@@ -3,46 +3,85 @@
     <head>
 
         <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
+        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
 
         <script>
 
-            var app = angular.module('app', []);
+            var app = angular.module('app', ['ngAnimate']);
 
             // ctrl
-            app.controller('MainCtrl', function ($scope) {
+            app.controller('MainCtrl', function ($scope, $rootScope) {
+                $scope.isLoading = function () {
+                    for (var k in $scope.initialLoad) {
+                        if (!$scope.initialLoad[k]) return true;
+                    }
+                    return false;
+                };
 
-                $scope.hello = "Hello";
+                $scope.initialLoad = {
+                    translations: false
+                };
 
+                $rootScope.$on('LOAD_FINISHED', function (event, args) {
+                    console.log(args);
+                    if (args.type == 'TRANSLATIONS') {
+                        $scope.initialLoad.translations = args.success;
+                    }
+                });
+
+
+            });
+
+            // simple download service
+            app.service('downloadService', function ($http) {
+
+                this.downloadsInProgress = 0;
+
+                this.getDownloadsInProgress = function () {
+                    return this.downloadsInProgress;
+                };
+
+                this.getJson = function (url, callback) {
+
+                    this.downloadsInProgress++;
+
+                    var promise = $http({
+                        method: 'GET',
+                        url: url,
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    promise.success(function (data, status, headers, config) {
+                        this.downloadsInProgress--;
+                        callback(data, status, headers, config);
+                    });
+                    promise.error(function (data, status, headers, config) {
+                        this.downloadsInProgress--;
+                        callback(null, status, headers, config);
+                        console.log("error when loading to " + property)
+                    });
+                    return promise;
+
+                };
             });
 
             // i18n
-            app.service('translationService', function ($http, $rootScope) {
+            app.service('translationService', function ($http, $rootScope, downloadService) {
 
-                var o = this;
-
-                this.elements = null;
-
-                $http({
-                    method: 'GET',
-                    url: '/awac/translations/fr',
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).
-                        success(function (data, status, headers, config) {
-                            o.elements = data;
-                        }).
-                        error(function (data, status, headers, config) {
-                            o.elements = null;
-                            console.log("error when loading translations")
-                        });
-
-                this.get = function (code) {
-                    if (this.elements == null) return '';
-                    return this.elements[code];
+                var svc = this;
+                svc.elements = null;
+                downloadService.getJson("/awac/translations/fr", function (data) {
+                    svc.elements = data;
+                    $rootScope.$broadcast('LOAD_FINISHED', { type: 'TRANSLATIONS', success: data != null });
+                });
+                svc.get = function (code) {
+                    if (svc.elements == null) return '';
+                    return svc.elements[code];
                 }
             });
-            app.filter("t", function ($sce, translationService) {
+
+            app.filter("translate", function ($sce, translationService) {
                 return function (input) {
 
                     var text = translationService.get(input);
@@ -54,6 +93,8 @@
                     }
                 };
             });
+
+
         </script>
 
 
@@ -65,19 +106,52 @@
                 font-style: italic;
                 color: red;
             }
+
+            .loading-overlay {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background: #eee;
+                color: #333;
+
+                text-align: center;
+                padding-top: 50%;
+            }
+
+            .fadeout {
+                -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+                -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+                -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+                transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+            }
+
+            .fadeout.ng-hide-add.ng-hide-add-active {
+                opacity: 0;
+                display: block !important;
+            }
+
+            .fadeout.ng-hide-add {
+                opacity: 1;
+                display: block !important;
+            }
         </style>
     </head>
     <body ng-controller="MainCtrl">
 
-        {{ hello }}
+        @loadingScreen()
 
-        <h1>Test of translation</h1>
+        <div ng-show="!isLoading()">
 
-        <b>Good Translated text:</b> @t("ABCD")
+            <h1>Test of translation</h1>
 
-        <hr/>
+            <b>Good Translated text:</b> @t("ABCD")
 
-        <b>Bad Translated text:</b> @t("ABCD-EFGH")
+            <hr/>
+
+            <b>Bad Translated text:</b> @t("ABCD-EFGH")
+        </div>
     </body>
 </html>
 
