@@ -1,0 +1,155 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+ 
+@(id: Long, administratorForm: play.data.Form[eu.factorx.awac.models.Administrator])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@*
+* @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+*@
+
+@informationAddress(field: Field, className: String = "address") = {
+    <div class="twipsies well @className">
+        
+        <a class="hideAddress btn success pull-right">Hide this address</a>
+			
+			@inputText(
+				field("street"),
+				'_label -> "Street"
+			)
+			 
+			@inputText(
+				field("postalcode"), 
+				'_label -> "Postal Code"
+			)
+					 
+			@inputText(
+				field("city"),
+				'_label -> "City"
+			)
+					 
+			@select(
+				field("country"), 
+				options = options(eu.factorx.awac.models.Countries.list),
+				'_default -> "--- Choose a country ---",
+				'_label -> "Country",
+				'_error -> administratorForm("country").error.map(_.withMessage("Please select your country"))
+			)
+
+    </div>
+}
+
+@eu.factorx.awac.views.html.main(Html("Administrator Update"), nav = "administrator") {
+    
+    <h1>Edit administrator</h1>
+    
+	@helper.form(eu.factorx.awac.controllers.routes.Administrators.update(id)) {
+                
+        <fieldset>
+            <legend>General informations</legend>
+            
+			@inputText(
+                administratorForm("idPerson"), 
+                '_label -> "Id Person",
+				'readonly -> "readonly",
+				'_help -> " This field is read only"
+            )
+			
+			@inputText(
+                administratorForm("identifier"), 
+                '_label -> "Identifier"
+            )
+			
+			@inputText(
+                administratorForm("password"), 
+                '_label -> "Password"
+            )
+
+            @inputText(
+                administratorForm("firstname"), 
+                '_label -> "First name"
+            )
+            
+            @inputText(
+                administratorForm("lastname"), 
+                '_label -> "Last name"
+            )
+            
+            @inputText(
+                administratorForm("email"), 
+                '_label -> "Email"
+            )
+		</fieldset>
+			
+		<fieldset>
+			<legend>Address Information</legend>
+			
+			<div id="addresses">
+			
+				@** to use to handle if multiple address 1 to n relation ship
+					@repeat(administratorForm("address")) { information =>
+						@informationAddress(information)
+					}
+				**@
+								
+				@** for now only one address by Person **@
+				@**
+				@informationAddress(administratorForm("address"))
+				**@
+				
+				@**
+                * Keep an hidden block that will be used as template for Javascript copy code
+                **@
+                @informationAddress(
+                    administratorForm("address"),
+                    className = "address_template"
+                )
+				
+				<div class="manage">
+                    <a class="showAddress btn success pull-right">Show Address</a>
+                </div>
+				
+			</div>
+            			
+		</fieldset>
+		
+        
+        <div class="actions">
+            <input type="submit" value="Save this administrator" class="btn primary"> or 
+            <a href="@eu.factorx.awac.controllers.routes.Administrators.list()" class="btn">Cancel</a>  
+        </div>
+    }
+    
+	
+    @helper.form(eu.factorx.awac.controllers.routes.Administrators.delete(id), 'class -> "topRight") {
+        <input type="submit" value="Delete this administrator" class="btn danger">
+    }
+	
+	    
+	   <script type="text/javascript" charset="utf-8">
+		
+		$('.showAddress').live('click', function(e) {
+			console.log ("show address called")
+            var template = $('.address_template')
+            template.before('<div class="twipsies well address">' + template.html() + '</div>')
+			$(this).hide()
+        })
+		
+		$('.hideAddress').live('click', function(e) {
+			console.log ("hide address called")
+            $(this).parents('.address').remove()
+			$('.showAddress').show()
+        })
+		
+		</script>
+}

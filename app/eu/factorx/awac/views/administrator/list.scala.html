@@ -1,0 +1,139 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+ 
+@(currentPage: com.avaje.ebean.Page[eu.factorx.awac.models.Administrator], currentSortBy: String, currentOrder: String, currentFilter: String)
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+	eu.factorx.awac.controllers.routes.Administrators.list(newPage, sortBy, order, currentFilter)
+    
+}
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@eu.factorx.awac.views.html.main(Html("Administrator List"), nav = "administrator") {
+    
+    <h1 id="homeTitle">@Messages("administrators.list.title", currentPage.getTotalRowCount)</h1>
+
+    @if(flash.containsKey("success")) {
+        <div class="alert-message warning">
+            <strong>Done!</strong> @flash.get("success")
+        </div>
+    } 
+
+    <div id="actions">
+        
+        <form action="@link(0, "name")" method="GET">
+            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by administrator identifier...">
+            <input type="submit" id="searchsubmit" value="Filter by identifier" class="btn primary">
+        </form>
+        
+        <a class="btn success" id="add" href="@eu.factorx.awac.controllers.routes.Administrators.create()">Add a new administrator</a>
+        
+    </div>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>
+        
+    } else {
+        
+        <table class="computers zebra-striped">
+            <thead>
+                <tr>
+                    @header("identifier", "Administrator identifier")
+                    @header("firstname", "First Name")
+                    @header("lastname", "Last Name")
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(administrator <- currentPage.getList) {
+                    <tr>
+                        <td><a href="@eu.factorx.awac.controllers.routes.Administrators.edit(administrator.personId)">@administrator.identifier</a></td>
+                        <td>
+                            @if(administrator.firstname == null) {
+                                <em>-</em>
+                            } else {
+                                @administrator.firstname
+                            }
+                        </td>
+                        <td>
+                            @if(administrator.lastname == null) {
+                                <em>-</em>
+                            } else {
+                                @administrator.lastname
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Previous</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Next &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        
+    }
+        
+}

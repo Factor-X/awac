@@ -1,0 +1,37 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+
+
+@main(Html("Welcome to AWAC")) {
+
+@if(eu.factorx.awac.controllers.Secured.isAuthenticated()) {
+	@if(eu.factorx.awac.controllers.Secured.isAdministrator()) {
+		
+		@* Administrator form *@
+		<h2>Administrator form</h2>
+		<p>Administrator module manager.</p>
+		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Administrators.list()">Manage Administrators</a></p>
+		
+		@* Account form *@
+		<h2>Account form</h2>
+		<p>Account module manager.</p>
+		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Accounts.list()">Manage Accounts</a></p>
+		
+	} else {
+	
+		@* Account form *@
+		<h2>Account form</h2>
+		<p>Account module manager.</p>
+		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Accounts.edit(21)">Manage My Account</a></p>		
+	}
+}
+		
+}

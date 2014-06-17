@@ -1,0 +1,197 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+ 
+@(accountForm: play.data.Form[eu.factorx.awac.models.Account])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@*
+* @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+*@
+
+@informationAddress(field: Field, className: String = "address") = {
+    <div class="twipsies well @className">
+        
+        <a class="hideAddress btn success pull-right">Hide address information</a>
+			
+		@inputText(
+			field("street"),
+			'_label -> "Street"
+		)
+			 					 
+		@inputText(
+			field("city"),
+			'_label -> "City"
+		)
+		
+		@inputText(
+			field("postalcode"), 'class -> "mini",
+			'_label -> "Postal Code"
+		)
+					 
+		@select(
+            field("country"), 
+            options = options(eu.factorx.awac.models.Countries.list),
+            '_default -> "--- Choose a country ---",
+            '_label -> "Country",
+            '_error -> accountForm("country").error.map(_.withMessage("Please select your country"))
+        )
+			
+    </div>
+}
+
+@informationVat(field: Field, className: String = "vat") = {
+    <div class="twipsies well @className">
+        
+        <a class="hideVat btn success pull-right">Hide VAT information</a>
+			
+		@inputText(
+			field("vatNumber"),
+			'_label -> "Vat Number"
+		)			 					 
+			
+    </div>
+}
+
+@eu.factorx.awac.views.html.main(Html("Account Create"), nav = "account") {
+    
+    <h1>Add an account</h1>
+    
+    @helper.form(eu.factorx.awac.controllers.routes.Accounts.save) {
+        
+        <fieldset>
+            <legend>General information</legend>
+            
+			@inputText(
+                accountForm("identifier"), 
+                '_label -> "Identifier"
+            )
+			
+			@inputText(
+                accountForm("password"), 
+                '_label -> "Password"
+            )
+
+            @inputText(
+                accountForm("firstname"), 
+                '_label -> "First name"
+            )
+            
+            @inputText(
+                accountForm("lastname"), 
+                '_label -> "Last name"
+            )
+            
+            @inputText(
+                accountForm("email"), 
+                '_label -> "Email"
+            )
+            
+            @inputText(
+                accountForm("age"), 
+                '_label -> "Age", 'class -> "mini",
+                '_showConstraints -> false
+            )
+            
+            
+         	@select(
+            	accountForm("accountStatus"), 
+            	options = options(eu.factorx.awac.common.AccountStatusType.options),
+            	'_default -> "--- Choose a status ---",
+            	'_label -> "Account Status",
+            	'_error -> accountForm("accountStatus").error.map(_.withMessage("Please select a status"))
+        	)
+            			
+        </fieldset>
+		
+		<fieldset>
+			<legend>Address information</legend>
+			
+			<div id="addresses">
+				
+				@**
+                * Keep an hidden block that will be used as template for Javascript copy code
+                **@
+                @informationAddress(
+                    accountForm("address"),
+                    className = "address_template"
+                )
+                				
+				<div class="manage">
+                    <a class="showAddress btn success pull-right">Show Address</a>
+                </div>
+				
+			</div>
+            			
+		</fieldset>
+		
+		
+		<fieldset>
+			<legend>VAT information</legend>
+			
+			<div id="vat">
+				
+				@**
+                * Keep an hidden block that will be used as template for Javascript copy code
+                **@
+                
+                @informationVat(
+                    accountForm("vat"),
+                    className = "vat_template"
+                )
+				
+				<div class="manage">
+                    <a class="showVat btn success pull-right">Show VAT</a>
+                </div>
+				
+			</div>
+            			
+		</fieldset>
+		
+		
+		        
+        <div class="actions">
+            <input type="submit" value="Create this account" class="btn primary"> or 
+            <a href="@eu.factorx.awac.controllers.routes.Accounts.list()" class="btn">Cancel</a> 
+        </div>   
+    }
+	
+		<script type="text/javascript" charset="utf-8">
+		
+		$('.showAddress').live('click', function(e) {
+			console.log ("show address called")
+            var template = $('.address_template')
+            template.before('<div class="twipsies well address">' + template.html() + '</div>')
+			$(this).hide()
+        })
+		
+		$('.hideAddress').live('click', function(e) {
+			console.log ("hide address called")
+            $(this).parents('.address').remove()
+			$('.showAddress').show()
+        })
+        
+        $('.showVat').live('click', function(e) {
+			console.log ("show vat called")
+            var template = $('.vat_template')
+            template.before('<div class="twipsies well vat">' + template.html() + '</div>')
+			$(this).hide()
+        })
+		
+		$('.hideVat').live('click', function(e) {
+			console.log ("hide vat called")
+            $(this).parents('.vat').remove()
+			$('.showVat').show()
+        })
+		
+		</script>
+}

@@ -1,3 +1,14 @@
+/*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ */
+ 
 import org.junit.*;
 
 import play.mvc.*;
@@ -14,8 +25,8 @@ public class IntegrationTest {
     /**
      * add your integration test here
      * in this example we just check if the welcome page is being shown
-     */
-    @Test
+     */   
+    //@Test
     public void test() {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
@@ -24,5 +35,5 @@ public class IntegrationTest {
             }
         });
     }
-
+  
 }

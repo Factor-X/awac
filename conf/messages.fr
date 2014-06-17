@@ -1,0 +1,6 @@
+# Messages
+main.welcome=bienvenu
+accounts.list.title={0,choice,0#Aucun compte trouvé|1#Un compte trouvé|1<{0,number,integer} comptes trouvés}
+administrators.list.title={0,choice,0#Aucun administrateur trouvé|1#Un administrateur trouvé|1<{0,number,integer} administrateurs trouvés}
+rooms.list.title={0,choice,0#Aucun salon trouvé|1#Un salon trouvé|1<{0,number,integer} salons trouvés}
+

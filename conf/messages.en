@@ -1,0 +1,7 @@
+# Messages
+main.welcome=welcome
+accounts.list.title={0,choice,0#No accounts|1#One account|1<{0,number,integer} accounts} found
+administrators.list.title={0,choice,0#No administrators|1#One administrator|1<{0,number,integer} administrators} found
+rooms.list.title={0,choice,0#No rooms|1#One room|1<{0,number,integer} rooms} found
+
+

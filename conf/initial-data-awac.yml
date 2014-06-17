@@ -1,0 +1,101 @@
+# Addresses
+
+addresses:
+
+    - &addressA !!eu.factorx.awac.models.Address
+        id:             1
+        street:         Fontaine des Miracles
+        postalcode:     1360
+        city:           Perwez
+        country:        Belgium
+
+    - &addressB !!eu.factorx.awac.models.Address
+        id:             2
+        street:         Rue Emile Delva
+        postalcode:     1020
+        city:           Bruxelles
+        country:        Belgium
+
+    - &addressC !!eu.factorx.awac.models.Address
+        id:             3
+        street:         Place Bockstael
+        postalcode:     1020
+        city:           Bruxelles
+        country:        Belgium
+
+vat:
+
+    - &vatA !!eu.factorx.awac.models.Vat
+        id:             1
+        vatNumber:      BE0849213125
+        viesVerified:   false     
+
+    - &vatB !!eu.factorx.awac.models.Vat
+        id:             2
+        vatNumber:      
+        viesVerified:   false     
+
+
+# Administrator
+
+administrators:
+
+    - &administrator1 !!eu.factorx.awac.models.Administrator
+        personId:       1
+        identifier:     admin
+        password:       password
+        lastname:       Hollands
+        firstname:      Gaston
+        email:          gaston.hollands@rimshot.be
+        accountStatus:  ACTIVE
+        address:        *addressA
+
+    - &administrator2 !!eu.factorx.awac.models.Administrator
+        personId:       2
+        identifier:     admin2
+        password:       password
+        lastname:       Schorils
+        firstname:      Murielle
+        email:          murielle.schorils@rimshot.be
+        accountStatus:  ACTIVE
+        address:        *addressA
+
+# Accounts
+
+accounts:
+
+    - &account1 !!eu.factorx.awac.models.Account
+        personId:       21
+        identifier:     hollandg
+        password:       password
+        lastname:       Hollands
+        firstname:      Gaston
+        age:            46
+        accountStatus:  ACTIVE
+        email:          gaston.hollands@rimshot.be
+        address:        *addressA
+        vat:            *vatA
+    
+    - &account2 !!eu.factorx.awac.models.Account
+        personId:       22
+        identifier:     schorim
+        password:       password
+        lastname:       Schorils
+        firstname:      Murielle
+        age:            46
+        accountStatus:  ACTIVE
+        email:          murielle.schorils@rimshot.be
+        address:        *addressA
+        vat:            *vatB
+        
+    - &account3 !!eu.factorx.awac.models.Account
+        personId:       23
+        identifier:     hollandl
+        password:       password
+        lastname:       Hollands
+        firstname:      Ludovic
+        age:            18
+        accountStatus:  UNACTIVE
+        email:          ludovic.hollands@rimshot.be
+        address:        *addressA
+        vat:            *vatB        

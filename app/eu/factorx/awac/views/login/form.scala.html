@@ -1,0 +1,62 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+ 
+@(loginForm: play.data.Form[eu.factorx.awac.controllers.Authentication.Login])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+    Authentication
+}
+
+@eu.factorx.awac.views.html.main(title, nav = "authentication") {
+    
+    @if(loginForm.hasErrors) {
+        <div class="alert-message error">
+            <p><strong>Access Denied</strong> @loginForm.globalError.message</p>
+        </div>
+    }
+	
+	@if(flash.contains("success")) {
+    	<p class="success">
+        	@flash.get("success")
+    	</p>
+	}
+    
+    @*
+    * modal mode
+	* @helper.form(action = eu.factorx.awac.controllers.routes.Authentication.authenticate, 'id -> "form",'class -> "modal show") {
+	*@
+	
+	@helper.form(action = eu.factorx.awac.controllers.routes.Authentication.authenticate, 'id -> "form") {        
+        <fieldset>
+            <legend>Please Sign In</legend>
+            
+			@inputText(
+                loginForm("identifier"), 
+                '_label -> "Identifier"
+            )
+			
+			@inputPassword(
+                loginForm("password"), 
+                '_label -> "Password"
+            )
+						
+        </fieldset>
+               
+        <div class="actions">
+            <input type="submit" class="btn primary" value="Login">
+            <a href="@eu.factorx.awac.controllers.routes.Application.index" class="btn">Cancel</a>
+        </div>
+        
+    }
+}

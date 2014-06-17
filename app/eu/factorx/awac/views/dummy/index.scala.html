@@ -1,0 +1,63 @@
+<!doctype html>
+<html ng-app="app">
+    <head>
+
+        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
+
+        <script>
+            var app = angular.module('app', []);
+
+            // ctrl
+            app.controller('MainCtrl', function ($scope) {
+
+                $scope.hello = "Hello";
+
+            });
+
+            // i18n
+            app.service('translationService', function () {
+                this.elements = {
+                    "ABCD": "Grand bravo !"
+                };
+
+                this.get = function (code) {
+                    return this.elements[code];
+                }
+            });
+            app.filter("t", function ($sce, translationService) {
+                return function (input) {
+
+                    var text = translationService.get(input);
+
+                    if (text != null) {
+                        return  $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
+                    } else {
+                        return  $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
+                    }
+                };
+            });
+        </script>
+
+
+        <style>
+            .translated-text {
+            }
+
+            .translated-text.translation-missing {
+                font-style: italic;
+                color: red;
+            }
+        </style>
+    </head>
+    <body ng-controller="MainCtrl">
+
+        {{ hello }}
+
+        <h1>Test of translation</h1>
+
+        <b>Translated text:</b> @t("ABCD")
+    </body>
+</html>
+
+
+
