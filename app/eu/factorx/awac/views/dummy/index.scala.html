@@ -5,6 +5,7 @@
         <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
 
         <script>
+
             var app = angular.module('app', []);
 
             // ctrl
@@ -15,12 +16,29 @@
             });
 
             // i18n
-            app.service('translationService', function () {
-                this.elements = {
-                    "ABCD": "Grand bravo !"
-                };
+            app.service('translationService', function ($http, $rootScope) {
+
+                var o = this;
+
+                this.elements = null;
+
+                $http({
+                    method: 'GET',
+                    url: '/awac/translations/fr',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).
+                        success(function (data, status, headers, config) {
+                            o.elements = data;
+                        }).
+                        error(function (data, status, headers, config) {
+                            o.elements = null;
+                            console.log("error when loading translations")
+                        });
 
                 this.get = function (code) {
+                    if (this.elements == null) return '';
                     return this.elements[code];
                 }
             });
@@ -55,7 +73,11 @@
 
         <h1>Test of translation</h1>
 
-        <b>Translated text:</b> @t("ABCD")
+        <b>Good Translated text:</b> @t("ABCD")
+
+        <hr/>
+
+        <b>Bad Translated text:</b> @t("ABCD-EFGH")
     </body>
 </html>
 

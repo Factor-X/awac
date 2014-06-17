@@ -41,6 +41,8 @@ POST    /accounts/:id/delete  		eu.factorx.awac.controllers.Accounts.delete(id:L
 
 GET     /dummy                      eu.factorx.awac.controllers.Dummy.index()
 
+GET     /translations/:lang         eu.factorx.awac.controllers.Translation.fetch(lang:String)
+
 
 # VIES Service 
 GET     /vies/vatcheck/:uid/:vat    eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
