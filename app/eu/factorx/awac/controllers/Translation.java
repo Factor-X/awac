@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.factorx.awac.dto.TranslationsDTO;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -20,11 +21,11 @@ public class Translation extends Controller {
         } catch (InterruptedException e) {
         }
 
-        Map<String, String> map = new HashMap<>();
+        TranslationsDTO dto = new TranslationsDTO(language);
 
-        map.put("ABCD", "Deux poules discutent:<br/>- Comment vas-tu ma cocotte?<br/>- Pas très bien. Je crois que je couve quelque chose !");
+        dto.put("ABCD", "Deux poules discutent:<br/>- Comment vas-tu ma cocotte?<br/>- Pas très bien. Je crois que je couve quelque chose !");
 
-        return ok(Json.toJson(map));
+        return ok(dto);
     }
 
 }
