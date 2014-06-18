@@ -73,6 +73,7 @@ public abstract class Person extends Model {
     @Required
     public AccountStatusType accountStatus = AccountStatusType.UNACTIVE;
 
+
     public Person() {
     }
 

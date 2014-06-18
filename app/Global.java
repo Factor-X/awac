@@ -54,10 +54,21 @@ public class Global extends GlobalSettings {
             Ebean.save(all.get("accounts"));
         }
 
+        // ========================================
         // INTERNAL SPRING SERVICES
+        // ========================================
 
         // read spring configuration and instanciate context
         ctx = new ClassPathXmlApplicationContext("components.xml");
+
+        // ========================================
+        // COMPILE ANGULAR APPLICATION
+        // ========================================
+
+
+
+
+
     }
 
     @Override

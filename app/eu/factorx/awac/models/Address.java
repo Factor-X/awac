@@ -62,4 +62,5 @@ public class Address extends Model {
     public void setId (Long id) {
 	    this.id = id;
     }
+
 }

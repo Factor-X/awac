@@ -1,157 +1,268 @@
 <!doctype html>
 <html ng-app="app">
-    <head>
+<head>
 
-        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
-        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
-
-        <script>
-
-            var app = angular.module('app', ['ngAnimate']);
-
-            // ctrl
-            app.controller('MainCtrl', function ($scope) {
-                $scope.isLoading = function () {
-                    for (var k in $scope.initialLoad) {
-                        if (!$scope.initialLoad[k]) return true;
-                    }
-                    return false;
-                };
-
-                $scope.initialLoad = {
-                    translations: false
-                };
-
-                $scope.$on('LOAD_FINISHED', function (event, args) {
-                    if (args.type == 'TRANSLATIONS') {
-                        $scope.initialLoad.translations = args.success;
-                    }
-                });
+<script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
+<script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
+<script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-sanitize.js")'></script>
 
 
-            });
+<script>
 
-            // simple download service
-            app.service('downloadService', function ($http) {
+    var app = angular.module('app', ['ngAnimate', 'ngSanitize', 'ui.select']);
 
-                this.downloadsInProgress = 0;
+    // ctrl
+    app.controller('MainCtrl', function ($scope) {
+        $scope.isLoading = function () {
+            for (var k in $scope.initialLoad) {
+                if (!$scope.initialLoad[k]) return true;
+            }
+            return false;
+        };
 
-                this.getDownloadsInProgress = function () {
-                    return this.downloadsInProgress;
-                };
+        $scope.initialLoad = {
+            translations: false
+        };
 
-                this.getJson = function (url, callback) {
+        $scope.$on('LOAD_FINISHED', function (event, args) {
+            if (args.type == 'TRANSLATIONS') {
+                $scope.initialLoad.translations = args.success;
+            }
+        });
 
-                    this.downloadsInProgress++;
+        $scope.o = {
+            myDouble: {
+                value: 17.97,
+                owner: 'XM',
+                validator: 'JC',
+                verifier: 'FC'
+            },
 
-                    var promise = $http({
-                        method: 'GET',
-                        url: url,
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    });
-                    promise.success(function (data, status, headers, config) {
-                        this.downloadsInProgress--;
-                        callback(data, status, headers, config);
-                    });
-                    promise.error(function (data, status, headers, config) {
-                        this.downloadsInProgress--;
-                        callback(null, status, headers, config);
-                        console.log("error when loading to " + property)
-                    });
-                    return promise;
+            myDoubleWithUnit: {
+                value: 17.97,
+                unit: 0,
+                owner: 'XM',
+                validator: null,
+                verifier: null,
+                units: [
+                    {key: 12, value: 'UNITS-KILOGRAM'},
+                    {key: 14, value: 'UNITS-GRAM'},
+                    {key: 135, value: 'UNITS-TON'}
+                ]
+            }
+        };
+    });
 
-                };
-            });
+    app.directive("mmDouble", function () {
+        return {
+            restrict: 'E',
+            scope: {
+                labelCode: '@@',
+                ngModel: '='
+            },
+            templateUrl: '/awac/assets/templates/mm-double.html'
+        }
+    });
 
-            // i18n
-            app.service('translationService', function ($http, $rootScope, downloadService) {
+    app.directive("mmDoubleWithUnit", function () {
+        return {
+            restrict: 'E',
+            scope: {
+                labelCode: '@@',
+                ngModel: '='
+            },
+            templateUrl: '/awac/assets/templates/mm-double-with-unit.html'
+        }
+    });
 
-                var svc = this;
-                svc.elements = null;
-                downloadService.getJson("/awac/translations/fr", function (data) {
-                    svc.elements = data.lines;
-                    $rootScope.$broadcast('LOAD_FINISHED', { type: 'TRANSLATIONS', success: data != null });
-                });
-                svc.get = function (code) {
-                    if (svc.elements == null) return '';
-                    return svc.elements[code];
+
+    // simple download service
+    app.service('downloadService', function ($http) {
+
+        this.downloadsInProgress = 0;
+
+        this.getDownloadsInProgress = function () {
+            return this.downloadsInProgress;
+        };
+
+        this.getJson = function (url, callback) {
+
+            this.downloadsInProgress++;
+
+            var promise = $http({
+                method: 'GET',
+                url: url,
+                headers: {
+                    "Content-Type": "application/json"
                 }
             });
-
-            app.filter("translate", function ($sce, translationService) {
-                return function (input) {
-
-                    var text = translationService.get(input);
-
-                    if (text != null) {
-                        return  $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
-                    } else {
-                        return  $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
-                    }
-                };
+            promise.success(function (data, status, headers, config) {
+                this.downloadsInProgress--;
+                callback(data, status, headers, config);
             });
+            promise.error(function (data, status, headers, config) {
+                this.downloadsInProgress--;
+                callback(null, status, headers, config);
+                console.log("error when loading to " + property)
+            });
+            return promise;
 
+        };
+    });
 
-        </script>
+    // i18n
+    app.service('translationService', function ($http, $rootScope, downloadService) {
 
+        var svc = this;
+        svc.elements = null;
+        downloadService.getJson("/awac/translations/fr", function (data) {
+            svc.elements = data.lines;
+            $rootScope.$broadcast('LOAD_FINISHED', { type: 'TRANSLATIONS', success: data != null });
+        });
+        svc.get = function (code) {
+            if (svc.elements == null) return '';
+            return svc.elements[code];
+        }
+    });
 
-        <style>
-            .translated-text {
+    app.filter("translate", function ($sce, translationService) {
+        return function (input) {
+
+            var text = translationService.get(input);
+
+            if (text != null) {
+                return  $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
+            } else {
+                return  $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
             }
+        };
+    });
 
-            .translated-text.translation-missing {
-                font-style: italic;
-                color: red;
+    app.filter("translateRaw", function ($sce, translationService) {
+        return function (input) {
+
+            var text = translationService.get(input);
+
+            if (text != null) {
+                return  $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
+            } else {
+                return  $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
             }
+        };
+    });
 
-            .loading-overlay {
-                position: absolute;
-                left: 0;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                background: #eee;
-                color: #333;
+</script>
 
-                text-align: center;
-                padding-top: 50%;
-            }
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/bootstrap.css")'>
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
-            .fadeout {
-                -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-                -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-                -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-                transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-            }
+<link rel="stylesheet" href="http://bootswatch.com/cosmo/bootstrap.min.css"/>
 
-            .fadeout.ng-hide-add.ng-hide-add-active {
-                opacity: 0;
-                display: block !important;
-            }
+<!-- ui-select files -->
+<script src='@routes.Assets.at("javascripts/select.js")'></script>
+<link rel="stylesheet" href='@routes.Assets.at("stylesheets/select.css")'>
 
-            .fadeout.ng-hide-add {
-                opacity: 1;
-                display: block !important;
-            }
-        </style>
-    </head>
-    <body ng-controller="MainCtrl">
+<!-- Select2 theme -->
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
 
-        @loadingScreen()
+<!--
+  Selectize theme
+  Less versions are available at https://github.com/brianreavis/selectize.js/tree/master/dist/less
+-->
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
+<!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
-        <div ng-show="!isLoading()">
 
-            <h1>Test of translation</h1>
+<style>
+    .translated-text {
+    }
 
-            <b>Good Translated text:</b> @t("ABCD")
+    .translated-text.translation-missing {
+        font-style: italic;
+        color: red;
+    }
 
-            <hr/>
+    .loading-overlay {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: #eee;
+        color: #333;
 
-            <b>Bad Translated text:</b> @t("ABCD-EFGH")
-        </div>
-    </body>
+        text-align: center;
+        padding-top: 50%;
+    }
+
+    .fadeout {
+        -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+        -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+        -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+    }
+
+    .fadeout.ng-hide-add.ng-hide-add-active {
+        opacity: 0;
+        display: block !important;
+    }
+
+    .fadeout.ng-hide-add {
+        opacity: 1;
+        display: block !important;
+    }
+
+    body {
+        background: #eee;;
+        font-family: sans;
+        padding: 0;
+    }
+
+    label {
+        float: none;
+        font-weight: bold;
+        line-height: 24px;
+        padding-right: 24px;
+        width: 200px;
+        display: inline-block;
+    }
+
+    input {
+        line-height: 24px;
+        height: 24px;
+    }
+
+    .question {
+        display: block;;
+        margin-bottom: 24px;
+    }
+</style>
+</head>
+<body ng-controller="MainCtrl">
+
+
+    @loadingScreen()
+
+
+    <div ng-show="!isLoading()">
+
+        <h1>Test of translation</h1>
+
+        <b>Good Translated text:</b> @t("ABCD")
+        <br/>
+        <b>Bad Translated text:</b> @t("ABCD-EFGH")
+
+        <h1>Test of survey</h1>
+
+        <mm-double label-code="DOUBLE-CODE" ng-model="o.myDouble"></mm-double>
+
+        <mm-double-with-unit label-code="DOUBLE-UNIT-CODE" ng-model="o.myDoubleWithUnit"></mm-double-with-unit>
+
+        {{o}}
+
+    </div>
+</body>
 </html>
 
 

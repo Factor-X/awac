@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import play.mvc.Content;
 
-/**
- * Created by gaetan on 6/17/14.
- */
 public class DTO implements Content {
     @Override
     public String body() {

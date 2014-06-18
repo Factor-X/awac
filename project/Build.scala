@@ -4,6 +4,32 @@ import play.Project._
 
 // for war plugin
 //import com.github.play2war.plugin._
+//
+//import java.io._
+//
+//object AngularCompiler {
+//
+//  private lazy val compiler = {
+//
+//    (source: File) => {
+//
+//      ""
+//
+//    }
+//
+//  }
+//
+//
+//  def compile(source: File, options: Seq[String]): String = {
+//    System.out.println(source.getAbsolutePath)
+//
+//    //compiler(source)
+//
+//    ""
+//  }
+//
+//}
+
 
 object ApplicationBuild extends Build {
 
@@ -49,6 +75,9 @@ object ApplicationBuild extends Build {
         } yield newArg
       }
     )
-  // Add your own project settings here
+    // Add your own project settings here
 
+//    .settings(
+//      resourceGenerators in Compile <+= AngularCompiler
+//    )
 }

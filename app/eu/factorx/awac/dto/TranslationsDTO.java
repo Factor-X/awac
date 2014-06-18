@@ -1,15 +1,10 @@
 package eu.factorx.awac.dto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import play.libs.Json;
-import play.mvc.Content;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
-
-/**
- * Created by gaetan on 6/17/14.
- */
 public class TranslationsDTO extends DTO {
 
     public String language;
