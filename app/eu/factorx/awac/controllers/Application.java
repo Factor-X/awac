@@ -12,9 +12,12 @@
 package eu.factorx.awac.controllers;
 
 
+import eu.factorx.awac.compilers.AngularCompiler;
 import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import java.io.File;
 
 public class Application extends Controller {
 
@@ -32,4 +35,12 @@ public class Application extends Controller {
                 )
         );
     }
+
+
+    public static Result app() {
+        AngularCompiler compiler = new AngularCompiler();
+        String code = compiler.compile("app/eu/factorx/awac/angular");
+        return ok(code);
+    }
+
 }

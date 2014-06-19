@@ -1,0 +1,6 @@
+.question
+    label(ng-bind-html='labelCode | translate')
+    input(type='text', style='text-align: right;', ng-model='ngModel.value')
+    span.label.label-info {{ ngModel.owner }}
+    span.label.label-success {{ ngModel.validator }}
+    span.label.label-danger {{ ngModel.verifier }}
