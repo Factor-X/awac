@@ -6,9 +6,12 @@ angular
             return true  unless $scope.initialLoad[k]
         false
 
-    $scope.initialLoad = translations: false
+    $scope.initialLoad =
+      translations: false
+
     $scope.$on "LOAD_FINISHED", (event, args) ->
-        $scope.initialLoad.translations = args.success  if args.type is "TRANSLATIONS"
+        if args.type is "TRANSLATIONS"
+            $scope.initialLoad.translations = args.success
         return
 
     $scope.o =
@@ -17,6 +20,11 @@ angular
             owner: "XM"
             validator: "JC"
             verifier: "FC"
+        myText:
+          value: 'Les poules discutent'
+          owner: "XM"
+          validator: "JC"
+          verifier: "FC"
 
         myDoubleWithUnit:
             value: 17.97
