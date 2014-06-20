@@ -1,6 +1,6 @@
 # simple download service
 angular
-.module('app')
+.module('app.services')
 .service "downloadService", ($http) ->
     @downloadsInProgress = 0
     @getDownloadsInProgress = ->

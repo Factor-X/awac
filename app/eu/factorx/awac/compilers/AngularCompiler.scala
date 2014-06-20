@@ -94,7 +94,7 @@ class AngularCompiler {
         }
 
 
-        val begin = "angular.module('app.components').run(function($templateCache) {"
+        val begin = "angular.module('app.directives').run(function($templateCache) {"
 
         val end = "});";
 

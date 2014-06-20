@@ -1,5 +1,5 @@
 angular
-.module('app')
+.module('app.controllers')
 .controller "MainCtrl", ($scope) ->
     $scope.isLoading = ->
         for k of $scope.initialLoad

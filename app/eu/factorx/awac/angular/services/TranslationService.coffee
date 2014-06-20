@@ -1,5 +1,5 @@
 angular
-.module('app')
+.module('app.services')
 .service "translationService", ($http, $rootScope, downloadService) ->
     svc = this
     svc.elements = null

@@ -1,5 +1,5 @@
 angular
-.module('app')
+.module('app.filters')
 .filter "translate", ($sce, translationService) ->
     (input) ->
         text = translationService.get(input)
