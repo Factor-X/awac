@@ -1,15 +1,18 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import play.db.ebean.Model;
 
 @Entity
-public class Factor implements Serializable {
+@Table(name = "factor")
+public class Factor extends Model {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,6 +28,7 @@ public class Factor implements Serializable {
 	private Unit unitOut;
 	@OneToMany(mappedBy = "factor")
 	private List<FactorValue> values;
+
 	public long getId() {
 		return id;
 	}
@@ -58,11 +62,11 @@ public class Factor implements Serializable {
 	}
 
 	public List<FactorValue> getValues() {
-	    return values;
+		return values;
 	}
 
 	public void setValues(List<FactorValue> param) {
-	    this.values = param;
+		this.values = param;
 	}
 
 }

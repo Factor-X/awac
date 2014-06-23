@@ -1,17 +1,19 @@
 package eu.factorx.awac.models.forms;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+import play.db.ebean.Model;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
-public class Campaign implements Serializable {
+@Table(name = "campaign")
+public class Campaign extends Model {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,11 +44,11 @@ public class Campaign implements Serializable {
 	}
 
 	public Period getPeriod() {
-	    return period;
+		return period;
 	}
 
 	public void setPeriod(Period param) {
-	    this.period = param;
+		this.period = param;
 	}
 
 }

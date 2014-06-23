@@ -1,14 +1,14 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import play.db.ebean.Model;
+
 @Entity
-@Table(name = "Indicator")
-public class Indicator implements Serializable {
+@Table(name = "indicator")
+public class Indicator extends Model {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,6 +17,7 @@ public class Indicator implements Serializable {
 
 	@Id
 	private long id;
+
 	public long getId() {
 		return id;
 	}

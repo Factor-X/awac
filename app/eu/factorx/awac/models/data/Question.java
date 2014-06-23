@@ -1,16 +1,15 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import play.db.ebean.Model;
 import eu.factorx.awac.models.code.QuestionCode;
 
 @Entity
-@Table(name = "Question")
-public class Question implements Serializable {
+@Table(name = "question")
+public class Question extends Model {
 
 	private static final long serialVersionUID = 1L;
 

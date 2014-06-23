@@ -2,11 +2,15 @@ package eu.factorx.awac.models.code;
 
 import javax.persistence.Embeddable;
 
+import play.db.ebean.Model;
+
 @Embeddable
-public class QuestionCode {
+public class QuestionCode extends Model {
+
+	private static final long serialVersionUID = 1L;
 
 	public static final QuestionCode Q1 = new QuestionCode("Q1");
-	public static final QuestionCode Q2 = new QuestionCode("Q1");
+	public static final QuestionCode Q2 = new QuestionCode("Q2");
 
 	private String value;
 

@@ -1,35 +1,35 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import play.db.ebean.Model;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.User;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @MappedSuperclass
-public class QuestionAnswer implements Serializable {
+public class QuestionAnswer extends Model {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	protected long id;
 	@ManyToOne(optional = false)
-	private User dataOwner;
+	protected User dataOwner;
 	@ManyToOne(optional = false)
-	private Period period;
+	protected Period period;
 	@ManyToOne(optional = false)
-	private Question question;
+	protected Question question;
 	@Embedded
-	private AuditInfo auditInfo;
+	protected AuditInfo auditInfo;
 	@ManyToOne(optional = false)
-	private Scope scope;
+	protected Scope scope;
 	@ManyToOne(optional = false)
-	private Unit unit;
+	protected Unit unit;
 
 	public long getId() {
 		return id;

@@ -1,17 +1,16 @@
 package eu.factorx.awac.models.forms;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import play.db.ebean.Model;
 import eu.factorx.awac.models.data.Question;
 
 @Entity
 @Table(name = "form_question")
-public class FormQuestion implements Serializable {
+public class FormQuestion extends Model {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +23,7 @@ public class FormQuestion implements Serializable {
 	private Form form;
 	@ManyToOne(optional = false)
 	private Question question;
+
 	public long getId() {
 		return id;
 	}
@@ -33,19 +33,19 @@ public class FormQuestion implements Serializable {
 	}
 
 	public Form getForm() {
-	    return form;
+		return form;
 	}
 
 	public void setForm(Form param) {
-	    this.form = param;
+		this.form = param;
 	}
 
 	public Question getQuestion() {
-	    return question;
+		return question;
 	}
 
 	public void setQuestion(Question param) {
-	    this.question = param;
+		this.question = param;
 	}
 
 }

@@ -1,13 +1,11 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "StringAnswer")
-public class StringAnswer extends QuestionAnswer implements Serializable {
+@Table(name = "string_answer")
+public class StringAnswer extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;
 	private String value;

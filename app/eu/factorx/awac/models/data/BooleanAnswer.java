@@ -1,11 +1,11 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-public class BooleanAnswer extends QuestionAnswer implements Serializable {
+@Table(name = "boolean_answer")
+public class BooleanAnswer extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;
 	private Boolean value;

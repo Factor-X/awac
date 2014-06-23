@@ -1,15 +1,15 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import play.db.ebean.Model;
+
 @Entity
-@Table(name = "AirTravelDetail")
-public class AirTravelInfo implements Serializable {
+@Table(name = "air_travel_info")
+public class AirTravelInfo extends Model {
 
 	private static final long serialVersionUID = 1L;
 

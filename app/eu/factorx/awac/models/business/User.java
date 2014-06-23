@@ -1,18 +1,15 @@
 package eu.factorx.awac.models.business;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import eu.factorx.awac.models.business.Organization;
-
-import javax.persistence.ManyToOne;
+import play.db.ebean.Model;
 
 @Entity
-@Table(name = "User")
-public class User implements Serializable {
+@Table(name = "user")
+public class User extends Model {
 
 	private static final long serialVersionUID = 1L;
 

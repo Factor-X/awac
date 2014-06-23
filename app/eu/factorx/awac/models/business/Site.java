@@ -1,12 +1,12 @@
 package eu.factorx.awac.models.business;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-public class Site extends Scope implements Serializable {
+@Table(name = "site")
+public class Site extends Scope {
 
 	private static final long serialVersionUID = 1L;
 

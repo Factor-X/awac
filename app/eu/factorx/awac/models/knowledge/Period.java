@@ -1,10 +1,14 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import play.db.ebean.Model;
 
 @Entity
-public class Period implements Serializable {
+@Table(name = "period")
+public class Period extends Model {
 
 	private static final long serialVersionUID = 1L;
 

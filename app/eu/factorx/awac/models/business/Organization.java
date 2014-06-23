@@ -1,6 +1,5 @@
 package eu.factorx.awac.models.business;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -8,8 +7,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Organization")
-public class Organization extends Scope implements Serializable {
+@Table(name = "organization")
+public class Organization extends Scope {
 
 	private static final long serialVersionUID = 1L;
 

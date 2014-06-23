@@ -1,14 +1,13 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
+import play.db.ebean.Model;
 import eu.factorx.awac.models.business.User;
 
 @Embeddable
-public class AuditInfo implements Serializable {
+public class AuditInfo extends Model {
 
 	private static final long serialVersionUID = 1L;
 

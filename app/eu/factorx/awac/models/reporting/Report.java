@@ -1,18 +1,15 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import eu.factorx.awac.models.reporting.Indicator;
-
-import java.util.Collection;
-
 import javax.persistence.ManyToMany;
 
+import play.db.ebean.Model;
+
 @Entity
-public class Report implements Serializable {
+public class Report extends Model {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +19,8 @@ public class Report implements Serializable {
 	@Id
 	private long id;
 	@ManyToMany
-	private Collection<Indicator> indicators;
+	private List<Indicator> indicators;
+
 	public long getId() {
 		return id;
 	}
@@ -31,12 +29,12 @@ public class Report implements Serializable {
 		this.id = id;
 	}
 
-	public Collection<Indicator> getIndicators() {
-	    return indicators;
+	public List<Indicator> getIndicators() {
+		return indicators;
 	}
 
-	public void setIndicators(Collection<Indicator> param) {
-	    this.indicators = param;
+	public void setIndicators(List<Indicator> param) {
+		this.indicators = param;
 	}
 
 }
