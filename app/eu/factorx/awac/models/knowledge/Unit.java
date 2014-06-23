@@ -20,7 +20,7 @@ public class Unit extends Model {
 	@Id
 	private long id;
 	private String name;
-	@ManyToOne(optional = false)
+	//@ManyToOne(optional = false)
 	private UnitCategory category;
 
 	public long getId() {

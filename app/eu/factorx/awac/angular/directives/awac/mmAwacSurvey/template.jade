@@ -1,0 +1,70 @@
+ng-virtual
+    mm-awac-survey-section(header="Chauffage")
+
+        mm-awac-question(label-code="MAIN-FUEL-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="CONSUMPTION-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="ADD-A-CONSUMPTION-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myDoubleWithUnit")
+            mm-unit(ng-model="ngModel.myDoubleWithUnit")
+
+    hr
+
+    mm-awac-survey-section(header="Habitation")
+
+        mm-awac-question(label-code="HOUSE-TYPE-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="SURFACE-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="NUMBER-OF-INHABITANTS-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myDoubleWithUnit")
+
+        mm-awac-question(label-code="NUMBER-OF-HEATED-ROOMS-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myDoubleWithUnit")
+
+        mm-awac-question(label-code="BEFORE-75-CODE", ng-reviewers="ngModel.myBoolean.reviewers")
+            mm-boolean(ng-model="ngModel.myBoolean")
+
+        mm-awac-question(label-code="ISOLATION-10-LAST-YEARS-CODE", ng-reviewers="ngModel.myText.reviewers")
+
+        mm-awac-question(label-code="ROOF-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="EXTERNAL-WALLS-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+        mm-awac-question(label-code="INSULATED-GLAZING-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+
+    hr
+
+    mm-awac-survey-section(header="Cuisson")
+
+        mm-awac-question(label-code="GAZ-COOKING-CODE", ng-reviewers="ngModel.myText.reviewers")
+            mm-double(ng-model="ngModel.myText")
+            mm-unit(ng-model="ngModel.myDoubleWithUnit")
+
+    // Chauffage
+    // -- Combustible principal ?
+    // -- Consommation précise
+    // -- Ajouter un autre combu
+    // Habitation
+    // -- Type
+    // -- Surface
+    // -- Nombre
+    // -- Nombre pièces chauffées
+    // -- Construction avant 1975
+    // -- Isolation 10 dernières années
+    // -- -- Toit
+    // -- -- Murs exétérieurs
+    // -- -- Double vitrage
+    // Cuisson
+    // -- au butane
+
+
+

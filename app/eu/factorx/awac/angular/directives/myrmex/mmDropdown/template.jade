@@ -1,0 +1,4 @@
+ui-select(ng-model='ngModel.unit', theme='select2', style='min-width: 50px;')
+    match(placeholder='Select a value...') {{ ngModel.unit.value }}
+    choices(repeat='u in ngModel.units | filter: $select.search')
+        span(ng-bind-html='u.value')

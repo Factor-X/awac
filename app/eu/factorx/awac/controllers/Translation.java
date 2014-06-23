@@ -1,6 +1,6 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.TranslationsDTO;
+import eu.factorx.awac.dto.myrmex.TranslationsDTO;
 import play.mvc.Controller;
 import play.mvc.Result;
 
