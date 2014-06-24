@@ -1,11 +1,12 @@
 angular
 .module('app.directives')
-.directive "mmDouble", (directiveService) ->
+.directive "mmAwacQuestion", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngLabelCode: "="
-        ngRequired: "="
-        ngModel: "="
-    templateUrl: "$/angular/templates/mm-double.html"
+        ngReviewers: "="
+    templateUrl: "$/angular/templates/mm-awac-question.html"
+    transclude: true
+    replace: true
     link: (scope) ->
         directiveService.autoScopeImpl scope

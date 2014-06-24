@@ -28,8 +28,6 @@ class AngularCompiler {
         val services = angular / "services" ** "*.coffee"
         val filters = angular / "filters" ** "*.coffee"
 
-        println(directives.head.sibling("template.jade").path)
-
         val compiledMain = simpleCompile(roots)
         val compiledServices = simpleCompile(services)
         val compiledFilters = simpleCompile(filters)
@@ -67,8 +65,6 @@ class AngularCompiler {
             println("compiling " + jadePath.path + " ...")
             val html = de.neuland.jade4j.Jade4J.render(jadePath.path, null);
 
-            println(html)
-
             // now, escape string so that it can be embedded as a variable
             val mapper: ObjectMapper = new ObjectMapper();
             val escapedHtml = mapper.writeValueAsString(html)
@@ -84,9 +80,12 @@ class AngularCompiler {
             // now split and format it correctly
             var usefulPathParts = usefulPath.split("/")
             usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
-            usefulPath = usefulPathParts.mkString("/")
+            // usefulPath = usefulPathParts.mkString("/")
+            usefulPath = usefulPathParts.slice(usefulPathParts.length-1, usefulPathParts.length).mkString
 
-            val url = "$/angular/templates" + usefulPath + ".html"
+            println(usefulPath)
+
+            val url = "$/angular/templates/" + usefulPath + ".html"
 
             // append it to the list
             names = names :+ url

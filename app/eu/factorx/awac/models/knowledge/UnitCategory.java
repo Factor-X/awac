@@ -18,7 +18,7 @@ public class UnitCategory extends Model {
 	@Id
 	private Long id;
 	private String code;
-	@OneToMany(mappedBy = "category")
+	//@OneToMany(mappedBy = "category")
 	private List<Unit> units;
 
 	public Long getId() {

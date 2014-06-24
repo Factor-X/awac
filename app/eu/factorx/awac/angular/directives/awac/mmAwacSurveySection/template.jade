@@ -1,0 +1,5 @@
+.survey-section
+    .survey-section-header
+        span {{ getHeader() }}
+    .survey-section-content
+        ng-virtual(style="display: table; width: 100%", ng-transclude=true)

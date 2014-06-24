@@ -18,16 +18,16 @@ public class Unit extends Model {
 	}
 
 	@Id
-	private Long id;
+	private long id;
 	private String name;
-	@ManyToOne(optional = false)
+	//@ManyToOne(optional = false)
 	private UnitCategory category;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -37,14 +37,6 @@ public class Unit extends Model {
 
 	public void setName(String param) {
 		this.name = param;
-	}
-
-	public UnitCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(UnitCategory category) {
-		this.category = category;
 	}
 
 }

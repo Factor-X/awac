@@ -7,7 +7,7 @@ angular
         false
 
     $scope.initialLoad =
-      translations: false
+        translations: false
 
     $scope.$on "LOAD_FINISHED", (event, args) ->
         if args.type is "TRANSLATIONS"
@@ -15,23 +15,41 @@ angular
         return
 
     $scope.o =
+
+
+        mainFuel:
+            value: null
+            reviewers:
+                dataOwner: "XM"
+                dataValidator: "JC"
+                dataVerifier: "FC"
+                dataLocker: "GP"
+
+
+
+
         myDouble:
             value: 17.97
             owner: "XM"
             validator: "JC"
             verifier: "FC"
+
         myText:
-          value: 'Les poules discutent'
-          owner: "XM"
-          validator: "JC"
-          verifier: "FC"
+            value: 'Les poules discutent'
+            reviewers:
+                dataOwner: "XM"
+                dataValidator: "JC"
+                dataVerifier: "FC"
+                dataLocker: "GP"
 
         myDoubleWithUnit:
+            reviewers:
+                dataOwner: "XM"
+                dataValidator: "JC"
+                dataVerifier: "FC"
+                dataLocker: "GP"
             value: 17.97
             unit: 0
-            owner: "XM"
-            validator: null
-            verifier: null
             units: [
                 {
                     key: 12

@@ -27,7 +27,6 @@
         <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
         <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
-
     </head>
     <body ng-controller="MainCtrl">
 
@@ -35,19 +34,7 @@
 
         <div ng-show="!isLoading()">
 
-            <h1>Test of translation</h1>
-
-            <b>Good Translated text:</b> @t("ABCD")
-            <br/>
-            <b>Bad Translated text:</b> @t("ABCD-EFGH")
-
-            <h1>Test of survey</h1>
-
-            <mm-double label-code="DOUBLE-CODE" ng-model="o.myDouble"></mm-double>
-
-            <mm-double-with-unit label-code="DOUBLE-UNIT-CODE" ng-model="o.myDoubleWithUnit"></mm-double-with-unit>
-
-            <mm-text label-code="TEXT-CODE" ng-model="o.myText"></mm-text>
+            <mm-awac-survey ng-model="o"></mm-awac-survey>
 
             {{o}}
 

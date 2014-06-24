@@ -1,10 +1,11 @@
 angular
 .module('app.directives')
-.directive "mmDoubleWithUnit", (directiveService) ->
+.directive "mmUnit", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
-        ngLabelCode: "="
+        ngRequired: "="
         ngModel: "="
-    templateUrl: "$/angular/templates/mm-double-with-unit.html"
+        ngOptions: "="
+    templateUrl: "$/angular/templates/mm-unit.html"
     link: (scope) ->
         directiveService.autoScopeImpl scope
