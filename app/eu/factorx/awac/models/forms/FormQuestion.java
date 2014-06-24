@@ -18,17 +18,17 @@ public class FormQuestion extends Model {
 	}
 
 	@Id
-	private long id;
+	private Long id;
 	@ManyToOne(optional = false)
 	private Form form;
 	@ManyToOne(optional = false)
 	private Question question;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

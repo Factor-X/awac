@@ -5,8 +5,8 @@ import javax.persistence.Table;
 
 import eu.factorx.awac.models.code.Code;
 
-@Entity
-@Table(name = "code_answer")
+//@Entity
+//@Table(name = "code_answer")
 public class CodeAnswer<T extends Code> extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;

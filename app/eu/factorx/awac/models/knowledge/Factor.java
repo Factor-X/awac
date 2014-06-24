@@ -20,7 +20,7 @@ public class Factor extends Model {
 	}
 
 	@Id
-	private long id;
+	private Long id;
 	private String name;
 	@ManyToOne
 	private Unit unitIn;
@@ -29,11 +29,11 @@ public class Factor extends Model {
 	@OneToMany(mappedBy = "factor")
 	private List<FactorValue> values;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -21,7 +21,7 @@ public class FactorValue extends Model {
 	}
 
 	@Id
-	private long id;
+	private Long id;
 	private Double value;
 	@Temporal(TemporalType.DATE)
 	private Date dateIn;
@@ -30,11 +30,11 @@ public class FactorValue extends Model {
 	@ManyToOne(optional = false)
 	private Factor factor;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -17,14 +17,14 @@ public class User extends Model {
 	}
 
 	@Id
-	private long id;
+	private Long id;
 	@ManyToOne(optional = false)
 	private Organization organization;
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

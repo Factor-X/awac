@@ -22,7 +22,7 @@ public class Form extends Model {
 	}
 
 	@Id
-	private long id;
+	private Long id;
 	@Transient
 	private Integer progress;
 	@OneToMany(mappedBy = "form")
@@ -30,11 +30,11 @@ public class Form extends Model {
 	@ManyToOne(optional = false)
 	private Campaign campaign;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
