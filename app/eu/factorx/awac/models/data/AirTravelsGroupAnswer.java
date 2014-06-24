@@ -2,12 +2,10 @@ package eu.factorx.awac.models.data;
 
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "air_travels_group_answer")
+//@Entity
+//@Table(name = "air_travels_group_answer")
 public class AirTravelsGroupAnswer extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;

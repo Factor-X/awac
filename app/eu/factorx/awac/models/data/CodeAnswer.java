@@ -1,8 +1,5 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.code.Code;
 
 //@Entity

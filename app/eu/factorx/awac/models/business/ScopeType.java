@@ -1,5 +1,8 @@
 package eu.factorx.awac.models.business;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class ScopeType {
 
 	public static final ScopeType ORG = new ScopeType(1);

@@ -5,7 +5,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
-import eu.factorx.awac.models.code.QuestionCode;
 
 @Entity
 @Table(name = "question")
@@ -18,10 +17,8 @@ public class Question extends Model {
 
 	@Id
 	private Long id;
-	private String label;
+	private String code;
 	private String unitCategory;
-
-	private QuestionCode code;
 
 	public Long getId() {
 		return id;
@@ -29,14 +26,6 @@ public class Question extends Model {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String param) {
-		this.label = param;
 	}
 
 	public String getUnitCategory() {
@@ -47,11 +36,11 @@ public class Question extends Model {
 		this.unitCategory = param;
 	}
 
-	public QuestionCode getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(QuestionCode param) {
+	public void setCode(String param) {
 		this.code = param;
 	}
 

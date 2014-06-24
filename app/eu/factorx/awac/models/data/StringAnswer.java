@@ -1,10 +1,8 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "string_answer")
+//@Entity
+//@Table(name = "string_answer")
 public class StringAnswer extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;

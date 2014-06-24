@@ -20,6 +20,7 @@ public class User extends Model {
 	private Long id;
 	@ManyToOne(optional = false)
 	private Organization organization;
+
 	public Long getId() {
 		return id;
 	}
@@ -29,11 +30,11 @@ public class User extends Model {
 	}
 
 	public Organization getOrganization() {
-	    return organization;
+		return organization;
 	}
 
 	public void setOrganization(Organization param) {
-	    this.organization = param;
+		this.organization = param;
 	}
 
 }

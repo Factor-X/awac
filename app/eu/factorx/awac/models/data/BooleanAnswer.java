@@ -1,10 +1,8 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "boolean_answer")
+//@Entity
+//@Table(name = "boolean_answer")
 public class BooleanAnswer extends QuestionAnswer {
 
 	private static final long serialVersionUID = 1L;

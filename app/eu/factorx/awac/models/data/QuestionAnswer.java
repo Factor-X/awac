@@ -1,9 +1,10 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import play.db.ebean.Model;
 import eu.factorx.awac.models.business.Scope;
@@ -11,7 +12,8 @@ import eu.factorx.awac.models.business.User;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 
-@MappedSuperclass
+@Entity
+@Table(name = "question_answer")
 public class QuestionAnswer extends Model {
 
 	private static final long serialVersionUID = 1L;
@@ -24,12 +26,15 @@ public class QuestionAnswer extends Model {
 	protected Period period;
 	@ManyToOne(optional = false)
 	protected Question question;
-	@Embedded
+	@OneToOne
 	protected AuditInfo auditInfo;
 	@ManyToOne(optional = false)
 	protected Scope scope;
 	@ManyToOne(optional = false)
 	protected Unit unit;
+	
+	 // for test purpose, answerValue should be an abstract type, with concrete classes for each type of answer
+	protected String answerValue;
 
 	public Long getId() {
 		return id;
@@ -87,4 +92,13 @@ public class QuestionAnswer extends Model {
 		this.unit = param;
 	}
 
+	public String getAnswerValue() {
+		return answerValue;
+	}
+
+	public void setAnswerValue(String answerValue) {
+		this.answerValue = answerValue;
+	}
+	
+	
 }

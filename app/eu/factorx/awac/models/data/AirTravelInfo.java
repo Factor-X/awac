@@ -7,8 +7,8 @@ import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
-@Entity
-@Table(name = "air_travel_info")
+//@Entity
+//@Table(name = "air_travel_info")
 public class AirTravelInfo extends Model {
 
 	private static final long serialVersionUID = 1L;
