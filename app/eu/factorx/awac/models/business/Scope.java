@@ -32,6 +32,15 @@ public class Scope extends Model {
 	@OneToOne
 	private Product product;
 
+	public Scope() {
+		
+	}
+
+	public Scope(Organization organization) {
+		this.scopeType = ScopeType.ORG;
+		this.organization = organization;
+	}
+
 	public Long getId() {
 		return id;
 	}

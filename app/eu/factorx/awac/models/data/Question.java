@@ -1,10 +1,17 @@
 package eu.factorx.awac.models.data;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
+import eu.factorx.awac.models.code.QuestionCode;
+import eu.factorx.awac.models.knowledge.UnitCategory;
 
 @Entity
 @Table(name = "question")
@@ -12,13 +19,27 @@ public class Question extends Model {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	private Long id;
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "code")), })
+	private QuestionCode code;
+	@ManyToOne
+	private UnitCategory unitCategory;
+
 	public Question() {
 	}
 
-	@Id
-	private Long id;
-	private String code;
-	private String unitCategory;
+	public Question(QuestionCode code) {
+		super();
+		this.code = code;
+	}
+
+	public Question(QuestionCode code, UnitCategory unitCategory) {
+		super();
+		this.code = code;
+		this.unitCategory = unitCategory;
+	}
 
 	public Long getId() {
 		return id;
@@ -28,20 +49,20 @@ public class Question extends Model {
 		this.id = id;
 	}
 
-	public String getUnitCategory() {
-		return unitCategory;
-	}
-
-	public void setUnitCategory(String param) {
-		this.unitCategory = param;
-	}
-
-	public String getCode() {
+	public QuestionCode getCode() {
 		return code;
 	}
 
-	public void setCode(String param) {
-		this.code = param;
+	public void setCode(QuestionCode code) {
+		this.code = code;
+	}
+
+	public UnitCategory getUnitCategory() {
+		return unitCategory;
+	}
+
+	public void setUnitCategory(UnitCategory unitCategory) {
+		this.unitCategory = unitCategory;
 	}
 
 }

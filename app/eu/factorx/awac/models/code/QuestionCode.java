@@ -9,9 +9,13 @@ public class QuestionCode extends Model {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final QuestionCode Q1 = new QuestionCode("Q1");
-	public static final QuestionCode Q2 = new QuestionCode("Q2");
-
+	// main heating fuel 
+	public static final QuestionCode MHF = new QuestionCode("MHF");
+	// heating fuel consumption
+	public static final QuestionCode HFC = new QuestionCode("HFC");
+	// housing type
+	public static final QuestionCode HOT = new QuestionCode("HOT");	
+	
 	private String value;
 
 	public QuestionCode() {

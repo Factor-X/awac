@@ -18,11 +18,9 @@ public class Form extends Model {
 
 	private static final long serialVersionUID = 1L;
 
-	public Form() {
-	}
-
 	@Id
 	private Long id;
+	private String name;
 	@Transient
 	private Integer progress;
 	@OneToMany(mappedBy = "form")
@@ -30,12 +28,29 @@ public class Form extends Model {
 	@ManyToOne(optional = false)
 	private Campaign campaign;
 
+	public Form() {
+	}
+
+	public Form(String name, Campaign campaign) {
+		super();
+		this.name = name;
+		this.campaign = campaign;
+	}
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Integer getProgress() {
@@ -55,11 +70,11 @@ public class Form extends Model {
 	}
 
 	public Campaign getCampaign() {
-	    return campaign;
+		return campaign;
 	}
 
 	public void setCampaign(Campaign param) {
-	    this.campaign = param;
+		this.campaign = param;
 	}
 
 }

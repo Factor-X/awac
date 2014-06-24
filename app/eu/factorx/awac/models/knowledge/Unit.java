@@ -13,14 +13,20 @@ public class Unit extends Model {
 
 	private static final long serialVersionUID = 1L;
 
-	public Unit() {
-	}
-
 	@Id
 	private Long id;
 	private String name;
 	@ManyToOne(optional = false)
 	private UnitCategory category;
+
+	public Unit() {
+	}
+
+	public Unit(String name, UnitCategory category) {
+		super();
+		this.name = name;
+		this.category = category;
+	}
 
 	public Long getId() {
 		return id;

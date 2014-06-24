@@ -18,6 +18,10 @@ public class Organization extends Model {
 	public Organization() {
 	}
 
+	public Organization(String name) {
+		this.name = name;
+	}
+
 	@Id
 	private Long id;
 	private String name;

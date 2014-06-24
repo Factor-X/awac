@@ -14,15 +14,21 @@ public class FormQuestion extends Model {
 
 	private static final long serialVersionUID = 1L;
 
-	public FormQuestion() {
-	}
-
 	@Id
 	private Long id;
 	@ManyToOne(optional = false)
 	private Form form;
 	@ManyToOne(optional = false)
 	private Question question;
+
+	public FormQuestion() {
+	}
+
+	public FormQuestion(Form form, Question question) {
+		super();
+		this.form = form;
+		this.question = question;
+	}
 
 	public Long getId() {
 		return id;

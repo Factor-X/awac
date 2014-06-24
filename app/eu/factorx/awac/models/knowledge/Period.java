@@ -19,6 +19,11 @@ public class Period extends Model {
 	private Long id;
 	private String label;
 
+	public Period(String label) {
+		super();
+		this.label = label;
+	}
+
 	public Long getId() {
 		return id;
 	}

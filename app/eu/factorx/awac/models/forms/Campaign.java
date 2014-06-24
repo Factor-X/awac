@@ -17,15 +17,22 @@ public class Campaign extends Model {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	private Long id;
+	private String name;
+	@ManyToOne(optional = false)
+	private Period period;
+	@OneToMany(mappedBy = "campaign")
+	private List<Form> forms;
+
 	public Campaign() {
 	}
 
-	@Id
-	private Long id;
-	@OneToMany(mappedBy = "campaign")
-	private List<Form> forms;
-	@ManyToOne(optional = false)
-	private Period period;
+	public Campaign(String name, Period period) {
+		super();
+		this.name = name;
+		this.period = period;
+	}
 
 	public Long getId() {
 		return id;
@@ -33,6 +40,14 @@ public class Campaign extends Model {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<Form> getForms() {

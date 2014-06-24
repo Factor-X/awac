@@ -9,24 +9,26 @@
  *
  */
 
-import play.*;
-import play.libs.*;
+import java.util.List;
+import java.util.Map;
+
+// Spring imports
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+import play.Application;
+import play.GlobalSettings;
+import play.i18n.Lang;
+import play.i18n.Messages;
+import play.libs.Yaml;
 
 import com.avaje.ebean.Ebean;
 
-import eu.factorx.awac.models.*;
-
-import java.util.*;
-
-import play.i18n.*;
-
-// Spring imports
-import org.springframework.context.*;
-import org.springframework.context.support.*;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Repository;
+import eu.factorx.awac.models.Administrator;
 
 public class Global extends GlobalSettings {
 
@@ -52,6 +54,8 @@ public class Global extends GlobalSettings {
 
             Ebean.save(all.get("administrators"));
             Ebean.save(all.get("accounts"));
+
+            AwacDummyDataCreator.createAwacDummyData();
         }
 
         // ========================================
