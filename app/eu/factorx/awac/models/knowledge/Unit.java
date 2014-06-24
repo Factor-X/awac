@@ -20,7 +20,7 @@ public class Unit extends Model {
 	@Id
 	private long id;
 	private String name;
-	//@ManyToOne(optional = false)
+	@ManyToOne(optional = false)
 	private UnitCategory category;
 
 	public long getId() {
@@ -37,6 +37,14 @@ public class Unit extends Model {
 
 	public void setName(String param) {
 		this.name = param;
+	}
+
+	public UnitCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(UnitCategory category) {
+		this.category = category;
 	}
 
 }

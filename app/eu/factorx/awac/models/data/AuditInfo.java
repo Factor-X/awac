@@ -11,11 +11,11 @@ public class AuditInfo extends Model {
 
 	private static final long serialVersionUID = 1L;
 
-	//@ManyToOne
+	@ManyToOne
 	private User dataValidator;
-	//@ManyToOne
+	@ManyToOne
 	private User dataLocker;
-	//@ManyToOne
+	@ManyToOne
 	private User dataVerifier;
 	private Integer verificationStatus;
 
