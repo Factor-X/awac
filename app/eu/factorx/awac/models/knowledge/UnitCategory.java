@@ -1,13 +1,12 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.List;
+import play.db.ebean.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import play.db.ebean.Model;
+import java.util.List;
 
 @Entity
 @Table(name = "unit_category")
@@ -18,7 +17,8 @@ public class UnitCategory extends Model {
 	@Id
 	private Long id;
 	private String code;
-	@OneToMany(mappedBy = "category")
+
+    @OneToMany(mappedBy = "category")
 	private List<Unit> units;
 
 	public UnitCategory() {
