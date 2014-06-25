@@ -9,11 +9,15 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-        scope.getKeys = () ->
-            return [e.key for e in scope.ngOptions]
+        scope.select = (o) ->
+            scope.sel = o
+            scope.ngModel.value = o.key
 
-        scope.getText = (key) ->
-            for e in scope.ngOptions
-                if e.key == key
-                    return e.value
+        scope.getValue = () ->
+            for o in scope.ngOptions
+                if o.key == scope.ngModel.value
+                    return o.value
             return null
+
+        scope.isSelected = (key) ->
+            scope.ngModel.value == key

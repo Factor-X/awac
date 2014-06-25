@@ -1,2 +1,1 @@
-select(ng-model="ngModel.unit")
-    option(ng-repeat="o in ngOptions", ng-value="o.key", ng-bind-html="o.value")
+select(ng-model="ngModel.unit", ng-options="o.key as o.value for o in ngOptions")

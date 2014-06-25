@@ -1,37 +1,52 @@
-@*
- *
- * Instant Play Framework
- * AWAC
- *                       
- *
- * Copyright (c) 2014 Factor-X.
- * Author Gaston Hollands
- *
- *@
+<!doctype html>
+<html ng-app="app">
+<head>
+
+    <!-- Angular dependencies -->
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-sanitize.js")'></script>
+
+    <!-- pretty print json -->
+    <!--<link rel="stylesheet" href='@routes.Assets.at("javascripts/highlight-js/styles/default.css")'>-->
+    <!--<script src='@routes.Assets.at("javascripts/highlight-js/highlight.pack.js")'></script>-->
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <!-- web app -->
+    <script src='app.js'></script>
+
+    <!-- styles -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
+    </script>
+    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
+
+    <!-- ui-select files -->
+    <!--<script src='@routes.Assets.at("javascripts/select.js")'></script>-->
+    <!--<link rel="stylesheet" href='@routes.Assets.at("stylesheets/select.css")'>-->
+
+    <!-- Select2 theme -->
+    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">-->
+
+    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">-->
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
+
+</head>
+<body ng-controller="MainCtrl">
+
+@loadingScreen()
+
+<div ng-show="!isLoading()">
+
+    <mm-awac-survey ng-model="o"></mm-awac-survey>
+
+    <pre style="font-size: 8px" ng-bind-html="prettyPrint(o)"></pre>
+
+</div>
+</body>
+</html>
 
 
-@main(Html("Welcome to AWAC")) {
 
-@if(eu.factorx.awac.controllers.Secured.isAuthenticated()) {
-	@if(eu.factorx.awac.controllers.Secured.isAdministrator()) {
-		
-		@* Administrator form *@
-		<h2>Administrator form</h2>
-		<p>Administrator module manager.</p>
-		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Administrators.list()">Manage Administrators</a></p>
-		
-		@* Account form *@
-		<h2>Account form</h2>
-		<p>Account module manager.</p>
-		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Accounts.list()">Manage Accounts</a></p>
-		
-	} else {
-	
-		@* Account form *@
-		<h2>Account form</h2>
-		<p>Account module manager.</p>
-		<p><a class="btn" href="@eu.factorx.awac.controllers.routes.Accounts.edit(21)">Manage My Account</a></p>		
-	}
-}
-		
-}

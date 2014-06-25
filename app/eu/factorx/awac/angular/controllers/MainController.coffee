@@ -16,8 +16,9 @@ angular
 
     translationService.initialize()
 
-    $scope.prettyPrint = (o) ->
-        return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
+
+    #$scope.prettyPrint = (o) ->
+    #    return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
 
     downloadService.getJson "dummy/household/2014", (data) ->
         $scope.o = data

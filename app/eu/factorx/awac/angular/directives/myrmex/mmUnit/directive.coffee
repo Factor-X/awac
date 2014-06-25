@@ -9,3 +9,9 @@ angular
     templateUrl: "$/angular/templates/mm-unit.html"
     link: (scope) ->
         directiveService.autoScopeImpl scope
+
+        scope.isSelected = (key) ->
+            console.log "TEST !"
+            console.log scope.ngModel.unit
+            console.log key
+            scope.ngModel.unit == key

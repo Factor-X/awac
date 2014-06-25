@@ -1,2 +1,11 @@
-select(ng-model="ngModel.value")
-    option(ng-repeat="o in ngOptions", ng-value="o.key", ng-bind-html="o.value")
+.btn-group.mm-dropdown
+    button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')
+        .row
+            .col-xs-10
+                div(style="text-align: left", ng-bind-html="getValue() | translate")
+            .col-xs-2
+                div(style="text-align: right")
+                    span.caret
+    ul.dropdown-menu(role='menu')
+        li(ng-repeat="o in ngOptions")
+            a(href='#', ng-click="select(o)") {{ o.value }}

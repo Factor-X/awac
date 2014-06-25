@@ -1,7 +1,7 @@
 # simple download service
 angular
 .module('app.services')
-.service "directiveService", () ->
+.service "directiveService", ($sce) ->
     @autoScope = (s) ->
         res = {}
 
@@ -42,6 +42,9 @@ angular
 
         s.isNull = (v) ->
             v == null
+
+        s.html = (v) ->
+            $sce.trustAsHtml(v)
 
 
     return

@@ -10,16 +10,6 @@ import java.util.Date;
 
 public class Dummy extends Controller {
 
-    /**
-     * Handle default path requests, redirect to account list
-     */
-    public static Result index() {
-
-
-        return ok(eu.factorx.awac.views.html.dummy.index.render());
-    }
-
-
     public static Result getHousehold(Integer year) {
         HouseholdDTO dto = new HouseholdDTO();
 

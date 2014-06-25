@@ -99,6 +99,16 @@ input:focus {
     width: 1%;
 }
 
+.mm-dropdown {
+    display: block;
+    width: 100%;
+}
+.dropdown-toggle {
+    display: block;
+    width: 100%;
+}
+
+
 hr {
     display: table-row;
     border: none;
