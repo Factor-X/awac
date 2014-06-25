@@ -1,0 +1,2 @@
+The package awac.get contains the DTO related to the communication FROM the server TO the client.
+The package awac.post contains the DTO related to the communication FROM the client TO the server.

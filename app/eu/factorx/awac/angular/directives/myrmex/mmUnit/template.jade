@@ -1,1 +1,2 @@
-mm-dropdown(ng-model="ngModel", ng-options="ngModel.units")
+select(ng-model="ngModel.unit")
+    option(ng-repeat="o in ngOptions", ng-value="o.key", ng-bind-html="o.value")

@@ -11,68 +11,57 @@
 
 package eu.factorx.awac.models;
 
-import javax.persistence.*;
-import javax.persistence.Version;
-
-import play.db.ebean.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.factorx.awac.common.AccountStatusType;
+import play.data.validation.Constraints.Email;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
 
-import com.avaje.ebean.*;
-
-// import for TimeStamp
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 
-
+// import for TimeStamp
 // imports for validation and constraints annotations
-import javax.validation.*;
-
-import play.data.validation.Constraints.*;
-
 // import for Json annotations -- jackson stack
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.annotation.*;
-
 // import for JAXB annotations -- JAXB stack
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
 
-@XmlRootElement(name = "Person") // for JAXB
-@XmlAccessorType(XmlAccessType.PROPERTY) // for JAXB
 @Entity
-@Access(AccessType.FIELD)
-@DiscriminatorColumn(name = "PERSON_TYPE")
-//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-// JOINED not supported by ebeans
-@Inheritance(strategy = InheritanceType.JOINED)
-// @DiscriminatorValue("Personne")	
-public abstract class Person extends Model {
+public class Person extends Model {
 
     @Version // in order to improve optimistic locking.
     public Timestamp lastUpdate;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long personId;
+
     @Required
     public String identifier;
+
     @JsonIgnore // ignore password field when render in JSON
     @XmlTransient //ignore password field when render in XML
     @Required
     public String password;
+
     @Required
     public String lastname;
+
     @Required
     public String firstname;
+
     @Email
     public String email;
+
     @Embedded
     public Address address;
+
     // set status to unactive by default.
     @Required
     public AccountStatusType accountStatus = AccountStatusType.UNACTIVE;
 
+    @ManyToOne
+    private Car car;
 
     public Person() {
     }

@@ -40,6 +40,7 @@ POST    /accounts/:id/delete  		eu.factorx.awac.controllers.Accounts.delete(id:L
 
 
 GET     /dummy                      eu.factorx.awac.controllers.Dummy.index()
+GET     /dummy/household/:year      eu.factorx.awac.controllers.Dummy.getHousehold(year:Integer)
 
 GET     /translations/:lang         eu.factorx.awac.controllers.Translation.fetch(lang:String)
 

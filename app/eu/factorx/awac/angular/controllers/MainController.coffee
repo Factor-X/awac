@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce) ->
     $scope.isLoading = ->
         for k of $scope.initialLoad
             return true  unless $scope.initialLoad[k]
@@ -14,53 +14,24 @@ angular
             $scope.initialLoad.translations = args.success
         return
 
-    $scope.o =
+    translationService.initialize()
 
+    $scope.prettyPrint = (o) ->
+        return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
 
-        mainFuel:
-            value: null
-            reviewers:
-                dataOwner: "XM"
-                dataValidator: "JC"
-                dataVerifier: "FC"
-                dataLocker: "GP"
+    downloadService.getJson "dummy/household/2014", (data) ->
+        $scope.o = data
+        $scope.o.consumption.units = $scope.volumeUnits;
 
-
-
-
-        myDouble:
-            value: 17.97
-            owner: "XM"
-            validator: "JC"
-            verifier: "FC"
-
-        myText:
-            value: 'Les poules discutent'
-            reviewers:
-                dataOwner: "XM"
-                dataValidator: "JC"
-                dataVerifier: "FC"
-                dataLocker: "GP"
-
-        myDoubleWithUnit:
-            reviewers:
-                dataOwner: "XM"
-                dataValidator: "JC"
-                dataVerifier: "FC"
-                dataLocker: "GP"
-            value: 17.97
-            unit: 0
-            units: [
-                {
-                    key: 12
-                    value: "UNITS-KILOGRAM"
-                }
-                {
-                    key: 14
-                    value: "UNITS-GRAM"
-                }
-                {
-                    key: 135
-                    value: "UNITS-TON"
-                }
-            ]
+        $scope.addOtherFuel = () ->
+            console.log 'ok'
+            $scope.o.otherFuels.push
+                value: 0,
+                unit: 0,
+                units: $scope.volumeUnits,
+                reviewers:
+                    dataOwner: null
+                    dataValidator: null
+                    dataVerifier: null
+                    dataLocker: null
+            return false

@@ -1,7 +1,8 @@
 .question
     .question-label(ng-bind-html='getLabelCode() | translate')
 
-    .question-editor(ng-transclude=true)
+    .question-editor
+        .question-editor-holder(ng-transclude=true)
 
     .question-reviewer
         .label.label-info {{ getReviewers().dataOwner }}
@@ -10,4 +11,4 @@
     .question-reviewer
         .label.label-danger {{ getReviewers().dataVerifier }}
     .question-reviewer
-        .label.label-success {{ getReviewers().dataLocker }}
+        .label.label-default {{ getReviewers().dataLocker }}

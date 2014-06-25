@@ -1,0 +1,59 @@
+package uml.forms;
+
+import play.db.ebean.Model;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "form")
+public class Form extends Model {
+
+    private static final long serialVersionUID = 1L;
+
+    public Form() {
+    }
+
+    @Id
+    private long id;
+    @Transient
+    private Integer progress;
+    @OneToMany(mappedBy = "form")
+    private List<FormQuestion> questions = new ArrayList<FormQuestion>();
+    @ManyToOne(optional = false)
+    private Campaign campaign;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
+    public List<FormQuestion> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<FormQuestion> param) {
+        this.questions = param;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign param) {
+        this.campaign = param;
+    }
+
+}

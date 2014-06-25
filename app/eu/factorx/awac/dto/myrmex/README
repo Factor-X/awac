@@ -1,0 +1,2 @@
+The package myrmex.get contains the DTO related to the communication FROM the server TO the client.
+The package myrmex.post contains the DTO related to the communication FROM the client TO the server.

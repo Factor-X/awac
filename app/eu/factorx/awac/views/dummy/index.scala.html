@@ -1,45 +1,49 @@
 <!doctype html>
 <html ng-app="app">
-    <head>
+<head>
 
-        <!-- Angular dependencies -->
-        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
-        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
-        <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-sanitize.js")'></script>
+    <!-- Angular dependencies -->
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-animate.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/angular-1.2.17/angular-sanitize.js")'></script>
 
-        <!-- web app -->
-        <script src='app.js'></script>
+    <!-- pretty print json -->
+    <link rel="stylesheet" href='@routes.Assets.at("javascripts/highlight-js/styles/default.css")'>
+    <script src='@routes.Assets.at("javascripts/highlight-js/highlight.pack.js")'></script>
 
-        <!-- styles -->
-        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/bootstrap.css")'>
-        <link rel="stylesheet" href="http://bootswatch.com/cosmo/bootstrap.min.css"/>
-        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
+    <!-- web app -->
+    <script src='app.js'></script>
 
-        <!-- ui-select files -->
-        <script src='@routes.Assets.at("javascripts/select.js")'></script>
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/select.css")'>
+    <!-- styles -->
+    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/bootstrap.css")'>
+    <link rel="stylesheet" href="http://bootswatch.com/superhero/bootstrap.min.css"/>
+    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
-        <!-- Select2 theme -->
-        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+    <!-- ui-select files -->
+    <script src='@routes.Assets.at("javascripts/select.js")'></script>
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/select.css")'>
 
-        <link rel="stylesheet"
-              href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
-        <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
-        <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
+    <!-- Select2 theme -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
 
-    </head>
-    <body ng-controller="MainCtrl">
+    <link rel="stylesheet"
+          href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
-        @loadingScreen()
+</head>
+<body ng-controller="MainCtrl">
 
-        <div ng-show="!isLoading()">
+@loadingScreen()
 
-            <mm-awac-survey ng-model="o"></mm-awac-survey>
+<div ng-show="!isLoading()">
 
-            {{o}}
+    <mm-awac-survey ng-model="o"></mm-awac-survey>
 
-        </div>
-    </body>
+    <pre style="font-size: 8px" ng-bind-html="prettyPrint(o)"></pre>
+
+</div>
+</body>
 </html>
 
 

@@ -45,13 +45,27 @@ body {
     display: block !important;
 }
 
-input {
-    line-height: 24px;
-    height: 24px;
+input.ng-invalid {
+    background: #fcc;
 }
 
-input.ng-invalid {
-    background: #faa;
+input, select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0%;
+    border-radius: 0;
+    line-height: 24px;
+    height: 24px;
+    color: black;
+    background: white;
+    box-shadow: none;
+    outline: none;
+}
+
+input:focus {
+    box-shadow: none;
+    outline: none;
+    border-color: orange;
 }
 
 .question {
@@ -69,6 +83,15 @@ input.ng-invalid {
     display: table-cell;
     width: 50%;
     white-space: nowrap;
+}
+
+.question-editor-holder {
+    width: 100%;
+    display: table;
+}
+
+.question-editor-holder > * {
+    display: table-cell;
 }
 
 .question-reviewer {
@@ -107,3 +130,4 @@ hr {
     display: table-cell;
     width: 100%;
 }
+
