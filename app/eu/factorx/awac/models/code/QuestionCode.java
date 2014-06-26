@@ -1,21 +1,21 @@
 package eu.factorx.awac.models.code;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
-import play.db.ebean.Model;
-
 @Embeddable
-public class QuestionCode extends Model {
+public class QuestionCode implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	// main heating fuel 
+	// main heating fuel
 	public static final QuestionCode MHF = new QuestionCode("MHF");
 	// heating fuel consumption
 	public static final QuestionCode HFC = new QuestionCode("HFC");
 	// housing type
-	public static final QuestionCode HOT = new QuestionCode("HOT");	
-	
+	public static final QuestionCode HOT = new QuestionCode("HOT");
+
 	private String value;
 
 	public QuestionCode() {

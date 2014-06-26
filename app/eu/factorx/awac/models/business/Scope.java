@@ -1,27 +1,19 @@
 package eu.factorx.awac.models.business;
 
+import java.io.Serializable;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-import play.db.ebean.Model;
-
-@Entity
-// @DiscriminatorColumn(name = "scope_type", discriminatorType =
-// DiscriminatorType.INTEGER)
-// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "scope")
-public class Scope extends Model {
+@Embeddable
+public class Scope implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private Long id;
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "scope_type")), })
 	private ScopeType scopeType;
@@ -33,20 +25,12 @@ public class Scope extends Model {
 	private Product product;
 
 	public Scope() {
-		
+
 	}
 
 	public Scope(Organization organization) {
 		this.scopeType = ScopeType.ORG;
 		this.organization = organization;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public ScopeType getScopeType() {

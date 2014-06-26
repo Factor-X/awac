@@ -1,15 +1,15 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Entity;
+import java.io.Serializable;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import play.db.ebean.Model;
 
 //@Entity
 //@Table(name = "air_travel_info")
-public class AirTravelInfo extends Model {
+public class AirTravelInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,6 +17,7 @@ public class AirTravelInfo extends Model {
 	}
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne(optional = false)
 	private AirTravelsGroupAnswer answer;

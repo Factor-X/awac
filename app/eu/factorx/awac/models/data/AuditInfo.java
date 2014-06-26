@@ -1,28 +1,24 @@
 package eu.factorx.awac.models.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-import play.db.ebean.Model;
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
+
 import eu.factorx.awac.models.business.User;
 
-@Entity
-@Table(name = "audit_info")
-public class AuditInfo extends Model {
+@Embeddable
+public class AuditInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private Long id;	
 	@ManyToOne
-	private User dataValidator;
+	protected User dataValidator;
 	@ManyToOne
-	private User dataLocker;
+	protected User dataLocker;
 	@ManyToOne
-	private User dataVerifier;
-	private Integer verificationStatus;
+	protected User dataVerifier;
+	protected Integer verificationStatus;
 
 	public User getDataValidator() {
 		return dataValidator;

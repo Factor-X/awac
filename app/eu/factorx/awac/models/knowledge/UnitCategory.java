@@ -1,24 +1,27 @@
 package eu.factorx.awac.models.knowledge;
 
-import play.db.ebean.Model;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name = "unit_category")
-public class UnitCategory extends Model {
+public class UnitCategory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String code;
 
-    @OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category")
 	private List<Unit> units;
 
 	public UnitCategory() {

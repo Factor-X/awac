@@ -1,20 +1,24 @@
 package eu.factorx.awac.models.forms;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import play.db.ebean.Model;
 import eu.factorx.awac.models.data.Question;
 
 @Entity
 @Table(name = "form_question")
-public class FormQuestion extends Model {
+public class FormQuestion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne(optional = false)
 	private Form form;

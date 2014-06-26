@@ -12,6 +12,7 @@
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
 // Spring imports
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,13 +23,13 @@ import org.springframework.stereotype.Service;
 
 import play.Application;
 import play.GlobalSettings;
+import play.db.jpa.JPA;
 import play.i18n.Lang;
 import play.i18n.Messages;
+import play.libs.F;
 import play.libs.Yaml;
-
-import com.avaje.ebean.Ebean;
-
 import eu.factorx.awac.models.Administrator;
+import eu.factorx.awac.models.Person;
 
 public class Global extends GlobalSettings {
 
@@ -44,20 +45,14 @@ public class Global extends GlobalSettings {
         //changeLang("fr");
         //Lang.change("fr");
 
-        // Check if the database is empty
-        if (Administrator.find.findRowCount() == 0) {
-            Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
-            // save data into DB in relevant order.
-            // -> no Ebean.save(all.get("adresses"));
-
-            System.out.println(all);
-
-            Ebean.save(all.get("administrators"));
-            Ebean.save(all.get("accounts"));
-
-            AwacDummyDataCreator.createAwacDummyData();
-        }
-
+        JPA.withTransaction(new F.Callback0() {
+			
+			@Override
+			public void invoke() throws Throwable {
+				createInitialData();			
+			}
+		});
+ 
         // ========================================
         // INTERNAL SPRING SERVICES
         // ========================================
@@ -74,6 +69,30 @@ public class Global extends GlobalSettings {
 
 
     }
+
+
+	private void createInitialData() {
+		// Get Hibernate session
+		Session session = JPA.em().unwrap(Session.class);
+
+		// Check if the database is empty
+        @SuppressWarnings("unchecked")
+		List<Administrator> administrators = session.createCriteria(Person.class).list();
+        if (administrators.isEmpty()) {
+            Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
+            // save data into DB in relevant order.
+ 
+            System.out.println(all);
+            for (Object entity : all.get("administrators")) {
+            	session.saveOrUpdate(entity);
+			}
+            for (Object entity : all.get("accounts")) {
+            	session.saveOrUpdate(entity);
+			}
+
+            AwacDummyDataCreator.createAwacDummyData(session);
+        }
+	}
 
     @Override
     public void onStop(Application app) {

@@ -1,5 +1,6 @@
+import org.hibernate.Session;
+
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.QuestionCode;
 import eu.factorx.awac.models.data.Question;
 import eu.factorx.awac.models.forms.Campaign;
@@ -11,51 +12,46 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 
 public class AwacDummyDataCreator {
 
-    public static void createAwacDummyData() {
+	public static void createAwacDummyData(Session session) {
 
-        Organization men1 = new Organization("Ménage 1");
-        men1.save();
-        Organization men2 = new Organization("Ménage 2");
-        men2.save();
+		Organization men1 = new Organization("Ménage 1");
+		session.saveOrUpdate(men1);
+		Organization men2 = new Organization("Ménage 2");
+		session.saveOrUpdate(men2);
 
-        Scope scopeMen1 = new Scope(men1);
-        scopeMen1.save();
-        Scope scopeMen2 = new Scope(men2);
-        scopeMen2.save();
+		UnitCategory volumeUnits = new UnitCategory("Volume");
+		session.saveOrUpdate(volumeUnits);
 
-        UnitCategory volumeUnits = new UnitCategory("Volume");
-        volumeUnits.save();
+		Unit litter = new Unit("Liter", volumeUnits);
+		session.saveOrUpdate(litter);
+		Unit gallon = new Unit("Gallon", volumeUnits);
+		session.saveOrUpdate(gallon);
+		Unit cubicMeter = new Unit("Cubic meter", volumeUnits);
+		session.saveOrUpdate(cubicMeter);
 
-        Unit litter = new Unit("Liter", volumeUnits);
-        litter.save();
-        Unit gallon = new Unit("Gallon", volumeUnits);
-        gallon.save();
-        Unit cubicMeter = new Unit("Cubic meter", volumeUnits);
-        cubicMeter.save();
+		Question q1 = new Question(QuestionCode.MHF);
+		session.saveOrUpdate(q1);
+		Question q2 = new Question(QuestionCode.HFC, volumeUnits);
+		session.saveOrUpdate(q2);
+		Question q3 = new Question(QuestionCode.HOT);
+		session.saveOrUpdate(q3);
 
-        Question q1 = new Question(QuestionCode.MHF);
-        q1.save();
-        Question q2 = new Question(QuestionCode.HFC, volumeUnits);
-        q2.save();
-        Question q3 = new Question(QuestionCode.HOT);
-        q3.save();
+		Period period1 = new Period("2013");
+		session.saveOrUpdate(period1);
 
-        Period period1 = new Period("2013");
-        period1.save();
+		Campaign awac2013 = new Campaign("AWAC 2013", period1);
+		session.saveOrUpdate(awac2013);
 
-        Campaign awac2013 = new Campaign("AWAC 2013", period1);
-        awac2013.save();
+		Form form = new Form("Formulaire Ménages", awac2013);
+		session.saveOrUpdate(form);
 
-        Form form = new Form("Formulaire Ménages", awac2013);
-        form.save();
+		FormQuestion formQ1 = new FormQuestion(form, q1);
+		session.saveOrUpdate(formQ1);
+		FormQuestion formQ2 = new FormQuestion(form, q2);
+		session.saveOrUpdate(formQ2);
+		FormQuestion formQ3 = new FormQuestion(form, q3);
+		session.saveOrUpdate(formQ3);
 
-        FormQuestion formQ1 = new FormQuestion(form, q1);
-        formQ1.save();
-        FormQuestion formQ2 = new FormQuestion(form, q2);
-        formQ2.save();
-        FormQuestion formQ3 = new FormQuestion(form, q3);
-        formQ3.save();
-
-    }
+	}
 
 }

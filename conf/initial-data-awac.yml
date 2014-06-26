@@ -3,21 +3,18 @@
 addresses:
 
     - &addressA !!eu.factorx.awac.models.Address
-        id:             1
         street:         Fontaine des Miracles
         postalcode:     1360
         city:           Perwez
         country:        Belgium
 
     - &addressB !!eu.factorx.awac.models.Address
-        id:             2
         street:         Rue Emile Delva
         postalcode:     1020
         city:           Bruxelles
         country:        Belgium
 
     - &addressC !!eu.factorx.awac.models.Address
-        id:             3
         street:         Place Bockstael
         postalcode:     1020
         city:           Bruxelles
@@ -26,12 +23,10 @@ addresses:
 vat:
 
     - &vatA !!eu.factorx.awac.models.Vat
-        id:             1
         vatNumber:      BE0849213125
         viesVerified:   false     
 
     - &vatB !!eu.factorx.awac.models.Vat
-        id:             2
         vatNumber:      
         viesVerified:   false     
 

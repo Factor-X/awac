@@ -11,33 +11,25 @@
  
 package eu.factorx.awac.models;
 
-import javax.persistence.*;
-import play.db.ebean.*;
-import com.avaje.ebean.*;
+import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-
-// import for Json annotations -- jackson stack
-//import org.codehaus.jackson.annotate.*;
-import com.fasterxml.jackson.annotation.*;
-
-
-// import for JAXB annotations -- JAXB stack
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+// import for JAXB annotations -- JAXB stack
+import javax.xml.bind.annotation.XmlRootElement;
+// import for Json annotations -- jackson stack
+//import org.codehaus.jackson.annotate.*;
 
 @XmlRootElement(name = "Address") // for JAXB
 @XmlAccessorType(XmlAccessType.PROPERTY) // for JAXB
 
 @Embeddable
-public class Address extends Model {
+public class Address implements Serializable {
 
-	@JsonIgnore // ignore id field when render in JSON
-    @Id
-    private Long id;
-    public String street;
+	private static final long serialVersionUID = 1L;
+	
+	public String street;
     public String postalcode;
     public String city;
 	public String country;
@@ -53,14 +45,4 @@ public class Address extends Model {
 	this.country = country;
     }
 	
-	/* not useful for Play  but need for yamlll */
-	
-	public Long getId() {
-	    return (id);
-    }
-
-    public void setId (Long id) {
-	    this.id = id;
-    }
-
 }

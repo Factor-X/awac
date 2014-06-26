@@ -12,37 +12,26 @@
 package eu.factorx.awac.models;
  
 
-import javax.persistence.*;
-
-import play.db.ebean.*;
-
-import com.avaje.ebean.*;
+import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-
-
-
-// import for Json annotations -- jackson stack
-//import org.codehaus.jackson.annotate.*;
-import com.fasterxml.jackson.annotation.*;
-
-// import for JAXB annotations -- JAXB stack
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+// import for JAXB annotations -- JAXB stack
+import javax.xml.bind.annotation.XmlRootElement;
+// import for Json annotations -- jackson stack
+//import org.codehaus.jackson.annotate.*;
 
 @XmlRootElement(name = "Vat") // for JAXB
 @XmlAccessorType(XmlAccessType.PROPERTY) // for JAXB
 
 @Embeddable
-public class Vat extends Model {
+public class Vat implements Serializable {
 
-	@JsonIgnore // ignore id field when render in JSON
-    @Id
-    private Long id;
+	private static final long serialVersionUID = 1L;
+
 	public String vatNumber;
-	public boolean viesVerified;
+	public Boolean viesVerified;
 	public String viesName;
     public String viesAddress;
     public String viesRequestId;
@@ -57,14 +46,53 @@ public class Vat extends Model {
 	this.vatNumber = vatNumber;
 	this.viesVerified = verified;
     }
-	
-	/* not useful for Play  but need for yamlll */
-	
-	public Long getId() {
-	    return (id);
-    }
 
-    public void setId (Long id) {
-	    this.id = id;
-    }
+	public String getVatNumber() {
+		return vatNumber;
+	}
+
+	public void setVatNumber(String vatNumber) {
+		this.vatNumber = vatNumber;
+	}
+
+	public Boolean getViesVerified() {
+		return viesVerified;
+	}
+
+	public void setViesVerified(Boolean viesVerified) {
+		this.viesVerified = viesVerified;
+	}
+
+	public String getViesName() {
+		return viesName;
+	}
+
+	public void setViesName(String viesName) {
+		this.viesName = viesName;
+	}
+
+	public String getViesAddress() {
+		return viesAddress;
+	}
+
+	public void setViesAddress(String viesAddress) {
+		this.viesAddress = viesAddress;
+	}
+
+	public String getViesRequestId() {
+		return viesRequestId;
+	}
+
+	public void setViesRequestId(String viesRequestId) {
+		this.viesRequestId = viesRequestId;
+	}
+
+	public String getViesRequestDate() {
+		return viesRequestDate;
+	}
+
+	public void setViesRequestDate(String viesRequestDate) {
+		this.viesRequestDate = viesRequestDate;
+	}
+    
 }

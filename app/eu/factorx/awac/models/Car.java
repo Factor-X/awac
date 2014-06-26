@@ -10,29 +10,34 @@
  */
 package eu.factorx.awac.models;
 
-import play.db.ebean.Model;
+import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 // import for JAXB annotations -- JAXB stack
 
 @Entity
-public class Car extends Model {
+public class Car implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    private Person person;
+//    @OneToOne
+//    private Person person;
 
     public Car() {
 
     }
 
-    public static Finder<Long, Car> find = new Finder<Long, Car>(
-            Long.class, Car.class
-    );
+//    public static Finder<Long, Car> find = new Finder<Long, Car>(
+//            Long.class, Car.class
+//    );
 
 
     public Long getId() {
@@ -43,11 +48,11 @@ public class Car extends Model {
         this.id = id;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
+//    public Person getPerson() {
+//        return person;
+//    }
+//
+//    public void setPerson(Person person) {
+//        this.person = person;
+//    }
 }

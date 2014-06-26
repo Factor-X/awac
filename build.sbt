@@ -2,10 +2,12 @@ name := "awac"
 
 version := "1.0-SNAPSHOT"
 
+ebeanEnabled := false
+
 libraryDependencies ++= Seq(
-  javaJdbc,
-  javaEbean,
-  cache
+  "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final",
+  javaCore,
+  javaJpa
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"

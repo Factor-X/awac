@@ -1,15 +1,16 @@
 package eu.factorx.awac.models.reporting;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import play.db.ebean.Model;
-
 @Entity
-public class Report extends Model {
+public class Report implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -17,6 +18,7 @@ public class Report extends Model {
 	}
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToMany
 	private List<Indicator> indicators;

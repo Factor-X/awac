@@ -1,11 +1,11 @@
 package eu.factorx.awac.models.code;
 
-import play.db.ebean.Model;
+import java.io.Serializable;
 
 //@Entity
 //@DiscriminatorColumn(name = "type")
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Code extends Model {
+public abstract class Code implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

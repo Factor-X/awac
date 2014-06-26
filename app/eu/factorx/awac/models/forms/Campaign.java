@@ -1,23 +1,26 @@
 package eu.factorx.awac.models.forms;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import play.db.ebean.Model;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "campaign")
-public class Campaign extends Model {
+public class Campaign implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	@ManyToOne(optional = false)
