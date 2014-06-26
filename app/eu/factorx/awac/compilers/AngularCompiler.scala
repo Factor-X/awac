@@ -78,7 +78,7 @@ class AngularCompiler {
             usefulPath = usefulPath.replaceAll(regex, replacement).toLowerCase();
 
             // now split and format it correctly
-            var usefulPathParts = usefulPath.split("/")
+            var usefulPathParts = usefulPath.split("[/\\\\]")
             usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
             // usefulPath = usefulPathParts.mkString("/")
             usefulPath = usefulPathParts.slice(usefulPathParts.length-1, usefulPathParts.length).mkString
