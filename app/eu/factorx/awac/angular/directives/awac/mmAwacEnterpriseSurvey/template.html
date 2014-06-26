@@ -1,0 +1,49 @@
+<ng-virtual>
+    <mm-awac-survey-section label-code="HEATING-CODE">
+        <mm-awac-question label-code="MAIN-FUEL-CODE" ng-reviewers="ngModel.mainFuel.reviewers">
+            <mm-dropdown ng-model="ngModel.mainFuel" ng-options="ngModel.fuels"></mm-dropdown>
+        </mm-awac-question>
+        <mm-awac-question label-code="CONSUMPTION-CODE" ng-reviewers="ngModel.consumption.reviewers">
+            <mm-double ng-model="ngModel.consumption"></mm-double>
+            <mm-unit ng-model="ngModel.consumption" ng-options="ngModel.volumeUnits"></mm-unit>
+        </mm-awac-question>
+        <mm-awac-question label-code="ADD-A-CONSUMPTION-CODE"
+                          ng-reviewers="ngModel.otherFuels.reviewers"></mm-awac-question>
+    </mm-awac-survey-section>
+    <hr/>
+    <mm-awac-survey-section label-code="HOUSEHOLD-CODE">
+        <mm-awac-question label-code="HOUSE-TYPE-CODE" ng-reviewers="ngModel.householdType.reviewers">
+            <mm-double ng-model="ngModel.householdType"></mm-double>
+        </mm-awac-question>
+        <mm-awac-question label-code="SURFACE-CODE" ng-reviewers="ngModel.surface.reviewers">
+            <mm-double ng-model="ngModel.surface"></mm-double>
+        </mm-awac-question>
+        <mm-awac-question label-code="NUMBER-OF-INHABITANTS-CODE" ng-reviewers="ngModel.inhabitants.reviewers">
+            <mm-double ng-model="ngModel.inhabitants"></mm-double>
+        </mm-awac-question>
+        <mm-awac-question label-code="NUMBER-OF-HEATED-ROOMS-CODE" ng-reviewers="ngModel.heatedRooms.reviewers">
+            <mm-double ng-model="ngModel.heatedRooms"></mm-double>
+        </mm-awac-question>
+        <mm-awac-question label-code="BEFORE-75-CODE" ng-reviewers="ngModel.builtBefore1975.reviewers">
+            <mm-boolean ng-model="ngModel.builtBefore1975"></mm-boolean>
+        </mm-awac-question>
+        <mm-awac-question label-code="ISOLATION-10-LAST-YEARS-CODE"></mm-awac-question>
+        <mm-awac-question label-code="ROOF-CODE" ng-reviewers="ngModel.last10YearsRoof.reviewers">
+            <mm-boolean ng-model="ngModel.last10YearsRoof"></mm-boolean>
+        </mm-awac-question>
+        <mm-awac-question label-code="EXTERNAL-WALLS-CODE" ng-reviewers="ngModel.last10YearsExternalWalls.reviewers">
+            <mm-boolean ng-model="ngModel.last10YearsExternalWalls"></mm-boolean>
+        </mm-awac-question>
+        <mm-awac-question label-code="INSULATED-GLAZING-CODE"
+                          ng-reviewers="ngModel.last10YearsInsulatedGlazing.reviewers">
+            <mm-boolean ng-model="ngModel.last10YearsInsulatedGlazing"></mm-boolean>
+        </mm-awac-question>
+    </mm-awac-survey-section>
+    <hr/>
+    <mm-awac-survey-section label-code="COOKING-CODE">
+        <mm-awac-question label-code="GAZ-COOKING-CODE" ng-reviewers="ngModel.butane.reviewers">
+            <mm-double ng-model="ngModel.butane"></mm-double>
+            <mm-unit ng-model="ngModel.butane" ng-options="ngModel.volumeUnits"></mm-unit>
+        </mm-awac-question>
+    </mm-awac-survey-section>
+</ng-virtual>

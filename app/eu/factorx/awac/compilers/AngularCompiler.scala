@@ -9,16 +9,6 @@ import java.util.Arrays
 
 class AngularCompiler {
 
-    /**
-     * Get a recursive listing of all files underneath the given directory.
-     * from stackoverflow.com/questions/2637643/how-do-i-list-all-files-in-a-subdirectory-in-scala
-     */
-    private def getRecursiveListOfFiles(dir: File): Array[File] = {
-        val these = dir.listFiles
-        these ++ these.filter(_.isDirectory).flatMap(getRecursiveListOfFiles)
-    }
-
-
     def compile(path: String): String = {
         val angular = Path.fromString(path)
 
@@ -62,8 +52,18 @@ class AngularCompiler {
         for (f <- files) {
             // turn it into an HTML
             val jadePath = f.sibling("template.jade")
-            println("compiling " + jadePath.path + " ...")
-            val html = de.neuland.jade4j.Jade4J.render(jadePath.path, null);
+            var html = "";
+            if (jadePath.exists) {
+                println("compiling " + jadePath.path + " ...")
+                html = de.neuland.jade4j.Jade4J.render(jadePath.path, null);
+            } else {
+                val htmlPath = f.sibling("template.html")
+                if (htmlPath.exists) {
+                    println("reading " + htmlPath.path + " ...")
+                    html = scala.io.Source.fromFile(htmlPath.path, "utf-8").getLines.mkString("\n")
+                }
+            }
+
 
             // now, escape string so that it can be embedded as a variable
             val mapper: ObjectMapper = new ObjectMapper();
@@ -81,7 +81,7 @@ class AngularCompiler {
             var usefulPathParts = usefulPath.split("[/\\\\]")
             usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
             // usefulPath = usefulPathParts.mkString("/")
-            usefulPath = usefulPathParts.slice(usefulPathParts.length-1, usefulPathParts.length).mkString
+            usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
 
             println(usefulPath)
 
@@ -99,7 +99,7 @@ class AngularCompiler {
 
         var res = List[String]()
         res = res :+ begin
-        for((url,content) <- (names,contents).zipped) {
+        for ((url, content) <- (names, contents).zipped) {
             res = res :+ "$templateCache.put('" + url + "', " + content + ");"
         }
         res = res :+ end
