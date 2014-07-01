@@ -1,0 +1,3 @@
+.tab(ng-class="{active: getActive()}")
+    .tab-header(ng-bind-html="getHeaderCode() | translate", ng-click="$select()")
+    .tab-content(ng-transclude=true)

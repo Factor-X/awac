@@ -2,7 +2,7 @@ import java.net.URL
 import java.util
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService
-import com.google.gdata.data.spreadsheet.{CellFeed, SpreadsheetEntry}
+import com.google.gdata.data.spreadsheet.{Cell, CellFeed, SpreadsheetEntry}
 import scala.util.control.Breaks._
 
 class DownloadTranslationsTask {
@@ -10,7 +10,7 @@ class DownloadTranslationsTask {
     private val DOCUMENT_URL = "https://spreadsheets.google.com/feeds/spreadsheets/0AiAtXT315RiWdFJxQ0FVMTlvNDhlamN2c2RGeEZWTVE"
     private var username = ""
     private var password = ""
-    //private var cells: List[List[Cell]] = _
+    private var cells: List[List[Cell]] = _
     private var rowCount: Int = _
     private var colCount: Int = _
 
@@ -32,13 +32,13 @@ class DownloadTranslationsTask {
 
 
     def getValue(row: Int, column: Int): String = {
-        /*
-        Cell cell = cells.get(row).get(column)
 
-        if (cell == null) return null
-        return cell.getValue
-        */
-        return null
+        val cell = cells(row)(column)
+
+        if (cell == null)
+            null
+        else
+            cell.getValue
     }
 
     def download() {
@@ -77,17 +77,16 @@ class DownloadTranslationsTask {
         }
 
 
-
     }
 
 
     private def fillCellsFromFeed(cFeed: CellFeed) {
-        /*
-        cells = new ArrayList[List[Cell]]()
+/*
+        cells = List(List[Cell]]()
         rowCount = cFeed.getRowCount
         colCount = cFeed.getColCount
         for (r <- 0 until rowCount) {
-            val row = new ArrayList[Cell]()
+            val row = new util.ArrayList[Cell]()
             cells.add(row)
             for (c <- 0 until colCount) {
                 row.add(null)

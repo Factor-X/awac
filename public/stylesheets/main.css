@@ -141,3 +141,10 @@ hr {
     width: 100%;
 }
 
+.tab .tab-content {
+    display: none;
+}
+
+.tab.active .tab-content {
+    display: block;
+}

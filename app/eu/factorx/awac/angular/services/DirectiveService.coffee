@@ -18,7 +18,7 @@ angular
         for key, val of s
             if key[0..1] == 'ng'
 
-                f = (scope, k) ->
+                fget = (scope, k) ->
                     return () ->
                         v = 0
 
@@ -32,7 +32,7 @@ angular
                         else
                             return v
 
-                s['get' + key[2..]] = f(s, key)
+                s['get' + key[2..]] = fget(s, key)
 
         s.isTrue = (v) ->
             v == true || v == 'true' || v == 'y'
