@@ -1,8 +1,8 @@
 angular
 .module('app.filters')
 .filter "translate", ($sce, translationService) ->
-    (input) ->
-        text = translationService.get(input)
+    (input, count) ->
+        text = translationService.get(input, count)
         if text?
             $sce.trustAsHtml "<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>"
         else

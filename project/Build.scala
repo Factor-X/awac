@@ -30,6 +30,14 @@ object ApplicationBuild extends Build {
 
     libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion;
 
+    libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
+
+
+    lazy val downloadTranslations = TaskKey[Unit]("download-translations", "Download translations from Google Spreadsheet")
+    val downloadTranslationsTask = downloadTranslations := {
+        new DownloadTranslationsTask().execute()
+    }
+
 
     val main = play.Project(appName, appVersion, appDependencies)
         //.settings(Play2WarPlugin.play2WarSettings: _*)
@@ -46,6 +54,9 @@ object ApplicationBuild extends Build {
                     val newArg = if (ta.framework == Some(TestFrameworks.JUnit)) ta.copy(args = List.empty[String]) else ta
                 } yield newArg
             }
+        )
+        .settings(
+            downloadTranslationsTask
         )
     // Add your own project settings here
 

@@ -12,6 +12,8 @@
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.InMemoryData;
+import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import org.hibernate.Session;
 // Spring imports
 import org.springframework.context.ApplicationContext;
@@ -46,13 +48,13 @@ public class Global extends GlobalSettings {
         //Lang.change("fr");
 
         JPA.withTransaction(new F.Callback0() {
-			
-			@Override
-			public void invoke() throws Throwable {
-				createInitialData();			
-			}
-		});
- 
+
+            @Override
+            public void invoke() throws Throwable {
+                createInitialData();
+            }
+        });
+
         // ========================================
         // INTERNAL SPRING SERVICES
         // ========================================
@@ -65,34 +67,96 @@ public class Global extends GlobalSettings {
         // ========================================
 
 
+        createInMemoryData();
+    }
 
+    private void createInMemoryData() {
+        createInMemoryTranslations();
+    }
+
+    private void createInMemoryTranslations() {
+
+        String language = "FR";
+
+        TranslationsDTO dto = new TranslationsDTO(language);
+
+        dto.put("ABCD", "Deux poules discutent:<br/>- Comment vas-tu ma cocotte?<br/>- Pas très bien. Je crois que je couve quelque chose !");
+        dto.put("DOUBLE-CODE", "Un double: ");
+        dto.put("INTEGER-CODE", "Un entier: ");
+        dto.put("TEXT-CODE", "Un texte: ");
+
+        dto.put("DOUBLE-UNIT-CODE", "Un double avec unité: ");
+
+        dto.put("WITH_VAR",
+                "Il n'y a personne dans la maison.",
+                "Il y a une personne dans la maison.",
+                "Il a {0} personnes dans la maison.");
+
+        dto.put("HEATING-CODE", "Chauffage");
+
+        dto.put("UNITS-KILOGRAM", "kg");
+        dto.put("UNITS-GRAM", "g");
+        dto.put("UNITS-TON", "ton");
+
+        dto.put("FR", "Français");
+        dto.put("NL", "Nederlands");
+        dto.put("EN", "English");
+
+        InMemoryData.translations.put("FR", dto);
+
+        language = "EN";
+        dto = new TranslationsDTO(language);
+
+        dto.put("ABCD", "Deux poules discutent:<br/>- Comment vas-tu ma cocotte?<br/>- Pas très bien. Je crois que je couve quelque chose !");
+        dto.put("DOUBLE-CODE", "Un double: ");
+        dto.put("INTEGER-CODE", "Un entier: ");
+        dto.put("TEXT-CODE", "Un texte: ");
+
+        dto.put("DOUBLE-UNIT-CODE", "Un double avec unité: ");
+
+        dto.put("WITH_VAR",
+                "There is nobody in the house.",
+                "There is one person in the house",
+                "There are {0} people in the house");
+
+        dto.put("HEATING-CODE", "Heating");
+
+        dto.put("UNITS-KILOGRAM", "kg");
+        dto.put("UNITS-GRAM", "g");
+        dto.put("UNITS-TON", "ton");
+
+        dto.put("FR", "Français");
+        dto.put("NL", "Nederlands");
+        dto.put("EN", "English");
+
+        InMemoryData.translations.put("EN", dto);
 
 
     }
 
 
-	private void createInitialData() {
-		// Get Hibernate session
-		Session session = JPA.em().unwrap(Session.class);
+    private void createInitialData() {
+        // Get Hibernate session
+        Session session = JPA.em().unwrap(Session.class);
 
-		// Check if the database is empty
+        // Check if the database is empty
         @SuppressWarnings("unchecked")
-		List<Administrator> administrators = session.createCriteria(Person.class).list();
+        List<Administrator> administrators = session.createCriteria(Person.class).list();
         if (administrators.isEmpty()) {
             Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
             // save data into DB in relevant order.
- 
+
             System.out.println(all);
             for (Object entity : all.get("administrators")) {
-            	session.saveOrUpdate(entity);
-			}
+                session.saveOrUpdate(entity);
+            }
             for (Object entity : all.get("accounts")) {
-            	session.saveOrUpdate(entity);
-			}
+                session.saveOrUpdate(entity);
+            }
 
             AwacDummyDataCreator.createAwacDummyData(session);
         }
-	}
+    }
 
     @Override
     public void onStop(Application app) {

@@ -1,3 +1,5 @@
+import sbt._
+
 // Comment to get more information during initialization
 logLevel := Level.Warn
 
@@ -6,3 +8,5 @@ resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/release
 
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.0")
+
+libraryDependencies += "com.google.gdata" % "core" % "1.47.1"

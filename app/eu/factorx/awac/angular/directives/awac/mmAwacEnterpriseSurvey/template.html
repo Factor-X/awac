@@ -21,6 +21,9 @@
         <mm-awac-question label-code="NUMBER-OF-INHABITANTS-CODE" ng-reviewers="ngModel.inhabitants.reviewers">
             <mm-double ng-model="ngModel.inhabitants"></mm-double>
         </mm-awac-question>
+
+        <div ng-bind-html="'WITH_VAR' | translate:ngModel.inhabitants.value"></div>
+
         <mm-awac-question label-code="NUMBER-OF-HEATED-ROOMS-CODE" ng-reviewers="ngModel.heatedRooms.reviewers">
             <mm-double ng-model="ngModel.heatedRooms"></mm-double>
         </mm-awac-question>
@@ -46,4 +49,5 @@
             <mm-unit ng-model="ngModel.butane" ng-options="ngModel.volumeUnits"></mm-unit>
         </mm-awac-question>
     </mm-awac-survey-section>
+
 </ng-virtual>

@@ -40,6 +40,12 @@
 
 <div ng-show="!isLoading()">
 
+    <select ng-model="language">
+        <option value="en" ng-bind-html="'EN' | translate"></option>
+        <option value="fr" ng-bind-html="'FR' | translate"></option>
+        <option value="nl" ng-bind-html="'NL' | translate"></option>
+    </select>
+
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
 
     <pre style="font-size: 8px" ng-bind-html="prettyPrint(o)"></pre>
