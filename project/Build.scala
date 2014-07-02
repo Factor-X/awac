@@ -58,6 +58,9 @@ object ApplicationBuild extends Build {
         .settings(
             downloadTranslationsTask
         )
+        .settings(
+            lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "stylesheets" ** "bootstrap.less")
+        )
     // Add your own project settings here
 
 

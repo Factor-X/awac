@@ -1,40 +1,123 @@
 /*------------------------------------------------------
 [Table of contents]
 
-1. Structure
-	1.a	Header
-	1.b	Data menu
-	1.c Nav menu
+1. Font
 
-2. Buttons
-	2.a Generic
-	2.b	Specifics
+2. Structure
+	2.a	Header
+	2.b	Data menu
+	2.c Nav menu
 
-3. Content
+3. Buttons
+	3.a Generic
+	3.b	Specifics
 
+4. Content
 ------------------------------------------------------*/
 
 
+/*-----------------------------------------------------
+[ 1. Font ]
+-------------------------------------------------------
+*/
+
+@font-face {
+    font-family: 'robotolight';
+    src: url('font/Roboto-Light-webfont.eot'); /* IE9 Compat Modes */
+    src: url('font/Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),/* IE6-8 */
+         url('font/Roboto-Light-webfont.woff') format('woff'),/* Modern Browsers */
+         url('font/Roboto-Light-webfont.ttf') format('truetype'),/* Safari, Android, iOS */
+         url('font/Roboto-Light-webfont.svg#robotolight') format('svg');/* Legacy iOS */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'robotolight';
+		src: url('font/Roboto-Light-webfont.svg#robotolight') format('svg');
+	}
+}
+
+
+@font-face {
+    font-family: 'robotoregular';
+    src: url('font/Roboto-Regular-webfont.eot'); /* IE9 Compat Modes */
+    src: url('font/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),/* IE6-8 */
+         url('font/Roboto-Regular-webfont.woff') format('woff'),/* Modern Browsers */
+         url('font/Roboto-Regular-webfont.ttf') format('truetype'),/* Safari, Android, iOS */
+         url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');/* Legacy iOS */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'robotoregular';
+		src: url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');
+	}
+}
+
+
+@font-face {
+    font-family: 'robotomedium';
+    src: url('font/Roboto-Medium-webfont.eot'); /* IE9 Compat Modes */
+    src: url('font/Roboto-Medium-webfont.eot?#iefix') format('embedded-opentype'),/* IE6-8 */
+         url('font/Roboto-Medium-webfont.woff') format('woff'),/* Modern Browsers */
+         url('font/Roboto-Medium-webfont.ttf') format('truetype'),/* Safari, Android, iOS */
+         url('font/Roboto-Medium-webfont.svg#robotomedium') format('svg');/* Legacy iOS */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'robotomedium';
+		src: url('font/Roboto-medium-webfont.svg#robotomedium') format('svg');
+	}
+}
+
+
+@font-face {
+    font-family: 'robotobold';
+    src: url('font/Roboto-Bold-webfont.eot'); /* IE9 Compat Modes */
+    src: url('font/Roboto-Bold-webfont.eot?#iefix') format('embedded-opentype'),/* IE6-8 */
+         url('font/Roboto-Bold-webfont.woff') format('woff'),/* Modern Browsers */
+         url('font/Roboto-Bold-webfont.ttf') format('truetype'),/* Safari, Android, iOS */
+         url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');/* Legacy iOS */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	@font-face {
+		font-family: 'robotobold';
+		src: url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');
+	}
+}
+
 
 /*-----------------------------------------------------
-[ 1. Structure ]
+[ 2. Structure ]
 
-	[ 1.a Header ]
+	[ 2.a Header ]
 -------------------------------------------------------
 */
 
 	* {
 		margin:0;
 		padding:0;
+					-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+			box-sizing: border-box;         /* Opera/IE 8+ */
 	}
 	
 	body {
 		color: #3c3b37;
 		background-color: white;
-		font-family: 'Roboto', Arial, Helvetica, sans-serif;
+		font-family: Arial, Helvetica, sans-serif;
 		font-size: 12px;
 		min-width: 1000px;
-		font-weight: 300;
 	}
 
 	input, select {
@@ -54,7 +137,7 @@
 
 	.header {
 		background-color: #3c3b37;
-		height: 60px;
+		height: 70px;
 		padding: 5px;
 		color: white;
 	}
@@ -74,12 +157,15 @@
 		.calculateur_type {
 			padding-top: 5px;
 			font-size: 12px;
-			font-weight: 300;
+//			font-family: 'robotolight', Arial, Helvetica, sans-serif;
+//			font-weight: 300;
 		}
 		
 		.entreprise_name {
-			font-size: 28px;
-			font-weight: 900;
+			font-size: 30px;
+//			font-family: 'robotobold', Arial, Helvetica, sans-serif;			
+//			font-weight: 900;
+			font-weight: bold;
 		}
 
 		.lg_cf_help, .users, .header > .small_separator {
@@ -96,7 +182,6 @@
 		}
 
 
-
 		.users {
 			margin-right: 10px;
 		}
@@ -105,7 +190,9 @@
 			}
 			
 			.users span.username {
-				font-weight: 900;
+//				font-weight: 900;
+				font-weight: bold;
+//				font-family: 'robotobold', Arial, Helvetica, sans-serif;
 				padding-bottom: 2px;
 				border-bottom: 3px solid white;
 			}
@@ -120,7 +207,7 @@
 
 
 /*-----------------------------------------------------
-	[ 1.b Data menu ]
+	[ 2.b Data menu ]
 -------------------------------------------------------
 */
 	
@@ -138,7 +225,9 @@
 		.data_date {
 			margin-left: 10px;
 			font-size: 16px;
-			font-weight: 700;
+//			font-weight: 700;
+			font-weight: bold;
+//			font-family: 'robotobold', Arial, Helvetica, sans-serif;
 		}
 
 		.data_date > div,
@@ -150,22 +239,24 @@
 		.data_date  select {
 			margin-left: 10px;
 			display: inline-block;
-			font-weight: 700;	
+//			font-weight: 700;	
+			font-weight: bold;
+//			font-family: 'robotobold', Arial, Helvetica, sans-serif;
 			padding: 2px;
-			min-width: 50px;
+			min-width: 54px;
 			background-color: white;
 			color: #3c3b37;
 		}
 
 		
 		.data_date_compare {
-			font-weight: 400;
+//			font-weight: 400;
 		}
 
 		.data_date_compare  select {
 			margin-left: 10px;
 			padding: 2px;
-			min-width: 150px;
+			min-width: 154px;
 			background-color: #9d9b91;
 			color: white;
 			font-style: italic;
@@ -206,7 +297,7 @@
 		}
 		
 /*-----------------------------------------------------
-	[ 1.c Nav menu ]
+	[ 2.c Nav menu ]
 -------------------------------------------------------
 */
 
@@ -225,7 +316,7 @@
 		
 
 		.menu {
-			height: 86px;
+			height: 91px;
 			padding-left: 5px;
 			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -235,17 +326,15 @@
 		
 		.menu > div,
 		.last_menu > div	{
+			//font-family: 'robotoregular', Arial, Helvetica, sans-serif;
 			height: 88px;
 			background-color: #efeee8;
 			display: inline-block;
-			font-size: 13px;
+			font-size: 12px;
 			text-transform: uppercase;
 			padding: 4px;
 			color: #3c3b37;
 			vertical-align: top;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */
 			transition: all 0.1s ease-out;
 		}
 
@@ -273,9 +362,6 @@
 			width: calc(16.7% - 5px);
 			position: relative;
 			margin: 0px 1px;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */			
 		}	
 
 		.nav_entreprise > div {
@@ -318,16 +404,13 @@
 			.sitename {
 				padding-top: 4px;
 				padding-right: 32px;
-				height: 22px;
+				height: 26px;
 				background: url('./img/notCompleted.png') right center no-repeat;
 			}
 
 
 		.last_menu {
 			width: 25%;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */
 			float:right;
 			padding: 5px 0 5px 5px;
 			background-color: #9d9b91;
@@ -351,9 +434,6 @@
 			color: #9d9b91;
 			padding-bottom:4px;
 			padding-right:8px;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */
 		}
 		
 		
@@ -407,9 +487,6 @@
 			display: none;
 			position: absolute;
 			bottom:-14px;
-			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-			box-sizing: border-box;         /* Opera/IE 8+ */
 		}
 
 		.menu_current .menu_arrow {
@@ -417,9 +494,9 @@
 		}
 
 /*-----------------------------------------------------
-[ 2. Buttons ]
+[ 3. Buttons ]
 
-	[ 2.a Generic ]
+	[ 3.a Generic ]
 -------------------------------------------------------
 */
 
@@ -429,7 +506,7 @@
 		-moz-border-radius: 5px;
 		border-radius: 5px;
 		border: 0;
-		padding: 0px 10px;
+		padding: 0 10px;
     	background-color: #dbd9d2;
     	color: white;
 		margin-left: 5px;
@@ -457,7 +534,7 @@
 		
 
 /*-----------------------------------------------------
-	[ 2.b Specific ]
+	[ 3.b Specific ]
 -------------------------------------------------------
 */
 
@@ -493,17 +570,9 @@
 		background: url('./img/comments.png') 7px center no-repeat #3c3b37;
 		margin-left: 0;
 	}
-
-	.element_table > div > div:nth-child(3) button.comments {
-		width: -moz-calc(100% - 40px);
-		width: -webkit-calc(100% - 40px);
-		width: calc(100% - 40px);
-		background-color: #61605b;
-	}
-	
 	
 /*-----------------------------------------------------
-[ 3. Content ]
+[ 4. Content ]
 -------------------------------------------------------
 */
 
@@ -522,12 +591,12 @@
 			.element_header {
 				height: 29px;
 			}
-			
+	
 				.title {
 					float: left;
-					height: 9px;
+					height: 29px;
 					line-height: 10px;
-					width: 108px;
+					width: 133px;
 					padding: 10px;
 					padding-right: 15px;
 					color: white;
@@ -552,15 +621,15 @@
 
 			.element_sidebar {
 				float: left;
-				width: 108px;
+				width: 123px;
 				padding-top: 10px;
 				padding-right: 15px;
 			}
 			
 				.block_status {
-					height: 34px;
+					height: 42px;
 					border: 4px solid #2e5c2e;
-					width: 110px;
+					width: 118px;
 					background-color: #2e5c2e;
 				}
 
@@ -588,7 +657,7 @@
 				.element_text {
 					background-color: #efeee8;
 					padding: 5px 10px;
-					min-height: 32px;
+					min-height: 42px;
 				}
 			
 				.element_table {
@@ -604,7 +673,7 @@
 				.element_table > div > div {
 					display: table-cell;
 //					border: 1px solid black;
-					padding: 3px 35px;
+					padding: 3px 15px 3px 35px;
 				}
 
 				.element_table > div > div:nth-child(1) {
@@ -626,9 +695,10 @@
 					margin-right: 12px;
 					display: inline-block;
 					width: 20px;
-					height: 10px;
+					height: 20px;
 					font-size: 8px;
-					font-weight: 700;
+					font-family: 'robotobold', Arial, Helvetica, sans-serif;
+//					font-weight: 700;
 					color: white;
 					padding: 5px 0;
 					float: left;
@@ -641,13 +711,14 @@
 					margin: 0 5px;
 					display: inline-block;
 					width: 20px;
-					height: 10px;
+					height: 20px;
 					font-size: 8px;
-					font-weight: 700;
+//					font-weight: 700;
+					font-weight: bold;
+//					font-family: 'robotobold', Arial, Helvetica, sans-serif;
 					color: white;
 					padding: 5px 0;
 					text-align: center;
-					font-family: Arial;
 					float: right;
 				}
 				
@@ -667,95 +738,91 @@
 					.element_table > div > div:nth-child(3) .user_icon {
 						font-style: normal;
 					}				
-
 					
 					
-				.element_table > div > div:nth-child(2).oneelement input {
+				.element_table > div > div:nth-child(2).oneelement input,
+				.element_table > div > div:nth-child(3).oneelement input  {
 					width: -moz-calc(100% - 72px);
 					width: -webkit-calc(100% - 72px);
 					width: calc(100% - 72px);
 				}				
-
-				.element_table > div > div:nth-child(3).oneelement input {
-					width: -moz-calc(100% - 42px);
-					width: -webkit-calc(100% - 42px);
-					width: calc(100% - 42px);
-				}				
 		
-				.element_table > div > div:nth-child(2).oneelement select {
+				.element_table > div > div:nth-child(2).oneelement select,
+				.element_table > div > div:nth-child(3).oneelement select {
 					width: -moz-calc(100% - 70px);
 					width: -webkit-calc(100% - 70px);
 					width: calc(100% - 70px);
 				}				
 
-				.element_table > div > div:nth-child(3).oneelement select {
-					width: -moz-calc(100% - 40px);
-					width: -webkit-calc(100% - 40px);
-					width: calc(100% - 40px);
-				}				
-
-				.element_table > div > div:nth-child(2).twoelements input {
-					width: -moz-calc(50% - 37px);
-					width: -webkit-calc(50% - 37px);
-					width: calc(50% - 37px);
-				}				
-
-				.element_table > div > div:nth-child(2).twoelements select {
-					width: -moz-calc(50% - 37px);
-					width: -webkit-calc(50% - 37px);
-					width: calc(50% - 37px);
-				}
-				
+				.element_table > div > div:nth-child(2).twoelements input,
 				.element_table > div > div:nth-child(3).twoelements input {
-					width: -moz-calc(50% - 21px);
-					width: -webkit-calc(50% - 21px);
-					width: calc(50% - 21px);
-				}				
-
-				.element_table > div > div:nth-child(3).twoelements select {
-					width: -moz-calc(50% - 21px);
-					width: -webkit-calc(50% - 21px);
-					width: calc(50% - 21px);
-				}
-
-				.element_table > div > div:nth-child(2).twoelements div:not(.user_icon,.status) {
 					width: -moz-calc(50% - 37px);
 					width: -webkit-calc(50% - 37px);
 					width: calc(50% - 37px);
 				}				
-				
 
-				.element_table > div > div:nth-child(3).twoelements div:not(.user_icon) {
-					width: -moz-calc(50% - 21px);
-					width: -webkit-calc(50% - 21px);
-					width: calc(50% - 21px);
+				.element_table > div > div:nth-child(2).twoelements select ,
+				.element_table > div > div:nth-child(3).twoelements select {
+					width: -moz-calc(50% - 37px);
+					width: -webkit-calc(50% - 37px);
+					width: calc(50% - 37px);
+				}
+
+				.element_table > div > div:nth-child(2).twoelements div:not(.user_icon,.status),
+				.element_table > div > div:nth-child(3).twoelements div:not(.user_icon,.status) {
+					width: -moz-calc(50% - 37px);
+					width: -webkit-calc(50% - 37px);
+					width: calc(50% - 37px);
 				}				
-				
 
 				.element_table > div > div:nth-child(3) .user_icon {
 					font-style: normal;
 				}				
-
-				
-			
-			
 			
 			.horizontal_separator {
 				height: 5px;
 				background-color: #305b2e;
 			}
-			
-			
-			
+		
 		.sub_nav {
 			margin-top: 20px;
 		}
 
+		.tab-panel {
+			position: relative;
+		}
+		
+		.tab-panel > div {
+			display: inline-block;
+		}
+				
+		.tab-panel .tab-header {
+				display: inline-block;
+				padding: 5px 10px;
+				font-size: 12px;
+				font-weight: bold;
+				color: white;
+				margin-right: 2px;
+				border-bottom: 5px solid white;
+//				width: 200px;
+				height: 34px;
+		}
+
+			.tab-panel > div:nth-child(1) > .tab-header  {background-color: #28b24c;}
+			.tab-panel > div:nth-child(2) > .tab-header  {background-color: #809d3e;}
+			.tab-panel > div:nth-child(3) > .tab-header  {background-color: #e1ad29;}
+			.tab-panel > div:nth-child(4) > .tab-header  {background-color: #e38a27;}
+		
+		
+			.tab-panel .active .tab-header {height: 39px;}
+		
 			.sub_nav > div {
 				display: inline-block;
 				padding: 5px 10px;
 				font-size: 12px;
-				font-weight: 700;
+//				font-weight: 700;
+				font-weight: bold;
+//				font-family: 'robotobold', Arial, Helvetica, sans-serif;
 				color: white;
 				margin-right: 2px;
 				border-bottom: 5px solid white;
@@ -770,11 +837,36 @@
 			.sub_nav > div:nth-child(2).sub_nav_current {border-bottom: 5px solid #809d3e;}
 			.sub_nav > div:nth-child(3).sub_nav_current {border-bottom: 5px solid #e1ad29;}
 			.sub_nav > div:nth-child(4).sub_nav_current {border-bottom: 5px solid #e38a27;}
-			
-			
+	
+	
 		
 		.sub_block {
-			border: 5px solid #e38a27;
+			border-width: 5px;
+			border-style: solid;
 			padding: 15px 0;
 		}
+		
+		.tab-panel .tab-content {
+			display: inline-block;
+			border-width: 5px;
+			border-style: solid;
+			padding: 15px 0;
+			position: absolute;
+			left: 0;
+			top: 50px;
+		}
+
+			.tab-panel > div:nth-child(1) > .tab-content {border-color: #28b24c;}
+			.tab-panel > div:nth-child(2) > .tab-content {border-color: #809d3e;}
+			.tab-panel > div:nth-child(3) > .tab-content {border-color: #e1ad29;}
+			.tab-panel > div:nth-child(4) > .tab-content {border-color: #e38a27;}
+
+		
+			.sub_block_1 {border-color: #28b24c;}
+			.sub_block_2 {border-color: #809d3e;}		
+			.sub_block_3 {border-color: #e1ad29;}
+			.sub_block_4 {border-color: #e38a27;}
+		
+		
+		
 		

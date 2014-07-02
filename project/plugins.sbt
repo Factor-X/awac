@@ -10,3 +10,7 @@ resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/release
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.0")
 
 libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
+
+resolvers += "JMParsons Releases" at "http://jmparsons.github.io/releases/"
+
+addSbtPlugin("com.jmparsons" % "play-lessc" % "0.0.8")
