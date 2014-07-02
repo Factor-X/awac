@@ -64,7 +64,7 @@
 </div>
 
 
-<div class="nav">
+<div class="nav_tabs">
     <div class="nav_entreprise">
         <div class="site_menu">
             <div class="site">
@@ -276,16 +276,32 @@
         background-color: #28b24c;
     }
 
+    .tab-color-lightgreen.sub_block {
+        border-color: #28b24c;
+    }
+
     .tab-color-green a {
         background-color: #809d3e;
+    }
+
+    .tab-color-green.sub_block {
+        border-color: #809d3e;
     }
 
     .tab-color-yellow a {
         background-color: #e1ad29;
     }
 
+    .tab-color-yellow.sub_block {
+        border-color: #e1ad29;
+    }
+
     .tab-color-orange a {
         background-color: #e38a27;
+    }
+
+    .tab-color-orange.sub_block {
+        border-color: #e38a27;
     }
 
 </style>
@@ -297,7 +313,7 @@
         <i class="glyphicon glyphicon-bell"></i> Systèmes
     </tab-heading>
 
-    <div class="sub_block">
+    <div class="sub_block tab-color-lightgreen">
         <div class="element_table">
             <div>
                 <div>Choix du combustible ?</div>
@@ -357,7 +373,7 @@
         <i class="glyphicon glyphicon-bell"></i> Recharges
     </tab-heading>
 
-    <div class="sub_block">
+    <div class="sub_block tab-color-green">
         <div class="element_table">
             <div>
                 <div>Choix du combustible ? 2</div>
@@ -417,7 +433,7 @@
         <i class="glyphicon glyphicon-bell"></i> Usages
     </tab-heading>
 
-    <div class="sub_block">
+    <div class="sub_block tab-color-yellow">
         <div class="element_table">
             <div>
                 <div>Choix du combustible ?</div>
@@ -477,7 +493,7 @@
         <i class="glyphicon glyphicon-bell"></i> Méthode #4
     </tab-heading>
 
-    <div class="sub_block">
+    <div class="sub_block tab-color-orange">
         <div class="element_table">
             <div>
                 <div>Choix du combustible ?</div>
@@ -536,65 +552,6 @@
 </tabset>
 
 
-<div class="sub_nav">
-    <div>Systèmes</div>
-    <div>Recharges</div>
-    <div>Usages</div>
-    <div class="sub_nav_current">Méthode #4</div>
-</div>
-<div class="sub_block">
-    <div class="element_table">
-        <div>
-            <div>Choix du combustible ?</div>
-            <div class="oneelement">
-                <div class="status answer"></div>
-                <select>
-                    <option>Mazout</option>
-                    <option>Fuel</option>
-                </select>
-
-                <div class="user_icon">XM</div>
-            </div>
-            <div class="oneelement">
-                <input value="Mazout"/>
-
-                <div class="user_icon">XM</div>
-            </div>
-
-        </div>
-        <div>
-            <div>Consommation précise :</div>
-            <div class="twoelements">
-                <div class="status"></div>
-                <input value="170"/>
-                <select>
-                    <option>Litres</option>
-                    <option>Kilogrammes</option>
-                </select>
-
-                <div class="user_icon">AG</div>
-            </div>
-            <div class="twoelements">
-                <input value="170"/>
-
-                <div style="display:inline-block; color: black">litres</div>
-                <div class="user_icon">AG</div>
-            </div>
-        </div>
-        <div>
-            <div></div>
-            <div>
-                <div class="status"></div>
-                <button type="button" class="comments">2 commentaires</button>
-            </div>
-            <div>
-                <button type="button" class="comments">1 commentaire</button>
-            </div>
-        </div>
-
-    </div>
-
-</div>
 </div>
 </div>
 
