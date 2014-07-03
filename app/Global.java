@@ -40,6 +40,9 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStart(Application app) {
+
+
+
         play.Logger.info("Starting AWAC");
         // force default language to FR - test purpose
         play.Logger.info(Messages.get(new Lang(Lang.forCode("fr")), "main.welcome"));
