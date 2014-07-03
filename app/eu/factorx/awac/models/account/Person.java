@@ -21,6 +21,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -48,7 +49,9 @@ import eu.factorx.awac.models.AbstractEntity;
 //    @NamedQuery(name = Person.FIND_BY_TYPE, query = "select p from Person p where p.type = :type")
 })
 public class Person extends AbstractEntity {
-
+	/**
+	 * :identifier = ...
+	 */
     public static final String FIND_BY_IDENTIFIER = "Person.findByIdentifier";
     
     public static final String FIND_BY_TYPE = "Person.findByType";

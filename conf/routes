@@ -5,9 +5,50 @@
 # Home page
 GET     /                           @eu.factorx.awac.controllers.Application.index()
 
-GET     /dummy/household/:year      eu.factorx.awac.controllers.Dummy.getHousehold(year:Integer)
-GET     /translations/:lang         eu.factorx.awac.controllers.Translation.fetch(lang:String)
-GET     /app.js                     eu.factorx.awac.controllers.Application.app()
+GET     /dummy/household/:year      @eu.factorx.awac.controllers.Dummy.getHousehold(year:Integer)
+GET     /translations/:lang         @eu.factorx.awac.controllers.Translation.fetch(lang:String)
+GET     /app.js                     @eu.factorx.awac.controllers.Application.app()
+
+
+# login rest api
+GET     /login                      @eu.factorx.awac.controllers.Authentication.login()
+POST    /login                      @eu.factorx.awac.controllers.Authentication.authenticate()
+GET     /logout                     @eu.factorx.awac.controllers.Authentication.logout()
+
+# Administrator list (look at the default values for pagination parameters)
+GET     /administrators             @eu.factorx.awac.controllers.Administrators.list(p:Int ?= 0, s ?= "identifier", o ?= "asc", f ?= "")
+GET     /administrators/pdf    		@eu.factorx.awac.controllers.Administrators.asPdf()
+GET     /administrators/json    	@eu.factorx.awac.controllers.Administrators.asJson()
+GET     /administrators/xml    		@eu.factorx.awac.controllers.Administrators.asXml()
+# Add admin
+GET     /administrators/new         @eu.factorx.awac.controllers.Administrators.create()
+POST    /administrators             @eu.factorx.awac.controllers.Administrators.save()
+# Edit existing admin
+GET     /administrators/:id         @eu.factorx.awac.controllers.Administrators.edit(id:Long)
+POST    /administrators/:id         @eu.factorx.awac.controllers.Administrators.update(id:Long)
+# Delete a admin
+POST    /administrators/:id/delete  @eu.factorx.awac.controllers.Administrators.delete(id:Long)
+
+# Account list (look at the default values for pagination parameters)
+GET     /accounts		            @eu.factorx.awac.controllers.Accounts.list(p:Int ?= 0, s ?= "identifier", o ?= "asc", f ?= "")
+GET     /accounts/pdf    			@eu.factorx.awac.controllers.Accounts.asPdf()
+GET     /accounts/json    			@eu.factorx.awac.controllers.Accounts.asJson()
+GET     /accounts/xml    			@eu.factorx.awac.controllers.Accounts.asXml()
+# Add account
+GET     /accounts/new         		@eu.factorx.awac.controllers.Accounts.create()
+POST    /accounts             		@eu.factorx.awac.controllers.Accounts.save()
+# Edit existing account
+GET     /accounts/:id         		@eu.factorx.awac.controllers.Accounts.edit(id:Long)
+POST    /accounts/:id         		@eu.factorx.awac.controllers.Accounts.update(id:Long)
+# Delete a account
+POST    /accounts/:id/delete  		@eu.factorx.awac.controllers.Accounts.delete(id:Long)
+
+# VIES Service 
+GET     /vies/vatcheck/:uid/:vat    @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
+
+# Javascript routing
+GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.javascriptRoutes()
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

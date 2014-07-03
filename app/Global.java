@@ -47,9 +47,6 @@ public class Global extends GlobalSettings {
         //changeLang("fr");
         //Lang.change("fr");
 
-<<<<<<< HEAD
-     
-=======
         JPA.withTransaction(new F.Callback0() {
 
             @Override
@@ -58,7 +55,6 @@ public class Global extends GlobalSettings {
             }
         });
 
->>>>>>> 4f171f4c271b5cf2aada47ccdfeda7ba7be081da
         // ========================================
         // INTERNAL SPRING SERVICES
         // ========================================
@@ -71,16 +67,6 @@ public class Global extends GlobalSettings {
         // ========================================
 
 
-<<<<<<< HEAD
-        JPA.withTransaction(new F.Callback0() {
-			
-			@Override
-			public void invoke() throws Throwable {
-				createInitialData();			
-			}
-		});
-    
-=======
         createInMemoryData();
     }
 
@@ -149,7 +135,6 @@ public class Global extends GlobalSettings {
 
 
         InMemoryData.translations.put("EN", dto);
->>>>>>> 4f171f4c271b5cf2aada47ccdfeda7ba7be081da
 
 
     }

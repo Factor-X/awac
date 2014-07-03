@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.service.PersonService;
@@ -12,8 +13,14 @@ import eu.factorx.awac.service.PersonService;
 public class PersonneServiceImpl extends AbstractJPAPersistenceServiceImpl<Person> implements PersonService {
  
     @SuppressWarnings("unchecked")
-	public List<Person> findByIdentifier(String identifier) {
-        return JPA.em().createNamedQuery(Person.FIND_BY_IDENTIFIER).setParameter("identifier", identifier).getResultList();
+	public Person findByIdentifier(String identifier) {
+        List<Person> resultList = JPA.em().createNamedQuery(Person.FIND_BY_IDENTIFIER).setParameter("identifier", identifier).getResultList();
+        if (resultList.size() > 1) {
+        	String errorMsg = "More than one account with identifier = '" + identifier + "'";
+        	Logger.error(errorMsg);
+			throw new RuntimeException(errorMsg);
+        }
+		return resultList.get(0);
     }
  
 //	@SuppressWarnings("unchecked")

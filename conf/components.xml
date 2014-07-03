@@ -7,10 +7,6 @@
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-<<<<<<< HEAD
    <context:component-scan base-package="eu.factorx.awac.controllers,eu.factorx.awac.service"/>
-=======
-   <context:component-scan base-package="eu.factorx.awac.controllers"/>
->>>>>>> 4f171f4c271b5cf2aada47ccdfeda7ba7be081da
 
 </beans>

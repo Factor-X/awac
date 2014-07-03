@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import play.db.jpa.JPA;
