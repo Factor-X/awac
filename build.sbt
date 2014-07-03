@@ -16,6 +16,10 @@ libraryDependencies += "com.google.code.maven-play-plugin.com.github.yeungda.jco
 
 libraryDependencies += "de.neuland-bfi" % "jade4j" % "0.4.0"
 
+<<<<<<< HEAD
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.1"
     
+=======
+
+>>>>>>> 4f171f4c271b5cf2aada47ccdfeda7ba7be081da
 play.Project.playJavaSettings
