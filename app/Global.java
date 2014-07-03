@@ -102,6 +102,8 @@ public class Global extends GlobalSettings {
         dto.put("NL", "Nederlands");
         dto.put("EN", "English");
 
+        dto.put("SAVE_BUTTON", "Sauvegarder");
+
         InMemoryData.translations.put("FR", dto);
 
         language = "EN";
@@ -128,6 +130,9 @@ public class Global extends GlobalSettings {
         dto.put("FR", "Français");
         dto.put("NL", "Nederlands");
         dto.put("EN", "English");
+
+        dto.put("SAVE_BUTTON", "Save");
+
 
         InMemoryData.translations.put("EN", dto);
 

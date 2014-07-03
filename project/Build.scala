@@ -26,9 +26,9 @@ object ApplicationBuild extends Build {
         "org.springframework" % "spring-expression" % "3.2.3.RELEASE"
     )
 
-    libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1";
+    libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
 
-    libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion;
+    libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion
 
     libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
 
@@ -59,6 +59,9 @@ object ApplicationBuild extends Build {
             downloadTranslationsTask
         )
     // Add your own project settings here
+
+
+
 
 
 }

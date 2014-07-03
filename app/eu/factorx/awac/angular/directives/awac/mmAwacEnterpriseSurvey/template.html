@@ -16,10 +16,10 @@
 
     <div class="lg_cf_help">
         <div>
-            <select>
-                <option>Français</option>
-                <option>English</option>
-                <option>Deutsch</option>
+            <select ng-model="$parent.language">
+                <option value="en" ng-bind-html="'EN' | translate"></option>
+                <option value="fr" ng-bind-html="'FR' | translate"></option>
+                <option value="nl" ng-bind-html="'NL' | translate"></option>
             </select>
         </div>
         <button type="button" class="confidentiality">Confidentialité</button>
@@ -58,7 +58,7 @@
         </div>
         <div class="small_separator"></div>
         <div class="save_button">
-            <button type="button" class="save">Sauvegarder</button>
+            <button type="button" class="save" ng-bind-html="'SAVE_BUTTON' | translate"></button>
         </div>
     </div>
 </div>

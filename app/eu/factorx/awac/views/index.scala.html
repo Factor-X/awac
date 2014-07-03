@@ -2,10 +2,7 @@
 <html ng-app="app">
 <head>
 
-
     <!-- Angular dependencies -->
-
-
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-sanitize.min.js"></script>
@@ -32,9 +29,8 @@
     <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
 
-
-
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900,300italic,400italic' rel='stylesheet'
+          type='text/css'>
     <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
 
     <!-- ui-select files -->
@@ -48,6 +44,26 @@
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
+    <script>
+        $(function () {
+            $('body').keydown(function (evt) {
+                console.log(evt);
+                if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
+                    if(window.debug)
+                    {
+                        window.debug = false;
+                        $('.translation-code').remove();
+                    }else {
+                        window.debug = true;
+                        $('.translated-text').each(function () {
+                            var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
+                            $(this).append(e)
+                        })
+                    }
+                }
+            })
+        });
+    </script>
 </head>
 <body ng-controller="MainCtrl">
 
@@ -55,15 +71,7 @@
 
 <div ng-show="!isLoading()">
 
-    <select ng-model="language">
-        <option value="en" ng-bind-html="'EN' | translate"></option>
-        <option value="fr" ng-bind-html="'FR' | translate"></option>
-        <option value="nl" ng-bind-html="'NL' | translate"></option>
-    </select>
-
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
-
-    <pre style="font-size: 8px" ng-bind-html="prettyPrint(o)"></pre>
 
 </div>
 </body>
