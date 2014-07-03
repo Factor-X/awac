@@ -1,17 +1,17 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
- 
+
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- 
+
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
- 
+
              version="2.0">
- 
+
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
- 
+
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
- 
+
         <non-jta-data-source>DefaultDS</non-jta-data-source>
-        
+
         <class>eu.factorx.awac.models.Account</class>
         <class>eu.factorx.awac.models.Address</class>
         <class>eu.factorx.awac.models.Administrator</class>
@@ -19,7 +19,7 @@
         <class>eu.factorx.awac.models.Countries</class>
         <class>eu.factorx.awac.models.Person</class>
         <class>eu.factorx.awac.models.Vat</class>
- 
+
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
@@ -37,22 +37,22 @@
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
 
- 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
- 
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
- 
+
             <property name="hibernate.show_sql" value="true"/>
- 
+
             <property name="hibernate.format_sql" value="true"/>
- 
-            <property name="hibernate.use_sql_comments" value="true" />   
- 
-             <property name="hibernate.hbm2ddl.auto" value="update"/>          
- 
+
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
         </properties>
-        
+
 
     </persistence-unit>
 
