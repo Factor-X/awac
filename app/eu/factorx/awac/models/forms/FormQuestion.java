@@ -17,23 +17,16 @@ public class FormQuestion extends AbstractEntity {
 	private Form form;
 
 	@ManyToOne(optional = false)
-	private QuestionSet question;
+	private QuestionSet questionSet;
 
 	public FormQuestion() {
+		super();
 	}
 
-	public FormQuestion(Form form, QuestionSet question) {
+	public FormQuestion(Form form, QuestionSet questionSet) {
 		super();
 		this.form = form;
-		this.question = question;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		this.questionSet = questionSet;
 	}
 
 	public Form getForm() {
@@ -44,12 +37,12 @@ public class FormQuestion extends AbstractEntity {
 		this.form = param;
 	}
 
-	public QuestionSet getQuestion() {
-		return question;
+	public QuestionSet getQuestionSet() {
+		return questionSet;
 	}
 
-	public void setQuestion(QuestionSet param) {
-		this.question = param;
+	public void setQuestionSet(QuestionSet questionSet) {
+		this.questionSet = questionSet;
 	}
 
 }

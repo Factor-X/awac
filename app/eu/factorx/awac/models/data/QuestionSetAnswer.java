@@ -33,6 +33,13 @@ public class QuestionSetAnswer extends AbstractEntity {
 		super();
 	}
 
+	public QuestionSetAnswer(QuestionSet questionSet, Period period, Scope scope) {
+		super();
+		this.questionSet = questionSet;
+		this.period = period;
+		this.scope = scope;
+	}
+
 	public QuestionSet getQuestionSet() {
 		return questionSet;
 	}

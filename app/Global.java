@@ -152,6 +152,9 @@ public class Global extends GlobalSettings {
             // save data into DB in relevant order.
 
             System.out.println(all);
+            for (Object entity : all.get("organizations")) {
+                session.saveOrUpdate(entity);
+            }
             for (Object entity : all.get("administrators")) {
                 session.saveOrUpdate(entity);
             }

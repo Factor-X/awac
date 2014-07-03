@@ -23,7 +23,6 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.ScopeType</class>
         <class>eu.factorx.awac.models.business.Site</class>
-        <class>eu.factorx.awac.models.business.User</class>
         <class>eu.factorx.awac.models.code.CodeLabel</class>
         <class>eu.factorx.awac.models.code.CodeType</class>
         <class>eu.factorx.awac.models.code.QuestionCode</class>

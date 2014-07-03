@@ -11,10 +11,12 @@ public class QuestionCode implements Serializable {
 
 	// heating fuel questions set
 	public static final QuestionCode HF_SET = new QuestionCode("HF_SET");
-	// heating fuel type 
+	// heating fuel type
 	public static final QuestionCode HF_HFT = new QuestionCode("HF_HFT");
-	// heating fuel consumption
-	public static final QuestionCode HF_HFC = new QuestionCode("HF_HFC");
+	// Heating fuel consumption (in volume units)
+	public static final QuestionCode HF_HFC1 = new QuestionCode("HF_HFC1");
+	// Heating fuel consumption (in mass units)
+	public static final QuestionCode HF_HFC2 = new QuestionCode("HF_HFC2");
 
 	private String value;
 

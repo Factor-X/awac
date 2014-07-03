@@ -1,6 +1,5 @@
 package eu.factorx.awac.models.code;
 
-
 public class HeatingFuelCode extends Code {
 
 	private static final long serialVersionUID = 1L;
@@ -9,8 +8,10 @@ public class HeatingFuelCode extends Code {
 
 	public static final HeatingFuelCode OIL = new HeatingFuelCode(1);
 	public static final HeatingFuelCode GAS = new HeatingFuelCode(2);
+	public static final HeatingFuelCode COAL = new HeatingFuelCode(3);
+	
 
-	public static final HeatingFuelCode[] ALL = new HeatingFuelCode[] { OIL, GAS };
+	public static final HeatingFuelCode[] ALL = new HeatingFuelCode[] { OIL, GAS, COAL };
 
 	private HeatingFuelCode(Integer value) {
 		this.type = CODE_TYPE;

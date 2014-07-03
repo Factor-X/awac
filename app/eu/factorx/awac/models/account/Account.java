@@ -13,10 +13,12 @@ package eu.factorx.awac.models.account;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import play.data.validation.Constraints.Max;
 import play.data.validation.Constraints.Min;
 import play.data.validation.Constraints.Required;
+import eu.factorx.awac.models.business.Organization;
 
 // import for JAXB annotations -- JAXB stack
 
@@ -36,6 +38,9 @@ public class Account extends Person {
     @Embedded
     private Vat vat;
 
+	@ManyToOne(optional = false)
+	private Organization organization;
+
 	protected Account() {
 	}
 
@@ -43,8 +48,9 @@ public class Account extends Person {
      * Constructor
      */
 
-    public Account(String identifier, String password, String lastname, String firstname) {
+    public Account(Organization organization, String identifier, String password, String lastname, String firstname) {
         super(identifier, password, lastname, firstname, new Address("", "", "", ""));
+        this.organization = organization;
     }
 
 	public Integer getAge() {
@@ -61,6 +67,14 @@ public class Account extends Person {
 
 	public void setVat(Vat vat) {
 		this.vat = vat;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
     
     /*

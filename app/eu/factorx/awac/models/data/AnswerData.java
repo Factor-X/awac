@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.Code;
 
 @Entity
 @Table(name = "answer_data")
@@ -29,6 +30,18 @@ public class AnswerData extends AbstractEntity {
 
 	public AnswerData() {
 		super();
+	}
+
+	public AnswerData(QuestionAnswer questionAnswer, Code code) {
+		super();
+		this.questionAnswer = questionAnswer;
+		this.doubleData = new Double(code.getValue());
+	}
+
+	public AnswerData(QuestionAnswer questionAnswer, Integer intValue) {
+		super();
+		this.questionAnswer = questionAnswer;
+		this.doubleData = new Double(intValue);
 	}
 
 	public QuestionAnswer getQuestionAnswer() {

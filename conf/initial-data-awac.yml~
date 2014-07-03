@@ -3,7 +3,7 @@
 organizations:
 
     - &FactorX !!eu.factorx.awac.models.business.Organization
-        name:           Factor-X
+        name:         	Factor-X
 
 
 # Addresses

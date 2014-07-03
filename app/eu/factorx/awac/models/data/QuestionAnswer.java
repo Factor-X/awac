@@ -2,6 +2,7 @@ package eu.factorx.awac.models.data;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,7 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.business.User;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
 @Table(name = "question_answer")
@@ -25,14 +27,17 @@ public class QuestionAnswer extends AbstractEntity {
 	private QuestionSetAnswer questionSetAnswer;
 
 	@ManyToOne(optional = false)
-	private User dataOwner;
+	private Account dataOwner;
+
+	@ManyToOne
+	private Unit unit;
 
 	@Embedded
 	private AuditInfo auditInfo;
 
 	private Short repetitionIndex;
 
-	@OneToMany(mappedBy = "questionAnswer")
+	@OneToMany(mappedBy = "questionAnswer", cascade = CascadeType.ALL)
 	private List<AnswerData> answerData;
 
 	@Transient
@@ -40,6 +45,16 @@ public class QuestionAnswer extends AbstractEntity {
 
 	protected QuestionAnswer() {
 		super();
+	}
+
+	public QuestionAnswer(Question question, QuestionSetAnswer questionSetAnswer, Account dataOwner,
+			Unit unit, Short repetitionIndex) {
+		super();
+		this.question = question;
+		this.questionSetAnswer = questionSetAnswer;
+		this.dataOwner = dataOwner;
+		this.unit = unit;
+		this.repetitionIndex = repetitionIndex;
 	}
 
 	public Question getQuestion() {
@@ -58,12 +73,20 @@ public class QuestionAnswer extends AbstractEntity {
 		this.questionSetAnswer = questionSetAnswer;
 	}
 
-	public User getDataOwner() {
+	public Account getDataOwner() {
 		return dataOwner;
 	}
 
-	public void setDataOwner(User dataOwner) {
+	public void setDataOwner(Account dataOwner) {
 		this.dataOwner = dataOwner;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 
 	public AuditInfo getAuditInfo() {
