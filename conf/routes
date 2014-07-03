@@ -43,7 +43,7 @@ POST    /accounts/:id         		@eu.factorx.awac.controllers.Accounts.update(id:
 # Delete a account
 POST    /accounts/:id/delete  		@eu.factorx.awac.controllers.Accounts.delete(id:Long)
 
-# VIES Service 
+# VIES Service
 GET     /vies/vatcheck/:uid/:vat    @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
 
 # Javascript routing
@@ -52,3 +52,4 @@ GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.jav
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+

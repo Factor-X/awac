@@ -233,11 +233,11 @@
         
         <div class="actions">
             <input type="submit" value="Save this account" class="btn primary"> 
-            @if(eu.factorx.awac.controllers.Secured.isAdministrator()) {
+
             	<a href="@eu.factorx.awac.controllers.routes.Accounts.list()" class="btn">Cancel</a>
-            } else {
+
             	<a href="@eu.factorx.awac.controllers.routes.Application.index()" class="btn">Cancel</a>
-            }
+            
             
             @helper.form(eu.factorx.awac.controllers.routes.Accounts.delete(id), 'class -> "topRight") {
         	<input type="submit" onclick="return confirm('Are you sure?');" value="Delete this account" class="btn danger">

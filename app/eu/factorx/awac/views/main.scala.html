@@ -36,34 +36,7 @@
                 <div class="container">
                     <a class="brand" href="@eu.factorx.awac.controllers.routes.Application.index()">AWAC</a>
                     <ul class="nav">
-					@if(eu.factorx.awac.controllers.Secured.isAuthenticated()) {
-					
-						@if(eu.factorx.awac.controllers.Secured.isAdministrator()) {
 
-							<li class="@("active".when(nav == "administrators"))">
-								<a href="@eu.factorx.awac.controllers.routes.Administrators.list()">Administrator</a>
-							</li>
-							
-							<li class="@("active".when(nav == "accounts"))">
-								<a href="@eu.factorx.awac.controllers.routes.Accounts.list()">Accounts</a>
-							</li>							
-							
-							} else {
-							
-							<li class="@("active".when(nav == "accounts"))">
-								<a href="@eu.factorx.awac.controllers.routes.Accounts.edit(eu.factorx.awac.controllers.Secured.getCurrentUser().getId())">My Account</a>
-							</li>		
-														
-							}
-																											
-							<li class="@("active".when(nav == "logout"))">
-								<a href="@eu.factorx.awac.controllers.routes.Authentication.logout()">Logout</a>
-							</li>
-						} else {
-							<li class="@("active".when(nav == "login"))">
-								<a href="@eu.factorx.awac.controllers.routes.Authentication.login()">Login</a>
-							</li> 
-						}
                     </ul>
                 </div>
             </div>
@@ -75,9 +48,6 @@
                 
                 <div class="page-header">
 					<h1>@title</h1>
-					@if(eu.factorx.awac.controllers.Secured.isAuthenticated()) {
-						@showUserInformation(eu.factorx.awac.controllers.Secured.getCurrentUser())
-					}
                 </div>
     			 
                 <div class="row">

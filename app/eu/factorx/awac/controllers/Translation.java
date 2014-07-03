@@ -7,7 +7,7 @@ import play.mvc.Result;
 
 public class Translation extends Controller {
 
-    public static Result fetch(String language) {
+    public Result fetch(String language) {
 
         try {
             Thread.sleep(1000);

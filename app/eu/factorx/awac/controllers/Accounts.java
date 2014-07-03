@@ -18,6 +18,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import eu.factorx.awac.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 // for JSON
 import play.libs.Json;
@@ -34,6 +36,12 @@ import eu.factorx.awac.util.pdf.PDF;
  
 @Security.Authenticated(Secured.class)
 public class Accounts extends Controller {
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private Secured secured;
     
     /**
      * This result directly redirect to application home is user of type Account.
@@ -55,7 +63,7 @@ public class Accounts extends Controller {
     /**
      * Handle default path requests, redirect to account list
      */
-    public static Result index() {
+    public Result index() {
         return GO_HOME;
     }
 
@@ -67,13 +75,9 @@ public class Accounts extends Controller {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on accounts names
      */
-    public static Result list(int page, String sortBy, String order, String filter) {
+    public Result list(int page, String sortBy, String order, String filter) {
         return ok(
-            list.render(
-                Account.page(page, 10, sortBy, order, filter),
-                sortBy, order, filter
-            )
-        );
+                eu.factorx.awac.views.html.account.list.render(accountService.findAll(), sortBy, order, filter));
     }
     
     /**
@@ -82,7 +86,7 @@ public class Accounts extends Controller {
      *
      */
     public Result asPdf() {
-        return PDF.ok(document.render(accountService.findAll()));
+        return PDF.ok(eu.factorx.awac.views.html.account.document.render(accountService.findAll()));
     }
 	
 	 /**
@@ -90,8 +94,8 @@ public class Accounts extends Controller {
 	 * for JSON output
      *
      */
-    public static Result asJson() {
-		return ok(Json.toJson(Account.find.all()));
+    public Result asJson() {
+		return ok(Json.toJson(accountService.findAll()));
 		//return TODO;
     }
 	
@@ -100,20 +104,20 @@ public class Accounts extends Controller {
 	 * for XML output
      *
      */
-    public static Result asXml() {
+    public Result asXml() {
 		try {
 			JAXBContext context    = JAXBContext.newInstance(Account.class);
 			Marshaller  marshaller = context.createMarshaller();
 
 			// Use linefeeds and indentation in the outputted XML
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.marshal(Account.find.byId(new Long(21)), System.out);
+			marshaller.marshal(accountService.findById(new Long(21)), System.out);
 			} catch (JAXBException jaxbe) {
 				play.Logger.debug("JAXB Exception : " + jaxbe);
 				return(GO_HOME);
 			}
 		
-		return ok(Json.toJson(Account.find.all()));
+		return ok(Json.toJson(accountService.findAll()));
 		//return TODO;
     }
     	
@@ -123,13 +127,12 @@ public class Accounts extends Controller {
      *
      * @param id Id of the account to edit
      */
-    public static Result edit(Long id) {
-	if (Secured.isAccount() || Secured.isAdministrator()) {
+    public Result edit(Long id) {
+	if (secured.isAccount() || secured.isAdministrator()) {
         Form<Account> accountForm = form(Account.class).fill(
-            Account.find.byId(id)
-        );
+                accountService.findById(id));
         return ok(
-            editForm.render(id, accountForm)
+                eu.factorx.awac.views.html.account.editForm.render(id, accountForm)
         );
 	} else {
 		return forbidden();
@@ -141,12 +144,12 @@ public class Accounts extends Controller {
      *
      * @param id Id of the account to edit
      */
-    public static Result update(Long id) {
-	if (Secured.isAccount() || Secured.isAdministrator()) {
+    public  Result update(Long id) {
+	if (secured.isAccount() || secured.isAdministrator()) {
         Form<Account> accountForm = form(Account.class).bindFromRequest();
 					
         if(accountForm.hasErrors()) {
-            return badRequest(editForm.render(id, accountForm));
+            return badRequest(eu.factorx.awac.views.html.account.editForm.render(id, accountForm));
         }
 		
 		//Automatic binding does not work for embedded objects.
@@ -178,7 +181,7 @@ public class Accounts extends Controller {
 		play.Logger.debug("VIES request date:"+acc.getVat().getViesRequestDate());
 		play.Logger.debug("VIES request ID:"+acc.getVat().getViesRequestId());
 		
-		eu.factorx.awac.models.account.Account updateAccount = eu.factorx.awac.models.account.Account.find.byId(id);
+		eu.factorx.awac.models.account.Account updateAccount = accountService.findById(id);
 		updateAccount.setIdentifier(acc.getIdentifier());
 		updateAccount.setPassword(acc.getPassword());
 		updateAccount.setFirstname(acc.getFirstname());
@@ -199,11 +202,11 @@ public class Accounts extends Controller {
 		updateAccount.getVat().setViesRequestDate(acc.getVat().getViesRequestDate());
 		updateAccount.getVat().setViesRequestId(acc.getVat().getViesRequestId());
 				
-		updateAccount.update();
+		accountService.update(updateAccount);
 		
         flash("success", "Account " + accountForm.get().getIdentifier() + " has been updated");
         
-        if (eu.factorx.awac.controllers.Secured.isAccount()) {  
+        if (secured.isAccount()) {
         	return GO_MAIN;
         } else {
         	return GO_HOME;
@@ -216,25 +219,25 @@ public class Accounts extends Controller {
     /**
      * Display the 'new account form'.
      */
-    public static Result create() {
+    public Result create() {
         Form<Account> accountForm = form(Account.class);
         return ok(
-            createForm.render(accountForm)
+                eu.factorx.awac.views.html.account.createForm.render(accountForm)
         );
     }
     
     /**
      * Handle the 'new account form' submission 
      */
-    public static Result save() {
+    public Result save() {
         Form<Account> accountForm = form(Account.class).bindFromRequest();
         if(accountForm.hasErrors()) {
-            return badRequest(createForm.render(accountForm));
+            return badRequest(eu.factorx.awac.views.html.account.createForm.render(accountForm));
         }
-        accountForm.get().save();
+       accountService.save(accountForm.get());
         flash("success", "Account " + accountForm.get().getIdentifier() + " has been created");
         
-        if (eu.factorx.awac.controllers.Secured.isAccount()) {  
+        if (secured.isAccount()) {
         	return GO_MAIN;
         } else {
         	return GO_HOME;
@@ -244,11 +247,11 @@ public class Accounts extends Controller {
     /**
      * Handle account deletion
      */
-    public static Result delete(Long id) {
-        Account.find.ref(id).delete();
+    public Result delete(Long id) {
+        accountService.remove(accountService.findById(id));
         flash("success", "Account has been deleted");
         
-        if (eu.factorx.awac.controllers.Secured.isAccount()) {  
+        if (secured.isAccount()) {
         	return GO_MAIN;
         } else {
         	return GO_HOME;

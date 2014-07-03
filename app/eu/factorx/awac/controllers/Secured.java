@@ -12,6 +12,7 @@ package eu.factorx.awac.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.stereotype.Component;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -20,6 +21,7 @@ import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.service.PersonService;
 
+@Component
 public class Secured extends Security.Authenticator {
 
 	@Autowired
@@ -35,7 +37,7 @@ public class Secured extends Security.Authenticator {
         return redirect(eu.factorx.awac.controllers.routes.Authentication.login());
     }
 
-	public static boolean isAuthenticated() {
+	public boolean isAuthenticated() {
 		return (Context.current().session().get("identifier")==null)?false:true;
 	}
 	
@@ -43,11 +45,11 @@ public class Secured extends Security.Authenticator {
     	return personService.findByIdentifier(Context.current().session().get("identifier"));
     }
 	
-    public static boolean isAdministrator () {
+    public boolean isAdministrator () {
     	return (getCurrentUser() instanceof Administrator);
     } // end of check administrator
     
-    public static boolean isAccount () {
+    public boolean isAccount () {
     	return (getCurrentUser() instanceof Account);
     } // end of check administrator
 

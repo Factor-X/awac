@@ -12,6 +12,9 @@
 package eu.factorx.awac.controllers;
 
 import static play.data.Form.form;
+
+import eu.factorx.awac.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -20,6 +23,9 @@ import eu.factorx.awac.common.AccountStatusType;
 import eu.factorx.awac.models.account.Person;
 
 public class Authentication extends Controller {
+
+    @Autowired
+    private PersonService personService;
 
     // inner class for login information
     public static class Login {
@@ -40,37 +46,38 @@ public class Authentication extends Controller {
    		*/
    	
       	public static Person authenticate(String id, String password) {
-      		return Person.find.where().eq("identifier", id)
+      		return null;/*pers.find.where().eq("identifier", id)
       				.eq("accountStatus",AccountStatusType.ACTIVE)
       	        	.eq("password", password).findUnique();
+      	        	*/
       	}	
     } // end of inner class
 
 
     // login action cf routes
-    public static Result login() {
+    public Result login() {
     	return ok(
-        	form.render(form(Login.class))
+        	eu.factorx.awac.views.html.login.form.render(form(Login.class))
     	);
     } // end of login controller
 
     // authenticate action cf routes
-    public static Result authenticate() {
+    public Result authenticate() {
 	    Form<Login> loginForm = form(Login.class).bindFromRequest(
     	);
 	    if (loginForm.hasErrors()) {
-	      return badRequest(form.render(loginForm));
+	      return badRequest(eu.factorx.awac.views.html.login.form.render(loginForm));
 	    }
 	    else {
 	      session().clear();
 	      session("identifier",loginForm.get().identifier);	      
-	      return (redirect (routes.Application.index()));
+	      return (redirect (eu.factorx.awac.controllers.routes.Application.index()));
 	    }
     } // end of authenticate action
 
     // logout action cf routes
     @Security.Authenticated(Secured.class)
-    public static Result logout() {
+    public Result logout() {
       session().clear();
        flash("success", "You've been logged out");
        return redirect(

@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import eu.factorx.awac.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.data.Form;
@@ -39,6 +40,10 @@ public class Administrators extends Controller {
 
 	@Autowired
 	private PersonService personService;
+    @Autowired
+    private AdministratorService administratorService;
+    @Autowired
+    private Secured secured;
 
 	/**
 	 * This result directly redirect to application home.
@@ -66,7 +71,7 @@ public class Administrators extends Controller {
 	 *            Filter applied on administrators names
 	 */
 	public Result list(int page, String sortBy, String order, String filter) {
-		return ok(list.render(Administrator.page(page, 10, sortBy, order, filter), sortBy, order, filter));
+		return ok(eu.factorx.awac.views.html.administrator.list.render(administratorService.findAll(), sortBy, order, filter));
 	}
 
 	/**
@@ -74,7 +79,7 @@ public class Administrators extends Controller {
 	 * 
 	 */
 	public Result asPdf() {
-		return PDF.ok(document.render(personService.fin));
+		return PDF.ok(eu.factorx.awac.views.html.administrator.document.render(administratorService.findAll()));
 	}
 
 	/**
@@ -82,7 +87,7 @@ public class Administrators extends Controller {
 	 * 
 	 */
 	public Result asJson() {
-		return ok(Json.toJson(Administrator.find.all()));
+		return ok(Json.toJson(administratorService.findAll()));
 		// return TODO;
 	}
 
@@ -97,13 +102,13 @@ public class Administrators extends Controller {
 
 			// Use linefeeds and indentation in the outputted XML
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.marshal(Administrator.find.byId(new Long(1)), System.out);
+			marshaller.marshal(administratorService.findById(new Long(1)), System.out);
 		} catch (JAXBException jaxbe) {
 			play.Logger.debug("JAXB Exception : " + jaxbe);
 			return (GO_HOME);
 		}
 
-		return ok(Json.toJson(Administrator.find.all()));
+		return ok(Json.toJson(administratorService.findAll()));
 		// return TODO;
 	}
 
@@ -114,9 +119,9 @@ public class Administrators extends Controller {
 	 *            Id of the administrator to edit
 	 */
 	public Result edit(Long id) {
-		if (Secured.isAdministrator()) {
-			Form<Administrator> administratorForm = form(Administrator.class).fill(Administrator.find.byId(id));
-			return ok(editForm.render(id, administratorForm));
+		if (secured.isAdministrator()) {
+			Form<Administrator> administratorForm = form(Administrator.class).fill(administratorService.findById(id));
+			return ok(eu.factorx.awac.views.html.administrator.editForm.render(id, administratorForm));
 		} else {
 			return forbidden();
 		}
@@ -129,11 +134,11 @@ public class Administrators extends Controller {
 	 *            Id of the administrator to edit
 	 */
 	public Result update(Long id) {
-		if (Secured.isAdministrator()) {
+		if (secured.isAdministrator()) {
 			Form<Administrator> administratorForm = form(Administrator.class).bindFromRequest();
 
 			if (administratorForm.hasErrors()) {
-				return badRequest(editForm.render(id, administratorForm));
+				return badRequest(eu.factorx.awac.views.html.administrator.editForm.render(id, administratorForm));
 			}
 
 			// Automatic binding does not work for embedded objects.
@@ -157,7 +162,7 @@ public class Administrators extends Controller {
 			play.Logger.debug("City:" + adm.getAddress().getCity());
 			play.Logger.debug("Country:" + adm.getAddress().getCountry());
 
-			Administrator updateAdministrator = Administrator.find.byId(id);
+			Administrator updateAdministrator = administratorService.findById(id);
 
 			updateAdministrator.setIdentifier(adm.getIdentifier());
 			updateAdministrator.setPassword(adm.getPassword());
@@ -170,9 +175,9 @@ public class Administrators extends Controller {
 			updateAdministrator.getAddress().setCity(adm.getAddress().getCity());
 			updateAdministrator.getAddress().setCountry(adm.getAddress().getCountry());
 
-			updateAdministrator.update();
+			administratorService.update(updateAdministrator);
 
-			flash("success", "Administrator " + administratorForm.get().firstname + " has been updated");
+			flash("success", "Administrator " + administratorForm.get().getFirstname() + " has been updated");
 			return GO_HOME;
 		} else {
 			return forbidden();
@@ -184,19 +189,22 @@ public class Administrators extends Controller {
 	 */
 	public Result create() {
 		Form<Administrator> administratorForm = form(Administrator.class);
-		return ok(createForm.render(administratorForm));
+		return ok(eu.factorx.awac.views.html.administrator.createForm.render(administratorForm));
 	}
 
 	/**
 	 * Handle the 'new administrator form' submission
 	 */
 	public Result save() {
-		Form<Administrator> administratorForm = form(Administrator.class).bindFromRequest();
+
+        Form<Administrator> administratorForm = form(Administrator.class).bindFromRequest();
 		if (administratorForm.hasErrors()) {
-			return badRequest(createForm.render(administratorForm));
+			return badRequest(eu.factorx.awac.views.html.administrator.createForm.render(administratorForm));
 		}
-		administratorForm.get().save();
-		flash("success", "Administrator " + administratorForm.get().firstname + " has been created");
+
+       // administratorService.save()
+		administratorService.save(administratorForm.get());
+		flash("success", "Administrator " + administratorForm.get().getFirstname()+ " has been created");
 		return GO_HOME;
 	}
 
@@ -204,7 +212,7 @@ public class Administrators extends Controller {
 	 * Handle administrator deletion
 	 */
 	public Result delete(Long id) {
-		Administrator.find.ref(id).delete();
+		administratorService.remove(administratorService.findById(id));
 		flash("success", "Administrator has been deleted");
 		return GO_HOME;
 	}

@@ -9,7 +9,7 @@
  *
  *@
  
-@(currentPage: com.avaje.ebean.Page[eu.factorx.awac.models.account.Administrator], currentSortBy: String, currentOrder: String, currentFilter: String)
+@(currentPage: java.util.List[eu.factorx.awac.models.account.Administrator], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -48,7 +48,7 @@
 
 @eu.factorx.awac.views.html.main(Html("Administrator List"), nav = "administrator") {
     
-    <h1 id="homeTitle">@Messages("administrators.list.title", currentPage.getTotalRowCount)</h1>
+    <h1 id="homeTitle">@Messages("administrators.list.title", currentPage.size)</h1>
 
     @if(flash.containsKey("success")) {
         <div class="alert-message warning">
@@ -67,7 +67,7 @@
         
     </div>
     
-    @if(currentPage.getTotalRowCount == 0) {
+    @if(currentPage.size == 0) {
         
         <div class="well">
             <em>Nothing to display</em>
@@ -85,7 +85,7 @@
             </thead>
             <tbody>
 
-                @for(administrator <- currentPage.getList) {
+                @for(administrator <- currentPage) {
                     <tr>
                         <td><a href="@eu.factorx.awac.controllers.routes.Administrators.edit(administrator.getId())">@administrator.getIdentifier()</a></td>
                         <td>
@@ -107,32 +107,6 @@
 
             </tbody>
         </table>
-
-        <div id="pagination" class="pagination">
-            <ul>
-                @if(currentPage.hasPrev) {
-                    <li class="prev">
-                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
-                    </li>
-                } else {
-                    <li class="prev disabled">
-                        <a>&larr; Previous</a>
-                    </li>
-                }
-                <li class="current">
-                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
-                </li>
-                @if(currentPage.hasNext) {
-                    <li class="next">
-                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
-                    </li>
-                } else {
-                    <li class="next disabled">
-                        <a>Next &rarr;</a>
-                    </li>
-                }
-            </ul>
-        </div>
         
     }
         

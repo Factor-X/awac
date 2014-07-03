@@ -37,7 +37,7 @@ public class VatViesService extends Controller {
 
     private static final String template = "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:urn='urn:ec.europa.eu:taxud:vies:services:checkVat:types'><soapenv:Header/><soapenv:Body><urn:checkVatApprox><urn:countryCode>${countryCode}</urn:countryCode><urn:vatNumber>${vatNumber}</urn:vatNumber><urn:requesterCountryCode>${requesterCountryCode}</urn:requesterCountryCode><urn:requesterVatNumber>${requesterVatNumber}</urn:requesterVatNumber></urn:checkVatApprox></soapenv:Body></soapenv:Envelope>";
 
-    public static Result checkVat(String uid, String vatNumber) {
+    public Result checkVat(String uid, String vatNumber) {
 
         HashMap<String, String> responseData = new HashMap<String, String>();
 
@@ -74,7 +74,7 @@ public class VatViesService extends Controller {
         return ok(Json.toJson(responseData));
     }
 
-    public static VatResult checkUID(String uid, String requester) throws Exception {
+    public VatResult checkUID(String uid, String requester) throws Exception {
         VatResult result = new VatResult();
 
         // Construct data
@@ -116,7 +116,7 @@ public class VatViesService extends Controller {
     }
 
 
-    private static class VatResult {
+    private class VatResult {
         public boolean valid = false;
         public String name;
         public String address;
@@ -124,7 +124,7 @@ public class VatViesService extends Controller {
         public String date;
     }
 
-    private static String getValue(String text, String tag) {
+    private String getValue(String text, String tag) {
         Pattern p = Pattern.compile("<" + tag + ">(.*)</" + tag + ">");
         Matcher m = p.matcher(text);
         return m.find() && m.group(1) != null ? m.group(1) : "";
@@ -134,7 +134,7 @@ public class VatViesService extends Controller {
      * *************** TEST FOLLOWS ***********************
      */
 
-    public static Result checkRimshotVat() {
+    public Result checkRimshotVat() {
         HashMap<String, String> responseData = new HashMap<String, String>();
         try {
             VatResult result = checkUID("BE0849213125", "BE0849213125");
