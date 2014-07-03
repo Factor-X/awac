@@ -1,43 +1,33 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import eu.factorx.awac.models.AbstractEntity;
+
 @Entity
 @Table(name = "factor")
-public class Factor implements Serializable {
+public class Factor extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	public Factor() {
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	private String name;
+
 	@ManyToOne
 	private Unit unitIn;
+
 	@ManyToOne
 	private Unit unitOut;
+
 	@OneToMany(mappedBy = "factor")
 	private List<FactorValue> values;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

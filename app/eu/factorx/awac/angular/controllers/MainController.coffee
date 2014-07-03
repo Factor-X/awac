@@ -14,8 +14,12 @@ angular
             $scope.initialLoad.translations = args.success
         return
 
-    translationService.initialize()
+    translationService.initialize('fr')
 
+    $scope.language = 'fr';
+
+    $scope.$watch 'language', (lang) ->
+        translationService.initialize(lang)
 
     #$scope.prettyPrint = (o) ->
     #    return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);

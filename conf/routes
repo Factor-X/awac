@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           eu.factorx.awac.controllers.Application.index()
+GET     /                           @eu.factorx.awac.controllers.Application.index()
 
 GET     /dummy/household/:year      eu.factorx.awac.controllers.Dummy.getHousehold(year:Integer)
 GET     /translations/:lang         eu.factorx.awac.controllers.Translation.fetch(lang:String)

@@ -28,8 +28,8 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
 import play.libs.Yaml;
-import eu.factorx.awac.models.Administrator;
-import eu.factorx.awac.models.Person;
+import eu.factorx.awac.models.account.Administrator;
+import eu.factorx.awac.models.account.Person;
 
 public class Global extends GlobalSettings {
 
@@ -45,14 +45,7 @@ public class Global extends GlobalSettings {
         //changeLang("fr");
         //Lang.change("fr");
 
-        JPA.withTransaction(new F.Callback0() {
-			
-			@Override
-			public void invoke() throws Throwable {
-				createInitialData();			
-			}
-		});
- 
+     
         // ========================================
         // INTERNAL SPRING SERVICES
         // ========================================
@@ -65,7 +58,14 @@ public class Global extends GlobalSettings {
         // ========================================
 
 
-
+        JPA.withTransaction(new F.Callback0() {
+			
+			@Override
+			public void invoke() throws Throwable {
+				createInitialData();			
+			}
+		});
+    
 
 
     }

@@ -26,9 +26,17 @@ object ApplicationBuild extends Build {
         "org.springframework" % "spring-expression" % "3.2.3.RELEASE"
     )
 
-    libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1";
+    libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
 
-    libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion;
+    libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion
+
+    libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
+
+
+    lazy val downloadTranslations = TaskKey[Unit]("download-translations", "Download translations from Google Spreadsheet")
+    val downloadTranslationsTask = downloadTranslations := {
+        new DownloadTranslationsTask().execute()
+    }
 
 
     val main = play.Project(appName, appVersion, appDependencies)
@@ -47,7 +55,13 @@ object ApplicationBuild extends Build {
                 } yield newArg
             }
         )
+        .settings(
+            downloadTranslationsTask
+        )
     // Add your own project settings here
+
+
+
 
 
 }

@@ -1,56 +1,60 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.QuestionCode;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 
 @Entity
 @Table(name = "question")
-public class Question implements Serializable {
+public class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@ManyToOne(optional = false)
+	private QuestionSet questionSet;
+
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "code")), })
+	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "code")) })
 	private QuestionCode code;
+
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "type", column = @Column(name = "type")),
+			@AttributeOverride(name = "valuesList.key", column = @Column(name = "code_type")) })
+	private AnswerType answerType;
+
 	@ManyToOne
 	private UnitCategory unitCategory;
 
+	private Short orderIndex;
+
 	public Question() {
+		super();
 	}
 
-	public Question(QuestionCode code) {
+	public Question(QuestionSet questionSet, QuestionCode code, AnswerType answerType, UnitCategory unitCategory,
+			Short orderIndex) {
 		super();
+		this.questionSet = questionSet;
 		this.code = code;
-	}
-
-	public Question(QuestionCode code, UnitCategory unitCategory) {
-		super();
-		this.code = code;
+		this.answerType = answerType;
 		this.unitCategory = unitCategory;
+		this.orderIndex = orderIndex;
 	}
 
-	public Long getId() {
-		return id;
+	public QuestionSet getQuestionSet() {
+		return questionSet;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setQuestionSet(QuestionSet questionSet) {
+		this.questionSet = questionSet;
 	}
 
 	public QuestionCode getCode() {
@@ -61,12 +65,28 @@ public class Question implements Serializable {
 		this.code = code;
 	}
 
+	public AnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(AnswerType answerType) {
+		this.answerType = answerType;
+	}
+
 	public UnitCategory getUnitCategory() {
 		return unitCategory;
 	}
 
 	public void setUnitCategory(UnitCategory unitCategory) {
 		this.unitCategory = unitCategory;
+	}
+
+	public Short getOrderIndex() {
+		return orderIndex;
+	}
+
+	public void setOrderIndex(Short orderIndex) {
+		this.orderIndex = orderIndex;
 	}
 
 }

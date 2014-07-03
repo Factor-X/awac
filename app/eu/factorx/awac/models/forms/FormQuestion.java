@@ -1,34 +1,28 @@
 package eu.factorx.awac.models.forms;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import eu.factorx.awac.models.data.Question;
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.data.QuestionSet;
 
 @Entity
 @Table(name = "form_question")
-public class FormQuestion implements Serializable {
+public class FormQuestion extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	@ManyToOne(optional = false)
 	private Form form;
+
 	@ManyToOne(optional = false)
-	private Question question;
+	private QuestionSet question;
 
 	public FormQuestion() {
 	}
 
-	public FormQuestion(Form form, Question question) {
+	public FormQuestion(Form form, QuestionSet question) {
 		super();
 		this.form = form;
 		this.question = question;
@@ -50,11 +44,11 @@ public class FormQuestion implements Serializable {
 		this.form = param;
 	}
 
-	public Question getQuestion() {
+	public QuestionSet getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question param) {
+	public void setQuestion(QuestionSet param) {
 		this.question = param;
 	}
 

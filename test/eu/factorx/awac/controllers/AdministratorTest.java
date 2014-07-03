@@ -12,15 +12,18 @@
 package eu.factorx.awac.controllers;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
+
 import java.util.*;
 
 import eu.factorx.awac.models.*;
-
+import eu.factorx.awac.models.account.Administrator;
 import play.mvc.*;
 import play.libs.*;
 import play.test.*;
 import static play.test.Helpers.*;
+
 import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
