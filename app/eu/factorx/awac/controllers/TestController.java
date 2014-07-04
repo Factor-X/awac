@@ -9,6 +9,7 @@ import javax.persistence.criteria.Predicate;
 
 import eu.factorx.awac.models.data.Question;
 import org.hibernate.Session;
+
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -20,13 +21,13 @@ import eu.factorx.awac.dto.awac.get.TestDTO;
 @Component
 public class TestController extends Controller {
 
-	public static final String QUERY = "select f, fq from Form f INNER JOIN f.questions fq";
-	public static final String QUERY2 = "select qs from QuestionSet qs";
-	public static final String QUERY3 = "select q from Question q";
+    public static final String QUERY = "select f, fq from Form f INNER JOIN f.questions fq";
+    public static final String QUERY2 = "select qs from QuestionSet qs";
+    public static final String QUERY3 = "select q from Question q";
 
-	@Transactional
-	public static Result index() {
-		List resultList = JPA.em().createQuery(QUERY).getResultList();
+    @Transactional
+    public static Result index() {
+        List resultList = JPA.em().createQuery(QUERY).getResultList();
 
 /*
         CriteriaBuilder builder =  JPA.em().getCriteriaBuilder();
@@ -47,7 +48,7 @@ public class TestController extends Controller {
 
         TestDTO dto = new TestDTO();
 
-		return ok(new TestDTO(resultList));
-	}
+        return ok(new TestDTO(resultList));
+    }
 
 }

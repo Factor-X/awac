@@ -7,6 +7,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+
 import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
@@ -27,17 +29,12 @@ public class CodeLabel extends AbstractEntity {
 
 	private String labelNl;
 
-	public CodeLabel() {
+	protected CodeLabel() {
 		super();
 	}
 
 	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
-		super();
-		this.codeType = code.getType();
-		this.codeValue = code.getValue();
-		this.labelEn = labelEn;
-		this.labelFr = labelFr;
-		this.labelNl = labelNl;
+		this(code.getCodeType(), code.getValue(), labelEn, labelFr, labelNl);
 	}
 
 	public CodeLabel(CodeType codeType, Integer codeValue, String labelEn, String labelFr, String labelNl) {
@@ -101,5 +98,12 @@ public class CodeLabel extends AbstractEntity {
 		}
 
 		return labelEn + " [no translation available]";
+	}
+
+	@Override
+	public int compareTo(AbstractEntity o) {
+		CompareToBuilder ctb = new CompareToBuilder();
+		//***
+		return ctb.toComparison();
 	}
 }

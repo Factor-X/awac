@@ -40,7 +40,7 @@ public class Question extends AbstractEntity {
 	}
 
 	public Question(QuestionSet questionSet, QuestionCode code, AnswerType answerType, UnitCategory unitCategory,
-			Short orderIndex) {
+			short orderIndex) {
 		super();
 		this.questionSet = questionSet;
 		this.code = code;

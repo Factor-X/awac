@@ -42,7 +42,7 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	@Override
 	public CodeLabel findCodeLabelByCode(Code code) {
 		Integer codeValue = code.getValue();
-		for (CodeLabel codeLabel : findCodeLabelsByType(code.getType())) {
+		for (CodeLabel codeLabel : findCodeLabelsByType(code.getCodeType())) {
 			if (codeValue.equals(codeLabel.getCodeValue())) {
 				return codeLabel;
 			}

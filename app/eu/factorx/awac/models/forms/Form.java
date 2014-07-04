@@ -5,19 +5,25 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.data.QuestionSet;
 
 @Entity
 @Table(name = "form")
+@NamedQueries({ @NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier") })
 public class Form extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
+
+	private String identifier;
 
 	@Transient
 	private Integer progress;
@@ -31,26 +37,18 @@ public class Form extends AbstractEntity {
 	public Form() {
 	}
 
-	public Form(String name, Campaign campaign) {
+	public Form(String identifier, Campaign campaign) {
 		super();
-		this.name = name;
+		this.identifier = identifier;
 		this.campaign = campaign;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
-		return name;
+		return identifier;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.identifier = name;
 	}
 
 	public Integer getProgress() {
@@ -75,6 +73,14 @@ public class Form extends AbstractEntity {
 
 	public void setCampaign(Campaign param) {
 		this.campaign = param;
+	}
+
+	public List<QuestionSet> getQuestionSets() {
+		List<QuestionSet> res = new ArrayList<>();
+		for (FormQuestion formQuestion : this.questions) {
+			res.add(formQuestion.getQuestionSet());
+		}
+		return res;
 	}
 
 }

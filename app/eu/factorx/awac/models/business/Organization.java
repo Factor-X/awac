@@ -19,7 +19,7 @@ public class Organization extends AbstractEntity {
 	@OneToMany(mappedBy = "organization")
 	private List<Site> sites;
 
-	public Organization() {
+	protected Organization() {
 		super();
 	}
 

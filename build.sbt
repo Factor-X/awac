@@ -20,5 +20,7 @@ libraryDependencies += "de.neuland-bfi" % "jade4j" % "0.4.0"
 
 libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.1"
 
+libraryDependencies += "joda-time" % "joda-time" % "2.3"
+
 
 play.Project.playJavaSettings

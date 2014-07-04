@@ -12,8 +12,6 @@
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.InMemoryData;
-import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import org.hibernate.Session;
 // Spring imports
 import org.springframework.context.ApplicationContext;
@@ -30,6 +28,8 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
 import play.libs.Yaml;
+import eu.factorx.awac.InMemoryData;
+import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 
@@ -64,7 +64,7 @@ public class Global extends GlobalSettings {
 
         // read spring configuration and instanciate context
         ctx = new ClassPathXmlApplicationContext("components.xml");
-
+    
         // ========================================
         // COMPILE ANGULAR APPLICATION
         // ========================================

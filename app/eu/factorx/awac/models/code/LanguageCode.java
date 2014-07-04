@@ -13,8 +13,7 @@ public class LanguageCode extends Code {
 	private static final LanguageCode[] ALL = new LanguageCode[] { ENGLISH, FRENCH, DUTCH };
 
 	private LanguageCode(Integer value) {
-		this.type = CODE_TYPE;
-		this.value = value;
+		super(CODE_TYPE, value);
 	}
 
 	public static LanguageCode getCode(Integer value) {
