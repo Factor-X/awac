@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Dummy extends Controller {
 
-    public static Result getHousehold(Integer year) {
+    public Result getHousehold(Integer year) {
         HouseholdDTO dto = new HouseholdDTO();
 
         // general

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
-import eu.factorx.awac.models.business.User;
+import eu.factorx.awac.models.account.Account;
 
 @Embeddable
 public class AuditInfo implements Serializable {
@@ -13,34 +13,34 @@ public class AuditInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	protected User dataValidator;
+	protected Account dataValidator;
 	@ManyToOne
-	protected User dataLocker;
+	protected Account dataLocker;
 	@ManyToOne
-	protected User dataVerifier;
+	protected Account dataVerifier;
 	protected Integer verificationStatus;
 
-	public User getDataValidator() {
+	public Account getDataValidator() {
 		return dataValidator;
 	}
 
-	public void setDataValidator(User validator) {
+	public void setDataValidator(Account validator) {
 		this.dataValidator = validator;
 	}
 
-	public User getDataLocker() {
+	public Account getDataLocker() {
 		return dataLocker;
 	}
 
-	public void setDataLocker(User dataLocker) {
+	public void setDataLocker(Account dataLocker) {
 		this.dataLocker = dataLocker;
 	}
 
-	public User getDataVerifier() {
+	public Account getDataVerifier() {
 		return dataVerifier;
 	}
 
-	public void setDataVerifier(User dataVerifier) {
+	public void setDataVerifier(Account dataVerifier) {
 		this.dataVerifier = dataVerifier;
 	}
 

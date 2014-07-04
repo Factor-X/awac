@@ -11,6 +11,10 @@ public class ScopeType {
 
 	private Integer value;
 
+	protected ScopeType() {
+		super();
+	}
+
 	public ScopeType(Integer value) {
 		this.value = value;
 	}

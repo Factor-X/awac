@@ -1,20 +1,28 @@
+# Organisations
+
+organizations:
+
+    - &FactorX !!eu.factorx.awac.models.business.Organization
+        name:           Factor-X
+
+
 # Addresses
 
 addresses:
 
-    - &addressA !!eu.factorx.awac.models.Address
+    - &addressA !!eu.factorx.awac.models.account.Address
         street:         Fontaine des Miracles
         postalcode:     1360
         city:           Perwez
         country:        Belgium
 
-    - &addressB !!eu.factorx.awac.models.Address
+    - &addressB !!eu.factorx.awac.models.account.Address
         street:         Rue Emile Delva
         postalcode:     1020
         city:           Bruxelles
         country:        Belgium
 
-    - &addressC !!eu.factorx.awac.models.Address
+    - &addressC !!eu.factorx.awac.models.account.Address
         street:         Place Bockstael
         postalcode:     1020
         city:           Bruxelles
@@ -22,11 +30,11 @@ addresses:
 
 vat:
 
-    - &vatA !!eu.factorx.awac.models.Vat
+    - &vatA !!eu.factorx.awac.models.account.Vat
         vatNumber:      BE0849213125
         viesVerified:   false     
 
-    - &vatB !!eu.factorx.awac.models.Vat
+    - &vatB !!eu.factorx.awac.models.account.Vat
         vatNumber:      
         viesVerified:   false     
 
@@ -35,8 +43,8 @@ vat:
 
 administrators:
 
-    - &administrator1 !!eu.factorx.awac.models.Administrator
-        personId:       1
+    - &administrator1 !!eu.factorx.awac.models.account.Administrator
+        id:       1
         identifier:     admin
         password:       password
         lastname:       Hollands
@@ -45,8 +53,8 @@ administrators:
         accountStatus:  ACTIVE
         address:        *addressA
 
-    - &administrator2 !!eu.factorx.awac.models.Administrator
-        personId:       2
+    - &administrator2 !!eu.factorx.awac.models.account.Administrator
+        id:       2
         identifier:     admin2
         password:       password
         lastname:       Schorils
@@ -59,8 +67,8 @@ administrators:
 
 accounts:
 
-    - &account1 !!eu.factorx.awac.models.Account
-        personId:       21
+    - &account1 !!eu.factorx.awac.models.account.Account
+        id:       21
         identifier:     hollandg
         password:       password
         lastname:       Hollands
@@ -70,9 +78,11 @@ accounts:
         email:          gaston.hollands@rimshot.be
         address:        *addressA
         vat:            *vatA
+        organization:   *FactorX
+
     
-    - &account2 !!eu.factorx.awac.models.Account
-        personId:       22
+    - &account2 !!eu.factorx.awac.models.account.Account
+        id:       22
         identifier:     schorim
         password:       password
         lastname:       Schorils
@@ -82,9 +92,10 @@ accounts:
         email:          murielle.schorils@rimshot.be
         address:        *addressA
         vat:            *vatB
+        organization:   *FactorX
         
-    - &account3 !!eu.factorx.awac.models.Account
-        personId:       23
+    - &account3 !!eu.factorx.awac.models.account.Account
+        id:       23
         identifier:     hollandl
         password:       password
         lastname:       Hollands
@@ -94,3 +105,5 @@ accounts:
         email:          ludovic.hollands@rimshot.be
         address:        *addressA
         vat:            *vatB        
+        organization:   *FactorX
+

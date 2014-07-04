@@ -12,18 +12,24 @@
 package eu.factorx.awac.models;
 
 import eu.factorx.awac.models.*;
+import eu.factorx.awac.models.account.Administrator;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
+
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+
 // for YAML tests
 import com.avaje.ebean.*;
+
 import play.*;
 import play.libs.*;
+
 import java.util.Map;
 
 public class AllModelUsingYamlTest extends BaseModelTest {

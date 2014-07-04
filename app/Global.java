@@ -30,8 +30,8 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
 import play.libs.Yaml;
-import eu.factorx.awac.models.Administrator;
-import eu.factorx.awac.models.Person;
+import eu.factorx.awac.models.account.Administrator;
+import eu.factorx.awac.models.account.Person;
 
 public class Global extends GlobalSettings {
 
@@ -155,6 +155,9 @@ public class Global extends GlobalSettings {
             // save data into DB in relevant order.
 
             System.out.println(all);
+            for (Object entity : all.get("organizations")) {
+                session.saveOrUpdate(entity);
+            }
             for (Object entity : all.get("administrators")) {
                 session.saveOrUpdate(entity);
             }

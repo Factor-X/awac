@@ -1,73 +1,92 @@
 package eu.factorx.awac.models.data;
 
-import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.User;
-import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
 @Table(name = "question_answer")
-public class QuestionAnswer implements Serializable {
+public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	protected Long id;
 	@ManyToOne(optional = false)
-	protected User dataOwner;
+	private Question question;
+
 	@ManyToOne(optional = false)
-	protected Period period;
+	private QuestionSetAnswer questionSetAnswer;
+
 	@ManyToOne(optional = false)
-	protected Question question;
+	private Account dataOwner;
+
+	@ManyToOne
+	private Unit unit;
+
 	@Embedded
-	protected AuditInfo auditInfo;
-	@Embedded
-	protected Scope scope;
-	@ManyToOne(optional = false)
-	protected Unit unit;
+	private AuditInfo auditInfo;
 
-	// for test purpose, answerValue should be an abstract type, with concrete
-	// classes for each type of answer
-	protected String answerValue;
+	private Short repetitionIndex;
 
-	public Long getId() {
-		return id;
+	@OneToMany(mappedBy = "questionAnswer", cascade = CascadeType.ALL)
+	private List<AnswerData> answerData;
+
+	@Transient
+	private List<? extends AnswerValue> answerValues;
+
+	protected QuestionAnswer() {
+		super();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getDataOwner() {
-		return dataOwner;
-	}
-
-	public void setDataOwner(User param) {
-		this.dataOwner = param;
-	}
-
-	public Period getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(Period param) {
-		this.period = param;
+	public QuestionAnswer(Question question, QuestionSetAnswer questionSetAnswer, Account dataOwner,
+			Unit unit, Short repetitionIndex) {
+		super();
+		this.question = question;
+		this.questionSetAnswer = questionSetAnswer;
+		this.dataOwner = dataOwner;
+		this.unit = unit;
+		this.repetitionIndex = repetitionIndex;
 	}
 
 	public Question getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question param) {
-		this.question = param;
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
+	public QuestionSetAnswer getQuestionSetAnswer() {
+		return questionSetAnswer;
+	}
+
+	public void setQuestionSetAnswer(QuestionSetAnswer questionSetAnswer) {
+		this.questionSetAnswer = questionSetAnswer;
+	}
+
+	public Account getDataOwner() {
+		return dataOwner;
+	}
+
+	public void setDataOwner(Account dataOwner) {
+		this.dataOwner = dataOwner;
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 
 	public AuditInfo getAuditInfo() {
@@ -78,28 +97,28 @@ public class QuestionAnswer implements Serializable {
 		this.auditInfo = auditInfo;
 	}
 
-	public Scope getScope() {
-		return scope;
+	public Short getRepetitionIndex() {
+		return repetitionIndex;
 	}
 
-	public void setScope(Scope param) {
-		this.scope = param;
+	public void setRepetitionIndex(Short repetitionIndex) {
+		this.repetitionIndex = repetitionIndex;
 	}
 
-	public Unit getUnit() {
-		return unit;
+	public List<AnswerData> getAnswerData() {
+		return answerData;
 	}
 
-	public void setUnit(Unit param) {
-		this.unit = param;
+	public void setAnswerData(List<AnswerData> answerData) {
+		this.answerData = answerData;
 	}
 
-	public String getAnswerValue() {
-		return answerValue;
+	public List<? extends AnswerValue> getAnswerValues() {
+		return answerValues;
 	}
 
-	public void setAnswerValue(String answerValue) {
-		this.answerValue = answerValue;
+	public void setAnswerValues(List<? extends AnswerValue> answerValues) {
+		this.answerValues = answerValues;
 	}
 
 }

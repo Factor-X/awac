@@ -1,34 +1,40 @@
 package eu.factorx.awac.models.business;
 
-import java.io.Serializable;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-@Embeddable
-public class Scope implements Serializable {
+import eu.factorx.awac.models.AbstractEntity;
+
+@Entity
+@Table(name = "scope")
+public class Scope extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "scope_type")), })
 	private ScopeType scopeType;
+
 	@OneToOne
 	private Organization organization;
+
 	@OneToOne
 	private Site site;
+
 	@OneToOne
 	private Product product;
 
-	public Scope() {
-
+	protected Scope() {
+		super();
 	}
 
 	public Scope(Organization organization) {
+		super();
 		this.scopeType = ScopeType.ORG;
 		this.organization = organization;
 	}

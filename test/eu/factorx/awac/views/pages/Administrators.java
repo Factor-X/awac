@@ -9,7 +9,7 @@
  *
  */
  
-package eu.factorx.awac.pages;
+package eu.factorx.awac.views.pages;
 
 import org.fluentlenium.core.*;
 import static org.fest.assertions.Assertions.assertThat;

@@ -1,43 +1,33 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import eu.factorx.awac.models.AbstractEntity;
+
 @Entity
 @Table(name = "factor_value")
-public class FactorValue implements Serializable {
+public class FactorValue extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	public FactorValue() {
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	private Double value;
+
 	@Temporal(TemporalType.DATE)
 	private Date dateIn;
+
 	@Temporal(TemporalType.DATE)
 	private Date dateOut;
+
 	@ManyToOne(optional = false)
 	private Factor factor;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public FactorValue() {
 	}
 
 	public Double getValue() {
@@ -65,11 +55,11 @@ public class FactorValue implements Serializable {
 	}
 
 	public Factor getFactor() {
-	    return factor;
+		return factor;
 	}
 
 	public void setFactor(Factor param) {
-	    this.factor = param;
+		this.factor = param;
 	}
 
 }

@@ -1,0 +1,393 @@
+@*
+ *
+ * Instant Play Framework
+ * AWAC
+ *                       
+ *
+ * Copyright (c) 2014 Factor-X.
+ * Author Gaston Hollands
+ *
+ *@
+ 
+@(id: Long, accountForm: play.data.Form[eu.factorx.awac.models.account.Account])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@*
+* @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+*@
+
+@informationAddress(field: Field, className: String = "address") = {
+    <div class="twipsies well @className">
+        
+        <a class="hideAddress btn success pull-right">Hide address information</a>
+			
+			@inputText(
+				field("street"),
+				'_label -> "Street"
+			)
+			
+			@inputText(
+				field("city"),
+				'_label -> "City"
+			)
+			 
+			@inputText(
+				field("postalcode"), 'class -> "mini",
+				'_label -> "Postal Code"
+			)
+					 					 
+			@select(
+				field("country"), 
+				options = options(eu.factorx.awac.models.knowledge.Countries.list),
+				'_default -> "--- Choose a country ---",
+				'_label -> "Country",
+				'_error -> accountForm("country").error.map(_.withMessage("Please select your country"))
+			)
+
+    </div>
+}
+
+@informationVat(field: Field, className: String = "vat") = {
+    <div class="twipsies well @className">
+        
+        <div class="manage"> 
+        	<a class="hideVat btn success pull-right">Hide VAT information</a>        
+        	<a class="checkVat btn success pull-right">Verify VAT</a>
+        	        	
+        	<div class="twipsies well loader_template" style="color:red;font-weight:bold;font-size:14px;">
+   				<img src="@routes.Assets.at("images/ajax-loader.gif")"/> Requesting VIES servers. Please wait...   				
+			</div>
+        			
+		@inputText(
+			field("vatNumber"),
+			'_label -> "Vat Number",
+			'class -> "vatNumber",
+			'id -> "vatNumber"
+		)
+		
+		@inputText(
+			field("viesVerified"),
+			'_label -> "VIES validation",
+			'readonly -> "readonly",			
+			'_help -> " This field is read only",
+			'class -> "viesVerified",
+			'id -> "viesVerified"			
+		)
+		@inputText(
+			field("viesName"),
+			'_label -> "VIES Name",
+			'readonly -> "readonly",
+			'_help -> " This field is read only",
+			'id -> "viesName",
+			'size -> 50			
+		)
+		@inputText(
+			field("viesAddress"),
+			'_label -> "VIES Address",
+			'readonly -> "readonly",
+			'_help -> " This field is read only",
+			'id -> "viesAddress",
+			'size -> 50
+		)
+		@inputText(
+			field("viesRequestDate"),
+			'_label -> "VIES Request Date",
+			'readonly -> "readonly",
+			'_help -> " This field is read only",
+			'id -> "viesRequestDate"			
+		)
+		@inputText(
+			field("viesRequestId"),
+			'_label -> "VIES Request ID",
+			'readonly -> "readonly",
+			'_help -> " This field is read only",
+			'id -> "viesRequestId"			
+		)
+						
+		</div>
+		 
+		<div class="twipsies well error_template" id="viesErrorDiv"></div> 
+		<div class="twipsies well error_template" id="map_canvas" style="width:250px; height:250px"></div>
+				
+    </div>
+}
+
+@eu.factorx.awac.views.html.main(Html("Account Update"), nav = "account") {
+    
+    <h1>Edit account</h1>
+    
+	@helper.form(eu.factorx.awac.controllers.routes.Accounts.update(id)) {
+                
+        <fieldset>
+            <legend>General information</legend>
+            
+            <div class="twipsies well" id="general">
+            
+			@inputText(
+                accountForm("idPerson"), 
+                '_label -> "Id Person",
+				'readonly -> "readonly",
+				'_help -> " This field is read only"
+            )
+			
+			@inputText(
+                accountForm("identifier"), 
+                '_label -> "Identifier"
+            )
+			
+			@inputText(
+                accountForm("password"), 
+                '_label -> "Password"
+            )
+
+            @inputText(
+                accountForm("firstname"), 
+                '_label -> "First name"
+            )
+            
+            @inputText(
+                accountForm("lastname"), 
+                '_label -> "Last name"
+            )
+            
+            @inputText(
+                accountForm("email"), 
+                '_label -> "Email"
+            )
+            
+            @inputText(
+                accountForm("age"), 
+                '_label -> "Age", 'class -> "mini",
+                '_showConstraints -> false
+            )
+            
+            @select(
+            	accountForm("accountStatus"), 
+            	options = options(eu.factorx.awac.common.AccountStatusType.options),
+            	'_default -> "--- Choose a status ---",
+            	'_label -> "Account Status",
+            	'_error -> accountForm("accountStatus").error.map(_.withMessage("Please select a status"))
+            	
+        	)
+        	
+        	</div>
+            
+		</fieldset>
+			
+		<fieldset>
+			<legend>Address Information</legend>
+			
+			<div id="addresses">
+			
+				@** to use to handle if multiple address 1 to n relation ship
+					@repeat(accountForm("address")) { information =>
+						@informationAddress(information)
+					}
+				**@
+								
+				@** for now only one address by Person **@
+				@**
+				@informationAddress(accountForm("address"))
+				**@
+				
+				@**
+                * Keep an hidden block that will be used as template for Javascript copy code
+                **@
+                @informationAddress(
+                    accountForm("address"),
+                    className = "address_template"
+                )
+				
+				<div class="manage">
+                    <a class="showAddress btn success pull-right">Show Address</a>
+                </div>
+				
+			</div>
+            			
+		</fieldset>
+		
+		<fieldset>
+			<legend>VAT information</legend>
+			
+			<div id="vat">
+				
+				@**
+                * Keep an hidden block that will be used as template for Javascript copy code
+                **@
+                
+                @informationVat(
+                    accountForm("vat"),
+                    className = "vat_template"
+                )
+				
+				<div class="manage">
+                    <a class="showVat btn success pull-right">Show VAT</a>
+                </div>
+                				
+			</div>
+			            			
+		</fieldset>
+		
+        
+        <div class="actions">
+            <input type="submit" value="Save this account" class="btn primary"> 
+
+            	<a href="@eu.factorx.awac.controllers.routes.Accounts.list()" class="btn">Cancel</a>
+
+            	<a href="@eu.factorx.awac.controllers.routes.Application.index()" class="btn">Cancel</a>
+            
+            
+            @helper.form(eu.factorx.awac.controllers.routes.Accounts.delete(id), 'class -> "topRight") {
+        	<input type="submit" onclick="return confirm('Are you sure?');" value="Delete this account" class="btn danger">
+    		}
+            
+        </div>
+    }
+    	    
+	   <script type="text/javascript" charset="utf-8">
+		
+		$('.showAddress').live('click', function(e) {
+			console.log ("show address called")
+            var template = $('.address_template')
+            template.before('<div class="twipsies well address">' + template.html() + '</div>')
+			$(this).hide()
+        })
+		
+		$('.hideAddress').live('click', function(e) {
+			console.log ("hide address called")
+            $(this).parents('.address').remove()
+			$('.showAddress').show()
+        })
+        
+        $('.showVat').live('click', function(e) {
+			console.log ("show vat called")
+            var template = $('.vat_template')
+            template.before('<div class="twipsies well vat">' + template.html() + '</div>')
+			$(this).hide()
+        })
+		
+		$('.hideVat').live('click', function(e) {
+			console.log ("hide vat called")
+            $(this).parents('.vat').remove()
+			$('.showVat').show()
+        })
+        
+        $('.checkVat').live('click', function(e) {
+			console.log ("verify vat called")
+			console.log ("@accountForm.get().getVat().getVatNumber()")
+			
+			// hide buttons
+			$('.checkVat').hide()
+        	$('.hideVat').hide()
+			
+			var template = $('.loader_template')
+			template.before('<div class="twipsies well loader">' + template.html() + '</div>')
+						
+			
+			jsRoutes.eu.factorx.awac.controllers.vies.VatViesService.checkVat(document.getElementById('vatNumber').value,document.getElementById('vatNumber').value).ajax({
+        		success: function(data) {        		 
+        			document.getElementById('viesVerified').value = data.valid
+        			if (data.valid==="true") { 
+        				document.getElementById('viesName').value = data.name
+        				document.getElementById('viesAddress').value = data.address
+        				document.getElementById('viesRequestId').value = data.requestid
+        				document.getElementById('viesRequestDate').value = data.requestdate
+        				} else {
+        				document.getElementById('viesName').value = ""
+        				document.getElementById('viesAddress').value = ""
+        				document.getElementById('viesRequestId').value = ""
+        				document.getElementById('viesRequestDate').value = ""
+        				}
+						
+					// show map
+					initialize();
+					codeAddress();
+					
+					// show buttons        				
+        			$('.loader').remove()
+        			$('.checkVat').show()
+        			$('.hideVat').show()
+        							
+        		},
+        		error: function() {
+        			document.getElementById('viesVerified').value = "false"
+        			document.getElementById('viesName').value = ""
+        			document.getElementById('viesAddress').value = ""
+        			document.getElementById('viesRequestId').value = ""
+        			document.getElementById('viesRequestDate').value = ""
+        			 
+					// show error message
+        			$('#viesErrorDiv').html("<h6>VIES response : Failed to have information from VIES</h6>");
+					// show map
+        			$('.loader').remove()
+        			$('.checkVat').show()
+        			$('.hideVat').show()        			          			
+        		}
+      		})
+    		}			
+        )
+        
+        $('.vatNumber').live('change', function (e) {
+        	console.log ("vat number changed")
+        	console.log (document.getElementById('vatNumber').value)
+        	document.getElementById('viesVerified').value = "false"
+        	document.getElementById('viesName').value = ""
+        	document.getElementById('viesAddress').value = ""
+        	document.getElementById('viesRequestId').value = ""
+        	document.getElementById('viesRequestDate').value = ""
+        })
+		
+		
+		  //Declare the variable that will store the geocode object
+  var geocoder;
+  var map;
+  
+  function initialize() {
+    //Set the geocoder variable equal to an instance of the google maps geocoder object as new google.maps.Geocoder()
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(42.095287, -79.3185139);
+    var myOptions = {
+      zoom: 10,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+  }
+  
+  //Add a second function to your javascript code, call it codeAddress.  It will not have any values passed to it.
+  function codeAddress() {
+    //The first line of the function should use getElementById to get the address from the text box and place it
+    //into a variable we'll call sAddress.
+    var sAddress = document.getElementById("viesAddress").value;
+    //Call the geocode method of the geocoder object, this will take two passed in parameters.  The first is 
+    //the GeocoderRequest, this says what kind of request is being made and what the request value is.  
+    //The second is the callback function that will be used to process the results.
+    geocoder.geocode( { 'address': sAddress}, function(results, status) {
+        //The callback function should first check the status value of the callback function.  Use an IF statement
+        //to test the result, check to see if the status equal google.maps.GeocoderStatus.OK.  Also add an 
+        //ELSE clause to the if statement as well.
+        if (status == google.maps.GeocoderStatus.OK) {
+            //If the status equals OK, call the setCenter method of the map object variable.  You will pass this
+            //method the results first geometry location.
+            map.setCenter(results[0].geometry.location);
+            //Next use the same result geometry location to add a map marker to the map object variable.  Create a new
+            //variable, we'll call it oMarker, it will be created as a new google.maps.Marker.  The new method take two
+            //parmaters, the first is the map object that you're adding the marker to, and the second is the 
+            //position to place the marker which is again the first results geometry location.
+            var marker = new google.maps.Marker({
+                map: map, 
+                position: results[0].geometry.location
+            });
+        } else {
+            //Finally we're going to add an alert message to the ELSE to let the user know that the Geocode didn't 
+            //work like it should have.  You can use the status to give a bit more information rather than just saying 
+            //that it didn't work.
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+      });
+  }
+ </script>
+}
