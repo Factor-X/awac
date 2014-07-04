@@ -44,10 +44,4 @@ public class Organization extends AbstractEntity {
 		this.sites = param;
 	}
 
-	@Override
-	public int compareTo(AbstractEntity o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

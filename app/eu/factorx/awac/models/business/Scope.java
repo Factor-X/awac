@@ -86,10 +86,4 @@ public class Scope extends AbstractEntity {
 		this.product = product;
 	}
 
-	@Override
-	public int compareTo(AbstractEntity o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

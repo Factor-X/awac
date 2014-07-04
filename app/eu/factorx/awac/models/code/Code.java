@@ -2,8 +2,11 @@ package eu.factorx.awac.models.code;
 
 import java.io.Serializable;
 
+import javax.persistence.MappedSuperclass;
+
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+@MappedSuperclass
 public abstract class Code implements Serializable, Comparable<Code> {
 
 	private static final long serialVersionUID = 1L;

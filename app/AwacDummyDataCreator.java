@@ -29,11 +29,13 @@ public class AwacDummyDataCreator {
 
 	public static void createAwacDummyData(Session session) {
 
-		// GET ORGANIZATION (Factor-X) AND ACCOUNT (user1)
-		// (created in initial-data-awac.yml)
+		// ORGANIZATION AND ACCOUNT
 
-		Organization factorx = (Organization) session.get(Organization.class, 1L);
-		Account user1 = (Account) session.get(Account.class, 1L);
+		Organization factorx = new Organization("Factor-X");
+		session.saveOrUpdate(factorx);
+		Account user1 = new Account(factorx, "user1", "password", "user1_lastname", "user1_firstname");
+		user1.setAge(25);
+		session.saveOrUpdate(user1);
 
 		// REFERENCES DATA
 

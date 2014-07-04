@@ -2,9 +2,8 @@
 
 organizations:
 
-    - &FactorX !!eu.factorx.awac.models.business.Organization
-        id:             1
-        name:           Factor-X
+    - &org1 !!eu.factorx.awac.models.business.Organization
+        name:           Org1
 
 
 # Addresses
@@ -67,20 +66,6 @@ administrators:
 accounts:
 
     - &account1 !!eu.factorx.awac.models.account.Account
-        id:             1
-        identifier:     user1
-        password:       password
-        lastname:       user1_lastname
-        firstname:      user1_firstname
-        age:            46
-        accountStatus:  ACTIVE
-        email:          gaston.hollands@rimshot.be
-        address:        *addressA
-        vat:            *vatA
-        organization:   *FactorX
-
-    
-    - &account2 !!eu.factorx.awac.models.account.Account
         identifier:     hollandg
         password:       password
         lastname:       Hollands
@@ -90,10 +75,10 @@ accounts:
         email:          gaston.hollands@rimshot.be
         address:        *addressA
         vat:            *vatA
-        organization:   *FactorX
+        organization:   *org1
 
     
-    - &account3 !!eu.factorx.awac.models.account.Account
+    - &account2 !!eu.factorx.awac.models.account.Account
         identifier:     schorim
         password:       password
         lastname:       Schorils
@@ -103,9 +88,9 @@ accounts:
         email:          murielle.schorils@rimshot.be
         address:        *addressA
         vat:            *vatB
-        organization:   *FactorX
+        organization:   *org1
         
-    - &account4 !!eu.factorx.awac.models.account.Account
+    - &account3 !!eu.factorx.awac.models.account.Account
         identifier:     hollandl
         password:       password
         lastname:       Hollands
@@ -115,5 +100,5 @@ accounts:
         email:          ludovic.hollands@rimshot.be
         address:        *addressA
         vat:            *vatB        
-        organization:   *FactorX
+        organization:   *org1
 

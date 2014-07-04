@@ -13,8 +13,11 @@ public class ScopeType extends Code {
 	public static final ScopeType SITE = new ScopeType(2);
 	public static final ScopeType PRODUCT = new ScopeType(3);
 
+	public ScopeType() {
+		super();
+	}
+
 	public ScopeType(Integer value) {
 		super(CODE_TYPE, value);
 	}
-
 }
