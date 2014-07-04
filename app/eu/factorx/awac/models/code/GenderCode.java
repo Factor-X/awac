@@ -12,8 +12,7 @@ public class GenderCode extends Code {
 	private static final GenderCode[] ALL = new GenderCode[] { MAN, WOMAN };
 
 	private GenderCode(Integer value) {
-		this.type = CODE_TYPE;
-		this.value = value;
+		super(CODE_TYPE, value);
 	}
 
 	public static GenderCode getCode(Integer value) {

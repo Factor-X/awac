@@ -31,17 +31,20 @@ public class Account extends Person {
 	//public int accessRights; // not used for now
 
 	// specific fields for an account.
-    @Required
+
+	@Required
     @Min(value = 18)
     @Max(value = 100)
     private Integer age;
-    @Embedded
+
+	@Embedded
     private Vat vat;
 
 	@ManyToOne(optional = false)
 	private Organization organization;
 
 	protected Account() {
+		super();
 	}
 
     /*

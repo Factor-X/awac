@@ -19,7 +19,7 @@ public class Organization extends AbstractEntity {
 	@OneToMany(mappedBy = "organization")
 	private List<Site> sites;
 
-	public Organization() {
+	protected Organization() {
 		super();
 	}
 
@@ -42,6 +42,12 @@ public class Organization extends AbstractEntity {
 
 	public void setSites(List<Site> param) {
 		this.sites = param;
+	}
+
+	@Override
+	public int compareTo(AbstractEntity o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

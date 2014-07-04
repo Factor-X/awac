@@ -10,6 +10,7 @@ public class CodeType implements Serializable {
 	public static final CodeType LANGUAGE = new CodeType("LANG");
 	public static final CodeType GENDER = new CodeType("GENDER");
 	public static final CodeType HEATING_FUEL_TYPE = new CodeType("HEATING_FUEL_TYPE");
+	public static final CodeType SCOPE = new CodeType("SCOPE");;
 	// ...
 
 	public static final CodeType[] ALL = { LANGUAGE, GENDER, HEATING_FUEL_TYPE };
@@ -21,11 +22,6 @@ public class CodeType implements Serializable {
 		super();
 	}
 
-	/**
-	 * For Hibernate, use instead {@link #getCodeType(String)}
-	 * 
-	 * @param key
-	 */
 	protected CodeType(String key) {
 		super();
 		this.key = key;
