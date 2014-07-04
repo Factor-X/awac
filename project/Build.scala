@@ -32,7 +32,6 @@ object ApplicationBuild extends Build {
 
     libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
 
-
     lazy val downloadTranslations = TaskKey[Unit]("download-translations", "Download translations from Google Spreadsheet")
     val downloadTranslationsTask = downloadTranslations := {
         new DownloadTranslationsTask().execute()
