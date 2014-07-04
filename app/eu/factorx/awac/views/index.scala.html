@@ -49,11 +49,10 @@
             $('body').keydown(function (evt) {
                 console.log(evt);
                 if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
-                    if(window.debug)
-                    {
+                    if (window.debug) {
                         window.debug = false;
                         $('.translation-code').remove();
-                    }else {
+                    } else {
                         window.debug = true;
                         $('.translated-text').each(function () {
                             var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
@@ -70,6 +69,17 @@
 @loadingScreen()
 
 <div ng-show="!isLoading()">
+
+    <mm-awac-dummy-survey ng-model="dummySurvey"></mm-awac-dummy-survey>
+
+    <mm-awac-dummy-result ng-model="dummyResult"></mm-awac-dummy-result>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
 
