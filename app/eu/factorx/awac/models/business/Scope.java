@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.ScopeType;
 
 @Entity
 @Table(name = "scope")
@@ -33,10 +34,24 @@ public class Scope extends AbstractEntity {
 		super();
 	}
 
-	public Scope(Organization organization) {
+	public Scope(ScopeType scopeType, Organization organization, Site site, Product product) {
 		super();
-		this.scopeType = ScopeType.ORG;
+		this.scopeType = scopeType;
 		this.organization = organization;
+		this.site = site;
+		this.product = product;
+	}
+
+	public Scope(Organization organization) {
+		this(ScopeType.ORG, organization, null, null);
+	}
+
+	public Scope(Site site) {
+		this(ScopeType.SITE, site.getOrganization(), site, null);
+	}
+
+	public Scope(Product product) {
+		this(ScopeType.PRODUCT, product.getOrganization(), null, product);
 	}
 
 	public ScopeType getScopeType() {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -13,9 +15,12 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "question_set_answer")
+@NamedQueries({ @NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.period = :period and qsa.scope = :scope") })
 public class QuestionSetAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionSetAnswer.findByScopeAndPeriod";
 
 	@ManyToOne(optional = false)
 	private QuestionSet questionSet;

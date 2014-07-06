@@ -12,13 +12,27 @@ public class Product extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	private String name;
-
 	@ManyToOne(optional = false)
 	private Organization organization;
 
-	public Product() {
+	private String name;
+
+	protected Product() {
 		super();
+	}
+
+	public Product(Organization organization, String name) {
+		super();
+		this.organization = organization;
+		this.name = name;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public String getName() {
@@ -29,12 +43,10 @@ public class Product extends AbstractEntity {
 		this.name = name;
 	}
 
-	public Organization getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(Organization param) {
-		this.organization = param;
+	@Override
+	public int compareTo(AbstractEntity o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

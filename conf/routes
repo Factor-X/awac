@@ -53,3 +53,4 @@ GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.jav
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
+GET     /tests                      eu.factorx.awac.controllers.TestController.index()

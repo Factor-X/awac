@@ -12,29 +12,27 @@ public class Site extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	private String name;
-
 	@ManyToOne(optional = false)
 	private Organization organization;
 
-	public Site() {
+	private String name;
+
+	protected Site() {
 		super();
+	}
+
+	public Site(Organization organization, String name) {
+		super();
+		this.organization = organization;
+		this.name = name;
 	}
 
 	public Organization getOrganization() {
 		return organization;
 	}
 
-	public void setOrganization(Organization param) {
-		this.organization = param;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public String getName() {
@@ -43,6 +41,12 @@ public class Site extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public int compareTo(AbstractEntity o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

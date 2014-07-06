@@ -5,7 +5,6 @@
     <!-- Angular dependencies -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-resource.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-sanitize.min.js"></script>
 
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
@@ -45,19 +44,15 @@
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
-    </script>
-
-
     <script>
         $(function () {
             $('body').keydown(function (evt) {
                 console.log(evt);
                 if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
-                    if(window.debug)
-                    {
+                    if (window.debug) {
                         window.debug = false;
                         $('.translation-code').remove();
-                    }else {
+                    } else {
                         window.debug = true;
                         $('.translated-text').each(function () {
                             var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
@@ -68,7 +63,6 @@
             })
         });
     </script>
-
 </head>
 <body ng-controller="MainCtrl">
 
@@ -76,7 +70,16 @@
 
 <div ng-show="!isLoading()">
 
-    <button ng-click="showLoginModal()">login</button>
+    <mm-awac-dummy-survey ng-model="dummySurvey"></mm-awac-dummy-survey>
+
+    <mm-awac-dummy-result ng-model="dummyResult"></mm-awac-dummy-result>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
 

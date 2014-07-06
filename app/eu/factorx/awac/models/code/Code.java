@@ -2,22 +2,35 @@ package eu.factorx.awac.models.code;
 
 import java.io.Serializable;
 
+import javax.persistence.MappedSuperclass;
+
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+@MappedSuperclass
 public abstract class Code implements Serializable, Comparable<Code> {
 
 	private static final long serialVersionUID = 1L;
 
-	protected CodeType type;
+	protected CodeType codeType;
 
 	protected Integer value;
 
-	public CodeType getType() {
-		return type;
+	protected Code() {
+		super();
 	}
 
-	public void setType(CodeType type) {
-		this.type = type;
+	protected Code(CodeType codeType, Integer value) {
+		super();
+		this.codeType = codeType;
+		this.value = value;
+	}
+
+	public CodeType getCodeType() {
+		return codeType;
+	}
+
+	public void setCodeType(CodeType codeType) {
+		this.codeType = codeType;
 	}
 
 	public Integer getValue() {
@@ -30,7 +43,7 @@ public abstract class Code implements Serializable, Comparable<Code> {
 
 	@Override
 	public int compareTo(Code o) {
-		CompareToBuilder ctb = new CompareToBuilder().append(this.type, o.type).append(this.value, o.value);
+		CompareToBuilder ctb = new CompareToBuilder().append(this.codeType, o.codeType).append(this.value, o.value);
 		return ctb.toComparison();
 	}
 

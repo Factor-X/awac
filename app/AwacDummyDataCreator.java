@@ -29,6 +29,14 @@ public class AwacDummyDataCreator {
 
 	public static void createAwacDummyData(Session session) {
 
+		// ORGANIZATION AND ACCOUNT
+
+		Organization factorx = new Organization("Factor-X");
+		session.saveOrUpdate(factorx);
+		Account user1 = new Account(factorx, "user1", "password", "user1_lastname", "user1_firstname");
+		user1.setAge(25);
+		session.saveOrUpdate(user1);
+
 		// REFERENCES DATA
 
 		session.saveOrUpdate(new CodeLabel(HeatingFuelCode.GAS, "Gas", "Gaz", "Gas"));
@@ -59,17 +67,6 @@ public class AwacDummyDataCreator {
 
 		Period period1 = new Period("2013");
 		session.saveOrUpdate(period1);
-
-		// ORGANIZATIONS AND USER
-
-		Organization men1 = new Organization("Ménage 1");
-		session.saveOrUpdate(men1);
-		Organization men2 = new Organization("Ménage 2");
-		session.saveOrUpdate(men2);
-
-		Account user1 = new Account(men1, "user1", "password", "user1_lastname", "user1_firstname");
-		user1.setAge(25);
-		session.saveOrUpdate(user1);
 
 		// CAMPAIGN AND FORM
 
@@ -105,7 +102,7 @@ public class AwacDummyDataCreator {
 
 		// ANSWERS
 
-		Scope scope1 = new Scope(men1);
+		Scope scope1 = new Scope(factorx);
 		session.saveOrUpdate(scope1);
 
 		QuestionSetAnswer qsa1 = new QuestionSetAnswer(qs1, period1, scope1);
@@ -117,7 +114,7 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer qa1_1 = new QuestionAnswer(q1, qsa1, user1, null, repetitionIndex);
 		session.saveOrUpdate(qa1_1);
-		
+
 		AnswerData answerData1 = new AnswerData(qa1_1, HeatingFuelCode.GAS);
 		List<AnswerData> answerDataLst1 = new ArrayList<>();
 		answerDataLst1.add(answerData1);
@@ -126,7 +123,7 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer qa2_1 = new QuestionAnswer(q2a, qsa1, user1, cubicMeter, repetitionIndex);
 		session.saveOrUpdate(qa2_1);
-		
+
 		AnswerData answerData2 = new AnswerData(qa2_1, 120);
 		List<AnswerData> answerDataLst2 = new ArrayList<>();
 		answerDataLst2.add(answerData2);
@@ -137,7 +134,7 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer qa1_2 = new QuestionAnswer(q1, qsa1, user1, null, repetitionIndex);
 		session.saveOrUpdate(qa1_2);
-		
+
 		AnswerData answerData3 = new AnswerData(qa1_2, HeatingFuelCode.COAL);
 		List<AnswerData> answerDataLst3 = new ArrayList<>();
 		answerDataLst3.add(answerData3);
@@ -146,12 +143,11 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer qa2_2 = new QuestionAnswer(q2b, qsa1, user1, ton, repetitionIndex);
 		session.saveOrUpdate(qa2_2);
-		
+
 		AnswerData answerData4 = new AnswerData(qa2_2, 5);
 		List<AnswerData> answerDataLst4 = new ArrayList<>();
 		answerDataLst4.add(answerData4);
 		qa2_2.setAnswerData(answerDataLst4);
 		session.saveOrUpdate(qa2_2);
-
 	}
 }

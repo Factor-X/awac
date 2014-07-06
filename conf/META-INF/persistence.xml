@@ -1,6 +1,6 @@
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
 
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 
@@ -21,8 +21,8 @@
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
-        <class>eu.factorx.awac.models.business.ScopeType</class>
         <class>eu.factorx.awac.models.business.Site</class>
+        <class>eu.factorx.awac.models.code.ScopeType</class>
         <class>eu.factorx.awac.models.code.CodeLabel</class>
         <class>eu.factorx.awac.models.code.CodeType</class>
         <class>eu.factorx.awac.models.code.QuestionCode</class>

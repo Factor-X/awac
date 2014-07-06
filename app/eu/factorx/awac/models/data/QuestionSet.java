@@ -19,6 +19,8 @@ public class QuestionSet extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
+
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "code")) })
 	private QuestionCode code;
@@ -27,6 +29,9 @@ public class QuestionSet extends AbstractEntity {
 
 	@OneToMany(mappedBy = "questionSet")
 	private List<Question> questions;
+
+	@OneToMany(mappedBy = "questionSet")
+	private List<QuestionSetAnswer> questionSetAnswers;
 
 	protected QuestionSet() {
 		super();
@@ -64,6 +69,14 @@ public class QuestionSet extends AbstractEntity {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+
+	public List<QuestionSetAnswer> getQuestionSetAnswers() {
+		return questionSetAnswers;
+	}
+
+	public void setQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
+		this.questionSetAnswers = questionSetAnswers;
 	}
 
 }
