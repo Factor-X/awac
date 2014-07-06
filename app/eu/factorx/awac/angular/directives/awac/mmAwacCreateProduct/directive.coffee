@@ -1,8 +1,8 @@
 angular
 .module('app.controllers')
 .controller "loginCtrl", ($scope, downloadService, translationService, $sce, $modal, $http) ->
-  $scope.login = "Your login LL"
-  $scope.password = "Your password"
+  $scope.login = "user1"
+  $scope.password = "password"
   $scope.send = () ->
     promise = $http
       method: "POST"
@@ -14,7 +14,8 @@ angular
         password: $scope.password
 
     promise.success (data, status, headers, config) ->
-      $scope.message = data.firstName + " " + data.lastName
+      console.info(data)
+      $scope.message = data.person.firstName + " " + data.person.lastName
       return
 
     promise.error (data, status, headers, config) ->
