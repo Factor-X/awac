@@ -2,7 +2,7 @@
 
 organizations:
 
-    - &FactorX !!eu.factorx.awac.models.business.Organization
+    - &FactorX !!eu.factorx.awac.models.business.OrganizationServiceImpl
         name:           Factor-X
 
 

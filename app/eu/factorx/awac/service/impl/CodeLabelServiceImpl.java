@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import eu.factorx.awac.models.code.Code;
@@ -12,7 +13,7 @@ import eu.factorx.awac.models.code.CodeLabel;
 import eu.factorx.awac.models.code.CodeType;
 import eu.factorx.awac.service.CodeLabelService;
 
-@Repository
+@Component
 public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {
 
 	// custom cache! code labels are "strictly" read-only data for now...

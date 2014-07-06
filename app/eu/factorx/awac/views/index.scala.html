@@ -5,6 +5,7 @@
     <!-- Angular dependencies -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-resource.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-sanitize.min.js"></script>
 
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
@@ -44,6 +45,9 @@
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
     <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css"> -->
 
+    </script>
+
+
     <script>
         $(function () {
             $('body').keydown(function (evt) {
@@ -64,12 +68,15 @@
             })
         });
     </script>
+
 </head>
 <body ng-controller="MainCtrl">
 
 @loadingScreen()
 
 <div ng-show="!isLoading()">
+
+    <button ng-click="showLoginModal()">login</button>
 
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
 

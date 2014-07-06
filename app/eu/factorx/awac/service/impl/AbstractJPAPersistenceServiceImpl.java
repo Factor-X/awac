@@ -9,13 +9,14 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.service.PersistenceService;
 
-@Repository
+@Component
 public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity> implements PersistenceService<E> {
  
     protected Class<E> entityClass;

@@ -1,36 +1,24 @@
 angular
-.module('app.directives')
-.directive "mmAwacExample", (directiveService, $http) ->
-  restrict: "E"
-  scope: {}
-  templateUrl: "$/angular/templates/mm-awac-example.html"
-  controller: (s) ->
-    s.login = "Your login"
-    s.password = ""
+.module('app.controllers')
+.controller "loginCtrl", ($scope, downloadService, translationService, $sce, $modal, $http) ->
+  $scope.login = "Your login LL"
+  $scope.password = "Your password"
+  $scope.send = () ->
+    promise = $http
+      method: "POST"
+      url: 'login'
+      headers:
+        "Content-Type": "application/json"
+      data:
+        login: $scope.login
+        password: $scope.password
 
-    s.send = () ->
-      promise = $http
-        method: "POST"
-        url: 'login'
-        headers:
-          "Content-Type": "application/json"
-        data:
-          login: s.login
-          password: s.password
+    promise.success (data, status, headers, config) ->
+      $scope.message = data.firstName + " " + data.lastName
+      return
 
-      promise.success (data, status, headers, config) ->
-        s.message = data.firstName + " " + data.lastName
-        return
+    promise.error (data, status, headers, config) ->
+      $scope.message = "error : " + data.message
+      return
 
-      promise.error (data, status, headers, config) ->
-        s.message = "error : " + data.message
-        return
-
-      return false
-
-
-
-
-
-
-
+    return false
