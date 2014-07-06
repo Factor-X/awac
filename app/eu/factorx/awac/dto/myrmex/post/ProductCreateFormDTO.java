@@ -32,8 +32,7 @@ public class ProductCreateFormDTO extends FormDTO {
     public boolean testName() {
 
         if (name != null) {
-
-            Pattern patternName = Pattern.compile("^.{6,20}$");
+            Pattern patternName = Pattern.compile("^.{2,20}$");
 
             Matcher matcherName = patternName.matcher(name);
 

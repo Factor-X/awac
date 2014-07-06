@@ -1,21 +1,19 @@
 angular
 .module('app.controllers')
-.controller "loginCtrl", ($scope, downloadService, translationService, $sce, $modal, $http) ->
-  $scope.login = "user1"
-  $scope.password = "password"
+.controller "createProductCtrl", ($scope, downloadService, translationService, $sce, $modal, $http) ->
+  $scope.productName = ""
   $scope.send = () ->
     promise = $http
       method: "POST"
-      url: 'login'
+      url: 'product/create'
       headers:
         "Content-Type": "application/json"
       data:
-        login: $scope.login
-        password: $scope.password
+        name: $scope.productName
 
     promise.success (data, status, headers, config) ->
       console.info(data)
-      $scope.message = data.person.firstName + " " + data.person.lastName
+      $scope.message = "Your product "+data.name+" was created"
       return
 
     promise.error (data, status, headers, config) ->

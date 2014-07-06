@@ -25,9 +25,9 @@ angular
   #    return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
 
 
-  $scope.showLoginModal = () ->
+  $scope.showLoginModal = (target) ->
     $modal.open (
-      templateUrl: "$/angular/templates/mm-awac-example.html"
+      templateUrl: target
     )
     return false
 

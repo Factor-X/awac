@@ -9,18 +9,18 @@ import eu.factorx.awac.models.account.Person;
 public class MyselfDTO  extends DTO{
 
 
-    private PersonDTO personDTO;
+    private PersonDTO person;
     private String organizationName;
     private long organizationId;
     private String identifier;
 
-    public PersonDTO getPersonDTO() {
-        return personDTO;
+    public PersonDTO getPerson() {
+        return person;
 
     }
 
-    public void setPersonDTO(PersonDTO personDTO) {
-        this.personDTO = personDTO;
+    public void setPersonDTO(PersonDTO person) {
+        this.person = person;
     }
 
     public String getOrganizationName() {

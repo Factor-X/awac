@@ -13,7 +13,7 @@ import eu.factorx.awac.models.code.CodeLabel;
 import eu.factorx.awac.models.code.CodeType;
 import eu.factorx.awac.service.CodeLabelService;
 
-@Component
+@Repository
 public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {
 
 	// custom cache! code labels are "strictly" read-only data for now...

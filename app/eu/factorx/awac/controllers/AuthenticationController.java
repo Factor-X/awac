@@ -48,16 +48,11 @@ public class AuthenticationController extends Controller {
     @Transactional(readOnly = true)
     public Result authenticate() {
 
-        Logger.info("Json content : " + request().body().asJson());
-
         ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
         if (connectionFormDTO == null) {
             throw new RuntimeException("The request cannot be convert");
         }
-
-        Logger.info("Login : " + connectionFormDTO.getLogin());
-        Logger.info("Password : " + connectionFormDTO.getPassword());
 
         //control the form
         if (!connectionFormDTO.controlForm()) {
@@ -66,8 +61,6 @@ public class AuthenticationController extends Controller {
         }
 
         //test if the login exist
-        Logger.info("accountService : " + accountService);
-        Logger.info("connectionFormDTO : " + connectionFormDTO);
         Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
 
         if (account == null) {

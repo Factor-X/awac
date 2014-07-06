@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.myrmex.post;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.FormDTO;
 import play.Logger;
 
 import java.util.regex.Matcher;
@@ -9,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * Created by florian on 4/07/14.
  */
-public class ConnectionFormDTO extends DTO {
+public class ConnectionFormDTO extends FormDTO {
 
     private String login;
     private String password;
@@ -42,16 +43,14 @@ public class ConnectionFormDTO extends DTO {
 
         if (login != null) {
 
-            Pattern patternLogin = Pattern.compile("^.*$");
+            Pattern patternLogin = Pattern.compile("^.{5,20}$");
 
             Matcher matcherLogin = patternLogin.matcher(login);
 
             if (matcherLogin.find()) {
-                Logger.info("LOGIN OK !!");
                 return true;
             }
         }
-        Logger.info("LOGIN WRONG !!");
 
         return false;
     }
@@ -60,20 +59,19 @@ public class ConnectionFormDTO extends DTO {
 
         if (password != null) {
 
-            Pattern patternPassword = Pattern.compile("^.*$");
+            Pattern patternPassword = Pattern.compile("^.{5,20}$");
 
             Matcher matcherPassword = patternPassword.matcher(password);
 
             if (matcherPassword.find()) {
-                Logger.info("PASSWORD OK !!");
                 return true;
             }
         }
-        Logger.info("PASSWORD WRONG !!");
 
         return false;
     }
 
+    @Override
     public boolean controlForm() {
 
         if (testLogin() && testPassword()) {
