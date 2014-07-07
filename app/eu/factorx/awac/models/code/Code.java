@@ -2,8 +2,6 @@ package eu.factorx.awac.models.code;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
-
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 
@@ -22,39 +20,10 @@ import eu.factorx.awac.models.data.question.Question;
  * and indicators).
  * 
  */
-@Embeddable
-public class Code implements Serializable {
+public interface Code extends Serializable {
 
-	private static final long serialVersionUID = 1L;
+	public CodeList getCodeList();
 
-	protected CodeList codeList;
-
-	protected String key;
-
-	protected Code() {
-		super();
-	}
-
-	public Code(CodeList codeList, String key) {
-		super();
-		this.codeList = codeList;
-		this.key = key;
-	}
-
-	public CodeList getCodeList() {
-		return codeList;
-	}
-
-	public void setCodeList(CodeList codeList) {
-		this.codeList = codeList;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
+	public String getKey();
 
 }

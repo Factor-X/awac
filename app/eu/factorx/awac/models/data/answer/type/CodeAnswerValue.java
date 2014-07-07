@@ -48,8 +48,20 @@ public class CodeAnswerValue<T extends Code> extends AnswerValue {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
-		CodeList codeList = CodeList.valueOf(StringUtils.trim(rawData.getStringData1()));
-		String key = rawData.getStringData2();
-		value = (T) new Code(codeList, key);
+		final CodeList codeList = CodeList.valueOf(StringUtils.trim(rawData.getStringData1()));
+		final String key = rawData.getStringData2();
+		this.value = (T) new Code() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getKey() {
+				return key;
+			}
+			@Override
+			public CodeList getCodeList() {
+				return codeList;
+			}
+		};
+		// TODO Find a way to instantiate the good Code impl!
+//		value = (T) new Code(codeList, key);
 	}
 }

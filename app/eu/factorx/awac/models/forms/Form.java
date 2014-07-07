@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -31,16 +30,12 @@ public class Form extends AbstractEntity {
 	@OneToMany(mappedBy = "form")
 	private List<FormQuestion> questions = new ArrayList<FormQuestion>();
 
-	@ManyToOne(optional = false)
-	private Campaign campaign;
-
 	public Form() {
 	}
 
-	public Form(String identifier, Campaign campaign) {
+	public Form(String identifier) {
 		super();
 		this.identifier = identifier;
-		this.campaign = campaign;
 	}
 
 	public String getName() {
@@ -65,14 +60,6 @@ public class Form extends AbstractEntity {
 
 	public void setQuestions(List<FormQuestion> param) {
 		this.questions = param;
-	}
-
-	public Campaign getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(Campaign param) {
-		this.campaign = param;
 	}
 
 	public List<QuestionSet> getQuestionSets() {
