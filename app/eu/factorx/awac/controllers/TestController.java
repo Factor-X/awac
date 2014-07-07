@@ -1,22 +1,13 @@
 package eu.factorx.awac.controllers;
 
-import java.util.List;
-
-import javax.persistence.NamedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-
-import eu.factorx.awac.models.data.Question;
-import org.hibernate.Session;
-
+import eu.factorx.awac.dto.awac.get.TestDTO;
 import org.springframework.stereotype.Component;
-
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import eu.factorx.awac.dto.awac.get.TestDTO;
+
+import java.util.List;
 
 @Component
 public class TestController extends Controller {
