@@ -12,7 +12,7 @@ GET     /app.js                     @eu.factorx.awac.controllers.Application.app
 
 # login rest api
 POST    /login                      @eu.factorx.awac.controllers.AuthenticationController.authenticate()
-GET     /logout                     @eu.factorx.awac.controllers.AuthenticationController.logout()
+POST    /logout                     @eu.factorx.awac.controllers.AuthenticationController.logout()
 
 # product
 POST    /product/create             @eu.factorx.awac.controllers.ProductController.createProduct()

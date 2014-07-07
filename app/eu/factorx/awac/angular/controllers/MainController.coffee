@@ -47,3 +47,18 @@ angular
           dataVerifier: null
           dataLocker: null
       return false
+
+  $scope.logout = () ->
+    console.log("logout ??")
+    promise = $http
+      method: "POST"
+      url: 'logout'
+      headers:
+        "Content-Type": "application/json"
+    promise.success (data, status, headers, config) ->
+      console.log("logout ok")
+      return
+
+    promise.error (data, status, headers, config) ->
+      console.log("logout error")
+      return

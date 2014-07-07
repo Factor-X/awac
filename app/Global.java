@@ -12,6 +12,8 @@
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.util.MyrmexRunTimeException;
 import org.hibernate.Session;
 // Spring imports
 import org.springframework.context.ApplicationContext;
@@ -23,15 +25,21 @@ import org.springframework.stereotype.Service;
 
 import play.Application;
 import play.GlobalSettings;
+import play.Logger;
 import play.db.jpa.JPA;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
+import play.libs.F.*;
 import play.libs.Yaml;
 import eu.factorx.awac.InMemoryData;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
+
+import play.mvc.Http.*;
+import play.mvc.Results;
+import play.mvc.SimpleResult;
 
 public class Global extends GlobalSettings {
 
@@ -40,7 +48,6 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStart(Application app) {
-
 
 
         play.Logger.info("Starting AWAC");
@@ -64,7 +71,7 @@ public class Global extends GlobalSettings {
 
         // read spring configuration and instanciate context
         ctx = new ClassPathXmlApplicationContext("components.xml");
-    
+
         // ========================================
         // COMPILE ANGULAR APPLICATION
         // ========================================
@@ -187,6 +194,17 @@ public class Global extends GlobalSettings {
         else
 
             return null;
+    }
+
+    @Override
+    public F.Promise<play.mvc.SimpleResult> onError(RequestHeader request, Throwable t) {
+
+        ExceptionsDTO exceptionsDTO= new ExceptionsDTO(t.getCause().getMessage());
+
+        Logger.error("ERROR into global : " + exceptionsDTO.getMessage());
+
+        return Promise.<SimpleResult>pure(Results.internalServerError(exceptionsDTO
+        ));
     }
 }
 
