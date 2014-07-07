@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
@@ -18,9 +20,13 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 @Table(name = "question")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "question_type")
+@NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+})
 public class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_CODES = "Question.findByCodes";
 
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;

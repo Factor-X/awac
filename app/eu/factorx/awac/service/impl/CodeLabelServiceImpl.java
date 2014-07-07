@@ -25,7 +25,7 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 		if (allLabels == null) {
 			allLabels = new LinkedHashMap<>();
 			for (CodeLabel codeLabel : super.findAll()) {
-				CodeList type = codeLabel.getCode().getCodeList();
+				CodeList type = codeLabel.getCodeList();
 				if (!allLabels.containsKey(type)) {
 					allLabels.put(type, new ArrayList<CodeLabel>());
 				}
@@ -44,7 +44,7 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	public CodeLabel findCodeLabelByCode(Code code) {
 		String key = code.getKey();
 		for (CodeLabel codeLabel : findCodeLabelsByType(code.getCodeList())) {
-			if (StringUtils.equals(key, codeLabel.getCode().getKey())) {
+			if (StringUtils.equals(key, codeLabel.getKey())) {
 				return codeLabel;
 			}
 		}

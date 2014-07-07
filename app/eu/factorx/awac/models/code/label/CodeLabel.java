@@ -2,7 +2,6 @@ package eu.factorx.awac.models.code.label;
 
 import java.io.Serializable;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -10,6 +9,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
@@ -18,9 +18,10 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 
 	private static final long serialVersionUID = 1L;
 
-	@Embedded
-	private Code code;
+	private CodeList codeList;
 
+	private String key;
+	
 	private String labelEn;
 
 	private String labelFr;
@@ -33,18 +34,27 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 
 	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
 		super();
-		this.code = code;
+		this.codeList = code.getCodeList();
+		this.key = code.getKey();
 		this.labelEn = labelEn;
 		this.labelFr = labelFr;
 		this.labelNl = labelNl;
 	}
 
-	public Code getCode() {
-		return code;
+	public CodeList getCodeList() {
+		return codeList;
 	}
 
-	public void setCode(Code code) {
-		this.code = code;
+	public void setCodeList(CodeList codeList) {
+		this.codeList = codeList;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getLabelEn() {
@@ -88,7 +98,8 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 	@Override
 	public int compareTo(CodeLabel obj) {
 		return new CompareToBuilder()
-				.append(this.getCode(), obj.getCode())
+				.append(this.getCodeList(), obj.getCodeList())
+				.append(this.getKey(), obj.getKey())
 				.append(this.getLabelEn(), obj.getLabelEn())
 				.append(this.getLabelFr(), obj.getLabelFr())
 				.append(this.getLabelNl(), obj.getLabelNl())
