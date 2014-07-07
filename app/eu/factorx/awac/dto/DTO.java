@@ -4,29 +4,22 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-<<<<<<< HEAD
 import eu.factorx.awac.util.MyrmexRunTimeException;
 import play.Logger;
-=======
 import eu.factorx.awac.dto.validation.NotNull;
 import eu.factorx.awac.util.FileUtil;
->>>>>>> 1ec25b30e9dfd94f727be7395b76b65f5653b07b
 import play.mvc.Content;
 
 import java.io.File;
 import java.io.IOException;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-=======
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.net.URL;
 
 import javax.script.*;
-
->>>>>>> 1ec25b30e9dfd94f727be7395b76b65f5653b07b
 
 public class DTO implements Content {
 
@@ -74,8 +67,7 @@ public class DTO implements Content {
     }
 
     public void validate() {
-<<<<<<< HEAD
-
+        /*
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -91,7 +83,7 @@ public class DTO implements Content {
             }
 
             throw new RuntimeException("Validation of DTO failed : "+errors);
-=======
+*/
         try {
             for (Field field : this.getClass().getDeclaredFields()) {
                 for (Annotation annotation : field.getAnnotations()) {
@@ -118,7 +110,6 @@ public class DTO implements Content {
             }
         } catch (Exception e) {
             throw new RuntimeException("Validation failed on DTO " + get__type());
->>>>>>> 1ec25b30e9dfd94f727be7395b76b65f5653b07b
         }
     }
 

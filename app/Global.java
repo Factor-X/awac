@@ -202,12 +202,10 @@ public class Global extends GlobalSettings {
             return null;
     }
 
-    <<<<<<<HEAD
-
     @Override
     public F.Promise<play.mvc.SimpleResult> onError(RequestHeader request, Throwable t) {
 
-        ExceptionsDTO exceptionsDTO = new ExceptionsDTO(t.getCause().getMessage());
+        ExceptionsDTO exceptionsDTO= new ExceptionsDTO(t.getCause().getMessage());
 
         Logger.error("ERROR into global : " + exceptionsDTO.getMessage());
 
@@ -215,8 +213,5 @@ public class Global extends GlobalSettings {
         ));
     }
 
-    =======
-
-            >>>>>>>1ec25b30e9dfd94f727be7395b76b65f5653b07b
 }
 
