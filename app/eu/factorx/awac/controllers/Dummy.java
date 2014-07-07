@@ -7,7 +7,7 @@ import play.mvc.Result;
 
 import java.util.Date;
 
-
+@org.springframework.stereotype.Controller
 public class Dummy extends Controller {
 
     public Result getHousehold(Integer year) {

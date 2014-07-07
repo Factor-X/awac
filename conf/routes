@@ -11,9 +11,11 @@ GET     /app.js                     @eu.factorx.awac.controllers.Application.app
 
 
 # login rest api
-GET     /login                      @eu.factorx.awac.controllers.Authentication.login()
-POST    /login                      @eu.factorx.awac.controllers.Authentication.authenticate()
-GET     /logout                     @eu.factorx.awac.controllers.Authentication.logout()
+POST    /login                      @eu.factorx.awac.controllers.AuthenticationController.authenticate()
+GET     /logout                     @eu.factorx.awac.controllers.AuthenticationController.logout()
+
+# product
+POST    /product/create             @eu.factorx.awac.controllers.ProductController.createProduct()
 
 # Administrator list (look at the default values for pagination parameters)
 GET     /administrators             @eu.factorx.awac.controllers.Administrators.list(p:Int ?= 0, s ?= "identifier", o ?= "asc", f ?= "")
@@ -53,3 +55,4 @@ GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.jav
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
+GET     /tests                      eu.factorx.awac.controllers.TestController.index()
