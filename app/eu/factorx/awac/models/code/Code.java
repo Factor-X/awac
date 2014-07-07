@@ -2,49 +2,56 @@ package eu.factorx.awac.models.code;
 
 import java.io.Serializable;
 
-import javax.persistence.MappedSuperclass;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
-@MappedSuperclass
-public abstract class Code implements Serializable, Comparable<Code> {
+/**
+ * 
+ * A <b>Code</b> is an element of a {@link CodeList}, defined as a tuple {
+ * {@link CodeList} codeList, {@link String} key}.<br>
+ * <br>
+ * The programmer will typically define 'constant' instances of a Code subclass
+ * when he needs to deal with a particular data without assuming the status of
+ * the database.<br>
+ * <br>
+ * <b>Example</b>: The {@link QuestionCode questionCode} of a {@link Question
+ * question} must be known (at compilation time) to write the algorithms of
+ * consolidation and calculation involving the answer to this question (reports
+ * and indicators).
+ * 
+ */
+public class Code implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	protected CodeType codeType;
+	protected CodeList codeList;
 
-	protected Integer value;
+	protected String key;
 
 	protected Code() {
 		super();
 	}
 
-	protected Code(CodeType codeType, Integer value) {
+	public Code(CodeList codeList, String key) {
 		super();
-		this.codeType = codeType;
-		this.value = value;
+		this.codeList = codeList;
+		this.key = key;
 	}
 
-	public CodeType getCodeType() {
-		return codeType;
+	public CodeList getCodeList() {
+		return codeList;
 	}
 
-	public void setCodeType(CodeType codeType) {
-		this.codeType = codeType;
+	public void setCodeList(CodeList codeList) {
+		this.codeList = codeList;
 	}
 
-	public Integer getValue() {
-		return value;
+	public String getKey() {
+		return key;
 	}
 
-	public void setValue(Integer value) {
-		this.value = value;
-	}
-
-	@Override
-	public int compareTo(Code o) {
-		CompareToBuilder ctb = new CompareToBuilder().append(this.codeType, o.codeType).append(this.value, o.value);
-		return ctb.toComparison();
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 }

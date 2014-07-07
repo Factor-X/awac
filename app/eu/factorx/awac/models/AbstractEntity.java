@@ -9,13 +9,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractEntity implements Serializable, Comparable<AbstractEntity> {
+public abstract class AbstractEntity implements Serializable {
 
 	public static final String FIND_ALL = "Entity.findAll";
 
@@ -45,15 +44,6 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
 	// public void setTechnicalSegment(TechnicalSegment technicalSegment) {
 	// this.technicalSegment = technicalSegment;
 	// }
-
-	/**
-	 * Default implementation: override this.
-	 * 
-	 */
-	@Override
-	public int compareTo(AbstractEntity obj) {
-		return new CompareToBuilder().append(this.id, obj.id).toComparison();
-	}
 
 	/**
 	 * Default implementation: override this.

@@ -13,6 +13,7 @@ package eu.factorx.awac.models.account;
 
 import java.sql.Timestamp;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

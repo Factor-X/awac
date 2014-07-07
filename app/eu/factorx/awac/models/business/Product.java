@@ -43,10 +43,4 @@ public class Product extends AbstractEntity {
 		this.name = name;
 	}
 
-	@Override
-	public int compareTo(AbstractEntity o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

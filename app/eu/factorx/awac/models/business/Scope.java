@@ -5,11 +5,12 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.ScopeType;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "scope")
@@ -17,9 +18,8 @@ public class Scope extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "scope_type")), })
-	private ScopeType scopeType;
+	@Enumerated
+	private ScopeTypeCode scopeType;
 
 	@OneToOne
 	private Organization organization;
@@ -34,7 +34,7 @@ public class Scope extends AbstractEntity {
 		super();
 	}
 
-	public Scope(ScopeType scopeType, Organization organization, Site site, Product product) {
+	public Scope(ScopeTypeCode scopeType, Organization organization, Site site, Product product) {
 		super();
 		this.scopeType = scopeType;
 		this.organization = organization;
@@ -43,22 +43,22 @@ public class Scope extends AbstractEntity {
 	}
 
 	public Scope(Organization organization) {
-		this(ScopeType.ORG, organization, null, null);
+		this(ScopeTypeCode.ORG, organization, null, null);
 	}
 
 	public Scope(Site site) {
-		this(ScopeType.SITE, site.getOrganization(), site, null);
+		this(ScopeTypeCode.SITE, site.getOrganization(), site, null);
 	}
 
 	public Scope(Product product) {
-		this(ScopeType.PRODUCT, product.getOrganization(), null, product);
+		this(ScopeTypeCode.PRODUCT, product.getOrganization(), null, product);
 	}
 
-	public ScopeType getScopeType() {
+	public ScopeTypeCode getScopeType() {
 		return scopeType;
 	}
 
-	public void setScopeType(ScopeType scopeType) {
+	public void setScopeType(ScopeTypeCode scopeType) {
 		this.scopeType = scopeType;
 	}
 

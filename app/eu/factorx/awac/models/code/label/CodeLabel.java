@@ -1,27 +1,23 @@
-package eu.factorx.awac.models.code;
+package eu.factorx.awac.models.code.label;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
 @Table(name = "code_label")
-public class CodeLabel extends AbstractEntity {
+public class CodeLabel<T extends Code> extends AbstractEntity implements Serializable, Comparable<CodeLabel<T>> {
 
 	private static final long serialVersionUID = 1L;
 
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code_type")), })
-	private CodeType codeType;
-
-	private Integer codeValue;
+	private T code;
 
 	private String labelEn;
 
@@ -33,33 +29,20 @@ public class CodeLabel extends AbstractEntity {
 		super();
 	}
 
-	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
-		this(code.getCodeType(), code.getValue(), labelEn, labelFr, labelNl);
-	}
-
-	public CodeLabel(CodeType codeType, Integer codeValue, String labelEn, String labelFr, String labelNl) {
+	public CodeLabel(T code, String labelEn, String labelFr, String labelNl) {
 		super();
-		this.codeType = codeType;
-		this.codeValue = codeValue;
+		this.code = code;
 		this.labelEn = labelEn;
 		this.labelFr = labelFr;
 		this.labelNl = labelNl;
 	}
 
-	public CodeType getCodeType() {
-		return codeType;
+	public T getCode() {
+		return code;
 	}
 
-	public void setCodeType(CodeType codeType) {
-		this.codeType = codeType;
-	}
-
-	public Integer getCodeValue() {
-		return codeValue;
-	}
-
-	public void setCodeValue(Integer codeValue) {
-		this.codeValue = codeValue;
+	public void setCode(T code) {
+		this.code = code;
 	}
 
 	public String getLabelEn() {
@@ -101,9 +84,9 @@ public class CodeLabel extends AbstractEntity {
 	}
 
 	@Override
-	public int compareTo(AbstractEntity o) {
-		CompareToBuilder ctb = new CompareToBuilder();
-		//***
-		return ctb.toComparison();
+	public int compareTo(CodeLabel<T> obj) {
+		return new CompareToBuilder().append(this.getCode().getCodeList(), obj.getCode().getCodeList())
+				.append(this.getCode().getKey(), obj.getCode().getKey()).toComparison();
 	}
+
 }

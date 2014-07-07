@@ -1,17 +1,20 @@
-package eu.factorx.awac.models.data;
+package eu.factorx.awac.models.data.question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.QuestionCode;
+import eu.factorx.awac.models.code.type.QuestionCode;
 
 @Entity
 @Table(name = "question_set")
@@ -21,17 +24,14 @@ public class QuestionSet extends AbstractEntity {
 
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
 
-	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "code")) })
+	@Enumerated
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	private QuestionCode code;
 
 	private Boolean repetitionAllowed;
 
-	@OneToMany(mappedBy = "questionSet")
-	private List<Question> questions;
-
-	@OneToMany(mappedBy = "questionSet")
-	private List<QuestionSetAnswer> questionSetAnswers;
+	@OneToMany(mappedBy = "questionSet", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Question<?>> questions = new ArrayList<>();
 
 	protected QuestionSet() {
 		super();
@@ -41,6 +41,13 @@ public class QuestionSet extends AbstractEntity {
 		super();
 		this.code = code;
 		this.repetitionAllowed = repetitionAllowed;
+	}
+
+	public QuestionSet(QuestionCode code, Boolean repetitionAllowed, List<Question<?>> questions) {
+		super();
+		this.code = code;
+		this.repetitionAllowed = repetitionAllowed;
+		this.questions = questions;
 	}
 
 	public QuestionSet(QuestionCode code) {
@@ -63,20 +70,16 @@ public class QuestionSet extends AbstractEntity {
 		this.repetitionAllowed = repetitionAllowed;
 	}
 
-	public List<Question> getQuestions() {
+	public List<? extends Question<?>> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(List<Question> questions) {
+	public void setQuestions(List<Question<?>> questions) {
 		this.questions = questions;
 	}
 
-	public List<QuestionSetAnswer> getQuestionSetAnswers() {
-		return questionSetAnswers;
-	}
-
-	public void setQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
-		this.questionSetAnswers = questionSetAnswers;
+	public <T extends Question<?>> boolean addQuestion(T question) {
+		return this.questions.add(question);
 	}
 
 }

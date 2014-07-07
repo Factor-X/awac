@@ -1,4 +1,4 @@
-package eu.factorx.awac.models.data;
+package eu.factorx.awac.models.data.answer;
 
 import java.io.Serializable;
 
@@ -14,10 +14,13 @@ public class AuditInfo implements Serializable {
 
 	@ManyToOne
 	protected Account dataValidator;
+
 	@ManyToOne
 	protected Account dataLocker;
+
 	@ManyToOne
 	protected Account dataVerifier;
+
 	protected Integer verificationStatus;
 
 	public Account getDataValidator() {

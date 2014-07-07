@@ -1,17 +1,17 @@
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
-             xmlns="http://java.sun.com/xml/ns/persistence"
-
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+ 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-
+ 
              version="2.0">
-
+ 
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-
+ 
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-
+ 
         <non-jta-data-source>DefaultDS</non-jta-data-source>
-
+        
         <class>eu.factorx.awac.models.AbstractEntity</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
@@ -22,17 +22,17 @@
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
-        <class>eu.factorx.awac.models.code.ScopeType</class>
-        <class>eu.factorx.awac.models.code.CodeLabel</class>
-        <class>eu.factorx.awac.models.code.CodeType</class>
-        <class>eu.factorx.awac.models.code.QuestionCode</class>
-        <class>eu.factorx.awac.models.data.AnswerData</class>
-        <class>eu.factorx.awac.models.data.AnswerType</class>
+        <class>eu.factorx.awac.models.code.label.CodeLabel</class>
+        <class>eu.factorx.awac.models.data.AbstractAnswerValue</class>
+        <class>eu.factorx.awac.models.data.AbstractNumericAnswerValue</class>
         <class>eu.factorx.awac.models.data.AuditInfo</class>
-        <class>eu.factorx.awac.models.data.QuestionSet</class>
-        <class>eu.factorx.awac.models.data.QuestionSetAnswer</class>
-        <class>eu.factorx.awac.models.data.Question</class>
+        <class>eu.factorx.awac.models.data.BooleanAnswerValue</class>
+        <class>eu.factorx.awac.models.data.CodeAnswerValue</class>
+        <class>eu.factorx.awac.models.data.DoubleAnswerValue</class>
+        <class>eu.factorx.awac.models.data.EntityAnswerValue</class>
+        <class>eu.factorx.awac.models.data.IntegerAnswerValue</class>
         <class>eu.factorx.awac.models.data.QuestionAnswer</class>
+        <class>eu.factorx.awac.models.data.StringAnswerValue</class>
         <class>eu.factorx.awac.models.forms.Campaign</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.forms.FormQuestion</class>
@@ -41,24 +41,29 @@
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
+        <class>eu.factorx.awac.models.question.EntitySelectionQuestion</class>
+        <class>eu.factorx.awac.models.question.NumericQuestion</class>
+        <class>eu.factorx.awac.models.question.Question</class>
+        <class>eu.factorx.awac.models.question.QuestionSet</class>
+        <class>eu.factorx.awac.models.question.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.reporting.Indicator</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+ 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
-
+ 
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+ 
             <property name="hibernate.show_sql" value="true"/>
-
+ 
             <property name="hibernate.format_sql" value="true"/>
-
-            <property name="hibernate.use_sql_comments" value="true"/>
-
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-
+ 
+            <property name="hibernate.use_sql_comments" value="true" />   
+ 
+             <property name="hibernate.hbm2ddl.auto" value="update"/>          
+ 
         </properties>
-
+        
 
     </persistence-unit>
 
