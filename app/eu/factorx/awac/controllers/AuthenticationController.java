@@ -53,13 +53,13 @@ public class AuthenticationController extends Controller {
         if (connectionFormDTO == null) {
             throw new RuntimeException("The request cannot be convert");
         }
-
+/*
         //control the form
         if (!connectionFormDTO.controlForm()) {
             //generic error message => the content of the form was controlled in the client side
             return this.forbidden(new ExceptionsDTO("The form is not valid"));
         }
-
+*/
         //test if the login exist
         Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
 
@@ -76,7 +76,7 @@ public class AuthenticationController extends Controller {
 
         //if the login and the password are ok, refresh the session
         session().clear();
-        session("identifier", account.getIdentifier());
+        session(Secured.SESSION_IDENTIFIER_STORE, account.getIdentifier());
 
         //convert and send it
         return ok(conversionService.convert(account, MyselfDTO.class));

@@ -31,20 +31,6 @@ POST    /administrators/:id         @eu.factorx.awac.controllers.Administrators.
 # Delete a admin
 POST    /administrators/:id/delete  @eu.factorx.awac.controllers.Administrators.delete(id:Long)
 
-# Account list (look at the default values for pagination parameters)
-GET     /accounts		            @eu.factorx.awac.controllers.Accounts.list(p:Int ?= 0, s ?= "identifier", o ?= "asc", f ?= "")
-GET     /accounts/pdf    			@eu.factorx.awac.controllers.Accounts.asPdf()
-GET     /accounts/json    			@eu.factorx.awac.controllers.Accounts.asJson()
-GET     /accounts/xml    			@eu.factorx.awac.controllers.Accounts.asXml()
-# Add account
-GET     /accounts/new         		@eu.factorx.awac.controllers.Accounts.create()
-POST    /accounts             		@eu.factorx.awac.controllers.Accounts.save()
-# Edit existing account
-GET     /accounts/:id         		@eu.factorx.awac.controllers.Accounts.edit(id:Long)
-POST    /accounts/:id         		@eu.factorx.awac.controllers.Accounts.update(id:Long)
-# Delete a account
-POST    /accounts/:id/delete  		@eu.factorx.awac.controllers.Accounts.delete(id:Long)
-
 # VIES Service
 GET     /vies/vatcheck/:uid/:vat    @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
 
@@ -56,3 +42,8 @@ GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.jav
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /tests                      eu.factorx.awac.controllers.TestController.index()
+
+
+#answer controller => used to save answer
+GET     /answer/getByForm:form/:period/:scope   @eu.factorx.awac.controllers.AnswerController.getByForm(form: Integer, period: Integer, scope: Integer)
+POST    /answer/save                            @eu.factorx.awac.controllers.AnswerController.save()

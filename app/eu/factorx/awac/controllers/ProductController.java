@@ -15,6 +15,7 @@ import org.springframework.core.convert.ConversionService;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 
 /**
  * Created by root on 6/07/14.
@@ -33,30 +34,18 @@ public class ProductController extends Controller {
 
 
     @Transactional(readOnly = false)
+    @Security.Authenticated(Secured.class)
     public Result createProduct() {
-
-        //1. control the authentification
-        Account account = secured.getCurrentUser();
-
-        if (account == null) {
-            return notFound("You are not connected");
-            //manage not connected user
-        }
 
         //2. create the DTO
         ProductCreateFormDTO productCreateFormDTO = DTO.getDTO(request().body().asJson(), ProductCreateFormDTO.class);
 
-        if(productCreateFormDTO==null){
+        if (productCreateFormDTO == null) {
             throw new RuntimeException("The request cannot be convert");
         }
 
-        //2.2 control DTO
-        if(!productCreateFormDTO.controlForm()){
-            return this.forbidden(new ExceptionsDTO("The form is not valid"));
-        }
-
         //3. create the product
-        Product product = new Product(account.getOrganization(), productCreateFormDTO.getName());
+        Product product = new Product(secured.getCurrentUser().getOrganization(), productCreateFormDTO.getName());
 
         //3.1 add
         productService.save(product);
