@@ -7,7 +7,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.UnitCategory;
@@ -15,7 +14,7 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("NUMERIC")
-public class NumericQuestion<T extends Number> extends Question<NumericAnswerValue<T>> {
+public class NumericQuestion<T extends Number> extends Question {
 
 	private static final long serialVersionUID = 1L;
 

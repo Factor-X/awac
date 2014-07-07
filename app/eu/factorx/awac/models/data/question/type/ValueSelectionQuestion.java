@@ -5,13 +5,12 @@ import javax.persistence.Entity;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @DiscriminatorValue("VALUE_SELECTION")
-public class ValueSelectionQuestion<T extends Code> extends Question<CodeAnswerValue<T>> {
+public class ValueSelectionQuestion<T extends Code> extends Question {
 
 	private static final long serialVersionUID = 1L;
 

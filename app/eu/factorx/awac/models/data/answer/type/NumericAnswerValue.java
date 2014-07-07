@@ -1,5 +1,8 @@
 package eu.factorx.awac.models.data.answer.type;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
 
 import play.db.jpa.JPA;
@@ -8,6 +11,8 @@ import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class NumericAnswerValue<T extends Number> extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +27,7 @@ public class NumericAnswerValue<T extends Number> extends AnswerValue {
 		super();
 	}
 
-	public NumericAnswerValue(QuestionAnswer<NumericAnswerValue<T>> questionAnswer, T value, Unit unit) {
+	public NumericAnswerValue(QuestionAnswer questionAnswer, T value, Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;

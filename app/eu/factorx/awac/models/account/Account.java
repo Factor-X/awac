@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import play.data.validation.Constraints.Max;
 import play.data.validation.Constraints.Min;
@@ -27,11 +29,19 @@ import eu.factorx.awac.models.business.Organization;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("account")
+@NamedQueries({
+	   @NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
+	})
 public class Account extends Person {
 
 	private static final long serialVersionUID = 1L;
 
-	//public int accessRights; // not used for now
+	/**
+	 * :identifier = ...
+	 */
+    public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+
+    //public int accessRights; // not used for now
 
 	// specific fields for an account.
 

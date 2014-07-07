@@ -6,14 +6,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("STRING")
-public class StringQuestion extends Question<StringAnswerValue> {
+public class StringQuestion extends Question {
 
 	private static final long serialVersionUID = 1L;
 
