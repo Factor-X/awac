@@ -15,7 +15,6 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
-import eu.factorx.awac.models.forms.Campaign;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.forms.FormQuestion;
 import eu.factorx.awac.models.knowledge.Period;
@@ -70,10 +69,7 @@ public class AwacDummyDataCreator {
 		Period period1 = new Period("2013");
 		session.saveOrUpdate(period1);
 
-		Campaign awac2013 = new Campaign("AWAC 2013", period1);
-		session.saveOrUpdate(awac2013);
-
-		Form form1 = new Form("Formulaire Ménages", awac2013);
+		Form form1 = new Form("Formulaire Entreprise");
 		session.saveOrUpdate(form1);
 
 		// QUESTIONS

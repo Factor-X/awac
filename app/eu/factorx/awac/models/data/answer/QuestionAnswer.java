@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,11 +19,17 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "question_answer")
+@NamedQueries({
+	   @NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period"),
+	   @NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
+	})
 public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_BY_PARAMETERS = "QuestionAnswer.findByParameters";
+	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
+
+	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
 
 	// ATTRIBUTES
 
