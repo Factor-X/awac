@@ -1,12 +1,10 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Product;
-import eu.factorx.awac.service.ProductService;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by root on 6/07/14.
- */
+import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.service.ProductService;
+
 @Repository
-public class ProductServiceImpl extends AbstractJPAPersistenceServiceImpl<Product> implements ProductService{
+public class ProductServiceImpl extends AbstractJPAPersistenceServiceImpl<Product> implements ProductService {
 }

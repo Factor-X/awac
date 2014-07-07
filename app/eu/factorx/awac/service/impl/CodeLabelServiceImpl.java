@@ -5,11 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
 import org.apache.commons.lang3.StringUtils;
-=======
-import org.springframework.stereotype.Component;
->>>>>>> b6dc4c0925243c4ac737e5336f5b23602cc0d12b
 import org.springframework.stereotype.Repository;
 
 import eu.factorx.awac.models.code.Code;
