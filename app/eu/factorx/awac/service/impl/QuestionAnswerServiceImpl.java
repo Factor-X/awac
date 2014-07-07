@@ -14,7 +14,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.QuestionAnswerService;
 
 @Component
-public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionAnswer<?>> implements
+public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionAnswer> implements
 		QuestionAnswerService {
 
 	@Override

@@ -13,6 +13,8 @@ package eu.factorx.awac.models.account;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
 import play.data.validation.Constraints.Max;
@@ -23,6 +25,7 @@ import eu.factorx.awac.models.business.Organization;
 // import for JAXB annotations -- JAXB stack
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("account")
 public class Account extends Person {
 

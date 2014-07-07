@@ -54,7 +54,7 @@
 
         <properties>
  
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
  
             <property name="hibernate.show_sql" value="true"/>
  
