@@ -7,14 +7,13 @@ import javax.persistence.InheritanceType;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("ENTITY_SELECTION")
-public class EntitySelectionQuestion<T extends AbstractEntity> extends Question<EntityAnswerValue<T>> {
+public class EntitySelectionQuestion<T extends AbstractEntity> extends Question {
 
 	private static final long serialVersionUID = 1L;
 

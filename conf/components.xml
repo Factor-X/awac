@@ -20,4 +20,13 @@
         </property>
     </bean>
 
+
+<!-- 	<bean id="entityManagerFactory" class="org.hibernate.ejb.EntityManagerFactoryImpl"> -->
+<!-- 		<constructor-arg name="persistenceUnitName" value="defaultPersistenceUnit" /> -->
+<!-- 	</bean> -->
+	
+<!-- 	<bean id="entityManager" class="org.hibernate.ejb.EntityManagerImpl"> -->
+<!-- 		<constructor-arg name="entityManagerFactory" ref="entityManagerFactory" /> -->
+<!-- 	</bean> -->
+
 </beans>

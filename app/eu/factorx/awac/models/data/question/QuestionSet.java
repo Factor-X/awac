@@ -31,7 +31,7 @@ public class QuestionSet extends AbstractEntity {
 	private Boolean repetitionAllowed;
 
 	@OneToMany(mappedBy = "questionSet", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Question<?>> questions = new ArrayList<>();
+	private List<Question> questions = new ArrayList<>();
 
 	protected QuestionSet() {
 		super();
@@ -43,7 +43,7 @@ public class QuestionSet extends AbstractEntity {
 		this.repetitionAllowed = repetitionAllowed;
 	}
 
-	public QuestionSet(QuestionCode code, Boolean repetitionAllowed, List<Question<?>> questions) {
+	public QuestionSet(QuestionCode code, Boolean repetitionAllowed, List<Question> questions) {
 		super();
 		this.code = code;
 		this.repetitionAllowed = repetitionAllowed;
@@ -70,15 +70,15 @@ public class QuestionSet extends AbstractEntity {
 		this.repetitionAllowed = repetitionAllowed;
 	}
 
-	public List<? extends Question<?>> getQuestions() {
+	public List<Question> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(List<Question<?>> questions) {
+	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
 
-	public <T extends Question<?>> boolean addQuestion(T question) {
+	public boolean addQuestion(Question question) {
 		return this.questions.add(question);
 	}
 

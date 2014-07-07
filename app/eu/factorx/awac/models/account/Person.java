@@ -42,12 +42,10 @@ import eu.factorx.awac.models.AbstractEntity;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "person_type")
 @NamedQueries({
-    @NamedQuery(name = Person.FIND_ALL, query = "select p from Person p"),
-    @NamedQuery(name = Person.TOTAL_RESULT, query = "select count(p) from Person p"),
-    @NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
+   @NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
 //    @NamedQuery(name = Person.FIND_BY_TYPE, query = "select p from Person p where p.type = :type")
 })
-public class Person extends AbstractEntity {
+public abstract class Person extends AbstractEntity {
 	/**
 	 * :identifier = ...
 	 */

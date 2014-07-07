@@ -11,6 +11,7 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
+import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
@@ -82,16 +83,16 @@ public class AwacDummyDataCreator {
 		session.saveOrUpdate(hfqs);
 
 		// (1.1) Heating fuel type
-		ValueSelectionQuestion<HeatingFuelTypeCode> hfqType = new ValueSelectionQuestion<>(hfqs, 0,
+		Question hfqType = new ValueSelectionQuestion<HeatingFuelTypeCode>(hfqs, 0,
 				QuestionCode.HFQ_HFTYPE);
 		hfqs.addQuestion(hfqType);
 
 		// (1.2a) Heating fuel consumption (in volume units)
-		NumericQuestion<Integer> hfqVol = new NumericQuestion<>(hfqs, 1, QuestionCode.HFQ_HFCONSO_VOL, volumeUnits);
+		Question hfqVol = new NumericQuestion<Integer>(hfqs, 1, QuestionCode.HFQ_HFCONSO_VOL, volumeUnits);
 		hfqs.addQuestion(hfqVol);
 
 		// (1.2b) Heating fuel consumption (in mass units)
-		NumericQuestion<Double> hfqMass = new NumericQuestion<>(hfqs, 1, QuestionCode.HFQ_HFCONSO_MASS, massUnits);
+		Question hfqMass = new NumericQuestion<Double>(hfqs, 1, QuestionCode.HFQ_HFCONSO_MASS, massUnits);
 		hfqs.addQuestion(hfqMass);
 
 		// link question set to form1
@@ -109,28 +110,36 @@ public class AwacDummyDataCreator {
 		// first set of responses
 		short repetitionIndex = 1;
 
-		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> hfqTypeAnswer1 = new QuestionAnswer<>(period1, scope1,
+		QuestionAnswer hfqTypeAnswer1 = new QuestionAnswer(period1, scope1,
 				user1, hfqType, repetitionIndex);
-		hfqTypeAnswer1.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(hfqTypeAnswer1, HeatingFuelTypeCode.GAS));
 		session.saveOrUpdate(hfqTypeAnswer1);
-
-		QuestionAnswer<NumericAnswerValue<Integer>> hfqVolAnswer1 = new QuestionAnswer<>(period1, scope1, user1,
+		CodeAnswerValue<HeatingFuelTypeCode> hfqTypeAnswer1Value = new CodeAnswerValue<HeatingFuelTypeCode>(hfqTypeAnswer1, HeatingFuelTypeCode.GAS);
+		session.saveOrUpdate(hfqTypeAnswer1Value);
+//		hfqTypeAnswer1.getAnswerValues().add(hfqTypeAnswer1Value);
+		
+		QuestionAnswer hfqVolAnswer1 = new QuestionAnswer(period1, scope1, user1,
 				hfqVol, repetitionIndex);
-		hfqVolAnswer1.getAnswerValues().add(new NumericAnswerValue<Integer>(hfqVolAnswer1, 120, cubicMeter));
 		session.saveOrUpdate(hfqVolAnswer1);
+		NumericAnswerValue<Integer> hfqVolAnswer1Value = new NumericAnswerValue<Integer>(hfqVolAnswer1, 120, cubicMeter);
+		session.saveOrUpdate(hfqVolAnswer1Value);
+//		hfqVolAnswer1.getAnswerValues().add(hfqVolAnswer1Value);
 
 		// second set of responses
 		repetitionIndex = 2;
 
-		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> question1_answer2 = new QuestionAnswer<>(period1, scope1,
+		QuestionAnswer question1_answer2 = new QuestionAnswer(period1, scope1,
 				user1, hfqType, repetitionIndex);
-		question1_answer2.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(question1_answer2,
-				HeatingFuelTypeCode.COAL));
 		session.saveOrUpdate(question1_answer2);
+		CodeAnswerValue<HeatingFuelTypeCode> question1_answer2Value = new CodeAnswerValue<HeatingFuelTypeCode>(question1_answer2,
+				HeatingFuelTypeCode.COAL);
+		question1_answer2.getAnswerValues().add(question1_answer2Value);
+//		session.saveOrUpdate(question1_answer2);
 
-		QuestionAnswer<NumericAnswerValue<Double>> question2b_answer2 = new QuestionAnswer<>(period1, scope1, user1,
+		QuestionAnswer question2b_answer2 = new QuestionAnswer(period1, scope1, user1,
 				hfqMass, repetitionIndex);
-		question2b_answer2.getAnswerValues().add(new NumericAnswerValue<Double>(question2b_answer2, 3.2, ton));
 		session.saveOrUpdate(question2b_answer2);
+		NumericAnswerValue<Double> question2b_answer2Value = new NumericAnswerValue<Double>(question2b_answer2, 3.2, ton);
+		session.saveOrUpdate(question2b_answer2Value);
+//		question2b_answer2.getAnswerValues().add(question2b_answer2Value);
 	}
 }

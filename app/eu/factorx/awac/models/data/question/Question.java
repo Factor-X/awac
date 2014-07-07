@@ -13,13 +13,12 @@ import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.AnswerValue;
 
 @Entity
 @Table(name = "question")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "question_type")
-public class Question<T extends AnswerValue> extends AbstractEntity {
+public class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

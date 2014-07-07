@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
@@ -13,12 +14,10 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.models.data.answer.AnswerValue;
-import javax.persistence.OneToMany;
 
 @Entity
 @Table(name = "question_answer")
-public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
+public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +42,7 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 	@OneToMany(mappedBy = "questionAnswer")
 	private List<AnswerValue> answerValues;
 
-	@ManyToOne
+	@ManyToOne(targetEntity = Question.class)
 	private Question question;
 
 	// CONSTRUCTORS
@@ -52,7 +51,7 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 		super();
 	}
 
-	public QuestionAnswer(Period period, Scope scope, Account dataOwner, Question<T> question, int repetitionIndex) {
+	public QuestionAnswer(Period period, Scope scope, Account dataOwner, Question question, int repetitionIndex) {
 		super();
 		this.period = period;
 		this.scope = scope;
