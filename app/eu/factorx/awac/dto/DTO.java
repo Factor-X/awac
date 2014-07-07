@@ -17,19 +17,18 @@ import java.util.Set;
 public class DTO implements Content {
 
     private String __type;
-
     public String get__type() {
-        return __type;
+        return this.getClass().getCanonicalName();
     }
-
     public void set__type(String __type) {
-        this.__type = __type;
+        if (!get__type().equals(__type)) {
+            throw new RuntimeException("Wrong type of DTO received");
+        }
     }
 
     @Override
     public String body() {
         ObjectMapper mapper = new ObjectMapper();
-
         try {
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
@@ -56,10 +55,8 @@ public class DTO implements Content {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<DTO>> violations = validator.validate(this);
-
-        for (ConstraintViolation<DTO> v : violations) {
-            System.out.println(v.getPropertyPath());
-            System.out.println(v.getMessage());
+        if (violations.size() > 0) {
+            throw new RuntimeException("Validation of DTO failed");
         }
     }
 
