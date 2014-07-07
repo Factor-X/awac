@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.TestDTO;
+import eu.factorx.awac.service.QuestionAnswerService;
 import org.springframework.stereotype.Component;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -18,6 +19,9 @@ public class TestController extends Controller {
 
     @Transactional
     public static Result index() {
+
+        // QuestionAnswerService qas =
+
         List resultList = JPA.em().createQuery(QUERY).getResultList();
 
 /*

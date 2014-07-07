@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.data.QuestionSet;
+import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Table(name = "form_question")

@@ -1,23 +1,19 @@
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Session;
 
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.CodeLabel;
-import eu.factorx.awac.models.code.CodeType;
-import eu.factorx.awac.models.code.GenderCode;
-import eu.factorx.awac.models.code.HeatingFuelCode;
-import eu.factorx.awac.models.code.LanguageCode;
-import eu.factorx.awac.models.code.QuestionCode;
-import eu.factorx.awac.models.data.AnswerData;
-import eu.factorx.awac.models.data.AnswerType;
-import eu.factorx.awac.models.data.Question;
-import eu.factorx.awac.models.data.QuestionAnswer;
-import eu.factorx.awac.models.data.QuestionSet;
-import eu.factorx.awac.models.data.QuestionSetAnswer;
+import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.GenderCode;
+import eu.factorx.awac.models.code.type.HeatingFuelTypeCode;
+import eu.factorx.awac.models.code.type.LanguageCode;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
+import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
+import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Campaign;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.forms.FormQuestion;
@@ -29,18 +25,12 @@ public class AwacDummyDataCreator {
 
 	public static void createAwacDummyData(Session session) {
 
-		// ORGANIZATION AND ACCOUNT
-
-		Organization factorx = new Organization("Factor-X");
-		session.saveOrUpdate(factorx);
-		Account user1 = new Account(factorx, "user1", "password", "user1_lastname", "user1_firstname");
-		user1.setAge(25);
-		session.saveOrUpdate(user1);
-
 		// REFERENCES DATA
 
-		session.saveOrUpdate(new CodeLabel(HeatingFuelCode.GAS, "Gas", "Gaz", "Gas"));
-		session.saveOrUpdate(new CodeLabel(HeatingFuelCode.OIL, "Oil", "Mazout", "Brandstof"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.COAL, "Coal", "Charbon",
+				"Steenkool"));
 
 		session.saveOrUpdate(new CodeLabel(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
 		session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
@@ -65,10 +55,19 @@ public class AwacDummyDataCreator {
 		Unit ton = new Unit("Ton", massUnits);
 		session.saveOrUpdate(ton);
 
-		Period period1 = new Period("2013");
-		session.saveOrUpdate(period1);
+		// ORGANIZATION AND ACCOUNT
+
+		Organization factorx = new Organization("Factor-X");
+		session.saveOrUpdate(factorx);
+
+		Account user1 = new Account(factorx, "user1", "password", "user1_lastname", "user1_firstname");
+		user1.setAge(25);
+		session.saveOrUpdate(user1);
 
 		// CAMPAIGN AND FORM
+
+		Period period1 = new Period("2013");
+		session.saveOrUpdate(period1);
 
 		Campaign awac2013 = new Campaign("AWAC 2013", period1);
 		session.saveOrUpdate(awac2013);
@@ -78,23 +77,25 @@ public class AwacDummyDataCreator {
 
 		// QUESTIONS
 
-		// (1) Heating Fuel Questions Set (repetition allowed)
-		QuestionSet qs1 = new QuestionSet(QuestionCode.HF_SET, Boolean.TRUE);
-		session.saveOrUpdate(qs1);
-		// Heating fuel type
-		Question q1 = new Question(qs1, QuestionCode.HF_HFT, AnswerType.valueSelection(CodeType.HEATING_FUEL_TYPE),
-				null, new Short("0"));
-		session.saveOrUpdate(q1);
-		// Heating fuel consumption (in volume units)
-		Question q2a = new Question(qs1, QuestionCode.HF_HFC1, AnswerType.INTEGER, volumeUnits, new Short("1"));
-		session.saveOrUpdate(q2a);
+		// (1) Heating Fuel Question Set (repetition allowed)
+		QuestionSet hfqs = new QuestionSet(QuestionCode.HFQS, Boolean.TRUE);
+		session.saveOrUpdate(hfqs);
 
-		// Heating fuel consumption (in mass units)
-		Question q2b = new Question(qs1, QuestionCode.HF_HFC2, AnswerType.INTEGER, massUnits, new Short("1"));
-		session.saveOrUpdate(q2b);
+		// (1.1) Heating fuel type
+		ValueSelectionQuestion<HeatingFuelTypeCode> hfqType = new ValueSelectionQuestion<>(hfqs, 0,
+				QuestionCode.HFQ_HFTYPE);
+		hfqs.addQuestion(hfqType);
 
-		// adding to form1
-		FormQuestion formQ1 = new FormQuestion(form1, qs1);
+		// (1.2a) Heating fuel consumption (in volume units)
+		NumericQuestion<Integer> hfqVol = new NumericQuestion<>(hfqs, 1, QuestionCode.HFQ_HFCONSO_VOL, volumeUnits);
+		hfqs.addQuestion(hfqVol);
+
+		// (1.2b) Heating fuel consumption (in mass units)
+		NumericQuestion<Double> hfqMass = new NumericQuestion<>(hfqs, 1, QuestionCode.HFQ_HFCONSO_MASS, massUnits);
+		hfqs.addQuestion(hfqMass);
+
+		// link question set to form1
+		FormQuestion formQ1 = new FormQuestion(form1, hfqs);
 		session.saveOrUpdate(formQ1);
 
 		// (2) Air Travel Questions Set (repetition allowed)
@@ -105,49 +106,31 @@ public class AwacDummyDataCreator {
 		Scope scope1 = new Scope(factorx);
 		session.saveOrUpdate(scope1);
 
-		QuestionSetAnswer qsa1 = new QuestionSetAnswer(qs1, period1, scope1);
-		session.saveOrUpdate(qsa1);
-
 		// first set of responses
+		short repetitionIndex = 1;
 
-		Short repetitionIndex = new Short("1");
+		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> hfqTypeAnswer1 = new QuestionAnswer<>(period1, scope1,
+				user1, hfqType, repetitionIndex);
+		hfqTypeAnswer1.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(hfqTypeAnswer1, HeatingFuelTypeCode.GAS));
+		session.saveOrUpdate(hfqTypeAnswer1);
 
-		QuestionAnswer qa1_1 = new QuestionAnswer(q1, qsa1, user1, null, repetitionIndex);
-		session.saveOrUpdate(qa1_1);
+		QuestionAnswer<NumericAnswerValue<Integer>> hfqVolAnswer1 = new QuestionAnswer<>(period1, scope1, user1,
+				hfqVol, repetitionIndex);
+		hfqVolAnswer1.getAnswerValues().add(new NumericAnswerValue<Integer>(hfqVolAnswer1, 120, cubicMeter));
+		session.saveOrUpdate(hfqVolAnswer1);
 
-		AnswerData answerData1 = new AnswerData(qa1_1, HeatingFuelCode.GAS);
-		List<AnswerData> answerDataLst1 = new ArrayList<>();
-		answerDataLst1.add(answerData1);
-		qa1_1.setAnswerData(answerDataLst1);
-		session.saveOrUpdate(qa1_1);
+		// second set of responses
+		repetitionIndex = 2;
 
-		QuestionAnswer qa2_1 = new QuestionAnswer(q2a, qsa1, user1, cubicMeter, repetitionIndex);
-		session.saveOrUpdate(qa2_1);
+		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> question1_answer2 = new QuestionAnswer<>(period1, scope1,
+				user1, hfqType, repetitionIndex);
+		question1_answer2.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(question1_answer2,
+				HeatingFuelTypeCode.COAL));
+		session.saveOrUpdate(question1_answer2);
 
-		AnswerData answerData2 = new AnswerData(qa2_1, 120);
-		List<AnswerData> answerDataLst2 = new ArrayList<>();
-		answerDataLst2.add(answerData2);
-		qa2_1.setAnswerData(answerDataLst2);
-		session.saveOrUpdate(qa2_1);
-
-		repetitionIndex = new Short("2");
-
-		QuestionAnswer qa1_2 = new QuestionAnswer(q1, qsa1, user1, null, repetitionIndex);
-		session.saveOrUpdate(qa1_2);
-
-		AnswerData answerData3 = new AnswerData(qa1_2, HeatingFuelCode.COAL);
-		List<AnswerData> answerDataLst3 = new ArrayList<>();
-		answerDataLst3.add(answerData3);
-		qa1_2.setAnswerData(answerDataLst3);
-		session.saveOrUpdate(qa1_2);
-
-		QuestionAnswer qa2_2 = new QuestionAnswer(q2b, qsa1, user1, ton, repetitionIndex);
-		session.saveOrUpdate(qa2_2);
-
-		AnswerData answerData4 = new AnswerData(qa2_2, 5);
-		List<AnswerData> answerDataLst4 = new ArrayList<>();
-		answerDataLst4.add(answerData4);
-		qa2_2.setAnswerData(answerDataLst4);
-		session.saveOrUpdate(qa2_2);
+		QuestionAnswer<NumericAnswerValue<Double>> question2b_answer2 = new QuestionAnswer<>(period1, scope1, user1,
+				hfqMass, repetitionIndex);
+		question2b_answer2.getAnswerValues().add(new NumericAnswerValue<Double>(question2b_answer2, 3.2, ton));
+		session.saveOrUpdate(question2b_answer2);
 	}
 }

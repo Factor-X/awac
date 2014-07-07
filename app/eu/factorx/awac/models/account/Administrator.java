@@ -12,12 +12,13 @@ package eu.factorx.awac.models.account;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 // import for JAXB annotations -- JAXB stack
 
 @Entity
-@Table(name = "administrator")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("admin")
 public class Administrator extends Person {
 

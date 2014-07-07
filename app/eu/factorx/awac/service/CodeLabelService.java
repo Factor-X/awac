@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeLabel;
-import eu.factorx.awac.models.code.CodeType;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 
 public interface CodeLabelService extends PersistenceService<CodeLabel> {
 
-	Map<CodeType, List<CodeLabel>> findAllCodeLabels();
+	Map<CodeList, List<CodeLabel>> findAllCodeLabels();
 
-	List<CodeLabel> findCodeLabelsByType(CodeType type);
+	List<CodeLabel> findCodeLabelsByType(CodeList type);
 
 	CodeLabel findCodeLabelByCode(Code code);
 

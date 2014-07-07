@@ -3,12 +3,14 @@ package eu.factorx.awac.service.impl;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.springframework.stereotype.Repository;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.service.FormService;
 
+@Repository
 public class FormServiceImpl extends AbstractJPAPersistenceServiceImpl<Form> implements FormService {
 
 	@Override
