@@ -1,6 +1,5 @@
 package eu.factorx.awac.models.data.answer.type;
 
-import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import play.db.jpa.JPA;
@@ -9,7 +8,6 @@ import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 
-@Entity
 public class NumericAnswerValue<T extends Number> extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;

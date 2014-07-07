@@ -5,7 +5,6 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,7 +17,8 @@ public class Scope extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Enumerated
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
 	private ScopeTypeCode scopeType;
 
 	@OneToOne

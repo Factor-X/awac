@@ -4,8 +4,8 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -19,14 +19,14 @@ import eu.factorx.awac.models.data.answer.AnswerValue;
 @Table(name = "question")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "question_type")
-public abstract class Question<T extends AnswerValue> extends AbstractEntity {
+public class Question<T extends AnswerValue> extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;
 
-	@Enumerated
+	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	protected QuestionCode code;
 

@@ -1,8 +1,11 @@
 package eu.factorx.awac.models.code.type;
 
+import javax.persistence.Embeddable;
+
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+@Embeddable
 public class ScopeTypeCode extends Code {
 
 	private static final long serialVersionUID = 1L;
@@ -19,6 +22,14 @@ public class ScopeTypeCode extends Code {
 
 	public ScopeTypeCode(Integer key) {
 		super(CODE_TYPE, Integer.toString(key));
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 }

@@ -1,6 +1,5 @@
 package eu.factorx.awac.models.data.answer.type;
 
-import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +11,6 @@ import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 
-@Entity
 public class EntityAnswerValue<T extends AbstractEntity> extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;

@@ -27,17 +27,17 @@ public class AwacDummyDataCreator {
 
 		// REFERENCES DATA
 
-		session.saveOrUpdate(new CodeLabel<HeatingFuelTypeCode>(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
-		session.saveOrUpdate(new CodeLabel<HeatingFuelTypeCode>(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
-		session.saveOrUpdate(new CodeLabel<HeatingFuelTypeCode>(HeatingFuelTypeCode.COAL, "Coal", "Charbon",
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.COAL, "Coal", "Charbon",
 				"Steenkool"));
 
-		session.saveOrUpdate(new CodeLabel<LanguageCode>(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
-		session.saveOrUpdate(new CodeLabel<LanguageCode>(LanguageCode.FRENCH, "French", "Français", "Frans"));
-		session.saveOrUpdate(new CodeLabel<LanguageCode>(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
 
-		session.saveOrUpdate(new CodeLabel<GenderCode>(GenderCode.MAN, "Man", "Homme", "Man"));
-		session.saveOrUpdate(new CodeLabel<GenderCode>(GenderCode.WOMAN, "Woman", "Femme", "Vrouw"));
+		session.saveOrUpdate(new CodeLabel(GenderCode.MAN, "Man", "Homme", "Man"));
+		session.saveOrUpdate(new CodeLabel(GenderCode.WOMAN, "Woman", "Femme", "Vrouw"));
 
 		UnitCategory volumeUnits = new UnitCategory("Volume");
 		session.saveOrUpdate(volumeUnits);
@@ -111,13 +111,12 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> hfqTypeAnswer1 = new QuestionAnswer<>(period1, scope1,
 				user1, hfqType, repetitionIndex);
-		hfqTypeAnswer1
-				.addAnswerValue(new CodeAnswerValue<HeatingFuelTypeCode>(hfqTypeAnswer1, HeatingFuelTypeCode.GAS));
+		hfqTypeAnswer1.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(hfqTypeAnswer1, HeatingFuelTypeCode.GAS));
 		session.saveOrUpdate(hfqTypeAnswer1);
 
 		QuestionAnswer<NumericAnswerValue<Integer>> hfqVolAnswer1 = new QuestionAnswer<>(period1, scope1, user1,
 				hfqVol, repetitionIndex);
-		hfqVolAnswer1.addAnswerValue(new NumericAnswerValue<Integer>(hfqVolAnswer1, 120, cubicMeter));
+		hfqVolAnswer1.getAnswerValues().add(new NumericAnswerValue<Integer>(hfqVolAnswer1, 120, cubicMeter));
 		session.saveOrUpdate(hfqVolAnswer1);
 
 		// second set of responses
@@ -125,13 +124,13 @@ public class AwacDummyDataCreator {
 
 		QuestionAnswer<CodeAnswerValue<HeatingFuelTypeCode>> question1_answer2 = new QuestionAnswer<>(period1, scope1,
 				user1, hfqType, repetitionIndex);
-		question1_answer2.addAnswerValue(new CodeAnswerValue<HeatingFuelTypeCode>(question1_answer2,
+		question1_answer2.getAnswerValues().add(new CodeAnswerValue<HeatingFuelTypeCode>(question1_answer2,
 				HeatingFuelTypeCode.COAL));
 		session.saveOrUpdate(question1_answer2);
 
 		QuestionAnswer<NumericAnswerValue<Double>> question2b_answer2 = new QuestionAnswer<>(period1, scope1, user1,
 				hfqMass, repetitionIndex);
-		question2b_answer2.addAnswerValue(new NumericAnswerValue<Double>(question2b_answer2, 3.2, ton));
+		question2b_answer2.getAnswerValues().add(new NumericAnswerValue<Double>(question2b_answer2, 3.2, ton));
 		session.saveOrUpdate(question2b_answer2);
 	}
 }

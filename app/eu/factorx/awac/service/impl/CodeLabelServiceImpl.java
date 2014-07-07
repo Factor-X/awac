@@ -14,20 +14,20 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.CodeLabelService;
 
 @Repository
-public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel<?>> implements CodeLabelService {
+public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {
 
 	// custom cache! code labels are "strictly" read-only data for now...
 	// TODO Improve this
-	private static Map<CodeList, List<CodeLabel<?>>> allLabels = null;
+	private static Map<CodeList, List<CodeLabel>> allLabels = null;
 
 	@Override
-	public Map<CodeList, List<CodeLabel<?>>> findAllCodeLabels() {
+	public Map<CodeList, List<CodeLabel>> findAllCodeLabels() {
 		if (allLabels == null) {
 			allLabels = new LinkedHashMap<>();
-			for (CodeLabel<?> codeLabel : super.findAll()) {
+			for (CodeLabel codeLabel : super.findAll()) {
 				CodeList type = codeLabel.getCode().getCodeList();
 				if (!allLabels.containsKey(type)) {
-					allLabels.put(type, new ArrayList<CodeLabel<?>>());
+					allLabels.put(type, new ArrayList<CodeLabel>());
 				}
 				allLabels.get(type).add(codeLabel);
 			}
@@ -36,14 +36,14 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	}
 
 	@Override
-	public List<CodeLabel<?>> findCodeLabelsByType(CodeList type) {
+	public List<CodeLabel> findCodeLabelsByType(CodeList type) {
 		return findAllCodeLabels().get(type);
 	}
 
 	@Override
-	public CodeLabel<?> findCodeLabelByCode(Code code) {
+	public CodeLabel findCodeLabelByCode(Code code) {
 		String key = code.getKey();
-		for (CodeLabel<?> codeLabel : findCodeLabelsByType(code.getCodeList())) {
+		for (CodeLabel codeLabel : findCodeLabelsByType(code.getCodeList())) {
 			if (StringUtils.equals(key, codeLabel.getCode().getKey())) {
 				return codeLabel;
 			}

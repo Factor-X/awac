@@ -3,12 +3,9 @@ package eu.factorx.awac.models.data.answer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
@@ -16,6 +13,8 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.data.answer.AnswerValue;
+import javax.persistence.OneToMany;
 
 @Entity
 @Table(name = "question_answer")
@@ -36,16 +35,16 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 	@ManyToOne(optional = false)
 	private Account dataOwner;
 
-	@ManyToOne(optional = false)
-	private Question<T> question;
-
 	private int repetitionIndex = 0;
 
 	@Embedded
 	private AuditInfo auditInfo;
 
-	@OneToMany(mappedBy = "questionAnswer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<T> answerValues;
+	@OneToMany(mappedBy = "questionAnswer")
+	private List<AnswerValue> answerValues;
+
+	@ManyToOne
+	private Question question;
 
 	// CONSTRUCTORS
 
@@ -60,7 +59,7 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 		this.dataOwner = dataOwner;
 		this.question = question;
 		this.repetitionIndex = repetitionIndex;
-		this.answerValues = new ArrayList<T>();
+		this.answerValues = new ArrayList<>();
 	}
 
 	// ACCESSORS
@@ -89,14 +88,6 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 		this.dataOwner = dataOwner;
 	}
 
-	public Question<T> getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question<T> question) {
-		this.question = question;
-	}
-
 	public int getRepetitionIndex() {
 		return repetitionIndex;
 	}
@@ -113,16 +104,20 @@ public class QuestionAnswer<T extends AnswerValue> extends AbstractEntity {
 		this.auditInfo = auditInfo;
 	}
 
-	public List<T> getAnswerValues() {
+	public List<AnswerValue> getAnswerValues() {
 		return answerValues;
 	}
 
-	public void setAnswerValues(List<T> answerValues) {
+	public void setAnswerValues(List<AnswerValue> answerValues) {
 		this.answerValues = answerValues;
 	}
 
-	public boolean addAnswerValue(T answerValue) {
-		return this.getAnswerValues().add(answerValue);
+	public Question getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 }

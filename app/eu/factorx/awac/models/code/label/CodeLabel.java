@@ -2,6 +2,7 @@ package eu.factorx.awac.models.code.label;
 
 import java.io.Serializable;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,11 +14,12 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
 @Table(name = "code_label")
-public class CodeLabel<T extends Code> extends AbstractEntity implements Serializable, Comparable<CodeLabel<T>> {
+public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 
 	private static final long serialVersionUID = 1L;
 
-	private T code;
+	@Embedded
+	private Code code;
 
 	private String labelEn;
 
@@ -29,7 +31,7 @@ public class CodeLabel<T extends Code> extends AbstractEntity implements Seriali
 		super();
 	}
 
-	public CodeLabel(T code, String labelEn, String labelFr, String labelNl) {
+	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
 		super();
 		this.code = code;
 		this.labelEn = labelEn;
@@ -37,11 +39,11 @@ public class CodeLabel<T extends Code> extends AbstractEntity implements Seriali
 		this.labelNl = labelNl;
 	}
 
-	public T getCode() {
+	public Code getCode() {
 		return code;
 	}
 
-	public void setCode(T code) {
+	public void setCode(Code code) {
 		this.code = code;
 	}
 
@@ -84,9 +86,13 @@ public class CodeLabel<T extends Code> extends AbstractEntity implements Seriali
 	}
 
 	@Override
-	public int compareTo(CodeLabel<T> obj) {
-		return new CompareToBuilder().append(this.getCode().getCodeList(), obj.getCode().getCodeList())
-				.append(this.getCode().getKey(), obj.getCode().getKey()).toComparison();
+	public int compareTo(CodeLabel obj) {
+		return new CompareToBuilder()
+				.append(this.getCode(), obj.getCode())
+				.append(this.getLabelEn(), obj.getLabelEn())
+				.append(this.getLabelFr(), obj.getLabelFr())
+				.append(this.getLabelNl(), obj.getLabelNl())
+				.toComparison();
 	}
 
 }

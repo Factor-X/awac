@@ -22,17 +22,24 @@
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
+        <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
-        <class>eu.factorx.awac.models.data.AbstractAnswerValue</class>
-        <class>eu.factorx.awac.models.data.AbstractNumericAnswerValue</class>
-        <class>eu.factorx.awac.models.data.AuditInfo</class>
-        <class>eu.factorx.awac.models.data.BooleanAnswerValue</class>
-        <class>eu.factorx.awac.models.data.CodeAnswerValue</class>
-        <class>eu.factorx.awac.models.data.DoubleAnswerValue</class>
-        <class>eu.factorx.awac.models.data.EntityAnswerValue</class>
-        <class>eu.factorx.awac.models.data.IntegerAnswerValue</class>
-        <class>eu.factorx.awac.models.data.QuestionAnswer</class>
-        <class>eu.factorx.awac.models.data.StringAnswerValue</class>
+        <class>eu.factorx.awac.models.code.type.GenderCode</class>
+        <class>eu.factorx.awac.models.code.type.HeatingFuelTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.LanguageCode</class>
+        <class>eu.factorx.awac.models.code.type.QuestionCode</class>
+        <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
+        <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
+        <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
+        <class>eu.factorx.awac.models.data.answer.AuditInfo</class>
+        <class>eu.factorx.awac.models.data.answer.QuestionAnswer</class>
+        <class>eu.factorx.awac.models.data.question.Question</class>
+        <class>eu.factorx.awac.models.data.question.QuestionSet</class>
+        <class>eu.factorx.awac.models.data.question.type.BooleanQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.EntitySelectionQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.NumericQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.Campaign</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.forms.FormQuestion</class>
@@ -41,11 +48,6 @@
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
-        <class>eu.factorx.awac.models.question.EntitySelectionQuestion</class>
-        <class>eu.factorx.awac.models.question.NumericQuestion</class>
-        <class>eu.factorx.awac.models.question.Question</class>
-        <class>eu.factorx.awac.models.question.QuestionSet</class>
-        <class>eu.factorx.awac.models.question.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.reporting.Indicator</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
  		<exclude-unlisted-classes>false</exclude-unlisted-classes>
