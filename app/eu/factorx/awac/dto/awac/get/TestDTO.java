@@ -3,15 +3,12 @@ package eu.factorx.awac.dto.awac.get;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.NotNull;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 public class TestDTO extends DTO {
 
     @NotNull
-    @Size(min = 1, max = 16)
     private String name;
 
 

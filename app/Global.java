@@ -32,6 +32,12 @@ import eu.factorx.awac.InMemoryData;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
+import play.mvc.Http;
+import play.mvc.SimpleResult;
+import play.*;
+import play.mvc.*;
+import play.mvc.Http.*;
+import play.libs.F.*;
 
 public class Global extends GlobalSettings {
 
@@ -40,7 +46,6 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStart(Application app) {
-
 
 
         play.Logger.info("Starting AWAC");
@@ -64,7 +69,7 @@ public class Global extends GlobalSettings {
 
         // read spring configuration and instanciate context
         ctx = new ClassPathXmlApplicationContext("components.xml");
-    
+
         // ========================================
         // COMPILE ANGULAR APPLICATION
         // ========================================
@@ -188,5 +193,7 @@ public class Global extends GlobalSettings {
 
             return null;
     }
+
+
 }
 
