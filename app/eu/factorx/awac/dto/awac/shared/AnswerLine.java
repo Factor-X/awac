@@ -1,55 +1,68 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import eu.factorx.awac.dto.DTO;
-
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by root on 7/07/14.
- */
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.models.data.answer.AnswerType;
+
 public class AnswerLine extends DTO {
 
-    @NotNull
-    private String questionKey;
-    @NotNull
-    private Object value;
-    private Integer unitId;
+	@NotNull
+	private String questionKey;
 
-    public AnswerLine() {
-    }
+	@NotNull
+	private Object value;
 
-    public AnswerLine(String questionKey, Object value) {
-        this.questionKey = questionKey;
-        this.value = value;
-    }
+	private Integer unitId;
 
-    public AnswerLine(String questionKey, Object value, Integer unitId) {
-        this.questionKey = questionKey;
-        this.value = value;
-        this.unitId = unitId;
-    }
+	private AnswerType answerType;
 
-    public Object getValue() {
-        return value;
-    }
+	public AnswerLine() {
+	}
 
-    public void setValue(Object value) {
-        this.value = value;
-    }
+	public AnswerLine(String questionKey, Object value, AnswerType answerType) {
+		this.questionKey = questionKey;
+		this.value = value;
+		this.answerType = answerType;
+	}
 
-    public String getQuestionKey() {
-        return questionKey;
-    }
+	public AnswerLine(String questionKey, Object value, Integer unitId, AnswerType answerType) {
+		this.questionKey = questionKey;
+		this.value = value;
+		this.unitId = unitId;
+		this.answerType = answerType;
+	}
 
-    public void setQuestionKey(String questionKey) {
-        this.questionKey = questionKey;
-    }
+	public Object getValue() {
+		return value;
+	}
 
-    public Integer getUnitId() {
-        return unitId;
-    }
+	public void setValue(Object value) {
+		this.value = value;
+	}
 
-    public void setUnitId(Integer unitId) {
-        this.unitId = unitId;
-    }
+	public String getQuestionKey() {
+		return questionKey;
+	}
+
+	public void setQuestionKey(String questionKey) {
+		this.questionKey = questionKey;
+	}
+
+	public Integer getUnitId() {
+		return unitId;
+	}
+
+	public void setUnitId(Integer unitId) {
+		this.unitId = unitId;
+	}
+
+	public AnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(AnswerType answerType) {
+		this.answerType = answerType;
+	}
+
 }
