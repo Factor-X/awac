@@ -10,7 +10,7 @@ import eu.factorx.awac.dto.validation.annotations.Pattern;
 public class ConnectionFormDTO extends DTO {
 
     @NotNull
-    @Pattern(regexp = "/^.{10,20}$/")
+    @Pattern(regexp = "/^.{5,20}$/")
     private String login;
 
     @NotNull

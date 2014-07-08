@@ -1,19 +1,40 @@
 angular
 .module('app.directives')
+.directive "ngEnter", () ->
+  return (scope, element, attrs) ->
+    element.bind("keydown keypress", (event) ->
+      if event.which == 13
+        scope.$apply( () ->
+          scope.$eval(attrs.ngEnter)
+        event.preventDefault()
+
 .directive "mmAwacModalLogin", (directiveService) ->
   restrict: "E"
   scope: {}
   templateUrl: "$/angular/templates/mm-awac-modal-login.html"
   controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
 
+    $scope.firstTime=true
+
+    #change option of the modal
+    $('#modalLogin').modal({
+      backdrop:'static'
+    })
+
     #initialize the modal when it's displayed
     $('#modalLogin').on 'shown.bs.modal', (e) ->
-      $scope.initialize()
-      #refresh angular
-      $scope.$apply()
+      if $scope.firstTime
+        $scope.firstTime=false
+      else
+        $scope.initialize()
+        #refresh angular
+        $scope.$apply()
+
+
 
     #initilize variables for the modal
     $scope.initialize = () ->
+
       console.log("initialization !!")
       $scope.loginInfo=
         fieldTitle:"Your login"
@@ -62,8 +83,10 @@ angular
           password: $scope.passwordInfo.field
 
       promise.success (data, status, headers, config) ->
+        $scope.$parent.setCurrentUser(data)
         #close the modal
-        $('#modalLogin').modal('toggle')
+        $('#modalLogin').modal('hide')
+        $scope.$apply()
         return
 
       promise.error (data, status, headers, config) ->

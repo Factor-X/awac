@@ -49,9 +49,39 @@ angular
       headers:
         "Content-Type": "application/json"
     promise.success (data, status, headers, config) ->
-      console.log("logout ok")
+      $scope.currentUser = null
+      $('#modalLogin').modal('show')
       return
 
     promise.error (data, status, headers, config) ->
-      console.log("logout error")
       return
+
+  $scope.currentUser=null
+
+  $scope.setCurrentUser = (user) ->
+    $scope.currentUser = user
+
+  $scope.getCurrentUser = () ->
+    return $scope.currentUser
+
+  $scope.testAuthentication = () ->
+    promise = $http
+      method: "POST"
+      url: 'testAuthentication'
+      headers:
+        "Content-Type": "application/text"
+
+    promise.success (data, status, headers, config) ->
+      $scope.setCurrentUser(data)
+      return
+
+    promise.error (data, status, headers, config) ->
+      $('#modalLogin').modal('show')
+      $scope.$apply()
+      return
+
+  #test the authentication of the user
+  $scope.testAuthentication()
+
+
+

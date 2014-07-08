@@ -80,11 +80,10 @@
     <!-- modal list -->
     <mm-awac-modal-login></mm-awac-modal-login>
 
-    <button type="button" data-toggle="modal" data-target="#modalLogin"  data-backdrop="static" >Login</button>
-    <button type="button"  ng-click="logout();">Logout</button>
+    <button ng-show="currentUser!=null" type="button"  ng-click="logout();">Logout</button>
 
-
-
+    <p ng-show="currentUser!=null">Hello, your are {{currentUser.person.firstName}} {{currentUser.person.lastName}}</p>
+    <p ng-show="currentUser==null">Your are currently not connected</p>
 
 
     <mm-awac-dummy-survey ng-model="dummySurvey"></mm-awac-dummy-survey>
