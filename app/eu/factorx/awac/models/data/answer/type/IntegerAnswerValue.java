@@ -5,63 +5,64 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang3.StringUtils;
-
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class EntityAnswerValue extends AnswerValue {
+public class IntegerAnswerValue extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private String entityName;
+	private Integer value;
 
 	@Transient
-	private Long entityId;
+	private Unit unit;
 
-	protected EntityAnswerValue() {
+	protected IntegerAnswerValue() {
 		super();
 	}
 
-	public EntityAnswerValue(QuestionAnswer questionAnswer, String entityName, Long entityId) {
+	public IntegerAnswerValue(QuestionAnswer questionAnswer, Integer value,
+			Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
-		this.entityName = entityName;
-		this.entityId = entityId;
+		this.value = value;
+		this.unit = unit;
 	}
 
-	public String getEntityName() {
-		return entityName;
+	public Integer getValue() {
+		return value;
 	}
 
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 
-	public Long getEntityId() {
-		return entityId;
+	public Unit getUnit() {
+		return unit;
 	}
 
-	public void setEntityId(Long entityId) {
-		this.entityId = entityId;
+	public void setUnit(Unit unit) {
+		this.unit = unit;
 	}
 
 	@Override
 	protected AnswerRawData getRawData() {
 		AnswerRawData rawData = new AnswerRawData();
-		rawData.setStringData1(entityName);
-		rawData.setLongData(entityId);
+		rawData.setLongData(unit.getId());
+		rawData.setDoubleData(value.doubleValue());
 		return rawData;
 	}
 
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
-		this.entityName = StringUtils.trim(rawData.getStringData1());
-		this.entityId = rawData.getLongData();
+		this.unit = JPA.em().find(Unit.class, rawData.getLongData());
+		this.value = rawData.getDoubleData().intValue();
 	}
 
 }

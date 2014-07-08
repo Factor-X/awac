@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import play.db.jpa.JPA;
@@ -25,8 +26,8 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	}
 
 	@Override
-	public E save(final E entity) {
-		JPA.em().persist(entity);
+	public E saveOrUpdate(final E entity) {
+		JPA.em().unwrap(Session.class).saveOrUpdate(entity);
 		return entity;
 	}
 
@@ -54,8 +55,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 
 	@Override
 	public Long getTotalResult() {
-		return JPA.em().createQuery("select count(e) from " + entityClass.getName() + " e", Long.class)
-				.getSingleResult();
+		return JPA.em().createQuery("select count(e) from " + entityClass.getName() + " e", Long.class).getSingleResult();
 	}
 
 }

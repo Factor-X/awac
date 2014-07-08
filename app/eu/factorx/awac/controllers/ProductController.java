@@ -43,7 +43,7 @@ public class ProductController extends Controller {
         Product product = new Product(securedController.getCurrentUser().getOrganization(), productCreateFormDTO.getName());
 
         //3.1 add
-        productService.save(product);
+        productService.saveOrUpdate(product);
 
         //4. return product DTO
         return ok(conversionService.convert(product, ProductDTO.class));

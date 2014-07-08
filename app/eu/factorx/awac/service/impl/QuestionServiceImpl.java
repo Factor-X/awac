@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
@@ -18,6 +19,22 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODES).setParameter("codes", codes)
 				.getResultList();
 		return resultList;
+	}
+
+	@Override
+	public Question findByCode(QuestionCode code) {
+		@SuppressWarnings("unchecked")
+		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODE).setParameter("code", code)
+				.getResultList();
+		if (resultList.size() > 1) {
+			String errorMsg = "More than one question with code = '" + code.getKey() + "'";
+			Logger.error(errorMsg);
+			throw new RuntimeException(errorMsg);
+		}
+		if (resultList.size() == 0) {
+			return null;
+		}
+		return resultList.get(0);
 	}
 
 }

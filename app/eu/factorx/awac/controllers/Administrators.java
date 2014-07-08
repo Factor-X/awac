@@ -203,7 +203,7 @@ public class Administrators extends Controller {
 		}
 
        // administratorService.save()
-		administratorService.save(administratorForm.get());
+		administratorService.saveOrUpdate(administratorForm.get());
 		flash("success", "Administrator " + administratorForm.get().getFirstname()+ " has been created");
 		return GO_HOME;
 	}

@@ -15,28 +15,28 @@ import eu.factorx.awac.models.data.answer.QuestionAnswer;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class CodeAnswerValue<T extends Code> extends AnswerValue {
+public class CodeAnswerValue extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private T value;
+	private Code value;
 
 	protected CodeAnswerValue() {
 		super();
 	}
 
-	public CodeAnswerValue(QuestionAnswer questionAnswer, T value) {
+	public CodeAnswerValue(QuestionAnswer questionAnswer, Code value) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
 	}
 
-	public T getValue() {
+	public Code getValue() {
 		return value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(Code value) {
 		this.value = value;
 	}
 
@@ -45,23 +45,11 @@ public class CodeAnswerValue<T extends Code> extends AnswerValue {
 		return new AnswerRawData(value.getCodeList().name(), value.getKey());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
-		final CodeList codeList = CodeList.valueOf(StringUtils.trim(rawData.getStringData1()));
-		final String key = rawData.getStringData2();
-		this.value = (T) new Code() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public String getKey() {
-				return key;
-			}
-			@Override
-			public CodeList getCodeList() {
-				return codeList;
-			}
-		};
-		// TODO Find a way to instantiate the good Code impl!
-//		value = (T) new Code(codeList, key);
+		CodeList codeList = CodeList.valueOf(StringUtils.trim(rawData.getStringData1()));
+		String key = rawData.getStringData2();
+		this.value = new Code(codeList, key);
 	}
+
 }

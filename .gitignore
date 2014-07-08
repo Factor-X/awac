@@ -16,3 +16,5 @@ RUNNING_PID
 bin
 .target
 .externalToolBuilders
+/.metadata
+/.cache

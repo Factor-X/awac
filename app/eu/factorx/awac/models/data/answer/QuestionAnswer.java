@@ -3,8 +3,10 @@ package eu.factorx.awac.models.data.answer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -47,8 +49,8 @@ public class QuestionAnswer extends AbstractEntity {
 	@Embedded
 	private AuditInfo auditInfo;
 
-	@OneToMany(mappedBy = "questionAnswer")
-	private List<AnswerValue> answerValues;
+	@OneToMany(mappedBy = "questionAnswer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AnswerValue> answerValues = new ArrayList<>();
 
 	@ManyToOne(targetEntity = Question.class)
 	private Question question;
