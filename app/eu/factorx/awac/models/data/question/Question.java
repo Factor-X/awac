@@ -15,15 +15,14 @@ import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerType;
 
 @Entity
 @Table(name = "question")
 @DiscriminatorColumn(name = "question_type")
-@NamedQueries({
-	@NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
-	@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
-})
-public class Question extends AbstractEntity {
+@NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"), })
+public abstract class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,5 +79,7 @@ public class Question extends AbstractEntity {
 	public void setOrderIndex(int orderIndex) {
 		this.orderIndex = orderIndex;
 	}
+
+	public abstract AnswerType getAnswerType();
 
 }

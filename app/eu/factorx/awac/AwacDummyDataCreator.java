@@ -1,3 +1,4 @@
+package eu.factorx.awac;
 import org.hibernate.Session;
 
 import eu.factorx.awac.models.account.Account;

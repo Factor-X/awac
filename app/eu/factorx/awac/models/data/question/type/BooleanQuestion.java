@@ -3,6 +3,7 @@ package eu.factorx.awac.models.data.question.type;
 import javax.persistence.Entity;
 
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
@@ -17,6 +18,11 @@ public class BooleanQuestion extends Question {
 
 	public BooleanQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code) {
 		super(questionSet, orderIndex, code);
+	}
+
+	@Override
+	public AnswerType getAnswerType() {
+		return AnswerType.BOOLEAN;
 	}
 
 }

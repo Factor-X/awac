@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.UnitCategory;
@@ -31,6 +32,11 @@ public class DoubleQuestion extends Question {
 
 	public void setUnitCategory(UnitCategory unitCategory) {
 		this.unitCategory = unitCategory;
+	}
+
+	@Override
+	public AnswerType getAnswerType() {
+		return AnswerType.DOUBLE;
 	}
 
 }

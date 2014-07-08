@@ -22,9 +22,9 @@ import eu.factorx.awac.models.knowledge.Period;
 @Entity
 @Table(name = "question_answer")
 @NamedQueries({
-	   @NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period"),
-	   @NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
-	})
+		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period"),
+		@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
+		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period and qa.question.questionSet in :questionSets"), })
 public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -32,6 +32,8 @@ public class QuestionAnswer extends AbstractEntity {
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
 
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
+
+	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndPeriodAndQuestionSets";
 
 	// ATTRIBUTES
 
