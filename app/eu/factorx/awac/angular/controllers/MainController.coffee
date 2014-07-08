@@ -24,13 +24,6 @@ angular
   #$scope.prettyPrint = (o) ->
   #    return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
 
-
-  $scope.showLoginModal = (target) ->
-    $modal.open (
-      templateUrl: target
-    )
-    return false
-
   downloadService.getJson "dummy/household/2014", (data) ->
     $scope.o = data
     $scope.o.consumption.units = $scope.volumeUnits;

@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
 
 import javax.validation.constraints.NotNull;
@@ -11,43 +12,31 @@ import java.util.List;
  */
 public class AnswersDTO extends DTO {
 
-    @NotNull
-    private Integer ScopeId;
-    @NotNull
-    private Integer periodId;
-    @NotNull
-    private List<AnswerLine> listQuestionValueDTO;
+    private AnswersSaveDTO answersSaveDTO;
+
+    private Object valueContent;
 
     public AnswersDTO() {
     }
 
-    public AnswersDTO(Integer scopeId, Integer periodId, List<AnswerLine> listQuestionValueDTO) {
-        ScopeId = scopeId;
-        this.periodId = periodId;
-        this.listQuestionValueDTO = listQuestionValueDTO;
+    public AnswersDTO(AnswersSaveDTO answersSaveDTO, Object valueContent) {
+        this.answersSaveDTO = answersSaveDTO;
+        this.valueContent = valueContent;
     }
 
-    public Integer getScopeId() {
-        return ScopeId;
+    public AnswersSaveDTO getAnswersSaveDTO() {
+        return answersSaveDTO;
     }
 
-    public void setScopeId(Integer scopeId) {
-        ScopeId = scopeId;
+    public void setAnswersSaveDTO(AnswersSaveDTO answersSaveDTO) {
+        this.answersSaveDTO = answersSaveDTO;
     }
 
-    public Integer getPeriodId() {
-        return periodId;
+    public Object getValueContent() {
+        return valueContent;
     }
 
-    public void setPeriodId(Integer periodId) {
-        this.periodId = periodId;
-    }
-
-    public List<AnswerLine> getListQuestionValueDTO() {
-        return listQuestionValueDTO;
-    }
-
-    public void setListQuestionValueDTO(List<AnswerLine> listQuestionValueDTO) {
-        this.listQuestionValueDTO = listQuestionValueDTO;
+    public void setValueContent(Object valueContent) {
+        this.valueContent = valueContent;
     }
 }

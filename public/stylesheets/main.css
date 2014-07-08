@@ -48,3 +48,36 @@ input.ng-invalid {
 .tab.active .tab-content {
     display: block;
 }
+
+/* body table into modal */
+.modal_body_table{
+    display:table;
+}
+
+.modal_body_table tr{
+    height:30px;
+
+}
+.modal_body_table td:first-child{
+    width:150px;
+}
+
+.modal_body_table input{
+    width:150px;
+}
+.modal_body_table td:last-child{
+    padding-left:20px;
+}
+
+.modal_body_table .error_message > div:last-child{
+    display: none;
+    position: absolute;
+    background-color: orangered;
+    border: 1px solid #ff0000;
+    color: #ffffff;
+    padding: 5px;
+}
+.modal_body_table .error_message:hover > div:last-child{
+    display: block;
+}
+
