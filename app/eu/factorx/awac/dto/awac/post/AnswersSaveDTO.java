@@ -9,27 +9,27 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 public class AnswersSaveDTO extends DTO {
 
     @NotNull
-    private Integer ScopeId;
+    private Integer scopeId;
     @NotNull
     private Integer periodId;
     @NotNull
-    private List<AnswerLine> listQuestionValueDTO;
+    private List<AnswerLine> listAnswers;
 
     public AnswersSaveDTO() {
     }
 
-    public AnswersSaveDTO(Integer scopeId, Integer periodId, List<AnswerLine> listQuestionValueDTO) {
-        ScopeId = scopeId;
+    public AnswersSaveDTO(Integer scopeId, Integer periodId, List<AnswerLine> listAnswers) {
+        this.scopeId = scopeId;
         this.periodId = periodId;
-        this.listQuestionValueDTO = listQuestionValueDTO;
+        this.listAnswers = listAnswers;
     }
 
     public Integer getScopeId() {
-        return ScopeId;
+        return scopeId;
     }
 
     public void setScopeId(Integer scopeId) {
-        ScopeId = scopeId;
+        this.scopeId = scopeId;
     }
 
     public Integer getPeriodId() {
@@ -40,11 +40,11 @@ public class AnswersSaveDTO extends DTO {
         this.periodId = periodId;
     }
 
-    public List<AnswerLine> getListQuestionValueDTO() {
-        return listQuestionValueDTO;
+    public List<AnswerLine> getListAnswers() {
+        return listAnswers;
     }
 
-    public void setListQuestionValueDTO(List<AnswerLine> listQuestionValueDTO) {
-        this.listQuestionValueDTO = listQuestionValueDTO;
+    public void setListAnswers(List<AnswerLine> listAnswers) {
+        this.listAnswers = listAnswers;
     }
 }

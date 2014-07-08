@@ -3,49 +3,26 @@ ng-virtual
     h1 Survey
 
     label Q1
-    input(type="text", ng-model="getByCode('Q1').value")
+    input(type="text", ng-model="getValue('Q1').value", ng-keyup="computeResult()")
 
     hr
 
     label Q2
-    input(type="text", ng-model="getByCode('Q2').value")
+    input(type="text", ng-model="getValue('Q2').value", ng-keyup="computeResult()")
 
     hr
 
     label Q3
-    input(type="text", ng-model="getByCode('Q3').value")
+    input(type="text", ng-model="getValue('Q3').value", ng-keyup="computeResult()")
 
     hr
 
     label Q4
-    input(type="text", ng-model="getByCode('Q4').value")
+    input(type="text", ng-model="getValue('Q4').value", ng-keyup="computeResult()")
 
-    hr
+    h1 Result
 
-    label Q5
-    input(type="text")
+    label Weighed sum of Q's
+    input(type="text", ng-model="indicatorValue")
 
-    hr
-
-    label Q6
-    input(type="text")
-
-    hr
-
-    label Q7
-    input(type="text")
-
-    hr
-
-    label Q8
-    input(type="text")
-
-    hr
-
-    label Q9
-    input(type="text")
-
-    hr
-
-    label Q10
-    input(type="text")
+    button(type="button", ng-click="save()") Save

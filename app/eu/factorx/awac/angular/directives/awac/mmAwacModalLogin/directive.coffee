@@ -2,9 +2,9 @@ angular
 .module('app.directives')
 .directive "ngEnter", () ->
   return (scope, element, attrs) ->
-    element.bind("keydown keypress", (event) ->
+    element.bind "keydown keypress", (event) ->
       if event.which == 13
-        scope.$apply( () ->
+        scope.$apply  () ->
           scope.$eval(attrs.ngEnter)
         event.preventDefault()
 
@@ -14,27 +14,23 @@ angular
   templateUrl: "$/angular/templates/mm-awac-modal-login.html"
   controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
 
-    $scope.firstTime=true
-
     #change option of the modal
+
     $('#modalLogin').modal({
       backdrop:'static'
     })
+    $('#modalLogin').modal('hide')
 
     #initialize the modal when it's displayed
     $('#modalLogin').on 'shown.bs.modal', (e) ->
-      if $scope.firstTime
-        $scope.firstTime=false
-      else
-        $scope.initialize()
-        #refresh angular
-        $scope.$apply()
+      $scope.initialize()
+      #refresh angular
+      $scope.$apply()
 
 
 
     #initilize variables for the modal
     $scope.initialize = () ->
-
       console.log("initialization !!")
       $scope.loginInfo=
         fieldTitle:"Your login"
@@ -66,35 +62,37 @@ angular
     #send the request to the server
     $scope.send = () ->
 
-      #remove the error message
-      $scope.errorMessage=""
+      if $scope.allFieldValid()
 
-      #active loading mode
-      $scope.isLoading =true
+        #remove the error message
+        $scope.errorMessage=""
 
-      #send request
-      promise = $http
-        method: "POST"
-        url: 'login'
-        headers:
-          "Content-Type": "application/json"
-        data:
-          login: $scope.loginInfo.field
-          password: $scope.passwordInfo.field
+        #active loading mode
+        $scope.isLoading =true
 
-      promise.success (data, status, headers, config) ->
-        $scope.$parent.setCurrentUser(data)
-        #close the modal
-        $('#modalLogin').modal('hide')
-        $scope.$apply()
-        return
+        #send request
+        promise = $http
+          method: "POST"
+          url: 'login'
+          headers:
+            "Content-Type": "application/json"
+          data:
+            login: $scope.loginInfo.field
+            password: $scope.passwordInfo.field
 
-      promise.error (data, status, headers, config) ->
-        #display the error message
-        $scope.errorMessage = "Error : " + data.message
-        #disactive loading mode
-        $scope.isLoading=false
-        return
+        promise.success (data, status, headers, config) ->
+          $scope.$parent.setCurrentUser(data)
+          #close the modal
+          $('#modalLogin').modal('hide')
+          $scope.$apply()
+          return
+
+        promise.error (data, status, headers, config) ->
+          #display the error message
+          $scope.errorMessage = "Error : " + data.message
+          #disactive loading mode
+          $scope.isLoading=false
+          return
 
       return false
   link: (scope) ->

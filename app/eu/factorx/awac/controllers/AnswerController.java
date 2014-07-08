@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -102,9 +103,13 @@ public class AnswerController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result save() {
-		Account currentUser = securedController.getCurrentUser();
+        Logger.info("save() 1");
+        Account currentUser = securedController.getCurrentUser();
+        Logger.info("save() 2");
 		AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
+        Logger.info("save() 3");
 		saveAnswsersDTO(currentUser, answersDTO);
+        Logger.info("save() 4");
 		return ok();
 	}
 
@@ -112,7 +117,7 @@ public class AnswerController extends Controller {
 		Period period = periodService.findById(answersDTO.getPeriodId().longValue());
 		Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
 
-		for (AnswerLine answerLine : answersDTO.getListQuestionValueDTO()) {
+		for (AnswerLine answerLine : answersDTO.getListAnswers()) {
 			Question question = getAndVerifyQuestion(answerLine);
 			// TODO The concept of "repetition" (== answers groups linked to a questions set) is not yet implemented in the client...
 			// => set repetitionIndex = 0
@@ -132,7 +137,7 @@ public class AnswerController extends Controller {
 		AnswerType answerType = question.getAnswerType();
 
 		if (questionAnswer == null) {
-			return new AnswerLine(question.getCode().getKey(), null, answerType);
+			return new AnswerLine(question.getCode().getKey(), null);
 		}
 		// TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
 		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
@@ -159,7 +164,7 @@ public class AnswerController extends Controller {
 					entityAnswerValue.getEntityId());
 			break;
 		}
-		return new AnswerLine(question.getCode().getKey(), rawAnswerValue, answerType);
+		return new AnswerLine(question.getCode().getKey(), rawAnswerValue);
 	}
 
 	private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
