@@ -6,51 +6,43 @@ angular
   templateUrl: "$/angular/templates/mm-awac-modal-login.html"
   controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
 
-    $scope.login = ""
-    $scope.login_placeholder="Your login"
-    $scope.loginExpectedMessage="Between 4 and 20 letters"
-    $scope.loginIsValid=false
+    #initialize the modal when it's displayed
+    $('#modalLogin').on 'shown.bs.modal', (e) ->
+      $scope.initialize()
+      #refresh angular
+      $scope.$apply()
 
-    $scope.password = ""
-    $scope.passwordIsValid=false
-    $scope.passwordExpectedMessage="Between 4 and 20 letters"
+    #initilize variables for the modal
+    $scope.initialize = () ->
+      console.log("initialization !!")
+      $scope.loginInfo=
+        fieldTitle:"Your login"
+        fieldType:"text"
+        placeholder:"your login"
+        validationMessage:"between 5 and 20 letters"
+        field:""
+        isValid:false
 
-    $scope.isLoading = false
-    $scope.errorMessage=""
+      $scope.passwordInfo=
+        fieldTitle:"Your password"
+        fieldType:"password"
+        validationMessage:"between 5 and 20 letters"
+        field:""
+        isValid:false
 
+      $scope.isLoading=false
+      $scope.errorMessage=""
 
-    $scope.loginInfo= [
-      fieldTitle:"Your login"
-      fieldType:"text"
-      placeholder:"your login"
-      validationMessage:"between 5 and 20 letters"
-      field:"login"
-    ]
+    #intialize the modal
+    $scope.initialize()
 
+    #control is all field are valid
+    $scope.allFieldValid = () ->
+      if $scope.loginInfo.isValid && $scope.passwordInfo.isValid
+        return true
+      return false
 
-
-
-
-    #$keyboardManager.bind 'ctrl+shift+d', () ->
-    #  console.log 'Callback ctrl+shift+d'
-
-
-    #$document.bind('keypress', function(event) {
-      #console.debug(event)
-    #})
-
-    $scope.controlLoginField = () ->
-      if $scope.login.length>4 && $scope.login.length< 20
-        $scope.loginIsValid=true
-      else
-        $scope.loginIsValid=false
-
-    $scope.controlPasswordField = () ->
-      if $scope.password.length>4 && $scope.password.length< 20
-        $scope.passwordIsValid=true
-      else
-        $scope.passwordIsValid=false
-
+    #send the request to the server
     $scope.send = () ->
 
       #remove the error message
@@ -66,12 +58,12 @@ angular
         headers:
           "Content-Type": "application/json"
         data:
-          login: $scope.login
-          password: $scope.password
+          login: $scope.loginInfo.field
+          password: $scope.passwordInfo.field
 
       promise.success (data, status, headers, config) ->
         #close the modal
-        $('#modalLogin').modal('hide')
+        $('#modalLogin').modal('toggle')
         return
 
       promise.error (data, status, headers, config) ->

@@ -14,7 +14,7 @@ public class TestDTO extends DTO {
     @NotNull
     private String name;
 
-    @Pattern(regexp=Pattern.EMAIL)
+    @Pattern(regexp=Pattern.EMAIL, message ="mauvais email ")
     private String streetNumber;
 
     private List<String> roles;

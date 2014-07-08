@@ -27,16 +27,16 @@ public class Validator {
             for (Annotation annotation : field.getAnnotations()) {
                 if (annotation.annotationType().getPackage().equals(NotNull.class.getPackage())) {
 
-                    Object o = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
+                    Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
 
                     if (annotation.annotationType().equals(Validate.class)) {
-                        if ( o instanceof List) {
-                            List list = (List) o;
+                        if ( value instanceof List) {
+                            List list = (List) value;
                             for (Object element : list) {
                                 Validator.validate(element);
                             }
                         } else {
-                            Validator.validate(o);
+                            Validator.validate(value);
                         }
                     } else {
                         // create a script engine manager
@@ -56,7 +56,7 @@ public class Validator {
 
                         ObjectMapper mapper = new ObjectMapper();
 
-                        engine.put("VALUE", o);
+                        engine.eval("VALUE = " + mapper.writeValueAsString(value) + ";");
                         engine.eval("ARGS = " + mapper.writeValueAsString(parameters) + ";");
 
                         Boolean result = (Boolean) engine.eval("validate(VALUE, ARGS)");

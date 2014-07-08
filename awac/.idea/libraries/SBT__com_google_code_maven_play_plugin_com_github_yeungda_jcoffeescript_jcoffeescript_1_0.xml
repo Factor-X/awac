@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="SBT: com.google.code.maven-play-plugin.com.github.yeungda.jcoffeescript:jcoffeescript:1.0">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/.ivy2/cache/com.google.code.maven-play-plugin.com.github.yeungda.jcoffeescript/jcoffeescript/jars/jcoffeescript-1.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

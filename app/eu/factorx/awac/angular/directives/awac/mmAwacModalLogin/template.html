@@ -10,47 +10,10 @@
             <div class="modal-body">
 
                 <div class="modal_body_table">
-                    <mm-awac-modal-field-text ng-info="loginInfo">
 
-                                              </mm-awac-modal-field-text>
+                    <mm-awac-modal-field-text ng-info="loginInfo"></mm-awac-modal-field-text>
 
-                    <mm-awac-modal-field-text field-title="Your password"
-                                              field-type="password"
-                                              validation-message="between 5 and 20 letters"
-                                              ng-field="password"></mm-awac-modal-field-text>
-                    <!--
-                    <tr>
-                        <td>
-                            Login
-                        </td>
-                        <td>
-                            <input ng-keyup="controlLoginField()" type="text" ng-model="login" placeholder="{{login_placeholder}}" />
-                        </td>
-                        <td>
-                            <img ng-show="loginIsValid" src="/awac/assets/images/field_valid.png" />
-                            <div class="error_message">
-                                <img ng-hide="loginIsValid" src="/awac/assets/images/field_invalid.png" />
-                                <div>{{loginExpectedMessage}}</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Password
-                        </td>
-                        <td>
-                            <input ng-keyup="controlPasswordField()" type="password"ng-model="password"/>
-                        </td>
-                        <td>
-                            <img ng-show="passwordIsValid" src="/awac/assets/images/field_valid.png" />
-                            <div class="error_message">
-                                <img ng-hide="passwordIsValid" src="/awac/assets/images/field_invalid.png" />
-                                <div>{{passwordExpectedMessage}}</div>
-                            </div>
-
-                        </td>
-                    </tr>
-                    -->
+                    <mm-awac-modal-field-text ng-info="passwordInfo"></mm-awac-modal-field-text>
                 </div>
             </div>
             <div class="modal-footer">
@@ -59,7 +22,7 @@
 
                 <div ng-hide="isLoading">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="send();">Login
+                    <button type="button" class="btn btn-primary" ng-click="send();" ng-disabled="!allFieldValid()" ng-enabled="allFieldValid()">Login
                     </button>
                 </div>
                 <img ng-show="isLoading" src="/awac/assets/images/modal-loading.gif"/>

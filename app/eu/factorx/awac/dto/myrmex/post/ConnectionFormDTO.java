@@ -1,8 +1,8 @@
 package eu.factorx.awac.dto.myrmex.post;
 
 import eu.factorx.awac.dto.DTO;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
+import eu.factorx.awac.dto.validation.annotations.Pattern;
 
 /**
  * Created by florian on 4/07/14.
@@ -10,11 +10,11 @@ import javax.validation.constraints.Pattern;
 public class ConnectionFormDTO extends DTO {
 
     @NotNull
-    @Pattern(regexp = "^.{5,20}$")
+    @Pattern(regexp = "/^.{10,20}$/")
     private String login;
 
     @NotNull
-    @Pattern(regexp = "^.{5,20}$")
+    @Pattern(regexp = "/^.{5,20}$/")
     private String password;
 
     protected ConnectionFormDTO() {

@@ -1,10 +1,10 @@
 package eu.factorx.awac.dto.myrmex.post;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 
 /**
  * Created by root on 6/07/14.

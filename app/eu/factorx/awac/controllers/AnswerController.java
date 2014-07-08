@@ -10,9 +10,9 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import scalaz.std.tuple;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.AnswersDTO;
+import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.models.account.Account;
@@ -141,7 +141,8 @@ public class AnswerController extends Controller {
 			break;
 		case ENTITY_SELECTION:
 			EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
-			rawAnswerValue = new tuple(entityAnswerValue.getEntityName(), entityAnswerValue.getEntityId());
+			rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
+					entityAnswerValue.getEntityId());
 			break;
 		}
 		AnswerLine answerLine = new AnswerLine(question.getCode().getKey(), rawAnswerValue, answerType);
@@ -209,14 +210,16 @@ public class AnswerController extends Controller {
 
 		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
 		if (answerUnitId == null) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getCode()));
+			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
+					questionUnitCategory.getCode()));
 		}
 		Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
 		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
 		UnitCategory answerUnitCategory = answerUnit.getCategory();
 		if (!questionUnitCategory.equals(answerUnitCategory)) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
+			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
+					questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
 		}
 		return answerUnit;
 	}
