@@ -88,6 +88,16 @@ public abstract class Person extends AbstractEntity {
 	protected Person() {
 	}
 
+    public String toString() {
+        String string ="";
+        string= string.concat("identifier:"+identifier);
+        string= string.concat("lastname:"+lastname);
+        string= string.concat("firstname:"+firstname);
+        string= string.concat("email:"+email);
+        string= string.concat("address:"+address);
+        return string;
+    }
+
 	public Person(String identifier, String password, String lastname,
 			String firstname) {
 		// Dans le constructeur de la classe Personne

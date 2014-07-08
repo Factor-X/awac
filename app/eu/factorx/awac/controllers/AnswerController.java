@@ -3,11 +3,14 @@ package eu.factorx.awac.controllers;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.myrmex.post.ProductCreateFormDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
@@ -40,126 +43,134 @@ import eu.factorx.awac.service.UnitService;
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
 
-	private static final String ERROR_ANSWER_UNIT_NOT_AUTHORIZED = "The question identified by key '%s' does not accept unit, since a unit (id = %s) is present in client answer";
-	private static final String ERROR_ANSWER_UNIT_REQUIRED = "The question identified by key '%s' requires a unit of the category '%s', but no unit is present in client answer";
-	private static final String ERROR_ANSWER_UNIT_INVALID = "The question identified by key '%s' requires a unit of the category '%s', since the unit of the client answer is '%s' (part of the category '%s')";
+    private static final String ERROR_ANSWER_UNIT_NOT_AUTHORIZED = "The question identified by key '%s' does not accept unit, since a unit (id = %s) is present in client answer";
+    private static final String ERROR_ANSWER_UNIT_REQUIRED = "The question identified by key '%s' requires a unit of the category '%s', but no unit is present in client answer";
+    private static final String ERROR_ANSWER_UNIT_INVALID = "The question identified by key '%s' requires a unit of the category '%s', since the unit of the client answer is '%s' (part of the category '%s')";
 
-	@Autowired
-	private PeriodService periodService;
-	@Autowired
-	private ScopeService scopeService;
-	@Autowired
-	private QuestionService questionService;
-	@Autowired
-	private QuestionAnswerService questionAnswerService;
-	@Autowired
-	private UnitService unitService;
-	@Autowired
-	private Secured secured;
+    @Autowired
+    private PeriodService periodService;
+    @Autowired
+    private ScopeService scopeService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private QuestionAnswerService questionAnswerService;
+    @Autowired
+    private UnitService unitService;
 
-	public Result getByForm(Integer formId, Integer periodId, Integer scopeId) {
-		return null;
-	}
+    @Autowired
+    private SecuredController securedController;
 
-	public Result save() {
-		Account currentUser = secured.getCurrentUser();
-		AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
-		Period period = periodService.findById(answersDTO.getPeriodId().longValue());
-		Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result getByForm(Integer formId, Integer periodId, Integer scopeId) {
 
-		for (AnswerLine answerLine : answersDTO.getListQuestionValueDTO()) {
-			Question question = getAndVerifyQuestion(answerLine);
-			// TODO The concept of "repetition" (== answers groups linked to a questions set) is not yet implemented in the client...
-			// => set repetitionIndex = 0
-			QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, 0);
-			// TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
-			// => add only one AnswerValue in answerValues list
-			AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
-			if (answerValue == null) {
-				throw new RuntimeException("The question of type '" + question.getClass() + "' cannot be treated");
-			}
-			questionAnswer.getAnswerValues().add(answerValue);
-			questionAnswerService.saveOrUpdate(questionAnswer);
-		}
-		return ok();
-	}
+        ProductCreateFormDTO productCreateFormDTO = DTO.getDTO(request().body().asJson(), ProductCreateFormDTO.class);
 
-	private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
-		Object rawAnswerValue = answerLine.getValue();
-		AnswerValue answerValue = null;
+        return null;
+    }
 
-		if (question instanceof BooleanQuestion) {
-			answerValue = new BooleanAnswerValue(questionAnswer, (Boolean) rawAnswerValue);
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result save() {
+        Account currentUser = securedController.getCurrentUser();
+        AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
+        Period period = periodService.findById(answersDTO.getPeriodId().longValue());
+        Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
 
-		} else if (question instanceof StringQuestion) {
-			answerValue = new StringAnswerValue(questionAnswer, (String) rawAnswerValue);
+        for (AnswerLine answerLine : answersDTO.getListQuestionValueDTO()) {
+            Question question = getAndVerifyQuestion(answerLine);
+            // TODO The concept of "repetition" (== answers groups linked to a questions set) is not yet implemented in the client...
+            // => set repetitionIndex = 0
+            QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, 0);
+            // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
+            // => add only one AnswerValue in answerValues list
+            AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
+            if (answerValue == null) {
+                throw new RuntimeException("The question of type '" + question.getClass() + "' cannot be treated");
+            }
+            questionAnswer.getAnswerValues().add(answerValue);
+            questionAnswerService.saveOrUpdate(questionAnswer);
+        }
+        return ok();
+    }
 
-		} else if (question instanceof IntegerQuestion) {
-			UnitCategory unitCategory = ((IntegerQuestion) question).getUnitCategory();
-			Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
-			answerValue = new IntegerAnswerValue(questionAnswer, (Integer) rawAnswerValue, unit);
+    private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
+        Object rawAnswerValue = answerLine.getValue();
+        AnswerValue answerValue = null;
 
-		} else if (question instanceof DoubleQuestion) {
-			UnitCategory unitCategory = ((DoubleQuestion) question).getUnitCategory();
-			Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
-			answerValue = new DoubleAnswerValue(questionAnswer, (Double) rawAnswerValue, unit);
+        if (question instanceof BooleanQuestion) {
+            answerValue = new BooleanAnswerValue(questionAnswer, (Boolean) rawAnswerValue);
 
-		} else if (question instanceof ValueSelectionQuestion) {
-			CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-			answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, (String) rawAnswerValue));
+        } else if (question instanceof StringQuestion) {
+            answerValue = new StringAnswerValue(questionAnswer, (String) rawAnswerValue);
 
-		} else if (question instanceof EntitySelectionQuestion) {
-			String entityName = ((EntitySelectionQuestion) question).getEntityName();
-			answerValue = new EntityAnswerValue(questionAnswer, entityName, (Long) rawAnswerValue);
-		}
-		return answerValue;
-	}
+        } else if (question instanceof IntegerQuestion) {
+            UnitCategory unitCategory = ((IntegerQuestion) question).getUnitCategory();
+            Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
+            answerValue = new IntegerAnswerValue(questionAnswer, (Integer) rawAnswerValue, unit);
 
-	private Question getAndVerifyQuestion(AnswerLine answerLine) {
-		String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
-		if (questionKey == null) {
-			throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
-		}
-		Question question = questionService.findByCode(new QuestionCode(questionKey));
-		if (question == null) {
-			throw new RuntimeException("The question key [" + questionKey + "] is not valid.");
-		}
-		return question;
-	}
+        } else if (question instanceof DoubleQuestion) {
+            UnitCategory unitCategory = ((DoubleQuestion) question).getUnitCategory();
+            Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
+            answerValue = new DoubleAnswerValue(questionAnswer, (Double) rawAnswerValue, unit);
 
-	private Unit getAndVerifyUnit(AnswerLine answerLine, UnitCategory questionUnitCategory, String questionKey) {
-		Integer answerUnitId = answerLine.getUnitId();
+        } else if (question instanceof ValueSelectionQuestion) {
+            CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+            answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, (String) rawAnswerValue));
 
-		// no unit category linked to the question => return null, or throw an Exception if client provided a unit
-		if (questionUnitCategory == null) {
-			if (answerUnitId != null) {
-				// TODO this event should not throw a RuntimeException => to improve
-				throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitId));
-			} else {
-				return null;
-			}
-		}
+        } else if (question instanceof EntitySelectionQuestion) {
+            String entityName = ((EntitySelectionQuestion) question).getEntityName();
+            answerValue = new EntityAnswerValue(questionAnswer, entityName, (Long) rawAnswerValue);
+        }
+        return answerValue;
+    }
 
-		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
-		if (answerUnitId == null) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getCode()));
-		}
-		Unit answerUnit = unitService.findById(answerUnitId.longValue());
+    private Question getAndVerifyQuestion(AnswerLine answerLine) {
+        String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
+        if (questionKey == null) {
+            throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
+        }
+        Question question = questionService.findByCode(new QuestionCode(questionKey));
+        if (question == null) {
+            throw new RuntimeException("The question key [" + questionKey + "] is not valid.");
+        }
+        return question;
+    }
 
-		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
-		UnitCategory answerUnitCategory = answerUnit.getCategory();
-		if (!questionUnitCategory.equals(answerUnitCategory)) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
-		}
-		return answerUnit;
-	}
+    private Unit getAndVerifyUnit(AnswerLine answerLine, UnitCategory questionUnitCategory, String questionKey) {
+        Integer answerUnitId = answerLine.getUnitId();
 
-	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
-	}
+        // no unit category linked to the question => return null, or throw an Exception if client provided a unit
+        if (questionUnitCategory == null) {
+            if (answerUnitId != null) {
+                // TODO this event should not throw a RuntimeException => to improve
+                throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitId));
+            } else {
+                return null;
+            }
+        }
+
+        // the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
+        if (answerUnitId == null) {
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getCode()));
+        }
+        Unit answerUnit = unitService.findById(answerUnitId.longValue());
+
+        // check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
+        UnitCategory answerUnitCategory = answerUnit.getCategory();
+        if (!questionUnitCategory.equals(answerUnitCategory)) {
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
+        }
+        return answerUnit;
+    }
+
+    protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
+        T dto = DTO.getDTO(request().body().asJson(), DTOclass);
+        if (dto == null) {
+            throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
+        }
+        return dto;
+    }
 
 }

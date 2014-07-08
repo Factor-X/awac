@@ -3,8 +3,8 @@ package eu.factorx.awac.dto.myrmex.post;
 import eu.factorx.awac.dto.DTO;
 
 import javax.validation.constraints.NotNull;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * Created by root on 6/07/14.
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class ProductCreateFormDTO extends DTO {
 
     @NotNull
-    @javax.validation.constraints.Pattern(regexp = "^.{2,20}$")
+    @Size(min = 2,max = 20,message = "name : between 2 and 20 letters")
     private String name;
 
     public ProductCreateFormDTO() {
@@ -30,5 +30,5 @@ public class ProductCreateFormDTO extends DTO {
     public void setName(String name) {
         this.name = name;
     }
-    
+
 }

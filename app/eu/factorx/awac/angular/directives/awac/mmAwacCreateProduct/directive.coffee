@@ -12,7 +12,6 @@ angular
         name: $scope.productName
 
     promise.success (data, status, headers, config) ->
-      console.info(data)
       $scope.message = "Your product "+data.name+" was created"
       return
 

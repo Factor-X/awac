@@ -92,7 +92,13 @@ public class Account extends Person {
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
-    
+
+    public String toString() {
+        String string = super.toString();
+        string=string.concat("age:"+age);
+        return string;
+    }
+
     /*
      * Finder
      */

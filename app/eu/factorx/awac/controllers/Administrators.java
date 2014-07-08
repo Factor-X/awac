@@ -35,7 +35,7 @@ import eu.factorx.awac.util.pdf.PDF;
  * Manage a database of administratros
  */
 
-@Security.Authenticated(Secured.class)
+@Security.Authenticated(SecuredController.class)
 public class Administrators extends Controller {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class Administrators extends Controller {
     @Autowired
     private AdministratorService administratorService;
     @Autowired
-    private Secured secured;
+    private SecuredController securedController;
 
 	/**
 	 * This result directly redirect to application home.
@@ -119,7 +119,7 @@ public class Administrators extends Controller {
 	 *            Id of the administrator to edit
 	 */
 	public Result edit(Long id) {
-		if (secured.isAdministrator()) {
+		if (securedController.isAdministrator()) {
 			Form<Administrator> administratorForm = form(Administrator.class).fill(administratorService.findById(id));
 			return ok(eu.factorx.awac.views.html.administrator.editForm.render(id, administratorForm));
 		} else {
@@ -134,7 +134,7 @@ public class Administrators extends Controller {
 	 *            Id of the administrator to edit
 	 */
 	public Result update(Long id) {
-		if (secured.isAdministrator()) {
+		if (securedController.isAdministrator()) {
 			Form<Administrator> administratorForm = form(Administrator.class).bindFromRequest();
 
 			if (administratorForm.hasErrors()) {

@@ -17,3 +17,4 @@ bin
 .target
 .externalToolBuilders
 /.metadata
+/.cache

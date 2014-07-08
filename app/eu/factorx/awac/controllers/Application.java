@@ -33,8 +33,7 @@ public class Application extends Controller {
 
 	public Result javascriptRoutes() {
 		response().setContentType("text/javascript");
-		return ok(Routes.javascriptRouter("jsRoutes",
-				eu.factorx.awac.controllers.vies.routes.javascript.VatViesService.checkVat()
+		return ok(Routes.javascriptRouter("jsRoutes"
 		// Routes
 				));
 	}
