@@ -7,15 +7,14 @@ import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * Created by root on 7/07/14.
- */
 public class AnswersSaveDTO  extends DTO{
 
     @NotNull
     private Integer ScopeId;
+
     @NotNull
     private Integer periodId;
+
     @NotNull
     private List<AnswerLine> listQuestionValueDTO;
 

@@ -24,22 +24,7 @@ angular
   #$scope.prettyPrint = (o) ->
   #    return $sce.trustAsHtml(hljs.highlight('json', JSON.stringify(o, null, '  ')).value);
 
-  downloadService.getJson "dummy/household/2014", (data) ->
-    $scope.o = data
-    $scope.o.consumption.units = $scope.volumeUnits;
 
-    $scope.addOtherFuel = () ->
-      console.log 'ok'
-      $scope.o.otherFuels.push
-        value: 0,
-        unit: 0,
-        units: $scope.volumeUnits,
-        reviewers:
-          dataOwner: null
-          dataValidator: null
-          dataVerifier: null
-          dataLocker: null
-      return false
 
   $scope.logout = () ->
     console.log("logout ??")
