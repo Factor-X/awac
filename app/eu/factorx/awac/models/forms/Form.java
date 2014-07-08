@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -27,8 +28,9 @@ public class Form extends AbstractEntity {
 	@Transient
 	private Integer progress;
 
-	@OneToMany(mappedBy = "form")
-	private List<FormQuestion> questions = new ArrayList<FormQuestion>();
+	@ManyToMany
+	@JoinTable(name = "mm_form_questionset")
+	private List<QuestionSet> questionSet = new ArrayList<>();
 
 	public Form() {
 	}
@@ -38,12 +40,12 @@ public class Form extends AbstractEntity {
 		this.identifier = identifier;
 	}
 
-	public String getName() {
+	public String getIdentifier() {
 		return identifier;
 	}
 
-	public void setName(String name) {
-		this.identifier = name;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public Integer getProgress() {
@@ -54,20 +56,12 @@ public class Form extends AbstractEntity {
 		this.progress = progress;
 	}
 
-	public List<FormQuestion> getQuestions() {
-		return questions;
+	public List<QuestionSet> getQuestionSet() {
+		return questionSet;
 	}
 
-	public void setQuestions(List<FormQuestion> param) {
-		this.questions = param;
-	}
-
-	public List<QuestionSet> getQuestionSets() {
-		List<QuestionSet> res = new ArrayList<>();
-		for (FormQuestion formQuestion : this.questions) {
-			res.add(formQuestion.getQuestionSet());
-		}
-		return res;
+	public void setQuestionSet(List<QuestionSet> questionSet) {
+		this.questionSet = questionSet;
 	}
 
 }

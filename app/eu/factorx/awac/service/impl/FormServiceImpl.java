@@ -23,7 +23,7 @@ public class FormServiceImpl extends AbstractJPAPersistenceServiceImpl<Form> imp
 			throw new RuntimeException(errorMsg);
 		}
 		Form form = resultList.get(0);
-		Hibernate.initialize(form.getQuestions());
+		Hibernate.initialize(form.getQuestionSet());
 		return form;
 	}
 

@@ -1,13 +1,13 @@
 package eu.factorx.awac.models.data.question;
 
+import java.util.List;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,15 +18,24 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 
 @Entity
 @Table(name = "question")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "question_type")
-@NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+@NamedQueries({
+	@NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+	@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
 })
 public class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * :codes = a {@link List} of {@link QuestionCode}
+	 */
 	public static final String FIND_BY_CODES = "Question.findByCodes";
+
+	/**
+	 * :code = a {@link QuestionCode}
+	 */
+	public static final String FIND_BY_CODE = "Question.findByCode";
 
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;

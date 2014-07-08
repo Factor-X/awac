@@ -1,9 +1,8 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.InMemoryData;
-import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import play.mvc.Controller;
 import play.mvc.Result;
+import eu.factorx.awac.InMemoryData;
 
 public class Translation extends Controller {
 

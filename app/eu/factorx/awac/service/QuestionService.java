@@ -9,4 +9,6 @@ public interface QuestionService extends PersistenceService<Question> {
 
 	public List<Question> findByCodes(List<QuestionCode> codes);
 
+	public Question findByCode(QuestionCode questionCode);
+
 }

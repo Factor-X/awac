@@ -13,32 +13,33 @@ import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class NumericAnswerValue<T extends Number> extends AnswerValue {
+public class DoubleAnswerValue extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private T value;
+	private Double value;
 
 	@Transient
 	private Unit unit;
 
-	protected NumericAnswerValue() {
+	protected DoubleAnswerValue() {
 		super();
 	}
 
-	public NumericAnswerValue(QuestionAnswer questionAnswer, T value, Unit unit) {
+	public DoubleAnswerValue(QuestionAnswer questionAnswer, Double value,
+			Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
 		this.unit = unit;
 	}
 
-	public T getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(T value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -54,16 +55,17 @@ public class NumericAnswerValue<T extends Number> extends AnswerValue {
 	protected AnswerRawData getRawData() {
 		AnswerRawData rawData = new AnswerRawData();
 		rawData.setLongData(unit.getId());
-		rawData.setDoubleData(value.doubleValue());
+		rawData.setDoubleData(value);
 		return rawData;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
-		this.unit = JPA.em().find(Unit.class, rawData.getLongData());
-		this.value = (T) rawData.getDoubleData();
+		Long unitId = rawData.getLongData();
+		if (unitId != null) {
+			this.unit = JPA.em().find(Unit.class, unitId);
+		}
+		this.value = rawData.getDoubleData();
 	}
 
-	
 }

@@ -1,21 +1,17 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
-import eu.factorx.awac.dto.myrmex.get.ProductDTO;
-import eu.factorx.awac.dto.myrmex.post.ProductCreateFormDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Product;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.ProductDTO;
+import eu.factorx.awac.dto.myrmex.post.ProductCreateFormDTO;
+import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.service.ProductService;
 
 /**
  * Created by root on 6/07/14.
@@ -48,7 +44,7 @@ public class ProductController extends Controller {
         Product product = new Product(secured.getCurrentUser().getOrganization(), productCreateFormDTO.getName());
 
         //3.1 add
-        productService.save(product);
+        productService.saveOrUpdate(product);
 
         //4. return product DTO
         return ok(conversionService.convert(product, ProductDTO.class));

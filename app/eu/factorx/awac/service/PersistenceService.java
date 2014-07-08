@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface PersistenceService<E> {
 
-	E save(E entity);
+	E saveOrUpdate(E entity);
 
 	E update(E entity);
 
