@@ -7,9 +7,6 @@ import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * Created by root on 7/07/14.
- */
 public class AnswersDTO extends DTO {
 
     private AnswersSaveDTO answersSaveDTO;

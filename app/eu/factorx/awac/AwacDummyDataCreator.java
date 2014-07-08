@@ -1,3 +1,5 @@
+package eu.factorx.awac;
+
 import org.hibernate.Session;
 
 import eu.factorx.awac.models.account.Account;
@@ -17,6 +19,7 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
+import eu.factorx.awac.models.data.question.type.StringQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
@@ -128,5 +131,53 @@ public class AwacDummyDataCreator {
 		session.saveOrUpdate(question2b_answer2);
 		DoubleAnswerValue question2b_answer2Value = new DoubleAnswerValue(question2b_answer2, 3.2, ton);
 		session.saveOrUpdate(question2b_answer2Value);
+
+		// TEST FORM
+
+		Form testForm = new Form("TEST_FORM");
+		session.saveOrUpdate(testForm);
+
+		// (Q1)
+		QuestionSet questionSet1 = new QuestionSet(new QuestionCode("QS1"), Boolean.TRUE);
+		session.saveOrUpdate(questionSet1);
+		Question question1 = new StringQuestion(questionSet1, 0, new QuestionCode("Q1"));
+		session.saveOrUpdate(question1);
+
+		// (Q2)
+		QuestionSet questionSet2 = new QuestionSet(new QuestionCode("QS2"), Boolean.TRUE);
+		session.saveOrUpdate(questionSet2);
+		Question question2 = new IntegerQuestion(questionSet2, 0, new QuestionCode("Q2"), volumeUnits);
+		session.saveOrUpdate(question2);
+
+		// (Q3)
+		QuestionSet questionSet3 = new QuestionSet(new QuestionCode("QS3"), Boolean.TRUE);
+		session.saveOrUpdate(questionSet3);
+		Question question3 = new DoubleQuestion(questionSet3, 0, new QuestionCode("Q3"), null);
+		session.saveOrUpdate(question3);
+
+		// (Q4)
+		QuestionSet questionSet4 = new QuestionSet(new QuestionCode("QS4"), Boolean.TRUE);
+		session.saveOrUpdate(questionSet4);
+		Question question4 = new IntegerQuestion(questionSet4, 0, new QuestionCode("Q4"), massUnits);
+		session.saveOrUpdate(question4);
+
+		// Add question sets to test form
+		testForm.getQuestionSet().add(questionSet1);
+		testForm.getQuestionSet().add(questionSet2);
+		testForm.getQuestionSet().add(questionSet3);
+		testForm.getQuestionSet().add(questionSet4);
+		session.saveOrUpdate(testForm);
+
+		// (Answer Q4)
+		QuestionAnswer question4Answer = new QuestionAnswer(period1, scope1, user1, question4, 0);
+		session.saveOrUpdate(question4Answer);
+		IntegerAnswerValue question4AnswerValue = new IntegerAnswerValue(question4Answer, 23, ton);
+		session.saveOrUpdate(question4AnswerValue);
+
+		System.out.println(" ==== TEST ANSWERS CONTROLLER - REQUEST PARAMS:");
+		System.out.println(" ===== Form ID = " + testForm.getId());
+		System.out.println(" ===== Period ID = " + period1.getId());
+		System.out.println(" ===== Scope ID = " + scope1.getId());
+
 	}
 }

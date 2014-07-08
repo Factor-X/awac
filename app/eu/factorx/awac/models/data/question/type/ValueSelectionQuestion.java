@@ -5,6 +5,7 @@ import javax.persistence.Enumerated;
 
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
@@ -20,8 +21,7 @@ public class ValueSelectionQuestion extends Question {
 		super();
 	}
 
-	public ValueSelectionQuestion(QuestionSet questionSet, int orderIndex,
-			QuestionCode code, CodeList codeList) {
+	public ValueSelectionQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, CodeList codeList) {
 		super(questionSet, orderIndex, code);
 		this.codeList = codeList;
 	}
@@ -32,6 +32,11 @@ public class ValueSelectionQuestion extends Question {
 
 	public void setCodeList(CodeList codeList) {
 		this.codeList = codeList;
+	}
+
+	@Override
+	public AnswerType getAnswerType() {
+		return AnswerType.VALUE_SELECTION;
 	}
 
 }

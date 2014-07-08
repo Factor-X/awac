@@ -5,7 +5,6 @@
 # Home page
 GET     /                           @eu.factorx.awac.controllers.Application.index()
 
-GET     /dummy/household/:year      @eu.factorx.awac.controllers.Dummy.getHousehold(year:Integer)
 GET     /translations/:lang         @eu.factorx.awac.controllers.Translation.fetch(lang:String)
 GET     /app.js                     @eu.factorx.awac.controllers.Application.app()
 
@@ -47,5 +46,5 @@ GET     /tests                      eu.factorx.awac.controllers.TestController.i
 
 
 #answer controller => used to save answer
-GET     /answer/getByForm:form/:period/:scope   @eu.factorx.awac.controllers.AnswerController.getByForm(form: Integer, period: Integer, scope: Integer)
-POST    /answer/save                            @eu.factorx.awac.controllers.AnswerController.save()
+GET     /answer/getByForm/:form/:period/:scope   @eu.factorx.awac.controllers.AnswerController.getByForm(form: Integer, period: Integer, scope: Integer)
+POST    /answer/save                             @eu.factorx.awac.controllers.AnswerController.save()
