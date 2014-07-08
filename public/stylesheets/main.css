@@ -76,6 +76,9 @@ input.ng-invalid {
     border: 1px solid #ff0000;
     color: #ffffff;
     padding: 5px;
+    max-width: 150px;
+    margin-top: -15px;
+    margin-left: 20px;
 }
 .modal_body_table .error_message:hover > div:last-child{
     display: block;
