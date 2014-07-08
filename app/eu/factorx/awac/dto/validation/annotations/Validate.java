@@ -1,4 +1,4 @@
-package eu.factorx.awac.dto.validation;
+package eu.factorx.awac.dto.validation.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(value = {ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Pattern {
-    String regex() default ".*";
+public @interface Validate {
 }
