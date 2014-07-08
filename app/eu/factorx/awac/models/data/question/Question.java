@@ -20,8 +20,12 @@ import eu.factorx.awac.models.data.answer.AnswerType;
 @Entity
 @Table(name = "question")
 @DiscriminatorColumn(name = "question_type")
-@NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
-		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"), })
+@NamedQueries({
+		@NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
+		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS, query = "select q from Question q where q.questionSet in :questionSets"),
+		
+})
 public abstract class Question extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -35,6 +39,11 @@ public abstract class Question extends AbstractEntity {
 	 * :code = a {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODE = "Question.findByCode";
+
+	/**
+	 * :questionSets = a {@link List} of {@link QuestionSet}
+	 */
+	public static final String FIND_BY_QUESTION_SETS = "Question.findByQuestionSets";
 
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;

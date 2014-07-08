@@ -1,7 +1,9 @@
 package eu.factorx.awac.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,15 +78,25 @@ public class AnswerController extends Controller {
 		Period period = periodService.findById(periodId.longValue());
 		Scope scope = scopeService.findById(scopeId.longValue());
 
-		List<QuestionAnswer> questionAnswers = questionAnswerService.findByFormAndPeriodAndScope(form, period, scope);
+		List<Question> questions = questionService.findByForm(form);
+		Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
 		List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
-		for (QuestionAnswer questionAnswer : questionAnswers) {
-			listQuestionValueDTO.add(toAnswerLine(questionAnswer));
+		for (Question question : questions) {
+			listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(question.getCode().getKey())));
 		}
 		AnswersSaveDTO answersSaveDTO = new AnswersSaveDTO(scopeId, periodId, listQuestionValueDTO);
 		AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null);
 
 		return ok(answersDTO);
+	}
+
+	private Map<String, QuestionAnswer> getQuestionAnswersByKey(Period period, Scope scope) {
+		List<QuestionAnswer> questionAnswers = questionAnswerService.findByScopeAndPeriod(scope, period);
+		Map<String, QuestionAnswer> questionAnswersByKey = new HashMap<>();
+		for (QuestionAnswer questionAnswer : questionAnswers) {
+			questionAnswersByKey.put(questionAnswer.getQuestion().getCode().getKey(), questionAnswer);
+		}
+		return questionAnswersByKey;
 	}
 
 	@Transactional(readOnly = false)
@@ -116,10 +128,12 @@ public class AnswerController extends Controller {
 		}
 	}
 
-	private AnswerLine toAnswerLine(QuestionAnswer questionAnswer) {
-		Question question = questionAnswer.getQuestion();
+	private AnswerLine toAnswerLine(Question question, QuestionAnswer questionAnswer) {
 		AnswerType answerType = question.getAnswerType();
 
+		if (questionAnswer == null) {
+			return new AnswerLine(question.getCode().getKey(), null, answerType);
+		}
 		// TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
 		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
 		Object rawAnswerValue = null;
@@ -145,8 +159,7 @@ public class AnswerController extends Controller {
 					entityAnswerValue.getEntityId());
 			break;
 		}
-		AnswerLine answerLine = new AnswerLine(question.getCode().getKey(), rawAnswerValue, answerType);
-		return answerLine;
+		return new AnswerLine(question.getCode().getKey(), rawAnswerValue, answerType);
 	}
 
 	private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {

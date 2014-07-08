@@ -8,7 +8,7 @@ angular
     transclude: true
     replace: true
     controller: ($scope, downloadService) ->
-        downloadService.getJson "answer/getByForm/26/24/29", (data) ->
+        downloadService.getJson "answer/getByForm/36/24/27", (data) ->
             $scope.o = data
 
             $scope.getByCode = (code) ->

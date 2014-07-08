@@ -33,6 +33,11 @@ public class QuestionAnswer extends AbstractEntity {
 
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
 
+	/**
+	 * :scope
+	 * :period
+	 * :questionSets
+	 */
 	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndPeriodAndQuestionSets";
 
 	// ATTRIBUTES

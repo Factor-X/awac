@@ -14,7 +14,7 @@ public class DoubleQuestion extends Question {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	protected UnitCategory unitCategory;
 
 	protected DoubleQuestion() {
