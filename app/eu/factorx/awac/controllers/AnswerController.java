@@ -116,6 +116,7 @@ public class AnswerController extends Controller {
 			for (Unit unit : unitCategory.getUnits()) {
 				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
 			}
+			res.add(unitCategoryDTO);
 		}
 		return res;
 	}
