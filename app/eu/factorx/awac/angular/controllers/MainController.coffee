@@ -26,6 +26,10 @@ angular
             templateUrl: '$/angular/templates/mm-awac-form6.html'
             controller: 'Form6Ctrl'
         })
+    .when('/results', {
+            templateUrl: '$/angular/templates/mm-awac-results.html'
+            controller: 'ResultsCtrl'
+        })
     .otherwise({ redirectTo: '/form1' })
 
     return

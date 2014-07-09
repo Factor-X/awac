@@ -1,112 +1,173 @@
 package eu.factorx.awac.compilers
 
-import java.io._
-import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.FileWriter
+import java.util
 
-import scalax.file.{PathSet, Path}
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.jcoffeescript._
-import java.util.Arrays
+
+import scalax.file.Path
 
 class AngularCompiler {
 
     def compile(path: String): String = {
         val angular = Path.fromString(path)
+        val tmp = Path.fromString("tmp")
 
         val roots = angular * "*.coffee"
-        val controllers = angular / "controllers" ** "*.coffee"
-        val directives = angular / "directives" ** "*.coffee"
         val services = angular / "services" ** "*.coffee"
         val filters = angular / "filters" ** "*.coffee"
+        val directives = angular / "directives" ** "*.coffee"
+        val directivesTemplates = (angular / "directives" ** "*.jade") ++ (angular / "directives" ** "*.html")
+        val controllers = angular / "controllers" ** "*.coffee"
 
-        val compiledMain = simpleCompile(roots)
-        val compiledServices = simpleCompile(services)
-        val compiledFilters = simpleCompile(filters)
-        val compiledDirectives = compileDirectives(directives, angular)
-        val compiledControllers = simpleCompile(controllers)
+        compileFiles(roots, Path.fromString("tmp/sources/"))
+        compileFiles(services, Path.fromString("tmp/sources/"))
+        compileFiles(filters, Path.fromString("tmp/sources/"))
+        compileFiles(directives, Path.fromString("tmp/sources/"))
+        compileFiles(directivesTemplates, Path.fromString("tmp/sources/"))
+        compileFiles(controllers, Path.fromString("tmp/sources/"))
 
-        compiledMain + compiledServices + compiledFilters + compiledDirectives + compiledControllers
+        assembleTemplates(Path.fromString("tmp/sources/") ** "*.html", Path.fromString("tmp/templates/"), angular)
 
+        concatenate(
+            (Path.fromString("tmp/sources/") ** "*.js")
+                ++ (Path.fromString("tmp/templates/") ** "*.js"),
+            Path.fromString("tmp/concatenated/"))
+
+        // compiledMain + compiledServices + compiledFilters + compiledDirectives + compiledControllers
+
+        scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
     }
 
-    private def simpleCompile(files: Iterable[Path]): String = {
-        var res = List[String]()
-        for (f <- files) {
-            // read the source
-            val coffee = scala.io.Source.fromFile(f.path).getLines.mkString("\n")
+    private def compileFile(f: Path, folder: Path) {
 
-            // turn it into a javascript
-            println("compiling " + f.path + " ...")
-            val js = new JCoffeeScriptCompiler(Arrays.asList(Option.BARE)).compile(coffee)
+        var targetExtension = ""
+        val sourceExtension = f.path.split("\\.").last.toLowerCase
 
-            // append it to the list
-            res :::= List(js)
+        if (sourceExtension == "coffee") {
+            targetExtension = "js"
         }
-        res.mkString(";")
-    }
+        if (sourceExtension == "js") {
+            targetExtension = "js"
+        }
+        if (sourceExtension == "jade") {
+            targetExtension = "html"
+        }
+        if (sourceExtension == "html") {
+            targetExtension = "html"
+        }
 
-    private def compileDirectives(files: Iterable[Path], angular: Path): String = {
+        val tempFile = new java.io.File((folder / f).path.replaceAll("\\." + sourceExtension + "$", "." + targetExtension))
+        tempFile.getParentFile.mkdirs()
 
-        var names = List[String]()
-        var contents = List[String]()
+        if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
+            // nothing to do, tempfile is up-to-date
+            println("[UP-TO-DATE]" + f.path)
+        } else {
+            var result = ""
+            println("[COMPILING] " + f.path)
 
-        for (f <- files) {
-            // turn it into an HTML
-            val jadePath = f.sibling("template.jade")
-            var html = "";
-            if (jadePath.exists) {
-                println("compiling " + jadePath.path + " ...")
-                html = de.neuland.jade4j.Jade4J.render(jadePath.path, null);
-            } else {
-                val htmlPath = f.sibling("template.html")
-                if (htmlPath.exists) {
-                    println("reading " + htmlPath.path + " ...")
-                    html = scala.io.Source.fromFile(htmlPath.path, "utf-8").getLines.mkString("\n")
-                }
+            if (sourceExtension == "coffee") {
+                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                result = new JCoffeeScriptCompiler(util.Arrays.asList(Option.BARE)).compile(source)
             }
 
+            if (sourceExtension == "js") {
+                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                result = source
+            }
 
-            // now, escape string so that it can be embedded as a variable
-            val mapper: ObjectMapper = new ObjectMapper();
-            val escapedHtml = mapper.writeValueAsString(html)
+            if (sourceExtension == "jade") {
+                result = de.neuland.jade4j.Jade4J.render(f.path, null)
+            }
 
-            // compute a decent url for the template
-            var usefulPath = f.path.substring((angular / "directives").path.length)
+            if (sourceExtension == "html") {
+                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                result = source
+            }
 
-            // to dashed
-            val regex = "([a-z])([A-Z])";
-            val replacement = "$1-$2";
-            usefulPath = usefulPath.replaceAll(regex, replacement).toLowerCase();
+            val fw = new FileWriter(tempFile)
+            fw.write(result)
+            fw.close()
 
-            // now split and format it correctly
-            var usefulPathParts = usefulPath.split("[/\\\\]")
-            usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
-            // usefulPath = usefulPathParts.mkString("/")
-            usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
-
-            println(usefulPath)
-
-            val url = "$/angular/templates/" + usefulPath + ".html"
-
-            // append it to the list
-            names = names :+ url
-            contents = contents :+ escapedHtml
         }
-
-
-        val begin = "angular.module('app.directives').run(function($templateCache) {"
-
-        val end = "});";
-
-        var res = List[String]()
-        res = res :+ begin
-        for ((url, content) <- (names, contents).zipped) {
-            res = res :+ "$templateCache.put('" + url + "', " + content + ");"
-        }
-        res = res :+ end
-
-
-        simpleCompile(files) + res.mkString("\n")
-
     }
+
+    private def compileFiles(files: Iterable[Path], folder: Path) {
+        for (f <- files) {
+            compileFile(f, folder)
+        }
+    }
+
+    private def assembleTemplates(files: Iterable[Path], folder: Path, angular: Path) {
+        val tempFile = new java.io.File((folder / "templates.js").path)
+        tempFile.getParentFile.mkdirs()
+
+        var mustRemake = false
+        for (f <- files) {
+            if (!tempFile.exists || tempFile.lastModified < f.lastModified) {
+                mustRemake = true
+            }
+        }
+
+        if (mustRemake) {
+            var result = "angular.module('app.directives').run(function($templateCache) {"
+            for (f <- files) {
+
+                // now, escape string so that it can be embedded as a variable
+                val mapper: ObjectMapper = new ObjectMapper()
+
+                // compute a decent url for the template
+                var usefulPath = f.path.substring((angular / "directives").path.length)
+
+                // to dashed
+                val regex = "([a-z])([A-Z])"
+                val replacement = "$1-$2"
+                usefulPath = usefulPath.replaceAll(regex, replacement).toLowerCase
+
+                // now split and format it correctly
+                var usefulPathParts = usefulPath.split("[/\\\\]")
+                usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
+                // usefulPath = usefulPathParts.mkString("/")
+                usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
+
+                val url = "$/angular/templates/" + usefulPath + ".html"
+                val content = mapper.writeValueAsString(scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n"))
+
+                result += "$templateCache.put('" + url + "', " + content + ");"
+
+            }
+            result += "});"
+
+            val fw = new FileWriter(tempFile)
+            fw.write(result)
+            fw.close()
+        }
+    }
+
+    private def concatenate(files: Iterable[Path], folder: Path) {
+        val tempFile = new java.io.File((folder / "concatenated.js").path)
+        tempFile.getParentFile.mkdirs()
+
+        var mustRemake = false
+        for (f <- files) {
+            if (!tempFile.exists || tempFile.lastModified < f.lastModified) {
+                mustRemake = true
+            }
+        }
+
+        if (mustRemake) {
+            var result = ""
+            for (f <- files) {
+                result += scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n")
+            }
+
+            val fw = new FileWriter(tempFile)
+            fw.write(result)
+            fw.close()
+        }
+    }
+
 
 }
