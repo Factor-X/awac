@@ -1,0 +1,254 @@
+ng-virtual
+    .element
+        .element_header
+            .title Combustion
+            .upload_banner
+                .element_table
+                    div
+                        div
+                            div upload de documents
+                            button.upload(type='button') Upload
+                        .oneelement
+                            .status
+                            select
+                                option carburant.xls
+                                option carbu2.xls
+                        .oneelement
+                            select
+                                option Fact_Gaz.pdf
+                                option Fact2_Gaz.pdf
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Choix du combustible ?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
+                    .oneelement
+                        input(value='Mazout')
+                        .user_icon XM
+                div
+                    div Consommation précise :
+                    .twoelements
+                        .status
+                        input(value='170')
+                        select
+                            option Litres
+                            option Kilogrammes
+                        .user_icon AG
+                    .twoelements
+                        input(value='170')
+                        div(style='display:inline-block; color: black') litres
+                        .user_icon AG
+                div
+                    div
+                    div
+                        .status
+                        button.comments(type='button') 2 commentaires
+                    div
+                        button.comments(type='button') 1 commentaire
+    .horizontal_separator
+    .element
+        .element_header
+            .title Froid
+            .upload
+        .element_sidebar
+            .block_status
+                .lock_status
+                .answered_status.disable_status
+                .validate_status.disable_status
+        .element_content
+            .element_text
+                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
+                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
+                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+            .method
+                style
+                    .tab-color-lightgreen a {
+                        background-color: #28b24c;
+                    }
+
+                    .tab-color-lightgreen.sub_block {
+                        border-color: #28b24c;
+                    }
+
+                    .tab-color-green a {
+                        background-color: #809d3e;
+                    }
+
+                    .tab-color-green.sub_block {
+                        border-color: #809d3e;
+                    }
+
+                    .tab-color-yellow a {
+                        background-color: #e1ad29;
+                    }
+
+                    .tab-color-yellow.sub_block {
+                        border-color: #e1ad29;
+                    }
+
+                    .tab-color-orange a {
+                        background-color: #e38a27;
+                    }
+
+                    .tab-color-orange.sub_block {
+                        border-color: #e38a27;
+                    }
+                tabset
+                    tab.tab-color-lightgreen
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Systèmes
+                        .sub_block.tab-color-lightgreen
+                            .element_table
+                                div
+                                    div Choix du combustible ?
+                                    .oneelement
+                                        .status.answer
+                                        select
+                                            option Mazout
+                                            option Fuel
+                                        .user_icon XM
+                                    .oneelement
+                                        input(value='Mazout')
+                                        .user_icon XM
+                                div
+                                    div Consommation précise :
+                                    .twoelements
+                                        .status
+                                        input(value='170')
+                                        select
+                                            option Litres
+                                            option Kilogrammes
+                                        .user_icon AG
+                                    .twoelements
+                                        input(value='170')
+                                        div(style='display:inline-block; color: black') litres
+                                        .user_icon AG
+                                div
+                                    div
+                                    div
+                                        .status
+                                        button.comments(type='button') 2 commentaires
+                                    div
+                                        button.comments(type='button') 1 commentaire
+                    tab.tab-color-green
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Recharges
+                        .sub_block.tab-color-green
+                            .element_table
+                                div
+                                    div Choix du combustible ? 2
+                                    .oneelement
+                                        .status.answer
+                                        select
+                                            option Mazout
+                                            option Fuel
+                                        .user_icon XM
+                                    .oneelement
+                                        input(value='Mazout')
+                                        .user_icon XM
+                                div
+                                    div Consommation précise :
+                                    .twoelements
+                                        .status
+                                        input(value='170')
+                                        select
+                                            option Litres
+                                            option Kilogrammes
+                                        .user_icon AG
+                                    .twoelements
+                                        input(value='170')
+                                        div(style='display:inline-block; color: black') litres
+                                        .user_icon AG
+                                div
+                                    div
+                                    div
+                                        .status
+                                        button.comments(type='button') 2 commentaires
+                                    div
+                                        button.comments(type='button') 1 commentaire
+                    tab.tab-color-yellow
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Usages
+                        .sub_block.tab-color-yellow
+                            .element_table
+                                div
+                                    div Choix du combustible ?
+                                    .oneelement
+                                        .status.answer
+                                        select
+                                            option Mazout
+                                            option Fuel
+                                        .user_icon XM
+                                    .oneelement
+                                        input(value='Mazout')
+                                        .user_icon XM
+                                div
+                                    div Consommation précise :
+                                    .twoelements
+                                        .status
+                                        input(value='170')
+                                        select
+                                            option Litres
+                                            option Kilogrammes
+                                        .user_icon AG
+                                    .twoelements
+                                        input(value='170')
+                                        div(style='display:inline-block; color: black') litres
+                                        .user_icon AG
+                                div
+                                    div
+                                    div
+                                        .status
+                                        button.comments(type='button') 2 commentaires
+                                    div
+                                        button.comments(type='button') 1 commentaire
+                    tab.tab-color-orange
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Méthode #4
+                        .sub_block.tab-color-orange
+                            .element_table
+                                div
+                                    div Choix du combustible ?
+                                    .oneelement
+                                        .status.answer
+                                        select
+                                            option Mazout
+                                            option Fuel
+                                        .user_icon XM
+                                    .oneelement
+                                        input(value='Mazout')
+                                        .user_icon XM
+                                div
+                                    div Consommation précise :
+                                    .twoelements
+                                        .status
+                                        input(value='170')
+                                        select
+                                            option Litres
+                                            option Kilogrammes
+                                        .user_icon AG
+                                    .twoelements
+                                        input(value='170')
+                                        div(style='display:inline-block; color: black') litres
+                                        .user_icon AG
+                                div
+                                    div
+                                    div
+                                        .status
+                                        button.comments(type='button') 2 commentaires
+                                    div
+                                        button.comments(type='button') 1 commentaire

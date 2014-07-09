@@ -1,16 +1,33 @@
 angular
 .module('app.directives')
+.directive "ngEnter", () ->
+  return (scope, element, attrs) ->
+    element.bind "keydown keypress", (event) ->
+      if event.which == 13
+        scope.$apply  () ->
+          scope.$eval(attrs.ngEnter)
+        event.preventDefault()
+
 .directive "mmAwacModalLogin", (directiveService) ->
   restrict: "E"
   scope: {}
   templateUrl: "$/angular/templates/mm-awac-modal-login.html"
   controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
 
+    #change option of the modal
+
+    $('#modalLogin').modal({
+      backdrop:'static'
+    })
+    $('#modalLogin').modal('hide')
+
     #initialize the modal when it's displayed
     $('#modalLogin').on 'shown.bs.modal', (e) ->
       $scope.initialize()
       #refresh angular
       $scope.$apply()
+
+
 
     #initilize variables for the modal
     $scope.initialize = () ->
@@ -45,33 +62,37 @@ angular
     #send the request to the server
     $scope.send = () ->
 
-      #remove the error message
-      $scope.errorMessage=""
+      if $scope.allFieldValid()
 
-      #active loading mode
-      $scope.isLoading =true
+        #remove the error message
+        $scope.errorMessage=""
 
-      #send request
-      promise = $http
-        method: "POST"
-        url: 'login'
-        headers:
-          "Content-Type": "application/json"
-        data:
-          login: $scope.loginInfo.field
-          password: $scope.passwordInfo.field
+        #active loading mode
+        $scope.isLoading =true
 
-      promise.success (data, status, headers, config) ->
-        #close the modal
-        $('#modalLogin').modal('toggle')
-        return
+        #send request
+        promise = $http
+          method: "POST"
+          url: 'login'
+          headers:
+            "Content-Type": "application/json"
+          data:
+            login: $scope.loginInfo.field
+            password: $scope.passwordInfo.field
 
-      promise.error (data, status, headers, config) ->
-        #display the error message
-        $scope.errorMessage = "Error : " + data.message
-        #disactive loading mode
-        $scope.isLoading=false
-        return
+        promise.success (data, status, headers, config) ->
+          $scope.$parent.setCurrentUser(data)
+          #close the modal
+          $('#modalLogin').modal('hide')
+          $scope.$apply()
+          return
+
+        promise.error (data, status, headers, config) ->
+          #display the error message
+          $scope.errorMessage = "Error : " + data.message
+          #disactive loading mode
+          $scope.isLoading=false
+          return
 
       return false
   link: (scope) ->

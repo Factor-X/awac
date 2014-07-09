@@ -7,5 +7,6 @@ angular
     templateUrl: "$/angular/templates/mm-awac-enterprise-survey.html"
     transclude: true
     replace: true
+    controller: 'MainCtrl'
     link: (scope) ->
         directiveService.autoScopeImpl scope

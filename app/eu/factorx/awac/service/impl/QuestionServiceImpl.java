@@ -8,6 +8,7 @@ import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.service.QuestionService;
 
 @Component
@@ -15,17 +16,15 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 
 	@Override
 	public List<Question> findByCodes(List<QuestionCode> codes) {
-		@SuppressWarnings("unchecked")
-		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODES).setParameter("codes", codes)
-				.getResultList();
+		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODES, Question.class)
+				.setParameter("codes", codes).getResultList();
 		return resultList;
 	}
 
 	@Override
 	public Question findByCode(QuestionCode code) {
-		@SuppressWarnings("unchecked")
-		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODE).setParameter("code", code)
-				.getResultList();
+		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_CODE, Question.class)
+				.setParameter("code", code).getResultList();
 		if (resultList.size() > 1) {
 			String errorMsg = "More than one question with code = '" + code.getKey() + "'";
 			Logger.error(errorMsg);
@@ -35,6 +34,13 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 			return null;
 		}
 		return resultList.get(0);
+	}
+
+	@Override
+	public List<Question> findByForm(Form form) {
+		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_QUESTION_SETS, Question.class)
+				.setParameter("questionSets", form.getQuestionSet()).getResultList();
+		return resultList;
 	}
 
 }

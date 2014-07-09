@@ -15,22 +15,18 @@ public class AnswerLine extends DTO {
 
 	private Integer unitId;
 
-	private AnswerType answerType;
-
 	public AnswerLine() {
 	}
 
-	public AnswerLine(String questionKey, Object value, AnswerType answerType) {
+	public AnswerLine(String questionKey, Object value) {
 		this.questionKey = questionKey;
 		this.value = value;
-		this.answerType = answerType;
 	}
 
-	public AnswerLine(String questionKey, Object value, Integer unitId, AnswerType answerType) {
+	public AnswerLine(String questionKey, Object value, Integer unitId) {
 		this.questionKey = questionKey;
 		this.value = value;
 		this.unitId = unitId;
-		this.answerType = answerType;
 	}
 
 	public Object getValue() {
@@ -55,14 +51,6 @@ public class AnswerLine extends DTO {
 
 	public void setUnitId(Integer unitId) {
 		this.unitId = unitId;
-	}
-
-	public AnswerType getAnswerType() {
-		return answerType;
-	}
-
-	public void setAnswerType(AnswerType answerType) {
-		this.answerType = answerType;
 	}
 
 }

@@ -36,6 +36,19 @@ public class AuthenticationController extends Controller {
     @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    private SecuredController securedController;
+
+    @Transactional(readOnly = true)
+    public Result testAuthentication(){
+
+        if(securedController.isAuthenticated()){
+            return ok(conversionService.convert(securedController.getCurrentUser(),MyselfDTO.class));
+        }
+        return this.unauthorized();
+    }
+
+
     // authenticate action cf routes
     @Transactional(readOnly = true)
     public Result authenticate() {
@@ -51,13 +64,13 @@ public class AuthenticationController extends Controller {
 
         if (account == null) {
             //use the same message for both login and password error
-            return this.notFound(new ExceptionsDTO("The couple login / password was not found"));
+            return this.unauthorized(new ExceptionsDTO("The couple login / password was not found"));
         }
 
         //test password
         if (!account.getPassword().equals(connectionFormDTO.getPassword())) {
             //use the same message for both login and password error
-            return this.notFound(new ExceptionsDTO("The couple login / password was not found"));
+            return this.unauthorized(new ExceptionsDTO("The couple login / password was not found"));
         }
 
         //if the login and the password are ok, refresh the session

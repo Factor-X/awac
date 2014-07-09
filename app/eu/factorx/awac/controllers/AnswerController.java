@@ -1,22 +1,29 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.awac.get.AnswersDTO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.AnswersDTO;
+import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
-import eu.factorx.awac.dto.myrmex.post.ProductCreateFormDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
@@ -26,22 +33,20 @@ import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
 import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
 import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.type.BooleanQuestion;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.StringQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.UnitService;
-
-import java.util.ArrayList;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -60,6 +65,8 @@ public class AnswerController extends Controller {
     private QuestionAnswerService questionAnswerService;
     @Autowired
     private UnitService unitService;
+    @Autowired
+    private FormService formService;
 
     @Autowired
     private SecuredController securedController;
@@ -68,31 +75,49 @@ public class AnswerController extends Controller {
     @Security.Authenticated(SecuredController.class)
     public Result getByForm(Integer formId, Integer periodId, Integer scopeId) {
 
-        AnswersDTO dto = new AnswersDTO();
+        Form form = formService.findById(formId.longValue());
+        Period period = periodService.findById(periodId.longValue());
+        Scope scope = scopeService.findById(scopeId.longValue());
 
+        List<Question> questions = questionService.findByForm(form);
+        Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
+        List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
+        for (Question question : questions) {
+            listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(question.getCode().getKey())));
+        }
+        AnswersSaveDTO answersSaveDTO = new AnswersSaveDTO(scopeId, periodId, listQuestionValueDTO);
+        AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null);
 
-        dto.setAnswersSaveDTO(new AnswersSaveDTO());
+        return ok(answersDTO);
+    }
 
-        dto.getAnswersSaveDTO().setListQuestionValueDTO(new ArrayList<AnswerLine>());
-
-        dto.getAnswersSaveDTO().getListQuestionValueDTO().add(new AnswerLine() {{
-            setQuestionKey("Q1");
-            setValue(123);
-        }});
-
-
-        return ok(dto);
+    private Map<String, QuestionAnswer> getQuestionAnswersByKey(Period period, Scope scope) {
+        List<QuestionAnswer> questionAnswers = questionAnswerService.findByScopeAndPeriod(scope, period);
+        Map<String, QuestionAnswer> questionAnswersByKey = new HashMap<>();
+        for (QuestionAnswer questionAnswer : questionAnswers) {
+            questionAnswersByKey.put(questionAnswer.getQuestion().getCode().getKey(), questionAnswer);
+        }
+        return questionAnswersByKey;
     }
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
     public Result save() {
+        Logger.info("save() 1");
         Account currentUser = securedController.getCurrentUser();
+        Logger.info("save() 2");
         AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
+        Logger.info("save() 3");
+        saveAnswsersDTO(currentUser, answersDTO);
+        Logger.info("save() 4");
+        return ok();
+    }
+
+    public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
         Period period = periodService.findById(answersDTO.getPeriodId().longValue());
         Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
 
-        for (AnswerLine answerLine : answersDTO.getListQuestionValueDTO()) {
+        for (AnswerLine answerLine : answersDTO.getListAnswers()) {
             Question question = getAndVerifyQuestion(answerLine);
             // TODO The concept of "repetition" (== answers groups linked to a questions set) is not yet implemented in the client...
             // => set repetitionIndex = 0
@@ -106,37 +131,73 @@ public class AnswerController extends Controller {
             questionAnswer.getAnswerValues().add(answerValue);
             questionAnswerService.saveOrUpdate(questionAnswer);
         }
-        return ok();
+    }
+
+    private AnswerLine toAnswerLine(Question question, QuestionAnswer questionAnswer) {
+        AnswerType answerType = question.getAnswerType();
+
+        if (questionAnswer == null) {
+            return new AnswerLine(question.getCode().getKey(), null);
+        }
+        // TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
+        AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+        Object rawAnswerValue = null;
+        switch (answerType) {
+            case BOOLEAN:
+                rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
+                break;
+            case STRING:
+                rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
+                break;
+            case INTEGER:
+                rawAnswerValue = ((IntegerAnswerValue) answerValue).getValue();
+                break;
+            case DOUBLE:
+                rawAnswerValue = ((DoubleAnswerValue) answerValue).getValue();
+                break;
+            case VALUE_SELECTION:
+                rawAnswerValue = ((CodeAnswerValue) answerValue).getValue();
+                break;
+            case ENTITY_SELECTION:
+                EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
+                rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
+                        entityAnswerValue.getEntityId());
+                break;
+        }
+        return new AnswerLine(question.getCode().getKey(), rawAnswerValue);
     }
 
     private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
         Object rawAnswerValue = answerLine.getValue();
         AnswerValue answerValue = null;
 
-        if (question instanceof BooleanQuestion) {
-            answerValue = new BooleanAnswerValue(questionAnswer, (Boolean) rawAnswerValue);
-
-        } else if (question instanceof StringQuestion) {
-            answerValue = new StringAnswerValue(questionAnswer, (String) rawAnswerValue);
-
-        } else if (question instanceof IntegerQuestion) {
-            UnitCategory unitCategory = ((IntegerQuestion) question).getUnitCategory();
-            Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
-            answerValue = new IntegerAnswerValue(questionAnswer, (Integer) rawAnswerValue, unit);
-
-        } else if (question instanceof DoubleQuestion) {
-            UnitCategory unitCategory = ((DoubleQuestion) question).getUnitCategory();
-            Unit unit = getAndVerifyUnit(answerLine, unitCategory, question.getCode().getKey());
-            answerValue = new DoubleAnswerValue(questionAnswer, (Double) rawAnswerValue, unit);
-
-        } else if (question instanceof ValueSelectionQuestion) {
-            CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-            answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, (String) rawAnswerValue));
-
-        } else if (question instanceof EntitySelectionQuestion) {
-            String entityName = ((EntitySelectionQuestion) question).getEntityName();
-            answerValue = new EntityAnswerValue(questionAnswer, entityName, (Long) rawAnswerValue);
+        switch (question.getAnswerType()) {
+            case BOOLEAN:
+                answerValue = new BooleanAnswerValue(questionAnswer, (Boolean) rawAnswerValue);
+                break;
+            case STRING:
+                answerValue = new StringAnswerValue(questionAnswer, (String) rawAnswerValue);
+                break;
+            case INTEGER:
+                UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
+                Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
+                answerValue = new IntegerAnswerValue(questionAnswer, (Integer) rawAnswerValue, unitInt);
+                break;
+            case DOUBLE:
+                UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
+                Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
+                answerValue = new DoubleAnswerValue(questionAnswer, (Double) rawAnswerValue, unitDbl);
+                break;
+            case VALUE_SELECTION:
+                CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+                answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, (String) rawAnswerValue));
+                break;
+            case ENTITY_SELECTION:
+                String entityName = ((EntitySelectionQuestion) question).getEntityName();
+                answerValue = new EntityAnswerValue(questionAnswer, entityName, (Long) rawAnswerValue);
+                break;
         }
+
         return answerValue;
     }
 
@@ -167,14 +228,16 @@ public class AnswerController extends Controller {
 
         // the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
         if (answerUnitId == null) {
-            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getCode()));
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
+                    questionUnitCategory.getCode()));
         }
         Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
         // check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
         UnitCategory answerUnitCategory = answerUnit.getCategory();
         if (!questionUnitCategory.equals(answerUnitCategory)) {
-            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
+                    questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
         }
         return answerUnit;
     }

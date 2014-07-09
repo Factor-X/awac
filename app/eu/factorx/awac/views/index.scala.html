@@ -12,6 +12,7 @@
     <script src="/awac/assets/javascripts/angular-1.2.19/angular.min.js"></script>
     <script src="/awac/assets/javascripts/angular-1.2.19/angular-animate.min.js"></script>
     <script src="/awac/assets/javascripts/angular-1.2.19/angular-sanitize.min.js"></script>
+    <script src="/awac/assets/javascripts/angular-1.2.19/angular-route.min.js"></script>
 
 
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
@@ -54,7 +55,7 @@
     <script>
         $(function () {
             $('body').keydown(function (evt) {
-                console.log(evt);
+                // console.log(evt);
                 if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
                     if (window.debug) {
                         window.debug = false;
@@ -80,23 +81,11 @@
     <!-- modal list -->
     <mm-awac-modal-login></mm-awac-modal-login>
 
-    <button type="button" data-toggle="modal" data-target="#modalLogin"  data-backdrop="static" >Login</button>
-    <button type="button"  ng-click="logout();">Logout</button>
+    <button ng-show="currentUser!=null" type="button" ng-click="logout();">Logout</button>
 
+    <p ng-show="currentUser!=null">Hello, your are {{currentUser.person.firstName}} {{currentUser.person.lastName}}</p>
 
-
-
-
-    <mm-awac-dummy-survey ng-model="dummySurvey"></mm-awac-dummy-survey>
-
-    <mm-awac-dummy-result ng-model="dummyResult"></mm-awac-dummy-result>
-
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+    <p ng-show="currentUser==null">Your are currently not connected</p>
 
     <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
 
