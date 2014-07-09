@@ -54,7 +54,9 @@ public class DoubleAnswerValue extends AnswerValue {
 	@Override
 	protected AnswerRawData getRawData() {
 		AnswerRawData rawData = new AnswerRawData();
-		rawData.setLongData(unit.getId());
+		if (unit != null) {
+			rawData.setLongData(unit.getId());
+		}
 		rawData.setDoubleData(value);
 		return rawData;
 	}
