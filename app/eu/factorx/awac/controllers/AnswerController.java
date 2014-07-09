@@ -14,8 +14,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.AnswersDTO;
+import eu.factorx.awac.dto.awac.get.FormDTO;
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
+import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
@@ -38,6 +39,7 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
@@ -87,19 +89,30 @@ public class AnswerController extends Controller {
 		List<Question> questions = questionService.findByForm(form);
 		Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
 		List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
+		List<QuestionDTO> questionDTOs = new ArrayList<>();
 		for (Question question : questions) {
-			listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(question.getCode().getKey())));
+			String questionKey = question.getCode().getKey();
+			AnswerType questionAnswerType = question.getAnswerType();
+			Long unitCategoryId = null;
+			if (questionAnswerType == AnswerType.INTEGER || questionAnswerType == AnswerType.DOUBLE) {
+				UnitCategory unitCategory = ((NumericQuestion) question).getUnitCategory();
+				if (unitCategory != null) {
+					unitCategoryId = unitCategory.getId();
+				}
+			}
+			questionDTOs.add(new QuestionDTO(questionKey, unitCategoryId));
+			listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(questionKey)));
 		}
 		AnswersSaveDTO answersSaveDTO = new AnswersSaveDTO(scopeId, periodId, listQuestionValueDTO);
-		AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null, getAllUnitCategories());
+		FormDTO formDTO = new FormDTO(questionDTOs, getAllUnitCategories(), answersSaveDTO);
 
-		return ok(answersDTO);
+		return ok(formDTO);
 	}
 
 	private List<UnitCategoryDTO> getAllUnitCategories() {
 		List<UnitCategoryDTO> res = new ArrayList<>();
 		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
-			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId(), unitCategory.getCode());
+			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
 			for (Unit unit : unitCategory.getUnits()) {
 				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
 			}
