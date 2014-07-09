@@ -20,9 +20,7 @@ public class Validator {
 
         for (Field field : object.getClass().getDeclaredFields()) {
 
-            System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
-            Class<?> fieldType = field.getType();
-
+            // System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
 
             for (Annotation annotation : field.getAnnotations()) {
                 if (annotation.annotationType().getPackage().equals(NotNull.class.getPackage())) {
@@ -67,7 +65,7 @@ public class Validator {
                 }
             }
 
-            System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
+            // System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
         }
 
     }

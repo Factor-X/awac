@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.dto.awac.get.AnswersDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +41,8 @@ import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.UnitService;
 
+import java.util.ArrayList;
+
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
 
@@ -65,9 +68,20 @@ public class AnswerController extends Controller {
     @Security.Authenticated(SecuredController.class)
     public Result getByForm(Integer formId, Integer periodId, Integer scopeId) {
 
-        ProductCreateFormDTO productCreateFormDTO = DTO.getDTO(request().body().asJson(), ProductCreateFormDTO.class);
+        AnswersDTO dto = new AnswersDTO();
 
-        return null;
+
+        dto.setAnswersSaveDTO(new AnswersSaveDTO());
+
+        dto.getAnswersSaveDTO().setListQuestionValueDTO(new ArrayList<AnswerLine>());
+
+        dto.getAnswersSaveDTO().getListQuestionValueDTO().add(new AnswerLine() {{
+            setQuestionKey("Q1");
+            setValue(123);
+        }});
+
+
+        return ok(dto);
     }
 
     @Transactional(readOnly = false)
