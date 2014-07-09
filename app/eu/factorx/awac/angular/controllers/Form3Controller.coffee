@@ -8,10 +8,32 @@ angular
     downloadService.getJson "answer/getByForm/" + $scope.formdId + "/" + $scope.periodId + "/" + $scope.scopeId, (data) ->
         $scope.o = data
 
-        $scope.getByCode = (code) ->
+        $scope.getAnswerByQuestionCode = (code) ->
             for qv in $scope.o.answersSaveDTO.listAnswers
                 if qv.questionKey == code
                     return qv
+            return null
+
+        $scope.getUnitsByQuestionCode = (code) ->
+            unitCategoryId = null;
+            for q in $scope.o.questions
+                console.log q.questionKey + " =?= " + code
+                console.log q.questionKey == code
+                if q.questionKey == code
+                    unitCategoryId = q.unitCategoryId
+
+            console.log unitCategoryId
+
+            if unitCategoryId == null
+                console.error "impossible to find question by its code: " + code
+                return null
+
+            for uc in $scope.o.unitCategories
+                if uc.id == unitCategoryId
+                    return uc.units
+
+            console.error "impossible to find unit category by its id: " + unitCategoryId + " question code was: " + code
+
             return null
 
     $scope.$on 'SAVE', () ->
