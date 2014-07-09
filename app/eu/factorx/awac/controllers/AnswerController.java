@@ -16,6 +16,8 @@ import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.AnswersDTO;
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
+import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.models.account.Account;
@@ -46,6 +48,7 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
 
 @org.springframework.stereotype.Controller
@@ -63,6 +66,8 @@ public class AnswerController extends Controller {
 	private QuestionService questionService;
 	@Autowired
 	private QuestionAnswerService questionAnswerService;
+	@Autowired
+	private UnitCategoryService unitCategoryService;
 	@Autowired
 	private UnitService unitService;
 	@Autowired
@@ -86,9 +91,20 @@ public class AnswerController extends Controller {
 			listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(question.getCode().getKey())));
 		}
 		AnswersSaveDTO answersSaveDTO = new AnswersSaveDTO(scopeId, periodId, listQuestionValueDTO);
-		AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null);
+		AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null, getAllUnitCategories());
 
 		return ok(answersDTO);
+	}
+
+	private List<UnitCategoryDTO> getAllUnitCategories() {
+		List<UnitCategoryDTO> res = new ArrayList<>();
+		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
+			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId(), unitCategory.getCode());
+			for (Unit unit : unitCategory.getUnits()) {
+				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
+			}
+		}
+		return res;
 	}
 
 	private Map<String, QuestionAnswer> getQuestionAnswersByKey(Period period, Scope scope) {
@@ -103,13 +119,13 @@ public class AnswerController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result save() {
-        Logger.info("save() 1");
-        Account currentUser = securedController.getCurrentUser();
-        Logger.info("save() 2");
+		Logger.info("save() 1");
+		Account currentUser = securedController.getCurrentUser();
+		Logger.info("save() 2");
 		AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
-        Logger.info("save() 3");
+		Logger.info("save() 3");
 		saveAnswsersDTO(currentUser, answersDTO);
-        Logger.info("save() 4");
+		Logger.info("save() 4");
 		return ok();
 	}
 
