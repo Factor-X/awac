@@ -172,6 +172,7 @@ public class AnswerController extends Controller {
 		// TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
 		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
 		Object rawAnswerValue = null;
+		Integer unitId = null;
 		switch (answerType) {
 		case BOOLEAN:
 			rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
@@ -180,10 +181,18 @@ public class AnswerController extends Controller {
 			rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
 			break;
 		case INTEGER:
-			rawAnswerValue = ((IntegerAnswerValue) answerValue).getValue();
+			IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
+			rawAnswerValue = integerAnswerValue.getValue();
+			if (integerAnswerValue.getUnit() != null) {				
+				unitId = integerAnswerValue.getUnit().getId().intValue();
+			}
 			break;
 		case DOUBLE:
-			rawAnswerValue = ((DoubleAnswerValue) answerValue).getValue();
+			DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
+			rawAnswerValue = doubleAnswerValue.getValue();
+			if (doubleAnswerValue.getUnit() != null) {				
+				unitId = doubleAnswerValue.getUnit().getId().intValue();
+			}
 			break;
 		case VALUE_SELECTION:
 			rawAnswerValue = ((CodeAnswerValue) answerValue).getValue();
@@ -194,7 +203,7 @@ public class AnswerController extends Controller {
 					entityAnswerValue.getEntityId());
 			break;
 		}
-		return new AnswerLine(question.getCode().getKey(), rawAnswerValue);
+		return new AnswerLine(question.getCode().getKey(), rawAnswerValue, unitId);
 	}
 
 	private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
