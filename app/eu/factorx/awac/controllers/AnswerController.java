@@ -14,8 +14,11 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.AnswersDTO;
+import eu.factorx.awac.dto.awac.get.FormDTO;
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
+import eu.factorx.awac.dto.awac.get.QuestionDTO;
+import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.models.account.Account;
@@ -36,6 +39,7 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
@@ -46,6 +50,7 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
 
 @org.springframework.stereotype.Controller
@@ -63,6 +68,8 @@ public class AnswerController extends Controller {
     private QuestionService questionService;
     @Autowired
     private QuestionAnswerService questionAnswerService;
+    @Autowired
+    private UnitCategoryService unitCategoryService;
     @Autowired
     private UnitService unitService;
     @Autowired
@@ -82,13 +89,36 @@ public class AnswerController extends Controller {
         List<Question> questions = questionService.findByForm(form);
         Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
         List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
+        List<QuestionDTO> questionDTOs = new ArrayList<>();
         for (Question question : questions) {
-            listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(question.getCode().getKey())));
+            String questionKey = question.getCode().getKey();
+            AnswerType questionAnswerType = question.getAnswerType();
+            Long unitCategoryId = null;
+            if (questionAnswerType == AnswerType.INTEGER || questionAnswerType == AnswerType.DOUBLE) {
+                UnitCategory unitCategory = ((NumericQuestion) question).getUnitCategory();
+                if (unitCategory != null) {
+                    unitCategoryId = unitCategory.getId();
+                }
+            }
+            questionDTOs.add(new QuestionDTO(questionKey, unitCategoryId));
+            listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(questionKey)));
         }
         AnswersSaveDTO answersSaveDTO = new AnswersSaveDTO(scopeId, periodId, listQuestionValueDTO);
-        AnswersDTO answersDTO = new AnswersDTO(answersSaveDTO, null);
+        FormDTO formDTO = new FormDTO(questionDTOs, getAllUnitCategories(), answersSaveDTO);
 
-        return ok(answersDTO);
+        return ok(formDTO);
+    }
+
+    private List<UnitCategoryDTO> getAllUnitCategories() {
+        List<UnitCategoryDTO> res = new ArrayList<>();
+        for (UnitCategory unitCategory : unitCategoryService.findAll()) {
+            UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
+            for (Unit unit : unitCategory.getUnits()) {
+                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
+            }
+            res.add(unitCategoryDTO);
+        }
+        return res;
     }
 
     private Map<String, QuestionAnswer> getQuestionAnswersByKey(Period period, Scope scope) {
@@ -142,6 +172,7 @@ public class AnswerController extends Controller {
         // TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
         AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
         Object rawAnswerValue = null;
+        Integer unitId = null;
         switch (answerType) {
             case BOOLEAN:
                 rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
@@ -150,10 +181,18 @@ public class AnswerController extends Controller {
                 rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
                 break;
             case INTEGER:
-                rawAnswerValue = ((IntegerAnswerValue) answerValue).getValue();
+                IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
+                rawAnswerValue = integerAnswerValue.getValue();
+                if (integerAnswerValue.getUnit() != null) {
+                    unitId = integerAnswerValue.getUnit().getId().intValue();
+                }
                 break;
             case DOUBLE:
-                rawAnswerValue = ((DoubleAnswerValue) answerValue).getValue();
+                DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
+                rawAnswerValue = doubleAnswerValue.getValue();
+                if (doubleAnswerValue.getUnit() != null) {
+                    unitId = doubleAnswerValue.getUnit().getId().intValue();
+                }
                 break;
             case VALUE_SELECTION:
                 rawAnswerValue = ((CodeAnswerValue) answerValue).getValue();
@@ -164,7 +203,7 @@ public class AnswerController extends Controller {
                         entityAnswerValue.getEntityId());
                 break;
         }
-        return new AnswerLine(question.getCode().getKey(), rawAnswerValue);
+        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, unitId);
     }
 
     private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
