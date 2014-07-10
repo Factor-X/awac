@@ -1,24 +1,42 @@
 ng-virtual
+    .element
+        .element_header
+            .title Combustion de combustible par les sources statiques des sites de l'entreprise
+            .upload
+        .element_sidebar
+            .block_status
+                .lock_status
+                .answered_status.disable_status
+                .validate_status.disable_status
+        .element_content
+            .element_text
+                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
+                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
+                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+            .method
 
-    h1 Survey
+//
+    ng-virtual
 
-    label Q1
-    input(type="text", ng-model="getAnswerByQuestionCode('Q1').value")
+        h1 Survey
 
-    hr
+        label Q1
+        input(type="text", ng-model="getAnswerByQuestionCode('Q1').value")
 
-    label Q2
-    input(type="text", ng-model="getAnswerByQuestionCode('Q2').value")
-    select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q2')", ng-model="getAnswerByQuestionCode('Q2').unitId")
+        hr
 
-    hr
+        label Q2
+        input(type="text", ng-model="getAnswerByQuestionCode('Q2').value")
+        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q2')", ng-model="getAnswerByQuestionCode('Q2').unitId")
 
-    label Q3
-    input(type="text", ng-model="getAnswerByQuestionCode('Q3').value")
+        hr
 
-    hr
+        label Q3
+        input(type="text", ng-model="getAnswerByQuestionCode('Q3').value")
 
-    label Q4
-    input(type="text", ng-model="getAnswerByQuestionCode('Q4').value")
-    select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q4')", ng-model="getAnswerByQuestionCode('Q4').unitId")
+        hr
+
+        label Q4
+        input(type="text", ng-model="getAnswerByQuestionCode('Q4').value")
+        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q4')", ng-model="getAnswerByQuestionCode('Q4').unitId")
 

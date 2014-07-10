@@ -1,22 +1,104 @@
 ng-virtual
+    .element
+        .element_header
+            .title AWAC - Entreprises
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                //
+                    Année de référence pour comparaison du présent bilan GES
+                    A quel secteur pricipal appartient votre site?
+                    Quel est le code NACE principal de votre site?
+                    Quel est le code NACE principal de votre site?
+                    Quel est le code NACE principal de votre site?
+                    Est-ce que votre activité est purement ou principalement de bureaux?
+                    Etes-vous dans le secteur public ou privé?
+                    Indiquez la surface totale du site:
+                    Quelle est la surface des bureaux?
+                    Etes-vous participant aux accords de branche de 2ème génération?
+                    Quel est le nombre d'employés sur l'année du bilan?
 
-    h1 Survey
 
-    label Q1
-    input(type="text", ng-model="getByCode('Q1').value")
 
-    hr
+                div
+                    div Année de référence pour comparaison du présent bilan GES
+                    .oneelement
+                        .status.answer
+                        input(type="text", ng-model="getAnswerByQuestionCode('A1').value")
+                        .user_icon XM
 
-    label Q2
-    input(type="text", ng-model="getByCode('Q2').value")
+                div
+                    div A quel secteur pricipal appartient votre site?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
+                div
+                    div Quel est le code NACE principal de votre site?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
+                div
+                    div Quel est le code NACE principal de votre site?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
+                div
+                    div Est-ce que votre activité est purement ou principalement de bureaux?
+                    .oneelement
+                        .status.answer
+                        input(type="text", ng-model="getAnswerByQuestionCode('A7').value")
+                        .user_icon XM
 
-    hr
+                div
+                    div Etes-vous dans le secteur public ou privé?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
+                div
+                    div Indiquez la surface totale du site:
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
 
-    label Q3
-    input(type="text", ng-model="getByCode('Q3').value")
+                div
+                    div Quelle est la surface des bureaux?
+                    .oneelement
+                        .status.answer
+                        select
+                            option Mazout
+                            option Fuel
+                        .user_icon XM
 
-    hr
+                div
+                    div Etes-vous participant aux accords de branche de 2ème génération?
+                    .oneelement
+                        .status.answer
+                        input(type="text", ng-model="getAnswerByQuestionCode('A11').value")
+                        .user_icon XM
 
-    label Q4
-    input(type="text", ng-model="getByCode('Q4').value")
 
+                div
+                    div Quel est le nombre d'employés sur l'année du bilan ?
+                    .twoelements
+                        .status
+                        input(value='170')
+                        .user_icon AG

@@ -34,8 +34,13 @@
 
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
     </script>
-    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dangle.css")'>
+
+
+    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
+    <script src='@routes.Assets.at("javascripts/d3.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/dangle.min.js")'></script>
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900,300italic,400italic' rel='stylesheet'
           type='text/css'>
@@ -78,16 +83,9 @@
 
 <div ng-show="!isLoading()">
 
-    <!-- modal list -->
-    <mm-awac-modal-login></mm-awac-modal-login>
+    <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
 
-    <button ng-show="currentUser!=null" type="button" ng-click="logout();">Logout</button>
-
-    <p ng-show="currentUser!=null">Hello, your are {{currentUser.person.firstName}} {{currentUser.person.lastName}}</p>
-
-    <p ng-show="currentUser==null">Your are currently not connected</p>
-
-    <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
+    <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
 
 </div>
 </body>

@@ -15,6 +15,7 @@ import static play.data.Form.form;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.LoginResultDTO;
 import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.account.Account;
@@ -78,7 +79,13 @@ public class AuthenticationController extends Controller {
         session(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
 
         //convert and send it
-        return ok(conversionService.convert(account, MyselfDTO.class));
+        LoginResultDTO dto = new LoginResultDTO();
+
+        dto.setUser(conversionService.convert(account, MyselfDTO.class));
+
+        dto.setDefaultPeriod(23L);
+
+        return ok(dto);
 
     } // end of authenticate action
 

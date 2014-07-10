@@ -17,7 +17,11 @@ public class QuestionCode extends Code {
 	public static final QuestionCode HFQ_HFCONSO_VOL = new QuestionCode("HFQ_HFCONSO_VOL");
 	public static final QuestionCode HFQ_HFCONSO_MASS = new QuestionCode("HFQ_HFCONSO_MASS");
 
-	protected QuestionCode() {
+    public static final QuestionCode A1 = new QuestionCode("A1");
+    public static final QuestionCode A2 = new QuestionCode("A2");
+    public static final QuestionCode A3 = new QuestionCode("A3");
+
+    protected QuestionCode() {
 		super();
 	}
 
