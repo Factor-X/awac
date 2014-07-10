@@ -25,6 +25,7 @@
         <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.HeatingFuelTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.IsoIndicatorScope</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
@@ -49,9 +50,17 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.knowledge.ActivityCategory</class>
+        <class>eu.factorx.awac.models.knowledge.ActivitySource</class>
+        <class>eu.factorx.awac.models.knowledge.ActivityType</class>
+        <class>eu.factorx.awac.models.knowledge.Factor</class>
+        <class>eu.factorx.awac.models.knowledge.FactorValue</class>
+        <class>eu.factorx.awac.models.knowledge.IndicatorCategory</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
+        <class>eu.factorx.awac.models.reporting.Indicator</class>
+        <class>eu.factorx.awac.models.reporting.Report</class>
  		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <properties>
