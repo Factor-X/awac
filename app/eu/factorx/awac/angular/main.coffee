@@ -1,4 +1,4 @@
-angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']
+angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'dangle']
 
 angular.module 'app.filters', []
 

@@ -14,7 +14,7 @@ angular
                     return qv
             return null
 
-    $scope.on 'save', () ->
+    $scope.$on 'save', () ->
         promise = $http
             method: "POST"
             url: 'answer/save'
@@ -29,3 +29,5 @@ angular
         promise.error (data, status, headers, config) ->
             console.log "ERROR : " + data.message
             return
+
+    return

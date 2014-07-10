@@ -32,7 +32,15 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 		super();
 	}
 
-	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
+    public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl) {
+        this.codeList = codeList;
+        this.key = key;
+        this.labelEn = labelEn;
+        this.labelFr = labelFr;
+        this.labelNl = labelNl;
+    }
+
+    public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
 		super();
 		this.codeList = code.getCodeList();
 		this.key = code.getKey();
