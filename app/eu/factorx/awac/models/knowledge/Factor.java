@@ -18,23 +18,33 @@ public class Factor extends AbstractEntity {
 	public Factor() {
 	}
 
-	private String name;
+	private String identifier;
 
+	@ManyToOne
+	private IndicatorCategory indicatorCategory;
+	
+	@ManyToOne
+	private ActivityType activityType;
+	
+	@ManyToOne
+	private ActivitySource activitySource;
+	
 	@ManyToOne
 	private Unit unitIn;
 
 	@ManyToOne
 	private Unit unitOut;
 
+	
 	@OneToMany(mappedBy = "factor")
 	private List<FactorValue> values;
 
-	public String getName() {
-		return name;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setName(String param) {
-		this.name = param;
+	public void setIdentifier(String param) {
+		this.identifier = param;
 	}
 
 	public Unit getUnitIn() {

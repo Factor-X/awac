@@ -7,7 +7,7 @@
          http://www.springframework.org/schema/context
              http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-   <context:component-scan base-package="eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter"/>
+   <context:component-scan base-package="eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.jxl"/>
 
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">

@@ -7,7 +7,6 @@ import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.GenderCode;
 import eu.factorx.awac.models.code.type.HeatingFuelTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
@@ -39,9 +38,6 @@ public class AwacDummyDataCreator {
 		session.saveOrUpdate(new CodeLabel(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
 		session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
 		session.saveOrUpdate(new CodeLabel(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
-
-		session.saveOrUpdate(new CodeLabel(GenderCode.MAN, "Man", "Homme", "Man"));
-		session.saveOrUpdate(new CodeLabel(GenderCode.WOMAN, "Woman", "Femme", "Vrouw"));
 
 		UnitCategory volumeUnits = new UnitCategory("Volume");
 		session.saveOrUpdate(volumeUnits);
@@ -178,6 +174,32 @@ public class AwacDummyDataCreator {
 		System.out.println(" ===== Form ID = " + testForm.getId());
 		System.out.println(" ===== Period ID = " + period1.getId());
 		System.out.println(" ===== Scope ID = " + scope1.getId());
+
+        // TAB 1
+
+        Form tab1Form = new Form("TAB1");
+        session.saveOrUpdate(tab1Form);
+
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "1", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "2", "Production de biens intermédiaires", "Production de biens intermédiaires", "Production de biens intermédiaires"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "3", "Production de biens de consommation", "Production de biens de consommation", "Production de biens de consommation"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "4", "Tertiaire", "Tertiaire", "Tertiaire"));
+
+        QuestionSet tab1qs = new QuestionSet(QuestionCode.A1, false);
+        session.saveOrUpdate(tab1qs);
+
+        tab1Form.getQuestionSet().add(tab1qs);
+        session.saveOrUpdate(tab1Form);
+
+
+        // -- QUESTIONS
+
+        Question a2 = new IntegerQuestion(tab1qs, 0, QuestionCode.A2, null);
+        session.saveOrUpdate(a2);
+
+        Question a3 = new ValueSelectionQuestion(tab1qs, 0, QuestionCode.A3, CodeList.SITE_SECTOR);
+        session.saveOrUpdate(a3);
+
 
 	}
 }

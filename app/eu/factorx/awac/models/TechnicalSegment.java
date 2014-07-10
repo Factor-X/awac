@@ -1,7 +1,5 @@
 package eu.factorx.awac.models;
 
-import javax.persistence.Embeddable;
-
 import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,16 +10,25 @@ public class TechnicalSegment {
 
 	@DateTimeFormat
 	private DateTime creationDate;
-	
+
 	private Account creationUser;
-	
+
 	@DateTimeFormat
 	private DateTime lastUpdateDate;
-	
+
 	private Account lastUpdateUser;
 
 	protected TechnicalSegment() {
 		super();
+	}
+
+	public TechnicalSegment(Account creationUser) {
+		super();
+		DateTime now = DateTime.now();
+		this.creationDate = now;
+		this.creationUser = creationUser;
+		this.lastUpdateDate = now;
+		this.lastUpdateUser = creationUser;
 	}
 
 	public DateTime getCreationDate() {
@@ -55,6 +62,9 @@ public class TechnicalSegment {
 	public void setLastUpdateUser(Account lastUpdateUser) {
 		this.lastUpdateUser = lastUpdateUser;
 	}
-	
-	
+
+	public void update(Account updateUser) {
+		this.setLastUpdateUser(updateUser);
+		this.setLastUpdateDate(DateTime.now());
+	}
 }
