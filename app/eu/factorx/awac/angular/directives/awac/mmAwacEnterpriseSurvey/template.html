@@ -154,8 +154,12 @@
                 </div>
             </div>
             <div class="last_menu">
-                <div>résultats</div>
-                <div>actions de réduction</div>
+                <div class="{{ getMenuCurrentClass('/results') }}" ng-click="nav('/results')">
+                    résultats
+                </div>
+                <div>
+                    actions de réduction
+                </div>
             </div>
         </div>
     </div>

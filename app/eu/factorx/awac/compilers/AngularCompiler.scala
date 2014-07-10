@@ -31,7 +31,11 @@ class AngularCompiler {
         assembleTemplates(Path.fromString("tmp/sources/") ** "*.html", Path.fromString("tmp/templates/"), angular)
 
         concatenate(
-            (Path.fromString("tmp/sources/") ** "*.js")
+            (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/") * "*.js")
+                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/services") ** "*.js")
+                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/filters") ** "*.js")
+                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
+                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
                 ++ (Path.fromString("tmp/templates/") ** "*.js"),
             Path.fromString("tmp/concatenated/"))
 
@@ -63,7 +67,7 @@ class AngularCompiler {
 
         if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
             // nothing to do, tempfile is up-to-date
-            println("[UP-TO-DATE]" + f.path)
+            println("[UP-TO-DATE] " + f.path)
         } else {
             var result = ""
             println("[COMPILING] " + f.path)
@@ -112,6 +116,7 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
+            println("[ASSEMBLING] " + (folder / "templates.js").path)
             var result = "angular.module('app.directives').run(function($templateCache) {"
             for (f <- files) {
 
@@ -143,6 +148,8 @@ class AngularCompiler {
             val fw = new FileWriter(tempFile)
             fw.write(result)
             fw.close()
+        } else {
+            println("[UP-TO-DATE] " + (folder / "templates.js").path)
         }
     }
 
@@ -158,6 +165,7 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
+            println("[CONCATENATING] " + (folder / "concatenated.js").path)
             var result = ""
             for (f <- files) {
                 result += scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n")
@@ -166,6 +174,8 @@ class AngularCompiler {
             val fw = new FileWriter(tempFile)
             fw.write(result)
             fw.close()
+        } else {
+            println("[UP-TO-DATE] " + (folder / "concatenated.js").path)
         }
     }
 
