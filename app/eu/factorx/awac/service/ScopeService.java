@@ -4,4 +4,6 @@ import eu.factorx.awac.models.business.Scope;
 
 public interface ScopeService extends PersistenceService<Scope> {
 
+    Scope findByType(String scopeType);
+
 }

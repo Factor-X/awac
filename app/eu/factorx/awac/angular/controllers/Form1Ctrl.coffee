@@ -1,20 +1,21 @@
 angular
 .module('app.controllers')
 .controller "Form1Ctrl", ($scope, downloadService, $http) ->
-    $scope.formdId = 49
-    $scope.scopeId = 29
+    $scope.formdIdentifier = "TAB1"
+    $scope.scopeType = 1
 
-    console.log $scope.$parent
-    downloadService.getJson "answer/getByForm/" + $scope.formdId + "/" + $scope.$parent.period + "/" + $scope.scopeId, (data) ->
+    downloadService.getJson "answer/getByForm/" + $scope.formdIdentifier + "/" + $scope.$parent.period + "/" + $scope.scopeType, (data) ->
         $scope.o = data
 
-        $scope.getAnswerByQuestionCode = (code) ->
+        # getAnswerByQuestionCode
+        $scope.A = (code) ->
             for qv in $scope.o.answersSaveDTO.listAnswers
                 if qv.questionKey == code
                     return qv
             return null
 
-        $scope.getUnitsByQuestionCode = (code) ->
+        # getUnitsByQuestionCode
+        $scope.U = (code) ->
             unitCategoryId = null;
             for q in $scope.o.questions
                 if q.questionKey == code
@@ -32,7 +33,8 @@ angular
 
             return null
 
-        $scope.getOptionsByQuestionCode = (code) ->
+        # getOptionsByQuestionCode
+        $scope.O = (code) ->
             codeListName = null;
             for q in $scope.o.questions
                 if q.questionKey == code

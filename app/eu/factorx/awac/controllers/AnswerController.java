@@ -74,11 +74,11 @@ public class AnswerController extends Controller {
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result getByForm(Integer formId, Integer periodId, Integer scopeId) {
+    public Result getByForm(String formIdentifier, Long periodId, Long scopeId) {
 
-        Form form = formService.findById(formId.longValue());
-        Period period = periodService.findById(periodId.longValue());
-        Scope scope = scopeService.findById(scopeId.longValue());
+        Form form = formService.findByIdentifier(formIdentifier);
+        Period period = periodService.findById(periodId);
+        Scope scope = scopeService.findById(scopeId);
 
         List<Question> questions = questionService.findByForm(form);
         Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
@@ -225,7 +225,11 @@ public class AnswerController extends Controller {
                 }
                 break;
             case VALUE_SELECTION:
-                rawAnswerValue = ((CodeAnswerValue) answerValue).getValue();
+                Code value = ((CodeAnswerValue) answerValue).getValue();
+                if (value != null)
+                    rawAnswerValue = value.getKey();
+                else
+                    rawAnswerValue = null;
                 break;
             case ENTITY_SELECTION:
                 EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;

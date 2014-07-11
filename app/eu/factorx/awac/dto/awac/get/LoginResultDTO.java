@@ -12,7 +12,8 @@ public class LoginResultDTO extends DTO {
 
     private Long defaultPeriod;
 
-    private List<KeyValuePairDTO<String, Long>> availablePeriods;
+    private List<PeriodDTO> availablePeriods;
+    private OrganizationDTO organization;
 
     public LoginResultDTO() {
     }
@@ -33,11 +34,19 @@ public class LoginResultDTO extends DTO {
         this.defaultPeriod = defaultPeriod;
     }
 
-    public List<KeyValuePairDTO<String, Long>> getAvailablePeriods() {
+    public List<PeriodDTO> getAvailablePeriods() {
         return availablePeriods;
     }
 
-    public void setAvailablePeriods(List<KeyValuePairDTO<String, Long>> availablePeriods) {
+    public void setAvailablePeriods(List<PeriodDTO> availablePeriods) {
         this.availablePeriods = availablePeriods;
+    }
+
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
+    }
+
+    public OrganizationDTO getOrganization() {
+        return organization;
     }
 }
