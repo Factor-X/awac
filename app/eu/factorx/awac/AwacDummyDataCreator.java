@@ -8,7 +8,6 @@ import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.GenderCode;
 import eu.factorx.awac.models.code.type.HeatingFuelTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
@@ -25,20 +24,17 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 
 public class AwacDummyDataCreator {
 
-    public static void createAwacDummyData(Session session) {
+	public static void createAwacDummyData(Session session) {
 
-        // REFERENCES DATA
+		// REFERENCES DATA
 
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.COAL, "Coal", "Charbon", "Steenkool"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
+		session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.COAL, "Coal", "Charbon", "Steenkool"));
 
-        session.saveOrUpdate(new CodeLabel(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
-        session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
-        session.saveOrUpdate(new CodeLabel(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
-
-        session.saveOrUpdate(new CodeLabel(GenderCode.MAN, "Man", "Homme", "Man"));
-        session.saveOrUpdate(new CodeLabel(GenderCode.WOMAN, "Woman", "Femme", "Vrouw"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.ENGLISH, "English", "Anglais", "Engels"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
+		session.saveOrUpdate(new CodeLabel(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
 
         UnitCategory volumeUnits = new UnitCategory("Volume");
         session.saveOrUpdate(volumeUnits);
@@ -180,7 +176,6 @@ public class AwacDummyDataCreator {
         System.out.println(" ===== Form ID = " + testForm.getId());
         System.out.println(" ===== Period ID = " + period1.getId());
         System.out.println(" ===== Scope ID = " + scope1.getId());
-
 
         // TAB 1
 

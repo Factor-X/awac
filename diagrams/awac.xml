@@ -143,6 +143,17 @@
 	</entity>
 
 	<entity>
+		<entity-name>eu.factorx.awac.models.data.question.type.IntegerQuestion</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>32</entity-height>
+		<entity-X-Coordinate>400</entity-X-Coordinate>
+		<entity-Y-Coordinate>905</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
 		<entity-name>eu.factorx.awac.models.business.Organization</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>108</entity-height>
@@ -220,6 +231,17 @@
 	</entity>
 
 	<entity>
+		<entity-name>eu.factorx.awac.models.data.question.type.DoubleQuestion</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>32</entity-height>
+		<entity-X-Coordinate>530</entity-X-Coordinate>
+		<entity-Y-Coordinate>905</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
 		<entity-name>eu.factorx.awac.models.data.answer.QuestionAnswer</entity-name>
 		<entity-width>140</entity-width>
 		<entity-height>208</entity-height>
@@ -264,22 +286,11 @@
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.data.question.type.IntegerQuestion</entity-name>
+		<entity-name>eu.factorx.awac.models.reporting.Indicator</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>32</entity-height>
-		<entity-X-Coordinate>418</entity-X-Coordinate>
-		<entity-Y-Coordinate>905</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
-		<entity-name>eu.factorx.awac.models.data.question.type.DoubleQuestion</entity-name>
-		<entity-width>120</entity-width>
-		<entity-height>32</entity-height>
-		<entity-X-Coordinate>548</entity-X-Coordinate>
-		<entity-Y-Coordinate>905</entity-Y-Coordinate>
+		<entity-X-Coordinate>80</entity-X-Coordinate>
+		<entity-Y-Coordinate>695</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
