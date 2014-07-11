@@ -21,31 +21,31 @@ angular
             templateUrl: '$/angular/templates/mm-awac-login.html'
             controller: 'LoginCtrl'
         })
-    .when('/form1/:period', {
+    .when('/form1/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form1.html'
             controller: 'Form1Ctrl'
         })
-    .when('/form2/:period', {
+    .when('/form2/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form2.html'
             controller: 'Form2Ctrl'
         })
-    .when('/form3/:period', {
+    .when('/form3/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form3.html'
             controller: 'Form3Ctrl'
         })
-    .when('/form4/:period', {
+    .when('/form4/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form4.html'
             controller: 'Form4Ctrl'
         })
-    .when('/form5/:period', {
+    .when('/form5/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form5.html'
             controller: 'Form5Ctrl'
         })
-    .when('/form6/:period', {
+    .when('/form6/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form6.html'
             controller: 'Form6Ctrl'
         })
-    .when('/results/:period', {
+    .when('/results/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-results.html'
             controller: 'ResultsCtrl'
         })

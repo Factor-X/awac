@@ -12,12 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrganizationToOrganizationDTOConverter implements Converter<Organization, OrganizationDTO> {
 
+    @Autowired
+    private SiteToSiteDTOConverter converter;
+
     @Override
     public OrganizationDTO convert(Organization org) {
         OrganizationDTO dto = new OrganizationDTO();
         dto.setId(org.getId());
         dto.setName(org.getName());
-        SiteToSiteDTOConverter converter = new SiteToSiteDTOConverter();
         for (Site site : org.getSites()) {
             dto.getSites().add(converter.convert(site));
         }

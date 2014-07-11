@@ -5,6 +5,7 @@ import eu.factorx.awac.dto.DTO;
 public class SiteDTO extends DTO {
     private Long id;
     private String name;
+    private Long scope;
 
     public SiteDTO() {
     }
@@ -28,5 +29,13 @@ public class SiteDTO extends DTO {
 
     public String getName() {
         return name;
+    }
+
+    public void setScope(Long scope) {
+        this.scope = scope;
+    }
+
+    public Long getScope() {
+        return scope;
     }
 }

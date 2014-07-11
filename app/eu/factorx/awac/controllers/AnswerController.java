@@ -185,9 +185,7 @@ public class AnswerController extends Controller {
             // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
             // => add only one AnswerValue in answerValues list
             AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
-            if (answerValue == null) {
-                throw new RuntimeException("The question of type '" + question.getClass() + "' cannot be treated");
-            }
+            if (answerValue == null) continue;
             questionAnswer.getAnswerValues().add(answerValue);
             questionAnswerService.saveOrUpdate(questionAnswer);
         }

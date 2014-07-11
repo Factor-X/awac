@@ -69,7 +69,7 @@ angular
             return ""
     # Tabs -- transition
     $scope.nav = (loc) ->
-        $location.path(loc + "/" + $scope.period)
+        $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
     #
     # Periods
@@ -86,7 +86,15 @@ angular
                 p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
             $location.path(p)
+    $scope.$watch 'scopeId', () ->
+        $routeParams.period = $scope.period
+        if $route.current
+            p = $route.current.$$route.originalPath
 
+            for k,v of $routeParams
+                p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
+
+            $location.path(p)
     #
     # Save
     #
@@ -94,7 +102,14 @@ angular
         $scope.$broadcast 'SAVE'
 
     #
+    #
+    #
+    $scope.setCurrentOrganization = (org) ->
+        $scope.organization = org
+
+    #
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
         $scope.period = parseInt($routeParams.period)
+        $scope.scopeId = parseInt($routeParams.scope)
