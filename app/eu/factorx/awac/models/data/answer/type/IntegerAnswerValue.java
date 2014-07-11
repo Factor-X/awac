@@ -27,8 +27,7 @@ public class IntegerAnswerValue extends AnswerValue {
 		super();
 	}
 
-	public IntegerAnswerValue(QuestionAnswer questionAnswer, Integer value,
-			Unit unit) {
+	public IntegerAnswerValue(QuestionAnswer questionAnswer, Integer value, Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
@@ -54,14 +53,19 @@ public class IntegerAnswerValue extends AnswerValue {
 	@Override
 	protected AnswerRawData getRawData() {
 		AnswerRawData rawData = new AnswerRawData();
-		rawData.setLongData(unit.getId());
+		if (unit != null) {
+			rawData.setLongData(unit.getId());
+		}
 		rawData.setDoubleData(value.doubleValue());
 		return rawData;
 	}
 
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
-		this.unit = JPA.em().find(Unit.class, rawData.getLongData());
+		Long unitId = rawData.getLongData();
+		if (unitId != null) {
+			this.unit = JPA.em().find(Unit.class, unitId);
+		}
 		this.value = rawData.getDoubleData().intValue();
 	}
 
