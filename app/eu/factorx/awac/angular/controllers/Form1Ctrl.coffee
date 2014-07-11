@@ -1,10 +1,11 @@
 angular
 .module('app.controllers')
 .controller "Form1Ctrl", ($scope, downloadService, $http) ->
-    $scope.formdId = 47
-    $scope.scopeId = 27
+    $scope.formdId = 49
+    $scope.scopeId = 29
 
-    downloadService.getJson "answer/getByForm/" + $scope.formdId + "/" + $scope.$parent.periodId + "/" + $scope.scopeId, (data) ->
+    console.log $scope.$parent
+    downloadService.getJson "answer/getByForm/" + $scope.formdId + "/" + $scope.$parent.period + "/" + $scope.scopeId, (data) ->
         $scope.o = data
 
         $scope.getAnswerByQuestionCode = (code) ->
@@ -28,6 +29,24 @@ angular
                     return uc.units
 
             console.error "impossible to find unit category by its id: " + unitCategoryId + " question code was: " + code
+
+            return null
+
+        $scope.getOptionsByQuestionCode = (code) ->
+            codeListName = null;
+            for q in $scope.o.questions
+                if q.questionKey == code
+                    codeListName = q.codeListName
+
+            if codeListName == null
+                console.error "impossible to find question by its code: " + code
+                return null
+
+            for cl in $scope.o.codeLists
+                if cl.code == codeListName
+                    return cl.codeLabels
+
+            console.error "impossible to find codeList by its code: " + codeLabelName + " question code was: " + code
 
             return null
 

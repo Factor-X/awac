@@ -37,6 +37,7 @@
     <div class="data_menu">
         <div class="data_date">
             <div>Données</div>
+            {{ periods.length }}
             <select ng-options="p.value as p.key for p in periods" ng-model="period"></select>
         </div>
 

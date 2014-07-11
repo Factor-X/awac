@@ -14,19 +14,23 @@ package eu.factorx.awac.controllers;
 import static play.data.Form.form;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.LoginResultDTO;
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
+
+import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends Controller {
@@ -40,11 +44,14 @@ public class AuthenticationController extends Controller {
     @Autowired
     private SecuredController securedController;
 
-    @Transactional(readOnly = true)
-    public Result testAuthentication(){
+    @Autowired
+    private PeriodService periodService;
 
-        if(securedController.isAuthenticated()){
-            return ok(conversionService.convert(securedController.getCurrentUser(),MyselfDTO.class));
+    @Transactional(readOnly = true)
+    public Result testAuthentication() {
+
+        if (securedController.isAuthenticated()) {
+            return ok(conversionService.convert(securedController.getCurrentUser(), MyselfDTO.class));
         }
         return this.unauthorized();
     }
@@ -83,7 +90,23 @@ public class AuthenticationController extends Controller {
 
         dto.setUser(conversionService.convert(account, MyselfDTO.class));
 
-        dto.setDefaultPeriod(23L);
+        List<KeyValuePairDTO<String, Long>> map = new ArrayList<>();
+
+        List<Period> periods = periodService.findAll();
+        Collections.sort(periods, new Comparator<Period>() {
+            @Override
+            public int compare(Period a, Period b) {
+                return -a.getLabel().compareTo(b.getLabel());
+            }
+        });
+
+        for (final Period period : periods) {
+            map.add(new KeyValuePairDTO<String, Long>(period.getLabel(), period.getId()));
+        }
+
+        dto.setAvailablePeriods(map);
+
+        dto.setDefaultPeriod(periods.get(0).getId());
 
         return ok(dto);
 
@@ -93,7 +116,7 @@ public class AuthenticationController extends Controller {
     public Result logout() {
 
         session().clear();
-        Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE+":"+session().get(SecuredController.SESSION_IDENTIFIER_STORE));
+        Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE + ":" + session().get(SecuredController.SESSION_IDENTIFIER_STORE));
 
         return ok("Stop");
     }

@@ -1,5 +1,6 @@
 package eu.factorx.awac;
 
+import eu.factorx.awac.models.data.question.type.*;
 import org.hibernate.Session;
 
 import eu.factorx.awac.models.account.Account;
@@ -17,10 +18,6 @@ import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
 import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.data.question.type.DoubleQuestion;
-import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.StringQuestion;
-import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -58,6 +55,11 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(kg);
         Unit ton = new Unit("Ton", massUnits);
         session.saveOrUpdate(ton);
+
+        UnitCategory surfaceUnits = new UnitCategory("Surface");
+        session.saveOrUpdate(surfaceUnits);
+        Unit m2 = new Unit("m2", surfaceUnits);
+        session.saveOrUpdate(m2);
 
         // ORGANIZATION AND ACCOUNT
 
@@ -182,28 +184,79 @@ public class AwacDummyDataCreator {
 
         // TAB 1
 
+        // -- FORM
         Form tab1Form = new Form("TAB1");
         session.saveOrUpdate(tab1Form);
 
-        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "1", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole"));
-        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "2", "Production de biens intermédiaires", "Production de biens intermédiaires", "Production de biens intermédiaires"));
-        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "3", "Production de biens de consommation", "Production de biens de consommation", "Production de biens de consommation"));
-        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTOR, "4", "Tertiaire", "Tertiaire", "Tertiaire"));
+        // -- CODE LISTS
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTORS, "1", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTORS, "2", "Production de biens intermédiaires", "Production de biens intermédiaires", "Production de biens intermédiaires"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTORS, "3", "Production de biens de consommation", "Production de biens de consommation", "Production de biens de consommation"));
+        session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTORS, "4", "Tertiaire", "Tertiaire", "Tertiaire"));
 
-        QuestionSet tab1qs = new QuestionSet(QuestionCode.A1, false);
-        session.saveOrUpdate(tab1qs);
+        session.saveOrUpdate(new CodeLabel(CodeList.NACE_CODES, "1", "05 Extraction de houille et de lignite", "05 Extraction de houille et de lignite", "05 Extraction de houille et de lignite"));
+        session.saveOrUpdate(new CodeLabel(CodeList.NACE_CODES, "2", "06 Extraction d'hydrocarbures", "06 Extraction d'hydrocarbures", "06 Extraction d'hydrocarbures"));
+        session.saveOrUpdate(new CodeLabel(CodeList.NACE_CODES, "3", "07 Extraction de minerais métalliques", "07 Extraction de minerais métalliques", "07 Extraction de minerais métalliques"));
+        session.saveOrUpdate(new CodeLabel(CodeList.NACE_CODES, "4", "08 Autres industries extractives", "08 Autres industries extractives", "08 Autres industries extractives"));
+        session.saveOrUpdate(new CodeLabel(CodeList.NACE_CODES, "5", "09 Services de soutien aux industries extractives", "09 Services de soutien aux industries extractives", "09 Services de soutien aux industries extractives"));
 
-        tab1Form.getQuestionSet().add(tab1qs);
+        session.saveOrUpdate(new CodeLabel(CodeList.PUBLIC_OR_PRIVATE, "1", "Public", "Public", "Public"));
+        session.saveOrUpdate(new CodeLabel(CodeList.PUBLIC_OR_PRIVATE, "2", "Privé", "Privé", "Privé"));
+
+        // -- QUESTION_SETS
+        QuestionSet a1 = new QuestionSet(QuestionCode.A1, false);
+        session.saveOrUpdate(a1);
+
+        tab1Form.getQuestionSet().add(a1);
         session.saveOrUpdate(tab1Form);
-
 
         // -- QUESTIONS
 
-        Question a2 = new IntegerQuestion(tab1qs, 0, QuestionCode.A2, null);
+        Question a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null);
         session.saveOrUpdate(a2);
 
-        Question a3 = new ValueSelectionQuestion(tab1qs, 0, QuestionCode.A3, CodeList.SITE_SECTOR);
+        Question a3 = new ValueSelectionQuestion(a1, 0, QuestionCode.A3, CodeList.SITE_SECTORS);
         session.saveOrUpdate(a3);
+
+        Question a4 = new ValueSelectionQuestion(a1, 0, QuestionCode.A4, CodeList.NACE_CODES);
+        session.saveOrUpdate(a4);
+
+        Question a5 = new ValueSelectionQuestion(a1, 0, QuestionCode.A5, CodeList.NACE_CODES);
+        session.saveOrUpdate(a5);
+
+        Question a6 = new ValueSelectionQuestion(a1, 0, QuestionCode.A6, CodeList.NACE_CODES);
+        session.saveOrUpdate(a6);
+
+        Question a7 = new BooleanQuestion(a1, 0, QuestionCode.A7);
+        session.saveOrUpdate(a7);
+
+        Question a8 = new ValueSelectionQuestion(a1, 0, QuestionCode.A8, CodeList.PUBLIC_OR_PRIVATE);
+        session.saveOrUpdate(a8);
+
+        Question a9 = new DoubleQuestion(a1, 0, QuestionCode.A9, surfaceUnits);
+        session.saveOrUpdate(a9);
+
+        Question a10 = new DoubleQuestion(a1, 0, QuestionCode.A10, surfaceUnits);
+        session.saveOrUpdate(a10);
+
+        Question a11 = new BooleanQuestion(a1, 0, QuestionCode.A11);
+        session.saveOrUpdate(a11);
+
+        Question a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null);
+        session.saveOrUpdate(a12);
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

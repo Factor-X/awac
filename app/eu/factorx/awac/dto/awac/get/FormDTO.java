@@ -11,20 +11,22 @@ public class FormDTO extends DTO {
 
 	private List<UnitCategoryDTO> unitCategories;
 
+    private List<CodeListDTO> codeLists;
+
 	private AnswersSaveDTO answersSaveDTO;
 
 	public FormDTO() {
 		super();
 	}
 
-	public FormDTO(List<QuestionDTO> questions, List<UnitCategoryDTO> unitCategories, AnswersSaveDTO answersSaveDTO) {
-		super();
-		this.questions = questions;
-		this.unitCategories = unitCategories;
-		this.answersSaveDTO = answersSaveDTO;
-	}
+    public FormDTO(List<QuestionDTO> questions, List<UnitCategoryDTO> unitCategories, List<CodeListDTO> codeLists, AnswersSaveDTO answersSaveDTO) {
+        this.questions = questions;
+        this.unitCategories = unitCategories;
+        this.codeLists = codeLists;
+        this.answersSaveDTO = answersSaveDTO;
+    }
 
-	public List<QuestionDTO> getQuestions() {
+    public List<QuestionDTO> getQuestions() {
 		return questions;
 	}
 
@@ -48,4 +50,11 @@ public class FormDTO extends DTO {
 		this.answersSaveDTO = answersSaveDTO;
 	}
 
+    public List<CodeListDTO> getCodeLists() {
+        return codeLists;
+    }
+
+    public void setCodeLists(List<CodeListDTO> codeLists) {
+        this.codeLists = codeLists;
+    }
 }
