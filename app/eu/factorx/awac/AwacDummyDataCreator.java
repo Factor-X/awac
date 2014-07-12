@@ -5,6 +5,7 @@ import eu.factorx.awac.models.data.question.type.*;
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
 
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
@@ -46,26 +47,13 @@ public class AwacDummyDataCreator {
 		session.saveOrUpdate(new CodeLabel(LanguageCode.FRENCH, "French", "Français", "Frans"));
 		session.saveOrUpdate(new CodeLabel(LanguageCode.DUTCH, "Dutch", "Néerlandais", "Nederlands"));
 
-        UnitCategory volumeUnits = new UnitCategory("Volume");
-        session.saveOrUpdate(volumeUnits);
-        Unit litter = new Unit("Liter", volumeUnits);
-        session.saveOrUpdate(litter);
-        Unit gallon = new Unit("Gallon", volumeUnits);
-        session.saveOrUpdate(gallon);
-        Unit cubicMeter = new Unit("Cubic meter", volumeUnits);
-        session.saveOrUpdate(cubicMeter);
+		UnitCategory volumeUnits = getUnitCategoryByName("Volume");
+        UnitCategory massUnits = getUnitCategoryByName("Mass");
+        UnitCategory surfaceUnits = getUnitCategoryByName("Area");
 
-        UnitCategory massUnits = new UnitCategory("Mass");
-        session.saveOrUpdate(massUnits);
-        Unit kg = new Unit("Kg", massUnits);
-        session.saveOrUpdate(kg);
-        Unit ton = new Unit("Ton", massUnits);
-        session.saveOrUpdate(ton);
+        Unit cubicMeter = getUnitByCategoryAndSymbol(volumeUnits, "m3");
+        Unit ton = getUnitByCategoryAndSymbol(massUnits, "t");
 
-        UnitCategory surfaceUnits = new UnitCategory("Surface");
-        session.saveOrUpdate(surfaceUnits);
-        Unit m2 = new Unit("m2", surfaceUnits);
-        session.saveOrUpdate(m2);
 
         // ORGANIZATION AND ACCOUNT
 
@@ -506,4 +494,13 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(a12);
 
     }
+
+	private static UnitCategory getUnitCategoryByName(String name) {
+		return JPA.em().createQuery("select uc from " + UnitCategory.class.getName() + " uc where uc.name = '" + name + "'", UnitCategory.class).getSingleResult();
+	}
+
+	private static Unit getUnitByCategoryAndSymbol(UnitCategory category, String symbol) {
+		return JPA.em().createQuery("select u from " + Unit.class.getName() + " u where u.category.id = " + category.getId() + " and u.symbol = '" + symbol + "'", Unit.class).getSingleResult();
+	}
+
 }
