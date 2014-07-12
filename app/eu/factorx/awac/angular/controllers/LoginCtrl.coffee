@@ -25,10 +25,10 @@ angular
                 password: $scope.password
 
         promise.success (data, status, headers, config) ->
+            $scope.$parent.setPeriods(data.availablePeriods)
             $scope.$parent.setCurrentUser(data.user)
-            console.log '---'
-            $location.path('/form1/' + data.defaultPeriod)
-            console.log data
+            $scope.$parent.setCurrentOrganization(data.organization)
+            $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
             return
 
         promise.error (data, status, headers, config) ->

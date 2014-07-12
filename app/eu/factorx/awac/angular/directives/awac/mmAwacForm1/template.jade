@@ -22,77 +22,73 @@ ng-virtual
                     Etes-vous participant aux accords de branche de 2ème génération?
                     Quel est le nombre d'employés sur l'année du bilan?
 
-
-
                 div
                     div Année de référence pour comparaison du présent bilan GES
                     .oneelement
                         .status.answer
-                        input(type="text", ng-model="getAnswerByQuestionCode('A1').value")
+                        input(type="text", ng-model="A('A2').value")
                         .user_icon XM
 
                 div
                     div A quel secteur pricipal appartient votre site?
                     .oneelement
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        select(ng-options="p.key as p.labelFr for p in O('A3')", ng-model="A('A3').value")
                         .user_icon XM
-                div
+
+                div(ng-show="A('A3').value == '1'")
                     div Quel est le code NACE principal de votre site?
                     .oneelement
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        select(ng-options="p.key as p.labelFr for p in O('A4')", ng-model="A('A4').value")
                         .user_icon XM
-                div
+                div(ng-show="A('A3').value == '2' || A('A3').value == '3'")
                     div Quel est le code NACE principal de votre site?
                     .oneelement
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        select(ng-options="p.key as p.labelFr for p in O('A5')", ng-model="A('A5').value")
                         .user_icon XM
+                div(ng-show="A('A3').value == '4'")
+                    div Quel est le code NACE principal de votre site?
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A6')", ng-model="A('A6').value")
+                        .user_icon XM
+
                 div
                     div Est-ce que votre activité est purement ou principalement de bureaux?
                     .oneelement
                         .status.answer
-                        input(type="text", ng-model="getAnswerByQuestionCode('A7').value")
+                        input(type="checkbox", ng-model="A('A7').value")
                         .user_icon XM
 
                 div
                     div Etes-vous dans le secteur public ou privé?
                     .oneelement
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        select(ng-options="p.key as p.labelFr for p in O('A8')", ng-model="A('A8').value")
                         .user_icon XM
                 div
                     div Indiquez la surface totale du site:
-                    .oneelement
+                    .twoelements
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        input(type="text", ng-model="A('A9').value")
+                        select(ng-options="p.id as p.name for p in U('A9')", ng-model="A('A9').unitId")
                         .user_icon XM
 
                 div
                     div Quelle est la surface des bureaux?
-                    .oneelement
+                    .twoelements
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        input(type="text", ng-model="A('A10').value")
+                        select(ng-options="p.id as p.name for p in U('A10')", ng-model="A('A10').unitId")
                         .user_icon XM
 
                 div
                     div Etes-vous participant aux accords de branche de 2ème génération?
                     .oneelement
                         .status.answer
-                        input(type="text", ng-model="getAnswerByQuestionCode('A11').value")
+                        input(type="checkbox", ng-model="A('A11').value")
                         .user_icon XM
 
 
@@ -100,5 +96,5 @@ ng-virtual
                     div Quel est le nombre d'employés sur l'année du bilan ?
                     .twoelements
                         .status
-                        input(value='170')
+                        input(type="text", ng-model="A('A12').value"))
                         .user_icon AG

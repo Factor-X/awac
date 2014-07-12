@@ -9,34 +9,34 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 public class AnswersSaveDTO extends DTO {
 
     @NotNull
-    private Integer scopeId;
+    private Long scopeId;
     @NotNull
-    private Integer periodId;
+    private Long periodId;
     @NotNull
     private List<AnswerLine> listAnswers;
 
     public AnswersSaveDTO() {
     }
 
-    public AnswersSaveDTO(Integer scopeId, Integer periodId, List<AnswerLine> listAnswers) {
+    public AnswersSaveDTO(Long scopeId, Long periodId, List<AnswerLine> listAnswers) {
         this.scopeId = scopeId;
         this.periodId = periodId;
         this.listAnswers = listAnswers;
     }
 
-    public Integer getScopeId() {
+    public Long getScopeId() {
         return scopeId;
     }
 
-    public void setScopeId(Integer scopeId) {
+    public void setScopeId(Long scopeId) {
         this.scopeId = scopeId;
     }
 
-    public Integer getPeriodId() {
+    public Long getPeriodId() {
         return periodId;
     }
 
-    public void setPeriodId(Integer periodId) {
+    public void setPeriodId(Long periodId) {
         this.periodId = periodId;
     }
 

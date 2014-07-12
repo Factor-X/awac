@@ -1,8 +1,10 @@
-package eu.factorx.awac.dto.myrmex.get;
+package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoginResultDTO extends DTO {
@@ -10,7 +12,8 @@ public class LoginResultDTO extends DTO {
 
     private Long defaultPeriod;
 
-    private Map<String,Long> availablePeriods;
+    private List<PeriodDTO> availablePeriods;
+    private OrganizationDTO organization;
 
     public LoginResultDTO() {
     }
@@ -31,11 +34,19 @@ public class LoginResultDTO extends DTO {
         this.defaultPeriod = defaultPeriod;
     }
 
-    public Map<String, Long> getAvailablePeriods() {
+    public List<PeriodDTO> getAvailablePeriods() {
         return availablePeriods;
     }
 
-    public void setAvailablePeriods(Map<String, Long> availablePeriods) {
+    public void setAvailablePeriods(List<PeriodDTO> availablePeriods) {
         this.availablePeriods = availablePeriods;
+    }
+
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
+    }
+
+    public OrganizationDTO getOrganization() {
+        return organization;
     }
 }

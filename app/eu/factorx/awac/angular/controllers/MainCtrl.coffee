@@ -1,44 +1,6 @@
 angular
 .module('app.controllers')
-.config ($routeProvider) ->
-    $routeProvider
-    .when('/login', {
-            templateUrl: '$/angular/templates/mm-awac-login.html'
-            controller: 'LoginCtrl'
-        })
-    .when('/form1/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form1.html'
-            controller: 'Form1Ctrl'
-        })
-    .when('/form2/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form2.html'
-            controller: 'Form2Ctrl'
-        })
-    .when('/form3/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form3.html'
-            controller: 'Form3Ctrl'
-        })
-    .when('/form4/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form4.html'
-            controller: 'Form4Ctrl'
-        })
-    .when('/form5/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form5.html'
-            controller: 'Form5Ctrl'
-        })
-    .when('/form6/:period', {
-            templateUrl: '$/angular/templates/mm-awac-form6.html'
-            controller: 'Form6Ctrl'
-        })
-    .when('/results/:period', {
-            templateUrl: '$/angular/templates/mm-awac-results.html'
-            controller: 'ResultsCtrl'
-        })
-    .otherwise({ redirectTo: '/login' })
-
-    return
-
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $modal, $http, $location, $route, $routeParams) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams) ->
 
     #
     # Redirect user to login view if not logged in
@@ -107,25 +69,13 @@ angular
             return ""
     # Tabs -- transition
     $scope.nav = (loc) ->
-        $location.path(loc + "/" + $scope.period)
+        $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
     #
     # Periods
     #
-    $scope.periods = [
-        {
-            key: 2013,
-            value: 24
-        },
-        {
-            key: 2012,
-            value: 23
-        },
-        {
-            key: 2011,
-            value: 22
-        }
-    ]
+    $scope.setPeriods = (periods) ->
+        $scope.periods = periods
     $scope.period = 0
     $scope.$watch 'period', () ->
         $routeParams.period = $scope.period
@@ -136,7 +86,15 @@ angular
                 p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
             $location.path(p)
+    $scope.$watch 'scopeId', () ->
+        $routeParams.period = $scope.period
+        if $route.current
+            p = $route.current.$$route.originalPath
 
+            for k,v of $routeParams
+                p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
+
+            $location.path(p)
     #
     # Save
     #
@@ -144,7 +102,14 @@ angular
         $scope.$broadcast 'SAVE'
 
     #
+    #
+    #
+    $scope.setCurrentOrganization = (org) ->
+        $scope.organization = org
+
+    #
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
         $scope.period = parseInt($routeParams.period)
+        $scope.scopeId = parseInt($routeParams.scope)
