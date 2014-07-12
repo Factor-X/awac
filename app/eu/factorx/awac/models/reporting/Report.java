@@ -1,31 +1,32 @@
 package eu.factorx.awac.models.reporting;
 
+import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
-import eu.factorx.awac.models.AbstractEntity;
-
-@Entity
-@Table(name = "report")
-public class Report extends AbstractEntity {
+@MappedSuperclass
+public class Report implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public Report() {
+	private List<ActivityResult> activityResults;
+
+	protected Report() {
+		super();
 	}
 
-	@ManyToMany
-	private List<Indicator> indicators;
-
-	public List<Indicator> getIndicators() {
-		return indicators;
+	public Report(List<ActivityResult> activityResults) {
+		super();
+		this.activityResults = activityResults;
 	}
 
-	public void setIndicators(List<Indicator> param) {
-		this.indicators = param;
+	public List<ActivityResult> getActivityResults() {
+		return activityResults;
+	}
+
+	public void setActivityResults(List<ActivityResult> activityResults) {
+		this.activityResults = activityResults;
 	}
 
 }

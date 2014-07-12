@@ -2,12 +2,15 @@ package eu.factorx.awac.models.reporting;
 
 import java.io.Serializable;
 
+import javax.persistence.MappedSuperclass;
+
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.knowledge.ActivityCategory;
-import eu.factorx.awac.models.knowledge.ActivitySource;
-import eu.factorx.awac.models.knowledge.ActivityType;
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySourceCode;
+import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.knowledge.Unit;
 
+@MappedSuperclass
 public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -18,11 +21,11 @@ public class BaseActivityData implements Serializable {
 
 	private String specificPurpose;
 
-	private ActivityCategory activityCategory;
+	private ActivityCategoryCode activityCategory;
 
-	private ActivityType activityType;
+	private ActivityTypeCode activityType;
 
-	private ActivitySource activitySource;
+	private ActivitySourceCode activitySource;
 
 	private Boolean activityOwnership;
 
@@ -30,12 +33,13 @@ public class BaseActivityData implements Serializable {
 
 	private Double value;
 
-	public BaseActivityData() {
+	protected BaseActivityData() {
 		super();
 	}
 
-	public BaseActivityData(Scope scope, Integer rank, String specificPurpose, ActivityCategory activityCategory,
-			ActivityType activityType, ActivitySource activitySource, Boolean activityOwnership, Unit unit, Double value) {
+	public BaseActivityData(Scope scope, Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
+			ActivityTypeCode activityType, ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit,
+			Double value) {
 		super();
 		this.scope = scope;
 		this.rank = rank;
@@ -72,27 +76,27 @@ public class BaseActivityData implements Serializable {
 		this.specificPurpose = specificPurpose;
 	}
 
-	public ActivityCategory getActivityCategory() {
+	public ActivityCategoryCode getActivityCategory() {
 		return activityCategory;
 	}
 
-	public void setActivityCategory(ActivityCategory activityCategory) {
+	public void setActivityCategory(ActivityCategoryCode activityCategory) {
 		this.activityCategory = activityCategory;
 	}
 
-	public ActivityType getActivityType() {
+	public ActivityTypeCode getActivityType() {
 		return activityType;
 	}
 
-	public void setActivityType(ActivityType activityType) {
+	public void setActivityType(ActivityTypeCode activityType) {
 		this.activityType = activityType;
 	}
 
-	public ActivitySource getActivitySource() {
+	public ActivitySourceCode getActivitySource() {
 		return activitySource;
 	}
 
-	public void setActivitySource(ActivitySource activitySource) {
+	public void setActivitySource(ActivitySourceCode activitySource) {
 		this.activitySource = activitySource;
 	}
 

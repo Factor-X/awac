@@ -1,9 +1,6 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
- 
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- 
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
- 
              version="2.0">
  
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
@@ -24,8 +21,14 @@
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
+        <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.ActivitySourceCode</class>
+        <class>eu.factorx.awac.models.code.type.ActivitySubCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.ActivityTypeCode</class>
         <class>eu.factorx.awac.models.code.type.HeatingFuelTypeCode</class>
-        <class>eu.factorx.awac.models.code.type.IsoIndicatorScope</class>
+        <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
+        <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
@@ -50,16 +53,14 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.Form</class>
-        <class>eu.factorx.awac.models.knowledge.ActivityCategory</class>
-        <class>eu.factorx.awac.models.knowledge.ActivitySource</class>
-        <class>eu.factorx.awac.models.knowledge.ActivityType</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
-        <class>eu.factorx.awac.models.knowledge.IndicatorCategory</class>
+        <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
-        <class>eu.factorx.awac.models.reporting.Indicator</class>
+        <class>eu.factorx.awac.models.reporting.ActivityResult</class>
+        <class>eu.factorx.awac.models.reporting.BaseActivityData</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
  		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -73,8 +74,10 @@
  
             <property name="hibernate.use_sql_comments" value="true" />   
  
-             <property name="hibernate.hbm2ddl.auto" value="update"/>          
+            <property name="hibernate.hbm2ddl.auto" value="update"/>          
  
+     		<property name="connection.autocommit" value="true" />
+     		   
         </properties>
         
 

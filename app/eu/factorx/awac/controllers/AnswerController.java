@@ -271,7 +271,7 @@ public class AnswerController extends Controller {
 		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
 		if (answerUnitId == null) {
 			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
-					questionUnitCategory.getCode()));
+					questionUnitCategory.getRef()));
 		}
 		Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
@@ -279,7 +279,7 @@ public class AnswerController extends Controller {
 		UnitCategory answerUnitCategory = answerUnit.getCategory();
 		if (!questionUnitCategory.equals(answerUnitCategory)) {
 			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
-					questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
+					questionUnitCategory.getRef(), answerUnit.getName(), answerUnitCategory.getRef()));
 		}
 		return answerUnit;
 	}
