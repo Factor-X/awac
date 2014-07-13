@@ -1,11 +1,8 @@
 package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.SiteDTO;
-import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
-import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.ScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
