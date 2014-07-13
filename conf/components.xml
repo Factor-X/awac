@@ -19,6 +19,7 @@
                 <bean class="eu.factorx.awac.converter.SiteToSiteDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.OrganizationToOrganizationDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.PeriodToPeriodDTOConverter"/>
+                <bean class="eu.factorx.awac.converter.ReportToReportDTOConverter"/>
             </set>
         </property>
     </bean>
