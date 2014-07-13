@@ -91,10 +91,8 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	protected void importData() throws Exception {
 
-		List<Unit> units = JPA.em().createQuery("select u from " + Unit.class.getName() + " u", Unit.class)
-				.getResultList();
 		knownUnits = new HashMap<>();
-		for (Unit unit : units) {
+		for (Unit unit : findAllUnits()) {
 			knownUnits.put(unit.getSymbol(), unit);
 		}
 
@@ -198,27 +196,14 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		FileWriter out = new FileWriter(CODE_CONSTANTS_FILE_PATH, true);
 		BufferedWriter writer = new BufferedWriter(out);
 
-		outputCodeConstants(IndicatorCategoryCode.class, indicatorCategories, writer);
-		outputCodeConstants(ActivityTypeCode.class, activityTypes, writer);
-		outputCodeConstants(ActivitySourceCode.class, activitySources, writer);
-		outputCodeConstants(ActivityCategoryCode.class, activityCategories, writer);
-		outputCodeConstants(ActivitySubCategoryCode.class, activitySubCategories, writer);
+		writeCodeConstants(IndicatorCategoryCode.class, new TreeSet<>(indicatorCategories.values()), writer);
+		writeCodeConstants(ActivityTypeCode.class, new TreeSet<>(activityTypes.values()), writer);
+		writeCodeConstants(ActivitySourceCode.class, new TreeSet<>(activitySources.values()), writer);
+		writeCodeConstants(ActivityCategoryCode.class, new TreeSet<>(activityCategories.values()), writer);
+		writeCodeConstants(ActivitySubCategoryCode.class, new TreeSet<>(activitySubCategories.values()), writer);
 
 		writer.flush();
 		writer.close();
-	}
-
-	private static <T extends Code> void outputCodeConstants(Class<T> codeClass,
-			Map<String, CodeExtract<T>> codeExtracts, BufferedWriter writer) throws IOException {
-		writer.write(codeClass.getName() + ":" + NEW_LINE);
-		String className = codeClass.getSimpleName();
-		for (CodeExtract<T> codeExtract : new TreeSet<>(codeExtracts.values())) {
-			String codeName = codeExtract.getName();
-			String codeKey = codeExtract.getCode().getKey();
-			writer.write("\tpublic static final " + className + " " + codeName + " = new " + className + "(\""
-					+ codeKey + "\");" + NEW_LINE);
-		}
-		writer.write(NEW_LINE + "--------------" + NEW_LINE);
 	}
 
 	private static void saveCodeLabels() {
@@ -285,6 +270,10 @@ public class AwacDataImporter extends WorkbookDataImporter {
 					indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit, deleted));
 		}
 		persistEntities(indicators);
+	}
+
+	private static List<Unit> findAllUnits() {
+		return JPA.em().createNamedQuery(Unit.FIND_ALL, Unit.class).getResultList();
 	}
 
 }

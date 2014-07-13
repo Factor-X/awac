@@ -1,5 +1,7 @@
 package eu.factorx.awac.util.data.importer;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -13,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.Code;
 
 public abstract class WorkbookDataImporter {
 
@@ -20,7 +23,7 @@ public abstract class WorkbookDataImporter {
 	public static final NumberFormat NUMBER_WITH_DECIMAL_COMMA_FORMAT = NumberFormat.getInstance(Locale.FRANCE); // for decimal numbers with comma
 	public static final String NEW_LINE = System.getProperty("line.separator");
 
-	public void run(boolean test) {
+	public void run() {
 		try {
 			importData();
 		} catch (Exception e) {
@@ -82,6 +85,19 @@ public abstract class WorkbookDataImporter {
 		for (T entity : entities) {
 			persistEntity(entity);
 		}
+	}
+
+	protected static <T extends Code> void writeCodeConstants(Class<T> codeClass,
+			Set<CodeExtract<T>> codeExtracts, BufferedWriter writer) throws IOException {
+		writer.write(codeClass.getName() + ":" + NEW_LINE);
+		String className = codeClass.getSimpleName();
+		for (CodeExtract<T> codeExtract : codeExtracts) {
+			String codeName = codeExtract.getName();
+			String codeKey = codeExtract.getCode().getKey();
+			writer.write("\tpublic static final " + className + " " + codeName + " = new " + className + "(\""
+					+ codeKey + "\");" + NEW_LINE);
+		}
+		writer.write(NEW_LINE + "--------------" + NEW_LINE);
 	}
 
 	protected static <T extends AbstractEntity> void persistEntity(T entity) {

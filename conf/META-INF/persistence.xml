@@ -22,6 +22,7 @@
         <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySourceCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySubCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivityTypeCode</class>
@@ -30,6 +31,10 @@
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
+        <class>eu.factorx.awac.models.code.type.Nace1Code</class>
+        <class>eu.factorx.awac.models.code.type.Nace2Code</class>
+        <class>eu.factorx.awac.models.code.type.Nace3Code</class>
+        <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>

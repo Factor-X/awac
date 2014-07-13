@@ -12,6 +12,8 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
@@ -126,7 +128,7 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 		if (obj == this) {
 			return true;
 		}
-		if (! (obj instanceof CodeLabel)) {
+		if (!(obj instanceof CodeLabel)) {
 			return false;
 		}
 		CodeLabel rhs = (CodeLabel) obj;
@@ -138,11 +140,14 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 		return new HashCodeBuilder(3, 53).append(this.codeList).append(this.key).toHashCode();
 	}
 
-
 	@Override
 	public int compareTo(CodeLabel obj) {
 		return new CompareToBuilder().append(this.getCodeList(), obj.getCodeList()).append(this.getKey(), obj.getKey())
 				.toComparison();
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(codeList.name()).append(key).toString();
+	}
 }
