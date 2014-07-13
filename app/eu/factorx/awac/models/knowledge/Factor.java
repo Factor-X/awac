@@ -7,6 +7,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,9 +19,22 @@ import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 
 @Entity
 @Table(name = "factor")
+@NamedQueries({
+		@NamedQuery(name = Factor.FIND_BY_PARAMETERS, query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"),
+})
 public class Factor extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Parameters:<br>
+	 * - indicatorCategory : an {@link IndicatorCategoryCode}<br>
+	 * - activitySource : an {@link ActivitySourceCode}<br>
+	 * - activityType : an {@link ActivityTypeCode}<br>
+	 * - unitIn : a {@link Unit}<br>
+	 * - unitOut : a {@link Unit}
+	 */
+	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
 
 	@Embedded
 	private IndicatorCategoryCode indicatorCategory;

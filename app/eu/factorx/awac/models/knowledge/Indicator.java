@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,9 +23,22 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "indicator")
+@NamedQueries({
+	@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and i.deleted = false and (:activityOwnership is null or i.activityOwnership = :activityOwnership)"),
+})
 public class Indicator extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Parameters:<br>
+	 * - type : an {@link IndicatorCategoryCode}<br>
+	 * - scopeType : an {@link ScopeTypeCode}<br>
+	 * - activityCategory : an {@link ActivityCategoryCode}<br>
+	 * - activitySubCategory : an {@link ActivitySubCategoryCode}<br>
+	 * - activityOwnership (optional) : {@link Boolean}<br>
+	 */
+	public static final String FIND_BY_PARAMETERS = "Indicator.findByParameters";
 
 	private String identifier;
 

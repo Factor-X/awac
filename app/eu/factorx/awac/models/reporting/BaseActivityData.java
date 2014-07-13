@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.MappedSuperclass;
 
-import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.ActivityCategoryCode;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
+import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @MappedSuperclass
@@ -15,13 +16,13 @@ public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Scope scope;
-
 	private Integer rank;
 
 	private String specificPurpose;
 
 	private ActivityCategoryCode activityCategory;
+
+	private ActivitySubCategoryCode activitySubCategory;
 
 	private ActivityTypeCode activityType;
 
@@ -31,33 +32,25 @@ public class BaseActivityData implements Serializable {
 
 	private Unit unit;
 
-	private Double value;
+	private NumericAnswerValue value;
 
 	protected BaseActivityData() {
 		super();
 	}
 
-	public BaseActivityData(Scope scope, Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
-			ActivityTypeCode activityType, ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit,
-			Double value) {
+	public BaseActivityData(Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
+			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
+			ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit, NumericAnswerValue value) {
 		super();
-		this.scope = scope;
 		this.rank = rank;
 		this.specificPurpose = specificPurpose;
 		this.activityCategory = activityCategory;
+		this.activitySubCategory = activitySubCategory;
 		this.activityType = activityType;
 		this.activitySource = activitySource;
 		this.activityOwnership = activityOwnership;
 		this.unit = unit;
 		this.value = value;
-	}
-
-	public Scope getScope() {
-		return scope;
-	}
-
-	public void setScope(Scope scope) {
-		this.scope = scope;
 	}
 
 	public Integer getRank() {
@@ -82,6 +75,14 @@ public class BaseActivityData implements Serializable {
 
 	public void setActivityCategory(ActivityCategoryCode activityCategory) {
 		this.activityCategory = activityCategory;
+	}
+
+	public ActivitySubCategoryCode getActivitySubCategory() {
+		return activitySubCategory;
+	}
+
+	public void setActivitySubCategory(ActivitySubCategoryCode activitySubCategory) {
+		this.activitySubCategory = activitySubCategory;
 	}
 
 	public ActivityTypeCode getActivityType() {
@@ -116,11 +117,11 @@ public class BaseActivityData implements Serializable {
 		this.unit = unit;
 	}
 
-	public Double getValue() {
+	public NumericAnswerValue getValue() {
 		return value;
 	}
 
-	public void setValue(Double value) {
+	public void setValue(NumericAnswerValue value) {
 		this.value = value;
 	}
 

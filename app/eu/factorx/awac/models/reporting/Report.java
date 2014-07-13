@@ -10,22 +10,22 @@ public class Report implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<ActivityResult> activityResults;
+	private List<BaseActivityResult> activityResults;
 
 	protected Report() {
 		super();
 	}
 
-	public Report(List<ActivityResult> activityResults) {
+	public Report(List<BaseActivityResult> activityResults) {
 		super();
 		this.activityResults = activityResults;
 	}
 
-	public List<ActivityResult> getActivityResults() {
+	public List<BaseActivityResult> getActivityResults() {
 		return activityResults;
 	}
 
-	public void setActivityResults(List<ActivityResult> activityResults) {
+	public void setActivityResults(List<BaseActivityResult> activityResults) {
 		this.activityResults = activityResults;
 	}
 

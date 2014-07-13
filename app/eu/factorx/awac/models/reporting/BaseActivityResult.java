@@ -1,29 +1,32 @@
 package eu.factorx.awac.models.reporting;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.MappedSuperclass;
 
+import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
 
 @MappedSuperclass
-public class ActivityResult implements Serializable {
+public class BaseActivityResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Indicator indicator;
 
-	private List<BaseActivityData> activityData;
+	private BaseActivityData activityData;
 
-	protected ActivityResult() {
+	private Factor factor;
+
+	protected BaseActivityResult() {
 		super();
 	}
 
-	public ActivityResult(Indicator indicator, List<BaseActivityData> activityData) {
+	public BaseActivityResult(Indicator indicator, BaseActivityData activityData, Factor factor) {
 		super();
 		this.indicator = indicator;
 		this.activityData = activityData;
+		this.factor = factor;
 	}
 
 	public Indicator getIndicator() {
@@ -34,12 +37,20 @@ public class ActivityResult implements Serializable {
 		this.indicator = indicator;
 	}
 
-	public List<BaseActivityData> getActivityData() {
+	public BaseActivityData getActivityData() {
 		return activityData;
 	}
 
-	public void setActivityData(List<BaseActivityData> activityData) {
+	public void setActivityData(BaseActivityData activityData) {
 		this.activityData = activityData;
+	}
+
+	public Factor getFactor() {
+		return factor;
+	}
+
+	public void setFactor(Factor factor) {
+		this.factor = factor;
 	}
 
 }

@@ -27,6 +27,9 @@ public class QuestionCode extends Code {
     public static final QuestionCode A11 = new QuestionCode("A11");
     public static final QuestionCode A12 = new QuestionCode("A12");
 
+    public static final QuestionCode A16 = new QuestionCode("A16");
+	public static final QuestionCode A17 = new QuestionCode("A17");
+
     protected QuestionCode() {
         super(CodeList.QUESTION);
     }
