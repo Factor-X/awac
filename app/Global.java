@@ -157,7 +157,8 @@ public class Global extends GlobalSettings {
         @SuppressWarnings("unchecked")
         List<Administrator> administrators = session.createCriteria(Person.class).list();
         if (administrators.isEmpty()) {
-            Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
+            @SuppressWarnings("unchecked")
+			Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
             // save data into DB in relevant order.
 
             System.out.println(all);
