@@ -47,6 +47,7 @@
         <class>eu.factorx.awac.models.data.answer.type.DoubleAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.EntityAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.IntegerAnswerValue</class>
+        <class>eu.factorx.awac.models.data.answer.type.NumericAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.StringAnswerValue</class>
         <class>eu.factorx.awac.models.data.question.Question</class>
         <class>eu.factorx.awac.models.data.question.QuestionSet</class>
@@ -64,8 +65,8 @@
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
-        <class>eu.factorx.awac.models.reporting.ActivityResult</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityData</class>
+        <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
  		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
