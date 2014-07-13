@@ -2,10 +2,16 @@ package eu.factorx.awac.models.code.label;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
@@ -13,15 +19,24 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
-@Table(name = "code_label")
+@Table(name = "code_label", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY })
+})
 public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String COLUMN_NAME_CODELIST = "codelist";
+	public static final String COLUMN_NAME_KEY = "key";
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = COLUMN_NAME_CODELIST, nullable = false)
 	private CodeList codeList;
 
+	@Column(name = COLUMN_NAME_KEY, nullable = false)
 	private String key;
-	
+
+	@Column(nullable = false)
 	private String labelEn;
 
 	private String labelFr;
@@ -32,15 +47,15 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 		super();
 	}
 
-    public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl) {
-        this.codeList = codeList;
-        this.key = key;
-        this.labelEn = labelEn;
-        this.labelFr = labelFr;
-        this.labelNl = labelNl;
-    }
+	public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl) {
+		this.codeList = codeList;
+		this.key = key;
+		this.labelEn = labelEn;
+		this.labelFr = labelFr;
+		this.labelNl = labelNl;
+	}
 
-    public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
+	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
 		super();
 		this.codeList = code.getCodeList();
 		this.key = code.getKey();
@@ -104,13 +119,29 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof CodeLabel)) {
+			return false;
+		}
+		CodeLabel rhs = (CodeLabel) obj;
+		return new EqualsBuilder().append(this.codeList, rhs.codeList).append(this.key, rhs.key).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(3, 53).append(this.codeList).append(this.key).toHashCode();
+	}
+
+
+	@Override
 	public int compareTo(CodeLabel obj) {
-		return new CompareToBuilder()
-				.append(this.getCodeList(), obj.getCodeList())
-				.append(this.getKey(), obj.getKey())
-				.append(this.getLabelEn(), obj.getLabelEn())
-				.append(this.getLabelFr(), obj.getLabelFr())
-				.append(this.getLabelNl(), obj.getLabelNl())
+		return new CompareToBuilder().append(this.getCodeList(), obj.getCodeList()).append(this.getKey(), obj.getKey())
 				.toComparison();
 	}
 
