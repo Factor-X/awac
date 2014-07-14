@@ -1,9 +1,6 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -171,7 +168,10 @@ public class AnswerController extends Controller {
         Logger.info("save() 3");
         saveAnswsersDTO(currentUser, answersDTO);
         Logger.info("save() 4");
-        return ok();
+
+        SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
+
+        return ok(dto);
     }
 
     public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {

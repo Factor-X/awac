@@ -4,6 +4,7 @@ angular
     $scope.formIdentifier = "TAB1"
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+
         $scope.o = data
 
         # getAnswerByQuestionCode

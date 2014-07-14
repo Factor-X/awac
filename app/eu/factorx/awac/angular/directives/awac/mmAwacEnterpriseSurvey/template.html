@@ -4,7 +4,7 @@
         <div class="awac_logo"></div>
         <div>
             <div class="calculateur_type">Calculateur CO2 Entreprise</div>
-            <div class="entreprise_name">{{$parent.getCurrentUser().organizationName}}</div>
+            <div class="entreprise_name">{{ $parent.getCurrentUser().organizationName }}</div>
         </div>
 
         <div class="users">
@@ -37,8 +37,7 @@
     <div class="data_menu">
         <div class="data_date">
             <div>Données</div>
-            {{ periods.length }}
-            <select ng-options="p.id as p.label for p in periods" ng-model="period"></select>
+            <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
         </div>
 
         <div class="big_separator"></div>
@@ -74,7 +73,7 @@
                     <button type="button" class="site_manage">Gérer les sites</button>
                     <div>Site</div>
                     <div class="small_separator"></div>
-                    <div class="sitename">Namur</div>
+                    <div class="sitename">{{ $root.organization.sites[0].name }}</div>
                     <button type="button" class="verification">Vérification</button>
                 </div>
                 <div class="menu">

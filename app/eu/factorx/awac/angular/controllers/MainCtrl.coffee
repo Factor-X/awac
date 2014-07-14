@@ -74,8 +74,7 @@ angular
     #
     # Periods
     #
-    $scope.setPeriods = (periods) ->
-        $scope.periods = periods
+
     $scope.period = 0
     $scope.$watch 'period', () ->
         $routeParams.period = $scope.period

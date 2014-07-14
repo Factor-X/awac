@@ -2,7 +2,6 @@ angular
 .module('app.controllers')
 .controller "LoginCtrl", ($scope, downloadService, $http, $location) ->
 
-
     $scope.login = 'user1'
     $scope.password = 'password'
 
@@ -25,10 +24,10 @@ angular
                 password: $scope.password
 
         promise.success (data, status, headers, config) ->
-            $scope.$parent.setPeriods(data.availablePeriods)
-            $scope.$parent.setCurrentUser(data.user)
-            $scope.$parent.setCurrentOrganization(data.organization)
             $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+            $scope.$root.periods = data.availablePeriods
+            $scope.$parent.setCurrentUser(data.user)
+            $scope.$root.organization = data.organization
             return
 
         promise.error (data, status, headers, config) ->
