@@ -26,6 +26,7 @@
         <class>eu.factorx.awac.models.code.type.ActivitySourceCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySubCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivityTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.FuelCode</class>
         <class>eu.factorx.awac.models.code.type.HeatingFuelTypeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
