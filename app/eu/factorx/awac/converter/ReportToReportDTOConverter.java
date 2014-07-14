@@ -11,8 +11,6 @@ import org.springframework.core.convert.converter.Converter;
 
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
-import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
@@ -23,30 +21,28 @@ public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> 
 
 	@Autowired
 	private CodeLabelService codeLabelService;
-	
+
 	@Override
 	public ReportDTO convert(Report report) {
 		ReportDTO reportDTO = new ReportDTO();
 
-		// group data by indicator category
-		Map<IndicatorCategoryCode, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
+		// group data by indicator name
+		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
 		for (BaseActivityResult baseActivityResult : report.getActivityResults()) {
 			Indicator indicator = baseActivityResult.getIndicator();
-			IndicatorCategoryCode indicatorCategory = indicator.getIndicatorCategory();
-			if (!dataByIndicator.containsKey(indicatorCategory)) {
-				dataByIndicator.put(indicatorCategory, new ArrayList<BaseActivityResult>());
+			String indicatorIdentifier = indicator.getIdentifier();
+			if (!dataByIndicator.containsKey(indicatorIdentifier)) {
+				dataByIndicator.put(indicatorIdentifier, new ArrayList<BaseActivityResult>());
 			}
-			dataByIndicator.get(indicatorCategory).add(baseActivityResult);
+			dataByIndicator.get(indicatorIdentifier).add(baseActivityResult);
 		}
 
 		// build a report line for each indicator category (=> adding values of each activity data linked to the indicator cat.)
-		for (Entry<IndicatorCategoryCode, List<BaseActivityResult>> indicatorData : dataByIndicator.entrySet()) {
+		for (Entry<String, List<BaseActivityResult>> indicatorData : dataByIndicator.entrySet()) {
 
-			IndicatorCategoryCode indicatorCategory = indicatorData.getKey();
-			CodeLabel indicatorCategoryCodeLabel = codeLabelService.findCodeLabelByCode(indicatorCategory);
+			String indicatorIdentifier = indicatorData.getKey();
 
-			ReportLineDTO reportLineDTO = new ReportLineDTO(indicatorCategory);
-			reportLineDTO.setTranslatedIndicatorCategory(indicatorCategoryCodeLabel.getLabelEn());
+			ReportLineDTO reportLineDTO = new ReportLineDTO(indicatorIdentifier);
 
 			for (BaseActivityResult baseActivityResult : indicatorData.getValue()) {
 				Double numericValue = baseActivityResult.getNumericValue();
