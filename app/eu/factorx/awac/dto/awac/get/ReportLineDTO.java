@@ -3,12 +3,13 @@ package eu.factorx.awac.dto.awac.get;
 import java.io.Serializable;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 
 public class ReportLineDTO extends DTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String indicatorName;
+	private IndicatorCategoryCode indicatorCategory;
 
 	private Double scope1Value = Double.valueOf(0);
 
@@ -16,29 +17,33 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private Double scope3Value = Double.valueOf(0);
 
+	// TODO Delete this field: The translation should occur in client, but for test purpose...
+	private String translatedIndicatorCategory;
+
 	public ReportLineDTO() {
 		super();
 	}
 
-	public ReportLineDTO(String indicatorName) {
+	public ReportLineDTO(IndicatorCategoryCode IndicatorCategory) {
 		super();
-		this.indicatorName = indicatorName;
+		this.indicatorCategory = IndicatorCategory;
 	}
 
-	public ReportLineDTO(String indicatorName, Double scope1Value, Double scope2Value, Double scope3Value) {
+	public ReportLineDTO(IndicatorCategoryCode IndicatorCategory, Double scope1Value, Double scope2Value,
+			Double scope3Value) {
 		super();
-		this.indicatorName = indicatorName;
+		this.indicatorCategory = IndicatorCategory;
 		this.scope1Value = scope1Value;
 		this.scope2Value = scope2Value;
 		this.scope3Value = scope3Value;
 	}
 
-	public String getIndicatorName() {
-		return indicatorName;
+	public IndicatorCategoryCode getIndicatorCategory() {
+		return indicatorCategory;
 	}
 
-	public void setIndicatorName(String indicatorName) {
-		this.indicatorName = indicatorName;
+	public void setIndicatorCategory(IndicatorCategoryCode IndicatorCategory) {
+		this.indicatorCategory = IndicatorCategory;
 	}
 
 	public Double getScope1Value() {
@@ -75,6 +80,14 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	public Double addScope3Value(Double value) {
 		return (scope3Value += value);
+	}
+
+	public String getTranslatedIndicatorCategory() {
+		return translatedIndicatorCategory;
+	}
+
+	public void setTranslatedIndicatorCategory(String translatedIndicatorCategory) {
+		this.translatedIndicatorCategory = translatedIndicatorCategory;
 	}
 
 }
