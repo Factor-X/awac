@@ -19,12 +19,19 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 	@Override
 	public List<Indicator> findCarbonIndicatorsForSitesByActivity(BaseActivityData activityData) {
 		TypedQuery<Indicator> query = JPA.em().createNamedQuery(Indicator.FIND_BY_PARAMETERS, Indicator.class)
-				.setParameter("type", IndicatorTypeCode.CARBON)
-				.setParameter("scopeType", ScopeTypeCode.SITE)
-				.setParameter("activityCategory", activityData.getActivityCategory())
-				.setParameter("activitySubCategory", activityData.getActivitySubCategory())
-//				.setParameter("activityOwnership", activityData.getActivityOwnership()) // not fully completed in indicators specifications => see Xavier M. !
-				;
+					.setParameter("type", IndicatorTypeCode.CARBON)
+					.setParameter("scopeType", ScopeTypeCode.SITE)
+					.setParameter("activityCategory", activityData.getActivityCategory())
+					.setParameter("activitySubCategory", activityData.getActivitySubCategory())
+					.setParameter("activityOwnership", activityData.getActivityOwnership());
 		return query.getResultList();
 	}
+
+	@Override
+	public List<String> findAllIndicatorNames() {
+		List<String> resultList = JPA.em().createNamedQuery(Indicator.FIND_ALL_INDICATOR_NAMES, String.class)
+				.getResultList();
+		return resultList;
+	}
+
 }

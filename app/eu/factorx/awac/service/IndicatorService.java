@@ -9,4 +9,6 @@ public interface IndicatorService extends PersistenceService<Indicator> {
 
 	List<Indicator> findCarbonIndicatorsForSitesByActivity(BaseActivityData activityData);
 
+	List<String> findAllIndicatorNames();
+
 }
