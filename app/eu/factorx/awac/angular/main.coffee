@@ -45,6 +45,10 @@ angular
             templateUrl: '$/angular/templates/mm-awac-form6.html'
             controller: 'Form6Ctrl'
         })
+    .when('/form7/:period/:scope', {
+            templateUrl: '$/angular/templates/mm-awac-form7.html'
+            controller: 'Form7Ctrl'
+        })
     .when('/results/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-results.html'
             controller: 'ResultsCtrl'
