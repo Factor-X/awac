@@ -23,8 +23,7 @@ public class DoubleAnswerValue extends NumericAnswerValue {
 		super();
 	}
 
-	public DoubleAnswerValue(QuestionAnswer questionAnswer, Double value,
-			Unit unit) {
+	public DoubleAnswerValue(QuestionAnswer questionAnswer, Double value, Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
@@ -56,6 +55,11 @@ public class DoubleAnswerValue extends NumericAnswerValue {
 			this.unit = JPA.em().find(Unit.class, unitId);
 		}
 		this.value = rawData.getDoubleData();
+	}
+
+	@Override
+	public Double doubleValue() {
+		return value;
 	}
 
 }

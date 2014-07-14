@@ -4,4 +4,6 @@ import eu.factorx.awac.models.knowledge.Unit;
 
 public interface UnitService extends PersistenceService<Unit> {
 
+	public Unit findBySymbol(String symbol);
+
 }

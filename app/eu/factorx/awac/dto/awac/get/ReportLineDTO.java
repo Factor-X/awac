@@ -10,14 +10,19 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private String indicatorName;
 
-	private Double scope1Value;
+	private Double scope1Value = Double.valueOf(0);
 
-	private Double scope2Value;
+	private Double scope2Value = Double.valueOf(0);
 
-	private Double scope3Value;
+	private Double scope3Value = Double.valueOf(0);
 
 	public ReportLineDTO() {
 		super();
+	}
+
+	public ReportLineDTO(String indicatorName) {
+		super();
+		this.indicatorName = indicatorName;
 	}
 
 	public ReportLineDTO(String indicatorName, Double scope1Value, Double scope2Value, Double scope3Value) {
@@ -58,6 +63,18 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	public void setScope3Value(Double scope3Value) {
 		this.scope3Value = scope3Value;
+	}
+
+	public Double addScope1Value(Double value) {
+		return (scope1Value += value);
+	}
+
+	public Double addScope2Value(Double value) {
+		return (scope2Value += value);
+	}
+
+	public Double addScope3Value(Double value) {
+		return (scope3Value += value);
 	}
 
 }

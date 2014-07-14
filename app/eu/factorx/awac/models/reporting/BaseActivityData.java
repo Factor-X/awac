@@ -8,7 +8,6 @@ import eu.factorx.awac.models.code.type.ActivityCategoryCode;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @MappedSuperclass
@@ -32,15 +31,15 @@ public class BaseActivityData implements Serializable {
 
 	private Unit unit;
 
-	private NumericAnswerValue value;
+	private Double value;
 
-	protected BaseActivityData() {
+	public BaseActivityData() {
 		super();
 	}
 
 	public BaseActivityData(Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
 			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
-			ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit, NumericAnswerValue value) {
+			ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit, Double value) {
 		super();
 		this.rank = rank;
 		this.specificPurpose = specificPurpose;
@@ -117,11 +116,11 @@ public class BaseActivityData implements Serializable {
 		this.unit = unit;
 	}
 
-	public NumericAnswerValue getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(NumericAnswerValue value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

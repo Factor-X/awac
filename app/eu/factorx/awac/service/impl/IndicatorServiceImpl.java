@@ -23,7 +23,8 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 				.setParameter("scopeType", ScopeTypeCode.SITE)
 				.setParameter("activityCategory", activityData.getActivityCategory())
 				.setParameter("activitySubCategory", activityData.getActivitySubCategory())
-				.setParameter("activityOwnership", activityData.getActivityOwnership());
+//				.setParameter("activityOwnership", activityData.getActivityOwnership()) // not fully completed in indicators specifications => see Xavier M. !
+				;
 		return query.getResultList();
 	}
 }

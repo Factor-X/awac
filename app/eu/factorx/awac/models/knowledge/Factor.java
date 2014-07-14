@@ -127,4 +127,8 @@ public class Factor extends AbstractEntity {
 		this.values = values;
 	}
 
+	public Double getCurrentValue() {
+		FactorValue factorValue = this.values.get(0); // TODO Find this value from the current date
+		return factorValue.getValue();
+	}
 }

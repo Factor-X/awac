@@ -24,7 +24,7 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Entity
 @Table(name = "indicator")
 @NamedQueries({
-	@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and i.deleted = false and (:activityOwnership is null or i.activityOwnership = :activityOwnership)"),
+	@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and i.deleted = false"),
 })
 public class Indicator extends AbstractEntity {
 
@@ -36,7 +36,7 @@ public class Indicator extends AbstractEntity {
 	 * - scopeType : an {@link ScopeTypeCode}<br>
 	 * - activityCategory : an {@link ActivityCategoryCode}<br>
 	 * - activitySubCategory : an {@link ActivitySubCategoryCode}<br>
-	 * - activityOwnership (optional) : {@link Boolean}<br>
+	 * (- activityOwnership (optional) : {@link Boolean} => not yet implemented because of lacks in specs => TODO Fix specs with Xavier)<br>
 	 */
 	public static final String FIND_BY_PARAMETERS = "Indicator.findByParameters";
 

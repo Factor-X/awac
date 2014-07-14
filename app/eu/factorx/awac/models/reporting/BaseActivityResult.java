@@ -53,4 +53,12 @@ public class BaseActivityResult implements Serializable {
 		this.factor = factor;
 	}
 
+	public Double getNumericValue() {
+		if (activityData == null || factor == null) {
+			return null;
+		}
+		Double activityDataValue = activityData.getValue();
+		Double factorValue = factor.getCurrentValue();
+		return (activityDataValue * factorValue);
+	}
 }

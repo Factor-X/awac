@@ -57,4 +57,9 @@ public class IntegerAnswerValue extends NumericAnswerValue {
 		this.value = rawData.getDoubleData().intValue();
 	}
 
+	@Override
+	public Double doubleValue() {
+		return value.doubleValue();
+	}
+
 }

@@ -22,4 +22,6 @@ public abstract class NumericAnswerValue extends AnswerValue {
 		this.unit = unit;
 	}
 
+	public abstract Double doubleValue();
+
 }

@@ -57,7 +57,6 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode BELGIQUE = new ActivitySourceCode("41");
 	public static final ActivitySourceCode MOYENNE_UE27 = new ActivitySourceCode("42");
 	public static final ActivitySourceCode BOIS_COPEAUX_DE_BOIS = new ActivitySourceCode("43");
-	public static final ActivitySourceCode DIESEL_GASOIL_FUEL_LEGER = new ActivitySourceCode("44");
 	public static final ActivitySourceCode _403B = new ActivitySourceCode("45");
 	public static final ActivitySourceCode _404A = new ActivitySourceCode("46");
 	public static final ActivitySourceCode _407C = new ActivitySourceCode("47");

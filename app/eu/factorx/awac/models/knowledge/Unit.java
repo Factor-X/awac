@@ -12,12 +12,15 @@ import eu.factorx.awac.models.AbstractEntity;
 @Table(name = "unit")
 @NamedQueries({
 	@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
+	@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
 })
 public class Unit extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_ALL = "Unit.findAll";
+
+	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
 
 
 	private String ref;
