@@ -12,12 +12,15 @@ import org.springframework.core.convert.converter.Converter;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
 import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.IndicatorService;
 
 public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> {
+
+	@Autowired
+	private IndicatorService indicatorService;
 
 	@Autowired
 	private CodeLabelService codeLabelService;
@@ -28,21 +31,18 @@ public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> 
 
 		// group data by indicator name
 		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
+		for (String indicatorName : indicatorService.findAllIndicatorNames()) {
+			dataByIndicator.put(indicatorName, new ArrayList<BaseActivityResult>());
+		}
 		for (BaseActivityResult baseActivityResult : report.getActivityResults()) {
-			Indicator indicator = baseActivityResult.getIndicator();
-			String indicatorIdentifier = indicator.getIdentifier();
-			if (!dataByIndicator.containsKey(indicatorIdentifier)) {
-				dataByIndicator.put(indicatorIdentifier, new ArrayList<BaseActivityResult>());
-			}
-			dataByIndicator.get(indicatorIdentifier).add(baseActivityResult);
+			String indicatorName = baseActivityResult.getIndicator().getName();
+			dataByIndicator.get(indicatorName).add(baseActivityResult);
 		}
 
-		// build a report line for each indicator category (=> adding values of each activity data linked to the indicator cat.)
+		// build a report line for each entry (=> adding values of each activity data linked to the indicator name.)
 		for (Entry<String, List<BaseActivityResult>> indicatorData : dataByIndicator.entrySet()) {
-
-			String indicatorIdentifier = indicatorData.getKey();
-
-			ReportLineDTO reportLineDTO = new ReportLineDTO(indicatorIdentifier);
+			String indicatorName = indicatorData.getKey();
+			ReportLineDTO reportLineDTO = new ReportLineDTO(indicatorName);
 
 			for (BaseActivityResult baseActivityResult : indicatorData.getValue()) {
 				Double numericValue = baseActivityResult.getNumericValue();
