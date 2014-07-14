@@ -12,6 +12,7 @@ public enum CodeList {
     PUBLIC_OR_PRIVATE,
     NACE_CODES_1,
     NACE_CODES_2,
-    NACE_CODES_3
+    NACE_CODES_3,
+    FUEL
 
 }

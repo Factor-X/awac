@@ -174,8 +174,8 @@ public class AnswerController extends Controller {
     }
 
     public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
-        Period period = periodService.findById(answersDTO.getPeriodId().longValue());
-        Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
+        Period period = periodService.findById(answersDTO.getPeriodId());
+        Scope scope = scopeService.findById(answersDTO.getScopeId());
 
         for (AnswerLine answerLine : answersDTO.getListAnswers()) {
             Question question = getAndVerifyQuestion(answerLine);

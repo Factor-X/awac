@@ -184,11 +184,12 @@ public class AwacDummyDataCreator {
         System.out.println(" ===== Period ID = " + period1.getId());
         System.out.println(" ===== Scope ID = " + scope1.getId());
 
-        // TAB 1
-
         // -- FORM
         Form tab1Form = new Form("TAB1");
         session.saveOrUpdate(tab1Form);
+
+        Form tab2Form = new Form("TAB2");
+        session.saveOrUpdate(tab2Form);
 
         // -- CODE LISTS
         session.saveOrUpdate(new CodeLabel(CodeList.SITE_SECTORS, "1", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole", "Industrie primaire, hormis le secteur agricole"));
@@ -450,51 +451,135 @@ public class AwacDummyDataCreator {
                 "99 Activités des organisations et organismes extraterritoriaux",
                 "99 Activités des organisations et organismes extraterritoriaux"));
 
-
         session.saveOrUpdate(new CodeLabel(CodeList.PUBLIC_OR_PRIVATE, "1", "Public", "Public", "Public"));
         session.saveOrUpdate(new CodeLabel(CodeList.PUBLIC_OR_PRIVATE, "2", "Privé", "Privé", "Privé"));
+
+        CodeList codeList = CodeList.FUEL;
+        session.saveOrUpdate(new CodeLabel(codeList, "1", "Diesel, gasoil ou fuel léger", "Diesel, gasoil ou fuel léger", "Diesel, gasoil ou fuel léger"));
+        session.saveOrUpdate(new CodeLabel(codeList, "2", "Gaz de Pétrole Liquefié (GPL)", "Gaz de Pétrole Liquefié (GPL)", "Gaz de Pétrole Liquefié (GPL)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "3", "Gaz naturel (pauvre)", "Gaz naturel (pauvre)", "Gaz naturel (pauvre)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "4", "Essence", "Essence", "Essence"));
+        session.saveOrUpdate(new CodeLabel(codeList, "5", "Biodiesel", "Biodiesel", "Biodiesel"));
+        session.saveOrUpdate(new CodeLabel(codeList, "6", "Bioethanol", "Bioethanol", "Bioethanol"));
+        session.saveOrUpdate(new CodeLabel(codeList, "7", "Biogaz", "Biogaz", "Biogaz"));
+        session.saveOrUpdate(new CodeLabel(codeList, "8", "Gaz de décharge", "Gaz de décharge", "Gaz de décharge"));
+        session.saveOrUpdate(new CodeLabel(codeList, "9", "Charbon", "Charbon", "Charbon"));
+        session.saveOrUpdate(new CodeLabel(codeList, "10", "Bois (bûche)", "Bois (bûche)", "Bois (bûche)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "11", "Bois (copeaux)", "Bois (copeaux)", "Bois (copeaux)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "12", "Bois (pellets)", "Bois (pellets)", "Bois (pellets)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "13", "Herbe/paille", "Herbe/paille", "Herbe/paille"));
+        session.saveOrUpdate(new CodeLabel(codeList, "14", "Propane", "Propane", "Propane"));
+        session.saveOrUpdate(new CodeLabel(codeList, "15", "Butane", "Butane", "Butane"));
+        session.saveOrUpdate(new CodeLabel(codeList, "16", "Aggloméré de charbon ou de lignite", "Aggloméré de charbon ou de lignite", "Aggloméré de charbon ou de lignite"));
+        session.saveOrUpdate(new CodeLabel(codeList, "17", "Anthracite", "Anthracite", "Anthracite"));
+        session.saveOrUpdate(new CodeLabel(codeList, "18", "Biogaz", "Biogaz", "Biogaz"));
+        session.saveOrUpdate(new CodeLabel(codeList, "19", "Autres produits pétroliers (paraffines, cires, …)", "Autres produits pétroliers (paraffines, cires, …)", "Autres produits pétroliers (paraffines, cires, …)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "20", "Bitumes", "Bitumes", "Bitumes"));
+        session.saveOrUpdate(new CodeLabel(codeList, "21", "Briquette de lignite", "Briquette de lignite", "Briquette de lignite"));
+        session.saveOrUpdate(new CodeLabel(codeList, "22", "Coke", "Coke", "Coke"));
+        session.saveOrUpdate(new CodeLabel(codeList, "23", "Coke de pétrole", "Coke de pétrole", "Coke de pétrole"));
+        session.saveOrUpdate(new CodeLabel(codeList, "24", "Fuel lourd", "Fuel lourd", "Fuel lourd"));
+        session.saveOrUpdate(new CodeLabel(codeList, "25", "Gaz de cokerie", "Gaz de cokerie", "Gaz de cokerie"));
+        session.saveOrUpdate(new CodeLabel(codeList, "26", "Gaz de haut fourneau", "Gaz de haut fourneau", "Gaz de haut fourneau"));
+        session.saveOrUpdate(new CodeLabel(codeList, "27", "Gaz naturel (riche)", "Gaz naturel (riche)", "Gaz naturel (riche)"));
+        session.saveOrUpdate(new CodeLabel(codeList, "28", "Goudron", "Goudron", "Goudron"));
+        session.saveOrUpdate(new CodeLabel(codeList, "29", "Graisses", "Graisses", "Graisses"));
+        session.saveOrUpdate(new CodeLabel(codeList, "30", "Huiles", "Huiles", "Huiles"));
+        session.saveOrUpdate(new CodeLabel(codeList, "31", "Kérosène", "Kérosène", "Kérosène"));
+        session.saveOrUpdate(new CodeLabel(codeList, "32", "Lignite", "Lignite", "Lignite"));
+        session.saveOrUpdate(new CodeLabel(codeList, "33", "Méthane", "Méthane", "Méthane"));
+        session.saveOrUpdate(new CodeLabel(codeList, "34", "Naphta", "Naphta", "Naphta"));
+        session.saveOrUpdate(new CodeLabel(codeList, "35", "Pétrole brut", "Pétrole brut", "Pétrole brut"));
+        session.saveOrUpdate(new CodeLabel(codeList, "36", "Pétrole lampant", "Pétrole lampant", "Pétrole lampant"));
+        session.saveOrUpdate(new CodeLabel(codeList, "37", "Terril", "Terril", "Terril"));
+        session.saveOrUpdate(new CodeLabel(codeList, "38", "Tourbe", "Tourbe", "Tourbe"));
+
 
         // -- QUESTION_SETS
         QuestionSet a1 = new QuestionSet(QuestionCode.A1, false);
         session.saveOrUpdate(a1);
-
         tab1Form.getQuestionSet().add(a1);
         session.saveOrUpdate(tab1Form);
 
+
+        QuestionSet a13 = new QuestionSet(QuestionCode.A13, false);
+        session.saveOrUpdate(a13);
+        tab2Form.getQuestionSet().add(a13);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a15 = new QuestionSet(QuestionCode.A15, true);
+        session.saveOrUpdate(a15);
+        tab2Form.getQuestionSet().add(a15);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a20 = new QuestionSet(QuestionCode.A20, false);
+        session.saveOrUpdate(a20);
+        tab2Form.getQuestionSet().add(a20);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a22 = new QuestionSet(QuestionCode.A22, false);
+        session.saveOrUpdate(a22);
+        tab2Form.getQuestionSet().add(a22);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a25 = new QuestionSet(QuestionCode.A25, false);
+        session.saveOrUpdate(a25);
+        tab2Form.getQuestionSet().add(a25);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a31 = new QuestionSet(QuestionCode.A31, false);
+        session.saveOrUpdate(a31);
+        tab2Form.getQuestionSet().add(a31);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a41 = new QuestionSet(QuestionCode.A41, false);
+        session.saveOrUpdate(a41);
+        tab2Form.getQuestionSet().add(a41);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a42 = new QuestionSet(QuestionCode.A42, false);
+        session.saveOrUpdate(a42);
+        tab2Form.getQuestionSet().add(a42);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a45 = new QuestionSet(QuestionCode.A45, false);
+        session.saveOrUpdate(a45);
+        tab2Form.getQuestionSet().add(a45);
+        session.saveOrUpdate(tab2Form);
+
+        QuestionSet a47 = new QuestionSet(QuestionCode.A47, false);
+        session.saveOrUpdate(a47);
+        tab2Form.getQuestionSet().add(a47);
+        session.saveOrUpdate(tab2Form);
+        
+        
         // -- QUESTIONS
 
-        Question a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null);
-        session.saveOrUpdate(a2);
+        session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A2, null));
+        session.saveOrUpdate(new ValueSelectionQuestion(a1, 100, QuestionCode.A3, CodeList.SITE_SECTORS));
+        session.saveOrUpdate(new ValueSelectionQuestion(a1, 200, QuestionCode.A4, CodeList.NACE_CODES_1));
+        session.saveOrUpdate(new ValueSelectionQuestion(a1, 300, QuestionCode.A5, CodeList.NACE_CODES_2));
+        session.saveOrUpdate(new ValueSelectionQuestion(a1, 400, QuestionCode.A6, CodeList.NACE_CODES_3));
+        session.saveOrUpdate(new BooleanQuestion(a1, 500, QuestionCode.A7));
+        session.saveOrUpdate(new ValueSelectionQuestion(a1, 600, QuestionCode.A8, CodeList.PUBLIC_OR_PRIVATE));
+        session.saveOrUpdate(new DoubleQuestion(a1, 700, QuestionCode.A9, surfaceUnits));
+        session.saveOrUpdate(new DoubleQuestion(a1, 800, QuestionCode.A10, surfaceUnits));
+        session.saveOrUpdate(new BooleanQuestion(a1, 900, QuestionCode.A11));
+        session.saveOrUpdate(new IntegerQuestion(a1, 1000, QuestionCode.A12, null));
 
-        Question a3 = new ValueSelectionQuestion(a1, 0, QuestionCode.A3, CodeList.SITE_SECTORS);
-        session.saveOrUpdate(a3);
+        // TAB 2
 
-        Question a4 = new ValueSelectionQuestion(a1, 0, QuestionCode.A4, CodeList.NACE_CODES_1);
-        session.saveOrUpdate(a4);
+        session.saveOrUpdate(new IntegerQuestion(a13, 0, QuestionCode.A14, null));
+        session.saveOrUpdate(new IntegerQuestion(a13, 100, QuestionCode.A15, null));
+        session.saveOrUpdate(new IntegerQuestion(a13, 200, QuestionCode.A16, null));
+        session.saveOrUpdate(new IntegerQuestion(a13, 300, QuestionCode.A17, null));
+        // 18
+        // 19
+        session.saveOrUpdate(new IntegerQuestion(a13, 300, QuestionCode.A21, null));
+        session.saveOrUpdate(new IntegerQuestion(a13, 300, QuestionCode.A23, null));
+        session.saveOrUpdate(new IntegerQuestion(a13, 300, QuestionCode.A24, null));
 
-        Question a5 = new ValueSelectionQuestion(a1, 0, QuestionCode.A5, CodeList.NACE_CODES_2);
-        session.saveOrUpdate(a5);
 
-        Question a6 = new ValueSelectionQuestion(a1, 0, QuestionCode.A6, CodeList.NACE_CODES_3);
-        session.saveOrUpdate(a6);
-
-        Question a7 = new BooleanQuestion(a1, 0, QuestionCode.A7);
-        session.saveOrUpdate(a7);
-
-        Question a8 = new ValueSelectionQuestion(a1, 0, QuestionCode.A8, CodeList.PUBLIC_OR_PRIVATE);
-        session.saveOrUpdate(a8);
-
-        Question a9 = new DoubleQuestion(a1, 0, QuestionCode.A9, surfaceUnits);
-        session.saveOrUpdate(a9);
-
-        Question a10 = new DoubleQuestion(a1, 0, QuestionCode.A10, surfaceUnits);
-        session.saveOrUpdate(a10);
-
-        Question a11 = new BooleanQuestion(a1, 0, QuestionCode.A11);
-        session.saveOrUpdate(a11);
-
-        Question a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null);
-        session.saveOrUpdate(a12);
 
     }
 }

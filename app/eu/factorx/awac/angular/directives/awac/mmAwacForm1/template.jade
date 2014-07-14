@@ -55,14 +55,14 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A6')", ng-model="A('A6').value")
                         .user_icon XM
 
-                div
+                div(ng-show="A('A3').value == '4'")
                     div Est-ce que votre activité est purement ou principalement de bureaux?
                     .oneelement
                         .status.answer
                         input(type="checkbox", ng-model="A('A7').value")
                         .user_icon XM
 
-                div
+                div(ng-show="A('A7').value == true")
                     div Etes-vous dans le secteur public ou privé?
                     .oneelement
                         .status.answer
@@ -84,7 +84,7 @@ ng-virtual
                         select(ng-options="p.id as p.name for p in U('A10')", ng-model="A('A10').unitId")
                         .user_icon XM
 
-                div
+                div(ng-show="A('A3').value != '4'")
                     div Etes-vous participant aux accords de branche de 2ème génération?
                     .oneelement
                         .status.answer
