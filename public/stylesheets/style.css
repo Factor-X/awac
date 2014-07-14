@@ -321,15 +321,18 @@
 			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 			box-sizing: border-box;         /* Opera/IE 8+ */
+
+            display: table;
+            width: 100%;
 		}
 		
 		
 		.menu > div,
 		.last_menu > div	{
-			//font-family: 'robotoregular', Arial, Helvetica, sans-serif;
+			/* font-family: 'robotoregular', Arial, Helvetica, sans-serif; */
 			height: 88px;
 			background-color: #efeee8;
-			display: inline-block;
+			display: table-cell;
 			font-size: 12px;
 			text-transform: uppercase;
 			padding: 4px;
@@ -352,17 +355,12 @@
 		}
 		
 		.menu > div	{
-			min-width: 16.0%;
-			width: 16.0%;
-			min-width: -moz-calc(16.6% - 5px);
-		    min-width: -webkit-calc(16.6% - 5px);
-			min-width: calc(16.7% - 5px);
-			width: -moz-calc(16.6% - 5px);
-		    width: -webkit-calc(16.6% - 5px);
-			width: calc(16.7% - 5px);
+			min-width: 5.0%;
+			width: 5.0%;
+			max-width: 5.0%;
 			position: relative;
 			margin: 0px 1px;
-		}	
+		}
 
 		.nav_entreprise > div {
 			display: inline-block;

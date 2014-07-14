@@ -28,8 +28,8 @@
                     <option value="nl" ng-bind-html="'NL' | translate"></option>
                 </select>
             </div>
-            <button type="button" class="confidentiality">Confidentialité</button>
-            <button type="button" class="help">Assistance</button>
+            <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
+            <button type="button" class="help" mm-not-implemented>Assistance</button>
         </div>
 
     </div>
@@ -40,9 +40,9 @@
             <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
         </div>
 
-        <div class="big_separator"></div>
+        <div class="big_separator" mm-not-implemented></div>
 
-        <div class="data_date_compare">
+        <div class="data_date_compare" mm-not-implemented>
             <div>Comparaison avec</div>
             <select>
                 <option>données 2012</option>
@@ -70,16 +70,16 @@
         <div class="nav_entreprise">
             <div class="site_menu">
                 <div class="site">
-                    <button type="button" class="site_manage">Gérer les sites</button>
+                    <button type="button" class="site_manage" mm-not-implemented>Gérer les sites</button>
                     <div>Site</div>
                     <div class="small_separator"></div>
                     <div class="sitename">{{ $root.organization.sites[0].name }}</div>
-                    <button type="button" class="verification">Vérification</button>
+                    <button type="button" class="verification" mm-not-implemented>Vérification</button>
                 </div>
                 <div class="menu">
                     <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
                         <div>données générales</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 16%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 70%"></div>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
                         <div>consommations & rejets des sites</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 70%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 25%"></div>
@@ -103,7 +103,7 @@
                     </div>
                     <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
                         <div>mobilité & transport</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 5%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 50%"></div>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
                         <div>déchets</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 25%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 45%"></div>
@@ -128,7 +128,7 @@
 
                     <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
                         <div>achats & investissements</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 82%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 45%"></div>
@@ -141,7 +141,20 @@
 
                     <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
                         <div>produits vendus</div>
-                        <div class="menu_jauge">
+                        <div class="menu_jauge" mm-not-implemented>
+                            <div>rempli à 50%</div>
+                            <div class="jauge">
+                                <div class="jauge_limit" style="margin-left: 50%"></div>
+                                <div class="jauge_current jauge_ok" style="width: 50%"></div>
+                                <div class="jauge_bg jauge_ok"></div>
+                            </div>
+                        </div>
+                        <div class="menu_arrow"></div>
+                    </div>
+
+                    <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
+                        <div>encore un tab à nommer</div>
+                        <div class="menu_jauge" mm-not-implemented>
                             <div>rempli à 50%</div>
                             <div class="jauge">
                                 <div class="jauge_limit" style="margin-left: 50%"></div>
@@ -153,11 +166,11 @@
                     </div>
                 </div>
             </div>
-            <div class="last_menu">
+            <div class="last_menu" >
                 <div class="{{ getMenuCurrentClass('/results') }}" ng-click="nav('/results')">
                     résultats
                 </div>
-                <div>
+                <div mm-not-implemented>
                     actions de réduction
                 </div>
             </div>
