@@ -84,7 +84,9 @@ public class AnswerController extends Controller {
         Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
         List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
         List<QuestionDTO> questionDTOs = new ArrayList<>();
+
         for (Question question : questions) {
+
             String questionKey = question.getCode().getKey();
             AnswerType questionAnswerType = question.getAnswerType();
             Long unitCategoryId = null;
@@ -102,7 +104,6 @@ public class AnswerController extends Controller {
                 String codeListName = codeList.name();
                 questionDTO.setCodeListName(codeListName);
             }
-
 
             questionDTOs.add(questionDTO);
             listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(questionKey)));
@@ -144,7 +145,7 @@ public class AnswerController extends Controller {
         for (UnitCategory unitCategory : unitCategoryService.findAll()) {
             UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
             for (Unit unit : unitCategory.getUnits()) {
-                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
+                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
             }
             res.add(unitCategoryDTO);
         }
@@ -303,7 +304,7 @@ public class AnswerController extends Controller {
         // the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
         if (answerUnitId == null) {
             throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
-                    questionUnitCategory.getCode()));
+                    questionUnitCategory.getName()));
         }
         Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
@@ -311,7 +312,7 @@ public class AnswerController extends Controller {
         UnitCategory answerUnitCategory = answerUnit.getCategory();
         if (!questionUnitCategory.equals(answerUnitCategory)) {
             throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
-                    questionUnitCategory.getCode(), answerUnit.getName(), answerUnitCategory.getCode()));
+                    questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
         }
         return answerUnit;
     }

@@ -2,27 +2,30 @@ package eu.factorx.awac.models.reporting;
 
 import java.io.Serializable;
 
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.knowledge.ActivityCategory;
-import eu.factorx.awac.models.knowledge.ActivitySource;
-import eu.factorx.awac.models.knowledge.ActivityType;
+import javax.persistence.MappedSuperclass;
+
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySourceCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
+import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.knowledge.Unit;
 
+@MappedSuperclass
 public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private Scope scope;
 
 	private Integer rank;
 
 	private String specificPurpose;
 
-	private ActivityCategory activityCategory;
+	private ActivityCategoryCode activityCategory;
 
-	private ActivityType activityType;
+	private ActivitySubCategoryCode activitySubCategory;
 
-	private ActivitySource activitySource;
+	private ActivityTypeCode activityType;
+
+	private ActivitySourceCode activitySource;
 
 	private Boolean activityOwnership;
 
@@ -34,26 +37,19 @@ public class BaseActivityData implements Serializable {
 		super();
 	}
 
-	public BaseActivityData(Scope scope, Integer rank, String specificPurpose, ActivityCategory activityCategory,
-			ActivityType activityType, ActivitySource activitySource, Boolean activityOwnership, Unit unit, Double value) {
+	public BaseActivityData(Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
+			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
+			ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit, Double value) {
 		super();
-		this.scope = scope;
 		this.rank = rank;
 		this.specificPurpose = specificPurpose;
 		this.activityCategory = activityCategory;
+		this.activitySubCategory = activitySubCategory;
 		this.activityType = activityType;
 		this.activitySource = activitySource;
 		this.activityOwnership = activityOwnership;
 		this.unit = unit;
 		this.value = value;
-	}
-
-	public Scope getScope() {
-		return scope;
-	}
-
-	public void setScope(Scope scope) {
-		this.scope = scope;
 	}
 
 	public Integer getRank() {
@@ -72,27 +68,35 @@ public class BaseActivityData implements Serializable {
 		this.specificPurpose = specificPurpose;
 	}
 
-	public ActivityCategory getActivityCategory() {
+	public ActivityCategoryCode getActivityCategory() {
 		return activityCategory;
 	}
 
-	public void setActivityCategory(ActivityCategory activityCategory) {
+	public void setActivityCategory(ActivityCategoryCode activityCategory) {
 		this.activityCategory = activityCategory;
 	}
 
-	public ActivityType getActivityType() {
+	public ActivitySubCategoryCode getActivitySubCategory() {
+		return activitySubCategory;
+	}
+
+	public void setActivitySubCategory(ActivitySubCategoryCode activitySubCategory) {
+		this.activitySubCategory = activitySubCategory;
+	}
+
+	public ActivityTypeCode getActivityType() {
 		return activityType;
 	}
 
-	public void setActivityType(ActivityType activityType) {
+	public void setActivityType(ActivityTypeCode activityType) {
 		this.activityType = activityType;
 	}
 
-	public ActivitySource getActivitySource() {
+	public ActivitySourceCode getActivitySource() {
 		return activitySource;
 	}
 
-	public void setActivitySource(ActivitySource activitySource) {
+	public void setActivitySource(ActivitySourceCode activitySource) {
 		this.activitySource = activitySource;
 	}
 

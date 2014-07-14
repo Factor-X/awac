@@ -27,7 +27,16 @@ public class FactorValue extends AbstractEntity {
 	@ManyToOne(optional = false)
 	private Factor factor;
 
-	public FactorValue() {
+	protected FactorValue() {
+		super();
+	}
+
+	public FactorValue(Double value, Date dateIn, Date dateOut, Factor factor) {
+		super();
+		this.value = value;
+		this.dateIn = dateIn;
+		this.dateOut = dateOut;
+		this.factor = factor;
 	}
 
 	public Double getValue() {

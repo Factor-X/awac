@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code;
 import java.io.Serializable;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
@@ -18,16 +25,22 @@ import eu.factorx.awac.models.data.question.Question;
  * 
  */
 @MappedSuperclass
-public class Code implements Serializable {
+public class Code implements Serializable, Comparable<Code> {
 
 	private static final long serialVersionUID = 1L;
 
+	@Transient
 	protected CodeList codeList;
 
 	protected String key;
 
-	protected Code() {
+	public Code() {
 		super();
+	}
+
+	protected Code(CodeList codeList) {
+		super();
+		this.codeList = codeList;
 	}
 
 	public Code(CodeList codeList, String key) {
@@ -52,4 +65,34 @@ public class Code implements Serializable {
 		this.key = key;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Code rhs = (Code) obj;
+		return new EqualsBuilder().append(this.codeList, rhs.codeList).append(this.key, rhs.key).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(29, 7).append(this.codeList).append(this.key).toHashCode();
+	}
+
+	@Override
+	public int compareTo(Code o) {
+		return new CompareToBuilder().append(this.codeList, o.codeList).append(this.key, o.key).toComparison();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("type", codeList).append("key", key)
+				.toString();
+	}
 }

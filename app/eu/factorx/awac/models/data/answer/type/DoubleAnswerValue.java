@@ -7,28 +7,23 @@ import javax.persistence.Transient;
 
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.answer.AnswerRawData;
-import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class DoubleAnswerValue extends AnswerValue {
+public class DoubleAnswerValue extends NumericAnswerValue {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
 	private Double value;
 
-	@Transient
-	private Unit unit;
-
 	protected DoubleAnswerValue() {
 		super();
 	}
 
-	public DoubleAnswerValue(QuestionAnswer questionAnswer, Double value,
-			Unit unit) {
+	public DoubleAnswerValue(QuestionAnswer questionAnswer, Double value, Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
@@ -41,14 +36,6 @@ public class DoubleAnswerValue extends AnswerValue {
 
 	public void setValue(Double value) {
 		this.value = value;
-	}
-
-	public Unit getUnit() {
-		return unit;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
 	}
 
 	@Override
@@ -68,6 +55,11 @@ public class DoubleAnswerValue extends AnswerValue {
 			this.unit = JPA.em().find(Unit.class, unitId);
 		}
 		this.value = rawData.getDoubleData();
+	}
+
+	@Override
+	public Double doubleValue() {
+		return value;
 	}
 
 }

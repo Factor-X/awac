@@ -12,11 +12,6 @@ public class QuestionCode extends Code {
 
     public static final CodeList CODE_TYPE = CodeList.QUESTION;
 
-    public static final QuestionCode HFQS = new QuestionCode("HFQS");
-    public static final QuestionCode HFQ_HFTYPE = new QuestionCode("HFQ_HFTYPE");
-    public static final QuestionCode HFQ_HFCONSO_VOL = new QuestionCode("HFQ_HFCONSO_VOL");
-    public static final QuestionCode HFQ_HFCONSO_MASS = new QuestionCode("HFQ_HFCONSO_MASS");
-
     public static final QuestionCode A1 = new QuestionCode("A1");
     public static final QuestionCode A2 = new QuestionCode("A2");
     public static final QuestionCode A3 = new QuestionCode("A3");
@@ -318,8 +313,7 @@ public class QuestionCode extends Code {
     public static final QuestionCode A299 = new QuestionCode("A299");
     public static final QuestionCode A300 = new QuestionCode("A300");
 
-
-    protected QuestionCode() {
+    public QuestionCode() {
         super();
     }
 

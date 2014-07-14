@@ -8,8 +8,7 @@
              http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <context:component-scan
-            base-package="eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.jxl"/>
-
+            base-package="eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer"/>
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
@@ -20,6 +19,7 @@
                 <bean class="eu.factorx.awac.converter.SiteToSiteDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.OrganizationToOrganizationDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.PeriodToPeriodDTOConverter"/>
+                <bean class="eu.factorx.awac.converter.ReportToReportDTOConverter"/>
             </set>
         </property>
     </bean>
