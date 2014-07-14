@@ -84,7 +84,9 @@ public class AnswerController extends Controller {
         Map<String, QuestionAnswer> questionAnswersByKey = getQuestionAnswersByKey(period, scope);
         List<AnswerLine> listQuestionValueDTO = new ArrayList<>();
         List<QuestionDTO> questionDTOs = new ArrayList<>();
+
         for (Question question : questions) {
+
             String questionKey = question.getCode().getKey();
             AnswerType questionAnswerType = question.getAnswerType();
             Long unitCategoryId = null;
@@ -102,7 +104,6 @@ public class AnswerController extends Controller {
                 String codeListName = codeList.name();
                 questionDTO.setCodeListName(codeListName);
             }
-
 
             questionDTOs.add(questionDTO);
             listQuestionValueDTO.add(toAnswerLine(question, questionAnswersByKey.get(questionKey)));
@@ -144,7 +145,7 @@ public class AnswerController extends Controller {
         for (UnitCategory unitCategory : unitCategoryService.findAll()) {
             UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
             for (Unit unit : unitCategory.getUnits()) {
-                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getName()));
+                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
             }
             res.add(unitCategoryDTO);
         }
@@ -174,8 +175,8 @@ public class AnswerController extends Controller {
     }
 
     public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
-        Period period = periodService.findById(answersDTO.getPeriodId().longValue());
-        Scope scope = scopeService.findById(answersDTO.getScopeId().longValue());
+        Period period = periodService.findById(answersDTO.getPeriodId());
+        Scope scope = scopeService.findById(answersDTO.getScopeId());
 
         for (AnswerLine answerLine : answersDTO.getListAnswers()) {
             Question question = getAndVerifyQuestion(answerLine);

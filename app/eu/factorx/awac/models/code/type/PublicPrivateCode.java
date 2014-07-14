@@ -18,7 +18,7 @@ public class PublicPrivateCode extends Code {
 	public static final PublicPrivateCode PRIVATE = new PublicPrivateCode("2");
 
 	protected PublicPrivateCode() {
-		super(CodeList.PUBLIC_OR_PRIVATE);
+		super(CodeList.PUBLIC_PRIVATE);
 	}
 
 	public PublicPrivateCode(String key) {

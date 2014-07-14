@@ -1,11 +1,9 @@
 angular
 .module('app.controllers')
 .controller "Form2Ctrl", ($scope, downloadService, $http) ->
-    $scope.formdId = 36
-    $scope.periodId = 24
-    $scope.scopeId = 27
+    $scope.formIdentifier = "TAB2"
 
-    downloadService.getJson "answer/getByForm/" + $scope.formdId + "/" + $scope.periodId + "/" + $scope.scopeId, (data) ->
+    downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
         $scope.getByCode = (code) ->

@@ -38,7 +38,7 @@
         <div class="data_date">
             <div>Données</div>
             {{ periods.length }}
-            <select ng-options="p.value as p.key for p in periods" ng-model="period"></select>
+            <select ng-options="p.id as p.label for p in periods" ng-model="period"></select>
         </div>
 
         <div class="big_separator"></div>

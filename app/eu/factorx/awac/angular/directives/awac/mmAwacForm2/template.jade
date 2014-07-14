@@ -2,71 +2,158 @@ ng-virtual
     .element
         .element_header
             .title Consommation de combustibles
-            .upload
         .element_sidebar
             .block_status
-                .lock_status
-                .answered_status.disable_status
-                .validate_status.disable_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
         .element_content
             .element_table
                 div
                     div Pièces documentaires liées aux consommations de combustible
                     .oneelement
                         .status.answer
-                        select
-                            option Mazout
-                            option Fuel
+                        select(ng-options="p.key as p.labelFr for p in O('A3')", ng-model="A('A3').value")
                         .user_icon XM
 
-    .horizontal_separator
     .element
         .element_header
             .title Combustion de combustible par les sources statiques des sites de l'entreprise
-            .upload
         .element_sidebar
             .block_status
-                .lock_status
-                .answered_status.disable_status
-                .validate_status.disable_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
         .element_content
-            .element_text
-                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
-                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
-                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
-            .method
-    .horizontal_separator
-    .element
-        .element_header
-            .title Electricité et vapeur achetées
-            .upload
-        .element_sidebar
-            .block_status
-                .lock_status
-                .answered_status.disable_status
-                .validate_status.disable_status
-        .element_content
-            .element_text
-                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
-                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
-                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
-            .method
-    .horizontal_separator
-    .element
-        .element_header
-            .title Electricité
-            .upload
-        .element_sidebar
-            .block_status
-                .lock_status
-                .answered_status.disable_status
-                .validate_status.disable_status
-        .element_content
-            .element_text
-                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
-                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
-                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
-            .method
+            .element_table
+                div(ng-show="A('A3').value == '2' || A('A3').value == '3'")
+                    div Combustible
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A5')", ng-model="A('A5').value")
+                        .user_icon XM
+                div(ng-show="A('A3').value == '4'")
+                    div Quantité
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A6')", ng-model="A('A6').value")
+                        .user_icon XM
+
+
+
+                div(ng-show="A('A3').value == '4'")
+                    div Est-ce que votre activité est purement ou principalement de bureaux?
+                    .oneelement
+                        .status.answer
+                        input(type="checkbox", ng-model="A('A7').value")
+                        .user_icon XM
+
+                div(ng-show="A('A7').value == true")
+                    div Etes-vous dans le secteur public ou privé?
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A8')", ng-model="A('A8').value")
+                        .user_icon XM
+                div
+                    div Indiquez la surface totale du site:
+                    .twoelements
+                        .status.answer
+                        input(type="text", ng-model="A('A9').value")
+                        select(ng-options="p.id as p.name for p in U('A9')", ng-model="A('A9').unitId")
+                        .user_icon XM
+
+                div
+                    div Quelle est la surface des bureaux?
+                    .twoelements
+                        .status.answer
+                        input(type="text", ng-model="A('A10').value")
+                        select(ng-options="p.id as p.name for p in U('A10')", ng-model="A('A10').unitId")
+                        .user_icon XM
+
+                div(ng-show="A('A3').value != '4'")
+                    div Etes-vous participant aux accords de branche de 2ème génération?
+                    .oneelement
+                        .status.answer
+                        input(type="checkbox", ng-model="A('A11').value")
+                        .user_icon XM
+
+
+                div
+                    div Quel est le nombre d'employés sur l'année du bilan ?
+                    .twoelements
+                        .status
+                        input(type="text", ng-model="A('A12').value"))
+                        .user_icon AG
+//
+    ng-virtual
+        .element
+            .element_header
+                .title Consommation de combustibles
+                .upload
+            .element_sidebar
+                .block_status
+                    .lock_status
+                    .answered_status.disable_status
+                    .validate_status.disable_status
+            .element_content
+                .element_table
+                    div
+                        div Pièces documentaires liées aux consommations de combustible
+                        .oneelement
+                            .status.answer
+                            select
+                                option Mazout
+                                option Fuel
+                            .user_icon XM
+
+        .horizontal_separator
+        .element
+            .element_header
+                .title Combustion de combustible par les sources statiques des sites de l'entreprise
+                .upload
+            .element_sidebar
+                .block_status
+                    .lock_status
+                    .answered_status.disable_status
+                    .validate_status.disable_status
+            .element_content
+                .element_text
+                    | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
+                    | froids. Elles vous sont présentées de la meilleure à la plus approximative.
+                    | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+                .method
+        .horizontal_separator
+        .element
+            .element_header
+                .title Electricité et vapeur achetées
+                .upload
+            .element_sidebar
+                .block_status
+                    .lock_status
+                    .answered_status.disable_status
+                    .validate_status.disable_status
+            .element_content
+                .element_text
+                    | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
+                    | froids. Elles vous sont présentées de la meilleure à la plus approximative.
+                    | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+                .method
+        .horizontal_separator
+        .element
+            .element_header
+                .title Electricité
+                .upload
+            .element_sidebar
+                .block_status
+                    .lock_status
+                    .answered_status.disable_status
+                    .validate_status.disable_status
+            .element_content
+                .element_text
+                    | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
+                    | froids. Elles vous sont présentées de la meilleure à la plus approximative.
+                    | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+                .method
 //
     ng-virtual
         .element

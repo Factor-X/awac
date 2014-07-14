@@ -8,18 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import eu.factorx.awac.models.code.type.*;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.ActivitySectorCode;
-import eu.factorx.awac.models.code.type.LanguageCode;
-import eu.factorx.awac.models.code.type.Nace1Code;
-import eu.factorx.awac.models.code.type.Nace2Code;
-import eu.factorx.awac.models.code.type.Nace3Code;
-import eu.factorx.awac.models.code.type.PublicPrivateCode;
 
 public class CodeImporter extends WorkbookDataImporter {
 
@@ -33,13 +28,14 @@ public class CodeImporter extends WorkbookDataImporter {
 		ws.setEncoding(CP1252_ENCODING);
 		codesWkb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
 
-		importCodesFromDatasheet("language", LanguageCode.class, CodeList.LANGUAGE);
-		importCodesFromDatasheet("public_private", PublicPrivateCode.class, CodeList.PUBLIC_OR_PRIVATE);
-		importCodesFromDatasheet("activity_sectors", ActivitySectorCode.class, CodeList.SITE_SECTORS);
-		importCodesFromDatasheet("nace1", Nace1Code.class, CodeList.NACE_CODES_1);
-		importCodesFromDatasheet("nace2", Nace2Code.class, CodeList.NACE_CODES_2);
-		importCodesFromDatasheet("nace3", Nace3Code.class, CodeList.NACE_CODES_3);
-		
+        importCodesFromDatasheet("language", LanguageCode.class, CodeList.LANGUAGE);
+		importCodesFromDatasheet("public_private", PublicPrivateCode.class, CodeList.PUBLIC_PRIVATE);
+		importCodesFromDatasheet("site_sectors", ActivitySectorCode.class, CodeList.SITE_SECTORS);
+		importCodesFromDatasheet("nace_codes_1", Nace1Code.class, CodeList.NACE_CODES_1);
+		importCodesFromDatasheet("nace_codes_2", Nace2Code.class, CodeList.NACE_CODES_2);
+		importCodesFromDatasheet("nace_codes_3", Nace3Code.class, CodeList.NACE_CODES_3);
+		importCodesFromDatasheet("fuel", FuelCode.class, CodeList.FUEL);
+
 	}
 
 	// Columns: NAME, KEY, LABEL_EN, LABEL_FR, LABEL_NL

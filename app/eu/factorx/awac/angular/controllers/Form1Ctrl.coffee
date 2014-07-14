@@ -3,8 +3,6 @@ angular
 .controller "Form1Ctrl", ($scope, downloadService, $http) ->
     $scope.formIdentifier = "TAB1"
 
-    console.log '$scope.$parent.scopeId ==' + $scope.$parent.scopeId
-
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
