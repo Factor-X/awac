@@ -1,15 +1,11 @@
 angular
 .module('app.controllers')
 .controller "ResultsCtrl", ($scope, downloadService, $http) ->
-    $scope.periodId = 24
-    $scope.scopeId = 27
+    downloadService.getJson "result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+        $scope.o = data
 
-    #downloadService.getJson "result/" + $scope.periodId + "/" + $scope.scopeId, (data) ->
-    #    $scope.o = data
-
-
-    $scope.o = {}
-    $scope.o.browsers =
+    $scope.temp = {}
+    $scope.temp.browsers =
         _type: 'terms'
         missing: 0
         total: 454

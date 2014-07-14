@@ -314,7 +314,7 @@ public class QuestionCode extends Code {
     public static final QuestionCode A300 = new QuestionCode("A300");
 
     public QuestionCode() {
-        super();
+        super(CodeList.QUESTION);
     }
 
     public QuestionCode(String key) {

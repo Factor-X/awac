@@ -43,29 +43,10 @@ public class AwacDummyDataCreator {
 
         // REFERENCES DATA
 
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.GAS, "Gas", "Gaz", "Gas"));
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.OIL, "Oil", "Mazout", "Brandstof"));
-        session.saveOrUpdate(new CodeLabel(HeatingFuelTypeCode.COAL, "Coal", "Charbon", "Steenkool"));
-
         UnitCategory surfaceUnits = getUnitCategoryByName("Area");
         UnitCategory energyUnits = getUnitCategoryByName("Energy");
 
         Unit gj = getUnitBySymbol("GJ");
-
-
-
-//        UnitCategory surfaceUnits = new UnitCategory(null, "Surface", null, null);
-//        session.saveOrUpdate(surfaceUnits);
-//        Unit m2 = new Unit(null, "m2", "m2", surfaceUnits);
-//        session.saveOrUpdate(m2);
-//        surfaceUnits.setMainUnit(m2);
-//
-//
-//        UnitCategory energyUnits = new UnitCategory(null, "Energy", null, null);
-//        session.saveOrUpdate(energyUnits);
-//        Unit gj = new Unit(null, "GK", "GJ", energyUnits);
-//        session.saveOrUpdate(gj);
-//        energyUnits.setMainUnit(gj);
 
 
         // ORGANIZATION AND ACCOUNT
@@ -93,10 +74,6 @@ public class AwacDummyDataCreator {
 
 
         // ANSWERS
-
-        Scope scope1 = new Scope(factorx);
-        session.saveOrUpdate(scope1);
-
 
         // -- FORM
         Form tab1Form = new Form("TAB1");

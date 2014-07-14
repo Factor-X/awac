@@ -34,7 +34,7 @@ public class Code implements Serializable, Comparable<Code> {
 
 	protected String key;
 
-	public Code() {
+	private Code() {
 		super();
 	}
 

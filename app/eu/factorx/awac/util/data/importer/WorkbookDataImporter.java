@@ -73,7 +73,7 @@ public abstract class WorkbookDataImporter {
 			return null;
 		}
 		try {
-			return NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents).doubleValue();
+			return NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
 		} catch (ParseException e) {
 			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", "
 					+ column + "} : " + cellContents, e);

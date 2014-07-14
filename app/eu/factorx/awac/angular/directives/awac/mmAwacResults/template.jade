@@ -1,18 +1,17 @@
 ng-virtual
     h1 Results
 
-    table
+    table(border="1")
         thead
             th
             th Scope 1
             th Scope 2
             th Scope 3
         tbody
-            - each i in [1,2,3,4,5,6,7,8,9,10]
-                tr
-                    td Indicator
-                    td
-                    td
-                    td
+            tr(ng-repeat="rl in o.reportLines")
+                td {{rl.translatedIndicatorCategory}}
+                td {{rl.scope1Value}}
+                td {{rl.scope2Value}}
+                td {{rl.scope3Value}}
 
-    fs-donut(bind="o.browsers")
+    fs-donut(bind="temp.browsers")
