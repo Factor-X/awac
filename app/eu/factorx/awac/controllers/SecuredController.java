@@ -36,7 +36,7 @@ public class SecuredController extends Security.Authenticator {
 
     @Override
     public Result onUnauthorized(Context ctx) {
-        return this.unauthorized(new ExceptionsDTO("Not connected"));
+        return unauthorized(new ExceptionsDTO("Not connected"));
     }
 
     public boolean isAuthenticated() {
