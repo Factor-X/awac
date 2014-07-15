@@ -29,4 +29,15 @@ public class PeriodDTO extends DTO {
     public String getLabel() {
         return label;
     }
+
+    public String toString(){
+        String content="[";
+        content+="id:"+id;
+        content+=",label:"+label;
+        content+="]";
+        return content;
+
+
+
+    }
 }

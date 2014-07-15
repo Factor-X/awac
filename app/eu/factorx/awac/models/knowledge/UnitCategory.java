@@ -20,6 +20,10 @@ public class UnitCategory extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Parameters:<br>
+	 * - name : a {@link String}<br>
+	 */
 	public static final String FIND_BY_NAME = "UnitCategory.findByName";
 
 	private String ref;

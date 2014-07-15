@@ -2,8 +2,22 @@ angular
 .module('app.controllers')
 .controller "LoginCtrl", ($scope, downloadService, $http, $location) ->
 
-    $scope.login = 'user1'
-    $scope.password = 'password'
+    console.log("je suis le logincontroller")
+
+    $scope.loginInfo=
+      fieldTitle:"Your login"
+      fieldType:"text"
+      placeholder:"your login"
+      validationMessage:"between 5 and 20 letters"
+      field:""
+      isValid:false
+
+    $scope.passwordInfo=
+      fieldTitle:"Your password"
+      fieldType:"password"
+      validationMessage:"between 5 and 20 letters"
+      field:""
+      isValid:false
 
     #send the request to the server
     $scope.send = () ->
@@ -20,14 +34,11 @@ angular
             headers:
                 "Content-Type": "application/json"
             data:
-                login: $scope.login
-                password: $scope.password
+                login: $scope.loginInfo.field
+                password: $scope.passwordInfo.field
 
         promise.success (data, status, headers, config) ->
-            $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
-            $scope.$root.periods = data.availablePeriods
-            $scope.$parent.setCurrentUser(data.user)
-            $scope.$root.organization = data.organization
+            $scope.$root.loginSuccess(data)
             return
 
         promise.error (data, status, headers, config) ->

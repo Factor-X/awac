@@ -4,15 +4,15 @@
         <div class="awac_logo"></div>
         <div>
             <div class="calculateur_type">Calculateur CO2 Entreprise</div>
-            <div class="entreprise_name">{{ $parent.getCurrentUser().organizationName }}</div>
+            <div class="entreprise_name">{{ $root.organization.name }}</div>
         </div>
 
         <div class="users">
-            <div ng-show="$parent.currentUser!=null">Bienvenue, <span class="username">{{$parent.currentUser.person.firstName}} {{$parent.getCurrentUser().person.lastName}}</span>
+            <div ng-show="$root.currentPerson!=null">Bienvenue, <span class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
             </div>
-            <div ng-show="$parent.currentUser==null">Your are currently not connected</div>
+            <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
             <!-- temporary -->
-            <button ng-show="$parent.currentUser!=null" type="button" ng-click="$parent.logout();" class="user_manage">
+            <button ng-show="$root.currentPerson!=null" type="button" ng-click="$root.logout();" class="user_manage">
                 Logout
             </button>
             <!--<button type="button" class="user_manage">Gestion utilisateurs</button>-->
