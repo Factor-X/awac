@@ -3,6 +3,7 @@ package eu.factorx.awac.models.data.answer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -62,7 +63,8 @@ public class QuestionAnswer extends AbstractEntity {
 	@ManyToOne(optional = false)
 	private Account dataOwner;
 
-	private int repetitionIndex = 0;
+	@Basic(optional = false)
+	private Integer repetitionIndex = 0;
 
 	@Embedded
 	private AuditInfo auditInfo;
@@ -79,7 +81,7 @@ public class QuestionAnswer extends AbstractEntity {
 		super();
 	}
 
-	public QuestionAnswer(Period period, Scope scope, Account dataOwner, Question question, int repetitionIndex) {
+	public QuestionAnswer(Period period, Scope scope, Account dataOwner, Question question, Integer repetitionIndex) {
 		super();
 		this.period = period;
 		this.scope = scope;
@@ -115,11 +117,11 @@ public class QuestionAnswer extends AbstractEntity {
 		this.dataOwner = dataOwner;
 	}
 
-	public int getRepetitionIndex() {
+	public Integer getRepetitionIndex() {
 		return repetitionIndex;
 	}
 
-	public void setRepetitionIndex(int repetitionIndex) {
+	public void setRepetitionIndex(Integer repetitionIndex) {
 		this.repetitionIndex = repetitionIndex;
 	}
 

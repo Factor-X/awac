@@ -1,14 +1,18 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.models.data.answer.AnswerType;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AnswerLine extends DTO {
 
 	@NotNull
 	private String questionKey;
+
+	@NotNull
+	private Integer repetitionIndex;
 
 	@NotNull
 	private Object value;
@@ -18,14 +22,10 @@ public class AnswerLine extends DTO {
 	public AnswerLine() {
 	}
 
-	public AnswerLine(String questionKey, Object value) {
+	public AnswerLine(String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
 		this.questionKey = questionKey;
 		this.value = value;
-	}
-
-	public AnswerLine(String questionKey, Object value, Integer unitId) {
-		this.questionKey = questionKey;
-		this.value = value;
+		this.repetitionIndex = repetitionIndex;
 		this.unitId = unitId;
 	}
 
@@ -45,6 +45,14 @@ public class AnswerLine extends DTO {
 		this.questionKey = questionKey;
 	}
 
+	public Integer getRepetitionIndex() {
+		return repetitionIndex;
+	}
+
+	public void setRepetitionIndex(Integer repetitionIndex) {
+		this.repetitionIndex = repetitionIndex;
+	}
+
 	public Integer getUnitId() {
 		return unitId;
 	}
@@ -53,4 +61,9 @@ public class AnswerLine extends DTO {
 		this.unitId = unitId;
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("questionKey", questionKey)
+				.append("repetitionIndex", repetitionIndex).append("value", value).append("unitId", unitId).toString();
+	}
 }
