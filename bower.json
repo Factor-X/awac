@@ -22,6 +22,7 @@
     "bootstrap": "*",
     "d3": "*",
     "jquery": "*",
-    "dangle": "*"
+    "dangle": "*",
+    "inweb-roboto": "~0.11.1"
   }
 }
