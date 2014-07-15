@@ -23,6 +23,7 @@
     "d3": "*",
     "jquery": "*",
     "dangle": "*",
-    "inweb-roboto": "~0.11.1"
+    "inweb-roboto": "~0.11.1",
+    "underscore": "~1.6.0"
   }
 }

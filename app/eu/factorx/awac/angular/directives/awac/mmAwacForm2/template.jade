@@ -11,26 +11,34 @@ ng-virtual
             .element_table
                 div
                     div Pièces documentaires liées aux consommations de combustible
-                    .oneelement(ng-repeat="v in A('A14').value")
-                        .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v")
-                        .user_icon XM
+                div(ng-repeat="v in A('A14')")
+                    div
                     .oneelement
-                        button(ng-click="A('A14').value.push(null)") Add
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
+                        .user_icon XM
+                    button(ng-click="removeAnwser(v)") Remove
+                div
+                    div
+                    .oneelement
+                        button(ng-click="addNewAnswer('A14')") Add
+
                 div
                     div Combustion de combustible par les sources statiques des sites de l'entreprise
+
+            .element_table(ng-repeat="ri in getRepetitionIndicesFor(['A16', 'A17'])")
                 div
                     div Combustible
                     .oneelement
                         .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A16')", ng-model="A('A16').value")
+                        select(ng-options="p.key as p.labelFr for p in O('A16')", ng-model="getByCodeAndRepetitionIndex('A16', ri).value")
                         .user_icon XM
                 div
                     div Quantité
                     .twoelements
                         .status.answer
                         input(type="text", ng-model="A('A17').value")
-                        select(ng-options="p.id as p.name for p in U('A17')", ng-model="A('A17').unitId")
+                        select(ng-options="p.id as p.name for p in U('A17')", ng-model="getByCodeAndRepetitionIndex('A17', ri).unitId")
                         .user_icon XM
 
     .horizontal_separator

@@ -46,7 +46,6 @@ test-result
 server.pid
 *.iml
 *.eml
-/dist/
 .cache
 
 
@@ -87,7 +86,6 @@ local.properties
 nbproject/private/
 build/
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml

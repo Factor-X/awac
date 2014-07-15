@@ -170,6 +170,9 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(new IntegerQuestion(a13, 600, QuestionCode.A24, null));
 
 
+
+
+
         // First set of answers
         int repetitionIndex = 1;
         QuestionAnswer a16Answer1 = new QuestionAnswer(period1, scope, user1, a16, repetitionIndex);
