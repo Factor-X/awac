@@ -1,11 +1,13 @@
 package eu.factorx.awac.models;
 
+import javax.persistence.Embeddable;
+
 import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import eu.factorx.awac.models.account.Account;
 
-//@Embeddable
+@Embeddable
 public class TechnicalSegment {
 
 	@DateTimeFormat

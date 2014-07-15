@@ -2,6 +2,7 @@ package eu.factorx.awac.models;
 
 import java.io.Serializable;
 
+import javax.persistence.Embedded;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,8 +27,8 @@ public abstract class AbstractEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 
-	// @Embedded
-	// protected TechnicalSegment technicalSegment;
+	 @Embedded
+	 protected TechnicalSegment technicalSegment;
 
 	public Long getId() {
 		return id;
@@ -37,13 +38,13 @@ public abstract class AbstractEntity implements Serializable {
 		this.id = id;
 	}
 
-	// public TechnicalSegment getTechnicalSegment() {
-	// return technicalSegment;
-	// }
-	//
-	// public void setTechnicalSegment(TechnicalSegment technicalSegment) {
-	// this.technicalSegment = technicalSegment;
-	// }
+	 public TechnicalSegment getTechnicalSegment() {
+	 return technicalSegment;
+	 }
+	
+	 public void setTechnicalSegment(TechnicalSegment technicalSegment) {
+	 this.technicalSegment = technicalSegment;
+	 }
 
 	/**
 	 * Default implementation: override this.

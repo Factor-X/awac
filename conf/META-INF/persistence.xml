@@ -66,6 +66,7 @@
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
+        <class>eu.factorx.awac.models.knowledge.UnitConversionFormula</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityData</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>

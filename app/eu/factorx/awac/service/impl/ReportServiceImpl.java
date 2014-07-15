@@ -30,6 +30,7 @@ import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.IndicatorService;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.service.ReportService;
+import eu.factorx.awac.service.UnitConversionService;
 import eu.factorx.awac.service.UnitService;
 
 @Component
@@ -43,6 +44,8 @@ public class ReportServiceImpl implements ReportService {
 	private FactorService factorService;
 	@Autowired
 	private UnitService unitService;
+	@Autowired
+	private UnitConversionService unitConversionService;
 
 	@Override
 	public Report getReport(Scope scope, Period period) {
@@ -159,8 +162,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	private Double convertValue(Double answerValue, Unit unitFrom, Unit toUnit) {
-		// TODO To Implement (not yet conversion data in DB...)
-		return answerValue;
+		return unitConversionService.convert(answerValue, unitFrom, toUnit, null);
 	}
 
 }

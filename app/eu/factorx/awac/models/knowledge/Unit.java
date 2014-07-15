@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.knowledge;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -18,19 +19,28 @@ public class Unit extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String COLUMN_NAME_REF = "ref";
+	public static final String COLUMN_NAME_SYMBOL = "symbol";
+
 	public static final String FIND_ALL = "Unit.findAll";
 
+	/**
+	 * Parameters:<br>
+	 * - symbol : a {@link String}<br>
+	 */
 	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
 
+	// TODO labels? i18n?
+	@Column(nullable = true)
+	private String name = null;
 
+	@Column(name = COLUMN_NAME_REF, nullable = false, unique = true)
 	private String ref;
 
-	// TODO i18n?
-	private String name;
-
+	@Column(name = COLUMN_NAME_SYMBOL, nullable = false)
 	private String symbol;
 
-	@ManyToOne
+	@ManyToOne()
 	private UnitCategory category;
 
 	protected Unit() {

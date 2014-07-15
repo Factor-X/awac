@@ -81,7 +81,6 @@ public abstract class WorkbookDataImporter {
 	}
 
 	protected static <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
-		System.out.println("== Inserting " + entities.size() + " ..." + entities.iterator().next().getClass());
 		for (T entity : entities) {
 			persistEntity(entity);
 		}

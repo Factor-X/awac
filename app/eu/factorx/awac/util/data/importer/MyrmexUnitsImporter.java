@@ -2,7 +2,9 @@ package eu.factorx.awac.util.data.importer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import jxl.Sheet;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.models.knowledge.UnitConversionFormula;
 
 @Component
 public class MyrmexUnitsImporter extends WorkbookDataImporter {
@@ -24,20 +27,30 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 	 * Columns:<br>
 	 * 0: REF<br>
 	 * 1: NAME<br>
-	 * 2: MAIN_UNIT_SYMBOL
+	 * 2: MAIN_UNIT_REF
 	 */
 	private static final String MYRMEX_UNITS_WORKBOOK__CATEGORIES_SHEET__NAME = "categories";
 
 	/**
 	 * Columns:<br>
 	 * 0: REF<br>
-	 * 1: SYMBOL<br>
-	 * 2: CATEGORY_REF
+	 * 1: NAME<br>
+	 * 2: SYMBOL<br>
+	 * 3: CATEGORY_REF
 	 */
 	private static final String MYRMEX_UNITS_WORKBOOK__UNITS_SHEET__NAME = "units";
 
-	private static Map<String, UnitCategory> unitCategories = new LinkedHashMap<>(); // key: ref
-	private static Map<String, Unit> units = new LinkedHashMap<String, Unit>(); // key: symbol
+	/**
+	 * Columns:<br>
+	 * 0: UNIT_REF<br>
+	 * 1: UNIT_TO_REFERENCE<br>
+	 * 2: REFERENCE_TO_UNIT<br>
+	 * 3: YEAR
+	 */
+	private static final String MYRMEX_UNITS_WORKBOOK__CONNVERSIONS_SHEET__NAME = "conversions";
+
+	private static Map<String, UnitCategory> unitCategoriesByRef = new LinkedHashMap<>();
+	private static Map<String, Unit> unitsByRef = new LinkedHashMap<String, Unit>();
 
 	protected void importData() throws BiffException, IOException {
 
@@ -45,41 +58,76 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		ws.setEncoding(CP1252_ENCODING);
 		Workbook myrmexUnitsWorkbook = Workbook.getWorkbook(new File(MYRMEX_UNITS_WORKBOOK__PATH), ws);
 
-		// Persit Unit Categories
+		persistUnitCategories(myrmexUnitsWorkbook);
+		persistUnits(myrmexUnitsWorkbook);
+		updateCategories(myrmexUnitsWorkbook);
+		persistConversionFormulas(myrmexUnitsWorkbook);
+
+	}
+
+	private void persistUnitCategories(Workbook myrmexUnitsWorkbook) {
 		Sheet unitCategoriesSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CATEGORIES_SHEET__NAME);
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
 			String name = getCellContent(unitCategoriesSheet, 1, i);
-			unitCategories.put(ref, new UnitCategory(ref, name, "", null));
+			unitCategoriesByRef.put(ref, new UnitCategory(ref, name, "", null));
 		}
-		persistEntities(unitCategories.values());
+		System.out.println("== Inserting " + unitCategoriesByRef.size() + " Unit Categories...");
+		persistEntities(unitCategoriesByRef.values());
+	}
 
-		// Persit Units
+	private void persistUnits(Workbook myrmexUnitsWorkbook) {
 		Sheet unitsSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__UNITS_SHEET__NAME);
 		for (int i = 1; i < unitsSheet.getRows(); i++) {
 			String ref = getCellContent(unitsSheet, 0, i);
-			String symbol = getCellContent(unitsSheet, 1, i);
-			String categoryRef = getCellContent(unitsSheet, 2, i);
-			UnitCategory category = unitCategories.get(categoryRef);
-			units.put(symbol, new Unit(ref, "", symbol, category));
+			String name = getCellContent(unitsSheet, 1, i);
+			String symbol = getCellContent(unitsSheet, 2, i);
+			String categoryRef = getCellContent(unitsSheet, 3, i);
+			UnitCategory category = unitCategoriesByRef.get(categoryRef);
+			unitsByRef.put(ref, new Unit(ref, name, symbol, category));
 		}
-		System.out.println("== Inserting " + units.size() + " Units...");
-		persistEntities(units.values());
+		System.out.println("== Inserting " + unitsByRef.size() + " Units...");
+		persistEntities(unitsByRef.values());
+	}
 
-		// Update Categories (set main Unit)
-		System.out.println("== Updating " + unitCategories.size() + " Unit Categories (set main Unit)...");
+	private void updateCategories(Workbook myrmexUnitsWorkbook) {
+		Sheet unitCategoriesSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CATEGORIES_SHEET__NAME);
+		System.out.println("== Updating " + unitCategoriesByRef.size() + " Unit Categories (set main Unit)...");
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
-			UnitCategory category = unitCategories.get(ref);
-			String mainUnitSymbol = getCellContent(unitCategoriesSheet, 2, i);
-			Unit mainUnit = units.get(mainUnitSymbol);
+			UnitCategory category = unitCategoriesByRef.get(ref);
+			String mainUnitRef = getCellContent(unitCategoriesSheet, 2, i);
+			Unit mainUnit = unitsByRef.get(mainUnitRef);
 			if (mainUnit == null) {
-				throw new RuntimeException("Cannot find the main unit (symbol '" + mainUnitSymbol
-						+ "') of the category '" + category.getName() + "'!");
+				throw new RuntimeException("Cannot find the main unit (ref = " + mainUnitRef + ") of the category '"
+						+ category.getName() + "'");
 			}
 			category.setMainUnit(mainUnit);
 			updateEntity(category);
 		}
+	}
+
+	private void persistConversionFormulas(Workbook myrmexUnitsWorkbook) {
+		Sheet conversionsSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CONNVERSIONS_SHEET__NAME);
+		List<UnitConversionFormula> conversionFormulas = new ArrayList<>();
+		for (int i = 1; i < conversionsSheet.getRows(); i++) {
+			String unitRef = getCellContent(conversionsSheet, 0, i);
+			Unit unit = unitsByRef.get(unitRef);
+			if (unit == null) {
+				throw new RuntimeException("Cannot find the conversion formula for unit (ref = " + unitRef + ")");
+			}
+			String unitToReferenceFormula = getCellContent(conversionsSheet, 1, i);
+			String referenceToUnitFormula = getCellContent(conversionsSheet, 2, i);
+			Integer year = null;
+			String strYear = getCellContent(conversionsSheet, 3, i);
+			if (strYear != null) {
+				year = Integer.valueOf(strYear);
+			}
+			conversionFormulas
+					.add(new UnitConversionFormula(unit, unitToReferenceFormula, referenceToUnitFormula, year));
+		}
+		System.out.println("== Inserting " + conversionFormulas.size() + " Unit Conversion Formulas...");
+		persistEntities(conversionFormulas);
 	}
 
 }
