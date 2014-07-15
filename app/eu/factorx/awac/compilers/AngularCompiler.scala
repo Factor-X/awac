@@ -10,6 +10,76 @@ import scalax.file.Path
 
 class AngularCompiler {
 
+    def validatorsToDirectives(ps: Iterable[Path], folder: Path) = {
+
+        val template =
+            """
+              |angular.module('app.directives').directive('mm__NAME__Validator', function(){
+              |    return {
+              |        restrict: 'A',
+              |        require: 'ngModel',
+              |        link: function(scope, elm, attrs, ctrl) {
+              |            console.log(attrs);
+              |
+              |            ctrl.$parsers.unshift(function(viewValue) {
+              |
+              |                var o = {};
+              |
+              |                for(k in attrs) {
+              |                    if( k.substring(0, 'mm__NAME__Validator'.length) == 'mm__NAME__Validator' && k.length > 'mm__NAME__Validator'.length) {
+              |                        arg = k.substring('mm__NAME__Validator'.length);
+              |                        o[arg.toLowerCase()] = attrs[k];
+              |                    }
+              |                }
+              |
+              |                ;
+              |
+              |                __SCRIPT__
+              |
+              |                ;
+              |
+              |                var result = validate(viewValue, o);
+              |
+              |                if (result) {
+              |                  ctrl.$setValidity('__DNAME__', true);
+              |                  return viewValue;
+              |                } else {
+              |                  ctrl.$setValidity('__DNAME__', false);
+              |                  return undefined;
+              |                }
+              |
+              |            });
+              |        }
+              |    };
+              |});
+            """.stripMargin
+
+        for (f <- ps) {
+            val tempFile = new java.io.File((folder / f.simpleName).path + ".js")
+            tempFile.getParentFile.mkdirs()
+
+            if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
+                // nothing to do, tempfile is up-to-date
+                println("[UP-TO-DATE] " + f.path)
+            } else {
+                println("[BUILDING] " + f.path)
+
+                val script = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                val name: String = f.simpleName.replaceAll("\\.js$ ", "")
+                val dname: String = name.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase
+                val result = template.replaceAll("__NAME__", name).replaceAll("__DNAME__", dname).replaceAll("__SCRIPT__", script)
+
+                val fw = new FileWriter(tempFile)
+                fw.write(result)
+                fw.close()
+
+            }
+
+        }
+
+
+    }
+
     def compile(path: String): String = {
         val angular = Path.fromString(path)
         val tmp = Path.fromString("tmp")
@@ -21,6 +91,8 @@ class AngularCompiler {
         val directivesTemplates = (angular / "directives" ** "*.jade") ++ (angular / "directives" ** "*.html")
         val controllers = angular / "controllers" ** "*.coffee"
 
+        val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
+
         compileFiles(roots, Path.fromString("tmp/sources/"))
         compileFiles(services, Path.fromString("tmp/sources/"))
         compileFiles(filters, Path.fromString("tmp/sources/"))
@@ -28,12 +100,17 @@ class AngularCompiler {
         compileFiles(directivesTemplates, Path.fromString("tmp/sources/"))
         compileFiles(controllers, Path.fromString("tmp/sources/"))
 
+        compileFiles(validators, Path.fromString("tmp/validators/"))
+
+        validatorsToDirectives(Path.fromString("tmp/validators/") ** "*.js", Path.fromString("tmp/validators-directives/"))
+
         assembleTemplates(Path.fromString("tmp/sources/") ** "*.html", Path.fromString("tmp/templates/"), angular)
 
         concatenate(
             (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/") * "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/services") ** "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/filters") ** "*.js")
+                ++ (Path.fromString("tmp/validators-directives") ** "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
                 ++ (Path.fromString("tmp/templates/") ** "*.js"),
@@ -134,7 +211,6 @@ class AngularCompiler {
                 // now split and format it correctly
                 var usefulPathParts = usefulPath.split("[/\\\\]")
                 usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
-                // usefulPath = usefulPathParts.mkString("/")
                 usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
 
                 val url = "$/angular/templates/" + usefulPath + ".html"

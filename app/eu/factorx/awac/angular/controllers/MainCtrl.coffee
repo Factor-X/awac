@@ -112,3 +112,4 @@ angular
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
         $scope.period = parseInt($routeParams.period)
         $scope.scopeId = parseInt($routeParams.scope)
+
