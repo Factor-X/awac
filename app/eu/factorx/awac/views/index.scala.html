@@ -1,81 +1,77 @@
 <!doctype html>
 <html ng-app="app">
-<head>
+    <head>
 
-    <!-- Angular dependencies
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-sanitize.min.js"></script>
-    -->
+        <!-- ------------------------------------------------------------------ -->
+        <!-- JAVASCRIPTS                                                        -->
+        <!-- ------------------------------------------------------------------ -->
 
-    <!-- Angular dependencies local -->
-    <script src="/awac/assets/javascripts/angular-1.2.19/angular.min.js"></script>
-    <script src="/awac/assets/javascripts/angular-1.2.19/angular-animate.min.js"></script>
-    <script src="/awac/assets/javascripts/angular-1.2.19/angular-sanitize.min.js"></script>
-    <script src="/awac/assets/javascripts/angular-1.2.19/angular-route.min.js"></script>
+        <!-- Angular dependencies local -->
+        <script src='@routes.Assets.at("components/angular/angular.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-animate/angular-animate.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>
 
+        <!-- jQuery -->
+        <script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>
 
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+        <!-- Bootstrap -->
+        <script src='@routes.Assets.at("components/bootstrap/dist/js/bootstrap.min.js")'></script>
 
-    <!-- pretty print json -->
-    <!--<link rel="stylesheet" href='@routes.Assets.at("javascripts/highlight-js/styles/default.css")'>-->
-    <!--<script src='@routes.Assets.at("javascripts/highlight-js/highlight.pack.js")'></script>-->
+        <!-- D3 -->
+        <script src='@routes.Assets.at("components/d3/d3.min.js")'></script>
 
-    <script src="/awac/assets/javascripts/jquery-1.11.1.min.js"></script>
+        <!-- Dangle -->
+        <script src='@routes.Assets.at("components/dangle/dist/dangle.min.js")'></script>
 
-    <!-- web app -->
-    <script src='app.js'></script>
+        <!-- web app -->
+        <script src='app.js'></script>
 
-    <!-- styles -->
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>-->
+        <!-- ------------------------------------------------------------------ -->
+        <!-- STYLES                                                             -->
+        <!-- ------------------------------------------------------------------ -->
 
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/bootstrap/bootstrap.css")'>
+        <!-- Dangle -->
+        <link rel="stylesheet" href='@routes.Assets.at("components/dangle/css/dangle.css")'>
 
+        <!-- Main (hacks) -->
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js">
-    </script>
+        <!-- Style -->
+        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
 
-    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/dangle.css")'>
-
-
-    <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
-    <script src='@routes.Assets.at("javascripts/d3.min.js")'></script>
-    <script src='@routes.Assets.at("javascripts/dangle.min.js")'></script>
-
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900,300italic,400italic' rel='stylesheet'
-          type='text/css'>
-    <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
-
-    <script>
-        $(function () {
-            $('body').keydown(function (evt) {
-                // console.log(evt);
-                if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
-                    if (window.debug) {
-                        window.debug = false;
-                        $('.translation-code').remove();
-                    } else {
-                        window.debug = true;
-                        $('.translated-text').each(function () {
-                            var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
-                            $(this).append(e)
-                        })
+        <!-- Developer's helper for translations -->
+        <script>
+            $(function () {
+                $('body').keydown(function (evt) {
+                    // console.log(evt);
+                    if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
+                        if (window.debug) {
+                            window.debug = false;
+                            $('.translation-code').remove();
+                        } else {
+                            window.debug = true;
+                            $('.translated-text').each(function () {
+                                var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
+                                $(this).append(e)
+                            })
+                        }
                     }
-                }
-            })
-        });
-    </script>
-</head>
-<body ng-controller="MainCtrl">
+                })
+            });
+        </script>
+    </head>
+    <body ng-controller="MainCtrl">
 
-<div ng-show="!isLoading()">
+        <div ng-show="!isLoading()">
 
-    <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
+            <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
 
-    <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
+            <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
 
-</div>
-</body>
+        </div>
+    </body>
 </html>
 
 
