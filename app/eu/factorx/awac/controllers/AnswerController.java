@@ -5,6 +5,7 @@ import java.util.*;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -191,10 +192,20 @@ public class AnswerController extends Controller {
     }
 
     private AnswerLine toAnswerLine(Question question, QuestionAnswer questionAnswer) {
-        AnswerType answerType = question.getAnswerType();
+    	Boolean repetitionAllowed = question.getQuestionSet().getRepetitionAllowed();
+    	Integer repetitionIndex = null;
+
+    	AnswerType answerType = question.getAnswerType();
 
         if (questionAnswer == null) {
-            return new AnswerLine(question.getCode().getKey(), null, 0, null);
+        	if (repetitionAllowed) {
+        		repetitionIndex = 0;
+        	}
+        	return new AnswerLine(question.getCode().getKey(), null, repetitionIndex, null);
+        } else {
+        	if (repetitionAllowed) {
+        		repetitionIndex = questionAnswer.getRepetitionIndex();
+        	}       	
         }
         // TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
         AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
@@ -234,7 +245,7 @@ public class AnswerController extends Controller {
                         entityAnswerValue.getEntityId());
                 break;
         }
-        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, questionAnswer.getRepetitionIndex(), unitId);
+        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, repetitionIndex, unitId);
     }
 
     private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
