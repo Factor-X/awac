@@ -47,6 +47,7 @@ public class AwacDummyDataCreator {
         UnitCategory energyUnits = getUnitCategoryByName("Energy");
 
         Unit gj = getUnitBySymbol("GJ");
+        Unit kcal = getUnitBySymbol("kcal");
 
 
         // ORGANIZATION AND ACCOUNT
@@ -169,16 +170,29 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(new IntegerQuestion(a13, 600, QuestionCode.A24, null));
 
 
-        QuestionAnswer a16Answer = new QuestionAnswer(period1, scope, user1, a16, 0);
-        session.saveOrUpdate(a16Answer);
-        CodeAnswerValue a16AnswerValue = new CodeAnswerValue(a16Answer, ActivitySourceCode.DIESEL_GASOIL_OU_FUEL_LEGER);
-        session.saveOrUpdate(a16AnswerValue);
+        // First set of answers
+        int repetitionIndex = 1;
+        QuestionAnswer a16Answer1 = new QuestionAnswer(period1, scope, user1, a16, repetitionIndex);
+        session.saveOrUpdate(a16Answer1);
+        CodeAnswerValue a16AnswerValue1 = new CodeAnswerValue(a16Answer1, ActivitySourceCode.DIESEL_GASOIL_OU_FUEL_LEGER);
+        session.saveOrUpdate(a16AnswerValue1);
 
-        QuestionAnswer a17Answer = new QuestionAnswer(period1, scope, user1, a17, 0);
-        session.saveOrUpdate(a17Answer);
-        DoubleAnswerValue a17AnswerValue = new DoubleAnswerValue(a17Answer, 20.6, gj);
-        session.saveOrUpdate(a17AnswerValue);
+        QuestionAnswer a17Answer1 = new QuestionAnswer(period1, scope, user1, a17, repetitionIndex);
+        session.saveOrUpdate(a17Answer1);
+        DoubleAnswerValue a17Answer1Value = new DoubleAnswerValue(a17Answer1, 20.6, gj);
+        session.saveOrUpdate(a17Answer1Value);
 
+        // Second set of answers
+        repetitionIndex = 2;
+        QuestionAnswer a16Answer2 = new QuestionAnswer(period1, scope, user1, a16, 2);
+        session.saveOrUpdate(a16Answer2);
+        CodeAnswerValue a16Answer2Value = new CodeAnswerValue(a16Answer2, ActivitySourceCode.BOIS_BUCHE);
+        session.saveOrUpdate(a16Answer2Value);
+
+        QuestionAnswer a17Answer2 = new QuestionAnswer(period1, scope, user1, a17, 2);
+        session.saveOrUpdate(a17Answer2);
+        DoubleAnswerValue a17Answer2Value = new DoubleAnswerValue(a17Answer2, 60523.0, kcal);
+        session.saveOrUpdate(a17Answer2Value);
 
     }
 

@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.knowledge.Period;
 
@@ -24,21 +25,31 @@ import eu.factorx.awac.models.knowledge.Period;
 @NamedQueries({
 		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period"),
 		@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
-		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period and qa.question.questionSet in :questionSets"), })
+		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period and qa.question.questionSet.code = :questionSetCode"), })
 public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Parameters:<br>
+	 * scope : a {@link Scope}<br>
+	 * period : a {@link Period}
+	 */
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
-
+	
+	/**
+	 * Parameters:<br>
+	 * codes : a Collection of {@link QuestionCode}<br>
+	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
 
 	/**
-	 * :scope
-	 * :period
-	 * :questionSets
+	 * Parameters:<br>
+	 * scope : a {@link Scope}<br>
+	 * period : a {@link Period}<br>
+	 * questionSetCode : a {@link QuestionCode}
 	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndPeriodAndQuestionSets";
+	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET = "QuestionAnswer.findByScopeAndPeriodAndQuestionSet";
 
 	// ATTRIBUTES
 

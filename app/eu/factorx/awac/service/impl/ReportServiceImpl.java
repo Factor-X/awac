@@ -49,18 +49,22 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Report getReport(Scope scope, Period period) {
-		Map<QuestionCode, QuestionAnswer> questionAnswers = getQuestionAnswers(scope, period);
 
 		// find all activity data
-		List<BaseActivityData> activityData = getActivityData(questionAnswers);
+		List<BaseActivityData> activityData = getActivityData(scope, period);
 
 		// build activity results (== link suitable indicators and factors to each activity data)
 		List<BaseActivityResult> activityResults = new ArrayList<>();
 		for (BaseActivityData baseActivityData : activityData) {
 			List<Indicator> indicators = indicatorService.findCarbonIndicatorsForSitesByActivity(baseActivityData);
+			if (indicators.isEmpty()) {
+				// TODO save a warning: no indicator for activity base data: ...
+			}
 			for (Indicator indicator : indicators) {
 				Factor factor = factorService.findByIndicatorAndActivity(indicator, baseActivityData);
-				if (factor != null) {
+				if (factor == null) {
+					// TODO save a warning: no factor for activity base data: ... and indicator:...
+				} else {
 					activityResults.add(new BaseActivityResult(indicator, baseActivityData, factor));
 				}
 			}
@@ -69,21 +73,12 @@ public class ReportServiceImpl implements ReportService {
 		return new Report(activityResults);
 	}
 
-	private List<BaseActivityData> getActivityData(Map<QuestionCode, QuestionAnswer> questionAnswers) {
+	private List<BaseActivityData> getActivityData(Scope scope, Period period) {
 		List<BaseActivityData> res = new ArrayList<>();
 
-		BaseActivityData baseActivityData1 = getBaseActivityData1(questionAnswers);
-		if (baseActivityData1 != null)
-			res.add(baseActivityData1);
-
-		BaseActivityData baseActivityData2 = getBaseActivityData2(questionAnswers);
-		if (baseActivityData2 != null)
-			res.add(baseActivityData2);
-
-		BaseActivityData baseActivityData3 = getBaseActivityData3(questionAnswers);
-		if (baseActivityData3 != null)
-			res.add(baseActivityData3);
-
+		res.addAll(getBaseActivityData1(scope, period));
+		res.addAll(getBaseActivityData2(scope, period));
+		res.addAll(getBaseActivityData3(scope, period));
 		// TODO To Continue...
 
 		return res;
@@ -95,43 +90,76 @@ public class ReportServiceImpl implements ReportService {
 	 * @param questionAnswers
 	 * @return a {@link BaseActivityData}
 	 */
-	private BaseActivityData getBaseActivityData1(Map<QuestionCode, QuestionAnswer> questionAnswers) {
-		QuestionAnswer questionA16Answer = questionAnswers.get(QuestionCode.A16);
-		QuestionAnswer questionA17Answer = questionAnswers.get(QuestionCode.A17);
-		if (questionA16Answer == null || questionA17Answer == null) {
-			return null;
+	private List<BaseActivityData> getBaseActivityData1(Scope scope, Period period) {
+		List<BaseActivityData> res = new ArrayList<>();
+
+		// Get Target Unit (GJ in this case)
+		// TODO Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
+		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
+
+		// Get all QuestionSet answers
+		List<Map<QuestionCode, QuestionAnswer>> questionSetAnswers = getQuestionSetAnswers(scope, period,
+				QuestionCode.A15);
+
+		// For each set of answers, build an ActivityBaseData (see specifications)
+		for (Map<QuestionCode, QuestionAnswer> questionAnswers : questionSetAnswers) {
+
+			QuestionAnswer questionA16Answer = questionAnswers.get(QuestionCode.A16);
+			QuestionAnswer questionA17Answer = questionAnswers.get(QuestionCode.A17);
+			if (questionA16Answer == null || questionA17Answer == null) {
+				continue;
+			}
+
+			int rank = 1;
+			String specificPurpose = null;
+			ActivityCategoryCode activityCategory = ActivityCategoryCode.ENERGIE;
+			ActivitySubCategoryCode activitySubCategory = ActivitySubCategoryCode.ENERGIE_FOSSILE;
+			ActivityTypeCode activityType = ActivityTypeCode.COMBUSTION_FOSSILE;
+			ActivitySourceCode activitySource = getCode(questionA16Answer, ActivitySourceCode.class);
+			Boolean activityOwnership = Boolean.TRUE;
+			Unit unit = baseActivityDataUnit;
+			Double value = getValue(questionA17Answer, unit);
+
+			BaseActivityData baseActivityData = new BaseActivityData(rank, specificPurpose, activityCategory,
+					activitySubCategory, activityType, activitySource, activityOwnership, unit, value);
+			res.add(baseActivityData);
 		}
 
-		int rank = 1;
-		String specificPurpose = null;
-		ActivityCategoryCode activityCategory = ActivityCategoryCode.ENERGIE;
-		ActivitySubCategoryCode activitySubCategory = ActivitySubCategoryCode.ENERGIE_FOSSILE;
-		ActivityTypeCode activityType = ActivityTypeCode.COMBUSTION_FOSSILE;
-		ActivitySourceCode activitySource = getCode(questionA16Answer, ActivitySourceCode.class);
-		Boolean activityOwnership = Boolean.TRUE;
-		Unit unit = unitService.findBySymbol("GJ"); // TODO Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Double value = getValue(questionA17Answer, unit);
-
-		return new BaseActivityData(rank, specificPurpose, activityCategory, activitySubCategory, activityType,
-				activitySource, activityOwnership, unit, value);
-	}
-
-	private BaseActivityData getBaseActivityData2(Map<QuestionCode, QuestionAnswer> questionAnswers) {
-		// TODO To implement...
-		return null;
-	}
-
-	private BaseActivityData getBaseActivityData3(Map<QuestionCode, QuestionAnswer> questionAnswers) {
-		// TODO To implement...
-		return null;
-	}
-
-	private Map<QuestionCode, QuestionAnswer> getQuestionAnswers(Scope scope, Period period) {
-		Map<QuestionCode, QuestionAnswer> res = new HashMap<>();
-		for (QuestionAnswer questionAnswer : questionAnswerService.findByScopeAndPeriod(scope, period)) {
-			res.put(questionAnswer.getQuestion().getCode(), questionAnswer);
-		}
 		return res;
+	}
+
+	private List<BaseActivityData> getBaseActivityData2(Scope scope, Period period) {
+		List<BaseActivityData> res = new ArrayList<>();
+
+		// TODO To implement...
+		return res;
+	}
+
+	private List<BaseActivityData> getBaseActivityData3(Scope scope, Period period) {
+		List<BaseActivityData> res = new ArrayList<>();
+
+		// TODO To implement...
+		return res;
+	}
+
+
+
+	private List<Map<QuestionCode, QuestionAnswer>> getQuestionSetAnswers(Scope scope, Period period,
+			QuestionCode questionSetCode) {
+		List<QuestionAnswer> questionAnswers = questionAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period,
+				questionSetCode);
+
+		Map<Integer, Map<QuestionCode, QuestionAnswer>> byRepetitionIndex = new HashMap<>();
+		for (QuestionAnswer questionAnswer : questionAnswers) {
+			questionAnswer.getQuestion();
+			Integer repetitionIndex = questionAnswer.getRepetitionIndex();
+			if (!byRepetitionIndex.containsKey(repetitionIndex)) {
+				byRepetitionIndex.put(repetitionIndex, new HashMap<QuestionCode, QuestionAnswer>());
+			}
+			byRepetitionIndex.get(repetitionIndex).put(questionAnswer.getQuestion().getCode(), questionAnswer);
+		}
+
+		return new ArrayList<Map<QuestionCode, QuestionAnswer>>(byRepetitionIndex.values());
 	}
 
 	private <T extends Code> T getCode(QuestionAnswer questionAnswer, Class<T> codeClass) {
