@@ -180,9 +180,7 @@ public class AnswerController extends Controller {
 
         for (AnswerLine answerLine : answersDTO.getListAnswers()) {
             Question question = getAndVerifyQuestion(answerLine);
-            // TODO The concept of "repetition" (== answers groups linked to a questions set) is not yet implemented in the client...
-            // => set repetitionIndex = 0
-            QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, 0);
+            QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, answerLine.getRepetitionIndex());
             // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
             // => add only one AnswerValue in answerValues list
             AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
@@ -196,7 +194,7 @@ public class AnswerController extends Controller {
         AnswerType answerType = question.getAnswerType();
 
         if (questionAnswer == null) {
-            return new AnswerLine(question.getCode().getKey(), null);
+            return new AnswerLine(question.getCode().getKey(), null, 0, null);
         }
         // TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
         AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
@@ -236,7 +234,7 @@ public class AnswerController extends Controller {
                         entityAnswerValue.getEntityId());
                 break;
         }
-        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, unitId);
+        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, questionAnswer.getRepetitionIndex(), unitId);
     }
 
     private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
