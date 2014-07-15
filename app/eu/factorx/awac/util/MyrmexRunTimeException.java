@@ -5,7 +5,9 @@ package eu.factorx.awac.util;
  */
 public class MyrmexRunTimeException extends RuntimeException{
 
-    private final String toClientMessage;
+	private static final long serialVersionUID = 1L;
+
+	private final String toClientMessage;
 
     public MyrmexRunTimeException(String message) {
         super(message);
