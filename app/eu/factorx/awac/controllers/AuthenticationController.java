@@ -19,7 +19,6 @@ import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.dto.myrmex.get.MyselfDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Site;
@@ -48,14 +47,12 @@ public class AuthenticationController extends Controller {
     @Autowired
     private SecuredController securedController;
 
-    @Autowired
-    private PeriodService periodService;
-
     @Transactional(readOnly = true)
     public Result testAuthentication() {
 
         if (securedController.isAuthenticated()) {
-            return ok(conversionService.convert(securedController.getCurrentUser(), MyselfDTO.class));
+            return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
+
         }
         return unauthorized();
     }
@@ -90,25 +87,7 @@ public class AuthenticationController extends Controller {
         session(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
 
         //convert and send it
-        LoginResultDTO dto = new LoginResultDTO();
-
-        dto.setUser(conversionService.convert(account, MyselfDTO.class));
-
-        List<PeriodDTO> map = new ArrayList<>();
-        List<Period> periods = periodService.findAll();
-        Collections.sort(periods, new Comparator<Period>() {
-            @Override
-            public int compare(Period a, Period b) {
-                return -a.getLabel().compareTo(b.getLabel());
-            }
-        });
-        for (final Period period : periods) {
-            map.add(conversionService.convert(period, PeriodDTO.class));
-        }
-        dto.setAvailablePeriods(map);
-        dto.setDefaultPeriod(periods.get(0).getId());
-
-        dto.setOrganization(conversionService.convert(account.getOrganization(), OrganizationDTO.class));
+        LoginResultDTO dto = conversionService.convert(account, LoginResultDTO.class);
 
         return ok(dto);
 

@@ -49,27 +49,27 @@ input.ng-invalid {
     display: block;
 }
 
-/* body table into modal */
-.modal_body_table{
+/* field_form */
+.field_form{
     display:table;
 }
 
-.modal_body_table tr{
+.field_form tr{
     height:30px;
 
 }
-.modal_body_table td:first-child{
+.field_form td:first-child{
     width:150px;
 }
 
-.modal_body_table input{
+.field_form input{
     width:150px;
 }
-.modal_body_table td:last-child{
+.field_form td:last-child{
     padding-left:20px;
 }
 
-.modal_body_table .error_message > div:last-child{
+.field_form .error_message > div:last-child{
     display: none;
     position: absolute;
     background-color: orangered;
@@ -80,7 +80,7 @@ input.ng-invalid {
     margin-top: -15px;
     margin-left: 20px;
 }
-.modal_body_table .error_message:hover > div:last-child{
+.field_form .error_message:hover > div:last-child{
     display: block;
 }
 
