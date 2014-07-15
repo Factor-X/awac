@@ -3,40 +3,6 @@ angular
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams) ->
 
     #
-    # Redirect user to login view if not logged in
-    #
-    if not $scope.currentUser
-        $location.path('/login')
-
-    #
-    # Is login
-    #
-    $scope.isLogin = () ->
-        return $location.path().substring(0, 6) == "/login"
-
-    $scope.logout = () ->
-        console.log("logout ??")
-        promise = $http
-            method: "POST"
-            url: 'logout'
-            headers:
-                "Content-Type": "application/json"
-        promise.success (data, status, headers, config) ->
-            $scope.currentUser = null
-            $location.path('/login')
-            return
-
-        promise.error (data, status, headers, config) ->
-            $location.path('/login')
-            return
-
-    $scope.setCurrentUser = (user) ->
-        $scope.currentUser = user
-
-    $scope.getCurrentUser = () ->
-        return $scope.currentUser
-
-    #
     # First loading
     #
     $scope.isLoading = ->
@@ -101,14 +67,75 @@ angular
         $scope.$broadcast 'SAVE'
 
     #
-    #
-    #
-    $scope.setCurrentOrganization = (org) ->
-        $scope.organization = org
-
-    #
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
         $scope.period = parseInt($routeParams.period)
         $scope.scopeId = parseInt($routeParams.scope)
+
+
+#rootScope
+angular.module('app').run ($rootScope,$location, $http)->
+
+  console.log("run  !!")
+
+  #
+  # Redirect user to login view if not logged in
+  #
+  if not $rootScope.currentPerson
+    $location.path('/login')
+
+  #
+  # Is login
+  #
+  $rootScope.isLogin = () ->
+    return $location.path().substring(0, 6) == "/login"
+
+  #
+  # logout the current user
+  #
+  $rootScope.logout = () ->
+    console.log("logout ??")
+    promise = $http
+      method: "POST"
+      url: 'logout'
+      headers:
+        "Content-Type": "application/json"
+    promise.success (data, status, headers, config) ->
+      $rootScope.currentPerson = null
+      $location.path('/login')
+      return
+
+    promise.error (data, status, headers, config) ->
+      $location.path('/login')
+      return
+  #
+  # success after login => store some datas, display the path
+  #
+  $rootScope.loginSuccess = (data) ->
+    $rootScope.periods = data.availablePeriods
+    $rootScope.currentPerson = data.person
+    $rootScope.organization = data.organization
+    $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+
+  #
+  # test if the user is currently connected on the server
+  #
+  $rootScope.testAuthentication = () ->
+    promise = $http
+      method: "POST"
+      url: 'testAuthentication'
+      headers:
+        "Content-Type": "application/text"
+    promise.success (data, status, headers, config) ->
+      $rootScope.loginSuccess data
+      return
+
+    promise.error (data, status, headers, config) ->
+      return
+  #
+  # call the test authentification function
+  #
+  $rootScope.testAuthentication()
+
+

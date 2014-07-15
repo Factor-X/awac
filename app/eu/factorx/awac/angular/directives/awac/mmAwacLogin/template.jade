@@ -1,18 +1,10 @@
-ng-virtual
+ng-virtual(ng-enter="send()")
 
-    .field
-        label Username
-        input(
-        type="text",
-        ng-model="login",
-        required=true)
+    div(class="field_form")
 
-    .field
-        label Password
-        input(
-        type="password",
-        ng-model="password",
-        required=true)
+        mm-awac-modal-field-text(ng-info="loginInfo")
+
+        mm-awac-modal-field-text(ng-info="passwordInfo")
 
     p(ng-show="errorMessage.length > 0", style="background-color:#ff0000;color:#ffffff;padding:15px")
         | {{errorMessage}}
