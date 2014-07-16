@@ -1,0 +1,6 @@
+div
+    div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    .oneelement
+        .status.answer
+        input(type="text", ng-model="getAnswerByQuestionCode(getQuestionCode()).value")
+        .user_icon XM
