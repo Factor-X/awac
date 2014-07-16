@@ -1,33 +1,22 @@
-ng-virtual
-    .element
-        .element_header
-            .title AWAC - Entreprises
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
+mm-awac-section(title-code="AWAC_ENTERPRISES")
+    mm-awac-integer-question(ng-object="o", question-code="A2")
 
-                mm-awac-integer-question(ng-object="o", question-code="A2")
+    mm-awac-select-question(ng-object="o", question-code="A3")
 
-                mm-awac-select-question(ng-object="o", question-code="A3")
+    mm-awac-select-question(ng-object="o", question-code="A4", ng-show="A('A3').value == '1'")
 
-                mm-awac-select-question(ng-object="o", question-code="A4", ng-show="A('A3').value == '1'")
+    mm-awac-select-question(ng-object="o", question-code="A5", ng-show="A('A3').value == '2' || A('A3').value == '3'")
 
-                mm-awac-select-question(ng-object="o", question-code="A5", ng-show="A('A3').value == '2' || A('A3').value == '3'")
+    mm-awac-select-question(ng-object="o", question-code="A6", ng-show="A('A3').value == '4'")
 
-                mm-awac-select-question(ng-object="o", question-code="A6", ng-show="A('A3').value == '4'")
+    mm-awac-boolean-question(ng-object="o", question-code="A7", ng-show="A('A3').value == '4'")
 
-                mm-awac-boolean-question(ng-object="o", question-code="A7", ng-show="A('A3').value == '4'")
+    mm-awac-select-question(ng-object="o", question-code="A8")
 
-                mm-awac-select-question(ng-object="o", question-code="A8")
+    mm-awac-real-with-unit-question(ng-object="o", question-code="A9")
 
-                mm-awac-real-with-unit-question(ng-object="o", question-code="A9")
+    mm-awac-real-with-unit-question(ng-object="o", question-code="A10")
 
-                mm-awac-real-with-unit-question(ng-object="o", question-code="A10")
+    mm-awac-boolean-question(ng-object="o", question-code="A11", ng-show="A('A3').value != '4'")
 
-                mm-awac-boolean-question(ng-object="o", question-code="A11", ng-show="A('A3').value != '4'")
-
-                mm-awac-integer-question(ng-object="o", question-code="A12")
+    mm-awac-integer-question(ng-object="o", question-code="A12")

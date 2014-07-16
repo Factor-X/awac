@@ -9,6 +9,12 @@ ng-virtual
                 .validate_status
         .element_content
             .element_table
+
+                mm-awac-repetition-question(ng-object="o", question-code="A13", questions-to-add="A14")
+                    mm-awac-select-question(ng-object="o", question-code="A14")
+
+
+            //
                 div
                     div Pièces documentaires liées aux consommations de combustible
                 div(ng-repeat="v in A('A14')")

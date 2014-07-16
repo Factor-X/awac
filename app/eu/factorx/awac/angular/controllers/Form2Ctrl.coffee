@@ -6,6 +6,7 @@ angular
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
+        ###
 
         $scope.addNewAnswer = (code) ->
             answers = $scope.A(code)
@@ -74,7 +75,7 @@ angular
                     if qv.repetitionIndex == ri
                         return qv
             return null
-
+        ###
         # getAnswerByQuestionCode
         $scope.A = (code) ->
             isRepetition = false
@@ -143,5 +144,7 @@ angular
         promise.error (data, status, headers, config) ->
             console.log "ERROR : " + data.message
             return
+
+    window.A = $scope
 
     return

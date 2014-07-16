@@ -14,6 +14,5 @@ angular
             if scope.ngObject
                 for qv in scope.ngObject.answersSaveDTO.listAnswers
                     if qv.questionKey == code
-                        console.log qv
                         return qv
             return null

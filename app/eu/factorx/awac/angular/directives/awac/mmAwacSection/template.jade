@@ -1,0 +1,11 @@
+ng-virtual
+    .element
+        .element_header
+            .title(ng-bind-html="getTitleCode() | translate")
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table(ng-transclude)
