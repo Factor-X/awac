@@ -83,3 +83,17 @@ input.ng-invalid {
     display: block;
 }
 
+.alert{
+    position:absolute;
+    width : 30%;
+    top:20px;
+    test-align:center;
+    margin:0 35%;
+    text-align: center;
+    box-shadow: 5px 5px 5px #888888;
+}
+
+.alert-error{
+    background-color: #ff0000;
+    color: #ffffff;
+}
