@@ -2,16 +2,12 @@ package eu.factorx.awac.models;
 
 import java.io.Serializable;
 
-import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import play.Logger;
+import play.mvc.Http.Context;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,8 +23,8 @@ public abstract class AbstractEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 
-	 @Embedded
-	 protected TechnicalSegment technicalSegment;
+	@Embedded
+	protected TechnicalSegment technicalSegment;
 
 	public Long getId() {
 		return id;
@@ -38,40 +34,64 @@ public abstract class AbstractEntity implements Serializable {
 		this.id = id;
 	}
 
-	 public TechnicalSegment getTechnicalSegment() {
-	 return technicalSegment;
-	 }
-	
-	 public void setTechnicalSegment(TechnicalSegment technicalSegment) {
-	 this.technicalSegment = technicalSegment;
-	 }
-
-	/**
-	 * Default implementation: override this.
-	 * 
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		AbstractEntity rhs = (AbstractEntity) obj;
-		return new EqualsBuilder().append(this.id, rhs.id).isEquals();
+	public TechnicalSegment getTechnicalSegment() {
+		return technicalSegment;
 	}
 
-	/**
-	 * Default implementation: override this.
-	 * 
-	 */
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
+	public void setTechnicalSegment(TechnicalSegment technicalSegment) {
+		this.technicalSegment = technicalSegment;
 	}
+
+	@PostPersist
+	public void postPersist() {
+        Logger.debug("===== Persisted " + getClass().getName() + " entity with ID = " + getId());
+		String creationUser;
+		if (Context.current.get() == null) {
+			creationUser = "TECH";
+		} else {
+			creationUser = Context.current().session().get("identifier");
+		}
+		this.technicalSegment = new TechnicalSegment(creationUser);
+	}
+
+	@PostUpdate
+	public void postUpdate() {
+        Logger.debug("===== Updated " + getClass().getName() + " entity with ID = " + getId());
+		String updateUser;
+		if (Context.current.get() == null) {
+			updateUser = "TECH";
+		} else {
+			updateUser = Context.current().session().get("identifier");
+		}
+		this.technicalSegment.update(updateUser);
+	}
+
+    /**
+     * Default implementation: override this.
+     *
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        AbstractEntity rhs = (AbstractEntity) obj;
+        return new EqualsBuilder().append(this.id, rhs.id).isEquals();
+    }
+
+    /**
+     * Default implementation: override this.
+     *
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
+    }
 
 }

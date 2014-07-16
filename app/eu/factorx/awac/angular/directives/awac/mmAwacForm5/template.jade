@@ -1,22 +1,105 @@
 ng-virtual
+    .element
+        .element_header
+            .title Déchets
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux déchets
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
 
-    h1 Survey
+    .horizontal_separator
 
-    label Q1
-    input(type="text", ng-model="getByCode('Q1').value")
+    .element
+        .element_header
+            .title Déchets générés par les opérations
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div(style="text-decoration: underline") Listez vos différents postes de déchets
 
-    hr
+    .horizontal_separator
 
-    label Q2
-    input(type="text", ng-model="getByCode('Q2').value")
+    .element
+        .element_header
+            .title Eaux usées
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div(style="text-decoration: underline") Eaux usées domestiques par grand type de bâtiments
+                    div
+                        div(style="text-decoration: underline") Usine ou atelier
+                        div(style="text-decoration: underline") Bureau
+                        div(style="text-decoration: underline") Hôtel, pension, hôpitaux, prison
+                        div(style="text-decoration: underline") Restaurant ou cantine
+                div
+                    div(style="text-decoration: underline") Eaux usées industrielles
+                div
+                    .element_content
+                        .element_text Plusieurs méthodes différentes existent pour rapporter les eaux usées industrielles. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+                        .method
+                            style
+                                .tab-color-lightgreen a {
+                                    background-color: #28b24c;
+                                }
 
-    hr
+                                .tab-color-lightgreen.sub_block {
+                                    border-color: #28b24c;
+                                }
 
-    label Q3
-    input(type="text", ng-model="getByCode('Q3').value")
+                                .tab-color-green a {
+                                    background-color: #809d3e;
+                                }
 
-    hr
+                                .tab-color-green.sub_block {
+                                    border-color: #809d3e;
+                                }
 
-    label Q4
-    input(type="text", ng-model="getByCode('Q4').value")
+                                .tab-color-yellow a {
+                                    background-color: #e1ad29;
+                                }
 
+                                .tab-color-yellow.sub_block {
+                                    border-color: #e1ad29;
+                                }
+
+                                .tab-color-orange a {
+                                    background-color: #e38a27;
+                                }
+
+                                .tab-color-orange.sub_block {
+                                    border-color: #e38a27;
+                                }
+                            tabset
+                                tab.tab-color-lightgreen
+                                    tab-heading
+                                        i.glyphicon.glyphicon-bell
+                                        | Méthode par la quantité de m³ rejetés
+                                    .sub_block.tab-color-lightgreen
+                                        .element_table
+                                            div
+                                tab.tab-color-green
+                                    tab-heading
+                                        i.glyphicon.glyphicon-bell
+                                        | Méthode par le poids de CO2 chimique des effluents rejetés
+                                    .sub_block.tab-color-green
+                                        .element_table
+                                            div

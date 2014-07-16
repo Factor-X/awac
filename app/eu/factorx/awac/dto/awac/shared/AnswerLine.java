@@ -8,6 +8,8 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AnswerLine extends DTO {
 
+	private Long questionAnswerId;
+	
 	@NotNull
 	private String questionKey;
 
@@ -22,11 +24,20 @@ public class AnswerLine extends DTO {
 	public AnswerLine() {
 	}
 
-	public AnswerLine(String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
+	public AnswerLine(Long questionAnswerId, String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
+		this.questionAnswerId = questionAnswerId;
 		this.questionKey = questionKey;
 		this.value = value;
 		this.repetitionIndex = repetitionIndex;
 		this.unitId = unitId;
+	}
+
+	public Long getQuestionAnswerId() {
+		return questionAnswerId;
+	}
+
+	public void setQuestionAnswerId(Long questionAnswerId) {
+		this.questionAnswerId = questionAnswerId;
 	}
 
 	public Object getValue() {

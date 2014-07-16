@@ -1,22 +1,114 @@
 ng-virtual
+    .element
+        .element_header
+            .title Achat de biens et services
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux achats
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Détail des achats
+                div
+                    div(style="text-decoration: underline") Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
+                div
+                    div(style="text-decoration: underline") Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
+                div
+                    div(style="text-decoration: underline") Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
 
-    h1 Survey
+    .horizontal_separator
 
-    label Q1
-    input(type="text", ng-model="getByCode('Q1').value")
+    .element
+        .element_header
+            .title Infrastructures
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux infrastructures
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Infrastructures (achetées durant l'année de déclaration)
+                div
+                    div(style="text-decoration: underline") Créez et nommez vos postes d'infrastructure
+                div
+                    div(style="text-decoration: underline") Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
+                div
+                    div(style="text-decoration: underline") Créez et nommez vos postes d'infrastructure spécifiques
 
-    hr
+    .horizontal_separator
+    .element
+        .element_header
+            .title Actifs loués (aval)
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux actifs loués
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Créez autant de catégories d'actifs loués que nécessaire
 
-    label Q2
-    input(type="text", ng-model="getByCode('Q2').value")
+    .horizontal_separator
 
-    hr
+    .element
+        .element_header
+            .title Franchises
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux franchises
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Créez autant de catégories de franchisés que nécessaire
 
-    label Q3
-    input(type="text", ng-model="getByCode('Q3').value")
+    .horizontal_separator
 
-    hr
-
-    label Q4
-    input(type="text", ng-model="getByCode('Q4').value")
-
+    .element
+        .element_header
+            .title Activités d'investissement
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux activités d'investissement
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
