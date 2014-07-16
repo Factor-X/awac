@@ -1,4 +1,0 @@
-#!/bin/bash
-cd project
-cat ../scripts/init.scala /dev/stdin | activator console
-cd ..
