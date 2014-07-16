@@ -114,7 +114,7 @@ ng-virtual
                     div Pièces documentaires liées aux GES des processus de production
                     .oneelement
                         .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A21')", ng-model="A('A21').value")
+                        select(ng-options="p.key as p.labelFr for p in O('A33')", ng-model="A('A33').value")
                         .user_icon XM
                 div
                     div(style="text-decoration: underline") Type de GES émis par la production
@@ -135,7 +135,7 @@ ng-virtual
                     div Pièces documentaires liées aux systèmes de refroidissement
                     .oneelement
                         .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A21')", ng-model="A('A21').value")
+                        select(ng-options="p.key as p.labelFr for p in O('A39')", ng-model="A('A39').value")
                         .user_icon XM
                 div
                     div(style="text-decoration: underline") Estimation des émissions à partir des recharges de gaz
@@ -156,10 +156,7 @@ ng-virtual
                 .answered_status.disable_status
                 .validate_status.disable_status
         .element_content
-            .element_text
-                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
-                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
-                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+            .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
             .method
                 style
                     .tab-color-lightgreen a {

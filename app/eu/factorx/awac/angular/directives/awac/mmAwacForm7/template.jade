@@ -1,22 +1,24 @@
 ng-virtual
-
-    h1 Survey
-
-    label Q1
-    input(type="text", ng-model="getByCode('Q1').value")
-
-    hr
-
-    label Q2
-    input(type="text", ng-model="getByCode('Q2').value")
-
-    hr
-
-    label Q3
-    input(type="text", ng-model="getByCode('Q3').value")
-
-    hr
-
-    label Q4
-    input(type="text", ng-model="getByCode('Q4').value")
-
+    .element
+        .element_header
+            .title Achat de biens et services
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+                div
+                    div Pièces documentaires liées aux transport & distribution, traitement, utilisation et fin de vie des produits vendus
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+                div
+                    div(style="text-decoration: underline") Lister les différents produits ou groupes de produits vendus par l'entreprise
+                    div
+                        div(style="text-decoration: underline") Transport
+                        div(style="text-decoration: underline") Traitement
+                        div(style="text-decoration: underline") Utilisation
+    .horizontal_separator

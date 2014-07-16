@@ -1,42 +1,210 @@
 ng-virtual
     .element
         .element_header
-            .title Combustion de combustible par les sources statiques des sites de l'entreprise
-            .upload
+            .title Mobilité
         .element_sidebar
             .block_status
-                .lock_status
-                .answered_status.disable_status
-                .validate_status.disable_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
         .element_content
-            .element_text
-                | Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes
-                | froids. Elles vous sont présentées de la meilleure à la plus approximative.
-                | L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez.
+            .element_table
+                div
+                    div Pièces documentaires liées à la mobilité
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                        .user_icon XM
+
+    .horizontal_separator
+
+    .element
+        .element_header
+            .title Transport routier
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_text Plusieurs méthodes différentes existent pour rapporter le transport routier. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
             .method
+                style
+                    .tab-color-lightgreen a {
+                        background-color: #28b24c;
+                    }
 
-//
-    ng-virtual
+                    .tab-color-lightgreen.sub_block {
+                        border-color: #28b24c;
+                    }
 
-        h1 Survey
+                    .tab-color-green a {
+                        background-color: #809d3e;
+                    }
 
-        label Q1
-        input(type="text", ng-model="getAnswerByQuestionCode('Q1').value")
+                    .tab-color-green.sub_block {
+                        border-color: #809d3e;
+                    }
 
-        hr
+                    .tab-color-yellow a {
+                        background-color: #e1ad29;
+                    }
 
-        label Q2
-        input(type="text", ng-model="getAnswerByQuestionCode('Q2').value")
-        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q2')", ng-model="getAnswerByQuestionCode('Q2').unitId")
+                    .tab-color-yellow.sub_block {
+                        border-color: #e1ad29;
+                    }
 
-        hr
+                    .tab-color-orange a {
+                        background-color: #e38a27;
+                    }
 
-        label Q3
-        input(type="text", ng-model="getAnswerByQuestionCode('Q3').value")
+                    .tab-color-orange.sub_block {
+                        border-color: #e38a27;
+                    }
+                tabset
+                    tab.tab-color-lightgreen
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Calcul par les consommations
+                        .sub_block.tab-color-lightgreen
+                            .element_table
+                                div
+                                    div(style="text-decoration: underline") Véhicules de société ou détenus par l'entreprise
+                                div
+                                    div(style="text-decoration: underline") Autres véhicules: déplacements domicile-travail des employés
+                                div
+                                    div(style="text-decoration: underline") Autres véhicules: Déplacements professionnels & visiteurs
+                    tab.tab-color-green
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Estimation par les kilomètres
+                        .sub_block.tab-color-green
+                            .element_table
+                                div
+                                    div(style="text-decoration: underline") Créez autant de catégories de véhicules que souhaité
+        tab.tab-color-yellow
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Estimation par euros dépensés
+                        .sub_block.tab-color-yellow
+                            .element_table
+                                div
+                                    div(style="text-decoration: underline") Créez autant de catégories de véhicules que souhaité
 
-        hr
+    .horizontal_separator
 
-        label Q4
-        input(type="text", ng-model="getAnswerByQuestionCode('Q4').value")
-        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode('Q4')", ng-model="getAnswerByQuestionCode('Q4').unitId")
+    .element
+        .element_header
+            .title Transport en commun
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_text Plusieurs méthodes différentes existent pour rapporter le transport en commun. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+            .method
+                style
+                    .tab-color-lightgreen a {
+                        background-color: #28b24c;
+                    }
 
+                    .tab-color-lightgreen.sub_block {
+                        border-color: #28b24c;
+                    }
+
+                    .tab-color-green a {
+                        background-color: #809d3e;
+                    }
+
+                    .tab-color-green.sub_block {
+                        border-color: #809d3e;
+                    }
+
+                    .tab-color-yellow a {
+                        background-color: #e1ad29;
+                    }
+
+                    .tab-color-yellow.sub_block {
+                        border-color: #e1ad29;
+                    }
+
+                    .tab-color-orange a {
+                        background-color: #e38a27;
+                    }
+
+                    .tab-color-orange.sub_block {
+                        border-color: #e38a27;
+                    }
+                tabset
+                    tab.tab-color-lightgreen
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Estimation par le détail des déplacements
+                        .sub_block.tab-color-lightgreen
+                            .element_table
+                    tab.tab-color-green
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Estimation par nombre d'employés
+                        .sub_block.tab-color-green
+                            .element_table
+
+    .horizontal_separator
+
+    .element
+        .element_header
+            .title Transport en avion (déplacements professionnels ou des visiteurs)
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_text Plusieurs méthodes différentes existent pour rapporter le transport en avion. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+            .method
+                style
+                    .tab-color-lightgreen a {
+                        background-color: #28b24c;
+                    }
+
+                    .tab-color-lightgreen.sub_block {
+                        border-color: #28b24c;
+                    }
+
+                    .tab-color-green a {
+                        background-color: #809d3e;
+                    }
+
+                    .tab-color-green.sub_block {
+                        border-color: #809d3e;
+                    }
+
+                    .tab-color-yellow a {
+                        background-color: #e1ad29;
+                    }
+
+                    .tab-color-yellow.sub_block {
+                        border-color: #e1ad29;
+                    }
+
+                    .tab-color-orange a {
+                        background-color: #e38a27;
+                    }
+
+                    .tab-color-orange.sub_block {
+                        border-color: #e38a27;
+                    }
+                tabset
+                    tab.tab-color-lightgreen
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Méthode par le détail des vols
+                        .sub_block.tab-color-lightgreen
+                            .element_table
+                    tab.tab-color-green
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            | Méthode des moyennes
+                        .sub_block.tab-color-green
+                            .element_table
