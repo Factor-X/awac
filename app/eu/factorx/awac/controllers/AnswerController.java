@@ -5,7 +5,6 @@ import java.util.*;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -197,10 +196,9 @@ public class AnswerController extends Controller {
     }
 
     private AnswerLine toAnswerLine(Question question, QuestionAnswer questionAnswer) {
+        AnswerType answerType = question.getAnswerType();
     	Boolean repetitionAllowed = question.getQuestionSet().getRepetitionAllowed();
     	Integer repetitionIndex = null;
-
-    	AnswerType answerType = question.getAnswerType();
 
         if (questionAnswer == null) {
         	if (repetitionAllowed) {

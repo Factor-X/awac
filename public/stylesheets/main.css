@@ -4,7 +4,6 @@
 .translated-text.translation-missing {
     font-style: italic;
     color: red;
-    font-size: 50%;
 }
 
 .loading-overlay {
