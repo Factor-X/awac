@@ -2,71 +2,69 @@ package eu.factorx.awac.models;
 
 import javax.persistence.Embeddable;
 
-import org.joda.time.DateTime;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import eu.factorx.awac.models.account.Account;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
 
 @Embeddable
 public class TechnicalSegment {
 
-	@DateTimeFormat
-	private DateTime creationDate;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime creationDate;
 
-	private Account creationUser;
+	private String creationUser;
 
-	@DateTimeFormat
-	private DateTime lastUpdateDate;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime lastUpdateDate;
 
-	private Account lastUpdateUser;
+	private String lastUpdateUser;
 
 	protected TechnicalSegment() {
 		super();
 	}
 
-	public TechnicalSegment(Account creationUser) {
+	public TechnicalSegment(String creationUser) {
 		super();
-		DateTime now = DateTime.now();
+		LocalDateTime now = LocalDateTime.now();
 		this.creationDate = now;
 		this.creationUser = creationUser;
 		this.lastUpdateDate = now;
 		this.lastUpdateUser = creationUser;
 	}
 
-	public DateTime getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(DateTime creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public Account getCreationUser() {
+	public String getCreationUser() {
 		return creationUser;
 	}
 
-	public void setCreationUser(Account creationUser) {
+	public void setCreationUser(String creationUser) {
 		this.creationUser = creationUser;
 	}
 
-	public DateTime getLastUpdateDate() {
+	public LocalDateTime getLastUpdateDate() {
 		return lastUpdateDate;
 	}
 
-	public void setLastUpdateDate(DateTime lastUpdateDate) {
+	public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
-	public Account getLastUpdateUser() {
+	public String getLastUpdateUser() {
 		return lastUpdateUser;
 	}
 
-	public void setLastUpdateUser(Account lastUpdateUser) {
+	public void setLastUpdateUser(String lastUpdateUser) {
 		this.lastUpdateUser = lastUpdateUser;
 	}
 
-	public void update(Account updateUser) {
-		this.setLastUpdateUser(updateUser);
-		this.setLastUpdateDate(DateTime.now());
+	public void update(String updateUser) {
+		this.lastUpdateDate = LocalDateTime.now();
+		this.lastUpdateUser = updateUser;
 	}
 }
