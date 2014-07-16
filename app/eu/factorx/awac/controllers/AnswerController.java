@@ -179,18 +179,22 @@ public class AnswerController extends Controller {
         Scope scope = scopeService.findById(answersDTO.getScopeId());
 
         for (AnswerLine answerLine : answersDTO.getListAnswers()) {
-            Question question = getAndVerifyQuestion(answerLine);
-            QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, answerLine.getRepetitionIndex());
-            if (answerLine.getQuestionAnswerId() != null) {
-            	questionAnswer.setId(answerLine.getQuestionAnswerId());
+            QuestionAnswer questionAnswer;
+			if (answerLine.getQuestionAnswerId() != null) {
+            	questionAnswer = questionAnswerService.findById(answerLine.getQuestionAnswerId());
+                questionAnswer.getAnswerValues().clear();
+            } else {
+            	Question question = getAndVerifyQuestion(answerLine);
+            	questionAnswer = new QuestionAnswer(period, scope, currentUser, question, answerLine.getRepetitionIndex());
             }
+
             // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
             // => add only one AnswerValue in answerValues list
-            AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
+            AnswerValue answerValue = getAnswerValue(answerLine, questionAnswer);
             if (answerValue == null) continue;
-            List<AnswerValue> answerValues = new ArrayList<>();
-            answerValues.add(answerValue);
-            questionAnswer.setAnswerValues(answerValues);
+            
+            questionAnswer.getAnswerValues().add(answerValue);
+
             questionAnswerService.saveOrUpdate(questionAnswer);
         }
     }
@@ -251,13 +255,14 @@ public class AnswerController extends Controller {
         return new AnswerLine(questionAnswer.getId(), question.getCode().getKey(), rawAnswerValue, repetitionIndex, unitId);
     }
 
-    private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
+    private AnswerValue getAnswerValue(AnswerLine answerLine, QuestionAnswer questionAnswer) {
         if (answerLine.getValue() == null) {
             return null;
         }
         String rawAnswerValue = answerLine.getValue().toString();
         AnswerValue answerValue = null;
 
+        Question question = questionAnswer.getQuestion();
         switch (question.getAnswerType()) {
             case BOOLEAN:
                 answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
