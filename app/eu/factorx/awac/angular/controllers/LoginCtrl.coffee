@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope, downloadService, $http, $location) ->
+.controller "LoginCtrl", ($scope, downloadService, $http, $location, messageFlash) ->
 
     console.log("je suis le logincontroller")
 
@@ -49,3 +49,6 @@ angular
             return
 
         return false
+
+    $scope.test = () ->
+      messageFlash.displaySuccess "prout"
