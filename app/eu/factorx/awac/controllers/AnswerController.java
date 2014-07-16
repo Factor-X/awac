@@ -182,11 +182,16 @@ public class AnswerController extends Controller {
         for (AnswerLine answerLine : answersDTO.getListAnswers()) {
             Question question = getAndVerifyQuestion(answerLine);
             QuestionAnswer questionAnswer = new QuestionAnswer(period, scope, currentUser, question, answerLine.getRepetitionIndex());
+            if (answerLine.getQuestionAnswerId() != null) {
+            	questionAnswer.setId(answerLine.getQuestionAnswerId());
+            }
             // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned)
             // => add only one AnswerValue in answerValues list
             AnswerValue answerValue = getAnswerValue(answerLine, question, questionAnswer);
             if (answerValue == null) continue;
-            questionAnswer.getAnswerValues().add(answerValue);
+            List<AnswerValue> answerValues = new ArrayList<>();
+            answerValues.add(answerValue);
+            questionAnswer.setAnswerValues(answerValues);
             questionAnswerService.saveOrUpdate(questionAnswer);
         }
     }
@@ -201,7 +206,7 @@ public class AnswerController extends Controller {
         	if (repetitionAllowed) {
         		repetitionIndex = 0;
         	}
-        	return new AnswerLine(question.getCode().getKey(), null, repetitionIndex, null);
+        	return new AnswerLine(null, question.getCode().getKey(), null, repetitionIndex, null);
         } else {
         	if (repetitionAllowed) {
         		repetitionIndex = questionAnswer.getRepetitionIndex();
@@ -245,7 +250,7 @@ public class AnswerController extends Controller {
                         entityAnswerValue.getEntityId());
                 break;
         }
-        return new AnswerLine(question.getCode().getKey(), rawAnswerValue, repetitionIndex, unitId);
+        return new AnswerLine(questionAnswer.getId(), question.getCode().getKey(), rawAnswerValue, repetitionIndex, unitId);
     }
 
     private AnswerValue getAnswerValue(AnswerLine answerLine, Question question, QuestionAnswer questionAnswer) {
