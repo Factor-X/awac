@@ -63,7 +63,6 @@ public class QuestionAnswer extends AbstractEntity {
 	@ManyToOne(optional = false)
 	private Account dataOwner;
 
-	@Basic(optional = false)
 	private Integer repetitionIndex = 0;
 
 	@Embedded
