@@ -121,7 +121,7 @@ public class ReportServiceImpl implements ReportService {
 			Unit unit = baseActivityDataUnit;
 			Double value = getValue(questionA17Answer, unit);
 
-			BaseActivityData baseActivityData = new BaseActivityData(activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+			BaseActivityData baseActivityData = new BaseActivityData("AE-BAD", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
 			
 			res.add(baseActivityData);
 		}
@@ -153,7 +153,7 @@ public class ReportServiceImpl implements ReportService {
                 Unit unit = baseActivityDataUnit;
                 Double value = getValue(questionA23Answer, unit);
 
-                BaseActivityData baseActivityData = new BaseActivityData(activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+                BaseActivityData baseActivityData = new BaseActivityData("AE-BAD2a", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
 
                 res.add(baseActivityData);
             }
@@ -169,7 +169,7 @@ public class ReportServiceImpl implements ReportService {
                 Unit unit = baseActivityDataUnit;
                 Double value = getValue(questionA24Answer, unit);
 
-                BaseActivityData baseActivityData = new BaseActivityData(activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+                BaseActivityData baseActivityData = new BaseActivityData("AE-BAD2b", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
 
                 res.add(baseActivityData);
             }
