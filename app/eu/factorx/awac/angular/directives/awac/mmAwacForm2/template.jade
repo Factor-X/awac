@@ -67,20 +67,11 @@ ng-virtual
                         .user_icon XM
                 div
                     div(style="text-decoration: underline") Electricité
-                div
-                    div Consommation d'électricité verte
-                    .twoelements
-                        .status.answer
-                        input(type="text", ng-model="A('A23').value")
-                        select(ng-options="p.id as p.name for p in U('A23')", ng-model="A('A23').unitId")
-                        .user_icon XM
-                div
-                    div Consommation d'électricité grise
-                    .twoelements
-                        .status.answer
-                        input(type="text", ng-model="A('A24').value")
-                        select(ng-options="p.id as p.name for p in U('A24')", ng-model="A('A24').unitId")
-                        .user_icon XM
+
+                mm-awac-real-with-unit-question(ng-object="o", question-code="A23")
+
+                mm-awac-real-with-unit-question(ng-object="o", question-code="A24")
+
                 div
                     div(style="text-decoration: underline") Vapeur
                 div
