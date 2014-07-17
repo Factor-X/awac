@@ -81,7 +81,7 @@ public class ReportServiceImpl implements ReportService {
 		List<BaseActivityData> res = new ArrayList<>();
 
 		res.addAll(getBaseActivityData1(allQuestionSetAnswers));
-		res.addAll(getBaseActivityData2(allQuestionSetAnswers));
+//		res.addAll(getBaseActivityData2(allQuestionSetAnswers));
 //		res.addAll(getBaseActivityData3(allQuestionSetAnswers));
 		// TODO To Continue...
 
