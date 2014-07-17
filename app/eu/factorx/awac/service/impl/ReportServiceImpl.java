@@ -1929,7 +1929,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA143Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.BARGE_ / _PENICHE);
+            baseActivityData.setActivityType(ActivityTypeCode.BARGE_PENICHE);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA152Answer, baseActivityDataUnit));
@@ -1971,7 +1971,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA143Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_( < 1000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_1000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA153Answer, baseActivityDataUnit));
@@ -2013,7 +2013,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA143Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_(1000_À_4000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_4000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA154Answer, baseActivityDataUnit));
@@ -2055,7 +2055,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA143Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_( > 4000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA155Answer, baseActivityDataUnit));
@@ -2091,7 +2091,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose("-ref marchandise");
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
+            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("RB*DB*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
@@ -2127,7 +2127,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose("-ref marchandise");
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
+            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("RH*DH*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
@@ -2163,7 +2163,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose("-ref marchandise");
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_BELGIQUE);
+            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DB);
@@ -2199,7 +2199,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose("-ref marchandise");
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_HORS_BELGIQUE_AMONT);
+            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AMONT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DH);
@@ -2718,7 +2718,6 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA218Answer = answersByCode.get(QuestionCode.A218);
             QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
             QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
-            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
             QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
 
             if (questionA212Answer == null ||
@@ -2730,7 +2729,6 @@ public class ReportServiceImpl implements ReportService {
                     questionA218Answer == null ||
                     questionA220Answer == null ||
                     questionA221Answer == null ||
-                    questionA211Answer == null ||
                     questionA210Answer == null) {
                 continue;
             }
@@ -2743,7 +2741,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType("getCode(questionA211Answer, ActivityTypeCode.class)+""_100%_RECYCLE""");
+            baseActivityData.setActivityType(ActivityTypeCode.);
             baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class)ou getCode(questionA213Answer, ActivitySourceCode.class)ou getCode(questionA214Answer, ActivitySourceCode.class)ou getCode(questionA215Answer, ActivitySourceCode.class)ou getCode(questionA216Answer, ActivitySourceCode.class)ou getCode(questionA217Answer, ActivitySourceCode.class)ou getCode(questionA218Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * getValue(questionA221Answer, baseActivityDataUnit));
@@ -2823,8 +2821,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA225Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
-            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
-            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
+            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
+            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA227Answer, baseActivityDataUnit) * getValue(questionA228Answer, baseActivityDataUnit));
 
@@ -2863,7 +2861,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA234Answer, baseActivityDataUnit));
@@ -2903,7 +2901,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA235Answer, baseActivityDataUnit));
@@ -2943,7 +2941,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA236Answer, baseActivityDataUnit));
@@ -2983,8 +2981,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
-            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
-            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
+            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
+            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA241Answer, baseActivityDataUnit) * getValue(questionA242Answer, baseActivityDataUnit));
 
@@ -3223,7 +3221,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.BARGE_ / _PENICHE);
+            baseActivityData.setActivityType(ActivityTypeCode.BARGE_PENICHE);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA217Answer, baseActivityDataUnit));
@@ -3263,7 +3261,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_( < 1000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_1000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA218Answer, baseActivityDataUnit));
@@ -3303,7 +3301,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_(1000_À_4000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_4000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA239Answer, baseActivityDataUnit)0);
@@ -3343,7 +3341,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_( > 4000_KM));
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA239Answer, baseActivityDataUnit)1);
@@ -3379,7 +3377,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
+            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("RB*DB*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
@@ -3415,7 +3413,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
+            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("RH*DH*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
@@ -3451,7 +3449,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_BELGIQUE);
+            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DB);
@@ -3487,7 +3485,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_HORS_BELGIQUE_AVAL);
+            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DH);
@@ -4197,8 +4195,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA335Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INVESTISSEMENT_SCOPE_1);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
-            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
-            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
+            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
+            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA336Answer, baseActivityDataUnit) * getValue(questionA337Answer, baseActivityDataUnit));
 
@@ -4237,8 +4235,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA335Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INVESTISSEMENT_SCOPE_2);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
-            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
-            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
+            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
+            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA336Answer, baseActivityDataUnit) * getValue(questionA338Answer, baseActivityDataUnit));
 
