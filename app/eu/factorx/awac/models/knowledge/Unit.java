@@ -25,8 +25,7 @@ public class Unit extends AbstractEntity {
 	public static final String FIND_ALL = "Unit.findAll";
 
 	/**
-	 * Parameters:<br>
-	 * - symbol : a {@link String}<br>
+	 * @param symbol : a {@link String}
 	 */
 	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
 

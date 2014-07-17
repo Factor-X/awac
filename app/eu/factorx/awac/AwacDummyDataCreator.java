@@ -12,6 +12,7 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
@@ -19,6 +20,7 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.BooleanQuestion;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
+import eu.factorx.awac.models.data.question.type.StringQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
@@ -45,6 +47,7 @@ public class AwacDummyDataCreator {
 
         UnitCategory surfaceUnits = getUnitCategoryByName("Area");
         UnitCategory energyUnits = getUnitCategoryByName("Energy");
+        UnitCategory massUnits = getUnitCategoryByName("Mass");
 
         Unit gj = getUnitBySymbol("GJ");
         Unit kcal = getUnitBySymbol("kcal");
@@ -83,6 +86,10 @@ public class AwacDummyDataCreator {
         Form tab2Form = new Form("TAB2");
         session.saveOrUpdate(tab2Form);
 
+        Form tab4Form = new Form("TAB4");
+        session.saveOrUpdate(tab4Form);
+
+        
 
         // -- QUESTION_SETS
         QuestionSet a1 = new QuestionSet(QuestionCode.A1, false);
@@ -140,7 +147,8 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(a47);
         tab2Form.getQuestionSet().add(a47);
         session.saveOrUpdate(tab2Form);
-
+        
+        
         // -- QUESTIONS
 
         session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A2, null));
@@ -170,33 +178,124 @@ public class AwacDummyDataCreator {
         session.saveOrUpdate(new IntegerQuestion(a13, 600, QuestionCode.A24, null));
 
 
-
-
-
         // First set of answers
-        int repetitionIndex = 1;
-        QuestionAnswer a16Answer1 = new QuestionAnswer(period1, scope, user1, a16, repetitionIndex);
-        session.saveOrUpdate(a16Answer1);
-        CodeAnswerValue a16AnswerValue1 = new CodeAnswerValue(a16Answer1, ActivitySourceCode.DIESEL_GASOIL_OU_FUEL_LEGER);
-        session.saveOrUpdate(a16AnswerValue1);
+        int repetitionIndex = 0;
+        QuestionSetAnswer questionSet15Answer0 = new QuestionSetAnswer(scope, period1, a15, repetitionIndex, null);
+        session.saveOrUpdate(questionSet15Answer0);
 
-        QuestionAnswer a17Answer1 = new QuestionAnswer(period1, scope, user1, a17, repetitionIndex);
-        session.saveOrUpdate(a17Answer1);
-        DoubleAnswerValue a17Answer1Value = new DoubleAnswerValue(a17Answer1, 20.6, gj);
-        session.saveOrUpdate(a17Answer1Value);
+        QuestionAnswer a16Answer0 = new QuestionAnswer(user1, null, questionSet15Answer0, a16);
+        session.saveOrUpdate(a16Answer0);
+        CodeAnswerValue a16Answer0Value = new CodeAnswerValue(a16Answer0, ActivitySourceCode.DIESEL_GASOIL_OU_FUEL_LEGER);
+        session.saveOrUpdate(a16Answer0Value);
+
+        QuestionAnswer a17Answer0 = new QuestionAnswer(user1, null, questionSet15Answer0, a17);
+        session.saveOrUpdate(a17Answer0);
+        DoubleAnswerValue a17Answer0Value = new DoubleAnswerValue(a17Answer0, 20.6, gj);
+        session.saveOrUpdate(a17Answer0Value);
 
         // Second set of answers
-        repetitionIndex = 2;
-        QuestionAnswer a16Answer2 = new QuestionAnswer(period1, scope, user1, a16, 2);
-        session.saveOrUpdate(a16Answer2);
-        CodeAnswerValue a16Answer2Value = new CodeAnswerValue(a16Answer2, ActivitySourceCode.BOIS_BUCHE);
-        session.saveOrUpdate(a16Answer2Value);
+        repetitionIndex = 1;
+        QuestionSetAnswer questionSet15Answer1 = new QuestionSetAnswer(scope, period1, a15, repetitionIndex, null);
+        session.saveOrUpdate(questionSet15Answer1);
 
-        QuestionAnswer a17Answer2 = new QuestionAnswer(period1, scope, user1, a17, 2);
-        session.saveOrUpdate(a17Answer2);
-        DoubleAnswerValue a17Answer2Value = new DoubleAnswerValue(a17Answer2, 60523.0, kcal);
-        session.saveOrUpdate(a17Answer2Value);
+        QuestionAnswer a16Answer1 = new QuestionAnswer(user1, null, questionSet15Answer1, a16);
+        session.saveOrUpdate(a16Answer1);
+        CodeAnswerValue a16Answer1Value = new CodeAnswerValue(a16Answer1, ActivitySourceCode.BOIS_BUCHE);
+        session.saveOrUpdate(a16Answer1Value);
 
+        QuestionAnswer a17Answer1 = new QuestionAnswer(user1, null, questionSet15Answer1, a17);
+        session.saveOrUpdate(a17Answer1);
+        DoubleAnswerValue a17Answer1Value = new DoubleAnswerValue(a17Answer1, 60523.0, kcal);
+        session.saveOrUpdate(a17Answer1Value);
+
+        
+        // Compound question : "Distribution amont: Energie et froid des entrepôts de stockage" (TAB 4)
+ 
+        // -- Question sets
+        
+        // entrepôts de stockage
+        QuestionSet a164 = new QuestionSet(QuestionCode.A164, true, null);
+        session.saveOrUpdate(a164);
+        tab4Form.getQuestionSet().add(a164);
+        session.saveOrUpdate(tab4Form);
+
+        // combustibles (pour chaque entrepôt)
+        QuestionSet a166 = new QuestionSet(QuestionCode.A166, true, a164);
+        session.saveOrUpdate(a166);
+        tab4Form.getQuestionSet().add(a166);
+        session.saveOrUpdate(tab4Form);
+
+        // gaz réfrigérants (pour chaque entrepôt)
+        QuestionSet a170 = new QuestionSet(QuestionCode.A170, true, a164);
+        session.saveOrUpdate(a170);
+        tab4Form.getQuestionSet().add(a170);
+        session.saveOrUpdate(tab4Form);
+
+        // -- Questions
+        
+        // entrepôts de stockage : nom
+        Question a165 = new StringQuestion(a164, 0, QuestionCode.A165);
+        
+        // combustibles : type
+        Question a167 = new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.FUEL);
+        // combustibles : quantité (énergie)
+        Question a168 = new DoubleQuestion(a166, 1, QuestionCode.A168, energyUnits);
+        // combustibles : électricité (énergie)
+        Question a169 = new DoubleQuestion(a166, 2, QuestionCode.A169, energyUnits);
+
+        // gaz réfrigérants : type
+        Question a171 = new ValueSelectionQuestion(a170, 0, QuestionCode.A171, CodeList.REFRIGERANT_GAS);
+        // gaz réfrigérants : quantité (masse)
+        Question a172 = new DoubleQuestion(a170, 1, QuestionCode.A172, massUnits);
+
+        session.saveOrUpdate(a165);
+        session.saveOrUpdate(a167);
+        session.saveOrUpdate(a168);
+        session.saveOrUpdate(a169);
+        session.saveOrUpdate(a171);
+        session.saveOrUpdate(a172);
+
+        // -- Answers
+
+        // 1er entrepôt
+        QuestionSetAnswer qs164_r0 = new QuestionSetAnswer(scope, period1, a164, 0, null);
+
+        // -- -- 1er combustible
+        QuestionSetAnswer qs164_r0_qs166_r0 = new QuestionSetAnswer(scope, period1, a166, 0, qs164_r0);
+        // -- -- -- type
+        // -- -- -- quantité
+        // -- -- -- électricité
+
+        // -- -- 2ème combustible 
+        QuestionSetAnswer qs164_r0_qs166_r1 = new QuestionSetAnswer(scope, period1, a166, 1, qs164_r0);
+        // -- -- -- type
+        // -- -- -- quantité
+        // -- -- -- électricité
+        
+        // -- -- 1er gaz réfrigérant
+        QuestionSetAnswer qs164_r0_qs170_r0 = new QuestionSetAnswer(scope, period1, a170, 0, qs164_r0);
+        // -- -- -- type
+        // -- -- -- quantité
+        
+        // 2ème entrepôt
+        QuestionSetAnswer qs164_r1 = new QuestionSetAnswer(scope, period1, a164, 1, null);
+
+        // -- -- 1er combustible
+        QuestionSetAnswer qs164_r1_qs166_r0 = new QuestionSetAnswer(scope, period1, a166, 0, qs164_r1);
+        // -- -- -- type
+        // -- -- -- quantité
+        // -- -- -- électricité
+        
+        // -- -- 1er gaz réfrigérant
+        QuestionSetAnswer qs164_r1_qs170_r0 = new QuestionSetAnswer(scope, period1, a170, 0, qs164_r1);
+        // -- -- -- type
+        // -- -- -- quantité
+
+        // -- -- 2ème gaz réfrigérant 
+        QuestionSetAnswer qs164_r1_qs170_r1 = new QuestionSetAnswer(scope, period1, a170, 1, qs164_r1);
+        // -- -- -- type
+        // -- -- -- quantité
+        
     }
 
     private static Unit getUnitBySymbol(String symbol) {

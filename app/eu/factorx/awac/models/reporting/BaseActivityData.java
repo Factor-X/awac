@@ -2,6 +2,9 @@ package eu.factorx.awac.models.reporting;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
+import javax.persistence.Embedded;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import eu.factorx.awac.models.code.type.ActivityCategoryCode;
@@ -15,56 +18,65 @@ public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer rank;
-
-	private String specificPurpose;
-
+	@Embedded
+	@Basic(optional = false)
 	private ActivityCategoryCode activityCategory;
 
+	@Embedded
+	@Basic(optional = false)
 	private ActivitySubCategoryCode activitySubCategory;
 
+	@Embedded
+	@Basic(optional = false)
 	private ActivityTypeCode activityType;
 
+	@Embedded
+	@Basic(optional = false)
 	private ActivitySourceCode activitySource;
 
+	@Basic(optional = false)
 	private Boolean activityOwnership;
 
+	@Basic(optional = false)
+	private Double value;
+
+	@ManyToOne(optional = false)
 	private Unit unit;
 
-	private Double value;
+	@Basic(optional = true)
+	private Integer rank;
+
+	@Basic(optional = true)
+	private String specificPurpose;
 
 	public BaseActivityData() {
 		super();
 	}
 
-	public BaseActivityData(Integer rank, String specificPurpose, ActivityCategoryCode activityCategory,
+	/**
+	 * @param activityCategory
+	 * @param activitySubCategory
+	 * @param activityType
+	 * @param activitySource
+	 * @param activityOwnership
+	 * @param value
+	 * @param unit
+	 * @param rank
+	 * @param specificPurpose
+	 */
+	public BaseActivityData(ActivityCategoryCode activityCategory,
 			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
-			ActivitySourceCode activitySource, Boolean activityOwnership, Unit unit, Double value) {
+			ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
+			String specificPurpose) {
 		super();
-		this.rank = rank;
-		this.specificPurpose = specificPurpose;
 		this.activityCategory = activityCategory;
 		this.activitySubCategory = activitySubCategory;
 		this.activityType = activityType;
 		this.activitySource = activitySource;
 		this.activityOwnership = activityOwnership;
-		this.unit = unit;
 		this.value = value;
-	}
-
-	public Integer getRank() {
-		return rank;
-	}
-
-	public void setRank(Integer rank) {
+		this.unit = unit;
 		this.rank = rank;
-	}
-
-	public String getSpecificPurpose() {
-		return specificPurpose;
-	}
-
-	public void setSpecificPurpose(String specificPurpose) {
 		this.specificPurpose = specificPurpose;
 	}
 
@@ -108,6 +120,14 @@ public class BaseActivityData implements Serializable {
 		this.activityOwnership = activityOwnership;
 	}
 
+	public Double getValue() {
+		return value;
+	}
+
+	public void setValue(Double value) {
+		this.value = value;
+	}
+
 	public Unit getUnit() {
 		return unit;
 	}
@@ -116,12 +136,20 @@ public class BaseActivityData implements Serializable {
 		this.unit = unit;
 	}
 
-	public Double getValue() {
-		return value;
+	public Integer getRank() {
+		return rank;
 	}
 
-	public void setValue(Double value) {
-		this.value = value;
+	public void setRank(Integer rank) {
+		this.rank = rank;
+	}
+
+	public String getSpecificPurpose() {
+		return specificPurpose;
+	}
+
+	public void setSpecificPurpose(String specificPurpose) {
+		this.specificPurpose = specificPurpose;
 	}
 
 }

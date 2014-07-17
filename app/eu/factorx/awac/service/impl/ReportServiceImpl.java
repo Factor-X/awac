@@ -17,6 +17,7 @@ import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
 import eu.factorx.awac.models.knowledge.Factor;
@@ -28,7 +29,7 @@ import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
 import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.IndicatorService;
-import eu.factorx.awac.service.QuestionAnswerService;
+import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ReportService;
 import eu.factorx.awac.service.UnitConversionService;
 import eu.factorx.awac.service.UnitService;
@@ -37,7 +38,7 @@ import eu.factorx.awac.service.UnitService;
 public class ReportServiceImpl implements ReportService {
 
 	@Autowired
-	private QuestionAnswerService questionAnswerService;
+	private QuestionSetAnswerService questionSetAnswerService;
 	@Autowired
 	private IndicatorService indicatorService;
 	@Autowired
@@ -50,8 +51,11 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public Report getReport(Scope scope, Period period) {
 
+		// find all question set answers (only "parents" => find where qsa.parent is null)
+		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = getAllQuestionSetAnswers(scope, period);
+		
 		// find all activity data
-		List<BaseActivityData> activityData = getActivityData(scope, period);
+		List<BaseActivityData> activityData = getActivityData(allQuestionSetAnswers);
 
 		// build activity results (== link suitable indicators and factors to each activity data)
 		List<BaseActivityResult> activityResults = new ArrayList<>();
@@ -73,12 +77,12 @@ public class ReportServiceImpl implements ReportService {
 		return new Report(activityResults);
 	}
 
-	private List<BaseActivityData> getActivityData(Scope scope, Period period) {
+	private List<BaseActivityData> getActivityData(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 
-		res.addAll(getBaseActivityData1(scope, period));
-		res.addAll(getBaseActivityData2(scope, period));
-		res.addAll(getBaseActivityData3(scope, period));
+		res.addAll(getBaseActivityData1(allQuestionSetAnswers));
+//		res.addAll(getBaseActivityData2(allQuestionSetAnswers));
+//		res.addAll(getBaseActivityData3(allQuestionSetAnswers));
 		// TODO To Continue...
 
 		return res;
@@ -90,22 +94,19 @@ public class ReportServiceImpl implements ReportService {
 	 * @param questionAnswers
 	 * @return a {@link BaseActivityData}
 	 */
-	private List<BaseActivityData> getBaseActivityData1(Scope scope, Period period) {
+	private List<BaseActivityData> getBaseActivityData1(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 
 		// Get Target Unit (GJ in this case)
 		// TODO Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
 		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-		// Get all QuestionSet answers
-		List<Map<QuestionCode, QuestionAnswer>> questionSetAnswers = getQuestionSetAnswers(scope, period,
-				QuestionCode.A15);
-
-		// For each set of answers, build an ActivityBaseData (see specifications)
-		for (Map<QuestionCode, QuestionAnswer> questionAnswers : questionSetAnswers) {
-
-			QuestionAnswer questionA16Answer = questionAnswers.get(QuestionCode.A16);
-			QuestionAnswer questionA17Answer = questionAnswers.get(QuestionCode.A17);
+		// For each set of answers in A15, build an ActivityBaseData (see specifications)
+		for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A15)) {
+			Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+			
+			QuestionAnswer questionA16Answer = answersByCode.get(QuestionCode.A16);
+			QuestionAnswer questionA17Answer = answersByCode.get(QuestionCode.A17);
 			if (questionA16Answer == null || questionA17Answer == null) {
 				continue;
 			}
@@ -120,22 +121,21 @@ public class ReportServiceImpl implements ReportService {
 			Unit unit = baseActivityDataUnit;
 			Double value = getValue(questionA17Answer, unit);
 
-			BaseActivityData baseActivityData = new BaseActivityData(rank, specificPurpose, activityCategory,
-					activitySubCategory, activityType, activitySource, activityOwnership, unit, value);
+			BaseActivityData baseActivityData = new BaseActivityData(activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+			
 			res.add(baseActivityData);
 		}
-
 		return res;
 	}
 
-	private List<BaseActivityData> getBaseActivityData2(Scope scope, Period period) {
+	private List<BaseActivityData> getBaseActivityData2(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 
 		// TODO To implement...
 		return res;
 	}
 
-	private List<BaseActivityData> getBaseActivityData3(Scope scope, Period period) {
+	private List<BaseActivityData> getBaseActivityData3(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 
 		// TODO To implement...
@@ -144,22 +144,27 @@ public class ReportServiceImpl implements ReportService {
 
 
 
-	private List<Map<QuestionCode, QuestionAnswer>> getQuestionSetAnswers(Scope scope, Period period,
-			QuestionCode questionSetCode) {
-		List<QuestionAnswer> questionAnswers = questionAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period,
-				questionSetCode);
-
-		Map<Integer, Map<QuestionCode, QuestionAnswer>> byRepetitionIndex = new HashMap<>();
+	private Map<QuestionCode, QuestionAnswer> toQuestionAnswersByQuestionCodeMap(List<QuestionAnswer> questionAnswers) {
+		Map<QuestionCode, QuestionAnswer> res = new HashMap<>();
 		for (QuestionAnswer questionAnswer : questionAnswers) {
-			questionAnswer.getQuestion();
-			Integer repetitionIndex = questionAnswer.getRepetitionIndex();
-			if (!byRepetitionIndex.containsKey(repetitionIndex)) {
-				byRepetitionIndex.put(repetitionIndex, new HashMap<QuestionCode, QuestionAnswer>());
+			res.put(questionAnswer.getQuestion().getCode(), questionAnswer);
+		}
+		return res;
+	}
+
+	private Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
+		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriod(scope, period);
+
+		Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			QuestionCode code = questionSetAnswer.getQuestionSet().getCode();
+			if (!res.containsKey(code)) {
+				res.put(code, new ArrayList<QuestionSetAnswer>());
 			}
-			byRepetitionIndex.get(repetitionIndex).put(questionAnswer.getQuestion().getCode(), questionAnswer);
+			res.get(code).add(questionSetAnswer);
 		}
 
-		return new ArrayList<Map<QuestionCode, QuestionAnswer>>(byRepetitionIndex.values());
+		return res;
 	}
 
 	private <T extends Code> T getCode(QuestionAnswer questionAnswer, Class<T> codeClass) {

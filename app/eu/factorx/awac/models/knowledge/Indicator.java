@@ -31,12 +31,11 @@ public class Indicator extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Parameters:<br>
-	 * - type : an {@link IndicatorCategoryCode}<br>
-	 * - scopeType : an {@link ScopeTypeCode}<br>
-	 * - activityCategory : an {@link ActivityCategoryCode}<br>
-	 * - activitySubCategory : an {@link ActivitySubCategoryCode}<br>
-	 * - activityOwnership : a {@link Boolean}
+	 * @param type : an {@link IndicatorCategoryCode}
+	 * @param scopeType : a {@link ScopeTypeCode}
+	 * @param activityCategory : an {@link ActivityCategoryCode}
+	 * @param activitySubCategory : an {@link ActivitySubCategoryCode}
+	 * @param activityOwnership : a {@link Boolean}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Indicator.findByParametersAndOwnership";
 

@@ -27,12 +27,11 @@ public class Factor extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Parameters:<br>
-	 * - indicatorCategory : an {@link IndicatorCategoryCode}<br>
-	 * - activitySource : an {@link ActivitySourceCode}<br>
-	 * - activityType : an {@link ActivityTypeCode}<br>
-	 * - unitIn : a {@link Unit}<br>
-	 * - unitOut : a {@link Unit}
+	 * @param indicatorCategory : an {@link IndicatorCategoryCode}
+	 * @param activitySource : an {@link ActivitySourceCode}
+	 * @param activityType : an {@link ActivityTypeCode}
+	 * @param unitIn : a {@link Unit}
+	 * @param unitOut : a {@link Unit}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
 

@@ -21,6 +21,8 @@ public enum CodeList {
     ACTIVITY_SUB_CATEGORY,
     ACTIVITY_TYPE,
     ACTIVITY_SOURCE,
-    UNIT
+    UNIT,
+    REFRIGERANT_GAS,
+    BASE_ACTIVITY_DATA
 
 }
