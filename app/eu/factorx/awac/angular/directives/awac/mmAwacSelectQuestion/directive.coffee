@@ -21,6 +21,7 @@ angular
             if scope.ngObject
                 codeListName = null;
                 for q in scope.ngObject.questions
+                    console.log q
                     if q.questionKey == code
                         codeListName = q.codeListName
 

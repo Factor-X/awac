@@ -1,36 +1,30 @@
 ng-virtual
-    .element
-        .element_header
-            .title Consommation de combustibles
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-
-                mm-awac-repetition-question(ng-object="o", question-code="A13", questions-to-add="A14")
-                    mm-awac-select-question(ng-object="o", question-code="A14")
+    mm-awac-section(title-code="CONSOMMATION_DE_COMBUSTIBLES")
 
 
-            //
-                div
-                    div Pièces documentaires liées aux consommations de combustible
-                div(ng-repeat="v in A('A14')")
+                //
                     div
-                    .oneelement
-                        .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
-                        .user_icon XM
-                    button(ng-click="removeAnwser(v)") Remove
-                div
+                        div Pièces documentaires liées aux consommations de combustible
+                    div(ng-repeat="v in A('A14')")
+                        div
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
+                            .user_icon XM
+                        button(ng-click="removeAnwser(v)") Remove
                     div
-                    .oneelement
-                        button(ng-click="addNewAnswer('A14')") Add
+                        div
+                        .oneelement
+                            button(ng-click="addNewAnswer('A14')") Add
 
-                div
-                    div Combustion de combustible par les sources statiques des sites de l'entreprise
+                    div
+                        div Combustion de combustible par les sources statiques des sites de l'entreprise
+
+                mm-awac-repetition-question(ng-object="o", question-code="A15", questions-to-add="A16,A17")
+                    span oki
+                    // mm-awac-select-question(ng-object="o", question-code="A15")
+                    // mm-awac-real-with-unit-question(ng-object="o", question-code="A16")
+
 
             .element_table(ng-repeat="ri in getRepetitionIndicesFor(['A16', 'A17'])")
                 div
