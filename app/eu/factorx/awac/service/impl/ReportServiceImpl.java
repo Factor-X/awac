@@ -415,6 +415,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD40(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -487,8 +490,11 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA48Answer = answersByCode.get(QuestionCode.A48);
             QuestionAnswer questionA49Answer = answersByCode.get(QuestionCode.A49);
 
-            if (questionA48Answer == null ||
+            if (questionA48Answer == null) {
                     questionA49Answer == null) {
+                continue;
+            }
+            if ((getValueBoolean(questionA48Answer) == true) && (questionA49Answer == null)) {
                 continue;
             }
 
@@ -503,9 +509,12 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.PUISSANCE_DES_BLOCS_FRIGO);
             baseActivityData.setActivitySource(ActivitySourceCode.GENERIQUE);
             baseActivityData.setActivityOwnership(true);
-            baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * H / getValue(questionA49Answer, baseActivityDataUnit)
-            (en heures));
-
+            if (getValueBoolean(questionA48Answer) == false) {
+                baseActivityData.setValue(0.0);
+            }
+            else {
+                baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * ElecConsumption / getValue(questionA49Answer, unitService.findBySymbol("h")));
+            }
             res.add(baseActivityData);
         }
         return res;
