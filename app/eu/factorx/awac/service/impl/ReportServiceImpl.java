@@ -146,6 +146,15 @@ public class ReportServiceImpl implements ReportService {
         res.addAll(getBaseActivityDataAE_BAD27A(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD27B(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD27C(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27D(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27E(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27F(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27G(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27H(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27I(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27J(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27K(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataAE_BAD27L(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD28(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD29A(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD29B(allQuestionSetAnswers));
@@ -457,6 +466,7 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
         Unit baseActivityDataUnit = unitService.findBySymbol("kW");
 
+        // Get reference Electrical Consumption
         QuestionSetAnswer questionSet22Answer = allQuestionSetAnswers.get(QuestionCode.A22).get(0);
         Map<QuestionCode, QuestionAnswer> questionSet22AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet22Answer.getQuestionAnswers());
         QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
@@ -467,12 +477,12 @@ public class ReportServiceImpl implements ReportService {
             return res;
         }
 
-        Double ElecConsumption = 0.0;
+        Double elecConsumption = 0.0;
         if (questionA23Answer != null) {
-            ElecConsumption += getValue(questionA23Answer, baseActivityDataUnit);
+            elecConsumption += getValue(questionA23Answer, baseActivityDataUnit);
         }
         if (questionA24Answer != null) {
-            ElecConsumption += getValue(questionA24Answer, baseActivityDataUnit);
+            elecConsumption += getValue(questionA24Answer, baseActivityDataUnit);
         }
 
         // For each set of answers in A47, build an ActivityBaseData (see specifications)
@@ -551,6 +561,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD7B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -587,6 +600,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD7C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -623,6 +639,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD8A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -659,6 +678,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD8B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -695,6 +717,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD8C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -731,6 +756,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD9A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -767,6 +795,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD9B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -803,6 +834,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD9C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -839,6 +873,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD10(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -854,6 +891,7 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA70Answer = answersByCode.get(QuestionCode.A70);
             QuestionAnswer questionA71Answer = answersByCode.get(QuestionCode.A71);
             QuestionAnswer questionA76Answer = answersByCode.get(QuestionCode.A76);
+            QuestionAnswer questionA72Answer = answersByCode.get(QuestionCode.A72);
             QuestionAnswer questionA73Answer = answersByCode.get(QuestionCode.A73);
             QuestionAnswer questionA74Answer = answersByCode.get(QuestionCode.A74);
             QuestionAnswer questionA75Answer = answersByCode.get(QuestionCode.A75);
@@ -863,11 +901,11 @@ public class ReportServiceImpl implements ReportService {
             if (questionA70Answer == null ||
                     questionA71Answer == null ||
                     questionA76Answer == null ||
-                    questionA73Answer == null ||
-                    questionA74Answer == null ||
-                    questionA75Answer == null ||
-                    questionA69Answer == null ||
-                    questionA68Answer == null) {
+                    questionA72Answer == null ||
+                    (questionA73Answer == null &&
+                    questionA74Answer == null &&
+                    questionA75Answer == null) ||
+                    questionA69Answer == null) {
                 continue;
             }
 
@@ -882,14 +920,24 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA71Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA69Answer));
-            baseActivityData.setValue(getValue(questionA76Answer, baseActivityDataUnit) * (getValue(questionA73Answer, baseActivityDataUnit)ou getValue(questionA74Answer, baseActivityDataUnit)ou getValue(questionA75Answer, baseActivityDataUnit)))
-            ;
+
+            // TODO
+            // Constantes adéquates de la réponse
+            // if getCode(questionA73Answer,CODE) == 1
+            baseActivityData.setValue(getValue(questionA76Answer, baseActivityDataUnit) * (getValue(questionA73Answer, baseActivityDataUnit)));
+            // elseif getCode(questionA73Answer,CODE) == 2 || 3 || 4
+            baseActivityData.setValue(getValue(questionA76Answer, baseActivityDataUnit) * (getValue(questionA74Answer, baseActivityDataUnit)));
+            // elseif getCode(questionA73Answer,CODE) == 5 || 6
+            baseActivityData.setValue(getValue(questionA76Answer, baseActivityDataUnit) * (getValue(questionA75Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD11(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -902,6 +950,8 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
+            QuestionAnswer questionA79Answer = answersByCode.get(QuestionCode.A79);
+            QuestionAnswer questionA80Answer = answersByCode.get(QuestionCode.A80);
             QuestionAnswer questionA81Answer = answersByCode.get(QuestionCode.A81);
             QuestionAnswer questionA83Answer = answersByCode.get(QuestionCode.A83);
             QuestionAnswer questionA88Answer = answersByCode.get(QuestionCode.A88);
@@ -909,18 +959,16 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA90Answer = answersByCode.get(QuestionCode.A90);
             QuestionAnswer questionA91Answer = answersByCode.get(QuestionCode.A91);
             QuestionAnswer questionA92Answer = answersByCode.get(QuestionCode.A92);
-            QuestionAnswer questionA80Answer = answersByCode.get(QuestionCode.A80);
-            QuestionAnswer questionA79Answer = answersByCode.get(QuestionCode.A79);
 
-            if (questionA81Answer == null ||
-                    questionA83Answer == null ||
+            if (questionA80Answer == null ||
+                    (questionA80Answer == null &&
+                            questionA81Answer == null) ||
                     questionA88Answer == null ||
-                    questionA89Answer == null ||
-                    questionA90Answer == null ||
-                    questionA91Answer == null ||
-                    questionA92Answer == null ||
-                    questionA80Answer == null ||
-                    questionA79Answer == null) {
+                    (questionA89Answer == null &&
+                    questionA90Answer == null &&
+                    questionA91Answer == null &&
+                    questionA92Answer == null) ||
+                    questionA83Answer == null) {
                 continue;
             }
 
@@ -931,18 +979,31 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(2);
             baseActivityData.setSpecificPurpose(getValueString(questionA79Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.MOBILITE);
+            // TODO
+            // Conversion des codes réponses A81 en DPRO et DDT
             baseActivityData.setActivitySubCategory(getCode(questionA81Answer, ActivitySubCategoryCode.class));
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA83Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA80Answer));
-            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA89Answer, baseActivityDataUnit)ou getValue(questionA90Answer, baseActivityDataUnit)ou getValue(questionA91Answer, baseActivityDataUnit)ou getValue(questionA92Answer, baseActivityDataUnit)))
-            ;
+            // TODO
+            // Constantes adéquates de la réponse
+            // if getCode(questionA83Answer,CODE) == 1
+            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA89Answer, baseActivityDataUnit)));
+            // if getCode(questionA83Answer,CODE) == 2
+            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA90Answer, baseActivityDataUnit)));
+            // if getCode(questionA83Answer,CODE) == 3
+            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA91Answer, baseActivityDataUnit)));
+            // if getCode(questionA83Answer,CODE) == 4
+            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA92Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -979,6 +1040,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1015,6 +1079,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1051,6 +1118,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1087,6 +1157,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12E(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1123,6 +1196,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12F(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1159,6 +1235,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12G(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1195,6 +1274,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12H(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1231,6 +1313,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12I(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1267,6 +1352,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12J(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1303,6 +1391,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12K(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1339,6 +1430,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12L(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1375,6 +1469,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12M(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1411,6 +1508,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD12N(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1447,6 +1547,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD13(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1454,17 +1557,32 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.employé)
         Unit baseActivityDataUnit = unitService.findBySymbol("employé");
 
+        // Get reference Number of Employees
+        // TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
+        QuestionSetAnswer questionSet12Answer = allQuestionSetAnswers.get(QuestionCode.A12).get(0);
+        Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet12Answer.getQuestionAnswers());
+        QuestionAnswer question12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+
+
+        if questionA12Answer == null {
+            return res;
+        }
+
+
         // For each set of answers in A109, build an ActivityBaseData (see specifications)
         for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A109)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA110Answer = answersByCode.get(QuestionCode.A110);
+            QuestionAnswer questionA111Answer = answersByCode.get(QuestionCode.A111);
+            QuestionAnswer questionA112Answer = answersByCode.get(QuestionCode.A112);
 
-            if (questionA110Answer == null) {
+            if (questionA110Answer == null ||
+                    questionA111Answer == null ||
+                    questionA112Answer == null) {
                 continue;
             }
-
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -1474,16 +1592,40 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.MOBILITE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DDT);
             baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
+            // TODO: utiliser codes pour assigner la source
             if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                baseActivityData.setActivitySource(ActivitySourceCode.R);
+                if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus hors agglo");
+                else
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus hors agglo");
+            else
+                if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus hors agglo");
+                else
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus hors agglo");
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("-H");
+            baseActivityData.setValue(getValue(questionA12Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD14(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1528,6 +1670,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD15(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1535,16 +1680,60 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
         Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
 
+        // Get reference Number of Employees
+        // TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
+        QuestionSetAnswer questionSet12Answer = allQuestionSetAnswers.get(QuestionCode.A12).get(0);
+        Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet12Answer.getQuestionAnswers());
+        QuestionAnswer question12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+
+        if questionA12Answer == null {
+            return res;
+        }
+
+
         // For each set of answers in A121, build an ActivityBaseData (see specifications)
         for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A121)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
+            QuestionAnswer questionA122Answer = answersByCode.get(QuestionCode.A122);
+            QuestionAnswer questionA123Answer = answersByCode.get(QuestionCode.A123);
+            QuestionAnswer questionA124Answer = answersByCode.get(QuestionCode.A124);
+            QuestionAnswer questionA125Answer = answersByCode.get(QuestionCode.A125);
+            QuestionAnswer questionA126Answer = answersByCode.get(QuestionCode.A126);
+            QuestionAnswer questionA127Answer = answersByCode.get(QuestionCode.A127);
 
-            if () {
+            if (questionA122Answer == null ||
+                    questionA123Answer == null ||
+                    (getValueBoolean(questionA123Answer) && questionA127Answer == null) ||
+                    (!getValueBoolean(questionA123Answer) && questionA124Answer == null) ||
+                    (!getValueBoolean(questionA123Answer) && questionA125Answer == null && questionA126Answer == null) {
                 continue;
             }
 
+            // intermediate variables to estimate flights
+            Double travelDistance;
+            // TODO: flight codes in variable
+            FlightCode flightType;
+            if getValueBoolean(questionA123Answer) {
+                travelDistance = getValue(questionA127Answer,"km");
+                // TODO code de vol
+                FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
+            } else {
+                //TODO code destination
+                if getCode(questionA124Answer,code) ==  Europe {
+                    travelDistance = 2500.0;
+                    // TODO code de vol
+                    FlightCode = "Vols europe (<4000km A/R)";
+                } else {
+                    travelDistance = 5000.0;
+                    // TODO code de vol
+                    FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
+                }
+            }
+
+            // TODO: comment déclarer que A122 est un %, i.e. sans unité?
+            travelDistance *= getValue(questionA12Answer,"employés") * getValue(questionA122Answer);
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -1554,15 +1743,18 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.MOBILITE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DPRO);
             baseActivityData.setActivityType(ActivityTypeCode.AVION_SANS_CLASSE);
-            baseActivityData.setActivitySource(ActivitySourceCode.R1);
+            baseActivityData.setActivitySource(ActivitySourceCode.flightType);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("-R2");
+            baseActivityData.setValue(travelDistance);
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD16A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1599,6 +1791,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD16B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1635,6 +1830,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD16C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1671,6 +1869,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD16D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1689,11 +1890,12 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA139Answer = answersByCode.get(QuestionCode.A139);
             QuestionAnswer questionA500Answer = answersByCode.get(QuestionCode.A500);
 
-            if (questionA137Answer == null ||
-                    questionA136Answer == null ||
-                    questionA138Answer == null ||
-                    questionA139Answer == null ||
-                    questionA500Answer == null) {
+            if (questionA136Answer == null ||
+                    (questionA136Answer == null && (
+                            questionA137Answer == null ||
+                            questionA138Answer == null ||
+                                    (questionA139Answer == null &&
+                                        questionA500Answer == null)))) {
                 continue;
             }
 
@@ -1708,6 +1910,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA137Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(true);
+            // TODO: toutes les valeurs ne sont pas exprimées dans la même unité ! Comment gérer?
+            // TODO: OK d'utiliser A138 comm eune valeur 1 ou 0 au lieu d'un booleén?
             baseActivityData.setValue(getValue(questionA136Answer, baseActivityDataUnit) * (getValue(questionA138Answer, baseActivityDataUnit) * getValue(questionA139Answer, baseActivityDataUnit) + (1 - getValue(questionA138Answer, baseActivityDataUnit)) * getValue(questionA500Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
@@ -1715,6 +1919,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1750,6 +1957,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_LOCAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
+            // TODO: unités ! pas totues indetiques. Même problèmes sur tous les BAD17....
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA147Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -1757,6 +1965,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1799,6 +2010,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1841,6 +2055,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1883,6 +2100,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17E(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1925,6 +2145,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17F(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -1967,6 +2190,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17G(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2009,6 +2235,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17H(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2051,6 +2280,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD17I(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2093,6 +2325,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD18A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2106,11 +2341,34 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA158Answer = answersByCode.get(QuestionCode.A158);
+            QuestionAnswer questionA159Answer = answersByCode.get(QuestionCode.A159);
+            QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
+            QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
+            QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
-            if (questionA158Answer == null) {
+            if (questionA158Answer == null ||
+                    questionA159Answer == null ||
+                    (questionA160Answer == null &&
+                        questionA161Answer == null &&
+                        questionA162Answer == null) {
                 continue;
             }
 
+            Double belgianTruckRatio = 0.854;
+            Double internationalTruckRatio = 0.287;
+            Double belgianDistance;
+            Double internationalDistance;
+            // TODO: codes
+            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+                belgianDistance = 200.0;
+                internationalDistance = 0.0;
+            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+                belgianDistance = 0.0;
+                internationalDistance = 2500.0;
+            } else {
+                belgianDistance = 0.0;
+                internationalDistance = 5000.0;
+            }
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -2122,13 +2380,16 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("RB*DB*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
+            baseActivityData.setValue(belgianTruckRatio*belgianDistance*getValue(questionA158Answer, baseActivityDataUnit)/11.4/0.4426*24.98/100);
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD18B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2142,9 +2403,33 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA158Answer = answersByCode.get(QuestionCode.A158);
+            QuestionAnswer questionA159Answer = answersByCode.get(QuestionCode.A159);
+            QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
+            QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
+            QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
-            if (questionA158Answer == null) {
+            if (questionA158Answer == null ||
+                    questionA159Answer == null ||
+                    (questionA160Answer == null &&
+                            questionA161Answer == null &&
+                            questionA162Answer == null) {
                 continue;
+            }
+
+            Double belgianTruckRatio = 0.854;
+            Double internationalTruckRatio = 0.287;
+            Double belgianDistance;
+            Double internationalDistance;
+            // TODO: codes
+            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+                belgianDistance = 200.0;
+                internationalDistance = 0.0;
+            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+                belgianDistance = 0.0;
+                internationalDistance = 2500.0;
+            } else {
+                belgianDistance = 0.0;
+                internationalDistance = 5000.0;
             }
 
 
@@ -2158,13 +2443,16 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("RH*DH*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
+            baseActivityData.setValue(internationalTruckRatio*internationalDistance*getValue(questionA158Answer, baseActivityDataUnit)/11.4/0.4426*24.98/100);
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD18C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2178,11 +2466,34 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA158Answer = answersByCode.get(QuestionCode.A158);
+            QuestionAnswer questionA159Answer = answersByCode.get(QuestionCode.A159);
+            QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
+            QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
+            QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
-            if (questionA158Answer == null) {
+            if (questionA158Answer == null ||
+                    questionA159Answer == null ||
+                    (questionA160Answer == null &&
+                            questionA161Answer == null &&
+                            questionA162Answer == null) {
                 continue;
             }
 
+            Double belgianTruckRatio = 0.854;
+            Double internationalTruckRatio = 0.287;
+            Double belgianDistance;
+            Double internationalDistance;
+            // TODO: codes
+            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+                belgianDistance = 200.0;
+                internationalDistance = 0.0;
+            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+                belgianDistance = 0.0;
+                internationalDistance = 2500.0;
+            } else {
+                belgianDistance = 0.0;
+                internationalDistance = 5000.0;
+            }
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -2194,13 +2505,16 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DB);
+            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * belgianDistance);
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD18D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2214,11 +2528,34 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA158Answer = answersByCode.get(QuestionCode.A158);
+            QuestionAnswer questionA159Answer = answersByCode.get(QuestionCode.A159);
+            QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
+            QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
+            QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
-            if (questionA158Answer == null) {
+            if (questionA158Answer == null ||
+                    questionA159Answer == null ||
+                    (questionA160Answer == null &&
+                            questionA161Answer == null &&
+                            questionA162Answer == null) {
                 continue;
             }
 
+            Double belgianTruckRatio = 0.854;
+            Double internationalTruckRatio = 0.287;
+            Double belgianDistance;
+            Double internationalDistance;
+            // TODO: codes
+            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+                belgianDistance = 200.0;
+                internationalDistance = 0.0;
+            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+                belgianDistance = 0.0;
+                internationalDistance = 2500.0;
+            } else {
+                belgianDistance = 0.0;
+                internationalDistance = 5000.0;
+            }
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -2230,7 +2567,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AMONT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DH);
+            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * internationalDistance);
 
             res.add(baseActivityData);
         }
@@ -2395,6 +2732,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD20(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2437,6 +2777,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD21(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2475,6 +2818,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD22(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2513,6 +2859,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD23(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2551,6 +2900,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD24(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2589,6 +2941,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD25(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2631,6 +2986,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD26A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2645,6 +3003,7 @@ public class ReportServiceImpl implements ReportService {
 
             QuestionAnswer questionA202Answer = answersByCode.get(QuestionCode.A202);
             QuestionAnswer questionA203Answer = answersByCode.get(QuestionCode.A203);
+            // TODO: question qui a été renumérotée car il y avait un doublon!
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
             if (questionA202Answer == null ||
@@ -2661,6 +3020,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: Code à matcher
             baseActivityData.setActivityType(ActivityTypeCode.DCO);
             baseActivityData.setActivitySource(getCode(questionA202Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
@@ -2671,6 +3031,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD26B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2685,6 +3048,7 @@ public class ReportServiceImpl implements ReportService {
 
             QuestionAnswer questionA203Answer = answersByCode.get(QuestionCode.A203);
             QuestionAnswer questionA204Answer = answersByCode.get(QuestionCode.A204);
+            // TODO: idem ci-dessus, numéro changé
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
             if (questionA203Answer == null ||
@@ -2701,6 +3065,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: Code
             baseActivityData.setActivityType(ActivityTypeCode.AZOTE);
             baseActivityData.setActivitySource(getCode(questionA203Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
@@ -2711,6 +3076,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD27A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2723,29 +3091,17 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
             QuestionAnswer questionA212Answer = answersByCode.get(QuestionCode.A212);
-            QuestionAnswer questionA213Answer = answersByCode.get(QuestionCode.A213);
-            QuestionAnswer questionA214Answer = answersByCode.get(QuestionCode.A214);
-            QuestionAnswer questionA215Answer = answersByCode.get(QuestionCode.A215);
-            QuestionAnswer questionA216Answer = answersByCode.get(QuestionCode.A216);
-            QuestionAnswer questionA217Answer = answersByCode.get(QuestionCode.A217);
-            QuestionAnswer questionA218Answer = answersByCode.get(QuestionCode.A218);
             QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
             QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
-            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
-            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
 
-            if (questionA212Answer == null ||
-                    questionA213Answer == null ||
-                    questionA214Answer == null ||
-                    questionA215Answer == null ||
-                    questionA216Answer == null ||
-                    questionA217Answer == null ||
-                    questionA218Answer == null ||
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
                     questionA220Answer == null ||
                     questionA221Answer == null ||
-                    questionA211Answer == null ||
-                    questionA210Answer == null) {
                 continue;
             }
 
@@ -2758,15 +3114,18 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class)ou getCode(questionA213Answer, ActivitySourceCode.class)ou getCode(questionA214Answer, ActivitySourceCode.class)ou getCode(questionA215Answer, ActivitySourceCode.class)ou getCode(questionA216Answer, ActivitySourceCode.class)ou getCode(questionA217Answer, ActivitySourceCode.class)ou getCode(questionA218Answer, ActivitySourceCode.class));
+            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * (1 - getValue(questionA221Answer, baseActivityDataUnit)));
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * (1 - getValue(questionA220Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
         }
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD27B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2779,37 +3138,19 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
             QuestionAnswer questionA212Answer = answersByCode.get(QuestionCode.A212);
-            QuestionAnswer questionA213Answer = answersByCode.get(QuestionCode.A213);
-            QuestionAnswer questionA214Answer = answersByCode.get(QuestionCode.A214);
-            QuestionAnswer questionA215Answer = answersByCode.get(QuestionCode.A215);
-            QuestionAnswer questionA216Answer = answersByCode.get(QuestionCode.A216);
-            QuestionAnswer questionA217Answer = answersByCode.get(QuestionCode.A217);
-            QuestionAnswer questionA218Answer = answersByCode.get(QuestionCode.A218);
             QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
             QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
-            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
 
-            if (questionA212Answer == null ||
-                    questionA213Answer == null ||
-                    questionA214Answer == null ||
-                    questionA215Answer == null ||
-                    questionA216Answer == null ||
-                    questionA217Answer == null ||
-                    questionA218Answer == null ||
-                    questionA220Answer == null ||
-                    questionA221Answer == null ||
-                    questionA210Answer == null) {
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
                 continue;
             }
-
-
-            //compute source value
-            ActivitySourceCode activitySource = getCode(questionA212Answer, ActivitySourceCode.class) ou getCode
-            (questionA213Answer, ActivitySourceCode.class)ou getCode (questionA214Answer, ActivitySourceCode.class)
-            ou getCode (questionA215Answer, ActivitySourceCode.class)ou getCode
-            (questionA216Answer, ActivitySourceCode.class)ou getCode (questionA217Answer, ActivitySourceCode.class)
-            ou getCode (questionA218Answer, ActivitySourceCode.class);
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
@@ -2819,10 +3160,435 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(ActivityTypeCode.);
-            baseActivityData.setActivitySource(activitySource);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            // TODO: transformé code en identique mais 100% recyclé
+            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class+ "100% recyclé"));
             baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * getValue(questionA221Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA213Answer = answersByCode.get(QuestionCode.A213);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA213Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27C);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA213Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * (1 - getValue(questionA220Answer, baseActivityDataUnit)));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA213Answer = answersByCode.get(QuestionCode.A213);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA213Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27D);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            // TODO: transformé code en identique mais 100% recyclé
+            baseActivityData.setActivitySource(getCode(questionA213Answer, ActivitySourceCode.class+ "100% recyclé"));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27E(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA214Answer = answersByCode.get(QuestionCode.A214);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27E);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA214Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * (1 - getValue(questionA220Answer, baseActivityDataUnit)));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27F(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA214Answer = answersByCode.get(QuestionCode.A214);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27F);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            // TODO: transformé code en identique mais 100% recyclé
+            baseActivityData.setActivitySource(getCode(questionA214Answer, ActivitySourceCode.class+ "100% recyclé"));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27G(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA215Answer = answersByCode.get(QuestionCode.A215);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27G);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA215Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * (1 - getValue(questionA220Answer, baseActivityDataUnit)));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27H(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA215Answer = answersByCode.get(QuestionCode.A215);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27H);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            // TODO: transformé code en identique mais 100% recyclé
+            baseActivityData.setActivitySource(getCode(questionA215Answer, ActivitySourceCode.class+ "100% recyclé"));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27I(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA216Answer = answersByCode.get(QuestionCode.A216);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27I);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA216Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27J(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA217Answer = answersByCode.get(QuestionCode.A217);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27J);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA217Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    /**
+     * CHECK XM
+     */
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27K(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA218Answer = answersByCode.get(QuestionCode.A218);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null) {
+                questionA220Answer == null ||
+                        questionA221Answer == null ||
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27K);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
+            baseActivityData.setActivitySource(getCode(questionA218Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2883,11 +3649,11 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
-            QuestionAnswer questionA227Answer = answersByCode.get(QuestionCode.A227);
+            QuestionAnswer questionA226Answer = answersByCode.get(QuestionCode.A226);
             QuestionAnswer questionA228Answer = answersByCode.get(QuestionCode.A228);
             QuestionAnswer questionA225Answer = answersByCode.get(QuestionCode.A225);
 
-            if (questionA227Answer == null ||
+            if (questionA226Answer == null ||
                     questionA228Answer == null ||
                     questionA225Answer == null) {
                 continue;
@@ -2904,7 +3670,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
             baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA227Answer, baseActivityDataUnit) * getValue(questionA228Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA226Answer, baseActivityDataUnit) * getValue(questionA228Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2941,6 +3707,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
             baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
@@ -2981,6 +3748,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
             baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
@@ -3021,6 +3789,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
             baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
             baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
@@ -3031,6 +3800,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD30(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -3043,11 +3815,11 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
-            QuestionAnswer questionA241Answer = answersByCode.get(QuestionCode.A241);
+            QuestionAnswer questionA240Answer = answersByCode.get(QuestionCode.A240);
             QuestionAnswer questionA242Answer = answersByCode.get(QuestionCode.A242);
             QuestionAnswer questionA239Answer = answersByCode.get(QuestionCode.A239);
 
-            if (questionA241Answer == null ||
+            if (questionA240Answer == null ||
                     questionA242Answer == null ||
                     questionA239Answer == null) {
                 continue;
@@ -3064,7 +3836,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.DIRECT_CO2E);
             baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_CO2E);
             baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA241Answer, baseActivityDataUnit) * getValue(questionA242Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA242Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3517,6 +4289,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD32A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
 
         List<BaseActivityData> res = new ArrayList<>();
@@ -3536,7 +4311,21 @@ public class ReportServiceImpl implements ReportService {
                     continue;
                 }
 
-                //compute RB
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance;
+                Double internationalDistance;
+                // TODO: codes
+                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+                    belgianDistance = 200.0;
+                    internationalDistance = 0.0;
+                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                    belgianDistance = 0.0;
+                    internationalDistance = 2500.0;
+                } else {
+                    belgianDistance = 0.0;
+                    internationalDistance = 5000.0;
+                }
 
                 BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -3545,14 +4334,13 @@ public class ReportServiceImpl implements ReportService {
                 baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
                 baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
                 baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
-                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+                baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
                 baseActivityData.setActivityOwnership(false);
-                //TODO what RB and DB ?
-                baseActivityData.setValue(RB *
-                        DB *
-                        getValue(questionA267Answer, baseActivityDataUnit) / 11, 4 / 0, 4426 *
-                        24, 98 / 100);
+                baseActivityData.setValue(belgianTruckRatio *
+                        belgianDistance *
+                        getValue(questionA267Answer, baseActivityDataUnit) / 11.4 / 0.4426 *
+                        24.98 / 100);
 
                 res.add(baseActivityData);
             }
@@ -3560,6 +4348,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD32B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
 
         List<BaseActivityData> res = new ArrayList<>();
@@ -3572,12 +4363,28 @@ public class ReportServiceImpl implements ReportService {
                 Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
+                QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
                 QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-                if (questionA267Answer == null) {
+                if (questionA268Answer == null || questionA267Answer == null) {
                     continue;
                 }
 
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance;
+                Double internationalDistance;
+                // TODO: codes
+                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+                    belgianDistance = 200.0;
+                    internationalDistance = 0.0;
+                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                    belgianDistance = 0.0;
+                    internationalDistance = 2500.0;
+                } else {
+                    belgianDistance = 0.0;
+                    internationalDistance = 5000.0;
+                }
 
                 BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -3586,14 +4393,14 @@ public class ReportServiceImpl implements ReportService {
                 baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
                 baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
                 baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
-                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+                baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
                 baseActivityData.setActivityOwnership(false);
                 //TODO what RB and DB ?
-                baseActivityData.setValue(RH *
-                        DH *
-                        getValue(questionA267Answer, baseActivityDataUnit) / 11, 4 / 0, 4426 *
-                        24, 98 / 100);
+                baseActivityData.setValue(internationalTruckRatio *
+                        internationalDistance *
+                        getValue(questionA267Answer, baseActivityDataUnit) / 11.4 / 0.4426 *
+                        24.98 / 100);
 
                 res.add(baseActivityData);
             }
@@ -3601,6 +4408,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD32C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
 
         List<BaseActivityData> res = new ArrayList<>();
@@ -3612,12 +4422,28 @@ public class ReportServiceImpl implements ReportService {
 
                 Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
+                QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
                 QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-                if (questionA267Answer == null) {
+                if (questionA268Answer == null || questionA267Answer == null) {
                     continue;
                 }
 
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance;
+                Double internationalDistance;
+                // TODO: codes
+                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+                    belgianDistance = 200.0;
+                    internationalDistance = 0.0;
+                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                    belgianDistance = 0.0;
+                    internationalDistance = 2500.0;
+                } else {
+                    belgianDistance = 0.0;
+                    internationalDistance = 5000.0;
+                }
 
                 BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -3629,7 +4455,7 @@ public class ReportServiceImpl implements ReportService {
                 baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
                 baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
                 baseActivityData.setActivityOwnership(false);
-                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DB);
+                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * belgianDistance);
 
                 res.add(baseActivityData);
             }
@@ -3637,6 +4463,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD32D(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
 
         List<BaseActivityData> res = new ArrayList<>();
@@ -3648,12 +4477,28 @@ public class ReportServiceImpl implements ReportService {
 
                 Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
+                QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
                 QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-                if (questionA267Answer == null) {
+                if (questionA268Answer == null || questionA267Answer == null) {
                     continue;
                 }
 
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance;
+                Double internationalDistance;
+                // TODO: codes
+                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+                    belgianDistance = 200.0;
+                    internationalDistance = 0.0;
+                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                    belgianDistance = 0.0;
+                    internationalDistance = 2500.0;
+                } else {
+                    belgianDistance = 0.0;
+                    internationalDistance = 5000.0;
+                }
 
                 BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -3665,7 +4510,7 @@ public class ReportServiceImpl implements ReportService {
                 baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
                 baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
                 baseActivityData.setActivityOwnership(false);
-                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DH);
+                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * internationalDistance);
 
                 res.add(baseActivityData);
             }
