@@ -504,8 +504,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityOwnership(true);
             if (getValueBoolean(questionA48Answer) == false) {
                 baseActivityData.setValue(0.0);
-            }
-            else {
+            } else {
                 baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * ElecConsumption / getValue(questionA49Answer, unitService.findBySymbol("h")));
             }
             res.add(baseActivityData);
@@ -2042,7 +2041,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA143Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_4000_KM);
+            baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_A_4000_KM);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA154Answer, baseActivityDataUnit));
@@ -2238,6 +2237,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD19A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2250,32 +2250,48 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
-            QuestionAnswer questionA167Answer = answersByCode.get(QuestionCode.A167);
-            QuestionAnswer questionA168Answer = answersByCode.get(QuestionCode.A168);
+            QuestionAnswer questionA165Answer = answersByCode.get(QuestionCode.A165);
 
-            if (questionA167Answer == null ||
-                    questionA168Answer == null) {
+            if (questionA165Answer == null) {
                 continue;
             }
 
+            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A166)) {
 
-            BaseActivityData baseActivityData = new BaseActivityData();
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD19A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(getCode(questionA167Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA168Answer, baseActivityDataUnit));
 
-            res.add(baseActivityData);
+                    QuestionAnswer questionA167Answer = answersByCodeChild.get(QuestionCode.A167);
+                    QuestionAnswer questionA168Answer = answersByCodeChild.get(QuestionCode.A168);
+
+
+                    if (questionA167Answer == null ||
+                            questionA168Answer == null) {
+                        continue;
+                    }
+
+
+                    BaseActivityData baseActivityData = new BaseActivityData();
+
+                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD19A);
+                    baseActivityData.setRank(1);
+                    baseActivityData.setSpecificPurpose(getValueString(questionA165Answer));
+                    baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
+                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                    baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+                    baseActivityData.setActivitySource(getCode(questionA167Answer, ActivitySourceCode.class));
+                    baseActivityData.setActivityOwnership(null);
+                    baseActivityData.setValue(getValue(questionA168Answer, baseActivityDataUnit));
+
+                    res.add(baseActivityData);
+                }
+            }
         }
         return res;
     }
 
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD19B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2288,32 +2304,45 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
-            QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
-            QuestionAnswer questionA167Answer = answersByCode.get(QuestionCode.A167);
+            QuestionAnswer questionA165Answer = answersByCode.get(QuestionCode.A165);
 
-            if (questionA160Answer == null ||
-                    questionA167Answer == null) {
+            if (questionA165Answer == null) {
                 continue;
             }
 
+            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A166)) {
 
-            BaseActivityData baseActivityData = new BaseActivityData();
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD19B);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
-            baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
-            baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA160Answer, baseActivityDataUnit));
 
-            res.add(baseActivityData);
+                    QuestionAnswer questionA169Answer = answersByCodeChild.get(QuestionCode.A169);
+
+
+                    if (questionA169Answer == null) {
+                        continue;
+                    }
+
+                    BaseActivityData baseActivityData = new BaseActivityData();
+
+                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD19B);
+                    baseActivityData.setRank(1);
+                    baseActivityData.setSpecificPurpose(getValueString(questionA165Answer));
+                    baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
+                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
+                    baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
+                    baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
+                    baseActivityData.setActivityOwnership(null);
+                    baseActivityData.setValue(getValue(questionA169Answer, baseActivityDataUnit));
+
+                    res.add(baseActivityData);
+                }
+            }
         }
         return res;
     }
 
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD19C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2326,30 +2355,42 @@ public class ReportServiceImpl implements ReportService {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
-            QuestionAnswer questionA171Answer = answersByCode.get(QuestionCode.A171);
-            QuestionAnswer questionA172Answer = answersByCode.get(QuestionCode.A172);
-            QuestionAnswer questionA167Answer = answersByCode.get(QuestionCode.A167);
+            QuestionAnswer questionA165Answer = answersByCode.get(QuestionCode.A165);
 
-            if (questionA171Answer == null ||
-                    questionA172Answer == null ||
-                    questionA167Answer == null) {
+            if (questionA165Answer == null) {
                 continue;
             }
 
+            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A170)) {
 
-            BaseActivityData baseActivityData = new BaseActivityData();
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD19C);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
-            baseActivityData.setActivityType(ActivityTypeCode.GAZ);
-            baseActivityData.setActivitySource(getCode(questionA171Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA172Answer, baseActivityDataUnit));
 
-            res.add(baseActivityData);
+                    QuestionAnswer questionA171Answer = answersByCodeChild.get(QuestionCode.A171);
+                    QuestionAnswer questionA172Answer = answersByCodeChild.get(QuestionCode.A172);
+
+
+                    if (questionA171Answer == null ||
+                            questionA172Answer == null) {
+                        continue;
+                    }
+
+                    BaseActivityData baseActivityData = new BaseActivityData();
+
+                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD19C);
+                    baseActivityData.setRank(1);
+                    baseActivityData.setSpecificPurpose(getValueString(questionA165Answer));
+                    baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
+                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
+                    baseActivityData.setActivityType(ActivityTypeCode.GAZ);
+                    baseActivityData.setActivitySource(getCode(questionA171Answer, ActivitySourceCode.class));
+                    baseActivityData.setActivityOwnership(null);
+                    baseActivityData.setValue(getValue(questionA172Answer, baseActivityDataUnit));
+
+                    res.add(baseActivityData);
+                }
+            }
         }
         return res;
     }
@@ -2763,6 +2804,14 @@ public class ReportServiceImpl implements ReportService {
             }
 
 
+            //compute source value
+            ActivitySourceCode activitySource = getCode(questionA212Answer, ActivitySourceCode.class) ou getCode
+            (questionA213Answer, ActivitySourceCode.class)ou getCode (questionA214Answer, ActivitySourceCode.class)
+            ou getCode (questionA215Answer, ActivitySourceCode.class)ou getCode
+            (questionA216Answer, ActivitySourceCode.class)ou getCode (questionA217Answer, ActivitySourceCode.class)
+            ou getCode (questionA218Answer, ActivitySourceCode.class);
+
+
             BaseActivityData baseActivityData = new BaseActivityData();
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD27B);
@@ -2771,7 +2820,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.);
-            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class)ou getCode(questionA213Answer, ActivitySourceCode.class)ou getCode(questionA214Answer, ActivitySourceCode.class)ou getCode(questionA215Answer, ActivitySourceCode.class)ou getCode(questionA216Answer, ActivitySourceCode.class)ou getCode(questionA217Answer, ActivitySourceCode.class)ou getCode(questionA218Answer, ActivitySourceCode.class));
+            baseActivityData.setActivitySource(activitySource);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * getValue(questionA221Answer, baseActivityDataUnit));
 
@@ -2780,6 +2829,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    //CHECKED FJ
     private List<BaseActivityData> getBaseActivityDataAE_BAD27C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -2820,12 +2870,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * checked FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED FJ
     private List<BaseActivityData> getBaseActivityDataAE_BAD28(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -3487,14 +3532,11 @@ public class ReportServiceImpl implements ReportService {
                 QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
                 QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-                if (questionA268Answer==null || questionA267Answer == null) {
+                if (questionA268Answer == null || questionA267Answer == null) {
                     continue;
                 }
 
                 //compute RB
-                int RB=0;
-                if(Selec questionA268Answer.get)
-
 
                 BaseActivityData baseActivityData = new BaseActivityData();
 
