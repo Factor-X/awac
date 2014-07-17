@@ -152,7 +152,6 @@ public class ReportServiceImpl implements ReportService {
         res.addAll(getBaseActivityDataAE_BAD29C(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD30(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataForProducts(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD36(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37A(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37B(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37C(allQuestionSetAnswers));
@@ -490,7 +489,7 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA48Answer = answersByCode.get(QuestionCode.A48);
             QuestionAnswer questionA49Answer = answersByCode.get(QuestionCode.A49);
 
-            if (questionA48Answer == null) {
+            if (questionA48Answer == null ||
                     questionA49Answer == null) {
                 continue;
             }
@@ -520,6 +519,9 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD7A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
