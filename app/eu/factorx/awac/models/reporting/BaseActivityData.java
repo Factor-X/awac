@@ -11,6 +11,7 @@ import eu.factorx.awac.models.code.type.ActivityCategoryCode;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
+import eu.factorx.awac.models.code.type.BaseActivityDataCode;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @MappedSuperclass
@@ -18,8 +19,9 @@ public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Embedded
 	@Basic(optional = false)
-	private String key;
+	private BaseActivityDataCode key;
 	
 	@Embedded
 	@Basic(optional = false)
@@ -68,7 +70,7 @@ public class BaseActivityData implements Serializable {
 	 * @param rank
 	 * @param specificPurpose
 	 */
-	public BaseActivityData(String key, ActivityCategoryCode activityCategory,
+	public BaseActivityData(BaseActivityDataCode key, ActivityCategoryCode activityCategory,
 			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
 			ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
 			String specificPurpose) {
@@ -85,11 +87,11 @@ public class BaseActivityData implements Serializable {
 		this.specificPurpose = specificPurpose;
 	}
 
-	public String getKey() {
+	public BaseActivityDataCode getKey() {
 		return key;
 	}
 
-	public void setKey(String key) {
+	public void setKey(BaseActivityDataCode key) {
 		this.key = key;
 	}
 
