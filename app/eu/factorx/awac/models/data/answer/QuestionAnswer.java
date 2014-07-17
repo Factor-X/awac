@@ -15,63 +15,37 @@ import javax.persistence.Table;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "question_answer")
-@NamedQueries({
-		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period"),
-		@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
-		@NamedQuery(name = QuestionAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET, query = "select qa from QuestionAnswer qa where qa.scope = :scope and qa.period = :period and qa.question.questionSet.code = :questionSetCode"), })
+@NamedQueries({ @NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"), })
 public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Parameters:<br>
-	 * scope : a {@link Scope}<br>
-	 * period : a {@link Period}
-	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
-	
-	/**
-	 * Parameters:<br>
-	 * codes : a Collection of {@link QuestionCode}<br>
+	 * @param codes : a Collection of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
-
-	/**
-	 * Parameters:<br>
-	 * scope : a {@link Scope}<br>
-	 * period : a {@link Period}<br>
-	 * questionSetCode : a {@link QuestionCode}
-	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET = "QuestionAnswer.findByScopeAndPeriodAndQuestionSet";
 
 	// ATTRIBUTES
 
 	@ManyToOne(optional = false)
-	private Period period;
-
-	@ManyToOne(optional = false)
-	private Scope scope;
-
-	@ManyToOne(optional = false)
 	private Account dataOwner;
-
-	private Integer repetitionIndex = 0;
 
 	@Embedded
 	private AuditInfo auditInfo;
 
-	@OneToMany(mappedBy = "questionAnswer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AnswerValue> answerValues = new ArrayList<>();
+	@ManyToOne(optional = false)
+	private QuestionSetAnswer questionSetAnswer;
 
-	@ManyToOne(targetEntity = Question.class)
+	@ManyToOne(optional = false, targetEntity = Question.class)
 	private Question question;
+
+	@OneToMany(mappedBy = "questionAnswer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AnswerValue> answerValues;
 
 	// CONSTRUCTORS
 
@@ -79,32 +53,13 @@ public class QuestionAnswer extends AbstractEntity {
 		super();
 	}
 
-	public QuestionAnswer(Period period, Scope scope, Account dataOwner, Question question, Integer repetitionIndex) {
+	public QuestionAnswer(Account dataOwner, AuditInfo auditInfo, QuestionSetAnswer questionSetAnswer, Question question) {
 		super();
-		this.period = period;
-		this.scope = scope;
 		this.dataOwner = dataOwner;
+		this.auditInfo = auditInfo;
+		this.questionSetAnswer = questionSetAnswer;
 		this.question = question;
-		this.repetitionIndex = repetitionIndex;
 		this.answerValues = new ArrayList<>();
-	}
-
-	// ACCESSORS
-
-	public Period getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(Period period) {
-		this.period = period;
-	}
-
-	public Scope getScope() {
-		return scope;
-	}
-
-	public void setScope(Scope scope) {
-		this.scope = scope;
 	}
 
 	public Account getDataOwner() {
@@ -115,14 +70,6 @@ public class QuestionAnswer extends AbstractEntity {
 		this.dataOwner = dataOwner;
 	}
 
-	public Integer getRepetitionIndex() {
-		return repetitionIndex;
-	}
-
-	public void setRepetitionIndex(Integer repetitionIndex) {
-		this.repetitionIndex = repetitionIndex;
-	}
-
 	public AuditInfo getAuditInfo() {
 		return auditInfo;
 	}
@@ -131,12 +78,12 @@ public class QuestionAnswer extends AbstractEntity {
 		this.auditInfo = auditInfo;
 	}
 
-	public List<AnswerValue> getAnswerValues() {
-		return answerValues;
+	public QuestionSetAnswer getQuestionSetAnswer() {
+		return questionSetAnswer;
 	}
 
-	public void setAnswerValues(List<AnswerValue> answerValues) {
-		this.answerValues = answerValues;
+	public void setQuestionSetAnswer(QuestionSetAnswer questionSetAnswer) {
+		this.questionSetAnswer = questionSetAnswer;
 	}
 
 	public Question getQuestion() {
@@ -145,6 +92,14 @@ public class QuestionAnswer extends AbstractEntity {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public List<AnswerValue> getAnswerValues() {
+		return answerValues;
+	}
+
+	public void setAnswerValues(List<AnswerValue> answerValues) {
+		this.answerValues = answerValues;
 	}
 
 }

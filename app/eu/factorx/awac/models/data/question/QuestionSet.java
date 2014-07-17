@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,28 +31,27 @@ public class QuestionSet extends AbstractEntity {
 
 	private Boolean repetitionAllowed;
 
+	@ManyToOne
+	private QuestionSet parent;
+	
 	@OneToMany(mappedBy = "questionSet", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
-
+	
 	protected QuestionSet() {
 		super();
+	}
+
+	public QuestionSet(QuestionCode code, Boolean repetitionAllowed, QuestionSet parent) {
+		super();
+		this.code = code;
+		this.repetitionAllowed = repetitionAllowed;
+		this.parent = parent;
 	}
 
 	public QuestionSet(QuestionCode code, Boolean repetitionAllowed) {
 		super();
 		this.code = code;
 		this.repetitionAllowed = repetitionAllowed;
-	}
-
-	public QuestionSet(QuestionCode code, Boolean repetitionAllowed, List<Question> questions) {
-		super();
-		this.code = code;
-		this.repetitionAllowed = repetitionAllowed;
-		this.questions = questions;
-	}
-
-	public QuestionSet(QuestionCode code) {
-		this(code, Boolean.FALSE);
 	}
 
 	public QuestionCode getCode() {
@@ -68,6 +68,14 @@ public class QuestionSet extends AbstractEntity {
 
 	public void setRepetitionAllowed(Boolean repetitionAllowed) {
 		this.repetitionAllowed = repetitionAllowed;
+	}
+
+	public QuestionSet getParent() {
+		return parent;
+	}
+
+	public void setParent(QuestionSet parent) {
+		this.parent = parent;
 	}
 
 	public List<Question> getQuestions() {

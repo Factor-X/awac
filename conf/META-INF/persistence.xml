@@ -10,6 +10,7 @@
         <non-jta-data-source>DefaultDS</non-jta-data-source>
         
         <class>eu.factorx.awac.models.AbstractEntity</class>
+        <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
@@ -40,9 +41,9 @@
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
-        <class>eu.factorx.awac.models.data.answer.AnswerValueBis</class>
         <class>eu.factorx.awac.models.data.answer.AuditInfo</class>
         <class>eu.factorx.awac.models.data.answer.QuestionAnswer</class>
+        <class>eu.factorx.awac.models.data.answer.QuestionSetAnswer</class>
         <class>eu.factorx.awac.models.data.answer.type.BooleanAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.CodeAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.DoubleAnswerValue</class>
@@ -86,8 +87,10 @@
  
      		<property name="connection.autocommit" value="true" />
      	
-     		<property name="jadira.usertype.autoRegisterUserTypes" value="true" />
-
+     			<property name="jadira.usertype.autoRegisterUserTypes" value="true" />
+		<property name="jadira.usertype.javaZone" value="UTC" />
+		<property name="jadira.usertype.databaseZone" value="UTC" />
+     		   
         </properties>
         
 

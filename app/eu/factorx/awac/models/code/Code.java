@@ -20,8 +20,8 @@ import eu.factorx.awac.models.data.question.Question;
  * <br>
  * The programmer will typically define 'constant' instances of a Code subclass when he needs to deal with a particular data without assuming the status of the database.<br>
  * <br>
- * <b>Example</b>: The {@link QuestionCode questionCode} of a {@link Question question} must be known (at compilation time) to write the algorithms of consolidation and calculation
- * involving the answer to this question (reports and indicators).
+ * <b>Example</b>: The {@link QuestionCode questionCode} of a {@link Question question} must be known (at development time) to write the algorithms of consolidation and calculation
+ * involving the answer(s) to this question (base activity data, then reports).
  * 
  */
 @MappedSuperclass
