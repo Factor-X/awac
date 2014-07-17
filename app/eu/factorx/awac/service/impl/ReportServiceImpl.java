@@ -165,6 +165,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD1(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -203,6 +207,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD2A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -239,6 +247,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD2B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -275,6 +287,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD3(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -315,6 +331,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD4(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -353,6 +373,10 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     *
+     * CHECK XM
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD5(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
