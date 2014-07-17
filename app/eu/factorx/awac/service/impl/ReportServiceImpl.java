@@ -330,7 +330,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.RESEAU_DE_CHALEUR);
             baseActivityData.setActivitySource(getCode(questionA26Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(true);
-            baseActivityData.setValue(getValue(questionA27Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA28Answer, baseActivityDataUnit) / getValue(questionA27Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -480,7 +480,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.PUISSANCE_DES_BLOCS_FRIGO);
             baseActivityData.setActivitySource(ActivitySourceCode.GENERIQUE);
             baseActivityData.setActivityOwnership(true);
-            baseActivityData.setValue(getValue(questionA49Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * H / getValue(questionA49Answer, baseActivityDataUnit)
+            (en heures));
 
             res.add(baseActivityData);
         }
@@ -854,7 +855,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA71Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA69Answer));
-            baseActivityData.setValue(getValue(questionA75Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA76Answer, baseActivityDataUnit) * (getValue(questionA73Answer, baseActivityDataUnit)ou getValue(questionA74Answer, baseActivityDataUnit)ou getValue(questionA75Answer, baseActivityDataUnit)))
+            ;
 
             res.add(baseActivityData);
         }
@@ -906,7 +908,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA83Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA80Answer));
-            baseActivityData.setValue(getValue(questionA92Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA88Answer, baseActivityDataUnit) / (getValue(questionA89Answer, baseActivityDataUnit)ou getValue(questionA90Answer, baseActivityDataUnit)ou getValue(questionA91Answer, baseActivityDataUnit)ou getValue(questionA92Answer, baseActivityDataUnit)))
+            ;
 
             res.add(baseActivityData);
         }
@@ -1446,7 +1449,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
             baseActivityData.setActivitySource(ActivitySourceCode.R);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue("-H", baseActivityDataUnit));
+            baseActivityData.setValue("-H");
 
             res.add(baseActivityData);
         }
@@ -1490,7 +1493,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(getCode(questionA118Answer, ActivityTypeCode.class));
             baseActivityData.setActivitySource(getCode(questionA117Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA120Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA119Answer, baseActivityDataUnit) * getValue(questionA120Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1525,7 +1528,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.AVION_SANS_CLASSE);
             baseActivityData.setActivitySource(ActivitySourceCode.R1);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue("-R2", baseActivityDataUnit));
+            baseActivityData.setValue("-R2");
 
             res.add(baseActivityData);
         }
@@ -1677,7 +1680,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA137Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(true);
-            baseActivityData.setValue(getValue(questionA500Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA136Answer, baseActivityDataUnit) * (getValue(questionA138Answer, baseActivityDataUnit) * getValue(questionA139Answer, baseActivityDataUnit) + (1 - getValue(questionA138Answer, baseActivityDataUnit)) * getValue(questionA500Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
         }
@@ -1719,7 +1722,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_LOCAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA147Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA147Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1761,7 +1764,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMIONNETTE_LOCAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA148Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA148Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1803,7 +1806,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_INTERNATIONAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA149Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA149Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1845,7 +1848,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.TRAIN);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA150Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA150Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1887,7 +1890,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.BATEAU);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA151Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA151Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1929,7 +1932,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.BARGE_ / _PENICHE);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA152Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA152Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -1971,7 +1974,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_( < 1000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA153Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA153Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2013,7 +2016,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_(1000_À_4000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA154Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA154Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2055,7 +2058,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_( > 4000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA155Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA145Answer, baseActivityDataUnit) * getValue(questionA146Answer, baseActivityDataUnit) * getValue(questionA155Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2091,7 +2094,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit));
+            baseActivityData.setValue("RB*DB*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
 
             res.add(baseActivityData);
         }
@@ -2127,7 +2130,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit));
+            baseActivityData.setValue("RH*DH*getValue(questionA158Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
 
             res.add(baseActivityData);
         }
@@ -2163,7 +2166,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_BELGIQUE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DB);
 
             res.add(baseActivityData);
         }
@@ -2199,7 +2202,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_HORS_BELGIQUE_AMONT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * DH);
 
             res.add(baseActivityData);
         }
@@ -2213,8 +2216,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A157, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A157)) {
+        // For each set of answers in A164, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2231,12 +2234,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD19A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA167Answer));
+            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA167Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA168Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2251,8 +2254,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A157, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A157)) {
+        // For each set of answers in A164, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2269,12 +2272,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD19B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA167Answer));
+            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA160Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2289,8 +2292,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A157, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A157)) {
+        // For each set of answers in A164, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2309,12 +2312,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD19C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA167Answer));
+            baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA171Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA172Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2329,8 +2332,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A175, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A175)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2371,8 +2374,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
         Unit baseActivityDataUnit = unitService.findBySymbol("équivalent.habitant");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A182, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A182)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2394,8 +2397,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
             baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA184Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA183Answer, baseActivityDataUnit) / 2 * getValue(questionA184Answer, baseActivityDataUnit) / 365);
 
             res.add(baseActivityData);
         }
@@ -2409,8 +2412,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
         Unit baseActivityDataUnit = unitService.findBySymbol("équivalent.habitant");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A185, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A185)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2432,8 +2435,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
             baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA187Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA186Answer, baseActivityDataUnit) / 3 * getValue(questionA187Answer, baseActivityDataUnit) / 365);
 
             res.add(baseActivityData);
         }
@@ -2447,8 +2450,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
         Unit baseActivityDataUnit = unitService.findBySymbol("équivalent.habitant");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A188, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A188)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2470,8 +2473,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
             baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA190Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA189Answer, baseActivityDataUnit) * getValue(questionA190Answer, baseActivityDataUnit) / 365);
 
             res.add(baseActivityData);
         }
@@ -2485,8 +2488,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
         Unit baseActivityDataUnit = unitService.findBySymbol("équivalent.habitant");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A191, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A191)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2508,8 +2511,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
             baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA193Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA192Answer, baseActivityDataUnit) / 4 * getValue(questionA193Answer, baseActivityDataUnit) / 365);
 
             res.add(baseActivityData);
         }
@@ -2523,8 +2526,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.m3)
         Unit baseActivityDataUnit = unitService.findBySymbol("m3");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A197, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A197)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2565,8 +2568,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A201, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A201)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2605,8 +2608,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A201, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A201)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2645,8 +2648,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2685,9 +2688,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA218Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit));
+            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class)ou getCode(questionA213Answer, ActivitySourceCode.class)ou getCode(questionA214Answer, ActivitySourceCode.class)ou getCode(questionA215Answer, ActivitySourceCode.class)ou getCode(questionA216Answer, ActivitySourceCode.class)ou getCode(questionA217Answer, ActivitySourceCode.class)ou getCode(questionA218Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * (1 - getValue(questionA221Answer, baseActivityDataUnit)));
 
             res.add(baseActivityData);
         }
@@ -2701,8 +2704,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2740,10 +2743,10 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA218Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit));
+            baseActivityData.setActivityType("getCode(questionA211Answer, ActivityTypeCode.class)+""_100%_RECYCLE""");
+            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class)ou getCode(questionA213Answer, ActivitySourceCode.class)ou getCode(questionA214Answer, ActivitySourceCode.class)ou getCode(questionA215Answer, ActivitySourceCode.class)ou getCode(questionA216Answer, ActivitySourceCode.class)ou getCode(questionA217Answer, ActivitySourceCode.class)ou getCode(questionA218Answer, ActivitySourceCode.class));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit) * getValue(questionA221Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2757,8 +2760,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.euros)
         Unit baseActivityDataUnit = unitService.findBySymbol("euros");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A209)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2782,7 +2785,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(ActivityTypeCode.SERVICES_ET_INFORMATIQUE);
             baseActivityData.setActivitySource(getCode(questionA219Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA222Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2797,8 +2800,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
         Unit baseActivityDataUnit = unitService.findBySymbol("tCO2e");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A224, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A224)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2822,8 +2825,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
             baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
             baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA228Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA227Answer, baseActivityDataUnit) * getValue(questionA228Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2837,8 +2840,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.m2)
         Unit baseActivityDataUnit = unitService.findBySymbol("m2");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A231, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A231)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2860,9 +2863,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getCode(questionA233Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA233Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA234Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2877,8 +2880,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A231, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A231)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2900,9 +2903,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getCode(questionA233Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA233Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA235Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2917,8 +2920,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.Unit)
         Unit baseActivityDataUnit = unitService.findBySymbol("Unit");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A231, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A231)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2940,9 +2943,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getCode(questionA233Answer, ActivityTypeCode.class));
-            baseActivityData.setActivitySource(getCode(questionA233Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_ *);
+            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA236Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -2957,8 +2960,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
         Unit baseActivityDataUnit = unitService.findBySymbol("tCO2e");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -2982,8 +2985,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
             baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
             baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA242Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA241Answer, baseActivityDataUnit) * getValue(questionA242Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -2997,8 +3000,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3017,13 +3020,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_LOCAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA241Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA241Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3037,8 +3040,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3057,13 +3060,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31B);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.CAMIONNETTE_LOCAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA242Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA242Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3077,8 +3080,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3097,13 +3100,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31C);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_INTERNATIONAL);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA236Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA236Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3117,8 +3120,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3137,13 +3140,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31D);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.TRAIN);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA215Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA215Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3157,8 +3160,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3177,13 +3180,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31E);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.BATEAU);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA216Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA216Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3197,8 +3200,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3217,13 +3220,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31F);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.BARGE_ / _PENICHE);
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA217Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA217Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3237,8 +3240,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3257,13 +3260,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31G);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_( < 1000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA218Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA218Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3277,8 +3280,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3297,13 +3300,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31H);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_(1000_À_4000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA219Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA239Answer, baseActivityDataUnit)0);
 
             res.add(baseActivityData);
         }
@@ -3317,8 +3320,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A238, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3337,13 +3340,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD31I);
             baseActivityData.setRank(2);
-            baseActivityData.setSpecificPurpose(getValueString(questionA239Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA239Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_( > 4000_KM));
             baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA220Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA239Answer, baseActivityDataUnit) * getValue(questionA240Answer, baseActivityDataUnit) * getValue(questionA239Answer, baseActivityDataUnit)1);
 
             res.add(baseActivityData);
         }
@@ -3357,8 +3360,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
         Unit baseActivityDataUnit = unitService.findBySymbol("l");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A266, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3373,13 +3376,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD32A);
             baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(getValueString(questionA267Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit));
+            baseActivityData.setValue("RB*DB*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
 
             res.add(baseActivityData);
         }
@@ -3393,8 +3396,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
         Unit baseActivityDataUnit = unitService.findBySymbol("l");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A266, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3409,13 +3412,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD32B);
             baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(getValueString(questionA267Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_(TRANSPORTEUR_EXT));
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit));
+            baseActivityData.setValue("RH*DH*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
 
             res.add(baseActivityData);
         }
@@ -3429,8 +3432,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A266, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3445,13 +3448,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
             baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(getValueString(questionA267Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_BELGIQUE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DB);
 
             res.add(baseActivityData);
         }
@@ -3465,8 +3468,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A266, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3481,13 +3484,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD32D);
             baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(getValueString(questionA267Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
             baseActivityData.setActivityType(ActivityTypeCode.RAIL / TRAIN / AVION_HORS_BELGIQUE_AVAL);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DH);
 
             res.add(baseActivityData);
         }
@@ -3501,8 +3504,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A273, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3519,12 +3522,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA276Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA276Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA277Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3539,8 +3542,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A273, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3557,12 +3560,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA276Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA278Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3577,8 +3580,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A273, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3597,12 +3600,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA276Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA280Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA281Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3617,8 +3620,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A284, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3635,12 +3638,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA285Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA285Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA286Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3655,8 +3658,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A284, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3673,12 +3676,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD34B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA285Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA287Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3693,8 +3696,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A284, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3713,12 +3716,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD34C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA285Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA289Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA290Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3733,8 +3736,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A291, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3751,13 +3754,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD35A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA293Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(ActivitySourceCode.DIESEL);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA293Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3771,8 +3774,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A291, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3791,13 +3794,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD35B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA293Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESSENCE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA293Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA295Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3811,8 +3814,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A291, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3831,13 +3834,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD35C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA293Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA293Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA296Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3851,8 +3854,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A291, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3873,13 +3876,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD35D);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA293Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA298Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA293Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA299Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3893,8 +3896,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
-        // For each set of answers in A164, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A164)) {
+        // For each set of answers in A300, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A300)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3915,13 +3918,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD36);
             baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(getValueString(questionA304Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA304Answer) - getValueString(questionA304Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.FIN_DE_VIE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA306Answer, ActivityTypeCode.class));
             baseActivityData.setActivitySource(getCode(questionA305Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA305Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA308Answer, baseActivityDataUnit) * getValue(questionA305Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3935,8 +3938,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A311, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A311)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3953,12 +3956,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD37A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA314Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA314Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA314Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA315Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -3973,8 +3976,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A311, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A311)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -3991,12 +3994,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD37B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA314Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA314Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA316Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -4011,8 +4014,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A311, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A311)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -4031,12 +4034,12 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD37C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA314Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA314Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA318Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
+            baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA319Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
@@ -4051,8 +4054,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A322)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -4069,13 +4072,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD38A);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA326Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA326Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.FRANCHISE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA326Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA327Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA327Answer, baseActivityDataUnit) * QgetValue(questionA327Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -4089,8 +4092,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A322)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -4109,13 +4112,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD38B);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA326Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA326Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.FRANCHISE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
             baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
             baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA327Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA328Answer, baseActivityDataUnit) * QgetValue(questionA327Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -4129,8 +4132,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A322)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -4151,13 +4154,13 @@ public class ReportServiceImpl implements ReportService {
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD38C);
             baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(getValueString(questionA326Answer));
+            baseActivityData.setSpecificPurpose(QgetValueString(questionA326Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.FRANCHISE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
             baseActivityData.setActivityType(ActivityTypeCode.GAZ);
             baseActivityData.setActivitySource(getCode(questionA330Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA327Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA331Answer, baseActivityDataUnit) * QgetValue(questionA327Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -4171,8 +4174,8 @@ public class ReportServiceImpl implements ReportService {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
         Unit baseActivityDataUnit = unitService.findBySymbol("tCO2e");
 
-        // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A322)) {
 
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
@@ -4196,8 +4199,48 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
             baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
             baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
-            baseActivityData.setActivityOwnership("-");
-            baseActivityData.setValue(getValue(questionA337Answer, baseActivityDataUnit));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA336Answer, baseActivityDataUnit) * getValue(questionA337Answer, baseActivityDataUnit));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
+
+    private List<BaseActivityData> getBaseActivityDataAE_BAD39B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
+
+        // Get Target Unit (tCO2e in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
+        Unit baseActivityDataUnit = unitService.findBySymbol("tCO2e");
+
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A322)) {
+
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA336Answer = answersByCode.get(QuestionCode.A336);
+            QuestionAnswer questionA338Answer = answersByCode.get(QuestionCode.A338);
+            QuestionAnswer questionA335Answer = answersByCode.get(QuestionCode.A335);
+
+            if (questionA336Answer == null ||
+                    questionA338Answer == null ||
+                    questionA335Answer == null) {
+                continue;
+            }
+
+
+            BaseActivityData baseActivityData = new BaseActivityData();
+
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD39B);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(getValueString(questionA335Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.INVESTISSEMENT_SCOPE_2);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FACTEUR_PROPRE);
+            baseActivityData.setActivityType(ActivityTypeCode.DIRECT_(CO2E));
+            baseActivityData.setActivitySource(ActivitySourceCode.DIRECT_(CO2E));
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setValue(getValue(questionA336Answer, baseActivityDataUnit) * getValue(questionA338Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
