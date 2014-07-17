@@ -121,7 +121,7 @@ public class ReportServiceImpl implements ReportService {
 			Unit unit = baseActivityDataUnit;
 			Double value = getValue(questionA17Answer, unit);
 
-			BaseActivityData baseActivityData = new BaseActivityData(activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+			BaseActivityData baseActivityData = new BaseActivityData("AE-BAD", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
 			
 			res.add(baseActivityData);
 		}
@@ -131,7 +131,53 @@ public class ReportServiceImpl implements ReportService {
 	private List<BaseActivityData> getBaseActivityData2(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 
-		// TODO To implement...
+        // Get Target Unit (kWh in this case)
+        // TODO Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
+        Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
+
+        // For each set of answers in A12, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A22)) {
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+
+            QuestionAnswer questionA23Answer = answersByCode.get(QuestionCode.A23);
+            QuestionAnswer questionA24Answer = answersByCode.get(QuestionCode.A24);
+
+            if (questionA23Answer != null) {
+                int rank = 1;
+                String specificPurpose = null;
+                ActivityCategoryCode activityCategory = ActivityCategoryCode.ENERGIE;
+                ActivitySubCategoryCode activitySubCategory = ActivitySubCategoryCode.ELECTRICITE;
+                ActivityTypeCode activityType = ActivityTypeCode.ELEC_PAYS_VERTE;
+                ActivitySourceCode activitySource = ActivitySourceCode.MOYENNE_UE27;
+                Boolean activityOwnership = Boolean.TRUE;
+                Unit unit = baseActivityDataUnit;
+                Double value = getValue(questionA23Answer, unit);
+
+                BaseActivityData baseActivityData = new BaseActivityData("AE-BAD2a", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+
+                res.add(baseActivityData);
+            }
+
+            if (questionA24Answer != null) {
+                int rank = 1;
+                String specificPurpose = null;
+                ActivityCategoryCode activityCategory = ActivityCategoryCode.ENERGIE;
+                ActivitySubCategoryCode activitySubCategory = ActivitySubCategoryCode.ELECTRICITE;
+                ActivityTypeCode activityType = ActivityTypeCode.ELEC_PAYS_GRISE;
+                ActivitySourceCode activitySource = ActivitySourceCode.MOYENNE_UE27;
+                Boolean activityOwnership = Boolean.TRUE;
+                Unit unit = baseActivityDataUnit;
+                Double value = getValue(questionA24Answer, unit);
+
+                BaseActivityData baseActivityData = new BaseActivityData("AE-BAD2b", activityCategory, activitySubCategory, activityType, activitySource, activityOwnership, value, unit, rank, specificPurpose);
+
+                res.add(baseActivityData);
+            }
+            return res;
+        }
+
+
+        // TODO To implement...
 		return res;
 	}
 

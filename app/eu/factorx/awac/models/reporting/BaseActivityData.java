@@ -18,6 +18,9 @@ public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Basic(optional = false)
+	private String key;
+	
 	@Embedded
 	@Basic(optional = false)
 	private ActivityCategoryCode activityCategory;
@@ -54,6 +57,7 @@ public class BaseActivityData implements Serializable {
 	}
 
 	/**
+	 * @param key
 	 * @param activityCategory
 	 * @param activitySubCategory
 	 * @param activityType
@@ -64,11 +68,12 @@ public class BaseActivityData implements Serializable {
 	 * @param rank
 	 * @param specificPurpose
 	 */
-	public BaseActivityData(ActivityCategoryCode activityCategory,
+	public BaseActivityData(String key, ActivityCategoryCode activityCategory,
 			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
 			ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
 			String specificPurpose) {
 		super();
+		this.key = key;
 		this.activityCategory = activityCategory;
 		this.activitySubCategory = activitySubCategory;
 		this.activityType = activityType;
@@ -78,6 +83,14 @@ public class BaseActivityData implements Serializable {
 		this.unit = unit;
 		this.rank = rank;
 		this.specificPurpose = specificPurpose;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public ActivityCategoryCode getActivityCategory() {
