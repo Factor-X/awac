@@ -152,7 +152,6 @@ public class ReportServiceImpl implements ReportService {
         res.addAll(getBaseActivityDataAE_BAD29C(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD30(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataForProducts(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD36(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37A(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37B(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37C(allQuestionSetAnswers));
@@ -166,7 +165,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD1(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -208,7 +206,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD2A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -248,7 +245,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD2B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -288,7 +284,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD3(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -332,7 +327,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD4(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -374,7 +368,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     /**
-     *
      * CHECK XM
      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD5(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -3070,10 +3063,10 @@ public class ReportServiceImpl implements ReportService {
             res.addAll(getBaseActivityDataAE_BAD34C(questionSetAnswers, questionA245Answer));
 
             //resolve BAD35
-            res.addAll(getBaseActivityDataAE_BAD35A(questionSetAnswers, questionA245Answer,questionA246Answer));
-            res.addAll(getBaseActivityDataAE_BAD35B(questionSetAnswers, questionA245Answer,questionA246Answer));
-            res.addAll(getBaseActivityDataAE_BAD35C(questionSetAnswers, questionA245Answer,questionA246Answer));
-            res.addAll(getBaseActivityDataAE_BAD35D(questionSetAnswers, questionA245Answer,questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35A(questionSetAnswers, questionA245Answer, questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35B(questionSetAnswers, questionA245Answer, questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35C(questionSetAnswers, questionA245Answer, questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35D(questionSetAnswers, questionA245Answer, questionA246Answer));
 
             //resolve BAD36
             res.addAll(getBaseActivityDataAE_BAD36(questionSetAnswers, questionA245Answer));
@@ -3479,11 +3472,16 @@ public class ReportServiceImpl implements ReportService {
                 Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
+                QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
                 QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-                if (questionA267Answer == null) {
+                if (questionA268Answer==null || questionA267Answer == null) {
                     continue;
                 }
+
+                //compute RB
+                int RB=0;
+                if(Selec questionA268Answer.get)
 
 
                 BaseActivityData baseActivityData = new BaseActivityData();
@@ -3658,7 +3656,6 @@ public class ReportServiceImpl implements ReportService {
 
                         baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);
                         baseActivityData.setRank(1);
-                        //TODO => question sur specificPurpose ?
                         baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
                         baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
                         baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
@@ -3711,7 +3708,6 @@ public class ReportServiceImpl implements ReportService {
 
                         baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
                         baseActivityData.setRank(1);
-                        //TODO => question sur specificPurpose ?
                         baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
                         baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
                         baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
@@ -3767,7 +3763,6 @@ public class ReportServiceImpl implements ReportService {
 
                         baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
                         baseActivityData.setRank(1);
-                        //TODO => question sur specificPurpose ?
                         baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
                         baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
                         baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
@@ -4103,49 +4098,48 @@ public class ReportServiceImpl implements ReportService {
         for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
             if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A300)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
-
-
-            if (questionA302Answer == null) {
-                continue;
-            }
-            for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-                if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
-
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
-
-                    QuestionAnswer questionA304Answer = answersByCodeChild.get(QuestionCode.A304);
-
-                    QuestionAnswer questionA308Answer = answersByCodeChild.get(QuestionCode.A308);
-                    QuestionAnswer questionA306Answer = answersByCodeChild.get(QuestionCode.A306);
-                    QuestionAnswer questionA305Answer = answersByCodeChild.get(QuestionCode.A305);
-
-                    if (questionA304Answer == null || questionA305Answer == null ||
-                            questionA308Answer == null ||
-                            questionA306Answer == null ||
-                            questionA304Answer == null) {
-                        continue;
-                    }
+                QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
 
 
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD36);
-                    baseActivityData.setRank(3);
-                    //TODO soustraction de string ?
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer)+" - "+getValueString(questionA304Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.FIN_DE_VIE);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-                    baseActivityData.setActivityType(getCode(questionA306Answer, ActivityTypeCode.class));
-                    baseActivityData.setActivitySource(getCode(questionA305Answer, ActivitySourceCode.class));
-                    baseActivityData.setActivityOwnership(null);
-                    baseActivityData.setValue(getValue(questionA308Answer, baseActivityDataUnit) * getValue(questionA305Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA302Answer == null) {
+                    continue;
                 }
-            }}
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
+
+                        QuestionAnswer questionA304Answer = answersByCodeChild.get(QuestionCode.A304);
+
+                        QuestionAnswer questionA308Answer = answersByCodeChild.get(QuestionCode.A308);
+                        QuestionAnswer questionA306Answer = answersByCodeChild.get(QuestionCode.A306);
+                        QuestionAnswer questionA305Answer = answersByCodeChild.get(QuestionCode.A305);
+
+                        if (questionA304Answer == null || questionA305Answer == null ||
+                                questionA308Answer == null ||
+                                questionA306Answer == null) {
+                            continue;
+                        }
+
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD36);
+                        baseActivityData.setRank(3);
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + " - " + getValueString(questionA304Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.FIN_DE_VIE);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+                        baseActivityData.setActivityType(getCode(questionA306Answer, ActivityTypeCode.class));
+                        baseActivityData.setActivitySource(getCode(questionA305Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA308Answer, baseActivityDataUnit) * getValue(questionA305Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
+            }
         }
         return res;
     }
