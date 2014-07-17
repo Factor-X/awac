@@ -12,7 +12,6 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-
         scope.getAnswerByQuestionCode = (code) ->
             if scope.ngObject
                 for qv in scope.ngObject.answersSaveDTO.listAnswers
@@ -26,6 +25,8 @@ angular
 
                 for q in scope.getQuestionsToAdd().split(',')
                     answers = scope.getAnswerByQuestionCode(q)
+
+                    console.log answers
 
                     maxRepetitionIndex = 0
 
@@ -48,4 +49,4 @@ angular
                     scope.ngObject.answersSaveDTO.listAnswers.splice(idx, 1)
                     console.log scope.ngObject.answersSaveDTO.listAnswers
                     return
-   
+        window.S = scope
