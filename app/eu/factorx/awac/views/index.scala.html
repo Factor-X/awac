@@ -71,19 +71,34 @@
                 })
             });
         </script>
+
+
+        <script type='text/javascript'>
+            //install bughred
+            (function (d, t) {
+                var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                bh.type = 'text/javascript';
+                bh.src = '//www.bugherd.com/sidebarv2.js?apikey=q7ppbvnhgqf4bonklbrbqa';
+                s.parentNode.insertBefore(bh, s);
+            })(document, 'script');
+        </script>
+
     </head>
     <body ng-controller="MainCtrl">
+
+        <!-- list modal -->
+        <mm-awac-modal-login></mm-awac-modal-login>
 
         <!-- success flash message. -->
         <div flash-alert="success" active-class="in" class="alert fade" >
             <strong class="alert-heading">Success!</strong>
-            <span class="alert-message">{{flash.message}}</span>
+            <span class="alert-message" ng-bind-html="flash.message"></span>
         </div>
 
         <!-- Error flash message -->
         <div flash-alert="error" active-class="in" class="alert fade alert-error">
             <strong class="alert-heading">Error!</strong>
-            <span class="alert-message">{{flash.message}}</span>
+            <span class="alert-message" ng-bind-html="flash.message"></span>
         </div>
 
 

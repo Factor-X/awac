@@ -21,8 +21,6 @@ angular
 
     #send the request to the server
     $scope.send = () ->
-        #remove the error message
-        $scope.errorMessage = ""
 
         #active loading mode
         $scope.isLoading = true
@@ -39,11 +37,12 @@ angular
 
         promise.success (data, status, headers, config) ->
             $scope.$root.loginSuccess(data)
+            messageFlash.displaySuccess "You are now connected"
             return
 
         promise.error (data, status, headers, config) ->
             #display the error message
-            $scope.errorMessage = "Error : " + data.message
+            messageFlash.displayError data.message
             #disactive loading mode
             $scope.isLoading = false
             return
@@ -51,4 +50,4 @@ angular
         return false
 
     $scope.test = () ->
-      messageFlash.displaySuccess "prout"
+      $('#modalLogin').modal('show')

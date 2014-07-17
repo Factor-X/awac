@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.reporting.BaseActivityData;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -35,6 +36,7 @@ public class CodeImporter extends WorkbookDataImporter {
 		importCodesFromDatasheet("nace_codes_2", Nace2Code.class, CodeList.NACE_CODES_2);
 		importCodesFromDatasheet("nace_codes_3", Nace3Code.class, CodeList.NACE_CODES_3);
 		importCodesFromDatasheet("fuel", FuelCode.class, CodeList.FUEL);
+        importCodesFromDatasheet("BaseActivityData", BaseActivityDataCode.class, CodeList.BASE_ACTIVITY_DATA);
 
 	}
 

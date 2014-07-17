@@ -1,8 +1,7 @@
 package eu.factorx.awac.dto.validation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.factorx.awac.dto.validation.annotations.NotNull;
-import eu.factorx.awac.dto.validation.annotations.Validate;
+import eu.factorx.awac.dto.validation.annotations.*;
 import eu.factorx.awac.util.FileUtil;
 
 import javax.script.ScriptEngine;
@@ -18,17 +17,20 @@ public class Validator {
     public static void validate(Object object) throws Exception {
         if (object == null) return;
 
+        boolean validationFail = false;
+        String failureMessage = "";
+
         for (Field field : object.getClass().getDeclaredFields()) {
 
             // System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
 
             for (Annotation annotation : field.getAnnotations()) {
-                if (annotation.annotationType().getPackage().equals(NotNull.class.getPackage())) {
+                if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {
 
                     Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
 
                     if (annotation.annotationType().equals(Validate.class)) {
-                        if ( value instanceof List) {
+                        if (value instanceof List) {
                             List list = (List) value;
                             for (Object element : list) {
                                 Validator.validate(element);
@@ -59,7 +61,24 @@ public class Validator {
 
                         Boolean result = (Boolean) engine.eval("validate(VALUE, ARGS)");
                         if (!result) {
-                            throw new Exception("Validation failed for property" + field.getName());
+                            validationFail = true;
+
+                            //create the error message
+                            failureMessage += "\n- ";
+
+                            //recover the error message
+                            if (annotation instanceof NotNull) {
+                                failureMessage += ((NotNull) annotation).message();
+                            } else if (annotation instanceof Null) {
+                                failureMessage += ((Null) annotation).message();
+                            } else if (annotation instanceof NotNull) {
+                                failureMessage += ((Size) annotation).message();
+                            } else if (annotation instanceof Pattern) {
+                                failureMessage += ((Pattern) annotation).message();
+                            } else {
+                                failureMessage += field.getName() + " is not valid";
+                            }
+
                         }
                     }
                 }
@@ -67,6 +86,8 @@ public class Validator {
 
             // System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
         }
-
+        if (validationFail) {
+            throw new Exception(failureMessage);
+        }
     }
 }

@@ -15,5 +15,5 @@ public @interface Pattern {
 
     public String regexp() default "/.*/";
 
-    String message() default "";
+    String message() default "The field doesn't have the expected structure";
 }
