@@ -151,29 +151,7 @@ public class ReportServiceImpl implements ReportService {
         res.addAll(getBaseActivityDataAE_BAD29B(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD29C(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD30(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31A(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31B(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31C(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31D(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31E(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31F(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31G(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31H(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD31I(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD32A(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD32B(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD32C(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD32D(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD33A(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD33B(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD33C(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD34A(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD34B(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD34C(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD35A(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD35B(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD35C(allQuestionSetAnswers));
-        res.addAll(getBaseActivityDataAE_BAD35D(allQuestionSetAnswers));
+        res.addAll(getBaseActivityDataForProducts(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD36(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37A(allQuestionSetAnswers));
         res.addAll(getBaseActivityDataAE_BAD37B(allQuestionSetAnswers));
@@ -451,7 +429,7 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * CHECK XM
-      */
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD6(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -471,10 +449,10 @@ public class ReportServiceImpl implements ReportService {
 
         Double ElecConsumption = 0.0;
         if (questionA23Answer != null) {
-            ElecConsumption +=getValue(questionA23Answer, baseActivityDataUnit);
+            ElecConsumption += getValue(questionA23Answer, baseActivityDataUnit);
         }
         if (questionA24Answer != null) {
-            ElecConsumption +=getValue(questionA24Answer, baseActivityDataUnit);
+            ElecConsumption += getValue(questionA24Answer, baseActivityDataUnit);
         }
 
         // For each set of answers in A47, build an ActivityBaseData (see specifications)
@@ -1469,7 +1447,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DDT);
             baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
             if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-            baseActivityData.setActivitySource(ActivitySourceCode.R);
+                baseActivityData.setActivitySource(ActivitySourceCode.R);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("-H");
 
@@ -2815,6 +2793,7 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * checked FJ
+     *
      * @param allQuestionSetAnswers
      * @return
      */
@@ -3018,139 +2997,12 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+
+    private List<BaseActivityData> getBaseActivityDataForProducts(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (tonne.km in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
-        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
-
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
-
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-
-
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
-
-
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA256Answer = answersByCodeChild.get(QuestionCode.A256);
-
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA256Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.CAMION_LOCAL);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA256Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
-        List<BaseActivityData> res = new ArrayList<>();
-
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
-        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
-
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
-
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-
-             QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
-
-
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA257Answer = answersByCodeChild.get(QuestionCode.A257);
-
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA257Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.CAMIONNETTE_LOCAL);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA257Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
-        List<BaseActivityData> res = new ArrayList<>();
-
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
-        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
         // For each set of answers in A238, build an ActivityBaseData (see specifications)
         for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
@@ -3158,547 +3010,595 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
+            QuestionAnswer questionA246Answer = answersByCode.get(QuestionCode.A246);
 
-            if (questionA245Answer == null) {
+            if (questionA245Answer == null || questionA246Answer == null) {
                 continue;
             }
 
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+            //resolve BAD31
+            res.addAll(getBaseActivityDataAE_BAD31A(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31B(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31C(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31D(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31E(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31F(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31G(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31H(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD31I(questionSetAnswers, questionA245Answer));
+
+            //resolve BAD32
+            res.addAll(getBaseActivityDataAE_BAD32A(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD32B(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD32C(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD32D(questionSetAnswers, questionA245Answer));
 
 
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+            //resolve BAD33
+            res.addAll(getBaseActivityDataAE_BAD33A(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD33B(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD33C(questionSetAnswers, questionA245Answer));
 
 
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA258Answer = answersByCodeChild.get(QuestionCode.A258);
+            //resolve BAD34
+            res.addAll(getBaseActivityDataAE_BAD34A(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD34B(questionSetAnswers, questionA245Answer));
+            res.addAll(getBaseActivityDataAE_BAD34C(questionSetAnswers, questionA245Answer));
 
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA258Answer == null) {
-                        continue;
-                    }
+            //resolve BAD35
+            res.addAll(getBaseActivityDataAE_BAD35A(questionSetAnswers, questionA245Answer,questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35B(questionSetAnswers, questionA245Answer,questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35C(questionSetAnswers, questionA245Answer,questionA246Answer));
+            res.addAll(getBaseActivityDataAE_BAD35D(questionSetAnswers, questionA245Answer,questionA246Answer));
 
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.CAMION_INTERNATIONAL);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA258Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
-                }
-            }
+            //resolve BAD36
+            res.addAll(getBaseActivityDataAE_BAD36(questionSetAnswers, questionA245Answer));
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA259Answer = answersByCodeChild.get(QuestionCode.A259);
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA256Answer = answersByCodeChild.get(QuestionCode.A256);
 
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA259Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.TRAIN);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA259Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA256Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.CAMION_LOCAL);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA256Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
+
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31E(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA257Answer = answersByCodeChild.get(QuestionCode.A257);
 
-
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA260Answer = answersByCodeChild.get(QuestionCode.A260);
-
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA260Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.BATEAU);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA260Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA257Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31B);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.CAMIONNETTE_LOCAL);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA257Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
         }
+
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31F(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
-
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
 
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA261Answer = answersByCodeChild.get(QuestionCode.A261);
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA258Answer = answersByCodeChild.get(QuestionCode.A258);
 
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA261Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.BARGE_PENICHE);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA261Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA258Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31C);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.CAMION_INTERNATIONAL);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA258Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
         }
+
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31G(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31D(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA262Answer = answersByCodeChild.get(QuestionCode.A262);
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA259Answer = answersByCodeChild.get(QuestionCode.A259);
 
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA262Answer == null) {
-                        continue;
-                    }
-
-
-                    BaseActivityData baseActivityData = new BaseActivityData();
-
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_1000_KM);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA262Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA259Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31D);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.TRAIN);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA259Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
+
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31H(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31E(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
-
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-
-                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
-
-                    QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
-                    QuestionAnswer questionA263Answer = answersByCodeChild.get(QuestionCode.A263);
-
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA263Answer == null) {
-                        continue;
-                    }
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
 
-                    BaseActivityData baseActivityData = new BaseActivityData();
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_A_4000_KM);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA263Answer, baseActivityDataUnit));
 
-                    res.add(baseActivityData);
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA260Answer = answersByCodeChild.get(QuestionCode.A260);
+
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA260Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31E);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.BATEAU);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA260Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD31I(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31F(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A238, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A238)) {
-
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
-            QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
-
-            if (questionA245Answer == null) {
-                continue;
-            }
-
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
 
-                    QuestionAnswer questionA254Answer = answersByCode.get(QuestionCode.A254);
-                    QuestionAnswer questionA255Answer = answersByCode.get(QuestionCode.A255);
-                    QuestionAnswer questionA263Answer = answersByCode.get(QuestionCode.A263);
-
-                    if (questionA254Answer == null ||
-                            questionA255Answer == null ||
-                            questionA263Answer == null) {
-                        continue;
-                    }
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
 
-                    BaseActivityData baseActivityData = new BaseActivityData();
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA261Answer = answersByCodeChild.get(QuestionCode.A261);
 
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
-                    baseActivityData.setRank(2);
-                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
-                    baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-                    baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
-                    baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
-                    baseActivityData.setActivityOwnership(false);
-                    baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA263Answer, baseActivityDataUnit));
-
-                    res.add(baseActivityData);
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA261Answer == null) {
+                    continue;
                 }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31F);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.BARGE_PENICHE);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA261Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD32A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31G(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (l in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
+        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
+
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA262Answer = answersByCodeChild.get(QuestionCode.A262);
+
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA262Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31G);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.AVION_COURT_COURRIER_1000_KM);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA262Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
+            }
+
+        }
+        return res;
+    }
+
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31H(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
+        List<BaseActivityData> res = new ArrayList<>();
+
+        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
+
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+                QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+                QuestionAnswer questionA263Answer = answersByCodeChild.get(QuestionCode.A263);
+
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA263Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31H);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.AVION_MOYEN_COURRIER_1000_A_4000_KM);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA263Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
+            }
+        }
+        return res;
+    }
+
+
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD31I(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
+        List<BaseActivityData> res = new ArrayList<>();
+
+        Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
+
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+
+                QuestionAnswer questionA254Answer = answersByCode.get(QuestionCode.A254);
+                QuestionAnswer questionA255Answer = answersByCode.get(QuestionCode.A255);
+                QuestionAnswer questionA263Answer = answersByCode.get(QuestionCode.A263);
+
+                if (questionA254Answer == null ||
+                        questionA255Answer == null ||
+                        questionA263Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31I);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA254Answer, baseActivityDataUnit) * getValue(questionA255Answer, baseActivityDataUnit) * getValue(questionA263Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
+            }
+        }
+        return res;
+    }
+
+
+    private List<BaseActivityData> getBaseActivityDataAE_BAD32A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
+        List<BaseActivityData> res = new ArrayList<>();
+
         Unit baseActivityDataUnit = unitService.findBySymbol("l");
 
-        // For each set of answers in A266, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-            if (questionA267Answer == null) {
-                continue;
+                QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+
+                if (questionA267Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                //TODO what RB and DB ?
+                baseActivityData.setValue(RB *
+                        DB *
+                        getValue(questionA267Answer, baseActivityDataUnit) / 11, 4 / 0, 4426 *
+                        24, 98 / 100);
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD32A);
-            baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
-            baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
-            baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("RB*DB*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD32B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD32B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (l in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
         Unit baseActivityDataUnit = unitService.findBySymbol("l");
 
-        // For each set of answers in A266, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-            if (questionA267Answer == null) {
-                continue;
+                QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+
+                if (questionA267Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD32B);
+                baseActivityData.setRank(2);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.AVION_LONG_COURRIER_4000_KM);
+                baseActivityData.setActivitySource(ActivitySourceCode.MOYENNE);
+                baseActivityData.setActivityOwnership(false);
+                //TODO what RB and DB ?
+                baseActivityData.setValue(RH *
+                        DH *
+                        getValue(questionA267Answer, baseActivityDataUnit) / 11, 4 / 0, 4426 *
+                        24, 98 / 100);
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD32B);
-            baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
-            baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
-            baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue("RH*DH*getValue(questionA267Answer, baseActivityDataUnit)/11,4/0,4426*24,98/100");
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD32C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD32C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A266, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A266)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+                QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-            if (questionA267Answer == null) {
-                continue;
+                if (questionA267Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
+                baseActivityData.setRank(3);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
+                baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DB);
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
-            baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
-            baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
-            baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DB);
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD32D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD32D(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (tonne.km in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
         Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
 
-        // For each set of answers in A266, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A266)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+                QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
 
-            if (questionA267Answer == null) {
-                continue;
+                if (questionA267Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD32D);
+                baseActivityData.setRank(3);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
+                baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
+                baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
+                baseActivityData.setActivityOwnership(false);
+                baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DH);
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD32D);
-            baseActivityData.setRank(3);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA267Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-            baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
-            baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
-            baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * DH);
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD33A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD33A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (GJ in this case)
@@ -3706,153 +3606,204 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
         // For each set of answers in A273, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA276Answer = answersByCode.get(QuestionCode.A276);
-            QuestionAnswer questionA277Answer = answersByCode.get(QuestionCode.A277);
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-            if (questionA276Answer == null ||
-                    questionA277Answer == null) {
-                continue;
+                if (questionA274Answer == null) {
+                    continue;
+                }
+
+
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A275)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
+
+                        QuestionAnswer questionA276Answer = answersByCodeChild.get(QuestionCode.A276);
+                        QuestionAnswer questionA277Answer = answersByCodeChild.get(QuestionCode.A277);
+
+                        if (questionA276Answer == null || questionA277Answer == null) {
+                            continue;
+                        }
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);
+                        baseActivityData.setRank(1);
+                        //TODO => question sur specificPurpose ?
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                        baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+                        baseActivityData.setActivitySource(getCode(questionA276Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA277Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(getCode(questionA276Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA277Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD33B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD33B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (kWh in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
-        Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
+        // Get Target Unit (GJ in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
+        Unit baseActivityDataUnit = unitService.findBySymbol("KWh");
 
         // For each set of answers in A273, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA278Answer = answersByCode.get(QuestionCode.A278);
-            QuestionAnswer questionA276Answer = answersByCode.get(QuestionCode.A276);
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-            if (questionA278Answer == null ||
-                    questionA276Answer == null) {
-                continue;
+                if (questionA274Answer == null) {
+                    continue;
+                }
+
+
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A275)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
+
+                        QuestionAnswer questionA278Answer = answersByCodeChild.get(QuestionCode.A278);
+
+                        if (questionA278Answer == null) {
+                            continue;
+                        }
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
+                        baseActivityData.setRank(1);
+                        //TODO => question sur specificPurpose ?
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
+                        baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
+                        baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA278Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
-            baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
-            baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA278Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD33C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD33C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
-        // Get Target Unit (kg in this case)
-        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
+        // Get Target Unit (GJ in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
         // For each set of answers in A273, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A273)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA280Answer = answersByCode.get(QuestionCode.A280);
-            QuestionAnswer questionA281Answer = answersByCode.get(QuestionCode.A281);
-            QuestionAnswer questionA276Answer = answersByCode.get(QuestionCode.A276);
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-            if (questionA280Answer == null ||
-                    questionA281Answer == null ||
-                    questionA276Answer == null) {
-                continue;
+                if (questionA274Answer == null) {
+                    continue;
+                }
+
+
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A279)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
+
+                        QuestionAnswer questionA280Answer = answersByCodeChild.get(QuestionCode.A280);
+                        QuestionAnswer questionA281Answer = answersByCodeChild.get(QuestionCode.A281);
+
+                        if (questionA280Answer == null || questionA281Answer == null) {
+                            continue;
+                        }
+
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
+                        baseActivityData.setRank(1);
+                        //TODO => question sur specificPurpose ?
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + "-" + getValueString(questionA274Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
+                        baseActivityData.setActivityType(ActivityTypeCode.GAZ);
+                        baseActivityData.setActivitySource(getCode(questionA280Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA281Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
-            baseActivityData.setActivityType(ActivityTypeCode.GAZ);
-            baseActivityData.setActivitySource(getCode(questionA280Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA281Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD34A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD34A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
+
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (GJ in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-        // For each set of answers in A284, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
+        // For each set of answers in A273, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA285Answer = answersByCode.get(QuestionCode.A285);
-            QuestionAnswer questionA286Answer = answersByCode.get(QuestionCode.A286);
+                QuestionAnswer questionA285Answer = answersByCode.get(QuestionCode.A285);
+                QuestionAnswer questionA286Answer = answersByCode.get(QuestionCode.A286);
 
-            if (questionA285Answer == null ||
-                    questionA286Answer == null) {
-                continue;
+                if (questionA285Answer == null ||
+                        questionA286Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+                baseActivityData.setActivitySource(getCode(questionA285Answer, ActivitySourceCode.class));
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setValue(getValue(questionA286Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(getCode(questionA285Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA286Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD34B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD34B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (kWh in this case)
@@ -3860,37 +3811,36 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
         // For each set of answers in A284, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren())
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA287Answer = answersByCode.get(QuestionCode.A287);
-            QuestionAnswer questionA285Answer = answersByCode.get(QuestionCode.A285);
+                QuestionAnswer questionA287Answer = answersByCode.get(QuestionCode.A287);
 
-            if (questionA287Answer == null ||
-                    questionA285Answer == null) {
-                continue;
+                if (questionA287Answer == null) {
+                    continue;
+                }
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD34B);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
+                baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
+                baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setValue(getValue(questionA287Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD34B);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
-            baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
-            baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA287Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
-        }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD34C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD34C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (kg in this case)
@@ -3898,39 +3848,43 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
         // For each set of answers in A284, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A284)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A279)) {
 
-            QuestionAnswer questionA289Answer = answersByCode.get(QuestionCode.A289);
-            QuestionAnswer questionA290Answer = answersByCode.get(QuestionCode.A290);
-            QuestionAnswer questionA285Answer = answersByCode.get(QuestionCode.A285);
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
 
-            if (questionA289Answer == null ||
-                    questionA290Answer == null ||
-                    questionA285Answer == null) {
-                continue;
+                        QuestionAnswer questionA289Answer = answersByCodeChild.get(QuestionCode.A289);
+                        QuestionAnswer questionA290Answer = answersByCodeChild.get(QuestionCode.A290);
+
+                        if (questionA289Answer == null || questionA290Answer == null) {
+                            continue;
+                        }
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD34C);
+                        baseActivityData.setRank(1);
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
+                        baseActivityData.setActivityType(ActivityTypeCode.GAZ);
+                        baseActivityData.setActivitySource(getCode(questionA289Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA290Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD34C);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
-            baseActivityData.setActivityType(ActivityTypeCode.GAZ);
-            baseActivityData.setActivitySource(getCode(questionA289Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA290Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD35A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD35A(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (GJ in this case)
@@ -3938,37 +3892,41 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
         // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
-            QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
+                QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
+                QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
 
-            if (questionA294Answer == null ||
-                    questionA293Answer == null) {
-                continue;
+                if (questionA294Answer == null ||
+                        questionA293Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD35A);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+                baseActivityData.setActivitySource(ActivitySourceCode.DIESEL);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setValue(getValue(questionA246Answer, baseActivityDataUnit) * getValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD35A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(ActivitySourceCode.DIESEL);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD35B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD35B(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (GJ in this case)
@@ -3976,39 +3934,44 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
         // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+        // For each set of answers in A291, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
 
-            QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
-            QuestionAnswer questionA295Answer = answersByCode.get(QuestionCode.A295);
-            QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            if (questionA294Answer == null ||
-                    questionA295Answer == null ||
-                    questionA293Answer == null) {
-                continue;
+                QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
+                QuestionAnswer questionA295Answer = answersByCode.get(QuestionCode.A295);
+                QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
+
+                if (questionA294Answer == null ||
+                        questionA295Answer == null ||
+                        questionA293Answer == null) {
+                    continue;
+                }
+
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD35B);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+                baseActivityData.setActivitySource(ActivitySourceCode.ESSENCE);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setValue(getValue(questionA246Answer, baseActivityDataUnit) * getValue(questionA295Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD35B);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(ActivitySourceCode.ESSENCE);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA295Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD35C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD35C(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (kWh in this case)
@@ -4016,39 +3979,41 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("kWh");
 
         // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
-            QuestionAnswer questionA296Answer = answersByCode.get(QuestionCode.A296);
-            QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
+                QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
+                QuestionAnswer questionA296Answer = answersByCode.get(QuestionCode.A296);
+                QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
 
-            if (questionA294Answer == null ||
-                    questionA296Answer == null ||
-                    questionA293Answer == null) {
-                continue;
+                if (questionA294Answer == null ||
+                        questionA296Answer == null ||
+                        questionA293Answer == null) {
+                    continue;
+                }
+
+                BaseActivityData baseActivityData = new BaseActivityData();
+
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD35C);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
+                baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
+                baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setValue(getValue(questionA246Answer, baseActivityDataUnit) * getValue(questionA296Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
+
+                res.add(baseActivityData);
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD35C);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ELECTRICITE);
-            baseActivityData.setActivityType(ActivityTypeCode.ELEC_PAYS_GRISE);
-            baseActivityData.setActivitySource(ActivitySourceCode.BELGIQUE);
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA296Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    private List<BaseActivityData> getBaseActivityDataAE_BAD35D(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD35D(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (kg in this case)
@@ -4056,49 +4021,54 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
         // For each set of answers in A291, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A291)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
 
-            //TODO pas de QQ1 ?
+                Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+                QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
 
-            QuestionAnswer questionA298Answer = answersByCode.get(QuestionCode.A298);
-            QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
-            QuestionAnswer questionA299Answer = answersByCode.get(QuestionCode.A299);
-            QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
+                if (
+                        questionA293Answer == null) {
+                    continue;
+                }
 
-            if (questionA298Answer == null ||
-                    questionA294Answer == null ||
-                    questionA299Answer == null ||
-                    questionA293Answer == null) {
-                continue;
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
+
+                        QuestionAnswer questionA298Answer = answersByCodeChild.get(QuestionCode.A298);
+                        QuestionAnswer questionA299Answer = answersByCodeChild.get(QuestionCode.A299);
+
+                        if (questionA298Answer == null ||
+                                questionA299Answer == null) {
+                            continue;
+                        }
+
+
+                        BaseActivityData baseActivityData = new BaseActivityData();
+
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD35D);
+                        baseActivityData.setRank(1);
+                        baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
+                        baseActivityData.setActivityType(ActivityTypeCode.GAZ);
+                        baseActivityData.setActivitySource(getCode(questionA298Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setValue(getValue(questionA246Answer, baseActivityDataUnit) * getValue(questionA299Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
             }
-
-
-            BaseActivityData baseActivityData = new BaseActivityData();
-
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD35D);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
-            baseActivityData.setActivityType(ActivityTypeCode.GAZ);
-            baseActivityData.setActivitySource(getCode(questionA298Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(QgetValue(questionA294Answer, baseActivityDataUnit) * getValue(questionA299Answer, baseActivityDataUnit) * getValue(questionA293Answer, baseActivityDataUnit));
-
-            res.add(baseActivityData);
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
-    private List<BaseActivityData> getBaseActivityDataAE_BAD36(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    //CHECKED BY FLO
+    private List<BaseActivityData> getBaseActivityDataAE_BAD36(QuestionSetAnswer questionSetAnswers, QuestionAnswer questionA245Answer) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (t in this case)
@@ -4106,9 +4076,10 @@ public class ReportServiceImpl implements ReportService {
         Unit baseActivityDataUnit = unitService.findBySymbol("t");
 
         // For each set of answers in A300, build an ActivityBaseData (see specifications)
-        for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A300)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A300)) {
 
-            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
+            Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
 
             QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
 
@@ -4116,14 +4087,16 @@ public class ReportServiceImpl implements ReportService {
             if (questionA302Answer == null) {
                 continue;
             }
-            for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
-                if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
+            for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
 
-                    QuestionAnswer questionA304Answer = answersByCode.get(QuestionCode.A304);
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
 
-                    QuestionAnswer questionA308Answer = answersByCode.get(QuestionCode.A308);
-                    QuestionAnswer questionA306Answer = answersByCode.get(QuestionCode.A306);
-                    QuestionAnswer questionA305Answer = answersByCode.get(QuestionCode.A305);
+                    QuestionAnswer questionA304Answer = answersByCodeChild.get(QuestionCode.A304);
+
+                    QuestionAnswer questionA308Answer = answersByCodeChild.get(QuestionCode.A308);
+                    QuestionAnswer questionA306Answer = answersByCodeChild.get(QuestionCode.A306);
+                    QuestionAnswer questionA305Answer = answersByCodeChild.get(QuestionCode.A305);
 
                     if (questionA304Answer == null || questionA305Answer == null ||
                             questionA308Answer == null ||
@@ -4138,7 +4111,7 @@ public class ReportServiceImpl implements ReportService {
                     baseActivityData.setKey(BaseActivityDataCode.AE_BAD36);
                     baseActivityData.setRank(3);
                     //TODO soustraction de string ?
-                    baseActivityData.setSpecificPurpose(getValueString(questionA302Answer) - getValueString(questionA304Answer));
+                    baseActivityData.setSpecificPurpose(getValueString(questionA245Answer)+" - "+getValueString(questionA304Answer));
                     baseActivityData.setActivityCategory(ActivityCategoryCode.FIN_DE_VIE);
                     baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
                     baseActivityData.setActivityType(getCode(questionA306Answer, ActivityTypeCode.class));
@@ -4148,17 +4121,12 @@ public class ReportServiceImpl implements ReportService {
 
                     res.add(baseActivityData);
                 }
-            }
+            }}
         }
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD37A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4179,32 +4147,26 @@ public class ReportServiceImpl implements ReportService {
             for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
                 if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A317)) {
 
-                    QuestionAnswer questionA314Answer = answersByCode.get(QuestionCode.A314);
-                    QuestionAnswer questionA315Answer = answersByCode.get(QuestionCode.A315);
+
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+
+                    QuestionAnswer questionA314Answer = answersByCodeChild.get(QuestionCode.A314);
+                    QuestionAnswer questionA315Answer = answersByCodeChild.get(QuestionCode.A315);
 
                     if (questionA314Answer == null ||
                             questionA315Answer == null) {
                         continue;
                     }
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD37A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA314Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(getCode(questionA314Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA315Answer, baseActivityDataUnit));
-
                     BaseActivityData baseActivityData = new BaseActivityData();
 
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD37C);
+                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD37A);
                     baseActivityData.setRank(1);
                     baseActivityData.setSpecificPurpose(getValueString(questionA312Answer));
                     baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
-                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.FROID);
-                    baseActivityData.setActivityType(ActivityTypeCode.GAZ);
+                    baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+                    baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
                     baseActivityData.setActivitySource(getCode(questionA314Answer, ActivitySourceCode.class));
                     baseActivityData.setActivityOwnership(null);
                     baseActivityData.setValue(getValue(questionA315Answer, baseActivityDataUnit));
@@ -4216,12 +4178,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD37B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4242,7 +4199,10 @@ public class ReportServiceImpl implements ReportService {
             for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
                 if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
 
-                    QuestionAnswer questionA316Answer = answersByCode.get(QuestionCode.A316);
+
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+                    QuestionAnswer questionA316Answer = answersByCodeChild.get(QuestionCode.A316);
 
                     if (questionA316Answer == null) {
                         continue;
@@ -4251,7 +4211,7 @@ public class ReportServiceImpl implements ReportService {
 
                     BaseActivityData baseActivityData = new BaseActivityData();
 
-                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD37C);
+                    baseActivityData.setKey(BaseActivityDataCode.AE_BAD37B);
                     baseActivityData.setRank(1);
                     baseActivityData.setSpecificPurpose(getValueString(questionA312Answer));
                     baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
@@ -4268,12 +4228,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD37C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4294,8 +4249,10 @@ public class ReportServiceImpl implements ReportService {
             for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
                 if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A317)) {
 
-                    QuestionAnswer questionA318Answer = answersByCode.get(QuestionCode.A318);
-                    QuestionAnswer questionA319Answer = answersByCode.get(QuestionCode.A319);
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+                    QuestionAnswer questionA318Answer = answersByCodeChild.get(QuestionCode.A318);
+                    QuestionAnswer questionA319Answer = answersByCodeChild.get(QuestionCode.A319);
 
                     if (questionA318Answer == null ||
                             questionA319Answer == null) {
@@ -4322,12 +4279,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD38A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4351,18 +4303,11 @@ public class ReportServiceImpl implements ReportService {
             for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
                 if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A325)) {
 
-                    QuestionAnswer questionA326Answer = answersByCode.get(QuestionCode.A326);
-                    QuestionAnswer questionA327Answer = answersByCode.get(QuestionCode.A327);
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD38A);
-            baseActivityData.setRank(1);
-            baseActivityData.setSpecificPurpose(QgetValueString(questionA326Answer));
-            baseActivityData.setActivityCategory(ActivityCategoryCode.FRANCHISE);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
-            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
-            baseActivityData.setActivitySource(getCode(questionA326Answer, ActivitySourceCode.class));
-            baseActivityData.setActivityOwnership(null);
-            baseActivityData.setValue(getValue(questionA327Answer, baseActivityDataUnit) * QgetValue(questionA327Answer, baseActivityDataUnit));
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+                    QuestionAnswer questionA326Answer = answersByCodeChild.get(QuestionCode.A326);
+                    QuestionAnswer questionA327Answer = answersByCodeChild.get(QuestionCode.A327);
 
                     if (questionA326Answer == null ||
                             questionA327Answer == null) {
@@ -4390,12 +4335,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD38B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4419,7 +4359,9 @@ public class ReportServiceImpl implements ReportService {
             for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswers.getChildren()) {
                 if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A325)) {
 
-                    QuestionAnswer questionA328Answer = answersByCode.get(QuestionCode.A328);
+                    Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChild.getQuestionAnswers());
+
+                    QuestionAnswer questionA328Answer = answersByCodeChild.get(QuestionCode.A328);
 
                     if (questionA328Answer == null) {
                         continue;
@@ -4445,12 +4387,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECH FJ
-     *
-     * @param allQuestionSetAnswers
-     * @return
-     */
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD38C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4505,6 +4442,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD39A(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4545,6 +4483,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    //CHECKED BY FLO
     private List<BaseActivityData> getBaseActivityDataAE_BAD39B(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -4655,7 +4594,6 @@ public class ReportServiceImpl implements ReportService {
     private Double convertValue(Double answerValue, Unit unitFrom, Unit toUnit) {
         return unitConversionService.convert(answerValue, unitFrom, toUnit, null);
     }
-
 
 
 }
