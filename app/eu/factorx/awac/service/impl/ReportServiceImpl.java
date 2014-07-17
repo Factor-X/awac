@@ -2781,7 +2781,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(ActivityTypeCode.SERVICES_ET_INFORMATIQUE);
+            baseActivityData.setActivityType(ActivityTypeCode.SERVICES_ET_INFORMATIQUES);
             baseActivityData.setActivitySource(getCode(questionA219Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA222Answer, baseActivityDataUnit));
@@ -2791,6 +2791,11 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * checked FJ
+     * @param allQuestionSetAnswers
+     * @return
+     */
     private List<BaseActivityData> getBaseActivityDataAE_BAD28(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
