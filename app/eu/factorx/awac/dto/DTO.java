@@ -59,7 +59,7 @@ public class DTO implements Content {
         try {
             Validator.validate(this);
         } catch (Exception e) {
-            throw new RuntimeException("Validation failed for DTO: " + get__type());
+            throw new MyrmexRunTimeException("Validation failed for DTO: " + e.getMessage());
         }
     }
 

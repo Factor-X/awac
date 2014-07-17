@@ -2451,7 +2451,7 @@ public class AwacDummyDataCreator {
 
     }
 */
-    
+
     private static Unit getUnitBySymbol(String symbol) {
         return JPA.em().createNamedQuery(Unit.FIND_BY_SYMBOL, Unit.class).setParameter("symbol", symbol).getSingleResult();
     }
