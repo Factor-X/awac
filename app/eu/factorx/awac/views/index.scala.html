@@ -12,6 +12,7 @@
         <script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>
         <script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>
         <script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>
 
         <!-- Underscore -->
         <script src='@routes.Assets.at("components/underscore/underscore.js")'></script>
@@ -35,7 +36,11 @@
         <!-- STYLES                                                             -->
         <!-- ------------------------------------------------------------------ -->
 
+<<<<<<< HEAD
         <!-- Bootstrap -->
+=======
+        <!-- bootstrap -->
+>>>>>>> 33fc4ec23c61a1126ee679840c59359c79c60ef6
         <link rel="stylesheet" href='@routes.Assets.at("components/bootstrap/dist/css/bootstrap.min.css")'>
 
         <!-- Dangle -->
@@ -72,6 +77,19 @@
         </script>
     </head>
     <body ng-controller="MainCtrl">
+
+        <!-- success flash message. -->
+        <div flash-alert="success" active-class="in" class="alert fade" >
+            <strong class="alert-heading">Success!</strong>
+            <span class="alert-message">{{flash.message}}</span>
+        </div>
+
+        <!-- Error flash message -->
+        <div flash-alert="error" active-class="in" class="alert fade alert-error">
+            <strong class="alert-heading">Error!</strong>
+            <span class="alert-message">{{flash.message}}</span>
+        </div>
+
 
         <div ng-show="!isLoading()">
 

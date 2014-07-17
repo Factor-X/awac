@@ -75,7 +75,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, $http)->
+angular.module('app').run ($rootScope, $location, $http,flash)->
     console.log("run  !!")
 
     #
@@ -136,5 +136,3 @@ angular.module('app').run ($rootScope, $location, $http)->
     # call the test authentification function
     #
     $rootScope.testAuthentication()
-
-

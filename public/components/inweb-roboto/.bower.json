@@ -30,7 +30,6 @@
     "commit": "41163ac4f8bc4610ec3d24e6cf9f4a40e0dcec2a"
   },
   "_source": "git://github.com/inframeworks/inweb-roboto.git",
-  "_target": "~0.11.1",
-  "_originalSource": "inweb-roboto",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "inweb-roboto"
 }
