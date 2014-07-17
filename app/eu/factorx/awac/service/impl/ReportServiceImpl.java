@@ -449,12 +449,33 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
+    /**
+     * CHECK XM
+      */
     private List<BaseActivityData> getBaseActivityDataAE_BAD6(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (kW in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
         Unit baseActivityDataUnit = unitService.findBySymbol("kW");
+
+        QuestionSetAnswer questionSet22Answer = allQuestionSetAnswers.get(QuestionCode.A22).get(0);
+        Map<QuestionCode, QuestionAnswer> questionSet22AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet22Answer.getQuestionAnswers());
+        QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
+        QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);
+
+        if (questionA23Answer == null &&
+                questionA24Answer == null) {
+            return res;
+        }
+
+        Double ElecConsumption = 0.0;
+        if (questionA23Answer != null) {
+            ElecConsumption +=getValue(questionA23Answer, baseActivityDataUnit);
+        }
+        if (questionA24Answer != null) {
+            ElecConsumption +=getValue(questionA24Answer, baseActivityDataUnit);
+        }
 
         // For each set of answers in A47, build an ActivityBaseData (see specifications)
         for (QuestionSetAnswer questionSetAnswers : allQuestionSetAnswers.get(QuestionCode.A47)) {
@@ -464,11 +485,12 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA48Answer = answersByCode.get(QuestionCode.A48);
             QuestionAnswer questionA49Answer = answersByCode.get(QuestionCode.A49);
 
-            if (questionA48Answer == null ||
-                    questionA49Answer == null) {
+            if (questionA48Answer == null) {
                 continue;
             }
-
+            if (getValueBoolean(questionA48Answer) && (questionA49Answer == null)) {
+                continue;
+            }
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -480,9 +502,12 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.PUISSANCE_DES_BLOCS_FRIGO);
             baseActivityData.setActivitySource(ActivitySourceCode.GENERIQUE);
             baseActivityData.setActivityOwnership(true);
-            baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * H / getValue(questionA49Answer, baseActivityDataUnit)
-            (en heures));
-
+            if (!getValueBoolean(questionA48Answer)) {
+                baseActivityData.setValue(0.0);
+            }
+            else {
+                baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * ElecConsumption / getValue(questionA49Answer, unitService.findBySymbol("h")));
+            }
             res.add(baseActivityData);
         }
         return res;
@@ -1447,6 +1472,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.MOBILITE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DDT);
             baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
+            if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
             baseActivityData.setActivitySource(ActivitySourceCode.R);
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue("-H");
@@ -2236,7 +2262,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(ref marchandise - QgetValueString(questionA167Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AMONT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA167Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
@@ -3522,7 +3548,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA276Answer) - QQgetValueString(questionA276Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.STOCKAGE_AVAL);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA276Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
@@ -3638,7 +3664,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA285Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.TRAITEMENT);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA285Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
@@ -3754,7 +3780,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(ActivitySourceCode.DIESEL);
             baseActivityData.setActivityOwnership(null);
@@ -3794,7 +3820,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA293Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.UTILISATION);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(ActivitySourceCode.ESSENCE);
             baseActivityData.setActivityOwnership(null);
@@ -3956,7 +3982,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA314Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACTIF_LOUE);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
+            baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA314Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
@@ -4072,7 +4099,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(QgetValueString(questionA326Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.FRANCHISE);
-            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIEFOSSILE);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
             baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
             baseActivityData.setActivitySource(getCode(questionA326Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(null);
