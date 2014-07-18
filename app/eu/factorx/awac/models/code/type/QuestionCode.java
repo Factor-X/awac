@@ -512,6 +512,7 @@ public class QuestionCode extends Code {
     public static final QuestionCode A498 = new QuestionCode("A498");
     public static final QuestionCode A499 = new QuestionCode("A499");
     public static final QuestionCode A500 = new QuestionCode("A500");
+    public static final QuestionCode A501 = new QuestionCode("A501");
 
 
     public QuestionCode() {
