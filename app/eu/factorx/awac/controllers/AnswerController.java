@@ -18,7 +18,6 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
 import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
@@ -32,7 +31,6 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -107,7 +105,7 @@ public class AnswerController extends Controller {
 		Scope scope = scopeService.findById(scopeId);
 		Logger.info("getByForm 1.3");
 
-		// TODO should be in request param
+		// TODO user language should be a request parameter (else, we should get from session or cookie)
 		LanguageCode lang = LanguageCode.ENGLISH;
 		Logger.info("getByForm 1.4");
 
@@ -118,66 +116,26 @@ public class AnswerController extends Controller {
 		Logger.info("getByForm 2");
 
 		List<QuestionSet> questionSets = form.getQuestionSets();
-		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(questionSets);
+		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
 
 		Logger.info("getByForm 3");
 
-		Map<String, CodeListDTO> codeListDTOs = new HashMap<>();
-		putNecessaryCodeLists(codeListDTOs, questionSets, lang);
+		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
+		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
+		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(scopeId, periodId, answerLineDTOs);
 
 		Logger.info("getByForm 4");
 
-		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
+		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);
 
 		Logger.info("getByForm 5");
 
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope,
-				period, form);
-		List<AnswerLineDTO> listAnswers = toAnswerLineDTOs(questionSetAnswers);
-		QuestionAnswersDTO questionAnswerDTO = new QuestionAnswersDTO(scopeId, periodId, listAnswers);
+		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
 
 		Logger.info("getByForm 6");
 
-		FormDTO formDTO = new FormDTO(scopeId, periodId, unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswerDTO);		
+		FormDTO formDTO = new FormDTO(scopeId, periodId, unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
-	}
-
-	private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionSetAnswer> questionSetAnswers) {
-		List<AnswerLineDTO> answers = new ArrayList<>();
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
-			for (QuestionAnswer questionAnswer : questionAnswers) {
-				answers.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
-			}
-			answers.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
-		}
-		return answers;
-	}
-
-	private Map<String, CodeListDTO> putNecessaryCodeLists(Map<String, CodeListDTO> codeLists,
-			List<QuestionSet> questionSets, LanguageCode lang) {
-		for (QuestionSet questionSet : questionSets) {
-			for (Question question : questionSet.getQuestions()) {
-				if (question instanceof ValueSelectionQuestion) {
-					CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-					String codeListName = codeList.name();
-					if (!codeLists.containsKey(codeList)) {
-						codeLists.put(codeListName, toCodeListDTO(codeList, lang));
-					}
-				}
-			}
-			putNecessaryCodeLists(codeLists, questionSet.getChildren(), lang);
-		}
-		return codeLists;
-	}
-
-	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
-		CodeListDTO codeListDTO = new CodeListDTO(codeList.name());
-		for (CodeLabel codeLabel : codeLabels) {
-			codeListDTO.getCodeLabels().add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
-		}
-		return codeListDTO;
 	}
 
 	private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
@@ -188,13 +146,44 @@ public class AnswerController extends Controller {
 		return questionSetDTOs;
 	}
 
-	/*
-	 * TODO private List<QuestionSetAnswerDTO> toQuestionSetAnswerDTOs(List<QuestionSetAnswer> questionSetAnswers) { List<QuestionSetAnswerDTO> questionSetAnswerDTOs = new
-	 * ArrayList<>(); for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) { questionSetAnswerDTOs.add(conversionService.convert(questionSetAnswer,
-	 * QuestionSetAnswerDTO.class));
-	 * 
-	 * } return questionSetAnswerDTOs; }
-	 */
+	private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionSetAnswer> questionSetAnswers) {
+		List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
+			for (QuestionAnswer questionAnswer : questionAnswers) {
+				answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
+			}
+			answerLineDTOs.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
+		}
+		return answerLineDTOs;
+	}
+
+	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
+		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
+		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+		for (CodeLabel codeLabel : codeLabels) {
+			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
+		}
+		return new CodeListDTO(codeList.name(), codeLabelDTOs);
+	}
+
+	private Map<String, CodeListDTO> getNecessaryCodeLists(List<QuestionSet> questionSets, LanguageCode lang) {
+		Map<String, CodeListDTO> codeLists = new HashMap<>();
+		for (QuestionSet questionSet : questionSets) {
+			for (Question question : questionSet.getQuestions()) {
+				if (question instanceof ValueSelectionQuestion) {
+					CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+					String codeListName = codeList.name();
+					if (!codeLists.containsKey(codeList)) {
+						codeLists.put(codeListName, toCodeListDTO(codeList, lang));
+					}
+				}
+			}
+			codeLists.putAll(getNecessaryCodeLists(questionSet.getChildren(), lang));
+		}
+		return codeLists;
+	}
+
 	private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
 		Map<Long, UnitCategoryDTO> res = new HashMap<>();
 		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
@@ -237,58 +226,6 @@ public class AnswerController extends Controller {
 		 * 
 		 * questionAnswerService.saveOrUpdate(questionAnswer); } }
 		 */
-	}
-
-	public AnswerLineDTO convert(QuestionAnswer questionAnswer) {
-		Question question = questionAnswer.getQuestion();
-		AnswerType answerType = question.getAnswerType();
-
-		// TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
-		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
-		Object rawAnswerValue = null;
-		Integer unitId = null;
-		switch (answerType) {
-		case BOOLEAN:
-			rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
-			break;
-		case STRING:
-			rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
-			break;
-		case INTEGER:
-			IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
-			rawAnswerValue = integerAnswerValue.getValue();
-			if (integerAnswerValue.getUnit() != null) {
-				unitId = integerAnswerValue.getUnit().getId().intValue();
-			}
-			break;
-		case DOUBLE:
-			DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
-			rawAnswerValue = doubleAnswerValue.getValue();
-			if (doubleAnswerValue.getUnit() != null) {
-				unitId = doubleAnswerValue.getUnit().getId().intValue();
-			}
-			break;
-		case VALUE_SELECTION:
-			Code value = ((CodeAnswerValue) answerValue).getValue();
-			if (value != null)
-				rawAnswerValue = value.getKey();
-			else
-				rawAnswerValue = null;
-			break;
-		case ENTITY_SELECTION:
-			EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
-			rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
-					entityAnswerValue.getEntityId());
-			break;
-		}
-
-        AnswerLineDTO answerLine = new AnswerLineDTO();
-        answerLine.setValue(rawAnswerValue);
-        answerLine.setQuestionKey(questionAnswer.getQuestion().getCode().getKey());
-        answerLine.setUnitId(unitId);
-
-
-		return answerLine;
 	}
 
 	private AnswerValue getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
@@ -356,16 +293,15 @@ public class AnswerController extends Controller {
 
 		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
 		if (answerUnitId == null) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
-					questionUnitCategory.getName()));
+			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getName()));
 		}
 		Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
 		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
 		UnitCategory answerUnitCategory = answerUnit.getCategory();
 		if (!questionUnitCategory.equals(answerUnitCategory)) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
-					questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
+			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getName(),
+					answerUnit.getName(), answerUnitCategory.getName()));
 		}
 		return answerUnit;
 	}
