@@ -7,6 +7,9 @@ import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 
 public class FormDTO extends DTO {
 
+    /*
+        for each iteration, contains all the 
+     */
 	private List<QuestionSetDTO> questionSets;
 
 	private List<UnitCategoryDTO> unitCategories;

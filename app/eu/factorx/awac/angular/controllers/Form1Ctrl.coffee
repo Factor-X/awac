@@ -3,16 +3,62 @@ angular
 .controller "Form1Ctrl", ($scope, downloadService, $http) ->
     $scope.formIdentifier = "TAB1"
 
+    #this variable contains all answer, new and old
+    $scope.answerList=[]
+
+    console.log $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
 
         $scope.o = data
 
+        #build the list of answers
+        $scope.scanQuestionSet = (questionSetAnswerDTO, mapRepetition) ->
+
+          #add repetition into the mapRepetition
+          if questionSetAnswerDTO.repetitionIndex !=null
+            mapRepetition[questionSetAnswerDTO.questionSetCode] =questionSetAnswerDTO.repetitionIndex
+
+          #create question
+          for q in questionSetAnswerDTO.questions
+            $scope.answerList[$scope.answerList.length] = {
+              'questionKey' : q.questionKey
+              'value' : q.value
+              'unitId' : q.unitId
+              'mapRepetition' : mapRepetition
+            }
+
+          #loop in the children
+          for c in questionSetAnswerDTO.children
+            $scope.scanQuestionSet(c, mapRepetition)
+
+
+
         # getAnswerByQuestionCode
-        $scope.A = (code) ->
-            console.log $scope.o
-            for qv in $scope.o.answersSaveDTO.listAnswers
-                if qv.questionKey == code
-                    return qv
+        $scope.getAnswer = (code) ->
+          listAnswer=[]
+          for answer in $scope.answerList
+            #control the code
+            if answer.questionKey == code
+              listAnswer[listAnswer.length] = answer
+
+          return listAnswer
+
+
+        # getAnswerByQuestionCode and mapIteration
+        $scope.getAnswer = (code, mapIteration) ->
+            for answer in $scope.answerList
+                #control the code
+                if answer.questionKey == code
+
+                    #control the repetition map
+                    failed=false
+                    for iParam in mapIteration
+                      if answer.mapRepetition[iParam.key]==null || answer.mapRepetition[iParam.key] != iParam.value
+                        failed = true
+
+                    if failed == false
+                      return answer
+
             return null
 
         # getUnitsByQuestionCode
