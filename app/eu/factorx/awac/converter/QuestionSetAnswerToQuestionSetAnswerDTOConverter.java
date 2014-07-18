@@ -1,5 +1,6 @@
 package eu.factorx.awac.converter;
 
+import eu.factorx.awac.dto.awac.post.QuestionAnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,20 @@ public class QuestionSetAnswerToQuestionSetAnswerDTOConverter implements
 	@Autowired
 	QuestionAnswerToAnswerLineConverter questionAnswerToAnswerLineConverter;
 
+    @Autowired
+    QuestionToQuestionDTOConverter questionToQuestionDTOConverter;
+
 	@Override
 	public QuestionSetAnswerDTO convert(QuestionSetAnswer questionSetAnswer) {
 		QuestionSetAnswerDTO questionSetAnswerDTO = new QuestionSetAnswerDTO(questionSetAnswer.getId(),
 				questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getRepetitionIndex());
 		for (QuestionAnswer questionAnswer : questionSetAnswer.getQuestionAnswers()) {
-			questionSetAnswerDTO.getQuestionAnswers().add(convertQuestionAnswer(questionAnswer));
+
+            QuestionAnswerDTO questionAnswerDTO = new QuestionAnswerDTO();
+            questionAnswerDTO.setAnswerLine(convertQuestionAnswer(questionAnswer));
+            questionAnswerDTO.setQuestionDTO(questionToQuestionDTOConverter.convert(questionAnswer.getQuestion()));
+
+			questionSetAnswerDTO.getQuestionAnswers().add(questionAnswerDTO);
 		}
 		for (QuestionSetAnswer childQuestionSetAnswer : questionSetAnswer.getChildren()) {
 			questionSetAnswerDTO.getChildren().add(convert(childQuestionSetAnswer));

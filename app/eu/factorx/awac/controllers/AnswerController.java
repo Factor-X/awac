@@ -64,137 +64,166 @@ import eu.factorx.awac.service.UnitService;
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
 
-	private static final String ERROR_ANSWER_UNIT_NOT_AUTHORIZED = "The question identified by key '%s' does not accept unit, since a unit (id = %s) is present in client answer";
-	private static final String ERROR_ANSWER_UNIT_REQUIRED = "The question identified by key '%s' requires a unit of the category '%s', but no unit is present in client answer";
-	private static final String ERROR_ANSWER_UNIT_INVALID = "The question identified by key '%s' requires a unit of the category '%s', since the unit of the client answer is '%s' (part of the category '%s')";
+    private static final String ERROR_ANSWER_UNIT_NOT_AUTHORIZED = "The question identified by key '%s' does not accept unit, since a unit (id = %s) is present in client answer";
+    private static final String ERROR_ANSWER_UNIT_REQUIRED = "The question identified by key '%s' requires a unit of the category '%s', but no unit is present in client answer";
+    private static final String ERROR_ANSWER_UNIT_INVALID = "The question identified by key '%s' requires a unit of the category '%s', since the unit of the client answer is '%s' (part of the category '%s')";
 
-	@Autowired
-	private PeriodService periodService;
-	@Autowired
-	private ScopeService scopeService;
-	@Autowired
-	private QuestionSetAnswerService questionSetAnswerService;
-	@Autowired
-	private QuestionService questionService;
-	@Autowired
-	private QuestionAnswerService questionAnswerService;
-	@Autowired
-	private UnitCategoryService unitCategoryService;
-	@Autowired
-	private UnitService unitService;
-	@Autowired
-	private FormService formService;
-	@Autowired
-	private CodeLabelService codeLabelService;
+    @Autowired
+    private PeriodService periodService;
+    @Autowired
+    private ScopeService scopeService;
+    @Autowired
+    private QuestionSetAnswerService questionSetAnswerService;
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private QuestionAnswerService questionAnswerService;
+    @Autowired
+    private UnitCategoryService unitCategoryService;
+    @Autowired
+    private UnitService unitService;
+    @Autowired
+    private FormService formService;
+    @Autowired
+    private CodeLabelService codeLabelService;
 
-	@Autowired
-	private ConversionService conversionService;
+    @Autowired
+    private ConversionService conversionService;
 
-	@Autowired
-	private SecuredController securedController;
+    @Autowired
+    private SecuredController securedController;
 
-	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
-	public Result getByForm(String formIdentifier, Long periodId, Long scopeId) {
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result getByForm(String formIdentifier, Long periodId, Long scopeId) {
 
-		Form form = formService.findByIdentifier(formIdentifier);
-		Period period = periodService.findById(periodId);
-		Scope scope = scopeService.findById(scopeId);
+        Logger.info("getByForm 1");
 
-		// TODO should be in request param
-		LanguageCode lang = LanguageCode.ENGLISH;
+        Form form = formService.findByIdentifier(formIdentifier);
+        Logger.info("getByForm 1.1");
 
-		if (form == null || period == null || scope == null) {
-			throw new RuntimeException("Invalid request params");
-		}
+        Period period = periodService.findById(periodId);
+        Logger.info("getByForm 1.25");
+        Scope scope = scopeService.findById(scopeId);
 
-		List<QuestionSet> questionSets = form.getQuestionSets();
-		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(questionSets);
+        Logger.info("getByForm 2");
 
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope,
-				period, form);
-		List<QuestionSetAnswerDTO> questionSetAnswerDTOs = toQuestionSetAnswerDTOs(questionSetAnswers);
+        // TODO should be in request param
+        LanguageCode lang = LanguageCode.ENGLISH;
 
-		Map<CodeList, CodeListDTO> codeLists = new HashMap<>();
-		putNecessaryCodeLists(codeLists, questionSets, lang);
+        if (form == null || period == null || scope == null) {
+            throw new RuntimeException("Invalid request params");
+        }
 
-		FormDTO formDTO = new FormDTO(questionSetDTOs, getAllUnitCategories(), new ArrayList<CodeListDTO>(codeLists.values()), new AnswersSaveDTO(
-				scope.getId(), period.getId(), questionSetAnswerDTOs));
-		return ok(formDTO);
-	}
+        Logger.info("getByForm 3");
 
-	private Map<CodeList, CodeListDTO> putNecessaryCodeLists(Map<CodeList, CodeListDTO> codeLists, List<QuestionSet> questionSets, LanguageCode lang) {
-		for (QuestionSet questionSet : questionSets) {
-			for (Question question : questionSet.getQuestions()) {
-				if (question instanceof ValueSelectionQuestion) {
-					CodeList codeList = ((ValueSelectionQuestion)question).getCodeList();
-					if (!codeLists.containsKey(codeList)) {
-						codeLists.put(codeList, toCodeListDTO(codeList, lang));
-					}
-				}
-			}
-			putNecessaryCodeLists(codeLists, questionSet.getChildren(), lang);
-		}
-		return codeLists;
-	}
+        List<QuestionSet> questionSets = form.getQuestionSets();
+        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(questionSets);
 
-	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
-		CodeListDTO codeListDTO = new CodeListDTO(codeList.name());
-		for (CodeLabel codeLabel : codeLabels) {
-			codeListDTO.getCodeLabels().add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
-			
-		}
-		return codeListDTO;
-	}
+        Logger.info("getByForm 4");
 
-	private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
-		List<QuestionSetDTO> questionSetDTOs = new ArrayList<>();
-		for (QuestionSet questionSet : questionSets) {
-			questionSetDTOs.add(conversionService.convert(questionSet, QuestionSetDTO.class));
-		}
-		return questionSetDTOs;
-	}
+        List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope,
+                period, form);
+        List<QuestionSetAnswerDTO> questionSetAnswerDTOs = toQuestionSetAnswerDTOs(questionSetAnswers);
 
-	private List<QuestionSetAnswerDTO> toQuestionSetAnswerDTOs(List<QuestionSetAnswer> questionSetAnswers) {
-		List<QuestionSetAnswerDTO> questionSetAnswerDTOs = new ArrayList<>();
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			questionSetAnswerDTOs.add(conversionService.convert(questionSetAnswer, QuestionSetAnswerDTO.class));
+        Logger.info("getByForm 5");
 
-		}
-		return questionSetAnswerDTOs;
-	}
+        Map<String, CodeListDTO> codeLists = new HashMap<>();
+        putNecessaryCodeLists(codeLists, questionSets, lang);
 
-	private List<UnitCategoryDTO> getAllUnitCategories() {
-		List<UnitCategoryDTO> res = new ArrayList<>();
-		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
-			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
-			for (Unit unit : unitCategory.getUnits()) {
-				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
-			}
-			res.add(unitCategoryDTO);
-		}
-		return res;
-	}
 
-	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
-	public Result save() {
-		Logger.info("save() 1");
-		Account currentUser = securedController.getCurrentUser();
-		Logger.info("save() 2");
-		AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
-		Logger.info("save() 3");
-		saveAnswsersDTO(currentUser, answersDTO);
-		Logger.info("save() 4");
+        Logger.info("getByForm 6");
 
-		SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
+        FormDTO formDTO = new FormDTO();
 
-		return ok(dto);
-	}
+        formDTO.setPeriodId(periodId);
+        formDTO.setScopeId(scopeId);
+        formDTO.setListAnswers(questionSetAnswerDTOs);
+        Logger.info("getByForm 7");
+        formDTO.setUnitCategories(getAllUnitCategories());
+        Logger.info("getByForm 8");
+        formDTO.setListAnswers(questionSetAnswerDTOs);
 
-	public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
-		List<QuestionSetAnswerDTO> listAnswers = answersDTO.getListAnswers();
+        formDTO.setCodeLists(codeLists);
+        Logger.info("getByForm 9");
+
+        return ok(formDTO);
+    }
+
+    private Map<String, CodeListDTO> putNecessaryCodeLists(Map<String, CodeListDTO> codeLists, List<QuestionSet> questionSets, LanguageCode lang) {
+        for (QuestionSet questionSet : questionSets) {
+            for (Question question : questionSet.getQuestions()) {
+                if (question instanceof ValueSelectionQuestion) {
+                    CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+                    String codeListName = codeList.name();
+                    if (!codeLists.containsKey(codeList)) {
+                        codeLists.put(codeListName, toCodeListDTO(codeList, lang));
+                    }
+                }
+            }
+            putNecessaryCodeLists(codeLists, questionSet.getChildren(), lang);
+        }
+        return codeLists;
+    }
+
+    private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
+        List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
+        CodeListDTO codeListDTO = new CodeListDTO(codeList.name());
+        for (CodeLabel codeLabel : codeLabels) {
+            codeListDTO.getCodeLabels().add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
+
+        }
+        return codeListDTO;
+    }
+
+    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
+        List<QuestionSetDTO> questionSetDTOs = new ArrayList<>();
+        for (QuestionSet questionSet : questionSets) {
+            questionSetDTOs.add(conversionService.convert(questionSet, QuestionSetDTO.class));
+        }
+        return questionSetDTOs;
+    }
+
+    private List<QuestionSetAnswerDTO> toQuestionSetAnswerDTOs(List<QuestionSetAnswer> questionSetAnswers) {
+        List<QuestionSetAnswerDTO> questionSetAnswerDTOs = new ArrayList<>();
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+            questionSetAnswerDTOs.add(conversionService.convert(questionSetAnswer, QuestionSetAnswerDTO.class));
+
+        }
+        return questionSetAnswerDTOs;
+    }
+
+    private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
+        Map<Long, UnitCategoryDTO> res = new HashMap<>();
+        for (UnitCategory unitCategory : unitCategoryService.findAll()) {
+            UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
+            for (Unit unit : unitCategory.getUnits()) {
+                unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
+            }
+            res.put(unitCategoryDTO.getId(), unitCategoryDTO);
+        }
+        return res;
+    }
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result save() {
+        Logger.info("save() 1");
+        Account currentUser = securedController.getCurrentUser();
+        Logger.info("save() 2");
+        AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
+        Logger.info("save() 3");
+        saveAnswsersDTO(currentUser, answersDTO);
+        Logger.info("save() 4");
+
+        SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
+
+        return ok(dto);
+    }
+
+    public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
+/*
+        List<QuestionSetAnswerDTO> listAnswers = answersDTO.getListAnswers();
 		for (QuestionSetAnswerDTO questionSetAnswerDTO : listAnswers) {
 			QuestionSetAnswer questionSetAnswer = questionSetAnswerService.findById(questionSetAnswerDTO.getId());
 			List<AnswerLine> answerLines = questionSetAnswerDTO.getQuestionAnswers();
@@ -220,93 +249,94 @@ public class AnswerController extends Controller {
 				questionAnswerService.saveOrUpdate(questionAnswer);
 			}
 		}
-	}
+		*/
+    }
 
-	private AnswerValue getAnswerValue(AnswerLine answerLine, QuestionAnswer questionAnswer) {
-		if (answerLine.getValue() == null) {
-			return null;
-		}
-		String rawAnswerValue = answerLine.getValue().toString();
-		AnswerValue answerValue = null;
+    private AnswerValue getAnswerValue(AnswerLine answerLine, QuestionAnswer questionAnswer) {
+        if (answerLine.getValue() == null) {
+            return null;
+        }
+        String rawAnswerValue = answerLine.getValue().toString();
+        AnswerValue answerValue = null;
 
-		Question question = questionAnswer.getQuestion();
-		switch (question.getAnswerType()) {
-		case BOOLEAN:
-			answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
-			break;
-		case STRING:
-			answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
-			break;
-		case INTEGER:
-			UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
-			Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-			answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
-			break;
-		case DOUBLE:
-			UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
-			Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
-			answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
-			break;
-		case VALUE_SELECTION:
-			CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-			answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
-			break;
-		case ENTITY_SELECTION:
-			String entityName = ((EntitySelectionQuestion) question).getEntityName();
-			answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
-			break;
-		}
+        Question question = questionAnswer.getQuestion();
+        switch (question.getAnswerType()) {
+            case BOOLEAN:
+                answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
+                break;
+            case STRING:
+                answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
+                break;
+            case INTEGER:
+                UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
+                Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
+                answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
+                break;
+            case DOUBLE:
+                UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
+                Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
+                answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
+                break;
+            case VALUE_SELECTION:
+                CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+                answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
+                break;
+            case ENTITY_SELECTION:
+                String entityName = ((EntitySelectionQuestion) question).getEntityName();
+                answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
+                break;
+        }
 
-		return answerValue;
-	}
+        return answerValue;
+    }
 
-	private Question getAndVerifyQuestion(AnswerLine answerLine) {
-		String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
-		if (questionKey == null) {
-			throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
-		}
-		Question question = questionService.findByCode(new QuestionCode(questionKey));
-		if (question == null) {
-			throw new RuntimeException("The question key [" + questionKey + "] is not valid.");
-		}
-		return question;
-	}
+    private Question getAndVerifyQuestion(AnswerLine answerLine) {
+        String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
+        if (questionKey == null) {
+            throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
+        }
+        Question question = questionService.findByCode(new QuestionCode(questionKey));
+        if (question == null) {
+            throw new RuntimeException("The question key [" + questionKey + "] is not valid.");
+        }
+        return question;
+    }
 
-	private Unit getAndVerifyUnit(AnswerLine answerLine, UnitCategory questionUnitCategory, String questionKey) {
-		Integer answerUnitId = answerLine.getUnitId();
+    private Unit getAndVerifyUnit(AnswerLine answerLine, UnitCategory questionUnitCategory, String questionKey) {
+        Integer answerUnitId = answerLine.getUnitId();
 
-		// no unit category linked to the question => return null, or throw an Exception if client provided a unit
-		if (questionUnitCategory == null) {
-			if (answerUnitId != null) {
-				// TODO this event should not throw a RuntimeException => to improve
-				throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitId));
-			} else {
-				return null;
-			}
-		}
+        // no unit category linked to the question => return null, or throw an Exception if client provided a unit
+        if (questionUnitCategory == null) {
+            if (answerUnitId != null) {
+                // TODO this event should not throw a RuntimeException => to improve
+                throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitId));
+            } else {
+                return null;
+            }
+        }
 
-		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
-		if (answerUnitId == null) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
-					questionUnitCategory.getName()));
-		}
-		Unit answerUnit = unitService.findById(answerUnitId.longValue());
+        // the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
+        if (answerUnitId == null) {
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey,
+                    questionUnitCategory.getName()));
+        }
+        Unit answerUnit = unitService.findById(answerUnitId.longValue());
 
-		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
-		UnitCategory answerUnitCategory = answerUnit.getCategory();
-		if (!questionUnitCategory.equals(answerUnitCategory)) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
-					questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
-		}
-		return answerUnit;
-	}
+        // check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
+        UnitCategory answerUnitCategory = answerUnit.getCategory();
+        if (!questionUnitCategory.equals(answerUnitCategory)) {
+            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey,
+                    questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
+        }
+        return answerUnit;
+    }
 
-	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
-	}
+    protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
+        T dto = DTO.getDTO(request().body().asJson(), DTOclass);
+        if (dto == null) {
+            throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
+        }
+        return dto;
+    }
 
 }

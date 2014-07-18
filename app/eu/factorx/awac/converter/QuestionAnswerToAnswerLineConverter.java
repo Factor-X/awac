@@ -63,8 +63,14 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 					entityAnswerValue.getEntityId());
 			break;
 		}
-		return new AnswerLine(questionAnswer.getId(), question.getCode().getKey(), rawAnswerValue, questionAnswer
-				.getQuestionSetAnswer().getRepetitionIndex(), unitId);
+
+        AnswerLine answerLine = new AnswerLine();
+        answerLine.setValue(rawAnswerValue);
+        answerLine.setQuestionKey(questionAnswer.getQuestion().getCode().getKey());
+        answerLine.setUnitId(unitId);
+
+
+		return answerLine;
 	}
 
 }
