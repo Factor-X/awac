@@ -18,7 +18,6 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetAnswerDTO;
 import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
 import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
@@ -124,7 +123,7 @@ public class AnswerController extends Controller {
 
         List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope,
                 period, form);
-        List<QuestionSetAnswerDTO> questionSetAnswerDTOs = toQuestionSetAnswerDTOs(questionSetAnswers);
+        //TODO List<QuestionSetAnswerDTO> questionSetAnswerDTOs = toQuestionSetAnswerDTOs(questionSetAnswers);
 
         Logger.info("getByForm 5");
 
@@ -138,11 +137,11 @@ public class AnswerController extends Controller {
 
         formDTO.setPeriodId(periodId);
         formDTO.setScopeId(scopeId);
-        formDTO.setListAnswers(questionSetAnswerDTOs);
+        //TODO  formDTO.setListAnswers(questionSetAnswerDTOs);
         Logger.info("getByForm 7");
         formDTO.setUnitCategories(getAllUnitCategories());
         Logger.info("getByForm 8");
-        formDTO.setListAnswers(questionSetAnswerDTOs);
+        //TODO formDTO.setListAnswers(questionSetAnswerDTOs);
 
         formDTO.setCodeLists(codeLists);
         Logger.info("getByForm 9");
@@ -183,7 +182,7 @@ public class AnswerController extends Controller {
         }
         return questionSetDTOs;
     }
-
+/*TODO
     private List<QuestionSetAnswerDTO> toQuestionSetAnswerDTOs(List<QuestionSetAnswer> questionSetAnswers) {
         List<QuestionSetAnswerDTO> questionSetAnswerDTOs = new ArrayList<>();
         for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
@@ -192,7 +191,7 @@ public class AnswerController extends Controller {
         }
         return questionSetAnswerDTOs;
     }
-
+*/
     private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
         Map<Long, UnitCategoryDTO> res = new HashMap<>();
         for (UnitCategory unitCategory : unitCategoryService.findAll()) {

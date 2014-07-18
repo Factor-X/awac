@@ -1,5 +1,5 @@
 div
-    div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    div(ng-bind-html="getObject().code + '_TITLE' | translate")
 
     div(ng-repeat="v in getAnswerByQuestionCode(getQuestionsToAdd())")
         ng-virtual(ng-transclude=true)

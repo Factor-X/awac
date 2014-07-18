@@ -3,9 +3,8 @@ angular
 .directive "mmAwacRepetitionQuestion", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
-        ngQuestionCode: '='
         ngObject: '='
-        ngQuestionsToAdd: '='
+        ngMapRepetition: '='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true

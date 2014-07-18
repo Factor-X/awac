@@ -17,8 +17,8 @@ public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionS
 
 	@Override
 	public QuestionSetDTO convert(QuestionSet questionSet) {
-		QuestionSetDTO questionSetDTO = new QuestionSetDTO(questionSet.getCode().getKey(),
-				questionSet.getRepetitionAllowed());
+		QuestionSetDTO questionSetDTO = new QuestionSetDTO();/* TODO questionSet.getCode().getKey(),
+				questionSet.getRepetitionAllowed());*/
 		for (Question question : questionSet.getQuestions()) {
 			questionSetDTO.getQuestions().add(convertQuestion(question));
 		}
