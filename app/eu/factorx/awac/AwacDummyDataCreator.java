@@ -94,58 +94,58 @@ public class AwacDummyDataCreator {
         // -- QUESTION_SETS
         QuestionSet a1 = new QuestionSet(QuestionCode.A1, false);
         session.saveOrUpdate(a1);
-        tab1Form.getQuestionSet().add(a1);
+        tab1Form.getQuestionSets().add(a1);
         session.saveOrUpdate(tab1Form);
 
 
         QuestionSet a13 = new QuestionSet(QuestionCode.A13, false);
         session.saveOrUpdate(a13);
-        tab2Form.getQuestionSet().add(a13);
+        tab2Form.getQuestionSets().add(a13);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a15 = new QuestionSet(QuestionCode.A15, true);
         session.saveOrUpdate(a15);
-        tab2Form.getQuestionSet().add(a15);
+        tab2Form.getQuestionSets().add(a15);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a20 = new QuestionSet(QuestionCode.A20, false);
         session.saveOrUpdate(a20);
-        tab2Form.getQuestionSet().add(a20);
+        tab2Form.getQuestionSets().add(a20);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a22 = new QuestionSet(QuestionCode.A22, false);
         session.saveOrUpdate(a22);
-        tab2Form.getQuestionSet().add(a22);
+        tab2Form.getQuestionSets().add(a22);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a25 = new QuestionSet(QuestionCode.A25, false);
         session.saveOrUpdate(a25);
-        tab2Form.getQuestionSet().add(a25);
+        tab2Form.getQuestionSets().add(a25);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a31 = new QuestionSet(QuestionCode.A31, false);
         session.saveOrUpdate(a31);
-        tab2Form.getQuestionSet().add(a31);
+        tab2Form.getQuestionSets().add(a31);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a41 = new QuestionSet(QuestionCode.A41, false);
         session.saveOrUpdate(a41);
-        tab2Form.getQuestionSet().add(a41);
+        tab2Form.getQuestionSets().add(a41);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a42 = new QuestionSet(QuestionCode.A42, false);
         session.saveOrUpdate(a42);
-        tab2Form.getQuestionSet().add(a42);
+        tab2Form.getQuestionSets().add(a42);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a45 = new QuestionSet(QuestionCode.A45, false);
         session.saveOrUpdate(a45);
-        tab2Form.getQuestionSet().add(a45);
+        tab2Form.getQuestionSets().add(a45);
         session.saveOrUpdate(tab2Form);
 
         QuestionSet a47 = new QuestionSet(QuestionCode.A47, false);
         session.saveOrUpdate(a47);
-        tab2Form.getQuestionSet().add(a47);
+        tab2Form.getQuestionSets().add(a47);
         session.saveOrUpdate(tab2Form);
         
         
@@ -213,46 +213,38 @@ public class AwacDummyDataCreator {
  
         // -- Question sets
         
-        // entrepôts de stockage
+        // Question Set "entrepôts de stockage"
         QuestionSet a164 = new QuestionSet(QuestionCode.A164, true, null);
         session.saveOrUpdate(a164);
-        tab4Form.getQuestionSet().add(a164);
+        tab4Form.getQuestionSets().add(a164);
         session.saveOrUpdate(tab4Form);
 
-        // combustibles (pour chaque entrepôt)
+        // -- Question "nom"
+        Question a165 = new StringQuestion(a164, 0, QuestionCode.A165);
+        session.saveOrUpdate(a165);
+        
+        // -- Question Set "combustibles"
         QuestionSet a166 = new QuestionSet(QuestionCode.A166, true, a164);
         session.saveOrUpdate(a166);
-        tab4Form.getQuestionSet().add(a166);
-        session.saveOrUpdate(tab4Form);
+        // -- -- Question "type"
+        Question a167 = new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.FUEL);
+        session.saveOrUpdate(a167);
+        // -- -- Question "quantité"
+        Question a168 = new DoubleQuestion(a166, 1, QuestionCode.A168, energyUnits);
+        session.saveOrUpdate(a168);
 
-        // gaz réfrigérants (pour chaque entrepôt)
+        // -- Question "électricité"
+        Question a169 = new DoubleQuestion(a164, 1, QuestionCode.A169, energyUnits);
+        session.saveOrUpdate(a169);
+
+        // -- Question Set "gaz réfrigérants"
         QuestionSet a170 = new QuestionSet(QuestionCode.A170, true, a164);
         session.saveOrUpdate(a170);
-        tab4Form.getQuestionSet().add(a170);
-        session.saveOrUpdate(tab4Form);
-
-        // -- Questions
-        
-        // entrepôts de stockage : nom
-        Question a165 = new StringQuestion(a164, 0, QuestionCode.A165);
-        
-        // combustibles : type
-        Question a167 = new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.FUEL);
-        // combustibles : quantité (énergie)
-        Question a168 = new DoubleQuestion(a166, 1, QuestionCode.A168, energyUnits);
-        // combustibles : électricité (énergie)
-        Question a169 = new DoubleQuestion(a166, 2, QuestionCode.A169, energyUnits);
-
-        // gaz réfrigérants : type
+        // -- -- Question "type"
         Question a171 = new ValueSelectionQuestion(a170, 0, QuestionCode.A171, CodeList.REFRIGERANT_GAS);
-        // gaz réfrigérants : quantité (masse)
-        Question a172 = new DoubleQuestion(a170, 1, QuestionCode.A172, massUnits);
-
-        session.saveOrUpdate(a165);
-        session.saveOrUpdate(a167);
-        session.saveOrUpdate(a168);
-        session.saveOrUpdate(a169);
         session.saveOrUpdate(a171);
+        // -- -- Question "quantité"
+        Question a172 = new DoubleQuestion(a170, 1, QuestionCode.A172, massUnits);
         session.saveOrUpdate(a172);
 
         // -- Answers

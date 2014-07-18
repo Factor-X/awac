@@ -30,7 +30,7 @@ public class Form extends AbstractEntity {
 
 	@ManyToMany
 	@JoinTable(name = "mm_form_questionset")
-	private List<QuestionSet> questionSet = new ArrayList<>();
+	private List<QuestionSet> questionSets = new ArrayList<>();
 
 	public Form() {
 	}
@@ -56,12 +56,12 @@ public class Form extends AbstractEntity {
 		this.progress = progress;
 	}
 
-	public List<QuestionSet> getQuestionSet() {
-		return questionSet;
+	public List<QuestionSet> getQuestionSets() {
+		return questionSets;
 	}
 
-	public void setQuestionSet(List<QuestionSet> questionSet) {
-		this.questionSet = questionSet;
+	public void setQuestionSets(List<QuestionSet> questionSet) {
+		this.questionSets = questionSet;
 	}
 
 }

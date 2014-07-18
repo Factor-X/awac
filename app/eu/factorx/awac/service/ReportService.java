@@ -6,6 +6,6 @@ import eu.factorx.awac.models.reporting.Report;
 
 public interface ReportService {
 
-	Report getReport(Scope scope, Period period);
+//	Report getReport(Scope scope, Period period);
 
 }

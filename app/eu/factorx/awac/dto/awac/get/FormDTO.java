@@ -7,11 +7,11 @@ import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
 
 public class FormDTO extends DTO {
 
-	private List<QuestionDTO> questions;
+	private List<QuestionSetDTO> questionSets;
 
 	private List<UnitCategoryDTO> unitCategories;
 
-    private List<CodeListDTO> codeLists;
+	private List<CodeListDTO> codeLists;
 
 	private AnswersSaveDTO answersSaveDTO;
 
@@ -19,19 +19,27 @@ public class FormDTO extends DTO {
 		super();
 	}
 
-    public FormDTO(List<QuestionDTO> questions, List<UnitCategoryDTO> unitCategories, List<CodeListDTO> codeLists, AnswersSaveDTO answersSaveDTO) {
-        this.questions = questions;
-        this.unitCategories = unitCategories;
-        this.codeLists = codeLists;
-        this.answersSaveDTO = answersSaveDTO;
-    }
-
-    public List<QuestionDTO> getQuestions() {
-		return questions;
+	/**
+	 * @param questionSets
+	 * @param unitCategories
+	 * @param codeLists
+	 * @param answersSaveDTO
+	 */
+	public FormDTO(List<QuestionSetDTO> questionSets, List<UnitCategoryDTO> unitCategories,
+			List<CodeListDTO> codeLists, AnswersSaveDTO answersSaveDTO) {
+		super();
+		this.questionSets = questionSets;
+		this.unitCategories = unitCategories;
+		this.codeLists = codeLists;
+		this.answersSaveDTO = answersSaveDTO;
 	}
 
-	public void setQuestions(List<QuestionDTO> questions) {
-		this.questions = questions;
+	public List<QuestionSetDTO> getQuestionSets() {
+		return questionSets;
+	}
+
+	public void setQuestionSets(List<QuestionSetDTO> questionSets) {
+		this.questionSets = questionSets;
 	}
 
 	public List<UnitCategoryDTO> getUnitCategories() {
@@ -42,6 +50,14 @@ public class FormDTO extends DTO {
 		this.unitCategories = unitCategories;
 	}
 
+	public List<CodeListDTO> getCodeLists() {
+		return codeLists;
+	}
+
+	public void setCodeLists(List<CodeListDTO> codeLists) {
+		this.codeLists = codeLists;
+	}
+
 	public AnswersSaveDTO getAnswersSaveDTO() {
 		return answersSaveDTO;
 	}
@@ -50,11 +66,4 @@ public class FormDTO extends DTO {
 		this.answersSaveDTO = answersSaveDTO;
 	}
 
-    public List<CodeListDTO> getCodeLists() {
-        return codeLists;
-    }
-
-    public void setCodeLists(List<CodeListDTO> codeLists) {
-        this.codeLists = codeLists;
-    }
 }

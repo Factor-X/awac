@@ -19,7 +19,7 @@ import eu.factorx.awac.models.knowledge.Period;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.parent is null"),
-		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet.code = :questionSetCode"), })
+		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"), })
 public class QuestionSetAnswer extends AbstractEntity {
 
 	/**
@@ -38,9 +38,9 @@ public class QuestionSetAnswer extends AbstractEntity {
 	/**
 	 * @param scope : a {@link Scope}
 	 * @param period : a {@link Period}
-	 * @param questionSetCode : a {@link QuestionCode}
+	 * @param questionSets: a Collection of {@link QuestionSet}
 	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET = "QuestionAnswer.findByScopeAndPeriodAndQuestionSet";
+	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndPeriodAndQuestionSets";
 
 	private static final long serialVersionUID = 1L;
 
