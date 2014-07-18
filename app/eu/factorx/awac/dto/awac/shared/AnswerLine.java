@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
+import java.util.Map;
+
 public class AnswerLine extends DTO {
 
 	@NotNull
@@ -16,43 +18,48 @@ public class AnswerLine extends DTO {
 
 	private Integer unitId;
 
-	public AnswerLine() {
-	}
-
-	public AnswerLine(String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
-		this.questionKey = questionKey;
-		this.value = value;
-		this.unitId = unitId;
-	}
+    private Map<String,Integer> mapRepetition;
 
 
-	public Object getValue() {
-		return value;
-	}
+    public AnswerLine() {
+    }
 
-	public void setValue(Object value) {
-		this.value = value;
-	}
+    public AnswerLine(String questionKey, Object value, Integer unitId, Map<String, Integer> mapRepetition) {
+        this.questionKey = questionKey;
+        this.value = value;
+        this.unitId = unitId;
+        this.mapRepetition = mapRepetition;
+    }
 
-	public String getQuestionKey() {
-		return questionKey;
-	}
+    public String getQuestionKey() {
+        return questionKey;
+    }
 
-	public void setQuestionKey(String questionKey) {
-		this.questionKey = questionKey;
-	}
+    public void setQuestionKey(String questionKey) {
+        this.questionKey = questionKey;
+    }
 
-	public Integer getUnitId() {
-		return unitId;
-	}
+    public Object getValue() {
+        return value;
+    }
 
-	public void setUnitId(Integer unitId) {
-		this.unitId = unitId;
-	}
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("questionKey", questionKey)
-				.append("value", value).append("unitId", unitId).toString();
-	}
+    public Integer getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(Integer unitId) {
+        this.unitId = unitId;
+    }
+
+    public Map<String, Integer> getMapRepetition() {
+        return mapRepetition;
+    }
+
+    public void setMapRepetition(Map<String, Integer> mapRepetition) {
+        this.mapRepetition = mapRepetition;
+    }
 }

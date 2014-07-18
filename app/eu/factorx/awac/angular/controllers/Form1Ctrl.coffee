@@ -19,12 +19,22 @@ angular
             mapRepetition[questionSetAnswerDTO.questionSetCode] =questionSetAnswerDTO.repetitionIndex
 
           #create question
-          for q in questionSetAnswerDTO.questions
+          for qAnswer in questionSetAnswerDTO
             $scope.answerList[$scope.answerList.length] = {
-              'questionKey' : q.questionKey
-              'value' : q.value
-              'unitId' : q.unitId
+              #load the questionKey from qAnswer.questionDTO
+              'questionKey' : qAnswer.questionDTO.code
+              #load the questionKey from qAnswer.questionDTO
+              'unitCategoryId':qAnswer.questionDTO.unitCategoryId
+              #load the questionKey from qAnswer.questionDTO
+              'codeListName':qAnswer.questionDTO.codeListName
+              #use the builded mapRepetition
               'mapRepetition' : mapRepetition
+
+
+              #load the questionKey from qAnswer.questionDTO
+              'value' : qAnswer.answerLine.value
+              #load the unitId already selected from the answerLine
+              'unitId' : qAnswer.answerLine.unitId
             }
 
           #loop in the children

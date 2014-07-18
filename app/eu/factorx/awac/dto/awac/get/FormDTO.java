@@ -4,98 +4,101 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
+import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class FormDTO extends DTO {
 
-	@NotNull
+    @NotNull
     /**
      * define the scopeId
      */
-	private Long scopeId;
+    private Long scopeId;
 
-	@NotNull
+    @NotNull
     /**
      * define the period
      */
-	private Long periodId;
+    private Long periodId;
 
-	/**
-	 * K: unitCategoryId
-	 */
-	private Map<Long, UnitCategoryDTO> unitCategories;
+    /**
+     * K: unitCategoryId
+     */
+    private Map<Long, UnitCategoryDTO> unitCategories;
 
-	/**
-	 * K: codeListName
-	 */
-	private Map<String, CodeListDTO> codeLists;
+    /**
+     * K: codeListName
+     */
+    private Map<String, CodeListDTO> codeLists;
 
-	@NotNull
+    @NotNull
     /**
      * contains list of questionAnswerDTO
      * each DTO contains all the structure of the QuestionSetAnswer, with value the response
      */
-	private List<QuestionSetAnswerDTO> listAnswers;
+    private List<QuestionSetDTO> listAnswers;
 
-	public FormDTO() {
-		super();
-	}
+    private AnswersSaveDTO answersSave;
 
-	/**
-	 * @param scopeId
-	 * @param periodId
-	 * @param unitCategories
-	 * @param codeLists
-	 * @param listAnswers
-	 */
-	public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories,
-			Map<String, CodeListDTO> codeLists, List<QuestionSetAnswerDTO> listAnswers) {
-		super();
-		this.scopeId = scopeId;
-		this.periodId = periodId;
-		this.unitCategories = unitCategories;
-		this.codeLists = codeLists;
-		this.listAnswers = listAnswers;
-	}
 
-	public Long getScopeId() {
-		return scopeId;
-	}
+    public FormDTO() {
+    }
 
-	public void setScopeId(Long scopeId) {
-		this.scopeId = scopeId;
-	}
+    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> listAnswers, AnswersSaveDTO answersSave) {
+        this.scopeId = scopeId;
+        this.periodId = periodId;
+        this.unitCategories = unitCategories;
+        this.codeLists = codeLists;
+        this.listAnswers = listAnswers;
+        this.answersSave = answersSave;
+    }
 
-	public Long getPeriodId() {
-		return periodId;
-	}
+    public Long getScopeId() {
+        return scopeId;
+    }
 
-	public void setPeriodId(Long periodId) {
-		this.periodId = periodId;
-	}
+    public void setScopeId(Long scopeId) {
+        this.scopeId = scopeId;
+    }
 
-	public Map<Long, UnitCategoryDTO> getUnitCategories() {
-		return unitCategories;
-	}
+    public Long getPeriodId() {
+        return periodId;
+    }
 
-	public void setUnitCategories(Map<Long, UnitCategoryDTO> unitCategories) {
-		this.unitCategories = unitCategories;
-	}
+    public void setPeriodId(Long periodId) {
+        this.periodId = periodId;
+    }
 
-	public Map<String, CodeListDTO> getCodeLists() {
-		return codeLists;
-	}
+    public Map<Long, UnitCategoryDTO> getUnitCategories() {
+        return unitCategories;
+    }
 
-	public void setCodeLists(Map<String, CodeListDTO> codeLists) {
-		this.codeLists = codeLists;
-	}
+    public void setUnitCategories(Map<Long, UnitCategoryDTO> unitCategories) {
+        this.unitCategories = unitCategories;
+    }
 
-	public List<QuestionSetAnswerDTO> getListAnswers() {
-		return listAnswers;
-	}
+    public Map<String, CodeListDTO> getCodeLists() {
+        return codeLists;
+    }
 
-	public void setListAnswers(List<QuestionSetAnswerDTO> listAnswers) {
-		this.listAnswers = listAnswers;
-	}
+    public void setCodeLists(Map<String, CodeListDTO> codeLists) {
+        this.codeLists = codeLists;
+    }
 
+    public List<QuestionSetDTO> getListAnswers() {
+        return listAnswers;
+    }
+
+    public void setListAnswers(List<QuestionSetDTO> listAnswers) {
+        this.listAnswers = listAnswers;
+    }
+
+    public AnswersSaveDTO getAnswersSave() {
+        return answersSave;
+    }
+
+    public void setAnswersSave(AnswersSaveDTO answersSave) {
+        this.answersSave = answersSave;
+    }
 }

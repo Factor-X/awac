@@ -1,7 +1,7 @@
 div
-    div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    div(ng-bind-html="getObject().questionvCode + '_TITLE' | translate")
     .twoelement
         .status.answer
-        input(type="text", ng-model="getAnswerByQuestionCode(getQuestionCode()).value")
-        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode(getQuestionCode())", ng-model="getAnswerByQuestionCode(getQuestionCode()).unitId")
+        input(type="text", ng-model="getObject().value")
+        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode(getQuestionCode())", ng-model="getObject().")
         .user_icon XM
