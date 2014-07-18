@@ -8,6 +8,7 @@ import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 
@@ -24,12 +25,12 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 	}
 
 	@Override
-	public List<QuestionSetAnswer> findByScopeAndPeriodAndQuestionSet(Scope scope, Period period,
-			QuestionCode questionSetCode) {
-		List<QuestionSetAnswer> resultList = JPA.em()
-				.createNamedQuery(QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SET, QuestionSetAnswer.class)
+	public List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form) {
+		List<QuestionSetAnswer> resultList = JPA
+				.em()
+				.createNamedQuery(QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, QuestionSetAnswer.class)
 				.setParameter("scope", scope).setParameter("period", period)
-				.setParameter("questionSetCode", questionSetCode).getResultList();
+				.setParameter("questionSets", form.getQuestionSets()).getResultList();
 		return resultList;
 	}
 

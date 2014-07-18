@@ -1,52 +1,61 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.models.data.answer.AnswerType;
 
 public class QuestionDTO extends DTO {
 
-    public String questionKey;
+	private String code;
 
-    public Long unitCategoryId;
+	private AnswerType answerType;	
+	
+	// if AnswerType = VALUE_SELECTION
+	private String codeListName;
+	
+	// if AnswerType = INTEGER or DOUBLE
+	private Long unitCategoryId;
 
-    public String codeListName;
+	public QuestionDTO() {
+		super();
+	}
 
-    protected QuestionDTO() {
-        super();
-    }
+	public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId) {
+		super();
+		this.code = code;
+		this.answerType = answerType;
+		this.codeListName = codeListName;
+		this.unitCategoryId = unitCategoryId;
+	}
 
-    public QuestionDTO(String questionKey, Long unitCategoryId) {
-        super();
-        this.questionKey = questionKey;
-        this.unitCategoryId = unitCategoryId;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public QuestionDTO(String questionKey, String codeListName) {
-        super();
-        this.questionKey = questionKey;
-        this.codeListName = codeListName;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public String getQuestionKey() {
-        return questionKey;
-    }
+	public AnswerType getAnswerType() {
+		return answerType;
+	}
 
-    public void setQuestionKey(String questionKey) {
-        this.questionKey = questionKey;
-    }
+	public void setAnswerType(AnswerType answerType) {
+		this.answerType = answerType;
+	}
 
-    public Long getUnitCategoryId() {
-        return unitCategoryId;
-    }
+	public String getCodeListName() {
+		return codeListName;
+	}
 
-    public void setUnitCategoryId(Long unitCategoryId) {
-        this.unitCategoryId = unitCategoryId;
-    }
+	public void setCodeListName(String codeListName) {
+		this.codeListName = codeListName;
+	}
 
-    public String getCodeListName() {
-        return codeListName;
-    }
+	public Long getUnitCategoryId() {
+		return unitCategoryId;
+	}
 
-    public void setCodeListName(String codeListName) {
-        this.codeListName = codeListName;
-    }
+	public void setUnitCategoryId(Long unitCategoryId) {
+		this.unitCategoryId = unitCategoryId;
+	}	
 }

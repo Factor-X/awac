@@ -5,16 +5,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class BaseActivityDataCode extends Code {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected BaseActivityDataCode() {
-		super(CodeList.BASE_ACTIVITY_DATA);
-	}
+    protected BaseActivityDataCode() {
+        super(CodeList.BASE_ACTIVITY_DATA);
+    }
 
-	public BaseActivityDataCode(String key) {
-		this();
-		this.key = key;
-	}
+    public BaseActivityDataCode(String key) {
+        this();
+        this.key = key;
+    }
 
     public static final BaseActivityDataCode AE_BAD1 = new BaseActivityDataCode("2");
     public static final BaseActivityDataCode AE_BAD2A = new BaseActivityDataCode("3");

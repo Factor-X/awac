@@ -39,7 +39,7 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 	@Override
 	public List<Question> findByForm(Form form) {
 		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_QUESTION_SETS, Question.class)
-				.setParameter("questionSets", form.getQuestionSet()).getResultList();
+				.setParameter("questionSets", form.getQuestionSets()).getResultList();
 		return resultList;
 	}
 

@@ -34,9 +34,12 @@ public class QuestionSet extends AbstractEntity {
 	@ManyToOne
 	private QuestionSet parent;
 	
-	@OneToMany(mappedBy = "questionSet", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "questionSet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<QuestionSet> children = new ArrayList<>();
+
 	protected QuestionSet() {
 		super();
 	}
@@ -78,6 +81,14 @@ public class QuestionSet extends AbstractEntity {
 		this.parent = parent;
 	}
 
+	public List<QuestionSet> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<QuestionSet> children) {
+		this.children = children;
+	}
+
 	public List<Question> getQuestions() {
 		return questions;
 	}
@@ -90,4 +101,7 @@ public class QuestionSet extends AbstractEntity {
 		return this.questions.add(question);
 	}
 
+	public boolean addChild(QuestionSet questionSet) {
+		return this.getChildren().add(questionSet);
+	}
 }
