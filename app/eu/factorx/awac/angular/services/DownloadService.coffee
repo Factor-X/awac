@@ -23,7 +23,7 @@ angular
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
             callback null, status, headers, config
-            console.log "error when loading to " + property
+            console.log "error when loading from " + url
             return
 
         promise

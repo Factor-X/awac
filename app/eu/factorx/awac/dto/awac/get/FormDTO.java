@@ -9,9 +9,15 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 public class FormDTO extends DTO {
 
 	@NotNull
+    /**
+     * define the scopeId
+     */
 	private Long scopeId;
 
 	@NotNull
+    /**
+     * define the period
+     */
 	private Long periodId;
 
 	/**
@@ -25,6 +31,10 @@ public class FormDTO extends DTO {
 	private Map<String, CodeListDTO> codeLists;
 
 	@NotNull
+    /**
+     * contains list of questionAnswerDTO
+     * each DTO contains all the structure of the QuestionSetAnswer, with value the response
+     */
 	private List<QuestionSetAnswerDTO> listAnswers;
 
 	public FormDTO() {
