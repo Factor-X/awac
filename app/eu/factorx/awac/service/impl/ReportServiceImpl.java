@@ -417,9 +417,7 @@ public class ReportServiceImpl implements ReportService {
         return res;
     }
 
-    /**
-     * CHECK XM
-     */
+    // CHECK XM
     private List<BaseActivityData> getBaseActivityDataAE_BAD40(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
@@ -493,11 +491,10 @@ public class ReportServiceImpl implements ReportService {
             QuestionAnswer questionA48Answer = answersByCode.get(QuestionCode.A48);
             QuestionAnswer questionA49Answer = answersByCode.get(QuestionCode.A49);
 
-            if (questionA48Answer == null ||
-                    questionA49Answer == null) {
+            if (questionA48Answer == null) {
                 continue;
             }
-            if ((getValueBoolean(questionA48Answer) == true) && (questionA49Answer == null)) {
+            if (getValueBoolean(questionA48Answer) && questionA49Answer == null) {
                 continue;
             }
 
@@ -512,10 +509,10 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.PUISSANCE_DES_BLOCS_FRIGO);
             baseActivityData.setActivitySource(ActivitySourceCode.GENERIQUE);
             baseActivityData.setActivityOwnership(true);
-            if (getValueBoolean(questionA48Answer) == false) {
+            if (!getValueBoolean(questionA48Answer)) {
                 baseActivityData.setValue(0.0);
             } else {
-                baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * ElecConsumption / getValue(questionA49Answer, unitService.findBySymbol("h")));
+                baseActivityData.setValue(getValue(questionA48Answer, baseActivityDataUnit) * elecConsumption / getValue(questionA49Answer, unitService.findBySymbol("h")));
             }
             res.add(baseActivityData);
         }
@@ -903,8 +900,8 @@ public class ReportServiceImpl implements ReportService {
                     questionA76Answer == null ||
                     questionA72Answer == null ||
                     (questionA73Answer == null &&
-                    questionA74Answer == null &&
-                    questionA75Answer == null) ||
+                     questionA74Answer == null &&
+                     questionA75Answer == null) ||
                     questionA69Answer == null) {
                 continue;
             }
@@ -965,9 +962,9 @@ public class ReportServiceImpl implements ReportService {
                             questionA81Answer == null) ||
                     questionA88Answer == null ||
                     (questionA89Answer == null &&
-                    questionA90Answer == null &&
-                    questionA91Answer == null &&
-                    questionA92Answer == null) ||
+                            questionA90Answer == null &&
+                            questionA91Answer == null &&
+                            questionA92Answer == null) ||
                     questionA83Answer == null) {
                 continue;
             }
@@ -1555,16 +1552,16 @@ public class ReportServiceImpl implements ReportService {
 
         // Get Target Unit (employé in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.employé)
-        Unit baseActivityDataUnit = unitService.findBySymbol("employé");
+        Unit baseActivityDataUnit = unitService.findBySymbol("employe");
 
         // Get reference Number of Employees
         // TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
         QuestionSetAnswer questionSet12Answer = allQuestionSetAnswers.get(QuestionCode.A12).get(0);
         Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet12Answer.getQuestionAnswers());
-        QuestionAnswer question12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+        QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
 
-        if questionA12Answer == null {
+        if (questionA12Answer == null) {
             return res;
         }
 
@@ -1593,28 +1590,35 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DDT);
             baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
             // TODO: utiliser codes pour assigner la source
-            if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+            /*if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
+                if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus en agglo");
-                    else
+                    } else {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus hors agglo");
-                else
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                    }
+                } else {
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus en agglo");
-                    else
+                    } else {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus hors agglo");
-            else
-                if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                    }
+                }
+            } else {
+                if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus en agglo");
-                    else
+                    } else {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus hors agglo");
-                else
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                    }
+                } else {
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus en agglo");
-                    else
+                    } else {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus hors agglo");
+                    }
+                }
+            }*/
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA12Answer, baseActivityDataUnit));
 
@@ -1679,14 +1683,16 @@ public class ReportServiceImpl implements ReportService {
         // Get Target Unit (km.passager in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
         Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
+        Unit kmUnit = unitService.findBySymbol("km");
+        Unit employesUnit = unitService.findBySymbol("employes");
 
         // Get reference Number of Employees
         // TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
         QuestionSetAnswer questionSet12Answer = allQuestionSetAnswers.get(QuestionCode.A12).get(0);
         Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet12Answer.getQuestionAnswers());
-        QuestionAnswer question12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+        QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
-        if questionA12Answer == null {
+        if (questionA12Answer == null) {
             return res;
         }
 
@@ -1707,21 +1713,21 @@ public class ReportServiceImpl implements ReportService {
                     questionA123Answer == null ||
                     (getValueBoolean(questionA123Answer) && questionA127Answer == null) ||
                     (!getValueBoolean(questionA123Answer) && questionA124Answer == null) ||
-                    (!getValueBoolean(questionA123Answer) && questionA125Answer == null && questionA126Answer == null) {
+                    (!getValueBoolean(questionA123Answer) && questionA125Answer == null && questionA126Answer == null)) {
                 continue;
             }
 
             // intermediate variables to estimate flights
             Double travelDistance;
             // TODO: flight codes in variable
-            FlightCode flightType;
-            if getValueBoolean(questionA123Answer) {
-                travelDistance = getValue(questionA127Answer,"km");
+           /* FlightCode flightType;
+            if (getValueBoolean(questionA123Answer)) {
+                travelDistance = getValue(questionA127Answer, kmUnit);
                 // TODO code de vol
                 FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
             } else {
                 //TODO code destination
-                if getCode(questionA124Answer,code) ==  Europe {
+                if (getCode(questionA124Answer, code) == Europe) {
                     travelDistance = 2500.0;
                     // TODO code de vol
                     FlightCode = "Vols europe (<4000km A/R)";
@@ -1733,8 +1739,8 @@ public class ReportServiceImpl implements ReportService {
             }
 
             // TODO: comment déclarer que A122 est un %, i.e. sans unité?
-            travelDistance *= getValue(questionA12Answer,"employés") * getValue(questionA122Answer);
-
+            travelDistance *= getValue(questionA12Answer, employesUnit) * getValue(questionA122Answer);
+*/
             BaseActivityData baseActivityData = new BaseActivityData();
 
             baseActivityData.setKey(BaseActivityDataCode.AE_BAD15);
@@ -1743,9 +1749,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.MOBILITE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DPRO);
             baseActivityData.setActivityType(ActivityTypeCode.AVION_SANS_CLASSE);
-            baseActivityData.setActivitySource(ActivitySourceCode.flightType);
+            //TODO baseActivityData.setActivitySource(ActivitySourceCode.flightType);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(travelDistance);
+            //TODO baseActivityData.setValue(travelDistance);
 
             res.add(baseActivityData);
         }
@@ -1893,9 +1899,9 @@ public class ReportServiceImpl implements ReportService {
             if (questionA136Answer == null ||
                     (questionA136Answer == null && (
                             questionA137Answer == null ||
-                            questionA138Answer == null ||
+                                    questionA138Answer == null ||
                                     (questionA139Answer == null &&
-                                        questionA500Answer == null)))) {
+                                            questionA500Answer == null)))) {
                 continue;
             }
 
@@ -2349,26 +2355,28 @@ public class ReportServiceImpl implements ReportService {
             if (questionA158Answer == null ||
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
-                        questionA161Answer == null &&
-                        questionA162Answer == null) {
+                            questionA161Answer == null &&
+                            questionA162Answer == null)) {
                 continue;
             }
 
             Double belgianTruckRatio = 0.854;
             Double internationalTruckRatio = 0.287;
-            Double belgianDistance;
-            Double internationalDistance;
+            Double belgianDistance = 0.0;
+            Double internationalDistance = 0.0;
             // TODO: codes
-            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+            /*
+            if (getCode(questionA159Answer, CODE) == CODE("Belgique")) {
                 belgianDistance = 200.0;
                 internationalDistance = 0.0;
-            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+            } else if (getCode(questionA159Answer, CODE) == CODE("Europe")) {
                 belgianDistance = 0.0;
                 internationalDistance = 2500.0;
             } else {
                 belgianDistance = 0.0;
                 internationalDistance = 5000.0;
             }
+            */
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -2380,7 +2388,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(belgianTruckRatio*belgianDistance*getValue(questionA158Answer, baseActivityDataUnit)/11.4/0.4426*24.98/100);
+            baseActivityData.setValue(belgianTruckRatio * belgianDistance * getValue(questionA158Answer, baseActivityDataUnit) / 11.4 / 0.4426 * 24.98 / 100);
 
             res.add(baseActivityData);
         }
@@ -2411,26 +2419,28 @@ public class ReportServiceImpl implements ReportService {
             if (questionA158Answer == null ||
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
-                            questionA161Answer == null &&
-                            questionA162Answer == null) {
+                     questionA161Answer == null &&
+                     questionA162Answer == null)) {
                 continue;
             }
 
             Double belgianTruckRatio = 0.854;
             Double internationalTruckRatio = 0.287;
-            Double belgianDistance;
-            Double internationalDistance;
+            Double belgianDistance=0.0;
+            Double internationalDistance=0.0;
             // TODO: codes
-            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+            /*
+            if (getCode(questionA159Answer, CODE) == CODE("Belgique")) {
                 belgianDistance = 200.0;
                 internationalDistance = 0.0;
-            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+            } else if (getCode(questionA159Answer, CODE) == CODE("Europe")) {
                 belgianDistance = 0.0;
                 internationalDistance = 2500.0;
             } else {
                 belgianDistance = 0.0;
                 internationalDistance = 5000.0;
             }
+            */
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
@@ -2443,7 +2453,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
             baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
             baseActivityData.setActivityOwnership(false);
-            baseActivityData.setValue(internationalTruckRatio*internationalDistance*getValue(questionA158Answer, baseActivityDataUnit)/11.4/0.4426*24.98/100);
+            baseActivityData.setValue(internationalTruckRatio * internationalDistance * getValue(questionA158Answer, baseActivityDataUnit) / 11.4 / 0.4426 * 24.98 / 100);
 
             res.add(baseActivityData);
         }
@@ -2475,25 +2485,27 @@ public class ReportServiceImpl implements ReportService {
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
                             questionA161Answer == null &&
-                            questionA162Answer == null) {
+                            questionA162Answer == null)) {
                 continue;
             }
 
             Double belgianTruckRatio = 0.854;
             Double internationalTruckRatio = 0.287;
-            Double belgianDistance;
-            Double internationalDistance;
+            Double belgianDistance = 0.0;
+            Double internationalDistance = 0.0;
             // TODO: codes
-            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+            /*
+            if (getCode(questionA159Answer, CODE) == CODE("Belgique")) {
                 belgianDistance = 200.0;
                 internationalDistance = 0.0;
-            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+            } else if (getCode(questionA159Answer, CODE) == CODE("Europe")) {
                 belgianDistance = 0.0;
                 internationalDistance = 2500.0;
             } else {
                 belgianDistance = 0.0;
                 internationalDistance = 5000.0;
             }
+            */
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -2537,25 +2549,27 @@ public class ReportServiceImpl implements ReportService {
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
                             questionA161Answer == null &&
-                            questionA162Answer == null) {
+                            questionA162Answer == null)) {
                 continue;
             }
 
             Double belgianTruckRatio = 0.854;
             Double internationalTruckRatio = 0.287;
-            Double belgianDistance;
-            Double internationalDistance;
+            Double belgianDistance = 0.0;
+            Double internationalDistance = 0.0;
             // TODO: codes
-            if (getCode(questionA159Answer,CODE) == CODE ("Belgique")) {
+            /*
+            if (getCode(questionA159Answer, CODE) == CODE("Belgique")) {
                 belgianDistance = 200.0;
                 internationalDistance = 0.0;
-            } else if (getCode(questionA159Answer,CODE) == CODE ("Europe")){
+            } else if (getCode(questionA159Answer, CODE) == CODE("Europe")) {
                 belgianDistance = 0.0;
                 internationalDistance = 2500.0;
             } else {
                 belgianDistance = 0.0;
                 internationalDistance = 5000.0;
             }
+            */
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -3002,12 +3016,11 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA202Answer = answersByCode.get(QuestionCode.A202);
-            QuestionAnswer questionA203Answer = answersByCode.get(QuestionCode.A203);
-            // TODO: question qui a été renumérotée car il y avait un doublon!
+            QuestionAnswer questionA204Answer = answersByCode.get(QuestionCode.A204);
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
             if (questionA202Answer == null ||
-                    questionA203Answer == null ||
+                    questionA204Answer == null ||
                     questionA501Answer == null) {
                 continue;
             }
@@ -3020,11 +3033,11 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
+            // TODO: baseActivityData.setActivityType(getValue(questionA204Answer));
             // TODO: Code à matcher
-            baseActivityData.setActivityType(ActivityTypeCode.DCO);
-            baseActivityData.setActivitySource(getCode(questionA202Answer, ActivitySourceCode.class));
+            // TODO: baseActivityData.setActivitySource(getCode(ActivitySourceCode("DCO"));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
-            baseActivityData.setValue(getValue(questionA203Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA202Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3048,7 +3061,7 @@ public class ReportServiceImpl implements ReportService {
 
             QuestionAnswer questionA203Answer = answersByCode.get(QuestionCode.A203);
             QuestionAnswer questionA204Answer = answersByCode.get(QuestionCode.A204);
-            // TODO: idem ci-dessus, numéro changé
+            // TODO: question qui a été renumérotée car il y avait un doublon!
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
             if (questionA203Answer == null ||
@@ -3065,11 +3078,11 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            // TODO: Code
-            baseActivityData.setActivityType(ActivityTypeCode.AZOTE);
-            baseActivityData.setActivitySource(getCode(questionA203Answer, ActivitySourceCode.class));
+            // TODO:  baseActivityData.setActivityType(getValue(questionA204Answer));
+            // TODO: Code à matcher
+            // TODO:  baseActivityData.setActivitySource(getCode(ActivitySourceCode("eaux usées industrielles"));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
-            baseActivityData.setValue(getValue(questionA204Answer, baseActivityDataUnit));
+            baseActivityData.setValue(getValue(questionA203Answer, baseActivityDataUnit));
 
             res.add(baseActivityData);
         }
@@ -3099,9 +3112,9 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
+                    questionA212Answer == null ||
                     questionA220Answer == null ||
-                    questionA221Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
@@ -3146,9 +3159,9 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA212Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
@@ -3161,8 +3174,7 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            // TODO: transformé code en identique mais 100% recyclé
-            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class+ "100% recyclé"));
+            // TODO: transformé code en identique mais 100% recyclé            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class + "100% recyclé"));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
 
@@ -3195,9 +3207,9 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA213Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA213Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
@@ -3242,23 +3254,22 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA213Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA213Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27D);
+            //TODO  baseActivityData.setKey(BaseActivityDataCode.AE_BAD27D);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            // TODO: transformé code en identique mais 100% recyclé
-            baseActivityData.setActivitySource(getCode(questionA213Answer, ActivitySourceCode.class+ "100% recyclé"));
+            // TODO: transformé code en identique mais 100% recyclé            baseActivityData.setActivitySource(getCode(questionA213Answer, ActivitySourceCode.class + "100% recyclé"));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
 
@@ -3290,16 +3301,16 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA214Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27E);
+            //TODO baseActivityData.setKey(BaseActivityDataCode.AE_BAD27E);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3337,23 +3348,22 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA214Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27F);
+            //TODO    baseActivityData.setKey(BaseActivityDataCode.AE_BAD27F);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            // TODO: transformé code en identique mais 100% recyclé
-            baseActivityData.setActivitySource(getCode(questionA214Answer, ActivitySourceCode.class+ "100% recyclé"));
+            // TODO: transformé code en identique mais 100% recyclé             baseActivityData.setActivitySource(getCode(questionA214Answer, ActivitySourceCode.class + "100% recyclé"));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
 
@@ -3385,16 +3395,16 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA215Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27G);
+            //TODO  baseActivityData.setKey(BaseActivityDataCode.AE_BAD27G);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3432,23 +3442,22 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
+                    questionA215Answer == null||
                 questionA220Answer == null ||
-                        questionA221Answer == null ||
+                        questionA221Answer == null ){
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27H);
+            //TODO   baseActivityData.setKey(BaseActivityDataCode.AE_BAD27H);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             baseActivityData.setActivityType(getCode(questionA211Answer, ActivityTypeCode.class));
-            // TODO: transformé code en identique mais 100% recyclé
-            baseActivityData.setActivitySource(getCode(questionA215Answer, ActivitySourceCode.class+ "100% recyclé"));
+            // TODO: transformé code en identique mais 100% recyclé             baseActivityData.setActivitySource(getCode(questionA215Answer, ActivitySourceCode.class + "100% recyclé"));
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA221Answer, baseActivityDataUnit) * getValue(questionA220Answer, baseActivityDataUnit));
 
@@ -3479,16 +3488,15 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA216Answer == null ||
+                        questionA221Answer == null){
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27I);
+            //TODO       baseActivityData.setKey(BaseActivityDataCode.AE_BAD27I);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3525,16 +3533,15 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA217Answer == null ||
+                    questionA221Answer == null) {
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27J);
+            //TODO   baseActivityData.setKey(BaseActivityDataCode.AE_BAD27J);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3571,16 +3578,15 @@ public class ReportServiceImpl implements ReportService {
 
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
-                    questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA218Answer == null ||
+            questionA221Answer == null){
                 continue;
             }
 
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27K);
+            //TODO             baseActivityData.setKey(BaseActivityDataCode.AE_BAD27K);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3596,7 +3602,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     //CHECKED FJ
-    private List<BaseActivityData> getBaseActivityDataAE_BAD27C(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
+    private List<BaseActivityData> getBaseActivityDataAE_BAD27L(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
         List<BaseActivityData> res = new ArrayList<>();
 
         // Get Target Unit (euros in this case)
@@ -3621,7 +3627,7 @@ public class ReportServiceImpl implements ReportService {
 
             BaseActivityData baseActivityData = new BaseActivityData();
 
-            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27C);
+            //TODO   baseActivityData.setKey(BaseActivityDataCode.AE_BAD27L);
             baseActivityData.setRank(1);
             baseActivityData.setSpecificPurpose(getValueString(questionA210Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.ACHAT);
@@ -3708,8 +3714,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
-            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            //TODO   baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
+            //TODO    baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA234Answer, baseActivityDataUnit));
 
@@ -3748,9 +3754,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(getValueString(questionA232Answer));
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
-            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"             baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
+            //TODO           baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA235Answer, baseActivityDataUnit));
 
@@ -3790,8 +3795,8 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setActivityCategory(ActivityCategoryCode.INFRASTRUCTURE);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
             // TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"
-            baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
-            baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
+            //TODO     baseActivityData.setActivityType(SPLIT_DE_getCode(questionA233Answer, ActivityTypeCode.class)_);
+            //TODO     baseActivityData.setActivitySource(split de getCode(questionA233Answer, ActivitySourceCode.class) *);
             baseActivityData.setActivityOwnership(null);
             baseActivityData.setValue(getValue(questionA236Answer, baseActivityDataUnit));
 
@@ -4313,20 +4318,20 @@ public class ReportServiceImpl implements ReportService {
 
                 Double belgianTruckRatio = 0.854;
                 Double internationalTruckRatio = 0.287;
-                Double belgianDistance;
-                Double internationalDistance;
+                Double belgianDistance=0.0;
+                Double internationalDistance=0.0;
                 // TODO: codes
-                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+            /*    if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
                     belgianDistance = 200.0;
                     internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
                     belgianDistance = 0.0;
                     internationalDistance = 2500.0;
                 } else {
                     belgianDistance = 0.0;
                     internationalDistance = 5000.0;
                 }
-
+*/
                 BaseActivityData baseActivityData = new BaseActivityData();
 
                 baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
@@ -4372,20 +4377,20 @@ public class ReportServiceImpl implements ReportService {
 
                 Double belgianTruckRatio = 0.854;
                 Double internationalTruckRatio = 0.287;
-                Double belgianDistance;
-                Double internationalDistance;
+                Double belgianDistance=0.0;
+                Double internationalDistance=0.0;
                 // TODO: codes
-                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+              /*  if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
                     belgianDistance = 200.0;
                     internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
                     belgianDistance = 0.0;
                     internationalDistance = 2500.0;
                 } else {
                     belgianDistance = 0.0;
                     internationalDistance = 5000.0;
                 }
-
+*/
                 BaseActivityData baseActivityData = new BaseActivityData();
 
                 baseActivityData.setKey(BaseActivityDataCode.AE_BAD32B);
@@ -4431,20 +4436,20 @@ public class ReportServiceImpl implements ReportService {
 
                 Double belgianTruckRatio = 0.854;
                 Double internationalTruckRatio = 0.287;
-                Double belgianDistance;
-                Double internationalDistance;
+                Double belgianDistance=0.0;
+                Double internationalDistance=0.0;
                 // TODO: codes
-                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+             /*   if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
                     belgianDistance = 200.0;
                     internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
                     belgianDistance = 0.0;
                     internationalDistance = 2500.0;
                 } else {
                     belgianDistance = 0.0;
                     internationalDistance = 5000.0;
                 }
-
+*/
                 BaseActivityData baseActivityData = new BaseActivityData();
 
                 baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
@@ -4486,20 +4491,20 @@ public class ReportServiceImpl implements ReportService {
 
                 Double belgianTruckRatio = 0.854;
                 Double internationalTruckRatio = 0.287;
-                Double belgianDistance;
-                Double internationalDistance;
+                Double belgianDistance=0.0;
+                Double internationalDistance=0.0;
                 // TODO: codes
-                if (getCode(questionA268Answer,CODE) == CODE ("Belgique")) {
+              /*  if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
                     belgianDistance = 200.0;
                     internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer,CODE) == CODE ("Europe")){
+                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
                     belgianDistance = 0.0;
                     internationalDistance = 2500.0;
                 } else {
                     belgianDistance = 0.0;
                     internationalDistance = 5000.0;
                 }
-
+*/
                 BaseActivityData baseActivityData = new BaseActivityData();
 
                 baseActivityData.setKey(BaseActivityDataCode.AE_BAD32D);
