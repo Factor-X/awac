@@ -903,8 +903,8 @@ public class ReportServiceImpl implements ReportService {
                     questionA76Answer == null ||
                     questionA72Answer == null ||
                     (questionA73Answer == null &&
-                            questionA74Answer == null &&
-                            questionA75Answer == null) ||
+                    questionA74Answer == null &&
+                    questionA75Answer == null) ||
                     questionA69Answer == null) {
                 continue;
             }
@@ -965,9 +965,9 @@ public class ReportServiceImpl implements ReportService {
                             questionA81Answer == null) ||
                     questionA88Answer == null ||
                     (questionA89Answer == null &&
-                            questionA90Answer == null &&
-                            questionA91Answer == null &&
-                            questionA92Answer == null) ||
+                    questionA90Answer == null &&
+                    questionA91Answer == null &&
+                    questionA92Answer == null) ||
                     questionA83Answer == null) {
                 continue;
             }
@@ -1600,21 +1600,21 @@ public class ReportServiceImpl implements ReportService {
                     else
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus hors agglo");
                 else
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus hors agglo");
+            else
                 if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                    baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus en agglo");
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus hors agglo");
                 else
-                    baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus hors agglo");
-            else
-            if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                    baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus en agglo");
-                else
-                    baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus hors agglo");
-            else
-            if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
-                baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus en agglo");
-            else
-                baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus hors agglo");
+                    if (getValueBoolean(answersByCode.get(QuestionCode.A110)))
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus en agglo");
+                    else
+                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus hors agglo");
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setValue(getValue(questionA12Answer, baseActivityDataUnit));
 
@@ -1893,9 +1893,9 @@ public class ReportServiceImpl implements ReportService {
             if (questionA136Answer == null ||
                     (questionA136Answer == null && (
                             questionA137Answer == null ||
-                                    questionA138Answer == null ||
+                            questionA138Answer == null ||
                                     (questionA139Answer == null &&
-                                            questionA500Answer == null)))) {
+                                        questionA500Answer == null)))) {
                 continue;
             }
 
@@ -2349,8 +2349,8 @@ public class ReportServiceImpl implements ReportService {
             if (questionA158Answer == null ||
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
-                            questionA161Answer == null &&
-                            questionA162Answer == null) {
+                        questionA161Answer == null &&
+                        questionA162Answer == null) {
                 continue;
             }
 
@@ -3100,8 +3100,8 @@ public class ReportServiceImpl implements ReportService {
             if (questionA210Answer == null ||
                     questionA211Answer == null ||
                     questionA212Answer == null) {
-                questionA220Answer == null ||
-                        questionA221Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null ||
                 continue;
             }
 
