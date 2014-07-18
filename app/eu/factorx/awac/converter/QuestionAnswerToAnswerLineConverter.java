@@ -17,7 +17,7 @@ import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
 import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 
-@Component
+//@Component
 public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAnswer, AnswerLine> {
 
 	@Override
