@@ -41,8 +41,9 @@ public class FormDTO extends DTO {
 
     private AnswersSaveDTO answersSave;
 
-    public FormDTO(Long scopeId) {
-        this.scopeId = scopeId;
+
+
+    public FormDTO() {
     }
 
     public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, AnswersSaveDTO answersSave) {

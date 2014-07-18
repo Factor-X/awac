@@ -1,7 +1,8 @@
 ng-virtual
     mm-awac-section(title-code="CONSOMMATION_DE_COMBUSTIBLES")
 
-        mm-awac-repetition-question(ng-object="getQuestionSet(A15)", ng-map-repetition="getMapRepetition(A15)")
+        mm-awac-repetition-question(ng-object="getQuestionSet(A15)", ng-map-repetition="getMapRepetition(A15)", ng-repeat="it in getMapRepetition()")
+
                 //
                     div
                         div Pièces documentaires liées aux consommations de combustible

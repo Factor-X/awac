@@ -47,12 +47,20 @@ angular
 
                 else mapRepetition[mapRepetition.length] = [repetition]
 
-
+        #scan the questionSet
         $scope.scanQuestionSet()
 
 
         $scope.getQuestionSet = (code) ->
-          $scope.o.
+          return $scope.getQuestionSet($scope.o.questionSets, code)
+
+        $scope.getQuestionSet = (qSet, code) ->
+          for qSet in qSet.children
+            if qSet.code == code
+              return qSet
+          return null
+
+
 
         # getAnswerByQuestionCode
         $scope.getAnswer = (code) ->
