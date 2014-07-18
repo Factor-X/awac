@@ -1,13 +1,15 @@
 package eu.factorx.awac.dto.awac.post;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.QuestionDTO;
+import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class QuestionAnswerDTO extends DTO {
 
 	@NotNull
-	private String questionKey;
+	private QuestionDTO questionDTO;
 
 	@NotNull
 	private AnswerLine answerLine;
@@ -16,30 +18,25 @@ public class QuestionAnswerDTO extends DTO {
 		super();
 	}
 
-	/**
-	 * @param questionKey
-	 * @param answerLine
-	 */
-	public QuestionAnswerDTO(String questionKey, AnswerLine answerLine) {
-		super();
-		this.questionKey = questionKey;
-		this.answerLine = answerLine;
-	}
 
-	public String getQuestionKey() {
-		return questionKey;
-	}
+    public QuestionAnswerDTO(AnswerLine answerLine, QuestionDTO questionDTO) {
+        this.answerLine = answerLine;
+        this.questionDTO = questionDTO;
+    }
 
-	public void setQuestionKey(String questionKey) {
-		this.questionKey = questionKey;
-	}
+    public QuestionDTO getQuestionDTO() {
+        return questionDTO;
+    }
 
-	public AnswerLine getAnswerLine() {
-		return answerLine;
-	}
+    public void setQuestionDTO(QuestionDTO questionDTO) {
+        this.questionDTO = questionDTO;
+    }
 
-	public void setAnswerLine(AnswerLine answerLine) {
-		this.answerLine = answerLine;
-	}
+    public AnswerLine getAnswerLine() {
+        return answerLine;
+    }
 
+    public void setAnswerLine(AnswerLine answerLine) {
+        this.answerLine = answerLine;
+    }
 }

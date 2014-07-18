@@ -10,12 +10,25 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 public class QuestionSetAnswerDTO extends DTO {
 
 	@NotNull
+    /**
+     * the questionSet code
+     */
 	private String questionSetCode;
 
+    /**
+     * the repetition index for this questionSetAnswer.
+     * Can be null (if this questionSetAnswer is not repetable)
+     */
 	private Integer repetitionIndex;
 
+    /**
+     *
+     */
 	private List<QuestionAnswerDTO> questionAnswers;
 
+    /**
+     * contains the questionSetAnswerDTO children
+     */
 	private List<QuestionSetAnswerDTO> children;
 
 	public QuestionSetAnswerDTO() {
