@@ -3,22 +3,21 @@ package eu.factorx.awac.dto.awac.post;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
-public class AnswersSaveDTO extends DTO {
+public class QuestionAnswersDTO extends DTO {
 
 	@NotNull
 	private Long scopeId;
 	@NotNull
 	private Long periodId;
 	@NotNull
-	private List<AnswerLine> listAnswers;
+	private List<AnswerLineDTO> listAnswers;
 
-    public AnswersSaveDTO() {
+    public QuestionAnswersDTO() {
     }
 
-    public AnswersSaveDTO(Long scopeId, Long periodId, List<AnswerLine> listAnswers) {
+    public QuestionAnswersDTO(Long scopeId, Long periodId, List<AnswerLineDTO> listAnswers) {
         this.scopeId = scopeId;
         this.periodId = periodId;
         this.listAnswers = listAnswers;
@@ -40,11 +39,11 @@ public class AnswersSaveDTO extends DTO {
         this.periodId = periodId;
     }
 
-    public List<AnswerLine> getListAnswers() {
+    public List<AnswerLineDTO> getListAnswers() {
         return listAnswers;
     }
 
-    public void setListAnswers(List<AnswerLine> listAnswers) {
+    public void setListAnswers(List<AnswerLineDTO> listAnswers) {
         this.listAnswers = listAnswers;
     }
 }

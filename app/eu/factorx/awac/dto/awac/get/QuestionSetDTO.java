@@ -1,6 +1,5 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;

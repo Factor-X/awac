@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class FormDTO extends DTO {
@@ -39,14 +38,14 @@ public class FormDTO extends DTO {
      */
     private List<QuestionSetDTO> questionSets;
 
-    private AnswersSaveDTO answersSave;
+    private QuestionAnswersDTO answersSave;
 
 
 
     public FormDTO() {
     }
 
-    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, AnswersSaveDTO answersSave) {
+    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, QuestionAnswersDTO answersSave) {
         this.scopeId = scopeId;
         this.periodId = periodId;
         this.unitCategories = unitCategories;
@@ -95,11 +94,11 @@ public class FormDTO extends DTO {
         this.questionSets = questionSets;
     }
 
-    public AnswersSaveDTO getAnswersSave() {
+    public QuestionAnswersDTO getAnswersSave() {
         return answersSave;
     }
 
-    public void setAnswersSave(AnswersSaveDTO answersSave) {
+    public void setAnswersSave(QuestionAnswersDTO answersSave) {
         this.answersSave = answersSave;
     }
 }

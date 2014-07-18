@@ -23,8 +23,8 @@ import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
 import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
-import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
@@ -133,8 +133,8 @@ public class AnswerController extends Controller {
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope,
 				period, form);
-		List<AnswerLine> listAnswers = toAnswerLineDTOs(questionSetAnswers);
-		AnswersSaveDTO questionAnswerDTO = new AnswersSaveDTO(scopeId, periodId, listAnswers);
+		List<AnswerLineDTO> listAnswers = toAnswerLineDTOs(questionSetAnswers);
+		QuestionAnswersDTO questionAnswerDTO = new QuestionAnswersDTO(scopeId, periodId, listAnswers);
 
 		Logger.info("getByForm 6");
 
@@ -142,12 +142,12 @@ public class AnswerController extends Controller {
 		return ok(formDTO);
 	}
 
-	private List<AnswerLine> toAnswerLineDTOs(List<QuestionSetAnswer> questionSetAnswers) {
-		List<AnswerLine> answers = new ArrayList<>();
+	private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionSetAnswer> questionSetAnswers) {
+		List<AnswerLineDTO> answers = new ArrayList<>();
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
 			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
 			for (QuestionAnswer questionAnswer : questionAnswers) {
-				answers.add(conversionService.convert(questionAnswer, AnswerLine.class));
+				answers.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
 			}
 			answers.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
 		}
@@ -213,7 +213,7 @@ public class AnswerController extends Controller {
 		Logger.info("save() 1");
 		Account currentUser = securedController.getCurrentUser();
 		Logger.info("save() 2");
-		AnswersSaveDTO answersDTO = extractDTOFromRequest(AnswersSaveDTO.class);
+		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
 		Logger.info("save() 3");
 		saveAnswsersDTO(currentUser, answersDTO);
 		Logger.info("save() 4");
@@ -223,7 +223,7 @@ public class AnswerController extends Controller {
 		return ok(dto);
 	}
 
-	public void saveAnswsersDTO(Account currentUser, AnswersSaveDTO answersDTO) {
+	public void saveAnswsersDTO(Account currentUser, QuestionAnswersDTO answersDTO) {
 		/*
 		 * List<QuestionSetAnswerDTO> listAnswers = answersDTO.getListAnswers(); for (QuestionSetAnswerDTO questionSetAnswerDTO : listAnswers) { QuestionSetAnswer questionSetAnswer
 		 * = questionSetAnswerService.findById(questionSetAnswerDTO.getId()); List<AnswerLine> answerLines = questionSetAnswerDTO.getQuestionAnswers(); for (AnswerLine answerLine :
@@ -239,7 +239,7 @@ public class AnswerController extends Controller {
 		 */
 	}
 
-	public AnswerLine convert(QuestionAnswer questionAnswer) {
+	public AnswerLineDTO convert(QuestionAnswer questionAnswer) {
 		Question question = questionAnswer.getQuestion();
 		AnswerType answerType = question.getAnswerType();
 
@@ -282,7 +282,7 @@ public class AnswerController extends Controller {
 			break;
 		}
 
-        AnswerLine answerLine = new AnswerLine();
+        AnswerLineDTO answerLine = new AnswerLineDTO();
         answerLine.setValue(rawAnswerValue);
         answerLine.setQuestionKey(questionAnswer.getQuestion().getCode().getKey());
         answerLine.setUnitId(unitId);
@@ -291,7 +291,7 @@ public class AnswerController extends Controller {
 		return answerLine;
 	}
 
-	private AnswerValue getAnswerValue(AnswerLine answerLine, QuestionAnswer questionAnswer) {
+	private AnswerValue getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
 		if (answerLine.getValue() == null) {
 			return null;
 		}
@@ -329,7 +329,7 @@ public class AnswerController extends Controller {
 		return answerValue;
 	}
 
-	private Question getAndVerifyQuestion(AnswerLine answerLine) {
+	private Question getAndVerifyQuestion(AnswerLineDTO answerLine) {
 		String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
 		if (questionKey == null) {
 			throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
@@ -341,7 +341,7 @@ public class AnswerController extends Controller {
 		return question;
 	}
 
-	private Unit getAndVerifyUnit(AnswerLine answerLine, UnitCategory questionUnitCategory, String questionKey) {
+	private Unit getAndVerifyUnit(AnswerLineDTO answerLine, UnitCategory questionUnitCategory, String questionKey) {
 		Integer answerUnitId = answerLine.getUnitId();
 
 		// no unit category linked to the question => return null, or throw an Exception if client provided a unit

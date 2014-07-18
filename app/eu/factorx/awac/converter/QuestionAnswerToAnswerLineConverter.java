@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.answer.AnswerValue;
@@ -22,10 +22,10 @@ import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 
 @Component
-public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAnswer, AnswerLine> {
+public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAnswer, AnswerLineDTO> {
 
 	@Override
-	public AnswerLine convert(QuestionAnswer questionAnswer) {
+	public AnswerLineDTO convert(QuestionAnswer questionAnswer) {
 		Question question = questionAnswer.getQuestion();
 		AnswerType answerType = question.getAnswerType();
 
@@ -68,7 +68,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 			break;
 		}
 
-		AnswerLine answerLine = new AnswerLine();
+		AnswerLineDTO answerLine = new AnswerLineDTO();
 		answerLine.setValue(rawAnswerValue);
 		answerLine.setQuestionKey(question.getCode().getKey());
 		answerLine.setUnitId(unitId);

@@ -1,14 +1,12 @@
-package eu.factorx.awac.dto.awac.shared;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.validation.annotations.NotNull;
+package eu.factorx.awac.dto.awac.post;
 
 import java.util.Map;
 
-public class AnswerLine extends DTO {
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
+import eu.factorx.awac.models.data.question.QuestionSet;
+
+public class AnswerLineDTO extends DTO {
 
 	@NotNull
 	private String questionKey;
@@ -18,13 +16,17 @@ public class AnswerLine extends DTO {
 
 	private Integer unitId;
 
+	/**
+	 * K: code of a parent {@link QuestionSet questionSet}<br>
+	 * V: repetition index of this answer inside this {@link QuestionSet questionSet}
+	 */
     private Map<String,Integer> mapRepetition;
 
 
-    public AnswerLine() {
+    public AnswerLineDTO() {
     }
 
-    public AnswerLine(String questionKey, Object value, Integer unitId, Map<String, Integer> mapRepetition) {
+    public AnswerLineDTO(String questionKey, Object value, Integer unitId, Map<String, Integer> mapRepetition) {
         this.questionKey = questionKey;
         this.value = value;
         this.unitId = unitId;
