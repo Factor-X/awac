@@ -9,6 +9,7 @@ angular
 
         # getAnswerByQuestionCode
         $scope.A = (code) ->
+            console.log $scope.o
             for qv in $scope.o.answersSaveDTO.listAnswers
                 if qv.questionKey == code
                     return qv

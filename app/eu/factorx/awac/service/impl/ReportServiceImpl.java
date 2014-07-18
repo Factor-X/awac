@@ -3017,7 +3017,6 @@ public class ReportServiceImpl implements ReportService {
 
             QuestionAnswer questionA202Answer = answersByCode.get(QuestionCode.A202);
             QuestionAnswer questionA204Answer = answersByCode.get(QuestionCode.A204);
-            // TODO: question qui a été renumérotée car il y avait un doublon!
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
             if (questionA202Answer == null ||
@@ -3034,9 +3033,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getValue(questionA204Answer));
+            // TODO: baseActivityData.setActivityType(getValue(questionA204Answer));
             // TODO: Code à matcher
-            baseActivityData.setActivitySource(getCode(ActivitySourceCode("DCO"));
+            // TODO: baseActivityData.setActivitySource(getCode(ActivitySourceCode("DCO"));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
             baseActivityData.setValue(getValue(questionA202Answer, baseActivityDataUnit));
 
@@ -3079,9 +3078,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getValue(questionA204Answer));
+            // TODO:  baseActivityData.setActivityType(getValue(questionA204Answer));
             // TODO: Code à matcher
-            baseActivityData.setActivitySource(getCode(ActivitySourceCode("eaux usées industrielles"));
+            // TODO:  baseActivityData.setActivitySource(getCode(ActivitySourceCode("eaux usées industrielles"));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
             baseActivityData.setValue(getValue(questionA203Answer, baseActivityDataUnit));
 
