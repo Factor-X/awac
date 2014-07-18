@@ -1,6 +1,5 @@
 package eu.factorx.awac.dto.awac.post;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
@@ -17,17 +16,19 @@ public class AnswersSaveDTO extends DTO {
 	private List<QuestionSetAnswerDTO> listAnswers;
 
 	public AnswersSaveDTO() {
+		super();
 	}
 
+	/**
+	 * @param scopeId
+	 * @param periodId
+	 * @param listAnswers
+	 */
 	public AnswersSaveDTO(Long scopeId, Long periodId, List<QuestionSetAnswerDTO> listAnswers) {
 		super();
 		this.scopeId = scopeId;
 		this.periodId = periodId;
 		this.listAnswers = listAnswers;
-	}
-
-	public AnswersSaveDTO(Long scopeId, Long periodId) {
-		this(scopeId, periodId, new ArrayList<QuestionSetAnswerDTO>());
 	}
 
 	public Long getScopeId() {
@@ -53,5 +54,6 @@ public class AnswersSaveDTO extends DTO {
 	public void setListAnswers(List<QuestionSetAnswerDTO> listAnswers) {
 		this.listAnswers = listAnswers;
 	}
+
 
 }
