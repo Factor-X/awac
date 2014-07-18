@@ -1,6 +1,7 @@
 div
     div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
-    div(ng-repeat="v in getAnswerByQuestionCode(getQuestionCode())")
+
+    div(ng-repeat="v in getAnswerByQuestionCode(getQuestionsToAdd())")
         ng-virtual(ng-transclude=true)
         button(ng-click="removeAnwser(v)") Remove
     div

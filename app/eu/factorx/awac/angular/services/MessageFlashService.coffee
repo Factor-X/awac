@@ -6,12 +6,12 @@ angular
   # display a success message
   # TODO => display multiple messages
   @displaySuccess = (message) ->
-    flash.success = message
+    flash.success = message.replace "\n",'<br />'
 
   #
   # display an error message
   # TODO => display multiple messages
   @displayError = (message) ->
-    flash.error = message
+    flash.error = message.replace /\n/g,'<br />'
 
   return
