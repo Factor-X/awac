@@ -5012,12 +5012,13 @@ public class ReportServiceImpl implements ReportService {
                         Map<QuestionCode, QuestionAnswer> answersByCodeChild = toQuestionAnswersByQuestionCodeMap(questionSetAnswersChildChild.getQuestionAnswers());
 
                         QuestionAnswer questionA304Answer = answersByCodeChild.get(QuestionCode.A304);
-
+                        QuestionAnswer questionA307Answer = answersByCodeChild.get(QuestionCode.A307);
                         QuestionAnswer questionA308Answer = answersByCodeChild.get(QuestionCode.A308);
                         QuestionAnswer questionA306Answer = answersByCodeChild.get(QuestionCode.A306);
                         QuestionAnswer questionA305Answer = answersByCodeChild.get(QuestionCode.A305);
 
                         if (questionA304Answer == null || questionA305Answer == null ||
+                                questionA307Answer == null ||
                                 questionA308Answer == null ||
                                 questionA306Answer == null) {
                             continue;
@@ -5031,8 +5032,8 @@ public class ReportServiceImpl implements ReportService {
                         baseActivityData.setSpecificPurpose(getValueString(questionA245Answer) + " - " + getValueString(questionA304Answer));
                         baseActivityData.setActivityCategory(ActivityCategoryCode.FIN_DE_VIE);
                         baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-                        baseActivityData.setActivityType(getCode(questionA306Answer, ActivityTypeCode.class));
-                        baseActivityData.setActivitySource(getCode(questionA305Answer, ActivitySourceCode.class));
+                        baseActivityData.setActivityType(getCode(questionA307Answer, ActivityTypeCode.class));
+                        baseActivityData.setActivitySource(getCode(questionA306Answer, ActivitySourceCode.class));
                         baseActivityData.setActivityOwnership(null);
                         baseActivityData.setValue(getValue(questionA308Answer, baseActivityDataUnit) * getValue(questionA305Answer, baseActivityDataUnit));
 
