@@ -3,7 +3,9 @@ package eu.factorx.awac.dto.awac.get;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionSetDTO {
+import eu.factorx.awac.dto.DTO;
+
+public class QuestionSetDTO extends DTO {
 
 	private String code;
 
