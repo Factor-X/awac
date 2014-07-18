@@ -51,6 +51,9 @@ angular
         $scope.scanQuestionSet()
 
 
+        $scope.getQuestionSet = (code) ->
+          $scope.o.
+
         # getAnswerByQuestionCode
         $scope.getAnswer = (code) ->
           listAnswer=[]

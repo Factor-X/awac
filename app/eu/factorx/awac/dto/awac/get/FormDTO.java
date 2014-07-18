@@ -37,20 +37,20 @@ public class FormDTO extends DTO {
      * contains list of questionAnswerDTO
      * each DTO contains all the structure of the QuestionSetAnswer, with value the response
      */
-    private List<QuestionSetDTO> listAnswers;
+    private List<QuestionSetDTO> questionSets;
 
     private AnswersSaveDTO answersSave;
 
-
-    public FormDTO() {
+    public FormDTO(Long scopeId) {
+        this.scopeId = scopeId;
     }
 
-    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> listAnswers, AnswersSaveDTO answersSave) {
+    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, AnswersSaveDTO answersSave) {
         this.scopeId = scopeId;
         this.periodId = periodId;
         this.unitCategories = unitCategories;
         this.codeLists = codeLists;
-        this.listAnswers = listAnswers;
+        this.questionSets = questionSets;
         this.answersSave = answersSave;
     }
 
@@ -86,12 +86,12 @@ public class FormDTO extends DTO {
         this.codeLists = codeLists;
     }
 
-    public List<QuestionSetDTO> getListAnswers() {
-        return listAnswers;
+    public List<QuestionSetDTO> getQuestionSets() {
+        return questionSets;
     }
 
-    public void setListAnswers(List<QuestionSetDTO> listAnswers) {
-        this.listAnswers = listAnswers;
+    public void setQuestionSets(List<QuestionSetDTO> questionSets) {
+        this.questionSets = questionSets;
     }
 
     public AnswersSaveDTO getAnswersSave() {
