@@ -1679,14 +1679,15 @@ public class ReportServiceImpl implements ReportService {
         // Get Target Unit (km.passager in this case)
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
         Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
+        Unit kmUnit = unitService.findBySymbol("km");
 
         // Get reference Number of Employees
         // TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
         QuestionSetAnswer questionSet12Answer = allQuestionSetAnswers.get(QuestionCode.A12).get(0);
         Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = toQuestionAnswersByQuestionCodeMap(questionSet12Answer.getQuestionAnswers());
-        QuestionAnswer question12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+        QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
-        if questionA12Answer == null {
+        if (questionA12Answer == null) {
             return res;
         }
 
@@ -1715,13 +1716,13 @@ public class ReportServiceImpl implements ReportService {
             Double travelDistance;
             // TODO: flight codes in variable
             FlightCode flightType;
-            if getValueBoolean(questionA123Answer) {
-                travelDistance = getValue(questionA127Answer,"km");
+            if (getValueBoolean(questionA123Answer)) {
+                travelDistance = getValue(questionA127Answer,kmUnit);
                 // TODO code de vol
                 FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
             } else {
                 //TODO code destination
-                if getCode(questionA124Answer,code) ==  Europe {
+                if (getCode(questionA124Answer,code) ==  Europe) {
                     travelDistance = 2500.0;
                     // TODO code de vol
                     FlightCode = "Vols europe (<4000km A/R)";
@@ -2350,7 +2351,7 @@ public class ReportServiceImpl implements ReportService {
                     questionA159Answer == null ||
                     (questionA160Answer == null &&
                         questionA161Answer == null &&
-                        questionA162Answer == null) {
+                        questionA162Answer == null)) {
                 continue;
             }
 
