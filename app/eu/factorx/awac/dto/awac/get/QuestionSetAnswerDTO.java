@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.awac.post.QuestionAnswerDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class QuestionSetAnswerDTO extends DTO {
-
-	@NotNull
-	private Long id;
 
 	@NotNull
 	private String questionSetCode;
 
 	private Integer repetitionIndex;
 
-	private List<AnswerLine> questionAnswers;
+	private List<QuestionAnswerDTO> questionAnswers;
 
 	private List<QuestionSetAnswerDTO> children;
 
@@ -27,19 +24,10 @@ public class QuestionSetAnswerDTO extends DTO {
 
 	public QuestionSetAnswerDTO(Long id, String questionSetCode, Integer repetitionIndex) {
 		super();
-		this.id = id;
 		this.questionSetCode = questionSetCode;
 		this.repetitionIndex = repetitionIndex;
 		this.questionAnswers = new ArrayList<>();
 		this.children = new ArrayList<>();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getQuestionSetCode() {
@@ -58,11 +46,11 @@ public class QuestionSetAnswerDTO extends DTO {
 		this.repetitionIndex = repetitionIndex;
 	}
 
-	public List<AnswerLine> getQuestionAnswers() {
+	public List<QuestionAnswerDTO> getQuestionAnswers() {
 		return questionAnswers;
 	}
 
-	public void setQuestionAnswers(List<AnswerLine> questionAnswers) {
+	public void setQuestionAnswers(List<QuestionAnswerDTO> questionAnswers) {
 		this.questionAnswers = questionAnswers;
 	}
 

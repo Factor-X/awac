@@ -8,13 +8,8 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AnswerLine extends DTO {
 
-	private Long questionAnswerId;
-	
 	@NotNull
 	private String questionKey;
-
-	@NotNull
-	private Integer repetitionIndex;
 
 	@NotNull
 	private Object value;
@@ -24,21 +19,12 @@ public class AnswerLine extends DTO {
 	public AnswerLine() {
 	}
 
-	public AnswerLine(Long questionAnswerId, String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
-		this.questionAnswerId = questionAnswerId;
+	public AnswerLine(String questionKey, Object value, Integer repetitionIndex, Integer unitId) {
 		this.questionKey = questionKey;
 		this.value = value;
-		this.repetitionIndex = repetitionIndex;
 		this.unitId = unitId;
 	}
 
-	public Long getQuestionAnswerId() {
-		return questionAnswerId;
-	}
-
-	public void setQuestionAnswerId(Long questionAnswerId) {
-		this.questionAnswerId = questionAnswerId;
-	}
 
 	public Object getValue() {
 		return value;
@@ -56,14 +42,6 @@ public class AnswerLine extends DTO {
 		this.questionKey = questionKey;
 	}
 
-	public Integer getRepetitionIndex() {
-		return repetitionIndex;
-	}
-
-	public void setRepetitionIndex(Integer repetitionIndex) {
-		this.repetitionIndex = repetitionIndex;
-	}
-
 	public Integer getUnitId() {
 		return unitId;
 	}
@@ -75,6 +53,6 @@ public class AnswerLine extends DTO {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("questionKey", questionKey)
-				.append("repetitionIndex", repetitionIndex).append("value", value).append("unitId", unitId).toString();
+				.append("value", value).append("unitId", unitId).toString();
 	}
 }

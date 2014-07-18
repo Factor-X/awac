@@ -1,10 +1,8 @@
 package eu.factorx.awac.dto.awac.post;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetAnswerDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AnswersSaveDTO extends DTO {
@@ -14,20 +12,22 @@ public class AnswersSaveDTO extends DTO {
 	@NotNull
 	private Long periodId;
 	@NotNull
-	private List<QuestionSetAnswerDTO> listAnswers;
+	private List<QuestionAnswerDTO> listAnswers;
 
 	public AnswersSaveDTO() {
+		super();
 	}
 
-	public AnswersSaveDTO(Long scopeId, Long periodId, List<QuestionSetAnswerDTO> listAnswers) {
+	/**
+	 * @param scopeId
+	 * @param periodId
+	 * @param listAnswers
+	 */
+	public AnswersSaveDTO(Long scopeId, Long periodId, List<QuestionAnswerDTO> listAnswers) {
 		super();
 		this.scopeId = scopeId;
 		this.periodId = periodId;
 		this.listAnswers = listAnswers;
-	}
-
-	public AnswersSaveDTO(Long scopeId, Long periodId) {
-		this(scopeId, periodId, new ArrayList<QuestionSetAnswerDTO>());
 	}
 
 	public Long getScopeId() {
@@ -46,11 +46,11 @@ public class AnswersSaveDTO extends DTO {
 		this.periodId = periodId;
 	}
 
-	public List<QuestionSetAnswerDTO> getListAnswers() {
+	public List<QuestionAnswerDTO> getListAnswers() {
 		return listAnswers;
 	}
 
-	public void setListAnswers(List<QuestionSetAnswerDTO> listAnswers) {
+	public void setListAnswers(List<QuestionAnswerDTO> listAnswers) {
 		this.listAnswers = listAnswers;
 	}
 
