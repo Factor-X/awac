@@ -30,7 +30,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 				.em()
 				.createNamedQuery(QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, QuestionSetAnswer.class)
 				.setParameter("scope", scope).setParameter("period", period)
-				.setParameter("questionSetCode", form.getQuestionSets()).getResultList();
+				.setParameter("questionSets", form.getQuestionSets()).getResultList();
 		return resultList;
 	}
 

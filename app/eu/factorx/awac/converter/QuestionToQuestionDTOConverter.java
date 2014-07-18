@@ -7,6 +7,7 @@ import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.knowledge.UnitCategory;
 
 @Component
 public class QuestionToQuestionDTOConverter implements Converter<Question, QuestionDTO> {
@@ -16,7 +17,10 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 		Long unitCategoryId = null;
 		String codeListName = null;
 		if (question instanceof NumericQuestion) {
-			unitCategoryId = ((NumericQuestion) question).getUnitCategory().getId();
+			UnitCategory unitCategory = ((NumericQuestion) question).getUnitCategory();
+			if (unitCategory != null) {
+				unitCategoryId = unitCategory.getId();
+			}
 		} else if (question instanceof ValueSelectionQuestion) {
 			codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
 		}
