@@ -3016,7 +3016,7 @@ public class ReportServiceImpl implements ReportService {
             Map<QuestionCode, QuestionAnswer> answersByCode = toQuestionAnswersByQuestionCodeMap(questionSetAnswers.getQuestionAnswers());
 
             QuestionAnswer questionA202Answer = answersByCode.get(QuestionCode.A202);
-            QuestionAnswer questionA204Answer = answersByCode.get(QuestionCode.A204);
+            QuestionAnswer questionA203Answer = answersByCode.get(QuestionCode.A203);
             // TODO: question qui a été renumérotée car il y avait un doublon!
             QuestionAnswer questionA501Answer = answersByCode.get(QuestionCode.A501);
 
@@ -3034,9 +3034,9 @@ public class ReportServiceImpl implements ReportService {
             baseActivityData.setSpecificPurpose(null);
             baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-            baseActivityData.setActivityType(getValue(questionA204Answer));
             // TODO: Code à matcher
-            baseActivityData.setActivitySource(getCode(ActivitySourceCode("DCO"));
+            baseActivityData.setActivityType(ActivityTypeCode.DCO);
+            baseActivityData.setActivitySource(getCode(questionA202Answer, ActivitySourceCode.class));
             baseActivityData.setActivityOwnership(getValueBoolean(questionA501Answer));
             baseActivityData.setValue(getValue(questionA202Answer, baseActivityDataUnit));
 
