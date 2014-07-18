@@ -16,7 +16,7 @@ public class FRIGORIGENECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final FRIGORIGENECode DIOXIDE_DE_CARBONE_CO2 = new FRIGORIGENECode("1");
     public static final FRIGORIGENECode METHANE_NH4 = new FRIGORIGENECode("2");
     public static final FRIGORIGENECode PROTOXYDE_D_AZOTE_N2O = new FRIGORIGENECode("3");
@@ -74,4 +74,5 @@ public class FRIGORIGENECode extends Code {
     public static final FRIGORIGENECode 409A=new
 
     FRIGORIGENECode("40");
+    */
 }

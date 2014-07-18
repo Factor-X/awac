@@ -16,7 +16,7 @@ public class POURCENTSIMPLIFIECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final POURCENTSIMPLIFIECode 0=new
 
     POURCENTSIMPLIFIECode("1");
@@ -60,4 +60,5 @@ public class POURCENTSIMPLIFIECode extends Code {
     public static final POURCENTSIMPLIFIECode 1=new
 
     POURCENTSIMPLIFIECode("11");
+    */
 }

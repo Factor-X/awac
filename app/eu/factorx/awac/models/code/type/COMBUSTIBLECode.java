@@ -16,7 +16,7 @@ public class COMBUSTIBLECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final COMBUSTIBLECode DIESEL_GASOIL_OU_FUEL_LEGER = new COMBUSTIBLECode("1");
     public static final COMBUSTIBLECode GAZ_DE_PETROLE_LIQUEFIE_GPL = new COMBUSTIBLECode("2");
     public static final COMBUSTIBLECode GAZ_NATUREL_PAUVRE = new COMBUSTIBLECode("3");
@@ -55,4 +55,5 @@ public class COMBUSTIBLECode extends Code {
     public static final COMBUSTIBLECode PETROLE_LAMPANT = new COMBUSTIBLECode("36");
     public static final COMBUSTIBLECode TERRIL = new COMBUSTIBLECode("37");
     public static final COMBUSTIBLECode TOURBE = new COMBUSTIBLECode("38");
+    */
 }

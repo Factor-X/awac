@@ -16,7 +16,7 @@ public class GESSIMPLIFIECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final GESSIMPLIFIECode DIOXIDE_DE_CARBONE_CO2 = new GESSIMPLIFIECode("1");
     public static final GESSIMPLIFIECode METHANE_NH4 = new GESSIMPLIFIECode("2");
     public static final GESSIMPLIFIECode PROTOXYDE_D_AZOTE_N2O = new GESSIMPLIFIECode("3");
@@ -74,4 +74,5 @@ public class GESSIMPLIFIECode extends Code {
     public static final GESSIMPLIFIECode 409A=new
 
     GESSIMPLIFIECode("40");
+    */
 }

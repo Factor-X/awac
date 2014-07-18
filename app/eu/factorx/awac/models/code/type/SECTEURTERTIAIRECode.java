@@ -16,7 +16,7 @@ public class SECTEURTERTIAIRECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final SECTEURTERTIAIRECode 36_CAPTAGE_TRAITEMENT_ET_DISTRIBUTION_D_EAU=new
 
     SECTEURTERTIAIRECode("1");
@@ -235,5 +235,5 @@ public class SECTEURTERTIAIRECode extends Code {
 
     public static final SECTEURTERTIAIRECode 99_ACTIVITES_DES_ORGANISATIONS_ET_ORGANISMES_EXTRATERRITORIAUX=new
 
-    SECTEURTERTIAIRECode("55");
+    SECTEURTERTIAIRECode("55");*/
 }

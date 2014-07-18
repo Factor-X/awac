@@ -16,7 +16,7 @@ public class SECTEURPRIMAIRECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final SECTEURPRIMAIRECode 05_EXTRACTION_DE_HOUILLE_ET_DE_LIGNITE=new
 
     SECTEURPRIMAIRECode("1");
@@ -35,5 +35,5 @@ public class SECTEURPRIMAIRECode extends Code {
 
     public static final SECTEURPRIMAIRECode 09_SERVICES_DE_SOUTIEN_AUX_INDUSTRIES_EXTRACTIVES=new
 
-    SECTEURPRIMAIRECode("5");
+    SECTEURPRIMAIRECode("5");*/
 }

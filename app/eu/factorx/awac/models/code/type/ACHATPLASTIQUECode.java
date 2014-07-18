@@ -16,7 +16,7 @@ public class ACHATPLASTIQUECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final ACHATPLASTIQUECode PLASTIQUE_MOYENNE = new ACHATPLASTIQUECode("1");
     public static final ACHATPLASTIQUECode POLYETHYLENE_BASSE_DENSITE = new ACHATPLASTIQUECode("2");
     public static final ACHATPLASTIQUECode PET = new ACHATPLASTIQUECode("3");
@@ -25,4 +25,5 @@ public class ACHATPLASTIQUECode extends Code {
     public static final ACHATPLASTIQUECode COMPOSITES_ET_POLYURETHANE_MOYENNE = new ACHATPLASTIQUECode("6");
     public static final ACHATPLASTIQUECode FILMS_PLASTIQUES_PET_PAS_RECYCLABLE = new ACHATPLASTIQUECode("7");
     public static final ACHATPLASTIQUECode PLASTIQUE_MOYENNE = new ACHATPLASTIQUECode("8");
+*/
 }

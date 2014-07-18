@@ -16,7 +16,7 @@ public class SECTEURSECONDAIRECode extends Code {
         this();
         this.key = key;
     }
-
+/*
     public static final SECTEURSECONDAIRECode 10_INDUSTRIES_ALIMENTAIRES=new
 
     SECTEURSECONDAIRECode("1");
@@ -116,4 +116,5 @@ public class SECTEURSECONDAIRECode extends Code {
     public static final SECTEURSECONDAIRECode 35_PRODUCTION_ET_DISTRIBUTION_D_ELECTRICITE_DE_GAZ_DE_VAPEUR_ET_D_AIR_CONDITIONNE=new
 
     SECTEURSECONDAIRECode("25");
+    */
 }
