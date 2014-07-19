@@ -16,10 +16,13 @@ import java.util.Map;
 
 public class InitializationThread extends Thread {
 
+	private boolean initialized;
+
 	private ApplicationContext ctx;
 
 	public InitializationThread(ApplicationContext ctx) {
 		this.ctx = ctx;
+		initialized = false;
 	}
 
 	public void run() {
@@ -29,6 +32,7 @@ public class InitializationThread extends Thread {
 			public void invoke() throws Throwable {
 				createInitialData(ctx);
 				createInMemoryData(ctx);
+				initialized = true;
 			}
 		});
 
@@ -103,5 +107,7 @@ public class InitializationThread extends Thread {
 		}
 	}
 
-
+	public boolean isInitialized() {
+		return initialized;
+	}
 }

@@ -9,7 +9,7 @@
         </div>
 
         <div class="users">
-            <div ng-show="$root.currentPerson!=null">Bienvenue, <span class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
+            <div ng-show="$root.currentPerson!=null"><span ng-bind-html="'WELCOME' | translate"></span>, <span class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
             </div>
             <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
             <!-- temporary -->
