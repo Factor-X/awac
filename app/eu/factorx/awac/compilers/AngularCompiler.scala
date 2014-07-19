@@ -95,10 +95,6 @@ class AngularCompiler {
 
         val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
 
-        println("<roots>")
-        println(roots)
-        println("</roots>")
-
         compileFiles(roots, Path.fromString("tmp/sources/"))
         compileFiles(services, Path.fromString("tmp/sources/"))
         compileFiles(filters, Path.fromString("tmp/sources/"))

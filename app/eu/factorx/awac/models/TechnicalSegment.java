@@ -1,9 +1,9 @@
 package eu.factorx.awac.models;
 
-import javax.persistence.Embeddable;
-
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class TechnicalSegment {

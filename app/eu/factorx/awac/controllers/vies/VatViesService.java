@@ -11,6 +11,13 @@
 
 package eu.factorx.awac.controllers.vies;
 
+import eu.factorx.awac.common.actions.CorsAction;
+import org.apache.commons.lang3.StringEscapeUtils;
+import play.libs.Json;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.With;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -20,14 +27,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 //for JSON
-import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.With;
-import eu.factorx.awac.common.actions.CorsAction;
 //import org.datanucleus.util.StringUtils;
 
 
@@ -115,15 +115,6 @@ public class VatViesService extends Controller {
 		return result;
 	}
 
-
-	private class VatResult {
-		public boolean valid = false;
-		public String name;
-		public String address;
-		public String id;
-		public String date;
-	}
-
 	private String getValue(String text, String tag) {
 		Pattern p = Pattern.compile("<" + tag + ">(.*)</" + tag + ">");
 		Matcher m = p.matcher(text);
@@ -160,5 +151,13 @@ public class VatViesService extends Controller {
 			return badRequest(Json.toJson(responseData));
 		}
 		return ok(Json.toJson(responseData));
+	}
+
+	private class VatResult {
+		public boolean valid = false;
+		public String name;
+		public String address;
+		public String id;
+		public String date;
 	}
 }

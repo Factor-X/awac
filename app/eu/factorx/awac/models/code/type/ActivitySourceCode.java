@@ -1,18 +1,16 @@
 package eu.factorx.awac.models.code.type;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "activitysource"))})
 public class ActivitySourceCode extends Code {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final ActivitySourceCode DIESEL_GASOIL_OU_FUEL_LEGER = new ActivitySourceCode("1");
 	public static final ActivitySourceCode GAZ_DE_PETROLE_LIQUEFIE_GPL = new ActivitySourceCode("2");
@@ -382,6 +380,7 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode REPAS_A_DOMINANTE_ANIMALE_AVEC_BOEUF = new ActivitySourceCode("361");
 	public static final ActivitySourceCode REPAS_POULET_MANIOC_BANANES = new ActivitySourceCode("362");
 	public static final ActivitySourceCode REPAS_POISSON_RIZ_TOMATES = new ActivitySourceCode("363");
+	private static final long serialVersionUID = 1L;
 
 	protected ActivitySourceCode() {
 		super(CodeList.ACTIVITY_SOURCE);

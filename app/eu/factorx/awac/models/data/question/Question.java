@@ -1,21 +1,11 @@
 package eu.factorx.awac.models.data.question;
 
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
@@ -28,23 +18,19 @@ import eu.factorx.awac.models.data.answer.AnswerType;
 })
 public abstract class Question extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * :codes = a {@link List} of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "Question.findByCodes";
-
 	/**
 	 * :code = a {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODE = "Question.findByCode";
-
 	/**
 	 * :questionSets = a {@link List} of {@link QuestionSet}
 	 */
 	public static final String FIND_BY_QUESTION_SETS = "Question.findByQuestionSets";
-
+	private static final long serialVersionUID = 1L;
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;
 

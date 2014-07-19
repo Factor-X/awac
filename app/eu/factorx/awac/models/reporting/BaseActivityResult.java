@@ -1,11 +1,10 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
-
-import javax.persistence.MappedSuperclass;
-
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
+
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 @MappedSuperclass
 public class BaseActivityResult implements Serializable {

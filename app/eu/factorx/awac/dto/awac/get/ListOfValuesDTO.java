@@ -1,8 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.ArrayList;
-
 import eu.factorx.awac.dto.awac.shared.ListOfValuesLine;
+
+import java.util.ArrayList;
 
 public class ListOfValuesDTO extends ArrayList<ListOfValuesLine> {
 

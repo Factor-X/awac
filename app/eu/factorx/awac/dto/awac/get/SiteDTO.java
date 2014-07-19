@@ -15,27 +15,27 @@ public class SiteDTO extends DTO {
 		this.name = name;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setScope(Long scope) {
-		this.scope = scope;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getScope() {
 		return scope;
+	}
+
+	public void setScope(Long scope) {
+		this.scope = scope;
 	}
 }

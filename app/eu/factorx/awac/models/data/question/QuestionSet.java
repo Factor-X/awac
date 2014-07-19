@@ -1,30 +1,18 @@
 package eu.factorx.awac.models.data.question;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "question_set")
 public class QuestionSet extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
-
+	private static final long serialVersionUID = 1L;
 	@Enumerated
 	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
 	private QuestionCode code;

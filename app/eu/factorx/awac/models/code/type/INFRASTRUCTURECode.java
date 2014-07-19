@@ -1,21 +1,9 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
 public class INFRASTRUCTURECode extends Code {
-
-	private static final long serialVersionUID = 1L;
-
-	protected INFRASTRUCTURECode() {
-		super(CodeList.INFRASTRUCTURE);
-	}
-
-	public INFRASTRUCTURECode(String key) {
-		this();
-		this.key = key;
-	}
 
 	public static final INFRASTRUCTURECode INFRASTRUCTURE = new INFRASTRUCTURECode("1");
 	public static final INFRASTRUCTURECode LOGEMENTS_BETON = new INFRASTRUCTURECode("2");
@@ -41,4 +29,12 @@ public class INFRASTRUCTURECode extends Code {
 	public static final INFRASTRUCTURECode MACHINES = new INFRASTRUCTURECode("22");
 	public static final INFRASTRUCTURECode MOBILIER = new INFRASTRUCTURECode("23");
 	public static final INFRASTRUCTURECode VOIRIE = new INFRASTRUCTURECode("24");
+	private static final long serialVersionUID = 1L;
+	protected INFRASTRUCTURECode() {
+		super(CodeList.INFRASTRUCTURE);
+	}
+	public INFRASTRUCTURECode(String key) {
+		this();
+		this.key = key;
+	}
 }

@@ -1,21 +1,9 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
 public class ORIGINEEAUUSEECode extends Code {
-
-	private static final long serialVersionUID = 1L;
-
-	protected ORIGINEEAUUSEECode() {
-		super(CodeList.ORIGINEEAUUSEE);
-	}
-
-	public ORIGINEEAUUSEECode(String key) {
-		this();
-		this.key = key;
-	}
 
 	public static final ORIGINEEAUUSEECode EAUX_DE_RAFFINAGE_D_ALCOOL = new ORIGINEEAUUSEECode("1");
 	public static final ORIGINEEAUUSEECode EAUX_DE_BIERE_ET_MALT = new ORIGINEEAUUSEECode("2");
@@ -31,4 +19,12 @@ public class ORIGINEEAUUSEECode extends Code {
 	public static final ORIGINEEAUUSEECode EAUX_DE_RAFFINAGE_DU_SUCRE = new ORIGINEEAUUSEECode("12");
 	public static final ORIGINEEAUUSEECode EAUX_DE_LEGUMES_ET_FRUITS_JUS = new ORIGINEEAUUSEECode("13");
 	public static final ORIGINEEAUUSEECode EAUX_DE_VINS_ET_VINAIGRES = new ORIGINEEAUUSEECode("14");
+	private static final long serialVersionUID = 1L;
+	protected ORIGINEEAUUSEECode() {
+		super(CodeList.ORIGINEEAUUSEE);
+	}
+	public ORIGINEEAUUSEECode(String key) {
+		this();
+		this.key = key;
+	}
 }

@@ -1,20 +1,13 @@
 package eu.factorx.awac.models.data.answer;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NamedQueries({

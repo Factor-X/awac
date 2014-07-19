@@ -1,19 +1,13 @@
 package eu.factorx.awac.models.code.type;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
+
+import javax.persistence.*;
 
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "fuel"))})
 public class FuelCode extends Code {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final FuelCode FUEL_DIESEL_GASOIL_FUEL_LEGER = new FuelCode("1", ActivitySourceCode.DIESEL_GASOIL_OU_FUEL_LEGER);
 	public static final FuelCode FUEL_GAZ_DE_PETROLE_LIQUEFIE_GPL = new FuelCode("2", ActivitySourceCode.GAZ_DE_PETROLE_LIQUEFIE_GPL);
@@ -46,7 +40,7 @@ public class FuelCode extends Code {
 	public static final FuelCode FUEL_PETROLE_LAMPANT = new FuelCode("29", ActivitySourceCode.PETROLE_LAMPANT);
 	public static final FuelCode FUEL_TERRIL = new FuelCode("30", ActivitySourceCode.TERRIL);
 	public static final FuelCode FUEL_TOURBE = new FuelCode("31", ActivitySourceCode.TOURBE);
-
+	private static final long serialVersionUID = 1L;
 	@Transient
 	private ActivitySourceCode activitySourceCode;
 

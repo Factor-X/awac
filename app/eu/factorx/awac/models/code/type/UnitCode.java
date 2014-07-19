@@ -5,9 +5,8 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class UnitCode extends Code {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final UnitCode GJ = new UnitCode("GJ");
+	private static final long serialVersionUID = 1L;
 
 	protected UnitCode() {
 		super(CodeList.UNIT);

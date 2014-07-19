@@ -1,17 +1,14 @@
 package eu.factorx.awac.models.code.type;
 
-import javax.persistence.Embeddable;
-
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class QuestionCode extends Code {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final CodeList CODE_TYPE = CodeList.QUESTION;
-
 	public static final QuestionCode A1 = new QuestionCode("A1");
 	public static final QuestionCode A2 = new QuestionCode("A2");
 	public static final QuestionCode A3 = new QuestionCode("A3");
@@ -513,6 +510,7 @@ public class QuestionCode extends Code {
 	public static final QuestionCode A499 = new QuestionCode("A499");
 	public static final QuestionCode A500 = new QuestionCode("A500");
 	public static final QuestionCode A501 = new QuestionCode("A501");
+	private static final long serialVersionUID = 1L;
 
 
 	public QuestionCode() {

@@ -1,27 +1,7 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
-import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
-import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
-import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
@@ -34,12 +14,7 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
-import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
-import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
-import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
+import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
@@ -50,15 +25,20 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.FormService;
-import eu.factorx.awac.service.PeriodService;
-import eu.factorx.awac.service.QuestionAnswerService;
-import eu.factorx.awac.service.QuestionService;
-import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.UnitCategoryService;
-import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.service.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {

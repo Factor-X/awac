@@ -1,9 +1,8 @@
 package eu.factorx.awac.models.reporting;
 
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class Report implements Serializable {

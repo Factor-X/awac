@@ -1,17 +1,15 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import javax.persistence.TypedQuery;
-
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.IndicatorTypeCode;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.IndicatorService;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Component
 public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indicator> implements IndicatorService {

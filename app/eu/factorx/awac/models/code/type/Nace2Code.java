@@ -1,18 +1,16 @@
 package eu.factorx.awac.models.code.type;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "nace2"))})
 public class Nace2Code extends Code {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final Nace2Code NACE_10 = new Nace2Code("10");
 	public static final Nace2Code NACE_11 = new Nace2Code("11");
@@ -39,6 +37,7 @@ public class Nace2Code extends Code {
 	public static final Nace2Code NACE_32 = new Nace2Code("32");
 	public static final Nace2Code NACE_33 = new Nace2Code("33");
 	public static final Nace2Code NACE_35 = new Nace2Code("35");
+	private static final long serialVersionUID = 1L;
 
 	protected Nace2Code() {
 		super(CodeList.NACE_CODES_2);

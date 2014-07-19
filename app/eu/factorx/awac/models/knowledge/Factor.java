@@ -1,21 +1,12 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "factor")
@@ -23,8 +14,6 @@ import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 		@NamedQuery(name = Factor.FIND_BY_PARAMETERS, query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"),
 })
 public class Factor extends AbstractEntity {
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param indicatorCategory : an {@link IndicatorCategoryCode}
@@ -34,7 +23,7 @@ public class Factor extends AbstractEntity {
 	 * @param unitOut : a {@link Unit}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
-
+	private static final long serialVersionUID = 1L;
 	@Embedded
 	private IndicatorCategoryCode indicatorCategory;
 

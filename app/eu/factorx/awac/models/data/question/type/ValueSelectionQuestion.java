@@ -1,13 +1,13 @@
 package eu.factorx.awac.models.data.question.type;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
+
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 
 @Entity
 public class ValueSelectionQuestion extends Question {

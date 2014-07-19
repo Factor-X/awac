@@ -1,9 +1,8 @@
 package eu.factorx.awac.service;
 
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitConversionFormula;
+import org.springframework.stereotype.Component;
 
 @Component
 public interface UnitConversionService extends PersistenceService<UnitConversionFormula> {

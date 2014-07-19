@@ -1,18 +1,16 @@
 package eu.factorx.awac.models.code.type;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "activitytype"))})
 public class ActivityTypeCode extends Code {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final ActivityTypeCode COMBUSTION_FOSSILE = new ActivityTypeCode("1");
 	public static final ActivityTypeCode COMBUSTION_FOSSILE_VIA_SURFACE = new ActivityTypeCode("2");
@@ -82,6 +80,7 @@ public class ActivityTypeCode extends Code {
 	public static final ActivityTypeCode VEHICULE_ROULANT = new ActivityTypeCode("66");
 	public static final ActivityTypeCode MACHINES_TYPE = new ActivityTypeCode("67");
 	public static final ActivityTypeCode MOBILIER_TYPE = new ActivityTypeCode("68");
+	private static final long serialVersionUID = 1L;
 
 	protected ActivityTypeCode() {
 		super(CodeList.ACTIVITY_TYPE);

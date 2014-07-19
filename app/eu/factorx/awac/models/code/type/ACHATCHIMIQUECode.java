@@ -1,21 +1,9 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
 public class ACHATCHIMIQUECode extends Code {
-
-	private static final long serialVersionUID = 1L;
-
-	protected ACHATCHIMIQUECode() {
-		super(CodeList.ACHATCHIMIQUE);
-	}
-
-	public ACHATCHIMIQUECode(String key) {
-		this();
-		this.key = key;
-	}
 
 	public static final ACHATCHIMIQUECode AMMONITRATE_PAR_TONNE_D_AZOTE_AN = new ACHATCHIMIQUECode("1");
 	public static final ACHATCHIMIQUECode AMMONITRATE_CALCAIRE_PAR_TONNE_D_AZOTE_CAN = new ACHATCHIMIQUECode("2");
@@ -40,4 +28,12 @@ public class ACHATCHIMIQUECode extends Code {
 	public static final ACHATCHIMIQUECode ACIDE_CHLORHYDRIQUE = new ACHATCHIMIQUECode("21");
 	public static final ACHATCHIMIQUECode NYLON = new ACHATCHIMIQUECode("22");
 	public static final ACHATCHIMIQUECode ALCOOL = new ACHATCHIMIQUECode("23");
+	private static final long serialVersionUID = 1L;
+	protected ACHATCHIMIQUECode() {
+		super(CodeList.ACHATCHIMIQUE);
+	}
+	public ACHATCHIMIQUECode(String key) {
+		this();
+		this.key = key;
+	}
 }

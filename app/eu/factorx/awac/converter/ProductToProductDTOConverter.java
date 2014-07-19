@@ -1,9 +1,8 @@
 package eu.factorx.awac.converter;
 
-import org.springframework.core.convert.converter.Converter;
-
 import eu.factorx.awac.dto.myrmex.get.ProductDTO;
 import eu.factorx.awac.models.business.Product;
+import org.springframework.core.convert.converter.Converter;
 
 /**
  * Created by root on 6/07/14.

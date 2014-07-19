@@ -11,10 +11,11 @@
 
 package eu.factorx.awac.common.actions;
 
-import play.mvc.*;
+import play.libs.F.Promise;
+import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Http.Response;
-import play.libs.F.Promise;
+import play.mvc.SimpleResult;
 
 public class CorsAction extends Action.Simple {
 

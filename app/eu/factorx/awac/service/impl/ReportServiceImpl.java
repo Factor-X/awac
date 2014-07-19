@@ -1,23 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import eu.factorx.awac.models.code.type.*;
-import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
 import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
+import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Period;
@@ -25,12 +16,15 @@ import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
-import eu.factorx.awac.service.FactorService;
-import eu.factorx.awac.service.IndicatorService;
-import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.ReportService;
-import eu.factorx.awac.service.UnitConversionService;
-import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ReportServiceImpl implements ReportService {
@@ -1590,7 +1584,7 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.DDT);
 			baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
 			// TODO: utiliser codes pour assigner la source
-	        /*if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
+		    /*if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                 if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                     if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus en agglo");

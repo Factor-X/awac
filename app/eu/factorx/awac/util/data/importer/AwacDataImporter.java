@@ -1,42 +1,26 @@
 package eu.factorx.awac.util.data.importer;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.FactorValue;
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.Unit;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-import eu.factorx.awac.models.knowledge.Factor;
-import eu.factorx.awac.models.knowledge.FactorValue;
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.models.knowledge.Unit;
+import java.util.*;
 
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
@@ -88,29 +72,6 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	// unit by symbol map
 	private static Map<String, Unit> knownUnits = null;
-
-	protected void importData() throws Exception {
-
-		knownUnits = new HashMap<>();
-		for (Unit unit : findAllUnits()) {
-			knownUnits.put(unit.getSymbol(), unit);
-		}
-
-		WorkbookSettings ws = new WorkbookSettings();
-		ws.setEncoding(CP1252_ENCODING);
-
-		Workbook awacDataWorkbook = Workbook.getWorkbook(new File(AWAC_DATA_WORKBOOK__PATH), ws);
-		Sheet factorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__FACTORS_SHEET__NAME);
-		Sheet indicatorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME);
-
-		extractCodes();
-		verifyAwacData(factorsSheet, indicatorsSheet);
-		outputCodeConstants();
-
-		saveCodeLabels();
-		saveFactors(factorsSheet);
-		saveIndicators(indicatorsSheet);
-	}
 
 	private static void extractCodes() throws Exception {
 		WorkbookSettings ws = new WorkbookSettings();
@@ -274,6 +235,29 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	private static List<Unit> findAllUnits() {
 		return JPA.em().createNamedQuery(Unit.FIND_ALL, Unit.class).getResultList();
+	}
+
+	protected void importData() throws Exception {
+
+		knownUnits = new HashMap<>();
+		for (Unit unit : findAllUnits()) {
+			knownUnits.put(unit.getSymbol(), unit);
+		}
+
+		WorkbookSettings ws = new WorkbookSettings();
+		ws.setEncoding(CP1252_ENCODING);
+
+		Workbook awacDataWorkbook = Workbook.getWorkbook(new File(AWAC_DATA_WORKBOOK__PATH), ws);
+		Sheet factorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__FACTORS_SHEET__NAME);
+		Sheet indicatorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME);
+
+		extractCodes();
+		verifyAwacData(factorsSheet, indicatorsSheet);
+		outputCodeConstants();
+
+		saveCodeLabels();
+		saveFactors(factorsSheet);
+		saveIndicators(indicatorsSheet);
 	}
 
 }

@@ -10,19 +10,12 @@
  */
 package eu.factorx.awac.models.account;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
+import eu.factorx.awac.models.business.Organization;
 import play.data.validation.Constraints.Max;
 import play.data.validation.Constraints.Min;
 import play.data.validation.Constraints.Required;
-import eu.factorx.awac.models.business.Organization;
+
+import javax.persistence.*;
 
 // import for JAXB annotations -- JAXB stack
 
@@ -34,17 +27,15 @@ import eu.factorx.awac.models.business.Organization;
 })
 public class Account extends Person {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * :identifier = ...
 	 */
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+	private static final long serialVersionUID = 1L;
 
 	//public int accessRights; // not used for now
 
 	// specific fields for an account.
-
 	@Required
 	@Min(value = 18)
 	@Max(value = 100)

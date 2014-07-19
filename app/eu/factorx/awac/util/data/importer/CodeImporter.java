@@ -1,5 +1,13 @@
 package eu.factorx.awac.util.data.importer;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.*;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,20 +16,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import eu.factorx.awac.models.code.type.*;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.label.CodeLabel;
-
 public class CodeImporter extends WorkbookDataImporter {
 
 	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_full.xls";
 	private static final String CODE_CONSTANTS_FILE_PATH = "code_constants.txt";
 	private static Workbook codesWkb = null;
+
+	private static <T extends Code> Constructor<T> getConstructor(Class<T> codeClass) throws NoSuchMethodException {
+		Constructor<T> classConstructor = null;
+		try {
+			classConstructor = codeClass.getConstructor(String.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			classConstructor = codeClass.getConstructor(CodeList.class, String.class);
+		}
+		if (classConstructor == null) {
+			throw new RuntimeException("The class " + codeClass.getName() + " contains no suitable constructor ( {CodeList, String} or {String} ), or this constructor is not visible");
+		}
+		return classConstructor;
+	}
 
 	@Override
 	protected void importData() throws Exception {
@@ -99,19 +111,6 @@ public class CodeImporter extends WorkbookDataImporter {
 		writeCodeConstants(codeClass, codeExtracts, writer);
 		writer.flush();
 		writer.close();
-	}
-
-	private static <T extends Code> Constructor<T> getConstructor(Class<T> codeClass) throws NoSuchMethodException {
-		Constructor<T> classConstructor = null;
-		try {
-			classConstructor = codeClass.getConstructor(String.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			classConstructor = codeClass.getConstructor(CodeList.class, String.class);
-		}
-		if (classConstructor == null) {
-			throw new RuntimeException("The class " + codeClass.getName() + " contains no suitable constructor ( {CodeList, String} or {String} ), or this constructor is not visible");
-		}
-		return classConstructor;
 	}
 
 	private <T extends Code> T getNewCodeInstance(Constructor<T> classConstructor, int nbParams, CodeList codeList,

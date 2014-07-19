@@ -1,18 +1,13 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
+import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.knowledge.Unit;
 
 import javax.persistence.Basic;
 import javax.persistence.Embedded;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.knowledge.Unit;
+import java.io.Serializable;
 
 @MappedSuperclass
 public class BaseActivityData implements Serializable {

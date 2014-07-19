@@ -11,29 +11,18 @@
 
 package eu.factorx.awac.controllers;
 
-import static play.data.Form.form;
-
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Results;
-
-import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends Controller {

@@ -1,18 +1,16 @@
 package eu.factorx.awac.models.code.type;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "activitysubcategory"))})
 public class ActivitySubCategoryCode extends Code {
-
-	private static final long serialVersionUID = 1L;
 
 	public static final ActivitySubCategoryCode ENERGIE_FOSSILE = new ActivitySubCategoryCode("1");
 	public static final ActivitySubCategoryCode ELECTRICITE = new ActivitySubCategoryCode("2");
@@ -26,6 +24,7 @@ public class ActivitySubCategoryCode extends Code {
 	public static final ActivitySubCategoryCode MATIERE = new ActivitySubCategoryCode("11");
 	public static final ActivitySubCategoryCode FACTEUR_PROPRE = new ActivitySubCategoryCode("12");
 	public static final ActivitySubCategoryCode AVAL = new ActivitySubCategoryCode("13");
+	private static final long serialVersionUID = 1L;
 
 	protected ActivitySubCategoryCode() {
 		super(CodeList.ACTIVITY_SUB_CATEGORY);

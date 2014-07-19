@@ -1,13 +1,12 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.service.QuestionAnswerService;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
+import java.util.List;
 
 @Component
 public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionAnswer> implements

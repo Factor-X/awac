@@ -14,6 +14,22 @@ public class DTO implements Content {
 
 	private String __type;
 
+	public static <T extends DTO> T getDTO(JsonNode data, Class<T> type) {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonParser jp = data.traverse();
+		try {
+			T dto = mapper.readValue(jp, type);
+			if (dto == null) {
+				throw new MyrmexRunTimeException("Validation of DTO creation");
+			}
+			dto.validate();
+			return dto;
+
+		} catch (IOException e) {
+			throw new MyrmexRunTimeException("Validation of DTO creation");
+		}
+	}
+
 	public String get__type() {
 		return this.getClass().getCanonicalName();
 	}
@@ -37,22 +53,6 @@ public class DTO implements Content {
 	@Override
 	public String contentType() {
 		return "application/json; charset=utf-8";
-	}
-
-	public static <T extends DTO> T getDTO(JsonNode data, Class<T> type) {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonParser jp = data.traverse();
-		try {
-			T dto = mapper.readValue(jp, type);
-			if (dto == null) {
-				throw new MyrmexRunTimeException("Validation of DTO creation");
-			}
-			dto.validate();
-			return dto;
-
-		} catch (IOException e) {
-			throw new MyrmexRunTimeException("Validation of DTO creation");
-		}
 	}
 
 	public void validate() {

@@ -1,4 +1,3 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;

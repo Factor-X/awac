@@ -1,15 +1,9 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "unit_category")
@@ -18,13 +12,11 @@ import eu.factorx.awac.models.AbstractEntity;
 })
 public class UnitCategory extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * @param String name : a {@link String}
 	 */
 	public static final String FIND_BY_NAME = "UnitCategory.findByName";
-
+	private static final long serialVersionUID = 1L;
 	private String ref;
 
 	// TODO i18n?

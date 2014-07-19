@@ -1,13 +1,12 @@
 package eu.factorx.awac.converter;
 
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 @Component
 public class QuestionToQuestionDTOConverter implements Converter<Question, QuestionDTO> {

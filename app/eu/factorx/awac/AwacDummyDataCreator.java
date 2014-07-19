@@ -1,27 +1,13 @@
 package eu.factorx.awac;
 
-import org.hibernate.Session;
-import org.springframework.context.ApplicationContext;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
-import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.data.question.type.BooleanQuestion;
-import eu.factorx.awac.models.data.question.type.DoubleQuestion;
-import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.StringQuestion;
-import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -29,6 +15,9 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.util.data.importer.AwacDataImporter;
 import eu.factorx.awac.util.data.importer.CodeImporter;
 import eu.factorx.awac.util.data.importer.MyrmexUnitsImporter;
+import org.hibernate.Session;
+import org.springframework.context.ApplicationContext;
+import play.db.jpa.JPA;
 
 public class AwacDummyDataCreator {
 

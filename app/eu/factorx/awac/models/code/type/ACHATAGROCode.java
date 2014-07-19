@@ -1,21 +1,9 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
 public class ACHATAGROCode extends Code {
-
-	private static final long serialVersionUID = 1L;
-
-	protected ACHATAGROCode() {
-		super(CodeList.ACHATAGRO);
-	}
-
-	public ACHATAGROCode(String key) {
-		this();
-		this.key = key;
-	}
 
 	public static final ACHATAGROCode BLE_PAR_TONNE_DE_MATIERE_SECHE = new ACHATAGROCode("1");
 	public static final ACHATAGROCode FOURRAGES_PAR_TONNE_DE_MATIERES_SECHES = new ACHATAGROCode("2");
@@ -58,4 +46,12 @@ public class ACHATAGROCode extends Code {
 	public static final ACHATAGROCode SUCRE = new ACHATAGROCode("39");
 	public static final ACHATAGROCode VIN = new ACHATAGROCode("40");
 	public static final ACHATAGROCode ALCOOL_PUR = new ACHATAGROCode("41");
+	private static final long serialVersionUID = 1L;
+	protected ACHATAGROCode() {
+		super(CodeList.ACHATAGRO);
+	}
+	public ACHATAGROCode(String key) {
+		this();
+		this.key = key;
+	}
 }

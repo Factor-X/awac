@@ -1,12 +1,12 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Pattern;
 import eu.factorx.awac.dto.validation.annotations.Validate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TestDTO extends DTO {

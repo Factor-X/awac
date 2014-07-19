@@ -9,36 +9,26 @@
  *
  */
 
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.Session;
-// Spring imports
+import eu.factorx.awac.compilers.RecompilerThread;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
-import play.db.jpa.JPA;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
 import play.libs.F.Promise;
-import play.libs.Yaml;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
-import eu.factorx.awac.AwacDummyDataCreator;
-import eu.factorx.awac.InMemoryData;
-import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
-import eu.factorx.awac.models.account.Administrator;
-import eu.factorx.awac.models.account.Person;
+
+// Spring imports
 
 public class Global extends GlobalSettings {
 
@@ -61,12 +51,17 @@ public class Global extends GlobalSettings {
 		// INTERNAL SPRING SERVICES
 		// ========================================
 
+
 		// read spring configuration and instanciate context
 		ctx = new ClassPathXmlApplicationContext("components.xml");
 
 		InitializationThread thread = new InitializationThread(ctx);
 		thread.start();
 
+		if (app.isDev()) {
+			RecompilerThread recompilerThread = new RecompilerThread();
+			recompilerThread.start();
+		}
 
 	}
 

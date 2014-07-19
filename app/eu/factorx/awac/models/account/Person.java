@@ -11,26 +11,15 @@
 
 package eu.factorx.awac.models.account;
 
-import java.sql.Timestamp;
-
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlTransient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.factorx.awac.common.AccountStatusType;
+import eu.factorx.awac.models.AbstractEntity;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import eu.factorx.awac.common.AccountStatusType;
-import eu.factorx.awac.models.AbstractEntity;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+import java.sql.Timestamp;
 
 // import for TimeStamp
 // imports for validation and constraints annotations
@@ -88,16 +77,6 @@ public abstract class Person extends AbstractEntity {
 	protected Person() {
 	}
 
-	public String toString() {
-		String string = "";
-		string = string.concat("identifier:" + identifier);
-		string = string.concat("lastname:" + lastname);
-		string = string.concat("firstname:" + firstname);
-		string = string.concat("email:" + email);
-		string = string.concat("address:" + address);
-		return string;
-	}
-
 	public Person(String identifier, String password, String lastname,
 	              String firstname) {
 		// Dans le constructeur de la classe Personne
@@ -116,6 +95,16 @@ public abstract class Person extends AbstractEntity {
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.address = address;
+	}
+
+	public String toString() {
+		String string = "";
+		string = string.concat("identifier:" + identifier);
+		string = string.concat("lastname:" + lastname);
+		string = string.concat("firstname:" + firstname);
+		string = string.concat("email:" + email);
+		string = string.concat("address:" + address);
+		return string;
 	}
 
 	public Timestamp getLastUpdate() {

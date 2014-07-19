@@ -1,13 +1,12 @@
 package eu.factorx.awac.models;
 
-import java.io.Serializable;
-
-import javax.persistence.*;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import play.Logger;
 import play.mvc.Http.Context;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)

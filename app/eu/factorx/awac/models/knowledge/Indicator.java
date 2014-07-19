@@ -1,25 +1,11 @@
 package eu.factorx.awac.models.knowledge;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "indicator")
@@ -27,8 +13,6 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = false"),
 		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),})
 public class Indicator extends AbstractEntity {
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param type : an {@link IndicatorCategoryCode}
@@ -38,9 +22,8 @@ public class Indicator extends AbstractEntity {
 	 * @param activityOwnership : a {@link Boolean}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Indicator.findByParametersAndOwnership";
-
 	public static final String FIND_ALL_INDICATOR_NAMES = "Indicator.findAllIndicatorNames";
-
+	private static final long serialVersionUID = 1L;
 	// not unique !!
 	private String name;
 

@@ -1,10 +1,10 @@
 package eu.factorx.awac.dto.awac.post;
 
-import java.util.Map;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.models.data.question.QuestionSet;
+
+import java.util.Map;
 
 public class AnswerLineDTO extends DTO {
 

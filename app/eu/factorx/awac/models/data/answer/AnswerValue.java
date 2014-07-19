@@ -1,15 +1,8 @@
 package eu.factorx.awac.models.data.answer;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

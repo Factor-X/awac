@@ -1,14 +1,13 @@
 package eu.factorx.awac.controllers;
 
-import java.util.List;
-
+import eu.factorx.awac.dto.awac.get.TestDTO;
 import org.springframework.stereotype.Component;
-
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import eu.factorx.awac.dto.awac.get.TestDTO;
+
+import java.util.List;
 
 @Component
 public class TestController extends Controller {

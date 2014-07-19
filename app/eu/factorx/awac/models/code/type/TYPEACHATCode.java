@@ -1,21 +1,9 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
 public class TYPEACHATCode extends Code {
-
-	private static final long serialVersionUID = 1L;
-
-	protected TYPEACHATCode() {
-		super(CodeList.TYPEACHAT);
-	}
-
-	public TYPEACHATCode(String key) {
-		this();
-		this.key = key;
-	}
 
 	public static final TYPEACHATCode METAUX = new TYPEACHATCode("1");
 	public static final TYPEACHATCode PLASTIQUES = new TYPEACHATCode("2");
@@ -25,4 +13,12 @@ public class TYPEACHATCode extends Code {
 	public static final TYPEACHATCode ROAD_MATERIALS = new TYPEACHATCode("6");
 	public static final TYPEACHATCode SERVICES_ET_INFORMATIQUE = new TYPEACHATCode("7");
 	public static final TYPEACHATCode AGRO_ALIMENTAIRE = new TYPEACHATCode("8");
+	private static final long serialVersionUID = 1L;
+	protected TYPEACHATCode() {
+		super(CodeList.TYPEACHAT);
+	}
+	public TYPEACHATCode(String key) {
+		this();
+		this.key = key;
+	}
 }

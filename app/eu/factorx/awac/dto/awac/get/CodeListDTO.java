@@ -1,8 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
+
+import java.util.List;
 
 public class CodeListDTO extends DTO {
 

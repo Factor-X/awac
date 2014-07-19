@@ -28,8 +28,6 @@ public class InitializationThread extends Thread {
 				createInitialData(ctx);
 			}
 		});
-
-
 		createInMemoryData();
 	}
 
