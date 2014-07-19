@@ -92,6 +92,21 @@ angular
               return result
       return null
 
+    $scope.getAnswerOrCreate = (code, mapIteration =null) ->
+      result = $scope.getAnswer(code)
+      if result
+        return result
+      else
+        #if the answer was not founded, create it
+        answerLine = {
+          'questionKey':code
+          'value':null
+          'unitId':null
+          'mapRepetition':mapIteration
+        }
+        $scope.answerList[$scope.answerList.length] = answerLine
+        return answerLine
+
     # getAnswerByQuestionCode and mapIteration
     $scope.getAnswer = (code, mapIteration =null) ->
       for answer in $scope.answerList
@@ -108,12 +123,4 @@ angular
           if failed == false
             return answer
 
-      #if the answer was not founded, create it
-      answerLine = {
-        'questionKey':code
-        'value':null
-        'unitId':null
-        'mapRepetition':mapIteration
-      }
-      $scope.answerList[$scope.answerList.length] = answerLine
-      return answerLine
+      return null

@@ -1,10 +1,6 @@
 div
-    div(ng-bind-html="getObject().code + '_TITLE' | translate")
+    div(ng-bind-html="getQuestionSetCode() + '_TITLE' | translate")
 
-    div(ng-repeat="v in getMapRepetition())")
+    div
         ng-virtual(ng-transclude=true)
         button(ng-click="removeAnwser(v)") Remove
-    div
-        div
-        .oneelement
-            button(ng-click="addNewAnswer()") Add

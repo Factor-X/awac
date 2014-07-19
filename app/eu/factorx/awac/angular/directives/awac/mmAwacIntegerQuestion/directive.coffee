@@ -5,13 +5,14 @@ angular
     scope: directiveService.autoScope
         ngQuestionCode: '='
         ngCondition: '='
+        ngRepetitionMap:'='
     templateUrl: "$/angular/templates/mm-awac-integer-question.html"
     replace: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
         scope.getAnswerValue = () ->
-            return scope.$parent.getAnswer(scope.ngQuestionCode)
+            return scope.$parent.getAnswerOrCreate(scope.ngQuestionCode,scope.ngRepetitionMap)
 
 
 

@@ -32,34 +32,62 @@ angular
         console.log "$scope.mapRepetition"
         console.log $scope.mapRepetition
 
+        #temp
+        ###
+        $scope.mapRepetition['A15'] = [{'A15':1},
+                                        {'A15':2}]
 
+        $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                       {'A16':2,'A15':1}]
+        ###
 
       $scope.loopRepetition = (questionSetDTO, currentRepetition=null) ->
-        console.log "je suis loopRepetition pour "+questionSetDTO.code
-
-        if questionSetDTO.code == "A15"
-          questionSetDTO.repetitionAllowed=true
 
         if questionSetDTO.repetitionAllowed == true
-          console.log "je suis "+questionSetDTO.code+" et je suis repetable"
 
           #find if the answer are already repeated on this repetition
           for q in questionSetDTO.questions
             #recover answer
-            answer = $scope.getAnswer(q.code)
+            listAnswer = $scope.getListAnswer(q.code)
 
-            #control if the answer have a repetition for this questionSetDTO
-            if answer.mapRepetition.length == 0
-              #this is an error
-              console.log("mapRepetition expected but not found")
-            else if answer.mapRepetition[questionSetDTO.code]!=null
-              repetition = answer.mapRepetition[questionSetDTO.code]
-              #try to add this repetition to the mapRepetition
-              if mapRepetition[questionSetDTO.code] !=null
-                if mapRepetition.get[questionSetDTO.code].get[repetition]
-                  mapRepetition.get[mapRepetition.get.length] = repetition
+            for answer in listAnswer
 
-              else mapRepetition[mapRepetition.length] = [repetition]
+              console.log "answer in $scope.loopRepetition"
+              console.log answer
+
+              #control if the answer have a repetition for this questionSetDTO
+              if answer.mapRepetition==null
+                #this is an error
+                console.log("mapRepetition expected but not found")
+              else
+                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                code= questionSetDTO.code
+                repetitionToAdd = {}#code:repetition}
+                repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                if $scope.mapRepetition[questionSetDTO.code]
+                  founded=false
+                  for repetition in $scope.mapRepetition[questionSetDTO.code]
+                    if repetition[questionSetDTO.code] == repetitionNumber
+                      console.log "exite dajà"
+                      founded=true
+                  if founded == false
+                    console.log "existe mais ajouté"
+                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] =repetitionToAdd
+                else
+                  console.log "exite pas, ajoute"
+                  $scope.mapRepetition[questionSetDTO.code] = []
+                  $scope.mapRepetition[questionSetDTO.code][0] = repetitionToAdd
+
+
+              ###
+                repetition = answer.mapRepetition[questionSetDTO.code]
+                #try to add this repetition to the mapRepetition
+                if mapRepetition[questionSetDTO.code] !=null
+                  if mapRepetition.get[questionSetDTO.code]['repetition']
+                    mapRepetition.get[mapRepetition.get.length] = repetition
+
+                else mapRepetition[mapRepetition.length] = [repetition]
+              ###
 
       $scope.storeAnswers()
       $scope.loading =false
@@ -153,6 +181,9 @@ angular
         if answer.value # && answer.visible
           listAnswerToSave[listAnswerToSave.length] = answer
 
+      console.log "listAnswerToSave"
+      console.log listAnswerToSave
+
       #and replace the list
       $scope.o.answersSave.listAnswers = listAnswerToSave
 
@@ -192,6 +223,9 @@ angular
       #recover the list
       return $scope.o.codeLists[question.codeListName]
 
+    $scope.getRepetitionMapByQuestionSet = (code) ->
+      return $scope.mapRepetition[code]
+
     # getQuestionByCode
     $scope.getQuestion = (code,listQuestionSets=$scope.o.questionSets) ->
       if listQuestionSets
@@ -206,8 +240,23 @@ angular
               return result
       return null
 
+    $scope.getAnswerOrCreate = (code, mapIteration =null) ->
+      result = $scope.getAnswer(code, mapIteration)
+      if result
+        return result
+      else
+        #if the answer was not founded, create it
+        answerLine = {
+          'questionKey':code
+          'value':null
+          'unitId':null
+          'mapRepetition':mapIteration
+        }
+        $scope.answerList[$scope.answerList.length] = answerLine
+        return answerLine
+
     # getAnswerByQuestionCode and mapIteration
-    $scope.getAnswer = (code, mapIteration =null) ->
+    $scope.getAnswer = (code, mapIteration) ->
       for answer in $scope.answerList
         #control the code
         if answer.questionKey == code
@@ -215,19 +264,43 @@ angular
           #control the repetition map
           failed=false
           if mapIteration
-            for iParam in mapIteration
-              if answer.mapRepetition[iParam.key]==null || answer.mapRepetition[iParam.key] != iParam.value
-                failed = true
+            for key in Object.keys(mapIteration)
+              if key != '$$hashKey'
+                value = mapIteration[key]
+                if answer.mapRepetition[key]==null || answer.mapRepetition[key] != value
+                  failed = true
 
           if failed == false
             return answer
 
-      #if the answer was not founded, create it
-      answerLine = {
-        'questionKey':code
-        'value':null
-        'unitId':null
-        'mapRepetition':mapIteration
-      }
-      $scope.answerList[$scope.answerList.length] = answerLine
-      return answerLine
+      return null
+
+    $scope.getListAnswer = (code, mapIteration) ->
+
+      listAnswer = []
+
+      for answer in $scope.answerList
+        #control the code
+        if answer.questionKey == code
+          listAnswer[listAnswer.length] = answer
+
+      return listAnswer
+
+    $scope.addIteration = (code, mapRepetition) ->
+      #TODO implement mapRepetition
+      max = 1
+      repetitionToAdd = {}
+
+      if $scope.mapRepetition[code] == null
+        repetitionToAdd[code] =max
+        $scope.mapRepetition[code] = []
+        $scope.mapRepetition[code][0] = repetitionToAdd
+      else
+        for repetition in $scope.mapRepetition[code]
+          if repetition[code] > max
+            max = repetition[code]
+
+        repetitionToAdd[code] =max+1
+        $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd
+
+

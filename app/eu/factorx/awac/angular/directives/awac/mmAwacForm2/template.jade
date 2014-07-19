@@ -1,1 +1,10 @@
 mm-awac-section(title-code="A1_TITLE")
+
+
+    mm-awac-repetition-question(ng-question-set-code="'A15'", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
+
+        mm-awac-select-question(ng-question-code="'A16'",ng-repetition-map="itLevel1")
+
+        mm-awac-real-with-unit-question(ng-question-code="'A17'",ng-repetition-map="itLevel1")
+
+    button(ng-click="addIteration('A15')", type="button") Add an iteration
