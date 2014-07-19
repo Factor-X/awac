@@ -45,4 +45,9 @@ public class UnitCategoryDTO {
 		return getUnits().add(unitDTO);
 	}
 
+	@Override
+	public String toString() {
+		return "UnitCategoryDTO [id=" + id + ", units=" + units + "]";
+	}
+
 }

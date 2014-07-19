@@ -8,6 +8,8 @@ import java.util.List;
 public class QuestionAnswersDTO extends DTO {
 
 	@NotNull
+	private Long formId;
+	@NotNull
 	private Long scopeId;
 	@NotNull
 	private Long periodId;
@@ -17,10 +19,19 @@ public class QuestionAnswersDTO extends DTO {
 	public QuestionAnswersDTO() {
 	}
 
-	public QuestionAnswersDTO(Long scopeId, Long periodId, List<AnswerLineDTO> listAnswers) {
+	public QuestionAnswersDTO(Long formId, Long scopeId, Long periodId, List<AnswerLineDTO> listAnswers) {
+		this.formId = formId;
 		this.scopeId = scopeId;
 		this.periodId = periodId;
 		this.listAnswers = listAnswers;
+	}
+
+	public Long getFormId() {
+		return formId;
+	}
+
+	public void setFormId(Long formId) {
+		this.formId = formId;
 	}
 
 	public Long getScopeId() {
@@ -49,7 +60,7 @@ public class QuestionAnswersDTO extends DTO {
 
 	@Override
 	public String toString() {
-		return "QuestionAnswersDTO [scopeId=" + scopeId + ", periodId=" + periodId + ", listAnswers=" + listAnswers + "]";
+		return "QuestionAnswersDTO [formId=" + formId + ", scopeId=" + scopeId + ", periodId=" + periodId + ", listAnswers=" + listAnswers + "]";
 	}
 
 }

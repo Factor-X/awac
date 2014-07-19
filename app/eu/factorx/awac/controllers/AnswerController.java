@@ -92,11 +92,13 @@ public class AnswerController extends Controller {
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
-		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(scopeId, periodId, answerLineDTOs);
+		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, answerLineDTOs);
 
 		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
+
+        Logger.debug("questionSetDTOs : "+questionSetDTOs);
 
 		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);

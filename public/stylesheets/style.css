@@ -569,6 +569,7 @@ button.comments {
 
 .element {
     padding: 10px;
+    min-height: 115px;
 }
 
 .element_header {
