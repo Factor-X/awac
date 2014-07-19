@@ -32,16 +32,33 @@ public class TranslationImporter extends WorkbookDataImporter {
 		ws.setEncoding(CP1252_ENCODING);
 		wb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
 
-		Sheet sheet = wb.getSheet(0);
+		Sheet survey = wb.getSheet("SURVEY");
 
-		for (int i = 1; i < sheet.getRows(); i++) {
+		for (int i = 1; i < survey.getRows(); i++) {
 
-			String key = getCellContent(sheet, 0, i);
-			String labelEn = getCellContent(sheet, 1, i);
-			String labelFr = getCellContent(sheet, 2, i);
-			String labelNl = getCellContent(sheet, 3, i);
+			String key = getCellContent(survey, 0, i);
+			if (key == null || key.trim().length() == 0) continue;
+			String labelEn = getCellContent(survey, 1, i);
+			String labelFr = getCellContent(survey, 2, i);
+			String labelNl = getCellContent(survey, 3, i);
 
 			CodeLabel cl = new CodeLabel(CodeList.TRANSLATIONS_SURVEY, key, labelEn, labelFr, labelNl);
+			session.saveOrUpdate(cl);
+
+		}
+
+		Sheet ui = wb.getSheet("INTERFACE");
+
+		for (int i = 1; i < ui.getRows(); i++) {
+
+			String key = getCellContent(ui, 0, i);
+			if (key == null || key.trim().length() == 0) continue;
+
+			String labelEn = getCellContent(ui, 1, i);
+			String labelFr = getCellContent(ui, 2, i);
+			String labelNl = getCellContent(ui, 3, i);
+
+			CodeLabel cl = new CodeLabel(CodeList.TRANSLATIONS_INTERFACE, key, labelEn, labelFr, labelNl);
 			session.saveOrUpdate(cl);
 
 		}

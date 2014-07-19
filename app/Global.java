@@ -82,7 +82,7 @@ public class Global extends GlobalSettings {
 			return new Action() {
 				@Override
 				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
-					return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try a gain in a moment."));
+					return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
 				}
 			};
 		}
