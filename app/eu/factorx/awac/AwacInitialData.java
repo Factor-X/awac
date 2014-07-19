@@ -116,7 +116,7 @@ public class AwacInitialData {
 		// Combustion de combustible par les sources statiques des sites de l'entreprise
 		// A13(Consommation de combustibles) > A15 (Combustion de combustible par les sources statiques des sites de l'entreprise)
 
-		QuestionSet a15 = new QuestionSet(QuestionCode.A15, false);
+		QuestionSet a15 = new QuestionSet(QuestionCode.A15, true);
 		session.saveOrUpdate(a15);
 		tab2Form.getQuestionSets().add(a15);
 		session.saveOrUpdate(tab2Form);

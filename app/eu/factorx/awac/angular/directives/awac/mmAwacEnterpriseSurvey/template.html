@@ -4,7 +4,7 @@
         <div class="wallonie_logo"></div>
         <div class="awac_logo"></div>
         <div>
-            <div class="calculateur_type">Calculateur CO2 Entreprise</div>
+            <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
             <div class="entreprise_name">{{ $root.organization.name }}</div>
         </div>
 
@@ -13,8 +13,11 @@
             </div>
             <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
             <!-- temporary -->
-            <button ng-show="$root.currentPerson!=null" type="button" ng-click="$root.logout();" class="user_manage">
-                Logout
+            <button ng-show="$root.currentPerson!=null"
+                    type="button"
+                    ng-click="$root.logout();"
+                    ng-bind-html="'LOGOUT_BUTTON' | translate"
+                    class="user_manage">
             </button>
             <!--<button type="button" class="user_manage">Gestion utilisateurs</button>-->
         </div>
@@ -37,7 +40,7 @@
 
     <div class="data_menu">
         <div class="data_date">
-            <div>Données</div>
+            <div ng-bind-html="'PERIOD_DATA' | translate"></div>
             <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
         </div>
 
@@ -56,8 +59,8 @@
 
         <div class="data_save">
             <div class="last_save">
-                dernière sauvegarde<br>
-                le 07/01/2014 à 19:42
+                <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
+                07/01/2014 - 19:42
             </div>
             <div class="small_separator"></div>
             <div class="save_button">

@@ -45,8 +45,22 @@ public class InitializationThread extends Thread {
 		TranslationsDTO frDTO = new TranslationsDTO("FR");
 		TranslationsDTO nlDTO = new TranslationsDTO("NL");
 
-		List<CodeLabel> codeLabels = JPA.em().createQuery("select o from CodeLabel o where o.codeList = :cl", CodeLabel.class)
+		List<CodeLabel> codeLabels;
+
+		// SURVEY
+		codeLabels = JPA.em().createQuery("select o from CodeLabel o where o.codeList = :cl", CodeLabel.class)
 				.setParameter("cl", CodeList.TRANSLATIONS_SURVEY)
+				.getResultList();
+
+		for (CodeLabel codeLabel : codeLabels) {
+			enDTO.put(codeLabel.getKey(), codeLabel.getLabelEn());
+			frDTO.put(codeLabel.getKey(), codeLabel.getLabelFr());
+			nlDTO.put(codeLabel.getKey(), codeLabel.getLabelNl());
+		}
+
+		// INTERFACE
+		codeLabels = JPA.em().createQuery("select o from CodeLabel o where o.codeList = :cl", CodeLabel.class)
+				.setParameter("cl", CodeList.TRANSLATIONS_INTERFACE)
 				.getResultList();
 
 		for (CodeLabel codeLabel : codeLabels) {
