@@ -87,7 +87,6 @@ public class Global extends GlobalSettings {
 		return super.onRequest(request, actionMethod);
 	}
 
-
 	// Spring beans instanciation
 	@Override
 	public <A> A getControllerInstance(Class<A> clazz) {

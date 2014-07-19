@@ -2,8 +2,10 @@ package eu.factorx.awac.compilers;
 
 import play.Logger;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 public class RecompilerThread extends Thread {
 
@@ -28,7 +30,21 @@ public class RecompilerThread extends Thread {
 			final Path path = FileSystems.getDefault().getPath("app/eu/factorx/awac/angular");
 			System.out.println(path);
 			final WatchService watchService = FileSystems.getDefault().newWatchService();
-			final WatchKey watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE);
+
+			final SimpleFileVisitor<Path> fileVisitor = new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+					dir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
+							StandardWatchEventKinds.ENTRY_DELETE,
+							StandardWatchEventKinds.ENTRY_MODIFY);
+
+					return FileVisitResult.CONTINUE;
+				}
+			};
+
+			Files.walkFileTree(path, fileVisitor);
+
+
 			while (true) {
 				final WatchKey wk = watchService.take();
 

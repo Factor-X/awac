@@ -1,14 +1,10 @@
 package eu.factorx.awac;
 
-import eu.factorx.awac.util.data.importer.AccountImporter;
+import eu.factorx.awac.util.data.importer.*;
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
 
 import play.db.jpa.JPA;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -21,13 +17,10 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.util.data.importer.AwacDataImporter;
-import eu.factorx.awac.util.data.importer.CodeImporter;
-import eu.factorx.awac.util.data.importer.MyrmexUnitsImporter;
 
-public class AwacDummyDataCreator {
+public class AwacInitialData {
 
-	public static void createAwacDummyData(ApplicationContext ctx, Session session) {
+	public static void createAwacInitialData(ApplicationContext ctx, Session session) {
 
 		// IMPORT MYRMEX UNITS
 		new MyrmexUnitsImporter(session).run();
@@ -41,10 +34,12 @@ public class AwacDummyDataCreator {
 		// ACCOUNTS
 		new AccountImporter(session).run();
 
+		// ACCOUNTS
+		new TranslationImporter(session).run();
+
 		session.flush();
 		
 		// REFERENCES DATA
-
 		UnitCategory surfaceUnits = getUnitCategoryByName("Area");
 		UnitCategory energyUnits = getUnitCategoryByName("Energy");
 		UnitCategory massUnits = getUnitCategoryByName("Mass");
@@ -54,10 +49,7 @@ public class AwacDummyDataCreator {
 		UnitCategory moneyUnits = getUnitCategoryByName("Currency");
 		UnitCategory timeUnits = getUnitCategoryByName("Time");
 
-
-
-		// CAMPAIGN AND FORM
-
+		// PERIOD
 		Period period1 = new Period("2013");
 		session.saveOrUpdate(period1);
 
@@ -65,7 +57,7 @@ public class AwacDummyDataCreator {
 	}
 
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
-			UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
+	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 
 		// == TAB1 ========================================================================
 
@@ -2301,10 +2293,6 @@ public class AwacDummyDataCreator {
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
 
-	}
-
-	private static Unit getUnitBySymbol(String symbol) {
-		return JPA.em().createNamedQuery(Unit.FIND_BY_SYMBOL, Unit.class).setParameter("symbol", symbol).getSingleResult();
 	}
 
 	private static UnitCategory getUnitCategoryByName(String name) {

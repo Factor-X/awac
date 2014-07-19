@@ -25,11 +25,13 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 	@Column(name = COLUMN_NAME_KEY, nullable = false)
 	private String key;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4096)
 	private String labelEn;
 
+	@Column(length = 4096)
 	private String labelFr;
 
+	@Column(length = 4096)
 	private String labelNl;
 
 	protected CodeLabel() {
