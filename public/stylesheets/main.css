@@ -51,6 +51,7 @@ input.ng-invalid {
 /* field_form */
 .field_form{
     display:table;
+    margin: 20px;
 }
 
 .field_form tr{

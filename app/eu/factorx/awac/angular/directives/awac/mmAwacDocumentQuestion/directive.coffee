@@ -1,11 +1,11 @@
 angular
 .module('app.directives')
-.directive "mmAwacIntegerQuestion", (directiveService) ->
+.directive "mmAwacDocumentQuestion", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
         ngObject: '='
-    templateUrl: "$/angular/templates/mm-awac-integer-question.html"
+    templateUrl: "$/angular/templates/mm-awac-document-question.html"
     replace: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
