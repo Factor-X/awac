@@ -118,8 +118,6 @@ public class AnswerController extends Controller {
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
 
-        Logger.debug("questionSetDTOs : "+questionSetDTOs);
-
 		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
 	}
@@ -146,6 +144,9 @@ public class AnswerController extends Controller {
 
 	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
 		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
+		if (codeLabels == null) {
+			throw new RuntimeException("No code labels for the code list: " + codeList);
+		}
 		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
 		for (CodeLabel codeLabel : codeLabels) {
 			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
@@ -198,20 +199,66 @@ public class AnswerController extends Controller {
 		return ok(dto);
 	}
 
-	public void saveAnswsersDTO(Account currentUser, QuestionAnswersDTO answersDTO) {
-		/*
-		 * List<QuestionSetAnswerDTO> listAnswers = answersDTO.getListAnswers(); for (QuestionSetAnswerDTO questionSetAnswerDTO : listAnswers) { QuestionSetAnswer questionSetAnswer
-		 * = questionSetAnswerService.findById(questionSetAnswerDTO.getId()); List<AnswerLine> answerLines = questionSetAnswerDTO.getQuestionAnswers(); for (AnswerLine answerLine :
-		 * answerLines) { QuestionAnswer questionAnswer; if (answerLine.getQuestionAnswerId() != null) { // updating questionAnswer =
-		 * questionAnswerService.findById(answerLine.getQuestionAnswerId()); questionAnswer.getAnswerValues().clear(); } else { // creating Question question =
-		 * getAndVerifyQuestion(answerLine); questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question); }
-		 * 
-		 * // TODO A single QuestionAnswer may be linked to several answer values (all of the same type); this is not yet implemented in DTOs (only one Object returned) // => add
-		 * only one AnswerValue in answerValues list AnswerValue answerValue = getAnswerValue(answerLine, questionAnswer); if (answerValue == null) continue;
-		 * questionAnswer.getAnswerValues().add(answerValue);
-		 * 
-		 * questionAnswerService.saveOrUpdate(questionAnswer); } }
-		 */
+	private void saveAnswsersDTO(Account currentUser, QuestionAnswersDTO answersDTO) {
+		Period period = periodService.findById(answersDTO.getPeriodId());
+		Scope scope = scopeService.findById(answersDTO.getScopeId());
+
+		if (period == null || scope == null) {
+			throw new RuntimeException("Invalid request params");
+		}
+
+		Map<String, Map<Integer, QuestionSetAnswer>> createdQuestionSetAnswers = new HashMap<>();
+		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
+			QuestionAnswer questionAnswer = createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQuestionSetAnswers);
+			questionAnswerService.saveOrUpdate(questionAnswer);
+		}
+	}
+
+	private QuestionAnswer createNewQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO,
+			Map<String, Map<Integer, QuestionSetAnswer>> allQuestionSetAnswers) {
+		Question question = getAndVerifyQuestion(answerLineDTO);
+		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, null, question);
+		AnswerValue answerValue = getAnswerValue(answerLineDTO, questionAnswer);
+		if (answerValue == null) {
+			return null;
+		}
+		questionAnswer.getAnswerValues().add(answerValue);
+		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(allQuestionSetAnswers, scope, period, answerLineDTO.getMapRepetition(), question.getQuestionSet());
+		questionAnswer.setQuestionSetAnswer(questionSetAnswer);
+		return questionAnswer;
+	}
+
+	private QuestionSetAnswer getQuestionSetAnswer(Map<String, Map<Integer, QuestionSetAnswer>> createdQuestionSetAnwers, Scope scope,
+			Period period, Map<String, Integer> repMap, QuestionSet questionSet) {
+
+		// if not yet present, create a new entry in createdQuestionSetAnwers for the list of QuestionSetAnswer linked to questionSet
+		String questionSetCode = questionSet.getCode().getKey();
+		if (!createdQuestionSetAnwers.containsKey(questionSetCode)) {
+			createdQuestionSetAnwers.put(questionSetCode, new HashMap<Integer, QuestionSetAnswer>());
+		}
+
+		Integer repetitionIndex = repMap.get(questionSetCode);
+		if (repetitionIndex == null) {
+			throw new RuntimeException("Invalid repetition map: " + repMap);
+		}
+		QuestionSetAnswer questionSetAnswer = null;
+		if (createdQuestionSetAnwers.get(questionSetCode).containsKey(repetitionIndex)) {
+			// if questionSetAnswer had already been created, get from map
+			questionSetAnswer =  createdQuestionSetAnwers.get(questionSetCode).get(repetitionIndex);
+		} else {
+			// create new questionSetAnswer
+			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, null);
+			if (questionSet.getParent() != null) {
+				// get parent questionSetAnswer (recursive call)
+				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(createdQuestionSetAnwers, scope, period, repMap, questionSet.getParent());
+				questionSetAnswer.setParent(parentQuestionSetAnswer);
+			}
+			// save
+			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
+			// add to createdQuestionSetAnwers map
+			createdQuestionSetAnwers.get(questionSetCode).put(repetitionIndex, questionSetAnswer);
+		}
+		return questionSetAnswer;
 	}
 
 	private AnswerValue getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
