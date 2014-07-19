@@ -10,8 +10,19 @@ import eu.factorx.awac.models.knowledge.Period;
 
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
+	/**
+	 * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (period and scope).  
+	 * @param scope
+	 * @param period
+	 */
 	List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period);
 
+	/**
+	 * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (period and scope) and for given form.  
+	 * @param scope
+	 * @param period
+	 * @param form
+	 */
 	List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form);
 
 	List<QuestionSetAnswer> findByCodes(List<QuestionCode> codes);

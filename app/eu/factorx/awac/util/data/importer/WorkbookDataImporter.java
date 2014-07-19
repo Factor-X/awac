@@ -12,8 +12,8 @@ import java.util.Set;
 import jxl.Sheet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
 
@@ -23,9 +23,14 @@ public abstract class WorkbookDataImporter {
 	public static final NumberFormat NUMBER_WITH_DECIMAL_COMMA_FORMAT = NumberFormat.getInstance(Locale.FRANCE); // for decimal numbers with comma
 	public static final String NEW_LINE = System.getProperty("line.separator");
 
-	public void run() {
+	protected Session session;
+	
+	public synchronized void run() {
 		try {
+			String className = getClass().getSimpleName();
+		   	System.out.println("========= " + className + " - START OF IMPORT =========");
 			importData();
+		   	System.out.println("========= " + className + " - END OF IMPORT =========");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -80,13 +85,13 @@ public abstract class WorkbookDataImporter {
 		}
 	}
 
-	protected static <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
+	protected <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
 		for (T entity : entities) {
 			persistEntity(entity);
 		}
 	}
 
-	protected static <T extends Code> void writeCodeConstants(Class<T> codeClass,
+	protected <T extends Code> void writeCodeConstants(Class<T> codeClass,
 			Set<CodeExtract<T>> codeExtracts, BufferedWriter writer) throws IOException {
 		writer.write(codeClass.getName() + ":" + NEW_LINE);
 		String className = codeClass.getSimpleName();
@@ -99,12 +104,12 @@ public abstract class WorkbookDataImporter {
 		writer.write(NEW_LINE + "--------------" + NEW_LINE);
 	}
 
-	protected static <T extends AbstractEntity> void persistEntity(T entity) {
-		JPA.em().persist(entity);
+	protected <T extends AbstractEntity> void persistEntity(T entity) {
+		session.persist(entity);
 	}
 
-	protected static <T extends AbstractEntity> void updateEntity(T entity) {
-		JPA.em().merge(entity);
+	protected <T extends AbstractEntity> void updateEntity(T entity) {
+		session.merge(entity);
 	}
 
 }

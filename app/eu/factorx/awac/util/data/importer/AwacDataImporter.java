@@ -19,6 +19,7 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -80,15 +81,24 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	private static final String AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME = "Indicators";
 
 	// codes extracts by identifier
-	private static Map<String, CodeExtract<IndicatorCategoryCode>> indicatorCategories = null;
-	private static Map<String, CodeExtract<ActivityTypeCode>> activityTypes = null;
-	private static Map<String, CodeExtract<ActivitySourceCode>> activitySources = null;
-	private static Map<String, CodeExtract<ActivityCategoryCode>> activityCategories = null;
-	private static Map<String, CodeExtract<ActivitySubCategoryCode>> activitySubCategories = null;
+	private Map<String, CodeExtract<IndicatorCategoryCode>> indicatorCategories = null;
+	private Map<String, CodeExtract<ActivityTypeCode>> activityTypes = null;
+	private Map<String, CodeExtract<ActivitySourceCode>> activitySources = null;
+	private Map<String, CodeExtract<ActivityCategoryCode>> activityCategories = null;
+	private Map<String, CodeExtract<ActivitySubCategoryCode>> activitySubCategories = null;
 
 	// unit by symbol map
-	private static Map<String, Unit> knownUnits = null;
+	private Map<String, Unit> knownUnits = null;
 
+	public AwacDataImporter() {
+		super();
+	}
+
+	public AwacDataImporter(Session session) {
+		super();
+		this.session = session;
+	}
+	
 	protected void importData() throws Exception {
 
 		knownUnits = new HashMap<>();
@@ -103,16 +113,26 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Sheet factorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__FACTORS_SHEET__NAME);
 		Sheet indicatorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME);
 
+		System.out.println("==== Extract codes (from " + AWAC_CODES_EXTRACT_WORKBOOK__PATH + ") ====");
 		extractCodes();
+
+		System.out.println("==== Verify Awac business Data (from " + AWAC_DATA_WORKBOOK__PATH + ") ====");
 		verifyAwacData(factorsSheet, indicatorsSheet);
+
+		System.out.println("==== Ouput Code constants (to " + CODE_CONSTANTS_FILE_PATH + ") ====");
 		outputCodeConstants();
 
+		System.out.println("==== Save Code Labels ====");
 		saveCodeLabels();
+
+		System.out.println("==== Save Factors ====");
 		saveFactors(factorsSheet);
+
+		System.out.println("==== Save Indicators ====");
 		saveIndicators(indicatorsSheet);
 	}
 
-	private static void extractCodes() throws Exception {
+	private void extractCodes() throws Exception {
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(CP1252_ENCODING);
 
@@ -123,18 +143,15 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Sheet activitycategoriesSheet = awacCodesWorkbook.getSheet("activitycategories");
 		Sheet activitysubcategoriesSheet = awacCodesWorkbook.getSheet("activitysubcategories");
 
-		indicatorCategories = toCodeExtracts(indicatorcategoriesSheet, IndicatorCategoryCode.class,
-				CodeList.INDICATOR_CATEGORY);
+		indicatorCategories = toCodeExtracts(indicatorcategoriesSheet, IndicatorCategoryCode.class, CodeList.INDICATOR_CATEGORY);
 		activityTypes = toCodeExtracts(activitytypesSheet, ActivityTypeCode.class, CodeList.ACTIVITY_TYPE);
 		activitySources = toCodeExtracts(activitysourcesSheet, ActivitySourceCode.class, CodeList.ACTIVITY_SOURCE);
-		activityCategories = toCodeExtracts(activitycategoriesSheet, ActivityCategoryCode.class,
-				CodeList.ACTIVITY_CATEGORY);
-		activitySubCategories = toCodeExtracts(activitysubcategoriesSheet, ActivitySubCategoryCode.class,
-				CodeList.ACTIVITY_SUB_CATEGORY);
+		activityCategories = toCodeExtracts(activitycategoriesSheet, ActivityCategoryCode.class, CodeList.ACTIVITY_CATEGORY);
+		activitySubCategories = toCodeExtracts(activitysubcategoriesSheet, ActivitySubCategoryCode.class, CodeList.ACTIVITY_SUB_CATEGORY);
 	}
 
-	private static <T extends Code> Map<String, CodeExtract<T>> toCodeExtracts(Sheet codesSheet, Class<T> codeClass,
-			CodeList codeList) throws Exception {
+	private <T extends Code> Map<String, CodeExtract<T>> toCodeExtracts(Sheet codesSheet, Class<T> codeClass, CodeList codeList)
+			throws Exception {
 		Map<String, CodeExtract<T>> res = new HashMap<>();
 		Constructor<T> constructor = codeClass.getConstructor(String.class);
 		for (int i = 1; i < codesSheet.getRows(); i++) {
@@ -149,7 +166,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		return res;
 	}
 
-	private static void verifyAwacData(Sheet factorsSheet, Sheet indicatorsSheet) throws BiffException, IOException {
+	private void verifyAwacData(Sheet factorsSheet, Sheet indicatorsSheet) throws BiffException, IOException {
 		Set<String> indicatorCategoriesIdentifiers = getColumnContent(factorsSheet, 0);
 		Set<String> activityTypesIdentifiers = getColumnContent(factorsSheet, 1);
 		Set<String> activitySourcesIdentifiers = getColumnContent(factorsSheet, 2);
@@ -170,8 +187,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		verifyUnitExist(unitsSymbols);
 	}
 
-	private static <T extends Code> void verifyCodeExist(Set<String> identifiers,
-			Map<String, CodeExtract<T>> codeByIdentifierMap) {
+	private <T extends Code> void verifyCodeExist(Set<String> identifiers, Map<String, CodeExtract<T>> codeByIdentifierMap) {
 		for (String identifier : identifiers) {
 			if (!codeByIdentifierMap.containsKey(identifier)) {
 				throw new RuntimeException("This identifier cannot be associated to any code: '" + identifier + "'");
@@ -179,7 +195,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		}
 	}
 
-	private static void verifyUnitExist(Set<String> unitSymbols) {
+	private void verifyUnitExist(Set<String> unitSymbols) {
 		Set<String> unknownUnitSymbols = new HashSet<>();
 		for (String unitSymbol : unitSymbols) {
 			if (!knownUnits.containsKey(unitSymbol)) {
@@ -187,12 +203,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			}
 		}
 		if (!unknownUnitSymbols.isEmpty()) {
-			System.out.println("These unit symbols cannot be associated to any known units: '" + unknownUnitSymbols
-					+ "'");
+			System.out.println("These unit symbols cannot be associated to any known units: '" + unknownUnitSymbols + "'");
 		}
 	}
 
-	private static void outputCodeConstants() throws IOException {
+	private void outputCodeConstants() throws IOException {
 		FileWriter out = new FileWriter(CODE_CONSTANTS_FILE_PATH, true);
 		BufferedWriter writer = new BufferedWriter(out);
 
@@ -206,7 +221,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		writer.close();
 	}
 
-	private static void saveCodeLabels() {
+	private void saveCodeLabels() {
 		saveCodeLabels(indicatorCategories);
 		saveCodeLabels(activityTypes);
 		saveCodeLabels(activitySources);
@@ -214,7 +229,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		saveCodeLabels(activitySubCategories);
 	}
 
-	private static <T extends Code> void saveCodeLabels(Map<String, CodeExtract<T>> codeExtracts) {
+	private <T extends Code> void saveCodeLabels(Map<String, CodeExtract<T>> codeExtracts) {
 		List<CodeLabel> codeLabels = new ArrayList<>();
 		for (CodeExtract<T> codeExtract : new TreeSet<>(codeExtracts.values())) {
 			codeLabels.add(codeExtract.getCodeLabel());
@@ -222,12 +237,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		persistEntities(codeLabels);
 	}
 
-	private static void saveFactors(Sheet factorsSheet) {
+	private void saveFactors(Sheet factorsSheet) {
 		List<Factor> factors = new ArrayList<>();
 		List<FactorValue> factorValues = new ArrayList<>();
 		for (int i = 1; i < factorsSheet.getRows(); i++) {
-			IndicatorCategoryCode indicatorCategory = indicatorCategories.get(getCellContent(factorsSheet, 0, i))
-					.getCode();
+			IndicatorCategoryCode indicatorCategory = indicatorCategories.get(getCellContent(factorsSheet, 0, i)).getCode();
 			ActivityTypeCode activityType = activityTypes.get(getCellContent(factorsSheet, 1, i)).getCode();
 			ActivitySourceCode activitySource = activitySources.get(getCellContent(factorsSheet, 2, i)).getCode();
 			Unit unitIn = knownUnits.get(getCellContent(factorsSheet, 3, i));
@@ -245,18 +259,15 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		persistEntities(factorValues);
 	}
 
-	private static void saveIndicators(Sheet indicatorsSheet) {
+	private void saveIndicators(Sheet indicatorsSheet) {
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = knownUnits.get("tCO2e");
 		for (int i = 1; i < indicatorsSheet.getRows(); i++) {
 			String name = getCellContent(indicatorsSheet, 1, i);
 			IndicatorIsoScopeCode isoScope = new IndicatorIsoScopeCode(getCellContent(indicatorsSheet, 3, i));
-			IndicatorCategoryCode indicatorCategory = indicatorCategories.get(getCellContent(indicatorsSheet, 4, i))
-					.getCode();
-			ActivityCategoryCode activityCategory = activityCategories.get(getCellContent(indicatorsSheet, 6, i))
-					.getCode();
-			ActivitySubCategoryCode activitySubCategory = activitySubCategories.get(
-					getCellContent(indicatorsSheet, 7, i)).getCode();
+			IndicatorCategoryCode indicatorCategory = indicatorCategories.get(getCellContent(indicatorsSheet, 4, i)).getCode();
+			ActivityCategoryCode activityCategory = activityCategories.get(getCellContent(indicatorsSheet, 6, i)).getCode();
+			ActivitySubCategoryCode activitySubCategory = activitySubCategories.get(getCellContent(indicatorsSheet, 7, i)).getCode();
 			String strActivityOwnership = getCellContent(indicatorsSheet, 10, i);
 			Boolean activityOwnership = null;
 			if ("1".equals(strActivityOwnership)) {
@@ -266,8 +277,8 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			}
 			Boolean deleted = indicatorsSheet.getCell(1, i).getCellFormat().getFont().isStruckout();
 
-			indicators.add(new Indicator(name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope,
-					indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit, deleted));
+			indicators.add(new Indicator(name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory,
+					activitySubCategory, activityOwnership, unit, deleted));
 		}
 		persistEntities(indicators);
 	}
