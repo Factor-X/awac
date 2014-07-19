@@ -19,7 +19,6 @@ angular
             return codeList.codeLabels
           return null
 
-        if scope.ngCondition
-          console.log "ma condition est vrai !!"
-        else
-          console.log "ma condition est fausse !!"
+        scope.$watch 'ngCondition', () ->
+          if scope.ngCondition== false
+            scope.getAnswerValue().value = null
