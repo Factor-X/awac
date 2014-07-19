@@ -113,20 +113,35 @@ angular
             return null
         ###
     $scope.$on 'SAVE', () ->
-        promise = $http
-            method: "POST"
-            url: 'answer/save'
-            headers:
-                "Content-Type": "application/json"
-            data: $scope.o.answersSaveDTO
 
-        promise.success (data, status, headers, config) ->
-            console.log "SAVE !"
-            return
 
-        promise.error (data, status, headers, config) ->
-            console.log "ERROR : " + data.message
-            return
+      #build the list to save
+      listAnswerToSave=[]
+      for answer in $scope.answerList
+        if answer.value # && answer.visible
+          listAnswerToSave[listAnswerToSave.length] = answer
+
+      #and replace the list
+      $scope.o.answersSave.listAnswers = listAnswerToSave
+
+      console.log "$scope.o.answersSave.listAnswers"
+      console.log $scope.o.answersSave.listAnswers
+
+
+      promise = $http
+          method: "POST"
+          url: 'answer/save'
+          headers:
+              "Content-Type": "application/json"
+          data: $scope.o.answersSave
+
+      promise.success (data, status, headers, config) ->
+          console.log "SAVE !"
+          return
+
+      promise.error (data, status, headers, config) ->
+          console.log "ERROR : " + data.message
+          return
 
     #get list choice by question code
     $scope.getUnitCategories = (code) ->
