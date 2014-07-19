@@ -78,7 +78,7 @@ public class Global extends GlobalSettings {
 	@Override
 	public Action onRequest(Http.Request request, Method actionMethod) {
 
-		if (thread.isAlive()) {
+		if (!thread.isInitialized()) {
 			return new Action() {
 				@Override
 				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {

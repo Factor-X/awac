@@ -20,6 +20,8 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 
 public class AwacInitialData {
 
+
+
 	public static void createAwacInitialData(ApplicationContext ctx, Session session) {
 
 		// IMPORT MYRMEX UNITS
