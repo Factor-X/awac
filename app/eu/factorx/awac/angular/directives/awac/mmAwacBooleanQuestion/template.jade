@@ -1,6 +1,10 @@
 div
     div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
-        .status.answer
-        input(type="checkbox", ng-model="getAnswerByQuestionCode(getQuestionCode()).value")
-        .user_icon XM
+        .status.answer(mm-not-implemented)
+
+        span(style="width:150px;display:inline-block;text-align:right;") oui
+        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="1", style="width :20px !important")
+        span(style="width:150px;display:inline-block;text-align:right;") non
+        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="0",style="width :20px !important")
+        .user_icon(mm-not-implemented) XM

@@ -1,23 +1,23 @@
 mm-awac-section(title-code="AWAC_ENTREPRISES")
 
     mm-awac-integer-question(ng-question-code="'A2'")
-//
-    mm-awac-select-question(ng-object="getAnswer(A3)")
 
-    mm-awac-select-question(ng-object="getAnswer(A4)", ng-show="A('A3').value == '1'")
+    mm-awac-select-question(ng-question-code="'A3'")
 
-    mm-awac-select-question(ng-object="getAnswer(A5)", ng-show="A('A3').value == '2' || A('A3').value == '3'")
+    mm-awac-select-question(ng-question-code="'A4'", ng-show="getAnswer('A3').value == '1'")
 
-    mm-awac-select-question(ng-object="getAnswer(A6)", ng-show="A('A3').value == '4'")
+    mm-awac-select-question(ng-question-code="'A5'", ng-show="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'")
 
-    mm-awac-boolean-question(ng-object="getAnswer(A7)", ng-show="A('A3').value == '4'")
+    mm-awac-select-question(ng-question-code="'A6'", ng-show="getAnswer('A3').value == '4'")
 
-    mm-awac-select-question(ng-object="getAnswer(A8)")
+    mm-awac-boolean-question(ng-question-code="'A7'", ng-show="getAnswer('A3').value == '4'")
 
-    mm-awac-real-with-unit-question(ng-object="getAnswer(A9)")
+    mm-awac-select-question(ng-question-code="'A8'")
 
-    mm-awac-real-with-unit-question(ng-object="getAnswer(A10)")
+    mm-awac-real-with-unit-question(ng-question-code="'A9'")
 
-    mm-awac-boolean-question(ng-object="getAnswer(A11)")
+    mm-awac-real-with-unit-question(ng-question-code="'A10'")
 
-    mm-awac-integer-question(ng-object="getAnswer(A12)")
+    mm-awac-boolean-question(ng-question-code="'A11'")
+
+    mm-awac-integer-question(ng-question-code="'A12'")
