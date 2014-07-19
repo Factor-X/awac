@@ -12,17 +12,31 @@ angular
         $scope.o = data
 
         #build the list of answers
-        $scope.scanQuestionSet = () ->
+        $scope.storeAnswers = () ->
 
           #recove answerSave
+          console.log "$scope.o"
+          console.log $scope.o
           answerSave = $scope.o.answersSave
 
           #save answer
           $scope.answerList =  answerSave.listAnswers
+          console.log "$scope.answerList"
+          console.log $scope.answerList
+
+          #TEMP
+          $scope.answerList[0] = {
+            'questionKey':'A2'
+            'value':34
+          }
 
           #build list of repetition for the mmAwacRepetition
 
+        $scope.storeAnswers()
 
+
+
+        ###
 
         $scope.mapRepetition=[]
 
@@ -62,33 +76,7 @@ angular
 
 
 
-        # getAnswerByQuestionCode
-        $scope.getAnswer = (code) ->
-          listAnswer=[]
-          for answer in $scope.answerList
-            #control the code
-            if answer.questionKey == code
-              listAnswer[listAnswer.length] = answer
 
-          return listAnswer
-
-
-        # getAnswerByQuestionCode and mapIteration
-        $scope.getAnswer = (code, mapIteration) ->
-            for answer in $scope.answerList
-                #control the code
-                if answer.questionKey == code
-
-                    #control the repetition map
-                    failed=false
-                    for iParam in mapIteration
-                      if answer.mapRepetition[iParam.key]==null || answer.mapRepetition[iParam.key] != iParam.value
-                        failed = true
-
-                    if failed == false
-                      return answer
-
-            return null
 
         # getUnitsByQuestionCode
         $scope.U = (code) ->
@@ -127,7 +115,7 @@ angular
             console.error "impossible to find codeList by its code: " + codeLabelName + " question code was: " + code
 
             return null
-
+        ###
     $scope.$on 'SAVE', () ->
         promise = $http
             method: "POST"
@@ -143,3 +131,60 @@ angular
         promise.error (data, status, headers, config) ->
             console.log "ERROR : " + data.message
             return
+
+
+
+    #get list choice by question code
+    $scope.getCodeList = (code) ->
+      #recover the question
+      question = $scope.getQuestion(code)
+      #recover the list
+      return $scope.o.codeLists.get(question.codeListName)
+
+
+    # getQuestionByCode
+    $scope.getQuestion = (code) ->
+      return getQuestion(code,$scope.o.questionSets)
+
+    # getQuestionByCode
+    $scope.getQuestion = (code,listQuestionSets) ->
+      for qSet in listQuestionSets
+        for q in qSet.questionSet
+          if q.code == code
+            return q
+        if qSet.children.length>0
+          result = $scope.getQuestion(code,qSet.children)
+          if result
+            return result
+      return null
+
+    # getAnswerByQuestionCode
+    $scope.getAnswer = (code) ->
+      return $scope.getAnswer(code,null)
+
+
+    # getAnswerByQuestionCode and mapIteration
+    $scope.getAnswer = (code, mapIteration) ->
+      for answer in $scope.answerList
+        #control the code
+        if answer.questionKey == code
+
+          #control the repetition map
+          failed=false
+          if mapIteration
+            for iParam in mapIteration
+              if answer.mapRepetition[iParam.key]==null || answer.mapRepetition[iParam.key] != iParam.value
+                failed = true
+
+          if failed == false
+            return answer
+
+      #if the answer was not founded, create it
+      answerLine = {
+        'questionKey':code
+        'value':null
+        'unitId':null
+        'mapRepetition':mapIteration
+      }
+      $scope.answerList[$scope.answerList.length] = answerLine
+      return answerLine

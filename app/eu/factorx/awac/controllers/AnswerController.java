@@ -96,45 +96,29 @@ public class AnswerController extends Controller {
 	@Security.Authenticated(SecuredController.class)
 	public Result getByForm(String formIdentifier, Long periodId, Long scopeId) {
 
-		Logger.info("getByForm 1");
-
 		Form form = formService.findByIdentifier(formIdentifier);
-		Logger.info("getByForm 1.1");
 		Period period = periodService.findById(periodId);
-		Logger.info("getByForm 1.2");
 		Scope scope = scopeService.findById(scopeId);
-		Logger.info("getByForm 1.3");
 
 		// TODO user language should be a request parameter (else, we should get from session or cookie)
 		LanguageCode lang = LanguageCode.ENGLISH;
-		Logger.info("getByForm 1.4");
 
 		if (form == null || period == null || scope == null) {
 			throw new RuntimeException("Invalid request params");
 		}
 
-		Logger.info("getByForm 2");
-
 		List<QuestionSet> questionSets = form.getQuestionSets();
 		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
-
-		Logger.info("getByForm 3");
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
 		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(scopeId, periodId, answerLineDTOs);
 
-		Logger.info("getByForm 4");
-
 		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);
-
-		Logger.info("getByForm 5");
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
 
-		Logger.info("getByForm 6");
-
-		FormDTO formDTO = new FormDTO(scopeId, periodId, unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
+		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
 	}
 
