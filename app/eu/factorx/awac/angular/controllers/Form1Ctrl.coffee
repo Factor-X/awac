@@ -5,6 +5,7 @@ angular
 
     #this variable contains all answer, new and old
     $scope.answerList=[]
+    $scope.loading = true
 
     console.log $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
@@ -24,15 +25,10 @@ angular
           console.log "$scope.answerList"
           console.log $scope.answerList
 
-          #TEMP
-          $scope.answerList[0] = {
-            'questionKey':'A2'
-            'value':34
-          }
-
           #build list of repetition for the mmAwacRepetition
 
         $scope.storeAnswers()
+        $scope.loading =false
 
 
 
@@ -132,39 +128,42 @@ angular
             console.log "ERROR : " + data.message
             return
 
-
-
     #get list choice by question code
-    $scope.getCodeList = (code) ->
+    $scope.getUnitCategories = (code) ->
+      if $scope.loading
+        return null
+
       #recover the question
       question = $scope.getQuestion(code)
       #recover the list
-      return $scope.o.codeLists.get(question.codeListName)
+      return $scope.o.unitCategories[question.unitCategoryId]
 
+    #get list choice by question code
+    $scope.getCodeList = (code) ->
+      if $scope.loading
+        return null
+
+      #recover the question
+      question = $scope.getQuestion(code)
+      #recover the list
+      return $scope.o.codeLists[question.codeListName]
 
     # getQuestionByCode
-    $scope.getQuestion = (code) ->
-      return getQuestion(code,$scope.o.questionSets)
-
-    # getQuestionByCode
-    $scope.getQuestion = (code,listQuestionSets) ->
-      for qSet in listQuestionSets
-        for q in qSet.questionSet
-          if q.code == code
-            return q
-        if qSet.children.length>0
-          result = $scope.getQuestion(code,qSet.children)
-          if result
-            return result
+    $scope.getQuestion = (code,listQuestionSets=$scope.o.questionSets) ->
+      if listQuestionSets
+        for qSet in listQuestionSets
+          if qSet.questions
+            for q in qSet.questions
+              if q.code == code
+                return q
+          if qSet.children
+            result = $scope.getQuestion(code,qSet.children)
+            if result
+              return result
       return null
 
-    # getAnswerByQuestionCode
-    $scope.getAnswer = (code) ->
-      return $scope.getAnswer(code,null)
-
-
     # getAnswerByQuestionCode and mapIteration
-    $scope.getAnswer = (code, mapIteration) ->
+    $scope.getAnswer = (code, mapIteration =null) ->
       for answer in $scope.answerList
         #control the code
         if answer.questionKey == code

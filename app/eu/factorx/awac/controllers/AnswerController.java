@@ -118,6 +118,8 @@ public class AnswerController extends Controller {
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
 
+        Logger.debug("questionSetDTOs : "+questionSetDTOs);
+
 		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
 	}
