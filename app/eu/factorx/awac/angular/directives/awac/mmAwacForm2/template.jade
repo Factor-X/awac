@@ -1,31 +1,37 @@
 ng-virtual
-    mm-awac-section(title-code="CONSOMMATION_DE_COMBUSTIBLES")
+    .element
+        .element_header
+            .title Consommation de combustibles
+            .title_arrow
+        .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
 
-        mm-awac-repetition-question(ng-object="getQuestionSet(A15)", ng-map-repetition="getMapRepetition(A15)", ng-repeat="it in getMapRepetition()")
+                mm-awac-repetition-question(ng-object="o", question-code="A13", questions-to-add="A14")
+                    mm-awac-select-question(ng-object="o", question-code="A14")
 
-                //
+
+            //
+                div
+                    div Pièces documentaires liées aux consommations de combustible
+                div(ng-repeat="v in A('A14')")
                     div
-                        div Pièces documentaires liées aux consommations de combustible
-                    div(ng-repeat="v in A('A14')")
-                        div
-                        .oneelement
-                            .status.answer
-                            select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
-                            .user_icon XM
-                        button(ng-click="removeAnwser(v)") Remove
+                    .oneelement
+                        .status.answer
+                        select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
+                        .user_icon XM
+                    button(ng-click="removeAnwser(v)") Remove
+                div
                     div
-                        div
-                        .oneelement
-                            button(ng-click="addNewAnswer('A14')") Add
+                    .oneelement
+                        button(ng-click="addNewAnswer('A14')") Add
 
-                    div
-                        div Combustion de combustible par les sources statiques des sites de l'entreprise
-
-
-                    span oki
-                    // mm-awac-select-question(ng-object="o", question-code="A15")
-                    // mm-awac-real-with-unit-question(ng-object="o", question-code="A16")
-
+                div
+                    div Combustion de combustible par les sources statiques des sites de l'entreprise
 
             .element_table(ng-repeat="ri in getRepetitionIndicesFor(['A16', 'A17'])")
                 div
@@ -47,6 +53,7 @@ ng-virtual
     .element
         .element_header
             .title Electricité et vapeur achetées
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -61,20 +68,36 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A21')", ng-model="A('A21').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Electricité
-
-                mm-awac-real-with-unit-question(ng-object="o", question-code="A23")
-
-                mm-awac-real-with-unit-question(ng-object="o", question-code="A24")
-
+                    .sub_title Electricité
                 div
-                    div(style="text-decoration: underline") Vapeur
+                    div
+                        .info
+                            .info_popup voici un text d'information assez longue à propos de cette question
+                        div Consommation d'électricité verte
+                    .twoelements
+                        .status.answer
+                        input(type="text", ng-model="A('A23').value")
+                        select(ng-options="p.id as p.name for p in U('A23')", ng-model="A('A23').unitId")
+                        .user_icon XM
+                div
+                    div Consommation d'électricité grise
+                    .twoelements
+                        .status.answer
+                        input(type="text", ng-model="A('A24').value")
+                        select(ng-options="p.id as p.name for p in U('A24')", ng-model="A('A24').unitId")
+                        .user_icon XM
+                div
+                    .sub_title Vapeur
                 div
                     div Energie primaire utilisée pour produire la vapeur:
                     .oneelement
                         .status.answer
                         select(ng-options="p.key as p.labelFr for p in O('A26')", ng-model="A('A26').value")
                         .user_icon XM
+                div
+                    div
+                        .sub_sub_title Efficacité de la chaudière
+
                 div
                     div Efficacité de la chaudière
                     .twoelements
@@ -95,6 +118,7 @@ ng-virtual
     .element
         .element_header
             .title GES des processus de production
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -109,13 +133,14 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A33')", ng-model="A('A33').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Type de GES émis par la production
+                    .sub_title Type de GES émis par la production
 
     .horizontal_separator
 
     .element
         .element_header
             .title Systèmes de refroidissement
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -130,17 +155,18 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A39')", ng-model="A('A39').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Estimation des émissions à partir des recharges de gaz
+                    .sub_title Estimation des émissions à partir des recharges de gaz
                 div
-                    div(style="text-decoration: underline") Estimation des émissions à partir de la puissance du groupe de froid
+                    .sub_title Estimation des émissions à partir de la puissance du groupe de froid
                 div
-                    div(style="text-decoration: underline") Estimation des émissions à partir de la consommation électrique du site
+                    .sub_title Estimation des émissions à partir de la consommation électrique du site
 
     .horizontal_separator
 
     .element
         .element_header
             .title Froid
+            .title_arrow
             .upload
         .element_sidebar
             .block_status
@@ -150,38 +176,6 @@ ng-virtual
         .element_content
             .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
             .method
-                style
-                    .tab-color-lightgreen a {
-                        background-color: #28b24c;
-                    }
-
-                    .tab-color-lightgreen.sub_block {
-                        border-color: #28b24c;
-                    }
-
-                    .tab-color-green a {
-                        background-color: #809d3e;
-                    }
-
-                    .tab-color-green.sub_block {
-                        border-color: #809d3e;
-                    }
-
-                    .tab-color-yellow a {
-                        background-color: #e1ad29;
-                    }
-
-                    .tab-color-yellow.sub_block {
-                        border-color: #e1ad29;
-                    }
-
-                    .tab-color-orange a {
-                        background-color: #e38a27;
-                    }
-
-                    .tab-color-orange.sub_block {
-                        border-color: #e38a27;
-                    }
                 tabset
                     tab.tab-color-lightgreen
                         tab-heading

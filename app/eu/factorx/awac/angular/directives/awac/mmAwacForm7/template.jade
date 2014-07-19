@@ -2,6 +2,7 @@ ng-virtual
     .element
         .element_header
             .title Achat de biens et services
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -16,9 +17,9 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Lister les différents produits ou groupes de produits vendus par l'entreprise
+                    .sub_title Lister les différents produits ou groupes de produits vendus par l'entreprise
                     div
-                        div(style="text-decoration: underline") Transport
-                        div(style="text-decoration: underline") Traitement
-                        div(style="text-decoration: underline") Utilisation
+                        .sub_title Transport
+                        .sub_title Traitement
+                        .sub_title Utilisation
     .horizontal_separator

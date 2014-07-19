@@ -5,7 +5,7 @@ import java.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.jcoffeescript._
-
+import play.Logger
 import scalax.file.Path
 
 class AngularCompiler {
@@ -60,9 +60,9 @@ class AngularCompiler {
 
             if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
                 // nothing to do, tempfile is up-to-date
-                println("[UP-TO-DATE] " + f.path)
+                Logger.debug("[UP-TO-DATE] " + f.path)
             } else {
-                println("[BUILDING] " + f.path)
+                Logger.debug("[BUILDING] " + f.path)
 
                 val script = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
                 val name: String = f.simpleName.replaceAll("\\.js$ ", "")
@@ -144,10 +144,10 @@ class AngularCompiler {
 
         if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
             // nothing to do, tempfile is up-to-date
-            println("[UP-TO-DATE] " + f.path)
+            Logger.debug("[UP-TO-DATE] " + f.path)
         } else {
             var result = ""
-            println("[COMPILING] " + f.path)
+            Logger.info("[COMPILING] " + f.path)
 
             if (sourceExtension == "coffee") {
                 val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
@@ -193,7 +193,7 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
-            println("[ASSEMBLING] " + (folder / "templates.js").path)
+            Logger.info("[ASSEMBLING] " + (folder / "templates.js").path)
             var result = "angular.module('app.directives').run(function($templateCache) {"
             for (f <- files) {
 
@@ -225,7 +225,7 @@ class AngularCompiler {
             fw.write(result)
             fw.close()
         } else {
-            println("[UP-TO-DATE] " + (folder / "templates.js").path)
+            Logger.debug("[UP-TO-DATE] " + (folder / "templates.js").path)
         }
     }
 
@@ -241,7 +241,7 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
-            println("[CONCATENATING] " + (folder / "concatenated.js").path)
+            Logger.info("[CONCATENATING] " + (folder / "concatenated.js").path)
             var result = ""
             for (f <- files) {
                 result += scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n")
@@ -251,7 +251,7 @@ class AngularCompiler {
             fw.write(result)
             fw.close()
         } else {
-            println("[UP-TO-DATE] " + (folder / "concatenated.js").path)
+            Logger.debug("[UP-TO-DATE] " + (folder / "concatenated.js").path)
         }
     }
 

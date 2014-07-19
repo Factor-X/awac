@@ -2,6 +2,7 @@ ng-virtual
     .element
         .element_header
             .title Achat de biens et services
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -16,19 +17,20 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Détail des achats
+                    .sub_title Détail des achats
                 div
-                    div(style="text-decoration: underline") Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
+                    .sub_title Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
                 div
-                    div(style="text-decoration: underline") Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
+                    .sub_title Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
                 div
-                    div(style="text-decoration: underline") Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
+                    .sub_title Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
 
     .horizontal_separator
 
     .element
         .element_header
             .title Infrastructures
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -43,18 +45,19 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Infrastructures (achetées durant l'année de déclaration)
+                    .sub_title Infrastructures (achetées durant l'année de déclaration)
                 div
-                    div(style="text-decoration: underline") Créez et nommez vos postes d'infrastructure
+                    .sub_title Créez et nommez vos postes d'infrastructure
                 div
-                    div(style="text-decoration: underline") Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
+                    .sub_title Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
                 div
-                    div(style="text-decoration: underline") Créez et nommez vos postes d'infrastructure spécifiques
+                    .sub_title Créez et nommez vos postes d'infrastructure spécifiques
 
     .horizontal_separator
     .element
         .element_header
             .title Actifs loués (aval)
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -69,13 +72,14 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Créez autant de catégories d'actifs loués que nécessaire
+                    .sub_title Créez autant de catégories d'actifs loués que nécessaire
 
     .horizontal_separator
 
     .element
         .element_header
             .title Franchises
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -90,13 +94,14 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Créez autant de catégories de franchisés que nécessaire
+                    .sub_title Créez autant de catégories de franchisés que nécessaire
 
     .horizontal_separator
 
     .element
         .element_header
             .title Activités d'investissement
+            .title_arrow
         .element_sidebar
             .block_status
                 .lock_status.disable_status
@@ -111,4 +116,4 @@ ng-virtual
                         select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
                         .user_icon XM
                 div
-                    div(style="text-decoration: underline") Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
+                    .sub_title Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
