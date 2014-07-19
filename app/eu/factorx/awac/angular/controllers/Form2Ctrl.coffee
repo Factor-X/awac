@@ -6,6 +6,9 @@ angular
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
+
+
+
         ###
 
         $scope.addNewAnswer = (code) ->

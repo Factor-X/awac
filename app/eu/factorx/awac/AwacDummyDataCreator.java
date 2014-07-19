@@ -84,7 +84,7 @@ public class AwacDummyDataCreator {
 
 
         createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
-
+/*
         // ANSWERS
 
         // -- FORM
@@ -295,8 +295,8 @@ public class AwacDummyDataCreator {
         // -- -- -- type
         // -- -- -- quantité
 
+ */
     }
-
 
     private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits, UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 

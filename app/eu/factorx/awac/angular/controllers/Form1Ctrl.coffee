@@ -12,24 +12,53 @@ angular
         $scope.o = data
 
         #build the list of answers
-        $scope.scanQuestionSet = (questionSetAnswerDTO, mapRepetition) ->
+        $scope.scanQuestionSet = () ->
 
-          #add repetition into the mapRepetition
-          if questionSetAnswerDTO.repetitionIndex !=null
-            mapRepetition[questionSetAnswerDTO.questionSetCode] =questionSetAnswerDTO.repetitionIndex
+          #recove answerSave
+          answerSave = $scope.o.answersSave
 
-          #create question
-          for q in questionSetAnswerDTO.questions
-            $scope.answerList[$scope.answerList.length] = {
-              'questionKey' : q.questionKey
-              'value' : q.value
-              'unitId' : q.unitId
-              'mapRepetition' : mapRepetition
-            }
+          #save answer
+          $scope.answerList =  answerSave.listAnswers
 
-          #loop in the children
-          for c in questionSetAnswerDTO.children
-            $scope.scanQuestionSet(c, mapRepetition)
+          #build list of repetition for the mmAwacRepetition
+
+
+
+        $scope.mapRepetition=[]
+
+        $scope.loopRepetition = (questionSetDTO, currentRepetition) ->
+          if questionSetDTO.repetitionAllowed
+
+            #find if the answer are already repeated on this repetition
+            for q in questionSetDTO.questions
+              #recover answer
+              answer = $scope.getAnswer q.code
+
+              #control if the answer have a repetition for this questionSetDTO
+              if answer.mapRepetition.length == 0
+                #this is an error
+                console.log("mapRepetition expected but not found")
+              else if answer.mapRepetition[questionSetDTO.code]!=null
+                repetition = answer.mapRepetition[questionSetDTO.code]
+                #try to add this repetition to the mapRepetition
+                if mapRepetition[questionSetDTO.code] !=null
+                  if mapRepetition.get[questionSetDTO.code].get[repetition]
+                    mapRepetition.get[mapRepetition.get.length] = repetition
+
+                else mapRepetition[mapRepetition.length] = [repetition]
+
+        #scan the questionSet
+        $scope.scanQuestionSet()
+
+
+        $scope.getQuestionSet = (code) ->
+          return $scope.getQuestionSet($scope.o.questionSets, code)
+
+        $scope.getQuestionSet = (qSet, code) ->
+          for qSet in qSet.children
+            if qSet.code == code
+              return qSet
+          return null
 
 
 

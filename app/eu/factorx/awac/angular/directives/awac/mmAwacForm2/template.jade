@@ -1,6 +1,7 @@
 ng-virtual
     mm-awac-section(title-code="CONSOMMATION_DE_COMBUSTIBLES")
 
+        mm-awac-repetition-question(ng-object="getQuestionSet(A15)", ng-map-repetition="getMapRepetition(A15)", ng-repeat="it in getMapRepetition()")
 
                 //
                     div
@@ -20,7 +21,7 @@ ng-virtual
                     div
                         div Combustion de combustible par les sources statiques des sites de l'entreprise
 
-                mm-awac-repetition-question(ng-object="o", question-code="A15", questions-to-add="A16,A17")
+
                     span oki
                     // mm-awac-select-question(ng-object="o", question-code="A15")
                     // mm-awac-real-with-unit-question(ng-object="o", question-code="A16")

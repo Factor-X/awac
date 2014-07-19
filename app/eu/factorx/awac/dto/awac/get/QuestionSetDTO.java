@@ -1,6 +1,5 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
@@ -11,20 +10,18 @@ public class QuestionSetDTO extends DTO {
 
 	private Boolean repetitionAllowed;
 
-	private List<QuestionDTO> questions = new ArrayList<>();
+	private List<QuestionSetDTO> children;
 
-	private List<QuestionSetDTO> children = new ArrayList<>();
+	private List<QuestionDTO> questions;
 
 	public QuestionSetDTO() {
-		super();
 	}
 
-	public QuestionSetDTO(String code, Boolean repetitionAllowed) {
-		super();
+	public QuestionSetDTO(String code, Boolean repetitionAllowed, List<QuestionSetDTO> children, List<QuestionDTO> questions) {
 		this.code = code;
 		this.repetitionAllowed = repetitionAllowed;
-		this.questions = new ArrayList<>();
-		this.children = new ArrayList<>();
+		this.children = children;
+		this.questions = questions;
 	}
 
 	public String getCode() {
@@ -43,6 +40,14 @@ public class QuestionSetDTO extends DTO {
 		this.repetitionAllowed = repetitionAllowed;
 	}
 
+	public List<QuestionSetDTO> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<QuestionSetDTO> children) {
+		this.children = children;
+	}
+
 	public List<QuestionDTO> getQuestions() {
 		return questions;
 	}
@@ -51,11 +56,10 @@ public class QuestionSetDTO extends DTO {
 		this.questions = questions;
 	}
 
-	public List<QuestionSetDTO> getChildren() {
-		return children;
+	@Override
+	public String toString() {
+		return "QuestionSetDTO [code=" + code + ", repetitionAllowed=" + repetitionAllowed + ", children=" + children + ", questions="
+				+ questions + "]";
 	}
 
-	public void setChildren(List<QuestionSetDTO> children) {
-		this.children = children;
-	}
 }

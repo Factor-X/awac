@@ -7,11 +7,11 @@ public class QuestionDTO extends DTO {
 
 	private String code;
 
-	private AnswerType answerType;	
-	
+	private AnswerType answerType;
+
 	// if AnswerType = VALUE_SELECTION
 	private String codeListName;
-	
+
 	// if AnswerType = INTEGER or DOUBLE
 	private Long unitCategoryId;
 
@@ -57,5 +57,12 @@ public class QuestionDTO extends DTO {
 
 	public void setUnitCategoryId(Long unitCategoryId) {
 		this.unitCategoryId = unitCategoryId;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "QuestionDTO [code=" + code + ", answerType=" + answerType + ", codeListName=" + codeListName + ", unitCategoryId="
+				+ unitCategoryId + "]";
+	}
+
 }

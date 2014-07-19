@@ -1,11 +1,9 @@
 package eu.factorx.awac.dto.awac.get;
 
+import java.util.List;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class LoginResultDTO extends DTO {
 

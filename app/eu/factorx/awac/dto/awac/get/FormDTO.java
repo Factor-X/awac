@@ -4,20 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class FormDTO extends DTO {
 
 	@NotNull
-    /**
-     * define the scopeId
-     */
+	/**
+	 * define the scopeId
+	 */
 	private Long scopeId;
 
 	@NotNull
-    /**
-     * define the period
-     */
+	/**
+	 * define the period
+	 */
 	private Long periodId;
 
 	/**
@@ -31,31 +32,25 @@ public class FormDTO extends DTO {
 	private Map<String, CodeListDTO> codeLists;
 
 	@NotNull
-    /**
-     * contains list of questionAnswerDTO
-     * each DTO contains all the structure of the QuestionSetAnswer, with value the response
-     */
-	private List<QuestionSetAnswerDTO> listAnswers;
+	/**
+	 * contains list of questionAnswerDTO
+	 * each DTO contains all the structure of the QuestionSetAnswer, with value the response
+	 */
+	private List<QuestionSetDTO> questionSets;
+
+	private QuestionAnswersDTO answersSave;
 
 	public FormDTO() {
-		super();
 	}
 
-	/**
-	 * @param scopeId
-	 * @param periodId
-	 * @param unitCategories
-	 * @param codeLists
-	 * @param listAnswers
-	 */
-	public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories,
-			Map<String, CodeListDTO> codeLists, List<QuestionSetAnswerDTO> listAnswers) {
-		super();
+	public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists,
+			List<QuestionSetDTO> questionSets, QuestionAnswersDTO answersSave) {
 		this.scopeId = scopeId;
 		this.periodId = periodId;
 		this.unitCategories = unitCategories;
 		this.codeLists = codeLists;
-		this.listAnswers = listAnswers;
+		this.questionSets = questionSets;
+		this.answersSave = answersSave;
 	}
 
 	public Long getScopeId() {
@@ -90,12 +85,26 @@ public class FormDTO extends DTO {
 		this.codeLists = codeLists;
 	}
 
-	public List<QuestionSetAnswerDTO> getListAnswers() {
-		return listAnswers;
+	public List<QuestionSetDTO> getQuestionSets() {
+		return questionSets;
 	}
 
-	public void setListAnswers(List<QuestionSetAnswerDTO> listAnswers) {
-		this.listAnswers = listAnswers;
+	public void setQuestionSets(List<QuestionSetDTO> questionSets) {
+		this.questionSets = questionSets;
+	}
+
+	public QuestionAnswersDTO getAnswersSave() {
+		return answersSave;
+	}
+
+	public void setAnswersSave(QuestionAnswersDTO answersSave) {
+		this.answersSave = answersSave;
+	}
+
+	@Override
+	public String toString() {
+		return "FormDTO [scopeId=" + scopeId + ", periodId=" + periodId + ", unitCategories=" + unitCategories + ", codeLists=" + codeLists
+				+ ", questionSets=" + questionSets + ", answersSave=" + answersSave + "]";
 	}
 
 }

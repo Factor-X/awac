@@ -1,6 +1,5 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
@@ -19,10 +18,10 @@ public class CodeListDTO extends DTO {
 	 * @param code
 	 * @param codeLabels
 	 */
-	public CodeListDTO(String code) {
+	public CodeListDTO(String code, List<CodeLabelDTO> codeLabels) {
 		super();
 		this.code = code;
-		this.codeLabels = new ArrayList<CodeLabelDTO>();
+		this.codeLabels = codeLabels;
 	}
 
 	public List<CodeLabelDTO> getCodeLabels() {
