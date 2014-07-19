@@ -10,11 +10,15 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-        scope.getAnswerValue = () ->
-            return scope.$parent.getAnswer(scope.ngQuestionCode)
+        scope.getAnswerValue=() ->
+          return scope.$parent.getAnswer(scope.ngQuestionCode)
 
         scope.getOptionsByQuestionCode = () ->
-            codeList = scope.$parent.getCodeList(scope.ngQuestionCode)
-            if codeList
-                return codeList.codeLabels
-            return null
+          codeList =scope.$parent.getCodeList(scope.ngQuestionCode)
+          if codeList
+            return codeList.codeLabels
+          return null
+
+        scope.$watch 'ngCondition', () ->
+          if scope.ngCondition== false
+            scope.getAnswerValue().value = null

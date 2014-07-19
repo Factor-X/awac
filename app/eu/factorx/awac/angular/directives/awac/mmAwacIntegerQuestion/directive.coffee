@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
+        ngCondition: '='
     templateUrl: "$/angular/templates/mm-awac-integer-question.html"
     replace: true
     link: (scope) ->
@@ -11,4 +12,10 @@ angular
 
         scope.getAnswerValue = () ->
             return scope.$parent.getAnswer(scope.ngQuestionCode)
+
+
+
+        scope.$watch 'ngCondition', () ->
+          if scope.ngCondition== false
+            scope.getAnswerValue().value = null
 

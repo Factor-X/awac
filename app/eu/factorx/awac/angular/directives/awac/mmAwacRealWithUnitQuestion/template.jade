@@ -1,4 +1,4 @@
-div
+div(ng-hide="getCondition() === false")
     div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .twoelement
         .status.answer(mm-not-implemented)

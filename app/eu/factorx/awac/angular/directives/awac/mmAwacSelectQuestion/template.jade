@@ -1,4 +1,4 @@
-div(ng-show="getCondition() === true || getCondition() === undefined")
+div(ng-hide="getCondition() === false")
     div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
         .status.answer(mm-not-implemented)
