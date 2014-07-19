@@ -4,13 +4,13 @@ mm-awac-section(title-code="AWAC_ENTREPRISES")
 
     mm-awac-select-question(ng-question-code="'A3'")
 
-    mm-awac-select-question(ng-question-code="'A4'", ng-show="getAnswer('A3').value == '1'")
+    mm-awac-select-question(ng-question-code="'A4'", ng-condition="getAnswer('A3').value == '1'")
 
-    mm-awac-select-question(ng-question-code="'A5'", ng-show="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'")
+    mm-awac-select-question(ng-question-code="'A5'", ng-condition="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'")
 
-    mm-awac-select-question(ng-question-code="'A6'", ng-show="getAnswer('A3').value == '4'")
+    mm-awac-select-question(ng-question-code="'A6'", ng-condition="getAnswer('A3').value == '4'")
 
-    mm-awac-boolean-question(ng-question-code="'A7'", ng-show="getAnswer('A3').value == '4'")
+    mm-awac-boolean-question(ng-question-code="'A7'", ng-condition="getAnswer('A3').value == '4'")
 
     mm-awac-select-question(ng-question-code="'A8'")
 

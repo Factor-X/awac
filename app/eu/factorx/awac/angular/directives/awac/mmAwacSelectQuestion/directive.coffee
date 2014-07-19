@@ -4,12 +4,11 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
-        ngObject: '='
+        ngCondition: '='
     templateUrl: "$/angular/templates/mm-awac-select-question.html"
     replace: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
-
 
         scope.getAnswerValue=() ->
           return scope.$parent.getAnswer(scope.ngQuestionCode)
@@ -19,3 +18,8 @@ angular
           if codeList
             return codeList.codeLabels
           return null
+
+        if scope.ngCondition
+          console.log "ma condition est vrai !!"
+        else
+          console.log "ma condition est fausse !!"
