@@ -22,8 +22,7 @@
                 <bean class="eu.factorx.awac.converter.AccountToLoginResultDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.QuestionSetToQuestionSetDTOConverter" />
 				<bean class="eu.factorx.awac.converter.QuestionToQuestionDTOConverter" />
-<!-- 				<bean class="eu.factorx.awac.converter.QuestionSetAnswerToQuestionSetAnswerDTOConverter" /> -->
-<!-- 				<bean class="eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter" /> -->
+				<bean class="eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter" />
             </set>
         </property>
     </bean>

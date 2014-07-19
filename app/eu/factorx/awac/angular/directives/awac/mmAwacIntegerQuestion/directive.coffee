@@ -1,9 +1,14 @@
 angular
 .module('app.directives')
 .directive "mmAwacIntegerQuestion", (directiveService) ->
-    restrict: "E"
-    scope: directiveService.autoScope
-        ngObject: '='
-    templateUrl: "$/angular/templates/mm-awac-integer-question.html"
-    replace: true
-    link: (scope) ->
+  restrict: "E"
+  scope: directiveService.autoScope
+    ngQuestionCode: '='
+  templateUrl: "$/angular/templates/mm-awac-integer-question.html"
+  replace: true
+  link: (scope) ->
+    directiveService.autoScopeImpl scope
+
+    scope.getAnswerValue=() ->
+      return scope.$parent.getAnswer(scope.ngQuestionCode)
+

@@ -1,5 +1,8 @@
 package eu.factorx.awac.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -17,15 +20,17 @@ public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionS
 
 	@Override
 	public QuestionSetDTO convert(QuestionSet questionSet) {
-		QuestionSetDTO questionSetDTO = new QuestionSetDTO();/* TODO questionSet.getCode().getKey(),
-				questionSet.getRepetitionAllowed());*/
+		String code = questionSet.getCode().getKey();
+		Boolean repetitionAllowed = questionSet.getRepetitionAllowed();
+		List<QuestionDTO> questions = new ArrayList<>();
 		for (Question question : questionSet.getQuestions()) {
-			questionSetDTO.getQuestions().add(convertQuestion(question));
+			questions.add(convertQuestion(question));
 		}
+		List<QuestionSetDTO> children = new ArrayList<>();
 		for (QuestionSet childQuestionSet : questionSet.getChildren()) {
-			questionSetDTO.getChildren().add(convert(childQuestionSet));
+			children.add(convert(childQuestionSet));
 		}
-		return questionSetDTO;
+		return new QuestionSetDTO(code, repetitionAllowed, children, questions);
 	}
 
 	private QuestionDTO convertQuestion(Question question) {

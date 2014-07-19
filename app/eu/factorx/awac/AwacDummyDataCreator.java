@@ -294,9 +294,9 @@ public class AwacDummyDataCreator {
         QuestionSetAnswer qs164_r1_qs170_r1 = new QuestionSetAnswer(scope, period1, a170, 1, qs164_r1);
         // -- -- -- type
         // -- -- -- quantité
-*/
-    }
 
+ */
+    }
 
     private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits, UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 

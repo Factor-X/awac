@@ -4,71 +4,38 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.post.AnswersSaveDTO;
-import eu.factorx.awac.dto.awac.shared.AnswerLine;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class FormDTO extends DTO {
 
-    @NotNull
-    /**
-     * define the scopeId
-     */
-    private Long scopeId;
+	/**
+	 * K: unitCategoryId
+	 */
+	private Map<Long, UnitCategoryDTO> unitCategories;
 
-    @NotNull
-    /**
-     * define the period
-     */
-    private Long periodId;
+	/**
+	 * K: codeListName
+	 */
+	private Map<String, CodeListDTO> codeLists;
 
-    /**
-     * K: unitCategoryId
-     */
-    private Map<Long, UnitCategoryDTO> unitCategories;
+	@NotNull
+	/**
+	 * contains list of questionAnswerDTO
+	 * each DTO contains all the structure of the QuestionSetAnswer, with value the response
+	 */
+	private List<QuestionSetDTO> questionSets;
 
-    /**
-     * K: codeListName
-     */
-    private Map<String, CodeListDTO> codeLists;
-
-    @NotNull
-    /**
-     * contains list of questionAnswerDTO
-     * each DTO contains all the structure of the QuestionSetAnswer, with value the response
-     */
-    private List<QuestionSetDTO> questionSets;
-
-    private AnswersSaveDTO answersSave;
-
-
+	private QuestionAnswersDTO answersSave;
 
     public FormDTO() {
     }
 
-    public FormDTO(Long scopeId, Long periodId, Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, AnswersSaveDTO answersSave) {
-        this.scopeId = scopeId;
-        this.periodId = periodId;
+    public FormDTO(Map<Long, UnitCategoryDTO> unitCategories, Map<String, CodeListDTO> codeLists, List<QuestionSetDTO> questionSets, QuestionAnswersDTO answersSave) {
         this.unitCategories = unitCategories;
         this.codeLists = codeLists;
         this.questionSets = questionSets;
         this.answersSave = answersSave;
-    }
-
-    public Long getScopeId() {
-        return scopeId;
-    }
-
-    public void setScopeId(Long scopeId) {
-        this.scopeId = scopeId;
-    }
-
-    public Long getPeriodId() {
-        return periodId;
-    }
-
-    public void setPeriodId(Long periodId) {
-        this.periodId = periodId;
     }
 
     public Map<Long, UnitCategoryDTO> getUnitCategories() {
@@ -95,11 +62,11 @@ public class FormDTO extends DTO {
         this.questionSets = questionSets;
     }
 
-    public AnswersSaveDTO getAnswersSave() {
+    public QuestionAnswersDTO getAnswersSave() {
         return answersSave;
     }
 
-    public void setAnswersSave(AnswersSaveDTO answersSave) {
+    public void setAnswersSave(QuestionAnswersDTO answersSave) {
         this.answersSave = answersSave;
     }
 }
