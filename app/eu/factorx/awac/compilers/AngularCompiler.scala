@@ -6,6 +6,7 @@ import java.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.jcoffeescript._
 import play.Logger
+
 import scalax.file.Path
 
 class AngularCompiler {
@@ -81,6 +82,7 @@ class AngularCompiler {
     }
 
     def compile(path: String): String = {
+
         val angular = Path.fromString(path)
         val tmp = Path.fromString("tmp")
 
@@ -92,6 +94,8 @@ class AngularCompiler {
         val controllers = angular / "controllers" ** "*.coffee"
 
         val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
+
+        println(roots)
 
         compileFiles(roots, Path.fromString("tmp/sources/"))
         compileFiles(services, Path.fromString("tmp/sources/"))
