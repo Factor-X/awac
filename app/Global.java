@@ -78,10 +78,13 @@ public class Global extends GlobalSettings {
 	@Override
 	public Action onRequest(Http.Request request, Method actionMethod) {
 
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (thread.isAlive()) {
+			return new Action() {
+				@Override
+				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
+					return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try a gain in a moment."));
+				}
+			};
 		}
 
 		return super.onRequest(request, actionMethod);
