@@ -90,14 +90,9 @@
             <span class="alert-message" ng-bind-html="flash.message"></span>
         </div>
 
+        <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
 
-        <div ng-show="!isLoading()">
-
-            <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
-
-            <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
-
-        </div>
+        <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
     </body>
 </html>
 

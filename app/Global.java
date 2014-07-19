@@ -24,9 +24,13 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
 import play.libs.F.Promise;
+import play.mvc.Action;
+import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
+
+import java.lang.reflect.Method;
 
 // Spring imports
 
@@ -34,6 +38,7 @@ public class Global extends GlobalSettings {
 
 	// Spring global context
 	private ApplicationContext ctx;
+	private InitializationThread thread;
 
 	@Override
 	public void onStart(Application app) {
@@ -55,7 +60,7 @@ public class Global extends GlobalSettings {
 		// read spring configuration and instanciate context
 		ctx = new ClassPathXmlApplicationContext("components.xml");
 
-		InitializationThread thread = new InitializationThread(ctx);
+		thread = new InitializationThread(ctx);
 		thread.start();
 
 		if (app.isDev()) {
@@ -69,6 +74,19 @@ public class Global extends GlobalSettings {
 	public void onStop(Application app) {
 		play.Logger.info("Stopping AWAC");
 	}
+
+	@Override
+	public Action onRequest(Http.Request request, Method actionMethod) {
+
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		return super.onRequest(request, actionMethod);
+	}
+
 
 	// Spring beans instanciation
 	@Override
