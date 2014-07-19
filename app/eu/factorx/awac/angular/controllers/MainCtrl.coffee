@@ -75,7 +75,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, $http,flash)->
+angular.module('app').run ($rootScope, $location, $http, flash)->
     console.log("run  !!")
 
     #

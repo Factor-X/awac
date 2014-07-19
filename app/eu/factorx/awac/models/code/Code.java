@@ -1,28 +1,20 @@
 package eu.factorx.awac.models.code;
 
-import java.io.Serializable;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
+import org.apache.commons.lang3.builder.*;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.question.Question;
+import java.io.Serializable;
 
 /**
- * 
  * A <b>Code</b> is an element of a {@link CodeList}, defined as a tuple { {@link CodeList} codeList, {@link String} key}.<br>
  * <br>
  * The programmer will typically define 'constant' instances of a Code subclass when he needs to deal with a particular data without assuming the status of the database.<br>
  * <br>
  * <b>Example</b>: The {@link QuestionCode questionCode} of a {@link Question question} must be known (at development time) to write the algorithms of consolidation and calculation
  * involving the answer(s) to this question (base activity data, then reports).
- * 
  */
 @MappedSuperclass
 public class Code implements Serializable, Comparable<Code> {

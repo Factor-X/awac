@@ -1,20 +1,19 @@
 package eu.factorx.awac.models.knowledge;
 
+import eu.factorx.awac.models.AbstractEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
 @Table(name = "period")
 public class Period extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+	private String label;
 
 	public Period() {
 	}
-
-	private String label;
 
 	public Period(String label) {
 		super();

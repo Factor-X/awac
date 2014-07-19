@@ -1,25 +1,18 @@
 package eu.factorx.awac.models.knowledge;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
 import eu.factorx.awac.models.AbstractEntity;
+
+import javax.persistence.*;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
+		@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
 })
 public class UnitConversionFormula extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String FIND_BY_UNIT_AND_YEAR = "UnitConversionFormula.findByUnitAndYear";
-
 	public static final String VARIABLE_NAME = "(x|X)";
-
+	private static final long serialVersionUID = 1L;
 	@ManyToOne(optional = false)
 	private Unit unit;
 

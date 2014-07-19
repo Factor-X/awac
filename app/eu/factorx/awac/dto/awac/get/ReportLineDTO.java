@@ -1,8 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import java.io.Serializable;
-
 import eu.factorx.awac.dto.DTO;
+
+import java.io.Serializable;
 
 public class ReportLineDTO extends DTO implements Serializable {
 

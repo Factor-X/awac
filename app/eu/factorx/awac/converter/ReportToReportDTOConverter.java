@@ -1,14 +1,5 @@
 package eu.factorx.awac.converter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
@@ -16,6 +7,14 @@ import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.IndicatorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> {
 

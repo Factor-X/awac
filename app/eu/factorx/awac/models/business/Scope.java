@@ -1,36 +1,24 @@
 package eu.factorx.awac.models.business;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "scope")
 @NamedQueries({
 		@NamedQuery(name = Scope.FIND_BY_SITE, query = "select s from Scope s where s.site = :site"),
 		@NamedQuery(name = Scope.FIND_BY_ORGANIZATION, query = "select s from Scope s where s.organization = :organization"),
-		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"), })
+		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"),})
 public class Scope extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String FIND_BY_SITE = "Scope.findBySite";
-
 	public static final String FIND_BY_ORGANIZATION = "Scope.findByOrganization";
-
 	public static final String FIND_BY_PRODUCT = "Scope.findByProduct";
-
+	private static final long serialVersionUID = 1L;
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "type"))})
 	private ScopeTypeCode scopeType;
 
 	@OneToOne

@@ -11,26 +11,15 @@
 
 package eu.factorx.awac.models.account;
 
-import java.sql.Timestamp;
-
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlTransient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.factorx.awac.common.AccountStatusType;
+import eu.factorx.awac.models.AbstractEntity;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import eu.factorx.awac.common.AccountStatusType;
-import eu.factorx.awac.models.AbstractEntity;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+import java.sql.Timestamp;
 
 // import for TimeStamp
 // imports for validation and constraints annotations
@@ -42,18 +31,18 @@ import eu.factorx.awac.models.AbstractEntity;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "person_type")
 @NamedQueries({
-   @NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
+		@NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
 //    @NamedQuery(name = Person.FIND_BY_TYPE, query = "select p from Person p where p.type = :type")
 })
 public abstract class Person extends AbstractEntity {
 	/**
 	 * :identifier = ...
 	 */
-    public static final String FIND_BY_IDENTIFIER = "Person.findByIdentifier";
-    
-    public static final String FIND_BY_TYPE = "Person.findByType";
+	public static final String FIND_BY_IDENTIFIER = "Person.findByIdentifier";
 
-    private static final long serialVersionUID = 1L;
+	public static final String FIND_BY_TYPE = "Person.findByType";
+
+	private static final long serialVersionUID = 1L;
 
 	@Version
 	// in order to improve optimistic locking.
@@ -88,18 +77,8 @@ public abstract class Person extends AbstractEntity {
 	protected Person() {
 	}
 
-    public String toString() {
-        String string ="";
-        string= string.concat("identifier:"+identifier);
-        string= string.concat("lastname:"+lastname);
-        string= string.concat("firstname:"+firstname);
-        string= string.concat("email:"+email);
-        string= string.concat("address:"+address);
-        return string;
-    }
-
 	public Person(String identifier, String password, String lastname,
-			String firstname) {
+	              String firstname) {
 		// Dans le constructeur de la classe Personne
 		this.identifier = identifier;
 		this.password = password;
@@ -109,13 +88,23 @@ public abstract class Person extends AbstractEntity {
 
 	// for YAML load
 	public Person(String identifier, String password, String lastname,
-			String firstname, Address address) {
+	              String firstname, Address address) {
 		// Dans le constructeur de la classe Personne
 		this.identifier = identifier;
 		this.password = password;
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.address = address;
+	}
+
+	public String toString() {
+		String string = "";
+		string = string.concat("identifier:" + identifier);
+		string = string.concat("lastname:" + lastname);
+		string = string.concat("firstname:" + firstname);
+		string = string.concat("email:" + email);
+		string = string.concat("address:" + address);
+		return string;
 	}
 
 	public Timestamp getLastUpdate() {
@@ -191,7 +180,7 @@ public abstract class Person extends AbstractEntity {
 //	 */
 //	 public static Person findByIdentifier(String identifier) {
 //		 return find.where().eq("identifier", identifier).findUnique();
-	
+
 //	 }
 	//
 	// /**

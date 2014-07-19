@@ -1,32 +1,25 @@
 package eu.factorx.awac.models.data.answer;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
 
+import javax.persistence.*;
+import java.util.List;
+
 @Entity
 @NamedQueries({
 		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.parent is null"),
-		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"), })
+		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"),})
 public class QuestionSetAnswer extends AbstractEntity {
 
 	/**
 	 * @param scope
-	 *            : a {@link Scope}
+	 * : a {@link Scope}
 	 * @param period
-	 *            : a {@link Period}
+	 * : a {@link Period}
 	 */
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
 
@@ -65,7 +58,6 @@ public class QuestionSetAnswer extends AbstractEntity {
 	private List<QuestionSetAnswer> children;
 
 	/**
-	 * 
 	 * @param questionSet
 	 * @param period
 	 * @param scope
@@ -73,7 +65,7 @@ public class QuestionSetAnswer extends AbstractEntity {
 	 * @param repetitionIndex
 	 */
 	public QuestionSetAnswer(Scope scope, Period period, QuestionSet questionSet,
-			Integer repetitionIndex, QuestionSetAnswer parent) {
+	                         Integer repetitionIndex, QuestionSetAnswer parent) {
 		super();
 		this.scope = scope;
 		this.period = period;

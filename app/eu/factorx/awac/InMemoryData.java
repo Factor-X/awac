@@ -6,5 +6,5 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryData {
-    public static Map<String, TranslationsDTO> translations = new HashMap<>();
+	public static Map<String, TranslationsDTO> translations = new HashMap<>();
 }

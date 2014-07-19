@@ -1,10 +1,10 @@
 package eu.factorx.awac.models.business;
 
+import eu.factorx.awac.models.AbstractEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
 @Table(name = "product")

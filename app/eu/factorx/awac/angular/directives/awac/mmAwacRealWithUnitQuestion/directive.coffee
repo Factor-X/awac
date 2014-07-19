@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
+        ngCondition: '='
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
     link: (scope) ->
@@ -17,3 +18,7 @@ angular
             if result
               return result.units
             return null
+
+        scope.$watch 'ngCondition', () ->
+          if scope.ngCondition== false
+            scope.getAnswerValue().value = null

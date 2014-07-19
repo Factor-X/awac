@@ -8,17 +8,17 @@
  * Author Gaston Hollands
  *
  */
- 
-package eu.factorx.awac.models.account;
- 
 
-import java.io.Serializable;
+package eu.factorx.awac.models.account;
+
 
 import javax.persistence.Embeddable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-// import for JAXB annotations -- JAXB stack
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+
+// import for JAXB annotations -- JAXB stack
 // import for Json annotations -- jackson stack
 //import org.codehaus.jackson.annotate.*;
 
@@ -36,16 +36,15 @@ public class Vat implements Serializable {
 	private String viesAddress;
 	private String viesRequestId;
 	private String viesRequestDate;
- 
 
-    protected Vat()
-    {
-    }
 
-    public Vat (String vatNumber, boolean verified) {
-	this.vatNumber = vatNumber;
-	this.viesVerified = verified;
-    }
+	protected Vat() {
+	}
+
+	public Vat(String vatNumber, boolean verified) {
+		this.vatNumber = vatNumber;
+		this.viesVerified = verified;
+	}
 
 	public String getVatNumber() {
 		return vatNumber;
@@ -94,5 +93,5 @@ public class Vat implements Serializable {
 	public void setViesRequestDate(String viesRequestDate) {
 		this.viesRequestDate = viesRequestDate;
 	}
-    
+
 }

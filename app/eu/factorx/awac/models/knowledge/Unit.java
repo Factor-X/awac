@@ -1,34 +1,25 @@
 package eu.factorx.awac.models.knowledge;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "unit")
 @NamedQueries({
-	@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
-	@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
+		@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
+		@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
 })
 public class Unit extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String COLUMN_NAME_REF = "ref";
 	public static final String COLUMN_NAME_SYMBOL = "symbol";
-
 	public static final String FIND_ALL = "Unit.findAll";
-
 	/**
 	 * @param symbol : a {@link String}
 	 */
 	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
-
+	private static final long serialVersionUID = 1L;
 	// TODO labels? i18n?
 	@Column(nullable = true)
 	private String name = null;

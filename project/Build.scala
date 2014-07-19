@@ -59,9 +59,5 @@ object ApplicationBuild extends Build {
         )
     // Add your own project settings here
 
-    
-
-
-
 
 }

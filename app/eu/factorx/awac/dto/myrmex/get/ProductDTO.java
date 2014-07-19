@@ -7,20 +7,20 @@ import eu.factorx.awac.dto.DTO;
  */
 public class ProductDTO extends DTO {
 
-    private String name;
+	private String name;
 
-    public ProductDTO() {
-    }
+	public ProductDTO() {
+	}
 
-    public ProductDTO(String name) {
-        this.name = name;
-    }
+	public ProductDTO(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 }

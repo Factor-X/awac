@@ -1,9 +1,9 @@
 package eu.factorx.awac.dto.awac.post;
 
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
+
+import java.util.List;
 
 public class QuestionAnswersDTO extends DTO {
 

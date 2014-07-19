@@ -10,19 +10,12 @@
  */
 package eu.factorx.awac.models.account;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
+import eu.factorx.awac.models.business.Organization;
 import play.data.validation.Constraints.Max;
 import play.data.validation.Constraints.Min;
 import play.data.validation.Constraints.Required;
-import eu.factorx.awac.models.business.Organization;
+
+import javax.persistence.*;
 
 // import for JAXB annotations -- JAXB stack
 
@@ -30,28 +23,26 @@ import eu.factorx.awac.models.business.Organization;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("account")
 @NamedQueries({
-	   @NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
-	})
+		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
+})
 public class Account extends Person {
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * :identifier = ...
 	 */
-    public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+	private static final long serialVersionUID = 1L;
 
-    //public int accessRights; // not used for now
+	//public int accessRights; // not used for now
 
 	// specific fields for an account.
-
 	@Required
-    @Min(value = 18)
-    @Max(value = 100)
-    private Integer age;
+	@Min(value = 18)
+	@Max(value = 100)
+	private Integer age;
 
 	@Embedded
-    private Vat vat;
+	private Vat vat;
 
 	@ManyToOne(optional = false)
 	private Organization organization;
@@ -64,10 +55,10 @@ public class Account extends Person {
      * Constructor
      */
 
-    public Account(Organization organization, String identifier, String password, String lastname, String firstname) {
-        super(identifier, password, lastname, firstname, new Address("", "", "", ""));
-        this.organization = organization;
-    }
+	public Account(Organization organization, String identifier, String password, String lastname, String firstname) {
+		super(identifier, password, lastname, firstname, new Address("", "", "", ""));
+		this.organization = organization;
+	}
 
 	public Integer getAge() {
 		return age;
@@ -93,11 +84,11 @@ public class Account extends Person {
 		this.organization = organization;
 	}
 
-    public String toString() {
-        String string = super.toString();
-        string=string.concat("age:"+age);
-        return string;
-    }
+	public String toString() {
+		String string = super.toString();
+		string = string.concat("age:" + age);
+		return string;
+	}
 
     /*
      * Finder
@@ -107,15 +98,15 @@ public class Account extends Person {
 //            Long.class, Account.class
 //    );
 
-    /**
-     * Return a page of account
-     *
-     * @param page     Page to display
-     * @param pageSize Number of administrators per page
-     * @param sortBy   Administrator property used for sorting
-     * @param order    Sort order (either or asc or desc)
-     * @param filter   Filter applied on the name column
-     */
+	/**
+	 * Return a page of account
+	 *
+	 * @param page     Page to display
+	 * @param pageSize Number of administrators per page
+	 * @param sortBy   Administrator property used for sorting
+	 * @param order    Sort order (either or asc or desc)
+	 * @param filter   Filter applied on the name column
+	 */
 //    public static Page<Account> page(int page, int pageSize, String sortBy, String order, String filter) {
 //        return
 //                find.where()
@@ -127,9 +118,9 @@ public class Account extends Person {
 //    }
 
 
-    /**
-     * Return a list of account to select from
-     */
+	/**
+	 * Return a list of account to select from
+	 */
 
 //    public static Map<String, String> options() {
 //        LinkedHashMap<String, String> options = new LinkedHashMap<String, String>();

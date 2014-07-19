@@ -1,4 +1,3 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
@@ -6,16 +5,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class SECTEURPRIMAIRECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected SECTEURPRIMAIRECode() {
-        super(CodeList.SECTEURPRIMAIRE);
-    }
+	protected SECTEURPRIMAIRECode() {
+		super(CodeList.SECTEURPRIMAIRE);
+	}
 
-    public SECTEURPRIMAIRECode(String key) {
-        this();
-        this.key = key;
-    }
+	public SECTEURPRIMAIRECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final SECTEURPRIMAIRECode 05_EXTRACTION_DE_HOUILLE_ET_DE_LIGNITE=new
 

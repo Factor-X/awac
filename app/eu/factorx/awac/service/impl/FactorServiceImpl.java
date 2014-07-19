@@ -1,14 +1,13 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.FactorService;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
+import java.util.List;
 
 @Component
 public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor> implements FactorService {

@@ -1,12 +1,11 @@
 package eu.factorx.awac.models.business;
 
-import java.util.List;
+import eu.factorx.awac.models.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import eu.factorx.awac.models.AbstractEntity;
+import java.util.List;
 
 @Entity
 @Table(name = "organization")

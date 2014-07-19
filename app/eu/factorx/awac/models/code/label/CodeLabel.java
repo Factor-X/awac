@@ -1,36 +1,23 @@
 package eu.factorx.awac.models.code.label;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
+import org.apache.commons.lang3.builder.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "code_label", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY })
+		@UniqueConstraint(columnNames = {CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY})
 })
 public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String COLUMN_NAME_CODELIST = "codelist";
 	public static final String COLUMN_NAME_KEY = "key";
-
+	private static final long serialVersionUID = 1L;
 	@Enumerated(EnumType.STRING)
 	@Column(name = COLUMN_NAME_CODELIST, nullable = false)
 	private CodeList codeList;
@@ -38,11 +25,13 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 	@Column(name = COLUMN_NAME_KEY, nullable = false)
 	private String key;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4096)
 	private String labelEn;
 
+	@Column(length = 4096)
 	private String labelFr;
 
+	@Column(length = 4096)
 	private String labelNl;
 
 	protected CodeLabel() {

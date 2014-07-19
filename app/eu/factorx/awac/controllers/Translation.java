@@ -1,15 +1,15 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.InMemoryData;
 import play.mvc.Controller;
 import play.mvc.Result;
-import eu.factorx.awac.InMemoryData;
 
 public class Translation extends Controller {
 
-    public Result fetch(String language) {
+	public Result fetch(String language) {
 
-        return ok(InMemoryData.translations.get(language.toUpperCase()));
+		return ok(InMemoryData.translations.get(language.toUpperCase()));
 
-    }
+	}
 
 }

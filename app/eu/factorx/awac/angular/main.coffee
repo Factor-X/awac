@@ -1,10 +1,15 @@
+#
+# Modules
+#
+
 angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'dangle']
 
 angular.module 'app.filters', []
 
 angular.module 'app.services', []
 
-angular.module 'app.controllers', ['app.services', 'ngRoute','angular-flash.service', 'angular-flash.flash-alert-directive']
+angular.module 'app.controllers', ['app.services', 'ngRoute', 'angular-flash.service',
+                                   'angular-flash.flash-alert-directive']
 
 angular.module 'app', [
     'app.directives',
@@ -12,6 +17,10 @@ angular.module 'app', [
     'app.services',
     'app.controllers'
 ]
+
+#
+# Routes
+#
 
 angular
 .module('app.controllers')

@@ -1,37 +1,26 @@
 package eu.factorx.awac.models.data.answer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "question_answer")
-@NamedQueries({ @NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"), })
+@NamedQueries({@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),})
 public class QuestionAnswer extends AbstractEntity {
-
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param codes : a Collection of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
+	private static final long serialVersionUID = 1L;
 
 	// ATTRIBUTES
-
 	@ManyToOne(optional = false)
 	private Account dataOwner;
 

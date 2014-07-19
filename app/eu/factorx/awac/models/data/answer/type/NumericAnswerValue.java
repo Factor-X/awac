@@ -1,10 +1,10 @@
 package eu.factorx.awac.models.data.answer.type;
 
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.knowledge.Unit;
+
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public abstract class NumericAnswerValue extends AnswerValue {

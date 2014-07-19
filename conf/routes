@@ -6,7 +6,6 @@
 GET     /                           @eu.factorx.awac.controllers.Application.index()
 
 GET     /translations/:lang         @eu.factorx.awac.controllers.Translation.fetch(lang:String)
-GET     /app.js                     @eu.factorx.awac.controllers.Application.app()
 
 
 # login rest api

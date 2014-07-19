@@ -1,16 +1,15 @@
 package eu.factorx.awac.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionSet, QuestionSetDTO> {

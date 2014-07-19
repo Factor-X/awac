@@ -1,4 +1,3 @@
-
 package eu.factorx.awac.models.code.type;
 
 import eu.factorx.awac.models.code.Code;
@@ -6,16 +5,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class SECTEURSECONDAIRECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected SECTEURSECONDAIRECode() {
-        super(CodeList.SECTEURSECONDAIRE);
-    }
+	protected SECTEURSECONDAIRECode() {
+		super(CodeList.SECTEURSECONDAIRE);
+	}
 
-    public SECTEURSECONDAIRECode(String key) {
-        this();
-        this.key = key;
-    }
+	public SECTEURSECONDAIRECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final SECTEURSECONDAIRECode 10_INDUSTRIES_ALIMENTAIRES=new
 

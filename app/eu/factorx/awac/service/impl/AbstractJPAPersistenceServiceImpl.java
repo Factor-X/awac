@@ -1,17 +1,15 @@
 package eu.factorx.awac.service.impl;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-
-import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.service.PersistenceService;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
+import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 @Repository
 public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity> implements PersistenceService<E> {
