@@ -8,15 +8,15 @@ import eu.factorx.awac.models.business.Product;
 /**
  * Created by root on 6/07/14.
  */
-public class ProductToProductDTOConverter implements Converter<Product , ProductDTO> {
+public class ProductToProductDTOConverter implements Converter<Product, ProductDTO> {
 
-    @Override
-    public ProductDTO convert(Product product) {
+	@Override
+	public ProductDTO convert(Product product) {
 
-        ProductDTO productDTO = new ProductDTO();
+		ProductDTO productDTO = new ProductDTO();
 
-        productDTO.setName(product.getName());
-        
-        return productDTO;
-    }
+		productDTO.setName(product.getName());
+
+		return productDTO;
+	}
 }

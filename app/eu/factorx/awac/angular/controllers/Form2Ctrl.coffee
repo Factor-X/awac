@@ -7,8 +7,6 @@ angular
         $scope.o = data
 
 
-
-
         ###
 
         $scope.addNewAnswer = (code) ->

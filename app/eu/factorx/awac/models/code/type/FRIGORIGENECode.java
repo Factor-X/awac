@@ -6,16 +6,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class FRIGORIGENECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected FRIGORIGENECode() {
-        super(CodeList.FRIGORIGENE);
-    }
+	protected FRIGORIGENECode() {
+		super(CodeList.FRIGORIGENE);
+	}
 
-    public FRIGORIGENECode(String key) {
-        this();
-        this.key = key;
-    }
+	public FRIGORIGENECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final FRIGORIGENECode DIOXIDE_DE_CARBONE_CO2 = new FRIGORIGENECode("1");
     public static final FRIGORIGENECode METHANE_NH4 = new FRIGORIGENECode("2");

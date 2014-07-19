@@ -221,30 +221,30 @@ public class AnswerController extends Controller {
 
 		Question question = questionAnswer.getQuestion();
 		switch (question.getAnswerType()) {
-		case BOOLEAN:
-			answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
-			break;
-		case STRING:
-			answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
-			break;
-		case INTEGER:
-			UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
-			Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-			answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
-			break;
-		case DOUBLE:
-			UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
-			Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
-			answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
-			break;
-		case VALUE_SELECTION:
-			CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-			answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
-			break;
-		case ENTITY_SELECTION:
-			String entityName = ((EntitySelectionQuestion) question).getEntityName();
-			answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
-			break;
+			case BOOLEAN:
+				answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
+				break;
+			case STRING:
+				answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
+				break;
+			case INTEGER:
+				UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
+				Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
+				answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
+				break;
+			case DOUBLE:
+				UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
+				Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
+				answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
+				break;
+			case VALUE_SELECTION:
+				CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+				answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
+				break;
+			case ENTITY_SELECTION:
+				String entityName = ((EntitySelectionQuestion) question).getEntityName();
+				answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
+				break;
 		}
 
 		return answerValue;

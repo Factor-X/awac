@@ -9,11 +9,11 @@ import eu.factorx.awac.models.knowledge.Period;
 @Component
 public class PeriodToPeriodDTOConverter implements Converter<Period, PeriodDTO> {
 
-    @Override
-    public PeriodDTO convert(Period period) {
-        PeriodDTO dto = new PeriodDTO();
-        dto.setId(period.getId());
-        dto.setLabel(period.getLabel());
-        return dto;
-    }
+	@Override
+	public PeriodDTO convert(Period period) {
+		PeriodDTO dto = new PeriodDTO();
+		dto.setId(period.getId());
+		dto.setLabel(period.getLabel());
+		return dto;
+	}
 }

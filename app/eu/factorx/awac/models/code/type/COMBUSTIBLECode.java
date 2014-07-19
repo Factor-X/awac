@@ -6,16 +6,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class COMBUSTIBLECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected COMBUSTIBLECode() {
-        super(CodeList.COMBUSTIBLE);
-    }
+	protected COMBUSTIBLECode() {
+		super(CodeList.COMBUSTIBLE);
+	}
 
-    public COMBUSTIBLECode(String key) {
-        this();
-        this.key = key;
-    }
+	public COMBUSTIBLECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final COMBUSTIBLECode DIESEL_GASOIL_OU_FUEL_LEGER = new COMBUSTIBLECode("1");
     public static final COMBUSTIBLECode GAZ_DE_PETROLE_LIQUEFIE_GPL = new COMBUSTIBLECode("2");

@@ -6,16 +6,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class GESSIMPLIFIECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected GESSIMPLIFIECode() {
-        super(CodeList.GESSIMPLIFIE);
-    }
+	protected GESSIMPLIFIECode() {
+		super(CodeList.GESSIMPLIFIE);
+	}
 
-    public GESSIMPLIFIECode(String key) {
-        this();
-        this.key = key;
-    }
+	public GESSIMPLIFIECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final GESSIMPLIFIECode DIOXIDE_DE_CARBONE_CO2 = new GESSIMPLIFIECode("1");
     public static final GESSIMPLIFIECode METHANE_NH4 = new GESSIMPLIFIECode("2");

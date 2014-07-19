@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 
-    @Autowired
-    private ScopeService scopeService;
+	@Autowired
+	private ScopeService scopeService;
 
-    @Override
-    public SiteDTO convert(Site site) {
-        SiteDTO dto = new SiteDTO();
-        dto.setId(site.getId());
-        dto.setName(site.getName());
-        Scope scope = scopeService.findBySite(site);
-        dto.setScope(scope.getId());
-        return dto;
-    }
+	@Override
+	public SiteDTO convert(Site site) {
+		SiteDTO dto = new SiteDTO();
+		dto.setId(site.getId());
+		dto.setName(site.getName());
+		Scope scope = scopeService.findBySite(site);
+		dto.setScope(scope.getId());
+		return dto;
+	}
 }

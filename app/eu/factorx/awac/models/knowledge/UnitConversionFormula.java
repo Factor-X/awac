@@ -10,7 +10,7 @@ import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
+		@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
 })
 public class UnitConversionFormula extends AbstractEntity {
 

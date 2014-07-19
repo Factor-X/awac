@@ -44,7 +44,7 @@ public abstract class AbstractEntity implements Serializable {
 
 	@PostPersist
 	public void postPersist() {
-        Logger.debug("===== Persisted " + getClass().getName() + " entity with ID = " + getId());
+		Logger.debug("===== Persisted " + getClass().getName() + " entity with ID = " + getId());
 		String creationUser;
 		if (Context.current.get() == null) {
 			creationUser = "TECH";
@@ -56,7 +56,7 @@ public abstract class AbstractEntity implements Serializable {
 
 	@PostUpdate
 	public void postUpdate() {
-        Logger.debug("===== Updated " + getClass().getName() + " entity with ID = " + getId());
+		Logger.debug("===== Updated " + getClass().getName() + " entity with ID = " + getId());
 		String updateUser;
 		if (Context.current.get() == null) {
 			updateUser = "TECH";
@@ -66,32 +66,30 @@ public abstract class AbstractEntity implements Serializable {
 		this.technicalSegment.update(updateUser);
 	}
 
-    /**
-     * Default implementation: override this.
-     *
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-        AbstractEntity rhs = (AbstractEntity) obj;
-        return new EqualsBuilder().append(this.id, rhs.id).isEquals();
-    }
+	/**
+	 * Default implementation: override this.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		AbstractEntity rhs = (AbstractEntity) obj;
+		return new EqualsBuilder().append(this.id, rhs.id).isEquals();
+	}
 
-    /**
-     * Default implementation: override this.
-     *
-     */
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
-    }
+	/**
+	 * Default implementation: override this.
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
+	}
 
 }

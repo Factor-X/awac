@@ -25,7 +25,7 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Table(name = "indicator")
 @NamedQueries({
 		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = false"),
-		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"), })
+		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),})
 public class Indicator extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public class Indicator extends AbstractEntity {
 	private String name;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "type"))})
 	private IndicatorTypeCode type;
 
 	@Embedded
@@ -75,8 +75,8 @@ public class Indicator extends AbstractEntity {
 	}
 
 	public Indicator(String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
-			IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
-			ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
+	                 IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
+	                 ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
 		super();
 		this.name = name;
 		this.type = type;

@@ -18,10 +18,10 @@ import eu.factorx.awac.service.ScopeService;
 @org.springframework.stereotype.Controller
 public class ResultController extends Controller {
 
-    @Autowired
-    private PeriodService periodService;
-    @Autowired
-    private ScopeService scopeService;
+	@Autowired
+	private PeriodService periodService;
+	@Autowired
+	private ScopeService scopeService;
 	@Autowired
 	private ConversionService conversionService;
 	@Autowired

@@ -24,7 +24,7 @@ import eu.factorx.awac.models.data.answer.AnswerType;
 		@NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
 		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
 		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS, query = "select q from Question q where q.questionSet in :questionSets"),
-		
+
 })
 public abstract class Question extends AbstractEntity {
 
@@ -49,7 +49,7 @@ public abstract class Question extends AbstractEntity {
 	protected QuestionSet questionSet;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
 	protected QuestionCode code;
 
 	protected int orderIndex = 0;

@@ -12,8 +12,8 @@ import eu.factorx.awac.models.AbstractEntity;
 @Entity
 @Table(name = "unit")
 @NamedQueries({
-	@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
-	@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
+		@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
+		@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
 })
 public class Unit extends AbstractEntity {
 

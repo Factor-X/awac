@@ -6,17 +6,17 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class SECTEURTYPECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected SECTEURTYPECode() {
-        super(CodeList.SECTEURTYPE);
-    }
+	protected SECTEURTYPECode() {
+		super(CodeList.SECTEURTYPE);
+	}
 
-    public SECTEURTYPECode(String key) {
-        this();
-        this.key = key;
-    }
+	public SECTEURTYPECode(String key) {
+		this();
+		this.key = key;
+	}
 
-    public static final SECTEURTYPECode PUBLIC = new SECTEURTYPECode("1");
-    public static final SECTEURTYPECode PRIVE = new SECTEURTYPECode("2");
+	public static final SECTEURTYPECode PUBLIC = new SECTEURTYPECode("1");
+	public static final SECTEURTYPECode PRIVE = new SECTEURTYPECode("2");
 }

@@ -12,19 +12,19 @@ import eu.factorx.awac.models.code.CodeList;
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "lang"))})
 public class LanguageCode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final LanguageCode ENGLISH = new LanguageCode("1");
-    public static final LanguageCode FRENCH = new LanguageCode("2");
-    public static final LanguageCode DUTCH = new LanguageCode("3");
+	public static final LanguageCode ENGLISH = new LanguageCode("1");
+	public static final LanguageCode FRENCH = new LanguageCode("2");
+	public static final LanguageCode DUTCH = new LanguageCode("3");
 
-    protected LanguageCode() {
-        super(CodeList.LANGUAGE);
-    }
+	protected LanguageCode() {
+		super(CodeList.LANGUAGE);
+	}
 
-    public LanguageCode(String key) {
-        this();
-        this.key = key;
-    }
+	public LanguageCode(String key) {
+		this();
+		this.key = key;
+	}
 
 }

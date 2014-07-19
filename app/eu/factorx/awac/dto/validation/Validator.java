@@ -14,80 +14,80 @@ import java.util.List;
 import java.util.Map;
 
 public class Validator {
-    public static void validate(Object object) throws Exception {
-        if (object == null) return;
+	public static void validate(Object object) throws Exception {
+		if (object == null) return;
 
-        boolean validationFail = false;
-        String failureMessage = "";
+		boolean validationFail = false;
+		String failureMessage = "";
 
-        for (Field field : object.getClass().getDeclaredFields()) {
+		for (Field field : object.getClass().getDeclaredFields()) {
 
-            // System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
+			// System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
 
-            for (Annotation annotation : field.getAnnotations()) {
-                if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {
+			for (Annotation annotation : field.getAnnotations()) {
+				if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {
 
-                    Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
+					Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
 
-                    if (annotation.annotationType().equals(Validate.class)) {
-                        if (value instanceof List) {
-                            List list = (List) value;
-                            for (Object element : list) {
-                                Validator.validate(element);
-                            }
-                        } else {
-                            Validator.validate(value);
-                        }
-                    } else {
-                        // create a script engine manager
-                        ScriptEngineManager factory = new ScriptEngineManager();
-                        // create a JavaScript engine
-                        ScriptEngine engine = factory.getEngineByName("JavaScript");
-                        // evaluate JavaScript code from String
-                        String name = annotation.annotationType().getSimpleName();
-                        String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
-                        engine.eval(javascript);
+					if (annotation.annotationType().equals(Validate.class)) {
+						if (value instanceof List) {
+							List list = (List) value;
+							for (Object element : list) {
+								Validator.validate(element);
+							}
+						} else {
+							Validator.validate(value);
+						}
+					} else {
+						// create a script engine manager
+						ScriptEngineManager factory = new ScriptEngineManager();
+						// create a JavaScript engine
+						ScriptEngine engine = factory.getEngineByName("JavaScript");
+						// evaluate JavaScript code from String
+						String name = annotation.annotationType().getSimpleName();
+						String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
+						engine.eval(javascript);
 
-                        Map<String, Object> parameters = new HashMap<>();
+						Map<String, Object> parameters = new HashMap<>();
 
-                        for (Method method : annotation.annotationType().getDeclaredMethods()) {
-                            parameters.put(method.getName(), method.invoke(annotation));
-                        }
+						for (Method method : annotation.annotationType().getDeclaredMethods()) {
+							parameters.put(method.getName(), method.invoke(annotation));
+						}
 
-                        ObjectMapper mapper = new ObjectMapper();
+						ObjectMapper mapper = new ObjectMapper();
 
-                        engine.eval("VALUE = " + mapper.writeValueAsString(value) + ";");
-                        engine.eval("ARGS = " + mapper.writeValueAsString(parameters) + ";");
+						engine.eval("VALUE = " + mapper.writeValueAsString(value) + ";");
+						engine.eval("ARGS = " + mapper.writeValueAsString(parameters) + ";");
 
-                        Boolean result = (Boolean) engine.eval("validate(VALUE, ARGS)");
-                        if (!result) {
-                            validationFail = true;
+						Boolean result = (Boolean) engine.eval("validate(VALUE, ARGS)");
+						if (!result) {
+							validationFail = true;
 
-                            //create the error message
-                            failureMessage += "\n- ";
+							//create the error message
+							failureMessage += "\n- ";
 
-                            //recover the error message
-                            if (annotation instanceof NotNull) {
-                                failureMessage += ((NotNull) annotation).message();
-                            } else if (annotation instanceof Null) {
-                                failureMessage += ((Null) annotation).message();
-                            } else if (annotation instanceof NotNull) {
-                                failureMessage += ((Size) annotation).message();
-                            } else if (annotation instanceof Pattern) {
-                                failureMessage += ((Pattern) annotation).message();
-                            } else {
-                                failureMessage += field.getName() + " is not valid";
-                            }
+							//recover the error message
+							if (annotation instanceof NotNull) {
+								failureMessage += ((NotNull) annotation).message();
+							} else if (annotation instanceof Null) {
+								failureMessage += ((Null) annotation).message();
+							} else if (annotation instanceof NotNull) {
+								failureMessage += ((Size) annotation).message();
+							} else if (annotation instanceof Pattern) {
+								failureMessage += ((Pattern) annotation).message();
+							} else {
+								failureMessage += field.getName() + " is not valid";
+							}
 
-                        }
-                    }
-                }
-            }
+						}
+					}
+				}
+			}
 
-            // System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
-        }
-        if (validationFail) {
-            throw new Exception(failureMessage);
-        }
-    }
+			// System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
+		}
+		if (validationFail) {
+			throw new Exception(failureMessage);
+		}
+	}
 }

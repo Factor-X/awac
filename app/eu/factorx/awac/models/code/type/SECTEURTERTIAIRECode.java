@@ -6,16 +6,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class SECTEURTERTIAIRECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected SECTEURTERTIAIRECode() {
-        super(CodeList.SECTEURTERTIAIRE);
-    }
+	protected SECTEURTERTIAIRECode() {
+		super(CodeList.SECTEURTERTIAIRE);
+	}
 
-    public SECTEURTERTIAIRECode(String key) {
-        this();
-        this.key = key;
-    }
+	public SECTEURTERTIAIRECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final SECTEURTERTIAIRECode 36_CAPTAGE_TRAITEMENT_ET_DISTRIBUTION_D_EAU=new
 

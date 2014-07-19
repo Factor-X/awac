@@ -26,17 +26,17 @@ public class QuestionSet extends AbstractEntity {
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
 
 	@Enumerated
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
 	private QuestionCode code;
 
 	private Boolean repetitionAllowed;
 
 	@ManyToOne
 	private QuestionSet parent;
-	
+
 	@OneToMany(mappedBy = "questionSet", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Question> questions = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<QuestionSet> children = new ArrayList<>();
 

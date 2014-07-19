@@ -49,27 +49,29 @@ input.ng-invalid {
 }
 
 /* field_form */
-.field_form{
-    display:table;
+.field_form {
+    display: table;
     margin: 20px;
 }
 
-.field_form tr{
-    height:30px;
+.field_form tr {
+    height: 30px;
 
 }
-.field_form td:first-child{
-    width:150px;
+
+.field_form td:first-child {
+    width: 150px;
 }
 
-.field_form input{
-    width:150px;
-}
-.field_form td:last-child{
-    padding-left:20px;
+.field_form input {
+    width: 150px;
 }
 
-.field_form .error_message > div:last-child{
+.field_form td:last-child {
+    padding-left: 20px;
+}
+
+.field_form .error_message > div:last-child {
     display: none;
     position: absolute;
     background-color: orangered;
@@ -80,21 +82,22 @@ input.ng-invalid {
     margin-top: -15px;
     margin-left: 20px;
 }
-.field_form .error_message:hover > div:last-child{
+
+.field_form .error_message:hover > div:last-child {
     display: block;
 }
 
-.alert{
-    position:absolute;
-    width : 30%;
-    top:20px;
-    test-align:center;
-    margin:0 35%;
+.alert {
+    position: absolute;
+    width: 30%;
+    top: 20px;
+    test-align: center;
+    margin: 0 35%;
     text-align: center;
     box-shadow: 5px 5px 5px #888888;
 }
 
-.alert-error{
+.alert-error {
     background-color: #ff0000;
     color: #ffffff;
 }

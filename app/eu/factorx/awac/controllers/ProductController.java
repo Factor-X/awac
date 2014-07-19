@@ -19,34 +19,34 @@ import play.mvc.Security;
 @org.springframework.stereotype.Controller
 public class ProductController extends Controller {
 
-    @Autowired
-    private SecuredController securedController;
+	@Autowired
+	private SecuredController securedController;
 
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @Autowired
-    private ConversionService conversionService;
+	@Autowired
+	private ConversionService conversionService;
 
 
-    @Transactional(readOnly = false)
-    @Security.Authenticated(SecuredController.class)
-    public Result createProduct() {
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result createProduct() {
 
-        Logger.debug("USER : "+securedController.getCurrentUser());
-        Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE+":"+session().get(SecuredController.SESSION_IDENTIFIER_STORE));
+		Logger.debug("USER : " + securedController.getCurrentUser());
+		Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE + ":" + session().get(SecuredController.SESSION_IDENTIFIER_STORE));
 
-        //1. create the DTO
-        ProductCreateFormDTO productCreateFormDTO = DTO.getDTO(request().body().asJson(), ProductCreateFormDTO.class);
+		//1. create the DTO
+		ProductCreateFormDTO productCreateFormDTO = DTO.getDTO(request().body().asJson(), ProductCreateFormDTO.class);
 
-        //2. create the product
-        Product product = new Product(securedController.getCurrentUser().getOrganization(), productCreateFormDTO.getName());
+		//2. create the product
+		Product product = new Product(securedController.getCurrentUser().getOrganization(), productCreateFormDTO.getName());
 
-        //3.1 add
-        productService.saveOrUpdate(product);
+		//3.1 add
+		productService.saveOrUpdate(product);
 
-        //4. return product DTO
-        return ok(conversionService.convert(product, ProductDTO.class));
+		//4. return product DTO
+		return ok(conversionService.convert(product, ProductDTO.class));
 
-    }
+	}
 }

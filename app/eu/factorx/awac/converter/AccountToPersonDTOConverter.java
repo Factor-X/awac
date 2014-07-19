@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
  * Created by florian on 4/07/14.
  */
 @Component
-public class AccountToPersonDTOConverter implements Converter<Account, PersonDTO>{
+public class AccountToPersonDTOConverter implements Converter<Account, PersonDTO> {
 
-    @Override
-    public PersonDTO convert(Account account) {
+	@Override
+	public PersonDTO convert(Account account) {
 
-        PersonDTO personDTO = new PersonDTO();
+		PersonDTO personDTO = new PersonDTO();
 
-        personDTO.setEmail(account.getEmail());
-        personDTO.setFirstName(account.getFirstname());
-        personDTO.setLastName(account.getLastname());
+		personDTO.setEmail(account.getEmail());
+		personDTO.setFirstName(account.getFirstname());
+		personDTO.setLastName(account.getLastname());
 
-        return personDTO;
-    }
+		return personDTO;
+	}
 }

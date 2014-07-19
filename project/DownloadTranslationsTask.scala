@@ -81,20 +81,20 @@ class DownloadTranslationsTask {
 
 
     private def fillCellsFromFeed(cFeed: CellFeed) {
-/*
-        cells = List(List[Cell]]()
-        rowCount = cFeed.getRowCount
-        colCount = cFeed.getColCount
-        for (r <- 0 until rowCount) {
-            val row = new util.ArrayList[Cell]()
-            cells.add(row)
-            for (c <- 0 until colCount) {
-                row.add(null)
-            }
-        }
-        for (row <- cFeed.getEntries) {
-            val cell = row.getCell
-            cells.get(cell.getRow - 1).set(cell.getCol - 1, cell)
-        }*/
+        /*
+                cells = List(List[Cell]]()
+                rowCount = cFeed.getRowCount
+                colCount = cFeed.getColCount
+                for (r <- 0 until rowCount) {
+                    val row = new util.ArrayList[Cell]()
+                    cells.add(row)
+                    for (c <- 0 until colCount) {
+                        row.add(null)
+                    }
+                }
+                for (row <- cFeed.getEntries) {
+                    val cell = row.getCell
+                    cells.get(cell.getRow - 1).set(cell.getCol - 1, cell)
+                }*/
     }
 }

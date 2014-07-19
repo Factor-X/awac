@@ -22,7 +22,7 @@ public class BaseActivityData implements Serializable {
 	@Embedded
 	@Basic(optional = false)
 	private BaseActivityDataCode key;
-	
+
 	@Embedded
 	@Basic(optional = false)
 	private ActivityCategoryCode activityCategory;
@@ -71,9 +71,9 @@ public class BaseActivityData implements Serializable {
 	 * @param specificPurpose
 	 */
 	public BaseActivityData(BaseActivityDataCode key, ActivityCategoryCode activityCategory,
-			ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
-			ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
-			String specificPurpose) {
+	                        ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
+	                        ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
+	                        String specificPurpose) {
 		super();
 		this.key = key;
 		this.activityCategory = activityCategory;

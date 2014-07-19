@@ -6,16 +6,16 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class POURCENTSIMPLIFIECode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected POURCENTSIMPLIFIECode() {
-        super(CodeList.POURCENTSIMPLIFIE);
-    }
+	protected POURCENTSIMPLIFIECode() {
+		super(CodeList.POURCENTSIMPLIFIE);
+	}
 
-    public POURCENTSIMPLIFIECode(String key) {
-        this();
-        this.key = key;
-    }
+	public POURCENTSIMPLIFIECode(String key) {
+		this();
+		this.key = key;
+	}
 /*
     public static final POURCENTSIMPLIFIECode 0=new
 

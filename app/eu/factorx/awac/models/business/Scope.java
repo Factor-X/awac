@@ -18,7 +18,7 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @NamedQueries({
 		@NamedQuery(name = Scope.FIND_BY_SITE, query = "select s from Scope s where s.site = :site"),
 		@NamedQuery(name = Scope.FIND_BY_ORGANIZATION, query = "select s from Scope s where s.organization = :organization"),
-		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"), })
+		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"),})
 public class Scope extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class Scope extends AbstractEntity {
 	public static final String FIND_BY_PRODUCT = "Scope.findByProduct";
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "type"))})
 	private ScopeTypeCode scopeType;
 
 	@OneToOne

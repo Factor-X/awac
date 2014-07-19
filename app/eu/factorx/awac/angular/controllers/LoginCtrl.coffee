@@ -1,23 +1,22 @@
 angular
 .module('app.controllers')
 .controller "LoginCtrl", ($scope, downloadService, $http, $location, messageFlash) ->
-
     console.log("je suis le logincontroller")
 
-    $scope.loginInfo=
-      fieldTitle:"Your login"
-      fieldType:"text"
-      placeholder:"your login"
-      validationMessage:"between 5 and 20 letters"
-      field:""
-      isValid:false
+    $scope.loginInfo =
+        fieldTitle: "Your login"
+        fieldType: "text"
+        placeholder: "your login"
+        validationMessage: "between 5 and 20 letters"
+        field: ""
+        isValid: false
 
-    $scope.passwordInfo=
-      fieldTitle:"Your password"
-      fieldType:"password"
-      validationMessage:"between 5 and 20 letters"
-      field:""
-      isValid:false
+    $scope.passwordInfo =
+        fieldTitle: "Your password"
+        fieldType: "password"
+        validationMessage: "between 5 and 20 letters"
+        field: ""
+        isValid: false
 
     #send the request to the server
     $scope.send = () ->
@@ -50,4 +49,4 @@ angular
         return false
 
     $scope.test = () ->
-      $('#modalLogin').modal('show')
+        $('#modalLogin').modal('show')

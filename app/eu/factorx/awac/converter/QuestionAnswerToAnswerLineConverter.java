@@ -34,38 +34,38 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		Object rawAnswerValue = null;
 		Integer unitId = null;
 		switch (answerType) {
-		case BOOLEAN:
-			rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
-			break;
-		case STRING:
-			rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
-			break;
-		case INTEGER:
-			IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
-			rawAnswerValue = integerAnswerValue.getValue();
-			if (integerAnswerValue.getUnit() != null) {
-				unitId = integerAnswerValue.getUnit().getId().intValue();
-			}
-			break;
-		case DOUBLE:
-			DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
-			rawAnswerValue = doubleAnswerValue.getValue();
-			if (doubleAnswerValue.getUnit() != null) {
-				unitId = doubleAnswerValue.getUnit().getId().intValue();
-			}
-			break;
-		case VALUE_SELECTION:
-			Code value = ((CodeAnswerValue) answerValue).getValue();
-			if (value != null)
-				rawAnswerValue = value.getKey();
-			else
-				rawAnswerValue = null;
-			break;
-		case ENTITY_SELECTION:
-			EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
-			rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
-					entityAnswerValue.getEntityId());
-			break;
+			case BOOLEAN:
+				rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
+				break;
+			case STRING:
+				rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
+				break;
+			case INTEGER:
+				IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
+				rawAnswerValue = integerAnswerValue.getValue();
+				if (integerAnswerValue.getUnit() != null) {
+					unitId = integerAnswerValue.getUnit().getId().intValue();
+				}
+				break;
+			case DOUBLE:
+				DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
+				rawAnswerValue = doubleAnswerValue.getValue();
+				if (doubleAnswerValue.getUnit() != null) {
+					unitId = doubleAnswerValue.getUnit().getId().intValue();
+				}
+				break;
+			case VALUE_SELECTION:
+				Code value = ((CodeAnswerValue) answerValue).getValue();
+				if (value != null)
+					rawAnswerValue = value.getKey();
+				else
+					rawAnswerValue = null;
+				break;
+			case ENTITY_SELECTION:
+				EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
+				rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
+						entityAnswerValue.getEntityId());
+				break;
 		}
 
 		AnswerLineDTO answerLine = new AnswerLineDTO();

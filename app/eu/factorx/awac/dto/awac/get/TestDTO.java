@@ -11,74 +11,73 @@ import eu.factorx.awac.dto.validation.annotations.Validate;
 
 public class TestDTO extends DTO {
 
-    @NotNull
-    private String name;
+	@NotNull
+	private String name;
 
-    @Pattern(regexp=Pattern.EMAIL, message ="mauvais email ")
-    private String streetNumber;
+	@Pattern(regexp = Pattern.EMAIL, message = "mauvais email ")
+	private String streetNumber;
 
-    private List<String> roles;
+	private List<String> roles;
 
-    @Validate
-    private List<SmallTestDTO> smalls;
-
-
-    private List<? extends Object> resultList;
-
-    public TestDTO() {
-        super();
-        this.roles = new ArrayList<>();
-        this.smalls = new ArrayList<>();
-    }
-
-    public TestDTO(List<? extends Object> resultList) {
-        super();
-        this.resultList = resultList;
-        this.roles = new ArrayList<>();
-        this.smalls = new ArrayList<>();
-    }
+	@Validate
+	private List<SmallTestDTO> smalls;
 
 
-    public String getName() {
-        return name;
-    }
+	private List<? extends Object> resultList;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public TestDTO() {
+		super();
+		this.roles = new ArrayList<>();
+		this.smalls = new ArrayList<>();
+	}
 
-    public String getStreetNumber() {
-        return streetNumber;
-    }
+	public TestDTO(List<? extends Object> resultList) {
+		super();
+		this.resultList = resultList;
+		this.roles = new ArrayList<>();
+		this.smalls = new ArrayList<>();
+	}
 
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
-    }
 
-    public List<String> getRoles() {
-        return roles;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public List<SmallTestDTO> getSmalls() {
-        return smalls;
-    }
+	public String getStreetNumber() {
+		return streetNumber;
+	}
 
-    public void setSmalls(List<SmallTestDTO> smalls) {
-        this.smalls = smalls;
-    }
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
+	}
 
-    public List<? extends Object> getResultList() {
-        return resultList;
-    }
+	public List<String> getRoles() {
+		return roles;
+	}
 
-    public void setResultList(List<? extends Object> resultList) {
-        this.resultList = resultList;
-    }
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
 
+	public List<SmallTestDTO> getSmalls() {
+		return smalls;
+	}
+
+	public void setSmalls(List<SmallTestDTO> smalls) {
+		this.smalls = smalls;
+	}
+
+	public List<? extends Object> getResultList() {
+		return resultList;
+	}
+
+	public void setResultList(List<? extends Object> resultList) {
+		this.resultList = resultList;
+	}
 
 
 }

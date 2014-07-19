@@ -16,7 +16,7 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Table(name = "form")
-@NamedQueries({ @NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier") })
+@NamedQueries({@NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier")})
 public class Form extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;

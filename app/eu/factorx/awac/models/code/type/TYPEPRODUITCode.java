@@ -6,17 +6,17 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class TYPEPRODUITCode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected TYPEPRODUITCode() {
-        super(CodeList.TYPEPRODUIT);
-    }
+	protected TYPEPRODUITCode() {
+		super(CodeList.TYPEPRODUIT);
+	}
 
-    public TYPEPRODUITCode(String key) {
-        this();
-        this.key = key;
-    }
+	public TYPEPRODUITCode(String key) {
+		this();
+		this.key = key;
+	}
 
-    public static final TYPEPRODUITCode FINAL = new TYPEPRODUITCode("1");
-    public static final TYPEPRODUITCode INTERMEDIAIRE = new TYPEPRODUITCode("2");
+	public static final TYPEPRODUITCode FINAL = new TYPEPRODUITCode("1");
+	public static final TYPEPRODUITCode INTERMEDIAIRE = new TYPEPRODUITCode("2");
 }

@@ -13,16 +13,16 @@ import eu.factorx.awac.dto.awac.get.TestDTO;
 @Component
 public class TestController extends Controller {
 
-    public static final String QUERY = "select f, fq from Form f INNER JOIN f.questions fq";
-    public static final String QUERY2 = "select qs from QuestionSet qs";
-    public static final String QUERY3 = "select q from Question q";
+	public static final String QUERY = "select f, fq from Form f INNER JOIN f.questions fq";
+	public static final String QUERY2 = "select qs from QuestionSet qs";
+	public static final String QUERY3 = "select q from Question q";
 
-    @Transactional
-    public static Result index() {
+	@Transactional
+	public static Result index() {
 
-        // QuestionAnswerService qas =
+		// QuestionAnswerService qas =
 
-        List resultList = JPA.em().createQuery(QUERY).getResultList();
+		List resultList = JPA.em().createQuery(QUERY).getResultList();
 
 /*
         CriteriaBuilder builder =  JPA.em().getCriteriaBuilder();
@@ -41,9 +41,9 @@ public class TestController extends Controller {
 */
 
 
-        TestDTO dto = new TestDTO();
+		TestDTO dto = new TestDTO();
 
-        return ok(new TestDTO(resultList));
-    }
+		return ok(new TestDTO(resultList));
+	}
 
 }

@@ -14,7 +14,7 @@ import eu.factorx.awac.models.AbstractEntity;
 @Entity
 @Table(name = "unit_category")
 @NamedQueries({
-	@NamedQuery(name = UnitCategory.FIND_BY_NAME, query = "select uc from UnitCategory uc where uc.name = :name"),
+		@NamedQuery(name = UnitCategory.FIND_BY_NAME, query = "select uc from UnitCategory uc where uc.name = :name"),
 })
 public class UnitCategory extends AbstractEntity {
 

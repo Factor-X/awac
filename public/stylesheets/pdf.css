@@ -3,21 +3,24 @@
 }
 
 .blue {
-	color: blue;
+    color: blue;
 }
 
 table {
- border-collapse:collapse;
- width:90%;
- border: 2px solid black;
- }
+    border-collapse: collapse;
+    width: 90%;
+    border: 2px solid black;
+}
+
 th, td {
- border:2px solid black;
- width:20%;
- }
+    border: 2px solid black;
+    width: 20%;
+}
+
 td, th {
- text-align:center;
- }
+    text-align: center;
+}
+
 caption {
- font-weight:bold
- }
+    font-weight: bold
+}

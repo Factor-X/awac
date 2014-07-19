@@ -22,7 +22,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
 @Table(name = "code_label", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY })
+		@UniqueConstraint(columnNames = {CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY})
 })
 public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 

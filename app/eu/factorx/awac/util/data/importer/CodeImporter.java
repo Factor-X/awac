@@ -22,62 +22,61 @@ public class CodeImporter extends WorkbookDataImporter {
 	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_full.xls";
 	private static final String CODE_CONSTANTS_FILE_PATH = "code_constants.txt";
 	private static Workbook codesWkb = null;
-	
+
 	@Override
 	protected void importData() throws Exception {
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(CP1252_ENCODING);
 		codesWkb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
 
-        importCodesFromDatasheet("language", LanguageCode.class, CodeList.LANGUAGE);
+		importCodesFromDatasheet("language", LanguageCode.class, CodeList.LANGUAGE);
 		importCodesFromDatasheet("public_private", PublicPrivateCode.class, CodeList.PUBLIC_PRIVATE);
 		importCodesFromDatasheet("site_sectors", ActivitySectorCode.class, CodeList.SITE_SECTORS);
 		importCodesFromDatasheet("nace_codes_1", Nace1Code.class, CodeList.NACE_CODES_1);
 		importCodesFromDatasheet("nace_codes_2", Nace2Code.class, CodeList.NACE_CODES_2);
 		importCodesFromDatasheet("nace_codes_3", Nace3Code.class, CodeList.NACE_CODES_3);
 		importCodesFromDatasheet("fuel", FuelCode.class, CodeList.FUEL);
-        importCodesFromDatasheet("BaseActivityData", BaseActivityDataCode.class, CodeList.BASE_ACTIVITY_DATA);
+		importCodesFromDatasheet("BaseActivityData", BaseActivityDataCode.class, CodeList.BASE_ACTIVITY_DATA);
 
-        importCodesFromDatasheet("ENERGIEVAPEUR", ENERGIEVAPEURCode.class, CodeList.ENERGIEVAPEUR);
-        importCodesFromDatasheet("GES", GESCode.class, CodeList.GES);
-        importCodesFromDatasheet("FRIGORIGENE", FRIGORIGENECode.class, CodeList.FRIGORIGENE);
-        importCodesFromDatasheet("MOTIFDEPLACEMENT", MOTIFDEPLACEMENTCode.class, CodeList.MOTIFDEPLACEMENT);
-        importCodesFromDatasheet("CARBURANT", CARBURANTCode.class, CodeList.CARBURANT);
-        importCodesFromDatasheet("TYPEVEHICULE", TYPEVEHICULECode.class, CodeList.TYPEVEHICULE);
-        importCodesFromDatasheet("TYPEVOL", TYPEVOLCode.class, CodeList.TYPEVOL);
-        importCodesFromDatasheet("CATEGORIEVOL", CATEGORIEVOLCode.class, CodeList.CATEGORIEVOL);
-        importCodesFromDatasheet("FRIGORIGENEBASE", FRIGORIGENEBASECode.class, CodeList.FRIGORIGENEBASE);
-        importCodesFromDatasheet("PROVENANCESIMPLIFIEE", PROVENANCESIMPLIFIEECode.class, CodeList.PROVENANCESIMPLIFIEE);
-        importCodesFromDatasheet("TYPEDECHET", TYPEDECHETCode.class, CodeList.TYPEDECHET);
-        importCodesFromDatasheet("TRAITEMENTDECHET", TRAITEMENTDECHETCode.class, CodeList.TRAITEMENTDECHET);
-        importCodesFromDatasheet("TRAITEUREAU", TRAITEUREAUCode.class, CodeList.TRAITEUREAU);
-        importCodesFromDatasheet("ORIGINEEAUUSEE", ORIGINEEAUUSEECode.class, CodeList.ORIGINEEAUUSEE);
-        importCodesFromDatasheet("TYPEACHAT", TYPEACHATCode.class, CodeList.TYPEACHAT);
-        importCodesFromDatasheet("ACHATMETAL", ACHATMETALCode.class, CodeList.ACHATMETAL);
-        importCodesFromDatasheet("ACHATPLASTIQUE", ACHATPLASTIQUECode.class, CodeList.ACHATPLASTIQUE);
-        importCodesFromDatasheet("ACHATPAPIER", ACHATPAPIERCode.class, CodeList.ACHATPAPIER);
-        importCodesFromDatasheet("ACHATVERRE", ACHATVERRECode.class, CodeList.ACHATVERRE);
-        importCodesFromDatasheet("ACHATCHIMIQUE", ACHATCHIMIQUECode.class, CodeList.ACHATCHIMIQUE);
-        importCodesFromDatasheet("ACHATROUTE", ACHATROUTECode.class, CodeList.ACHATROUTE);
-        importCodesFromDatasheet("ACHATAGRO", ACHATAGROCode.class, CodeList.ACHATAGRO);
-        importCodesFromDatasheet("ACHATSERVICE", ACHATSERVICECode.class, CodeList.ACHATSERVICE);
-        importCodesFromDatasheet("INFRASTRUCTURE", INFRASTRUCTURECode.class, CodeList.INFRASTRUCTURE);
-        importCodesFromDatasheet("TYPEPRODUIT", TYPEPRODUITCode.class, CodeList.TYPEPRODUIT);
-        importCodesFromDatasheet("COMBUSTIBLE", COMBUSTIBLECode.class, CodeList.COMBUSTIBLE);
-        importCodesFromDatasheet("GESSIMPLIFIE", GESSIMPLIFIECode.class, CodeList.GESSIMPLIFIE);
-        importCodesFromDatasheet("POURCENTSIMPLIFIE", POURCENTSIMPLIFIECode.class, CodeList.POURCENTSIMPLIFIE);
-
+		importCodesFromDatasheet("ENERGIEVAPEUR", ENERGIEVAPEURCode.class, CodeList.ENERGIEVAPEUR);
+		importCodesFromDatasheet("GES", GESCode.class, CodeList.GES);
+		importCodesFromDatasheet("FRIGORIGENE", FRIGORIGENECode.class, CodeList.FRIGORIGENE);
+		importCodesFromDatasheet("MOTIFDEPLACEMENT", MOTIFDEPLACEMENTCode.class, CodeList.MOTIFDEPLACEMENT);
+		importCodesFromDatasheet("CARBURANT", CARBURANTCode.class, CodeList.CARBURANT);
+		importCodesFromDatasheet("TYPEVEHICULE", TYPEVEHICULECode.class, CodeList.TYPEVEHICULE);
+		importCodesFromDatasheet("TYPEVOL", TYPEVOLCode.class, CodeList.TYPEVOL);
+		importCodesFromDatasheet("CATEGORIEVOL", CATEGORIEVOLCode.class, CodeList.CATEGORIEVOL);
+		importCodesFromDatasheet("FRIGORIGENEBASE", FRIGORIGENEBASECode.class, CodeList.FRIGORIGENEBASE);
+		importCodesFromDatasheet("PROVENANCESIMPLIFIEE", PROVENANCESIMPLIFIEECode.class, CodeList.PROVENANCESIMPLIFIEE);
+		importCodesFromDatasheet("TYPEDECHET", TYPEDECHETCode.class, CodeList.TYPEDECHET);
+		importCodesFromDatasheet("TRAITEMENTDECHET", TRAITEMENTDECHETCode.class, CodeList.TRAITEMENTDECHET);
+		importCodesFromDatasheet("TRAITEUREAU", TRAITEUREAUCode.class, CodeList.TRAITEUREAU);
+		importCodesFromDatasheet("ORIGINEEAUUSEE", ORIGINEEAUUSEECode.class, CodeList.ORIGINEEAUUSEE);
+		importCodesFromDatasheet("TYPEACHAT", TYPEACHATCode.class, CodeList.TYPEACHAT);
+		importCodesFromDatasheet("ACHATMETAL", ACHATMETALCode.class, CodeList.ACHATMETAL);
+		importCodesFromDatasheet("ACHATPLASTIQUE", ACHATPLASTIQUECode.class, CodeList.ACHATPLASTIQUE);
+		importCodesFromDatasheet("ACHATPAPIER", ACHATPAPIERCode.class, CodeList.ACHATPAPIER);
+		importCodesFromDatasheet("ACHATVERRE", ACHATVERRECode.class, CodeList.ACHATVERRE);
+		importCodesFromDatasheet("ACHATCHIMIQUE", ACHATCHIMIQUECode.class, CodeList.ACHATCHIMIQUE);
+		importCodesFromDatasheet("ACHATROUTE", ACHATROUTECode.class, CodeList.ACHATROUTE);
+		importCodesFromDatasheet("ACHATAGRO", ACHATAGROCode.class, CodeList.ACHATAGRO);
+		importCodesFromDatasheet("ACHATSERVICE", ACHATSERVICECode.class, CodeList.ACHATSERVICE);
+		importCodesFromDatasheet("INFRASTRUCTURE", INFRASTRUCTURECode.class, CodeList.INFRASTRUCTURE);
+		importCodesFromDatasheet("TYPEPRODUIT", TYPEPRODUITCode.class, CodeList.TYPEPRODUIT);
+		importCodesFromDatasheet("COMBUSTIBLE", COMBUSTIBLECode.class, CodeList.COMBUSTIBLE);
+		importCodesFromDatasheet("GESSIMPLIFIE", GESSIMPLIFIECode.class, CodeList.GESSIMPLIFIE);
+		importCodesFromDatasheet("POURCENTSIMPLIFIE", POURCENTSIMPLIFIECode.class, CodeList.POURCENTSIMPLIFIE);
 
 
 	}
 
 	// Columns: NAME, KEY, LABEL_EN, LABEL_FR, LABEL_NL
-	protected <T extends Code> void importCodesFromDatasheet(String sheetName , Class<T> codeClass, CodeList codeList) throws Exception {
+	protected <T extends Code> void importCodesFromDatasheet(String sheetName, Class<T> codeClass, CodeList codeList) throws Exception {
 
 		// check if there is a suitable constructor ( {CodeList, String} or {String} )
 		Constructor<T> classConstructor = getConstructor(codeClass);
 		int nbParams = classConstructor.getParameterTypes().length;
-		
+
 		// Extract infos from sheet and persist code labels
 		Set<CodeExtract<T>> codeExtracts = new TreeSet<>();
 		Sheet sheet = codesWkb.getSheet(sheetName);
@@ -116,7 +115,7 @@ public class CodeImporter extends WorkbookDataImporter {
 	}
 
 	private <T extends Code> T getNewCodeInstance(Constructor<T> classConstructor, int nbParams, CodeList codeList,
-			String key) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+	                                              String key) throws InstantiationException, IllegalAccessException, InvocationTargetException {
 		T code = null;
 		if (nbParams == 1) {
 			code = classConstructor.newInstance(key);

@@ -6,10 +6,10 @@ import eu.factorx.awac.InMemoryData;
 
 public class Translation extends Controller {
 
-    public Result fetch(String language) {
+	public Result fetch(String language) {
 
-        return ok(InMemoryData.translations.get(language.toUpperCase()));
+		return ok(InMemoryData.translations.get(language.toUpperCase()));
 
-    }
+	}
 
 }

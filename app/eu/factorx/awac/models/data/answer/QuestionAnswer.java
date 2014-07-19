@@ -20,7 +20,7 @@ import eu.factorx.awac.models.data.question.Question;
 
 @Entity
 @Table(name = "question_answer")
-@NamedQueries({ @NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"), })
+@NamedQueries({@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),})
 public class QuestionAnswer extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;

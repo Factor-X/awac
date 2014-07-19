@@ -6,17 +6,17 @@ import eu.factorx.awac.models.code.CodeList;
 
 public class TRAITEUREAUCode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    protected TRAITEUREAUCode() {
-        super(CodeList.TRAITEUREAU);
-    }
+	protected TRAITEUREAUCode() {
+		super(CodeList.TRAITEUREAU);
+	}
 
-    public TRAITEUREAUCode(String key) {
-        this();
-        this.key = key;
-    }
+	public TRAITEUREAUCode(String key) {
+		this();
+		this.key = key;
+	}
 
-    public static final TRAITEUREAUCode PAR_L_ENTREPRISE = new TRAITEUREAUCode("1");
-    public static final TRAITEUREAUCode PAR_DES_TIERS = new TRAITEUREAUCode("2");
+	public static final TRAITEUREAUCode PAR_L_ENTREPRISE = new TRAITEUREAUCode("1");
+	public static final TRAITEUREAUCode PAR_DES_TIERS = new TRAITEUREAUCode("2");
 }

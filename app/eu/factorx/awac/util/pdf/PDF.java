@@ -8,7 +8,7 @@
  * Author Gaston Hollands
  *
  */
- 
+
 package eu.factorx.awac.util.pdf;
 
 import java.io.ByteArrayOutputStream;
@@ -209,7 +209,7 @@ public class PDF {
 	}
 
 	private static void addFontDirectory(ITextFontResolver fontResolver,
-			String directory) throws DocumentException, IOException {
+	                                     String directory) throws DocumentException, IOException {
 		File dir = new File(directory);
 		for (File file : dir.listFiles()) {
 			fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,

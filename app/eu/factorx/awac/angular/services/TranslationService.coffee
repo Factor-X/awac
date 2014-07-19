@@ -26,7 +26,7 @@ angular
                 txt = v.one || v.fallback
             else
                 txt = v.more || v.fallback
-            txt = txt.replace( /\{0\}/g, count)
+            txt = txt.replace(/\{0\}/g, count)
         else
             txt = v.fallback || ''
 

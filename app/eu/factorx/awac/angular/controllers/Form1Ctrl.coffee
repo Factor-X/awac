@@ -4,118 +4,116 @@ angular
     $scope.formIdentifier = "TAB1"
 
     #this variable contains all answer, new and old
-    $scope.answerList=[]
+    $scope.answerList = []
 
     console.log $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
-
         $scope.o = data
 
         #build the list of answers
         $scope.storeAnswers = () ->
 
-          #recove answerSave
-          console.log "$scope.o"
-          console.log $scope.o
-          answerSave = $scope.o.answersSave
+            #recove answerSave
+            console.log "$scope.o"
+            console.log $scope.o
+            answerSave = $scope.o.answersSave
 
-          #save answer
-          $scope.answerList =  answerSave.listAnswers
-          console.log "$scope.answerList"
-          console.log $scope.answerList
+            #save answer
+            $scope.answerList = answerSave.listAnswers
+            console.log "$scope.answerList"
+            console.log $scope.answerList
 
-          #TEMP
-          $scope.answerList[0] = {
-            'questionKey':'A2'
-            'value':34
-          }
+            #TEMP
+            $scope.answerList[0] = {
+                'questionKey': 'A2'
+                'value': 34
+            }
 
-          #build list of repetition for the mmAwacRepetition
+        #build list of repetition for the mmAwacRepetition
 
         $scope.storeAnswers()
 
 
+    ###
 
-        ###
+    $scope.mapRepetition=[]
 
-        $scope.mapRepetition=[]
+    $scope.loopRepetition = (questionSetDTO, currentRepetition) ->
+      if questionSetDTO.repetitionAllowed
 
-        $scope.loopRepetition = (questionSetDTO, currentRepetition) ->
-          if questionSetDTO.repetitionAllowed
+        #find if the answer are already repeated on this repetition
+        for q in questionSetDTO.questions
+          #recover answer
+          answer = $scope.getAnswer q.code
 
-            #find if the answer are already repeated on this repetition
-            for q in questionSetDTO.questions
-              #recover answer
-              answer = $scope.getAnswer q.code
+          #control if the answer have a repetition for this questionSetDTO
+          if answer.mapRepetition.length == 0
+            #this is an error
+            console.log("mapRepetition expected but not found")
+          else if answer.mapRepetition[questionSetDTO.code]!=null
+            repetition = answer.mapRepetition[questionSetDTO.code]
+            #try to add this repetition to the mapRepetition
+            if mapRepetition[questionSetDTO.code] !=null
+              if mapRepetition.get[questionSetDTO.code].get[repetition]
+                mapRepetition.get[mapRepetition.get.length] = repetition
 
-              #control if the answer have a repetition for this questionSetDTO
-              if answer.mapRepetition.length == 0
-                #this is an error
-                console.log("mapRepetition expected but not found")
-              else if answer.mapRepetition[questionSetDTO.code]!=null
-                repetition = answer.mapRepetition[questionSetDTO.code]
-                #try to add this repetition to the mapRepetition
-                if mapRepetition[questionSetDTO.code] !=null
-                  if mapRepetition.get[questionSetDTO.code].get[repetition]
-                    mapRepetition.get[mapRepetition.get.length] = repetition
+            else mapRepetition[mapRepetition.length] = [repetition]
 
-                else mapRepetition[mapRepetition.length] = [repetition]
-
-        #scan the questionSet
-        $scope.scanQuestionSet()
+    #scan the questionSet
+    $scope.scanQuestionSet()
 
 
-        $scope.getQuestionSet = (code) ->
-          return $scope.getQuestionSet($scope.o.questionSets, code)
+    $scope.getQuestionSet = (code) ->
+      return $scope.getQuestionSet($scope.o.questionSets, code)
 
-        $scope.getQuestionSet = (qSet, code) ->
-          for qSet in qSet.children
-            if qSet.code == code
-              return qSet
-          return null
-
+    $scope.getQuestionSet = (qSet, code) ->
+      for qSet in qSet.children
+        if qSet.code == code
+          return qSet
+      return null
 
 
 
 
-        # getUnitsByQuestionCode
-        $scope.U = (code) ->
-            unitCategoryId = null;
-            for q in $scope.o.questions
-                if q.questionKey == code
-                    unitCategoryId = q.unitCategoryId
 
-            if unitCategoryId == null
-                console.error "impossible to find question by its code: " + code
-                return null
+    # getUnitsByQuestionCode
+    $scope.U = (code) ->
+        unitCategoryId = null;
+        for q in $scope.o.questions
+            if q.questionKey == code
+                unitCategoryId = q.unitCategoryId
 
-            for uc in $scope.o.unitCategories
-                if uc.id == unitCategoryId
-                    return uc.units
-
-            console.error "impossible to find unit category by its id: " + unitCategoryId + " question code was: " + code
-
+        if unitCategoryId == null
+            console.error "impossible to find question by its code: " + code
             return null
 
-        # getOptionsByQuestionCode
-        $scope.O = (code) ->
-            codeListName = null;
-            for q in $scope.o.questions
-                if q.questionKey == code
-                    codeListName = q.codeListName
+        for uc in $scope.o.unitCategories
+            if uc.id == unitCategoryId
+                return uc.units
 
-            if codeListName == null
-                console.error "impossible to find question by its code: " + code
-                return null
+        console.error "impossible to find unit category by its id: " + unitCategoryId + " question code was: " + code
 
-            for cl in $scope.o.codeLists
-                if cl.code == codeListName
-                    return cl.codeLabels
+        return null
 
-            console.error "impossible to find codeList by its code: " + codeLabelName + " question code was: " + code
+    # getOptionsByQuestionCode
+    $scope.O = (code) ->
+        codeListName = null;
+        for q in $scope.o.questions
+            if q.questionKey == code
+                codeListName = q.codeListName
 
+        if codeListName == null
+            console.error "impossible to find question by its code: " + code
             return null
-        ###
+
+        for cl in $scope.o.codeLists
+            if cl.code == codeListName
+                return cl.codeLabels
+
+        console.error "impossible to find codeList by its code: " + codeLabelName + " question code was: " + code
+
+        return null
+    ###
     $scope.$on 'SAVE', () ->
         promise = $http
             method: "POST"
@@ -133,58 +131,57 @@ angular
             return
 
 
-
     #get list choice by question code
     $scope.getCodeList = (code) ->
-      #recover the question
-      question = $scope.getQuestion(code)
-      #recover the list
-      return $scope.o.codeLists.get(question.codeListName)
+        #recover the question
+        question = $scope.getQuestion(code)
+        #recover the list
+        return $scope.o.codeLists.get(question.codeListName)
 
 
     # getQuestionByCode
     $scope.getQuestion = (code) ->
-      return getQuestion(code,$scope.o.questionSets)
+        return getQuestion(code, $scope.o.questionSets)
 
     # getQuestionByCode
-    $scope.getQuestion = (code,listQuestionSets) ->
-      for qSet in listQuestionSets
-        for q in qSet.questionSet
-          if q.code == code
-            return q
-        if qSet.children.length>0
-          result = $scope.getQuestion(code,qSet.children)
-          if result
-            return result
-      return null
+    $scope.getQuestion = (code, listQuestionSets) ->
+        for qSet in listQuestionSets
+            for q in qSet.questionSet
+                if q.code == code
+                    return q
+            if qSet.children.length > 0
+                result = $scope.getQuestion(code, qSet.children)
+                if result
+                    return result
+        return null
 
     # getAnswerByQuestionCode
     $scope.getAnswer = (code) ->
-      return $scope.getAnswer(code,null)
+        return $scope.getAnswer(code, null)
 
 
     # getAnswerByQuestionCode and mapIteration
     $scope.getAnswer = (code, mapIteration) ->
-      for answer in $scope.answerList
-        #control the code
-        if answer.questionKey == code
+        for answer in $scope.answerList
+            #control the code
+            if answer.questionKey == code
 
-          #control the repetition map
-          failed=false
-          if mapIteration
-            for iParam in mapIteration
-              if answer.mapRepetition[iParam.key]==null || answer.mapRepetition[iParam.key] != iParam.value
-                failed = true
+                #control the repetition map
+                failed = false
+                if mapIteration
+                    for iParam in mapIteration
+                        if answer.mapRepetition[iParam.key] == null || answer.mapRepetition[iParam.key] != iParam.value
+                            failed = true
 
-          if failed == false
-            return answer
+                if failed == false
+                    return answer
 
-      #if the answer was not founded, create it
-      answerLine = {
-        'questionKey':code
-        'value':null
-        'unitId':null
-        'mapRepetition':mapIteration
-      }
-      $scope.answerList[$scope.answerList.length] = answerLine
-      return answerLine
+        #if the answer was not founded, create it
+        answerLine = {
+            'questionKey': code
+            'value': null
+            'unitId': null
+            'mapRepetition': mapIteration
+        }
+        $scope.answerList[$scope.answerList.length] = answerLine
+        return answerLine

@@ -46,8 +46,8 @@ public class StringAnswerValue extends AnswerValue {
 	@Override
 	protected void setRawData(AnswerRawData rawData) {
 		this.value = StringUtils.trimToNull(rawData.getStringData1());
-		
+
 	}
 
-	
+
 }

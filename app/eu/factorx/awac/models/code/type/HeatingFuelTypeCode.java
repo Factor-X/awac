@@ -12,19 +12,19 @@ import eu.factorx.awac.models.code.CodeList;
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "heatingfueltype"))})
 public class HeatingFuelTypeCode extends Code {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final HeatingFuelTypeCode OIL = new HeatingFuelTypeCode("1");
-    public static final HeatingFuelTypeCode GAS = new HeatingFuelTypeCode("2");
-    public static final HeatingFuelTypeCode COAL = new HeatingFuelTypeCode("3");
+	public static final HeatingFuelTypeCode OIL = new HeatingFuelTypeCode("1");
+	public static final HeatingFuelTypeCode GAS = new HeatingFuelTypeCode("2");
+	public static final HeatingFuelTypeCode COAL = new HeatingFuelTypeCode("3");
 
-    protected HeatingFuelTypeCode() {
-        super(CodeList.HEATING_FUEL_TYPE);
-    }
+	protected HeatingFuelTypeCode() {
+		super(CodeList.HEATING_FUEL_TYPE);
+	}
 
-    public HeatingFuelTypeCode(String key) {
-        this();
-        this.key = key;
-    }
+	public HeatingFuelTypeCode(String key) {
+		this();
+		this.key = key;
+	}
 
 }

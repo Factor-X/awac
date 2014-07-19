@@ -60,7 +60,7 @@ public class Factor extends AbstractEntity {
 	}
 
 	public Factor(IndicatorCategoryCode indicatorCategory, ActivityTypeCode activityType,
-			ActivitySourceCode activitySource, Unit unitIn, Unit unitOut, String institution) {
+	              ActivitySourceCode activitySource, Unit unitIn, Unit unitOut, String institution) {
 		super();
 		this.indicatorCategory = indicatorCategory;
 		this.activityType = activityType;

@@ -34,7 +34,7 @@ public class Application extends Controller {
 	public Result javascriptRoutes() {
 		response().setContentType("text/javascript");
 		return ok(Routes.javascriptRouter("jsRoutes"
-		// Routes
-				));
+				// Routes
+		));
 	}
 }
