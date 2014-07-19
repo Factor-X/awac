@@ -101,3 +101,39 @@ input.ng-invalid {
     background-color: #ff0000;
     color: #ffffff;
 }
+
+
+
+
+.loginBackground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #333;
+}
+
+.loginFrame {
+    display: block;
+    border: 5px solid #a4a298;
+    padding: 10px;
+    background-color: #cfcdc0;
+    width: 50%;
+    margin: auto;
+    margin-top: 10%;
+
+    padding-bottom: 35px;
+}
+
+.loginFrame .field_form {
+    width: 100%;
+}
+
+.loginFrame .field_form input {
+    width: 100%;
+}
+
+.loginFrame button {
+    float: right;
+}
