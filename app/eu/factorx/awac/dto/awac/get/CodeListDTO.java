@@ -39,4 +39,10 @@ public class CodeListDTO extends DTO {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	@Override
+	public String toString() {
+		return "CodeListDTO [code=" + code + ", codeLabels=" + codeLabels + "]";
+	}
+
 }

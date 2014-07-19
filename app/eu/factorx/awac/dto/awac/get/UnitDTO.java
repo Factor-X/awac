@@ -34,4 +34,9 @@ public class UnitDTO extends DTO {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "UnitDTO [id=" + id + ", name=" + name + "]";
+	}
+
 }

@@ -3,7 +3,6 @@ package eu.factorx.awac.models.code;
 public enum CodeList {
 
     LANGUAGE,
-    GENDER,
     HEATING_FUEL_TYPE,
     SCOPE_TYPE,
     QUESTION,
@@ -22,7 +21,6 @@ public enum CodeList {
     ACTIVITY_TYPE,
     ACTIVITY_SOURCE,
     UNIT,
-    REFRIGERANT_GAS,
     BASE_ACTIVITY_DATA,
     SECTEURPRINCIPAL,
     SECTEURPRIMAIRE,

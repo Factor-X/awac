@@ -30,4 +30,9 @@ public class CodeLabelDTO extends DTO {
 		this.label = label;
 	}
 
+	@Override
+	public String toString() {
+		return "CodeLabelDTO [key=" + key + ", label=" + label + "]";
+	}
+
 }
