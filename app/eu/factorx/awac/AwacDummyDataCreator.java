@@ -84,7 +84,7 @@ public class AwacDummyDataCreator {
 
 
         createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
-
+/*
         // ANSWERS
 
         // -- FORM
@@ -294,7 +294,7 @@ public class AwacDummyDataCreator {
         QuestionSetAnswer qs164_r1_qs170_r1 = new QuestionSetAnswer(scope, period1, a170, 1, qs164_r1);
         // -- -- -- type
         // -- -- -- quantité
-
+*/
     }
 
 
