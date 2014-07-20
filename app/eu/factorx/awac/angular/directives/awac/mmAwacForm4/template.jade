@@ -1,4 +1,24 @@
 ng-virtual
+
+
+    div(ng-bind-html="'A244_TITLE' | translate")
+    mm-awac-repetition-question(ng-question-set-code="'A244'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A244')")
+
+        mm-awac-string-question(ng-question-code="'A245'",ng-repetition-map="itLevel1")
+
+        div(ng-bind-html="'A273_TITLE' | translate")
+        mm-awac-repetition-question(ng-question-set-code="'A273'", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A273')")
+
+            mm-awac-string-question(ng-question-code="'A274'",ng-repetition-map="itLevel2")
+
+        button(ng-click="addIteration('A273')", type="button") Add an iteration
+
+    button(ng-click="addIteration('A244')", type="button") Add an iteration
+
+
+
+
+   //
     .element
         .element_header
             .title Transport et distribution de marchandises amont

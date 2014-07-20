@@ -1,0 +1,6 @@
+div(ng-hide="getCondition() === false")
+    div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    .oneelement
+        .status.answer(mm-not-implemented)
+        input(type="text", ng-model="getAnswerValue().value")
+        .user_icon(mm-not-implemented) XM
