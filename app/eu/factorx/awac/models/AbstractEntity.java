@@ -1,12 +1,20 @@
 package eu.factorx.awac.models;
 
+import java.io.Serializable;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import play.Logger;
-import play.mvc.Http.Context;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import play.Logger;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -19,11 +27,8 @@ public abstract class AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
-
-	@Embedded
-	protected TechnicalSegment technicalSegment;
 
 	public Long getId() {
 		return id;
@@ -33,36 +38,14 @@ public abstract class AbstractEntity implements Serializable {
 		this.id = id;
 	}
 
-	public TechnicalSegment getTechnicalSegment() {
-		return technicalSegment;
+	@PrePersist
+	public void prePersist() {
+		Logger.debug("===== Persisting " + getClass().getName() + " entity");
 	}
 
-	public void setTechnicalSegment(TechnicalSegment technicalSegment) {
-		this.technicalSegment = technicalSegment;
-	}
-
-	@PostPersist
-	public void postPersist() {
-		Logger.debug("===== Persisted " + getClass().getName() + " entity with ID = " + getId());
-		String creationUser;
-		if (Context.current.get() == null) {
-			creationUser = "TECH";
-		} else {
-			creationUser = Context.current().session().get("identifier");
-		}
-		this.technicalSegment = new TechnicalSegment(creationUser);
-	}
-
-	@PostUpdate
-	public void postUpdate() {
-		Logger.debug("===== Updated " + getClass().getName() + " entity with ID = " + getId());
-		String updateUser;
-		if (Context.current.get() == null) {
-			updateUser = "TECH";
-		} else {
-			updateUser = Context.current().session().get("identifier");
-		}
-		this.technicalSegment.update(updateUser);
+	@PreUpdate
+	public void preUpdate() {
+		Logger.debug("===== Updating " + getClass().getName() + " entity with ID = " + getId());
 	}
 
 	/**
