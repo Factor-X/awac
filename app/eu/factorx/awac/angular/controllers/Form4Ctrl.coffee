@@ -19,6 +19,9 @@ angular
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
 
+
+      console.log "data"
+      console.log data
       $scope.o = data
 
       #build the list of answers
@@ -39,9 +42,9 @@ angular
           $scope.loopRepetition(qSet)
 
         #TEMP
-        $scope.mapRepetition['A244'] = [{'A244':1},{'A244':2}]
+        $scope.mapRepetition['A244'] = [{'A244':10},{'A244':20}]
 
-        $scope.mapRepetition['A273'] = [{'A244':1,'A273':1},{'A244':2,'A273':1},{'A244':2,'A273':2}]
+        $scope.mapRepetition['A273'] = [{'A244':10,'A273':1},{'A244':20,'A273':1}]
 
         console.log "$scope.mapRepetition"
         console.log $scope.mapRepetition
