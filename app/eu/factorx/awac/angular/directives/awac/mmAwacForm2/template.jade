@@ -4,6 +4,7 @@ mm-awac-section(title-code="A13_TITLE")
     //mm-awac-document-question (ng-question-code="'A14'")
 
 
+    div(ng-bind-html="'A15_TITLE' | translate")
     mm-awac-repetition-question(ng-question-set-code="'A15'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
 
         mm-awac-select-question(ng-question-code="'A16'",ng-repetition-map="itLevel1")
