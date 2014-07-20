@@ -1,6 +1,7 @@
 div
-    div(ng-bind-html="getQuestionSetCode() + '_TITLE' | translate")
-
     div
-        ng-virtual(ng-transclude=true)
-        button(ng-click="removeAnwser(v)") Remove
+        div(ng-bind-html="getQuestionSetCode() + '_TITLE' | translate", style="display : inline-block; margin-right : 20px")
+        button(ng-click="removeAnwser()") Remove
+
+        div
+            ng-virtual(ng-transclude=true, class="element_table")
