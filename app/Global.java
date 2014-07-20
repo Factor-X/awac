@@ -38,7 +38,7 @@ public class Global extends GlobalSettings {
 
 	// Spring global context
 	private ApplicationContext ctx;
-	private InitializationThread thread;
+	private static InitializationThread thread;
 
 	@Override
 	public void onStart(Application app) {
