@@ -3,13 +3,16 @@ angular
 .directive "mmAwacRepetitionQuestion", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
-        ngObject: '='
-        ngMapRepetition: '='
+        ngQuestionSetCode: '='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
+
+        scope.getQuestionSet = () ->
+          return scope.$parent.getQuestionSet(scope.ngQuestionSetCode)
+        ###
 
         scope.getAnswerByQuestionCode = (code) ->
             if scope.ngObject
@@ -49,3 +52,4 @@ angular
                     console.log scope.ngObject.answersSaveDTO.listAnswers
                     return
         window.S = scope
+        ###
