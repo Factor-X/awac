@@ -42,9 +42,9 @@ angular
           $scope.loopRepetition(qSet)
 
         #TEMP
-        $scope.mapRepetition['A244'] = [{'A244':10},{'A244':20}]
+        #$scope.mapRepetition['A244'] = [{'A244':10},{'A244':20}]
 
-        $scope.mapRepetition['A273'] = [{'A244':10,'A273':1},{'A244':20,'A273':1}]
+        #$scope.mapRepetition['A273'] = [{'A244':10,'A273':1},{'A244':20,'A273':1}]
 
         console.log "$scope.mapRepetition"
         console.log $scope.mapRepetition

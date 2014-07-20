@@ -259,7 +259,7 @@ public class AnswerController extends Controller {
 
 		Integer repetitionIndex = repMap.get(questionSetCode);
 		if (repetitionIndex == null) {
-			throw new RuntimeException("Invalid repetition map: " + repMap);
+			throw new RuntimeException("Invalid repetition map: " + repMap+", expected key : "+questionSetCode);
 		}
 		QuestionSetAnswer questionSetAnswer = null;
 		if (createdQuestionSetAnwers.get(questionSetCode).containsKey(repetitionIndex)) {

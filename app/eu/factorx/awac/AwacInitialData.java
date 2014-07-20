@@ -819,6 +819,7 @@ public class AwacInitialData {
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273 (Créez autant d'entrepôts de stockage que nécessaire)
 
 		QuestionSet a273 = new QuestionSet(QuestionCode.A273, true);
+        a273.setParent(a244);
 		session.saveOrUpdate(a273);
 		tab7Form.getQuestionSets().add(a273);
 		session.saveOrUpdate(tab7Form);

@@ -11,8 +11,12 @@ mm-awac-section(title-code="A243_TITLE")
 
             mm-awac-string-question(ng-question-code="'A274'",ng-repetition-map="itLevel2")
 
-        button(ng-click="addIteration('A273',itLevel1)", type="button") Add an iteration
+        button(ng-click="addIteration('A273',itLevel1)", type="button")
+            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+            span(ng-bind-html="'A273_LOOPDESC' | translate")
 
-    button(ng-click="addIteration('A244')", type="button") Add an iteration
+    button(ng-click="addIteration('A244')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'A244_LOOPDESC' | translate")
 
 
