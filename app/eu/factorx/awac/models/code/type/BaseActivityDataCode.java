@@ -110,9 +110,11 @@ public class BaseActivityDataCode extends Code {
 	public static final BaseActivityDataCode AE_BAD39A = new BaseActivityDataCode("104");
 	public static final BaseActivityDataCode AE_BAD39B = new BaseActivityDataCode("105");
 	private static final long serialVersionUID = 1L;
+
 	protected BaseActivityDataCode() {
 		super(CodeList.BASE_ACTIVITY_DATA);
 	}
+
 	public BaseActivityDataCode(String key) {
 		this();
 		this.key = key;

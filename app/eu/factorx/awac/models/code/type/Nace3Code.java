@@ -70,7 +70,7 @@ public class Nace3Code extends Code {
 	private static final long serialVersionUID = 1L;
 
 	protected Nace3Code() {
-		super(CodeList.NACE_CODES_3);
+		super(CodeList.SECTEURTERTIAIRE);
 	}
 
 	public Nace3Code(String key) {

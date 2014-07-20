@@ -19,7 +19,7 @@ public class ActivitySectorCode extends Code {
 	private static final long serialVersionUID = 1L;
 
 	protected ActivitySectorCode() {
-		super(CodeList.SITE_SECTORS);
+		super(CodeList.SECTEURPRINCIPAL);
 	}
 
 	public ActivitySectorCode(String key) {

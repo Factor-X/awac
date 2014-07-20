@@ -40,7 +40,7 @@ public class Nace2Code extends Code {
 	private static final long serialVersionUID = 1L;
 
 	protected Nace2Code() {
-		super(CodeList.NACE_CODES_2);
+		super(CodeList.SECTEURSECONDAIRE);
 	}
 
 	public Nace2Code(String key) {

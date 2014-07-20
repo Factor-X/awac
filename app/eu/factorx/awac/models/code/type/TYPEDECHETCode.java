@@ -11,7 +11,6 @@ public class TYPEDECHETCode extends Code {
 	public static final TYPEDECHETCode PAPIER_CARTON = new TYPEDECHETCode("4");
 	public static final TYPEDECHETCode MATIERE_ORGANIQUE = new TYPEDECHETCode("5");
 	public static final TYPEDECHETCode DECHETS_INDUSTRIELS_SPECIAUX = new TYPEDECHETCode("6");
-	public static final TYPEDECHETCode DECHETS_DANGEREUX_D_ORIGINE_SANITAIRE = new TYPEDECHETCode("7");
 	private static final long serialVersionUID = 1L;
 	protected TYPEDECHETCode() {
 		super(CodeList.TYPEDECHET);

@@ -19,7 +19,6 @@ public class ENERGIEVAPEURCode extends Code {
 	public static final ENERGIEVAPEURCode HUILES = new ENERGIEVAPEURCode("12");
 	public static final ENERGIEVAPEURCode GAZ_DE_PETROLE_LIQUEFIE_GPL = new ENERGIEVAPEURCode("13");
 	public static final ENERGIEVAPEURCode METHANE = new ENERGIEVAPEURCode("14");
-	public static final ENERGIEVAPEURCode PROPANE = new ENERGIEVAPEURCode("15");
 	private static final long serialVersionUID = 1L;
 	protected ENERGIEVAPEURCode() {
 		super(CodeList.ENERGIEVAPEUR);
