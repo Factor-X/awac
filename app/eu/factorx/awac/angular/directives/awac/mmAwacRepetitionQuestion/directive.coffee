@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionSetCode: '='
+        ngIteration:'='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true
@@ -12,6 +13,11 @@ angular
 
         scope.getQuestionSet = () ->
           return scope.$parent.getQuestionSet(scope.ngQuestionSetCode)
+
+
+        scope.removeAnwser = () ->
+          scope.$parent.removeIteration(scope.ngQuestionSetCode,scope.ngIteration)
+
         ###
 
         scope.getAnswerByQuestionCode = (code) ->

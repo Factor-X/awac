@@ -303,4 +303,23 @@ angular
         repetitionToAdd[code] =max+1
         $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd
 
+    $scope.removeIteration = (questionSetCode,iterationToDelete) ->
+
+      #delete question
+      len = $scope.answerList.length
+      while (len--)
+        question = $scope.answerList[len]
+        if question.mapRepetition!=null
+          if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode]==iterationToDelete[questionSetCode]
+            $scope.answerList.splice(len,1)
+
+      #delete iteration
+      if $scope.mapRepetition[questionSetCode]
+        len = $scope.mapRepetition[questionSetCode].length
+        while (len--)
+          iteration = $scope.mapRepetition[questionSetCode][len]
+          if iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
+            $scope.mapRepetition[questionSetCode].splice(len,1)
+
+
 

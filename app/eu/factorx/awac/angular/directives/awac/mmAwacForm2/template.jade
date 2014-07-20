@@ -1,10 +1,344 @@
-mm-awac-section(title-code="A1_TITLE")
+mm-awac-section(title-code="A13_TITLE")
 
 
-    mm-awac-repetition-question(ng-question-set-code="'A15'", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
+    //mm-awac-document-question (ng-question-code="'A14'")
+
+
+    div(ng-bind-html="'A15_TITLE' | translate")
+    mm-awac-repetition-question(ng-question-set-code="'A15'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
 
         mm-awac-select-question(ng-question-code="'A16'",ng-repetition-map="itLevel1")
 
         mm-awac-real-with-unit-question(ng-question-code="'A17'",ng-repetition-map="itLevel1")
 
     button(ng-click="addIteration('A15')", type="button") Add an iteration
+
+//
+    div
+            ng-virtual
+        .element
+            .element_header
+                .title Consommation de combustibles
+                .title_arrow
+            .element_sidebar
+                .block_status
+                    .lock_status.disable_status
+                    .answered_status
+                    .validate_status
+            .element_content
+                .element_table
+
+                    mm-awac-repetition-question(ng-object="o", question-code="A13", questions-to-add="A14")
+                        mm-awac-select-question(ng-object="o", question-code="A14")
+
+
+                //
+                    div
+                        div Pièces documentaires liées aux consommations de combustible
+                    div(ng-repeat="v in A('A14')")
+                        div
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A14')", ng-model="v.value")
+                            .user_icon XM
+                        button(ng-click="removeAnwser(v)") Remove
+                    div
+                        div
+                        .oneelement
+                            button(ng-click="addNewAnswer('A14')") Add
+
+                    div
+                        div Combustion de combustible par les sources statiques des sites de l'entreprise
+
+                .element_table(ng-repeat="ri in getRepetitionIndicesFor(['A16', 'A17'])")
+                    div
+                        div Combustible
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A16')", ng-model="getByCodeAndRepetitionIndex('A16', ri).value")
+                            .user_icon XM
+                    div
+                        div Quantité
+                        .twoelements
+                            .status.answer
+                            input(type="text", ng-model="A('A17').value")
+                            select(ng-options="p.id as p.name for p in U('A17')", ng-model="getByCodeAndRepetitionIndex('A17', ri).unitId")
+                            .user_icon XM
+
+        .horizontal_separator
+
+        .element
+            .element_header
+                .title Electricité et vapeur achetées
+                .title_arrow
+            .element_sidebar
+                .block_status
+                    .lock_status.disable_status
+                    .answered_status
+                    .validate_status
+            .element_content
+                .element_table
+                    div
+                        div Pièces documentaires liées aux achats d'électricité et de vapeur
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A21')", ng-model="A('A21').value")
+                            .user_icon XM
+                    div
+                        .sub_title Electricité
+                    div
+                        div
+                            .info
+                                .info_popup voici un text d'information assez longue à propos de cette question
+                            div Consommation d'électricité verte
+                        .twoelements
+                            .status.answer
+                            input(type="text", ng-model="A('A23').value")
+                            select(ng-options="p.id as p.name for p in U('A23')", ng-model="A('A23').unitId")
+                            .user_icon XM
+                    div
+                        div Consommation d'électricité grise
+                        .twoelements
+                            .status.answer
+                            input(type="text", ng-model="A('A24').value")
+                            select(ng-options="p.id as p.name for p in U('A24')", ng-model="A('A24').unitId")
+                            .user_icon XM
+                    div
+                        .sub_title Vapeur
+                    div
+                        div Energie primaire utilisée pour produire la vapeur:
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A26')", ng-model="A('A26').value")
+                            .user_icon XM
+                    div
+                        div
+                            .sub_sub_title Efficacité de la chaudière
+
+                    div
+                        div Efficacité de la chaudière
+                        .twoelements
+                            .status.answer
+                            input(type="text", ng-model="A('A27').value")
+                            select(ng-options="p.id as p.name for p in U('A27')", ng-model="A('A27').unitId")
+                            .user_icon XM
+                    div
+                        div Quantité achetée
+                        .twoelements
+                            .status.answer
+                            input(type="text", ng-model="A('A28').value")
+                            select(ng-options="p.id as p.name for p in U('A28')", ng-model="A('A28').unitId")
+                            .user_icon XM
+
+        .horizontal_separator
+
+        .element
+            .element_header
+                .title GES des processus de production
+                .title_arrow
+            .element_sidebar
+                .block_status
+                    .lock_status.disable_status
+                    .answered_status
+                    .validate_status
+            .element_content
+                .element_table
+                    div
+                        div Pièces documentaires liées aux GES des processus de production
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A33')", ng-model="A('A33').value")
+                            .user_icon XM
+                    div
+                        .sub_title Type de GES émis par la production
+
+        .horizontal_separator
+
+        .element
+            .element_header
+                .title Systèmes de refroidissement
+                .title_arrow
+            .element_sidebar
+                .block_status
+                    .lock_status.disable_status
+                    .answered_status
+                    .validate_status
+            .element_content
+                .element_table
+                    div
+                        div Pièces documentaires liées aux systèmes de refroidissement
+                        .oneelement
+                            .status.answer
+                            select(ng-options="p.key as p.labelFr for p in O('A39')", ng-model="A('A39').value")
+                            .user_icon XM
+                    div
+                        .sub_title Estimation des émissions à partir des recharges de gaz
+                    div
+                        .sub_title Estimation des émissions à partir de la puissance du groupe de froid
+                    div
+                        .sub_title Estimation des émissions à partir de la consommation électrique du site
+
+        .horizontal_separator
+
+        .element
+            .element_header
+                .title Froid
+                .title_arrow
+                .upload
+            .element_sidebar
+                .block_status
+                    .lock_status
+                    .answered_status.disable_status
+                    .validate_status.disable_status
+            .element_content
+                .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+                .method
+                    tabset
+                        tab.tab-color-lightgreen
+                            tab-heading
+                                i.glyphicon.glyphicon-bell
+                                | Systèmes
+                            .sub_block.tab-color-lightgreen
+                                .element_table
+                                    div
+                                        div Choix du combustible ?
+                                        .oneelement
+                                            .status.answer
+                                            select
+                                                option Mazout
+                                                option Fuel
+                                            .user_icon XM
+                                        .oneelement
+                                            input(value='Mazout')
+                                            .user_icon XM
+                                    div
+                                        div Consommation précise :
+                                        .twoelements
+                                            .status
+                                            input(value='170')
+                                            select
+                                                option Litres
+                                                option Kilogrammes
+                                            .user_icon AG
+                                        .twoelements
+                                            input(value='170')
+                                            div(style='display:inline-block; color: black') litres
+                                            .user_icon AG
+                                    div
+                                        div
+                                        div
+                                            .status
+                                            button.comments(type='button') 2 commentaires
+                                        div
+                                            button.comments(type='button') 1 commentaire
+                        tab.tab-color-green
+                            tab-heading
+                                i.glyphicon.glyphicon-bell
+                                | Recharges
+                            .sub_block.tab-color-green
+                                .element_table
+                                    div
+                                        div Choix du combustible ? 2
+                                        .oneelement
+                                            .status.answer
+                                            select
+                                                option Mazout
+                                                option Fuel
+                                            .user_icon XM
+                                        .oneelement
+                                            input(value='Mazout')
+                                            .user_icon XM
+                                    div
+                                        div Consommation précise :
+                                        .twoelements
+                                            .status
+                                            input(value='170')
+                                            select
+                                                option Litres
+                                                option Kilogrammes
+                                            .user_icon AG
+                                        .twoelements
+                                            input(value='170')
+                                            div(style='display:inline-block; color: black') litres
+                                            .user_icon AG
+                                    div
+                                        div
+                                        div
+                                            .status
+                                            button.comments(type='button') 2 commentaires
+                                        div
+                                            button.comments(type='button') 1 commentaire
+                        tab.tab-color-yellow
+                            tab-heading
+                                i.glyphicon.glyphicon-bell
+                                | Usages
+                            .sub_block.tab-color-yellow
+                                .element_table
+                                    div
+                                        div Choix du combustible ?
+                                        .oneelement
+                                            .status.answer
+                                            select
+                                                option Mazout
+                                                option Fuel
+                                            .user_icon XM
+                                        .oneelement
+                                            input(value='Mazout')
+                                            .user_icon XM
+                                    div
+                                        div Consommation précise :
+                                        .twoelements
+                                            .status
+                                            input(value='170')
+                                            select
+                                                option Litres
+                                                option Kilogrammes
+                                            .user_icon AG
+                                        .twoelements
+                                            input(value='170')
+                                            div(style='display:inline-block; color: black') litres
+                                            .user_icon AG
+                                    div
+                                        div
+                                        div
+                                            .status
+                                            button.comments(type='button') 2 commentaires
+                                        div
+                                            button.comments(type='button') 1 commentaire
+                        tab.tab-color-orange
+                            tab-heading
+                                i.glyphicon.glyphicon-bell
+                                | Méthode #4
+                            .sub_block.tab-color-orange
+                                .element_table
+                                    div
+                                        div Choix du combustible ?
+                                        .oneelement
+                                            .status.answer
+                                            select
+                                                option Mazout
+                                                option Fuel
+                                            .user_icon XM
+                                        .oneelement
+                                            input(value='Mazout')
+                                            .user_icon XM
+                                    div
+                                        div Consommation précise :
+                                        .twoelements
+                                            .status
+                                            input(value='170')
+                                            select
+                                                option Litres
+                                                option Kilogrammes
+                                            .user_icon AG
+                                        .twoelements
+                                            input(value='170')
+                                            div(style='display:inline-block; color: black') litres
+                                            .user_icon AG
+                                    div
+                                        div
+                                        div
+                                            .status
+                                            button.comments(type='button') 2 commentaires
+                                        div
+                                            button.comments(type='button') 1 commentaire
