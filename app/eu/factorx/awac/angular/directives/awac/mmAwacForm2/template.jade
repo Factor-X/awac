@@ -15,9 +15,14 @@ mm-awac-section(title-code="A13_TITLE")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A15_LOOPDESC' | translate")
 
+    div
+        .sub_title Vapeur--x
+
+    mm-awac-sub-title(ng-bind-html="'A25_TITLE' | translate")
+
+
 //
     div
-            ng-virtual
         .element
             .element_header
                 .title Consommation de combustibles
@@ -33,8 +38,6 @@ mm-awac-section(title-code="A13_TITLE")
                     mm-awac-repetition-question(ng-object="o", question-code="A13", questions-to-add="A14")
                         mm-awac-select-question(ng-object="o", question-code="A14")
 
-
-                //
                     div
                         div Pièces documentaires liées aux consommations de combustible
                     div(ng-repeat="v in A('A14')")
@@ -105,8 +108,12 @@ mm-awac-section(title-code="A13_TITLE")
                             input(type="text", ng-model="A('A24').value")
                             select(ng-options="p.id as p.name for p in U('A24')", ng-model="A('A24').unitId")
                             .user_icon XM
+
                     div
-                        .sub_title Vapeur
+                        .sub_title Vapeur--x
+
+                    mm-awac-sub-title(ng-bind-html="'A25_TITLE' | translate")
+
                     div
                         div Energie primaire utilisée pour produire la vapeur:
                         .oneelement
