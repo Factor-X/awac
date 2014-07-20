@@ -1,118 +1,172 @@
-ng-virtual
-    .element
-        .element_header
-            .title Mobilité
-            .title_arrow
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-                div
-                    div Pièces documentaires liées à la mobilité
-                    .oneelement
-                        .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
-                        .user_icon XM
+mm-awac-section(title-code="A50_TITLE")
+
+    mm-awac-document-question(question-code="A51")
 
     .horizontal_separator
 
-    .element
-        .element_header
-            .title Transport routier
-            .title_arrow
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_text Plusieurs méthodes différentes existent pour rapporter le transport routier. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
-            .method
-                tabset
-                    tab.tab-color-lightgreen
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Calcul par les consommations
-                        .sub_block.tab-color-lightgreen
-                            .element_table
-                                div
-                                    .sub_title Véhicules de société ou détenus par l'entreprise
-                                div
-                                    .sub_title Autres véhicules: déplacements domicile-travail des employés
-                                div
-                                    .sub_title Autres véhicules: Déplacements professionnels & visiteurs
-                    tab.tab-color-green
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Estimation par les kilomètres
-                        .sub_block.tab-color-green
-                            .element_table
-                                div
-                                    .sub_title Créez autant de catégories de véhicules que souhaité
-        tab.tab-color-yellow
-            tab-heading
-                i.glyphicon.glyphicon-bell
-                | Estimation par euros dépensés
-            .sub_block.tab-color-yellow
-                .element_table
-                    div
-                        .sub_title Créez autant de catégories de véhicules que souhaité
+mm-awac-section(title-code="A52_TITLE")
+
+div
+    .element_content
+        .element_text Plusieurs méthodes différentes existent pour rapporter le transport routier. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+        .method
+            tabset
+                tab.tab-color-lightgreen
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A53') | translate)
+                    .sub_block.tab-color-lightgreen
+                        .element_table
+                            mm-awac-sub-title
+                                ng-virtual(ng-bind-html="'A54_TITLE' | translate")
+
+                            mm-awac-real-with-unit-question(question-code="A55")
+                            mm-awac-real-with-unit-question(question-code="A56")
+                            mm-awac-real-with-unit-question(question-code="A57")
+
+                            mm-awac-sub-title
+                                ng-virtual(ng-bind-html="'A58_TITLE' | translate")
+
+                            mm-awac-real-with-unit-question(question-code="A59")
+                            mm-awac-real-with-unit-question(question-code="A60")
+                            mm-awac-real-with-unit-question(question-code="A61")
+
+                            mm-awac-sub-title
+                                ng-virtual(ng-bind-html="'A62_TITLE' | translate")
+
+                            mm-awac-real-with-unit-question(question-code="A63")
+                            mm-awac-real-with-unit-question(question-code="A64")
+                            mm-awac-real-with-unit-question(question-code="A65")
+
+                tab.tab-color-green
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A66') | translate)
+                    .sub_block.tab-color-green
+                        .element_table
+                            div(ng-bind-html="'A67_TITLE' | translate")
+
+                            mm-awac-repetition-question(question-set-code="A67", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A67')")
+
+                                // mm-awac-text-question(question-code="A68",ng-repetition-map="itLevel1")
+
+                                mm-awac-boolean-question(question-code="A69",ng-repetition-map="itLevel1")
+
+                                mm-awac-select-question(question-code="A70",ng-repetition-map="itLevel1")
+
+                                mm-awac-select-question(question-code="A71",ng-repetition-map="itLevel1")
+
+                                mm-awac-select-question(question-code="A72",ng-repetition-map="itLevel1")
+
+                                mm-awac-real-question(question-code="A73",ng-repetition-map="itLevel1")
+
+                                mm-awac-real-question(question-code="A74",ng-repetition-map="itLevel1")
+
+                                mm-awac-real-question(question-code="A75",ng-repetition-map="itLevel1")
+
+                                mm-awac-real-question(question-code="A76",ng-repetition-map="itLevel1")
+
+                            button(ng-click="addIteration('A67')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'A67_LOOPDESC' | translate")
+
+                tab.tab-color-yellow
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A77') | translate)
+                    .sub_block.tab-color-yellow
+                        .element_table
+                            div(ng-bind-html="'A78_TITLE' | translate")
+                            mm-awac-repetition-question(question-set-code="A78", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A78')")
+                                // mm-awac-text-question(question-code="A79",ng-repetition-map="itLevel1")
+                                mm-awac-boolean-question(question-code="A80",ng-repetition-map="itLevel1")
+                                mm-awac-select-question(question-code="A81",ng-repetition-map="itLevel1")
+                                mm-awac-select-question(question-code="A83",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A88",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A89",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A90",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A91",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A92",ng-repetition-map="itLevel1")
+
+                            button(ng-click="addIteration('A78')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'A78_LOOPDESC' | translate")
 
     .horizontal_separator
 
-    .element
-        .element_header
-            .title Transport en commun
-            .title_arrow
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_text Plusieurs méthodes différentes existent pour rapporter le transport en commun. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
-            .method
-                tabset
-                    tab.tab-color-lightgreen
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Estimation par le détail des déplacements
-                        .sub_block.tab-color-lightgreen
-                            .element_table
-                    tab.tab-color-green
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Estimation par nombre d'employés
-                        .sub_block.tab-color-green
-                            .element_table
+mm-awac-section(title-code="A93_TITLE")
+div
+    .element_content
+        .element_text Plusieurs méthodes différentes existent pour rapporter le transport en commun. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+        .method
+            tabset
+                tab.tab-color-lightgreen
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A94') | translate)
+                    .sub_block.tab-color-lightgreen
+                        .element_table
+                            mm-awac-real-question(question-code="A95")
+                            mm-awac-real-question(question-code="A96")
+                            mm-awac-real-question(question-code="A97")
+                            mm-awac-real-question(question-code="A98")
+                            mm-awac-real-question(question-code="A99")
+                            mm-awac-real-question(question-code="A100")
+                            mm-awac-real-question(question-code="A101")
+                            mm-awac-real-question(question-code="A102")
+                            mm-awac-real-question(question-code="A103")
+                            mm-awac-real-question(question-code="A104")
+                            mm-awac-real-question(question-code="A105")
+                            mm-awac-real-question(question-code="A106")
+                            mm-awac-real-with-unit-question(question-code="A107")
+                            mm-awac-real-with-unit-question(question-code="A108")
+
+                tab.tab-color-green
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A109') | translate)
+                    .sub_block.tab-color-green
+                        .element_table
+                            mm-awac-boolean-question(question-code="A110")
+                            mm-awac-boolean-question(question-code="A111")
+                            mm-awac-boolean-question(question-code="A112")
 
     .horizontal_separator
 
-    .element
-        .element_header
-            .title Transport en avion (déplacements professionnels ou des visiteurs)
-            .title_arrow
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_text Plusieurs méthodes différentes existent pour rapporter le transport en avion. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
-            .method
-                tabset
-                    tab.tab-color-lightgreen
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Méthode par le détail des vols
-                        .sub_block.tab-color-lightgreen
-                            .element_table
-                    tab.tab-color-green
-                        tab-heading
-                            i.glyphicon.glyphicon-bell
-                            | Méthode des moyennes
-                        .sub_block.tab-color-green
-                            .element_table
+mm-awac-section(title-code="A113_TITLE")
+
+div
+    .element_content
+        .element_text Plusieurs méthodes différentes existent pour rapporter le transport en avion. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+        .method
+            tabset
+                tab.tab-color-lightgreen
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A114') | translate)
+                    .sub_block.tab-color-lightgreen
+                        .element_table
+                            div(ng-bind-html="'A115_TITLE' | translate")
+                            mm-awac-repetition-question(question-set-code="A115", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A115')")
+                                //mm-awac-text-question(question-code="A116",ng-repetition-map="itLevel1")
+                                mm-awac-select-question(question-code="A117",ng-repetition-map="itLevel1")
+                                mm-awac-select-question(question-code="A118",ng-repetition-map="itLevel1")
+                                mm-awac-real-question(question-code="A119",ng-repetition-map="itLevel1")
+                                mm-awac-real-with-unit-question(question-code="A44",ng-repetition-map="itLevel1")
+                            button(ng-click="addIteration('A115')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'A115_LOOPDESC' | translate")
+
+                tab.tab-color-green
+                    tab-heading
+                        i.glyphicon.glyphicon-bell
+                        | (getTitleCode('A121') | translate)
+                    .sub_block.tab-color-green
+                        .element_table
+                            mm-awac-real-with-unit-question(question-code="A122")
+                            mm-awac-boolean-question(question-code="A123")
+                            mm-awac-boolean-question(question-code="A124")
+                            mm-awac-real-with-unit-question(question-code="A125")
+                            mm-awac-real-with-unit-question(question-code="A126")
+                            mm-awac-real-with-unit-question(question-code="A127")
+

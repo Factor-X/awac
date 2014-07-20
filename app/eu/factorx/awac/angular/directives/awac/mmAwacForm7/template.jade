@@ -1,25 +1,21 @@
-ng-virtual
-    .element
-        .element_header
-            .title Achat de biens et services
-            .title_arrow
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-                div
-                    div Pièces documentaires liées aux transport & distribution, traitement, utilisation et fin de vie des produits vendus
-                    .oneelement
-                        .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
-                        .user_icon XM
-                div
-                    .sub_title Lister les différents produits ou groupes de produits vendus par l'entreprise
-                    div
-                        .sub_title Transport
-                        .sub_title Traitement
-                        .sub_title Utilisation
-    .horizontal_separator
+mm-awac-section(title-code="A43_TITLE")
+
+    mm-awac-document-question(question-code="A51")
+
+    div(ng-bind-html="'A244_TITLE' | translate")
+    mm-awac-repetition-question(ng-question-set-code="'A244'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A244')")
+
+        mm-awac-string-question(ng-question-code="'A245'",ng-repetition-map="itLevel1")
+        mm-awac-real-question(ng-question-code="'A246'",ng-repetition-map="itLevel1")
+        mm-awac-string-question(ng-question-code="'A247'",ng-repetition-map="itLevel1")
+        mm-awac-select-question(ng-question-code="'A248'",ng-repetition-map="itLevel1")
+        mm-awac-boolean-question(ng-question-code="'A249'",ng-repetition-map="itLevel1")
+
+        div(ng-bind-html="'A273_TITLE' | translate")
+        mm-awac-repetition-question(ng-question-set-code="'A273'", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A273')")
+
+            mm-awac-string-question(ng-question-code="'A274'",ng-repetition-map="itLevel2")
+
+        button(ng-click="addIteration('A273')", type="button") Add an iteration
+
+    button(ng-click="addIteration('A244')", type="button") Add an iteration
