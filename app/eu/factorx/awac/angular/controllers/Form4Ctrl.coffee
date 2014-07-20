@@ -84,7 +84,7 @@ angular
                     console.log "exite pas, ajoute"
                     $scope.mapRepetition[questionSetDTO.code] = []
                     $scope.mapRepetition[questionSetDTO.code][0] = repetitionToAdd
-                    
+
 
       $scope.storeAnswers()
       $scope.loading =false

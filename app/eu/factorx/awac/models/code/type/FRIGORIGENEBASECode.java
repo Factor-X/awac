@@ -7,8 +7,8 @@ public class FRIGORIGENEBASECode extends Code {
 
 	public static final FRIGORIGENEBASECode R404A = new FRIGORIGENEBASECode("1");
 	public static final FRIGORIGENEBASECode R134A = new FRIGORIGENEBASECode("2");
-	public static final FRIGORIGENEBASECode R410A = new FRIGORIGENEBASECode("3");
 	private static final long serialVersionUID = 1L;
+
 	protected FRIGORIGENEBASECode() {
 		super(CodeList.FRIGORIGENEBASE);
 	}

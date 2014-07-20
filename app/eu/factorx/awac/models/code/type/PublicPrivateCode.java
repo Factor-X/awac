@@ -17,7 +17,7 @@ public class PublicPrivateCode extends Code {
 	private static final long serialVersionUID = 1L;
 
 	protected PublicPrivateCode() {
-		super(CodeList.PUBLIC_PRIVATE);
+		super(CodeList.SECTEURTYPE);
 	}
 
 	public PublicPrivateCode(String key) {

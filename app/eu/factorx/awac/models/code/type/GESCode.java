@@ -81,7 +81,6 @@ public class GESCode extends Code {
 	public static final GESCode R600A_ISOBUTANE_C4H10 = new GESCode("74");
 	public static final GESCode R406A_55_41_4_MIX_DE_HCFC_22_HCFC_142B_ET_R600A = new GESCode("75");
 	public static final GESCode R409A_60_25_15_MIX_DE_HCFC_22_HCFC_124_ET_HCFC_142B = new GESCode("76");
-	public static final GESCode R502_48_8_51_2_MIX_DE_OF_HCFC_22_ET_CFC_115 = new GESCode("77");
 	private static final long serialVersionUID = 1L;
 	protected GESCode() {
 		super(CodeList.GES);

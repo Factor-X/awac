@@ -27,7 +27,6 @@ public class ACHATCHIMIQUECode extends Code {
 	public static final ACHATCHIMIQUECode ACIDE_SULFURIQUE = new ACHATCHIMIQUECode("20");
 	public static final ACHATCHIMIQUECode ACIDE_CHLORHYDRIQUE = new ACHATCHIMIQUECode("21");
 	public static final ACHATCHIMIQUECode NYLON = new ACHATCHIMIQUECode("22");
-	public static final ACHATCHIMIQUECode ALCOOL = new ACHATCHIMIQUECode("23");
 	private static final long serialVersionUID = 1L;
 	protected ACHATCHIMIQUECode() {
 		super(CodeList.ACHATCHIMIQUE);

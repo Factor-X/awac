@@ -18,7 +18,6 @@ public class ORIGINEEAUUSEECode extends Code {
 	public static final ORIGINEEAUUSEECode EAUX_DE_PRODUCTION_D_AMIDON = new ORIGINEEAUUSEECode("11");
 	public static final ORIGINEEAUUSEECode EAUX_DE_RAFFINAGE_DU_SUCRE = new ORIGINEEAUUSEECode("12");
 	public static final ORIGINEEAUUSEECode EAUX_DE_LEGUMES_ET_FRUITS_JUS = new ORIGINEEAUUSEECode("13");
-	public static final ORIGINEEAUUSEECode EAUX_DE_VINS_ET_VINAIGRES = new ORIGINEEAUUSEECode("14");
 	private static final long serialVersionUID = 1L;
 	protected ORIGINEEAUUSEECode() {
 		super(CodeList.ORIGINEEAUUSEE);

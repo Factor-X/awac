@@ -11,7 +11,6 @@ public class ACHATMETALCode extends Code {
 	public static final ACHATMETALCode ZINC_MOYENNE = new ACHATMETALCode("4");
 	public static final ACHATMETALCode NICKEL_MOYENNE = new ACHATMETALCode("5");
 	public static final ACHATMETALCode PLOMB_MOYENNE = new ACHATMETALCode("6");
-	public static final ACHATMETALCode AUTRES_METAUX_COURANTS_MOYENNE = new ACHATMETALCode("7");
 	private static final long serialVersionUID = 1L;
 	protected ACHATMETALCode() {
 		super(CodeList.ACHATMETAL);

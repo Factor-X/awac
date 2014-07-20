@@ -45,7 +45,6 @@ public class ACHATAGROCode extends Code {
 	public static final ACHATAGROCode OEUFS = new ACHATAGROCode("38");
 	public static final ACHATAGROCode SUCRE = new ACHATAGROCode("39");
 	public static final ACHATAGROCode VIN = new ACHATAGROCode("40");
-	public static final ACHATAGROCode ALCOOL_PUR = new ACHATAGROCode("41");
 	private static final long serialVersionUID = 1L;
 	protected ACHATAGROCode() {
 		super(CodeList.ACHATAGRO);

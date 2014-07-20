@@ -1,5 +1,7 @@
 package eu.factorx.awac;
 
+
+
 import eu.factorx.awac.util.data.importer.*;
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
@@ -1020,22 +1022,22 @@ public class AwacInitialData {
 		// == A3 ==========================================================================
 		// A quel secteur principal appartient votre site?
 		// A1(AWAC - Entreprises) > A3 (A quel secteur principal appartient votre site?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A3, CodeList.SITE_SECTORS));
+		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A3, CodeList.SECTEURPRINCIPAL));
 
 		// == A4 ==========================================================================
 		// Quel est le code NACE principal de votre site?
 		// A1(AWAC - Entreprises) > A4 (Quel est le code NACE principal de votre site?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A4, CodeList.NACE_CODES_1));
+		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A4, CodeList.SECTEURPRIMAIRE));
 
 		// == A5 ==========================================================================
 		// Quel est le code NACE principal de votre site?
 		// A1(AWAC - Entreprises) > A5 (Quel est le code NACE principal de votre site?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A5, CodeList.NACE_CODES_2));
+		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A5, CodeList.SECTEURSECONDAIRE));
 
 		// == A6 ==========================================================================
 		// Quel est le code NACE principal de votre site?
 		// A1(AWAC - Entreprises) > A6 (Quel est le code NACE principal de votre site?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A6, CodeList.NACE_CODES_3));
+		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A6, CodeList.SECTEURTERTIAIRE));
 
 		// == A7 ==========================================================================
 		// Est-ce que votre activité est purement ou principalement de bureaux?
@@ -1045,7 +1047,7 @@ public class AwacInitialData {
 		// == A8 ==========================================================================
 		// Etes-vous dans le secteur public ou privé?
 		// A1(AWAC - Entreprises) > A8 (Etes-vous dans le secteur public ou privé?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A8, CodeList.PUBLIC_PRIVATE));
+		session.saveOrUpdate(new ValueSelectionQuestion(a1, 0, QuestionCode.A8, CodeList.SECTEURTYPE));
 
 		// == A9 ==========================================================================
 		// Indiquez la surface totale du site:
@@ -1075,7 +1077,7 @@ public class AwacInitialData {
 		// == A16 =========================================================================
 		// Combustible
 		// A13(Consommation de combustibles) > A15(Combustion de combustible par les sources statiques des sites de l'entreprise) > A16 (Combustible)
-		session.saveOrUpdate(new ValueSelectionQuestion(a15, 0, QuestionCode.A16, CodeList.FUEL));
+		session.saveOrUpdate(new ValueSelectionQuestion(a15, 0, QuestionCode.A16, CodeList.COMBUSTIBLE));
 
 		// == A17 =========================================================================
 		// Quantité
@@ -1590,7 +1592,7 @@ public class AwacInitialData {
 		// == A167 ========================================================================
 		// Combustible utilisé en amont
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A166(Listez les totaux de combustibles utilisés en amont) > A167 (Combustible utilisé en amont)
-		session.saveOrUpdate(new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.FUEL));
+		session.saveOrUpdate(new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.COMBUSTIBLE));
 
 		// == A168 ========================================================================
 		// Quantité
@@ -2201,6 +2203,7 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
+
 
 	}
 
