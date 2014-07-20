@@ -10,6 +10,7 @@
         <non-jta-data-source>DefaultDS</non-jta-data-source>
         
         <class>eu.factorx.awac.models.AbstractEntity</class>
+        <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
@@ -21,6 +22,9 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
+        <class>eu.factorx.awac.models.code.conversion.CodeToActivitySourceCodeEquivalence</class>
+        <class>eu.factorx.awac.models.code.conversion.CodeToActivityTypeCodeEquivalence</class>
+        <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
