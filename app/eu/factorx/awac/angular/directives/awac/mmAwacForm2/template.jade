@@ -18,7 +18,8 @@ mm-awac-section(title-code="A13_TITLE")
     div
         .sub_title Vapeur--x
 
-    mm-awac-sub-title(ng-bind-html="'A25_TITLE' | translate")
+    mm-awac-sub-title
+        ng-virtual(ng-bind-html="'A25_TITLE' | translate")
 
 
 //
