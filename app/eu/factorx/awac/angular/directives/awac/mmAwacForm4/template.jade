@@ -7,85 +7,12 @@ mm-awac-section(title-code="A243_TITLE")
         mm-awac-string-question(ng-question-code="'A245'",ng-repetition-map="itLevel1")
 
         div(ng-bind-html="'A273_TITLE' | translate")
-        mm-awac-repetition-question(ng-question-set-code="'A273'", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A273')")
+        mm-awac-repetition-question(ng-question-set-code="'A273'", ng-iteration="itLevel2",ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A273',itLevel1)")
 
             mm-awac-string-question(ng-question-code="'A274'",ng-repetition-map="itLevel2")
 
-        button(ng-click="addIteration('A273')", type="button") Add an iteration
+        button(ng-click="addIteration('A273',itLevel1)", type="button") Add an iteration
 
     button(ng-click="addIteration('A244')", type="button") Add an iteration
 
-
-
-
-.element
-    .element_header
-        .title Transport et distribution de marchandises amont
-    .element_sidebar
-        .block_status
-            .lock_status.disable_status
-            .answered_status
-            .validate_status
-    .element_content
-        .element_table
-            div
-                div Pièces documentaires liées au transport et stockage amont
-                .oneelement
-                    .status.answer
-                    select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
-                    .user_icon XM
-
-.horizontal_separator
-
-.element
-    .element_header
-        .title Transport amont
-    .element_sidebar
-        .block_status
-            .lock_status.disable_status
-            .answered_status
-            .validate_status
-    .element_content
-        .element_table
-            div
-                .sub_title Transport avec des véhicules détenus par l'entreprise
-            div
-                .sub_title Transport effectué par des transporteurs
-            div
-                .element_content
-                    .element_text Plusieurs méthodes différentes existent pour rapporter le transport effectué par des transporteurs. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
-                    .method
-                        tabset
-                            tab.tab-color-lightgreen
-                                tab-heading
-                                    i.glyphicon.glyphicon-bell
-                                    | Méthode des kilomètres
-                                .sub_block.tab-color-lightgreen
-                                    .element_table
-                                        div
-                                            .sub_title Créez autant de marchandises que nécessaire
-                            tab.tab-color-green
-                                tab-heading
-                                    i.glyphicon.glyphicon-bell
-                                    | Méthode des moyennes
-                                .sub_block.tab-color-green
-                                    .element_table
-                                        div
-
-.horizontal_separator
-
-.element
-    .element_header
-        .title Distribution amont
-    .element_sidebar
-        .block_status
-            .lock_status.disable_status
-            .answered_status
-            .validate_status
-    .element_content
-        .element_table
-            div
-                .sub_title Distribution amont: Energie et froid des entrepôts de stockage
-            div
-                .sub_title Créez autant d'entrepôts de stockage que nécessaire
 

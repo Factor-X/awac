@@ -1605,7 +1605,7 @@ public class AwacInitialData {
 		// == A171 ========================================================================
 		// Type de gaz
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A170(Listez les gaz réfrigérants utilisés pour les marchandises amont) > A171 (Type de gaz)
-		session.saveOrUpdate(new ValueSelectionQuestion(a170, 0, QuestionCode.A171, CodeList.REFRIGERANT_GAS));
+		session.saveOrUpdate(new ValueSelectionQuestion(a170, 0, QuestionCode.A171, CodeList.FRIGORIGENE));
 
 		// == A172 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
