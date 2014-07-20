@@ -1,4 +1,4 @@
-ng-virtual
+mm-awac-section(title-code="A243_TITLE")
 
 
     div(ng-bind-html="'A244_TITLE' | translate")
@@ -18,74 +18,74 @@ ng-virtual
 
 
 
-    .element
-        .element_header
-            .title Transport et distribution de marchandises amont
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-                div
-                    div Pièces documentaires liées au transport et stockage amont
-                    .oneelement
-                        .status.answer
-                        select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
-                        .user_icon XM
+.element
+    .element_header
+        .title Transport et distribution de marchandises amont
+    .element_sidebar
+        .block_status
+            .lock_status.disable_status
+            .answered_status
+            .validate_status
+    .element_content
+        .element_table
+            div
+                div Pièces documentaires liées au transport et stockage amont
+                .oneelement
+                    .status.answer
+                    select(ng-options="p.key as p.labelFr for p in O('A51')", ng-model="A('A51').value")
+                    .user_icon XM
 
-    .horizontal_separator
+.horizontal_separator
 
-    .element
-        .element_header
-            .title Transport amont
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-                div
-                    .sub_title Transport avec des véhicules détenus par l'entreprise
-                div
-                    .sub_title Transport effectué par des transporteurs
-                div
-                    .element_content
-                        .element_text Plusieurs méthodes différentes existent pour rapporter le transport effectué par des transporteurs. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
-                        .method
-                            tabset
-                                tab.tab-color-lightgreen
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell
-                                        | Méthode des kilomètres
-                                    .sub_block.tab-color-lightgreen
-                                        .element_table
-                                            div
-                                                .sub_title Créez autant de marchandises que nécessaire
-                                tab.tab-color-green
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell
-                                        | Méthode des moyennes
-                                    .sub_block.tab-color-green
-                                        .element_table
-                                            div
+.element
+    .element_header
+        .title Transport amont
+    .element_sidebar
+        .block_status
+            .lock_status.disable_status
+            .answered_status
+            .validate_status
+    .element_content
+        .element_table
+            div
+                .sub_title Transport avec des véhicules détenus par l'entreprise
+            div
+                .sub_title Transport effectué par des transporteurs
+            div
+                .element_content
+                    .element_text Plusieurs méthodes différentes existent pour rapporter le transport effectué par des transporteurs. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+                    .method
+                        tabset
+                            tab.tab-color-lightgreen
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell
+                                    | Méthode des kilomètres
+                                .sub_block.tab-color-lightgreen
+                                    .element_table
+                                        div
+                                            .sub_title Créez autant de marchandises que nécessaire
+                            tab.tab-color-green
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell
+                                    | Méthode des moyennes
+                                .sub_block.tab-color-green
+                                    .element_table
+                                        div
 
-    .horizontal_separator
+.horizontal_separator
 
-    .element
-        .element_header
-            .title Distribution amont
-        .element_sidebar
-            .block_status
-                .lock_status.disable_status
-                .answered_status
-                .validate_status
-        .element_content
-            .element_table
-                div
-                    .sub_title Distribution amont: Energie et froid des entrepôts de stockage
-                div
-                    .sub_title Créez autant d'entrepôts de stockage que nécessaire
+.element
+    .element_header
+        .title Distribution amont
+    .element_sidebar
+        .block_status
+            .lock_status.disable_status
+            .answered_status
+            .validate_status
+    .element_content
+        .element_table
+            div
+                .sub_title Distribution amont: Energie et froid des entrepôts de stockage
+            div
+                .sub_title Créez autant d'entrepôts de stockage que nécessaire
 
