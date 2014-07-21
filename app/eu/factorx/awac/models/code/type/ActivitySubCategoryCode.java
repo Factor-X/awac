@@ -21,18 +21,15 @@ public class ActivitySubCategoryCode extends Code {
 	public static final ActivitySubCategoryCode DPRO = new ActivitySubCategoryCode("7");
 	public static final ActivitySubCategoryCode DDT = new ActivitySubCategoryCode("8");
 	public static final ActivitySubCategoryCode DPRO_DVIS = new ActivitySubCategoryCode("9");
-	public static final ActivitySubCategoryCode MATIERE = new ActivitySubCategoryCode("11");
-	public static final ActivitySubCategoryCode FACTEUR_PROPRE = new ActivitySubCategoryCode("12");
-	public static final ActivitySubCategoryCode AVAL = new ActivitySubCategoryCode("13");
+	public static final ActivitySubCategoryCode MATIERE = new ActivitySubCategoryCode("10");
+	public static final ActivitySubCategoryCode FACTEUR_PROPRE = new ActivitySubCategoryCode("11");
+	public static final ActivitySubCategoryCode AVAL = new ActivitySubCategoryCode("12");
 	private static final long serialVersionUID = 1L;
-
 	protected ActivitySubCategoryCode() {
-		super(CodeList.ACTIVITY_SUB_CATEGORY);
+		super(CodeList.ActivitySubCategory);
 	}
-
 	public ActivitySubCategoryCode(String key) {
 		this();
 		this.key = key;
 	}
-
 }

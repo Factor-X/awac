@@ -82,19 +82,6 @@ public class Parallel {
 		}
 	}
 
-	private static class ThreadSafeIterator<T> {
-
-		private final Iterator<T> itr;
-
-		public ThreadSafeIterator(Iterator<T> itr) {
-			this.itr = itr;
-		}
-
-		public synchronized T next() {
-			return itr.hasNext() ? itr.next() : null;
-		}
-	}
-
 	public static <T> void ForFJ(final Iterable<T> elements, final Operation<T> operation) {
 		// TODO: is this really utilizing any fork-join capabilities since it is just an invokeAll?
 		// I assume work stealing is at least going on since this is sumbitted to a fork-join pool?
@@ -120,6 +107,19 @@ public class Parallel {
 
 	public static interface Operation<T> {
 		public void perform(T pParameter);
+	}
+
+	private static class ThreadSafeIterator<T> {
+
+		private final Iterator<T> itr;
+
+		public ThreadSafeIterator(Iterator<T> itr) {
+			this.itr = itr;
+		}
+
+		public synchronized T next() {
+			return itr.hasNext() ? itr.next() : null;
+		}
 	}
 
 }

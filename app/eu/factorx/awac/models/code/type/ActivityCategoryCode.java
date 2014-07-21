@@ -30,14 +30,11 @@ public class ActivityCategoryCode extends Code {
 	public static final ActivityCategoryCode INVESTISSEMENT_SCOPE_1 = new ActivityCategoryCode("16");
 	public static final ActivityCategoryCode INVESTISSEMENT_SCOPE_2 = new ActivityCategoryCode("17");
 	private static final long serialVersionUID = 1L;
-
 	protected ActivityCategoryCode() {
-		super(CodeList.ACTIVITY_CATEGORY);
+		super(CodeList.ActivityCategory);
 	}
-
 	public ActivityCategoryCode(String key) {
 		this();
 		this.key = key;
 	}
-
 }

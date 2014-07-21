@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "combustible"))})
 public class COMBUSTIBLECode extends Code {
 
 	public static final COMBUSTIBLECode DIESEL_GASOIL_OU_FUEL_LEGER = new COMBUSTIBLECode("1");
@@ -41,6 +48,7 @@ public class COMBUSTIBLECode extends Code {
 	public static final COMBUSTIBLECode PETROLE_BRUT = new COMBUSTIBLECode("34");
 	public static final COMBUSTIBLECode PETROLE_LAMPANT = new COMBUSTIBLECode("35");
 	public static final COMBUSTIBLECode TERRIL = new COMBUSTIBLECode("36");
+	public static final COMBUSTIBLECode TOURBE = new COMBUSTIBLECode("37");
 	private static final long serialVersionUID = 1L;
 	protected COMBUSTIBLECode() {
 		super(CodeList.COMBUSTIBLE);

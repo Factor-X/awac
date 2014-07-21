@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "pourcentsimplifie"))})
 public class POURCENTSIMPLIFIECode extends Code {
 
 	public static final POURCENTSIMPLIFIECode _0 = new POURCENTSIMPLIFIECode("1");
@@ -15,6 +22,7 @@ public class POURCENTSIMPLIFIECode extends Code {
 	public static final POURCENTSIMPLIFIECode _0_7 = new POURCENTSIMPLIFIECode("8");
 	public static final POURCENTSIMPLIFIECode _0_8 = new POURCENTSIMPLIFIECode("9");
 	public static final POURCENTSIMPLIFIECode _0_9 = new POURCENTSIMPLIFIECode("10");
+	public static final POURCENTSIMPLIFIECode _1 = new POURCENTSIMPLIFIECode("11");
 	private static final long serialVersionUID = 1L;
 	protected POURCENTSIMPLIFIECode() {
 		super(CodeList.POURCENTSIMPLIFIE);

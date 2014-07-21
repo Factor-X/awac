@@ -1,5 +1,8 @@
 div(ng-hide="getCondition() === false")
-    div(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    div
+        .info(ng-show="hasDescription()")
+            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
         .status.answer(mm-not-implemented)
         input(type="text", ng-model="getAnswerValue().value")

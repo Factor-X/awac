@@ -3,7 +3,8 @@ div(ng-hide="getCondition() === false")
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
-    .oneelement
+    .twoelement
         .status.answer(mm-not-implemented)
         input(type="text", ng-model="getAnswerValue().value")
+        div %
         .user_icon(mm-not-implemented) XM

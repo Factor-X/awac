@@ -24,6 +24,7 @@ public class Factor extends AbstractEntity {
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
 	private static final long serialVersionUID = 1L;
+
 	@Embedded
 	private IndicatorCategoryCode indicatorCategory;
 

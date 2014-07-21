@@ -676,6 +676,7 @@ button.comments {
     display: table;
     width: 100%;
     border-spacing: 1px;
+    position: relative;
 }
 
 .element_table > div {
@@ -689,6 +690,7 @@ button.comments {
 }
 
 .info {
+    display: inline-block;
     position: relative;
     float: right;
     width: 18px;
@@ -709,6 +711,7 @@ button.comments {
     -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
 }
 
 .info:hover .info_popup,
@@ -719,19 +722,6 @@ button.comments {
 .info + div {
     padding-right: 20px;
 
-}
-
-.sub_title {
-    font-size: 14px;
-    font-weight: bold;
-    border: 1px solid #dbd9d2;
-    margin-bottom: 5px;
-    padding-left: 15px !important;
-}
-
-.sub_sub_title {
-    font-weight: bold;
-    border-bottom: 1px solid #dbd9d2;
 }
 
 .element_table > div > div:nth-child(1) {
@@ -747,6 +737,22 @@ button.comments {
     font-style: italic;
     color: white;
 }
+
+
+.sub_title {
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #dbd9d2;
+    display: table-row;
+    padding-left: 15px !important;
+    width: calc(100% - 10px) !important;
+}
+
+.sub_sub_title {
+    font-weight: bold;
+    border-bottom: 1px solid #dbd9d2;
+}
+
 
 .status {
     margin-right: 12px;
@@ -844,6 +850,12 @@ button.comments {
     clear: both;
 }
 
+.method {
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+
 .sub_nav {
     margin-top: 20px;
 }
@@ -933,6 +945,7 @@ button.comments {
     border-width: 5px;
     border-style: solid;
     padding: 15px 0;
+    position: relative;
 }
 
 .tab-panel .tab-content {

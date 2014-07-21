@@ -1,13 +1,9 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.forms.Form;
-import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.FormService;
-
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
-
 import play.Logger;
 import play.db.jpa.JPA;
 

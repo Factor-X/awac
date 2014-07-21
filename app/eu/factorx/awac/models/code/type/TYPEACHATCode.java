@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "typeachat"))})
 public class TYPEACHATCode extends Code {
 
 	public static final TYPEACHATCode METAUX = new TYPEACHATCode("1");
@@ -12,6 +19,7 @@ public class TYPEACHATCode extends Code {
 	public static final TYPEACHATCode PRODUITS_CHIMIQUES = new TYPEACHATCode("5");
 	public static final TYPEACHATCode ROAD_MATERIALS = new TYPEACHATCode("6");
 	public static final TYPEACHATCode SERVICES_ET_INFORMATIQUE = new TYPEACHATCode("7");
+	public static final TYPEACHATCode AGRO_ALIMENTAIRE = new TYPEACHATCode("8");
 	private static final long serialVersionUID = 1L;
 	protected TYPEACHATCode() {
 		super(CodeList.TYPEACHAT);

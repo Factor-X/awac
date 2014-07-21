@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "frigorigene"))})
 public class FRIGORIGENECode extends Code {
 
 	public static final FRIGORIGENECode DIOXIDE_DE_CARBONE_CO2 = new FRIGORIGENECode("1");
@@ -44,6 +51,7 @@ public class FRIGORIGENECode extends Code {
 	public static final FRIGORIGENECode R401A = new FRIGORIGENECode("37");
 	public static final FRIGORIGENECode R402A = new FRIGORIGENECode("38");
 	public static final FRIGORIGENECode _403B = new FRIGORIGENECode("39");
+	public static final FRIGORIGENECode _409A = new FRIGORIGENECode("40");
 	private static final long serialVersionUID = 1L;
 	protected FRIGORIGENECode() {
 		super(CodeList.FRIGORIGENE);

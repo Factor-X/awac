@@ -34,6 +34,19 @@ public class CodeImporter extends WorkbookDataImporter {
 		this.session = session;
 	}
 
+	private static <T extends Code> Constructor<T> getConstructor(Class<T> codeClass) throws NoSuchMethodException {
+		Constructor<T> classConstructor = null;
+		try {
+			classConstructor = codeClass.getConstructor(String.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			classConstructor = codeClass.getConstructor(CodeList.class, String.class);
+		}
+		if (classConstructor == null) {
+			throw new RuntimeException("The class " + codeClass.getName() + " contains no suitable constructor ( {CodeList, String} or {String} ), or this constructor is not visible");
+		}
+		return classConstructor;
+	}
+
 	@Override
 	protected void importData() throws Exception {
 		WorkbookSettings ws = new WorkbookSettings();
@@ -50,7 +63,6 @@ public class CodeImporter extends WorkbookDataImporter {
 //		importCodesFromDatasheet("nace_codes_3", Nace3Code.class, CodeList.NACE_CODES_3);
 //		importCodesFromDatasheet("fuel", FuelCode.class, CodeList.FUEL);
 //        importCodesFromDatasheet("BaseActivityData", BaseActivityDataCode.class, CodeList.BASE_ACTIVITY_DATA);
-
 
 
 		importCodesFromDatasheet("SECTEURPRINCIPAL", SECTEURPRINCIPALCode.class, CodeList.SECTEURPRINCIPAL);
@@ -122,19 +134,6 @@ public class CodeImporter extends WorkbookDataImporter {
 		writeCodeConstants(codeClass, codeExtracts, writer);
 		writer.flush();
 		writer.close();
-	}
-
-	private static <T extends Code> Constructor<T> getConstructor(Class<T> codeClass) throws NoSuchMethodException {
-		Constructor<T> classConstructor = null;
-		try {
-			classConstructor = codeClass.getConstructor(String.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			classConstructor = codeClass.getConstructor(CodeList.class, String.class);
-		}
-		if (classConstructor == null) {
-			throw new RuntimeException("The class " + codeClass.getName() + " contains no suitable constructor ( {CodeList, String} or {String} ), or this constructor is not visible");
-		}
-		return classConstructor;
 	}
 
 	private <T extends Code> T getNewCodeInstance(Constructor<T> classConstructor, int nbParams, CodeList codeList,

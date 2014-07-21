@@ -1,19 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Repository;
-
-import play.Logger;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.CodeLabelService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
+import play.Logger;
+
+import java.util.*;
 
 @Repository
 public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {

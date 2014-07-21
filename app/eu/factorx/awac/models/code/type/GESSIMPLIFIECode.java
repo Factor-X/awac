@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "gessimplifie"))})
 public class GESSIMPLIFIECode extends Code {
 
 	public static final GESSIMPLIFIECode DIOXIDE_DE_CARBONE_CO2 = new GESSIMPLIFIECode("1");
@@ -44,6 +51,7 @@ public class GESSIMPLIFIECode extends Code {
 	public static final GESSIMPLIFIECode R401A = new GESSIMPLIFIECode("37");
 	public static final GESSIMPLIFIECode R402A = new GESSIMPLIFIECode("38");
 	public static final GESSIMPLIFIECode _403B = new GESSIMPLIFIECode("39");
+	public static final GESSIMPLIFIECode _409A = new GESSIMPLIFIECode("40");
 	private static final long serialVersionUID = 1L;
 	protected GESSIMPLIFIECode() {
 		super(CodeList.GESSIMPLIFIE);

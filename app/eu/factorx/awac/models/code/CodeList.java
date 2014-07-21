@@ -3,6 +3,12 @@ package eu.factorx.awac.models.code;
 public enum CodeList {
 
 	// FORMS
+
+	ActivityCategory,
+	ActivitySubCategory,
+	ActivityType,
+	ActivitySource,
+	IndicatorCategory,
 	SECTEURPRINCIPAL,
 	SECTEURPRIMAIRE,
 	SECTEURSECONDAIRE,
@@ -37,6 +43,8 @@ public enum CodeList {
 	TYPEPRODUIT,
 	GESSIMPLIFIE,
 	POURCENTSIMPLIFIE,
+
+
 	FUEL,
 	HEATING_FUEL_TYPE,
 		/*
