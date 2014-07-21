@@ -6,6 +6,7 @@ angular
         ngQuestionSetCode: '='
         ngIteration: '='
         ngRepetitionMap: '='
+        ngCondition: '='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true
@@ -21,3 +22,6 @@ angular
 
         scope.removeAnwser = () ->
             scope.$parent.removeIteration(scope.getQuestionSetCode(), scope.getIteration(), scope.getRepetitionMap())
+
+
+        scope.$watch 'ngCondition', () ->
