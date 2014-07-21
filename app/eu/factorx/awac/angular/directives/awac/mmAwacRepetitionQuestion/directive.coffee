@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRepetitionQuestion", (directiveService) ->
+.directive "mmAwacRepetitionQuestion", (directiveService, translationService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionSetCode: '='
@@ -14,6 +14,9 @@ angular
 
         scope.getQuestionSet = () ->
           return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
+
+        scope.hasDescription = () ->
+            return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
 
         scope.removeAnwser = () ->

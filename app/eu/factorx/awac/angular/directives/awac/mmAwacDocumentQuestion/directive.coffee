@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacDocumentQuestion", (directiveService) ->
+.directive "mmAwacDocumentQuestion", (directiveService, translationService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
@@ -16,3 +16,7 @@ angular
                     if qv.questionKey == code
                         return qv
             return null
+
+        scope.hasDescription = () ->
+            return translationService.get(scope.getQuestionCode() + '_DESC') != null
+

@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacIntegerQuestion", (directiveService) ->
+.directive "mmAwacIntegerQuestion", (directiveService, translationService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
@@ -13,6 +13,9 @@ angular
 
         scope.getAnswerValue = () ->
             return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap())
+
+        scope.hasDescription = () ->
+            return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
 
 

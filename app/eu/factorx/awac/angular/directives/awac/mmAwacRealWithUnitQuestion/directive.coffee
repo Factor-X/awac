@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRealWithUnitQuestion", (directiveService) ->
+.directive "mmAwacRealWithUnitQuestion", (directiveService, translationService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
@@ -20,6 +20,10 @@ angular
             if result
               return result.units
             return null
+
+        scope.hasDescription = () ->
+            return translationService.get(scope.getQuestionCode() + '_DESC') != null
+
 
         scope.$watch 'ngCondition', () ->
           if scope.getCondition()== false
