@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "secteurtertiaire"))})
 public class SECTEURTERTIAIRECode extends Code {
 
 	public static final SECTEURTERTIAIRECode _36_CAPTAGE_TRAITEMENT_ET_DISTRIBUTION_D_EAU = new SECTEURTERTIAIRECode("1");
@@ -59,6 +66,7 @@ public class SECTEURTERTIAIRECode extends Code {
 	public static final SECTEURTERTIAIRECode _96_AUTRES_SERVICES_PERSONNELS = new SECTEURTERTIAIRECode("52");
 	public static final SECTEURTERTIAIRECode _97_ACTIVITES_DES_MENAGES_EN_TANT_QU_EMPLOYEURS_DE_PERSONNEL_DOMESTIQUE = new SECTEURTERTIAIRECode("53");
 	public static final SECTEURTERTIAIRECode _98_ACTIVITES_INDIFFERENCIEES_DES_MENAGES_EN_TANT_QUE_PRODUCTEURS_DE_BIENS_ET_SERVICES_POUR_USAGE_PROPRE = new SECTEURTERTIAIRECode("54");
+	public static final SECTEURTERTIAIRECode _99_ACTIVITES_DES_ORGANISATIONS_ET_ORGANISMES_EXTRATERRITORIAUX = new SECTEURTERTIAIRECode("55");
 	private static final long serialVersionUID = 1L;
 	protected SECTEURTERTIAIRECode() {
 		super(CodeList.SECTEURTERTIAIRE);

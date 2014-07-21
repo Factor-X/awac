@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "infrastructure"))})
 public class INFRASTRUCTURECode extends Code {
 
 	public static final INFRASTRUCTURECode INFRASTRUCTURE = new INFRASTRUCTURECode("1");
@@ -28,6 +35,7 @@ public class INFRASTRUCTURECode extends Code {
 	public static final INFRASTRUCTURECode VEHICULES = new INFRASTRUCTURECode("21");
 	public static final INFRASTRUCTURECode MACHINES = new INFRASTRUCTURECode("22");
 	public static final INFRASTRUCTURECode MOBILIER = new INFRASTRUCTURECode("23");
+	public static final INFRASTRUCTURECode VOIRIE = new INFRASTRUCTURECode("24");
 	private static final long serialVersionUID = 1L;
 	protected INFRASTRUCTURECode() {
 		super(CodeList.INFRASTRUCTURE);

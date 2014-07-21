@@ -2379,7 +2379,8 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-ref marchandise");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-			baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+			// TODO: FLORIAN
+			//baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
 			baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setValue(belgianTruckRatio * belgianDistance * getValue(questionA158Answer, baseActivityDataUnit) / 11.4 / 0.4426 * 24.98 / 100);
@@ -2444,7 +2445,8 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-ref marchandise");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-			baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
 			baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setValue(internationalTruckRatio * internationalDistance * getValue(questionA158Answer, baseActivityDataUnit) / 11.4 / 0.4426 * 24.98 / 100);
@@ -2508,7 +2510,8 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-ref marchandise");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-			baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
 			baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * belgianDistance);
@@ -2572,7 +2575,8 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-ref marchandise");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AMONT);
-			baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AMONT);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AMONT);
 			baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setValue(getValue(questionA158Answer, baseActivityDataUnit) * internationalDistance);
@@ -2816,8 +2820,10 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-atelier");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-			baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
+			// TODO: FLORIAN
+			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setValue(getValue(questionA183Answer, baseActivityDataUnit) / 2 * getValue(questionA184Answer, baseActivityDataUnit) / 365);
 
@@ -2857,8 +2863,10 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-bureau");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-			baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
+			// TODO: FLORIAN
+			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setValue(getValue(questionA186Answer, baseActivityDataUnit) / 3 * getValue(questionA187Answer, baseActivityDataUnit) / 365);
 
@@ -2898,8 +2906,10 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-pension");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-			baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
+			// TODO: FLORIAN
+			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setValue(getValue(questionA189Answer, baseActivityDataUnit) * getValue(questionA190Answer, baseActivityDataUnit) / 365);
 
@@ -2939,8 +2949,10 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setSpecificPurpose("-cantine");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.DECHET);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.MATIERE);
-			baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+			// TODO: FLORIAN
+			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
+			// TODO: FLORIAN
+			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setValue(getValue(questionA192Answer, baseActivityDataUnit) / 4 * getValue(questionA193Answer, baseActivityDataUnit) / 365);
 
@@ -4333,7 +4345,8 @@ public class ReportServiceImpl implements ReportService {
 				baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-				baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+				// TODO: FLORIAN
+				// baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
 				baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
 				baseActivityData.setActivityOwnership(false);
 				baseActivityData.setValue(belgianTruckRatio *
@@ -4392,7 +4405,8 @@ public class ReportServiceImpl implements ReportService {
 				baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-				baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
+				// TODO: FLORIAN
+				// baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
 				baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MOYENNE);
 				baseActivityData.setActivityOwnership(false);
 				//TODO what RB and DB ?
@@ -4451,7 +4465,8 @@ public class ReportServiceImpl implements ReportService {
 				baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-				baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
+				// TODO: FLORIAN
+				// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
 				baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
 				baseActivityData.setActivityOwnership(false);
 				baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * belgianDistance);
@@ -4506,7 +4521,8 @@ public class ReportServiceImpl implements ReportService {
 				baseActivityData.setSpecificPurpose(getValueString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.TRANSPORT);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.AVAL);
-				baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
+				// TODO: FLORIAN
+				// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
 				baseActivityData.setActivitySource(ActivitySourceCode.ESTIMATION_MIXTE);
 				baseActivityData.setActivityOwnership(false);
 				baseActivityData.setValue(getValue(questionA267Answer, baseActivityDataUnit) * internationalDistance);

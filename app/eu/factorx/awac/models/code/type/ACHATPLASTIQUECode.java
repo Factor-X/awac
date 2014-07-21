@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "achatplastique"))})
 public class ACHATPLASTIQUECode extends Code {
 
 	public static final ACHATPLASTIQUECode PLASTIQUE_MOYENNE = new ACHATPLASTIQUECode("1");

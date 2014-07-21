@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "typedechet"))})
 public class TYPEDECHETCode extends Code {
 
 	public static final TYPEDECHETCode METAUX = new TYPEDECHETCode("1");
@@ -11,6 +18,7 @@ public class TYPEDECHETCode extends Code {
 	public static final TYPEDECHETCode PAPIER_CARTON = new TYPEDECHETCode("4");
 	public static final TYPEDECHETCode MATIERE_ORGANIQUE = new TYPEDECHETCode("5");
 	public static final TYPEDECHETCode DECHETS_INDUSTRIELS_SPECIAUX = new TYPEDECHETCode("6");
+	public static final TYPEDECHETCode DECHETS_DANGEREUX_D_ORIGINE_SANITAIRE = new TYPEDECHETCode("7");
 	private static final long serialVersionUID = 1L;
 	protected TYPEDECHETCode() {
 		super(CodeList.TYPEDECHET);

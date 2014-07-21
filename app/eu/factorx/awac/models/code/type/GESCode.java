@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "ges"))})
 public class GESCode extends Code {
 
 	public static final GESCode DIOXIDE_DE_CARBONE_CO2 = new GESCode("1");
@@ -81,6 +88,7 @@ public class GESCode extends Code {
 	public static final GESCode R600A_ISOBUTANE_C4H10 = new GESCode("74");
 	public static final GESCode R406A_55_41_4_MIX_DE_HCFC_22_HCFC_142B_ET_R600A = new GESCode("75");
 	public static final GESCode R409A_60_25_15_MIX_DE_HCFC_22_HCFC_124_ET_HCFC_142B = new GESCode("76");
+	public static final GESCode R502_48_8_51_2_MIX_DE_OF_HCFC_22_ET_CFC_115 = new GESCode("77");
 	private static final long serialVersionUID = 1L;
 	protected GESCode() {
 		super(CodeList.GES);
