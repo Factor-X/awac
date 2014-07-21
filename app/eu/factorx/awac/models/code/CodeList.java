@@ -45,8 +45,6 @@ public enum CodeList {
 	POURCENTSIMPLIFIE,
 
 
-	FUEL,
-	HEATING_FUEL_TYPE,
 		/*
 
     HEATING_FUEL_TYPE,
