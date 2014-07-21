@@ -115,7 +115,7 @@ ng-virtual
             button(ng-click="addIteration('A325')", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A325_LOOPDESC' | translate")
-            mm-awac-real-with-unit-question(question-code="A328",ng-repetition-map="itLevel1")
+            mm-awac-real-question(question-code="A328",ng-repetition-map="itLevel1")
             div(ng-bind-html="'A329_TITLE' | translate")
             mm-awac-repetition-question(question-set-code="A329", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A329')")
                 mm-awac-select-question(question-code="A330",ng-repetition-map="itLevel2")
