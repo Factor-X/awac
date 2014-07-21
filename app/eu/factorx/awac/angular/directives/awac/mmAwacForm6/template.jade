@@ -18,7 +18,7 @@ ng-virtual
             mm-awac-select-question(question-code="A217",ng-repetition-map="itLevel1")
             mm-awac-select-question(question-code="A218",ng-repetition-map="itLevel1")
             mm-awac-select-question(question-code="A219",ng-repetition-map="itLevel1")
-            mm-awac-real-with-unit-question(question-code="A220",ng-repetition-map="itLevel1")
+            mm-awac-percentage-question(question-code="A220",ng-repetition-map="itLevel1")
             mm-awac-real-with-unit-question(question-code="A221",ng-repetition-map="itLevel1")
             mm-awac-real-with-unit-question(question-code="A222",ng-repetition-map="itLevel1")
 
@@ -136,7 +136,7 @@ ng-virtual
         div(ng-bind-html="'A334_TITLE' | translate")
         mm-awac-repetition-question(question-set-code="A334", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A334')")
             mm-awac-string-question(question-code="A335",ng-repetition-map="itLevel2")
-            mm-awac-real-with-unit-question(question-code="A336",ng-repetition-map="itLevel2")
+            mm-awac-percentage-question(question-code="A336",ng-repetition-map="itLevel2")
             mm-awac-real-question(question-code="A337",ng-repetition-map="itLevel2")
             mm-awac-real-question(question-code="A338",ng-repetition-map="itLevel2")
         button(ng-click="addIteration('A334')", type="button")
