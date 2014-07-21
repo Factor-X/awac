@@ -1,19 +1,18 @@
 package eu.factorx.awac.util.data.importer;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.Code;
-import jxl.Sheet;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import jxl.Sheet;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
+
+import eu.factorx.awac.models.AbstractEntity;
 
 public abstract class WorkbookDataImporter {
 
@@ -22,6 +21,19 @@ public abstract class WorkbookDataImporter {
 	public static final String NEW_LINE = System.getProperty("line.separator");
 
 	protected Session session;
+	
+	public synchronized void run() {
+		try {
+			String className = getClass().getSimpleName();
+		   	System.out.println("========= " + className + " - START OF IMPORT =========");
+			importData();
+		   	System.out.println("========= " + className + " - END OF IMPORT =========");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected abstract void importData() throws Exception;
 
 	protected static Set<String> getColumnContent(Sheet sheet, int column) {
 		return getColumnContent(sheet, column, 1);
@@ -70,36 +82,10 @@ public abstract class WorkbookDataImporter {
 		}
 	}
 
-	public synchronized void run() {
-		try {
-			String className = getClass().getSimpleName();
-			System.out.println("========= " + className + " - START OF IMPORT =========");
-			importData();
-			System.out.println("========= " + className + " - END OF IMPORT =========");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected abstract void importData() throws Exception;
-
 	protected <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
 		for (T entity : entities) {
 			persistEntity(entity);
 		}
-	}
-
-	protected <T extends Code> void writeCodeConstants(Class<T> codeClass,
-	                                                   Set<CodeExtract<T>> codeExtracts, BufferedWriter writer) throws IOException {
-		writer.write(codeClass.getName() + ":" + NEW_LINE);
-		String className = codeClass.getSimpleName();
-		for (CodeExtract<T> codeExtract : codeExtracts) {
-			String codeName = codeExtract.getName();
-			String codeKey = codeExtract.getCode().getKey();
-			writer.write("\tpublic static final " + className + " " + codeName + " = new " + className + "(\""
-					+ codeKey + "\");" + NEW_LINE);
-		}
-		writer.write(NEW_LINE + "--------------" + NEW_LINE);
 	}
 
 	protected <T extends AbstractEntity> void persistEntity(T entity) {
