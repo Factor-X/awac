@@ -17,8 +17,6 @@ angular
         scope.hasDescription = () ->
             return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
-
-
         scope.$watch 'ngCondition', () ->
           if scope.getCondition()== false
             scope.getAnswerValue().value = null
