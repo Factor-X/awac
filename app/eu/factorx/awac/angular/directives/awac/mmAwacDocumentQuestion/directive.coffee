@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
+        ngCondition: '='
         ngObject: '='
     templateUrl: "$/angular/templates/mm-awac-document-question.html"
     replace: true
@@ -19,4 +20,9 @@ angular
 
         scope.hasDescription = () ->
             return translationService.get(scope.getQuestionCode() + '_DESC') != null
+
+
+        scope.$watch 'ngCondition', () ->
+        #if scope.getCondition() == false
+        #  scope.getAnswerValue().value = null
 
