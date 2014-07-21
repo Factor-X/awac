@@ -52,9 +52,9 @@ mm-awac-section(title-code="A31_TITLE")
 
         mm-awac-repetition-question(question-set-code="A34", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A34')")
 
-            mm-awac-select-question(question-code="A35",ng-repetition-map="itLevel1",ng-condition="getAnswer('A32').value == '1'")
+            mm-awac-select-question(question-code="A35",ng-repetition-map="itLevel1", ng-condition="getAnswer('A32').value == '1'")
 
-            mm-awac-real-with-unit-question(question-code="A36",ng-repetition-map="itLevel1",ng-condition="getAnswer('A32').value == '1'")
+            mm-awac-real-with-unit-question(question-code="A36",ng-repetition-map="itLevel1", ng-condition="getAnswer('A32').value == '1'")
 
         button(ng-click="addIteration('A34')", type="button")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
@@ -66,9 +66,9 @@ mm-awac-section(title-code="A37_TITLE")
 
     mm-awac-boolean-question(question-code="A38")
 
-    mm-awac-document-question(question-code="A39")
+    mm-awac-document-question(question-code="A39", ng-condition="getAnswer('A38').value == '1'")
 
-div
+div(ng-show="getAnswer('A38').value == '1'")
     .element_content
         .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
         .method
@@ -81,8 +81,8 @@ div
                         .element_table
                             div(ng-bind-html="'A42_TITLE' | translate")
                             mm-awac-repetition-question(question-set-code="A42", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A42')")
-                                mm-awac-select-question(question-code="A43",ng-repetition-map="itLevel1")
-                                mm-awac-real-with-unit-question(question-code="A44",ng-repetition-map="itLevel1")
+                                mm-awac-select-question(question-code="A43",ng-repetition-map="itLevel1", ng-condition="getAnswer('A38').value == '1'")
+                                mm-awac-real-with-unit-question(question-code="A44",ng-repetition-map="itLevel1", ng-condition="getAnswer('A38').value == '1'")
                             button(ng-click="addIteration('A42')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A42_LOOPDESC' | translate")
@@ -93,14 +93,13 @@ div
                         span(ng-bind-html="'A45_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
-                            mm-awac-real-with-unit-question(question-code="A46")
-                tab.tab-color-yellow
-                    tab-heading
-                        i.glyphicon.glyphicon-bell
-                        span(ng-bind-html="'A47_TITLE' | translate")
-                    .sub_block.tab-color-yellow
-                        .element_table
-                            mm-awac-boolean-question(question-code="A48")
-                            mm-awac-real-with-unit-question(question-code="A49")
-
-
+                            mm-awac-real-with-unit-question(question-code="A46", ng-condition="getAnswer('A38').value == '1'")
+                div(ng-show="getAnswer('A35').value == '1' || getAnswer('A35').value == '2'")
+                    tab.tab-color-yellow
+                        tab-heading
+                            i.glyphicon.glyphicon-bell
+                            span(ng-bind-html="'A47_TITLE' | translate")
+                        .sub_block.tab-color-yellow
+                            .element_table
+                                mm-awac-boolean-question(question-code="A48", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A35').value == '1' || getAnswer('A35').value == '2')")
+                                mm-awac-real-with-unit-question(question-code="A49", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A35').value == '1' || getAnswer('A35').value == '2')")

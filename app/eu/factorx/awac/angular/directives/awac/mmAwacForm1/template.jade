@@ -14,12 +14,12 @@ mm-awac-section(title-code="A1_TITLE")
 
     mm-awac-boolean-question(ng-question-code="'A7'",ng-condition="getAnswer('A3').value == '4'")
 
-    mm-awac-select-question(ng-question-code="'A8'")
+    mm-awac-select-question(ng-question-code="'A8'",ng-condition="getAnswer('A7').value == '1'")
 
     mm-awac-real-with-unit-question(ng-question-code="'A9'")
 
     mm-awac-real-with-unit-question(ng-question-code="'A10'")
 
-    mm-awac-boolean-question(ng-question-code="'A11'")
+    mm-awac-boolean-question(ng-question-code="'A11'", ng-condition="getAnswer('A3').value != '4'")
 
     mm-awac-integer-question(ng-question-code="'A12'")
