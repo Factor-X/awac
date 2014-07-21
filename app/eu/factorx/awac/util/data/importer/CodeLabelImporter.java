@@ -45,6 +45,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			saveCodeLabels(sheetName, codeList);
 		}
 
+		session.flush();
 		System.out.println("==== Finding codes correspondances ====");
 
 		// TODO

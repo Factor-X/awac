@@ -1,23 +1,42 @@
 package eu.factorx.awac.models.code.label;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
-import org.apache.commons.lang3.builder.*;
-
-import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "code_label", uniqueConstraints = {
-		@UniqueConstraint(columnNames = {CodeLabel.COLUMN_NAME_CODELIST, CodeLabel.COLUMN_NAME_KEY})
-})
+@Table(name = "code_label", uniqueConstraints = { @UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST,
+		CodeLabel.COLUMN_NAME_KEY }) })
+@NamedQueries({
+		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList"),
+		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl") })
 public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 
 	public static final String COLUMN_NAME_CODELIST = "codelist";
 	public static final String COLUMN_NAME_KEY = "key";
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_LIST = "CodeLabel.findByList";
+	public static final String FIND_ALL = "CodeLabel.findAll";
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = COLUMN_NAME_CODELIST, nullable = false)
 	private CodeList codeList;
@@ -131,8 +150,7 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 
 	@Override
 	public int compareTo(CodeLabel obj) {
-		return new CompareToBuilder().append(this.getCodeList(), obj.getCodeList()).append(this.getKey(), obj.getKey())
-				.toComparison();
+		return new CompareToBuilder().append(this.getCodeList(), obj.getCodeList()).append(this.getKey(), obj.getKey()).toComparison();
 	}
 
 	@Override

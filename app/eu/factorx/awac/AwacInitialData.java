@@ -20,11 +20,11 @@ public class AwacInitialData {
 		// IMPORT MYRMEX UNITS
 		new MyrmexUnitsImporter(session).run();
 
-		// IMPORT AWAC DATA
-		new AwacDataImporter(session).run();
-
 		// IMPORT CODES
 		new CodeLabelImporter(session).run();
+
+		// IMPORT AWAC DATA
+		new AwacDataImporter(session).run();
 
 		// ACCOUNTS
 		new AccountImporter(session).run();

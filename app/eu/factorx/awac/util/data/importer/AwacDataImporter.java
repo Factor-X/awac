@@ -15,9 +15,8 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -36,6 +35,7 @@ import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.service.CodeLabelService;
 
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
@@ -68,6 +68,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 */
 	private static final String AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME = "Indicators";
 
+	@Autowired
+	private CodeLabelService codeLabelService;
+	
 	// unit by symbol map
 	private Map<String, Unit> knownUnits = null;
 
@@ -94,11 +97,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			knownUnits.put(unit.getSymbol(), unit);
 		}
 
-		indicatorCategories = findCodesLabelsByCodeList(CodeList.INDICATOR_CATEGORY);
-		activityTypes = findCodesLabelsByCodeList(CodeList.ACTIVITY_TYPE);
-		activitySources = findCodesLabelsByCodeList(CodeList.ACTIVITY_SOURCE);
-		activityCategories = findCodesLabelsByCodeList(CodeList.ACTIVITY_CATEGORY);
-		activitySubCategories = findCodesLabelsByCodeList(CodeList.ACTIVITY_SUB_CATEGORY);
+		indicatorCategories = findCodesLabelsByCodeList(CodeList.IndicatorCategory);
+		activityTypes = findCodesLabelsByCodeList(CodeList.ActivityType);
+		activitySources = findCodesLabelsByCodeList(CodeList.ActivitySource);
+		activityCategories = findCodesLabelsByCodeList(CodeList.ActivityCategory);
+		activitySubCategories = findCodesLabelsByCodeList(CodeList.ActivitySubCategory);
 
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(CP1252_ENCODING);
@@ -118,6 +121,10 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	}
 
 	private void verifyAwacData(Sheet factorsSheet, Sheet indicatorsSheet) throws BiffException, IOException {
+		
+		boolean validationResult = true;
+
+		// parse Factors
 		Set<String> indicatorCategoriesIdentifiers = getColumnContent(factorsSheet, 0);
 		Set<String> activityTypesIdentifiers = getColumnContent(factorsSheet, 1);
 		Set<String> activitySourcesIdentifiers = getColumnContent(factorsSheet, 2);
@@ -125,25 +132,57 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		getColumnNumericContent(factorsSheet, 5);
 		unitsSymbols.addAll(getColumnContent(factorsSheet, 6));
 
-		indicatorCategoriesIdentifiers.addAll(getColumnContent(indicatorsSheet, 4));
+		List<String> unknownIdentifiers = verifyCodeExist(indicatorCategoriesIdentifiers, indicatorCategories);
+		if (!unknownIdentifiers.isEmpty()) {			
+			System.out.println("Error while parsing '" + factorsSheet.getName() + "' : these Indicator Categories are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.IndicatorCategory + "')");
+			validationResult = false;
+		}
+		unknownIdentifiers = verifyCodeExist(activityTypesIdentifiers, activityTypes);
+		if (!unknownIdentifiers.isEmpty()) {			
+			validationResult = false;
+			System.out.println("Error while parsing '" + factorsSheet.getName() + "' : these Activity Types are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.ActivityType + "')");
+		}
+		unknownIdentifiers = verifyCodeExist(activitySourcesIdentifiers, activitySources);
+		if (!unknownIdentifiers.isEmpty()) {			
+			System.out.println("Error while parsing '" + factorsSheet.getName() + "' : these Activity Sources are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.ActivitySource + "')");
+			validationResult = false;
+		}
+
+		// parse Indicators
+		indicatorCategoriesIdentifiers = getColumnContent(indicatorsSheet, 4);
 		Set<String> activityCategoriesIdentifiers = getColumnContent(indicatorsSheet, 6);
 		Set<String> activitySubCategoriesIdentifiers = getColumnContent(indicatorsSheet, 7);
 
-		// verify identifiers and unit symbols
-		verifyCodeExist(indicatorCategoriesIdentifiers, indicatorCategories);
-		verifyCodeExist(activityTypesIdentifiers, activityTypes);
-		verifyCodeExist(activitySourcesIdentifiers, activitySources);
-		verifyCodeExist(activityCategoriesIdentifiers, activityCategories);
-		verifyCodeExist(activitySubCategoriesIdentifiers, activitySubCategories);
+		unknownIdentifiers = verifyCodeExist(indicatorCategoriesIdentifiers, indicatorCategories);
+		if (!unknownIdentifiers.isEmpty()) {			
+			System.out.println("Error while parsing '" + indicatorsSheet.getName() + "' : these Indicator Categories are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.IndicatorCategory + "')");
+			validationResult = false;
+		}
+		unknownIdentifiers = verifyCodeExist(activityCategoriesIdentifiers, activityCategories);
+		if (!unknownIdentifiers.isEmpty()) {			
+			System.out.println("Error while parsing '" + indicatorsSheet.getName() + "' : these Activity Categories are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.ActivityCategory + "')");
+			validationResult = false;
+		}
+		unknownIdentifiers = verifyCodeExist(activitySubCategoriesIdentifiers, activitySubCategories);
+		if (!unknownIdentifiers.isEmpty()) {			
+			System.out.println("Error while parsing '" + indicatorsSheet.getName() + "' : these Activity SubCategories are unknown : " + unknownIdentifiers + " (not repertoried in sheet '" + CodeList.ActivitySubCategory + "')");
+			validationResult = false;
+		}
+		
+		if (!validationResult) {
+			throw new RuntimeException("Validation of sheet " + factorsSheet.getName() + " and/or " + indicatorsSheet.getName() + " failed: please fix errors!");
+		}
 		verifyUnitExist(unitsSymbols);
 	}
 
-	private <T extends Code> void verifyCodeExist(Set<String> identifiers, Map<String, String> keyByLabelMap) {
+	private <T extends Code> List<String> verifyCodeExist(Set<String> identifiers, Map<String, String> keyByLabelMap) {
+		List<String> unknownsIdentifiers = new ArrayList<>();
 		for (String identifier : identifiers) {
 			if (!keyByLabelMap.containsKey(identifier)) {
-				throw new RuntimeException("This identifier cannot be associated to any code: '" + identifier + "'");
+				unknownsIdentifiers.add(identifier);
 			}
 		}
+		return unknownsIdentifiers;
 	}
 
 	private void verifyUnitExist(Set<String> unitSymbols) {
@@ -223,9 +262,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 */
 	private Map<String, String> findCodesLabelsByCodeList(CodeList codeList) {
 
-		Criteria criteria = session.createCriteria(CodeLabel.class).add(Restrictions.eq("codeList", codeList));
-		@SuppressWarnings("unchecked")
-		List<CodeLabel> codeLabels = criteria.add(Restrictions.eq("codeList", codeList)).list();
+		List<CodeLabel> codeLabels = JPA.em().createNamedQuery(CodeLabel.FIND_BY_LIST, CodeLabel.class).setParameter("codeList", codeList).getResultList();
 
 		Map<String, String> res = new HashMap<>();
 		for (CodeLabel codeLabel : codeLabels) {
