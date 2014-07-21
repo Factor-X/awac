@@ -225,7 +225,7 @@ angular
 
       for answer in $scope.answerList
         #control the code
-        if answer.questionKey == code && scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+        if answer.questionKey == code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
           listAnswer[listAnswer.length] = answer
 
       return listAnswer

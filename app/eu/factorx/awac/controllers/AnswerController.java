@@ -112,6 +112,12 @@ public class AnswerController extends Controller {
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
+
+        Logger.info("List<AnswerLineDTO>");
+        for( AnswerLineDTO answerLine : answerLineDTOs ){
+            Logger.info(answerLine.toString());
+        }
+
 		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, answerLineDTOs);
 
 		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);

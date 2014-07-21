@@ -50,7 +50,7 @@ angular
         console.log "$scope.mapRepetition"
         console.log $scope.mapRepetition
 
-      $scope.loopRepetition = (questionSetDTO, currentRepetition=null) ->
+      $scope.loopRepetition = (questionSetDTO) ->
         #TODO implement mapRepetition
 
         if questionSetDTO.repetitionAllowed == true
@@ -71,28 +71,34 @@ angular
                   #this is an error
                   console.log("mapRepetition expected but not found")
                 else
+                  ###
                   repetitionNumber = answer.mapRepetition[questionSetDTO.code]
                   code= questionSetDTO.code
                   repetitionToAdd = {}#code:repetition}
                   repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                  ###
                   if $scope.mapRepetition[questionSetDTO.code]
                     founded=false
                     for repetition in $scope.mapRepetition[questionSetDTO.code]
-                      if repetition[questionSetDTO.code] == repetitionNumber
-                        console.log "exite dajà"
+                      if $scope.compareRepetitionMap(repetition,answer.mapRepetition)
                         founded=true
                     if founded == false
-                      console.log "existe mais ajouté"
-                      $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] =repetitionToAdd
+                      $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition)
                   else
-                    console.log "exite pas, ajoute"
                     $scope.mapRepetition[questionSetDTO.code] = []
-                    $scope.mapRepetition[questionSetDTO.code][0] = repetitionToAdd
+                    $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition)
+
+        if questionSetDTO.children
+          for child in questionSetDTO.children
+            $scope.loopRepetition(child)
 
 
       $scope.storeAnswers()
       $scope.loading =false
 
+    #
+    # save the result of this form
+    #
     $scope.$on 'SAVE', () ->
 
       #build the list to save
@@ -226,7 +232,7 @@ angular
 
       for answer in $scope.answerList
         #control the code
-        if answer.questionKey == code && scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+        if answer.questionKey == code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
           listAnswer[listAnswer.length] = answer
 
       return listAnswer
@@ -235,7 +241,7 @@ angular
     # add a iteration for the code and the mapRepetition
     #
     $scope.addIteration = (code, mapRepetition) ->
-      max = 1
+      max = 0
       repetitionToAdd = {}
       #exemple : {'A273' : 1,'A243':2}
 
@@ -247,7 +253,7 @@ angular
 
       if $scope.mapRepetition[code] == null || $scope.mapRepetition[code] == undefined
         #there is no repetition for the code => create a new iteration
-        repetitionToAdd[code] =max
+        repetitionToAdd[code] =max+1
         $scope.mapRepetition[code] = []
         $scope.mapRepetition[code][0] = repetitionToAdd
       else
