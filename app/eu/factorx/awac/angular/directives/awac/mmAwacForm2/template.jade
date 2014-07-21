@@ -72,7 +72,7 @@ div
                 tab.tab-color-lightgreen
                     tab-heading
                         i.glyphicon.glyphicon-bell
-                        | (getTitleCode('A41') | translate)
+                        span(ng-bind-html="'A41_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
                             div(ng-bind-html="'A42_TITLE' | translate")
@@ -86,14 +86,14 @@ div
                 tab.tab-color-green
                     tab-heading
                         i.glyphicon.glyphicon-bell
-                        | (getTitleCode('A45') | translate)
+                        span(ng-bind-html="'A45_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
                             mm-awac-real-with-unit-question(question-code="A46")
                 tab.tab-color-yellow
                     tab-heading
                         i.glyphicon.glyphicon-bell
-                        | (getTitleCode('A47') | translate)
+                        span(ng-bind-html="'A47_TITLE' | translate")
                     .sub_block.tab-color-yellow
                         .element_table
                             mm-awac-boolean-question(question-code="A48")

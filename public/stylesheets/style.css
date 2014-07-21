@@ -676,6 +676,7 @@ button.comments {
     display: table;
     width: 100%;
     border-spacing: 1px;
+    position: relative;
 }
 
 .element_table > div {
@@ -689,6 +690,7 @@ button.comments {
 }
 
 .info {
+    display: inline-block;
     position: relative;
     float: right;
     width: 18px;
@@ -721,19 +723,6 @@ button.comments {
 
 }
 
-.sub_title {
-    font-size: 14px;
-    font-weight: bold;
-    border: 1px solid #dbd9d2;
-    margin-bottom: 5px;
-    padding-left: 15px !important;
-}
-
-.sub_sub_title {
-    font-weight: bold;
-    border-bottom: 1px solid #dbd9d2;
-}
-
 .element_table > div > div:nth-child(1) {
     width: 40%;
 }
@@ -747,6 +736,29 @@ button.comments {
     font-style: italic;
     color: white;
 }
+
+
+.sub_title {
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #dbd9d2;
+    display: table-row;
+    padding-left: 15px !important;
+    width: 100% !important;
+    width: calc(100% - 10px) !important;
+    position: absolute;
+    margin: 5px;
+}
+
+.sub_title_place_holder {
+    height: 3em;
+}
+
+.sub_sub_title {
+    font-weight: bold;
+    border-bottom: 1px solid #dbd9d2;
+}
+
 
 .status {
     margin-right: 12px;
@@ -844,6 +856,12 @@ button.comments {
     clear: both;
 }
 
+.method {
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+
 .sub_nav {
     margin-top: 20px;
 }
@@ -933,6 +951,7 @@ button.comments {
     border-width: 5px;
     border-style: solid;
     padding: 15px 0;
+    position: relative;
 }
 
 .tab-panel .tab-content {
