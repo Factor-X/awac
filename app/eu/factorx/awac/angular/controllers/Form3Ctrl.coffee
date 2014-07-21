@@ -3,8 +3,6 @@ angular
 .controller "Form3Ctrl", ($scope, downloadService, $http) ->
     $scope.formIdentifier = "TAB3"
 
-
-
     #this variable contains all answer, new and old
     $scope.answerList=[]
     $scope.mapRepetition=[]
@@ -36,20 +34,11 @@ angular
 
         #save answer
         $scope.answerList =  answerSave.listAnswers
-        console.log "$scope.answerList"
-        console.log $scope.answerList
+
 
         #build list of repetition for the mmAwacRepetition
         for qSet in $scope.o.questionSets
           $scope.loopRepetition(qSet)
-
-        #TEMP
-        #$scope.mapRepetition['A244'] = [{'A244':10},{'A244':20}]
-
-        #$scope.mapRepetition['A273'] = [{'A244':10,'A273':1},{'A244':20,'A273':1}]
-
-        console.log "$scope.mapRepetition"
-        console.log $scope.mapRepetition
 
       $scope.loopRepetition = (questionSetDTO) ->
         #TODO implement mapRepetition
@@ -64,20 +53,11 @@ angular
 
               for answer in listAnswer
 
-                console.log "answer in $scope.loopRepetition"
-                console.log answer
-
                 #control if the answer have a repetition for this questionSetDTO
                 if answer.mapRepetition==null
                   #this is an error
                   console.log("mapRepetition expected but not found")
                 else
-                  ###
-                  repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                  code= questionSetDTO.code
-                  repetitionToAdd = {}#code:repetition}
-                  repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                  ###
                   if $scope.mapRepetition[questionSetDTO.code]
                     founded=false
                     for repetition in $scope.mapRepetition[questionSetDTO.code]
@@ -105,7 +85,7 @@ angular
       #build the list to save
       listAnswerToSave=[]
       for answer in $scope.answerList
-        if answer.value # && answer.visible
+        if answer.value!=null && answer!= undefined
           listAnswerToSave[listAnswerToSave.length] = answer
 
       console.log "listAnswerToSave"
@@ -295,8 +275,10 @@ angular
     # if all items of the second are included into the first, return true
     #
     $scope.compareRepetitionMap = (mapContainer, mapContained) ->
-      if mapContained == null || mapContained == undefined
+      if mapContained == null || mapContained == undefined  || mapContained.length == 0
         return true
+      if mapContainer == null || mapContainer == undefined || mapContainer.length == 0
+        return false
       for key in Object.keys(mapContained)
         if key != '$$hashKey'
           value = mapContained[key]
