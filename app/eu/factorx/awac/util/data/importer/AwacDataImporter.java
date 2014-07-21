@@ -1,43 +1,27 @@
 package eu.factorx.awac.util.data.importer;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.FactorValue;
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.Unit;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-import eu.factorx.awac.models.knowledge.Factor;
-import eu.factorx.awac.models.knowledge.FactorValue;
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.models.knowledge.Unit;
+import java.util.*;
 
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
@@ -98,7 +82,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		super();
 		this.session = session;
 	}
-	
+
+	private static List<Unit> findAllUnits() {
+		return JPA.em().createNamedQuery(Unit.FIND_ALL, Unit.class).getResultList();
+	}
+
 	protected void importData() throws Exception {
 
 		knownUnits = new HashMap<>();
@@ -281,10 +269,6 @@ public class AwacDataImporter extends WorkbookDataImporter {
 					activitySubCategory, activityOwnership, unit, deleted));
 		}
 		persistEntities(indicators);
-	}
-
-	private static List<Unit> findAllUnits() {
-		return JPA.em().createNamedQuery(Unit.FIND_ALL, Unit.class).getResultList();
 	}
 
 }

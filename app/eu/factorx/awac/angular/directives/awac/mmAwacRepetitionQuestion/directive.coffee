@@ -4,8 +4,8 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionSetCode: '='
-        ngIteration:'='
-        ngRepetitionMap:'='
+        ngIteration: '='
+        ngRepetitionMap: '='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true
@@ -13,11 +13,11 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.getQuestionSet = () ->
-          return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
+            return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
 
         scope.hasDescription = () ->
             return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
 
         scope.removeAnwser = () ->
-          scope.$parent.removeIteration(scope.getQuestionSetCode(),scope.getIteration(),scope.getRepetitionMap())
+            scope.$parent.removeIteration(scope.getQuestionSetCode(), scope.getIteration(), scope.getRepetitionMap())

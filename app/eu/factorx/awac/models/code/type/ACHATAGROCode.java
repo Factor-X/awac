@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "achatagro"))})
 public class ACHATAGROCode extends Code {
 
 	public static final ACHATAGROCode BLE_PAR_TONNE_DE_MATIERE_SECHE = new ACHATAGROCode("1");
@@ -45,6 +52,7 @@ public class ACHATAGROCode extends Code {
 	public static final ACHATAGROCode OEUFS = new ACHATAGROCode("38");
 	public static final ACHATAGROCode SUCRE = new ACHATAGROCode("39");
 	public static final ACHATAGROCode VIN = new ACHATAGROCode("40");
+	public static final ACHATAGROCode ALCOOL_PUR = new ACHATAGROCode("41");
 	private static final long serialVersionUID = 1L;
 	protected ACHATAGROCode() {
 		super(CodeList.ACHATAGRO);

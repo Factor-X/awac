@@ -1,11 +1,11 @@
 package eu.factorx.awac.models;
 
+import play.mvc.Http.Context;
+
 import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-
-import play.mvc.Http.Context;
 
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {

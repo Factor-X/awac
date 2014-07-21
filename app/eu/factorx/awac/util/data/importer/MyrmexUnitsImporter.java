@@ -1,23 +1,21 @@
 package eu.factorx.awac.util.data.importer;
 
+import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.models.knowledge.UnitConversionFormula;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
-
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.models.knowledge.UnitConversionFormula;
 
 @Component
 public class MyrmexUnitsImporter extends WorkbookDataImporter {

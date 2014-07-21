@@ -1,22 +1,20 @@
 package eu.factorx.awac.models.code.conversion;
 
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.ActivitySourceCode;
+
 import javax.persistence.Basic;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
-
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
 
 @Entity
 @NamedQuery(name = CodeToActivitySourceCodeEquivalence.FIND_BY_CODE,
 		query = "select eq.activitySourceCode from CodeToActivitySourceCodeEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey")
 public class CodeToActivitySourceCodeEquivalence extends CodesEquivalence {
 
-	private static final long serialVersionUID = 1L;
-
 	public static final String FIND_BY_CODE = "CodeToActivitySourceCodeEquivalence.findByCode";
-
+	private static final long serialVersionUID = 1L;
 	@Embedded
 	@Basic(optional = false)
 	private ActivitySourceCode activitySourceCode;

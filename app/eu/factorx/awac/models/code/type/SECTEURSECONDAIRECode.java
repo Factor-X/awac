@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "secteursecondaire"))})
 public class SECTEURSECONDAIRECode extends Code {
 
 	public static final SECTEURSECONDAIRECode _10_INDUSTRIES_ALIMENTAIRES = new SECTEURSECONDAIRECode("1");
@@ -29,6 +36,7 @@ public class SECTEURSECONDAIRECode extends Code {
 	public static final SECTEURSECONDAIRECode _31_FABRICATION_DE_MEUBLES = new SECTEURSECONDAIRECode("22");
 	public static final SECTEURSECONDAIRECode _32_AUTRES_INDUSTRIES_MANUFACTURIERES = new SECTEURSECONDAIRECode("23");
 	public static final SECTEURSECONDAIRECode _33_REPARATION_ET_INSTALLATION_DE_MACHINES_ET_D_EQUIPEMENTS = new SECTEURSECONDAIRECode("24");
+	public static final SECTEURSECONDAIRECode _35_PRODUCTION_ET_DISTRIBUTION_D_ELECTRICITE_DE_GAZ_DE_VAPEUR_ET_D_AIR_CONDITIONNE = new SECTEURSECONDAIRECode("25");
 	private static final long serialVersionUID = 1L;
 	protected SECTEURSECONDAIRECode() {
 		super(CodeList.SECTEURSECONDAIRE);

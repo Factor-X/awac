@@ -3,6 +3,13 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "achatroute"))})
 public class ACHATROUTECode extends Code {
 
 	public static final ACHATROUTECode BETON_BITUMINEUX = new ACHATROUTECode("1");
@@ -31,6 +38,7 @@ public class ACHATROUTECode extends Code {
 	public static final ACHATROUTECode BETON_C25_30CEM_II = new ACHATROUTECode("24");
 	public static final ACHATROUTECode BETON_ARME = new ACHATROUTECode("25");
 	public static final ACHATROUTECode BOIS_COURTE_DUREE_DE_VIE = new ACHATROUTECode("26");
+	public static final ACHATROUTECode BOIS_D_OEUVRE = new ACHATROUTECode("27");
 	private static final long serialVersionUID = 1L;
 	protected ACHATROUTECode() {
 		super(CodeList.ACHATROUTE);

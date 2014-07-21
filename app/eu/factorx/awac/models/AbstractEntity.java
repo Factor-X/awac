@@ -1,20 +1,11 @@
 package eu.factorx.awac.models;
 
-import java.io.Serializable;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import play.Logger;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
