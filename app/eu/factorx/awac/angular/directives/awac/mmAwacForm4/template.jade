@@ -59,22 +59,30 @@ mm-awac-section(title-code="A130_TITLE")
 mm-awac-section(title-code="A163_TITLE")
     div(ng-bind-html="'A164_TITLE' | translate")
     mm-awac-repetition-question(question-set-code="A164", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A164')")
+
         mm-awac-string-question(question-code="A165",ng-repetition-map="itLevel1")
+
         div(ng-bind-html="'A166_TITLE' | translate")
-        mm-awac-repetition-question(question-set-code="A166", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A166')")
+
+        mm-awac-repetition-question(question-set-code="A166", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A166',itLevel1)")
             mm-awac-select-question(question-code="A167",ng-repetition-map="itLevel2")
             mm-awac-real-with-unit-question(question-code="A168",ng-repetition-map="itLevel2")
-        button(ng-click="addIteration('A166')", type="button")
+
+        button(ng-click="addIteration('A166',itLevel1)", type="button")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A166_LOOPDESC' | translate")
+
         mm-awac-real-with-unit-question(question-code="A169",ng-repetition-map="itLevel1")
+
         div(ng-bind-html="'A170_TITLE' | translate")
-        mm-awac-repetition-question(question-set-code="A170", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A170')")
+
+        mm-awac-repetition-question(question-set-code="A170", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A170',itLevel1)")
             mm-awac-select-question(question-code="A171",ng-repetition-map="itLevel2")
             mm-awac-real-with-unit-question(question-code="A172",ng-repetition-map="itLevel2")
-        button(ng-click="addIteration('A170')", type="button")
+        button(ng-click="addIteration('A170',itLevel1)", type="button")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A170_LOOPDESC' | translate")
+
     button(ng-click="addIteration('A164')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A164_LOOPDESC' | translate")
