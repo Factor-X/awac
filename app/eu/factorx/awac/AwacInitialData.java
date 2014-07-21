@@ -1,27 +1,17 @@
 package eu.factorx.awac;
 
 
-
-import eu.factorx.awac.util.data.importer.*;
-import org.hibernate.Session;
-import org.springframework.context.ApplicationContext;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.data.question.type.BooleanQuestion;
-import eu.factorx.awac.models.data.question.type.DoubleQuestion;
-import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.StringQuestion;
-import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-
-import java.util.ArrayList;
-import java.util.List;
+import eu.factorx.awac.util.data.importer.*;
+import org.hibernate.Session;
+import org.springframework.context.ApplicationContext;
+import play.db.jpa.JPA;
 
 public class AwacInitialData {
 
@@ -820,7 +810,7 @@ public class AwacInitialData {
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273 (Créez autant d'entrepôts de stockage que nécessaire)
 
 		QuestionSet a273 = new QuestionSet(QuestionCode.A273, true);
-        a273.setParent(a244);
+		a273.setParent(a244);
 		session.saveOrUpdate(a273);
 		tab7Form.getQuestionSets().add(a273);
 		session.saveOrUpdate(tab7Form);
@@ -2205,8 +2195,6 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
-
-
 
 
 	}

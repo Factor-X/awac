@@ -5,20 +5,19 @@ angular
     scope: directiveService.autoScope
         ngQuestionCode: '='
         ngCondition: '='
-        ngRepetitionMap:'='
+        ngRepetitionMap: '='
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
     link: (scope) ->
-
         directiveService.autoScopeImpl scope
 
-        scope.getAnswerValue=() ->
-          return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap())
+        scope.getAnswerValue = () ->
+            return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
         scope.getUnitsByQuestionCode = () ->
             result = scope.$parent.getUnitCategories(scope.getQuestionCode())
             if result
-              return result.units
+                return result.units
             return null
 
         scope.hasDescription = () ->
@@ -26,5 +25,5 @@ angular
 
 
         scope.$watch 'ngCondition', () ->
-          if scope.getCondition()== false
-            scope.getAnswerValue().value = null
+            if scope.getCondition() == false
+                scope.getAnswerValue().value = null

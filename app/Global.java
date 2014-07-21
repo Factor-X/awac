@@ -36,9 +36,9 @@ import java.lang.reflect.Method;
 
 public class Global extends GlobalSettings {
 
+	private static InitializationThread thread;
 	// Spring global context
 	private ApplicationContext ctx;
-	private static InitializationThread thread;
 
 	@Override
 	public void onStart(Application app) {

@@ -1,14 +1,9 @@
 package eu.factorx.awac.models.code.conversion;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
+
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
