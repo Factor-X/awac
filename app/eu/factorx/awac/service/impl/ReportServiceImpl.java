@@ -1585,7 +1585,7 @@ public class ReportServiceImpl implements ReportService {
 			baseActivityData.setActivityType(ActivityTypeCode.DEPLACEMENT_MOYENNE);
 			// TODO: utiliser codes pour assigner la source
 			/*if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
+	            if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                     if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
                         baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus en agglo");
                     } else {
