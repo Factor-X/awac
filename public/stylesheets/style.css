@@ -745,14 +745,7 @@ button.comments {
     border: 1px solid #dbd9d2;
     display: table-row;
     padding-left: 15px !important;
-    width: 100% !important;
     width: calc(100% - 10px) !important;
-    position: absolute;
-    margin: 5px;
-}
-
-.sub_title_place_holder {
-    height: 3em;
 }
 
 .sub_sub_title {
