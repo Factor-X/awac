@@ -12,14 +12,14 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.getAnswerValue=() ->
-          return scope.$parent.getAnswerOrCreate(scope.ngQuestionCode,scope.ngRepetitionMap)
+          return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap())
 
         scope.getOptionsByQuestionCode = () ->
-          codeList =scope.$parent.getCodeList(scope.ngQuestionCode)
+          codeList =scope.$parent.getCodeList(scope.getQuestionCode())
           if codeList
             return codeList.codeLabels
           return null
 
         scope.$watch 'ngCondition', () ->
-          if scope.ngCondition== false
+          if scope.getCondition()== false
             scope.getAnswerValue().value = null

@@ -9,17 +9,18 @@ angular
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
     link: (scope) ->
+
         directiveService.autoScopeImpl scope
 
         scope.getAnswerValue=() ->
-          return scope.$parent.getAnswerOrCreate(scope.ngQuestionCode,scope.ngRepetitionMap)
+          return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap())
 
         scope.getUnitsByQuestionCode = () ->
-            result = scope.$parent.getUnitCategories(scope.ngQuestionCode)
+            result = scope.$parent.getUnitCategories(scope.getQuestionCode())
             if result
               return result.units
             return null
 
         scope.$watch 'ngCondition', () ->
-          if scope.ngCondition== false
+          if scope.getCondition()== false
             scope.getAnswerValue().value = null

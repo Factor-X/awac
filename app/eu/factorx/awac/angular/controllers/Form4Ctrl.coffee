@@ -3,6 +3,7 @@ angular
 .controller "Form4Ctrl", ($scope, downloadService, $http) ->
     $scope.formIdentifier = "TAB4"
 
+
     #this variable contains all answer, new and old
     $scope.answerList=[]
     $scope.mapRepetition=[]
@@ -132,6 +133,12 @@ angular
       #recover the question
       question = $scope.getQuestion(code)
       #recover the list
+      if question == null || question == undefined
+        console.log "ERROR : this question was not found : "+code
+        return null
+      if question.unitCategoryId == null || question.unitCategoryId == undefined
+        console.log "ERROR : there is no unitCategoryId for this question : "+code
+        return null
       return $scope.o.unitCategories[question.unitCategoryId]
 
     #
@@ -260,7 +267,7 @@ angular
       len = $scope.answerList.length
       while (len--)
         question = $scope.answerList[len]
-        if question.mapRepetition!=null && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
+        if question.mapRepetition!=null && question.mapRepetition!=undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
           if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode]==iterationToDelete[questionSetCode]
             $scope.answerList.splice(len,1)
 
@@ -289,7 +296,6 @@ angular
           if mapContainer[key]==null || mapContainer[key]==undefined || mapContainer[key]!=value
             return false
       return true
-
 
 
 

@@ -3,66 +3,295 @@ angular
 .controller "Form3Ctrl", ($scope, downloadService, $http) ->
     $scope.formIdentifier = "TAB3"
 
+    #this variable contains all answer, new and old
+    $scope.answerList=[]
+    $scope.mapRepetition=[]
+    ###
+    illustration of the structures
+    $scope.mapRepetition['A15'] = [{'A15':1},
+                                    {'A15':2}]
+
+    $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                   {'A16':2,'A15':1}]
+    ###
+
+    $scope.loading = true
+
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
-        $scope.o = data
 
-        # getAnswerByQuestionCode
-        $scope.A = (code) ->
-            for qv in $scope.o.answersSaveDTO.listAnswers
-                if qv.questionKey == code
-                    return qv
-            return null
 
-        # getUnitsByQuestionCode
-        $scope.U = (code) ->
-            unitCategoryId = null;
-            for q in $scope.o.questions
-                if q.questionKey == code
-                    unitCategoryId = q.unitCategoryId
+      console.log "data"
+      console.log data
+      $scope.o = data
 
-            if unitCategoryId == null
-                console.error "impossible to find question by its code: " + code
-                return null
+      #build the list of answers
+      $scope.storeAnswers = () ->
+        console.log "je suis $scope.storeAnswers"
+        #recove answerSave
+        console.log "$scope.o"
+        console.log $scope.o
+        answerSave = $scope.o.answersSave
 
-            for uc in $scope.o.unitCategories
-                if uc.id == unitCategoryId
-                    return uc.units
+        #save answer
+        $scope.answerList =  answerSave.listAnswers
+        console.log "$scope.answerList"
+        console.log $scope.answerList
 
-            console.error "impossible to find unit category by its id: " + unitCategoryId + " question code was: " + code
+        #build list of repetition for the mmAwacRepetition
+        for qSet in $scope.o.questionSets
+          $scope.loopRepetition(qSet)
 
-            return null
+        #TEMP
+        #$scope.mapRepetition['A244'] = [{'A244':10},{'A244':20}]
 
-        # getOptionsByQuestionCode
-        $scope.O = (code) ->
-            codeListName = null;
-            for q in $scope.o.questions
-                if q.questionKey == code
-                    codeListName = q.codeListName
+        #$scope.mapRepetition['A273'] = [{'A244':10,'A273':1},{'A244':20,'A273':1}]
 
-            if codeListName == null
-                console.error "impossible to find question by its code: " + code
-                return null
+        console.log "$scope.mapRepetition"
+        console.log $scope.mapRepetition
 
-            for cl in $scope.o.codeLists
-                if cl.code == codeListName
-                    return cl.codeLabels
+      $scope.loopRepetition = (questionSetDTO, currentRepetition=null) ->
+        #TODO implement mapRepetition
 
-            console.error "impossible to find codeList by its code: " + codeLabelName + " question code was: " + code
+        if questionSetDTO.repetitionAllowed == true
 
-            return null
+          #find if the answer are already repeated on this repetition
+          if questionSetDTO.questions
+            for q in questionSetDTO.questions
+              #recover answer
+              listAnswer = $scope.getListAnswer(q.code)
+
+              for answer in listAnswer
+
+                console.log "answer in $scope.loopRepetition"
+                console.log answer
+
+                #control if the answer have a repetition for this questionSetDTO
+                if answer.mapRepetition==null
+                  #this is an error
+                  console.log("mapRepetition expected but not found")
+                else
+                  repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                  code= questionSetDTO.code
+                  repetitionToAdd = {}#code:repetition}
+                  repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                  if $scope.mapRepetition[questionSetDTO.code]
+                    founded=false
+                    for repetition in $scope.mapRepetition[questionSetDTO.code]
+                      if repetition[questionSetDTO.code] == repetitionNumber
+                        console.log "exite dajà"
+                        founded=true
+                    if founded == false
+                      console.log "existe mais ajouté"
+                      $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] =repetitionToAdd
+                  else
+                    console.log "exite pas, ajoute"
+                    $scope.mapRepetition[questionSetDTO.code] = []
+                    $scope.mapRepetition[questionSetDTO.code][0] = repetitionToAdd
+
+
+      $scope.storeAnswers()
+      $scope.loading =false
 
     $scope.$on 'SAVE', () ->
-        promise = $http
-            method: "POST"
-            url: 'answer/save'
-            headers:
-                "Content-Type": "application/json"
-            data: $scope.o.answersSaveDTO
 
-        promise.success (data, status, headers, config) ->
-            console.log "SAVE !"
-            return
+      #build the list to save
+      listAnswerToSave=[]
+      for answer in $scope.answerList
+        if answer.value # && answer.visible
+          listAnswerToSave[listAnswerToSave.length] = answer
 
-        promise.error (data, status, headers, config) ->
-            console.log "ERROR : " + data.message
-            return
+      console.log "listAnswerToSave"
+      console.log listAnswerToSave
+
+      #and replace the list
+      $scope.o.answersSave.listAnswers = listAnswerToSave
+
+
+      promise = $http
+        method: "POST"
+        url: 'answer/save'
+        headers:
+          "Content-Type": "application/json"
+        data: $scope.o.answersSave
+
+      promise.success (data, status, headers, config) ->
+        console.log "SAVE !"
+        return
+
+      promise.error (data, status, headers, config) ->
+        console.log "ERROR : " + data.message
+        return
+
+    #
+    # get list choice by question code
+    #
+    $scope.getUnitCategories = (code) ->
+      if $scope.loading
+        return null
+
+      #recover the question
+      question = $scope.getQuestion(code)
+      #recover the list
+      if question == null || question == undefined
+        console.log "ERROR : this question was not found : "+code
+        return null
+      if question.unitCategoryId == null || question.unitCategoryId == undefined
+        console.log "ERROR : there is no unitCategoryId for this question : "+code
+        return null
+      return $scope.o.unitCategories[question.unitCategoryId]
+
+    #
+    # get list choice by question code
+    #
+    $scope.getCodeList = (code) ->
+      if $scope.loading
+        return null
+
+      #recover the question
+      question = $scope.getQuestion(code)
+      #recover the list
+      return $scope.o.codeLists[question.codeListName]
+
+    #
+    # get the repetitionMap by code and mapRepetition
+    # use by mm-awac-repetition-question for the ng-repeat
+    #
+    $scope.getRepetitionMapByQuestionSet = (code, mapRepetition) ->
+      listRepetition = []
+      if $scope.mapRepetition[code]!=null && $scope.mapRepetition[code]!=undefined
+        for repetition in $scope.mapRepetition[code]
+
+          #control map
+          if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
+            listRepetition[listRepetition.length] = repetition
+
+      return listRepetition
+
+    #
+    # getQuestionByCode
+    #
+    $scope.getQuestion = (code,listQuestionSets=$scope.o.questionSets) ->
+      if listQuestionSets
+        for qSet in listQuestionSets
+          if qSet.questions
+            for q in qSet.questions
+              if q.code == code
+                return q
+          if qSet.children
+            result = $scope.getQuestion(code,qSet.children)
+            if result
+              return result
+      return null
+
+    #
+    # get the answer by code and mapIteration
+    # if there is not answer for this case, create it
+    #
+    $scope.getAnswerOrCreate = (code, mapIteration) ->
+      result = $scope.getAnswer(code, mapIteration)
+      if result
+        return result
+      else
+        #if the answer was not founded, create it
+        answerLine = {
+          'questionKey':code
+          'value':null
+          'unitId':null
+          'mapRepetition':mapIteration
+        }
+        $scope.answerList[$scope.answerList.length] = answerLine
+        return answerLine
+
+    #
+    # getAnswerByQuestionCode and mapIteration
+    #
+    $scope.getAnswer = (code, mapIteration) ->
+      for answer in $scope.answerList
+        #control the code
+        if answer.questionKey == code
+
+          #control the repetition map
+          if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+            return answer
+
+      return null
+
+    #
+    # get a list answer by code and mapIteration
+    # the response can by a list in function of the mapIteration
+    #
+    $scope.getListAnswer = (code, mapIteration) ->
+      listAnswer = []
+
+      for answer in $scope.answerList
+        #control the code
+        if answer.questionKey == code && scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+          listAnswer[listAnswer.length] = answer
+
+      return listAnswer
+
+    #
+    # add a iteration for the code and the mapRepetition
+    #
+    $scope.addIteration = (code, mapRepetition) ->
+      max = 1
+      repetitionToAdd = {}
+      #exemple : {'A273' : 1,'A243':2}
+
+      #if there is already a mapRepetition, used it for the new repetitionToAdd
+      if mapRepetition != null && mapRepetition != undefined
+        console.log "mapRepetition"
+        console.log mapRepetition
+        repetitionToAdd = angular.copy(mapRepetition)
+
+      if $scope.mapRepetition[code] == null || $scope.mapRepetition[code] == undefined
+        #there is no repetition for the code => create a new iteration
+        repetitionToAdd[code] =max
+        $scope.mapRepetition[code] = []
+        $scope.mapRepetition[code][0] = repetitionToAdd
+      else
+        for repetition in $scope.mapRepetition[code]
+          if $scope.compareRepetitionMap(repetition,mapRepetition) && repetition[code] > max
+            max = repetition[code]
+
+        repetitionToAdd[code] =max+1
+        $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd
+
+    #
+    # remove an iteration by question set code, number of the iteration and the mapRepetition
+    #
+    $scope.removeIteration = (questionSetCode,iterationToDelete,mapRepetition) ->
+
+      #delete question
+      len = $scope.answerList.length
+      while (len--)
+        question = $scope.answerList[len]
+        if question.mapRepetition!=null && question.mapRepetition!=undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
+          if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode]==iterationToDelete[questionSetCode]
+            $scope.answerList.splice(len,1)
+
+      # delete iteration
+      # check all iteration because it must remove the iteration linked to the iteration to delete
+      for key in Object.keys($scope.mapRepetition)
+        if key != '$$hashKey'
+          #value = mapContained[key]
+          len = $scope.mapRepetition[key].length
+          while (len--)
+            iteration = $scope.mapRepetition[key][len]
+            if $scope.compareRepetitionMap(iteration,mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
+              $scope.mapRepetition[key].splice(len,1)
+
+    #
+    # compare to mapRepetition
+    # if the mapContained is null or undefined, the result is true
+    # if all items of the second are included into the first, return true
+    #
+    $scope.compareRepetitionMap = (mapContainer, mapContained) ->
+      if mapContained == null || mapContained == undefined
+        return true
+      for key in Object.keys(mapContained)
+        if key != '$$hashKey'
+          value = mapContained[key]
+          if mapContainer[key]==null || mapContainer[key]==undefined || mapContainer[key]!=value
+            return false
+      return true

@@ -13,8 +13,8 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.getQuestionSet = () ->
-          return scope.$parent.getQuestionSet(scope.ngQuestionSetCode)
+          return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
 
 
         scope.removeAnwser = () ->
-          scope.$parent.removeIteration(scope.ngQuestionSetCode,scope.ngIteration,scope.ngRepetitionMap)
+          scope.$parent.removeIteration(scope.getQuestionSetCode(),scope.getIteration(),scope.getRepetitionMap())
