@@ -62,6 +62,7 @@ public class AwacInitialData {
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 
+
 		// == TAB1 ========================================================================
 
 		Form tab1Form = new Form("TAB1");
@@ -827,7 +828,7 @@ public class AwacInitialData {
 
 		// == A275 ========================================================================
 		// Listez les totaux de combustibles utilisés
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A275 (Listez les totaux de combustibles utilisés)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275 (Listez les totaux de combustibles utilisés)
 
 		QuestionSet a275 = new QuestionSet(QuestionCode.A275, true);
 		session.saveOrUpdate(a275);
@@ -837,7 +838,7 @@ public class AwacInitialData {
 
 		// == A279 ========================================================================
 		// Listez les gaz réfrigérants
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A279 (Listez les gaz réfrigérants)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279 (Listez les gaz réfrigérants)
 
 		QuestionSet a279 = new QuestionSet(QuestionCode.A279, true);
 		session.saveOrUpdate(a279);
@@ -1977,32 +1978,32 @@ public class AwacInitialData {
 
 		// == A274 ========================================================================
 		// Entrepôt
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A274 (Entrepôt)
-		session.saveOrUpdate(new StringQuestion(a34, 0, QuestionCode.A274));
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A274 (Entrepôt)
+		session.saveOrUpdate(new StringQuestion(a273, 0, QuestionCode.A274));
 
 		// == A276 ========================================================================
 		// Combustible utilisé
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A275(Listez les totaux de combustibles utilisés) > A276 (Combustible utilisé)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275(Listez les totaux de combustibles utilisés) > A276 (Combustible utilisé)
 		session.saveOrUpdate(new ValueSelectionQuestion(a275, 0, QuestionCode.A276, CodeList.COMBUSTIBLE));
 
 		// == A277 ========================================================================
 		// Quantité
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A275(Listez les totaux de combustibles utilisés) > A277 (Quantité)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275(Listez les totaux de combustibles utilisés) > A277 (Quantité)
 		session.saveOrUpdate(new DoubleQuestion(a275, 0, QuestionCode.A277, energyUnits));
 
 		// == A278 ========================================================================
 		// Electricité
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A278 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A278, energyUnits));
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A278 (Electricité)
+		session.saveOrUpdate(new DoubleQuestion(a273, 0, QuestionCode.A278, energyUnits));
 
 		// == A280 ========================================================================
 		// Type de gaz
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A279(Listez les gaz réfrigérants) > A280 (Type de gaz)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279(Listez les gaz réfrigérants) > A280 (Type de gaz)
 		session.saveOrUpdate(new ValueSelectionQuestion(a279, 0, QuestionCode.A280, CodeList.FRIGORIGENE));
 
 		// == A281 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
-		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A279(Listez les gaz réfrigérants) > A281 (Quantité de recharge nécessaire pour l'année)
+		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279(Listez les gaz réfrigérants) > A281 (Quantité de recharge nécessaire pour l'année)
 		session.saveOrUpdate(new DoubleQuestion(a279, 0, QuestionCode.A281, massUnits));
 
 		// == A283 ========================================================================
@@ -2204,6 +2205,8 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
+
+
 
 
 	}
