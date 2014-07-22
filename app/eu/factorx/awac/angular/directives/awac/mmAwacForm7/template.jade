@@ -29,7 +29,7 @@ mm-awac-section(title-code="A243_TITLE")
         mm-awac-real-question(ng-question-code="'A246'",ng-repetition-map="itLevel1")
         mm-awac-string-question(ng-question-code="'A247'",ng-repetition-map="itLevel1")
         mm-awac-select-question(ng-question-code="'A248'",ng-repetition-map="itLevel1")
-        mm-awac-boolean-question(ng-question-code="'A249'",ng-repetition-map="itLevel1")
+        mm-awac-boolean-question(ng-question-code="'A249'",ng-repetition-map="itLevel1", ng-condition="getAnswer('A248').value == '2'")
 
         // Transport
         mm-awac-sub-title
@@ -70,9 +70,9 @@ mm-awac-section(title-code="A243_TITLE")
                         .element_table
                             mm-awac-real-with-unit-question(question-code="A267")
                             mm-awac-select-question(question-code="A268")
-                            mm-awac-real-with-unit-question(question-code="A269")
-                            mm-awac-real-with-unit-question(question-code="A270")
-                            mm-awac-real-with-unit-question(question-code="A271")
+                            mm-awac-real-with-unit-question(question-code="A269", ng-condition="getAnswer('A268').value == '3'")
+                            mm-awac-real-with-unit-question(question-code="A270", ng-condition="getAnswer('A268').value == '2'")
+                            mm-awac-real-with-unit-question(question-code="A271", ng-condition="getAnswer('A268').value == '1'")
 
         // Distribution
         mm-awac-sub-title
