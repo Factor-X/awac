@@ -256,6 +256,7 @@ public class AnswerController extends Controller {
 			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, null);
 			if (questionSet.getParent() != null) {
 				// get parent questionSetAnswer (recursive call)
+
 				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(createdQuestionSetAnwers, scope, period, repMap,
 						questionSet.getParent());
 				questionSetAnswer.setParent(parentQuestionSetAnswer);

@@ -20,8 +20,7 @@ mm-awac-section(title-code="A20_TITLE")
 
     mm-awac-document-question(question-code="A21")
 
-    mm-awac-sub-sub-title
-        ng-virtual(ng-bind-html="'A22_TITLE' | translate")
+    mm-awac-sub-sub-title(question-code="A22")
 
     mm-awac-real-with-unit-question(question-code="A23")
 
@@ -94,12 +93,12 @@ div(ng-show="getAnswer('A38').value == '1'")
                     .sub_block.tab-color-green
                         .element_table
                             mm-awac-real-with-unit-question(question-code="A46", ng-condition="getAnswer('A38').value == '1'")
-                div(ng-show="getAnswer('A35').value == '1' || getAnswer('A35').value == '2'")
+                div(ng-show="getAnswer('A5').value == '1' || getAnswer('A5').value == '2'")
                     tab.tab-color-yellow
                         tab-heading
                             i.glyphicon.glyphicon-bell
                             span(ng-bind-html="'A47_TITLE' | translate")
                         .sub_block.tab-color-yellow
                             .element_table
-                                mm-awac-boolean-question(question-code="A48", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A35').value == '1' || getAnswer('A35').value == '2')")
-                                mm-awac-real-with-unit-question(question-code="A49", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A35').value == '1' || getAnswer('A35').value == '2')")
+                                mm-awac-boolean-question(question-code="A48", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A5').value == '1' || getAnswer('A5').value == '2')")
+                                mm-awac-real-with-unit-question(question-code="A49", ng-condition="getAnswer('A38').value == '1' && (getAnswer('A5').value == '1' || getAnswer('A5').value == '2')")
