@@ -1,3 +1,6 @@
 div
-    .sub_title(ng-transclude=true)
-    .sub_title_place_holder
+    .sub_title
+        .info(ng-show="hasDescription()")
+            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+        ng-virtual(ng-transclude=true)

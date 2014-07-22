@@ -3,8 +3,7 @@ ng-virtual
 
         mm-awac-document-question(question-code="A206")
 
-        mm-awac-sub-title
-            ng-virtual(ng-bind-html="'A208_TITLE' | translate")
+        mm-awac-sub-title(question-code="A208")
 
         div(ng-bind-html="'A209_TITLE' | translate")
         mm-awac-repetition-question(question-set-code="A209", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A209')")
@@ -57,8 +56,7 @@ ng-virtual
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A231_LOOPDESC' | translate")
 
-        mm-awac-sub-sub-title
-            ng-virtual(ng-bind-html="'A237_TITLE' | translate")
+        mm-awac-sub-sub-title(question-code="A237")
 
         div(ng-bind-html="'A238_TITLE' | translate")
         mm-awac-repetition-question(question-set-code="A238", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A238')")
