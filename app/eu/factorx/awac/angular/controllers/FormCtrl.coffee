@@ -98,7 +98,7 @@ angular
         #build the list to save
         listAnswerToSave=[]
         for answer in $scope.answerList
-            if answer.value # && answer.visible
+            if answer.value && (answer.value.$valid==null || answer.value.$valid == undefined  || answer.value.$valid == true)
                 listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"

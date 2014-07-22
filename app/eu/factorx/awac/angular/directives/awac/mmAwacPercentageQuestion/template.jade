@@ -5,6 +5,6 @@ div(ng-hide="getCondition() === false")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .twoelement
         .status.answer(mm-not-implemented)
-        input(type="text", ng-model="getAnswerValue().value")
+        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/")
         span(style="margin-left:5px") %
         .user_icon(mm-not-implemented) XM
