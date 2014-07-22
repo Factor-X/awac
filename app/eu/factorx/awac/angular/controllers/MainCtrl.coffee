@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams,modalService) ->
 
     #
     # First loading
@@ -35,12 +35,15 @@ angular
             return ""
     # Tabs -- transition
     $scope.nav = (loc) ->
-        $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+        # TODO to implement : ask a confirmation when the user try to exit a form with non-saved data
+        if loc.indexOf("/form") > -1
+            modalService.show "CONFIRMATION_EXIT_FORM",loc
+        else
+            $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
     #
     # Periods
     #
-
     $scope.period = 0
     $scope.$watch 'period', () ->
         $routeParams.period = $scope.period

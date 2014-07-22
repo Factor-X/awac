@@ -29,7 +29,8 @@ angular
     .when('/login', {
             templateUrl: '$/angular/templates/mm-awac-login.html'
             controller: 'LoginCtrl'
-        })
+        }
+    )
     .when('/form1/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form1.html'
             controller: 'FormCtrl'
@@ -44,46 +45,53 @@ angular
             resolve:
                 formIdentifier: () ->
                     return 'TAB2'
-        })
+        }
+    )
     .when('/form3/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form3.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
                     return 'TAB3'
-        })
+        }
+    )
     .when('/form4/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form4.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
                     return 'TAB4'
-        })
+        }
+    )
     .when('/form5/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form5.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
                     return 'TAB5'
-        })
+        }
+    )
     .when('/form6/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form6.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
                     return 'TAB6'
-        })
+        }
+    )
     .when('/form7/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form7.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
                     return 'TAB7'
-        })
+        }
+    )
     .when('/results/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-results.html'
             controller: 'ResultsCtrl'
-        })
+        }
+    )
     .otherwise({ redirectTo: '/login' })
 
     return

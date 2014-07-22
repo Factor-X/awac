@@ -1,0 +1,20 @@
+// Modal
+.modal(ng-show="show",id="modalConfirmationExitForm",tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true",ng-enter="send()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                h4(class="modal-title",id="myModalLabel") Attention
+                button(type="button",class="close",data-dismiss="modal")
+                    span(aria-hidden="true") &times;<span
+                    span(class="sr-only") Close
+            .modal-body
+                .field_form
+                    Vous allez perdre toutes vos modifications depuis la dernière sauvegarde. Êtes-vous sûr de vouloir continuer ?
+            .modal-footer
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="continue();",
+                ng-disabled="!allFieldValid()",
+                ng-enabled="allFieldValid()")
+                    | Continuer sans sauvegarder
+                button(type="button",class="close",data-dismiss="modal") Annuler

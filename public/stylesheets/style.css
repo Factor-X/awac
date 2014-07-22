@@ -575,6 +575,8 @@ button.comments {
     overflow-y: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
+    left:0;
+    right: 0;
 }
 
 .element {
