@@ -88,10 +88,11 @@ input.ng-invalid {
 }
 
 .alert {
-    position: absolute;
+    z-index : 1000;
+    position: fixed;
     width: 30%;
-    top: 20px;
-    test-align: center;
+    top: 40px;
+    text-align: center;
     margin: 0 35%;
     text-align: center;
     box-shadow: 5px 5px 5px #888888;

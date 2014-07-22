@@ -1,10 +1,7 @@
 angular
 .module('app.controllers')
-.controller "Form2Ctrl", ($scope, downloadService, $http) ->
+.controller "Form2Ctrl", ($scope, downloadService, $http,messageFlash) ->
     $scope.formIdentifier = "TAB2"
-
-
-
 
     #this variable contains all answer, new and old
     $scope.answerList=[]
@@ -29,19 +26,18 @@ angular
 
       #build the list of answers
       $scope.storeAnswers = () ->
-        console.log "je suis $scope.storeAnswers"
         #recove answerSave
-        console.log "$scope.o"
-        console.log $scope.o
         answerSave = $scope.o.answersSave
 
         #save answer
         $scope.answerList =  answerSave.listAnswers
 
-
         #build list of repetition for the mmAwacRepetition
         for qSet in $scope.o.questionSets
           $scope.loopRepetition(qSet)
+
+        console.log "$scope.mapRepetition"
+        console.log $scope.mapRepetition
 
       $scope.loopRepetition = (questionSetDTO) ->
         #TODO implement mapRepetition
@@ -61,6 +57,12 @@ angular
                   #this is an error
                   console.log("mapRepetition expected but not found")
                 else
+                  ###
+                  repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                  code= questionSetDTO.code
+                  repetitionToAdd = {}#code:repetition}
+                  repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                  ###
                   if $scope.mapRepetition[questionSetDTO.code]
                     founded=false
                     for repetition in $scope.mapRepetition[questionSetDTO.code]
@@ -88,7 +90,7 @@ angular
       #build the list to save
       listAnswerToSave=[]
       for answer in $scope.answerList
-        if answer.value!=null && answer!= undefined
+        if answer.value # && answer.visible
           listAnswerToSave[listAnswerToSave.length] = answer
 
       console.log "listAnswerToSave"
@@ -106,11 +108,11 @@ angular
         data: $scope.o.answersSave
 
       promise.success (data, status, headers, config) ->
-        console.log "SAVE !"
+        messageFlash.displaySuccess "Your answers are saved !"
         return
 
       promise.error (data, status, headers, config) ->
-        console.log "ERROR : " + data.message
+        messageFlash.displayError "An error was thrown during the save : "+data.message
         return
 
     #
@@ -231,8 +233,6 @@ angular
 
       #if there is already a mapRepetition, used it for the new repetitionToAdd
       if mapRepetition != null && mapRepetition != undefined
-        console.log "mapRepetition"
-        console.log mapRepetition
         repetitionToAdd = angular.copy(mapRepetition)
 
       if $scope.mapRepetition[code] == null || $scope.mapRepetition[code] == undefined
@@ -278,9 +278,9 @@ angular
     # if all items of the second are included into the first, return true
     #
     $scope.compareRepetitionMap = (mapContainer, mapContained) ->
-      if mapContained == null || mapContained == undefined  || mapContained.length == 0
+      if mapContained == null || mapContained == undefined || mapContained.length == 0
         return true
-      if mapContainer == null || mapContainer == undefined || mapContainer.length == 0
+      if mapContainer == null || mapContainer == undefined  || mapContainer.length == 0
         return false
       for key in Object.keys(mapContained)
         if key != '$$hashKey'
@@ -288,7 +288,5 @@ angular
           if mapContainer[key]==null || mapContainer[key]==undefined || mapContainer[key]!=value
             return false
       return true
-
-
 
 
