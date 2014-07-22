@@ -18,7 +18,7 @@ angular
     $scope.loading = true
 
     #display the loading modal
-    modalService.show('modalLoading')
+    modalService.show('LOADING')
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
 
@@ -83,7 +83,7 @@ angular
 
 
         #hide the loading modal
-        modalService.hide('modalLoading')
+        modalService.hide('LOADING')
 
         $scope.loading =false
 
@@ -93,7 +93,7 @@ angular
     $scope.$on 'SAVE', () ->
 
         #display the loading modal
-        modalService.show('modalLoading')
+        modalService.show('LOADING')
 
         #build the list to save
         listAnswerToSave=[]
@@ -117,12 +117,12 @@ angular
 
         promise.success (data, status, headers, config) ->
             messageFlash.displaySuccess "Your answers are saved !"
-            modalService.hide('modalLoading')
+            modalService.hide('LOADING')
             return
 
         promise.error (data, status, headers, config) ->
             messageFlash.displayError "An error was thrown during the save : "+data.message
-            modalService.hide('modalLoading')
+            modalService.hide('LOADING')
             return
 
     #

@@ -799,6 +799,18 @@ button.comments {
     width: 40%;
 }
 
+.question_field .oneelement input,
+.question_field .oneelement select{
+    width: calc(100% - 72px);
+}
+.question_field .twoelement input{
+    width: calc(70% - 36px);
+}
+
+.question_field .twoelement select{
+    width: calc(30% - 36px);
+}
+
 .info {
     display: inline-block;
     position: relative;
@@ -914,7 +926,6 @@ button.comments {
 .element_table > div > div:nth-child(3) .user_icon {
     font-style: normal;
 }
-*/
 .element_table > div > div:nth-child(2).oneelement input,
 .element_table > div > div:nth-child(3).oneelement input {
     width: -moz-calc(100% - 72px);
@@ -950,6 +961,7 @@ button.comments {
     width: -webkit-calc(50% - 37px);
     width: calc(50% - 37px);
 }
+*/
 
 .element_table > div > div:nth-child(3) .user_icon {
     font-style: normal;
