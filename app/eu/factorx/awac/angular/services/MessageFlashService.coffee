@@ -2,6 +2,12 @@
 angular
 .module('app.services')
 .service "messageFlash", (flash) ->
+
+
+
+
+
+
     #
     # display a success message
     # TODO => display multiple messages
