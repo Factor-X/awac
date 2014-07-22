@@ -10,7 +10,7 @@ mm-awac-section(title-code="A173_TITLE")
         mm-awac-select-question(question-code="A177",ng-repetition-map="itLevel1")
         mm-awac-select-question(question-code="A178",ng-repetition-map="itLevel1")
         mm-awac-real-with-unit-question(question-code="A179",ng-repetition-map="itLevel1")
-    button(ng-click="addIteration('A175')", type="button")
+    button.add-button(ng-click="addIteration('A175')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A175_LOOPDESC' | translate")
 

@@ -1,7 +1,6 @@
 div(ng-hide="getCondition() === false")
-    div
-        div(ng-bind-html="getQuestionSetCode() + '_LOOPDESC' | translate", style="display : inline-block; margin-right : 20px")
-        button(ng-click="removeAnwser()",type="button") Supprimer
-
-        div
-            ng-virtual(ng-transclude=true, class="element_table")
+    .repetition-question
+        .repetition-question-title(ng-bind-html="getQuestionSetCode() + '_LOOPDESC' | translate", style="display : inline-block; margin-right : 20px")
+        button.remove-button(ng-click="removeAnwser()",type="button") Supprimer
+        .repetition-question-container
+            ng-virtual(ng-transclude=true, class="element_stack")

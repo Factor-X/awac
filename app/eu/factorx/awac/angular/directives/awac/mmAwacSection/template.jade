@@ -9,4 +9,4 @@ ng-virtual
                 .answered_status
                 .validate_status
         .element_content
-            .element_table(ng-transclude)
+            div(ng-class="getMode()", ng-transclude)
