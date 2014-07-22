@@ -104,7 +104,7 @@ mm-awac-section(title-code="A243_TITLE")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A273_LOOPDESC' | translate")
 
-    div(ng-show="getAnswer(getAnswer('A249').value == '1'")
+    div(ng-show="getAnswer('A249').value == '1'")
         // Traitement
         mm-awac-sub-title(question-code="A282")
         mm-awac-document-question(question-code="A283", ng-condition="getAnswer('A249').value == '1'")
