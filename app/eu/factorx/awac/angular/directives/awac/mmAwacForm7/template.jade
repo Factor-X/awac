@@ -32,7 +32,6 @@ mm-awac-section(title-code="A243_TITLE")
         mm-awac-boolean-question(ng-question-code="'A249'",ng-repetition-map="itLevel1", ng-condition="getAnswer('A248').value == '2'")
 
     div(ng-show="getAnswer('A248').value == '1' || getAnswer('A249').value == '1'")
-
         // Transport
         mm-awac-sub-title(question-code="A250")
 
@@ -70,9 +69,9 @@ mm-awac-section(title-code="A243_TITLE")
                         .element_table
                             mm-awac-real-with-unit-question(question-code="A267", ng-condition="getAnswer('A248').value == '1'|| getAnswer('A249').value == '1'")
                             mm-awac-select-question(question-code="A268", ng-condition="getAnswer('A248').value == '1'|| getAnswer('A249').value == '1'")
-                            mm-awac-real-with-unit-question(question-code="A269", ng-condition="getAnswer('A268').value == '3'", ng-condition="getAnswer('A248').value == '1'|| getAnswer('A249').value == '1'")
-                            mm-awac-real-with-unit-question(question-code="A270", ng-condition="getAnswer('A268').value == '2'", ng-condition="getAnswer('A248').value == '1'|| getAnswer('A249').value == '1'")
-                            mm-awac-real-with-unit-question(question-code="A271", ng-condition="getAnswer('A268').value == '1'", ng-condition="getAnswer('A248').value == '1'|| getAnswer('A249').value == '1'")
+                            mm-awac-real-with-unit-question(question-code="A269", ng-condition="getAnswer('A268').value == '3' && (getAnswer('A248').value == '1'|| getAnswer('A249').value == '1')")
+                            mm-awac-real-with-unit-question(question-code="A270", ng-condition="getAnswer('A268').value == '2' && (getAnswer('A248').value == '1'|| getAnswer('A249').value == '1')")
+                            mm-awac-real-with-unit-question(question-code="A271", ng-condition="getAnswer('A268').value == '1' && (getAnswer('A248').value == '1'|| getAnswer('A249').value == '1')")
 
     div(ng-show="getAnswer('A248').value == '1' || getAnswer('A249').value == '1'")
         // Distribution
