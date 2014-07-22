@@ -295,7 +295,7 @@ angular
     # if all items of the second are included into the first, return true
     #
     $scope.compareRepetitionMap = (mapContainer, mapContained) ->
-        if mapContained == null || mapContained == undefined || mapContained.length == 0
+        if mapContained == null || mapContained == undefined  || mapContained.length == 0
             return true
         if mapContainer == null || mapContainer == undefined  || mapContainer.length == 0
             return false

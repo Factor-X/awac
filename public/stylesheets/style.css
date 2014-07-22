@@ -767,20 +767,28 @@ button.comments {
 }
 
 .element_table {
-    display: table;
+    /* display: table; */
     width: 100%;
     border-spacing: 1px;
     position: relative;
 }
 
 .element_table > div {
-    display: table-row;
+    /* display: table-row; */
 }
 
 .element_table > div > div {
-    display: table-cell;
+    /* display: table-cell; */
 / / border : 1 px solid black;
     padding: 3px 15px 3px 35px;
+}
+
+.question_field{
+
+}
+
+.question_field > div {
+
 }
 
 .info {

@@ -38,7 +38,6 @@ angular
     # use the args.loc to specify the target loc
     #
     $scope.$on 'NAV',(event,args) ->
-        console.log "nav !! : "+args.loc+"/"+args.confirmed
         $scope.nav(args.loc,args.confirmed)
 
 
@@ -94,7 +93,6 @@ angular
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
-    console.log("run  !!")
 
     #
     # Redirect user to login view if not logged in
@@ -112,7 +110,6 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
     # logout the current user
     #
     $rootScope.logout = () ->
-        console.log("logout ??")
         promise = $http
             method: "POST"
             url: 'logout'
