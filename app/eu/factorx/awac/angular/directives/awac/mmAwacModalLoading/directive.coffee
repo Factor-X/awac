@@ -4,17 +4,30 @@ angular
     restrict: "E"
     scope: {}
     templateUrl: "$/angular/templates/mm-awac-modal-loading.html"
-    controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
+    controller: ($scope, modalService) ->
 
-        #change option of the modal
+            #change option of the modal
         $('#modalLoading').modal({
-            backdrop: 'static'
+            backdrop: false
         })
-        $('#modalLoading').modal('hide')
+        $('#modalLoading').modal('show')
 
-        #initialize the modal when it's displayed
-        $('#modalLoading').on 'shown.bs.modal', (e) ->
-            #refresh angular
+        modalName = 'LOADING'
+        $scope.show = false
+        $scope.loc =null
+
+        $scope.$on 'SHOW_MODAL_'+modalName,(event,args) ->
+            if args.show
+                $scope.display()
+            else
+                $scope.close()
+
+        $scope.display = ()->
+            $scope.show = true
+
+        $scope.close= ->
+            $scope.show = false
+            modalService.hide "SHOW_MODAL_"+modalName
 
     link: (scope) ->
 

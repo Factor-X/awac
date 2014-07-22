@@ -76,7 +76,7 @@
     <body ng-controller="MainCtrl">
 
         <!-- background for modal -->
-        <div class="modal-background">
+        <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>
 
         <!-- list modal -->
@@ -96,9 +96,11 @@
             <span class="alert-message" ng-bind-html="flash.message"></span>
         </div>
 
-        <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
+        <!--
+            <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
+         -->
 
-        <mm-awac-enterprise-survey ng-hide="isLogin()" ng-model="o"></mm-awac-enterprise-survey>
+        <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
     </body>
 </html>
 

@@ -33,11 +33,26 @@ angular
             return "menu_current"
         else
             return ""
+    #
+    # use the nav from an event
+    # use the args.loc to specify the target loc
+    #
+    $scope.$on 'NAV',(event,args) ->
+        console.log "nav !! : "+args.loc+"/"+args.confirmed
+        $scope.nav(args.loc,args.confirmed)
+
+
+    #
     # Tabs -- transition
-    $scope.nav = (loc) ->
-        # TODO to implement : ask a confirmation when the user try to exit a form with non-saved data
-        if loc.indexOf("/form") > -1
-            modalService.show "CONFIRMATION_EXIT_FORM",loc
+    # loc : the localisation targeted
+    # confirmed : the modification of localisation was already confirmed by the user
+    #
+    $scope.nav = (loc,confirmed=false) ->
+
+        if loc.indexOf("/form") > -1 && !confirmed
+            params = {}
+            params.loc = loc
+            modalService.show "CONFIRMATION_EXIT_FORM",params
         else
             $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
@@ -123,19 +138,19 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
     #
     # test if the user is currently connected on the server
     #
-    $rootScope.testAuthentication = () ->
-        promise = $http
-            method: "POST"
-            url: 'testAuthentication'
-            headers:
-                "Content-Type": "application/text"
-        promise.success (data, status, headers, config) ->
-            $rootScope.loginSuccess data
-            return
+    promise = $http
+        method: "POST"
+        url: 'testAuthentication'
+        headers:
+            "Content-Type": "application/text"
+    promise.success (data, status, headers, config) ->
+        $rootScope.loginSuccess data
+        return
 
-        promise.error (data, status, headers, config) ->
-            return
+    promise.error (data, status, headers, config) ->
+        return
+
     #
-    # call the test authentification function
+    # parameter to display / hide the modal background
     #
-    $rootScope.testAuthentication()
+    $rootScope.displayModalBackground = false

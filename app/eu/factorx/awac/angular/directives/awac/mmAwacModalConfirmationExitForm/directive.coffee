@@ -6,37 +6,47 @@ angular
 
     }
     templateUrl: "$/angular/templates/mm-awac-modal-confirmation-exit-form.html"
-    controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
+    controller: ($scope,modalService) ->
 
         #change option of the modal
         $('#modalConfirmationExitForm').modal({
-            backdrop: 'static'
+            backdrop: false
         })
+        $('#modalConfirmationExitForm').modal('show')
 
         modalName = 'CONFIRMATION_EXIT_FORM'
-        show = true
+        $scope.show = false
+        $scope.loc =null
 
         $scope.$on 'SHOW_MODAL_'+modalName,(event,args) ->
-            console.log "je dois mouvrir"
-            show = args.show
+            if args.show
+                $scope.display(args.params)
+            else
+                $scope.close()
 
 
-        ###
+        $scope.display = (params)->
+            $scope.show = true
+            if params.loc != undefined
+                $scope.loc = params.loc
 
-        #change option of the modal
-        $('#modalLogin').modal({
-            backdrop: 'static'
-        })
-        $('#modalLogin').modal('hide')
 
-        #initialize the modal when it's displayed
-        $('#modalLogin').on 'shown.bs.modal', (e) ->
-            $scope.initialize()
-            #refresh angular
-            $scope.$apply()
+        $scope.close= ->
+            $scope.show = false
+            modalService.hide "SHOW_MODAL_"+modalName
 
         $scope.continue = ->
-        ###
+            arg={}
+            arg.loc = $scope.loc
+            arg.confirmed = true
+            $scope.$root.$broadcast('NAV', arg)
+            $scope.close()
+
+        $scope.save= ->
+            $scope.$root.$broadcast 'SAVE'
+            $scope.continue()
+
+
 
     link: (scope) ->
 

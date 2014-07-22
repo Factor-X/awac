@@ -1,3 +1,6 @@
+#
+# TODO deprecated => to adapt to the new modal service
+#
 angular
 .module('app.directives')
 .directive "mmAwacModalLogin", (directiveService) ->
