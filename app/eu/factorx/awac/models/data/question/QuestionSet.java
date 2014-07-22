@@ -1,18 +1,38 @@
 package eu.factorx.awac.models.data.question;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.type.QuestionCode;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.QuestionCode;
+
 @Entity
 @Table(name = "question_set")
+@NamedQuery(name = QuestionSet.FIND_WITHOUT_PARENT_BY_CODES, query = "select qs from QuestionSet qs where qs.parent is null and qs.code.key in :codes")
 public class QuestionSet extends AbstractEntity {
 
 	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Returns a subset of the given collection, where parent is null
+	 * 
+	 * @param codess a collection of Codes (as String)
+	 */
+	public static final String FIND_WITHOUT_PARENT_BY_CODES = "QuestionSet.findWithoutParentByCodes";
+	
 	@Enumerated
 	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
 	private QuestionCode code;
@@ -92,4 +112,11 @@ public class QuestionSet extends AbstractEntity {
 	public boolean addChild(QuestionSet questionSet) {
 		return this.getChildren().add(questionSet);
 	}
+
+	@Override
+	public String toString() {
+		return "QuestionSet [code=" + code + ", repetitionAllowed=" + repetitionAllowed + ", parent=" + parent + "]";
+	}
+	
+	
 }

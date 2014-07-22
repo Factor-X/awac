@@ -139,4 +139,9 @@ public class QuestionSetAnswer extends AbstractEntity {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return "QuestionSetAnswer [questionSet=" + questionSet + ", parent=" + parent + ", repetitionIndex=" + repetitionIndex + "]";
+	}
+
 }

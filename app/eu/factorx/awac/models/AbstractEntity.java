@@ -31,12 +31,12 @@ public abstract class AbstractEntity implements Serializable {
 
 	@PrePersist
 	public void prePersist() {
-		Logger.debug("===== Persisting " + getClass().getName() + " entity");
+		Logger.info("===== Persisting " + getClass().getName() + " entity");
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		Logger.debug("===== Updating " + getClass().getName() + " entity with ID = " + getId());
+		Logger.info("===== Updating " + getClass().getName() + " entity with ID = " + getId());
 	}
 
 	/**
