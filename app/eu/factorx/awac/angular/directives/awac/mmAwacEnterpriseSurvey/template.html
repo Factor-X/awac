@@ -1,5 +1,5 @@
 <ng-virtual>
-    <div ng-hide="$parent.isLogin()" >
+    <div ng-hide="$root.isLogin()" >
         <div class="header">
             <div class="wallonie_logo"></div>
             <div class="awac_logo"></div>
@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <div ng-class="{true: '', false: 'content'}[isLogin()]" ng-view>
+    <div ng-class="{true: '', false: 'content'}[$root.isLogin()]" ng-view>
 
 
     </div>
