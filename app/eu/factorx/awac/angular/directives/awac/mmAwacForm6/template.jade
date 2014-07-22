@@ -25,8 +25,7 @@ ng-virtual
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A209_LOOPDESC' | translate")
 
-        mm-awac-sub-title
-            ng-virtual(ng-bind-html="'A223_TITLE' | translate")
+        mm-awac-sub-title(question-code="A223")
 
         div(ng-bind-html="'A224_TITLE' | translate")
         mm-awac-repetition-question(question-set-code="A224", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A224')")

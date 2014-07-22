@@ -1,26 +1,27 @@
-mm-awac-section(title-code="A243_TITLE")
+mm-awac-section(title-code="A243_TITLE", mode="stack")
 
     div(ng-bind-html="'A244_TITLE' | translate")
     mm-awac-repetition-question(ng-question-set-code="'A244'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A244')")
 
         mm-awac-string-question(ng-question-code="'A245'",ng-repetition-map="itLevel1")
 
+        br
+
         div(ng-bind-html="'A273_TITLE' | translate")
         mm-awac-repetition-question(ng-question-set-code="'A273'", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A273',itLevel1)")
 
             mm-awac-string-question(ng-question-code="'A274'",ng-repetition-map="itLevel2")
 
-        button(ng-click="addIteration('A273',itLevel1)", type="button")
+        button.add-button(ng-click="addIteration('A273',itLevel1)", type="button")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A273_LOOPDESC' | translate")
 
-    button(ng-click="addIteration('A244')", type="button")
+    button.add-button(ng-click="addIteration('A244')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A244_LOOPDESC' | translate")
 
 
-    mm-awac-section(title-code="A243_TITLE")
-
+mm-awac-section(title-code="A243_TITLE")
 
     div(ng-bind-html="'A244_TITLE' | translate")
     mm-awac-repetition-question(ng-question-set-code="'A244'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A244')")
@@ -104,7 +105,7 @@ mm-awac-section(title-code="A243_TITLE")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A273_LOOPDESC' | translate")
 
-    div(ng-show="getAnswer(getAnswer('A249').value == '1'")
+    div(ng-show="getAnswer('A249').value == '1'")
         // Traitement
         mm-awac-sub-title(question-code="A282")
         mm-awac-document-question(question-code="A283", ng-condition="getAnswer('A249').value == '1'")
@@ -166,3 +167,4 @@ mm-awac-section(title-code="A243_TITLE")
     button(ng-click="addIteration('A244')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A244_LOOPDESC' | translate")
+
