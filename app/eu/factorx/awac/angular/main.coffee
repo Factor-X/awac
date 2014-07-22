@@ -32,31 +32,53 @@ angular
         })
     .when('/form1/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form1.html'
-            controller: 'Form1Ctrl'
-        })
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB1'
+        }
+    )
     .when('/form2/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form2.html'
-            controller: 'Form2Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB2'
         })
     .when('/form3/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form3.html'
-            controller: 'Form3Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB3'
         })
     .when('/form4/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form4.html'
-            controller: 'Form4Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB4'
         })
     .when('/form5/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form5.html'
-            controller: 'Form5Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB5'
         })
     .when('/form6/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form6.html'
-            controller: 'Form6Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB6'
         })
     .when('/form7/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-form7.html'
-            controller: 'Form7Ctrl'
+            controller: 'FormCtrl'
+            resolve:
+                formIdentifier: () ->
+                    return 'TAB7'
         })
     .when('/results/:period/:scope', {
             templateUrl: '$/angular/templates/mm-awac-results.html'
