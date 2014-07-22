@@ -569,6 +569,10 @@ button.comments {
 */
 
 .content {
+    position: absolute;
+    bottom: 0;
+    top: 238px;
+    overflow-y: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
 }

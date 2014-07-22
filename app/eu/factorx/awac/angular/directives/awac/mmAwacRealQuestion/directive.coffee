@@ -12,7 +12,7 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.getAnswerValue = () ->
-            return scope.$parent.getAnswerOrCreate(scope.ngQuestionCode, scope.ngRepetitionMap)
+            return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
         scope.hasDescription = () ->
             return translationService.get(scope.getQuestionCode() + '_DESC') != null

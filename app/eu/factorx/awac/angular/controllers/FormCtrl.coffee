@@ -69,10 +69,10 @@ angular
 
         #build the list of answers
         #recove answerSave
-        answerSave = $scope.o.answersSave
-
-        #save answer
-        $scope.answerList =  answerSave.listAnswers
+        if $scope.o.answersSave !=null && $scope.o.answersSave!=undefined
+            answerSave = $scope.o.answersSave
+            #save answer        i
+            $scope.answerList =  answerSave.listAnswers
 
         #build list of repetition for the mmAwacRepetition
         for qSet in $scope.o.questionSets
@@ -191,6 +191,12 @@ angular
     # if there is not answer for this case, create it
     #
     $scope.getAnswerOrCreate = (code, mapIteration) ->
+
+        if code == null || code == undefined
+            console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
+            return null
+
+
         result = $scope.getAnswer(code, mapIteration)
         if result
             return result
@@ -210,19 +216,12 @@ angular
     #
     $scope.getAnswer = (code, mapIteration) ->
 
-        console.log "code"
-        console.log code
-        console.log "mapIteration"
-        console.log mapIteration
-
         for answer in $scope.answerList
             #control the code
             if answer.questionKey == code
 
                 #control the repetition map
                 if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
-                    console.log "result : "
-                    console.log answer
                     return answer
 
         return null
