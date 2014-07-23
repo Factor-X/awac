@@ -16,7 +16,7 @@ public class QuestionDTO extends DTO {
 	private Long unitCategoryId;
 
     //a default value for the answer
-    private Object defaultValue;
+    private Double defaultValue;
 
 
     public QuestionDTO() {
@@ -29,7 +29,7 @@ public class QuestionDTO extends DTO {
         this.unitCategoryId = unitCategoryId;
     }
 
-    public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId, Object defaultValue) {
+    public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId, Double defaultValue) {
         this.code = code;
         this.answerType = answerType;
         this.codeListName = codeListName;
@@ -69,11 +69,11 @@ public class QuestionDTO extends DTO {
         this.unitCategoryId = unitCategoryId;
     }
 
-    public Object getDefaultValue() {
+    public Double getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue(Object defaultValue) {
+    public void setDefaultValue(Double defaultValue) {
         this.defaultValue = defaultValue;
     }
 

@@ -23,7 +23,7 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 		} else if (question instanceof ValueSelectionQuestion) {
 			codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
 		}
-		return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId);
+		return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, question.getDefaultValue());
 	}
 
 }
