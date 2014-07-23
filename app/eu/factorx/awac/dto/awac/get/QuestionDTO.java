@@ -15,54 +15,76 @@ public class QuestionDTO extends DTO {
 	// if AnswerType = INTEGER or DOUBLE
 	private Long unitCategoryId;
 
-	public QuestionDTO() {
-		super();
-	}
+    //a default value for the answer
+    private Object defaultValue;
 
-	public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId) {
-		super();
-		this.code = code;
-		this.answerType = answerType;
-		this.codeListName = codeListName;
-		this.unitCategoryId = unitCategoryId;
-	}
 
-	public String getCode() {
-		return code;
-	}
+    public QuestionDTO() {
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId) {
+        this.code = code;
+        this.answerType = answerType;
+        this.codeListName = codeListName;
+        this.unitCategoryId = unitCategoryId;
+    }
 
-	public AnswerType getAnswerType() {
-		return answerType;
-	}
+    public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId, Object defaultValue) {
+        this.code = code;
+        this.answerType = answerType;
+        this.codeListName = codeListName;
+        this.unitCategoryId = unitCategoryId;
+        this.defaultValue = defaultValue;
+    }
 
-	public void setAnswerType(AnswerType answerType) {
-		this.answerType = answerType;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getCodeListName() {
-		return codeListName;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setCodeListName(String codeListName) {
-		this.codeListName = codeListName;
-	}
+    public AnswerType getAnswerType() {
+        return answerType;
+    }
 
-	public Long getUnitCategoryId() {
-		return unitCategoryId;
-	}
+    public void setAnswerType(AnswerType answerType) {
+        this.answerType = answerType;
+    }
 
-	public void setUnitCategoryId(Long unitCategoryId) {
-		this.unitCategoryId = unitCategoryId;
-	}
+    public String getCodeListName() {
+        return codeListName;
+    }
 
-	@Override
-	public String toString() {
-		return "QuestionDTO [code=" + code + ", answerType=" + answerType + ", codeListName=" + codeListName + ", unitCategoryId="
-				+ unitCategoryId + "]";
-	}
+    public void setCodeListName(String codeListName) {
+        this.codeListName = codeListName;
+    }
 
+    public Long getUnitCategoryId() {
+        return unitCategoryId;
+    }
+
+    public void setUnitCategoryId(Long unitCategoryId) {
+        this.unitCategoryId = unitCategoryId;
+    }
+
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionDTO{" +
+                "code='" + code + '\'' +
+                ", answerType=" + answerType +
+                ", codeListName='" + codeListName + '\'' +
+                ", unitCategoryId=" + unitCategoryId +
+                ", defaultValue=" + defaultValue +
+                '}';
+    }
 }
