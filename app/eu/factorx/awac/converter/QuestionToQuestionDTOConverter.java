@@ -2,6 +2,7 @@ package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.UnitCategory;
@@ -15,6 +16,7 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 	public QuestionDTO convert(Question question) {
 		Long unitCategoryId = null;
 		String codeListName = null;
+		Double defaultValue = null;
 		if (question instanceof NumericQuestion) {
 			UnitCategory unitCategory = ((NumericQuestion) question).getUnitCategory();
 			if (unitCategory != null) {
@@ -22,8 +24,10 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 			}
 		} else if (question instanceof ValueSelectionQuestion) {
 			codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
+		} else if (question instanceof DoubleQuestion) {
+			defaultValue = ((DoubleQuestion) question).getDefaultValue();
 		}
-		return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, question.getDefaultValue());
+		return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue);
 	}
 
 }

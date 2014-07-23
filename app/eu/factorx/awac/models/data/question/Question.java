@@ -51,8 +51,6 @@ public abstract class Question extends AuditedAbstractEntity {
 
 	protected int orderIndex = 0;
 
-	protected Double defaultValue = null;
-
 	protected Question() {
 		super();
 	}
@@ -67,20 +65,6 @@ public abstract class Question extends AuditedAbstractEntity {
 		this.questionSet = questionSet;
 		this.orderIndex = orderIndex;
 		this.code = code;
-	}
-
-	/**
-	 * @param questionSet
-	 * @param orderIndex
-	 * @param code
-	 * @param defaultValue
-	 */
-	public Question(QuestionSet questionSet, int orderIndex, QuestionCode code, Double defaultValue) {
-		super();
-		this.questionSet = questionSet;
-		this.orderIndex = orderIndex;
-		this.code = code;
-		this.defaultValue = defaultValue;
 	}
 
 	public QuestionSet getQuestionSet() {
@@ -105,14 +89,6 @@ public abstract class Question extends AuditedAbstractEntity {
 
 	public void setOrderIndex(int orderIndex) {
 		this.orderIndex = orderIndex;
-	}
-
-	public Double getDefaultValue() {
-		return defaultValue;
-	}
-
-	public void setDefaultValue(Double defaultValue) {
-		this.defaultValue = defaultValue;
 	}
 
 	public abstract AnswerType getAnswerType();
