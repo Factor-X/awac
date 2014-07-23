@@ -31,7 +31,13 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		Integer unitId = null;
 		switch (answerType) {
 			case BOOLEAN:
-				rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
+				Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+				if (booleanValue == Boolean.TRUE) {
+					rawAnswerValue = "1";
+				} else if (booleanValue == Boolean.FALSE) {
+					rawAnswerValue = "0";
+				}
+				rawAnswerValue = booleanValue;
 				break;
 			case STRING:
 				rawAnswerValue = ((StringAnswerValue) answerValue).getValue();

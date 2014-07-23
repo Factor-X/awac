@@ -331,7 +331,14 @@ public class AnswerController extends Controller {
 		Question question = questionAnswer.getQuestion();
 		switch (question.getAnswerType()) {
 		case BOOLEAN:
-			answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
+			String strValue = StringUtils.trim((String) rawAnswerValue);
+			Boolean booleanValue = null;
+			if ("1".equals(strValue)) {
+				booleanValue = Boolean.TRUE;
+			} else if ("0".equals(strValue)) {
+				booleanValue = Boolean.FALSE;
+			}
+			answerValue = new BooleanAnswerValue(questionAnswer, booleanValue);
 			break;
 		case STRING:
 			answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
