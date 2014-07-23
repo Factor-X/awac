@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
@@ -111,7 +112,12 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Sheet indicatorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME);
 
 		System.out.println("==== Verify Awac business Data (from " + AWAC_DATA_WORKBOOK__PATH + ") ====");
-		verifyAwacData(factorsSheet, indicatorsSheet);
+		try {
+			verifyAwacData(factorsSheet, indicatorsSheet);
+		} catch (RuntimeException e) {
+			Logger.error("######## ABORTING IMPORT OF INDICATORS AND FACTORS - Please fix errors and relaunch the DB import script!");
+			return;
+		}
 
 		System.out.println("==== Save Factors ====");
 		saveFactors(factorsSheet);
@@ -170,7 +176,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		}
 		
 		if (!validationResult) {
-			throw new RuntimeException("Validation of sheet " + factorsSheet.getName() + " and/or " + indicatorsSheet.getName() + " failed: please fix errors!");
+			throw new RuntimeException("Validation of sheet " + factorsSheet.getName() + " and/or " + indicatorsSheet.getName() + " failed!");
 		}
 		verifyUnitExist(unitsSymbols);
 	}
