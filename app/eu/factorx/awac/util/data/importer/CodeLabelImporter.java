@@ -16,9 +16,8 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 @Component
 public class CodeLabelImporter extends WorkbookDataImporter {
 
+	// Columns: NAME (not used), KEY, LABEL_EN, LABEL_FR, LABEL_NL
 	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_full.xls";
-
-	private Workbook codesWkb = null;
 
 	public CodeLabelImporter() {
 		super();
@@ -33,32 +32,27 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	protected void importData() throws Exception {
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(CP1252_ENCODING);
-		codesWkb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
+		Workbook codesWkb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
 
 		System.out.println("==== Importing Code Labels (from " + CODE_TO_IMPORT_WORKBOOK_PATH + ") ====");
 
 		for (String sheetName : codesWkb.getSheetNames()) {
 			CodeList codeList = CodeList.valueOf(sheetName);
 			if (codeList == null) {
-				throw new RuntimeException("No codeList named '" + sheetName + "'!");
+				throw new RuntimeException("The sheet name '" + sheetName + "' does not match with any CodeList enum member");
 			}
-			saveCodeLabels(sheetName, codeList);
+			System.out.println("== Importing labels from sheet " + sheetName + " ==");
+			Sheet sheet = codesWkb.getSheet(sheetName);
+			saveCodeLabels(sheet, codeList);
 		}
 
-		session.flush();
 		System.out.println("==== Finding codes correspondances ====");
 
 		// TODO
 		
 	}
 
-	// Columns: NAME, KEY, LABEL_EN, LABEL_FR, LABEL_NL
-	protected <T extends Code> void saveCodeLabels(String sheetName, CodeList codeList) throws Exception {
-
-		System.out.println("== Importing '" + codeList + "' Labels (from sheetName " + sheetName + ") ==");
-
-		// Extract infos from sheet and persist code labels
-		Sheet sheet = codesWkb.getSheet(sheetName);
+	protected <T extends Code> void saveCodeLabels(Sheet sheet, CodeList codeList) {
 		for (int i = 1; i < sheet.getRows(); i++) {
 			String key = getCellContent(sheet, 1, i);
 			String labelEn = getCellContent(sheet, 2, i);

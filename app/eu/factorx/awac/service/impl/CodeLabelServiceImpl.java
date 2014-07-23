@@ -37,12 +37,12 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 		CodeList[] values = CodeList.values();
 		for (CodeList codeList : values) {
 			if (!allLabelsCodeLists.contains(codeList)) {
-				Logger.error("No labels for the code list " + codeList.name());
+				Logger.warn("No labels for the code list " + codeList.name());
 			}
 		}
 		// check if all labels are linked to an existing codelist
 		if (!(CodeList.values().length == allLabelsCodeLists.size())) {
-			Logger.error("CodeList enum contains " + CodeList.values().length + " values, since there are " + allLabelsCodeLists.size()
+			Logger.warn("CodeList enum contains " + CodeList.values().length + " values, since there are " + allLabelsCodeLists.size()
 					+ " distinct codeList used in all code labels");
 		}
 
