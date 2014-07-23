@@ -34,4 +34,9 @@ public abstract class AnswerValue extends AbstractEntity {
 		this.questionAnswer = param;
 	}
 
+	@Override
+	public String toString() {
+		return "rawData=" + rawData;
+	}
+
 }
