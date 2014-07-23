@@ -2,10 +2,10 @@ div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        img(src='/awac/assets/images/arrow_question.png')
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
         .status.answer(mm-not-implemented)
-
         span(style="width:75px;display:inline-block;text-align:right;") oui
         input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="1", style="width :20px !important",ng-change="edited()")
         span(style="width:75px;display:inline-block;text-align:right;") non
