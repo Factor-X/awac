@@ -1,11 +1,18 @@
 # simple download service
 angular
 .module('app.services')
-.service "modalService", () ->
-    @show = (modalName) ->
-      $("#"+modalName).modal('show')
+.service "modalService", ($rootScope) ->
+
+    @show = (modalName,params) ->
+        arg = {}
+        arg.show = true
+        arg.params = params
+        target ='SHOW_MODAL_'+modalName
+        $rootScope.$broadcast(target, arg)
 
     @hide = (modalName) ->
-      $("#"+modalName).modal('hide')
+        arg = {}
+        arg.show = false
+        $rootScope.$broadcast('SHOW_MODAL_'+modalName, arg)
 
     return

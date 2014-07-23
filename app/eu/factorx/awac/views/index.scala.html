@@ -75,9 +75,14 @@
     </head>
     <body ng-controller="MainCtrl">
 
+        <!-- background for modal -->
+        <div class="modal-background">
+        </div>
+
         <!-- list modal -->
         <mm-awac-modal-login></mm-awac-modal-login>
         <mm-awac-modal-loading></mm-awac-modal-loading>
+        <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
 
         <!-- success flash message. -->
         <div flash-alert="success" active-class="in" class="alert fade">
