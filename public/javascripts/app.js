@@ -2809,7 +2809,7 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     return null;
   };
   $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, result;
+    var answerLine, question, result, value;
     if (code === null || code === void 0) {
       console.log("ERROR !! getAnswerOrCreate : code is null or undefined");
       return null;
@@ -2818,6 +2818,11 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     if (result) {
       return result;
     } else {
+      question = $scope.getQuestion(code);
+      value = Object;
+      if (question.defaultValue !== null && question.defaultValue !== void 0) {
+        value = question.defaultValue;
+      }
       answerLine = {
         'questionKey': code,
         'value': null,

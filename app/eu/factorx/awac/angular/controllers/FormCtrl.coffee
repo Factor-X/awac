@@ -180,10 +180,17 @@ angular
         if result
             return result
         else
+
+            #compute default value
+            question = $scope.getQuestion(code)
+            value = Object
+            if question.defaultValue!=null && question.defaultValue!=undefined
+              value = question.defaultValue
+
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey':code
-                'value':null
+                'value':value
                 'unitId':null
                 'mapRepetition':mapIteration
             }
