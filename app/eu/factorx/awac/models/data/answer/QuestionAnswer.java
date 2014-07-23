@@ -91,4 +91,10 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 		this.answerValues = answerValues;
 	}
 
+	@Override
+	public String toString() {
+		return "QuestionAnswer [questionSetAnswer=" + questionSetAnswer + ", question=" + question + ", answerValues=" + answerValues + "]";
+	}
+
+	
 }

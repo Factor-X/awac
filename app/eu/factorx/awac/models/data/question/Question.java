@@ -77,4 +77,9 @@ public abstract class Question extends AuditedAbstractEntity {
 
 	public abstract AnswerType getAnswerType();
 
+	@Override
+	public String toString() {
+		return "Question [questionSet=" + questionSet + ", code=" + code + ", orderIndex=" + orderIndex + "]";
+	}
+
 }

@@ -1,7 +1,27 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.*;
+import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
+import eu.factorx.awac.dto.awac.get.CodeListDTO;
+import eu.factorx.awac.dto.awac.get.FormDTO;
+import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
+import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
+import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
@@ -14,7 +34,12 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.*;
+import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
+import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
+import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
+import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
+import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
+import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
@@ -25,20 +50,15 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.*;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.FormService;
+import eu.factorx.awac.service.PeriodService;
+import eu.factorx.awac.service.QuestionAnswerService;
+import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.service.QuestionSetAnswerService;
+import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.UnitCategoryService;
+import eu.factorx.awac.service.UnitService;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -93,10 +113,10 @@ public class AnswerController extends Controller {
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
 
-        Logger.info("List<AnswerLineDTO>");
-        for( AnswerLineDTO answerLine : answerLineDTOs ){
-            Logger.info(answerLine.toString());
-        }
+		Logger.info("GET ANSWERS:");
+		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
+			Logger.info("\t" + answerLineDTO);
+		}
 
 		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, answerLineDTOs);
 
@@ -176,6 +196,11 @@ public class AnswerController extends Controller {
 		Account currentUser = securedController.getCurrentUser();
 		Logger.info("save() 2");
 		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
+
+		Logger.info("POST ANSWERS:");
+		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
+			Logger.info("\t" + answerLine);
+		}
 		Logger.info("save() 3");
 		saveAnswsersDTO(currentUser, answersDTO);
 		Logger.info("save() 4");
@@ -198,75 +223,101 @@ public class AnswerController extends Controller {
 		questionSetAnswerService.deleteAllFormAnswers(scope, period, form);
 
 		// create answers
-		Map<String, Map<Integer, QuestionSetAnswer>> createdQuestionSetAnswers = new HashMap<>();
+		Map<String, List<QuestionSetAnswer>> createdQSAnswers = new HashMap<>();
 		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			QuestionAnswer questionAnswer = createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQuestionSetAnswers);
-			questionAnswerService.saveOrUpdate(questionAnswer);
+			questionAnswerService.saveOrUpdate(createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQSAnswers));
 		}
 	}
 
 	private QuestionAnswer createNewQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO,
-	                                               Map<String, Map<Integer, QuestionSetAnswer>> allQuestionSetAnswers) {
+			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		Question question = getAndVerifyQuestion(answerLineDTO);
-		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, null, question);
+		QuestionSet questionSet = question.getQuestionSet();
+
+		// get (and fix) repetition map
+		Map<String, Integer> repetitionMap = getRepetitionMap(questionSet, answerLineDTO);
+
+		// get QuestionSetAnswer
+		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(scope, period, repetitionMap, questionSet, createdQuestionSetAnswers);
+		
+		// create and save QuestionAnswer
+		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
 		AnswerValue answerValue = getAnswerValue(answerLineDTO, questionAnswer);
 		if (answerValue == null) {
 			return null;
 		}
 		questionAnswer.getAnswerValues().add(answerValue);
+		questionAnswerService.saveOrUpdate(questionAnswer);
 
-		// get parent answer (QuestionSetAnswer)
-		QuestionSet questionSet = question.getQuestionSet();
-		Map<String, Integer> mapRepetition = answerLineDTO.getMapRepetition();
-		if (mapRepetition == null) {
-			if (questionSet.getRepetitionAllowed()) {
-				throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO
-						+ ") : repetition map is null, while repetion is allowed in parent questionSet (code = "
-						+ questionSet.getCode().getKey() + ")");
-			} else {
-				mapRepetition = new HashMap<String, Integer>();
-				mapRepetition.put(questionSet.getCode().getKey(), 0);
-			}
-		}
-		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(allQuestionSetAnswers, scope, period, mapRepetition, questionSet);
-
-		questionAnswer.setQuestionSetAnswer(questionSetAnswer);
 		return questionAnswer;
 	}
 
-	private QuestionSetAnswer getQuestionSetAnswer(Map<String, Map<Integer, QuestionSetAnswer>> createdQuestionSetAnwers, Scope scope,
-	                                               Period period, Map<String, Integer> repMap, QuestionSet questionSet) {
+	private Map<String, Integer> getRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
+		Map<String, Integer> repMap = answerLineDTO.getMapRepetition();
+		if (repMap == null) {
+			repMap = new HashMap<String, Integer>();
+		}
+		while (questionSet != null) {
+			String questionSetCode = questionSet.getCode().getKey();
+			// get repetition index
+			Integer repetitionIndex = repMap.get(questionSetCode);
+			if (repetitionIndex == null) {
+				if (questionSet.getRepetitionAllowed()) {
+					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap
+							+ ") doesn not contain entry for parent questionSet (" + questionSetCode
+							+ "), while repetion is allowed in this questionSet");
+				}
+				repMap.put(questionSetCode, 0);
+			}
+			questionSet = questionSet.getParent();
+		}
+		return repMap;
+	}
 
-		// if not yet present, create a new entry in createdQuestionSetAnwers for the list of QuestionSetAnswer linked to questionSet
+	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet,
+			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		String questionSetCode = questionSet.getCode().getKey();
-		if (!createdQuestionSetAnwers.containsKey(questionSetCode)) {
-			createdQuestionSetAnwers.put(questionSetCode, new HashMap<Integer, QuestionSetAnswer>());
-		}
 
-		Integer repetitionIndex = repMap.get(questionSetCode);
-		if (repetitionIndex == null) {
-			throw new RuntimeException("Invalid repetition map: " + repMap + ", expected key : " + questionSetCode);
-		}
+		// attempt to find the QuestionSetAnswer in already created map
 		QuestionSetAnswer questionSetAnswer = null;
-		if (createdQuestionSetAnwers.get(questionSetCode).containsKey(repetitionIndex)) {
-			// if questionSetAnswer had already been created, get from map
-			questionSetAnswer = createdQuestionSetAnwers.get(questionSetCode).get(repetitionIndex);
+		if (!createdQuestionSetAnswers.containsKey(questionSetCode)) {
+			createdQuestionSetAnswers.put(questionSetCode, new ArrayList<QuestionSetAnswer>());
 		} else {
-			// create new questionSetAnswer
-			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, null);
-			if (questionSet.getParent() != null) {
-				// get parent questionSetAnswer (recursive call)
+			questionSetAnswer = fromCreatedQuestionSetAnswers(repMap, createdQuestionSetAnswers.get(questionSetCode));
+		}
 
-				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(createdQuestionSetAnwers, scope, period, repMap,
-						questionSet.getParent());
+		// else create new QuestionSetAnswer
+		if (questionSetAnswer == null) {
+			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repMap.get(questionSetCode), null);
+			if (questionSet.getParent() != null) {
+				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(),
+						createdQuestionSetAnswers);
 				questionSetAnswer.setParent(parentQuestionSetAnswer);
 			}
-			// save
 			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-			// add to createdQuestionSetAnwers map
-			createdQuestionSetAnwers.get(questionSetCode).put(repetitionIndex, questionSetAnswer);
+			createdQuestionSetAnswers.get(questionSetCode).add(questionSetAnswer);
 		}
 		return questionSetAnswer;
+	}
+
+	private QuestionSetAnswer fromCreatedQuestionSetAnswers(Map<String, Integer> repMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+		loop1: for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
+			String key = questionSetAnswer.getQuestionSet().getCode().getKey();
+			if (repMap.containsKey(key) && repMap.get(key).equals(questionSetAnswer.getRepetitionIndex())) {
+				// check parents
+				QuestionSetAnswer parentQuestionSetAnswer = questionSetAnswer.getParent();
+				while (parentQuestionSetAnswer != null) {
+					String parentKey = parentQuestionSetAnswer.getQuestionSet().getCode().getKey();
+					if (repMap.containsKey(parentKey) && repMap.get(parentKey).equals(parentQuestionSetAnswer.getRepetitionIndex())) {
+						parentQuestionSetAnswer = parentQuestionSetAnswer.getParent();
+					} else {
+						continue loop1;
+					}
+				}
+				return questionSetAnswer;
+			}
+		}
+		return null;
 	}
 
 	private AnswerValue getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
@@ -278,30 +329,30 @@ public class AnswerController extends Controller {
 
 		Question question = questionAnswer.getQuestion();
 		switch (question.getAnswerType()) {
-			case BOOLEAN:
-				answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
-				break;
-			case STRING:
-				answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
-				break;
-			case INTEGER:
-				UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
-				Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-				answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
-				break;
-			case DOUBLE:
-				UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
-				Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
-				answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
-				break;
-			case VALUE_SELECTION:
-				CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-				answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
-				break;
-			case ENTITY_SELECTION:
-				String entityName = ((EntitySelectionQuestion) question).getEntityName();
-				answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
-				break;
+		case BOOLEAN:
+			answerValue = new BooleanAnswerValue(questionAnswer, Boolean.valueOf(rawAnswerValue));
+			break;
+		case STRING:
+			answerValue = new StringAnswerValue(questionAnswer, rawAnswerValue);
+			break;
+		case INTEGER:
+			UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
+			Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
+			answerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue), unitInt);
+			break;
+		case DOUBLE:
+			UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
+			Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
+			answerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue), unitDbl);
+			break;
+		case VALUE_SELECTION:
+			CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
+			answerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue));
+			break;
+		case ENTITY_SELECTION:
+			String entityName = ((EntitySelectionQuestion) question).getEntityName();
+			answerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue));
+			break;
 		}
 
 		return answerValue;
