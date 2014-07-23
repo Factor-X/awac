@@ -27,10 +27,15 @@ angular
         console.log data
         $scope.o = data
 
-        $scope.loopRepetition = (questionSetDTO) ->
+        $scope.loopRepetition = (questionSetDTO,listQuestionSetRepetition = []) ->
             #TODO implement mapRepetition
 
+            console.log "$scope.loopRepetition listQuestionSetRepetition : "+questionSetDTO.code
+            console.log listQuestionSetRepetition
+
             if questionSetDTO.repetitionAllowed == true
+
+                listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
 
                 #find if the answer are already repeated on this repetition
                 if questionSetDTO.questions
@@ -45,12 +50,7 @@ angular
                                 #this is an error
                                 console.log("mapRepetition expected but not found")
                             else
-                                ###
-                                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                                code= questionSetDTO.code
-                                repetitionToAdd = {}#code:repetition}
-                                repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                                ###
+                                # create the repetition for this questionsSEt
                                 if $scope.mapRepetition[questionSetDTO.code]
                                     founded=false
                                     for repetition in $scope.mapRepetition[questionSetDTO.code]
@@ -61,10 +61,19 @@ angular
                                 else
                                     $scope.mapRepetition[questionSetDTO.code] = []
                                     $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition)
+                                #try to create repetition for the other questionSet into the mapRepetition of the answer
+                                # this is usefull if the user had respond to the question of the level1++ and not of the level1
+                                ###
+                                for key in Object.keys(answer.mapRepetition)
+                                  if key != '$$hashKey' && key!=questionSetDTO.code
+                                    value = mapContained[key]
+                                    if
+                                ###
+
 
             if questionSetDTO.children
                 for child in questionSetDTO.children
-                    $scope.loopRepetition(child)
+                    $scope.loopRepetition(child,listQuestionSetRepetition)
 
 
         #build the list of answers
