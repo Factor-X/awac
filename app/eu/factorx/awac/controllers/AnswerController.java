@@ -181,6 +181,7 @@ public class AnswerController extends Controller {
 		Map<Long, UnitCategoryDTO> res = new HashMap<>();
 		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
 			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
+			unitCategoryDTO.setMainUnitId(unitCategory.getMainUnit().getId());
 			for (Unit unit : unitCategory.getUnits()) {
 				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
 			}
