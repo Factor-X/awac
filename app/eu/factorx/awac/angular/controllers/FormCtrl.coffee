@@ -182,15 +182,22 @@ angular
         else
 
             #compute default value
+            ###
             question = $scope.getQuestion(code)
+
+            console.log "create answer"
+            console.log question
             value = Object
             if question.defaultValue!=null && question.defaultValue!=undefined
               value = question.defaultValue
 
+            console.log "value"
+            console.log value
+            ###
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey':code
-                'value':value
+                'value':null
                 'unitId':null
                 'mapRepetition':mapIteration
             }
