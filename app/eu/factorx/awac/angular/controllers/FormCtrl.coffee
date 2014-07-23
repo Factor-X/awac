@@ -28,52 +28,17 @@ angular
         $scope.o = data
 
         $scope.loopRepetition = (questionSetDTO,listQuestionSetRepetition = []) ->
-            #TODO implement mapRepetition
 
             if questionSetDTO.repetitionAllowed == true
 
+                listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
+
                 #find if the answer are already repeated on this repetition
-                if questionSetDTO.questions
-                    for q in questionSetDTO.questions
-                        #recover answer
-                        listAnswer = $scope.getListAnswer(q.code)
+                for answer in $scope.answerList
+                   if answer.mapRepetition!=null && answer.mapRepetition != undefined
+                       if answer.mapRepetition[questionSetDTO.code]!=null && answer.mapRepetition[questionSetDTO.code]!=undefined && answer.mapRepetition[questionSetDTO.code]!=0
+                         $scope.addMapRepetition(questionSetDTO.code,answer.mapRepetition,listQuestionSetRepetition)
 
-                        for answer in listAnswer
-
-                            #control if the answer have a repetition for this questionSetDTO
-                            if answer.mapRepetition==null
-                                #this is an error
-                                console.log("mapRepetition expected but not found")
-                            else
-                                # create the repetition for this questionsSEt
-                                $scope.addMapRepetition(questionSetDTO.code,answer.mapRepetition)
-                                ###
-                                if $scope.mapRepetition[questionSetDTO.code]
-                                    founded=false
-                                    for repetition in $scope.mapRepetition[questionSetDTO.code]
-                                        if $scope.compareRepetitionMap(repetition,answer.mapRepetition)
-                                            founded=true
-                                    if founded == false
-                                        $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition)
-                                else
-                                    $scope.mapRepetition[questionSetDTO.code] = []
-                                    $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition)
-                                ###
-                                #try to create repetition for the other questionSet into the mapRepetition of the answer
-                                # this is usefull if the user had respond to the question of the level1++ and not of the level1
-                                for key in Object.keys(answer.mapRepetition)
-                                    if key != '$$hashKey' && key!=questionSetDTO.code
-                                      value = answer.mapRepetition[key]
-                                      mapRepetitionToAdd = {}
-                                      for key2 in Object.keys(answer.mapRepetition)
-                                         if key2 != '$$hashKey'
-                                           for questionCode in listQuestionSetRepetition
-                                             if questionCode == key2
-                                               mapRepetitionToAdd.key2 = answer.mapRepetition.key2
-                                      $scope.addMapRepetition(key,mapRepetitionToAdd)
-
-
-            listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
 
             if questionSetDTO.children
                 for child in questionSetDTO.children
@@ -100,17 +65,6 @@ angular
 
         $scope.loading =false
 
-    $scope.addMapRepetition = (questionSetCode,mapRepetitionToAdd) ->
-      if $scope.mapRepetition[questionSetCode]
-        founded=false
-        for repetition in $scope.mapRepetition[questionSetCode]
-          if $scope.compareRepetitionMap(repetition,mapRepetitionToAdd)
-            founded=true
-        if founded == false
-          $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd)
-      else
-        $scope.mapRepetition[questionSetCode] = []
-        $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
     #
     # save the result of this form
@@ -330,4 +284,29 @@ angular
                 if mapContainer[key]==null || mapContainer[key]==undefined || mapContainer[key]!=value
                     return false
         return true
+
+    #
+    # add a mapRepetition into the variable $scope.mapRepetition
+    #
+    $scope.addMapRepetition = (questionSetCode,mapRepetitionSource,listQuestionSetRepetition) ->
+
+      #build the map repetition for this questionSet
+      mapRepetitionToAdd = {}
+      for key in Object.keys(mapRepetitionSource)
+        if key != '$$hashKey'
+          for questionCode in listQuestionSetRepetition
+            if questionCode == key
+              mapRepetitionToAdd[key] = mapRepetitionSource[key]
+
+      #control if this map is already store and add it if it's needed
+      if $scope.mapRepetition[questionSetCode]
+        founded=false
+        for repetition in $scope.mapRepetition[questionSetCode]
+          if $scope.compareRepetitionMap(repetition,mapRepetitionToAdd)
+            founded=true
+        if founded == false
+          $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd)
+      else
+        $scope.mapRepetition[questionSetCode] = []
+        $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
