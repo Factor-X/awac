@@ -5,6 +5,6 @@ div(ng-hide="getCondition() === false",class="question_field")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .twoelement
         .status.answer(mm-not-implemented)
-        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/"))
-        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode()", ng-model="getAnswerValue().unitId")
+        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()")
+        select(ng-options="p.id as p.name for p in getUnitsByQuestionCode()", ng-model="getAnswerValue().unitId",ng-change="edited()")
         .user_icon(mm-not-implemented) XM

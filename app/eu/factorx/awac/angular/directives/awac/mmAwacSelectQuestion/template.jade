@@ -5,5 +5,5 @@ div(ng-hide="getCondition() === false",class="question_field")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
         .status.answer(mm-not-implemented)
-        select(ng-options="p.key as p.label for p in getOptionsByQuestionCode()", ng-model="getAnswerValue().value")
+        select(ng-options="p.key as p.label for p in getOptionsByQuestionCode()", ng-model="getAnswerValue().value",ng-change="edited()")
         .user_icon(mm-not-implemented) XM

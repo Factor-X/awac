@@ -48,12 +48,20 @@ angular
     #
     $scope.nav = (loc,confirmed=false) ->
 
-        if loc.indexOf("/form") > -1 && !confirmed
-            params = {}
-            params.loc = loc
-            modalService.show "CONFIRMATION_EXIT_FORM",params
-        else
-            $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+      canBeContinue = true
+
+      # test if the main current scope have a validNavigation function and if this function return a false
+      if $scope.getMainScope().validNavigation!=undefined && confirmed == false
+        # ask a confirmation to quite the view
+        result = $scope.getMainScope().validNavigation()
+
+        if result.valid == false
+          canBeContinue =false
+          params = {}
+          params.loc = loc
+          modalService.show result.modalForConfirm,params
+      if canBeContinue
+          $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
     #
     # Periods
@@ -89,6 +97,10 @@ angular
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
         $scope.period = parseInt($routeParams.period)
         $scope.scopeId = parseInt($routeParams.scope)
+
+
+    $scope.getMainScope = ->
+      return mainScope =  angular.element($('[ng-view]')[0]).scope()
 
 
 #rootScope

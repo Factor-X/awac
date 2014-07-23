@@ -7,7 +7,7 @@ div(ng-hide="getCondition() === false",class="question_field")
         .status.answer(mm-not-implemented)
 
         span(style="width:75px;display:inline-block;text-align:right;") oui
-        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="1", style="width :20px !important")
+        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="1", style="width :20px !important",ng-change="edited()")
         span(style="width:75px;display:inline-block;text-align:right;") non
-        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="0",style="width :20px !important")
+        input(type="radio",name="{{getQuestionCode()}}", ng-model="getAnswerValue().value",value="0",style="width :20px !important",ng-change="edited()")
         .user_icon(mm-not-implemented) XM

@@ -21,3 +21,9 @@ angular
         scope.$watch 'ngCondition', () ->
         if scope.getCondition() == false
             scope.getAnswerValue().value = null
+
+        #
+        # called when the user change the value of the field
+        #
+        scope.edited = ->
+          scope.getAnswerValue().wasEdited = true

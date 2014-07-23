@@ -78,6 +78,8 @@ angular
         listAnswerToSave=[]
         for answer in $scope.answerList
             if answer.value && (answer.value.$valid==null || answer.value.$valid == undefined  || answer.value.$valid == true)
+                if answer.wasEdited!=undefined 
+                  delete answer['wasEdited']
                 listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
@@ -323,4 +325,17 @@ angular
       else
         $scope.mapRepetition[questionSetCode] = []
         $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
+
+
+
+    $scope.validNavigation = ->
+      result = {}
+      result.modalForConfirm = "CONFIRMATION_EXIT_FORM"
+
+      for answer in $scope.answerList
+        if answer.wasEdited != undefined  && answer.wasEdited == true
+          result.valid=false
+          break
+
+      return result
 
