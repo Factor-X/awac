@@ -804,11 +804,12 @@ button.comments {
     width: calc(100% - 72px);
 }
 .question_field .twoelement input{
-    width: calc(70% - 36px);
+    width: calc(60% - 36px);
 }
 
 .question_field .twoelement select{
-    width: calc(30% - 36px);
+    width: calc(40% - 42px);
+    margin-left : 8px;
 }
 
 .info {
@@ -912,13 +913,13 @@ button.comments {
 }
 
 /*.element_table > div > div:nth-child(3) .user_icon,*/
+/*
 .element_table > div > div:nth-child(3) input,
 .element_table > div > div:nth-child(3) select {
     background-color: #9d9b91;
     color: white;
     font-style: italic;
 }
-/*
 .element_table > div > div:nth-child(2) .user_icon {
     background-color: #3c3b37;
 }
