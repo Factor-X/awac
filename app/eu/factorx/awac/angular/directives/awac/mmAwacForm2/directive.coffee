@@ -7,6 +7,6 @@ angular
     templateUrl: "$/angular/templates/mm-awac-form2.html"
     transclude: true
     replace: true
-    controller: 'Form2Ctrl'
+    controller: 'FormCtrl'
     link: (scope) ->
         directiveService.autoScopeImpl scope

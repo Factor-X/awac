@@ -18,7 +18,7 @@ angular
     $scope.loading = true
 
     #display the loading modal
-    modalService.show('modalLoading')
+    modalService.show('LOADING')
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
 
@@ -83,7 +83,7 @@ angular
 
 
         #hide the loading modal
-        modalService.hide('modalLoading')
+        modalService.hide('LOADING')
 
         $scope.loading =false
 
@@ -93,12 +93,12 @@ angular
     $scope.$on 'SAVE', () ->
 
         #display the loading modal
-        modalService.show('modalLoading')
+        modalService.show('LOADING')
 
         #build the list to save
         listAnswerToSave=[]
         for answer in $scope.answerList
-            if answer.value # && answer.visible
+            if answer.value && (answer.value.$valid==null || answer.value.$valid == undefined  || answer.value.$valid == true)
                 listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
@@ -117,12 +117,12 @@ angular
 
         promise.success (data, status, headers, config) ->
             messageFlash.displaySuccess "Your answers are saved !"
-            modalService.hide('modalLoading')
+            modalService.hide('LOADING')
             return
 
         promise.error (data, status, headers, config) ->
             messageFlash.displayError "An error was thrown during the save : "+data.message
-            modalService.hide('modalLoading')
+            modalService.hide('LOADING')
             return
 
     #
@@ -295,7 +295,7 @@ angular
     # if all items of the second are included into the first, return true
     #
     $scope.compareRepetitionMap = (mapContainer, mapContained) ->
-        if mapContained == null || mapContained == undefined || mapContained.length == 0
+        if mapContained == null || mapContained == undefined  || mapContained.length == 0
             return true
         if mapContainer == null || mapContainer == undefined  || mapContainer.length == 0
             return false

@@ -1,10 +1,10 @@
-div(ng-hide="getCondition() === false")
+div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .twoelement
         .status.answer(mm-not-implemented)
-        input(type="text", ng-model="getAnswerValue().value")
+        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/"))
         select(ng-options="p.id as p.name for p in getUnitsByQuestionCode()", ng-model="getAnswerValue().unitId")
         .user_icon(mm-not-implemented) XM

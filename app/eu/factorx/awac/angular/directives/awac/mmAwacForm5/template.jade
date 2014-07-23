@@ -1,4 +1,18 @@
-mm-awac-section("Déchets")
+// mm-awac-section("Déchets")
+// It lacks a proper fild code for "D2chets alone" -> TODO : insert into Excel file as an additional line
+ng-virtual
+    .element
+        .element_header
+            .title Déchets
+            .title_arrow
+    .element_sidebar
+            .block_status
+                .lock_status.disable_status
+                .answered_status
+                .validate_status
+        .element_content
+            .element_table
+
     mm-awac-document-question(question-code="A174")
 
 .horizontal_separator

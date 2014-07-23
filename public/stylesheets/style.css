@@ -465,6 +465,22 @@ select {
     display: block;
 }
 
+
+/*-----------------------------------------------------
+	[ 2.c Nav menu ]
+-------------------------------------------------------
+*/
+
+.modal-background{
+    z-index:100;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-color: #000000;
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
 /*-----------------------------------------------------
 [ 3. Buttons ]
 
@@ -594,7 +610,7 @@ button.comments {
     display: table-cell;
     height: 40px;
     line-height: 12px;
-    width: 133px;
+    width: 203px;
     padding-left: 10px;
     color: white;
     background: center right no-repeat #305b2e;
@@ -685,7 +701,7 @@ button.comments {
     min-height: 42px;
     margin-bottom: 5px;
 }
-
+/*
 .element_stack {
     display: block;
     width: 100%;
@@ -700,7 +716,7 @@ button.comments {
     display: block;
     width: auto;
 }
-
+*/
 .repetition-question {
     position: relative;
     padding-top: 0px;
@@ -721,7 +737,7 @@ button.comments {
 
 .repetition-question .add-button {
     display: inline-block;
-    position: absolute;
+    /* position: absolute; */
     right: 0;
     bottom: 0;
     border-top-right-radius: 0;
@@ -739,32 +755,60 @@ button.comments {
 }
 
 .repetition-question-container {
-    padding-bottom: 25px;
+    /*    padding-bottom: 25px; */
 }
 
 .repetition-question-container [ng-question-code] > div {
-    display: table-row;
+  /*  display: table-row; */
 }
 
 .repetition-question-container [ng-question-code] > div {
-    display: table-cell;
+   /* display: table-cell; */
 }
-
+/*
 .element_table {
-    display: table;
+     display: table;
     width: 100%;
     border-spacing: 1px;
     position: relative;
 }
 
 .element_table > div {
-    display: table-row;
+     display: table-row;
 }
 
 .element_table > div > div {
-    display: table-cell;
+     display: table-cell;
 / / border : 1 px solid black;
     padding: 3px 15px 3px 35px;
+}
+*/
+.question_field{
+    padding: 3px 15px 3px 35px;
+}
+
+.question_field > div {
+    display: inline-block;
+}
+
+.question_field > div:first-child{
+       width : 50%;
+}
+
+.question_field > div:last-child{
+    width: 40%;
+}
+
+.question_field .oneelement input,
+.question_field .oneelement select{
+    width: calc(100% - 72px);
+}
+.question_field .twoelement input{
+    width: calc(70% - 36px);
+}
+
+.question_field .twoelement select{
+    width: calc(30% - 36px);
 }
 
 .info {
@@ -803,11 +847,11 @@ button.comments {
 }
 
 .element_table > div > div:nth-child(1) {
-    width: 40%;
+    /*width: 40%;*/
 }
 
 .element_table > div > div:nth-child(2) {
-    width: 30%;
+   /* width: 30%;*/
 }
 
 .element_table > div > div:nth-child(3) {
@@ -862,16 +906,19 @@ button.comments {
     padding: 5px 0;
     text-align: center;
     float: right;
+    background-color: #9d9b91;
+    color: white;
+    font-style: italic;
 }
 
-.element_table > div > div:nth-child(3) .user_icon,
+/*.element_table > div > div:nth-child(3) .user_icon,*/
 .element_table > div > div:nth-child(3) input,
 .element_table > div > div:nth-child(3) select {
     background-color: #9d9b91;
     color: white;
     font-style: italic;
 }
-
+/*
 .element_table > div > div:nth-child(2) .user_icon {
     background-color: #3c3b37;
 }
@@ -879,7 +926,6 @@ button.comments {
 .element_table > div > div:nth-child(3) .user_icon {
     font-style: normal;
 }
-
 .element_table > div > div:nth-child(2).oneelement input,
 .element_table > div > div:nth-child(3).oneelement input {
     width: -moz-calc(100% - 72px);
@@ -915,6 +961,7 @@ button.comments {
     width: -webkit-calc(50% - 37px);
     width: calc(50% - 37px);
 }
+*/
 
 .element_table > div > div:nth-child(3) .user_icon {
     font-style: normal;

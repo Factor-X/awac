@@ -1,189 +1,189 @@
 <ng-virtual>
-    <div class="header">
-        <div class="wallonie_logo"></div>
-        <div class="awac_logo"></div>
-        <div>
-            <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
-            <div class="entreprise_name">{{ $root.organization.name }}</div>
-        </div>
-
-        <div class="users">
-            <div ng-show="$root.currentPerson!=null"><span ng-bind-html="'WELCOME' | translate"></span>, <span
-                    class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
-            </div>
-            <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
-            <!-- temporary -->
-            <button ng-show="$root.currentPerson!=null"
-                    type="button"
-                    ng-click="$root.logout();"
-                    ng-bind-html="'LOGOUT_BUTTON' | translate"
-                    class="user_manage">
-            </button>
-            <!--<button type="button" class="user_manage">Gestion utilisateurs</button>-->
-        </div>
-
-        <div class="small_separator"></div>
-
-        <div class="lg_cf_help">
+    <div ng-hide="$root.isLogin()" >
+        <div class="header">
+            <div class="wallonie_logo"></div>
+            <div class="awac_logo"></div>
             <div>
-                <select ng-model="$parent.language">
-                    <option value="en" ng-bind-html="'EN' | translate"></option>
-                    <option value="fr" ng-bind-html="'FR' | translate"></option>
-                    <option value="nl" ng-bind-html="'NL' | translate"></option>
+                <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
+                <div class="entreprise_name">{{ $root.organization.name }}</div>
+            </div>
+
+            <div class="users">
+                <div ng-show="$root.currentPerson!=null"><span ng-bind-html="'WELCOME' | translate"></span>, <span
+                        class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
+                </div>
+                <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
+                <!-- temporary -->
+                <button ng-show="$root.currentPerson!=null"
+                        type="button"
+                        ng-click="$root.logout();"
+                        ng-bind-html="'LOGOUT_BUTTON' | translate"
+                        class="user_manage">
+                </button>
+                <!--<button type="button" class="user_manage">Gestion utilisateurs</button>-->
+            </div>
+
+            <div class="small_separator"></div>
+
+            <div class="lg_cf_help">
+                <div>
+                    <select ng-model="$parent.language">
+                        <option value="en" ng-bind-html="'EN' | translate"></option>
+                        <option value="fr" ng-bind-html="'FR' | translate"></option>
+                        <option value="nl" ng-bind-html="'NL' | translate"></option>
+                    </select>
+                </div>
+                <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
+                <button type="button" class="help" mm-not-implemented>Assistance</button>
+            </div>
+
+        </div>
+
+        <div class="data_menu">
+            <div class="data_date">
+                <div ng-bind-html="'PERIOD_DATA' | translate"></div>
+                <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
+            </div>
+
+            <div class="big_separator" mm-not-implemented></div>
+
+            <div class="data_date_compare" mm-not-implemented>
+                <div>Comparaison avec</div>
+                <select>
+                    <option>données 2012</option>
+                    <option>données 2011</option>
+                    <option>données 2010</option>
                 </select>
             </div>
-            <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
-            <button type="button" class="help" mm-not-implemented>Assistance</button>
-        </div>
 
-    </div>
+            <div class="big_separator"></div>
 
-    <div class="data_menu">
-        <div class="data_date">
-            <div ng-bind-html="'PERIOD_DATA' | translate"></div>
-            <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
-        </div>
-
-        <div class="big_separator" mm-not-implemented></div>
-
-        <div class="data_date_compare" mm-not-implemented>
-            <div>Comparaison avec</div>
-            <select>
-                <option>données 2012</option>
-                <option>données 2011</option>
-                <option>données 2010</option>
-            </select>
-        </div>
-
-        <div class="big_separator"></div>
-
-        <div class="data_save">
-            <div class="last_save" mm-not-implemented>
-                <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
-                07/01/2014 - 19:42
-            </div>
-            <div class="small_separator"></div>
-            <div class="save_button">
-                <button type="button" class="save" ng-click="save()" ng-bind-html="'SAVE_BUTTON' | translate"></button>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="nav_tabs">
-        <div class="nav_entreprise">
-            <div class="site_menu">
-                <div class="site">
-                    <button type="button" class="site_manage" mm-not-implemented>Gérer les sites</button>
-                    <div>Site</div>
-                    <div class="small_separator"></div>
-                    <div class="sitename">{{ $root.organization.sites[0].name }}</div>
-                    <button type="button" class="verification" mm-not-implemented>Vérification</button>
+            <div class="data_save">
+                <div class="last_save" mm-not-implemented>
+                    <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
+                    07/01/2014 - 19:42
                 </div>
-                <div class="menu">
-                    <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
-                        <div ng-bind-html="'TAB1' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 16%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 70%"></div>
-                                <div class="jauge_current" style="width: 15%"></div>
-                                <div class="jauge_bg"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-                    <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
-                        <div ng-bind-html="'TAB2' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 70%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 25%"></div>
-                                <div class="jauge_current jauge_ok" style="width: 70%"></div>
-                                <div class="jauge_bg jauge_ok"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-                    <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
-                        <div ng-bind-html="'TAB3' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 5%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 50%"></div>
-                                <div class="jauge_current" style="width: 5%"></div>
-                                <div class="jauge_bg"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-                    <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
-                        <div ng-bind-html="'TAB4' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 25%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 45%"></div>
-                                <div class="jauge_current" style="width: 25%"></div>
-                                <div class="jauge_bg"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-
-                    <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
-                        <div ng-bind-html="'TAB5' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 82%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 45%"></div>
-                                <div class="jauge_current jauge_ok" style="width: 82%"></div>
-                                <div class="jauge_bg jauge_ok"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-
-                    <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
-                        <div ng-bind-html="'TAB6' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 50%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 50%"></div>
-                                <div class="jauge_current jauge_ok" style="width: 50%"></div>
-                                <div class="jauge_bg jauge_ok"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
-
-                    <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
-                        <div ng-bind-html="'TAB7' | translate"></div>
-                        <div class="menu_jauge" mm-not-implemented>
-                            <div>rempli à 50%</div>
-                            <div class="jauge">
-                                <div class="jauge_limit" style="margin-left: 50%"></div>
-                                <div class="jauge_current jauge_ok" style="width: 50%"></div>
-                                <div class="jauge_bg jauge_ok"></div>
-                            </div>
-                        </div>
-                        <div class="menu_arrow"></div>
-                    </div>
+                <div class="small_separator"></div>
+                <div class="save_button">
+                    <button type="button" class="save" ng-click="save()" ng-bind-html="'SAVE_BUTTON' | translate"></button>
                 </div>
             </div>
-            <div class="last_menu">
-                <div class="{{ getMenuCurrentClass('/results') }}" ng-click="nav('/results')">
-                    résultats
+        </div>
+
+
+        <div class="nav_tabs">
+            <div class="nav_entreprise">
+                <div class="site_menu">
+                    <div class="site">
+                        <button type="button" class="site_manage" mm-not-implemented>Gérer les sites</button>
+                        <div>Site</div>
+                        <div class="small_separator"></div>
+                        <div class="sitename">{{ $root.organization.sites[0].name }}</div>
+                        <button type="button" class="verification" mm-not-implemented>Vérification</button>
+                    </div>
+                    <div class="menu">
+                        <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
+                            <div ng-bind-html="'TAB1' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 16%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 70%"></div>
+                                    <div class="jauge_current" style="width: 15%"></div>
+                                    <div class="jauge_bg"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+                        <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
+                            <div ng-bind-html="'TAB2' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 70%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 25%"></div>
+                                    <div class="jauge_current jauge_ok" style="width: 70%"></div>
+                                    <div class="jauge_bg jauge_ok"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+                        <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
+                            <div ng-bind-html="'TAB3' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 5%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 50%"></div>
+                                    <div class="jauge_current" style="width: 5%"></div>
+                                    <div class="jauge_bg"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+                        <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
+                            <div ng-bind-html="'TAB4' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 25%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 45%"></div>
+                                    <div class="jauge_current" style="width: 25%"></div>
+                                    <div class="jauge_bg"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+
+                        <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
+                            <div ng-bind-html="'TAB5' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 82%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 45%"></div>
+                                    <div class="jauge_current jauge_ok" style="width: 82%"></div>
+                                    <div class="jauge_bg jauge_ok"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+
+                        <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
+                            <div ng-bind-html="'TAB6' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 50%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 50%"></div>
+                                    <div class="jauge_current jauge_ok" style="width: 50%"></div>
+                                    <div class="jauge_bg jauge_ok"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+
+                        <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
+                            <div ng-bind-html="'TAB7' | translate"></div>
+                            <div class="menu_jauge" mm-not-implemented>
+                                <div>rempli à 50%</div>
+                                <div class="jauge">
+                                    <div class="jauge_limit" style="margin-left: 50%"></div>
+                                    <div class="jauge_current jauge_ok" style="width: 50%"></div>
+                                    <div class="jauge_bg jauge_ok"></div>
+                                </div>
+                            </div>
+                            <div class="menu_arrow"></div>
+                        </div>
+                    </div>
                 </div>
-                <div mm-not-implemented>
-                    actions de réduction
+                <div class="last_menu">
+                    <div class="{{ getMenuCurrentClass('/results') }}" ng-click="nav('/results')">
+                        résultats
+                    </div>
+                    <div mm-not-implemented>
+                        actions de réduction
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-    <div class="content" ng-view>
+    <div ng-class="{true: '', false: 'content'}[$root.isLogin()]" ng-view>
 
 
     </div>
