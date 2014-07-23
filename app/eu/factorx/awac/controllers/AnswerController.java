@@ -2,10 +2,8 @@ package eu.factorx.awac.controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,6 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.QuestionSetService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
@@ -76,8 +73,6 @@ public class AnswerController extends Controller {
 	private ScopeService scopeService;
 	@Autowired
 	private QuestionSetAnswerService questionSetAnswerService;
-	@Autowired
-	private QuestionSetService questionSetService;
 	@Autowired
 	private QuestionService questionService;
 	@Autowired
@@ -118,9 +113,9 @@ public class AnswerController extends Controller {
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
 
-		Logger.info("List<AnswerLineDTO>");
-		for (AnswerLineDTO answerLine : answerLineDTOs) {
-			Logger.info(answerLine.toString());
+		Logger.info("GET ANSWERS:");
+		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
+			Logger.info("\t" + answerLineDTO);
 		}
 
 		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, answerLineDTOs);
@@ -146,9 +141,7 @@ public class AnswerController extends Controller {
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
 			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
 			for (QuestionAnswer questionAnswer : questionAnswers) {
-				AnswerLineDTO answerLine = conversionService.convert(questionAnswer, AnswerLineDTO.class);
-				System.out.println("GET : adding answer : " + answerLine);
-				answerLineDTOs.add(answerLine);
+				answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
 			}
 			answerLineDTOs.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
 		}
@@ -203,6 +196,11 @@ public class AnswerController extends Controller {
 		Account currentUser = securedController.getCurrentUser();
 		Logger.info("save() 2");
 		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
+
+		Logger.info("POST ANSWERS:");
+		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
+			Logger.info("\t" + answerLine);
+		}
 		Logger.info("save() 3");
 		saveAnswsersDTO(currentUser, answersDTO);
 		Logger.info("save() 4");
@@ -223,158 +221,103 @@ public class AnswerController extends Controller {
 
 		// delete all answers linked to form
 		questionSetAnswerService.deleteAllFormAnswers(scope, period, form);
-		if (answersDTO.getListAnswers().isEmpty()) {
-			return;
-		}
 
-		// put all repetition indexes in a map
-
-		// get question sets (1st level - without parent)
-		List<QuestionSet> questionSets = getFirstLevelQuestionSets(answersDTO);
-		
-		// create questionSetAnswers
-		Map<String, Map<Integer, QuestionSetAnswer>> questionSetAnswers = new HashMap<>();
-		for (QuestionSet questionSet : questionSets) {
-			String questionSetKey = questionSet.getCode().getKey();
-			Logger.info("questionSetKey = " + questionSetKey);
-			questionSetAnswers.put(questionSetKey, new HashMap<Integer, QuestionSetAnswer>());
-			// find indexes
-			List<Integer> repIndexes = findIndexes(answersDTO, questionSet);
-			for (Integer repIndex : repIndexes) {
-				Logger.info("repIndex = " + repIndex);
-				QuestionSetAnswer questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repIndex, null);
-				questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-				questionSetAnswers.get(questionSetKey).put(repIndex, questionSetAnswer);
-				// create children questionSetAnswers
-				for (QuestionSet childQuestionSet : questionSet.getChildren()) {	
-					String childQuestionSetKey = childQuestionSet.getCode().getKey();
-					Logger.info("childQuestionSetKey = " + childQuestionSetKey);
-					if (!questionSetAnswers.containsKey(childQuestionSetKey)) {
-						questionSetAnswers.put(childQuestionSetKey, new HashMap<Integer, QuestionSetAnswer>());
-					}
-					// find indexes
-					List<Integer> childRepIndexes = findIndexes(answersDTO, childQuestionSet, questionSetAnswer);
-					for (Integer childRepIndex : childRepIndexes) {
-						Logger.info("childRepIndex = " + childRepIndex);
-						QuestionSetAnswer childQuestionSetAnswer = new QuestionSetAnswer(scope, period, childQuestionSet, childRepIndex, questionSetAnswer);
-						questionSetAnswerService.saveOrUpdate(childQuestionSetAnswer);	
-						questionSetAnswers.get(childQuestionSetKey).put(childRepIndex, childQuestionSetAnswer);
-					}
-				}
-			}
-		}
-		
 		// create answers
+		Map<String, List<QuestionSetAnswer>> createdQSAnswers = new HashMap<>();
 		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			QuestionAnswer questionAnswer = createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, questionSetAnswers);
-			System.out.println("POST : Saving answer : " + answerLineDTO);
-			questionAnswerService.saveOrUpdate(questionAnswer);
-		}
-	}
-
-	private List<QuestionSet> getFirstLevelQuestionSets(QuestionAnswersDTO answersDTO) {
-		List<String> allCodes = new ArrayList<String>();
-		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			Set<String> answerCodes = answerLineDTO.getMapRepetition().keySet();
-			for (String code : answerCodes) {
-				if (!allCodes.contains(code)) {
-					allCodes.add(code);
-				}
-			}
-		}
-		return questionSetService.findQuestionSetsWithoutParentByCodes(allCodes);
-	}
-
-	private List<Integer> findIndexes(QuestionAnswersDTO answersDTO, QuestionSet questionSet, QuestionSetAnswer parentQuestionSetAnswer) {
-		String questionSetKey = questionSet.getCode().getKey();
-		
-		String parentQuestionSetAnswerKey = parentQuestionSetAnswer.getQuestionSet().getCode().getKey();
-		Integer parentQuestionSetAnswerRepetitionIndex = parentQuestionSetAnswer.getRepetitionIndex();
-		
-		List<Integer> res = new ArrayList<Integer>();
-		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			Map<String, Integer> mapRepetition = answerLineDTO.getMapRepetition();
-			Integer indexRepetition = mapRepetition.get(questionSetKey);
-			Integer parentIndexRepetition = mapRepetition.get(parentQuestionSetAnswerKey);
-			if ((indexRepetition != null) && (parentIndexRepetition.equals(parentQuestionSetAnswerRepetitionIndex))) {
-				if (!res.contains(indexRepetition)) {					
-					res.add(indexRepetition);
-				}
-			}
-		}
-		return res;
-	}
-
-	private List<Integer> findIndexes(QuestionAnswersDTO answersDTO, QuestionSet questionSet) {
-		String questionSetKey = questionSet.getCode().getKey();
-
-		List<Integer> res = new ArrayList<Integer>();
-		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			Integer indexRepetition = answerLineDTO.getMapRepetition().get(questionSetKey);
-			if (indexRepetition != null && ! res.contains(indexRepetition)) {
-				res.add(indexRepetition);
-			}
-		}
-		return res;	
-	}
-
-	private void createQuestionSetAnswers(Period period, Scope scope, QuestionSet questionSet, QuestionAnswersDTO answersDTO,
-			QuestionSetAnswer parent, Map<String, Map<Integer, QuestionSetAnswer>> allCreatedQuestionSetAnswers) {
-
-		String questionSetKey = questionSet.getCode().getKey();
-
-		for (AnswerLineDTO answerLineDTO : answersDTO.getListAnswers()) {
-			Map<String, Integer> mapRepetition = answerLineDTO.getMapRepetition();
-			if (mapRepetition.containsKey(questionSetKey)) {
-				if (parent != null) {
-					String parentCode = parent.getQuestionSet().getCode().getKey();
-					Integer parentIndex = parent.getRepetitionIndex();
-					if ((!mapRepetition.containsKey(parentCode)) || (!mapRepetition.get(parentCode).equals(parentIndex))) {
-						continue;
-					}
-				}
-				Integer repIndex = mapRepetition.get(questionSetKey);
-				if (allCreatedQuestionSetAnswers.get(questionSetKey) != null
-						&& allCreatedQuestionSetAnswers.get(questionSetKey).containsKey(repIndex)) {
-					continue;
-				}
-
-				QuestionSetAnswer questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repIndex, parent);
-				// create QuestionSetAnswer
-				questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-
-				// put new QuestionSetAnswer in allCreatedQuestionSetAnswers
-				if (!allCreatedQuestionSetAnswers.containsKey(questionSetKey)) {
-					allCreatedQuestionSetAnswers.put(questionSetKey, new HashMap<Integer, QuestionSetAnswer>());
-				}
-				allCreatedQuestionSetAnswers.get(questionSetKey).put(repIndex, questionSetAnswer);
-
-				// create children
-				for (QuestionSet childQuestionSet : questionSet.getChildren()) {
-					createQuestionSetAnswers(period, scope, childQuestionSet, answersDTO, questionSetAnswer, allCreatedQuestionSetAnswers);
-				}
-
-			}
+			questionAnswerService.saveOrUpdate(createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQSAnswers));
 		}
 	}
 
 	private QuestionAnswer createNewQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO,
-			Map<String, Map<Integer, QuestionSetAnswer>> allQuestionSetAnswers) {
+			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		Question question = getAndVerifyQuestion(answerLineDTO);
+		QuestionSet questionSet = question.getQuestionSet();
 
-		String questionSetKey = question.getQuestionSet().getCode().getKey();
-		Integer repIndexInQuestionSet = answerLineDTO.getMapRepetition().get(questionSetKey);
-		QuestionSetAnswer questionSetAnswer = allQuestionSetAnswers.get(questionSetKey).get(repIndexInQuestionSet);
+		// get (and fix) repetition map
+		Map<String, Integer> repetitionMap = getRepetitionMap(questionSet, answerLineDTO);
 
+		// get QuestionSetAnswer
+		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(scope, period, repetitionMap, questionSet, createdQuestionSetAnswers);
+		
+		// create and save QuestionAnswer
 		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
 		AnswerValue answerValue = getAnswerValue(answerLineDTO, questionAnswer);
 		if (answerValue == null) {
-			Logger.error("Invalid answer line:" + answerLineDTO);
 			return null;
 		}
 		questionAnswer.getAnswerValues().add(answerValue);
+		questionAnswerService.saveOrUpdate(questionAnswer);
 
 		return questionAnswer;
+	}
+
+	private Map<String, Integer> getRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
+		Map<String, Integer> repMap = answerLineDTO.getMapRepetition();
+		if (repMap == null) {
+			repMap = new HashMap<String, Integer>();
+		}
+		while (questionSet != null) {
+			String questionSetCode = questionSet.getCode().getKey();
+			// get repetition index
+			Integer repetitionIndex = repMap.get(questionSetCode);
+			if (repetitionIndex == null) {
+				if (questionSet.getRepetitionAllowed()) {
+					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap
+							+ ") doesn not contain entry for parent questionSet (" + questionSetCode
+							+ "), while repetion is allowed in this questionSet");
+				}
+				repMap.put(questionSetCode, 0);
+			}
+			questionSet = questionSet.getParent();
+		}
+		return repMap;
+	}
+
+	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet,
+			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
+		String questionSetCode = questionSet.getCode().getKey();
+
+		// attempt to find the QuestionSetAnswer in already created map
+		QuestionSetAnswer questionSetAnswer = null;
+		if (!createdQuestionSetAnswers.containsKey(questionSetCode)) {
+			createdQuestionSetAnswers.put(questionSetCode, new ArrayList<QuestionSetAnswer>());
+		} else {
+			questionSetAnswer = fromCreatedQuestionSetAnswers(repMap, createdQuestionSetAnswers.get(questionSetCode));
+		}
+
+		// else create new QuestionSetAnswer
+		if (questionSetAnswer == null) {
+			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repMap.get(questionSetCode), null);
+			if (questionSet.getParent() != null) {
+				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(),
+						createdQuestionSetAnswers);
+				questionSetAnswer.setParent(parentQuestionSetAnswer);
+			}
+			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
+			createdQuestionSetAnswers.get(questionSetCode).add(questionSetAnswer);
+		}
+		return questionSetAnswer;
+	}
+
+	private QuestionSetAnswer fromCreatedQuestionSetAnswers(Map<String, Integer> repMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+		loop1: for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
+			String key = questionSetAnswer.getQuestionSet().getCode().getKey();
+			if (repMap.containsKey(key) && repMap.get(key).equals(questionSetAnswer.getRepetitionIndex())) {
+				// check parents
+				QuestionSetAnswer parentQuestionSetAnswer = questionSetAnswer.getParent();
+				while (parentQuestionSetAnswer != null) {
+					String parentKey = parentQuestionSetAnswer.getQuestionSet().getCode().getKey();
+					if (repMap.containsKey(parentKey) && repMap.get(parentKey).equals(parentQuestionSetAnswer.getRepetitionIndex())) {
+						parentQuestionSetAnswer = parentQuestionSetAnswer.getParent();
+					} else {
+						continue loop1;
+					}
+				}
+				return questionSetAnswer;
+			}
+		}
+		return null;
 	}
 
 	private AnswerValue getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {

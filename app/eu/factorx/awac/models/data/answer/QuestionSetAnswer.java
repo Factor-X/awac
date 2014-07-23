@@ -1,13 +1,24 @@
 package eu.factorx.awac.models.data.answer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
-
-import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @NamedQueries({
@@ -65,13 +76,15 @@ public class QuestionSetAnswer extends AbstractEntity {
 	 * @param repetitionIndex
 	 */
 	public QuestionSetAnswer(Scope scope, Period period, QuestionSet questionSet,
-	                         Integer repetitionIndex, QuestionSetAnswer parent) {
+            			Integer repetitionIndex, QuestionSetAnswer parent) {
 		super();
 		this.scope = scope;
 		this.period = period;
 		this.questionSet = questionSet;
 		this.repetitionIndex = repetitionIndex;
 		this.parent = parent;
+		this.questionAnswers = new ArrayList<QuestionAnswer>();
+		this.children = new ArrayList<QuestionSetAnswer>();
 	}
 
 	public QuestionSetAnswer() {
@@ -144,4 +157,25 @@ public class QuestionSetAnswer extends AbstractEntity {
 		return "QuestionSetAnswer [questionSet=" + questionSet + ", parent=" + parent + ", repetitionIndex=" + repetitionIndex + "]";
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof QuestionSetAnswer)) {
+			return false;
+		}
+		QuestionSetAnswer rhs = (QuestionSetAnswer) obj;
+		return new EqualsBuilder().append(this.questionSet, rhs.questionSet).append(this.period, rhs.period).append(this.scope, rhs.scope)
+				.append(this.parent, rhs.parent).append(this.repetitionIndex, rhs.repetitionIndex).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(47, 89).append(this.questionSet).append(this.period).append(this.scope).append(this.parent)
+				.append(this.repetitionIndex).toHashCode();
+	}
 }
