@@ -1,11 +1,22 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.type.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
+import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.code.type.IndicatorTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "indicator")
@@ -155,10 +166,8 @@ public class Indicator extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", name).append("type", type)
-				.append("scopeType", scopeType).append("isoScope", isoScope)
-				.append("indicatorCategory", indicatorCategory).append("activityCategory", activityCategory)
-				.append("activitySubCategoryCode", activitySubCategory).append("activityOwnership", activityOwnership)
-				.append("unit", unit).append("deleted", deleted).toString();
+		return "Indicator [id=" + id + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
+				+ ", indicatorCategory=" + indicatorCategory + ", activityCategory=" + activityCategory + ", activitySubCategory="
+				+ activitySubCategory + ", activityOwnership=" + activityOwnership + ", unit=" + unit + ", deleted=" + deleted + "]";
 	}
 }
