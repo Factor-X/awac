@@ -19,8 +19,10 @@ angular
 
 
         scope.$watch 'ngCondition', () ->
-          if scope.getCondition() == false
-              scope.getAnswerValue().value = null
+            if scope.getCondition() == false
+                scope.getAnswerValue().value = null
+            else if scope.$parent.loading == false
+                scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
         #
         # called when the user change the value of the field

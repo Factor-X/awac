@@ -24,16 +24,21 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 			if (unitCategory != null) {
 				unitCategoryId = unitCategory.getId();
 			}
+
 		} else if (question instanceof ValueSelectionQuestion) {
 			codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
-		} else if (question instanceof DoubleQuestion) {
-			defaultValue = ((DoubleQuestion) question).getDefaultValue();
-		} else if (question instanceof IntegerQuestion) {
-			Double doubleValue =  ((IntegerQuestion) question).getDefaultValue();
-			if (doubleValue != null) {
-				defaultValue = doubleValue.intValue();
-			}
 		}
+
+        //add default value
+        if (question instanceof DoubleQuestion) {
+            defaultValue = ((DoubleQuestion) question).getDefaultValue();
+        } else if (question instanceof IntegerQuestion) {
+            Double doubleValue =  ((IntegerQuestion) question).getDefaultValue();
+            if (doubleValue != null) {
+                defaultValue = doubleValue.intValue();
+            }
+        }
+
 		return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue);
 	}
 

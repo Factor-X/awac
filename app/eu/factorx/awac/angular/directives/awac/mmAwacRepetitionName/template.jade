@@ -2,6 +2,6 @@ div
     .repetition-title
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-plus")
+        span(class="glyphicon glyphicon-record")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
         ng-virtual(ng-transclude=true)

@@ -2,7 +2,7 @@ div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-arrow-right")
+        span(class="glyphicon glyphicon-share-alt")
         i(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
 

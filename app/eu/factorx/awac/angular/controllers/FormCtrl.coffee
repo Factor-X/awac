@@ -1,11 +1,11 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http,messageFlash,modalService, formIdentifier ) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier) ->
     $scope.formIdentifier = formIdentifier
 
     #this variable contains all answer, new and old
-    $scope.answerList=[]
-    $scope.mapRepetition=[]
+    $scope.answerList = []
+    $scope.mapRepetition = []
     ###
     illustration of the structures
     $scope.mapRepetition['A15'] = [{'A15':1},
@@ -21,48 +21,46 @@ angular
     modalService.show('LOADING')
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
-
-
         console.log "data"
         console.log data
         $scope.o = data
 
-        $scope.loopRepetition = (questionSetDTO,listQuestionSetRepetition = []) ->
-
+        $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
             if questionSetDTO.repetitionAllowed == true
 
                 listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
 
                 #find if the answer are already repeated on this repetition
                 for answer in $scope.answerList
-                   if answer.mapRepetition!=null && answer.mapRepetition != undefined
-                       if answer.mapRepetition[questionSetDTO.code]!=null && answer.mapRepetition[questionSetDTO.code]!=undefined && answer.mapRepetition[questionSetDTO.code]!=0
-                         $scope.addMapRepetition(questionSetDTO.code,answer.mapRepetition,listQuestionSetRepetition)
+                    if answer.mapRepetition != null && answer.mapRepetition != undefined
+                        if answer.mapRepetition[questionSetDTO.code] != null && answer.mapRepetition[questionSetDTO.code] != undefined && answer.mapRepetition[questionSetDTO.code] != 0
+                            $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition,
+                                listQuestionSetRepetition)
 
 
             if questionSetDTO.children
                 for child in questionSetDTO.children
-                    $scope.loopRepetition(child,angular.copy(listQuestionSetRepetition))
+                    $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition))
 
         #
         # add default value to answer
         #
         $scope.addDefaultValue = (questionSetDTO) ->
-          for question in questionSetDTO.questions
-            if question.defaultValue != undefined && question.defaultValue != null
-              for answer in $scope.answerList
-                if answer.questionKey == question.code && answer.value == null
-                  answer.value = question.defaultValue
-          for child in questionSetDTO.children
-            $scope.addDefaultValue(child)
+            for question in questionSetDTO.questions
+                if question.defaultValue != undefined && question.defaultValue != null
+                    for answer in $scope.answerList
+                        if answer.questionKey == question.code && answer.value == null
+                            answer.value = question.defaultValue
+            for child in questionSetDTO.children
+                $scope.addDefaultValue(child)
 
 
         #build the list of answers
         #recove answerSave
-        if $scope.o.answersSave !=null && $scope.o.answersSave!=undefined
+        if $scope.o.answersSave != null && $scope.o.answersSave != undefined
             answerSave = $scope.o.answersSave
             #save answer        i
-            $scope.answerList =  answerSave.listAnswers
+            $scope.answerList = answerSave.listAnswers
 
         #build list of repetition for the mmAwacRepetition
         for qSet in $scope.o.questionSets
@@ -73,13 +71,13 @@ angular
 
         #use the defaultValues to completed null value
         for questionSetDTO in $scope.o.questionSets
-          $scope.addDefaultValue(questionSetDTO)
+            $scope.addDefaultValue(questionSetDTO)
 
 
         #hide the loading modal
         modalService.hide('LOADING')
 
-        $scope.loading =false
+        $scope.loading = false
 
 
     #
@@ -91,11 +89,11 @@ angular
         modalService.show('LOADING')
 
         #build the list to save
-        listAnswerToSave=[]
+        listAnswerToSave = []
         for answer in $scope.answerList
-            if answer.value && (answer.value.$valid==null || answer.value.$valid == undefined  || answer.value.$valid == true)
-                if answer.wasEdited!=undefined
-                  delete answer['wasEdited']
+            if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                if answer.wasEdited != undefined
+                    delete answer['wasEdited']
                 listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
@@ -118,7 +116,7 @@ angular
             return
 
         promise.error (data, status, headers, config) ->
-            messageFlash.displayError "An error was thrown during the save : "+data.message
+            messageFlash.displayError "An error was thrown during the save : " + data.message
             modalService.hide('LOADING')
             return
 
@@ -133,10 +131,10 @@ angular
         question = $scope.getQuestion(code)
         #recover the list
         if question == null || question == undefined
-            console.log "ERROR : this question was not found : "+code
+            console.log "ERROR : this question was not found : " + code
             return null
         if question.unitCategoryId == null || question.unitCategoryId == undefined
-            console.log "ERROR : there is no unitCategoryId for this question : "+code
+            console.log "ERROR : there is no unitCategoryId for this question : " + code
             return null
         return $scope.o.unitCategories[question.unitCategoryId]
 
@@ -158,7 +156,7 @@ angular
     #
     $scope.getRepetitionMapByQuestionSet = (code, mapRepetition) ->
         listRepetition = []
-        if $scope.mapRepetition[code]!=null && $scope.mapRepetition[code]!=undefined
+        if $scope.mapRepetition[code] != null && $scope.mapRepetition[code] != undefined
             for repetition in $scope.mapRepetition[code]
 
                 #control map
@@ -170,7 +168,7 @@ angular
     #
     # getQuestionByCode
     #
-    $scope.getQuestion = (code,listQuestionSets=$scope.o.questionSets) ->
+    $scope.getQuestion = (code, listQuestionSets = $scope.o.questionSets) ->
         if listQuestionSets
             for qSet in listQuestionSets
                 if qSet.questions
@@ -178,7 +176,7 @@ angular
                         if q.code == code
                             return q
                 if qSet.children
-                    result = $scope.getQuestion(code,qSet.children)
+                    result = $scope.getQuestion(code, qSet.children)
                     if result
                         return result
         return null
@@ -188,7 +186,6 @@ angular
     # if there is not answer for this case, create it
     #
     $scope.getAnswerOrCreate = (code, mapIteration) ->
-
         if code == null || code == undefined
             console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
             return null
@@ -201,22 +198,27 @@ angular
             #compute default value
             value = null
             unitId = null
-            if $scope.loading ==false
-              question = $scope.getQuestion(code)
-              if question.defaultValue!=null && question.defaultValue!=undefined
-                value = question.defaultValue
+            if $scope.loading == false
+                question = $scope.getQuestion(code)
 
-              #compute default unitId
-              if question.unitCategoryId != null && question.unitCategoryId!= undefined
-                unitId = $scope.getUnitCategories(code).mainUnitId
+                console.log "createAnsser question"
+                console.log question
+
+                #if question.defaultValue != null && question.defaultValue != undefined
+                value = question.defaultValue
+                console.log "add a default value : "+value
+
+                #compute default unitId
+                if question.unitCategoryId != null && question.unitCategoryId != undefined
+                    unitId = $scope.getUnitCategories(code).mainUnitId
 
 
             #if the answer was not founded, create it
             answerLine = {
-                'questionKey':code
-                'value':value
-                'unitId':unitId
-                'mapRepetition':mapIteration
+                'questionKey': code
+                'value': value
+                'unitId': unitId
+                'mapRepetition': mapIteration
             }
             $scope.answerList[$scope.answerList.length] = answerLine
             return answerLine
@@ -225,7 +227,6 @@ angular
     # getAnswerByQuestionCode and mapIteration
     #
     $scope.getAnswer = (code, mapIteration) ->
-
         for answer in $scope.answerList
             #control the code
             if answer.questionKey == code
@@ -264,29 +265,29 @@ angular
 
         if $scope.mapRepetition[code] == null || $scope.mapRepetition[code] == undefined
             #there is no repetition for the code => create a new iteration
-            repetitionToAdd[code] =max+1
+            repetitionToAdd[code] = max + 1
             $scope.mapRepetition[code] = []
             $scope.mapRepetition[code][0] = repetitionToAdd
         else
             for repetition in $scope.mapRepetition[code]
-                if $scope.compareRepetitionMap(repetition,mapRepetition) && repetition[code] > max
+                if $scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max
                     max = repetition[code]
 
-            repetitionToAdd[code] =max+1
+            repetitionToAdd[code] = max + 1
             $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd
 
     #
     # remove an iteration by question set code, number of the iteration and the mapRepetition
     #
-    $scope.removeIteration = (questionSetCode,iterationToDelete,mapRepetition) ->
+    $scope.removeIteration = (questionSetCode, iterationToDelete, mapRepetition) ->
 
         #delete question
         len = $scope.answerList.length
         while (len--)
             question = $scope.answerList[len]
-            if question.mapRepetition!=null && question.mapRepetition!=undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
-                if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode]==iterationToDelete[questionSetCode]
-                    $scope.answerList.splice(len,1)
+            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
+                if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
+                    $scope.answerList.splice(len, 1)
 
         # delete iteration
         # check all iteration because it must remove the iteration linked to the iteration to delete
@@ -297,7 +298,7 @@ angular
                 while (len--)
                     iteration = $scope.mapRepetition[key][len]
                     if $scope.compareRepetitionMap(iteration,mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
-                        $scope.mapRepetition[key].splice(len,1)
+                        $scope.mapRepetition[key].splice(len, 1)
 
     #
     # compare to mapRepetition
@@ -305,52 +306,51 @@ angular
     # if all items of the second are included into the first, return true
     #
     $scope.compareRepetitionMap = (mapContainer, mapContained) ->
-        if mapContained == null || mapContained == undefined  || mapContained.length == 0
+        if mapContained == null || mapContained == undefined || mapContained.length == 0
             return true
-        if mapContainer == null || mapContainer == undefined  || mapContainer.length == 0
+        if mapContainer == null || mapContainer == undefined || mapContainer.length == 0
             return false
         for key in Object.keys(mapContained)
             if key != '$$hashKey'
                 value = mapContained[key]
-                if mapContainer[key]==null || mapContainer[key]==undefined || mapContainer[key]!=value
+                if mapContainer[key] == null || mapContainer[key] == undefined || mapContainer[key] != value
                     return false
         return true
 
     #
     # add a mapRepetition into the variable $scope.mapRepetition
     #
-    $scope.addMapRepetition = (questionSetCode,mapRepetitionSource,listQuestionSetRepetition) ->
+    $scope.addMapRepetition = (questionSetCode, mapRepetitionSource, listQuestionSetRepetition) ->
 
-      #build the map repetition for this questionSet
-      mapRepetitionToAdd = {}
-      for key in Object.keys(mapRepetitionSource)
-        if key != '$$hashKey'
-          for questionCode in listQuestionSetRepetition
-            if questionCode == key
-              mapRepetitionToAdd[key] = mapRepetitionSource[key]
+        #build the map repetition for this questionSet
+        mapRepetitionToAdd = {}
+        for key in Object.keys(mapRepetitionSource)
+            if key != '$$hashKey'
+                for questionCode in listQuestionSetRepetition
+                    if questionCode == key
+                        mapRepetitionToAdd[key] = mapRepetitionSource[key]
 
-      #control if this map is already store and add it if it's needed
-      if $scope.mapRepetition[questionSetCode]
-        founded=false
-        for repetition in $scope.mapRepetition[questionSetCode]
-          if $scope.compareRepetitionMap(repetition,mapRepetitionToAdd)
-            founded=true
-        if founded == false
-          $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd)
-      else
-        $scope.mapRepetition[questionSetCode] = []
-        $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
-
+        #control if this map is already store and add it if it's needed
+        if $scope.mapRepetition[questionSetCode]
+            founded = false
+            for repetition in $scope.mapRepetition[questionSetCode]
+                if $scope.compareRepetitionMap(repetition, mapRepetitionToAdd)
+                    founded = true
+            if founded == false
+                $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd)
+        else
+            $scope.mapRepetition[questionSetCode] = []
+            $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
 
     $scope.validNavigation = ->
-      result = {}
-      result.modalForConfirm = "CONFIRMATION_EXIT_FORM"
+        result = {}
+        result.modalForConfirm = "CONFIRMATION_EXIT_FORM"
 
-      for answer in $scope.answerList
-        if answer.wasEdited != undefined  && answer.wasEdited == true
-          result.valid=false
-          break
+        for answer in $scope.answerList
+            if answer.wasEdited != undefined && answer.wasEdited == true
+                result.valid = false
+                break
 
-      return result
+        return result
 
