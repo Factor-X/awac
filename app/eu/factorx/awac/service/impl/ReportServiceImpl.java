@@ -18,6 +18,7 @@ import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
 import eu.factorx.awac.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +40,9 @@ public class ReportServiceImpl implements ReportService {
 	private UnitService unitService;
 	@Autowired
 	private UnitConversionService unitConversionService;
+	@Autowired
+	@Qualifier("codeConversionServiceLabelComparisonImpl")
+	private CodeConversionService codeConversionService;
 
 	@Override
 	public Report getReport(Scope scope, Period period) {

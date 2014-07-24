@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -27,6 +28,7 @@ import eu.factorx.awac.service.CodeLabelService;
  * 
  */
 @Component
+@Qualifier("codeConversionServiceLabelComparisonImpl")
 public class CodeConversionServiceLabelComparisonImpl implements CodeConversionService {
 
 	@Autowired

@@ -162,4 +162,12 @@ public class BaseActivityData implements Serializable {
 		this.specificPurpose = specificPurpose;
 	}
 
+	@Override
+	public String toString() {
+		return "BaseActivityData [key=" + key + ", activityCategory=" + activityCategory + ", activitySubCategory=" + activitySubCategory
+				+ ", activityType=" + activityType + ", activitySource=" + activitySource + ", activityOwnership=" + activityOwnership
+				+ ", value=" + value + ", unit=" + unit + ", rank=" + rank + ", specificPurpose=" + specificPurpose + "]";
+	}
+
+	
 }
