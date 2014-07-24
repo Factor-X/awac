@@ -1,10 +1,15 @@
 div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
-            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")                                                                                       
-        img(src='/awac/assets/images/arrow_question.png')
+            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        span(class="glyphicon glyphicon-arrow-right")
         i(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
-        //.status.answer(mm-not-impleented)
-        // input(type="text", ng-model="getAnswerByQuestionCode(getQuestionCode()).value")
-        //.user_icon(mm-not-implemented) XM
+
+        input(type='text', ng-model='myModelObj')
+        input(type='file', ng-file-select='onFileSelect($files)')
+            input(type='file', ng-file-select='onFileSelect($files)', multiple='multiple')
+            .button(ng-file-select='onFileSelect($files)', data-multiple='true')
+            div(ng-file-drop='onFileSelect($files)', ng-file-drag-over-class='optional-css-class-name-or-function', ng-show='dropSupported') drop files here
+            div(ng-file-drop-available='dropSupported=true', ng-show='!dropSupported') HTML5 Drop File is not supported!
+            button(ng-click='upload.abort()') Cancel Upload

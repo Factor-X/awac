@@ -25,6 +25,7 @@
     "dangle": "*",
     "inweb-roboto": "*",
     "underscore": "*",
-    "angular-flash": "*"
+    "angular-flash": "*",
+    "ng-file-upload": "*"
   }
 }

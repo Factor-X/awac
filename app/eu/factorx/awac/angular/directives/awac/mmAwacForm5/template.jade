@@ -18,13 +18,13 @@ ng-virtual
 .horizontal_separator
 
 mm-awac-section(title-code="A173_TITLE")
-    div(ng-bind-html="'A175_TITLE' | translate")
+    mm-awac-repetition-name(question-code="A175")
     mm-awac-repetition-question(question-set-code="A175", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A175')")
         mm-awac-string-question(question-code="A176",ng-repetition-map="itLevel1")
         mm-awac-select-question(question-code="A177",ng-repetition-map="itLevel1")
         mm-awac-select-question(question-code="A178",ng-repetition-map="itLevel1")
         mm-awac-real-with-unit-question(question-code="A179",ng-repetition-map="itLevel1")
-    button.add-button(ng-click="addIteration('A175')", type="button")
+    button.add-repetition-button(ng-click="addIteration('A175')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A175_LOOPDESC' | translate")
 

@@ -41,8 +41,8 @@ div
                         span(ng-bind-html="'A66_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
-                            div(ng-bind-html="'A67_TITLE' | translate")
 
+                            mm-awac-repetition-name(question-code="A67")
                             mm-awac-repetition-question(question-set-code="A67", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A67')")
 
                                 mm-awac-string-question(question-code="A68",ng-repetition-map="itLevel1")
@@ -63,7 +63,7 @@ div
 
                                 mm-awac-real-question(question-code="A76",ng-repetition-map="itLevel1")
 
-                            button.add-button(ng-click="addIteration('A67')", type="button")
+                            button.add-repetition-button(ng-click="addIteration('A67')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A67_LOOPDESC' | translate")
 
@@ -73,7 +73,7 @@ div
                         span(ng-bind-html="'A77_TITLE' | translate")
                     .sub_block.tab-color-yellow
                         .element_table
-                            div(ng-bind-html="'A78_TITLE' | translate")
+                            mm-awac-repetition-name(question-code="A78")
                             mm-awac-repetition-question(question-set-code="A78", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A78')")
                                 mm-awac-string-question(question-code="A79",ng-repetition-map="itLevel1")
                                 mm-awac-boolean-question(question-code="A80",ng-repetition-map="itLevel1")
@@ -85,7 +85,7 @@ div
                                 mm-awac-real-question(question-code="A91",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == '3'")
                                 mm-awac-real-question(question-code="A92",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == '4'")
 
-                            button.add-button(ng-click="addIteration('A78')", type="button")
+                            button.add-repetition-button(ng-click="addIteration('A78')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A78_LOOPDESC' | translate")
 
@@ -143,14 +143,14 @@ div
                         span(ng-bind-html="'A114_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
-                            div(ng-bind-html="'A115_TITLE' | translate")
+                            mm-awac-repetition-name(question-code="A115")
                             mm-awac-repetition-question(question-set-code="A115", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A115')")
                                 mm-awac-string-question(question-code="A116",ng-repetition-map="itLevel1")
                                 mm-awac-select-question(question-code="A117",ng-repetition-map="itLevel1")
                                 mm-awac-select-question(question-code="A118",ng-repetition-map="itLevel1")
                                 mm-awac-real-question(question-code="A119",ng-repetition-map="itLevel1")
                                 mm-awac-real-with-unit-question(question-code="A120",ng-repetition-map="itLevel1")
-                            button.add-button(ng-click="addIteration('A115')", type="button")
+                            button.add-repetition-button(ng-click="addIteration('A115')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A115_LOOPDESC' | translate")
 
