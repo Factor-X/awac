@@ -21,7 +21,7 @@
     "angular": "*",
     "bootstrap": "*",
     "d3": "*",
-    "jquery": "*",
+    "jquery": "1.11.*",
     "dangle": "*",
     "inweb-roboto": "*",
     "underscore": "*",
