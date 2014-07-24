@@ -12,8 +12,6 @@ public class DoubleQuestion extends NumericQuestion {
 
 	private static final long serialVersionUID = 1L;
 
-	protected Double defaultValue = null;
-
 	protected DoubleQuestion() {
 		super();
 	}
@@ -23,16 +21,7 @@ public class DoubleQuestion extends NumericQuestion {
 	}
 
 	public DoubleQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Double defaultValue) {
-		super(questionSet, orderIndex, code, unitCategory);
-		this.defaultValue = defaultValue;
-	}
-
-	public Double getDefaultValue() {
-		return defaultValue;
-	}
-
-	public void setDefaultValue(Double defaultValue) {
-		this.defaultValue = defaultValue;
+		super(questionSet, orderIndex, code, unitCategory, defaultValue);
 	}
 
 	@Override
