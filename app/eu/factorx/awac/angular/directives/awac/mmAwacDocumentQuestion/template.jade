@@ -6,7 +6,7 @@ div(ng-hide="getCondition() === false",class="question_field")
         i(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
 
-        input(type='text', ng-model='myModelObj')
+        div {{percent}} % of the download
         input(type='file', ng-file-select='onFileSelect($files)')
             input(type='file', ng-file-select='onFileSelect($files)', multiple='multiple')
             .button(ng-file-select='onFileSelect($files)', data-multiple='true')

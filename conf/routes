@@ -34,3 +34,7 @@ POST    /answer/save                             @eu.factorx.awac.controllers.An
 # ResultController => used to get report
 GET     /result/getReport/:period/:scope         @eu.factorx.awac.controllers.ResultController.getReport(period: Long, scope: Long)
 
+
+# upload
+POST     /file/upload/                           @eu.factorx.awac.controllers.FilesController.upload()
+

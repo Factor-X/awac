@@ -68,6 +68,11 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 				rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
 						entityAnswerValue.getEntityId());
 				break;
+            case DOCUMENT:
+                DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValue;
+                //TODO finish
+                rawAnswerValue =  documentAnswerValue.getStoredFile().getStoredName();
+                break;
 		}
 
 		AnswerLineDTO answerLine = new AnswerLineDTO();
