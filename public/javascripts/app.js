@@ -88,6 +88,7 @@ angular.module('app.controllers').config(function($routeProvider) {
     return $rootScope.displayModalBackground = false;
   };
   return;
+<<<<<<< HEAD
 });angular.module('app.services').service("translationService", function($http, $rootScope, downloadService) {
   var svc;
   svc = this;
@@ -177,6 +178,8 @@ angular.module('app.controllers').config(function($routeProvider) {
     };
   };
   return;
+=======
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
 });angular.module('app.services').service("downloadService", function($http) {
   this.downloadsInProgress = 0;
   this.getDownloadsInProgress = function() {
@@ -214,6 +217,98 @@ angular.module('app.controllers').config(function($routeProvider) {
     return flash.error = message.replace(/\n/g, '<br />');
   };
   return;
+<<<<<<< HEAD
+=======
+});angular.module('app.services').service("translationService", function($http, $rootScope, downloadService) {
+  var svc;
+  svc = this;
+  svc.elements = null;
+  svc.initialize = function(lang) {
+    return downloadService.getJson("/awac/translations/" + lang, function(data) {
+      svc.elements = data.lines;
+      return $rootScope.$broadcast("LOAD_FINISHED", {
+        type: "TRANSLATIONS",
+        success: data != null
+      });
+    });
+  };
+  svc.get = function(code, count) {
+    var txt, v;
+    if (svc.elements == null) {
+      return "";
+    }
+    v = svc.elements[code];
+    if (!(v != null)) {
+      return null;
+    }
+    if (count != null) {
+      if ("" + count === "0") {
+        txt = v.zero || v.fallback;
+      } else if ("" + count === "1") {
+        txt = v.one || v.fallback;
+      } else {
+        txt = v.more || v.fallback;
+      }
+      txt = txt.replace(/\{0\}/g, count);
+    } else {
+      txt = v.fallback || '';
+    }
+    return txt;
+  };
+  return;
+});angular.module('app.services').service("directiveService", function($sce) {
+  this.autoScope = function(s) {
+    var k, res, v;
+    res = {};
+    for (k in s) {
+      v = s[k];
+      res[k] = v;
+      if (k.slice(0, 2) === 'ng' && v === '=') {
+        res[k[2].toLowerCase() + k.slice(3)] = '@';
+      }
+    }
+    return res;
+  };
+  this.autoScopeImpl = function(s, name) {
+    var fget, key, val;
+    s.$$NAME = name;
+    for (key in s) {
+      val = s[key];
+      if (key.slice(0, 2) === 'ng') {
+        fget = function(scope, k) {
+          return function() {
+            var v;
+            v = 0;
+            if (scope[k] === void 0 || scope[k] === null || scope[k] === '') {
+              v = scope[k[2].toLowerCase() + k.slice(3)];
+            } else {
+              v = scope[k];
+            }
+            if (scope['decorate' + k.slice(2)]) {
+              return scope['decorate' + k.slice(2)](v);
+            } else {
+              return v;
+            }
+          };
+        };
+        s['get' + key.slice(2)] = fget(s, key);
+      }
+    }
+    s.isTrue = function(v) {
+      return v === true || v === 'true' || v === 'y';
+    };
+    s.isFalse = function(v) {
+      return v === false || v === 'false' || v === 'n';
+    };
+    s.isNull = function(v) {
+      return v === null;
+    };
+    return s.html = function(v) {
+      return $sce.trustAsHtml(v);
+    };
+  };
+  return;
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
 });angular.module('app.filters').filter("translate", function($sce, translationService) {
   return function(input, count) {
     var text;
@@ -1020,6 +1115,45 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     },
     link: function(scope) {}
   };
+<<<<<<< HEAD
+=======
+});angular.module('app.directives').directive("mmNotImplemented", function(directiveService) {
+  return {
+    restrict: "A",
+    scope: {},
+    link: function(scope, elem, attrs) {
+      elem.css('opacity', '0.25');
+      return elem.bind('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      });
+    }
+  };
+});angular.module('app.controllers').controller("ResultsCtrl", function($scope, downloadService, $http) {
+  downloadService.getJson("result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
+    return $scope.o = data;
+  });
+  $scope.temp = {};
+  return $scope.temp.browsers = {
+    _type: 'terms',
+    missing: 0,
+    total: 454,
+    other: 0,
+    terms: [
+      {
+        term: 'Prod-A',
+        count: 306
+      }, {
+        term: 'Prod-B',
+        count: 148
+      }, {
+        term: 'Prod-C',
+        count: 25
+      }
+    ]
+  };
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
 });angular.module('app.controllers').controller("Form3Ctrl", function($scope, downloadService, $http, messageFlash, modalService) {
   $scope.formIdentifier = "TAB3";
   $scope.answerList = [];
@@ -1314,8 +1448,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     }
     return true;
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("Form5Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB5";
+=======
+});angular.module('app.controllers').controller("Form6Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB6";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -1605,6 +1744,7 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     }
     return true;
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService) {
   $scope.isLoading = function() {
     var k;
@@ -1745,6 +1885,10 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
   return $rootScope.displayModalBackground = false;
 });angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, $http, messageFlash, modalService, formIdentifier) {
   $scope.formIdentifier = formIdentifier;
+=======
+});angular.module('app.controllers').controller("Form5Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB5";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -1833,7 +1977,10 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
   });
   $scope.$on('SAVE', function() {
     var answer, listAnswerToSave, promise, _i, _len, _ref;
+<<<<<<< HEAD
     modalService.show('LOADING');
+=======
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
     listAnswerToSave = [];
     _ref = $scope.answerList;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1858,12 +2005,18 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     });
     promise.success(function(data, status, headers, config) {
       messageFlash.displaySuccess("Your answers are saved !");
+<<<<<<< HEAD
       modalService.hide('LOADING');
+=======
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
       return;
     });
     return promise.error(function(data, status, headers, config) {
       messageFlash.displayError("An error was thrown during the save : " + data.message);
+<<<<<<< HEAD
       modalService.hide('LOADING');
+=======
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
       return;
     });
   });
@@ -2057,6 +2210,7 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return true;
   };
+<<<<<<< HEAD
   $scope.addMapRepetition = function(questionSetCode, mapRepetitionSource, listQuestionSetRepetition) {
     var founded, key, mapRepetitionToAdd, questionCode, repetition, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
     mapRepetitionToAdd = {};
@@ -2128,6 +2282,10 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
   };
 });angular.module('app.controllers').controller("Form7Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB7";
+=======
+});angular.module('app.controllers').controller("Form4Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB4";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -2417,8 +2575,13 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return true;
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("Form2Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB2";
+=======
+});angular.module('app.controllers').controller("Form7Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB7";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -2442,6 +2605,7 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         qSet = _ref[_i];
         $scope.loopRepetition(qSet);
+<<<<<<< HEAD
       }
       console.log("$scope.mapRepetition");
       return console.log($scope.mapRepetition);
@@ -2494,8 +2658,65 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
           _results.push($scope.loopRepetition(child));
         }
         return _results;
+=======
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
+      }
+      console.log("$scope.mapRepetition");
+      return console.log($scope.mapRepetition);
+    };
+<<<<<<< HEAD
+=======
+    $scope.loopRepetition = function(questionSetDTO) {
+      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
+      if (questionSetDTO.repetitionAllowed === true) {
+        if (questionSetDTO.questions) {
+          _ref = questionSetDTO.questions;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            q = _ref[_i];
+            listAnswer = $scope.getListAnswer(q.code);
+            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
+              answer = listAnswer[_j];
+              if (answer.mapRepetition === null) {
+                console.log("mapRepetition expected but not found");
+              } else {
+                /*
+                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                code= questionSetDTO.code
+                repetitionToAdd = {}#code:repetition}
+                repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                */
+                if ($scope.mapRepetition[questionSetDTO.code]) {
+                  founded = false;
+                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
+                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+                    repetition = _ref2[_k];
+                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
+                      founded = true;
+                    }
+                  }
+                  if (founded === false) {
+                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
+                  }
+                } else {
+                  $scope.mapRepetition[questionSetDTO.code] = [];
+                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
+                }
+              }
+            }
+          }
+        }
+      }
+      if (questionSetDTO.children) {
+        _ref3 = questionSetDTO.children;
+        _results = [];
+        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
+          child = _ref3[_l];
+          _results.push($scope.loopRepetition(child));
+        }
+        return _results;
       }
     };
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
     $scope.storeAnswers();
     return $scope.loading = false;
   });
@@ -2708,8 +2929,13 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return true;
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("Form6Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB6";
+=======
+});angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, $http, messageFlash, modalService, formIdentifier) {
+  $scope.formIdentifier = formIdentifier;
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -2721,82 +2947,92 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
                                  {'A16':2,'A15':1}]
   */
   $scope.loading = true;
+  modalService.show('LOADING');
   downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
+    var answerSave, qSet, questionSetDTO, _i, _j, _len, _len2, _ref, _ref2;
     console.log("data");
     console.log(data);
     $scope.o = data;
-    $scope.storeAnswers = function() {
-      var answerSave, qSet, _i, _len, _ref;
-      answerSave = $scope.o.answersSave;
-      $scope.answerList = answerSave.listAnswers;
-      _ref = $scope.o.questionSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        qSet = _ref[_i];
-        $scope.loopRepetition(qSet);
+    $scope.loopRepetition = function(questionSetDTO, listQuestionSetRepetition) {
+      var answer, child, _i, _j, _len, _len2, _ref, _ref2, _results;
+      if (listQuestionSetRepetition == null) {
+        listQuestionSetRepetition = [];
       }
-      console.log("$scope.mapRepetition");
-      return console.log($scope.mapRepetition);
-    };
-    $scope.loopRepetition = function(questionSetDTO) {
-      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
       if (questionSetDTO.repetitionAllowed === true) {
-        if (questionSetDTO.questions) {
-          _ref = questionSetDTO.questions;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            q = _ref[_i];
-            listAnswer = $scope.getListAnswer(q.code);
-            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
-              answer = listAnswer[_j];
-              if (answer.mapRepetition === null) {
-                console.log("mapRepetition expected but not found");
-              } else {
-                /*
-                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                code= questionSetDTO.code
-                repetitionToAdd = {}#code:repetition}
-                repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                */
-                if ($scope.mapRepetition[questionSetDTO.code]) {
-                  founded = false;
-                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
-                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
-                    repetition = _ref2[_k];
-                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
-                      founded = true;
-                    }
-                  }
-                  if (founded === false) {
-                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
-                  }
-                } else {
-                  $scope.mapRepetition[questionSetDTO.code] = [];
-                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
-                }
-              }
+        listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code;
+        _ref = $scope.answerList;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          answer = _ref[_i];
+          if (answer.mapRepetition !== null && answer.mapRepetition !== void 0) {
+            if (answer.mapRepetition[questionSetDTO.code] !== null && answer.mapRepetition[questionSetDTO.code] !== void 0 && answer.mapRepetition[questionSetDTO.code] !== 0) {
+              $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition, listQuestionSetRepetition);
             }
           }
         }
       }
       if (questionSetDTO.children) {
-        _ref3 = questionSetDTO.children;
+        _ref2 = questionSetDTO.children;
         _results = [];
-        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
-          child = _ref3[_l];
-          _results.push($scope.loopRepetition(child));
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          child = _ref2[_j];
+          _results.push($scope.loopRepetition(child, angular.copy(listQuestionSetRepetition)));
         }
         return _results;
       }
     };
-    $scope.storeAnswers();
+    $scope.addDefaultValue = function(questionSetDTO) {
+      var answer, child, question, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
+      _ref = questionSetDTO.questions;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        question = _ref[_i];
+        if (question.defaultValue !== void 0 && question.defaultValue !== null) {
+          _ref2 = $scope.answerList;
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            answer = _ref2[_j];
+            if (answer.questionKey === question.code && answer.value === null) {
+              answer.value = question.defaultValue;
+            }
+          }
+        }
+      }
+      _ref3 = questionSetDTO.children;
+      _results = [];
+      for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
+        child = _ref3[_k];
+        _results.push($scope.addDefaultValue(child));
+      }
+      return _results;
+    };
+    if ($scope.o.answersSave !== null && $scope.o.answersSave !== void 0) {
+      answerSave = $scope.o.answersSave;
+      $scope.answerList = answerSave.listAnswers;
+    }
+    _ref = $scope.o.questionSets;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      qSet = _ref[_i];
+      $scope.loopRepetition(qSet);
+    }
+    console.log("$scope.mapRepetition");
+    console.log($scope.mapRepetition);
+    _ref2 = $scope.o.questionSets;
+    for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+      questionSetDTO = _ref2[_j];
+      $scope.addDefaultValue(questionSetDTO);
+    }
+    modalService.hide('LOADING');
     return $scope.loading = false;
   });
   $scope.$on('SAVE', function() {
     var answer, listAnswerToSave, promise, _i, _len, _ref;
+    modalService.show('LOADING');
     listAnswerToSave = [];
     _ref = $scope.answerList;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       answer = _ref[_i];
-      if (answer.value) {
+      if (answer.value && (answer.value.$valid === null || answer.value.$valid === void 0 || answer.value.$valid === true)) {
+        if (answer.wasEdited !== void 0) {
+          delete answer['wasEdited'];
+        }
         listAnswerToSave[listAnswerToSave.length] = answer;
       }
     }
@@ -2813,10 +3049,12 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     });
     promise.success(function(data, status, headers, config) {
       messageFlash.displaySuccess("Your answers are saved !");
+      modalService.hide('LOADING');
       return;
     });
     return promise.error(function(data, status, headers, config) {
       messageFlash.displayError("An error was thrown during the save : " + data.message);
+      modalService.hide('LOADING');
       return;
     });
   });
@@ -2886,15 +3124,30 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     return null;
   };
   $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, result;
+    var answerLine, question, result, unitId, value;
+    if (code === null || code === void 0) {
+      console.log("ERROR !! getAnswerOrCreate : code is null or undefined");
+      return null;
+    }
     result = $scope.getAnswer(code, mapIteration);
     if (result) {
       return result;
     } else {
+      value = null;
+      unitId = null;
+      if ($scope.loading === false) {
+        question = $scope.getQuestion(code);
+        if (question.defaultValue !== null && question.defaultValue !== void 0) {
+          value = question.defaultValue;
+        }
+        if (question.unitCategoryId !== null && question.unitCategoryId !== void 0) {
+          unitId = $scope.getUnitCategories(code).mainUnitId;
+        }
+      }
       answerLine = {
         'questionKey': code,
-        'value': null,
-        'unitId': null,
+        'value': value,
+        'unitId': unitId,
         'mapRepetition': mapIteration
       };
       $scope.answerList[$scope.answerList.length] = answerLine;
@@ -2979,7 +3232,7 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return _results;
   };
-  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
+  $scope.compareRepetitionMap = function(mapContainer, mapContained) {
     var key, value, _i, _len, _ref;
     if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
       return true;
@@ -2999,8 +3252,197 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return true;
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("Form1Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB1";
+=======
+  $scope.addMapRepetition = function(questionSetCode, mapRepetitionSource, listQuestionSetRepetition) {
+    var founded, key, mapRepetitionToAdd, questionCode, repetition, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
+    mapRepetitionToAdd = {};
+    _ref = Object.keys(mapRepetitionSource);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        for (_j = 0, _len2 = listQuestionSetRepetition.length; _j < _len2; _j++) {
+          questionCode = listQuestionSetRepetition[_j];
+          if (questionCode === key) {
+            mapRepetitionToAdd[key] = mapRepetitionSource[key];
+          }
+        }
+      }
+    }
+    if ($scope.mapRepetition[questionSetCode]) {
+      founded = false;
+      _ref2 = $scope.mapRepetition[questionSetCode];
+      for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+        repetition = _ref2[_k];
+        if ($scope.compareRepetitionMap(repetition, mapRepetitionToAdd)) {
+          founded = true;
+        }
+      }
+      if (founded === false) {
+        return $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd);
+      }
+    } else {
+      $scope.mapRepetition[questionSetCode] = [];
+      return $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd);
+    }
+  };
+  return $scope.validNavigation = function() {
+    var answer, result, _i, _len, _ref;
+    result = {};
+    result.modalForConfirm = "CONFIRMATION_EXIT_FORM";
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
+        result.valid = false;
+        break;
+      }
+    }
+    return result;
+  };
+});angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService) {
+  $scope.isLoading = function() {
+    var k;
+    for (k in $scope.initialLoad) {
+      if (!$scope.initialLoad[k]) {
+        return true;
+      }
+    }
+    return false;
+  };
+  $scope.initialLoad = {
+    translations: false
+  };
+  $scope.$on("LOAD_FINISHED", function(event, args) {
+    if (args.type === "TRANSLATIONS") {
+      $scope.initialLoad.translations = args.success;
+    }
+    return;
+  });
+  translationService.initialize('fr');
+  $scope.language = 'fr';
+  $scope.$watch('language', function(lang) {
+    return translationService.initialize(lang);
+  });
+  $scope.getMenuCurrentClass = function(loc) {
+    if ($location.path().substring(0, loc.length) === loc) {
+      return "menu_current";
+    } else {
+      return "";
+    }
+  };
+  $scope.$on('NAV', function(event, args) {
+    return $scope.nav(args.loc, args.confirmed);
+  });
+  $scope.nav = function(loc, confirmed) {
+    var canBeContinue, params, result;
+    if (confirmed == null) {
+      confirmed = false;
+    }
+    canBeContinue = true;
+    if ($scope.getMainScope().validNavigation !== void 0 && confirmed === false) {
+      result = $scope.getMainScope().validNavigation();
+      if (result.valid === false) {
+        canBeContinue = false;
+        params = {};
+        params.loc = loc;
+        modalService.show(result.modalForConfirm, params);
+      }
+    }
+    if (canBeContinue) {
+      return $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId);
+    }
+  };
+  $scope.period = 0;
+  $scope.$watch('period', function() {
+    var k, p, v;
+    $routeParams.period = $scope.period;
+    if ($route.current) {
+      p = $route.current.$$route.originalPath;
+      for (k in $routeParams) {
+        v = $routeParams[k];
+        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
+      }
+      return $location.path(p);
+    }
+  });
+  $scope.$watch('scopeId', function() {
+    var k, p, v;
+    $routeParams.period = $scope.period;
+    if ($route.current) {
+      p = $route.current.$$route.originalPath;
+      for (k in $routeParams) {
+        v = $routeParams[k];
+        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
+      }
+      return $location.path(p);
+    }
+  });
+  $scope.save = function() {
+    return $scope.$broadcast('SAVE');
+  };
+  $scope.$on("$routeChangeSuccess", function(event, current, previous) {
+    $scope.period = parseInt($routeParams.period);
+    return $scope.scopeId = parseInt($routeParams.scope);
+  });
+  return $scope.getMainScope = function() {
+    var mainScope;
+    return mainScope = angular.element($('[ng-view]')[0]).scope();
+  };
+});
+angular.module('app').run(function($rootScope, $location, $http, flash) {
+  var promise;
+  if (!$rootScope.currentPerson) {
+    $location.path('/login');
+  }
+  $rootScope.isLogin = function() {
+    return $location.path().substring(0, 6) === "/login";
+  };
+  $rootScope.logout = function() {
+    var promise;
+    promise = $http({
+      method: "POST",
+      url: 'logout',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    promise.success(function(data, status, headers, config) {
+      $rootScope.currentPerson = null;
+      $location.path('/login');
+      return;
+    });
+    return promise.error(function(data, status, headers, config) {
+      $location.path('/login');
+      return;
+    });
+  };
+  $rootScope.loginSuccess = function(data) {
+    $rootScope.periods = data.availablePeriods;
+    $rootScope.currentPerson = data.person;
+    $rootScope.organization = data.organization;
+    return $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope);
+  };
+  promise = $http({
+    method: "POST",
+    url: 'testAuthentication',
+    headers: {
+      "Content-Type": "application/text"
+    }
+  });
+  promise.success(function(data, status, headers, config) {
+    $rootScope.loginSuccess(data);
+    return;
+  });
+  promise.error(function(data, status, headers, config) {
+    return;
+  });
+  return $rootScope.displayModalBackground = false;
+});angular.module('app.controllers').controller("Form2Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB2";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -3336,8 +3778,13 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
   return $scope.test = function() {
     return $('#modalLogin').modal('show');
   };
+<<<<<<< HEAD
 });angular.module('app.controllers').controller("Form4Ctrl", function($scope, downloadService, $http, messageFlash) {
   $scope.formIdentifier = "TAB4";
+=======
+});angular.module('app.controllers').controller("Form1Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB1";
+>>>>>>> 97a9bfc1d76b048b7588445ebed9b507ffac1a10
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
