@@ -9,6 +9,8 @@ import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.QuestionSet;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,13 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		Integer unitId = null;
 		switch (answerType) {
 			case BOOLEAN:
-				rawAnswerValue = ((BooleanAnswerValue) answerValue).getValue();
+				Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+				if (booleanValue == Boolean.TRUE) {
+					rawAnswerValue = "1";
+				} else if (booleanValue == Boolean.FALSE) {
+					rawAnswerValue = "0";
+				}
+				rawAnswerValue = booleanValue;
 				break;
 			case STRING:
 				rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
@@ -78,9 +86,12 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 	}
 
 	private void putRepetitionIndex(Map<String, Integer> repetitionMap, QuestionSetAnswer questionSetAnswer) {
-		String code = questionSetAnswer.getQuestionSet().getCode().getKey();
-		Integer repetitionIndex = questionSetAnswer.getRepetitionIndex();
-		repetitionMap.put(code, repetitionIndex);
+		QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+		if (questionSet.getRepetitionAllowed()) {			
+			String code = questionSet.getCode().getKey();
+			Integer repetitionIndex = questionSetAnswer.getRepetitionIndex();
+			repetitionMap.put(code, repetitionIndex);
+		}
 
 		QuestionSetAnswer parent = questionSetAnswer.getParent();
 		if (parent != null) {

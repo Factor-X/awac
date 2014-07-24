@@ -1,17 +1,26 @@
 package eu.factorx.awac.models.data.question;
 
+import java.util.List;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
 
-import javax.persistence.*;
-import java.util.List;
-
 @Entity
 @Table(name = "question")
 @DiscriminatorColumn(name = "question_type")
-@NamedQueries({
-		@NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
+@NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
 		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
 		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS, query = "select q from Question q where q.questionSet in :questionSets"),
 
@@ -30,12 +39,14 @@ public abstract class Question extends AuditedAbstractEntity {
 	 * :questionSets = a {@link List} of {@link QuestionSet}
 	 */
 	public static final String FIND_BY_QUESTION_SETS = "Question.findByQuestionSets";
+
 	private static final long serialVersionUID = 1L;
+
 	@ManyToOne(optional = false)
 	protected QuestionSet questionSet;
 
 	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	protected QuestionCode code;
 
 	protected int orderIndex = 0;
@@ -44,6 +55,11 @@ public abstract class Question extends AuditedAbstractEntity {
 		super();
 	}
 
+	/**
+	 * @param questionSet
+	 * @param orderIndex
+	 * @param code
+	 */
 	protected Question(QuestionSet questionSet, int orderIndex, QuestionCode code) {
 		super();
 		this.questionSet = questionSet;
@@ -76,5 +92,10 @@ public abstract class Question extends AuditedAbstractEntity {
 	}
 
 	public abstract AnswerType getAnswerType();
+
+	@Override
+	public String toString() {
+		return "Question [questionSet=" + questionSet + ", code=" + code + ", orderIndex=" + orderIndex + "]";
+	}
 
 }

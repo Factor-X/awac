@@ -53,6 +53,7 @@ public class AwacInitialData {
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 
 
+
 		// == TAB1 ========================================================================
 
 		Form tab1Form = new Form("TAB1");
@@ -99,911 +100,773 @@ public class AwacInitialData {
 		// AWAC - Entreprises
 		// A1 (AWAC - Entreprises)
 
-		QuestionSet a1 = new QuestionSet(QuestionCode.A1, false);
+		QuestionSet a1 = new QuestionSet(QuestionCode.A1, false, null);
 		session.saveOrUpdate(a1);
+
+
 		tab1Form.getQuestionSets().add(a1);
 		session.saveOrUpdate(tab1Form);
-
 
 		// == A13 =========================================================================
 		// Consommation de combustibles
 		// A13 (Consommation de combustibles)
 
-		QuestionSet a13 = new QuestionSet(QuestionCode.A13, false);
+		QuestionSet a13 = new QuestionSet(QuestionCode.A13, false, null);
 		session.saveOrUpdate(a13);
+
+
 		tab2Form.getQuestionSets().add(a13);
 		session.saveOrUpdate(tab2Form);
-
 
 		// == A15 =========================================================================
 		// Combustion de combustible par les sources statiques des sites de l'entreprise
 		// A13(Consommation de combustibles) > A15 (Combustion de combustible par les sources statiques des sites de l'entreprise)
 
-		QuestionSet a15 = new QuestionSet(QuestionCode.A15, true);
+		QuestionSet a15 = new QuestionSet(QuestionCode.A15, true, a13);
 		session.saveOrUpdate(a15);
-		tab2Form.getQuestionSets().add(a15);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A20 =========================================================================
 		// Electricité et vapeur achetées
 		// A20 (Electricité et vapeur achetées)
 
-		QuestionSet a20 = new QuestionSet(QuestionCode.A20, false);
+		QuestionSet a20 = new QuestionSet(QuestionCode.A20, false, null);
 		session.saveOrUpdate(a20);
+
+
 		tab2Form.getQuestionSets().add(a20);
 		session.saveOrUpdate(tab2Form);
-
 
 		// == A22 =========================================================================
 		// Electricité
 		// A20(Electricité et vapeur achetées) > A22 (Electricité)
 
-		QuestionSet a22 = new QuestionSet(QuestionCode.A22, false);
+		QuestionSet a22 = new QuestionSet(QuestionCode.A22, false, a20);
 		session.saveOrUpdate(a22);
-		tab2Form.getQuestionSets().add(a22);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A25 =========================================================================
 		// Vapeur
 		// A20(Electricité et vapeur achetées) > A25 (Vapeur)
 
-		QuestionSet a25 = new QuestionSet(QuestionCode.A25, true);
+		QuestionSet a25 = new QuestionSet(QuestionCode.A25, true, a20);
 		session.saveOrUpdate(a25);
-		tab2Form.getQuestionSets().add(a25);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A31 =========================================================================
 		// GES des processus de production
 		// A31 (GES des processus de production)
 
-		QuestionSet a31 = new QuestionSet(QuestionCode.A31, false);
+		QuestionSet a31 = new QuestionSet(QuestionCode.A31, false, null);
 		session.saveOrUpdate(a31);
+
+
 		tab2Form.getQuestionSets().add(a31);
 		session.saveOrUpdate(tab2Form);
-
 
 		// == A34 =========================================================================
 		// Type de GES émis par la production
 		// A31(GES des processus de production) > A34 (Type de GES émis par la production)
 
-		QuestionSet a34 = new QuestionSet(QuestionCode.A34, true);
+		QuestionSet a34 = new QuestionSet(QuestionCode.A34, true, a31);
 		session.saveOrUpdate(a34);
-		tab2Form.getQuestionSets().add(a34);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A37 =========================================================================
 		// Systèmes de refroidissement
 		// A37 (Systèmes de refroidissement)
 
-		QuestionSet a37 = new QuestionSet(QuestionCode.A37, false);
+		QuestionSet a37 = new QuestionSet(QuestionCode.A37, false, null);
 		session.saveOrUpdate(a37);
+
+
 		tab2Form.getQuestionSets().add(a37);
 		session.saveOrUpdate(tab2Form);
-
 
 		// == A40 =========================================================================
 		// Méthodes au choix
 		// A37(Systèmes de refroidissement) > A40 (Méthodes au choix)
 
-		QuestionSet a40 = new QuestionSet(QuestionCode.A40, false);
+		QuestionSet a40 = new QuestionSet(QuestionCode.A40, false, a37);
 		session.saveOrUpdate(a40);
-		tab2Form.getQuestionSets().add(a40);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A41 =========================================================================
 		// Estimation des émissions à partir des recharges de gaz
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41 (Estimation des émissions à partir des recharges de gaz)
 
-		QuestionSet a41 = new QuestionSet(QuestionCode.A41, false);
+		QuestionSet a41 = new QuestionSet(QuestionCode.A41, false, a40);
 		session.saveOrUpdate(a41);
-		tab2Form.getQuestionSets().add(a41);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A42 =========================================================================
 		// Listes des types de gaz réfrigérants utilisés
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42 (Listes des types de gaz réfrigérants utilisés)
 
-		QuestionSet a42 = new QuestionSet(QuestionCode.A42, true);
+		QuestionSet a42 = new QuestionSet(QuestionCode.A42, true, a41);
 		session.saveOrUpdate(a42);
-		tab2Form.getQuestionSets().add(a42);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A45 =========================================================================
 		// Estimation des émissions à partir de la puissance du groupe de froid
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45 (Estimation des émissions à partir de la puissance du groupe de froid)
 
-		QuestionSet a45 = new QuestionSet(QuestionCode.A45, false);
+		QuestionSet a45 = new QuestionSet(QuestionCode.A45, false, a40);
 		session.saveOrUpdate(a45);
-		tab2Form.getQuestionSets().add(a45);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A47 =========================================================================
 		// Estimation des émissions à partir de la consommation électrique du site
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47 (Estimation des émissions à partir de la consommation électrique du site)
 
-		QuestionSet a47 = new QuestionSet(QuestionCode.A47, false);
+		QuestionSet a47 = new QuestionSet(QuestionCode.A47, false, a40);
 		session.saveOrUpdate(a47);
-		tab2Form.getQuestionSets().add(a47);
-		session.saveOrUpdate(tab2Form);
 
 
 		// == A50 =========================================================================
 		// Mobilité
 		// A50 (Mobilité)
 
-		QuestionSet a50 = new QuestionSet(QuestionCode.A50, false);
+		QuestionSet a50 = new QuestionSet(QuestionCode.A50, false, null);
 		session.saveOrUpdate(a50);
+
+
 		tab3Form.getQuestionSets().add(a50);
 		session.saveOrUpdate(tab3Form);
-
 
 		// == A52 =========================================================================
 		// Transport routier (méthode au choix)
 		// A50(Mobilité) > A52 (Transport routier (méthode au choix))
 
-		QuestionSet a52 = new QuestionSet(QuestionCode.A52, false);
+		QuestionSet a52 = new QuestionSet(QuestionCode.A52, false, a50);
 		session.saveOrUpdate(a52);
-		tab3Form.getQuestionSets().add(a52);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A53 =========================================================================
 		// Calcul par les consommations
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53 (Calcul par les consommations)
 
-		QuestionSet a53 = new QuestionSet(QuestionCode.A53, false);
+		QuestionSet a53 = new QuestionSet(QuestionCode.A53, false, a52);
 		session.saveOrUpdate(a53);
-		tab3Form.getQuestionSets().add(a53);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A54 =========================================================================
 		// Véhicules de société ou détenus par l'entreprise
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54 (Véhicules de société ou détenus par l'entreprise)
 
-		QuestionSet a54 = new QuestionSet(QuestionCode.A54, false);
+		QuestionSet a54 = new QuestionSet(QuestionCode.A54, false, a53);
 		session.saveOrUpdate(a54);
-		tab3Form.getQuestionSets().add(a54);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A58 =========================================================================
 		// Autres véhicules: déplacements domicile-travail des employés
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58 (Autres véhicules: déplacements domicile-travail des employés)
 
-		QuestionSet a58 = new QuestionSet(QuestionCode.A58, false);
+		QuestionSet a58 = new QuestionSet(QuestionCode.A58, false, a53);
 		session.saveOrUpdate(a58);
-		tab3Form.getQuestionSets().add(a58);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A62 =========================================================================
 		// Autres véhicules: Déplacements professionnels & visiteurs
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62 (Autres véhicules: Déplacements professionnels & visiteurs)
 
-		QuestionSet a62 = new QuestionSet(QuestionCode.A62, false);
+		QuestionSet a62 = new QuestionSet(QuestionCode.A62, false, a53);
 		session.saveOrUpdate(a62);
-		tab3Form.getQuestionSets().add(a62);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A66 =========================================================================
 		// Calcul par les kilomètres
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66 (Calcul par les kilomètres)
 
-		QuestionSet a66 = new QuestionSet(QuestionCode.A66, false);
+		QuestionSet a66 = new QuestionSet(QuestionCode.A66, false, a52);
 		session.saveOrUpdate(a66);
-		tab3Form.getQuestionSets().add(a66);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A67 =========================================================================
 		// Créez autant de catégories de véhicules que souhaité
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66(Calcul par les kilomètres) > A67 (Créez autant de catégories de véhicules que souhaité)
 
-		QuestionSet a67 = new QuestionSet(QuestionCode.A67, true);
+		QuestionSet a67 = new QuestionSet(QuestionCode.A67, true, a66);
 		session.saveOrUpdate(a67);
-		tab3Form.getQuestionSets().add(a67);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A77 =========================================================================
 		// Calcul par euros dépensés
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77 (Calcul par euros dépensés)
 
-		QuestionSet a77 = new QuestionSet(QuestionCode.A77, false);
+		QuestionSet a77 = new QuestionSet(QuestionCode.A77, false, a52);
 		session.saveOrUpdate(a77);
-		tab3Form.getQuestionSets().add(a77);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A78 =========================================================================
 		// Créez autant de catégories de véhicules que souhaité
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78 (Créez autant de catégories de véhicules que souhaité)
 
-		QuestionSet a78 = new QuestionSet(QuestionCode.A78, true);
+		QuestionSet a78 = new QuestionSet(QuestionCode.A78, true, a77);
 		session.saveOrUpdate(a78);
-		tab3Form.getQuestionSets().add(a78);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A93 =========================================================================
 		// Transport en commun
 		// A50(Mobilité) > A93 (Transport en commun)
 
-		QuestionSet a93 = new QuestionSet(QuestionCode.A93, false);
+		QuestionSet a93 = new QuestionSet(QuestionCode.A93, false, a50);
 		session.saveOrUpdate(a93);
-		tab3Form.getQuestionSets().add(a93);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A94 =========================================================================
 		// Estimation par le détail des déplacements
 		// A50(Mobilité) > A93(Transport en commun) > A94 (Estimation par le détail des déplacements)
 
-		QuestionSet a94 = new QuestionSet(QuestionCode.A94, false);
+		QuestionSet a94 = new QuestionSet(QuestionCode.A94, false, a93);
 		session.saveOrUpdate(a94);
-		tab3Form.getQuestionSets().add(a94);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A109 ========================================================================
 		// Estimation par nombre d'employés
 		// A50(Mobilité) > A93(Transport en commun) > A109 (Estimation par nombre d'employés)
 
-		QuestionSet a109 = new QuestionSet(QuestionCode.A109, false);
+		QuestionSet a109 = new QuestionSet(QuestionCode.A109, false, a93);
 		session.saveOrUpdate(a109);
-		tab3Form.getQuestionSets().add(a109);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A113 ========================================================================
 		// Transport en avion (déplacements professionnels ou des visiteurs)
 		// A50(Mobilité) > A113 (Transport en avion (déplacements professionnels ou des visiteurs))
 
-		QuestionSet a113 = new QuestionSet(QuestionCode.A113, false);
+		QuestionSet a113 = new QuestionSet(QuestionCode.A113, false, a50);
 		session.saveOrUpdate(a113);
-		tab3Form.getQuestionSets().add(a113);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A114 ========================================================================
 		// Méthode par le détail des vols
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A114 (Méthode par le détail des vols)
 
-		QuestionSet a114 = new QuestionSet(QuestionCode.A114, false);
+		QuestionSet a114 = new QuestionSet(QuestionCode.A114, false, a113);
 		session.saveOrUpdate(a114);
-		tab3Form.getQuestionSets().add(a114);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A115 ========================================================================
 		// Créez autant de catégories de vol que nécessaire
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A114(Méthode par le détail des vols) > A115 (Créez autant de catégories de vol que nécessaire)
 
-		QuestionSet a115 = new QuestionSet(QuestionCode.A115, true);
+		QuestionSet a115 = new QuestionSet(QuestionCode.A115, true, a114);
 		session.saveOrUpdate(a115);
-		tab3Form.getQuestionSets().add(a115);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A121 ========================================================================
 		// Méthode des moyennes
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121 (Méthode des moyennes)
 
-		QuestionSet a121 = new QuestionSet(QuestionCode.A121, false);
+		QuestionSet a121 = new QuestionSet(QuestionCode.A121, false, a113);
 		session.saveOrUpdate(a121);
-		tab3Form.getQuestionSets().add(a121);
-		session.saveOrUpdate(tab3Form);
 
 
 		// == A128 ========================================================================
 		// Transport et distribution de marchandises amont
 		// A128 (Transport et distribution de marchandises amont)
 
-		QuestionSet a128 = new QuestionSet(QuestionCode.A128, false);
+		QuestionSet a128 = new QuestionSet(QuestionCode.A128, false, null);
 		session.saveOrUpdate(a128);
+
+
 		tab4Form.getQuestionSets().add(a128);
 		session.saveOrUpdate(tab4Form);
-
 
 		// == A130 ========================================================================
 		// Transport amont
 		// A128(Transport et distribution de marchandises amont) > A130 (Transport amont)
 
-		QuestionSet a130 = new QuestionSet(QuestionCode.A130, false);
+		QuestionSet a130 = new QuestionSet(QuestionCode.A130, false, a128);
 		session.saveOrUpdate(a130);
-		tab4Form.getQuestionSets().add(a130);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A131 ========================================================================
 		// Transport avec des véhicules détenus par l'entreprise
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131 (Transport avec des véhicules détenus par l'entreprise)
 
-		QuestionSet a131 = new QuestionSet(QuestionCode.A131, false);
+		QuestionSet a131 = new QuestionSet(QuestionCode.A131, false, a130);
 		session.saveOrUpdate(a131);
-		tab4Form.getQuestionSets().add(a131);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A132 ========================================================================
 		// Méthode par consommation de carburants
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132 (Méthode par consommation de carburants)
 
-		QuestionSet a132 = new QuestionSet(QuestionCode.A132, false);
+		QuestionSet a132 = new QuestionSet(QuestionCode.A132, false, a131);
 		session.saveOrUpdate(a132);
-		tab4Form.getQuestionSets().add(a132);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A140 ========================================================================
 		// Transport effectué par des transporteurs
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140 (Transport effectué par des transporteurs)
 
-		QuestionSet a140 = new QuestionSet(QuestionCode.A140, false);
+		QuestionSet a140 = new QuestionSet(QuestionCode.A140, false, a130);
 		session.saveOrUpdate(a140);
-		tab4Form.getQuestionSets().add(a140);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A141 ========================================================================
 		// Méthode des kilomètres
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141 (Méthode des kilomètres)
 
-		QuestionSet a141 = new QuestionSet(QuestionCode.A141, false);
+		QuestionSet a141 = new QuestionSet(QuestionCode.A141, false, a140);
 		session.saveOrUpdate(a141);
-		tab4Form.getQuestionSets().add(a141);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A142 ========================================================================
 		// Créez autant de marchandises que nécessaire
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142 (Créez autant de marchandises que nécessaire)
 
-		QuestionSet a142 = new QuestionSet(QuestionCode.A142, true);
+		QuestionSet a142 = new QuestionSet(QuestionCode.A142, true, a141);
 		session.saveOrUpdate(a142);
-		tab4Form.getQuestionSets().add(a142);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A157 ========================================================================
 		// Méthode des moyennes
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157 (Méthode des moyennes)
 
-		QuestionSet a157 = new QuestionSet(QuestionCode.A157, false);
+		QuestionSet a157 = new QuestionSet(QuestionCode.A157, false, a140);
 		session.saveOrUpdate(a157);
-		tab4Form.getQuestionSets().add(a157);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A163 ========================================================================
 		// Distribution amont: Energie et froid des entrepôts de stockage
 		// A128(Transport et distribution de marchandises amont) > A163 (Distribution amont: Energie et froid des entrepôts de stockage)
 
-		QuestionSet a163 = new QuestionSet(QuestionCode.A163, false);
+		QuestionSet a163 = new QuestionSet(QuestionCode.A163, false, a128);
 		session.saveOrUpdate(a163);
-		tab4Form.getQuestionSets().add(a163);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A164 ========================================================================
 		// Créez autant d'entrepôts de stockage que nécessaire
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164 (Créez autant d'entrepôts de stockage que nécessaire)
 
-		QuestionSet a164 = new QuestionSet(QuestionCode.A164, true);
+		QuestionSet a164 = new QuestionSet(QuestionCode.A164, true, a163);
 		session.saveOrUpdate(a164);
-		tab4Form.getQuestionSets().add(a164);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A166 ========================================================================
 		// Listez les totaux de combustibles utilisés en amont
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A166 (Listez les totaux de combustibles utilisés en amont)
 
-		QuestionSet a166 = new QuestionSet(QuestionCode.A166, true);
+		QuestionSet a166 = new QuestionSet(QuestionCode.A166, true, a164);
 		session.saveOrUpdate(a166);
-		tab4Form.getQuestionSets().add(a166);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A170 ========================================================================
 		// Listez les gaz réfrigérants utilisés pour les marchandises amont
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A170 (Listez les gaz réfrigérants utilisés pour les marchandises amont)
 
-		QuestionSet a170 = new QuestionSet(QuestionCode.A170, true);
+		QuestionSet a170 = new QuestionSet(QuestionCode.A170, true, a164);
 		session.saveOrUpdate(a170);
-		tab4Form.getQuestionSets().add(a170);
-		session.saveOrUpdate(tab4Form);
 
 
 		// == A173 ========================================================================
 		// Déchets générés par les opérations
 		// A173 (Déchets générés par les opérations)
 
-		QuestionSet a173 = new QuestionSet(QuestionCode.A173, false);
+		QuestionSet a173 = new QuestionSet(QuestionCode.A173, false, null);
 		session.saveOrUpdate(a173);
+
+
 		tab5Form.getQuestionSets().add(a173);
 		session.saveOrUpdate(tab5Form);
-
 
 		// == A175 ========================================================================
 		// Listez vos différents postes de déchets
 		// A173(Déchets générés par les opérations) > A175 (Listez vos différents postes de déchets)
 
-		QuestionSet a175 = new QuestionSet(QuestionCode.A175, true);
+		QuestionSet a175 = new QuestionSet(QuestionCode.A175, true, a173);
 		session.saveOrUpdate(a175);
-		tab5Form.getQuestionSets().add(a175);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A180 ========================================================================
 		// Eaux usées
 		// A173(Déchets générés par les opérations) > A180 (Eaux usées)
 
-		QuestionSet a180 = new QuestionSet(QuestionCode.A180, false);
+		QuestionSet a180 = new QuestionSet(QuestionCode.A180, false, a173);
 		session.saveOrUpdate(a180);
-		tab5Form.getQuestionSets().add(a180);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A181 ========================================================================
 		// Eaux usées domestiques par grand type de bâtiments
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181 (Eaux usées domestiques par grand type de bâtiments)
 
-		QuestionSet a181 = new QuestionSet(QuestionCode.A181, false);
+		QuestionSet a181 = new QuestionSet(QuestionCode.A181, false, a180);
 		session.saveOrUpdate(a181);
-		tab5Form.getQuestionSets().add(a181);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A182 ========================================================================
 		// Usine ou atelier
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A182 (Usine ou atelier)
 
-		QuestionSet a182 = new QuestionSet(QuestionCode.A182, false);
+		QuestionSet a182 = new QuestionSet(QuestionCode.A182, false, a181);
 		session.saveOrUpdate(a182);
-		tab5Form.getQuestionSets().add(a182);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A185 ========================================================================
 		// Bureau
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A185 (Bureau)
 
-		QuestionSet a185 = new QuestionSet(QuestionCode.A185, false);
+		QuestionSet a185 = new QuestionSet(QuestionCode.A185, false, a181);
 		session.saveOrUpdate(a185);
-		tab5Form.getQuestionSets().add(a185);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A188 ========================================================================
 		// Hôtel, pension, hôpitaux, prison
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A188 (Hôtel, pension, hôpitaux, prison)
 
-		QuestionSet a188 = new QuestionSet(QuestionCode.A188, false);
+		QuestionSet a188 = new QuestionSet(QuestionCode.A188, false, a181);
 		session.saveOrUpdate(a188);
-		tab5Form.getQuestionSets().add(a188);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A191 ========================================================================
 		// Restaurant ou cantine
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A191 (Restaurant ou cantine)
 
-		QuestionSet a191 = new QuestionSet(QuestionCode.A191, false);
+		QuestionSet a191 = new QuestionSet(QuestionCode.A191, false, a181);
 		session.saveOrUpdate(a191);
-		tab5Form.getQuestionSets().add(a191);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A194 ========================================================================
 		// Eaux usées industrielles
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194 (Eaux usées industrielles)
 
-		QuestionSet a194 = new QuestionSet(QuestionCode.A194, false);
+		QuestionSet a194 = new QuestionSet(QuestionCode.A194, false, a180);
 		session.saveOrUpdate(a194);
-		tab5Form.getQuestionSets().add(a194);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A196 ========================================================================
 		// Méthodes alternatives
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196 (Méthodes alternatives)
 
-		QuestionSet a196 = new QuestionSet(QuestionCode.A196, false);
+		QuestionSet a196 = new QuestionSet(QuestionCode.A196, false, a194);
 		session.saveOrUpdate(a196);
-		tab5Form.getQuestionSets().add(a196);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A197 ========================================================================
 		// Méthode par la quantité de m³ rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A197 (Méthode par la quantité de m³ rejetés)
 
-		QuestionSet a197 = new QuestionSet(QuestionCode.A197, false);
+		QuestionSet a197 = new QuestionSet(QuestionCode.A197, false, a196);
 		session.saveOrUpdate(a197);
-		tab5Form.getQuestionSets().add(a197);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A201 ========================================================================
 		// Méthode par le poids de CO2 chimique des effluents rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A201 (Méthode par le poids de CO2 chimique des effluents rejetés)
 
-		QuestionSet a201 = new QuestionSet(QuestionCode.A201, false);
+		QuestionSet a201 = new QuestionSet(QuestionCode.A201, false, a196);
 		session.saveOrUpdate(a201);
-		tab5Form.getQuestionSets().add(a201);
-		session.saveOrUpdate(tab5Form);
 
 
 		// == A205 ========================================================================
 		// Achat de biens et services
 		// A205 (Achat de biens et services)
 
-		QuestionSet a205 = new QuestionSet(QuestionCode.A205, false);
+		QuestionSet a205 = new QuestionSet(QuestionCode.A205, false, null);
 		session.saveOrUpdate(a205);
+
+
 		tab6Form.getQuestionSets().add(a205);
 		session.saveOrUpdate(tab6Form);
-
 
 		// == A208 ========================================================================
 		// Méthode par détail des achats
 		// A208 (Méthode par détail des achats)
 
-		QuestionSet a208 = new QuestionSet(QuestionCode.A208, false);
+		QuestionSet a208 = new QuestionSet(QuestionCode.A208, false, null);
 		session.saveOrUpdate(a208);
+
+
 		tab6Form.getQuestionSets().add(a208);
 		session.saveOrUpdate(tab6Form);
-
 
 		// == A209 ========================================================================
 		// Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
 		// A208(Méthode par détail des achats) > A209 (Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite))
 
-		QuestionSet a209 = new QuestionSet(QuestionCode.A209, true);
+		QuestionSet a209 = new QuestionSet(QuestionCode.A209, true, a208);
 		session.saveOrUpdate(a209);
-		tab6Form.getQuestionSets().add(a209);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A223 ========================================================================
 		// Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
 		// A208(Méthode par détail des achats) > A223 (Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate)
 
-		QuestionSet a223 = new QuestionSet(QuestionCode.A223, false);
+		QuestionSet a223 = new QuestionSet(QuestionCode.A223, false, a208);
 		session.saveOrUpdate(a223);
-		tab6Form.getQuestionSets().add(a223);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A224 ========================================================================
 		// Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224 (Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique))
 
-		QuestionSet a224 = new QuestionSet(QuestionCode.A224, true);
+		QuestionSet a224 = new QuestionSet(QuestionCode.A224, true, a223);
 		session.saveOrUpdate(a224);
-		tab6Form.getQuestionSets().add(a224);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A229 ========================================================================
 		// Infrastructures (achetées durant l'année de déclaration)
 		// A229 (Infrastructures (achetées durant l'année de déclaration))
 
-		QuestionSet a229 = new QuestionSet(QuestionCode.A229, false);
+		QuestionSet a229 = new QuestionSet(QuestionCode.A229, false, null);
 		session.saveOrUpdate(a229);
+
+
 		tab6Form.getQuestionSets().add(a229);
 		session.saveOrUpdate(tab6Form);
-
 
 		// == A231 ========================================================================
 		// Créez et nommez vos postes d'infrastructure
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A231 (Créez et nommez vos postes d'infrastructure)
 
-		QuestionSet a231 = new QuestionSet(QuestionCode.A231, true);
+		QuestionSet a231 = new QuestionSet(QuestionCode.A231, true, a229);
 		session.saveOrUpdate(a231);
-		tab6Form.getQuestionSets().add(a231);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A237 ========================================================================
 		// Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237 (Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate)
 
-		QuestionSet a237 = new QuestionSet(QuestionCode.A237, false);
+		QuestionSet a237 = new QuestionSet(QuestionCode.A237, false, a229);
 		session.saveOrUpdate(a237);
-		tab6Form.getQuestionSets().add(a237);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A238 ========================================================================
 		// Créez et nommez vos postes d'infrastructure spécifiques
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238 (Créez et nommez vos postes d'infrastructure spécifiques)
 
-		QuestionSet a238 = new QuestionSet(QuestionCode.A238, true);
+		QuestionSet a238 = new QuestionSet(QuestionCode.A238, true, a237);
 		session.saveOrUpdate(a238);
-		tab6Form.getQuestionSets().add(a238);
-		session.saveOrUpdate(tab6Form);
 
 
 		// == A243 ========================================================================
 		// Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus
 		// A243 (Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus)
 
-		QuestionSet a243 = new QuestionSet(QuestionCode.A243, false);
+		QuestionSet a243 = new QuestionSet(QuestionCode.A243, false, null);
 		session.saveOrUpdate(a243);
+
+
 		tab7Form.getQuestionSets().add(a243);
 		session.saveOrUpdate(tab7Form);
-
 
 		// == A244 ========================================================================
 		// Lister les différents produits ou groupes de produits vendus par l'entreprise
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244 (Lister les différents produits ou groupes de produits vendus par l'entreprise)
 
-		QuestionSet a244 = new QuestionSet(QuestionCode.A244, true);
+		QuestionSet a244 = new QuestionSet(QuestionCode.A244, true, a243);
 		session.saveOrUpdate(a244);
-		tab7Form.getQuestionSets().add(a244);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A250 ========================================================================
 		// Transport et distribution aval
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250 (Transport et distribution aval)
 
-		QuestionSet a250 = new QuestionSet(QuestionCode.A250, false);
+		QuestionSet a250 = new QuestionSet(QuestionCode.A250, false, a244);
 		session.saveOrUpdate(a250);
-		tab7Form.getQuestionSets().add(a250);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A252 ========================================================================
 		// Transport aval: choix de méthodes
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252 (Transport aval: choix de méthodes)
 
-		QuestionSet a252 = new QuestionSet(QuestionCode.A252, false);
+		QuestionSet a252 = new QuestionSet(QuestionCode.A252, false, a250);
 		session.saveOrUpdate(a252);
-		tab7Form.getQuestionSets().add(a252);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A253 ========================================================================
 		// Méthode par kilométrage
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253 (Méthode par kilométrage)
 
-		QuestionSet a253 = new QuestionSet(QuestionCode.A253, false);
+		QuestionSet a253 = new QuestionSet(QuestionCode.A253, false, a252);
 		session.saveOrUpdate(a253);
-		tab7Form.getQuestionSets().add(a253);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A266 ========================================================================
 		// Méthode des moyennes
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266 (Méthode des moyennes)
 
-		QuestionSet a266 = new QuestionSet(QuestionCode.A266, false);
+		QuestionSet a266 = new QuestionSet(QuestionCode.A266, false, a252);
 		session.saveOrUpdate(a266);
-		tab7Form.getQuestionSets().add(a266);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A272 ========================================================================
 		// Distribution avale: Energie et Froid des entrepôts de stockage
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272 (Distribution avale: Energie et Froid des entrepôts de stockage)
 
-		QuestionSet a272 = new QuestionSet(QuestionCode.A272, false);
+		QuestionSet a272 = new QuestionSet(QuestionCode.A272, false, a244);
 		session.saveOrUpdate(a272);
-		tab7Form.getQuestionSets().add(a272);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A273 ========================================================================
 		// Créez autant d'entrepôts de stockage que nécessaire
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273 (Créez autant d'entrepôts de stockage que nécessaire)
 
-		QuestionSet a273 = new QuestionSet(QuestionCode.A273, true);
-		a273.setParent(a244);
+		QuestionSet a273 = new QuestionSet(QuestionCode.A273, true, a272);
 		session.saveOrUpdate(a273);
-		tab7Form.getQuestionSets().add(a273);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A275 ========================================================================
 		// Listez les totaux de combustibles utilisés
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275 (Listez les totaux de combustibles utilisés)
 
-		QuestionSet a275 = new QuestionSet(QuestionCode.A275, true);
+		QuestionSet a275 = new QuestionSet(QuestionCode.A275, true, a273);
 		session.saveOrUpdate(a275);
-		tab7Form.getQuestionSets().add(a275);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A279 ========================================================================
 		// Listez les gaz réfrigérants
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279 (Listez les gaz réfrigérants)
 
-		QuestionSet a279 = new QuestionSet(QuestionCode.A279, true);
+		QuestionSet a279 = new QuestionSet(QuestionCode.A279, true, a273);
 		session.saveOrUpdate(a279);
-		tab7Form.getQuestionSets().add(a279);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A282 ========================================================================
 		// Traitement
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282 (Traitement)
 
-		QuestionSet a282 = new QuestionSet(QuestionCode.A282, false);
+		QuestionSet a282 = new QuestionSet(QuestionCode.A282, false, a244);
 		session.saveOrUpdate(a282);
-		tab7Form.getQuestionSets().add(a282);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A284 ========================================================================
 		// Listez les totaux de combustibles
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A284 (Listez les totaux de combustibles)
 
-		QuestionSet a284 = new QuestionSet(QuestionCode.A284, true);
+		QuestionSet a284 = new QuestionSet(QuestionCode.A284, true, a282);
 		session.saveOrUpdate(a284);
-		tab7Form.getQuestionSets().add(a284);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A288 ========================================================================
 		// Listez les gaz réfrigérants
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A288 (Listez les gaz réfrigérants)
 
-		QuestionSet a288 = new QuestionSet(QuestionCode.A288, true);
+		QuestionSet a288 = new QuestionSet(QuestionCode.A288, true, a282);
 		session.saveOrUpdate(a288);
-		tab7Form.getQuestionSets().add(a288);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A291 ========================================================================
 		// Utilisation
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291 (Utilisation)
 
-		QuestionSet a291 = new QuestionSet(QuestionCode.A291, false);
+		QuestionSet a291 = new QuestionSet(QuestionCode.A291, false, a244);
 		session.saveOrUpdate(a291);
-		tab7Form.getQuestionSets().add(a291);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A297 ========================================================================
 		// Listez les gaz émis par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A297 (Listez les gaz émis par utilisation de produit)
 
-		QuestionSet a297 = new QuestionSet(QuestionCode.A297, true);
+		QuestionSet a297 = new QuestionSet(QuestionCode.A297, true, a291);
 		session.saveOrUpdate(a297);
-		tab7Form.getQuestionSets().add(a297);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A300 ========================================================================
 		// Traitement de fin de vie
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300 (Traitement de fin de vie)
 
-		QuestionSet a300 = new QuestionSet(QuestionCode.A300, false);
+		QuestionSet a300 = new QuestionSet(QuestionCode.A300, false, a244);
 		session.saveOrUpdate(a300);
-		tab7Form.getQuestionSets().add(a300);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A303 ========================================================================
 		// Créez autant de catégories de déchet que nécessaire
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A303 (Créez autant de catégories de déchet que nécessaire)
 
-		QuestionSet a303 = new QuestionSet(QuestionCode.A303, true);
+		QuestionSet a303 = new QuestionSet(QuestionCode.A303, true, a300);
 		session.saveOrUpdate(a303);
-		tab7Form.getQuestionSets().add(a303);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A309 ========================================================================
 		// Actifs loués (aval)
 		// A309 (Actifs loués (aval))
 
-		QuestionSet a309 = new QuestionSet(QuestionCode.A309, false);
+		QuestionSet a309 = new QuestionSet(QuestionCode.A309, false, null);
 		session.saveOrUpdate(a309);
-		tab7Form.getQuestionSets().add(a309);
-		session.saveOrUpdate(tab7Form);
 
+
+		tab6Form.getQuestionSets().add(a309);
+		session.saveOrUpdate(tab6Form);
 
 		// == A311 ========================================================================
 		// Créez autant de catégories d'actifs loués que nécessaire
 		// A309(Actifs loués (aval)) > A311 (Créez autant de catégories d'actifs loués que nécessaire)
 
-		QuestionSet a311 = new QuestionSet(QuestionCode.A311, true);
+		QuestionSet a311 = new QuestionSet(QuestionCode.A311, true, a309);
 		session.saveOrUpdate(a311);
-		tab7Form.getQuestionSets().add(a311);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A313 ========================================================================
 		// Listez les totaux de combustibles utilisés pour les actifs loués
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313 (Listez les totaux de combustibles utilisés pour les actifs loués)
 
-		QuestionSet a313 = new QuestionSet(QuestionCode.A313, true);
+		QuestionSet a313 = new QuestionSet(QuestionCode.A313, true, a311);
 		session.saveOrUpdate(a313);
-		tab7Form.getQuestionSets().add(a313);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A317 ========================================================================
 		// Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317 (Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués)
 
-		QuestionSet a317 = new QuestionSet(QuestionCode.A317, true);
+		QuestionSet a317 = new QuestionSet(QuestionCode.A317, true, a311);
 		session.saveOrUpdate(a317);
-		tab7Form.getQuestionSets().add(a317);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A320 ========================================================================
 		// Franchises
 		// A320 (Franchises)
 
-		QuestionSet a320 = new QuestionSet(QuestionCode.A320, false);
+		QuestionSet a320 = new QuestionSet(QuestionCode.A320, false, null);
 		session.saveOrUpdate(a320);
-		tab7Form.getQuestionSets().add(a320);
-		session.saveOrUpdate(tab7Form);
 
+
+		tab6Form.getQuestionSets().add(a320);
+		session.saveOrUpdate(tab6Form);
 
 		// == A322 ========================================================================
 		// Créez autant de catégories de franchisés que nécessaire
 		// A320(Franchises) > A322 (Créez autant de catégories de franchisés que nécessaire)
 
-		QuestionSet a322 = new QuestionSet(QuestionCode.A322, true);
+		QuestionSet a322 = new QuestionSet(QuestionCode.A322, true, a320);
 		session.saveOrUpdate(a322);
-		tab7Form.getQuestionSets().add(a322);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A325 ========================================================================
 		// Listez les moyennes de combustibles utilisés par franchisé
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325 (Listez les moyennes de combustibles utilisés par franchisé)
 
-		QuestionSet a325 = new QuestionSet(QuestionCode.A325, true);
+		QuestionSet a325 = new QuestionSet(QuestionCode.A325, true, a322);
 		session.saveOrUpdate(a325);
-		tab7Form.getQuestionSets().add(a325);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A329 ========================================================================
 		// Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329 (Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé)
 
-		QuestionSet a329 = new QuestionSet(QuestionCode.A329, true);
+		QuestionSet a329 = new QuestionSet(QuestionCode.A329, true, a322);
 		session.saveOrUpdate(a329);
-		tab7Form.getQuestionSets().add(a329);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A332 ========================================================================
 		// Activités d'investissement
 		// A332 (Activités d'investissement)
 
-		QuestionSet a332 = new QuestionSet(QuestionCode.A332, false);
+		QuestionSet a332 = new QuestionSet(QuestionCode.A332, false, null);
 		session.saveOrUpdate(a332);
-		tab7Form.getQuestionSets().add(a332);
-		session.saveOrUpdate(tab7Form);
 
+
+		tab6Form.getQuestionSets().add(a332);
+		session.saveOrUpdate(tab6Form);
 
 		// == A334 ========================================================================
 		// Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
 		// A332(Activités d'investissement) > A334 (Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit)
 
-		QuestionSet a334 = new QuestionSet(QuestionCode.A334, true);
+		QuestionSet a334 = new QuestionSet(QuestionCode.A334, true, a332);
 		session.saveOrUpdate(a334);
-		tab7Form.getQuestionSets().add(a334);
-		session.saveOrUpdate(tab7Form);
 
 
 		// == A2 ==========================================================================
@@ -1044,12 +907,12 @@ public class AwacInitialData {
 		// == A9 ==========================================================================
 		// Indiquez la surface totale du site:
 		// A1(AWAC - Entreprises) > A9 (Indiquez la surface totale du site:)
-		session.saveOrUpdate(new DoubleQuestion(a1, 0, QuestionCode.A9, surfaceUnits));
+		session.saveOrUpdate(new DoubleQuestion(a1, 0, QuestionCode.A9, surfaceUnits, null));
 
 		// == A10 =========================================================================
 		// Quelle est la surface des bureaux?
 		// A1(AWAC - Entreprises) > A10 (Quelle est la surface des bureaux?)
-		session.saveOrUpdate(new DoubleQuestion(a1, 0, QuestionCode.A10, surfaceUnits));
+		session.saveOrUpdate(new DoubleQuestion(a1, 0, QuestionCode.A10, surfaceUnits, null));
 
 		// == A11 =========================================================================
 		// Etes-vous participant aux accords de branche de 2ème génération?
@@ -1074,7 +937,7 @@ public class AwacInitialData {
 		// == A17 =========================================================================
 		// Quantité
 		// A13(Consommation de combustibles) > A15(Combustion de combustible par les sources statiques des sites de l'entreprise) > A17 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a15, 0, QuestionCode.A17, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a15, 0, QuestionCode.A17, energyUnits, null));
 
 		// == A21 =========================================================================
 		// Pièces documentaires liées aux achats d'électricité et de vapeur
@@ -1084,12 +947,12 @@ public class AwacInitialData {
 		// == A23 =========================================================================
 		// Consommation d'électricité verte
 		// A20(Electricité et vapeur achetées) > A22(Electricité) > A23 (Consommation d'électricité verte)
-		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A23, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A23, energyUnits, null));
 
 		// == A24 =========================================================================
 		// Consommation d'électricité grise
 		// A20(Electricité et vapeur achetées) > A22(Electricité) > A24 (Consommation d'électricité grise)
-		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A24, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A24, energyUnits, null));
 
 		// == A26 =========================================================================
 		// Energie primaire utilisée pour produire la vapeur:
@@ -1099,12 +962,12 @@ public class AwacInitialData {
 		// == A27 =========================================================================
 		// Efficacité de la chaudière
 		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A27 (Efficacité de la chaudière)
-		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A27, null));
+		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A27, null, null));
 
 		// == A28 =========================================================================
 		// Quantité achetée
 		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A28 (Quantité achetée)
-		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A28, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A28, energyUnits, null));
 
 		// == A32 =========================================================================
 		// Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
@@ -1124,7 +987,7 @@ public class AwacInitialData {
 		// == A36 =========================================================================
 		// Quantité
 		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A36 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A36, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A36, massUnits, null));
 
 		// == A38 =========================================================================
 		// Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
@@ -1144,12 +1007,12 @@ public class AwacInitialData {
 		// == A44 =========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A44 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a42, 0, QuestionCode.A44, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a42, 0, QuestionCode.A44, massUnits, null));
 
 		// == A46 =========================================================================
 		// Quel est la puissance frigorifique des groupes froid?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45(Estimation des émissions à partir de la puissance du groupe de froid) > A46 (Quel est la puissance frigorifique des groupes froid?)
-		session.saveOrUpdate(new DoubleQuestion(a45, 0, QuestionCode.A46, powerUnits));
+		session.saveOrUpdate(new DoubleQuestion(a45, 0, QuestionCode.A46, powerUnits, null));
 
 		// == A48 =========================================================================
 		// Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
@@ -1159,7 +1022,7 @@ public class AwacInitialData {
 		// == A49 =========================================================================
 		// Quel est le nombre d'heures de fonctionnement annuel du site?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
-		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits, null));
 
 		// == A51 =========================================================================
 		// Pièces documentaires liées à la mobilité
@@ -1169,47 +1032,47 @@ public class AwacInitialData {
 		// == A55 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A55 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A55, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A55, volumeUnits, null));
 
 		// == A56 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A56 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A56, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A56, volumeUnits, null));
 
 		// == A57 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A57 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A57, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A57, volumeUnits, null));
 
 		// == A59 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A59 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A59, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A59, volumeUnits, null));
 
 		// == A60 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A60 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A60, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A60, volumeUnits, null));
 
 		// == A61 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A61 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A61, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A61, volumeUnits, null));
 
 		// == A63 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A63 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A63, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A63, volumeUnits, null));
 
 		// == A64 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A64 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A64, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A64, volumeUnits, null));
 
 		// == A65 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A65 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A65, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A65, volumeUnits, null));
 
 		// == A68 =========================================================================
 		// Catégorie de véhicule
@@ -1279,27 +1142,27 @@ public class AwacInitialData {
 		// == A88 =========================================================================
 		// Quel est le montant annuel de dépenses en carburant?
 		// A13(Consommation de combustibles) > A88 (Quel est le montant annuel de dépenses en carburant?)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A88, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A88, moneyUnits, null));
 
 		// == A89 =========================================================================
 		// Prix moyen du litre d'essence
 		// A13(Consommation de combustibles) > A89 (Prix moyen du litre d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A89, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A89, moneyUnits, 1.3));
 
 		// == A90 =========================================================================
 		// Prix moyen du litre de diesel
 		// A13(Consommation de combustibles) > A90 (Prix moyen du litre de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A90, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A90, moneyUnits, 1.45));
 
 		// == A91 =========================================================================
 		// Prix moyen du litre de biodiesel
 		// A13(Consommation de combustibles) > A91 (Prix moyen du litre de biodiesel)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A91, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A91, moneyUnits, 1.44));
 
 		// == A92 =========================================================================
 		// Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL)
 		// A13(Consommation de combustibles) > A92 (Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A92, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A92, moneyUnits, 1.1));
 
 		// == A95 =========================================================================
 		// Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
@@ -1364,12 +1227,12 @@ public class AwacInitialData {
 		// == A107 ========================================================================
 		// Taxi pour déplacement domicile-travail des employés (en valeur)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A107 (Taxi pour déplacement domicile-travail des employés (en valeur))
-		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A107, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A107, moneyUnits, null));
 
 		// == A108 ========================================================================
 		// Taxi pour déplacements professionnels & des visiteurs (en valeur)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A108 (Taxi pour déplacements professionnels & des visiteurs (en valeur))
-		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A108, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A108, moneyUnits, null));
 
 		// == A110 ========================================================================
 		// Etes-vous situés à proximité d'une gare (< 1 km)?
@@ -1409,12 +1272,12 @@ public class AwacInitialData {
 		// == A120 ========================================================================
 		// Distance moyenne A/R (km)
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A114(Méthode par le détail des vols) > A115(Créez autant de catégories de vol que nécessaire) > A120 (Distance moyenne A/R (km))
-		session.saveOrUpdate(new DoubleQuestion(a115, 0, QuestionCode.A120, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a115, 0, QuestionCode.A120, lengthUnits, null));
 
 		// == A122 ========================================================================
 		// % des employés qui réalisent des déplacements en avion
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A122 (% des employés qui réalisent des déplacements en avion)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A122, null));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A122, null, null));
 
 		// == A123 ========================================================================
 		// Connaissez-vous le nombre de km parcourus en avion?
@@ -1429,17 +1292,17 @@ public class AwacInitialData {
 		// == A125 ========================================================================
 		// Km moyen assignés par employé voyageant
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A125 (Km moyen assignés par employé voyageant)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A125, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A125, lengthUnits, null));
 
 		// == A126 ========================================================================
 		// Km moyen assignés par employé voyageant
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A126 (Km moyen assignés par employé voyageant)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A126, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A126, lengthUnits, null));
 
 		// == A127 ========================================================================
 		// km moyen parcourus sur l'année:
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A127 (km moyen parcourus sur l'année:)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A127, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A127, lengthUnits, null));
 
 		// == A129 ========================================================================
 		// Pièces documentaires liées au transport et stockage amont
@@ -1449,17 +1312,17 @@ public class AwacInitialData {
 		// == A133 ========================================================================
 		// Consommation d'essence
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A133 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A133, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A133, volumeUnits, null));
 
 		// == A134 ========================================================================
 		// Consommation de diesel
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A134 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A134, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A134, volumeUnits, null));
 
 		// == A135 ========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A135 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A135, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A135, volumeUnits, null));
 
 		// == A136 ========================================================================
 		// Est-ce les marchandises sont refrigérées durant le transport?
@@ -1479,12 +1342,12 @@ public class AwacInitialData {
 		// == A139 ========================================================================
 		// Quantité de recharge annuelle
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A139 (Quantité de recharge annuelle)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A139, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A139, massUnits, null));
 
 		// == A500 ========================================================================
 		// Quantité de recharge annuelle
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A500 (Quantité de recharge annuelle)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A500, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A500, massUnits, null));
 
 		// == A143 ========================================================================
 		// Marchandise
@@ -1494,67 +1357,67 @@ public class AwacInitialData {
 		// == A145 ========================================================================
 		// Poids total transporté:
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A145 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A145, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A145, massUnits, null));
 
 		// == A146 ========================================================================
 		// Distance totale entre le point de départ et le point d'arrivée de la marchandise:
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A146 (Distance totale entre le point de départ et le point d'arrivée de la marchandise:)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A146, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A146, lengthUnits, null));
 
 		// == A147 ========================================================================
 		// % de distance effectuée par transport routier local par camion
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A147 (% de distance effectuée par transport routier local par camion)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A147, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A147, null, null));
 
 		// == A148 ========================================================================
 		// % de distance effectuée par transport routier local par camionnette
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A148 (% de distance effectuée par transport routier local par camionnette)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A148, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A148, null, null));
 
 		// == A149 ========================================================================
 		// % de distance effectuée par transport routier international
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A149 (% de distance effectuée par transport routier international)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A149, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A149, null, null));
 
 		// == A150 ========================================================================
 		// % de distance effectuée par voie ferroviaire
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A150 (% de distance effectuée par voie ferroviaire)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A150, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A150, null, null));
 
 		// == A151 ========================================================================
 		// % de distance effectuée par voie maritime
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A151 (% de distance effectuée par voie maritime)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A151, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A151, null, null));
 
 		// == A152 ========================================================================
 		// % de distance effectuée par voie fluviale
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A152 (% de distance effectuée par voie fluviale)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A152, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A152, null, null));
 
 		// == A153 ========================================================================
 		// % de distance effectuée par transport aérien court courrier (<1000 km)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A153 (% de distance effectuée par transport aérien court courrier (<1000 km))
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A153, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A153, null, null));
 
 		// == A154 ========================================================================
 		// % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A154 (% de distance effectuée par transport aérien moyen courrier (1000 à 4000 km))
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A154, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A154, null, null));
 
 		// == A155 ========================================================================
 		// % de distance effectuée par transport aérien long courrier (> 4000 km)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A155 (% de distance effectuée par transport aérien long courrier (> 4000 km))
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A155, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A155, null, null));
 
 		// == A156 ========================================================================
 		// Total (supposé être égal à 100%)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A156 (Total (supposé être égal à 100%))
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A156, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A156, null, null));
 
 		// == A158 ========================================================================
 		// Quel est le poids total des marchandises?
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A158 (Quel est le poids total des marchandises?)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A158, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A158, massUnits, null));
 
 		// == A159 ========================================================================
 		// Quelle est la provenance ou destination des marchandises?
@@ -1564,17 +1427,17 @@ public class AwacInitialData {
 		// == A160 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A160 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A160, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A160, lengthUnits, null));
 
 		// == A161 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A161 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A161, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A161, lengthUnits, null));
 
 		// == A162 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A162 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A162, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A162, lengthUnits, null));
 
 		// == A165 ========================================================================
 		// Entrepôt
@@ -1589,12 +1452,12 @@ public class AwacInitialData {
 		// == A168 ========================================================================
 		// Quantité
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A166(Listez les totaux de combustibles utilisés en amont) > A168 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a166, 0, QuestionCode.A168, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a166, 0, QuestionCode.A168, energyUnits, null));
 
 		// == A169 ========================================================================
 		// Electricité
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A169 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a164, 0, QuestionCode.A169, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a164, 0, QuestionCode.A169, energyUnits, null));
 
 		// == A171 ========================================================================
 		// Type de gaz
@@ -1604,7 +1467,7 @@ public class AwacInitialData {
 		// == A172 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A170(Listez les gaz réfrigérants utilisés pour les marchandises amont) > A172 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a170, 0, QuestionCode.A172, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a170, 0, QuestionCode.A172, massUnits, null));
 
 		// == A174 ========================================================================
 		// Pièces documentaires liées aux déchets
@@ -1629,7 +1492,7 @@ public class AwacInitialData {
 		// == A179 ========================================================================
 		// Quantité
 		// A173(Déchets générés par les opérations) > A175(Listez vos différents postes de déchets) > A179 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a175, 0, QuestionCode.A179, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a175, 0, QuestionCode.A179, massUnits, null));
 
 		// == A183 ========================================================================
 		// Nombre d'ouvriers
@@ -1684,7 +1547,7 @@ public class AwacInitialData {
 		// == A199 ========================================================================
 		// Quantités de m³ rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A197(Méthode par la quantité de m³ rejetés) > A199 (Quantités de m³ rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a197, 0, QuestionCode.A199, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a197, 0, QuestionCode.A199, volumeUnits, null));
 
 		// == A200 ========================================================================
 		// Méthode de traitement des eaux usées
@@ -1699,12 +1562,12 @@ public class AwacInitialData {
 		// == A202 ========================================================================
 		// Quantités de DCO rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A201(Méthode par le poids de CO2 chimique des effluents rejetés) > A202 (Quantités de DCO rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A202, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A202, massUnits, null));
 
 		// == A203 ========================================================================
 		// Quantités d'azote rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A201(Méthode par le poids de CO2 chimique des effluents rejetés) > A203 (Quantités d'azote rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A203, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A203, massUnits, null));
 
 		// == A204 ========================================================================
 		// Méthode de traitement des eaux usées
@@ -1769,17 +1632,17 @@ public class AwacInitialData {
 		// == A220 ========================================================================
 		// Taux de recyclé
 		// A208(Méthode par détail des achats) > A209(Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)) > A220 (Taux de recyclé)
-		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A220, null));
+		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A220, null, null));
 
 		// == A221 ========================================================================
 		// Quantité
 		// A208(Méthode par détail des achats) > A209(Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)) > A221 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A221, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A221, massUnits, null));
 
 		// == A222 ========================================================================
 		// Quantité
 		// A208(Méthode par détail des achats) > A209(Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)) > A222 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A222, moneyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A222, moneyUnits, null));
 
 		// == A225 ========================================================================
 		// Poste d'achat
@@ -1819,12 +1682,12 @@ public class AwacInitialData {
 		// == A234 ========================================================================
 		// Quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A231(Créez et nommez vos postes d'infrastructure) > A234 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A234, surfaceUnits));
+		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A234, surfaceUnits, null));
 
 		// == A235 ========================================================================
 		// Quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A231(Créez et nommez vos postes d'infrastructure) > A235 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A235, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A235, massUnits, null));
 
 		// == A236 ========================================================================
 		// Quantité
@@ -1884,67 +1747,67 @@ public class AwacInitialData {
 		// == A254 ========================================================================
 		// Poids total transporté:
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A254 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A254, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A254, massUnits, null));
 
 		// == A255 ========================================================================
 		// Distance totale entre le point de vente et le client particulier ou entre le point de vente et le client professionnel
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A255 (Distance totale entre le point de vente et le client particulier ou entre le point de vente et le client professionnel)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A255, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A255, lengthUnits, null));
 
 		// == A256 ========================================================================
 		// % de distance effectuée par transport routier local par camion
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A256 (% de distance effectuée par transport routier local par camion)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A256, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A256, null, null));
 
 		// == A257 ========================================================================
 		// % de distance effectuée par transport routier local par camionnette
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A257 (% de distance effectuée par transport routier local par camionnette)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A257, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A257, null, null));
 
 		// == A258 ========================================================================
 		// % de distance effectuée par transport routier international
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A258 (% de distance effectuée par transport routier international)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A258, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A258, null, null));
 
 		// == A259 ========================================================================
 		// % de distance effectuée par voie ferroviaire
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A259 (% de distance effectuée par voie ferroviaire)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A259, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A259, null, null));
 
 		// == A260 ========================================================================
 		// % de distance effectuée par voie maritime
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A260 (% de distance effectuée par voie maritime)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A260, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A260, null, null));
 
 		// == A261 ========================================================================
 		// % de distance effectuée par voie fluviale
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A261 (% de distance effectuée par voie fluviale)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A261, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A261, null, null));
 
 		// == A262 ========================================================================
 		// % de distance effectuée par transport aérien court courrier (<1000 km)
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A262 (% de distance effectuée par transport aérien court courrier (<1000 km))
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A262, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A262, null, null));
 
 		// == A263 ========================================================================
 		// % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A263 (% de distance effectuée par transport aérien moyen courrier (1000 à 4000 km))
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A263, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A263, null, null));
 
 		// == A264 ========================================================================
 		// % de distance effectuée par transport aérien long courrier (> 4000 km)
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A264 (% de distance effectuée par transport aérien long courrier (> 4000 km))
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A264, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A264, null, null));
 
 		// == A265 ========================================================================
 		// Total (supposé être égal à 100%)
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A265 (Total (supposé être égal à 100%))
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A265, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A265, null, null));
 
 		// == A267 ========================================================================
 		// Poids total transporté:
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A267 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A267, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A267, massUnits, null));
 
 		// == A268 ========================================================================
 		// Quelle est la destination géographique des produits vendus?
@@ -1954,17 +1817,17 @@ public class AwacInitialData {
 		// == A269 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A269 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A269, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A269, lengthUnits, null));
 
 		// == A270 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A270 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A270, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A270, lengthUnits, null));
 
 		// == A271 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A271 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A271, lengthUnits));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A271, lengthUnits, null));
 
 		// == A274 ========================================================================
 		// Entrepôt
@@ -1979,12 +1842,12 @@ public class AwacInitialData {
 		// == A277 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275(Listez les totaux de combustibles utilisés) > A277 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a275, 0, QuestionCode.A277, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a275, 0, QuestionCode.A277, energyUnits, null));
 
 		// == A278 ========================================================================
 		// Electricité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A278 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a273, 0, QuestionCode.A278, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a273, 0, QuestionCode.A278, energyUnits, null));
 
 		// == A280 ========================================================================
 		// Type de gaz
@@ -1994,7 +1857,7 @@ public class AwacInitialData {
 		// == A281 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279(Listez les gaz réfrigérants) > A281 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a279, 0, QuestionCode.A281, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a279, 0, QuestionCode.A281, massUnits, null));
 
 		// == A283 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2009,12 +1872,12 @@ public class AwacInitialData {
 		// == A286 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A284(Listez les totaux de combustibles) > A286 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a284, 0, QuestionCode.A286, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a284, 0, QuestionCode.A286, energyUnits, null));
 
 		// == A287 ========================================================================
 		// Electricité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A287 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a282, 0, QuestionCode.A287, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a282, 0, QuestionCode.A287, energyUnits, null));
 
 		// == A289 ========================================================================
 		// Type de gaz
@@ -2024,7 +1887,7 @@ public class AwacInitialData {
 		// == A290 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A288(Listez les gaz réfrigérants) > A290 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a288, 0, QuestionCode.A290, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a288, 0, QuestionCode.A290, massUnits, null));
 
 		// == A292 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2039,17 +1902,17 @@ public class AwacInitialData {
 		// == A294 ========================================================================
 		// Consommation de diesel par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A294 (Consommation de diesel par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A294, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A294, volumeUnits, null));
 
 		// == A295 ========================================================================
 		// Consommation d'essence par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A295 (Consommation d'essence par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A295, volumeUnits));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A295, volumeUnits, null));
 
 		// == A296 ========================================================================
 		// Consommation d'électricité par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A296 (Consommation d'électricité par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A296, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A296, energyUnits, null));
 
 		// == A298 ========================================================================
 		// Gaz émis
@@ -2059,7 +1922,7 @@ public class AwacInitialData {
 		// == A299 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A297(Listez les gaz émis par utilisation de produit) > A299 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a297, 0, QuestionCode.A299, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a297, 0, QuestionCode.A299, massUnits, null));
 
 		// == A301 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2069,7 +1932,7 @@ public class AwacInitialData {
 		// == A302 ========================================================================
 		// Poids total de produit vendu
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A302 (Poids total de produit vendu)
-		session.saveOrUpdate(new DoubleQuestion(a300, 0, QuestionCode.A302, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a300, 0, QuestionCode.A302, massUnits, null));
 
 		// == A304 ========================================================================
 		// Catégorie de déchet
@@ -2079,7 +1942,7 @@ public class AwacInitialData {
 		// == A305 ========================================================================
 		// Poids total de cette catégorie de déchet issu des produits vendus
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A303(Créez autant de catégories de déchet que nécessaire) > A305 (Poids total de cette catégorie de déchet issu des produits vendus)
-		session.saveOrUpdate(new DoubleQuestion(a303, 0, QuestionCode.A305, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a303, 0, QuestionCode.A305, massUnits, null));
 
 		// == A306 ========================================================================
 		// Type principal de ce déchet:
@@ -2114,12 +1977,12 @@ public class AwacInitialData {
 		// == A315 ========================================================================
 		// Quantité
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A315 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits, null));
 
 		// == A316 ========================================================================
 		// Electricité
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A316 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits, null));
 
 		// == A318 ========================================================================
 		// Type de gaz
@@ -2129,7 +1992,7 @@ public class AwacInitialData {
 		// == A319 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A319 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits, null));
 
 		// == A321 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2154,12 +2017,12 @@ public class AwacInitialData {
 		// == A327 ========================================================================
 		// Quantité
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A327 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits, null));
 
 		// == A328 ========================================================================
 		// Electricité (moyenne par franchisé)
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A328 (Electricité (moyenne par franchisé))
-		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits));
+		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits, null));
 
 		// == A330 ========================================================================
 		// Type de gaz
@@ -2169,7 +2032,7 @@ public class AwacInitialData {
 		// == A331 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A331 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits));
+		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits, null));
 
 		// == A333 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2184,7 +2047,7 @@ public class AwacInitialData {
 		// == A336 ========================================================================
 		// Part d'investissements dans le projet
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A336 (Part d'investissements dans le projet)
-		session.saveOrUpdate(new DoubleQuestion(a334, 0, QuestionCode.A336, null));
+		session.saveOrUpdate(new DoubleQuestion(a334, 0, QuestionCode.A336, null, null));
 
 		// == A337 ========================================================================
 		// Emissions directes totales (tCO2e)
@@ -2195,6 +2058,9 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
+
+
+
 
 
 	}

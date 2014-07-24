@@ -1,20 +1,43 @@
 package eu.factorx.awac.models.data.question;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.type.QuestionCode;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.QuestionCode;
+
 @Entity
 @Table(name = "question_set")
+@NamedQuery(name = QuestionSet.FIND_ONLY_PARENTS, query = "select qs from QuestionSet qs where qs.parent is null and qs in :questionSets")
 public class QuestionSet extends AbstractEntity {
 
-	public static final String FIND_BY_SCOPE_AND_PERIOD = "";
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Returns a subset of the given collection, where parent is null
+	 * 
+	 * @param questionSets
+	 *            a collection of QuestionSet
+	 */
+	public static final String FIND_ONLY_PARENTS = "QuestionSet.findOnlyParents";
+
 	@Enumerated
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	private QuestionCode code;
 
 	private Boolean repetitionAllowed;
@@ -92,4 +115,30 @@ public class QuestionSet extends AbstractEntity {
 	public boolean addChild(QuestionSet questionSet) {
 		return this.getChildren().add(questionSet);
 	}
+
+	@Override
+	public String toString() {
+		return "QuestionSet [code=" + code + ", repetitionAllowed=" + repetitionAllowed + ", parent=" + parent + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof QuestionSet)) {
+			return false;
+		}
+		QuestionSet rhs = (QuestionSet) obj;
+		return new EqualsBuilder().append(this.code, rhs.code).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(53, 13).append(this.code).toHashCode();
+	}
+
 }
