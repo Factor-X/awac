@@ -719,11 +719,22 @@ button.comments {
     width: auto;
 }
 */
+
+.repetition-title {
+    margin-left: 35px;
+}
+
+.repetition-title .glyphicon{
+    margin-right: 5px;
+}
+
 .repetition-question {
     position: relative;
     padding-top: 0px;
     padding-bottom: 25px;
     padding-left: 5px !important;
+    border: solid 1px #ddd;
+    margin: 5px;
 }
 
 .repetition-question .remove-button {
@@ -737,8 +748,8 @@ button.comments {
     background-color: #8a6060;
 }
 
-.repetition-question .add-button {
-    margin-left: 40px;
+.add-repetition-button {
+    margin-left: 40px !important;
 }
 
 .repetition-question-title {
@@ -792,9 +803,8 @@ button.comments {
     padding-right : 15px;
 }
 
-.question_field > div:first-child img{
+.question_field > div:first-child .glyphicon{
     margin-right : 2px;
-    vertical-align: top;
 }
 
 .question_field > div:last-child{
@@ -873,6 +883,7 @@ button.comments {
     margin-bottom: 5px;
     padding-right : 15px;
     padding-bottom : 2px;
+    margin-left : 35px;
 }
 
 .status {
@@ -1173,9 +1184,4 @@ button.comments {
 
 .tab-color-orange.sub_block {
     border-color: #e38a27;
-}
-
-.repetition-question {
-    border: solid 1px #ddd;
-    margin: 5px;
 }

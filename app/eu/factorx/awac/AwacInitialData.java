@@ -872,7 +872,7 @@ public class AwacInitialData {
 		// == A2 ==========================================================================
 		// Année de référence pour comparaison du présent bilan GES
 		// A1(AWAC - Entreprises) > A2 (Année de référence pour comparaison du présent bilan GES)
-		session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A2, null));
+		session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A2, null, null));
 
 		// == A3 ==========================================================================
 		// A quel secteur principal appartient votre site?
@@ -922,7 +922,7 @@ public class AwacInitialData {
 		// == A12 =========================================================================
 		// Quel est le nombre d'employés sur l'année du bilan?
 		// A1(AWAC - Entreprises) > A12 (Quel est le nombre d'employés sur l'année du bilan?)
-		session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A12, null));
+		session.saveOrUpdate(new IntegerQuestion(a1, 0, QuestionCode.A12, null, null));
 
 		// == A14 =========================================================================
 		// Pièces documentaires liées aux consommations de combustible
@@ -1102,22 +1102,22 @@ public class AwacInitialData {
 		// == A73 =========================================================================
 		// Consommation moyenne (L/100km)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66(Calcul par les kilomètres) > A67(Créez autant de catégories de véhicules que souhaité) > A73 (Consommation moyenne (L/100km))
-		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A73, null));
+		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A73, null, 7));
 
 		// == A74 =========================================================================
 		// Consommation moyenne (L/100km)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66(Calcul par les kilomètres) > A67(Créez autant de catégories de véhicules que souhaité) > A74 (Consommation moyenne (L/100km))
-		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A74, null));
+		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A74, null, 12));
 
 		// == A75 =========================================================================
 		// Consommation moyenne (L/100km)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66(Calcul par les kilomètres) > A67(Créez autant de catégories de véhicules que souhaité) > A75 (Consommation moyenne (L/100km))
-		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A75, null));
+		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A75, null, 6));
 
 		// == A76 =========================================================================
 		// Quelle est le nombre de kilomètres parcourus par an?
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A66(Calcul par les kilomètres) > A67(Créez autant de catégories de véhicules que souhaité) > A76 (Quelle est le nombre de kilomètres parcourus par an?)
-		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A76, null));
+		session.saveOrUpdate(new IntegerQuestion(a67, 0, QuestionCode.A76, null, null));
 
 		// == A79 =========================================================================
 		// Catégorie de véhicule
@@ -1167,62 +1167,62 @@ public class AwacInitialData {
 		// == A95 =========================================================================
 		// Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A95 (Bus TEC pour déplacement domicile-travail des employés (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A95, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A95, null, null));
 
 		// == A96 =========================================================================
 		// Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A96 (Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A96, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A96, null, null));
 
 		// == A97 =========================================================================
 		// Métro pour déplacement domicile-travail des employés (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A97 (Métro pour déplacement domicile-travail des employés (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A97, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A97, null, null));
 
 		// == A98 =========================================================================
 		// Métro pour déplacements professionnels & des visiteurs (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A98 (Métro pour déplacements professionnels & des visiteurs (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A98, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A98, null, null));
 
 		// == A99 =========================================================================
 		// Train national SNCB pour déplacement domicile-travail des employés (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A99 (Train national SNCB pour déplacement domicile-travail des employés (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A99, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A99, null, null));
 
 		// == A100 ========================================================================
 		// Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A100 (Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A100, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A100, null, null));
 
 		// == A101 ========================================================================
 		// Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A101 (Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A101, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A101, null, null));
 
 		// == A102 ========================================================================
 		// Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A102 (Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A102, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A102, null, null));
 
 		// == A103 ========================================================================
 		// Tram pour déplacement domicile-travail des employés (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A103 (Tram pour déplacement domicile-travail des employés (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A103, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A103, null, null));
 
 		// == A104 ========================================================================
 		// Tram pour déplacements professionnels & des visiteurs (en km.passagers)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A104 (Tram pour déplacements professionnels & des visiteurs (en km.passagers))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A104, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A104, null, null));
 
 		// == A105 ========================================================================
 		// Taxi pour déplacement domicile-travail des employés (en véhicules.km)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A105 (Taxi pour déplacement domicile-travail des employés (en véhicules.km))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A105, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A105, null, null));
 
 		// == A106 ========================================================================
 		// Taxi pour déplacements professionnels & des visiteurs (en véhicules.km)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A106 (Taxi pour déplacements professionnels & des visiteurs (en véhicules.km))
-		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A106, null));
+		session.saveOrUpdate(new IntegerQuestion(a94, 0, QuestionCode.A106, null, null));
 
 		// == A107 ========================================================================
 		// Taxi pour déplacement domicile-travail des employés (en valeur)
@@ -1267,7 +1267,7 @@ public class AwacInitialData {
 		// == A119 ========================================================================
 		// Nombre de vols/an
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A114(Méthode par le détail des vols) > A115(Créez autant de catégories de vol que nécessaire) > A119 (Nombre de vols/an)
-		session.saveOrUpdate(new IntegerQuestion(a115, 0, QuestionCode.A119, null));
+		session.saveOrUpdate(new IntegerQuestion(a115, 0, QuestionCode.A119, null, null));
 
 		// == A120 ========================================================================
 		// Distance moyenne A/R (km)
@@ -1497,42 +1497,42 @@ public class AwacInitialData {
 		// == A183 ========================================================================
 		// Nombre d'ouvriers
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A182(Usine ou atelier) > A183 (Nombre d'ouvriers)
-		session.saveOrUpdate(new IntegerQuestion(a182, 0, QuestionCode.A183, null));
+		session.saveOrUpdate(new IntegerQuestion(a182, 0, QuestionCode.A183, null, null));
 
 		// == A184 ========================================================================
 		// Nombre de jours de travail/an
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A182(Usine ou atelier) > A184 (Nombre de jours de travail/an)
-		session.saveOrUpdate(new IntegerQuestion(a182, 0, QuestionCode.A184, null));
+		session.saveOrUpdate(new IntegerQuestion(a182, 0, QuestionCode.A184, null, 220));
 
 		// == A186 ========================================================================
 		// Nombre d'employés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A185(Bureau) > A186 (Nombre d'employés)
-		session.saveOrUpdate(new IntegerQuestion(a185, 0, QuestionCode.A186, null));
+		session.saveOrUpdate(new IntegerQuestion(a185, 0, QuestionCode.A186, null, null));
 
 		// == A187 ========================================================================
 		// Nombre de jours de travail/an
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A185(Bureau) > A187 (Nombre de jours de travail/an)
-		session.saveOrUpdate(new IntegerQuestion(a185, 0, QuestionCode.A187, null));
+		session.saveOrUpdate(new IntegerQuestion(a185, 0, QuestionCode.A187, null, 220));
 
 		// == A189 ========================================================================
 		// Nombre de lits
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A188(Hôtel, pension, hôpitaux, prison) > A189 (Nombre de lits)
-		session.saveOrUpdate(new IntegerQuestion(a188, 0, QuestionCode.A189, null));
+		session.saveOrUpdate(new IntegerQuestion(a188, 0, QuestionCode.A189, null, null));
 
 		// == A190 ========================================================================
 		// Nombre de jours d'ouverture/an
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A188(Hôtel, pension, hôpitaux, prison) > A190 (Nombre de jours d'ouverture/an)
-		session.saveOrUpdate(new IntegerQuestion(a188, 0, QuestionCode.A190, null));
+		session.saveOrUpdate(new IntegerQuestion(a188, 0, QuestionCode.A190, null, 365));
 
 		// == A192 ========================================================================
 		// Nombre de couverts/jour
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A191(Restaurant ou cantine) > A192 (Nombre de couverts/jour)
-		session.saveOrUpdate(new IntegerQuestion(a191, 0, QuestionCode.A192, null));
+		session.saveOrUpdate(new IntegerQuestion(a191, 0, QuestionCode.A192, null, null));
 
 		// == A193 ========================================================================
 		// Nombre de jours d'ouverture/an
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A181(Eaux usées domestiques par grand type de bâtiments) > A191(Restaurant ou cantine) > A193 (Nombre de jours d'ouverture/an)
-		session.saveOrUpdate(new IntegerQuestion(a191, 0, QuestionCode.A193, null));
+		session.saveOrUpdate(new IntegerQuestion(a191, 0, QuestionCode.A193, null, 220));
 
 		// == A195 ========================================================================
 		// Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
@@ -1652,17 +1652,17 @@ public class AwacInitialData {
 		// == A226 ========================================================================
 		// Quantité
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224(Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)) > A226 (Quantité)
-		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A226, null));
+		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A226, null, null));
 
 		// == A227 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224(Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)) > A227 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A227, null));
+		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A227, null, null));
 
 		// == A228 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224(Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)) > A228 (Facteur d'émission en tCO2e par unité ci-dessus)
-		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A228, null));
+		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A228, null, null));
 
 		// == A230 ========================================================================
 		// Pièces documentaires liées aux infrastructures
@@ -1692,7 +1692,7 @@ public class AwacInitialData {
 		// == A236 ========================================================================
 		// Quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A231(Créez et nommez vos postes d'infrastructure) > A236 (Quantité)
-		session.saveOrUpdate(new IntegerQuestion(a231, 0, QuestionCode.A236, null));
+		session.saveOrUpdate(new IntegerQuestion(a231, 0, QuestionCode.A236, null, null));
 
 		// == A239 ========================================================================
 		// Poste d'infrastructure
@@ -1702,17 +1702,17 @@ public class AwacInitialData {
 		// == A240 ========================================================================
 		// Quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A240 (Quantité)
-		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A240, null));
+		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A240, null, null));
 
 		// == A241 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A241 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A241, null));
+		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A241, null, null));
 
 		// == A242 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A242 (Facteur d'émission en tCO2e par unité ci-dessus)
-		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A242, null));
+		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A242, null, null));
 
 		// == A245 ========================================================================
 		// Nom du produit ou groupe de produits
@@ -1722,7 +1722,7 @@ public class AwacInitialData {
 		// == A246 ========================================================================
 		// Quantité vendue de ce produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A246 (Quantité vendue de ce produit)
-		session.saveOrUpdate(new IntegerQuestion(a244, 0, QuestionCode.A246, null));
+		session.saveOrUpdate(new IntegerQuestion(a244, 0, QuestionCode.A246, null, null));
 
 		// == A247 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
@@ -1897,7 +1897,7 @@ public class AwacInitialData {
 		// == A293 ========================================================================
 		// Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A293 (Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie)
-		session.saveOrUpdate(new IntegerQuestion(a291, 0, QuestionCode.A293, null));
+		session.saveOrUpdate(new IntegerQuestion(a291, 0, QuestionCode.A293, null, null));
 
 		// == A294 ========================================================================
 		// Consommation de diesel par utilisation de produit
@@ -2007,7 +2007,7 @@ public class AwacInitialData {
 		// == A324 ========================================================================
 		// Nombre de franchisés
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A324 (Nombre de franchisés)
-		session.saveOrUpdate(new IntegerQuestion(a322, 0, QuestionCode.A324, null));
+		session.saveOrUpdate(new IntegerQuestion(a322, 0, QuestionCode.A324, null, null));
 
 		// == A326 ========================================================================
 		// Combustible utilisé
@@ -2052,12 +2052,12 @@ public class AwacInitialData {
 		// == A337 ========================================================================
 		// Emissions directes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A337 (Emissions directes totales (tCO2e))
-		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A337, null));
+		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A337, null, null));
 
 		// == A338 ========================================================================
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
-		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null));
+		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
 
 
 
