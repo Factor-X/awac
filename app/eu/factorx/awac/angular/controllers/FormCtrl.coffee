@@ -200,16 +200,22 @@ angular
         else
             #compute default value
             value = null
+            unitId = null
             if $scope.loading ==false
               question = $scope.getQuestion(code)
               if question.defaultValue!=null && question.defaultValue!=undefined
                 value = question.defaultValue
 
+              #compute default unitId
+              if question.unitCategoryId != null && question.unitCategoryId!= undefined
+                unitId = $scope.getUnitCategories(code).mainUnitId
+
+
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey':code
                 'value':value
-                'unitId':null
+                'unitId':unitId
                 'mapRepetition':mapIteration
             }
             $scope.answerList[$scope.answerList.length] = answerLine

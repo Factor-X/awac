@@ -70,58 +70,6 @@ angular.module('app.controllers').config(function($routeProvider) {
     redirectTo: '/login'
   });
   return;
-});angular.module('app.services').service("directiveService", function($sce) {
-  this.autoScope = function(s) {
-    var k, res, v;
-    res = {};
-    for (k in s) {
-      v = s[k];
-      res[k] = v;
-      if (k.slice(0, 2) === 'ng' && v === '=') {
-        res[k[2].toLowerCase() + k.slice(3)] = '@';
-      }
-    }
-    return res;
-  };
-  this.autoScopeImpl = function(s, name) {
-    var fget, key, val;
-    s.$$NAME = name;
-    for (key in s) {
-      val = s[key];
-      if (key.slice(0, 2) === 'ng') {
-        fget = function(scope, k) {
-          return function() {
-            var v;
-            v = 0;
-            if (scope[k] === void 0 || scope[k] === null || scope[k] === '') {
-              v = scope[k[2].toLowerCase() + k.slice(3)];
-            } else {
-              v = scope[k];
-            }
-            if (scope['decorate' + k.slice(2)]) {
-              return scope['decorate' + k.slice(2)](v);
-            } else {
-              return v;
-            }
-          };
-        };
-        s['get' + key.slice(2)] = fget(s, key);
-      }
-    }
-    s.isTrue = function(v) {
-      return v === true || v === 'true' || v === 'y';
-    };
-    s.isFalse = function(v) {
-      return v === false || v === 'false' || v === 'n';
-    };
-    s.isNull = function(v) {
-      return v === null;
-    };
-    return s.html = function(v) {
-      return $sce.trustAsHtml(v);
-    };
-  };
-  return;
 });angular.module('app.services').service("modalService", function($rootScope) {
   this.show = function(modalName, params) {
     var arg, target;
@@ -212,6 +160,58 @@ angular.module('app.controllers').config(function($routeProvider) {
       txt = v.fallback || '';
     }
     return txt;
+  };
+  return;
+});angular.module('app.services').service("directiveService", function($sce) {
+  this.autoScope = function(s) {
+    var k, res, v;
+    res = {};
+    for (k in s) {
+      v = s[k];
+      res[k] = v;
+      if (k.slice(0, 2) === 'ng' && v === '=') {
+        res[k[2].toLowerCase() + k.slice(3)] = '@';
+      }
+    }
+    return res;
+  };
+  this.autoScopeImpl = function(s, name) {
+    var fget, key, val;
+    s.$$NAME = name;
+    for (key in s) {
+      val = s[key];
+      if (key.slice(0, 2) === 'ng') {
+        fget = function(scope, k) {
+          return function() {
+            var v;
+            v = 0;
+            if (scope[k] === void 0 || scope[k] === null || scope[k] === '') {
+              v = scope[k[2].toLowerCase() + k.slice(3)];
+            } else {
+              v = scope[k];
+            }
+            if (scope['decorate' + k.slice(2)]) {
+              return scope['decorate' + k.slice(2)](v);
+            } else {
+              return v;
+            }
+          };
+        };
+        s['get' + key.slice(2)] = fget(s, key);
+      }
+    }
+    s.isTrue = function(v) {
+      return v === true || v === 'true' || v === 'y';
+    };
+    s.isFalse = function(v) {
+      return v === false || v === 'false' || v === 'n';
+    };
+    s.isNull = function(v) {
+      return v === null;
+    };
+    return s.html = function(v) {
+      return $sce.trustAsHtml(v);
+    };
   };
   return;
 });angular.module('app.filters').filter("translate", function($sce, translationService) {
@@ -1020,297 +1020,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
       });
     }
   };
-});angular.module('app.controllers').controller("Form4Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB4";
-  $scope.answerList = [];
-  $scope.mapRepetition = [];
-  /*
-  illustration of the structures
-  $scope.mapRepetition['A15'] = [{'A15':1},
-                                  {'A15':2}]
-
-  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
-                                 {'A16':2,'A15':1}]
-  */
-  $scope.loading = true;
-  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
-    console.log("data");
-    console.log(data);
-    $scope.o = data;
-    $scope.storeAnswers = function() {
-      var answerSave, qSet, _i, _len, _ref;
-      answerSave = $scope.o.answersSave;
-      $scope.answerList = answerSave.listAnswers;
-      _ref = $scope.o.questionSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        qSet = _ref[_i];
-        $scope.loopRepetition(qSet);
-      }
-      console.log("$scope.mapRepetition");
-      return console.log($scope.mapRepetition);
-    };
-    $scope.loopRepetition = function(questionSetDTO) {
-      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
-      if (questionSetDTO.repetitionAllowed === true) {
-        if (questionSetDTO.questions) {
-          _ref = questionSetDTO.questions;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            q = _ref[_i];
-            listAnswer = $scope.getListAnswer(q.code);
-            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
-              answer = listAnswer[_j];
-              if (answer.mapRepetition === null) {
-                console.log("mapRepetition expected but not found");
-              } else {
-                /*
-                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                code= questionSetDTO.code
-                repetitionToAdd = {}#code:repetition}
-                repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                */
-                if ($scope.mapRepetition[questionSetDTO.code]) {
-                  founded = false;
-                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
-                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
-                    repetition = _ref2[_k];
-                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
-                      founded = true;
-                    }
-                  }
-                  if (founded === false) {
-                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
-                  }
-                } else {
-                  $scope.mapRepetition[questionSetDTO.code] = [];
-                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
-                }
-              }
-            }
-          }
-        }
-      }
-      if (questionSetDTO.children) {
-        _ref3 = questionSetDTO.children;
-        _results = [];
-        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
-          child = _ref3[_l];
-          _results.push($scope.loopRepetition(child));
-        }
-        return _results;
-      }
-    };
-    $scope.storeAnswers();
-    return $scope.loading = false;
-  });
-  $scope.$on('SAVE', function() {
-    var answer, listAnswerToSave, promise, _i, _len, _ref;
-    listAnswerToSave = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.value) {
-        listAnswerToSave[listAnswerToSave.length] = answer;
-      }
-    }
-    console.log("listAnswerToSave");
-    console.log(listAnswerToSave);
-    $scope.o.answersSave.listAnswers = listAnswerToSave;
-    promise = $http({
-      method: "POST",
-      url: 'answer/save',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: $scope.o.answersSave
-    });
-    promise.success(function(data, status, headers, config) {
-      messageFlash.displaySuccess("Your answers are saved !");
-      return;
-    });
-    return promise.error(function(data, status, headers, config) {
-      messageFlash.displayError("An error was thrown during the save : " + data.message);
-      return;
-    });
-  });
-  $scope.getUnitCategories = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    if (question === null || question === void 0) {
-      console.log("ERROR : this question was not found : " + code);
-      return null;
-    }
-    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
-      console.log("ERROR : there is no unitCategoryId for this question : " + code);
-      return null;
-    }
-    return $scope.o.unitCategories[question.unitCategoryId];
-  };
-  $scope.getCodeList = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    return $scope.o.codeLists[question.codeListName];
-  };
-  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
-    var listRepetition, repetition, _i, _len, _ref;
-    listRepetition = [];
-    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
-          listRepetition[listRepetition.length] = repetition;
-        }
-      }
-    }
-    return listRepetition;
-  };
-  $scope.getQuestion = function(code, listQuestionSets) {
-    var q, qSet, result, _i, _j, _len, _len2, _ref;
-    if (listQuestionSets == null) {
-      listQuestionSets = $scope.o.questionSets;
-    }
-    if (listQuestionSets) {
-      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
-        qSet = listQuestionSets[_i];
-        if (qSet.questions) {
-          _ref = qSet.questions;
-          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
-            q = _ref[_j];
-            if (q.code === code) {
-              return q;
-            }
-          }
-        }
-        if (qSet.children) {
-          result = $scope.getQuestion(code, qSet.children);
-          if (result) {
-            return result;
-          }
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, result;
-    result = $scope.getAnswer(code, mapIteration);
-    if (result) {
-      return result;
-    } else {
-      answerLine = {
-        'questionKey': code,
-        'value': null,
-        'unitId': null,
-        'mapRepetition': mapIteration
-      };
-      $scope.answerList[$scope.answerList.length] = answerLine;
-      return answerLine;
-    }
-  };
-  $scope.getAnswer = function(code, mapIteration) {
-    var answer, _i, _len, _ref;
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code) {
-        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-          return answer;
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getListAnswer = function(code, mapIteration) {
-    var answer, listAnswer, _i, _len, _ref;
-    listAnswer = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-        listAnswer[listAnswer.length] = answer;
-      }
-    }
-    return listAnswer;
-  };
-  $scope.addIteration = function(code, mapRepetition) {
-    var max, repetition, repetitionToAdd, _i, _len, _ref;
-    max = 0;
-    repetitionToAdd = {};
-    if (mapRepetition !== null && mapRepetition !== void 0) {
-      repetitionToAdd = angular.copy(mapRepetition);
-    }
-    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
-      repetitionToAdd[code] = max + 1;
-      $scope.mapRepetition[code] = [];
-      return $scope.mapRepetition[code][0] = repetitionToAdd;
-    } else {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
-          max = repetition[code];
-        }
-      }
-      repetitionToAdd[code] = max + 1;
-      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
-    }
-  };
-  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
-    var iteration, key, len, question, _i, _len, _ref, _results;
-    len = $scope.answerList.length;
-    while (len--) {
-      question = $scope.answerList[len];
-      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
-        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
-          $scope.answerList.splice(len, 1);
-        }
-      }
-    }
-    _ref = Object.keys($scope.mapRepetition);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      _results.push((function() {
-        var _results;
-        if (key !== '$$hashKey') {
-          len = $scope.mapRepetition[key].length;
-          _results = [];
-          while (len--) {
-            iteration = $scope.mapRepetition[key][len];
-            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
-          }
-          return _results;
-        }
-      })());
-    }
-    return _results;
-  };
-  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
-    var key, value, _i, _len, _ref;
-    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
-      return true;
-    }
-    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
-      return false;
-    }
-    _ref = Object.keys(mapContained);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        value = mapContained[key];
-        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
 });angular.module('app.controllers').controller("ResultsCtrl", function($scope, downloadService, $http) {
   downloadService.getJson("result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
     return $scope.o = data;
@@ -1333,343 +1042,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         count: 25
       }
     ]
-  };
-});angular.module('app.controllers').controller("Form6Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB6";
-  $scope.answerList = [];
-  $scope.mapRepetition = [];
-  /*
-  illustration of the structures
-  $scope.mapRepetition['A15'] = [{'A15':1},
-                                  {'A15':2}]
-
-  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
-                                 {'A16':2,'A15':1}]
-  */
-  $scope.loading = true;
-  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
-    console.log("data");
-    console.log(data);
-    $scope.o = data;
-    $scope.storeAnswers = function() {
-      var answerSave, qSet, _i, _len, _ref;
-      answerSave = $scope.o.answersSave;
-      $scope.answerList = answerSave.listAnswers;
-      _ref = $scope.o.questionSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        qSet = _ref[_i];
-        $scope.loopRepetition(qSet);
-      }
-      console.log("$scope.mapRepetition");
-      return console.log($scope.mapRepetition);
-    };
-    $scope.loopRepetition = function(questionSetDTO) {
-      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
-      if (questionSetDTO.repetitionAllowed === true) {
-        if (questionSetDTO.questions) {
-          _ref = questionSetDTO.questions;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            q = _ref[_i];
-            listAnswer = $scope.getListAnswer(q.code);
-            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
-              answer = listAnswer[_j];
-              if (answer.mapRepetition === null) {
-                console.log("mapRepetition expected but not found");
-              } else {
-                /*
-                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                code= questionSetDTO.code
-                repetitionToAdd = {}#code:repetition}
-                repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                */
-                if ($scope.mapRepetition[questionSetDTO.code]) {
-                  founded = false;
-                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
-                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
-                    repetition = _ref2[_k];
-                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
-                      founded = true;
-                    }
-                  }
-                  if (founded === false) {
-                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
-                  }
-                } else {
-                  $scope.mapRepetition[questionSetDTO.code] = [];
-                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
-                }
-              }
-            }
-          }
-        }
-      }
-      if (questionSetDTO.children) {
-        _ref3 = questionSetDTO.children;
-        _results = [];
-        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
-          child = _ref3[_l];
-          _results.push($scope.loopRepetition(child));
-        }
-        return _results;
-      }
-    };
-    $scope.storeAnswers();
-    return $scope.loading = false;
-  });
-  $scope.$on('SAVE', function() {
-    var answer, listAnswerToSave, promise, _i, _len, _ref;
-    listAnswerToSave = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.value) {
-        listAnswerToSave[listAnswerToSave.length] = answer;
-      }
-    }
-    console.log("listAnswerToSave");
-    console.log(listAnswerToSave);
-    $scope.o.answersSave.listAnswers = listAnswerToSave;
-    promise = $http({
-      method: "POST",
-      url: 'answer/save',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: $scope.o.answersSave
-    });
-    promise.success(function(data, status, headers, config) {
-      messageFlash.displaySuccess("Your answers are saved !");
-      return;
-    });
-    return promise.error(function(data, status, headers, config) {
-      messageFlash.displayError("An error was thrown during the save : " + data.message);
-      return;
-    });
-  });
-  $scope.getUnitCategories = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    if (question === null || question === void 0) {
-      console.log("ERROR : this question was not found : " + code);
-      return null;
-    }
-    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
-      console.log("ERROR : there is no unitCategoryId for this question : " + code);
-      return null;
-    }
-    return $scope.o.unitCategories[question.unitCategoryId];
-  };
-  $scope.getCodeList = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    return $scope.o.codeLists[question.codeListName];
-  };
-  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
-    var listRepetition, repetition, _i, _len, _ref;
-    listRepetition = [];
-    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
-          listRepetition[listRepetition.length] = repetition;
-        }
-      }
-    }
-    return listRepetition;
-  };
-  $scope.getQuestion = function(code, listQuestionSets) {
-    var q, qSet, result, _i, _j, _len, _len2, _ref;
-    if (listQuestionSets == null) {
-      listQuestionSets = $scope.o.questionSets;
-    }
-    if (listQuestionSets) {
-      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
-        qSet = listQuestionSets[_i];
-        if (qSet.questions) {
-          _ref = qSet.questions;
-          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
-            q = _ref[_j];
-            if (q.code === code) {
-              return q;
-            }
-          }
-        }
-        if (qSet.children) {
-          result = $scope.getQuestion(code, qSet.children);
-          if (result) {
-            return result;
-          }
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, result;
-    result = $scope.getAnswer(code, mapIteration);
-    if (result) {
-      return result;
-    } else {
-      answerLine = {
-        'questionKey': code,
-        'value': null,
-        'unitId': null,
-        'mapRepetition': mapIteration
-      };
-      $scope.answerList[$scope.answerList.length] = answerLine;
-      return answerLine;
-    }
-  };
-  $scope.getAnswer = function(code, mapIteration) {
-    var answer, _i, _len, _ref;
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code) {
-        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-          return answer;
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getListAnswer = function(code, mapIteration) {
-    var answer, listAnswer, _i, _len, _ref;
-    listAnswer = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-        listAnswer[listAnswer.length] = answer;
-      }
-    }
-    return listAnswer;
-  };
-  $scope.addIteration = function(code, mapRepetition) {
-    var max, repetition, repetitionToAdd, _i, _len, _ref;
-    max = 0;
-    repetitionToAdd = {};
-    if (mapRepetition !== null && mapRepetition !== void 0) {
-      repetitionToAdd = angular.copy(mapRepetition);
-    }
-    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
-      repetitionToAdd[code] = max + 1;
-      $scope.mapRepetition[code] = [];
-      return $scope.mapRepetition[code][0] = repetitionToAdd;
-    } else {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
-          max = repetition[code];
-        }
-      }
-      repetitionToAdd[code] = max + 1;
-      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
-    }
-  };
-  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
-    var iteration, key, len, question, _i, _len, _ref, _results;
-    len = $scope.answerList.length;
-    while (len--) {
-      question = $scope.answerList[len];
-      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
-        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
-          $scope.answerList.splice(len, 1);
-        }
-      }
-    }
-    _ref = Object.keys($scope.mapRepetition);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      _results.push((function() {
-        var _results;
-        if (key !== '$$hashKey') {
-          len = $scope.mapRepetition[key].length;
-          _results = [];
-          while (len--) {
-            iteration = $scope.mapRepetition[key][len];
-            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
-          }
-          return _results;
-        }
-      })());
-    }
-    return _results;
-  };
-  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
-    var key, value, _i, _len, _ref;
-    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
-      return true;
-    }
-    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
-      return false;
-    }
-    _ref = Object.keys(mapContained);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        value = mapContained[key];
-        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $http, $location, messageFlash) {
-  console.log("je suis le logincontroller");
-  $scope.loginInfo = {
-    fieldTitle: "Your login",
-    fieldType: "text",
-    placeholder: "your login",
-    validationMessage: "between 5 and 20 letters",
-    field: "",
-    isValid: false
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "Your password",
-    fieldType: "password",
-    validationMessage: "between 5 and 20 letters",
-    field: "",
-    isValid: false
-  };
-  $scope.send = function() {
-    var promise;
-    $scope.isLoading = true;
-    promise = $http({
-      method: "POST",
-      url: 'login',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: {
-        login: $scope.loginInfo.field,
-        password: $scope.passwordInfo.field
-      }
-    });
-    promise.success(function(data, status, headers, config) {
-      $scope.$root.loginSuccess(data);
-      messageFlash.displaySuccess("You are now connected");
-      return;
-    });
-    promise.error(function(data, status, headers, config) {
-      messageFlash.displayError(data.message);
-      $scope.isLoading = false;
-      return;
-    });
-    return false;
-  };
-  return $scope.test = function() {
-    return $('#modalLogin').modal('show');
   };
 });angular.module('app.controllers').controller("Form3Ctrl", function($scope, downloadService, $http, messageFlash, modalService) {
   $scope.formIdentifier = "TAB3";
@@ -1965,8 +1337,881 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
     }
     return true;
   };
-});angular.module('app.controllers').controller("Form2Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB2";
+});angular.module('app.controllers').controller("Form6Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB6";
+  $scope.answerList = [];
+  $scope.mapRepetition = [];
+  /*
+  illustration of the structures
+  $scope.mapRepetition['A15'] = [{'A15':1},
+                                  {'A15':2}]
+
+  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                 {'A16':2,'A15':1}]
+  */
+  $scope.loading = true;
+  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
+    console.log("data");
+    console.log(data);
+    $scope.o = data;
+    $scope.storeAnswers = function() {
+      var answerSave, qSet, _i, _len, _ref;
+      answerSave = $scope.o.answersSave;
+      $scope.answerList = answerSave.listAnswers;
+      _ref = $scope.o.questionSets;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        qSet = _ref[_i];
+        $scope.loopRepetition(qSet);
+      }
+      console.log("$scope.mapRepetition");
+      return console.log($scope.mapRepetition);
+    };
+    $scope.loopRepetition = function(questionSetDTO) {
+      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
+      if (questionSetDTO.repetitionAllowed === true) {
+        if (questionSetDTO.questions) {
+          _ref = questionSetDTO.questions;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            q = _ref[_i];
+            listAnswer = $scope.getListAnswer(q.code);
+            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
+              answer = listAnswer[_j];
+              if (answer.mapRepetition === null) {
+                console.log("mapRepetition expected but not found");
+              } else {
+                /*
+                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                code= questionSetDTO.code
+                repetitionToAdd = {}#code:repetition}
+                repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                */
+                if ($scope.mapRepetition[questionSetDTO.code]) {
+                  founded = false;
+                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
+                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+                    repetition = _ref2[_k];
+                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
+                      founded = true;
+                    }
+                  }
+                  if (founded === false) {
+                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
+                  }
+                } else {
+                  $scope.mapRepetition[questionSetDTO.code] = [];
+                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
+                }
+              }
+            }
+          }
+        }
+      }
+      if (questionSetDTO.children) {
+        _ref3 = questionSetDTO.children;
+        _results = [];
+        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
+          child = _ref3[_l];
+          _results.push($scope.loopRepetition(child));
+        }
+        return _results;
+      }
+    };
+    $scope.storeAnswers();
+    return $scope.loading = false;
+  });
+  $scope.$on('SAVE', function() {
+    var answer, listAnswerToSave, promise, _i, _len, _ref;
+    listAnswerToSave = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.value) {
+        listAnswerToSave[listAnswerToSave.length] = answer;
+      }
+    }
+    console.log("listAnswerToSave");
+    console.log(listAnswerToSave);
+    $scope.o.answersSave.listAnswers = listAnswerToSave;
+    promise = $http({
+      method: "POST",
+      url: 'answer/save',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: $scope.o.answersSave
+    });
+    promise.success(function(data, status, headers, config) {
+      messageFlash.displaySuccess("Your answers are saved !");
+      return;
+    });
+    return promise.error(function(data, status, headers, config) {
+      messageFlash.displayError("An error was thrown during the save : " + data.message);
+      return;
+    });
+  });
+  $scope.getUnitCategories = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    if (question === null || question === void 0) {
+      console.log("ERROR : this question was not found : " + code);
+      return null;
+    }
+    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
+      console.log("ERROR : there is no unitCategoryId for this question : " + code);
+      return null;
+    }
+    return $scope.o.unitCategories[question.unitCategoryId];
+  };
+  $scope.getCodeList = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    return $scope.o.codeLists[question.codeListName];
+  };
+  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
+    var listRepetition, repetition, _i, _len, _ref;
+    listRepetition = [];
+    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
+          listRepetition[listRepetition.length] = repetition;
+        }
+      }
+    }
+    return listRepetition;
+  };
+  $scope.getQuestion = function(code, listQuestionSets) {
+    var q, qSet, result, _i, _j, _len, _len2, _ref;
+    if (listQuestionSets == null) {
+      listQuestionSets = $scope.o.questionSets;
+    }
+    if (listQuestionSets) {
+      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
+        qSet = listQuestionSets[_i];
+        if (qSet.questions) {
+          _ref = qSet.questions;
+          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+            q = _ref[_j];
+            if (q.code === code) {
+              return q;
+            }
+          }
+        }
+        if (qSet.children) {
+          result = $scope.getQuestion(code, qSet.children);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getAnswerOrCreate = function(code, mapIteration) {
+    var answerLine, result;
+    result = $scope.getAnswer(code, mapIteration);
+    if (result) {
+      return result;
+    } else {
+      answerLine = {
+        'questionKey': code,
+        'value': null,
+        'unitId': null,
+        'mapRepetition': mapIteration
+      };
+      $scope.answerList[$scope.answerList.length] = answerLine;
+      return answerLine;
+    }
+  };
+  $scope.getAnswer = function(code, mapIteration) {
+    var answer, _i, _len, _ref;
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code) {
+        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+          return answer;
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getListAnswer = function(code, mapIteration) {
+    var answer, listAnswer, _i, _len, _ref;
+    listAnswer = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+        listAnswer[listAnswer.length] = answer;
+      }
+    }
+    return listAnswer;
+  };
+  $scope.addIteration = function(code, mapRepetition) {
+    var max, repetition, repetitionToAdd, _i, _len, _ref;
+    max = 0;
+    repetitionToAdd = {};
+    if (mapRepetition !== null && mapRepetition !== void 0) {
+      repetitionToAdd = angular.copy(mapRepetition);
+    }
+    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
+      repetitionToAdd[code] = max + 1;
+      $scope.mapRepetition[code] = [];
+      return $scope.mapRepetition[code][0] = repetitionToAdd;
+    } else {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
+          max = repetition[code];
+        }
+      }
+      repetitionToAdd[code] = max + 1;
+      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
+    }
+  };
+  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
+    var iteration, key, len, question, _i, _len, _ref, _results;
+    len = $scope.answerList.length;
+    while (len--) {
+      question = $scope.answerList[len];
+      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
+        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
+          $scope.answerList.splice(len, 1);
+        }
+      }
+    }
+    _ref = Object.keys($scope.mapRepetition);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      _results.push((function() {
+        var _results;
+        if (key !== '$$hashKey') {
+          len = $scope.mapRepetition[key].length;
+          _results = [];
+          while (len--) {
+            iteration = $scope.mapRepetition[key][len];
+            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
+          }
+          return _results;
+        }
+      })());
+    }
+    return _results;
+  };
+  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
+    var key, value, _i, _len, _ref;
+    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
+      return true;
+    }
+    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
+      return false;
+    }
+    _ref = Object.keys(mapContained);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        value = mapContained[key];
+        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+});angular.module('app.controllers').controller("Form5Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB5";
+  $scope.answerList = [];
+  $scope.mapRepetition = [];
+  /*
+  illustration of the structures
+  $scope.mapRepetition['A15'] = [{'A15':1},
+                                  {'A15':2}]
+
+  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                 {'A16':2,'A15':1}]
+  */
+  $scope.loading = true;
+  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
+    console.log("data");
+    console.log(data);
+    $scope.o = data;
+    $scope.storeAnswers = function() {
+      var answerSave, qSet, _i, _len, _ref;
+      answerSave = $scope.o.answersSave;
+      $scope.answerList = answerSave.listAnswers;
+      _ref = $scope.o.questionSets;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        qSet = _ref[_i];
+        $scope.loopRepetition(qSet);
+      }
+      console.log("$scope.mapRepetition");
+      return console.log($scope.mapRepetition);
+    };
+    $scope.loopRepetition = function(questionSetDTO) {
+      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
+      if (questionSetDTO.repetitionAllowed === true) {
+        if (questionSetDTO.questions) {
+          _ref = questionSetDTO.questions;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            q = _ref[_i];
+            listAnswer = $scope.getListAnswer(q.code);
+            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
+              answer = listAnswer[_j];
+              if (answer.mapRepetition === null) {
+                console.log("mapRepetition expected but not found");
+              } else {
+                /*
+                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                code= questionSetDTO.code
+                repetitionToAdd = {}#code:repetition}
+                repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                */
+                if ($scope.mapRepetition[questionSetDTO.code]) {
+                  founded = false;
+                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
+                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+                    repetition = _ref2[_k];
+                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
+                      founded = true;
+                    }
+                  }
+                  if (founded === false) {
+                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
+                  }
+                } else {
+                  $scope.mapRepetition[questionSetDTO.code] = [];
+                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
+                }
+              }
+            }
+          }
+        }
+      }
+      if (questionSetDTO.children) {
+        _ref3 = questionSetDTO.children;
+        _results = [];
+        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
+          child = _ref3[_l];
+          _results.push($scope.loopRepetition(child));
+        }
+        return _results;
+      }
+    };
+    $scope.storeAnswers();
+    return $scope.loading = false;
+  });
+  $scope.$on('SAVE', function() {
+    var answer, listAnswerToSave, promise, _i, _len, _ref;
+    listAnswerToSave = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.value) {
+        listAnswerToSave[listAnswerToSave.length] = answer;
+      }
+    }
+    console.log("listAnswerToSave");
+    console.log(listAnswerToSave);
+    $scope.o.answersSave.listAnswers = listAnswerToSave;
+    promise = $http({
+      method: "POST",
+      url: 'answer/save',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: $scope.o.answersSave
+    });
+    promise.success(function(data, status, headers, config) {
+      messageFlash.displaySuccess("Your answers are saved !");
+      return;
+    });
+    return promise.error(function(data, status, headers, config) {
+      messageFlash.displayError("An error was thrown during the save : " + data.message);
+      return;
+    });
+  });
+  $scope.getUnitCategories = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    if (question === null || question === void 0) {
+      console.log("ERROR : this question was not found : " + code);
+      return null;
+    }
+    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
+      console.log("ERROR : there is no unitCategoryId for this question : " + code);
+      return null;
+    }
+    return $scope.o.unitCategories[question.unitCategoryId];
+  };
+  $scope.getCodeList = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    return $scope.o.codeLists[question.codeListName];
+  };
+  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
+    var listRepetition, repetition, _i, _len, _ref;
+    listRepetition = [];
+    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
+          listRepetition[listRepetition.length] = repetition;
+        }
+      }
+    }
+    return listRepetition;
+  };
+  $scope.getQuestion = function(code, listQuestionSets) {
+    var q, qSet, result, _i, _j, _len, _len2, _ref;
+    if (listQuestionSets == null) {
+      listQuestionSets = $scope.o.questionSets;
+    }
+    if (listQuestionSets) {
+      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
+        qSet = listQuestionSets[_i];
+        if (qSet.questions) {
+          _ref = qSet.questions;
+          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+            q = _ref[_j];
+            if (q.code === code) {
+              return q;
+            }
+          }
+        }
+        if (qSet.children) {
+          result = $scope.getQuestion(code, qSet.children);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getAnswerOrCreate = function(code, mapIteration) {
+    var answerLine, result;
+    result = $scope.getAnswer(code, mapIteration);
+    if (result) {
+      return result;
+    } else {
+      answerLine = {
+        'questionKey': code,
+        'value': null,
+        'unitId': null,
+        'mapRepetition': mapIteration
+      };
+      $scope.answerList[$scope.answerList.length] = answerLine;
+      return answerLine;
+    }
+  };
+  $scope.getAnswer = function(code, mapIteration) {
+    var answer, _i, _len, _ref;
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code) {
+        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+          return answer;
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getListAnswer = function(code, mapIteration) {
+    var answer, listAnswer, _i, _len, _ref;
+    listAnswer = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+        listAnswer[listAnswer.length] = answer;
+      }
+    }
+    return listAnswer;
+  };
+  $scope.addIteration = function(code, mapRepetition) {
+    var max, repetition, repetitionToAdd, _i, _len, _ref;
+    max = 0;
+    repetitionToAdd = {};
+    if (mapRepetition !== null && mapRepetition !== void 0) {
+      repetitionToAdd = angular.copy(mapRepetition);
+    }
+    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
+      repetitionToAdd[code] = max + 1;
+      $scope.mapRepetition[code] = [];
+      return $scope.mapRepetition[code][0] = repetitionToAdd;
+    } else {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
+          max = repetition[code];
+        }
+      }
+      repetitionToAdd[code] = max + 1;
+      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
+    }
+  };
+  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
+    var iteration, key, len, question, _i, _len, _ref, _results;
+    len = $scope.answerList.length;
+    while (len--) {
+      question = $scope.answerList[len];
+      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
+        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
+          $scope.answerList.splice(len, 1);
+        }
+      }
+    }
+    _ref = Object.keys($scope.mapRepetition);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      _results.push((function() {
+        var _results;
+        if (key !== '$$hashKey') {
+          len = $scope.mapRepetition[key].length;
+          _results = [];
+          while (len--) {
+            iteration = $scope.mapRepetition[key][len];
+            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
+          }
+          return _results;
+        }
+      })());
+    }
+    return _results;
+  };
+  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
+    var key, value, _i, _len, _ref;
+    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
+      return true;
+    }
+    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
+      return false;
+    }
+    _ref = Object.keys(mapContained);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        value = mapContained[key];
+        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+});angular.module('app.controllers').controller("Form4Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB4";
+  $scope.answerList = [];
+  $scope.mapRepetition = [];
+  /*
+  illustration of the structures
+  $scope.mapRepetition['A15'] = [{'A15':1},
+                                  {'A15':2}]
+
+  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                 {'A16':2,'A15':1}]
+  */
+  $scope.loading = true;
+  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
+    console.log("data");
+    console.log(data);
+    $scope.o = data;
+    $scope.storeAnswers = function() {
+      var answerSave, qSet, _i, _len, _ref;
+      answerSave = $scope.o.answersSave;
+      $scope.answerList = answerSave.listAnswers;
+      _ref = $scope.o.questionSets;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        qSet = _ref[_i];
+        $scope.loopRepetition(qSet);
+      }
+      console.log("$scope.mapRepetition");
+      return console.log($scope.mapRepetition);
+    };
+    $scope.loopRepetition = function(questionSetDTO) {
+      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
+      if (questionSetDTO.repetitionAllowed === true) {
+        if (questionSetDTO.questions) {
+          _ref = questionSetDTO.questions;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            q = _ref[_i];
+            listAnswer = $scope.getListAnswer(q.code);
+            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
+              answer = listAnswer[_j];
+              if (answer.mapRepetition === null) {
+                console.log("mapRepetition expected but not found");
+              } else {
+                /*
+                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
+                code= questionSetDTO.code
+                repetitionToAdd = {}#code:repetition}
+                repetitionToAdd[questionSetDTO.code] =repetitionNumber
+                */
+                if ($scope.mapRepetition[questionSetDTO.code]) {
+                  founded = false;
+                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
+                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+                    repetition = _ref2[_k];
+                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
+                      founded = true;
+                    }
+                  }
+                  if (founded === false) {
+                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
+                  }
+                } else {
+                  $scope.mapRepetition[questionSetDTO.code] = [];
+                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
+                }
+              }
+            }
+          }
+        }
+      }
+      if (questionSetDTO.children) {
+        _ref3 = questionSetDTO.children;
+        _results = [];
+        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
+          child = _ref3[_l];
+          _results.push($scope.loopRepetition(child));
+        }
+        return _results;
+      }
+    };
+    $scope.storeAnswers();
+    return $scope.loading = false;
+  });
+  $scope.$on('SAVE', function() {
+    var answer, listAnswerToSave, promise, _i, _len, _ref;
+    listAnswerToSave = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.value) {
+        listAnswerToSave[listAnswerToSave.length] = answer;
+      }
+    }
+    console.log("listAnswerToSave");
+    console.log(listAnswerToSave);
+    $scope.o.answersSave.listAnswers = listAnswerToSave;
+    promise = $http({
+      method: "POST",
+      url: 'answer/save',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: $scope.o.answersSave
+    });
+    promise.success(function(data, status, headers, config) {
+      messageFlash.displaySuccess("Your answers are saved !");
+      return;
+    });
+    return promise.error(function(data, status, headers, config) {
+      messageFlash.displayError("An error was thrown during the save : " + data.message);
+      return;
+    });
+  });
+  $scope.getUnitCategories = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    if (question === null || question === void 0) {
+      console.log("ERROR : this question was not found : " + code);
+      return null;
+    }
+    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
+      console.log("ERROR : there is no unitCategoryId for this question : " + code);
+      return null;
+    }
+    return $scope.o.unitCategories[question.unitCategoryId];
+  };
+  $scope.getCodeList = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    return $scope.o.codeLists[question.codeListName];
+  };
+  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
+    var listRepetition, repetition, _i, _len, _ref;
+    listRepetition = [];
+    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
+          listRepetition[listRepetition.length] = repetition;
+        }
+      }
+    }
+    return listRepetition;
+  };
+  $scope.getQuestion = function(code, listQuestionSets) {
+    var q, qSet, result, _i, _j, _len, _len2, _ref;
+    if (listQuestionSets == null) {
+      listQuestionSets = $scope.o.questionSets;
+    }
+    if (listQuestionSets) {
+      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
+        qSet = listQuestionSets[_i];
+        if (qSet.questions) {
+          _ref = qSet.questions;
+          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+            q = _ref[_j];
+            if (q.code === code) {
+              return q;
+            }
+          }
+        }
+        if (qSet.children) {
+          result = $scope.getQuestion(code, qSet.children);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getAnswerOrCreate = function(code, mapIteration) {
+    var answerLine, result;
+    result = $scope.getAnswer(code, mapIteration);
+    if (result) {
+      return result;
+    } else {
+      answerLine = {
+        'questionKey': code,
+        'value': null,
+        'unitId': null,
+        'mapRepetition': mapIteration
+      };
+      $scope.answerList[$scope.answerList.length] = answerLine;
+      return answerLine;
+    }
+  };
+  $scope.getAnswer = function(code, mapIteration) {
+    var answer, _i, _len, _ref;
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code) {
+        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+          return answer;
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getListAnswer = function(code, mapIteration) {
+    var answer, listAnswer, _i, _len, _ref;
+    listAnswer = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+        listAnswer[listAnswer.length] = answer;
+      }
+    }
+    return listAnswer;
+  };
+  $scope.addIteration = function(code, mapRepetition) {
+    var max, repetition, repetitionToAdd, _i, _len, _ref;
+    max = 0;
+    repetitionToAdd = {};
+    if (mapRepetition !== null && mapRepetition !== void 0) {
+      repetitionToAdd = angular.copy(mapRepetition);
+    }
+    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
+      repetitionToAdd[code] = max + 1;
+      $scope.mapRepetition[code] = [];
+      return $scope.mapRepetition[code][0] = repetitionToAdd;
+    } else {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
+          max = repetition[code];
+        }
+      }
+      repetitionToAdd[code] = max + 1;
+      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
+    }
+  };
+  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
+    var iteration, key, len, question, _i, _len, _ref, _results;
+    len = $scope.answerList.length;
+    while (len--) {
+      question = $scope.answerList[len];
+      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
+        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
+          $scope.answerList.splice(len, 1);
+        }
+      }
+    }
+    _ref = Object.keys($scope.mapRepetition);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      _results.push((function() {
+        var _results;
+        if (key !== '$$hashKey') {
+          len = $scope.mapRepetition[key].length;
+          _results = [];
+          while (len--) {
+            iteration = $scope.mapRepetition[key][len];
+            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
+          }
+          return _results;
+        }
+      })());
+    }
+    return _results;
+  };
+  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
+    var key, value, _i, _len, _ref;
+    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
+      return true;
+    }
+    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
+      return false;
+    }
+    _ref = Object.keys(mapContained);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        value = mapContained[key];
+        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+});angular.module('app.controllers').controller("Form7Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB7";
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -2446,7 +2691,7 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
     return null;
   };
   $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, question, result, value;
+    var answerLine, question, result, unitId, value;
     if (code === null || code === void 0) {
       console.log("ERROR !! getAnswerOrCreate : code is null or undefined");
       return null;
@@ -2456,16 +2701,20 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
       return result;
     } else {
       value = null;
+      unitId = null;
       if ($scope.loading === false) {
         question = $scope.getQuestion(code);
         if (question.defaultValue !== null && question.defaultValue !== void 0) {
           value = question.defaultValue;
         }
+        if (question.unitCategoryId !== null && question.unitCategoryId !== void 0) {
+          unitId = $scope.getUnitCategories(code).mainUnitId;
+        }
       }
       answerLine = {
         'questionKey': code,
         'value': value,
-        'unitId': null,
+        'unitId': unitId,
         'mapRepetition': mapIteration
       };
       $scope.answerList[$scope.answerList.length] = answerLine;
@@ -2616,297 +2865,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
     }
     return result;
   };
-});angular.module('app.controllers').controller("Form1Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB1";
-  $scope.answerList = [];
-  $scope.mapRepetition = [];
-  /*
-  illustration of the structures
-  $scope.mapRepetition['A15'] = [{'A15':1},
-                                  {'A15':2}]
-
-  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
-                                 {'A16':2,'A15':1}]
-  */
-  $scope.loading = true;
-  downloadService.getJson("answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, function(data) {
-    console.log("data");
-    console.log(data);
-    $scope.o = data;
-    $scope.storeAnswers = function() {
-      var answerSave, qSet, _i, _len, _ref;
-      answerSave = $scope.o.answersSave;
-      $scope.answerList = answerSave.listAnswers;
-      _ref = $scope.o.questionSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        qSet = _ref[_i];
-        $scope.loopRepetition(qSet);
-      }
-      console.log("$scope.mapRepetition");
-      return console.log($scope.mapRepetition);
-    };
-    $scope.loopRepetition = function(questionSetDTO) {
-      var answer, child, founded, listAnswer, q, repetition, _i, _j, _k, _l, _len, _len2, _len3, _len4, _ref, _ref2, _ref3, _results;
-      if (questionSetDTO.repetitionAllowed === true) {
-        if (questionSetDTO.questions) {
-          _ref = questionSetDTO.questions;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            q = _ref[_i];
-            listAnswer = $scope.getListAnswer(q.code);
-            for (_j = 0, _len2 = listAnswer.length; _j < _len2; _j++) {
-              answer = listAnswer[_j];
-              if (answer.mapRepetition === null) {
-                console.log("mapRepetition expected but not found");
-              } else {
-                /*
-                repetitionNumber = answer.mapRepetition[questionSetDTO.code]
-                code= questionSetDTO.code
-                repetitionToAdd = {}#code:repetition}
-                repetitionToAdd[questionSetDTO.code] =repetitionNumber
-                */
-                if ($scope.mapRepetition[questionSetDTO.code]) {
-                  founded = false;
-                  _ref2 = $scope.mapRepetition[questionSetDTO.code];
-                  for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
-                    repetition = _ref2[_k];
-                    if ($scope.compareRepetitionMap(repetition, answer.mapRepetition)) {
-                      founded = true;
-                    }
-                  }
-                  if (founded === false) {
-                    $scope.mapRepetition[questionSetDTO.code][$scope.mapRepetition[questionSetDTO.code].length] = angular.copy(answer.mapRepetition);
-                  }
-                } else {
-                  $scope.mapRepetition[questionSetDTO.code] = [];
-                  $scope.mapRepetition[questionSetDTO.code][0] = angular.copy(answer.mapRepetition);
-                }
-              }
-            }
-          }
-        }
-      }
-      if (questionSetDTO.children) {
-        _ref3 = questionSetDTO.children;
-        _results = [];
-        for (_l = 0, _len4 = _ref3.length; _l < _len4; _l++) {
-          child = _ref3[_l];
-          _results.push($scope.loopRepetition(child));
-        }
-        return _results;
-      }
-    };
-    $scope.storeAnswers();
-    return $scope.loading = false;
-  });
-  $scope.$on('SAVE', function() {
-    var answer, listAnswerToSave, promise, _i, _len, _ref;
-    listAnswerToSave = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.value) {
-        listAnswerToSave[listAnswerToSave.length] = answer;
-      }
-    }
-    console.log("listAnswerToSave");
-    console.log(listAnswerToSave);
-    $scope.o.answersSave.listAnswers = listAnswerToSave;
-    promise = $http({
-      method: "POST",
-      url: 'answer/save',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      data: $scope.o.answersSave
-    });
-    promise.success(function(data, status, headers, config) {
-      messageFlash.displaySuccess("Your answers are saved !");
-      return;
-    });
-    return promise.error(function(data, status, headers, config) {
-      messageFlash.displayError("An error was thrown during the save : " + data.message);
-      return;
-    });
-  });
-  $scope.getUnitCategories = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    if (question === null || question === void 0) {
-      console.log("ERROR : this question was not found : " + code);
-      return null;
-    }
-    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
-      console.log("ERROR : there is no unitCategoryId for this question : " + code);
-      return null;
-    }
-    return $scope.o.unitCategories[question.unitCategoryId];
-  };
-  $scope.getCodeList = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    return $scope.o.codeLists[question.codeListName];
-  };
-  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
-    var listRepetition, repetition, _i, _len, _ref;
-    listRepetition = [];
-    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
-          listRepetition[listRepetition.length] = repetition;
-        }
-      }
-    }
-    return listRepetition;
-  };
-  $scope.getQuestion = function(code, listQuestionSets) {
-    var q, qSet, result, _i, _j, _len, _len2, _ref;
-    if (listQuestionSets == null) {
-      listQuestionSets = $scope.o.questionSets;
-    }
-    if (listQuestionSets) {
-      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
-        qSet = listQuestionSets[_i];
-        if (qSet.questions) {
-          _ref = qSet.questions;
-          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
-            q = _ref[_j];
-            if (q.code === code) {
-              return q;
-            }
-          }
-        }
-        if (qSet.children) {
-          result = $scope.getQuestion(code, qSet.children);
-          if (result) {
-            return result;
-          }
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getAnswerOrCreate = function(code, mapIteration) {
-    var answerLine, result;
-    result = $scope.getAnswer(code, mapIteration);
-    if (result) {
-      return result;
-    } else {
-      answerLine = {
-        'questionKey': code,
-        'value': null,
-        'unitId': null,
-        'mapRepetition': mapIteration
-      };
-      $scope.answerList[$scope.answerList.length] = answerLine;
-      return answerLine;
-    }
-  };
-  $scope.getAnswer = function(code, mapIteration) {
-    var answer, _i, _len, _ref;
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code) {
-        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-          return answer;
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getListAnswer = function(code, mapIteration) {
-    var answer, listAnswer, _i, _len, _ref;
-    listAnswer = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-        listAnswer[listAnswer.length] = answer;
-      }
-    }
-    return listAnswer;
-  };
-  $scope.addIteration = function(code, mapRepetition) {
-    var max, repetition, repetitionToAdd, _i, _len, _ref;
-    max = 0;
-    repetitionToAdd = {};
-    if (mapRepetition !== null && mapRepetition !== void 0) {
-      repetitionToAdd = angular.copy(mapRepetition);
-    }
-    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
-      repetitionToAdd[code] = max + 1;
-      $scope.mapRepetition[code] = [];
-      return $scope.mapRepetition[code][0] = repetitionToAdd;
-    } else {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
-          max = repetition[code];
-        }
-      }
-      repetitionToAdd[code] = max + 1;
-      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
-    }
-  };
-  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
-    var iteration, key, len, question, _i, _len, _ref, _results;
-    len = $scope.answerList.length;
-    while (len--) {
-      question = $scope.answerList[len];
-      if (question.mapRepetition !== null && question.mapRepetition !== void 0 && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
-        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
-          $scope.answerList.splice(len, 1);
-        }
-      }
-    }
-    _ref = Object.keys($scope.mapRepetition);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      _results.push((function() {
-        var _results;
-        if (key !== '$$hashKey') {
-          len = $scope.mapRepetition[key].length;
-          _results = [];
-          while (len--) {
-            iteration = $scope.mapRepetition[key][len];
-            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
-          }
-          return _results;
-        }
-      })());
-    }
-    return _results;
-  };
-  return $scope.compareRepetitionMap = function(mapContainer, mapContained) {
-    var key, value, _i, _len, _ref;
-    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
-      return true;
-    }
-    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
-      return false;
-    }
-    _ref = Object.keys(mapContained);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        value = mapContained[key];
-        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
 });angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService) {
   $scope.isLoading = function() {
     var k;
@@ -3045,8 +3003,8 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     return;
   });
   return $rootScope.displayModalBackground = false;
-});angular.module('app.controllers').controller("Form7Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB7";
+});angular.module('app.controllers').controller("Form2Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB2";
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
@@ -3336,8 +3294,54 @@ angular.module('app').run(function($rootScope, $location, $http, flash) {
     }
     return true;
   };
-});angular.module('app.controllers').controller("Form5Ctrl", function($scope, downloadService, $http, messageFlash) {
-  $scope.formIdentifier = "TAB5";
+});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $http, $location, messageFlash) {
+  console.log("je suis le logincontroller");
+  $scope.loginInfo = {
+    fieldTitle: "Your login",
+    fieldType: "text",
+    placeholder: "your login",
+    validationMessage: "between 5 and 20 letters",
+    field: "",
+    isValid: false
+  };
+  $scope.passwordInfo = {
+    fieldTitle: "Your password",
+    fieldType: "password",
+    validationMessage: "between 5 and 20 letters",
+    field: "",
+    isValid: false
+  };
+  $scope.send = function() {
+    var promise;
+    $scope.isLoading = true;
+    promise = $http({
+      method: "POST",
+      url: 'login',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: {
+        login: $scope.loginInfo.field,
+        password: $scope.passwordInfo.field
+      }
+    });
+    promise.success(function(data, status, headers, config) {
+      $scope.$root.loginSuccess(data);
+      messageFlash.displaySuccess("You are now connected");
+      return;
+    });
+    promise.error(function(data, status, headers, config) {
+      messageFlash.displayError(data.message);
+      $scope.isLoading = false;
+      return;
+    });
+    return false;
+  };
+  return $scope.test = function() {
+    return $('#modalLogin').modal('show');
+  };
+});angular.module('app.controllers').controller("Form1Ctrl", function($scope, downloadService, $http, messageFlash) {
+  $scope.formIdentifier = "TAB1";
   $scope.answerList = [];
   $scope.mapRepetition = [];
   /*
