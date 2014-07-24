@@ -736,13 +736,7 @@ button.comments {
 }
 
 .repetition-question .add-button {
-    display: inline-block;
-    /* position: absolute; */
-    right: 0;
-    bottom: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+    margin-left: 40px;
 }
 
 .repetition-question-title {
@@ -792,7 +786,13 @@ button.comments {
 }
 
 .question_field > div:first-child{
-       width : 50%;
+    width : 50%;
+    padding-right : 15px;
+}
+
+.question_field > div:first-child img{
+    margin-right : 2px;
+    vertical-align: top;
 }
 
 .question_field > div:last-child{
@@ -804,11 +804,12 @@ button.comments {
     width: calc(100% - 72px);
 }
 .question_field .twoelement input{
-    width: calc(70% - 36px);
+    width: calc(60% - 36px);
 }
 
 .question_field .twoelement select{
-    width: calc(30% - 36px);
+    width: calc(40% - 42px);
+    margin-left : 8px;
 }
 
 .info {
@@ -821,6 +822,8 @@ button.comments {
 }
 
 .info_popup {
+    font-weight: normal;
+    font-size: 12px;
     display: none;
     position: absolute;
     background-color: #efeee8;
@@ -846,32 +849,28 @@ button.comments {
 
 }
 
-.element_table > div > div:nth-child(1) {
-    /*width: 40%;*/
-}
-
-.element_table > div > div:nth-child(2) {
-   /* width: 30%;*/
-}
-
-.element_table > div > div:nth-child(3) {
-    width: 30%;
-    font-style: italic;
-    color: white;
-}
-
 .sub_title {
     font-size: 14px;
     font-weight: bold;
     border: 1px solid #dbd9d2;
-    display: table-row;
     padding-left: 15px !important;
-    width: calc(100% - 10px) !important;
+    width: calc(50% + 10px) !important;
+    margin-top : 10px;
+    margin-bottom: 10px;
+    padding-right : 15px;
+    padding-top : 4px;
+    padding-bottom: 4px;
 }
 
 .sub_sub_title {
     font-weight: bold;
+    font-size: 14px;
     border-bottom: 1px solid #dbd9d2;
+    width: calc(50% + 10px) !important;
+    margin-top : 5px;
+    margin-bottom: 5px;
+    padding-right : 15px;
+    padding-bottom : 2px;
 }
 
 .status {
@@ -912,13 +911,13 @@ button.comments {
 }
 
 /*.element_table > div > div:nth-child(3) .user_icon,*/
+/*
 .element_table > div > div:nth-child(3) input,
 .element_table > div > div:nth-child(3) select {
     background-color: #9d9b91;
     color: white;
     font-style: italic;
 }
-/*
 .element_table > div > div:nth-child(2) .user_icon {
     background-color: #3c3b37;
 }

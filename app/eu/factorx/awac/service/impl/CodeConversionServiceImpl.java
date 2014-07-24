@@ -1,5 +1,8 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.conversion.CodeToActivitySourceCodeEquivalence;
 import eu.factorx.awac.models.code.conversion.CodeToActivityTypeCodeEquivalence;
@@ -7,12 +10,7 @@ import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.service.CodeConversionService;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
 
-import java.util.List;
-
-@Component
 public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<CodesEquivalence> implements CodeConversionService {
 
 	@Override

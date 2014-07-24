@@ -44,6 +44,18 @@ angular
                 for child in questionSetDTO.children
                     $scope.loopRepetition(child,angular.copy(listQuestionSetRepetition))
 
+        #
+        # add default value to answer
+        #
+        $scope.addDefaultValue = (questionSetDTO) ->
+          for question in questionSetDTO.questions
+            if question.defaultValue != undefined && question.defaultValue != null
+              for answer in $scope.answerList
+                if answer.questionKey == question.code && answer.value == null
+                  answer.value = question.defaultValue
+          for child in questionSetDTO.children
+            $scope.addDefaultValue(child)
+
 
         #build the list of answers
         #recove answerSave
@@ -58,6 +70,10 @@ angular
 
         console.log "$scope.mapRepetition"
         console.log $scope.mapRepetition
+
+        #use the defaultValues to completed null value
+        for questionSetDTO in $scope.o.questionSets
+          $scope.addDefaultValue(questionSetDTO)
 
 
         #hide the loading modal
@@ -182,24 +198,17 @@ angular
         if result
             return result
         else
-
             #compute default value
-            ###
-            question = $scope.getQuestion(code)
+            value = null
+            if $scope.loading ==false
+              question = $scope.getQuestion(code)
+              if question.defaultValue!=null && question.defaultValue!=undefined
+                value = question.defaultValue
 
-            console.log "create answer"
-            console.log question
-            value = Object
-            if question.defaultValue!=null && question.defaultValue!=undefined
-              value = question.defaultValue
-
-            console.log "value"
-            console.log value
-            ###
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey':code
-                'value':null
+                'value':value
                 'unitId':null
                 'mapRepetition':mapIteration
             }

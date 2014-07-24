@@ -2,6 +2,7 @@ div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        img(src='/awac/assets/images/arrow_question.png')
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .twoelement
         .status.answer(mm-not-implemented)
