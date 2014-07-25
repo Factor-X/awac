@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacDocumentQuestion", (directiveService, translationService,$upload) ->
+.directive "mmAwacDocumentQuestion", (directiveService, translationService,$upload, messageFlash) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
@@ -11,6 +11,15 @@ angular
     compile: () ->
         pre: (scope) ->
             directiveService.autoScopeImpl scope
+
+            scope.inDownload = false
+            scope.percent = 0
+
+            scope.$watch 'percent', ->
+                scope.style= {
+                                "width": scope.percent+"%"
+                                "color":((scope.percent>50) ? "white":"black")
+                            }
 
             scope.getAnswerByQuestionCode = (code) ->
                 if scope.ngObject
@@ -30,8 +39,10 @@ angular
                     scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
 
-            scope.percent = 0
+
             scope.onFileSelect = ($files) ->
+
+                scope.inDownload = true
 
                 #$files: an array of files selected, each file has name, size, and type.
                 i = 0
@@ -49,9 +60,17 @@ angular
                         console.log "percent: " + scope.percent
                         return
                     ).success((data, status, headers, config) ->
-
                         # file is uploaded successfully
+                        scope.percent=0
+                        scope.inDownload = false
+                        fileName = "??"
+                        messageFlash.displaySuccess("The file "+fileName+" was upload successfully")
                         console.log data
+                        return
+                    ).fail(() ->
+                        scope.percent=0
+                        scope.inDownload = false
+                        messageFlash.displayError("The upload of the file was faild")
                         return
                     )
                     i++

@@ -814,6 +814,7 @@ button.comments {
 .question_field .oneelement input,
 .question_field .oneelement select{
     width: calc(100% - 72px);
+    display: inline-block !important;
 }
 .question_field .twoelement input{
     width: calc(60% - 36px);
@@ -974,6 +975,20 @@ button.comments {
     width: calc(50% - 37px);
 }
 */
+
+.document-question-progress-bar {
+    text-align: center;
+    border: 1px solid #dbd9d2;
+}
+.document-question-progress-bar > div:first-child {
+    width:100%;
+    float:left;
+}
+
+.document-question-progress-bar > div:last-child {
+    background-color: green;
+    overflow: hidden;
+}
 
 .element_table > div > div:nth-child(3) .user_icon {
     font-style: normal;

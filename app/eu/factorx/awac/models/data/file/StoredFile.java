@@ -7,7 +7,11 @@ import eu.factorx.awac.models.account.Account;
 import javax.persistence.*;
 
 @Entity
+@NamedQueries({ @NamedQuery(name = StoredFile.FIND_BY_STORED_NAME, query = "select q from StoredFile q where q.storedName in :storedName"),
+})
 public class StoredFile  extends AuditedAbstractEntity {
+
+    public static final String FIND_BY_STORED_NAME = "StoredFile.findByStoredName";
 
     private String originalName;
 

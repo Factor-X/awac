@@ -2,14 +2,6 @@ div(ng-hide="getCondition() === false",class="question_field")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-share-alt")
+        span(class="glyphicon glyphicon-file")
         i(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
-
-        div {{percent}} % of the download
-        input(type='file', ng-file-select='onFileSelect($files)')
-            input(type='file', ng-file-select='onFileSelect($files)', multiple='multiple')
-            .button(ng-file-select='onFileSelect($files)', data-multiple='true')
-            div(ng-file-drop='onFileSelect($files)', ng-file-drag-over-class='optional-css-class-name-or-function', ng-show='dropSupported') drop files here
-            div(ng-file-drop-available='dropSupported=true', ng-show='!dropSupported') HTML5 Drop File is not supported!
-            button(ng-click='upload.abort()') Cancel Upload
