@@ -12,23 +12,23 @@ import javax.persistence.Embeddable;
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "activitycategory"))})
 public class ActivityCategoryCode extends Code {
 
-	public static final ActivityCategoryCode ENERGIE = new ActivityCategoryCode("1");
-	public static final ActivityCategoryCode EMISSION = new ActivityCategoryCode("2");
-	public static final ActivityCategoryCode FROID = new ActivityCategoryCode("3");
-	public static final ActivityCategoryCode TRANSPORT = new ActivityCategoryCode("4");
-	public static final ActivityCategoryCode MOBILITE = new ActivityCategoryCode("5");
-	public static final ActivityCategoryCode STOCKAGE_AMONT = new ActivityCategoryCode("6");
-	public static final ActivityCategoryCode DECHET = new ActivityCategoryCode("7");
-	public static final ActivityCategoryCode ACHAT = new ActivityCategoryCode("8");
-	public static final ActivityCategoryCode INFRASTRUCTURE = new ActivityCategoryCode("9");
-	public static final ActivityCategoryCode STOCKAGE_AVAL = new ActivityCategoryCode("10");
-	public static final ActivityCategoryCode TRAITEMENT = new ActivityCategoryCode("11");
-	public static final ActivityCategoryCode UTILISATION = new ActivityCategoryCode("12");
-	public static final ActivityCategoryCode FIN_DE_VIE = new ActivityCategoryCode("13");
-	public static final ActivityCategoryCode ACTIF_LOUE = new ActivityCategoryCode("14");
-	public static final ActivityCategoryCode FRANCHISE = new ActivityCategoryCode("15");
-	public static final ActivityCategoryCode INVESTISSEMENT_SCOPE_1 = new ActivityCategoryCode("16");
-	public static final ActivityCategoryCode INVESTISSEMENT_SCOPE_2 = new ActivityCategoryCode("17");
+	public static final ActivityCategoryCode AC_1 = new ActivityCategoryCode("AC_1");
+	public static final ActivityCategoryCode AC_2 = new ActivityCategoryCode("AC_2");
+	public static final ActivityCategoryCode AC_3 = new ActivityCategoryCode("AC_3");
+	public static final ActivityCategoryCode AC_4 = new ActivityCategoryCode("AC_4");
+	public static final ActivityCategoryCode AC_5 = new ActivityCategoryCode("AC_5");
+	public static final ActivityCategoryCode AC_6 = new ActivityCategoryCode("AC_6");
+	public static final ActivityCategoryCode AC_7 = new ActivityCategoryCode("AC_7");
+	public static final ActivityCategoryCode AC_8 = new ActivityCategoryCode("AC_8");
+	public static final ActivityCategoryCode AC_9 = new ActivityCategoryCode("AC_9");
+	public static final ActivityCategoryCode AC_10 = new ActivityCategoryCode("AC_10");
+	public static final ActivityCategoryCode AC_11 = new ActivityCategoryCode("AC_11");
+	public static final ActivityCategoryCode AC_12 = new ActivityCategoryCode("AC_12");
+	public static final ActivityCategoryCode AC_13 = new ActivityCategoryCode("AC_13");
+	public static final ActivityCategoryCode AC_14 = new ActivityCategoryCode("AC_14");
+	public static final ActivityCategoryCode AC_15 = new ActivityCategoryCode("AC_15");
+	public static final ActivityCategoryCode AC_16 = new ActivityCategoryCode("AC_16");
+	public static final ActivityCategoryCode AC_17 = new ActivityCategoryCode("AC_17");
 	private static final long serialVersionUID = 1L;
 	protected ActivityCategoryCode() {
 		super(CodeList.ActivityCategory);

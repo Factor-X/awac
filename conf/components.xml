@@ -28,6 +28,14 @@
     </bean>
 
 
+	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceImpl">
+		<property name="activityResultContributors">
+            <set>
+                <bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD1"/>
+ 			</set>
+        </property>				
+	</bean>
+
     <!-- 	<bean id="entityManagerFactory" class="org.hibernate.ejb.EntityManagerFactoryImpl"> -->
     <!-- 		<constructor-arg name="persistenceUnitName" value="defaultPersistenceUnit" /> -->
     <!-- 	</bean> -->

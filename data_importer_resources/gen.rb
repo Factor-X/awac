@@ -40,7 +40,7 @@ options_lists = []
 current_tab = nil
 
 
-book = Spreadsheet.open('awac_data_17-07-2014/AWAC-entreprise-calcul_FE.xls', 'r')
+book = Spreadsheet.open('awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls', 'r')
 
 sheet = book.worksheet('site entreprise-activityData') # can use an index or worksheet name
 
@@ -212,7 +212,7 @@ end
 
 def make_question(q)
 
-  driver = q.driver
+  driver = q.driver.to_s
 
   if driver == nil or driver.to_s.strip.length == 0
     driver = 'null'
@@ -226,10 +226,10 @@ def make_question(q)
   if q.type == 'NUMBER'
     found= true
 
-    txt = 'session.saveOrUpdate(new IntegerQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new IntegerQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'MULTIPLE'
@@ -237,7 +237,6 @@ def make_question(q)
     txt = 'session.saveOrUpdate(new ValueSelectionQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, CodeList.__LIST__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-
 
     if q.options != nil and q.options.start_with? 'Liste:'
       txt = txt.gsub /__LIST__/, make_code(q.options.gsub('Liste:', '').strip)
@@ -248,25 +247,48 @@ def make_question(q)
         txt = txt.gsub /__LIST__/, q.accronym.upcase + '_OPTIONS'
       end
     end
-
-
   end
 
   if q.type == 'YES_NO'
     found= true
 
-    txt = 'session.saveOrUpdate(new BooleanQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
+    txt = 'session.saveOrUpdate(new BooleanQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
+
+    if driver == true or
+        driver.upcase == 'YES' or
+        driver.upcase == 'Y' or
+        driver.upcase == 'OUI' or
+        driver.upcase == 'O' or
+        driver.upcase == 'TRUE' or
+        driver.upcase == 'T' or
+        driver.upcase == '1'
+      txt = txt.gsub /__DEFAULT__/, 'true'
+    else
+      if driver == false or
+          driver.upcase == 'NO' or
+          driver.upcase == 'N' or
+          driver.upcase == 'NON' or
+          driver.upcase == 'N' or
+          driver.upcase == 'FALSE' or
+          driver.upcase == 'F' or
+          driver.upcase == '0'
+        txt = txt.gsub /__DEFAULT__/, 'false'
+      else
+        txt = txt.gsub /__DEFAULT__/, 'null'
+      end
+    end
+
   end
 
   if q.type == 'UNIT_AREA'
     found= true
 
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, surfaceUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, surfaceUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'DOCUMENT'
@@ -279,75 +301,76 @@ def make_question(q)
 
   if q.type == 'UNIT_ENERGY'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, energyUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, energyUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_MASS' or q.type == 'UNIT_MASS_KG'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, massUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, massUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_POWER'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, powerUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, powerUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_TIME'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, timeUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, timeUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_LENGTH'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, lengthUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, lengthUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_VOLUME'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, volumeUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, volumeUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'UNIT_MONEY'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, moneyUnits, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, moneyUnits, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'TEXT'
     found= true
 
-    txt = 'session.saveOrUpdate(new StringQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
+    txt = 'session.saveOrUpdate(new StringQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if q.type == 'PCT'
     found= true
 
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DELFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DELFAULT__/, driver
+    txt = txt.gsub /__DEFAULT__/, driver.inspect
   end
 
   if found
@@ -402,41 +425,44 @@ b = Spreadsheet::Workbook.new
 
 def create_ws(b, ln, good_sheet)
 
+  # excel
 
   s = b.create_worksheet
   s.name = ln
 
   bold = Spreadsheet::Format.new :weight => :bold
-  s.row(0).set_format(0, bold)
-  s.row(0).set_format(1, bold)
-  s.row(0).set_format(2, bold)
-  s.row(0).set_format(3, bold)
-  s.row(0).set_format(4, bold)
+
+  if good_sheet[0, 0] == 'ActivitySource_KEY' or good_sheet[0, 0] == 'ActivityType_KEY'
+    s[0, 0] = good_sheet[0, 0]
+
+    s.row(0).set_format(0, bold)
+
+    for i in 1..good_sheet.rows.length
+      s[i, 0] = good_sheet[i, 0]
+    end
+  else
+    s[0, 0] = 'KEY'
+    s[0, 1] = 'LABEL_EN'
+    s[0, 2] = 'LABEL_FR'
+    s[0, 3] = 'LABEL_NL'
+
+    s.row(0).set_format(0, bold)
+    s.row(0).set_format(1, bold)
+    s.row(0).set_format(2, bold)
+    s.row(0).set_format(3, bold)
 
 
-  s[0, 0] = 'NAME'
-  s[0, 1] = 'KEY'
-  s[0, 2] = 'LABEL_EN'
-  s[0, 3] = 'LABEL_FR'
-  s[0, 4] = 'LABEL_NL'
-
-
-  puts ln
-
-  opts = []
-
-  puts good_sheet.inspect
-
-  for row in good_sheet.rows
-    begin
-      opts.push row[0].to_s.strip
-    rescue
-      next
+    for i in 1..good_sheet.rows.length
+      s[i, 0] = good_sheet[i, 0]
+      s[i, 1] = good_sheet[i, 1]
+      s[i, 2] = good_sheet[i, 1]
+      s[i, 3] = good_sheet[i, 1]
     end
   end
+end
 
-  opts = opts.uniq
 
+def create_code_class(ln, good_sheet)
 
   # Code file
   lines = []
@@ -467,43 +493,16 @@ public class __LN__Code extends Code {
     }
 '.gsub('__LN__', ln).gsub('__LLN__', ln.downcase)
 
-  n= 1
-  code_done = []
-  for o in opts
-
-    unless code_done.include?(make_code(o))
-
-      l = 'public static final ' + ln + 'Code ' + make_code(o) + ' = new ' + ln + 'Code("' + n.to_s + '");'
-      lines.push l
-      n = n + 1
-
-      code_done.push make_code(o)
-    end
-
+  for i in 1..good_sheet.rows.length
+    r = good_sheet.row(i)
+    next if r[0] == nil
+    l = 'public static final ' + ln + 'Code ' + r[0] + ' = new ' + ln + 'Code("' + r[0] + '");'
+    lines.push l
   end
 
   footer = '}'
 
   File.open('/tmp/codes/' + ln + 'Code.java', 'w') { |file| file.write(header + lines.join("\n") + footer) }
-
-
-  # excel
-  n = 1
-  code_done = []
-  for o in opts
-    unless code_done.include?(make_code(o))
-
-      s[n, 0] = make_code(o)
-      s[n, 1] = n.to_s
-      s[n, 2] = o
-      s[n, 3] = o
-      s[n, 4] = o
-
-      n = n + 1
-
-      code_done.push make_code(o)
-    end
-  end
 
 
 end
@@ -521,6 +520,7 @@ for l in hardlists
   good_sheet = book.worksheets.select { |s| s.name == l }.first
   if good_sheet
     create_ws(b, l, good_sheet)
+    create_code_class(l, good_sheet)
   else
     puts 'ERROR for sheet ' + ln
   end

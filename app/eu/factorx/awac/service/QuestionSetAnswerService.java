@@ -11,7 +11,7 @@ import java.util.List;
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
 	/**
-	 * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (period and scope).
+	 * Gets all QuestionSetAnswers corresponding to given context (period and scope).
 	 *
 	 * @param scope
 	 * @param period

@@ -60,4 +60,10 @@ public class BaseActivityResult implements Serializable {
 		Double factorValue = factor.getCurrentValue();
 		return (activityDataValue * factorValue);
 	}
+
+	@Override
+	public String toString() {
+		return "BaseActivityResult [indicator=" + indicator + ", activityData=" + activityData + ", factor=" + factor + "]";
+	}
+
 }
