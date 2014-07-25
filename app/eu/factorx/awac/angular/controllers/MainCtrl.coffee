@@ -2,6 +2,8 @@ angular
 .module('app.controllers')
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams,modalService) ->
 
+
+
     #
     # First loading
     #
@@ -33,6 +35,21 @@ angular
             return "menu_current"
         else
             return ""
+
+    #
+    # ask confirmation before leave the site
+    #
+    window.onbeforeunload = (event) ->
+        canBeContinue = true
+
+        # test if the main current scope have a validNavigation function and if this function return a false
+        if $scope.getMainScope().validNavigation!=undefined
+            # ask a confirmation to quite the view
+            result = $scope.getMainScope().validNavigation()
+
+            if result.valid == false
+                return "Certaines données n'ont pas été sauvegardées. Êtes-vous sûr de vouloir quittez cette page ?"
+
     #
     # use the nav from an event
     # use the args.loc to specify the target loc

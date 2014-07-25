@@ -24,6 +24,8 @@ libraryDependencies += "joda-time" % "joda-time" % "2.3"
 
 libraryDependencies += "com.liferay" % "org.apache.commons.fileupload" % "1.2.2.LIFERAY-PATCHED-1"
 
+libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.8.5"
+
 libraryDependencies += "net.sourceforge.jexcelapi" % "jxl" % "2.6.12" excludeAll(
     ExclusionRule(organization = "com.sun.jdmk"),
     ExclusionRule(organization = "com.sun.jmx"),

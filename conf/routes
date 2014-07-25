@@ -37,4 +37,5 @@ GET     /result/getReport/:period/:scope         @eu.factorx.awac.controllers.Re
 
 # upload
 POST     /file/upload/                           @eu.factorx.awac.controllers.FilesController.upload()
+GET      /file/download/:storedFileId            @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
 
