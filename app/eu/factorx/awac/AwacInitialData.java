@@ -24,7 +24,7 @@ public class AwacInitialData {
 		new CodeLabelImporter(session).run();
 
 		// IMPORT AWAC DATA
-		new AwacDataImporter(session).run();
+//		new AwacDataImporter(session).run();
 
 		// ACCOUNTS
 		new AccountImporter(session).run();

@@ -41,7 +41,7 @@ import eu.factorx.awac.service.CodeLabelService;
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	private static final String AWAC_DATA_WORKBOOK__PATH = "data_importer_resources/awac_data_17-07-2014/AWAC-entreprise-calcul_FE.xls";
+	private static final String AWAC_DATA_WORKBOOK__PATH = "data_importer_resources/awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls";
 
 	/**
 	 * Columns:<br>
@@ -113,7 +113,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 		System.out.println("==== Verify Awac business Data (from " + AWAC_DATA_WORKBOOK__PATH + ") ====");
 		try {
-			verifyAwacData(factorsSheet, indicatorsSheet);
+//			verifyAwacData(factorsSheet, indicatorsSheet);
 		} catch (RuntimeException e) {
 			Logger.error("######## ABORTING IMPORT OF INDICATORS AND FACTORS - Please fix errors and relaunch the DB import script!");
 			return;
@@ -208,9 +208,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		List<Factor> factors = new ArrayList<>();
 		List<FactorValue> factorValues = new ArrayList<>();
 		for (int i = 1; i < factorsSheet.getRows(); i++) {
-			String indicatorKey = indicatorCategories.get(getCellContent(factorsSheet, 0, i));
-			String activityTypeKey = activityTypes.get(getCellContent(factorsSheet, 1, i));
-			String activitySourceKey = activitySources.get(getCellContent(factorsSheet, 2, i));
+			String indicatorKey = getCellContent(factorsSheet, 0, i);
+			String activityTypeKey = getCellContent(factorsSheet, 1, i);
+			String activitySourceKey = getCellContent(factorsSheet, 2, i);
 			Unit unitIn = knownUnits.get(getCellContent(factorsSheet, 3, i));
 			String institution = getCellContent(factorsSheet, 4, i);
 			Double value = getNumericCellContent(factorsSheet, 5, i);
@@ -235,9 +235,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		for (int i = 1; i < indicatorsSheet.getRows(); i++) {
 			String name = getCellContent(indicatorsSheet, 1, i);
 			String indicatorIsoScopeKey = getCellContent(indicatorsSheet, 3, i);
-			String indicatorCategoryKey = indicatorCategories.get(getCellContent(indicatorsSheet, 4, i));
-			String activityCategoryKey = activityCategories.get(getCellContent(indicatorsSheet, 6, i));
-			String activitySubCategoryKey = activitySubCategories.get(getCellContent(indicatorsSheet, 7, i));
+			String indicatorCategoryKey = getCellContent(indicatorsSheet, 4, i);
+			String activityCategoryKey = getCellContent(indicatorsSheet, 6, i);
+			String activitySubCategoryKey = getCellContent(indicatorsSheet, 7, i);
 			String strActivityOwnership = getCellContent(indicatorsSheet, 10, i);
 			Boolean activityOwnership = null;
 			if ("1".equals(strActivityOwnership)) {
