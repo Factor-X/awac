@@ -67,4 +67,11 @@ public class TechnicalSegment {
 		this.lastUpdateDate = LocalDateTime.now();
 		this.lastUpdateUser = updateUser;
 	}
+
+	@Override
+	public String toString() {
+		return "TechnicalSegment [creationDate=" + creationDate + ", creationUser=" + creationUser + ", lastUpdateDate=" + lastUpdateDate
+				+ ", lastUpdateUser=" + lastUpdateUser + "]";
+	}
+
 }

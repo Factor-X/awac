@@ -22,7 +22,7 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.parent is null"),
+		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period"),
 		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"),})
 public class QuestionSetAnswer extends AbstractEntity {
 

@@ -66,7 +66,7 @@ public class CodeConversionServiceLabelComparisonImpl implements CodeConversionS
 
 		if (key == null) {
 			Logger.warn("Cannot find an ActivityTypeCode having the same label than input code '" + code
-					+ "' - Trying to compare after removing non-ascci characters...");
+					+ "' - Trying to compare after removing non-ascii characters...");
 			key = findByAsciiComparison(labelToFind, activityTypes);
 			if (key == null) {
 				Logger.error("Cannot find an ActivityTypeCode for input code " + code + "!");

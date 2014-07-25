@@ -120,4 +120,12 @@ public class Factor extends AbstractEntity {
 		FactorValue factorValue = this.values.get(0); // TODO Find this value from the current date
 		return factorValue.getValue();
 	}
+
+	@Override
+	public String toString() {
+		return "Factor [indicatorCategory=" + indicatorCategory + ", activityType=" + activityType + ", activitySource=" + activitySource
+				+ ", unitIn=" + unitIn + ", unitOut=" + unitOut + ", institution=" + institution + ", values=" + values + "]";
+	}
+
+	
 }

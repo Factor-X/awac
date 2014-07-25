@@ -6,10 +6,12 @@ import eu.factorx.awac.models.knowledge.Unit;
 import javax.persistence.Basic;
 import javax.persistence.Embedded;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+
 import java.io.Serializable;
 
-@MappedSuperclass
+@Embeddable
 public class BaseActivityData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,7 +39,7 @@ public class BaseActivityData implements Serializable {
 	@Basic(optional = false)
 	private Boolean activityOwnership;
 
-	@Basic(optional = false)
+	@Transient
 	private Double value;
 
 	@ManyToOne(optional = false)
