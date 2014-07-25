@@ -40,19 +40,23 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 			QuestionAnswer questionA16Answer = answersByCode.get(QuestionCode.A16);
 			QuestionAnswer questionA17Answer = answersByCode.get(QuestionCode.A17);
 
-			if (questionA16Answer == null || questionA17Answer == null) {
+			if (questionA16Answer == null ||
+					questionA17Answer == null) {
 				continue;
 			}
+
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD1);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.ENERGIE);
-			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ENERGIE_FOSSILE);
-			baseActivityData.setActivityType(ActivityTypeCode.COMBUSTION_FOSSILE);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_1);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
+			
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA16Answer));
+			
 			baseActivityData.setActivityOwnership(true);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA17Answer, baseActivityDataUnit));
