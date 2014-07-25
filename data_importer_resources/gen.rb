@@ -432,7 +432,7 @@ def create_ws(b, ln, good_sheet)
 
   bold = Spreadsheet::Format.new :weight => :bold
 
-  if good_sheet[0, 0] == 'ActivitySource_KEY' or good_sheet[0, 0] == 'ActivityType_KEY'
+  if good_sheet[0, 0] == 'ActivitySource_KEY' or good_sheet[0, 0] == 'ActivityType_KEY' or good_sheet[0, 0] == 'ActivitySubCategory_KEY'
     s[0, 0] = good_sheet[0, 0]
 
     s.row(0).set_format(0, bold)
