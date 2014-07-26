@@ -814,7 +814,7 @@ button.comments {
 .question_field .oneelement input,
 .question_field .oneelement select{
     width: calc(100% - 72px);
-    display: inline-block !important;
+    display: inline-block;
 }
 .question_field .twoelement input{
     width: calc(60% - 36px);
@@ -897,7 +897,7 @@ button.comments {
 / / font-weight : 700;
     color: white;
     padding: 5px 0;
-    float: left;
+    vertical-align: middle;
 }
 
 .status.answer {
@@ -918,10 +918,10 @@ button.comments {
     color: white;
     padding: 5px 0;
     text-align: center;
-    float: right;
     background-color: #9d9b91;
     color: white;
     font-style: italic;
+    vertical-align: middle;
 }
 
 /*.element_table > div > div:nth-child(3) .user_icon,*/
@@ -976,18 +976,38 @@ button.comments {
 }
 */
 
+.document-question-block{
+    width :calc(100% - 72px);
+    display: inline-block;
+}
+
+.document-question-block input{
+    width : 100% !important;
+    height: 25px !important;
+}
+
 .document-question-progress-bar {
     text-align: center;
     border: 1px solid #dbd9d2;
-}
-.document-question-progress-bar > div:first-child {
-    width:100%;
-    float:left;
+    width :calc(100% - 70px);
+    height:20px;
+    display: inline-block;
 }
 
-.document-question-progress-bar > div:last-child {
-    background-color: green;
-    overflow: hidden;
+.document-question-progress-bar > div {
+    height: 20px;
+    background-color: #5cb85c;
+}
+
+.document-question-progress-percentage{
+    display: inline-block;
+    line-height: 20px;
+    vertical-align: top;
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    width: 50px;
+    text-align: right;
 }
 
 .element_table > div > div:nth-child(3) .user_icon {

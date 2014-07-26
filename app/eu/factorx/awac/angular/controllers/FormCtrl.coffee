@@ -21,9 +21,10 @@ angular
     modalService.show('LOADING')
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+
         console.log "data"
         console.log data
-        $scope.o = data
+        $scope.o = angular.copy(data)
 
         $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
             if questionSetDTO.repetitionAllowed == true
@@ -201,12 +202,8 @@ angular
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
-                console.log "createAnsser question"
-                console.log question
-
                 #if question.defaultValue != null && question.defaultValue != undefined
                 value = question.defaultValue
-                console.log "add a default value : "+value
 
                 #compute default unitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
