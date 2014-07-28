@@ -149,7 +149,7 @@ public class AnswerController extends Controller {
 	}
 
 	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByType(codeList);
+		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(codeList);
 		if (codeLabels == null) {
 			throw new RuntimeException("No code labels for the code list: " + codeList);
 		}

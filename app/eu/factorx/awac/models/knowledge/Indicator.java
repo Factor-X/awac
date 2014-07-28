@@ -35,6 +35,10 @@ public class Indicator extends AbstractEntity {
 	public static final String FIND_BY_PARAMETERS = "Indicator.findByParametersAndOwnership";
 	public static final String FIND_ALL_INDICATOR_NAMES = "Indicator.findAllIndicatorNames";
 	private static final long serialVersionUID = 1L;
+
+	@Column(unique = true)
+	private String key;
+
 	// not unique !!
 	private String name;
 
@@ -68,10 +72,11 @@ public class Indicator extends AbstractEntity {
 		super();
 	}
 
-	public Indicator(String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
+	public Indicator(String key, String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
 	                 IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
 	                 ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
 		super();
+		this.key = key;
 		this.name = name;
 		this.type = type;
 		this.scopeType = scopeType;
@@ -82,6 +87,15 @@ public class Indicator extends AbstractEntity {
 		this.activityOwnership = activityOwnership;
 		this.unit = unit;
 		this.deleted = deleted;
+	}
+
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getName() {
@@ -166,8 +180,9 @@ public class Indicator extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return "Indicator [id=" + id + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
+		return "Indicator [key=" + key + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
 				+ ", indicatorCategory=" + indicatorCategory + ", activityCategory=" + activityCategory + ", activitySubCategory="
 				+ activitySubCategory + ", activityOwnership=" + activityOwnership + ", unit=" + unit + ", deleted=" + deleted + "]";
 	}
+
 }

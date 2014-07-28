@@ -1,10 +1,9 @@
+
 package eu.factorx.awac.service.knowledge.activity.contributor.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.type.ActivityCategoryCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
@@ -17,23 +16,21 @@ import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
 
-@Component
+/**
+ * CHECK XM
+ */
 public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
-		List<BaseActivityData> res = new ArrayList<>();
+				List<BaseActivityData> res = new ArrayList<>();
 
 		// Get Target Unit (GJ in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
 		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
 		// For each set of answers in A15, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetA15Answers = questionSetAnswers.get(QuestionCode.A15);
-		if (questionSetA15Answers == null) {
-			return res;
-		}
-		for (QuestionSetAnswer questionSetAnswer : questionSetA15Answers) {
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A15)) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

@@ -1,12 +1,22 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-
-import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "factor")
@@ -24,6 +34,9 @@ public class Factor extends AbstractEntity {
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
 	private static final long serialVersionUID = 1L;
+
+	@Column(unique=true)
+	private String key;
 
 	@Embedded
 	private IndicatorCategoryCode indicatorCategory;
@@ -49,15 +62,25 @@ public class Factor extends AbstractEntity {
 		super();
 	}
 
-	public Factor(IndicatorCategoryCode indicatorCategory, ActivityTypeCode activityType,
+	public Factor(String key, IndicatorCategoryCode indicatorCategory, ActivityTypeCode activityType,
 	              ActivitySourceCode activitySource, Unit unitIn, Unit unitOut, String institution) {
 		super();
+		this.key = key;
 		this.indicatorCategory = indicatorCategory;
 		this.activityType = activityType;
 		this.activitySource = activitySource;
 		this.unitIn = unitIn;
 		this.unitOut = unitOut;
 		this.institution = institution;
+	}
+
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public IndicatorCategoryCode getIndicatorCategory() {
@@ -123,9 +146,9 @@ public class Factor extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return "Factor [indicatorCategory=" + indicatorCategory + ", activityType=" + activityType + ", activitySource=" + activitySource
-				+ ", unitIn=" + unitIn + ", unitOut=" + unitOut + ", institution=" + institution + ", values=" + values + "]";
+		return "Factor [key=" + key + ", indicatorCategory=" + indicatorCategory + ", activityType=" + activityType + ", activitySource="
+				+ activitySource + ", unitIn=" + unitIn + ", unitOut=" + unitOut + ", institution=" + institution + ", values=" + values
+				+ "]";
 	}
-
 	
 }

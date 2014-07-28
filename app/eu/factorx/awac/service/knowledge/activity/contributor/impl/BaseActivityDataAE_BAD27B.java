@@ -1,0 +1,69 @@
+
+package eu.factorx.awac.service.knowledge.activity.contributor.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
+import eu.factorx.awac.models.code.type.BaseActivityDataCode;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.models.reporting.BaseActivityData;
+import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+
+/**
+ * CHECK XM
+ */
+public class BaseActivityDataAE_BAD27B extends ActivityResultContributor {
+
+	@Override
+	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
+				List<BaseActivityData> res = new ArrayList<>();
+
+		// Get Target Unit (t in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+		Unit baseActivityDataUnit = unitService.findBySymbol("t");
+
+		// For each set of answers in A209, build an ActivityBaseData (see specifications)
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A209)) {
+
+			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
+
+			QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+			QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+			QuestionAnswer questionA212Answer = answersByCode.get(QuestionCode.A212);
+			QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+			QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+			if (questionA210Answer == null ||
+					questionA211Answer == null ||
+					questionA212Answer == null ||
+					questionA220Answer == null ||
+					questionA221Answer == null) {
+				continue;
+			}
+
+
+			BaseActivityData baseActivityData = new BaseActivityData();
+
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD27B);
+			baseActivityData.setRank(1);
+			baseActivityData.setSpecificPurpose(toString(questionA210Answer));
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
+			baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
+			// TODO: transformé code en identique mais 100% recyclé            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class + "100% recyclé"));
+			baseActivityData.setActivityOwnership(null);
+			baseActivityData.setUnit(baseActivityDataUnit);
+			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer, baseActivityDataUnit));
+
+			res.add(baseActivityData);
+		}
+		return res;
+	}
+
+}
