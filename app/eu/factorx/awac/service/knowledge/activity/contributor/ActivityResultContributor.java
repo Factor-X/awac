@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
@@ -33,7 +33,6 @@ public abstract class ActivityResultContributor {
 	private UnitConversionService unitConversionService;
 
 	@Autowired
-	@Qualifier("codeConversionServiceLabelComparisonImpl")
 	private CodeConversionService codeConversionService;
 
 	public ActivityResultContributor() {
@@ -67,6 +66,12 @@ public abstract class ActivityResultContributor {
 	protected ActivityTypeCode toActivityTypeCode(QuestionAnswer questionAnswer) {
 		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
 		return codeConversionService.toActivityTypeCode(answerValue.getValue());
+	}
+
+	protected ActivitySubCategoryCode toActivitySubCategoryCode(QuestionAnswer questionAnswer) {
+		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+//		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
 	}
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {

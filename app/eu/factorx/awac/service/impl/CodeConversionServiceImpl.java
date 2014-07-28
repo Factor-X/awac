@@ -2,6 +2,8 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.conversion.CodeToActivitySourceCodeEquivalence;
@@ -11,6 +13,7 @@ import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.service.CodeConversionService;
 
+@Component
 public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<CodesEquivalence> implements CodeConversionService {
 
 	@Override
@@ -24,10 +27,8 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 	}
 
 	private <T> T findByCode(Code code, String namedQuery, Class<T> resultType) {
-		List<T> resultList = JPA.em().createNamedQuery(namedQuery, resultType)
-				.setParameter("codeList", code.getCodeList())
-				.setParameter("codeKey", code.getKey())
-				.getResultList();
+		List<T> resultList = JPA.em().createNamedQuery(namedQuery, resultType).setParameter("codeList", code.getCodeList())
+				.setParameter("codeKey", code.getKey()).getResultList();
 		if (resultList.size() > 1) {
 			throw new RuntimeException("More than one equivalence found for given parameters");
 		}
@@ -36,6 +37,11 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 		}
 
 		return resultList.get(0);
+	}
+
+	@Override
+	public List<CodesEquivalence> findAllSublistsData() {
+		return JPA.em().createNamedQuery(CodesEquivalence.FIND_ALL_SUBLISTS_DATA, CodesEquivalence.class).getResultList();
 	}
 
 }

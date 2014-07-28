@@ -1,5 +1,5 @@
 <ng-virtual>
-    <div ng-hide="$root.isLogin()" >
+    <div ng-hide="$root.isLogin()">
         <div class="header">
             <div class="wallonie_logo"></div>
             <div class="awac_logo"></div>
@@ -65,7 +65,8 @@
                 </div>
                 <div class="small_separator"></div>
                 <div class="save_button">
-                    <button type="button" class="save" ng-click="save()" ng-bind-html="'SAVE_BUTTON' | translate"></button>
+                    <button type="button" class="save" ng-click="save()"
+                            ng-bind-html="'SAVE_BUTTON' | translate"></button>
                 </div>
             </div>
         </div>
@@ -84,89 +85,40 @@
                     <div class="menu">
                         <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
                             <div ng-bind-html="'TAB1' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 16%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 70%"></div>
-                                    <div class="jauge_current" style="width: 15%"></div>
-                                    <div class="jauge_bg"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="63"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
                             <div ng-bind-html="'TAB2' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 70%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 25%"></div>
-                                    <div class="jauge_current jauge_ok" style="width: 70%"></div>
-                                    <div class="jauge_bg jauge_ok"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="70"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
                             <div ng-bind-html="'TAB3' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 5%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 50%"></div>
-                                    <div class="jauge_current" style="width: 5%"></div>
-                                    <div class="jauge_bg"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="5"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
                             <div ng-bind-html="'TAB4' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 25%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 45%"></div>
-                                    <div class="jauge_current" style="width: 25%"></div>
-                                    <div class="jauge_bg"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="25"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
                             <div ng-bind-html="'TAB5' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 82%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 45%"></div>
-                                    <div class="jauge_current jauge_ok" style="width: 82%"></div>
-                                    <div class="jauge_bg jauge_ok"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="82"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
                             <div ng-bind-html="'TAB6' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 50%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 50%"></div>
-                                    <div class="jauge_current jauge_ok" style="width: 50%"></div>
-                                    <div class="jauge_bg jauge_ok"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="50"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
                             <div ng-bind-html="'TAB7' | translate"></div>
-                            <div class="menu_jauge" mm-not-implemented>
-                                <div>rempli à 50%</div>
-                                <div class="jauge">
-                                    <div class="jauge_limit" style="margin-left: 50%"></div>
-                                    <div class="jauge_current jauge_ok" style="width: 50%"></div>
-                                    <div class="jauge_bg jauge_ok"></div>
-                                </div>
-                            </div>
+                            <mm-awac-tab-progress-bar value="50"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                     </div>

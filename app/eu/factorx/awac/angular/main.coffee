@@ -28,12 +28,12 @@ angular
 .config ($routeProvider) ->
     $routeProvider
     .when('/login', {
-            templateUrl: '$/angular/templates/mm-awac-login.html'
+            templateUrl: '$/angular/views/login.html'
             controller: 'LoginCtrl'
         }
     )
     .when('/form1/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form1.html'
+            templateUrl: '$/angular/views/form1.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -41,7 +41,7 @@ angular
         }
     )
     .when('/form2/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form2.html'
+            templateUrl: '$/angular/views/form2.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -49,7 +49,7 @@ angular
         }
     )
     .when('/form3/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form3.html'
+            templateUrl: '$/angular/views/form3.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -57,7 +57,7 @@ angular
         }
     )
     .when('/form4/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form4.html'
+            templateUrl: '$/angular/views/form4.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -65,7 +65,7 @@ angular
         }
     )
     .when('/form5/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form5.html'
+            templateUrl: '$/angular/views/form5.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -73,7 +73,7 @@ angular
         }
     )
     .when('/form6/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form6.html'
+            templateUrl: '$/angular/views/form6.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -81,7 +81,7 @@ angular
         }
     )
     .when('/form7/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-form7.html'
+            templateUrl: '$/angular/views/form7.html'
             controller: 'FormCtrl'
             resolve:
                 formIdentifier: () ->
@@ -89,7 +89,7 @@ angular
         }
     )
     .when('/results/:period/:scope', {
-            templateUrl: '$/angular/templates/mm-awac-results.html'
+            templateUrl: '$/angular/views/results.html'
             controller: 'ResultsCtrl'
         }
     )

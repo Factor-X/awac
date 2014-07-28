@@ -1,15 +1,21 @@
 package eu.factorx.awac.models.code.conversion;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQuery;
+
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
 
-import javax.persistence.*;
-
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class CodesEquivalence extends AbstractEntity {
+@NamedQuery(name = CodesEquivalence.FIND_ALL_SUBLISTS_DATA, query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.id")
+public class CodesEquivalence extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_ALL_SUBLISTS_DATA = "CodesEquivalence.findAllSublistsData";
 
 	@Enumerated(EnumType.STRING)
 	@Basic(optional = false)
@@ -18,6 +24,13 @@ public abstract class CodesEquivalence extends AbstractEntity {
 	@Basic(optional = false)
 	protected String codeKey;
 
+	@Enumerated(EnumType.STRING)
+	@Basic(optional = false)
+	protected CodeList referencedCodeList;
+
+	@Basic(optional = false)
+	protected String referencedCodeKey;
+
 	protected CodesEquivalence() {
 		super();
 	}
@@ -25,11 +38,15 @@ public abstract class CodesEquivalence extends AbstractEntity {
 	/**
 	 * @param codeList
 	 * @param codeKey
+	 * @param referencedCodeList
+	 * @param referencedCodeKey
 	 */
-	protected CodesEquivalence(CodeList codeList, String codeKey) {
+	public CodesEquivalence(CodeList codeList, String codeKey, CodeList referencedCodeList, String referencedCodeKey) {
 		super();
 		this.codeList = codeList;
 		this.codeKey = codeKey;
+		this.referencedCodeList = referencedCodeList;
+		this.referencedCodeKey = referencedCodeKey;
 	}
 
 	public CodeList getCodeList() {
@@ -46,6 +63,28 @@ public abstract class CodesEquivalence extends AbstractEntity {
 
 	public void setCodeKey(String codeKey) {
 		this.codeKey = codeKey;
+	}
+
+	public CodeList getReferencedCodeList() {
+		return referencedCodeList;
+	}
+
+	public void setReferencedCodeList(CodeList referencedCodeList) {
+		this.referencedCodeList = referencedCodeList;
+	}
+
+	public String getReferencedCodeKey() {
+		return referencedCodeKey;
+	}
+
+	public void setReferencedCodeKey(String referencedCodeKey) {
+		this.referencedCodeKey = referencedCodeKey;
+	}
+
+	@Override
+	public String toString() {
+		return "CodesEquivalence [codeList=" + codeList + ", codeKey=" + codeKey + ", referencedCodeList=" + referencedCodeList
+				+ ", referencedCodeKey=" + referencedCodeKey + "]";
 	}
 
 }

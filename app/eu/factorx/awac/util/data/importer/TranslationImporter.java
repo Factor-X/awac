@@ -1,19 +1,18 @@
 package eu.factorx.awac.util.data.importer;
 
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.label.CodeLabel;
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.WorkbookSettings;
+
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 
 @Component
 public class TranslationImporter extends WorkbookDataImporter {
 
-	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
+	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
 
 	private static Workbook wb = null;
 
@@ -28,9 +27,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	@Override
 	protected void importData() throws Exception {
-		WorkbookSettings ws = new WorkbookSettings();
-		ws.setEncoding(CP1252_ENCODING);
-		wb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
+		wb = getWorkbook(TRANSLATIONS_WORKBOOK_PATH);
 
 		Sheet survey = wb.getSheet("SURVEY");
 

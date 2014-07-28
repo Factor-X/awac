@@ -1,24 +1,24 @@
 package eu.factorx.awac.util.data.importer;
 
+import javax.persistence.NoResultException;
+
+import jxl.Sheet;
+import jxl.Workbook;
+
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import javax.persistence.NoResultException;
-import java.io.File;
 
 @Component
 public class AccountImporter extends WorkbookDataImporter {
 
-	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/accounts/accounts.xls";
+	private static final String ACCOUNTS_WORKBOOK_PATH = "data_importer_resources/accounts/accounts.xls";
 
 	private static Workbook wb = null;
 
@@ -33,9 +33,7 @@ public class AccountImporter extends WorkbookDataImporter {
 
 	@Override
 	protected void importData() throws Exception {
-		WorkbookSettings ws = new WorkbookSettings();
-		ws.setEncoding(CP1252_ENCODING);
-		wb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
+		wb = getWorkbook(ACCOUNTS_WORKBOOK_PATH);
 
 		// CREATE ORGANIZATIONS AND SITES
 		Sheet sites = wb.getSheet("SITES");
