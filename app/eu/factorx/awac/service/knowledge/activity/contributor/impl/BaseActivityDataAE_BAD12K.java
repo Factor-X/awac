@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.BaseActivityDataCode;
@@ -19,44 +20,40 @@ import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultCont
 /**
  * CHECK XM
  */
-public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
+public class BaseActivityDataAE_BAD12K extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (GJ in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
+		// Get Target Unit (véhicule.km in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.véhicule.km)
+		Unit baseActivityDataUnit = unitService.findBySymbol("véhicule.km");
 
-		// For each set of answers in A15, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A15)) {
+		// For each set of answers in A94, build an ActivityBaseData (see specifications)
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A94)) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
-			QuestionAnswer questionA16Answer = answersByCode.get(QuestionCode.A16);
-			QuestionAnswer questionA17Answer = answersByCode.get(QuestionCode.A17);
+			QuestionAnswer questionA105Answer = answersByCode.get(QuestionCode.A105);
 
-			if (questionA16Answer == null ||
-					questionA17Answer == null) {
+			if (questionA105Answer == null) {
 				continue;
 			}
 
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
-			baseActivityData.setKey(BaseActivityDataCode.AE_BAD1);
-			baseActivityData.setRank(1);
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD12K);
+			baseActivityData.setRank(2);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_1);
-			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
-			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
-			
-			baseActivityData.setActivitySource(toActivitySourceCode(questionA16Answer));
-			
-			baseActivityData.setActivityOwnership(true);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_5);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_8);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_16);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
+			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA17Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA105Answer, baseActivityDataUnit));
 
 			res.add(baseActivityData);
 		}

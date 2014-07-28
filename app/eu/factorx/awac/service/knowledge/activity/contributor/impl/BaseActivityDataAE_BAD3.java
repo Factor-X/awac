@@ -19,7 +19,7 @@ import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultCont
 /**
  * CHECK XM
  */
-public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
+public class BaseActivityDataAE_BAD3 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
@@ -29,34 +29,34 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
 		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
 
-		// For each set of answers in A15, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A15)) {
+		// For each set of answers in A25, build an ActivityBaseData (see specifications)
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A25)) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
-			QuestionAnswer questionA16Answer = answersByCode.get(QuestionCode.A16);
-			QuestionAnswer questionA17Answer = answersByCode.get(QuestionCode.A17);
+			QuestionAnswer questionA26Answer = answersByCode.get(QuestionCode.A26);
+			QuestionAnswer questionA28Answer = answersByCode.get(QuestionCode.A28);
+			QuestionAnswer questionA27Answer = answersByCode.get(QuestionCode.A27);
 
-			if (questionA16Answer == null ||
-					questionA17Answer == null) {
+			if (questionA26Answer == null ||
+					questionA28Answer == null ||
+					questionA27Answer == null) {
 				continue;
 			}
 
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
-			baseActivityData.setKey(BaseActivityDataCode.AE_BAD1);
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD3);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(null);
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_1);
-			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
-			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
-			
-			baseActivityData.setActivitySource(toActivitySourceCode(questionA16Answer));
-			
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_3);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_7);
+			baseActivityData.setActivitySource(toActivitySourceCode(questionA26Answer));
 			baseActivityData.setActivityOwnership(true);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA17Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA28Answer, baseActivityDataUnit) / toDouble(questionA27Answer, baseActivityDataUnit));
 
 			res.add(baseActivityData);
 		}

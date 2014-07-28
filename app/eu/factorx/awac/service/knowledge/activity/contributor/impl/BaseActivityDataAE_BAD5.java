@@ -19,44 +19,42 @@ import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultCont
 /**
  * CHECK XM
  */
-public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
+public class BaseActivityDataAE_BAD5 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (GJ in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
+		// Get Target Unit (kg in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
+		Unit baseActivityDataUnit = unitService.findBySymbol("kg");
 
-		// For each set of answers in A15, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A15)) {
+		// For each set of answers in A42, build an ActivityBaseData (see specifications)
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A42)) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
-			QuestionAnswer questionA16Answer = answersByCode.get(QuestionCode.A16);
-			QuestionAnswer questionA17Answer = answersByCode.get(QuestionCode.A17);
+			QuestionAnswer questionA43Answer = answersByCode.get(QuestionCode.A43);
+			QuestionAnswer questionA44Answer = answersByCode.get(QuestionCode.A44);
 
-			if (questionA16Answer == null ||
-					questionA17Answer == null) {
+			if (questionA43Answer == null ||
+					questionA44Answer == null) {
 				continue;
 			}
 
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
-			baseActivityData.setKey(BaseActivityDataCode.AE_BAD1);
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD5);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_1);
-			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
-			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
-			
-			baseActivityData.setActivitySource(toActivitySourceCode(questionA16Answer));
-			
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_2);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_5);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_8);
+			baseActivityData.setActivitySource(toActivitySourceCode(questionA43Answer));
 			baseActivityData.setActivityOwnership(true);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA17Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA44Answer, baseActivityDataUnit));
 
 			res.add(baseActivityData);
 		}
