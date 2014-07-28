@@ -466,17 +466,16 @@ select {
     display: block;
 }
 
-
 /*-----------------------------------------------------
 	[ 2.c Nav menu ]
 -------------------------------------------------------
 */
 
-.modal-background{
-    z-index:100;
-    position:fixed;
-    width:100%;
-    height:100%;
+.modal-background {
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    height: 100%;
     background-color: #000000;
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
@@ -504,7 +503,7 @@ button[type="button"] {
     box-shadow: -1px 2px 10px 3px rgba(255, 255, 255, 0.05) inset;
 
     outline: none;
-    
+
     color: white;
     margin-left: 5px;
     transition: all 0.1s ease-out;
@@ -596,7 +595,7 @@ button.comments {
     border-top-width: 15px;
     left: 0;
     right: 0;
-    min-width : 1000px;
+    min-width: 1000px;
 }
 
 .element {
@@ -703,6 +702,7 @@ button.comments {
     min-height: 42px;
     margin-bottom: 5px;
 }
+
 /*
 .element_stack {
     display: block;
@@ -724,7 +724,7 @@ button.comments {
     margin-left: 35px;
 }
 
-.repetition-title .glyphicon{
+.repetition-title .glyphicon {
     margin-right: 5px;
 }
 
@@ -766,12 +766,13 @@ button.comments {
 }
 
 .repetition-question-container [ng-question-code] > div {
-  /*  display: table-row; */
+    /*  display: table-row; */
 }
 
 .repetition-question-container [ng-question-code] > div {
-   /* display: table-cell; */
+    /* display: table-cell; */
 }
+
 /*
 .element_table {
      display: table;
@@ -790,7 +791,7 @@ button.comments {
     padding: 3px 15px 3px 35px;
 }
 */
-.question_field{
+.question_field {
     padding: 3px 15px 3px 35px;
 }
 
@@ -798,31 +799,32 @@ button.comments {
     display: inline-block;
 }
 
-.question_field > div:first-child{
-    width : 50%;
-    padding-right : 15px;
+.question_field > div:first-child {
+    width: 50%;
+    padding-right: 15px;
 }
 
-.question_field > div:first-child .glyphicon{
-    margin-right : 2px;
+.question_field > div:first-child .glyphicon {
+    margin-right: 2px;
 }
 
-.question_field > div:last-child{
+.question_field > div:last-child {
     width: 40%;
 }
 
 .question_field .oneelement input,
-.question_field .oneelement select{
+.question_field .oneelement select {
     width: calc(100% - 72px);
     display: inline-block;
 }
-.question_field .twoelement input{
+
+.question_field .twoelement input {
     width: calc(60% - 36px);
 }
 
-.question_field .twoelement select{
+.question_field .twoelement select {
     width: calc(40% - 42px);
-    margin-left : 8px;
+    margin-left: 8px;
 }
 
 .info {
@@ -868,10 +870,10 @@ button.comments {
     border: 1px solid #dbd9d2;
     padding-left: 15px !important;
     width: calc(50% + 10px) !important;
-    margin-top : 10px;
+    margin-top: 10px;
     margin-bottom: 10px;
-    padding-right : 15px;
-    padding-top : 4px;
+    padding-right: 15px;
+    padding-top: 4px;
     padding-bottom: 4px;
 }
 
@@ -880,11 +882,11 @@ button.comments {
     font-size: 14px;
     border-bottom: 1px solid #dbd9d2;
     width: calc(50% + 10px) !important;
-    margin-top : 5px;
+    margin-top: 5px;
     margin-bottom: 5px;
-    padding-right : 15px;
-    padding-bottom : 2px;
-    margin-left : 35px;
+    padding-right: 15px;
+    padding-bottom: 2px;
+    margin-left: 35px;
 }
 
 .status {
@@ -976,21 +978,21 @@ button.comments {
 }
 */
 
-.document-question-block{
-    width :calc(100% - 72px);
+.document-question-block {
+    width: calc(100% - 72px);
     display: inline-block;
 }
 
-.document-question-block input{
-    width : 100% !important;
+.document-question-block input {
+    width: 100% !important;
     height: 25px !important;
 }
 
 .document-question-progress-bar {
     text-align: center;
     border: 1px solid #dbd9d2;
-    width :calc(100% - 70px);
-    height:20px;
+    width: calc(100% - 70px);
+    height: 20px;
     display: inline-block;
 }
 
@@ -999,7 +1001,7 @@ button.comments {
     background-color: #5cb85c;
 }
 
-.document-question-progress-percentage{
+.document-question-progress-percentage {
     display: inline-block;
     line-height: 20px;
     vertical-align: top;
@@ -1219,4 +1221,53 @@ button.comments {
 
 .tab-color-orange.sub_block {
     border-color: #e38a27;
+}
+
+/*
+ * PROGRESS BAR FOR TABS
+ */
+.tab-pg-bar {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+}
+
+.tab-pg-text {
+    font-size: 12px;
+    text-align: right;
+    text-transform: lowercase;
+    font-style: italic;
+    color: #9d9b91;
+}
+
+.tab-pg-background {
+    background: darkorange;
+    width: 100%;
+}
+
+.tab-pg-indicator {
+    background: orange;
+    height: 10px;
+}
+
+.tab-pb-green-bg{
+    background: #82d998
+}
+.tab-pb-green-fg{
+    background: #28b24c
+}
+
+.tab-pb-orange-bg{
+    background: #d9b882
+}
+.tab-pb-orange-fg{
+    background: #b07c28
+}
+
+.tab-pb-red-bg{
+    background: #d98282
+}
+.tab-pb-red-fg{
+    background: #b02828
 }
