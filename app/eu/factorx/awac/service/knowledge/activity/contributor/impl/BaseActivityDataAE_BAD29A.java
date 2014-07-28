@@ -24,7 +24,7 @@ public class BaseActivityDataAE_BAD29A extends ActivityResultContributor {
 
 		// Get Target Unit (m2 in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.m2)
-		Unit baseActivityDataUnit = unitService.findBySymbol("m2");
+		Unit baseActivityDataUnit = getUnitBySymbol("m2");
 
 		// For each set of answers in A231, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A231)) {

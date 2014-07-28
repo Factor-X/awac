@@ -27,9 +27,9 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 
 		// Get Target Unit (km.passager in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
-		Unit kmUnit = unitService.findBySymbol("km");
-		Unit employesUnit = unitService.findBySymbol("employes");
+		Unit baseActivityDataUnit = getUnitBySymbol("km.passager");
+		Unit kmUnit = getUnitBySymbol("km");
+		Unit employesUnit = getUnitBySymbol("employes");
 
 		// Get reference Number of Employees
 		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...

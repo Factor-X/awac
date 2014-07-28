@@ -27,13 +27,15 @@ import eu.factorx.awac.service.UnitService;
 public abstract class ActivityResultContributor {
 
 	@Autowired
-	protected UnitService unitService;
+	private UnitService unitService;
 
 	@Autowired
 	private UnitConversionService unitConversionService;
 
 	@Autowired
 	private CodeConversionService codeConversionService;
+
+	private Map<String, Unit> unitsBySymbol = null;;
 
 	public ActivityResultContributor() {
 		super();
@@ -86,4 +88,17 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
+	protected Unit getUnitBySymbol(String symbol) {
+		if (unitsBySymbol == null) {
+			findAllUnits();
+		}
+		return unitsBySymbol.get(symbol);
+	}
+
+	private void findAllUnits() {
+		List<Unit> units = unitService.findAll();
+		for (Unit unit : units) {
+			unitsBySymbol.put(unit.getSymbol(), unit);
+		}
+	}
 }

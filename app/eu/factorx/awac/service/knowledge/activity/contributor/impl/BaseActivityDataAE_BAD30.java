@@ -28,7 +28,7 @@ public class BaseActivityDataAE_BAD30 extends ActivityResultContributor {
 
 		// Get Target Unit (tCO2e in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
-		Unit baseActivityDataUnit = unitService.findBySymbol("tCO2e");
+		Unit baseActivityDataUnit = getUnitBySymbol("tCO2e");
 
 		// For each set of answers in A238, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A238)) {

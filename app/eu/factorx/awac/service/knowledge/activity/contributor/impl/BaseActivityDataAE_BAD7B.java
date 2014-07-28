@@ -28,7 +28,7 @@ public class BaseActivityDataAE_BAD7B extends ActivityResultContributor {
 
 		// Get Target Unit (l in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
-		Unit baseActivityDataUnit = unitService.findBySymbol("l");
+		Unit baseActivityDataUnit = getUnitBySymbol("l");
 
 		// For each set of answers in A54, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A54)) {

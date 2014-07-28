@@ -25,7 +25,7 @@ public class BaseActivityDataAE_BAD34C extends BaseActivityDataForProducts {
 
 		// Get Target Unit (kg in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
-		Unit baseActivityDataUnit = unitService.findBySymbol("kg");
+		Unit baseActivityDataUnit = getUnitBySymbol("kg");
 
 		// For each set of answers in A284, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {

@@ -28,7 +28,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 
 		// Get Target Unit (kW in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = unitService.findBySymbol("kW");
+		Unit baseActivityDataUnit = getUnitBySymbol("kW");
 
 		// Get reference Electrical Consumption
 		QuestionSetAnswer questionSet22Answer = questionSetAnswers.get(QuestionCode.A22).get(0);
@@ -80,7 +80,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 				baseActivityData.setValue(0.0);
 			} else {
 			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, unitService.findBySymbol("h")));
+				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
 			}
 			res.add(baseActivityData);
 		}

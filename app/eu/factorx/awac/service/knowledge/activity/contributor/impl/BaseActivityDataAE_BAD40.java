@@ -26,7 +26,7 @@ public class BaseActivityDataAE_BAD40 extends ActivityResultContributor {
 
 		// Get Target Unit (kW in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = unitService.findBySymbol("kW");
+		Unit baseActivityDataUnit = getUnitBySymbol("kW");
 
 		// For each set of answers in A45, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A45)) {

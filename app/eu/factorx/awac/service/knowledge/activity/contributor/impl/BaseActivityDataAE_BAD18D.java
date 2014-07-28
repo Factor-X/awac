@@ -27,7 +27,7 @@ public class BaseActivityDataAE_BAD18D extends ActivityResultContributor {
 
 		// Get Target Unit (tonne.km in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
-		Unit baseActivityDataUnit = unitService.findBySymbol("tonne.km");
+		Unit baseActivityDataUnit = getUnitBySymbol("tonne.km");
 
 		// For each set of answers in A157, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A157)) {
