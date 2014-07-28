@@ -1,21 +1,24 @@
 package eu.factorx.awac.util.data.importer;
 
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.models.knowledge.UnitConversionFormula;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
+
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.models.knowledge.UnitConversionFormula;
 
 @Component
 public class MyrmexUnitsImporter extends WorkbookDataImporter {
@@ -66,32 +69,26 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		ws.setEncoding(CP1252_ENCODING);
 		Workbook myrmexUnitsWorkbook = Workbook.getWorkbook(new File(MYRMEX_UNITS_WORKBOOK__PATH), ws);
 
-		System.out.println("==== Importing Unit Categories ====");
 		persistUnitCategories(myrmexUnitsWorkbook);
-
-		System.out.println("==== Importing Units ====");
 		persistUnits(myrmexUnitsWorkbook);
-
-		System.out.println("==== Updating Unit Categories (set main unit) ====");
 		updateCategories(myrmexUnitsWorkbook);
-
-		System.out.println("==== Importing Conversion Formula ====");
 		persistConversionFormulas(myrmexUnitsWorkbook);
-
 	}
 
 	private void persistUnitCategories(Workbook myrmexUnitsWorkbook) {
+		Logger.info("== Importing Unit Categories");
 		Sheet unitCategoriesSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CATEGORIES_SHEET__NAME);
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
 			String name = getCellContent(unitCategoriesSheet, 1, i);
 			unitCategoriesByRef.put(ref, new UnitCategory(ref, name, "", null));
 		}
-		System.out.println("== Inserting " + unitCategoriesByRef.size() + " Unit Categories...");
 		persistEntities(unitCategoriesByRef.values());
+		Logger.info("==== Imported {} Unit Categories", unitCategoriesByRef.size());
 	}
 
 	private void persistUnits(Workbook myrmexUnitsWorkbook) {
+		Logger.info("== Importing Units");
 		Sheet unitsSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__UNITS_SHEET__NAME);
 		for (int i = 1; i < unitsSheet.getRows(); i++) {
 			String ref = getCellContent(unitsSheet, 0, i);
@@ -101,13 +98,13 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			UnitCategory category = unitCategoriesByRef.get(categoryRef);
 			unitsByRef.put(ref, new Unit(ref, name, symbol, category));
 		}
-		System.out.println("== Inserting " + unitsByRef.size() + " Units...");
 		persistEntities(unitsByRef.values());
+		Logger.info("==== Imported {} Units", unitsByRef.size());
 	}
 
 	private void updateCategories(Workbook myrmexUnitsWorkbook) {
+		Logger.info("== Updating Unit Categories (setting main Unit)");
 		Sheet unitCategoriesSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CATEGORIES_SHEET__NAME);
-		System.out.println("== Updating " + unitCategoriesByRef.size() + " Unit Categories (set main Unit)...");
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
 			UnitCategory category = unitCategoriesByRef.get(ref);
@@ -123,6 +120,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 	}
 
 	private void persistConversionFormulas(Workbook myrmexUnitsWorkbook) {
+		Logger.info("== Importing Unit Conversion Formulas");
 		Sheet conversionsSheet = myrmexUnitsWorkbook.getSheet(MYRMEX_UNITS_WORKBOOK__CONNVERSIONS_SHEET__NAME);
 		List<UnitConversionFormula> conversionFormulas = new ArrayList<>();
 		for (int i = 1; i < conversionsSheet.getRows(); i++) {
@@ -140,8 +138,8 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			}
 			conversionFormulas.add(new UnitConversionFormula(unit, unitToReferenceFormula, referenceToUnitFormula, year));
 		}
-		System.out.println("== Inserting " + conversionFormulas.size() + " Unit Conversion Formulas...");
 		persistEntities(conversionFormulas);
+		Logger.info("==== Imported {} Unit Conversion Formulas", conversionFormulas.size());
 	}
 
 }

@@ -1,5 +1,7 @@
 package eu.factorx.awac.util.data.importer;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -8,10 +10,14 @@ import java.util.Locale;
 import java.util.Set;
 
 import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 
+import play.Logger;
 import eu.factorx.awac.models.AbstractEntity;
 
 public abstract class WorkbookDataImporter {
@@ -21,19 +27,31 @@ public abstract class WorkbookDataImporter {
 	public static final String NEW_LINE = System.getProperty("line.separator");
 
 	protected Session session;
-	
+
 	public synchronized void run() {
 		try {
 			String className = getClass().getSimpleName();
-		   	System.out.println("========= " + className + " - START OF IMPORT =========");
+			Logger.info(className + " - START OF IMPORT");
 			importData();
-		   	System.out.println("========= " + className + " - END OF IMPORT =========");
+			Logger.info(className + " - END OF IMPORT");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	protected abstract void importData() throws Exception;
+
+	protected Workbook getWorkbook(String path) throws IOException, BiffException {
+		Workbook codesWkb = getWorkbook(path, CP1252_ENCODING);
+		return codesWkb;
+	}
+
+	protected Workbook getWorkbook(String path, String encoding) throws IOException, BiffException {
+		WorkbookSettings ws = new WorkbookSettings();
+		ws.setEncoding(encoding);
+		ws.setSuppressWarnings(true);
+		return Workbook.getWorkbook(new File(path), ws);
+	}
 
 	protected static Set<String> getColumnContent(Sheet sheet, int column) {
 		return getColumnContent(sheet, column, 1);
@@ -77,8 +95,8 @@ public abstract class WorkbookDataImporter {
 		try {
 			return NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
 		} catch (ParseException e) {
-			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", "
-					+ column + "} : " + cellContents, e);
+			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", " + column + "} : "
+					+ cellContents, e);
 		}
 	}
 

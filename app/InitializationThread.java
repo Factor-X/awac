@@ -92,7 +92,6 @@ public class InitializationThread extends Thread {
 			Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
 			// save data into DB in relevant order.
 
-			System.out.println(all);
 			for (Object entity : all.get("organizations")) {
 				session.saveOrUpdate(entity);
 			}

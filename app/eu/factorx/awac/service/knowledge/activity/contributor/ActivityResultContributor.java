@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
@@ -33,7 +32,6 @@ public abstract class ActivityResultContributor {
 	private UnitConversionService unitConversionService;
 
 	@Autowired
-	@Qualifier("codeConversionServiceLabelComparisonImpl")
 	private CodeConversionService codeConversionService;
 
 	public ActivityResultContributor() {
