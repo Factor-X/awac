@@ -14,7 +14,7 @@ angular
         })
         $('#modalConfirmationExitForm').modal('show')
 
-        modalName = 'CONFIRMATION_EXIT_FORM'
+        modalName = modalService.CONFIRMATION_EXIT_FORM
         $scope.show = false
         $scope.loc =null
 

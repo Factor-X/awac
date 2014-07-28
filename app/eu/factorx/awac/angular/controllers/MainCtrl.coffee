@@ -2,8 +2,6 @@ angular
 .module('app.controllers')
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams,modalService) ->
 
-
-
     #
     # First loading
     #
@@ -15,6 +13,9 @@ angular
     $scope.initialLoad =
         translations: false
 
+    #
+    # Initialize
+    #
     $scope.$on "LOAD_FINISHED", (event, args) ->
         if args.type is "TRANSLATIONS"
             $scope.initialLoad.translations = args.success
