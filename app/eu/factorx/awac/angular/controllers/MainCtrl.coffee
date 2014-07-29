@@ -73,7 +73,7 @@ angular
         result = $scope.getMainScope().validNavigation()
 
         if result.valid == false
-          canBeContinue =false
+          canBeContinue = false
           params = {}
           params.loc = loc
           modalService.show result.modalForConfirm,params
