@@ -67,6 +67,7 @@ public class StoredFile  extends AuditedAbstractEntity {
     @Override
     public String toString() {
         return "StoredFile{" +
+                super.toString()+
                 "originalName='" + originalName + '\'' +
                 ", storedName='" + storedName + '\'' +
                 ", size=" + size +

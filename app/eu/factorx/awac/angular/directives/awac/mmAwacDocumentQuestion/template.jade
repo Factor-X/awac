@@ -5,5 +5,16 @@ div(ng-hide="getCondition() === false",class="question_field")
         span(class="glyphicon glyphicon-file")
         i(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     .oneelement
-        .status.answer(mm-not-implemented)
-        .document-question-block
+        table
+            tr
+                td.status.answer(mm-not-implemented)
+                td.document-question-block.document-question
+                    span Upload new documents
+                    div(class="document-question-progress-bar",ng-show="inDownload")
+                        div(ng-style="style")
+                            spa
+                    .document-question-progress-percentage(ng-show="inDownload") {{percent}} %
+                    input(ng-hide="inDownload",type='file', ng-file-select='onFileSelect($files)')
+                    div(ng-show="getFileNumber()>0") {{getFileNumber()}} document had already uploaded
+                    button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()") consult this documents
+                td.user_icon(mm-not-implemented) XM

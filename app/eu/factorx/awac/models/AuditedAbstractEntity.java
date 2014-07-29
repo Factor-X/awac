@@ -44,4 +44,8 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 		return Context.current().session().get("identifier");
 	}
 
+    @Override
+    public String toString() {
+        return super.toString()+" "+technicalSegment.toString();
+    }
 }

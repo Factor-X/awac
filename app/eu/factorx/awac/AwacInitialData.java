@@ -927,7 +927,7 @@ public class AwacInitialData {
 		// == A14 =========================================================================
 		// Pièces documentaires liées aux consommations de combustible
 		// A13(Consommation de combustibles) > A14 (Pièces documentaires liées aux consommations de combustible)
-		session.saveOrUpdate(new StringQuestion(a13, 0, QuestionCode.A14));
+		session.saveOrUpdate(new DocumentQuestion(a13, 0, QuestionCode.A14));
 
 		// == A16 =========================================================================
 		// Combustible

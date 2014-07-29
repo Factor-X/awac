@@ -1,5 +1,6 @@
 package eu.factorx.awac.converter;
 
+import com.amazonaws.services.simpleworkflow.model.Run;
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.models.code.Code;
@@ -8,11 +9,13 @@ import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.*;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +28,14 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		Question question = questionAnswer.getQuestion();
 		AnswerType answerType = question.getAnswerType();
 
-		// TODO A single QuestionAnswer may be linked to several answer values => not yet implemented
+        if(questionAnswer.getAnswerValues().size()==0){
+            throw new RuntimeException("Error converter : "+questionAnswer);
+        }
+
 		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+
+
+
 		Object rawAnswerValue = null;
 		Integer unitId = null;
 		switch (answerType) {
@@ -69,9 +78,20 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 						entityAnswerValue.getEntityId());
 				break;
             case DOCUMENT:
-                DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValue;
-                //TODO finish
-                rawAnswerValue =  documentAnswerValue.getStoredFile().getStoredName();
+
+                for(AnswerValue answerValueEl : questionAnswer.getAnswerValues()){
+
+                    Logger.info("!!!!!! : "+answerValueEl);
+
+                    if(rawAnswerValue==null){
+                        rawAnswerValue = new HashMap<Long,String>();
+                    }
+
+                    DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValueEl;
+                    StoredFile storedFile = documentAnswerValue.getStoredFile();
+                    ((HashMap<Long,String>)rawAnswerValue).put(storedFile.getId(),storedFile.getOriginalName());
+                }
+
                 break;
 		}
 
@@ -92,7 +112,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 
 	private void putRepetitionIndex(Map<String, Integer> repetitionMap, QuestionSetAnswer questionSetAnswer) {
 		QuestionSet questionSet = questionSetAnswer.getQuestionSet();
-		if (questionSet.getRepetitionAllowed()) {			
+		if (questionSet.getRepetitionAllowed()) {
 			String code = questionSet.getCode().getKey();
 			Integer repetitionIndex = questionSetAnswer.getRepetitionIndex();
 			repetitionMap.put(code, repetitionIndex);

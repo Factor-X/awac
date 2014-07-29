@@ -881,7 +881,7 @@ button.comments {
     font-weight: bold;
     font-size: 14px;
     border-bottom: 1px solid #dbd9d2;
-    width: calc(50% + 10px) !important;
+    width: calc(50% - 25px) !important;
     margin-top: 5px;
     margin-bottom: 5px;
     padding-right: 15px;
@@ -978,8 +978,16 @@ button.comments {
 }
 */
 
+.document-question {
+    border: 1px solid #dbd9d2;
+}
+
 .document-question-block {
     width: calc(100% - 72px);
+    display: inline-block;
+}
+
+.document-question-block > div {
     display: inline-block;
 }
 
@@ -1224,6 +1232,36 @@ button.comments {
 }
 
 /*
+ * DOCUMENT MANAGER (MODAL)
+ */
+
+.document-manager-table {
+    width: 100%;
+}
+
+.document-manager-table thead td {
+    border: 2px solid #dbd9d2;
+    font-weight: bold;
+    text-align: center;
+}
+
+.document-manager-table td {
+    padding: 5px;
+}
+
+.document-manager-table tbody td {
+    border: 1px solid #dbd9d2;
+}
+
+.document-manager-table tbody td:first-child {
+    width: 50%;
+}
+
+.document-manager-table tbody td:last-child {
+    text-align: center;
+}
+
+/*
  * PROGRESS BAR FOR TABS
  */
 .tab-pg-bar {
@@ -1251,23 +1289,26 @@ button.comments {
     height: 10px;
 }
 
-.tab-pb-green-bg{
+.tab-pb-green-bg {
     background: #82d998
 }
-.tab-pb-green-fg{
+
+.tab-pb-green-fg {
     background: #28b24c
 }
 
-.tab-pb-orange-bg{
+.tab-pb-orange-bg {
     background: #d9b882
 }
-.tab-pb-orange-fg{
+
+.tab-pb-orange-fg {
     background: #b07c28
 }
 
-.tab-pb-red-bg{
+.tab-pb-red-bg {
     background: #d98282
 }
-.tab-pb-red-fg{
+
+.tab-pb-red-fg {
     background: #b02828
 }
