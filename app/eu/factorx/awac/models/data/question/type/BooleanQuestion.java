@@ -16,8 +16,15 @@ public class BooleanQuestion extends Question {
 		super();
 	}
 
+	protected Boolean defaultValue;
+
 	public BooleanQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code) {
 		super(questionSet, orderIndex, code);
+	}
+
+	public BooleanQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, Boolean defaultValue) {
+		super(questionSet, orderIndex, code);
+		this.defaultValue = defaultValue;
 	}
 
 	@Override
@@ -25,4 +32,11 @@ public class BooleanQuestion extends Question {
 		return AnswerType.BOOLEAN;
 	}
 
+	public Boolean getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(Boolean defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 }

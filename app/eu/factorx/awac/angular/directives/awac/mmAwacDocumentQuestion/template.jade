@@ -15,6 +15,6 @@ div(ng-hide="getCondition() === false",class="question_field")
                             spa
                     .document-question-progress-percentage(ng-show="inDownload") {{percent}} %
                     input(ng-hide="inDownload",type='file', ng-file-select='onFileSelect($files)')
-                    div(ng-show="getAnswerValue().value.length>0") {{getAnswerValue().value.length}} document had already uploaded
-                    button(type="button",ng-show="getAnswerValue().value.length>0",ng-click="openDocumentManager()") consult this documents
+                    div(ng-show="getFileNumber()>0") {{getFileNumber()}} document had already uploaded
+                    button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()") consult this documents
                 td.user_icon(mm-not-implemented) XM

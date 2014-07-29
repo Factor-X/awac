@@ -119,11 +119,16 @@ class AngularCompiler {
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
                 ++ (Path.fromString("tmp/templates/") ** "*.js"),
-            Path.fromString("tmp/concatenated/"))
+            Path.fromString("tmp/concatenated/")
+        )
 
         // compiledMain + compiledServices + compiledFilters + compiledDirectives + compiledControllers
 
-        scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
+        val res = scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
+
+        Logger.info("ANGULAR APP COMPILED")
+
+        res
     }
 
     private def compileFile(f: Path, folder: Path) {
@@ -211,10 +216,10 @@ class AngularCompiler {
 
                 var url = ""
 
-                if (f.path.startsWith((Path.fromString("tmp/sources") / angular / "directives").path)) {
+                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "directives").path)) {
                     Logger.info("DIRECTIVE")
                     // compute a decent url for the template
-                    var usefulPath = f.path.substring((Path.fromString("tmp/sources") / angular / "directives").path.length)
+                    var usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "directives").path.length)
 
                     // to dashed
                     val regex = "([a-z])([A-Z])"
@@ -229,9 +234,9 @@ class AngularCompiler {
                     url = "$/angular/templates/" + usefulPath + ".html"
                 }
 
-                if (f.path.startsWith((Path.fromString("tmp/sources") / angular / "views").path)) {
+                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "views").path)) {
                     Logger.info("VIEW")
-                    val usefulPath = f.path.substring((Path.fromString("tmp/sources") / angular / "views").path.length)
+                    val usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "views").path.length)
                     url = "$/angular/views" + usefulPath
                 }
 

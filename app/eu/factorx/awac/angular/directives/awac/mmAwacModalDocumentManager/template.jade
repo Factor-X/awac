@@ -20,7 +20,7 @@
                             td Actions
                     tbody
                         tr(ng-repeat="doc in listDocuments")
-                            td {{doc.name}}
+                            td {{doc}}
                             td
                                 button(type="button",ng-click="download(doc.id)") download
                                 button(type="button",ng-click="removeDoc(doc.id)") remove

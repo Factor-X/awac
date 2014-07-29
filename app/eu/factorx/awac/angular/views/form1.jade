@@ -2,24 +2,20 @@ mm-awac-section(title-code="A1_TITLE")
 
     mm-awac-sub-title(question-code="A1")
 
-    mm-awac-integer-question(question-code="A2")
+    mm-awac-question(question-code="A2")
 
-    mm-awac-select-question(question-code="A3")
+    mm-awac-question(question-code="A3")
 
-    mm-awac-select-question(question-code="A4", ng-condition="getAnswer('A3').value == '1'")
+    mm-awac-question(question-code="A4", ng-condition="getAnswer('A3').value == '1'")
 
-    mm-awac-select-question(question-code="A5", ng-condition="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'")
+    mm-awac-question(question-code="A5", ng-condition="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'")
 
-    mm-awac-select-question(question-code="A6", ng-condition="getAnswer('A3').value == '4'")
+    mm-awac-question(question-code="A6", ng-condition="getAnswer('A3').value == '4'")
 
-    mm-awac-boolean-question(question-code="A7",ng-condition="getAnswer('A3').value == '4'")
+    mm-awac-question(question-code="A7",ng-condition="getAnswer('A3').value == '4'")
 
-    mm-awac-select-question(question-code="A8",ng-condition="getAnswer('A7').value == '1'")
+    mm-awac-question(question-code="A8",ng-condition="getAnswer('A7').value == '1'")
 
-    mm-awac-real-with-unit-question(question-code="A9")
+    mm-awac-question(question-code="A11", ng-condition="getAnswer('A3').value != '4'")
 
-    mm-awac-real-with-unit-question(question-code="A10")
-
-    mm-awac-boolean-question(question-code="A11", ng-condition="getAnswer('A3').value != '4'")
-
-    mm-awac-integer-question(question-code="A12")
+    mm-awac-question(question-code="A12")

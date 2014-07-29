@@ -2,20 +2,26 @@ angular
 .module('app.directives')
 .directive "mmAwacSelectQuestion", (directiveService, translationService) ->
     restrict: "E"
-    scope: directiveService.autoScope
-        ngQuestionCode: '='
-        ngCondition: '='
-        ngRepetitionMap: '='
+    scope: {}
     templateUrl: "$/angular/templates/mm-awac-select-question.html"
     replace: true
     link: (scope) ->
-        directiveService.autoScopeImpl scope
+
+        scope.getQuestionCode = ->
+            console.log scope.$parent
+            return scope.$parent.getQuestionCode()
+
+        scope.getCondition = ->
+            return scope.$parent.getCondition()
+
+        scope.getRepetitionMap = ->
+            return scope.$parent.getRepetitionMap()
 
         scope.getAnswerValue = () ->
             return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
         scope.getOptionsByQuestionCode = () ->
-            codeList = scope.$parent.getCodeList(scope.getQuestionCode())
+            codeList = scope.$parent.$parent.$parent.getCodeList(scope.getQuestionCode())
             if codeList
                 return codeList.codeLabels
             return null
@@ -26,8 +32,8 @@ angular
         scope.$watch 'ngCondition', () ->
             if scope.getCondition() == false
                 scope.getAnswerValue().value = null
-            else if scope.$parent.loading == false && scope.getAnswerValue().value==null
-                scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+            else if scope.$parent.$parent.$parent.loading == false && scope.getAnswerValue().value==null
+                scope.getAnswerValue().value = scope.$parent.$parent.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
 
         #
