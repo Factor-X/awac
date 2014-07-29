@@ -1,8 +1,6 @@
 package eu.factorx.awac.controllers;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
