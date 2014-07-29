@@ -22,8 +22,6 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
-        <class>eu.factorx.awac.models.code.conversion.CodeToActivitySourceCodeEquivalence</class>
-        <class>eu.factorx.awac.models.code.conversion.CodeToActivityTypeCodeEquivalence</class>
         <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>

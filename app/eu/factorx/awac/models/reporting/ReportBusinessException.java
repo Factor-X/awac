@@ -1,13 +1,14 @@
 package eu.factorx.awac.models.reporting;
 
-import javax.persistence.Embedded;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.knowledge.Indicator;
 
 @Entity
 public class ReportBusinessException extends AuditedAbstractEntity {
@@ -21,11 +22,12 @@ public class ReportBusinessException extends AuditedAbstractEntity {
 	@Enumerated(EnumType.STRING)
 	private ErrorType errorType;
 
-	@Embedded
-	private BaseActivityData baseActivityData;
+	private String baseActivityDataKey;
 
-	@ManyToOne
-	private Indicator indicator;
+	private String indicatorKey;
+
+	@Column(columnDefinition = "TEXT")
+	private String searchParameter;
 
 	public ReportBusinessException() {
 		super();
@@ -33,14 +35,16 @@ public class ReportBusinessException extends AuditedAbstractEntity {
 
 	/**
 	 * @param errorType
-	 * @param baseActivityData
-	 * @param indicator
+	 * @param baseActivityDataKey
+	 * @param indicatorKey
+	 * @param searchParameter
 	 */
-	public ReportBusinessException(ErrorType errorType, BaseActivityData baseActivityData, Indicator indicator) {
+	public ReportBusinessException(ErrorType errorType, String baseActivityDataKey, String indicatorKey, String searchParameter) {
 		super();
 		this.errorType = errorType;
-		this.baseActivityData = baseActivityData;
-		this.indicator = indicator;
+		this.baseActivityDataKey = baseActivityDataKey;
+		this.indicatorKey = indicatorKey;
+		this.searchParameter = searchParameter;
 	}
 
 	public ErrorType getErrorType() {
@@ -51,20 +55,50 @@ public class ReportBusinessException extends AuditedAbstractEntity {
 		this.errorType = errorType;
 	}
 
-	public BaseActivityData getBaseActivityData() {
-		return baseActivityData;
+	public String getBaseActivityDataKey() {
+		return baseActivityDataKey;
 	}
 
-	public void setBaseActivityData(BaseActivityData baseActivityData) {
-		this.baseActivityData = baseActivityData;
+	public void setBaseActivityDataKey(String baseActivityDataKey) {
+		this.baseActivityDataKey = baseActivityDataKey;
 	}
 
-	public Indicator getIndicator() {
-		return indicator;
+	public String getIndicatorKey() {
+		return indicatorKey;
 	}
 
-	public void setIndicator(Indicator indicator) {
-		this.indicator = indicator;
+	public void setIndicatorKey(String indicatorKey) {
+		this.indicatorKey = indicatorKey;
+	}
+
+	public String getSearchParameter() {
+		return searchParameter;
+	}
+
+	public void setSearchParameter(String searchParameter) {
+		this.searchParameter = searchParameter;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof ReportBusinessException)) {
+			return false;
+		}
+		ReportBusinessException rhs = (ReportBusinessException) obj;
+		return new EqualsBuilder().append(this.errorType, rhs.errorType).append(this.baseActivityDataKey, rhs.baseActivityDataKey)
+				.append(this.indicatorKey, rhs.indicatorKey).append(this.searchParameter, rhs.searchParameter).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(5, 83).append(this.errorType).append(this.baseActivityDataKey).append(this.indicatorKey)
+				.append(this.searchParameter).toHashCode();
 	}
 
 }

@@ -72,8 +72,7 @@ public abstract class ActivityResultContributor {
 
 	protected ActivitySubCategoryCode toActivitySubCategoryCode(QuestionAnswer questionAnswer) {
 		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-//		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
+		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
 	}
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
