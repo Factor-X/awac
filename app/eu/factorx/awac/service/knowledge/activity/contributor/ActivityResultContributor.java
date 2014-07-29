@@ -96,6 +96,7 @@ public abstract class ActivityResultContributor {
 	}
 
 	private void findAllUnits() {
+		unitsBySymbol = new HashMap<>();
 		List<Unit> units = unitService.findAll();
 		for (Unit unit : units) {
 			unitsBySymbol.put(unit.getSymbol(), unit);
