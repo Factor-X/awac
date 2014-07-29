@@ -1,9 +1,6 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.file.StoredFile;
-import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.service.StoredFileService;
 import org.springframework.stereotype.Component;
 import play.Logger;

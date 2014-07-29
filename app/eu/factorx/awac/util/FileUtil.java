@@ -1,6 +1,5 @@
 package eu.factorx.awac.util;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import eu.factorx.awac.plugins.S3Plugin;
 import play.Logger;
@@ -9,8 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by gaetan on 7/7/14.
