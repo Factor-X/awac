@@ -31,7 +31,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("kW");
 
 		// Get reference Electrical Consumption
-		QuestionSetAnswer questionSet22Answer = questionSetAnswers.get(QuestionCode.A22).get(0);
+		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);		if ((questionSetAnswersA22 == null) || questionSetAnswersA22.isEmpty()) {			return res;		}		QuestionSetAnswer questionSet22Answer = questionSetAnswersA22.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet22AnswerQuestionAnswers = byQuestionCode(questionSet22Answer.getQuestionAnswers());
 		QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
 		QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);

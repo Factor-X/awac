@@ -31,7 +31,7 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 
 		// Get reference Number of Employees
 		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
-		QuestionSetAnswer questionSet12Answer = questionSetAnswers.get(QuestionCode.A12).get(0);
+		List<QuestionSetAnswer> questionSetAnswersA12 = questionSetAnswers.get(QuestionCode.A12);		if ((questionSetAnswersA12 == null) || questionSetAnswersA12.isEmpty()) {			return res;		}		QuestionSetAnswer questionSet12Answer = questionSetAnswersA12.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = byQuestionCode(questionSet12Answer.getQuestionAnswers());
 		QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
