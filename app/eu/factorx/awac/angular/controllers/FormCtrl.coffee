@@ -18,7 +18,7 @@ angular
     $scope.loading = true
 
     #display the loading modal
-    modalService.show('LOADING')
+    modalService.show(modalService.LOADING)
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
 
@@ -76,7 +76,7 @@ angular
 
 
         #hide the loading modal
-        modalService.hide('LOADING')
+        modalService.hide(modalService.LOADING)
 
         $scope.loading = false
 
@@ -87,7 +87,7 @@ angular
     $scope.$on 'SAVE', () ->
 
         #display the loading modal
-        modalService.show('LOADING')
+        modalService.show(modalService.LOADING)
 
         #build the list to save
         listAnswerToSave = []
@@ -113,12 +113,12 @@ angular
 
         promise.success (data, status, headers, config) ->
             messageFlash.displaySuccess "Your answers are saved !"
-            modalService.hide('LOADING')
+            modalService.hide(modalService.LOADING)
             return
 
         promise.error (data, status, headers, config) ->
             messageFlash.displayError "An error was thrown during the save : " + data.message
-            modalService.hide('LOADING')
+            modalService.hide(modalService.LOADING)
             return
 
     #
@@ -342,7 +342,7 @@ angular
 
     $scope.validNavigation = ->
         result = {}
-        result.modalForConfirm = "CONFIRMATION_EXIT_FORM"
+        result.modalForConfirm = modalService.CONFIRMATION_EXIT_FORM
 
         for answer in $scope.answerList
             if answer.wasEdited != undefined && answer.wasEdited == true

@@ -3,6 +3,11 @@ angular
 .module('app.services')
 .service "modalService", ($rootScope) ->
 
+    @LOADING = 'LOADING'
+    @DOCUMENT_MANAGER = 'DOCUMENT_MANAGER'
+    @CONFIRMATION_EXIT_FORM = 'CONFIRMATION_EXIT_FORM'
+
+
     @show = (modalName,params) ->
         arg = {}
         arg.show = true

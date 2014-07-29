@@ -1,0 +1,7 @@
+.tab-pg-bar
+    .tab-pg-text
+        span(ng-bind-html="'FILLED_BY' | translate")
+        span &nbsp;
+        span {{ pg }}%
+    div(class="tab-pg-background tab-pb-{{color}}-bg")
+        div(class="tab-pg-indicator tab-pb-{{color}}-fg", style="width: {{ pg }}%")

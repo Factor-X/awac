@@ -1,0 +1,26 @@
+// Modal
+.modal(ng-show="show",id="modalDocumentManager",tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button( type="button",
+                    ng-click="close()",
+                    style="float:right")
+                        span(aria-hidden="true") &times;<span
+                        span(class="sr-only") Close
+
+                h4(class="modal-title",id="myModalLabel") Docuements uploaded
+
+            .modal-body
+
+                table.document-manager-table
+                    thead
+                        tr
+                            td Document name
+                            td Actions
+                    tbody
+                        tr(ng-repeat="doc in listDocuments")
+                            td {{doc.name}}
+                            td
+                                button(type="button",ng-click="download(doc.id)") download
+                                button(type="button",ng-click="removeDoc(doc.id)") remove

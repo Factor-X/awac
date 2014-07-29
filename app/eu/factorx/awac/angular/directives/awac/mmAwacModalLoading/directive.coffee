@@ -12,7 +12,7 @@ angular
         })
         $('#modalLoading').modal('show')
 
-        modalName = 'LOADING'
+        modalName = modalService.LOADING
         $scope.show = false
         $scope.loc =null
 

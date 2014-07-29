@@ -33,6 +33,9 @@ public class ProductController extends Controller {
 	@Security.Authenticated(SecuredController.class)
 	public Result createProduct() {
 
+
+
+
 		Logger.debug("USER : " + securedController.getCurrentUser());
 		Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE + ":" + session().get(SecuredController.SESSION_IDENTIFIER_STORE));
 
@@ -49,4 +52,8 @@ public class ProductController extends Controller {
 		return ok(conversionService.convert(product, ProductDTO.class));
 
 	}
+
+    public Integer getA(){
+        return 5;
+    }
 }

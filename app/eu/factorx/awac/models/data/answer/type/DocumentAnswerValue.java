@@ -21,7 +21,9 @@ public class DocumentAnswerValue extends AnswerValue {
     public DocumentAnswerValue() {
     }
 
-    public DocumentAnswerValue(StoredFile storedFile) {
+    public DocumentAnswerValue(QuestionAnswer questionAnswer, StoredFile storedFile) {
+        super();
+        this.questionAnswer = questionAnswer;
         this.storedFile = storedFile;
     }
 
