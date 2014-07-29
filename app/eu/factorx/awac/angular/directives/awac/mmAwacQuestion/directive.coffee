@@ -44,7 +44,7 @@ angular
                 scope.getAnswerValue().value = null
             else if scope.$parent.loading == false && scope.getAnswerValue().value == null
                 scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
-                if scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId != undefined
+                if scope.$parent.getUnitCategories(scope.getQuestionCode())!=null
                     scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
 
         #

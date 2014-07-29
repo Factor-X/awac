@@ -21,7 +21,6 @@ angular
     modalService.show(modalService.LOADING)
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
-
         console.log "data"
         console.log data
         $scope.o = angular.copy(data)
@@ -161,7 +160,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -169,7 +168,12 @@ angular
     #
     # getQuestionByCode
     #
-    $scope.getQuestion = (code, listQuestionSets = $scope.o.questionSets) ->
+    $scope.getQuestion = (code, listQuestionSets = null) ->
+        if listQuestionSets == null
+            if  $scope.o == null || $scope.o == undefined || $scope.o.questionSets == null
+                return null
+            listQuestionSets = $scope.o.questionSets
+
         if listQuestionSets
             for qSet in listQuestionSets
                 if qSet.questions
@@ -282,7 +286,7 @@ angular
         len = $scope.answerList.length
         while (len--)
             question = $scope.answerList[len]
-            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
+            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,                mapRepetition)
                 if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
                     $scope.answerList.splice(len, 1)
 

@@ -11,9 +11,6 @@ angular
             scope.getQuestionCode = ->
                 return scope.$parent.getQuestionCode()
 
-            scope.getCondition = ->
-                return scope.$parent.getCondition()
-
             scope.getRepetitionMap = ->
                 return scope.$parent.getRepetitionMap()
 
@@ -28,16 +25,6 @@ angular
                     "width": scope.percent + "%"
                     "color": ((scope.percent > 50) ? "white": "black")
                 }
-
-            scope.hasDescription = () ->
-                return translationService.get(scope.getQuestionCode() + '_DESC') != null
-
-
-            scope.$watch 'ngCondition', () ->
-                if scope.getCondition() == false
-                    scope.getAnswerValue().value = null
-                else if scope.$parent.$parent.$parent.loading == false && scope.getAnswerValue().value == null
-                    scope.getAnswerValue().value = scope.$parent.$parent.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
             scope.openDocumentManager = ->
                 args = {}
