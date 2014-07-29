@@ -30,7 +30,7 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("GJ");
 
 		// For each set of answers in A15, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A15)) {
+		List<QuestionSetAnswer> questionSetAnswersA15 = questionSetAnswers.get(QuestionCode.A15);		if (questionSetAnswersA15 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA15) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

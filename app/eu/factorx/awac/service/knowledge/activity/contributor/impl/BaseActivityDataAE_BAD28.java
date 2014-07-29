@@ -31,7 +31,7 @@ public class BaseActivityDataAE_BAD28 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("tCO2e");
 
 		// For each set of answers in A224, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A224)) {
+		List<QuestionSetAnswer> questionSetAnswersA224 = questionSetAnswers.get(QuestionCode.A224);		if (questionSetAnswersA224 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA224) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

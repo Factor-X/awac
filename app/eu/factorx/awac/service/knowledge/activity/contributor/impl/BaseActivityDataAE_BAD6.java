@@ -50,7 +50,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		}
 
 		// For each set of answers in A47, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A47)) {
+		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);		if (questionSetAnswersA47 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA47) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

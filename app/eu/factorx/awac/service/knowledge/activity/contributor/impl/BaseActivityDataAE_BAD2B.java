@@ -31,7 +31,7 @@ public class BaseActivityDataAE_BAD2B extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("kWh");
 
 		// For each set of answers in A22, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A22)) {
+		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);		if (questionSetAnswersA22 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA22) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

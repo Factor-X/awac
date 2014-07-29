@@ -31,7 +31,7 @@ public class BaseActivityDataAE_BAD17B extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("tonne.km");
 
 		// For each set of answers in A142, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A142)) {
+		List<QuestionSetAnswer> questionSetAnswersA142 = questionSetAnswers.get(QuestionCode.A142);		if (questionSetAnswersA142 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA142) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
