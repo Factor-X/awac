@@ -68,7 +68,7 @@ public class FilesController extends Controller {
             storedFileService.saveOrUpdate(storedFile);
 
             //save the file
-            FileUtil.save(file, storageKey);
+            //TODO FileUtil.save(file, storageKey);
 
             //complete the result
             filesUploadedDTO = new FilesUploadedDTO(storedFile.getId(),storedFile.getOriginalName());

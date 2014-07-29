@@ -341,7 +341,7 @@ def make_question(q)
   if q.type == 'DOCUMENT'
     found= true
 
-    txt = 'session.saveOrUpdate(new StringQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
+    txt = 'session.saveOrUpdate(new DocumentQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
   end

@@ -47,6 +47,11 @@ angular
                 modalService.show(modalService.DOCUMENT_MANAGER,args)
 
 
+            scope.getFileNumber = ->
+                if scope.getAnswerValue().value==null || scope.getAnswerValue().value == undefined
+                    return 0
+                return Object.keys(scope.getAnswerValue().value).length
+
             scope.onFileSelect = ($files) ->
                 scope.inDownload = true
 
@@ -75,11 +80,8 @@ angular
 
                         #add the file to the answer
                         if scope.getAnswerValue().value == null || scope.getAnswerValue().value == undefined
-                            scope.getAnswerValue().value = []
-                        scope.getAnswerValue().value[scope.getAnswerValue().value.length] = {
-                            'id':data.id,
-                            'name' : data.name
-                        }
+                            scope.getAnswerValue().value = {}
+                        scope.getAnswerValue().value[data.id] =  data.name
 
                         console.log "AnswerValue : "
                         console.log scope.getAnswerValue()
