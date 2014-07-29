@@ -27,13 +27,13 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 
 		// Get Target Unit (km.passager in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
-		Unit kmUnit = unitService.findBySymbol("km");
-		Unit employesUnit = unitService.findBySymbol("employes");
+		Unit baseActivityDataUnit = getUnitBySymbol("km.passager");
+		Unit kmUnit = getUnitBySymbol("km");
+		Unit employesUnit = getUnitBySymbol("employes");
 
 		// Get reference Number of Employees
 		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
-		QuestionSetAnswer questionSet12Answer = questionSetAnswers.get(QuestionCode.A12).get(0);
+		List<QuestionSetAnswer> questionSetAnswersA12 = questionSetAnswers.get(QuestionCode.A12);		if ((questionSetAnswersA12 == null) || questionSetAnswersA12.isEmpty()) {			return res;		}		QuestionSetAnswer questionSet12Answer = questionSetAnswersA12.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = byQuestionCode(questionSet12Answer.getQuestionAnswers());
 		QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
@@ -43,7 +43,7 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 
 
 		// For each set of answers in A121, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A121)) {
+		List<QuestionSetAnswer> questionSetAnswersA121 = questionSetAnswers.get(QuestionCode.A121);		if (questionSetAnswersA121 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA121) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

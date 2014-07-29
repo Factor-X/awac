@@ -28,10 +28,10 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 
 		// Get Target Unit (kW in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = unitService.findBySymbol("kW");
+		Unit baseActivityDataUnit = getUnitBySymbol("kW");
 
 		// Get reference Electrical Consumption
-		QuestionSetAnswer questionSet22Answer = questionSetAnswers.get(QuestionCode.A22).get(0);
+		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);		if ((questionSetAnswersA22 == null) || questionSetAnswersA22.isEmpty()) {			return res;		}		QuestionSetAnswer questionSet22Answer = questionSetAnswersA22.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet22AnswerQuestionAnswers = byQuestionCode(questionSet22Answer.getQuestionAnswers());
 		QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
 		QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);
@@ -50,7 +50,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		}
 
 		// For each set of answers in A47, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A47)) {
+		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);		if (questionSetAnswersA47 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA47) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -80,7 +80,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 				baseActivityData.setValue(0.0);
 			} else {
 			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, unitService.findBySymbol("h")));
+				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
 			}
 			res.add(baseActivityData);
 		}

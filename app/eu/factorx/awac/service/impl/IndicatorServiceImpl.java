@@ -1,27 +1,27 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-import eu.factorx.awac.service.IndicatorService;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
+import java.util.List;
 
 import javax.persistence.TypedQuery;
-import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.service.IndicatorService;
 
 @Component
 public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indicator> implements IndicatorService {
 
 	@Override
-	public List<Indicator> findCarbonIndicatorsForSitesByActivity(BaseActivityData activityData) {
+	public List<Indicator> findByParameters(IndicatorSearchParameter searchParameter) {
 		TypedQuery<Indicator> query = JPA.em().createNamedQuery(Indicator.FIND_BY_PARAMETERS, Indicator.class)
-				.setParameter("type", IndicatorTypeCode.CARBON)
-				.setParameter("scopeType", ScopeTypeCode.SITE)
-				.setParameter("activityCategory", activityData.getActivityCategory())
-				.setParameter("activitySubCategory", activityData.getActivitySubCategory())
-				.setParameter("activityOwnership", activityData.getActivityOwnership());
+				.setParameter("type", searchParameter.getType())
+				.setParameter("scopeType", searchParameter.getScopeType())
+				.setParameter("activityCategory", searchParameter.getActivityCategory())
+				.setParameter("activitySubCategory", searchParameter.getActivitySubCategory())
+				.setParameter("activityOwnership", searchParameter.getActivityOwnership())
+				.setParameter("deleted", searchParameter.getDeleted());
 		return query.getResultList();
 	}
 

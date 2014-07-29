@@ -24,7 +24,7 @@ public class BaseActivityDataAE_BAD32B extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		Unit baseActivityDataUnit = unitService.findBySymbol("l");
+		Unit baseActivityDataUnit = getUnitBySymbol("l");
 
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
 			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {

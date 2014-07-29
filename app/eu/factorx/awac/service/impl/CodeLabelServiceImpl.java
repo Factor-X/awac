@@ -46,7 +46,6 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 		// add labels of sublists
 		List<CodesEquivalence> sublistsData = codeConversionService.findAllSublistsData();
 		for (CodesEquivalence codesEquivalence : sublistsData) {
-			System.out.println("Adding " + codesEquivalence);
 			CodeList codeList = codesEquivalence.getCodeList();
 			if (!allLabels.containsKey(codeList)) {
 				allLabels.put(codeList, new LinkedHashMap<String, CodeLabel>());

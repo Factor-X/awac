@@ -27,10 +27,10 @@ public class BaseActivityDataAE_BAD16D extends ActivityResultContributor {
 
 		// Get Target Unit (kg in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
-		Unit baseActivityDataUnit = unitService.findBySymbol("kg");
+		Unit baseActivityDataUnit = getUnitBySymbol("kg");
 
 		// For each set of answers in A132, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A132)) {
+		List<QuestionSetAnswer> questionSetAnswersA132 = questionSetAnswers.get(QuestionCode.A132);		if (questionSetAnswersA132 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA132) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

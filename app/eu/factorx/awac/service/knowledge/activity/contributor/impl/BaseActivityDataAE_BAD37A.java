@@ -27,10 +27,10 @@ public class BaseActivityDataAE_BAD37A extends ActivityResultContributor {
 
 		// Get Target Unit (GJ in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
+		Unit baseActivityDataUnit = getUnitBySymbol("GJ");
 
 		// For each set of answers in A311, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A311)) {
+		List<QuestionSetAnswer> questionSetAnswersA311 = questionSetAnswers.get(QuestionCode.A311);		if (questionSetAnswersA311 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA311) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
