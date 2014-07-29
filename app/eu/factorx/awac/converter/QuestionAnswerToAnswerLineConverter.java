@@ -15,7 +15,6 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import play.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,8 +79,6 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
             case DOCUMENT:
 
                 for(AnswerValue answerValueEl : questionAnswer.getAnswerValues()){
-
-                    Logger.info("!!!!!! : "+answerValueEl);
 
                     if(rawAnswerValue==null){
                         rawAnswerValue = new HashMap<Long,String>();

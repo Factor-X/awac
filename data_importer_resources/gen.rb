@@ -414,7 +414,7 @@ def make_question(q)
   if q.type == 'PCT'
     found= true
 
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new PercentageQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver.inspect
