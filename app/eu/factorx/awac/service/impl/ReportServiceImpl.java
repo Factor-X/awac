@@ -41,12 +41,10 @@ public class ReportServiceImpl implements ReportService {
 	private FactorService factorService;
 
 	/**
-	 * No Autowired for this property: contributors have to be explicitly declared in components.xml
+	 * No auto-wiring for this property: contributors have to be explicitly declared in components.xml
 	 */
 	private Set<ActivityResultContributor> activityResultContributors;
 
-	// TODO Implement all ActivityResultContributors!
-	// Only one contributor implemented for now... BaseActivityDataAE_BAD1, consolidating answers to QuestionSet A15 (Tab2)
 	@Override
 	public Report getReport(Scope scope, Period period) {
 

@@ -104,7 +104,6 @@ public enum CodeList {
 
 
 	// BAD
-	UNIT,
 	BASE_ACTIVITY_DATA,
 	INDICATOR_TYPE,
 	INDICATOR_ISO_SCOPE,

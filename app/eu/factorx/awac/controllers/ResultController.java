@@ -30,13 +30,10 @@ public class ResultController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result getReport(Long periodId, Long scopeId) {
-        /*
 		Period period = periodService.findById(periodId);
 		Scope scope = scopeService.findById(scopeId);
 		Report report = reportService.getReport(scope, period);
 		return ok(conversionService.convert(report, ReportDTO.class));
-		*/
-        return ok();
 	}
 
 }
