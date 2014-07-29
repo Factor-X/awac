@@ -1,11 +1,3 @@
-div(ng-hide="getCondition() === false",class="question_field")
-    div
-        .info(ng-show="hasDescription()")
-            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-share-alt")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
-    .twoelement
-        .status.answer(mm-not-implemented)
-        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()")
-        span(style="margin-left:5px") %
-        .user_icon(mm-not-implemented) XM
+span.twoelement
+    input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()",style="text-align:right;")
+    span(style="margin-left:5px") %

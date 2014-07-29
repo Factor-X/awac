@@ -333,25 +333,25 @@ public class AnswerController extends Controller {
                 answerValue.add(new BooleanAnswerValue(questionAnswer, booleanValue));
                 break;
             case STRING:
-                answerValue.add(new StringAnswerValue(questionAnswer, (String) rawAnswerValue));
+                answerValue.add(new StringAnswerValue(questionAnswer,  rawAnswerValue.toString()));
                 break;
             case INTEGER:
                 UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
                 Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-                answerValue.add(new IntegerAnswerValue(questionAnswer, Integer.valueOf((String) rawAnswerValue), unitInt));
+                answerValue.add(new IntegerAnswerValue(questionAnswer, Integer.valueOf( rawAnswerValue.toString()), unitInt));
                 break;
             case DOUBLE:
                 UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
                 Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
-                answerValue.add(new DoubleAnswerValue(questionAnswer, Double.valueOf((String) rawAnswerValue), unitDbl));
+                answerValue.add(new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue.toString()), unitDbl));
                 break;
             case VALUE_SELECTION:
                 CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-                answerValue.add(new CodeAnswerValue(questionAnswer, new Code(codeList, (String) rawAnswerValue)));
+                answerValue.add(new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue.toString())));
                 break;
             case ENTITY_SELECTION:
                 String entityName = ((EntitySelectionQuestion) question).getEntityName();
-                answerValue.add(new EntityAnswerValue(questionAnswer, entityName, Long.valueOf((String) rawAnswerValue)));
+                answerValue.add(new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue.toString())));
                 break;
             case DOCUMENT:
 

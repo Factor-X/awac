@@ -2,18 +2,23 @@ angular
 .module('app.directives')
 .directive "mmAwacDocumentQuestion", (directiveService, translationService, $upload, messageFlash, modalService) ->
     restrict: "E"
-    scope: directiveService.autoScope
-        ngQuestionCode: '='
-        ngCondition: '='
-        ngRepetitionMap: '='
+    scope: {}
     templateUrl: "$/angular/templates/mm-awac-document-question.html"
     replace: true
     compile: () ->
         pre: (scope) ->
-            directiveService.autoScopeImpl scope
+
+            scope.getQuestionCode = ->
+                return scope.$parent.getQuestionCode()
+
+            scope.getCondition = ->
+                return scope.$parent.getCondition()
+
+            scope.getRepetitionMap = ->
+                return scope.$parent.getRepetitionMap()
 
             scope.getAnswerValue = () ->
-                return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
+                return scope.$parent.$parent.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
             scope.inDownload = false
             scope.percent = 0
@@ -23,14 +28,7 @@ angular
                     "width": scope.percent + "%"
                     "color": ((scope.percent > 50) ? "white": "black")
                 }
-            ###
-            scope.getAnswerByQuestionCode = (code) ->
-                if scope.ngObject
-                    for qv in scope.ngObject.answersSaveDTO.listAnswers
-                        if qv.questionKey == code
-                            return qv
-                return null
-            ###
+
             scope.hasDescription = () ->
                 return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
@@ -38,8 +36,8 @@ angular
             scope.$watch 'ngCondition', () ->
                 if scope.getCondition() == false
                     scope.getAnswerValue().value = null
-                else if scope.$parent.loading == false && scope.getAnswerValue().value == null
-                    scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+                else if scope.$parent.$parent.$parent.loading == false && scope.getAnswerValue().value == null
+                    scope.getAnswerValue().value = scope.$parent.$parent.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
             scope.openDocumentManager = ->
                 args = {}

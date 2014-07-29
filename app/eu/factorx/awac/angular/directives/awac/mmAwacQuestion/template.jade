@@ -1,1 +1,10 @@
-div( ng-include="getTemplate()")
+div(ng-hide="getCondition() === false",class="question_field")
+    div
+        .info(ng-show="hasDescription()")
+            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        span(class="glyphicon glyphicon-share-alt")
+        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    div
+        .status.answer(mm-not-implemented)
+        span( ng-include="getTemplate()")
+        .user_icon(mm-not-implemented) XM

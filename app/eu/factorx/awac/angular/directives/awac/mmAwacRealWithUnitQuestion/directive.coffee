@@ -2,34 +2,25 @@ angular
 .module('app.directives')
 .directive "mmAwacRealWithUnitQuestion", (directiveService, translationService) ->
     restrict: "E"
-    scope: directiveService.autoScope
-        ngQuestionCode: '='
-        ngCondition: '='
-        ngRepetitionMap: '='
+    scope: {}
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
     link: (scope) ->
-        directiveService.autoScopeImpl scope
+
+        scope.getQuestionCode = ->
+            return scope.$parent.getQuestionCode()
+
+        scope.getRepetitionMap = ->
+            return scope.$parent.getRepetitionMap()
 
         scope.getAnswerValue = () ->
-            return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
+            return scope.$parent.$parent.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
         scope.getUnitsByQuestionCode = () ->
-            result = scope.$parent.getUnitCategories(scope.getQuestionCode())
+            result = scope.$parent.$parent.$parent.getUnitCategories(scope.getQuestionCode())
             if result
                 return result.units
             return null
-
-        scope.hasDescription = () ->
-            return translationService.get(scope.getQuestionCode() + '_DESC') != null
-
-
-        scope.$watch 'ngCondition', () ->
-            if scope.getCondition() == false
-                scope.getAnswerValue().value = null
-            else if scope.$parent.loading == false && scope.getAnswerValue().value==null
-                scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
-                scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
 
         #
         # called when the user change the value of the field

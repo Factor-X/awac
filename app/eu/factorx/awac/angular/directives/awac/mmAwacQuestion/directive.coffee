@@ -12,7 +12,7 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.getTemplate = ->
-            if scope.$parent.getQuestion(scope.getQuestionCode())!=null
+            if scope.$parent.getQuestion(scope.getQuestionCode()) != null
                 answerType = scope.$parent.getQuestion(scope.getQuestionCode()).answerType
 
                 #call the directive by the type of the question
@@ -21,8 +21,7 @@ angular
                 else if answerType == 'INTEGER'
                     return "mmAwacIntegerQuestion"
                 else if answerType == 'DOUBLE'
-                    if scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != null ||
-                        scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != undefined
+                    if scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != null || scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != undefined
                         return "mmAwacRealWithUnitQuestion"
                     else
                         return "mmAwacRealQuestion"
@@ -43,11 +42,13 @@ angular
         scope.$watch 'ngCondition', () ->
             if scope.getCondition() == false
                 scope.getAnswerValue().value = null
-            else if scope.$parent.loading == false && scope.getAnswerValue().value==null
+            else if scope.$parent.loading == false && scope.getAnswerValue().value == null
                 scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+                if scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId != undefined
+                    scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
 
         #
         # called when the user change the value of the field
         #
         scope.edited = ->
-          scope.getAnswerValue().wasEdited = true
+            scope.getAnswerValue().wasEdited = true

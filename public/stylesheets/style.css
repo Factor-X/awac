@@ -645,27 +645,20 @@ button.comments {
 
 .element_sidebar {
     float: left;
-    width: 143px;
     padding-top: 10px;
     padding-right: 15px;
     margin-bottom: 10px;
 }
 
 .block_status {
-    height: 49px;
     border: 4px solid #2e5c2e;
-    width: 133px;
     background-color: #2e5c2e;
+    display: inline-block;
 }
 
 .block_status > div {
     height: 41px;
     width: 41px;
-    display: inline-block;
-}
-
-.block_status > div + div {
-    margin-left: 1px;
 }
 
 .block_status .lock_status {
@@ -693,7 +686,7 @@ button.comments {
 }
 
 .element_content {
-    margin: 10px 0 0 153px;
+    margin: 10px 0 0 73px;
 }
 
 .element_text {
@@ -809,20 +802,23 @@ button.comments {
 }
 
 .question_field > div:last-child {
-    width: 40%;
+    width: 50%;
 }
 
-.question_field .oneelement input,
-.question_field .oneelement select {
+.question_field .oneelement{
     width: calc(100% - 72px);
     display: inline-block;
 }
 
-.question_field .twoelement input {
+.question_field .twoelement > *{
+    display: inline-block;
+}
+
+.question_field .twoelement > *:first-child{
     width: calc(60% - 36px);
 }
 
-.question_field .twoelement select {
+.question_field .twoelement > *:last-child {
     width: calc(40% - 42px);
     margin-left: 8px;
 }

@@ -64,6 +64,10 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 					unitId = doubleAnswerValue.getUnit().getId().intValue();
 				}
 				break;
+            case PERCENTAGE:
+                DoubleAnswerValue doubleAnswerValueForPercent = (DoubleAnswerValue) answerValue;
+                rawAnswerValue = doubleAnswerValueForPercent.getValue();
+                break;
 			case VALUE_SELECTION:
 				Code value = ((CodeAnswerValue) answerValue).getValue();
 				if (value != null)
