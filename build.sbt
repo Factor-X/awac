@@ -37,3 +37,5 @@ libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excl
  )
 
 play.Project.playJavaSettings
+
+javaOptions in Test += "-Dconfig.file=conf/test.conf"
