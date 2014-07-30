@@ -150,7 +150,8 @@ public class AnswerController extends Controller {
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
 			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
 			for (QuestionAnswer questionAnswer : questionAnswers) {
-				answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
+				AnswerLineDTO answerLine = conversionService.convert(questionAnswer, AnswerLineDTO.class);
+				answerLineDTOs.add(answerLine);
 			}
 			answerLineDTOs.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
 		}
@@ -176,7 +177,7 @@ public class AnswerController extends Controller {
 				if (question instanceof ValueSelectionQuestion) {
 					CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
 					String codeListName = codeList.name();
-					if (!codeLists.containsKey(codeList)) {
+					if (!codeLists.containsKey(codeListName)) {
 						codeLists.put(codeListName, toCodeListDTO(codeList, lang));
 					}
 				}
