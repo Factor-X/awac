@@ -1,11 +1,13 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractEntity;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.account.Account;
 
 @Entity
 @Table(name = "organization")
@@ -17,6 +19,9 @@ public class Organization extends AbstractEntity {
 
 	@OneToMany(mappedBy = "organization")
 	private List<Site> sites;
+	
+	@OneToMany(mappedBy = "organization")
+	List<Account> accounts;
 
 	protected Organization() {
 		super();
@@ -43,4 +48,11 @@ public class Organization extends AbstractEntity {
 		this.sites = param;
 	}
 
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
 }
