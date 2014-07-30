@@ -8,6 +8,6 @@ div(ng-hide="getCondition() === false",class="question_field",ng-class="displayO
         .status.answer(mm-not-implemented)
         span( ng-include="getTemplate(false)")
         .user_icon(mm-not-implemented) XM
-    div(ng-show="displayOldDatas()")
+    div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
         span( ng-include="getTemplate(true)")
         .user_icon(mm-not-implemented) XM

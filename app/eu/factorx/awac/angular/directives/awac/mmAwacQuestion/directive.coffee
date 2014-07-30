@@ -8,7 +8,7 @@ angular
         ngRepetitionMap: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
-    link: (scope) ->
+    link: (scope,element) ->
         directiveService.autoScopeImpl scope
 
         scope.getTemplate = (dataToCompare)->
@@ -31,6 +31,8 @@ angular
                         return "mmAwacRealWithUnitQuestion"+toCompare
                     else
                         return "mmAwacRealQuestion"+toCompare
+                else if answerType == 'PERCENTAGE'
+                    return "mmAwacPercentageQuestion"+toCompare
                 else if answerType == 'STRING'
                     return "mmAwacStringQuestion"+toCompare
                 else if answerType == 'VALUE_SELECTION'
@@ -38,25 +40,38 @@ angular
                 else if answerType == 'DOCUMENT'
                     return "mmAwacDocumentQuestion"+toCompare
 
+        scope.getAnswerToCompare = ->
+            return scope.$parent.getAnswerToCompare(scope.getQuestionCode(),scope.getRepetitionMap())
+
         scope.getAnswerValue = () ->
             return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
         scope.hasDescription = () ->
             return translationService.get(scope.getQuestionCode() + '_DESC') != null
 
-
-        scope.$watch 'ngCondition', () ->
-            if scope.getCondition() == false
-                scope.getAnswerValue().value = null
-            else if scope.$parent.loading == false && scope.getAnswerValue().value == null
-                scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
-                if scope.$parent.getUnitCategories(scope.getQuestionCode())!=null
-                    scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
-
         scope.displayOldDatas = ->
             if scope.$parent.dataToCompare == null
                 return false
             return true
+
+        scope.$watch 'ngCondition', () ->
+            scope.$root.$broadcast('CONDITION')
+
+        scope.$on 'CONDITION',(event,args) ->
+            scope.testVisibility(element)
+
+        scope.testVisibility = (elementToTest)->
+
+            if elementToTest.hasClass('ng-hide') == true
+                scope.getAnswerValue().hasValidCondition = false
+                return false
+            if elementToTest.parent()[0].tagName!='BODY'
+                return scope.testVisibility(elementToTest.parent())
+
+            scope.getAnswerValue().hasValidCondition = true
+            return true
+
+        scope.testVisibility(element)
 
         #
         # called when the user change the value of the field
