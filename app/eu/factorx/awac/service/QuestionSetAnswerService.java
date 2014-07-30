@@ -46,4 +46,11 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 
 	void deleteAllFormAnswers(Scope scope, Period period, Form form);
 
+	/***
+	 * Find all distinct periods for which data related to given scope were saved
+	 * @param scopeId
+	 * @return a list of {@link Period}
+	 */
+	List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId);
+
 }

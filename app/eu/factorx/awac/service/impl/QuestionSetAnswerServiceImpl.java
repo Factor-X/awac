@@ -69,4 +69,12 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		}
 	}
 
+	@Override
+	public List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId) {
+		List<Period> resultList = JPA.em()
+				.createNamedQuery(QuestionSetAnswer.FIND_DISTINCT_PERIODS, Period.class)
+				.setParameter("scopeId", scopeId).getResultList();
+		return resultList;
+	}
+
 }
