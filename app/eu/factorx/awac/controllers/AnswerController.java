@@ -315,35 +315,100 @@ public class AnswerController extends Controller {
         Question question = questionAnswer.getQuestion();
         switch (question.getAnswerType()) {
             case BOOLEAN:
-                String strValue = StringUtils.trim( rawAnswerValue.toString());
+
+                //build the answer value
+                String strValue = StringUtils.trim(rawAnswerValue.toString());
                 Boolean booleanValue = null;
                 if ("1".equals(strValue)) {
                     booleanValue = Boolean.TRUE;
                 } else if ("0".equals(strValue)) {
                     booleanValue = Boolean.FALSE;
                 }
-                answerValue.add(new BooleanAnswerValue(questionAnswer, booleanValue));
+
+                BooleanAnswerValue booleanAnswerValue = new BooleanAnswerValue(questionAnswer, booleanValue);
+
+                //test if the value is not null
+                if (booleanAnswerValue.getValue() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(booleanAnswerValue);
+
                 break;
             case STRING:
-                answerValue.add(new StringAnswerValue(questionAnswer, rawAnswerValue.toString()));
+
+                //build the answerValue
+                StringAnswerValue stringAnswerValue = new StringAnswerValue(questionAnswer, rawAnswerValue.toString());
+
+                //test if the value is not null
+                if (stringAnswerValue.getValue() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(stringAnswerValue);
                 break;
             case INTEGER:
+
+                //build the answerValue
                 UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
                 Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-                answerValue.add(new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue.toString()), unitInt));
+                IntegerAnswerValue integerAnswerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue.toString()), unitInt);
+
+                //test if the value is not null
+                if (integerAnswerValue.getValue() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(integerAnswerValue);
                 break;
             case DOUBLE:
+
+                //build the answerValue
                 UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
                 Unit unitDbl = getAndVerifyUnit(answerLine, unitCategoryDbl, question.getCode().getKey());
-                answerValue.add(new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue.toString()), unitDbl));
+
+                DoubleAnswerValue doubleAnswerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue.toString()), unitDbl);
+
+                //test if the value is not null
+                if (doubleAnswerValue.getValue() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(doubleAnswerValue);
                 break;
             case VALUE_SELECTION:
+
+                //build the answerValue
                 CodeList codeList = ((ValueSelectionQuestion) question).getCodeList();
-                answerValue.add(new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue.toString())));
+
+                CodeAnswerValue codeAnswerValue = new CodeAnswerValue(questionAnswer, new Code(codeList, rawAnswerValue.toString()));
+
+                //test if the value is not null
+                if (codeAnswerValue.getValue() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(codeAnswerValue);
                 break;
             case ENTITY_SELECTION:
+
+                //build the answerValue
                 String entityName = ((EntitySelectionQuestion) question).getEntityName();
-                answerValue.add(new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue.toString())));
+
+                EntityAnswerValue entityAnswerValue = new EntityAnswerValue(questionAnswer, entityName, Long.valueOf(rawAnswerValue.toString()));
+
+                //test if the value is not null
+                if (entityAnswerValue.getEntityId() == null) {
+                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+
+                //add to the list
+                answerValue.add(entityAnswerValue);
                 break;
             case DOCUMENT:
 
@@ -352,7 +417,9 @@ public class AnswerController extends Controller {
 
                 for (Map.Entry<String, String> entry : ((LinkedHashMap<String, String>) rawAnswerValue).entrySet()) {
                     StoredFile storedFile = storedFileService.findById(Long.parseLong(entry.getKey()));
-                    Logger.info("storedFile : " + storedFile);
+                    if (storedFile == null) {
+                        throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    }
                     answerValue.add(new DocumentAnswerValue(questionAnswer, storedFile));
                 }
 

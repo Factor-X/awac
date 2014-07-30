@@ -92,8 +92,8 @@ angular
         listAnswerToSave = []
         for answer in $scope.answerList
             if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-                if answer.wasEdited != undefined
-                    delete answer['wasEdited']
+                #if answer.wasEdited != undefined
+                #    delete answer['wasEdited']
                 listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"

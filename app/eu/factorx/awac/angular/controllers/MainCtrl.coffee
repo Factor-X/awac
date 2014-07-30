@@ -94,6 +94,12 @@ angular
 
             $location.path(p)
 
+        #hide data to compare if the period is the same than the period to answer
+        if $scope.period == $scope.periodToCompare
+            $scope.periodToCompare = null
+
+        $scope.loadPeriodForComparison()
+
     $scope.$watch 'scopeId', () ->
         $routeParams.period = $scope.period
         if $route.current
@@ -137,12 +143,21 @@ angular
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
-                if data.periodDTOList.length == 0
+
+                console.log "DATA : : "
+                console.log data
+
+                $scope.$root.periodsForComparison = []
+                for period in data.periodDTOList
+                    if period.id != $routeParams.period
+                        console.log "add !!! "
+                        $scope.$root.periodsForComparison[$scope.$root.periodsForComparison.length] = period
+
+                if $scope.$root.periodsForComparison == 0
+                    console.log "initialie ..."
                     $scope.$root.periodsForComparison = [
                         {'id': null, 'label': '-'}
                     ]
-                else
-                    $scope.$root.periodsForComparison = data.periodDTOList
                 return
 
             promise.error (data, status, headers, config) ->
