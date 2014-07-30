@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -120,14 +121,14 @@ public class AnswerController extends Controller {
 		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
-		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionSetAnswers);
+		List<QuestionAnswer> allQuestionAnswers = getAllQuestionAnswers(questionSetAnswers);
+		
+		QuestionAnswersDTO questionAnswersDTO = createQuestionAnswersDTO(form.getId(), periodId, scopeId, allQuestionAnswers);
 
 		Logger.info("GET '{}' Data:", form.getIdentifier());
-		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
+		for (AnswerLineDTO answerLineDTO : questionAnswersDTO.getListAnswers()) {
 			Logger.info("\t" + answerLineDTO);
 		}
-
-		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, answerLineDTOs);
 
 		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);
 
@@ -135,6 +136,22 @@ public class AnswerController extends Controller {
 
 		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
+	}
+
+	private QuestionAnswersDTO createQuestionAnswersDTO(Long formId, Long periodId, Long scopeId, List<QuestionAnswer> allQuestionAnswers) {
+		LocalDateTime formAnswersLastUpdateDate = null;
+		if (!allQuestionAnswers.isEmpty()) {
+			formAnswersLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
+		}
+		List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();
+		for (QuestionAnswer questionAnswer : allQuestionAnswers) {
+			LocalDateTime lastUpdateDate = questionAnswer.getTechnicalSegment().getLastUpdateDate();
+			if (lastUpdateDate.isAfter(formAnswersLastUpdateDate)) {
+				formAnswersLastUpdateDate = lastUpdateDate;
+			}
+			answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
+		}
+		return new QuestionAnswersDTO(formId, scopeId, periodId, formAnswersLastUpdateDate, answerLineDTOs);
 	}
 
 	private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
@@ -145,17 +162,13 @@ public class AnswerController extends Controller {
 		return questionSetDTOs;
 	}
 
-	private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionSetAnswer> questionSetAnswers) {
-		List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();
+	private List<QuestionAnswer> getAllQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers) {
+		List<QuestionAnswer> questionAnswers = new ArrayList<QuestionAnswer>();
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
-			for (QuestionAnswer questionAnswer : questionAnswers) {
-				AnswerLineDTO answerLine = conversionService.convert(questionAnswer, AnswerLineDTO.class);
-				answerLineDTOs.add(answerLine);
-			}
-			answerLineDTOs.addAll(toAnswerLineDTOs(questionSetAnswer.getChildren()));
+			questionAnswers.addAll(questionSetAnswer.getQuestionAnswers());
+			questionAnswers.addAll(getAllQuestionAnswers(questionSetAnswer.getChildren()));
 		}
-		return answerLineDTOs;
+		return questionAnswers;
 	}
 
 	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
