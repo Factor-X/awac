@@ -96,4 +96,17 @@
 
     </persistence-unit>
 
+    <persistence-unit name="testPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <non-jta-data-source>TestDS</non-jta-data-source>
+        <properties>
+            <property name="hibernate.dialect"
+                      value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"></property>
+            <property name="hibernate.format_sql" value="true"></property>
+        </properties>
+    </persistence-unit>
+
+
 </persistence>

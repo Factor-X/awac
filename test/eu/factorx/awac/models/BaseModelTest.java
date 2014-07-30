@@ -38,12 +38,12 @@ public class BaseModelTest extends WithApplication {
     Helpers.start(app);
 
     // Reading the evolution file
-    String evolutionContent = FileUtils.readFileToString(app.getWrappedApplication().getFile("conf/evolutions/default/1.sql"));
+//    String evolutionContent = FileUtils.readFileToString(app.getWrappedApplication().getFile("conf/evolutions/default/1.sql"));
     // Splitting the String to get Create & Drop DDL
-    String[] splittedEvolutionContent = evolutionContent.split("# --- !Ups");
-    String[] upsDowns = splittedEvolutionContent[1].split("# --- !Downs");
-    createDdl = upsDowns[0];
-    dropDdl = upsDowns[1];
+//    String[] splittedEvolutionContent = evolutionContent.split("# --- !Ups");
+//    String[] upsDowns = splittedEvolutionContent[1].split("# --- !Downs");
+//    createDdl = upsDowns[0];
+//    dropDdl = upsDowns[1];
   }
  
   @AfterClass
@@ -53,8 +53,8 @@ public class BaseModelTest extends WithApplication {
 
   @Before
   public void createCleanDb() {
-    Ebean.execute(Ebean.createCallableSql(dropDdl));
-    Ebean.execute(Ebean.createCallableSql(createDdl));
+//    Ebean.execute(Ebean.createCallableSql(dropDdl));
+//    Ebean.execute(Ebean.createCallableSql(createDdl));
   }
 }
 
