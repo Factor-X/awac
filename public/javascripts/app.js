@@ -2319,8 +2319,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
   $scope.dataToCompare = null;
   return $scope.$parent.$watch('periodToCompare', function() {
     var promise;
-    console.log("$scope.periodToCompare");
-    console.log($scope.periodToCompare);
     if ($scope.periodToCompare !== null) {
       promise = $http({
         method: "GET",
@@ -2331,8 +2329,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
       });
       promise.success(function(data, status, headers, config) {
         $scope.dataToCompare = data;
-        console.log("$scope.dataToCompare");
-        console.log($scope.dataToCompare);
         return;
       });
       return promise.error(function(data, status, headers, config) {
@@ -3294,7 +3290,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
   });
   $scope.$watch('scopeId', function() {
     var k, p, v;
-    console.log("JE SUIS watch csope id !!!!!!");
     $routeParams.period = $scope.period;
     if ($route.current) {
       p = $route.current.$$route.originalPath;
@@ -3320,11 +3315,8 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
   };
   return $scope.loadPeriodForComparison = function() {
     var promise, url;
-    console.log("$scope.loadPeriodForComparison start");
-    console.log($scope.scopeId);
     url = 'answer/getPeriodsForComparison/' + $scope.scopeId;
     if ($scope.scopeId !== null && $scope.scopeId !== void 0 && $scope.scopeId !== NaN && $scope.scopeId !== 'NaN') {
-      console.log("START BABYYYY: " + url);
       promise = $http({
         method: "GET",
         url: url,
@@ -3333,8 +3325,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         }
       });
       promise.success(function(data, status, headers, config) {
-        console.log("$scope.loadPeriodForComparison : success");
-        console.log(data);
         if (data.periodDTOList.length === 0) {
           $scope.$root.periodsForComparison = [
             {
