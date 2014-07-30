@@ -1,17 +1,20 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.dto.DTO;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 
 public class OrganizationDTO extends DTO {
 	private Long id;
 	private String name;
 	private List<SiteDTO> sites;
+	private List<PersonDTO> users;
 
 	public OrganizationDTO() {
 		sites = new ArrayList<>();
+		users = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -36,5 +39,13 @@ public class OrganizationDTO extends DTO {
 
 	public void setSites(List<SiteDTO> sites) {
 		this.sites = sites;
+	}
+
+	public List<PersonDTO> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<PersonDTO> users) {
+		this.users = users;
 	}
 }
