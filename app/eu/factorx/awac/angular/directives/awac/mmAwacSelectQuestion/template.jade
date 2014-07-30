@@ -1,1 +1,4 @@
-select.oneelement(ng-options="p.key as p.label for p in getOptionsByQuestionCode()", ng-model="getAnswerValue().value",ng-change="edited()")
+select.oneelement(  ng-options="p.key as p.label for p in getOptionsByQuestionCode()",
+                    ng-model="getAnswerValue().value",
+                    ng-change="edited()",
+                    ng-disabled="getDataToCompare()==true")

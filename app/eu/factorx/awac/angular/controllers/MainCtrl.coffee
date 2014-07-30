@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams,modalService) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService) ->
 
     #
     # First loading
@@ -44,7 +44,7 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope().validNavigation!=undefined
+        if $scope.getMainScope().validNavigation != undefined
             # ask a confirmation to quite the view
             result = $scope.getMainScope().validNavigation()
 
@@ -55,8 +55,8 @@ angular
     # use the nav from an event
     # use the args.loc to specify the target loc
     #
-    $scope.$on 'NAV',(event,args) ->
-        $scope.nav(args.loc,args.confirmed)
+    $scope.$on 'NAV', (event, args) ->
+        $scope.nav(args.loc, args.confirmed)
 
 
     #
@@ -64,22 +64,21 @@ angular
     # loc : the localisation targeted
     # confirmed : the modification of localisation was already confirmed by the user
     #
-    $scope.nav = (loc,confirmed=false) ->
+    $scope.nav = (loc, confirmed = false) ->
+        canBeContinue = true
 
-      canBeContinue = true
+        # test if the main current scope have a validNavigation function and if this function return a false
+        if $scope.getMainScope().validNavigation != undefined && confirmed == false
+            # ask a confirmation to quite the view
+            result = $scope.getMainScope().validNavigation()
 
-      # test if the main current scope have a validNavigation function and if this function return a false
-      if $scope.getMainScope().validNavigation!=undefined && confirmed == false
-        # ask a confirmation to quite the view
-        result = $scope.getMainScope().validNavigation()
-
-        if result.valid == false
-          canBeContinue = false
-          params = {}
-          params.loc = loc
-          modalService.show result.modalForConfirm,params
-      if canBeContinue
-          $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+            if result.valid == false
+                canBeContinue = false
+                params = {}
+                params.loc = loc
+                modalService.show result.modalForConfirm, params
+        if canBeContinue
+            $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
 
     #
     # Periods
@@ -94,6 +93,7 @@ angular
                 p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
             $location.path(p)
+
     $scope.$watch 'scopeId', () ->
         $routeParams.period = $scope.period
         if $route.current
@@ -103,6 +103,11 @@ angular
                 p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
             $location.path(p)
+        $scope.loadPeriodForComparison()
+
+    $scope.periodToCompare = null
+
+
     #
     # Save
     #
@@ -118,11 +123,37 @@ angular
 
 
     $scope.getMainScope = ->
-      return mainScope =  angular.element($('[ng-view]')[0]).scope()
+        return mainScope = angular.element($('[ng-view]')[0]).scope()
+
+
+    $scope.loadPeriodForComparison = ->
+
+        url ='answer/getPeriodsForComparison/' + $scope.scopeId
+        if $scope.scopeId != null && $scope.scopeId != undefined && $scope.scopeId != NaN  && $scope.scopeId != 'NaN'
+
+            promise = $http
+                method: "GET"
+                url: url
+                headers:
+                    "Content-Type": "application/json"
+            promise.success (data, status, headers, config) ->
+                if data.periodDTOList.length == 0
+                    $scope.$root.periodsForComparison = [
+                        {'id': null, 'label': '-'}
+                    ]
+                else
+                    $scope.$root.periodsForComparison = data.periodDTOList
+                return
+
+            promise.error (data, status, headers, config) ->
+                return
 
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
+    $rootScope.periodsForComparison = [
+        {'id': null, 'label': '-'}
+    ]
 
     #
     # Redirect user to login view if not logged in

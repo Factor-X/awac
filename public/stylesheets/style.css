@@ -696,23 +696,6 @@ button.comments {
     margin-bottom: 5px;
 }
 
-/*
-.element_stack {
-    display: block;
-    width: 100%;
-}
-
-.element_stack > div {
-    display: block;
-    width: 100%;
-}
-
-.element_stack > div > div {
-    display: block;
-    width: auto;
-}
-*/
-
 .repetition-title {
     margin-left: 35px;
 }
@@ -754,67 +737,44 @@ button.comments {
     margin-bottom: 10px;
 }
 
-.repetition-question-container {
-    /*    padding-bottom: 25px; */
-}
-
-.repetition-question-container [ng-question-code] > div {
-    /*  display: table-row; */
-}
-
-.repetition-question-container [ng-question-code] > div {
-    /* display: table-cell; */
-}
-
-/*
-.element_table {
-     display: table;
-    width: 100%;
-    border-spacing: 1px;
-    position: relative;
-}
-
-.element_table > div {
-     display: table-row;
-}
-
-.element_table > div > div {
-     display: table-cell;
-/ / border : 1 px solid black;
-    padding: 3px 15px 3px 35px;
-}
-*/
 .question_field {
-    padding: 3px 15px 3px 35px;
+    padding: 3px 0px 3px 35px;
 }
 
 .question_field > div {
     display: inline-block;
 }
 
-.question_field > div:first-child {
-    width: 50%;
+.question_field > div {
     padding-right: 15px;
+}
+
+.question_field.oneanswer > div {
+    width: 50%;
+}
+
+.question_field.twoanswer > div:first-child {
+    width: 30%;
+}
+
+.question_field.twoanswer > div:nth-child(n+2) {
+    width: 35%;
 }
 
 .question_field > div:first-child .glyphicon {
     margin-right: 2px;
 }
 
-.question_field > div:last-child {
-    width: 50%;
-}
-
-.question_field .oneelement{
+.question_field .oneelement {
     width: calc(100% - 72px);
     display: inline-block;
 }
 
-.question_field .twoelement > *{
+.question_field .twoelement > * {
     display: inline-block;
 }
 
-.question_field .twoelement > *:first-child{
+.question_field .twoelement > *:first-child {
     width: calc(60% - 36px);
 }
 
@@ -921,58 +881,6 @@ button.comments {
     font-style: italic;
     vertical-align: middle;
 }
-
-/*.element_table > div > div:nth-child(3) .user_icon,*/
-/*
-.element_table > div > div:nth-child(3) input,
-.element_table > div > div:nth-child(3) select {
-    background-color: #9d9b91;
-    color: white;
-    font-style: italic;
-}
-.element_table > div > div:nth-child(2) .user_icon {
-    background-color: #3c3b37;
-}
-
-.element_table > div > div:nth-child(3) .user_icon {
-    font-style: normal;
-}
-.element_table > div > div:nth-child(2).oneelement input,
-.element_table > div > div:nth-child(3).oneelement input {
-    width: -moz-calc(100% - 72px);
-    width: -webkit-calc(100% - 72px);
-    width: calc(100% - 72px);
-}
-
-.element_table > div > div:nth-child(2).oneelement select,
-.element_table > div > div:nth-child(3).oneelement select {
-    width: -moz-calc(100% - 70px);
-    width: -webkit-calc(100% - 70px);
-    width: calc(100% - 70px);
-}
-
-.element_table > div > div:nth-child(2).twoelements input,
-.element_table > div > div:nth-child(3).twoelements input {
-    width: -moz-calc(50% - 37px);
-    width: -webkit-calc(50% - 37px);
-    width: calc(50% - 37px);
-    margin-right: 4px;
-}
-
-.element_table > div > div:nth-child(2).twoelements select,
-.element_table > div > div:nth-child(3).twoelements select {
-    width: -moz-calc(50% - 37px);
-    width: -webkit-calc(50% - 37px);
-    width: calc(50% - 37px);
-}
-
-.element_table > div > div:nth-child(2).twoelements div:not(.user_icon,.status),
-.element_table > div > div:nth-child(3).twoelements div:not(.user_icon,.status) {
-    width: -moz-calc(50% - 37px);
-    width: -webkit-calc(50% - 37px);
-    width: calc(50% - 37px);
-}
-*/
 
 .document-question {
     border: 1px solid #dbd9d2;
@@ -1307,4 +1215,9 @@ button.comments {
 
 .tab-pb-red-fg {
     background: #b02828
+}
+
+*:disabled {
+    opacity: 0.50;
+    color: black;
 }

@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.service.*;
@@ -17,13 +18,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
-import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
-import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
-import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
@@ -323,7 +317,7 @@ public class AnswerController extends Controller {
         Question question = questionAnswer.getQuestion();
         switch (question.getAnswerType()) {
             case BOOLEAN:
-                String strValue = StringUtils.trim((String) rawAnswerValue);
+                String strValue = StringUtils.trim( rawAnswerValue.toString());
                 Boolean booleanValue = null;
                 if ("1".equals(strValue)) {
                     booleanValue = Boolean.TRUE;
@@ -333,12 +327,12 @@ public class AnswerController extends Controller {
                 answerValue.add(new BooleanAnswerValue(questionAnswer, booleanValue));
                 break;
             case STRING:
-                answerValue.add(new StringAnswerValue(questionAnswer,  rawAnswerValue.toString()));
+                answerValue.add(new StringAnswerValue(questionAnswer, rawAnswerValue.toString()));
                 break;
             case INTEGER:
                 UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
                 Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-                answerValue.add(new IntegerAnswerValue(questionAnswer, Integer.valueOf( rawAnswerValue.toString()), unitInt));
+                answerValue.add(new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue.toString()), unitInt));
                 break;
             case DOUBLE:
                 UnitCategory unitCategoryDbl = ((DoubleQuestion) question).getUnitCategory();
@@ -408,6 +402,33 @@ public class AnswerController extends Controller {
                     answerUnit.getName(), answerUnitCategory.getName()));
         }
         return answerUnit;
+    }
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result getPeriodsForComparison(Long scopeId) {
+
+
+        List<QuestionSetAnswer> listQuestionSetAnswer = questionSetAnswerService.findByScope(scopeService.findById(scopeId));
+
+        List<PeriodDTO> periodList = new ArrayList<>();
+
+        for (QuestionSetAnswer questionSetAnswer : listQuestionSetAnswer) {
+
+            boolean toAdd = true;
+
+            for (PeriodDTO periodDTO : periodList) {
+                if (periodDTO.getId().equals(questionSetAnswer.getPeriod().getId())) {
+                    toAdd = false;
+                    break;
+                }
+            }
+            if (toAdd) {
+                periodList.add(conversionService.convert(questionSetAnswer.getPeriod(), PeriodDTO.class));
+            }
+        }
+
+        return ok(new ListPeriodsDTO(periodList));
     }
 
     protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {

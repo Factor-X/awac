@@ -1,4 +1,4 @@
-div(ng-hide="getCondition() === false",class="question_field")
+div(ng-hide="getCondition() === false",class="question_field",ng-class="displayOldDatas() ? 'twoanswer' : 'oneanswer'")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
@@ -6,5 +6,8 @@ div(ng-hide="getCondition() === false",class="question_field")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     div
         .status.answer(mm-not-implemented)
-        span( ng-include="getTemplate()")
+        span( ng-include="getTemplate(false)")
+        .user_icon(mm-not-implemented) XM
+    div(ng-show="displayOldDatas()")
+        span( ng-include="getTemplate(true)")
         .user_icon(mm-not-implemented) XM

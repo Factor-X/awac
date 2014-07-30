@@ -1,1 +1,4 @@
-input.oneelement(type="text", ng-model="getAnswerValue().value",ng-change="edited()")
+input.oneelement(   type="text",
+                    ng-model="getAnswerValue().value",
+                    ng-change="edited()",
+                    ng-disabled="getDataToCompare()==true")

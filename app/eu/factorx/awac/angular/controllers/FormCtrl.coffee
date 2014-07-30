@@ -138,6 +138,7 @@ angular
             return null
         return $scope.o.unitCategories[question.unitCategoryId]
 
+
     #
     # get list choice by question code
     #
@@ -160,7 +161,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -184,6 +185,19 @@ angular
                     result = $scope.getQuestion(code, qSet.children)
                     if result
                         return result
+        return null
+
+
+    $scope.getAnswerToCompare = (code, mapIteration) ->
+        if $scope.dataToCompare != null
+            for answer in $scope.dataToCompare.answersSave.listAnswers
+                #control the code
+                if answer.questionKey == code
+
+                    #control the repetition map
+                    if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+                        return answer
+
         return null
 
     #
@@ -286,7 +300,7 @@ angular
         len = $scope.answerList.length
         while (len--)
             question = $scope.answerList[len]
-            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,                mapRepetition)
+            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
                 if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
                     $scope.answerList.splice(len, 1)
 
@@ -354,4 +368,22 @@ angular
                 break
 
         return result
+
+    $scope.dataToCompare = null
+
+
+    $scope.$parent.$watch 'periodToCompare', () ->
+
+        if $scope.periodToCompare != null
+            promise = $http
+                method: "GET"
+                url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.periodToCompare + "/" + $scope.$parent.scopeId
+                headers:
+                    "Content-Type": "application/json"
+            promise.success (data, status, headers, config) ->
+                $scope.dataToCompare = data
+                return
+
+            promise.error (data, status, headers, config) ->
+                return
 

@@ -45,15 +45,11 @@
                 <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
             </div>
 
-            <div class="big_separator" mm-not-implemented></div>
+            <div class="big_separator"></div>
 
-            <div class="data_date_compare" mm-not-implemented>
+            <div class="data_date_compare">
                 <div>Comparaison avec</div>
-                <select>
-                    <option>données 2012</option>
-                    <option>données 2011</option>
-                    <option>données 2010</option>
-                </select>
+                <select ng-options="p.id as p.label for p in $root.periodsForComparison" ng-model="periodToCompare"></select>
             </div>
 
             <div class="big_separator"></div>

@@ -1,1 +1,6 @@
-input.oneelement(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()",style="text-align:right;")
+input.oneelement(   type="text",
+                    ng-model="getAnswerValue().value",
+                    ng-pattern="/^[0-9,. ]*$/",
+                    ng-change="edited()",
+                    style="text-align:right;",
+                    ng-disabled="getDataToCompare()==true")

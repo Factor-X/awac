@@ -2,11 +2,13 @@ angular
 .module('app.directives')
 .directive "mmAwacDocumentQuestion", (directiveService, translationService, $upload, messageFlash, modalService) ->
     restrict: "E"
-    scope: {}
+    scope: directiveService.autoScope
+        ngDataToCompare: '='
     templateUrl: "$/angular/templates/mm-awac-document-question.html"
     replace: true
     compile: () ->
         pre: (scope) ->
+            directiveService.autoScopeImpl scope
 
             scope.getQuestionCode = ->
                 return scope.$parent.getQuestionCode()
@@ -15,6 +17,9 @@ angular
                 return scope.$parent.getRepetitionMap()
 
             scope.getAnswerValue = () ->
+            if scope.getDataToCompare() == true
+                return scope.$parent.$parent.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
+            else
                 return scope.$parent.$parent.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
             scope.inDownload = false
@@ -25,6 +30,16 @@ angular
                     "width": scope.percent + "%"
                     "color": ((scope.percent > 50) ? "white": "black")
                 }
+
+            scope.hasDescription = () ->
+                return translationService.get(scope.getQuestionCode() + '_DESC') != null
+
+
+            scope.$watch 'ngCondition', () ->
+                if scope.getCondition() == false
+                    scope.getAnswerValue().value = null
+                else if scope.$parent.loading == false && scope.getAnswerValue().value == null
+                    scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
 
             scope.openDocumentManager = ->
                 args = {}

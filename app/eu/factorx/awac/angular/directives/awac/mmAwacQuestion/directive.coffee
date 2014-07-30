@@ -11,26 +11,32 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-        scope.getTemplate = ->
+        scope.getTemplate = (dataToCompare)->
+
+            toCompare = ""
+            if  dataToCompare == true
+                toCompare = "ToCompare"
+
+
             if scope.$parent.getQuestion(scope.getQuestionCode()) != null
                 answerType = scope.$parent.getQuestion(scope.getQuestionCode()).answerType
 
                 #call the directive by the type of the question
                 if answerType == 'BOOLEAN'
-                    return "mmAwacBooleanQuestion"
+                    return "mmAwacBooleanQuestion"+toCompare
                 else if answerType == 'INTEGER'
-                    return "mmAwacIntegerQuestion"
+                    return "mmAwacIntegerQuestion"+toCompare
                 else if answerType == 'DOUBLE'
                     if scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != null || scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != undefined
-                        return "mmAwacRealWithUnitQuestion"
+                        return "mmAwacRealWithUnitQuestion"+toCompare
                     else
-                        return "mmAwacRealQuestion"
+                        return "mmAwacRealQuestion"+toCompare
                 else if answerType == 'STRING'
-                    return "mmAwacStringQuestion"
+                    return "mmAwacStringQuestion"+toCompare
                 else if answerType == 'VALUE_SELECTION'
-                    return "mmAwacSelectQuestion"
+                    return "mmAwacSelectQuestion"+toCompare
                 else if answerType == 'DOCUMENT'
-                    return "mmAwacDocumentQuestion"
+                    return "mmAwacDocumentQuestion"+toCompare
 
         scope.getAnswerValue = () ->
             return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
@@ -46,6 +52,11 @@ angular
                 scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
                 if scope.$parent.getUnitCategories(scope.getQuestionCode())!=null
                     scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
+
+        scope.displayOldDatas = ->
+            if scope.$parent.dataToCompare == null
+                return false
+            return true
 
         #
         # called when the user change the value of the field

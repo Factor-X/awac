@@ -1,3 +1,8 @@
 span.twoelement
-    input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()",style="text-align:right;")
+    input(  type="text",
+            ng-model="getAnswerValue().value",
+            ng-pattern="/^[0-9,. ]*$/",
+            ng-change="edited()",
+            style="text-align:right;",
+            ng-disabled="getDataToCompare()==true")
     span(style="margin-left:5px") %

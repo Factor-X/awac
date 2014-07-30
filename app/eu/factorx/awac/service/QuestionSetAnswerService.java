@@ -10,6 +10,13 @@ import java.util.List;
 
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
+    /**
+     * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (scope) and for given form.
+     *
+     * @param scope
+     */
+    List<QuestionSetAnswer> findByScope(Scope scope);
+
 	/**
 	 * Gets all QuestionSetAnswers corresponding to given context (period and scope).
 	 *
@@ -26,6 +33,14 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 	 * @param form
 	 */
 	List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form);
+
+    /**
+     * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (scope) and for given form.
+     *
+     * @param scope
+     * @param form
+     */
+    List<QuestionSetAnswer> findByScopeAndForm(Scope scope,Form form);
 
 	List<QuestionSetAnswer> findByCodes(List<QuestionCode> codes);
 

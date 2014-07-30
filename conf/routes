@@ -27,8 +27,9 @@ GET     /tests                      eu.factorx.awac.controllers.TestController.i
 
 
 #answer controller => used to save answer
-GET     /answer/getByForm/:form/:period/:scope   @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: Long, scope: Long)
-POST    /answer/save                             @eu.factorx.awac.controllers.AnswerController.save()
+GET     /answer/getByForm/:form/:period/:scope          @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: Long, scope: Long)
+POST    /answer/save                                    @eu.factorx.awac.controllers.AnswerController.save()
+GET     /answer/getPeriodsForComparison/:scope          @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
 
 
 # ResultController => used to get report

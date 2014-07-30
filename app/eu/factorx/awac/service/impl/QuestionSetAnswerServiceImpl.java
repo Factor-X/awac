@@ -15,6 +15,17 @@ import java.util.List;
 public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionSetAnswer> implements
 		QuestionSetAnswerService {
 
+
+
+    @Override
+    public List<QuestionSetAnswer> findByScope(Scope scope) {
+        List<QuestionSetAnswer> resultList = JPA
+                .em()
+                .createNamedQuery(QuestionSetAnswer.FIND_BY_SCOPE, QuestionSetAnswer.class)
+                .setParameter("scope", scope).getResultList();
+        return resultList;
+    }
+
 	@Override
 	public List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period) {
 		List<QuestionSetAnswer> resultList = JPA.em()
@@ -32,6 +43,15 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 				.setParameter("questionSets", form.getQuestionSets()).getResultList();
 		return resultList;
 	}
+
+    @Override
+    public List<QuestionSetAnswer> findByScopeAndForm(Scope scope,Form form) {
+        List<QuestionSetAnswer> resultList = JPA
+                .em()
+                .createNamedQuery(QuestionSetAnswer.FIND_BY_SCOPE_AND_QUESTION_SETS, QuestionSetAnswer.class)
+                .setParameter("scope", scope).setParameter("questionSets", form.getQuestionSets()).getResultList();
+        return resultList;
+    }
 
 	@Override
 	public List<QuestionSetAnswer> findByCodes(List<QuestionCode> codes) {

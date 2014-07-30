@@ -22,9 +22,17 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope"),
 		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period"),
+        @NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.questionSet in :questionSets and qsa.parent is null"),
 		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"),})
 public class QuestionSetAnswer extends AbstractEntity {
+
+    /**
+     * @param scope
+     * : a {@link Scope}
+     */
+    public static final String FIND_BY_SCOPE = "QuestionAnswer.findByScope";
 
 	/**
 	 * @param scope
@@ -38,6 +46,12 @@ public class QuestionSetAnswer extends AbstractEntity {
 	 * @param codes : a Collection of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
+
+    /**
+     * @param scope : a {@link Scope}
+     * @param questionSets: a Collection of {@link QuestionSet}
+     */
+    public static final String FIND_BY_SCOPE_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndQuestionSets";
 
 	/**
 	 * @param scope : a {@link Scope}
