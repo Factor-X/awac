@@ -57,7 +57,7 @@
             <div class="data_save">
                 <div class="last_save" mm-not-implemented>
                     <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
-                    07/01/2014 - 19:42
+                    {{lastSaveTime | date: 'medium' }}
                 </div>
                 <div class="small_separator"></div>
                 <div class="save_button">

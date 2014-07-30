@@ -164,6 +164,12 @@ angular
                 return
 
 
+    #lastSaveTime
+    $scope.lastSaveTime = new Date() #.getTimezoneOffset()
+    console.log "Date.getTimezoneOffset"
+    console.log new Date().getTimezoneOffset()
+
+
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
     $rootScope.periodsForComparison = [
