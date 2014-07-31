@@ -52,7 +52,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	private void importCodeLabels(Workbook codesWkb) {
 		Logger.info("==== Importing Code Labels");
 		for (String sheetName : codesWkb.getSheetNames()) {
-			CodeList codeList = getMatchingCodeList(sheetName);
+			CodeList codeList = getCodeListBySheetName(sheetName);
 			Sheet sheet = codesWkb.getSheet(sheetName);
 			String firstCell = getCellContent(sheet, 0, 0);
 			if (PRIMARY_KEY_COLUMN_NAME.equals(firstCell)) {
@@ -65,7 +65,6 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	// Columns: 0:KEY, 1:LABEL_EN, 2:LABEL_FR, 3:LABEL_NL
 	private LinkedHashMap<String, CodeLabel> importCodeLabels(Sheet sheet, CodeList codeList) {
 		LinkedHashMap<String, CodeLabel> codeLabels = new LinkedHashMap<>();
-		Logger.info("====== Importing labels of code list '{}'", codeList);
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			String key = getCellContent(sheet, 0, i);
@@ -78,17 +77,20 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			codeLabels.put(key, new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
 		}
 		persistEntities(codeLabels.values());
+
+		Logger.info("====== Imported code list '{}' ({} items)", codeList, codeLabels.size());
 		return codeLabels;
 	}
 
 	private void importCodesEquivalences(Workbook codesWkb) {
 		Logger.info("==== Importing Codes Equivalences");
 		for (String sheetName : codesWkb.getSheetNames()) {
-			CodeList codeList = getMatchingCodeList(sheetName);
+			CodeList codeList = getCodeListBySheetName(sheetName);
 			Sheet sheet = codesWkb.getSheet(sheetName);
 
 			// searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
-			for (int columnIndex = 0; columnIndex < sheet.getColumns(); columnIndex++) {
+			int columns = sheet.getColumns();
+			for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
 				String columnName = getCellContent(sheet, columnIndex, 0);
 				if (!columnName.endsWith(FOREIGN_KEY_SUFFIX)) {
 					continue;
@@ -114,7 +116,6 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
 	// Columns: 0:REF_KEY
 	private void importSubListData(Sheet sheet, CodeList codeList, CodeList referencedCodeList) {
-		Logger.info("====== Importing data of code list '{}' (sublist of '{}')", codeList, referencedCodeList);
 		List<CodesEquivalence> codesEquivalences = new ArrayList<>();
 		for (int i = 1; i < sheet.getRows(); i++) {
 			String referencedCodeKey = getCellContent(sheet, 0, i);
@@ -124,6 +125,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			codesEquivalences.add(new CodesEquivalence(codeList, referencedCodeKey, referencedCodeList, referencedCodeKey));
 		}
 		persistEntities(codesEquivalences);
+		Logger.info("====== Imported code list '{}' ({} items) (sublist of '{}')", codeList, codesEquivalences.size(), referencedCodeList);
 	}
 
 	// Columns: 0:KEY, refKeyColumnIndex:REF_KEY
@@ -141,7 +143,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		persistEntities(codesEquivalences);
 	}
 
-	private CodeList getMatchingCodeList(String sheetName) {
+	private static CodeList getCodeListBySheetName(String sheetName) {
 		CodeList codeList = CodeList.valueOf(sheetName);
 		if (codeList == null) {
 			throw new RuntimeException("Cannot import data from sheet '" + sheetName
