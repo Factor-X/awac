@@ -56,9 +56,13 @@ public class Global extends GlobalSettings {
 		// INTERNAL SPRING SERVICES
 		// ========================================
 
-
-		// read spring configuration and instanciate context
-		ctx = new ClassPathXmlApplicationContext("components.xml");
+        if (app.isTest()) {
+            // read spring configuration and instanciate context for test purposes
+            ctx = new ClassPathXmlApplicationContext("components-test.xml");
+        } else {
+            // read spring configuration and instanciate context
+            ctx = new ClassPathXmlApplicationContext("components.xml");
+        }
 
 		thread = new InitializationThread(ctx);
 		thread.start();

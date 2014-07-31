@@ -16,7 +16,7 @@ public class OrganizationTest extends BaseModelTest {
 
     /* ORGANIZATION TESTS */
 
-    @Test
+    //@Test
     public void createOrganization() {
 
         JPA.withTransaction(new F.Callback0() {
@@ -29,7 +29,7 @@ public class OrganizationTest extends BaseModelTest {
     } // end of test method
 
 
-    @Test
+    //@Test
     public void retrieveOrganizationSuccess() {
         JPA.withTransaction(new F.Callback0() {
             @Override
@@ -43,7 +43,7 @@ public class OrganizationTest extends BaseModelTest {
         });
     }
 
-    @Test
+    //@Test
     public void retrieveOrganizationFailure() {
         JPA.withTransaction(new F.Callback0() {
             @Override
