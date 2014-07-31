@@ -53,6 +53,8 @@ public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> 
 					reportLineDTO.addScope2Value(numericValue);
 				} else if (IndicatorIsoScopeCode.SCOPE3.equals(isoScope)) {
 					reportLineDTO.addScope3Value(numericValue);
+				} else if (IndicatorIsoScopeCode.OUT_OF_SCOPE.equals(isoScope)) {
+					reportLineDTO.addOutOfScopeValue(numericValue);
 				}
 			}
 			reportDTO.getReportLines().add(reportLineDTO);
