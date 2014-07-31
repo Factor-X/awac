@@ -3,6 +3,7 @@ package eu.factorx.awac.dto.validation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.annotations.*;
 import eu.factorx.awac.util.FileUtil;
+import play.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -87,6 +88,9 @@ public class Validator {
 			// System.out.println("-- " + object.getClass().getName() + " :: " + field.getName());
 		}
 		if (validationFail) {
+
+			Logger.error(object.toString());
+
 			throw new Exception(failureMessage);
 		}
 	}

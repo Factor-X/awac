@@ -105,7 +105,11 @@ angular
         # called when the user change the value of the field
         #
         scope.edited = ->
+            if scope.getAnswerValue().value !=null
+                if scope.getAnswerValue().value.length == 0
+                    scope.getAnswerValue().value = null
             scope.getAnswerValue().wasEdited = true
+
 
         #
         # create a event CONDITION if the ngCondition was modified
@@ -126,40 +130,47 @@ angular
         # change the value by default value if
         # the value is null and the condition is true
         #
+        scope.firstComputecondition=true
         scope.testVisibility = (elementToTest)->
 
-            # if the element contains the condition-false class,
-            # the condition of this question is false
-            if elementToTest.hasClass('ng-hide') == true
+            if scope.getCondition() != undefined && scope.$parent.loading != true
 
-                # if there was modification the the validity of the condition ...
-                if scope.getAnswerValue().hasValidCondition == true
-                    #...change the parameter into the answer
-                    scope.getAnswerValue().hasValidCondition = false
-                    # if the loading of the form is finish, the modification of the
-                    # validation of the question come from an user modification :
-                    # this question was edited
-                    if scope.$parent.loading == false
-                        scope.getAnswerValue().wasEdited = true
+                # if the element contains the condition-false class,
+                # the condition of this question is false
+                if elementToTest.hasClass('ng-hide') == true
 
-                return false
+                    # if there was modification the the validity of the condition ...
+                    if scope.getAnswerValue().hasValidCondition != false
+                        #...change the parameter into the answer
+                        scope.getAnswerValue().hasValidCondition = false
 
-            # the body if the limit for the test => continue if this element id not the body
-            if elementToTest.parent()[0].tagName!='BODY'
-                return scope.testVisibility(elementToTest.parent())
-            else
-                # if this element is the body, the condition is true
-                # if there was modification the the validity of the condition ...
-                if  scope.getAnswerValue().hasValidCondition == false
-                    #...change the parameter into the answer
-                    scope.getAnswerValue().hasValidCondition = true
-                    if scope.$parent.loading == false
-                        # if the loading of the form is finish, the modification of the
-                        # validation of the question come from an user modification :
-                        # this question was edited
-                        scope.getAnswerValue().wasEdited = true
+                        # if this if the first compute, it was caused during the loading :
+                        # the question is not edited
+                        if scope.firstComputecondition == true
+                            scope.firstComputecondition=false
+                        else
+                            scope.getAnswerValue().wasEdited = true
 
-                return true
+                    return false
+
+                # the body if the limit for the test => continue if this element id not the body
+                if elementToTest.parent()[0].tagName!='BODY'
+                    return scope.testVisibility(elementToTest.parent())
+                else
+                    # if this element is the body, the condition is true
+                    # if there was modification the the validity of the condition ...
+                    if  scope.getAnswerValue().hasValidCondition != true
+                        #...change the parameter into the answer
+                        scope.getAnswerValue().hasValidCondition = true
+
+                        # if this if the first compute, it was caused during the loading :
+                        # the question is not edited
+                        if scope.firstComputecondition == true
+                            scope.firstComputecondition=false
+                        else
+                            scope.getAnswerValue().wasEdited = true
+
+                    return true
 
         #
         # return the name of the user for this question
@@ -184,3 +195,22 @@ angular
             else
                 name = user.firstName+" "+user.lastName
                 return name
+
+        #
+        # get the status class
+        #
+        scope.getStatusClass =->
+            answer = scope.getAnswerValue()
+
+            if answer.value!=null && (answer.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                if answer.wasEdited != undefined  && answer.wasEdited == true
+                    return 'answer_temp'
+                return 'answer'
+            else
+                if answer.wasEdited != undefined  && answer.wasEdited == true
+                    return 'pending_temp'
+                return 'pending'
+
+
+
+

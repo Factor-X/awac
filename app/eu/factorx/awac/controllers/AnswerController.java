@@ -6,6 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.dto.awac.get.*;
+import eu.factorx.awac.dto.awac.post.FormProgressDTO;
+import eu.factorx.awac.models.data.FormProgress;
+import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +21,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
-import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
-import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
-import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
@@ -56,16 +51,6 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.FormService;
-import eu.factorx.awac.service.PeriodService;
-import eu.factorx.awac.service.QuestionAnswerService;
-import eu.factorx.awac.service.QuestionService;
-import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.StoredFileService;
-import eu.factorx.awac.service.UnitCategoryService;
-import eu.factorx.awac.service.UnitService;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -101,6 +86,9 @@ public class AnswerController extends Controller {
 
 	@Autowired
 	private StoredFileService storedFileService;
+
+	@Autowired
+	private FormProgressService formProgressService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -540,11 +528,78 @@ public class AnswerController extends Controller {
 	}
 
 	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
+
+		if(request().body().asJson() == null){
+			throw new RuntimeException("The request doesn't contain any body");
+		}
+
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
 		if (dto == null) {
 			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
 		}
 		return dto;
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getFormProgress(Long periodId, Long scopeId){
+
+		//1. control the owner of the scope
+		Scope scope = scopeService.findById(scopeId);
+
+		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new RuntimeException("This scope doesn't owned by your organization");
+		}
+
+		//2. load period
+		Period period = periodService.findById(periodId);
+
+		//3. load formProgress
+		List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
+
+		return ok(conversionService.convert(formProgressList, FormProgressListDTO.class));
+
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result setFormProgress(){
+
+		Logger.info("public Result setFormProgress(){");
+
+		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
+
+		Period period = periodService.findById(formProgressDTO.getPeriod());
+		Scope scope = scopeService.findById(formProgressDTO.getScope());
+		Form form = formService.findByIdentifier(formProgressDTO.getForm());
+
+
+		//control percentage
+		Integer percentage = formProgressDTO.getPercentage();
+		if(percentage<0 || percentage>100){
+			throw new RuntimeException("Percentage must be more than 0 and less than 100. Currently : "+percentage);
+		}
+
+		//control scope
+		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new RuntimeException("This scope doesn't owned by your organization. Scope asked : "+scope.toString());
+		}
+
+		//try to load
+		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period, scope, form);
+
+		//update...
+		if(formProgress != null){
+			formProgress.setPercentage(percentage);
+		}
+		//...or create a new formProgress
+		else{
+			formProgress = new FormProgress(period,form,scope,percentage);
+		}
+
+		formProgressService.saveOrUpdate(formProgress);
+
+		return ok();
 	}
 
 }

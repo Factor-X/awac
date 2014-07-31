@@ -2,6 +2,7 @@ package eu.factorx.awac.models.business;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,6 +16,7 @@ public class Organization extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@Column(unique = true)
 	private String name;
 
 	@OneToMany(mappedBy = "organization")
@@ -54,5 +56,25 @@ public class Organization extends AbstractEntity {
 
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Organization)) return false;
+		if (!super.equals(o)) return false;
+
+		Organization that = (Organization) o;
+
+		if (!name.equals(that.name)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + name.hashCode();
+		return result;
 	}
 }

@@ -99,6 +99,7 @@ angular
             $scope.periodToCompare = null
 
         $scope.loadPeriodForComparison()
+        $scope.loadFormProgress()
 
     $scope.$watch 'scopeId', () ->
         $routeParams.period = $scope.period
@@ -109,7 +110,9 @@ angular
                 p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
             $location.path(p)
+
         $scope.loadPeriodForComparison()
+        $scope.loadFormProgress()
 
     $scope.periodToCompare = null
 
@@ -144,23 +147,38 @@ angular
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
 
-                console.log "DATA : : "
-                console.log data
-
                 $scope.$root.periodsForComparison = []
                 for period in data.periodDTOList
                     if period.id != $routeParams.period
-                        console.log "add !!! "
                         $scope.$root.periodsForComparison[$scope.$root.periodsForComparison.length] = period
 
                 if $scope.$root.periodsForComparison == 0
-                    console.log "initialie ..."
                     $scope.$root.periodsForComparison = [
                         {'id': null, 'label': '-'}
                     ]
                 return
 
             promise.error (data, status, headers, config) ->
+                return
+
+    $scope.getProgress = (form)->
+        if $scope.formProgress != null
+            for formProgress in $scope.formProgress
+                if formProgress.form == form
+                    return formProgress.percentage
+        return 0
+
+
+    $scope.formProgress = null
+
+    $scope.loadFormProgress = ->
+        if $scope.scopeId !=undefined && $scope.scopeId !=null && $scope.period != null && $scope.period != undefined
+            promise = $http
+                method:"GET"
+                url: "answer/formProgress/"+$scope.period+"/"+$scope.scopeId
+                headers:"Content-Type": "application/json"
+            promise.success (data, status, headers, config) ->
+                $scope.formProgress = data.listFormProgress
                 return
 
 
