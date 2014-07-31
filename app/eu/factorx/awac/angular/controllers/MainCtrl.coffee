@@ -164,6 +164,13 @@ angular
                 return
 
 
+
+    #lastSaveTime TEMP
+    $scope.lastSaveTime = new Date() #.getTimezoneOffset()
+    console.log "Date.getTimezoneOffset"
+    console.log new Date().getTimezoneOffset()
+
+
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
     $rootScope.periodsForComparison = [
@@ -206,7 +213,17 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
         $rootScope.organization = data.organization
+        $rootScope.users = data.organization.users
+
         $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+
+
+    #get user
+    $rootScope.getUserByIdentifier = (identifier) ->
+        for user in $rootScope.users
+            if user.identifier = identifier
+                return user
+        return null
 
     #
     # test if the user is currently connected on the server

@@ -3,7 +3,7 @@ span.twoelement
         span(style="vertical-align:middle;margin-right : 15px;") oui
         input(  type="radio",
                 name="{{getQuestionCode()}}",
-                ng-model="getAnswerValue().value",
+                ng-model="getAnswer().value",
                 value="1",
                 style="width :20px !important;margin:0;vertical-align:middle;",
                 ng-change="edited()",
@@ -12,7 +12,7 @@ span.twoelement
         span(style="vertical-align:middle;margin-right : 15px;") non
         input(  type="radio",
                 name="{{getQuestionCode()}}",
-                ng-model="getAnswerValue().value",
+                ng-model="getAnswer().value",
                 value="0",
                 style="width :20px !important;margin:0;vertical-align:middle;",
                 ng-change="edited()",

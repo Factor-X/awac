@@ -9,21 +9,24 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
+        #
+        # get the question code :
+        # call the getQuestionCode from the parent
+        #
         scope.getQuestionCode = ->
             return scope.$parent.getQuestionCode()
 
-        scope.getRepetitionMap = ->
-            return scope.$parent.getRepetitionMap()
-
-        scope.getAnswerValue = () ->
-            if scope.getDataToCompare() == true
-                return scope.$parent.$parent.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
-            else
-                return scope.$parent.$parent.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
+        #
+        # get the answer :
+        # call the getAnswerOrCreate from the parent or the
+        # getAnswerToCompare if the question is a dataToCompare
+        #
+        scope.getAnswer = () ->
+            return scope.$parent.getAnswer(scope.getDataToCompare())
 
         #
         # called when the user change the value of the field
         #
         scope.edited = ->
-          scope.getAnswerValue().wasEdited = true
+            scope.$parent.edited()
 

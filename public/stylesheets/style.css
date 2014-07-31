@@ -596,6 +596,7 @@ button.comments {
     left: 0;
     right: 0;
     min-width: 1000px;
+    padding-bottom: 75px;
 }
 
 .element {
@@ -870,16 +871,30 @@ button.comments {
     margin: 0 5px;
     display: inline-block;
     width: 20px;
-    height: 20px;
-    font-size: 8px;
+    line-height: 20px;
+    font-size: 10px;
     font-weight: bold;
     color: white;
-    padding: 5px 0;
     text-align: center;
     background-color: #9d9b91;
     color: white;
     font-style: italic;
     vertical-align: middle;
+}
+
+.user_icon:hover > div,
+.user_icon > div:hover{
+    display: block;
+}
+
+.user_icon > div{
+    display:none;
+    position: absolute;
+    padding: 5px;
+    background-color: #cccccc;
+    border: 1px solid #777777;
+    width: 100px;
+    margin-left: -80px;
 }
 
 .document-question {
