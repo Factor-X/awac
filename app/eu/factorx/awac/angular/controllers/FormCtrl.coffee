@@ -91,35 +91,57 @@ angular
         #build the list to save
         listAnswerToSave = []
         for answer in $scope.answerList
-            if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-                if answer.hasValidCondition == undefined || answer.hasValidCondition == true
-                    if answer.wasEdited != undefined
-                        answer['wasEdited'] = false
+
+            # test if the question was edited
+            if answer.wasEdited != undefined && answer.wasEdited == true
+                console.log "je suis editer !!"
+                console.log answer
+                answer.wasEdited = false
+
+                #test if the data is valid
+                if answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
+                    #test if the condition is not valid...
+                    if answer.hasValidCondition != undefined && answer.hasValidCondition == false
+                        # clean the value
+                        answer.value = null
+
+                    # add the answer of the listAnswerToSave
                     listAnswerToSave[listAnswerToSave.length] = answer
 
+
+                    ###
+                    if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                        if answer.hasValidCondition == undefined || answer.hasValidCondition == true
+                            if answer.wasEdited != undefined
+                                answer['wasEdited'] = false
+                            listAnswerToSave[listAnswerToSave.length] = answer
+                    ###
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
-        #and replace the list
-        $scope.o.answersSave.listAnswers = listAnswerToSave
+        if listAnswerToSave.length == 0
+            messageFlash.displaySuccess "All answers are already saved !"
+        else
+            #and replace the list
+            $scope.o.answersSave.listAnswers = listAnswerToSave
 
 
-        promise = $http
-            method: "POST"
-            url: 'answer/save'
-            headers:
-                "Content-Type": "application/json"
-            data: $scope.o.answersSave
+            promise = $http
+                method: "POST"
+                url: 'answer/save'
+                headers:
+                    "Content-Type": "application/json"
+                data: $scope.o.answersSave
 
-        promise.success (data, status, headers, config) ->
-            messageFlash.displaySuccess "Your answers are saved !"
-            modalService.hide(modalService.LOADING)
-            return
+            promise.success (data, status, headers, config) ->
+                messageFlash.displaySuccess "Your answers are saved !"
+                modalService.hide(modalService.LOADING)
+                return
 
-        promise.error (data, status, headers, config) ->
-            messageFlash.displayError "An error was thrown during the save : " + data.message
-            modalService.hide(modalService.LOADING)
-            return
+            promise.error (data, status, headers, config) ->
+                messageFlash.displayError "An error was thrown during the save : " + data.message
+                modalService.hide(modalService.LOADING)
+                return
 
     #
     # get list choice by question code
@@ -162,7 +184,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -205,7 +227,7 @@ angular
     # get the answer by code and mapIteration
     # if there is not answer for this case, create it
     #
-    $scope.getAnswerOrCreate = (code, mapIteration) ->
+    $scope.getAnswerOrCreate = (code, mapIteration = null) ->
         if code == null || code == undefined
             console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
             return null
@@ -217,24 +239,25 @@ angular
         else
             #compute default value
             value = null
-            unitId = null
+            defaultUnitId = null
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
                 #if question.defaultValue != null && question.defaultValue != undefined
                 value = question.defaultValue
 
-                #compute default unitId
+                #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
-                    unitId = $scope.getUnitCategories(code).mainUnitId
+                    defaultUnitId = $scope.getUnitCategories(code).mainUnitId
 
 
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey': code
                 'value': value
-                'unitId': unitId
+                'unitId': defaultUnitId
                 'mapRepetition': mapIteration
+                'lastUpdateUser': $scope.$root.currentPerson.identifier
             }
             $scope.answerList[$scope.answerList.length] = answerLine
             return answerLine
@@ -374,7 +397,6 @@ angular
 
 
     $scope.$parent.$watch 'periodToCompare', () ->
-
         if $scope.periodToCompare != null
             promise = $http
                 method: "GET"

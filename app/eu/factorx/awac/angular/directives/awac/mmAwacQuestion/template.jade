@@ -7,7 +7,9 @@ div(ng-hide="getCondition() === false",class="question_field",ng-class="displayO
     div
         .status.answer(mm-not-implemented)
         span( ng-include="getTemplate(false)")
-        .user_icon(mm-not-implemented) XM
+        .user_icon {{getUserName(false,true)}}
+            div {{getUserName(false,false)}}
     div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
         span( ng-include="getTemplate(true)")
-        .user_icon(mm-not-implemented) XM
+        .user_icon {{getUserName(true,true)}}
+            div {{getUserName(true,false)}}
