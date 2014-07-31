@@ -106,6 +106,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Logger.info("==== Importing indicators");
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitSymbols.get("tCO2e");
+		Integer deletedIndicators = 0;
 		for (int i = 1; i < indicatorsSheet.getRows(); i++) {
 			String key = getCellContent(indicatorsSheet, 1, i);
 			String name = getCellContent(indicatorsSheet, 2, i);
@@ -137,7 +138,10 @@ public class AwacDataImporter extends WorkbookDataImporter {
 				activityOwnership = Boolean.FALSE;
 			}
 
-			Boolean deleted = indicatorsSheet.getCell(1, i).getCellFormat().getFont().isStruckout();
+			Boolean deleted = indicatorsSheet.getCell(2, i).getCellFormat().getFont().isStruckout();
+			if (deleted) {
+				deletedIndicators++;
+			}
 
 			IndicatorIsoScopeCode isoScope = new IndicatorIsoScopeCode(indicatorIsoScopeKey);
 			IndicatorCategoryCode indicatorCategory = new IndicatorCategoryCode(indicatorCategoryKey);
@@ -148,7 +152,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 					activitySubCategory, activityOwnership, unit, deleted));
 		}
 		persistEntities(indicators);
-		Logger.info("====== Imported {} indicators", indicators.size());
+		Logger.info("====== Imported {} indicators (including {} marked as 'deleted')", indicators.size(), deletedIndicators);
 	}
 
 	private void saveFactors(Sheet factorsSheet) {
