@@ -5,6 +5,7 @@ version := "1.0-SNAPSHOT"
 ebeanEnabled := false
 
 libraryDependencies ++= Seq(
+  "org.springframework" % "spring-orm" % "3.1.1.RELEASE",
   "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final",
   javaCore,
   javaJpa
@@ -35,6 +36,7 @@ libraryDependencies += "net.sourceforge.jexcelapi" % "jxl" % "2.6.12" excludeAll
 libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll(
     ExclusionRule(organization = "org.hibernate")
  )
+
 
 play.Project.playJavaSettings
 

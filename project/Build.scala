@@ -23,7 +23,8 @@ object ApplicationBuild extends Build {
         "org.apache.commons" % "commons-email" % "1.3.1",
         "commons-io" % "commons-io" % "2.3",
         "org.springframework" % "spring-context" % "3.2.3.RELEASE",
-        "org.springframework" % "spring-expression" % "3.2.3.RELEASE"
+        "org.springframework" % "spring-expression" % "3.2.3.RELEASE",
+        "org.springframework" % "spring-orm" % "3.1.1.RELEASE"
     )
 
     libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
