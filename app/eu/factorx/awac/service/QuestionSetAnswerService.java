@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
-    /**
+	List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter);
+
+	/**
      * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (scope) and for given form.
      *
      * @param scope

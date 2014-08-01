@@ -110,7 +110,7 @@ public class AnswerController extends Controller {
 
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		List<QuestionAnswer> allQuestionAnswers = getAllQuestionAnswers(questionSetAnswers);
-		
+
 		QuestionAnswersDTO questionAnswersDTO = createQuestionAnswersDTO(form.getId(), periodId, scopeId, allQuestionAnswers);
 
 		Logger.info("GET '{}' Data:", form.getIdentifier());
@@ -124,6 +124,48 @@ public class AnswerController extends Controller {
 
 		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
 		return ok(formDTO);
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getPeriodsForComparison(Long scopeId) {
+		List<PeriodDTO> periodDTOs = new ArrayList<>();
+		List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
+		for (Period period : periods) {			
+			periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+		}
+		return ok(new ListPeriodsDTO(periodDTOs));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result save() {
+		Account currentUser = securedController.getCurrentUser();
+		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
+
+		Form form = formService.findById(answersDTO.getFormId());
+		Period period = periodService.findById(answersDTO.getPeriodId());
+		Scope scope = scopeService.findById(answersDTO.getScopeId());
+
+		if (form == null || period == null || scope == null) {
+			throw new RuntimeException("Invalid request parameters : " + answersDTO);
+		}
+
+		// security check
+		if (!currentUser.getOrganization().equals(scope.getOrganization())) {
+			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
+		}
+
+		Logger.info("POST '{}' Data:", form.getIdentifier());
+		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
+			Logger.info("\t" + answerLine);
+		}
+
+		saveAnswsersDTO(currentUser, form, period, scope, answersDTO.getListAnswers());
+
+		SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
+
+		return ok(dto);
 	}
 
 	private QuestionAnswersDTO createQuestionAnswersDTO(Long formId, Long periodId, Long scopeId, List<QuestionAnswer> allQuestionAnswers) {
@@ -201,45 +243,76 @@ public class AnswerController extends Controller {
 		return res;
 	}
 
-	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
-	public Result save() {
-		Account currentUser = securedController.getCurrentUser();
-		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
-
-		Form form = formService.findById(answersDTO.getFormId());
-		Period period = periodService.findById(answersDTO.getPeriodId());
-		Scope scope = scopeService.findById(answersDTO.getScopeId());
-
-		if (form == null || period == null || scope == null) {
-			throw new RuntimeException("Invalid request params");
-		}
-
-		Logger.info("POST '{}' Data:", form.getIdentifier());
-		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
-			Logger.info("\t" + answerLine);
-		}
-
-		saveAnswsersDTO(currentUser, form, period, scope, answersDTO.getListAnswers());
-
-		SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
-
-		return ok(dto);
-	}
-
 	private void saveAnswsersDTO(Account currentUser, Form form, Period period, Scope scope, List<AnswerLineDTO> answerLineDTOs) {
-		// delete all answers linked to form
-		questionSetAnswerService.deleteAllFormAnswers(scope, period, form);
+		Map<String, List<AnswerLineDTO>> answerLinesDTOsMap = asMap(answerLineDTOs);
 
-		// create answers
+		// updated or deleted question answers
+		List<AnswerLineDTO> updatedAndDeletedQuestionAnswers = new ArrayList<>();
+		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
+		updateOrDeleteQuestionAnswers(questionSetAnswers, answerLinesDTOsMap, updatedAndDeletedQuestionAnswers);
+
+		// new question answers
 		Map<String, List<QuestionSetAnswer>> createdQSAnswers = new HashMap<>();
 		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
-			questionAnswerService.saveOrUpdate(createNewQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQSAnswers));
+			if (!updatedAndDeletedQuestionAnswers.contains(answerLineDTO)) {
+				createQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQSAnswers);
+			}
+		}
+
+		// cleaning: delete empty QuestionSetAnswers (without QuestionAnswers)
+		deleteEmptyQuestionSetAnswers(questionSetAnswers);
+	}
+
+	private void updateOrDeleteQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers, Map<String, List<AnswerLineDTO>> answerLinesDTOs,
+			List<AnswerLineDTO> updatedAndDeletedQuestionAnswers) {
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			for (QuestionAnswer questionAnswer : questionSetAnswer.getQuestionAnswers()) {
+				AnswerLineDTO answerLineDTO = getAnswerLineDTO(questionAnswer, answerLinesDTOs);
+				if (answerLineDTO != null) {
+					updateOrDeleteQuestionAnswer(questionAnswer, answerLineDTO);
+					updatedAndDeletedQuestionAnswers.add(answerLineDTO);
+				}
+			}
+			updateOrDeleteQuestionAnswers(questionSetAnswer.getChildren(), answerLinesDTOs, updatedAndDeletedQuestionAnswers);
 		}
 	}
 
-	private QuestionAnswer createNewQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO,
-			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
+	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			if (questionSetAnswer.getQuestionAnswers().isEmpty() && questionSetAnswer.getChildren().isEmpty()) {
+				Logger.info("DELETING QuestionSetAnswer [ID={}]", questionSetAnswer.getId());
+				questionSetAnswerService.remove(questionSetAnswer);
+			} else {
+				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
+			}
+		}
+	}
+
+	private void updateOrDeleteQuestionAnswer(QuestionAnswer questionAnswer, AnswerLineDTO answerLineDTO) {
+		Object value = answerLineDTO.getValue();
+		if ((value == null) || (StringUtils.trimToNull(value.toString()) == null)) {
+			Logger.info("DELETING QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
+			questionAnswer = questionAnswerService.findById(questionAnswer.getId());
+			questionAnswerService.remove(questionAnswer);
+		} else {
+			List<AnswerValue> oldAnswerValues = questionAnswer.getAnswerValues();
+			List<AnswerValue> newAnswerValues = getAnswerValue(answerLineDTO, questionAnswer);
+			if (!oldAnswerValues.equals(newAnswerValues)) {
+				Logger.info("UPDATING QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
+				questionAnswer.getAnswerValues().clear();
+				questionAnswer.getAnswerValues().addAll(newAnswerValues);
+				questionAnswerService.saveOrUpdate(questionAnswer);
+			}
+		}
+	}
+
+	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
+		Object answerValue = answerLineDTO.getValue();
+		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {			
+			Logger.warn("Cannot create a new QuestionAnswer from answer line {}: value is null", answerLineDTO);
+			return;
+		}
+		
 		Question question = getAndVerifyQuestion(answerLineDTO);
 		QuestionSet questionSet = question.getQuestionSet();
 
@@ -253,12 +326,11 @@ public class AnswerController extends Controller {
 		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
 		List<AnswerValue> answerValues = getAnswerValue(answerLineDTO, questionAnswer);
 		if (answerValues == null) {
-			return null;
+			return;
 		}
 		questionAnswer.getAnswerValues().addAll(answerValues);
 		questionAnswerService.saveOrUpdate(questionAnswer);
-
-		return questionAnswer;
+		Logger.info("CREATED QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
 	}
 
 	private Map<String, Integer> getRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
@@ -272,8 +344,7 @@ public class AnswerController extends Controller {
 			Integer repetitionIndex = repMap.get(questionSetCode);
 			if (repetitionIndex == null) {
 				if (questionSet.getRepetitionAllowed()) {
-					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap
-							+ ") doesn not contain entry for parent questionSet (" + questionSetCode
+					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap + ") doesn not contain entry for parent questionSet (" + questionSetCode
 							+ "), while repetion is allowed in this questionSet");
 				}
 				repMap.put(questionSetCode, 0);
@@ -283,8 +354,7 @@ public class AnswerController extends Controller {
 		return repMap;
 	}
 
-	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet,
-			Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
+	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		String questionSetCode = questionSet.getCode().getKey();
 
 		// attempt to find the QuestionSetAnswer in already created map
@@ -299,8 +369,7 @@ public class AnswerController extends Controller {
 		if (questionSetAnswer == null) {
 			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repMap.get(questionSetCode), null);
 			if (questionSet.getParent() != null) {
-				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(),
-						createdQuestionSetAnswers);
+				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(), createdQuestionSetAnswers);
 				questionSetAnswer.setParent(parentQuestionSetAnswer);
 			}
 			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
@@ -353,8 +422,7 @@ public class AnswerController extends Controller {
 
 			// test if the value is not null
 			if (booleanAnswerValue.getValue() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -368,8 +436,7 @@ public class AnswerController extends Controller {
 
 			// test if the value is not null
 			if (stringAnswerValue.getValue() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -380,13 +447,11 @@ public class AnswerController extends Controller {
 			// build the answerValue
 			UnitCategory unitCategoryInt = ((IntegerQuestion) question).getUnitCategory();
 			Unit unitInt = getAndVerifyUnit(answerLine, unitCategoryInt, question.getCode().getKey());
-			IntegerAnswerValue integerAnswerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue.toString()),
-					unitInt);
+			IntegerAnswerValue integerAnswerValue = new IntegerAnswerValue(questionAnswer, Integer.valueOf(rawAnswerValue.toString()), unitInt);
 
 			// test if the value is not null
 			if (integerAnswerValue.getValue() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -402,8 +467,7 @@ public class AnswerController extends Controller {
 
 			// test if the value is not null
 			if (doubleAnswerValue.getValue() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -418,8 +482,7 @@ public class AnswerController extends Controller {
 
 			// test if the value is not null
 			if (codeAnswerValue.getValue() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -434,8 +497,7 @@ public class AnswerController extends Controller {
 
 			// test if the value is not null
 			if (entityAnswerValue.getEntityId() == null) {
-				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-						+ rawAnswerValue.toString());
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 			}
 
 			// add to the list
@@ -449,8 +511,7 @@ public class AnswerController extends Controller {
 			for (Map.Entry<String, String> entry : ((LinkedHashMap<String, String>) rawAnswerValue).entrySet()) {
 				StoredFile storedFile = storedFileService.findById(Long.parseLong(entry.getKey()));
 				if (storedFile == null) {
-					throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : "
-							+ rawAnswerValue.toString());
+					throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
 				}
 				answerValue.add(new DocumentAnswerValue(questionAnswer, storedFile));
 			}
@@ -495,49 +556,62 @@ public class AnswerController extends Controller {
 		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
 		UnitCategory answerUnitCategory = answerUnit.getCategory();
 		if (!questionUnitCategory.equals(answerUnitCategory)) {
-			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getName(),
-					answerUnit.getName(), answerUnitCategory.getName()));
+			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
 		}
 		return answerUnit;
 	}
 
-	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
-	public Result getPeriodsForComparison(Long scopeId) {
-
-		List<QuestionSetAnswer> listQuestionSetAnswer = questionSetAnswerService.findByScope(scopeService.findById(scopeId));
-
-		List<PeriodDTO> periodList = new ArrayList<>();
-
-		for (QuestionSetAnswer questionSetAnswer : listQuestionSetAnswer) {
-
-			boolean toAdd = true;
-
-			for (PeriodDTO periodDTO : periodList) {
-				if (periodDTO.getId().equals(questionSetAnswer.getPeriod().getId())) {
-					toAdd = false;
-					break;
-				}
-			}
-			if (toAdd) {
-				periodList.add(conversionService.convert(questionSetAnswer.getPeriod(), PeriodDTO.class));
-			}
-		}
-
-		return ok(new ListPeriodsDTO(periodList));
-	}
-
 	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-
-		if(request().body().asJson() == null){
-			throw new RuntimeException("The request doesn't contain any body");
-		}
-
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
 		if (dto == null) {
 			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
 		}
 		return dto;
+	}
+
+	private static Map<String, List<AnswerLineDTO>> asMap(List<AnswerLineDTO> answerLineDTOs) {
+		Map<String, List<AnswerLineDTO>> answerLinesDTOsMap = new HashMap<>();
+		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
+			String questionKey = answerLineDTO.getQuestionKey();
+			if (!answerLinesDTOsMap.containsKey(questionKey)) {
+				answerLinesDTOsMap.put(questionKey, new ArrayList<AnswerLineDTO>());
+			}
+			answerLinesDTOsMap.get(questionKey).add(answerLineDTO);
+		}
+		return answerLinesDTOsMap;
+	}
+
+	private static AnswerLineDTO getAnswerLineDTO(QuestionAnswer questionAnswer, Map<String, List<AnswerLineDTO>> answerLineDTOs) {
+		Map<String, Integer> questionAnswerRepetitionMap = buildRepetitionMap(questionAnswer);
+		String questionKey = questionAnswer.getQuestion().getCode().getKey();
+		List<AnswerLineDTO> questionSetAnswerLineDTOs = answerLineDTOs.get(questionKey);
+		if (questionSetAnswerLineDTOs != null) {
+			for (AnswerLineDTO answerLineDTO : questionSetAnswerLineDTOs) {
+				if (answerLineDTO.getMapRepetition() != null && answerLineDTO.getMapRepetition().isEmpty()) {
+					answerLineDTO.setMapRepetition(null);
+				}
+				if ((questionAnswerRepetitionMap == null && answerLineDTO.getMapRepetition() == null) || questionAnswerRepetitionMap.equals(answerLineDTO.getMapRepetition())) {
+					return answerLineDTO;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static Map<String, Integer> buildRepetitionMap(QuestionAnswer questionAnswer) {
+		Map<String, Integer> res = new HashMap<>();
+		QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
+		while (questionSetAnswer != null) {
+			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+			if (questionSet.getRepetitionAllowed()) {
+				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
+			}
+			questionSetAnswer = questionSetAnswer.getParent();
+		}
+		if (res.isEmpty()) {
+			res = null;
+		}
+		return res;
 	}
 
 	@Transactional(readOnly = true)

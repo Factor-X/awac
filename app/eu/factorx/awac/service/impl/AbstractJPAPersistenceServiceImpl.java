@@ -35,8 +35,9 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	}
 
 	@Override
-	public void remove(final E entity) {
-		JPA.em().remove(JPA.em().merge(entity));
+	public void remove(E entity) {
+		E merge = JPA.em().merge(entity);
+		JPA.em().remove(merge);
 	}
 
 	@Override

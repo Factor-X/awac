@@ -4,6 +4,9 @@ import eu.factorx.awac.models.AbstractEntity;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "answer_value")
@@ -37,6 +40,26 @@ public abstract class AnswerValue extends AbstractEntity {
 	@Override
 	public String toString() {
 		return "rawData=" + rawData;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof AnswerValue)) {
+			return false;
+		}
+		AnswerValue rhs = (AnswerValue) obj;
+		return new EqualsBuilder().append(this.questionAnswer, rhs.questionAnswer).append(this.rawData, rhs.rawData).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(this.questionAnswer).append(this.rawData).toHashCode();
 	}
 
 }
