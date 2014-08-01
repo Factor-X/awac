@@ -5,8 +5,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
-import play.mvc.Http.Context;
-
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {
 
@@ -27,25 +25,18 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		this.technicalSegment = new TechnicalSegment(getCurrentUser());
+		this.technicalSegment = new TechnicalSegment();
 	}
 
 	@PreUpdate
 	@Override
 	public void preUpdate() {
 		super.preUpdate();
-		this.technicalSegment.update(getCurrentUser());
+		this.technicalSegment.update();
 	}
 
-	private String getCurrentUser() {
-		if (Context.current.get() == null) {
-			return "TECH";
-		}
-		return Context.current().session().get("identifier");
+	@Override
+	public String toString() {
+		return super.toString() + " " + technicalSegment.toString();
 	}
-
-    @Override
-    public String toString() {
-        return super.toString()+" "+technicalSegment.toString();
-    }
 }
