@@ -37,7 +37,6 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 				} else if (booleanValue == Boolean.FALSE) {
 					rawAnswerValue = "0";
 				}
-				rawAnswerValue = booleanValue;
 				break;
 			case STRING:
 				rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
