@@ -110,6 +110,7 @@ angular
                 if scope.getAnswerValue().value.length == 0
                     scope.getAnswerValue().value = null
             scope.getAnswerValue().wasEdited = true
+            scope.getAnswerValue().lastUpdateUser = scope.$root.currentPerson.identifier
 
 
         #
@@ -148,12 +149,8 @@ angular
                             scope.getAnswerValue().value = null
                             scope.$root.$broadcast('CONDITION')
 
-                        # if this if the first compute, it was caused during the loading :
-                        # the question is not edited
-                        if scope.firstComputecondition == true
-                            scope.firstComputecondition=false
-                        else
                             scope.getAnswerValue().wasEdited = true
+                            scope.getAnswerValue().lastUpdateUser = scope.$root.currentPerson.identifier
 
                     return false
 
@@ -177,6 +174,7 @@ angular
                                 scope.firstComputecondition=false
                             else
                                 scope.getAnswerValue().wasEdited = true
+                                scope.getAnswerValue().lastUpdateUser = scope.$root.currentPerson.identifier
 
                     return true
 

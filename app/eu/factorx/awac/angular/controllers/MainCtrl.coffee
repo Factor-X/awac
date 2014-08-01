@@ -239,7 +239,7 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
     #get user
     $rootScope.getUserByIdentifier = (identifier) ->
         for user in $rootScope.users
-            if user.identifier = identifier
+            if user.identifier == identifier
                 return user
         return null
 
