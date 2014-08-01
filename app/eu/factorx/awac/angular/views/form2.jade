@@ -96,6 +96,6 @@ mm-awac-block(ng-condition="getAnswer('A38').value == '1'")
                             i.glyphicon.glyphicon-bell
                             span(ng-bind-html="'A47_TITLE' | translate")
                         .sub_block.tab-color-yellow
-                            .element_table
+                            mm-awac-block.element_table(ng-condition="getAnswer('A5').value == '1' || getAnswer('A5').value == '2'")
                                 mm-awac-question(question-code="A48")
                                 mm-awac-question(question-code="A49")

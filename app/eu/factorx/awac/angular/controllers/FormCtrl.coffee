@@ -436,15 +436,22 @@ angular
         total = 0
         answered = 0
 
+        listTotal = []
+
         for answer in $scope.answerList
-            if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
 
-                # clean the value
-                total++
+            # document questions are optional : do not count them into total
+            if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
 
-                #test if the data is valid
-                if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-                    answered++
+                if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+
+                    # clean the value
+                    total++
+                    listTotal[listTotal.length] = answer
+
+                    #test if the data is valid
+                    if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                        answered++
 
 
         percentage = answered / total * 100
@@ -452,6 +459,7 @@ angular
         percentage =Math.floor(percentage)
 
         console.log "PROGRESS : "+answered+"/"+total+"="+percentage
+        console.log listTotal
 
         #build formProgressDTO
         formProgressDTO = {}

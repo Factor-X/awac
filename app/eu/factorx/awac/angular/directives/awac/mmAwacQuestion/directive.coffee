@@ -23,8 +23,8 @@ angular
             if  dataToCompare == true
                 toCompare = "ToCompare"
 
-            if scope.$parent.getQuestion(scope.getQuestionCode()) != null
-                answerType = scope.$parent.getQuestion(scope.getQuestionCode()).answerType
+            if scope.getQuestion() != null
+                answerType = scope.getQuestion().answerType
 
                 #call the directive by the type of the question
                 if answerType == 'BOOLEAN'
@@ -32,7 +32,7 @@ angular
                 else if answerType == 'INTEGER'
                     return "mmAwacIntegerQuestion"+toCompare
                 else if answerType == 'DOUBLE'
-                    if scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != null || scope.$parent.getQuestion(scope.getQuestionCode()).unitCategoryId != undefined
+                    if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
                         return "mmAwacRealWithUnitQuestion"+toCompare
                     else
                         return "mmAwacRealQuestion"+toCompare
@@ -44,6 +44,11 @@ angular
                     return "mmAwacSelectQuestion"+toCompare
                 else if answerType == 'DOCUMENT'
                     return "mmAwacDocumentQuestion"+toCompare
+
+
+        scope.getQuestion = ->
+            return scope.$parent.getQuestion(scope.getQuestionCode())
+
 
         #
         # get the answer for comparison.
@@ -135,7 +140,7 @@ angular
         scope.firstComputecondition=true
         scope.testVisibility = (elementToTest)->
 
-            if scope.getCondition() != undefined && scope.$parent.loading != true
+            #if scope.getCondition() != undefined && scope.$parent.loading != true
 
                 # if the element contains the condition-false class,
                 # the condition of this question is false
@@ -165,8 +170,8 @@ angular
                         scope.getAnswerValue().hasValidCondition = true
 
                         # try to add a default value
-                        if scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue !=null
-                            scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+                        if scope.getQuestion()!=null && scope.getQuestion().defaultValue !=null
+                            scope.getAnswerValue().value = scope.getQuestion().defaultValue
 
                             # if this if the first compute, it was caused during the loading :
                             # the question is not edited
@@ -206,6 +211,11 @@ angular
         # get the status class
         #
         scope.getStatusClass =->
+
+            #there is no status for document
+            if scope.getQuestion()!=null && scope.getQuestion().answerType == 'DOCUMENT'
+                return ""
+
             answer = scope.getAnswerValue()
 
             if answer.value!=null && (answer.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
@@ -216,6 +226,11 @@ angular
                 if answer.wasEdited != undefined  && answer.wasEdited == true
                     return 'pending_temp'
                 return 'pending'
+
+
+
+
+
 
 
 

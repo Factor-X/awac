@@ -2,7 +2,7 @@ div(class="question_field",ng-class="{'twoanswer':displayOldDatas()===true, 'one
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-share-alt")
+        span(ng-class="getQuestion().answerType === 'DOCUMENT' ? 'glyphicon-file' : 'glyphicon-share-alt' ",class="glyphicon")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     div
         div.status(ng-class="getStatusClass()")
