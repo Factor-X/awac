@@ -1,4 +1,4 @@
-div(ng-hide="getCondition() === false",class="question_field",ng-class="displayOldDatas() ? 'twoanswer' : 'oneanswer'")
+div(class="question_field",ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")

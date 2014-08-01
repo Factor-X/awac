@@ -1244,3 +1244,7 @@ button.comments {
     opacity: 0.50;
     color: black;
 }
+
+.condition-false{
+    display: none !important;
+}

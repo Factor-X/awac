@@ -138,7 +138,7 @@ angular
 
                 # if the element contains the condition-false class,
                 # the condition of this question is false
-                if elementToTest.hasClass('ng-hide') == true
+                if elementToTest.hasClass('condition-false') == true
 
                     # if there was modification the the validity of the condition ...
                     if scope.getAnswerValue().hasValidCondition != false

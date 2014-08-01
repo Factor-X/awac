@@ -1,2 +1,2 @@
 ng-virtual
-    div(ng-hide="getCondition() === false",ng-transclude)
+    div(ng-class="{true:'condition-false', false:''}[getCondition() === false]",ng-transclude)
