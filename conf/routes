@@ -30,6 +30,8 @@ GET     /tests                      eu.factorx.awac.controllers.TestController.i
 GET     /answer/getByForm/:form/:period/:scope          @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: Long, scope: Long)
 POST    /answer/save                                    @eu.factorx.awac.controllers.AnswerController.save()
 GET     /answer/getPeriodsForComparison/:scope          @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
+POST	/answer/formProgress							@eu.factorx.awac.controllers.AnswerController.setFormProgress()
+GET		/answer/formProgress/:period/:scope				@eu.factorx.awac.controllers.AnswerController.getFormProgress(period: Long, scope :Long)
 
 
 # ResultController => used to get report

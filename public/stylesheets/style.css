@@ -596,7 +596,6 @@ button.comments {
     left: 0;
     right: 0;
     min-width: 1000px;
-    padding-bottom: 75px;
 }
 
 .element {
@@ -849,8 +848,8 @@ button.comments {
 .status {
     margin-right: 12px;
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
     font-size: 8px;
     font-family: 'robotobold', Arial, Helvetica, sans-serif;
 / / font-weight : 700;
@@ -861,6 +860,18 @@ button.comments {
 
 .status.answer {
     background: url('../images/status/answer.png') no-repeat;
+}
+
+.status.answer_temp {
+    background: url('../images/status/answer_temp.png') no-repeat;
+}
+
+.status.pending {
+    background: url('../images/status/pending.png') no-repeat;
+}
+
+.status.pending_temp {
+    background: url('../images/status/pending_temp.png') no-repeat;
 }
 
 .status.stop {
@@ -882,9 +893,8 @@ button.comments {
     vertical-align: middle;
 }
 
-.user_icon:hover > div,
-.user_icon > div:hover{
-    display: block;
+.user_icon:hover > div {
+
 }
 
 .user_icon > div{
@@ -893,8 +903,6 @@ button.comments {
     padding: 5px;
     background-color: #cccccc;
     border: 1px solid #777777;
-    width: 100px;
-    margin-left: -80px;
 }
 
 .document-question {

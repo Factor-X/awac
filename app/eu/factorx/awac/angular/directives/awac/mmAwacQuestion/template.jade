@@ -5,7 +5,7 @@ div(ng-hide="getCondition() === false",class="question_field",ng-class="displayO
         span(class="glyphicon glyphicon-share-alt")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
     div
-        .status.answer(mm-not-implemented)
+        div.status(ng-class="getStatusClass()")
         span( ng-include="getTemplate(false)")
         .user_icon {{getUserName(false,true)}}
             div {{getUserName(false,false)}}

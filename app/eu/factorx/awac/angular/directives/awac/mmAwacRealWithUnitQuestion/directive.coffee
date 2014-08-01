@@ -35,4 +35,7 @@ angular
         # call the getUnitCategory parent method
         #
         scope.getUnits = () ->
-            return scope.$parent.getUnitCategories().units
+            unitCategory = scope.$parent.getUnitCategories()
+            if unitCategory ==null
+                return null
+            return unitCategory.units

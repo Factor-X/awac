@@ -35,4 +35,7 @@ angular
         # call the getCodeList parent method
         #
         scope.getOptions = ->
-            return scope.$parent.getCodeList().codeLabels
+            codeList = scope.$parent.getCodeList()
+            if codeList ==null
+                return null
+            return codeList.codeLabels

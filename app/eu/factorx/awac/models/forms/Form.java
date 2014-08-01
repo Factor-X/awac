@@ -14,6 +14,8 @@ public class Form extends AbstractEntity {
 
 	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
 	private static final long serialVersionUID = 1L;
+
+	@Column(unique = true)
 	private String identifier;
 
 	@Transient

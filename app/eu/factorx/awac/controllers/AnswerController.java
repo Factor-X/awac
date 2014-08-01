@@ -51,7 +51,10 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5bf6ef1e98c0ee9fcd66f432165a187f4eecc431
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -613,6 +616,80 @@ public class AnswerController extends Controller {
 			res = null;
 		}
 		return res;
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getFormProgress(Long periodId, Long scopeId){
+
+		//1. control the owner of the scope
+		Scope scope = scopeService.findById(scopeId);
+
+		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new RuntimeException("This scope doesn't owned by your organization");
+		}
+
+		//2. load period
+		Period period = periodService.findById(periodId);
+
+		//3. load formProgress
+		List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
+
+		return ok(conversionService.convert(formProgressList, FormProgressListDTO.class));
+
+	}
+
+<<<<<<< HEAD
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result setFormProgress(){
+
+		Logger.info("public Result setFormProgress(){");
+
+		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
+
+		Period period = periodService.findById(formProgressDTO.getPeriod());
+		Scope scope = scopeService.findById(formProgressDTO.getScope());
+		Form form = formService.findByIdentifier(formProgressDTO.getForm());
+
+
+		//control percentage
+		Integer percentage = formProgressDTO.getPercentage();
+		if(percentage<0 || percentage>100){
+			throw new RuntimeException("Percentage must be more than 0 and less than 100. Currently : "+percentage);
+=======
+	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
+
+		if(request().body().asJson() == null){
+			throw new RuntimeException("The request doesn't contain any body");
+		}
+
+		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
+		if (dto == null) {
+			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
+>>>>>>> 5bf6ef1e98c0ee9fcd66f432165a187f4eecc431
+		}
+
+		//control scope
+		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new RuntimeException("This scope doesn't owned by your organization. Scope asked : "+scope.toString());
+		}
+
+		//try to load
+		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period, scope, form);
+
+		//update...
+		if(formProgress != null){
+			formProgress.setPercentage(percentage);
+		}
+		//...or create a new formProgress
+		else{
+			formProgress = new FormProgress(period,form,scope,percentage);
+		}
+
+		formProgressService.saveOrUpdate(formProgress);
+
+		return ok();
 	}
 
 	@Transactional(readOnly = true)

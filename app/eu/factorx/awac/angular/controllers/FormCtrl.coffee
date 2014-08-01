@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier,$timeout) ->
     $scope.formIdentifier = formIdentifier
 
     #this variable contains all answer, new and old
@@ -73,11 +73,18 @@ angular
         for questionSetDTO in $scope.o.questionSets
             $scope.addDefaultValue(questionSetDTO)
 
+        #$timeout(->
+            modalService.hide(modalService.LOADING)
+            $scope.loading = false
+            console.log $scope.answerList
+        #, 200)
 
-        #hide the loading modal
-        modalService.hide(modalService.LOADING)
+        # broadcast a condition event to compute condition a first time
+        # this first condition computing do not edit question
+        #$scope.$root.$broadcast('CONDITION')
 
-        $scope.loading = false
+        return
+
 
 
     #
@@ -94,12 +101,9 @@ angular
 
             # test if the question was edited
             if answer.wasEdited != undefined && answer.wasEdited == true
-                console.log "je suis editer !!"
-                console.log answer
-                answer.wasEdited = false
 
                 #test if the data is valid
-                if answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
+                if answer.value == null || answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
                     #test if the condition is not valid...
                     if answer.hasValidCondition != undefined && answer.hasValidCondition == false
                         # clean the value
@@ -121,6 +125,7 @@ angular
 
         if listAnswerToSave.length == 0
             messageFlash.displaySuccess "All answers are already saved !"
+            modalService.hide(modalService.LOADING)
         else
             #and replace the list
             $scope.o.answersSave.listAnswers = listAnswerToSave
@@ -136,12 +141,22 @@ angular
             promise.success (data, status, headers, config) ->
                 messageFlash.displaySuccess "Your answers are saved !"
                 modalService.hide(modalService.LOADING)
+
+                for answer in $scope.answerList
+
+                    # test if the question was edited
+                    if answer.wasEdited != undefined && answer.wasEdited == true
+                       answer.wasEdited = false
+
+                #refresh the progress bar
+                $scope.saveFormProgress()
                 return
 
             promise.error (data, status, headers, config) ->
                 messageFlash.displayError "An error was thrown during the save : " + data.message
                 modalService.hide(modalService.LOADING)
                 return
+
 
     #
     # get list choice by question code
@@ -240,11 +255,13 @@ angular
             #compute default value
             value = null
             defaultUnitId = null
+            wasEdited=false
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
-                #if question.defaultValue != null && question.defaultValue != undefined
-                value = question.defaultValue
+                if question.defaultValue != null
+                    value = question.defaultValue
+                    wasEdited = true
 
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
@@ -258,7 +275,9 @@ angular
                 'unitId': defaultUnitId
                 'mapRepetition': mapIteration
                 'lastUpdateUser': $scope.$root.currentPerson.identifier
+                'wasEdited' : wasEdited
             }
+
             $scope.answerList[$scope.answerList.length] = answerLine
             return answerLine
 
@@ -397,7 +416,7 @@ angular
 
 
     $scope.$parent.$watch 'periodToCompare', () ->
-        if $scope.periodToCompare != null
+        if $scope.periodToCompare != null && $scope.$parent != null
             promise = $http
                 method: "GET"
                 url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.periodToCompare + "/" + $scope.$parent.scopeId
@@ -409,4 +428,52 @@ angular
 
             promise.error (data, status, headers, config) ->
                 return
+
+    $scope.saveFormProgress = ->
+
+        #compute percentage
+        percentage=0
+        total = 0
+        answered = 0
+
+        for answer in $scope.answerList
+            if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+
+                # clean the value
+                total++
+
+                #test if the data is valid
+                if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                    answered++
+
+
+        percentage = answered / total * 100
+
+        percentage =Math.floor(percentage)
+
+        console.log "PROGRESS : "+answered+"/"+total+"="+percentage
+
+        #build formProgressDTO
+        formProgressDTO = {}
+        formProgressDTO.form = $scope.formIdentifier
+        formProgressDTO.period = $scope.$parent.period
+        formProgressDTO.scope = $scope.$parent.scopeId
+        formProgressDTO.percentage = percentage
+
+        promise = $http
+            method: "POST"
+            url: 'answer/formProgress'
+            headers:
+                "Content-Type": "application/json"
+            data: formProgressDTO
+        promise.success (data, status, headers, config) ->
+            founded=false
+            for formProgress in $scope.$parent.formProgress
+                console.log formProgress.form+"-"+$scope.formIdentifier
+                if formProgress.form == $scope.formIdentifier
+                    founded=true
+                    formProgress.percentage = percentage
+            if founded == false
+                $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
+            return
 

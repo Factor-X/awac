@@ -61,6 +61,7 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
+        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
