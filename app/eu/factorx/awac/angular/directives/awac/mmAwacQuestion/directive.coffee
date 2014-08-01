@@ -105,6 +105,7 @@ angular
         # called when the user change the value of the field
         #
         scope.edited = ->
+            console.log "EDITED !!!"
             if scope.getAnswerValue().value !=null
                 if scope.getAnswerValue().value.length == 0
                     scope.getAnswerValue().value = null
@@ -143,6 +144,9 @@ angular
                     if scope.getAnswerValue().hasValidCondition != false
                         #...change the parameter into the answer
                         scope.getAnswerValue().hasValidCondition = false
+                        if scope.getAnswerValue().value != null
+                            scope.getAnswerValue().value = null
+                            scope.$root.$broadcast('CONDITION')
 
                         # if this if the first compute, it was caused during the loading :
                         # the question is not edited
@@ -163,12 +167,16 @@ angular
                         #...change the parameter into the answer
                         scope.getAnswerValue().hasValidCondition = true
 
-                        # if this if the first compute, it was caused during the loading :
-                        # the question is not edited
-                        if scope.firstComputecondition == true
-                            scope.firstComputecondition=false
-                        else
-                            scope.getAnswerValue().wasEdited = true
+                        # try to add a default value
+                        if scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue !=null
+                            scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+
+                            # if this if the first compute, it was caused during the loading :
+                            # the question is not edited
+                            if scope.firstComputecondition == true
+                                scope.firstComputecondition=false
+                            else
+                                scope.getAnswerValue().wasEdited = true
 
                     return true
 

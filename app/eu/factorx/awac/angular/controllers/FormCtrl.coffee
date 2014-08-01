@@ -73,10 +73,11 @@ angular
         for questionSetDTO in $scope.o.questionSets
             $scope.addDefaultValue(questionSetDTO)
 
-
-        modalService.hide(modalService.LOADING)
-        $scope.loading = false
-        console.log $scope.answerList
+        #$timeout(->
+            modalService.hide(modalService.LOADING)
+            $scope.loading = false
+            console.log $scope.answerList
+        #, 200)
 
         # broadcast a condition event to compute condition a first time
         # this first condition computing do not edit question
@@ -254,11 +255,13 @@ angular
             #compute default value
             value = null
             defaultUnitId = null
+            wasEdited=false
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
-                #if question.defaultValue != null && question.defaultValue != undefined
-                value = question.defaultValue
+                if question.defaultValue != null
+                    value = question.defaultValue
+                    wasEdited = true
 
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
@@ -272,7 +275,9 @@ angular
                 'unitId': defaultUnitId
                 'mapRepetition': mapIteration
                 'lastUpdateUser': $scope.$root.currentPerson.identifier
+                'wasEdited' : wasEdited
             }
+
             $scope.answerList[$scope.answerList.length] = answerLine
             return answerLine
 
@@ -411,7 +416,7 @@ angular
 
 
     $scope.$parent.$watch 'periodToCompare', () ->
-        if $scope.periodToCompare != null
+        if $scope.periodToCompare != null && $scope.$parent != null
             promise = $http
                 method: "GET"
                 url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.periodToCompare + "/" + $scope.$parent.scopeId
@@ -446,6 +451,8 @@ angular
 
         percentage =Math.floor(percentage)
 
+        console.log "PROGRESS : "+answered+"/"+total+"="+percentage
+
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
@@ -460,8 +467,13 @@ angular
                 "Content-Type": "application/json"
             data: formProgressDTO
         promise.success (data, status, headers, config) ->
+            founded=false
             for formProgress in $scope.$parent.formProgress
-                if formProgress.form = $scope.formIdentifier
+                console.log formProgress.form+"-"+$scope.formIdentifier
+                if formProgress.form == $scope.formIdentifier
+                    founded=true
                     formProgress.percentage = percentage
+            if founded == false
+                $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
             return
 
