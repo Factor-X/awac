@@ -3,6 +3,8 @@ package eu.factorx.awac.models;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
+import play.mvc.Http.Context;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -18,13 +20,10 @@ public class TechnicalSegment {
 
 	private String lastUpdateUser;
 
-	protected TechnicalSegment() {
-		super();
-	}
-
-	public TechnicalSegment(String creationUser) {
+	public TechnicalSegment() {
 		super();
 		LocalDateTime now = LocalDateTime.now();
+		String creationUser = getCurrentUser();
 		this.creationDate = now;
 		this.creationUser = creationUser;
 		this.lastUpdateDate = now;
@@ -63,9 +62,16 @@ public class TechnicalSegment {
 		this.lastUpdateUser = lastUpdateUser;
 	}
 
-	public void update(String updateUser) {
+	public void update() {
 		this.lastUpdateDate = LocalDateTime.now();
-		this.lastUpdateUser = updateUser;
+		this.lastUpdateUser = getCurrentUser();
+	}
+
+	public static String getCurrentUser() {
+		if (Context.current.get() == null) {
+			return "TECH";
+		}
+		return Context.current().session().get("identifier");
 	}
 
 	@Override

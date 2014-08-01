@@ -6,10 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.dto.awac.get.*;
-import eu.factorx.awac.dto.awac.post.FormProgressDTO;
-import eu.factorx.awac.models.data.FormProgress;
-import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +17,18 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
+import eu.factorx.awac.dto.awac.get.CodeListDTO;
+import eu.factorx.awac.dto.awac.get.FormDTO;
+import eu.factorx.awac.dto.awac.get.FormProgressListDTO;
+import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
+import eu.factorx.awac.dto.awac.get.PeriodDTO;
+import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
+import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
+import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
+import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
@@ -30,6 +37,7 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -51,6 +59,17 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.FormProgressService;
+import eu.factorx.awac.service.FormService;
+import eu.factorx.awac.service.PeriodService;
+import eu.factorx.awac.service.QuestionAnswerService;
+import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.service.QuestionSetAnswerService;
+import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.StoredFileService;
+import eu.factorx.awac.service.UnitCategoryService;
+import eu.factorx.awac.service.UnitService;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -301,6 +320,7 @@ public class AnswerController extends Controller {
 				Logger.info("UPDATING QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
 				questionAnswer.getAnswerValues().clear();
 				questionAnswer.getAnswerValues().addAll(newAnswerValues);
+				questionAnswer.getTechnicalSegment().update();
 				questionAnswerService.saveOrUpdate(questionAnswer);
 			}
 		}
