@@ -39,6 +39,17 @@ public abstract class AbstractEntity implements Serializable {
 		Logger.debug("===== Updating " + getClass().getName() + " entity with ID = " + getId());
 	}
 
+	@PreRemove
+	public void preRemove() {
+		Logger.debug("===== Removing " + getClass().getName() + " entity with ID = " + getId());
+	}
+
+	@PostLoad
+	public void postLoad() {
+		Logger.debug("===== Loaded " + getClass().getName() + " entity with ID = " + getId());
+	}
+	
+	
 	/**
 	 * Default implementation: override this.
 	 */
