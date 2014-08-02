@@ -62,4 +62,10 @@ public class IntegerAnswerValue extends NumericAnswerValue {
 		return value.doubleValue();
 	}
 
+	@Override
+	public String toString() {
+		return "IntegerAnswerValue [value=" + value + ", unit=" + unit + "]";
+	}
+
+	
 }
