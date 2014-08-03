@@ -188,19 +188,26 @@ public class AnswerController extends Controller {
 	}
 
 	private QuestionAnswersDTO createQuestionAnswersDTO(Long formId, Long periodId, Long scopeId, List<QuestionAnswer> allQuestionAnswers) {
-		LocalDateTime formAnswersLastUpdateDate = null;
-		if (!allQuestionAnswers.isEmpty()) {
-			formAnswersLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
-		}
+		LocalDateTime maxLastUpdateDate = getMaxLastUpdateDate(allQuestionAnswers);
 		List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();
 		for (QuestionAnswer questionAnswer : allQuestionAnswers) {
-			LocalDateTime lastUpdateDate = questionAnswer.getTechnicalSegment().getLastUpdateDate();
-			if (lastUpdateDate.isAfter(formAnswersLastUpdateDate)) {
-				formAnswersLastUpdateDate = lastUpdateDate;
-			}
 			answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
 		}
-		return new QuestionAnswersDTO(formId, scopeId, periodId, formAnswersLastUpdateDate, answerLineDTOs);
+		return new QuestionAnswersDTO(formId, scopeId, periodId, maxLastUpdateDate, answerLineDTOs);
+	}
+
+	private static LocalDateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
+		if ((allQuestionAnswers == null) || allQuestionAnswers.isEmpty()) {
+			return null;
+		}
+		LocalDateTime maxLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
+		for (int i = 1; i < allQuestionAnswers.size(); i++) {
+			LocalDateTime lastUpdateDate = allQuestionAnswers.get(i).getTechnicalSegment().getLastUpdateDate();
+			if (lastUpdateDate.isAfter(maxLastUpdateDate)) {
+				maxLastUpdateDate = lastUpdateDate;
+			}
+		}
+		return maxLastUpdateDate;
 	}
 
 	private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
@@ -266,11 +273,13 @@ public class AnswerController extends Controller {
 		Map<String, List<AnswerLineDTO>> answerLinesDTOsMap = asMap(answerLineDTOs);
 
 		// updated or deleted question answers
+		Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
 		List<AnswerLineDTO> updatedAndDeletedQuestionAnswers = new ArrayList<>();
 		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
 		updateOrDeleteQuestionAnswers(questionSetAnswers, answerLinesDTOsMap, updatedAndDeletedQuestionAnswers);
 
 		// new question answers
+		Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
 		Map<String, List<QuestionSetAnswer>> createdQSAnswers = new HashMap<>();
 		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
 			if (!updatedAndDeletedQuestionAnswers.contains(answerLineDTO)) {
@@ -279,13 +288,15 @@ public class AnswerController extends Controller {
 		}
 
 		// cleaning: delete empty QuestionSetAnswers (without QuestionAnswers)
-		deleteEmptyQuestionSetAnswers(questionSetAnswers);
+		Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
+		deleteEmptyQuestionSetAnswers(questionSetAnswers, 1);
 	}
 
-	private void updateOrDeleteQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers, Map<String, List<AnswerLineDTO>> answerLinesDTOs,
-			List<AnswerLineDTO> updatedAndDeletedQuestionAnswers) {
+	private void updateOrDeleteQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers, Map<String, List<AnswerLineDTO>> answerLinesDTOs, List<AnswerLineDTO> updatedAndDeletedQuestionAnswers) {
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			for (QuestionAnswer questionAnswer : questionSetAnswer.getQuestionAnswers()) {
+			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
+			for (int i = questionAnswers.size() - 1; i >= 0; i--) {
+				QuestionAnswer questionAnswer = questionAnswers.get(i);
 				AnswerLineDTO answerLineDTO = getAnswerLineDTO(questionAnswer, answerLinesDTOs);
 				if (answerLineDTO != null) {
 					updateOrDeleteQuestionAnswer(questionAnswer, answerLineDTO);
@@ -296,13 +307,23 @@ public class AnswerController extends Controller {
 		}
 	}
 
-	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			if (questionSetAnswer.getQuestionAnswers().isEmpty() && questionSetAnswer.getChildren().isEmpty()) {
-				Logger.info("DELETING QuestionSetAnswer [ID={}]", questionSetAnswer.getId());
-				questionSetAnswerService.remove(questionSetAnswer);
-			} else {
-				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
+	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers, int indent) {
+		for (int i = questionSetAnswers.size() - 1; i >= 0; i--) {
+			QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
+			String questionSetKey = questionSetAnswer.getQuestionSet().getCode().getKey();
+			Logger.info("{}Check QuestionSetAnswer [{}, {}]...", StringUtils.repeat(">> ", indent), questionSetKey, questionSetAnswer.getRepetitionIndex());
+			if (!questionSetAnswer.getChildren().isEmpty()) {
+				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren(), indent + 1);
+			}
+			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
+				Logger.info("DELETING {}", questionSetAnswer);
+				QuestionSetAnswer parent = questionSetAnswer.getParent();
+				if (parent == null) {
+					questionSetAnswerService.remove(questionSetAnswer);
+				} else {
+					parent.getChildren().remove(questionSetAnswer);
+					questionSetAnswerService.update(parent);
+				}
 			}
 		}
 	}
@@ -310,18 +331,17 @@ public class AnswerController extends Controller {
 	private void updateOrDeleteQuestionAnswer(QuestionAnswer questionAnswer, AnswerLineDTO answerLineDTO) {
 		Object value = answerLineDTO.getValue();
 		if ((value == null) || (StringUtils.trimToNull(value.toString()) == null)) {
-			Logger.info("DELETING QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
-			questionAnswer = questionAnswerService.findById(questionAnswer.getId());
-			questionAnswerService.remove(questionAnswer);
+			Logger.info("DELETING {}", questionAnswer);
+			QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
+			questionSetAnswer.getQuestionAnswers().remove(questionAnswer);
+			questionSetAnswerService.update(questionSetAnswer);
 		} else {
 			List<AnswerValue> oldAnswerValues = questionAnswer.getAnswerValues();
 			List<AnswerValue> newAnswerValues = getAnswerValue(answerLineDTO, questionAnswer);
 			if (!oldAnswerValues.equals(newAnswerValues)) {
-				Logger.info("UPDATING QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
-				questionAnswer.getAnswerValues().clear();
-				questionAnswer.getAnswerValues().addAll(newAnswerValues);
-				questionAnswer.getTechnicalSegment().update();
+				questionAnswer.updateAnswerValues(newAnswerValues);
 				questionAnswerService.saveOrUpdate(questionAnswer);
+				Logger.info("UPDATED {}", questionAnswer);
 			}
 		}
 	}
@@ -350,7 +370,7 @@ public class AnswerController extends Controller {
 		}
 		questionAnswer.getAnswerValues().addAll(answerValues);
 		questionAnswerService.saveOrUpdate(questionAnswer);
-		Logger.info("CREATED QuestionAnswer [ID={}] ({})", questionAnswer.getId(), answerLineDTO);
+		Logger.info("CREATED {}", questionAnswer);
 	}
 
 	private Map<String, Integer> getRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
@@ -377,7 +397,7 @@ public class AnswerController extends Controller {
 	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		String questionSetCode = questionSet.getCode().getKey();
 
-		// attempt to find the QuestionSetAnswer in already created map
+		// attempt to find the QuestionSetAnswer in already created QuestionSetAnswers map
 		QuestionSetAnswer questionSetAnswer = null;
 		if (!createdQuestionSetAnswers.containsKey(questionSetCode)) {
 			createdQuestionSetAnswers.put(questionSetCode, new ArrayList<QuestionSetAnswer>());
@@ -392,6 +412,7 @@ public class AnswerController extends Controller {
 				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(), createdQuestionSetAnswers);
 				questionSetAnswer.setParent(parentQuestionSetAnswer);
 			}
+			Logger.info("Creating QuestionSetAnswer [{}, {}]", questionSetCode, questionSetAnswer.getRepetitionIndex());
 			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 			createdQuestionSetAnswers.get(questionSetCode).add(questionSetAnswer);
 		}

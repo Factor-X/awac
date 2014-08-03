@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "form")
-@NamedQueries({@NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier")})
+@NamedQueries({ @NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier") })
 public class Form extends AbstractEntity {
 
 	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
@@ -22,7 +22,9 @@ public class Form extends AbstractEntity {
 	private Integer progress;
 
 	@ManyToMany
-	@JoinTable(name = "mm_form_questionset")
+	@JoinTable(name = "mm_form_questionset",
+			joinColumns = @JoinColumn(name = "form_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "questionset_id", referencedColumnName = "id"))
 	private List<QuestionSet> questionSets = new ArrayList<>();
 
 	public Form() {

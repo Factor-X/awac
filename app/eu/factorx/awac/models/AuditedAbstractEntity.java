@@ -25,7 +25,7 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		this.technicalSegment = new TechnicalSegment();
+		this.technicalSegment = TechnicalSegment.newInstance();
 	}
 
 	@PreUpdate

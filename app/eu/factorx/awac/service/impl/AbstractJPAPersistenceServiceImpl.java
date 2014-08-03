@@ -36,8 +36,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 
 	@Override
 	public void remove(E entity) {
-		E merge = JPA.em().merge(entity);
-		JPA.em().remove(merge);
+		JPA.em().remove(JPA.em().merge(entity));
 	}
 
 	@Override
@@ -45,11 +44,10 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 		return JPA.em().find(entityClass, id);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<E> findAll() {
-		return JPA.em().createQuery("select e from " + entityClass.getName() + " e").getResultList();
+		return JPA.em().createQuery("select e from " + entityClass.getName() + " e", entityClass).getResultList();
 	}
 
 	@Override
