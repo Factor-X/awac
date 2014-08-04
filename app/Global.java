@@ -11,6 +11,7 @@
 
 import eu.factorx.awac.compilers.RecompilerThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.models.Analytics;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -75,19 +76,30 @@ public class Global extends GlobalSettings {
 		play.Logger.info("Stopping AWAC");
 	}
 
+
 	@Override
 	public Action onRequest(Http.Request request, Method actionMethod) {
 
+		Analytics analytics = AnalyticsUtil.start(request);
+
+
+		Action action;
+
 		if (!thread.isInitialized()) {
-			return new Action() {
+			action = new Action() {
 				@Override
 				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
 					return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
 				}
 			};
+		} else {
+
+			action = super.onRequest(request, actionMethod);
 		}
 
-		return super.onRequest(request, actionMethod);
+		AnalyticsUtil.end(analytics);
+
+		return action;
 	}
 
 	// Spring beans instanciation
