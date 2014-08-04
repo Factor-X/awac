@@ -122,6 +122,7 @@ angular
     #
     $scope.save = () ->
         $scope.$broadcast 'SAVE'
+        $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME")
 
     #
     # Route Change
@@ -181,12 +182,18 @@ angular
                 $scope.formProgress = data.listFormProgress
                 return
 
+    $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
+        if args != undefined
+            console.log "TIME : "+args.time
+            date = new Date(args.time)
 
+            # adapt for the current time zone
+            minuteToAdd = new Date().getTimezoneOffset()
+            date = new Date(date.getTime() - minuteToAdd*60000)
+        else
+            date = new Date()
 
-    #lastSaveTime TEMP
-    $scope.lastSaveTime = new Date() #.getTimezoneOffset()
-    console.log "Date.getTimezoneOffset"
-    console.log new Date().getTimezoneOffset()
+        $scope.lastSaveTime = date
 
 
 #rootScope

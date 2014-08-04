@@ -761,6 +761,11 @@ button.comments {
     width: 35%;
 }
 
+.question_field.twoanswer > div:last-child > button{
+    margin-right: 12px;
+    font-weight: bold;
+}
+
 .question_field > div:first-child .glyphicon {
     margin-right: 2px;
 }
@@ -903,7 +908,16 @@ button.comments {
     padding: 5px;
     background-color: #cccccc;
     border: 1px solid #777777;
+    width: 100px;
+    margin-left: -80px;
 }
+
+.user_icon:hover > div,
+.user_icon > div:hover
+{
+    display: block;
+}
+
 
 .document-question {
     border: 1px solid #dbd9d2;

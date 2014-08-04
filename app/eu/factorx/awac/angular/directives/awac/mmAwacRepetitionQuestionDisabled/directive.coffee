@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRepetitionQuestionDisable", (directiveService, translationService) ->
+.directive "mmAwacRepetitionQuestionDisabled", (directiveService, translationService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
