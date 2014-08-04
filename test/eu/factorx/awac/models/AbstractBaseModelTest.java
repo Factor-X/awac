@@ -5,17 +5,24 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import play.db.jpa.JPA;
 import play.db.jpa.JPAPlugin;
 import play.test.FakeApplication;
 import play.test.Helpers;
 import scala.Option;
 
-public abstract class AbstractBaseModelTest {
+public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
     protected static EntityManager em;
+	ApplicationContext applicationContext;
 
-    //before class
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
+
+	//before class
     @BeforeClass
     public static void setUp() {
 
