@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier,$timeout) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier, $timeout) ->
     $scope.formIdentifier = formIdentifier
 
     #this variable contains all answer, new and old
@@ -54,6 +54,11 @@ angular
             for child in questionSetDTO.children
                 $scope.addDefaultValue(child)
 
+        args = {}
+
+        args.time = $scope.o.answersSave.lastUpdateDate
+
+        $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
 
         #build the list of answers
         #recove answerSave
@@ -73,18 +78,19 @@ angular
         for questionSetDTO in $scope.o.questionSets
             $scope.addDefaultValue(questionSetDTO)
 
-        #$timeout(->
-            modalService.hide(modalService.LOADING)
-            $scope.loading = false
-            console.log $scope.answerList
-        #, 200)
 
         # broadcast a condition event to compute condition a first time
         # this first condition computing do not edit question
-        #$scope.$root.$broadcast('CONDITION')
+        $scope.$root.$broadcast('CONDITION')
+
+        #$timeout(->
+        modalService.hide(modalService.LOADING)
+        $scope.loading = false
+        console.log $scope.answerList
+        #, 200)
+
 
         return
-
 
 
     #
@@ -113,13 +119,13 @@ angular
                     listAnswerToSave[listAnswerToSave.length] = answer
 
 
-                    ###
-                    if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-                        if answer.hasValidCondition == undefined || answer.hasValidCondition == true
-                            if answer.wasEdited != undefined
-                                answer['wasEdited'] = false
-                            listAnswerToSave[listAnswerToSave.length] = answer
-                    ###
+        ###
+        if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+            if answer.hasValidCondition == undefined || answer.hasValidCondition == true
+                if answer.wasEdited != undefined
+                    answer['wasEdited'] = false
+                listAnswerToSave[listAnswerToSave.length] = answer
+        ###
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
@@ -146,7 +152,7 @@ angular
 
                     # test if the question was edited
                     if answer.wasEdited != undefined && answer.wasEdited == true
-                       answer.wasEdited = false
+                        answer.wasEdited = false
 
                 #refresh the progress bar
                 $scope.saveFormProgress()
@@ -255,7 +261,7 @@ angular
             #compute default value
             value = null
             defaultUnitId = null
-            wasEdited=false
+            wasEdited = false
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
@@ -275,7 +281,7 @@ angular
                 'unitId': defaultUnitId
                 'mapRepetition': mapIteration
                 'lastUpdateUser': $scope.$root.currentPerson.identifier
-                'wasEdited' : wasEdited
+                'wasEdited': wasEdited
             }
 
             $scope.answerList[$scope.answerList.length] = answerLine
@@ -432,7 +438,7 @@ angular
     $scope.saveFormProgress = ->
 
         #compute percentage
-        percentage=0
+        percentage = 0
         total = 0
         answered = 0
 
@@ -456,9 +462,9 @@ angular
 
         percentage = answered / total * 100
 
-        percentage =Math.floor(percentage)
+        percentage = Math.floor(percentage)
 
-        console.log "PROGRESS : "+answered+"/"+total+"="+percentage
+        console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
         console.log listTotal
 
         #build formProgressDTO
@@ -475,11 +481,11 @@ angular
                 "Content-Type": "application/json"
             data: formProgressDTO
         promise.success (data, status, headers, config) ->
-            founded=false
+            founded = false
             for formProgress in $scope.$parent.formProgress
-                console.log formProgress.form+"-"+$scope.formIdentifier
+                console.log formProgress.form + "-" + $scope.formIdentifier
                 if formProgress.form == $scope.formIdentifier
-                    founded=true
+                    founded = true
                     formProgress.percentage = percentage
             if founded == false
                 $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO

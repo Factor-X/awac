@@ -11,7 +11,7 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class QuestionAnswersDTO extends DTO {
 
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");
 
 	@NotNull
 	private Long formId;

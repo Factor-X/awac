@@ -10,6 +10,8 @@ div(class="question_field",ng-class="{'twoanswer':displayOldDatas()===true, 'one
         .user_icon {{getUserName(false,true)}}
             div {{getUserName(false,false)}}
     div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
+        button( ng-click="copyDataToCompare()",
+        title="Copier la valeur") <<
         span( ng-include="getTemplate(true)")
         .user_icon {{getUserName(true,true)}}
             div {{getUserName(true,false)}}

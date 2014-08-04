@@ -10,5 +10,6 @@ angular
     link: (scope,element) ->
         directiveService.autoScopeImpl scope
 
-        scope.$watch 'ngCondition', () ->
-            scope.$root.$broadcast('CONDITION')
+        scope.$watch 'ngCondition', (n,o) ->
+            if n != o
+                scope.$root.$broadcast('CONDITION')
