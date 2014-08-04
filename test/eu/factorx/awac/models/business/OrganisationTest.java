@@ -1,5 +1,6 @@
-package eu.factorx.awac.models;
+package eu.factorx.awac.models.business;
 
+import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
 import org.hibernate.Session;
 import org.junit.FixMethodOrder;
