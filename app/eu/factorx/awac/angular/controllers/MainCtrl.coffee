@@ -189,10 +189,10 @@ angular
 
             # adapt for the current time zone
             minuteToAdd = new Date().getTimezoneOffset()
-            date = new Date(date.getTime() + minuteToAdd*60000)
+            date = new Date(date.getTime() - minuteToAdd*60000)
         else
             date = new Date()
-            
+
         $scope.lastSaveTime = date
 
 
