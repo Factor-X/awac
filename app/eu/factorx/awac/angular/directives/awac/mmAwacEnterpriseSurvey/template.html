@@ -13,7 +13,7 @@
                         class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
                 </div>
                 <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
-                <!-- temporary -->
+
                 <button ng-show="$root.currentPerson!=null"
                         type="button"
                         ng-click="$root.logout();"
@@ -45,15 +45,11 @@
                 <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
             </div>
 
-            <div class="big_separator" mm-not-implemented></div>
+            <div class="big_separator"></div>
 
-            <div class="data_date_compare" mm-not-implemented>
+            <div class="data_date_compare">
                 <div>Comparaison avec</div>
-                <select>
-                    <option>données 2012</option>
-                    <option>données 2011</option>
-                    <option>données 2010</option>
-                </select>
+                <select ng-options="p.id as p.label for p in $root.periodsForComparison" ng-model="periodToCompare"></select>
             </div>
 
             <div class="big_separator"></div>
@@ -61,7 +57,7 @@
             <div class="data_save">
                 <div class="last_save" mm-not-implemented>
                     <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
-                    07/01/2014 - 19:42
+                    {{lastSaveTime | date: 'medium' }}
                 </div>
                 <div class="small_separator"></div>
                 <div class="save_button">
@@ -85,40 +81,40 @@
                     <div class="menu">
                         <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
                             <div ng-bind-html="'TAB1' | translate"></div>
-                            <mm-awac-tab-progress-bar value="63"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB1')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
                             <div ng-bind-html="'TAB2' | translate"></div>
-                            <mm-awac-tab-progress-bar value="70"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB2')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
                             <div ng-bind-html="'TAB3' | translate"></div>
-                            <mm-awac-tab-progress-bar value="5"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB3')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                         <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
                             <div ng-bind-html="'TAB4' | translate"></div>
-                            <mm-awac-tab-progress-bar value="25"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB4')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
                             <div ng-bind-html="'TAB5' | translate"></div>
-                            <mm-awac-tab-progress-bar value="82"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB5')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
                             <div ng-bind-html="'TAB6' | translate"></div>
-                            <mm-awac-tab-progress-bar value="50"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB6')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
 
                         <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
                             <div ng-bind-html="'TAB7' | translate"></div>
-                            <mm-awac-tab-progress-bar value="50"></mm-awac-tab-progress-bar>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB7')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </div>
                     </div>

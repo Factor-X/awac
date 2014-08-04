@@ -18,17 +18,17 @@ import org.fluentlenium.core.FluentPage;
 //import components.*;
 
 public class Login extends FluentPage {
-    public String getUrl() {
-		return eu.factorx.awac.controllers.routes.Authentication.login().url();
-    }
-
-    public void isAt() {
-        assertThat(find("h1", withText("Authentication"))).hasSize(1);
-    }
-
-    public void login(String id, String password) {
-        fill("identifier").with(id);
-		fill("password").with(password);
-        click("Login");
-    }
+//    public String getUrl() {
+//		return eu.factorx.awac.controllers.routes.Authentication.login().url();
+//    }
+//
+//    public void isAt() {
+//        assertThat(find("h1", withText("Authentication"))).hasSize(1);
+//    }
+//
+//    public void login(String id, String password) {
+//        fill("identifier").with(id);
+//		fill("password").with(password);
+//        click("Login");
+//    }
 }

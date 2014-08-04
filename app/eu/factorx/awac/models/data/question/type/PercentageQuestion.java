@@ -3,7 +3,6 @@ package eu.factorx.awac.models.data.question.type;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.knowledge.UnitCategory;
 
 import javax.persistence.Entity;
 

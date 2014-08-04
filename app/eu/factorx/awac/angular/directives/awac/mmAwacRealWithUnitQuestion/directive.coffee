@@ -2,37 +2,40 @@ angular
 .module('app.directives')
 .directive "mmAwacRealWithUnitQuestion", (directiveService, translationService) ->
     restrict: "E"
-    scope: directiveService.autoScope
-        ngQuestionCode: '='
-        ngCondition: '='
-        ngRepetitionMap: '='
+    scope:  directiveService.autoScope
+        ngDataToCompare: '='
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-        scope.getAnswerValue = () ->
-            return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
+        #
+        # get the question code :
+        # call the getQuestionCode from the parent
+        #
+        scope.getQuestionCode = ->
+            return scope.$parent.getQuestionCode()
 
-        scope.getUnitsByQuestionCode = () ->
-            result = scope.$parent.getUnitCategories(scope.getQuestionCode())
-            if result
-                return result.units
-            return null
-
-        scope.hasDescription = () ->
-            return translationService.get(scope.getQuestionCode() + '_DESC') != null
-
-
-        scope.$watch 'ngCondition', () ->
-            if scope.getCondition() == false
-                scope.getAnswerValue().value = null
-            else if scope.$parent.loading == false && scope.getAnswerValue().value==null
-                scope.getAnswerValue().value = scope.$parent.getQuestion(scope.getQuestionCode()).defaultValue
-                scope.getAnswerValue().unitId = scope.$parent.getUnitCategories(scope.getQuestionCode()).mainUnitId
+        #
+        # get the answer :
+        # call the getAnswerOrCreate parent method or the
+        # getAnswerToCompare if the question is a dataToCompare
+        #
+        scope.getAnswer = () ->
+            return scope.$parent.getAnswer(scope.getDataToCompare())
 
         #
         # called when the user change the value of the field
         #
         scope.edited = ->
-          scope.getAnswerValue().wasEdited = true
+            scope.$parent.edited()
+
+        #
+        # return the list of units that can be choose
+        # call the getUnitCategory parent method
+        #
+        scope.getUnits = () ->
+            unitCategory = scope.$parent.getUnitCategories()
+            if unitCategory ==null
+                return null
+            return unitCategory.units

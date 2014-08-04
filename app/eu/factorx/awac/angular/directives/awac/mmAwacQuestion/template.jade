@@ -1,1 +1,15 @@
-div( ng-include="getTemplate()")
+div(class="question_field",ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
+    div
+        .info(ng-show="hasDescription()")
+            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
+        span(ng-class="getQuestion().answerType === 'DOCUMENT' ? 'glyphicon-file' : 'glyphicon-share-alt' ",class="glyphicon")
+        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+    div
+        div.status(ng-class="getStatusClass()")
+        span( ng-include="getTemplate(false)")
+        .user_icon {{getUserName(false,true)}}
+            div {{getUserName(false,false)}}
+    div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
+        span( ng-include="getTemplate(true)")
+        .user_icon {{getUserName(true,true)}}
+            div {{getUserName(true,false)}}

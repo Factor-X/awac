@@ -2,42 +2,40 @@ angular
 .module('app.directives')
 .directive "mmAwacSelectQuestion", (directiveService, translationService) ->
     restrict: "E"
-    scope: {}
+    scope:  directiveService.autoScope
+        ngDataToCompare: '='
     templateUrl: "$/angular/templates/mm-awac-select-question.html"
     replace: true
     link: (scope) ->
+        directiveService.autoScopeImpl scope
 
+        #
+        # get the question code :
+        # call the getQuestionCode from the parent
+        #
         scope.getQuestionCode = ->
-            console.log scope.$parent
             return scope.$parent.getQuestionCode()
 
-        scope.getCondition = ->
-            return scope.$parent.getCondition()
-
-        scope.getRepetitionMap = ->
-            return scope.$parent.getRepetitionMap()
-
-        scope.getAnswerValue = () ->
-            return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
-
-        scope.getOptionsByQuestionCode = () ->
-            codeList = scope.$parent.$parent.$parent.getCodeList(scope.getQuestionCode())
-            if codeList
-                return codeList.codeLabels
-            return null
-
-        scope.hasDescription = () ->
-            return translationService.get(scope.getQuestionCode() + '_DESC') != null
-
-        scope.$watch 'ngCondition', () ->
-            if scope.getCondition() == false
-                scope.getAnswerValue().value = null
-            else if scope.$parent.$parent.$parent.loading == false && scope.getAnswerValue().value==null
-                scope.getAnswerValue().value = scope.$parent.$parent.$parent.getQuestion(scope.getQuestionCode()).defaultValue
-
+        #
+        # get the answer :
+        # call the getAnswerOrCreate parent method or the
+        # getAnswerToCompare if the question is a dataToCompare
+        #
+        scope.getAnswer = () ->
+            return scope.$parent.getAnswer(scope.getDataToCompare())
 
         #
         # called when the user change the value of the field
         #
         scope.edited = ->
-          scope.getAnswerValue().wasEdited = true
+            scope.$parent.edited()
+
+        #
+        # return the list of options that can be choose
+        # call the getCodeList parent method
+        #
+        scope.getOptions = ->
+            codeList = scope.$parent.getCodeList()
+            if codeList ==null
+                return null
+            return codeList.codeLabels

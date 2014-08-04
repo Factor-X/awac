@@ -4,8 +4,6 @@ import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.file.StoredFile;
-import eu.factorx.awac.models.knowledge.Unit;
-import play.db.jpa.JPA;
 
 import javax.persistence.*;
 

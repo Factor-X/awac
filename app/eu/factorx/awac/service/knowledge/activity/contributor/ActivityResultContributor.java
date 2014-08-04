@@ -27,13 +27,15 @@ import eu.factorx.awac.service.UnitService;
 public abstract class ActivityResultContributor {
 
 	@Autowired
-	protected UnitService unitService;
+	private UnitService unitService;
 
 	@Autowired
 	private UnitConversionService unitConversionService;
 
 	@Autowired
 	private CodeConversionService codeConversionService;
+
+	private Map<String, Unit> unitsBySymbol = null;;
 
 	public ActivityResultContributor() {
 		super();
@@ -70,8 +72,7 @@ public abstract class ActivityResultContributor {
 
 	protected ActivitySubCategoryCode toActivitySubCategoryCode(QuestionAnswer questionAnswer) {
 		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-//		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
+		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
 	}
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
@@ -86,4 +87,18 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
+	protected Unit getUnitBySymbol(String symbol) {
+		if (unitsBySymbol == null) {
+			findAllUnits();
+		}
+		return unitsBySymbol.get(symbol);
+	}
+
+	private void findAllUnits() {
+		unitsBySymbol = new HashMap<>();
+		List<Unit> units = unitService.findAll();
+		for (Unit unit : units) {
+			unitsBySymbol.put(unit.getSymbol(), unit);
+		}
+	}
 }

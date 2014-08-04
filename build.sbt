@@ -5,9 +5,12 @@ version := "1.0-SNAPSHOT"
 ebeanEnabled := false
 
 libraryDependencies ++= Seq(
+  "org.springframework" % "spring-orm" % "3.1.1.RELEASE",
   "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final",
+  "org.hibernate" % "hibernate-ehcache" % "4.2.6.Final",
   javaCore,
-  javaJpa
+  javaJpa,
+  cache
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"
@@ -36,4 +39,7 @@ libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excl
     ExclusionRule(organization = "org.hibernate")
  )
 
+
 play.Project.playJavaSettings
+
+javaOptions in Test += "-Dconfig.file=conf/test.conf"

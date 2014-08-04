@@ -1,13 +1,13 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-
 import java.util.List;
+
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.service.impl.IndicatorSearchParameter;
 
 public interface IndicatorService extends PersistenceService<Indicator> {
 
-	List<Indicator> findCarbonIndicatorsForSitesByActivity(BaseActivityData activityData);
+	List<Indicator> findByParameters(IndicatorSearchParameter searchParameter);
 
 	List<String> findAllIndicatorNames();
 

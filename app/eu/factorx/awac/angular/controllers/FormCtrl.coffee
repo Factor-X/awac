@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier,$timeout) ->
     $scope.formIdentifier = formIdentifier
 
     #this variable contains all answer, new and old
@@ -21,7 +21,6 @@ angular
     modalService.show(modalService.LOADING)
 
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
-
         console.log "data"
         console.log data
         $scope.o = angular.copy(data)
@@ -74,11 +73,18 @@ angular
         for questionSetDTO in $scope.o.questionSets
             $scope.addDefaultValue(questionSetDTO)
 
+        #$timeout(->
+            modalService.hide(modalService.LOADING)
+            $scope.loading = false
+            console.log $scope.answerList
+        #, 200)
 
-        #hide the loading modal
-        modalService.hide(modalService.LOADING)
+        # broadcast a condition event to compute condition a first time
+        # this first condition computing do not edit question
+        #$scope.$root.$broadcast('CONDITION')
 
-        $scope.loading = false
+        return
+
 
 
     #
@@ -92,34 +98,65 @@ angular
         #build the list to save
         listAnswerToSave = []
         for answer in $scope.answerList
-            if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-                if answer.wasEdited != undefined
-                    delete answer['wasEdited']
-                listAnswerToSave[listAnswerToSave.length] = answer
 
+            # test if the question was edited
+            if answer.wasEdited != undefined && answer.wasEdited == true
+
+                #test if the data is valid
+                if answer.value == null || answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
+                    #test if the condition is not valid...
+                    if answer.hasValidCondition != undefined && answer.hasValidCondition == false
+                        # clean the value
+                        answer.value = null
+
+                    # add the answer of the listAnswerToSave
+                    listAnswerToSave[listAnswerToSave.length] = answer
+
+
+                    ###
+                    if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                        if answer.hasValidCondition == undefined || answer.hasValidCondition == true
+                            if answer.wasEdited != undefined
+                                answer['wasEdited'] = false
+                            listAnswerToSave[listAnswerToSave.length] = answer
+                    ###
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
-        #and replace the list
-        $scope.o.answersSave.listAnswers = listAnswerToSave
-
-
-        promise = $http
-            method: "POST"
-            url: 'answer/save'
-            headers:
-                "Content-Type": "application/json"
-            data: $scope.o.answersSave
-
-        promise.success (data, status, headers, config) ->
-            messageFlash.displaySuccess "Your answers are saved !"
+        if listAnswerToSave.length == 0
+            messageFlash.displaySuccess "All answers are already saved !"
             modalService.hide(modalService.LOADING)
-            return
+        else
+            #and replace the list
+            $scope.o.answersSave.listAnswers = listAnswerToSave
 
-        promise.error (data, status, headers, config) ->
-            messageFlash.displayError "An error was thrown during the save : " + data.message
-            modalService.hide(modalService.LOADING)
-            return
+
+            promise = $http
+                method: "POST"
+                url: 'answer/save'
+                headers:
+                    "Content-Type": "application/json"
+                data: $scope.o.answersSave
+
+            promise.success (data, status, headers, config) ->
+                messageFlash.displaySuccess "Your answers are saved !"
+                modalService.hide(modalService.LOADING)
+
+                for answer in $scope.answerList
+
+                    # test if the question was edited
+                    if answer.wasEdited != undefined && answer.wasEdited == true
+                       answer.wasEdited = false
+
+                #refresh the progress bar
+                $scope.saveFormProgress()
+                return
+
+            promise.error (data, status, headers, config) ->
+                messageFlash.displayError "An error was thrown during the save : " + data.message
+                modalService.hide(modalService.LOADING)
+                return
+
 
     #
     # get list choice by question code
@@ -138,6 +175,7 @@ angular
             console.log "ERROR : there is no unitCategoryId for this question : " + code
             return null
         return $scope.o.unitCategories[question.unitCategoryId]
+
 
     #
     # get list choice by question code
@@ -161,7 +199,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -169,7 +207,12 @@ angular
     #
     # getQuestionByCode
     #
-    $scope.getQuestion = (code, listQuestionSets = $scope.o.questionSets) ->
+    $scope.getQuestion = (code, listQuestionSets = null) ->
+        if listQuestionSets == null
+            if  $scope.o == null || $scope.o == undefined || $scope.o.questionSets == null
+                return null
+            listQuestionSets = $scope.o.questionSets
+
         if listQuestionSets
             for qSet in listQuestionSets
                 if qSet.questions
@@ -182,11 +225,24 @@ angular
                         return result
         return null
 
+
+    $scope.getAnswerToCompare = (code, mapIteration) ->
+        if $scope.dataToCompare != null
+            for answer in $scope.dataToCompare.answersSave.listAnswers
+                #control the code
+                if answer.questionKey == code
+
+                    #control the repetition map
+                    if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+                        return answer
+
+        return null
+
     #
     # get the answer by code and mapIteration
     # if there is not answer for this case, create it
     #
-    $scope.getAnswerOrCreate = (code, mapIteration) ->
+    $scope.getAnswerOrCreate = (code, mapIteration = null) ->
         if code == null || code == undefined
             console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
             return null
@@ -198,25 +254,30 @@ angular
         else
             #compute default value
             value = null
-            unitId = null
+            defaultUnitId = null
+            wasEdited=false
             if $scope.loading == false
                 question = $scope.getQuestion(code)
 
-                #if question.defaultValue != null && question.defaultValue != undefined
-                value = question.defaultValue
+                if question.defaultValue != null
+                    value = question.defaultValue
+                    wasEdited = true
 
-                #compute default unitId
+                #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
-                    unitId = $scope.getUnitCategories(code).mainUnitId
+                    defaultUnitId = $scope.getUnitCategories(code).mainUnitId
 
 
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey': code
                 'value': value
-                'unitId': unitId
+                'unitId': defaultUnitId
                 'mapRepetition': mapIteration
+                'lastUpdateUser': $scope.$root.currentPerson.identifier
+                'wasEdited' : wasEdited
             }
+
             $scope.answerList[$scope.answerList.length] = answerLine
             return answerLine
 
@@ -350,4 +411,77 @@ angular
                 break
 
         return result
+
+    $scope.dataToCompare = null
+
+
+    $scope.$parent.$watch 'periodToCompare', () ->
+        if $scope.periodToCompare != null && $scope.$parent != null
+            promise = $http
+                method: "GET"
+                url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.periodToCompare + "/" + $scope.$parent.scopeId
+                headers:
+                    "Content-Type": "application/json"
+            promise.success (data, status, headers, config) ->
+                $scope.dataToCompare = data
+                return
+
+            promise.error (data, status, headers, config) ->
+                return
+
+    $scope.saveFormProgress = ->
+
+        #compute percentage
+        percentage=0
+        total = 0
+        answered = 0
+
+        listTotal = []
+
+        for answer in $scope.answerList
+
+            # document questions are optional : do not count them into total
+            if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
+
+                if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+
+                    # clean the value
+                    total++
+                    listTotal[listTotal.length] = answer
+
+                    #test if the data is valid
+                    if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                        answered++
+
+
+        percentage = answered / total * 100
+
+        percentage =Math.floor(percentage)
+
+        console.log "PROGRESS : "+answered+"/"+total+"="+percentage
+        console.log listTotal
+
+        #build formProgressDTO
+        formProgressDTO = {}
+        formProgressDTO.form = $scope.formIdentifier
+        formProgressDTO.period = $scope.$parent.period
+        formProgressDTO.scope = $scope.$parent.scopeId
+        formProgressDTO.percentage = percentage
+
+        promise = $http
+            method: "POST"
+            url: 'answer/formProgress'
+            headers:
+                "Content-Type": "application/json"
+            data: formProgressDTO
+        promise.success (data, status, headers, config) ->
+            founded=false
+            for formProgress in $scope.$parent.formProgress
+                console.log formProgress.form+"-"+$scope.formIdentifier
+                if formProgress.form == $scope.formIdentifier
+                    founded=true
+                    formProgress.percentage = percentage
+            if founded == false
+                $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
+            return
 

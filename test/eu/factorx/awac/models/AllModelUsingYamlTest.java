@@ -36,20 +36,20 @@ public class AllModelUsingYamlTest extends BaseModelTest {
 
 		/* USE YAML */
 	
-	    @Test
-		public void createDataUsingYamlTest() {
-		Map<String,List<Object>> all = (Map<String,List<Object>>)Yaml.load("initial-data-awac.yml"); 
+//	    @Test
+//		public void createDataUsingYamlTest() {
+//		Map<String,List<Object>> all = (Map<String,List<Object>>)Yaml.load("initial-data-awac.yml");
 		// Insert users first
 		
 		//Ebean.save(all.get("addresses"));
-		Ebean.save(all.get("administrators"));
-		
-		//find admin
-		Administrator admin = Administrator.find.where().eq("identifier","admin").findUnique();
-		assertNotNull(admin);
-		assertEquals(admin.lastname, "Hollands");
-		assertNotNull(admin.getAddress());
-		assertEquals(admin.getAddress().getStreet(), "Fontaine des Miracles");
-	} // end of test method
+//		Ebean.save(all.get("administrators"));
+//
+//		find admin
+//		Administrator admin = Administrator.find.where().eq("identifier","admin").findUnique();
+//		assertNotNull(admin);
+//		assertEquals(admin.lastname, "Hollands");
+//		assertNotNull(admin.getAddress());
+//		assertEquals(admin.getAddress().getStreet(), "Fontaine des Miracles");
+//	} // end of test method
 
 } // end of class

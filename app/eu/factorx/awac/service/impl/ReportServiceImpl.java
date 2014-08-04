@@ -31,6 +31,10 @@ import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultCont
 @Component
 public class ReportServiceImpl implements ReportService {
 
+	private static final String NO_SUITABLE_INDICATOR_ERROR_MSG = "No suitable indicator to build activity result with BaseActivityData [key='{}'] : no indicator matching {}";
+
+	private static final String NO_SUITABLE_FACTOR_ERROR_MSG = "No suitable factor to build activity result with BaseActivityData [key='{}'] and Indicator [key='{}'] : no factor matching {}";
+
 	@Autowired
 	private QuestionSetAnswerService questionSetAnswerService;
 
@@ -41,12 +45,10 @@ public class ReportServiceImpl implements ReportService {
 	private FactorService factorService;
 
 	/**
-	 * No Autowired for this property: contributors have to be explicitly declared in components.xml
+	 * No auto-wiring for this property: contributors have to be explicitly declared in components.xml
 	 */
 	private Set<ActivityResultContributor> activityResultContributors;
 
-	// TODO Implement all ActivityResultContributors!
-	// Only one contributor implemented for now... BaseActivityDataAE_BAD1, consolidating answers to QuestionSet A15 (Tab2)
 	@Override
 	public Report getReport(Scope scope, Period period) {
 
@@ -59,19 +61,22 @@ public class ReportServiceImpl implements ReportService {
 		// build activity results (== link suitable indicators and factors to each activity data)
 		List<BaseActivityResult> activityResults = new ArrayList<>();
 		for (BaseActivityData baseActivityData : activityData) {
-			List<Indicator> indicators = indicatorService.findCarbonIndicatorsForSitesByActivity(baseActivityData);
+			String baseActivityDataKey = baseActivityData.getKey().getKey();
+			IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(baseActivityData);
+			List<Indicator> indicators = indicatorService.findByParameters(indicatorSearchParam);
 			if (indicators.isEmpty()) {
-				Logger.error("No suitable indicator to build activity result with BaseActivityData: " + baseActivityData);
-				saveNoSuitableIndicatorError(baseActivityData);
+				Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataKey, indicatorSearchParam);
+				saveNoSuitableIndicatorError(baseActivityDataKey, indicatorSearchParam);
 			}
 			for (Indicator indicator : indicators) {
-				Factor factor = factorService.findByIndicatorAndActivity(indicator, baseActivityData);
+				String indicatorKey = indicator.getKey();
+				FactorSearchParameter factorSearchParam = new FactorSearchParameter(indicator, baseActivityData);
+				Factor factor = factorService.findByParameters(factorSearchParam);
 				if (factor == null) {
-					Logger.error("No suitable factor to build activity result with BaseActivityData: " + baseActivityData + " and Indicator: " + indicator);
-					saveNoSuitableFactorError(baseActivityData, indicator);
+					Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityDataKey, indicatorKey, factorSearchParam);
+					saveNoSuitableFactorError(baseActivityDataKey, indicatorKey, factorSearchParam);
 				} else {
 					BaseActivityResult baseActivityResult = new BaseActivityResult(indicator, baseActivityData, factor);
-//					Logger.info("Adding BaseActivityResult: " + baseActivityResult);
 					activityResults.add(baseActivityResult);
 				}
 			}
@@ -103,12 +108,12 @@ public class ReportServiceImpl implements ReportService {
 		return res;
 	}
 
-	private void saveNoSuitableIndicatorError(BaseActivityData baseActivityData) {
-		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityData, null));
+	private void saveNoSuitableIndicatorError(String baseActivityDataKey, IndicatorSearchParameter indicatorSearchParam) {
+		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityDataKey, null, indicatorSearchParam.toString()));
 	}
 
-	private void saveNoSuitableFactorError(BaseActivityData baseActivityData, Indicator indicator) {
-		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityData, indicator));
+	private void saveNoSuitableFactorError(String baseActivityDataKey, String indicatorKey, FactorSearchParameter factorSearchParam) {
+		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityDataKey, indicatorKey, factorSearchParam.toString()));
 	}
 
 	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {

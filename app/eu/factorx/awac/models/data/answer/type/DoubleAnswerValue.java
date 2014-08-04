@@ -62,4 +62,9 @@ public class DoubleAnswerValue extends NumericAnswerValue {
 		return value;
 	}
 
+	@Override
+	public String toString() {
+		return "DoubleAnswerValue [value=" + value + ", unit=" + unit + "]";
+	}
+
 }

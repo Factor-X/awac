@@ -4,18 +4,30 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
 
 @Entity
-@NamedQuery(name = CodesEquivalence.FIND_ALL_SUBLISTS_DATA, query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.id")
+@NamedQueries({
+		@NamedQuery(name = CodesEquivalence.FIND_ALL_SUBLISTS_DATA,
+				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.id"),
+		@NamedQuery(name = CodesEquivalence.FIND_BY_CODE_AND_TARGET_CODELIST,
+				query = "select eq from CodesEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey and eq.referencedCodeList = :targetCodeList") })
 public class CodesEquivalence extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_ALL_SUBLISTS_DATA = "CodesEquivalence.findAllSublistsData";
+
+	/**
+	 * @param codeList: a {@link CodeList}
+	 * @param codeKey: a {@link String}
+	 * @param targetCodeList: a {@link CodeList}
+	 */
+	public static final String FIND_BY_CODE_AND_TARGET_CODELIST = "CodesEquivalence.findByCodeAndTargetCodeList";
 
 	@Enumerated(EnumType.STRING)
 	@Basic(optional = false)

@@ -25,3 +25,4 @@ angular
 
 
         scope.$watch 'ngCondition', () ->
+            scope.$root.$broadcast('CONDITION')

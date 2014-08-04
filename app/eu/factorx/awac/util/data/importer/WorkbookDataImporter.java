@@ -41,12 +41,11 @@ public abstract class WorkbookDataImporter {
 
 	protected abstract void importData() throws Exception;
 
-	protected Workbook getWorkbook(String path) throws IOException, BiffException {
-		Workbook codesWkb = getWorkbook(path, CP1252_ENCODING);
-		return codesWkb;
+	protected static Workbook getWorkbook(String path) throws IOException, BiffException {
+		return getWorkbook(path, CP1252_ENCODING);
 	}
 
-	protected Workbook getWorkbook(String path, String encoding) throws IOException, BiffException {
+	protected static Workbook getWorkbook(String path, String encoding) throws IOException, BiffException {
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(encoding);
 		ws.setSuppressWarnings(true);

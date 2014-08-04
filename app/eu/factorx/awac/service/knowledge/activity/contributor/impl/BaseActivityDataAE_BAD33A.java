@@ -24,7 +24,7 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 
 		// Get Target Unit (GJ in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Unit baseActivityDataUnit = unitService.findBySymbol("GJ");
+		Unit baseActivityDataUnit = getUnitBySymbol("GJ");
 
 		// For each set of answers in A273, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {

@@ -1,11 +1,17 @@
 package eu.factorx.awac.dto.awac.post;
 
+import java.util.List;
+
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 
-import java.util.List;
-
 public class QuestionAnswersDTO extends DTO {
+
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
 	@NotNull
 	private Long formId;
@@ -13,16 +19,20 @@ public class QuestionAnswersDTO extends DTO {
 	private Long scopeId;
 	@NotNull
 	private Long periodId;
+	private String lastUpdateDate;
 	@NotNull
 	private List<AnswerLineDTO> listAnswers;
 
 	public QuestionAnswersDTO() {
 	}
 
-	public QuestionAnswersDTO(Long formId, Long scopeId, Long periodId, List<AnswerLineDTO> listAnswers) {
+	public QuestionAnswersDTO(Long formId, Long scopeId, Long periodId, LocalDateTime lastUpdateDate, List<AnswerLineDTO> listAnswers) {
 		this.formId = formId;
 		this.scopeId = scopeId;
 		this.periodId = periodId;
+		if (lastUpdateDate != null) {
+			this.lastUpdateDate = DATE_TIME_FORMATTER.print(lastUpdateDate);
+		}
 		this.listAnswers = listAnswers;
 	}
 
@@ -50,6 +60,14 @@ public class QuestionAnswersDTO extends DTO {
 		this.periodId = periodId;
 	}
 
+	public String getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(String lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
 	public List<AnswerLineDTO> getListAnswers() {
 		return listAnswers;
 	}
@@ -60,7 +78,7 @@ public class QuestionAnswersDTO extends DTO {
 
 	@Override
 	public String toString() {
-		return "QuestionAnswersDTO [formId=" + formId + ", scopeId=" + scopeId + ", periodId=" + periodId + ", listAnswers=" + listAnswers + "]";
+		return "QuestionAnswersDTO [formId=" + formId + ", scopeId=" + scopeId + ", periodId=" + periodId + ", lastUpdateDate="
+				+ lastUpdateDate + ", listAnswers=" + listAnswers + "]";
 	}
-
 }

@@ -91,9 +91,15 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 		this.answerValues = answerValues;
 	}
 
+	public void updateAnswerValues(List<AnswerValue> answerValues) {
+		this.getAnswerValues().clear();
+		this.getAnswerValues().addAll(answerValues);
+		this.getTechnicalSegment().update();
+	}
+
 	@Override
 	public String toString() {
-		return "QuestionAnswer [questionSetAnswer=" + questionSetAnswer + ", question=" + question + ", answerValues=" + answerValues + "]";
+		return "QuestionAnswer [question=" + question.getCode().getKey() + ", answerValues=" + answerValues + ", questionSetAnswer=" + questionSetAnswer + "]";
 	}
 
 	

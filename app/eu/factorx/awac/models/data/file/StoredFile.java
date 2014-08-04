@@ -1,6 +1,5 @@
 package eu.factorx.awac.models.data.file;
 
-import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 
@@ -11,7 +10,9 @@ import javax.persistence.*;
 })
 public class StoredFile  extends AuditedAbstractEntity {
 
-    public static final String FIND_BY_STORED_NAME = "StoredFile.findByStoredName";
+	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_STORED_NAME = "StoredFile.findByStoredName";
 
     private String originalName;
 

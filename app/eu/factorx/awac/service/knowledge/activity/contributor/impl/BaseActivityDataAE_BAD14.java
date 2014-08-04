@@ -26,10 +26,10 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 
 		// Get Target Unit (km.passager in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = unitService.findBySymbol("km.passager");
+		Unit baseActivityDataUnit = getUnitBySymbol("km.passager");
 
 		// For each set of answers in A115, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers.get(QuestionCode.A115)) {
+		List<QuestionSetAnswer> questionSetAnswersA115 = questionSetAnswers.get(QuestionCode.A115);		if (questionSetAnswersA115 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA115) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

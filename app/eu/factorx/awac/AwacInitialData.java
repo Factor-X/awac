@@ -43,8 +43,18 @@ public class AwacInitialData {
 		UnitCategory timeUnits = getUnitCategoryByName("Time");
 
 		// PERIOD
-		Period period1 = new Period("2013");
-		session.saveOrUpdate(period1);
+        Period period1 = new Period("2008");
+        session.saveOrUpdate(period1);
+        Period period2 = new Period("2009");
+        session.saveOrUpdate(period2);
+        Period period3 = new Period("2010");
+        session.saveOrUpdate(period3);
+        Period period4 = new Period("2011");
+        session.saveOrUpdate(period4);
+        Period period5 = new Period("2012");
+        session.saveOrUpdate(period5);
+		Period period6 = new Period("2013");
+        session.saveOrUpdate(period6);
 
 		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
 	}

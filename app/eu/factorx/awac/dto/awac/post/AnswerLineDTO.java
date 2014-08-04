@@ -1,10 +1,13 @@
 package eu.factorx.awac.dto.awac.post;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.models.data.question.QuestionSet;
-
-import java.util.Map;
 
 public class AnswerLineDTO extends DTO {
 
@@ -13,6 +16,8 @@ public class AnswerLineDTO extends DTO {
 
 	@NotNull
 	private Object value;
+
+	private String lastUpdateUser;
 
 	private Integer unitId;
 
@@ -25,9 +30,10 @@ public class AnswerLineDTO extends DTO {
 	public AnswerLineDTO() {
 	}
 
-	public AnswerLineDTO(String questionKey, Object value, Integer unitId, Map<String, Integer> mapRepetition) {
+	public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId, Map<String, Integer> mapRepetition) {
 		this.questionKey = questionKey;
 		this.value = value;
+		this.lastUpdateUser = lastUpdateUser;
 		this.unitId = unitId;
 		this.mapRepetition = mapRepetition;
 	}
@@ -48,6 +54,14 @@ public class AnswerLineDTO extends DTO {
 		this.value = value;
 	}
 
+	public String getLastUpdateUser() {
+		return lastUpdateUser;
+	}
+
+	public void setLastUpdateUser(String lastUpdateUser) {
+		this.lastUpdateUser = lastUpdateUser;
+	}
+
 	public Integer getUnitId() {
 		return unitId;
 	}
@@ -65,9 +79,32 @@ public class AnswerLineDTO extends DTO {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof AnswerLineDTO)) {
+			return false;
+		}
+		AnswerLineDTO rhs = (AnswerLineDTO) obj;
+		return new EqualsBuilder().append(this.questionKey, rhs.questionKey).append(this.mapRepetition, rhs.mapRepetition).isEquals();
+	}
+
+	/**
+	 * Default implementation: override this.
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(7, 29).append(this.questionKey).append(this.mapRepetition).toHashCode();
+	}
+
+	@Override
 	public String toString() {
-		return "AnswerLineDTO [questionKey=" + questionKey + ", value=" + value + ", unitId=" + unitId + ", mapRepetition=" + mapRepetition
-				+ "]";
+		return "AnswerLineDTO [questionKey=" + questionKey + ", value=" + value + ", lastUpdateUser=" + lastUpdateUser + ", unitId="
+				+ unitId + ", mapRepetition=" + mapRepetition + "]";
 	}
 
 }

@@ -2,37 +2,31 @@ angular
 .module('app.directives')
 .directive "mmAwacIntegerQuestion", (directiveService, translationService) ->
     restrict: "E"
-    scope: {}
+    scope: directiveService.autoScope
+        ngDataToCompare: '='
     templateUrl: "$/angular/templates/mm-awac-integer-question.html"
     replace: true
     link: (scope) ->
+        directiveService.autoScopeImpl scope
 
+        #
+        # get the question code :
+        # call the getQuestionCode from the parent
+        #
         scope.getQuestionCode = ->
-            console.log scope.$parent
             return scope.$parent.getQuestionCode()
 
-        scope.getCondition = ->
-            return scope.$parent.getCondition()
-
-        scope.getRepetitionMap = ->
-            return scope.$parent.getRepetitionMap()
-
-        scope.getAnswerValue = () ->
-            return scope.$parent.$parent.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
-
-        scope.hasDescription = () ->
-            return translationService.get(scope.getQuestionCode() + '_DESC') != null
-
-
-        scope.$watch 'ngCondition', () ->
-            if scope.getCondition() == false
-                scope.getAnswerValue().value = null
-            else if scope.$parent.$parent.$parent.loading == false && scope.getAnswerValue().value == null
-                scope.getAnswerValue().value = scope.$parent.$parent.$parent.getQuestion(scope.getQuestionCode()).defaultValue
+        #
+        # get the answer :
+        # call the getAnswerOrCreate from the parent or the
+        # getAnswerToCompare if the question is a dataToCompare
+        #
+        scope.getAnswer = () ->
+            return scope.$parent.getAnswer(scope.getDataToCompare())
 
         #
         # called when the user change the value of the field
         #
         scope.edited = ->
-            scope.getAnswerValue().wasEdited = true
+            scope.$parent.edited()
 

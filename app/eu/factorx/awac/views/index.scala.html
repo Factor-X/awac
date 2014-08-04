@@ -77,19 +77,74 @@
 
     </head>
     <body ng-controller="MainCtrl">
-
+        
+        <!-- template for inclusion into mm-awac-question -->
         <script type="text/ng-template" id="mmAwacBooleanQuestion">
-            <mm-awac-boolean-question></mm-awac-boolean-question>
+            <mm-awac-boolean-question ng-data-to-compare="false"></mm-awac-boolean-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacDocumentQuestion">
+            <mm-awac-document-question ng-data-to-compare="false"></mm-awac-document-question>
         </script>
 
         <script type="text/ng-template" id="mmAwacIntegerQuestion">
-            <mm-awac-integer-question></mm-awac-integer-question>
+            <mm-awac-integer-question ng-data-to-compare="false"></mm-awac-integer-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacPercentageQuestion">
+            <mm-awac-percentage-question ng-data-to-compare="false"></mm-awac-percentage-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacRealQuestion">
+            <mm-awac-real-question ng-data-to-compare="false"></mm-awac-real-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacRealWithUnitQuestion">
+            <mm-awac-real-with-unit-question ng-data-to-compare="false"></mm-awac-real-with-unit-question>
         </script>
 
         <script type="text/ng-template" id="mmAwacSelectQuestion">
-            <mm-awac-select-question></mm-awac-select-question>
+            <mm-awac-select-question ng-data-to-compare="false"></mm-awac-select-question>
         </script>
 
+        <script type="text/ng-template" id="mmAwacStringQuestion">
+            <mm-awac-string-question ng-data-to-compare="false"></mm-awac-string-question>
+        </script>
+
+        <!-- template for inclusion into mm-awac-question for dataToCompare-->
+        <script type="text/ng-template" id="mmAwacBooleanQuestionToCompare">
+            <mm-awac-boolean-question ng-data-to-compare="true"></mm-awac-boolean-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacDocumentQuestionToCompare">
+            <mm-awac-document-question ng-data-to-compare="true"></mm-awac-document-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacIntegerQuestionToCompare">
+            <mm-awac-integer-question ng-data-to-compare="true"></mm-awac-integer-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacPercentageQuestionToCompare">
+            <mm-awac-percentage-question ng-data-to-compare="true"></mm-awac-percentage-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacRealQuestionToCompare">
+            <mm-awac-real-question ng-data-to-compare="true"></mm-awac-real-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacRealWithUnitQuestionToCompare">
+            <mm-awac-real-with-unit-question ng-data-to-compare="true"></mm-awac-real-with-unit-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacSelectQuestionToCompare">
+            <mm-awac-select-question ng-data-to-compare="true"></mm-awac-select-question>
+        </script>
+
+        <script type="text/ng-template" id="mmAwacStringQuestionToCompare">
+            <mm-awac-string-question ng-data-to-compare="true"></mm-awac-string-question>
+        </script>
+        
+        
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>

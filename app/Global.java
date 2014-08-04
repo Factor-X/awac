@@ -11,7 +11,6 @@
 
 import eu.factorx.awac.compilers.RecompilerThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.models.Analytics;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -32,12 +31,16 @@ import play.mvc.Results;
 import play.mvc.SimpleResult;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Semaphore;
 
 // Spring imports
 
 public class Global extends GlobalSettings {
 
 	private static InitializationThread thread;
+	private static RecompilerThread recompilerThread;
+	private static Semaphore semaphore = new Semaphore(1);
+
 	// Spring global context
 	private ApplicationContext ctx;
 
@@ -57,18 +60,34 @@ public class Global extends GlobalSettings {
 		// INTERNAL SPRING SERVICES
 		// ========================================
 
-
-		// read spring configuration and instanciate context
-		ctx = new ClassPathXmlApplicationContext("components.xml");
-
-		thread = new InitializationThread(ctx);
-		thread.start();
-
-		if (app.isDev()) {
-			RecompilerThread recompilerThread = new RecompilerThread();
-			recompilerThread.start();
+		if (app.isTest()) {
+			// read spring configuration and instanciate context for test purposes
+			ctx = new ClassPathXmlApplicationContext("components-test.xml");
+		} else {
+			// read spring configuration and instanciate context
+			ctx = new ClassPathXmlApplicationContext("components.xml");
 		}
 
+		try {
+			semaphore.acquire();
+
+			if (thread == null) {
+				thread = new InitializationThread(ctx);
+				thread.start();
+			}
+
+			if (app.isDev()) {
+
+				if (recompilerThread == null) {
+					recompilerThread = new RecompilerThread();
+					recompilerThread.start();
+				}
+			}
+
+			semaphore.release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -79,11 +98,11 @@ public class Global extends GlobalSettings {
 
 	@Override
 	public Action onRequest(Http.Request request, Method actionMethod) {
-
-		Analytics analytics = AnalyticsUtil.start(request);
-
+		// Analytics analytics = AnalyticsUtil.start(request);
 
 		Action action;
+
+		System.out.println(Thread.currentThread().getId());
 
 		if (!thread.isInitialized()) {
 			action = new Action() {
@@ -93,12 +112,11 @@ public class Global extends GlobalSettings {
 				}
 			};
 		} else {
-
 			action = super.onRequest(request, actionMethod);
 		}
 
-		AnalyticsUtil.end(analytics);
 
+		//AnalyticsUtil.end(analytics);
 		return action;
 	}
 

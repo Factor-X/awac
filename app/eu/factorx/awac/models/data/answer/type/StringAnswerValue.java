@@ -48,5 +48,9 @@ public class StringAnswerValue extends AnswerValue {
 
 	}
 
+	@Override
+	public String toString() {
+		return "StringAnswerValue [value=" + value + "]";
+	}
 
 }
