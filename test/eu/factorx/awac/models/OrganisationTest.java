@@ -2,21 +2,22 @@ package eu.factorx.awac.models;
 
 import eu.factorx.awac.models.business.Organization;
 import org.hibernate.Session;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.transaction.annotation.Transactional;
 import play.api.Play;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-/**
- * Created by gaston on 7/31/14.
- */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrganisationTest extends AbstractBaseModelTest {
 
 
     @Test
-    public void createOrganisation() {
+    public void _001_createOrganisation() {
 
         em.getTransaction().begin();
         em.persist(new Organization("factorx"));
@@ -25,7 +26,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
 
     @Test
-    public void retrieveOrganisationSuccess() {
+    public void _002_retrieveOrganisationSuccess() {
 
         String query = "select o from Organization o where o.name = 'factorx'";
         Organization org = em.createQuery(query, Organization.class).getResultList().get(0);
@@ -33,7 +34,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
     } // end of test
 
     @Test
-    public void retrieveOrganisationFailure() {
+    public void _003_retrieveOrganisationFailure() {
 
         Organization org = null;
         String query = "select o from Organization o where o.name = 'factor'";
@@ -46,7 +47,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
     } // end of test
 
     @Test
-    public void deleteOrganisation() {
+    public void _004_deleteOrganisation() {
 
         Organization org = null;
         String query = "select o from Organization o where o.name = 'factorx'";
@@ -72,7 +73,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
 
     @Test
-    public void updateOrganization() {
+    public void _005_updateOrganization() {
 
 
         // Create
@@ -107,6 +108,31 @@ public class OrganisationTest extends AbstractBaseModelTest {
         assertEquals(modifiedOrg.getName(), "CarrefourCamelCase");
 
     } // end of test method
+
+	@Test
+	public void _006_deleteOrganisation() {
+
+		Organization org = null;
+		String query = "select o from Organization o where o.name = 'CarrefourCamelCase'";
+
+		try {
+			org = em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertEquals(org.getName(), "CarrefourCamelCase");
+
+		em.getTransaction().begin();
+		em.remove(org);
+		em.getTransaction().commit();
+
+		Organization reload=null;
+
+		try {
+			reload = em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertNull(reload);
+	} // end of test
 
 
 } // end of class

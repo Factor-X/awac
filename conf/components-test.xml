@@ -11,7 +11,7 @@
             base-package="eu.factorx.awac.models"/>
 
     <!--<context:component-scan-->
-            <!--base-package="eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer"/>-->
+            <!--base-package="eu.factorx.awac.models, eu.factorx.awac.controllers,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer"/>-->
 
     <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
         <!--<property name="converters">-->
@@ -171,22 +171,22 @@
     <!--</bean>-->
 
     <!--for test purposes - PLay.JPA vs Spring definition TransactionManager and EntityManager -->
-    <bean id="testDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
-        <property name="username" value="sa" />
-        <property name="password" value="" />
-    </bean>
+    <!--<bean id="testDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+        <!--<property name="driverClassName" value="org.h2.Driver"/>-->
+        <!--<property name="url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>-->
+        <!--<property name="username" value="sa" />-->
+        <!--<property name="password" value="" />-->
+    <!--</bean>-->
 
     <!-- Drives transactions using local JPA APIs -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
+    <!--<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
+        <!--<property name="entityManagerFactory" ref="entityManagerFactory" />-->
+    <!--</bean>-->
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-     		<property name="persistenceUnitName" value="testPersistenceUnit" />
-            <property name="dataSource" ref="testDS"/>
-    </bean>
+    <!--<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+     		<!--<property name="persistenceUnitName" value="testPersistenceUnit" />-->
+            <!--<property name="dataSource" ref="testDS"/>-->
+    <!--</bean>-->
 
     <!--<bean id="entityManager" class="org.hibernate.ejb.EntityManagerImpl">-->
         <!--<constructor-arg name="entityManagerFactory" ref="entityManagerFactory" />-->

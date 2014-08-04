@@ -11,9 +11,6 @@ import play.test.FakeApplication;
 import play.test.Helpers;
 import scala.Option;
 
-/**
- * Created by gaston on 7/31/14.
- */
 public abstract class AbstractBaseModelTest {
 
     protected static EntityManager em;
@@ -33,6 +30,6 @@ public abstract class AbstractBaseModelTest {
     @AfterClass
     public static void tearDown() {
         JPA.bindForCurrentThread(null);
-        em.close();
+		if (em.isOpen()) em.close();
     }
 }
