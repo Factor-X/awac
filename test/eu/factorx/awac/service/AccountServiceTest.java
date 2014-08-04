@@ -1,35 +1,45 @@
 package eu.factorx.awac.service;
 
+import eu.factorx.awac.controllers.Application;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.service.impl.AccountServiceImpl;
+import eu.factorx.awac.service.AccountService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import play.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import play.db.jpa.Transactional;
+import play.mvc.Content;
+import play.mvc.Result;
+import play.test.Helpers;
 
 //import java.util.List;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Component
 public class AccountServiceTest extends AbstractBaseModelTest {
 
+	@Autowired
+	private AccountService accountService;
 
     @Test
+	@Transactional (readOnly = true)
     public void _001_createAccount() {
 
-
-        Organization org = new Organization("testing");
+		Organization org = new Organization("testing");
         Account ac = new Account(org,"gho","passwd","gaston","hollands");
         ac.setAge(new Integer(20)); // constraints should it be a constraint ?
 
-        em.getTransaction().begin();
+        //em.getTransaction().begin();
         em.persist(ac);
-        em.getTransaction().commit();
+        //em.getTransaction().commit();
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
 		//Logger.info("Id:" + ac.getId());
@@ -38,7 +48,14 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 	@Test
 	public void _002_retrieveAccountSuccessByService() {
-		AccountServiceImpl accountService = new AccountServiceImpl ();
+		//AccountServiceImpl accountService = new AccountServiceImpl ();
+
+
+		//Logger.info("applicationContext Startup Date",new Date(applicationContext.getStartupDate()));
+
+		//AccountServiceImpl accountService = applicationContext.getBean(AccountServiceImpl.class);
+
+		Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/"));
 
 		Account account = null;
 		account = accountService.findByIdentifier("gho");
@@ -75,7 +92,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 	@Test
 	public void _004_retrieveAccountFailureByService() {
-		AccountServiceImpl accountService = new AccountServiceImpl ();
+		//AccountServiceImpl accountService = new AccountServiceImpl ();
 
 		Account account = null;
 		account = accountService.findByIdentifier("gho");
