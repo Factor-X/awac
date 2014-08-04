@@ -2,8 +2,10 @@ package eu.factorx.awac.models.business;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +24,7 @@ public class Organization extends AbstractEntity {
 	@OneToMany(mappedBy = "organization")
 	private List<Site> sites;
 	
-	@OneToMany(mappedBy = "organization")
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	List<Account> accounts;
 
 	protected Organization() {
