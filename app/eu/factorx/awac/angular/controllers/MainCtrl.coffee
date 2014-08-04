@@ -181,12 +181,16 @@ angular
                 $scope.formProgress = data.listFormProgress
                 return
 
+    $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
+        if args.time != undefined
+            console.log "TIME : "+args.time
+            date = new Date(args.time)
+            $scope.lastSaveTime = date
 
-
-    #lastSaveTime TEMP
-    $scope.lastSaveTime = new Date() #.getTimezoneOffset()
-    console.log "Date.getTimezoneOffset"
-    console.log new Date().getTimezoneOffset()
+            #console.log "Date.getTimezoneOffset"
+            #console.log new Date().getTimezoneOffset()
+        else
+            $scope.lastSaveTime = new Date()
 
 
 #rootScope
