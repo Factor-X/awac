@@ -11,6 +11,7 @@ import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
@@ -43,11 +44,31 @@ public abstract class ActivityResultContributor {
 
 	public abstract List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers);
 
+	protected Double toDouble(QuestionAnswer questionAnswer) {
+		return toDouble(questionAnswer, null);
+	}
+
 	protected Double toDouble(QuestionAnswer questionAnswer, Unit toUnit) {
-		NumericAnswerValue numericAnswerValue = (NumericAnswerValue) questionAnswer.getAnswerValues().get(0);
-		Unit answerUnit = numericAnswerValue.getUnit();
-		Double answerValue = numericAnswerValue.doubleValue();
-		return convertNumericValue(answerValue, answerUnit, toUnit);
+		Double res = null;
+		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+		if (answerValue instanceof BooleanAnswerValue) {
+			Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+			if (Boolean.TRUE.equals(booleanValue)) {
+				res = new Double(1);
+			} else if (Boolean.FALSE.equals(booleanValue)) {
+				res = new Double(0);
+			}
+		} else if (answerValue instanceof NumericAnswerValue) {			
+			NumericAnswerValue numericAnswerValue = (NumericAnswerValue) answerValue;
+			if (numericAnswerValue.getUnit() == null) {
+				res = numericAnswerValue.doubleValue();
+			} else {
+				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit);
+			}
+		} else {
+			throw new RuntimeException("Cannot convert " + answerValue + " do Double");
+		}
+		return res;
 	}
 
 	protected String toString(QuestionAnswer questionAnswer) {
