@@ -38,9 +38,7 @@ public abstract class AnswerValue extends AbstractEntity {
 	}
 
 	@Override
-	public String toString() {
-		return "rawData=" + rawData;
-	}
+	public abstract String toString();
 
 	@Override
 	public boolean equals(Object obj) {

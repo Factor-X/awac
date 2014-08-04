@@ -18,6 +18,7 @@ public abstract class AbstractBaseModelTest {
 
     protected static EntityManager em;
 
+    //before class
     @BeforeClass
     public static void setUp() {
 
@@ -28,6 +29,7 @@ public abstract class AbstractBaseModelTest {
         JPA.bindForCurrentThread(em);
     }
 
+    // after class
     @AfterClass
     public static void tearDown() {
         JPA.bindForCurrentThread(null);

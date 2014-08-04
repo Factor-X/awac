@@ -1,11 +1,12 @@
 package eu.factorx.awac.models;
 
+import javax.persistence.Embeddable;
+
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 
 import play.mvc.Http.Context;
-
-import javax.persistence.Embeddable;
+import play.mvc.Http.Session;
 
 @Embeddable
 public class TechnicalSegment {
@@ -22,12 +23,6 @@ public class TechnicalSegment {
 
 	public TechnicalSegment() {
 		super();
-		LocalDateTime now = LocalDateTime.now();
-		String creationUser = getCurrentUser();
-		this.creationDate = now;
-		this.creationUser = creationUser;
-		this.lastUpdateDate = now;
-		this.lastUpdateUser = creationUser;
 	}
 
 	public LocalDateTime getCreationDate() {
@@ -67,17 +62,28 @@ public class TechnicalSegment {
 		this.lastUpdateUser = getCurrentUser();
 	}
 
-	public static String getCurrentUser() {
+	private static String getCurrentUser() {
 		if (Context.current.get() == null) {
 			return "TECH";
 		}
-		return Context.current().session().get("identifier");
+		Session session = Context.current().session();
+		return session.get("identifier");
+	}
+
+	public static TechnicalSegment newInstance() {
+		TechnicalSegment res = new TechnicalSegment();
+		LocalDateTime now = LocalDateTime.now();
+		String creationUser = getCurrentUser();
+		res.creationDate = now;
+		res.creationUser = creationUser;
+		res.lastUpdateDate = now;
+		res.lastUpdateUser = creationUser;
+		return res;
 	}
 
 	@Override
 	public String toString() {
-		return "TechnicalSegment [creationDate=" + creationDate + ", creationUser=" + creationUser + ", lastUpdateDate=" + lastUpdateDate
-				+ ", lastUpdateUser=" + lastUpdateUser + "]";
+		return "TechnicalSegment [creationDate=" + creationDate + ", creationUser=" + creationUser + ", lastUpdateDate=" + lastUpdateDate + ", lastUpdateUser=" + lastUpdateUser + "]";
 	}
 
 }
