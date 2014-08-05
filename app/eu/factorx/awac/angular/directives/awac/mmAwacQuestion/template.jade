@@ -1,9 +1,10 @@
-div(class="question_field",ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
+div(class="question_field",
+    ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
     div
         .info(ng-show="hasDescription()")
             .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(ng-class="getQuestion().answerType === 'DOCUMENT' ? 'glyphicon-file' : 'glyphicon-share-alt' ",class="glyphicon")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate", ng-click="logQuestionCode()")
     div
         div.status(ng-class="getStatusClass()")
         span( ng-include="getTemplate(false)")
