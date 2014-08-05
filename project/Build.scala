@@ -24,7 +24,11 @@ object ApplicationBuild extends Build {
         "commons-io" % "commons-io" % "2.3",
         "org.springframework" % "spring-context" % "3.2.3.RELEASE",
         "org.springframework" % "spring-expression" % "3.2.3.RELEASE",
-        "org.springframework" % "spring-orm" % "3.1.1.RELEASE"
+        "org.springframework" % "spring-orm" % "3.1.1.RELEASE",
+        "com.google.inject" % "guice" % "3.0" % "test",
+        "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
+        "info.cukes" % "cucumber-java" % "1.1.5" % "test",
+        "info.cukes" % "cucumber-junit" % "1.1.5" % "test"
     )
 
     libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
@@ -45,19 +49,22 @@ object ApplicationBuild extends Build {
         // set war plugin  for 3.0 servlet container as Servlet 3.0: Tomcat 7, JBoss 7, JBoss EAP 6, Glassfish 3, Jetty 8
         //  Play2WarKeys.servletVersion := "3.0"
         //  )
-        .settings(
-            // work around regarding unit testing problem on 2.1.3
-            testOptions in Test ~= { args =>
-                for {
-                    arg <- args
-                    val ta: Tests.Argument = arg.asInstanceOf[Tests.Argument]
-                    val newArg = if (ta.framework == Some(TestFrameworks.JUnit)) ta.copy(args = List.empty[String]) else ta
-                } yield newArg
-            }
-        )
+//        .settings(
+//            // work around regarding unit testing problem on 2.1.3
+//            testOptions in Test ~= { args =>
+//                for {
+//                    arg <- args
+//                    val ta: Tests.Argument = arg.asInstanceOf[Tests.Argument]
+//                    val newArg = if (ta.framework == Some(TestFrameworks.JUnit)) ta.copy(args = List.empty[String]) else ta
+//                } yield newArg
+//            }
+//        )
         .settings(
             downloadTranslationsTask
         )
+//        .settings (
+//          unmanagedResourceDirectories in Test &lt;+= baseDirectory( _ / "features" )
+//        )
     // Add your own project settings here
 
 
