@@ -12,31 +12,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.FormDTO;
-import eu.factorx.awac.dto.awac.get.FormProgressListDTO;
-import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
-import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
-import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
-import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
@@ -59,17 +54,7 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.FormProgressService;
-import eu.factorx.awac.service.FormService;
-import eu.factorx.awac.service.PeriodService;
-import eu.factorx.awac.service.QuestionAnswerService;
-import eu.factorx.awac.service.QuestionService;
-import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.StoredFileService;
-import eu.factorx.awac.service.UnitCategoryService;
-import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.service.*;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends Controller {
@@ -96,16 +81,12 @@ public class AnswerController extends Controller {
 	private FormService formService;
 	@Autowired
 	private CodeLabelService codeLabelService;
-
 	@Autowired
 	private ConversionService conversionService;
-
 	@Autowired
 	private SecuredController securedController;
-
 	@Autowired
 	private StoredFileService storedFileService;
-
 	@Autowired
 	private FormProgressService formProgressService;
 
@@ -117,32 +98,31 @@ public class AnswerController extends Controller {
 		Period period = periodService.findById(periodId);
 		Scope scope = scopeService.findById(scopeId);
 
-		// TODO user language should be a request parameter (else, we should get from session or cookie)
+		// TODO The user language should be saved in a session attribute, and it should be possible to update it with a request parameter (change language request).
+		// Without connection, the user language should be obtained from a cookie or from browser "accepted languages" request header.
 		LanguageCode lang = LanguageCode.ENGLISH;
 
 		if (form == null || period == null || scope == null) {
 			throw new RuntimeException("Invalid request params");
 		}
 
-		List<QuestionSet> questionSets = form.getQuestionSets();
+		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
+
+		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(form.getAllQuestionSets(), lang);
+
 		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
 
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
-		List<QuestionAnswer> allQuestionAnswers = getAllQuestionAnswers(questionSetAnswers);
-
-		QuestionAnswersDTO questionAnswersDTO = createQuestionAnswersDTO(form.getId(), periodId, scopeId, allQuestionAnswers);
+		List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
+		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
 
 		Logger.info("GET '{}' Data:", form.getIdentifier());
-		for (AnswerLineDTO answerLineDTO : questionAnswersDTO.getListAnswers()) {
+		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
 			Logger.info("\t" + answerLineDTO);
 		}
 
-		Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(questionSets, lang);
+		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, getMaxLastUpdateDate(questionAnswers), answerLineDTOs);
 
-		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
-
-		FormDTO formDTO = new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO);
-		return ok(formDTO);
+		return ok(new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO));
 	}
 
 	@Transactional(readOnly = true)
@@ -150,7 +130,7 @@ public class AnswerController extends Controller {
 	public Result getPeriodsForComparison(Long scopeId) {
 		List<PeriodDTO> periodDTOs = new ArrayList<>();
 		List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
-		for (Period period : periods) {			
+		for (Period period : periods) {
 			periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
 		}
 		return ok(new ListPeriodsDTO(periodDTOs));
@@ -162,52 +142,99 @@ public class AnswerController extends Controller {
 		Account currentUser = securedController.getCurrentUser();
 		QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
 
+		// validate context
 		Form form = formService.findById(answersDTO.getFormId());
 		Period period = periodService.findById(answersDTO.getPeriodId());
 		Scope scope = scopeService.findById(answersDTO.getScopeId());
-
 		if (form == null || period == null || scope == null) {
 			throw new RuntimeException("Invalid request parameters : " + answersDTO);
 		}
 
-		// security check
-		if (!currentUser.getOrganization().equals(scope.getOrganization())) {
-			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
-		}
+		// validate user organization
+		validateUserRightsForScope(currentUser, scope);
 
+		// log posted data (...and create an empty mapRepetition if the property is null; easier for comparisons)
 		Logger.info("POST '{}' Data:", form.getIdentifier());
 		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
 			Logger.info("\t" + answerLine);
+			if (answerLine.getMapRepetition() == null) {
+				answerLine.setMapRepetition(new HashMap<String, Integer>());
+			}
 		}
 
+		// create, update or delete QuestionAnswers and QuestionSetAnswers
 		saveAnswsersDTO(currentUser, form, period, scope, answersDTO.getListAnswers());
 
-		SaveAnswersResultDTO dto = new SaveAnswersResultDTO();
-
-		return ok(dto);
+		return ok(new SaveAnswersResultDTO());
 	}
 
-	private QuestionAnswersDTO createQuestionAnswersDTO(Long formId, Long periodId, Long scopeId, List<QuestionAnswer> allQuestionAnswers) {
-		LocalDateTime maxLastUpdateDate = getMaxLastUpdateDate(allQuestionAnswers);
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getFormProgress(Long periodId, Long scopeId) {
+
+		// 1. control the owner of the scope
+		Scope scope = scopeService.findById(scopeId);
+
+		if (!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+			throw new RuntimeException("This scope doesn't owned by your organization");
+		}
+
+		// 2. load period
+		Period period = periodService.findById(periodId);
+
+		// 3. load formProgress
+		List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
+
+		return ok(conversionService.convert(formProgressList, FormProgressListDTO.class));
+
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result setFormProgress() {
+
+		Logger.info("public Result setFormProgress(){");
+
+		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
+
+		Period period = periodService.findById(formProgressDTO.getPeriod());
+		Scope scope = scopeService.findById(formProgressDTO.getScope());
+		Form form = formService.findByIdentifier(formProgressDTO.getForm());
+
+		// control percentage
+		Integer percentage = formProgressDTO.getPercentage();
+		if (percentage < 0 || percentage > 100) {
+			throw new RuntimeException("Percentage must be more than 0 and less than 100. Currently : " + percentage);
+		}
+
+		// control scope
+		if (!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+			throw new RuntimeException("This scope doesn't owned by your organization. Scope asked : " + scope.toString());
+		}
+
+		// try to load
+		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period, scope, form);
+
+		// update...
+		if (formProgress != null) {
+			formProgress.setPercentage(percentage);
+		}
+		// ...or create a new formProgress
+		else {
+			formProgress = new FormProgress(period, form, scope, percentage);
+		}
+
+		formProgressService.saveOrUpdate(formProgress);
+
+		return ok();
+	}
+
+	private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionAnswer> allQuestionAnswers) {
 		List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();
 		for (QuestionAnswer questionAnswer : allQuestionAnswers) {
 			answerLineDTOs.add(conversionService.convert(questionAnswer, AnswerLineDTO.class));
 		}
-		return new QuestionAnswersDTO(formId, scopeId, periodId, maxLastUpdateDate, answerLineDTOs);
-	}
-
-	private static LocalDateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
-		if ((allQuestionAnswers == null) || allQuestionAnswers.isEmpty()) {
-			return null;
-		}
-		LocalDateTime maxLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
-		for (int i = 1; i < allQuestionAnswers.size(); i++) {
-			LocalDateTime lastUpdateDate = allQuestionAnswers.get(i).getTechnicalSegment().getLastUpdateDate();
-			if (lastUpdateDate.isAfter(maxLastUpdateDate)) {
-				maxLastUpdateDate = lastUpdateDate;
-			}
-		}
-		return maxLastUpdateDate;
+		return answerLineDTOs;
 	}
 
 	private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
@@ -216,27 +243,6 @@ public class AnswerController extends Controller {
 			questionSetDTOs.add(conversionService.convert(questionSet, QuestionSetDTO.class));
 		}
 		return questionSetDTOs;
-	}
-
-	private List<QuestionAnswer> getAllQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers) {
-		List<QuestionAnswer> questionAnswers = new ArrayList<QuestionAnswer>();
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			questionAnswers.addAll(questionSetAnswer.getQuestionAnswers());
-			questionAnswers.addAll(getAllQuestionAnswers(questionSetAnswer.getChildren()));
-		}
-		return questionAnswers;
-	}
-
-	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(codeList);
-		if (codeLabels == null) {
-			throw new RuntimeException("No code labels for the code list: " + codeList);
-		}
-		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
-		for (CodeLabel codeLabel : codeLabels) {
-			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
-		}
-		return new CodeListDTO(codeList.name(), codeLabelDTOs);
 	}
 
 	private Map<String, CodeListDTO> getNecessaryCodeLists(List<QuestionSet> questionSets, LanguageCode lang) {
@@ -251,9 +257,20 @@ public class AnswerController extends Controller {
 					}
 				}
 			}
-			codeLists.putAll(getNecessaryCodeLists(questionSet.getChildren(), lang));
 		}
 		return codeLists;
+	}
+
+	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
+		List<CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(codeList);
+		if (codeLabels == null) {
+			throw new RuntimeException("No code labels for the code list: " + codeList);
+		}
+		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+		for (CodeLabel codeLabel : codeLabels) {
+			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
+		}
+		return new CodeListDTO(codeList.name(), codeLabelDTOs);
 	}
 
 	private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
@@ -270,176 +287,136 @@ public class AnswerController extends Controller {
 	}
 
 	private void saveAnswsersDTO(Account currentUser, Form form, Period period, Scope scope, List<AnswerLineDTO> answerLineDTOs) {
-		Map<String, List<AnswerLineDTO>> answerLinesDTOsMap = asMap(answerLineDTOs);
 
-		// updated or deleted question answers
+		// existing question answers to update or delete
 		Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
-		List<AnswerLineDTO> updatedAndDeletedQuestionAnswers = new ArrayList<>();
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndForm(scope, period, form);
-		updateOrDeleteQuestionAnswers(questionSetAnswers, answerLinesDTOsMap, updatedAndDeletedQuestionAnswers);
+		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(true).appendForm(form).appendPeriod(period).appendScope(scope));
+		updateOrDeleteQuestionAnswers(questionSetAnswers, answerLineDTOs);
 
 		// new question answers
 		Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
-		Map<String, List<QuestionSetAnswer>> createdQSAnswers = new HashMap<>();
 		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
-			if (!updatedAndDeletedQuestionAnswers.contains(answerLineDTO)) {
-				createQuestionAnswer(currentUser, period, scope, answerLineDTO, createdQSAnswers);
-			}
+			createQuestionAnswer(currentUser, period, scope, answerLineDTO, questionSetAnswers);
 		}
 
 		// cleaning: delete empty QuestionSetAnswers (without QuestionAnswers)
 		Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
-		deleteEmptyQuestionSetAnswers(questionSetAnswers, 1);
+		JPA.em().flush();
+		questionSetAnswerService.deleteEmptyQuestionSetAnswers(scope, period, form);
 	}
 
-	private void updateOrDeleteQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers, Map<String, List<AnswerLineDTO>> answerLinesDTOs, List<AnswerLineDTO> updatedAndDeletedQuestionAnswers) {
+	/**
+	 * For each {@link QuestionSetAnswer} in given list, iterate over all questionAnswer, and check if there is a matching {@link AnswerLineDTO} in answerLinesDTOs. If there is a
+	 * matching, update or delete the {@link QuestionAnswer}.
+	 * 
+	 * @param questionSetAnswers
+	 * @param answerLineDTOs
+	 */
+	private void updateOrDeleteQuestionAnswers(List<QuestionSetAnswer> questionSetAnswers, List<AnswerLineDTO> answerLineDTOs) {
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
 			List<QuestionAnswer> questionAnswers = questionSetAnswer.getQuestionAnswers();
 			for (int i = questionAnswers.size() - 1; i >= 0; i--) {
 				QuestionAnswer questionAnswer = questionAnswers.get(i);
-				AnswerLineDTO answerLineDTO = getAnswerLineDTO(questionAnswer, answerLinesDTOs);
+				AnswerLineDTO answerLineDTO = getMatchingAnswerLineDTO(questionAnswer, answerLineDTOs);
 				if (answerLineDTO != null) {
 					updateOrDeleteQuestionAnswer(questionAnswer, answerLineDTO);
-					updatedAndDeletedQuestionAnswers.add(answerLineDTO);
-				}
-			}
-			updateOrDeleteQuestionAnswers(questionSetAnswer.getChildren(), answerLinesDTOs, updatedAndDeletedQuestionAnswers);
-		}
-	}
-
-	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers, int indent) {
-		for (int i = questionSetAnswers.size() - 1; i >= 0; i--) {
-			QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
-			String questionSetKey = questionSetAnswer.getQuestionSet().getCode().getKey();
-			Logger.info("{}Check QuestionSetAnswer [{}, {}]...", StringUtils.repeat(">> ", indent), questionSetKey, questionSetAnswer.getRepetitionIndex());
-			if (!questionSetAnswer.getChildren().isEmpty()) {
-				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren(), indent + 1);
-			}
-			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
-				Logger.info("DELETING {}", questionSetAnswer);
-				QuestionSetAnswer parent = questionSetAnswer.getParent();
-				if (parent == null) {
-					questionSetAnswerService.remove(questionSetAnswer);
-				} else {
-					parent.getChildren().remove(questionSetAnswer);
-					questionSetAnswerService.update(parent);
+					answerLineDTOs.remove(answerLineDTO);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Update or delete the given {@link QuestionAnswer questionAnswer} according to the value of the given {@link AnswerLineDTO answerLineDTO}.
+	 * 
+	 * @param questionAnswer
+	 * @param answerLineDTO
+	 */
 	private void updateOrDeleteQuestionAnswer(QuestionAnswer questionAnswer, AnswerLineDTO answerLineDTO) {
 		Object value = answerLineDTO.getValue();
+		QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
 		if ((value == null) || (StringUtils.trimToNull(value.toString()) == null)) {
 			Logger.info("DELETING {}", questionAnswer);
-			QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
 			questionSetAnswer.getQuestionAnswers().remove(questionAnswer);
-			questionSetAnswerService.update(questionSetAnswer);
+			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 		} else {
 			List<AnswerValue> oldAnswerValues = questionAnswer.getAnswerValues();
-			List<AnswerValue> newAnswerValues = getAnswerValue(answerLineDTO, questionAnswer);
+			List<AnswerValue> newAnswerValues = getAnswerValues(answerLineDTO, questionAnswer);
 			if (!oldAnswerValues.equals(newAnswerValues)) {
 				questionAnswer.updateAnswerValues(newAnswerValues);
-				questionAnswerService.saveOrUpdate(questionAnswer);
+				questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 				Logger.info("UPDATED {}", questionAnswer);
 			}
 		}
 	}
 
-	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
+	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, List<QuestionSetAnswer> createdQuestionSetAnswers) {
 		Object answerValue = answerLineDTO.getValue();
-		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {			
+		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {
 			Logger.warn("Cannot create a new QuestionAnswer from answer line {}: value is null", answerLineDTO);
 			return;
 		}
-		
+
 		Question question = getAndVerifyQuestion(answerLineDTO);
 		QuestionSet questionSet = question.getQuestionSet();
 
-		// get (and fix) repetition map
-		Map<String, Integer> repetitionMap = getRepetitionMap(questionSet, answerLineDTO);
+		// get (and fix) AnswerLineDTO repetition map
+		Map<String, Integer> repetitionMap = getFullRepetitionMap(questionSet, answerLineDTO);
 
-		// get QuestionSetAnswer
-		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(scope, period, repetitionMap, questionSet, createdQuestionSetAnswers);
+		// find QuestionSetAnswer matching QuestionSet key and (if existing)
+		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(period, scope, questionSet, repetitionMap, createdQuestionSetAnswers);
 
 		// create and save QuestionAnswer
 		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
-		List<AnswerValue> answerValues = getAnswerValue(answerLineDTO, questionAnswer);
+		List<AnswerValue> answerValues = getAnswerValues(answerLineDTO, questionAnswer);
 		if (answerValues == null) {
 			return;
 		}
 		questionAnswer.getAnswerValues().addAll(answerValues);
-		questionAnswerService.saveOrUpdate(questionAnswer);
+		questionSetAnswer.getQuestionAnswers().add(questionAnswer);
+		questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 		Logger.info("CREATED {}", questionAnswer);
 	}
 
-	private Map<String, Integer> getRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
+	private QuestionSetAnswer getQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, Map<String, Integer> repetitionMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+		String questionSetKey = questionSet.getCode().getKey();
+		if (!repetitionMap.containsKey(questionSetKey)) {
+			// assume that the questionSet is not repeatable (this validation should have already occurred), and save 0 in DB
+			repetitionMap.put(questionSetKey, 0);
+		}
+		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(questionSetKey, repetitionMap, createdQuestionSetAnswers);
+		if (questionSetAnswer == null) {			
+			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionMap.get(questionSetKey), null);
+			if (questionSet.getParent() != null) {
+				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), repetitionMap, createdQuestionSetAnswers);
+				questionSetAnswer.setParent(parentQuestionSetAnswer);
+			}
+		}
+		questionSetAnswerService.saveOrUpdate(questionSetAnswer);
+		Logger.info("CREATED {}", questionSetAnswer);
+		createdQuestionSetAnswers.add(questionSetAnswer);
+		return questionSetAnswer;
+	}
+
+	private Map<String, Integer> getFullRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
 		Map<String, Integer> repMap = answerLineDTO.getMapRepetition();
 		if (repMap == null) {
 			repMap = new HashMap<String, Integer>();
 		}
 		while (questionSet != null) {
-			String questionSetCode = questionSet.getCode().getKey();
-			// get repetition index
-			Integer repetitionIndex = repMap.get(questionSetCode);
+			Integer repetitionIndex = repMap.get(questionSet.getCode().getKey());
 			if (repetitionIndex == null) {
 				if (questionSet.getRepetitionAllowed()) {
-					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap + ") doesn not contain entry for parent questionSet (" + questionSetCode
-							+ "), while repetion is allowed in this questionSet");
+					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap + ") doesn not contain entry for parent questionSet ("
+							+ questionSet.getCode().getKey() + "), while repetion is allowed in this questionSet");
 				}
-				repMap.put(questionSetCode, 0);
 			}
 			questionSet = questionSet.getParent();
 		}
 		return repMap;
 	}
 
-	private QuestionSetAnswer getQuestionSetAnswer(Scope scope, Period period, Map<String, Integer> repMap, QuestionSet questionSet, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
-		String questionSetCode = questionSet.getCode().getKey();
-
-		// attempt to find the QuestionSetAnswer in already created QuestionSetAnswers map
-		QuestionSetAnswer questionSetAnswer = null;
-		if (!createdQuestionSetAnswers.containsKey(questionSetCode)) {
-			createdQuestionSetAnswers.put(questionSetCode, new ArrayList<QuestionSetAnswer>());
-		} else {
-			questionSetAnswer = fromCreatedQuestionSetAnswers(repMap, createdQuestionSetAnswers.get(questionSetCode));
-		}
-
-		// else create new QuestionSetAnswer
-		if (questionSetAnswer == null) {
-			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repMap.get(questionSetCode), null);
-			if (questionSet.getParent() != null) {
-				QuestionSetAnswer parentQuestionSetAnswer = getQuestionSetAnswer(scope, period, repMap, questionSet.getParent(), createdQuestionSetAnswers);
-				questionSetAnswer.setParent(parentQuestionSetAnswer);
-			}
-			Logger.info("Creating QuestionSetAnswer [{}, {}]", questionSetCode, questionSetAnswer.getRepetitionIndex());
-			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-			createdQuestionSetAnswers.get(questionSetCode).add(questionSetAnswer);
-		}
-		return questionSetAnswer;
-	}
-
-	private QuestionSetAnswer fromCreatedQuestionSetAnswers(Map<String, Integer> repMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
-		loop1: for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
-			String key = questionSetAnswer.getQuestionSet().getCode().getKey();
-			if (repMap.containsKey(key) && repMap.get(key).equals(questionSetAnswer.getRepetitionIndex())) {
-				// check parents
-				QuestionSetAnswer parentQuestionSetAnswer = questionSetAnswer.getParent();
-				while (parentQuestionSetAnswer != null) {
-					String parentKey = parentQuestionSetAnswer.getQuestionSet().getCode().getKey();
-					if (repMap.containsKey(parentKey) && repMap.get(parentKey).equals(parentQuestionSetAnswer.getRepetitionIndex())) {
-						parentQuestionSetAnswer = parentQuestionSetAnswer.getParent();
-					} else {
-						continue loop1;
-					}
-				}
-				return questionSetAnswer;
-			}
-		}
-		return null;
-	}
-
-	private List<AnswerValue> getAnswerValue(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
+	private List<AnswerValue> getAnswerValues(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
 		if (answerLine.getValue() == null) {
 			return null;
 		}
@@ -513,6 +490,18 @@ public class AnswerController extends Controller {
 
 			// add to the list
 			answerValue.add(doubleAnswerValue);
+			break;
+		case PERCENTAGE:
+
+			DoubleAnswerValue percentageAnswerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue.toString()), null);
+
+			// test if the value is not null
+			if (percentageAnswerValue.getValue() == null) {
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+			}
+
+			// add to the list
+			answerValue.add(percentageAnswerValue);
 			break;
 		case VALUE_SELECTION:
 
@@ -602,119 +591,72 @@ public class AnswerController extends Controller {
 		return answerUnit;
 	}
 
-	protected <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
-	}
-
-	private static Map<String, List<AnswerLineDTO>> asMap(List<AnswerLineDTO> answerLineDTOs) {
-		Map<String, List<AnswerLineDTO>> answerLinesDTOsMap = new HashMap<>();
-		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
-			String questionKey = answerLineDTO.getQuestionKey();
-			if (!answerLinesDTOsMap.containsKey(questionKey)) {
-				answerLinesDTOsMap.put(questionKey, new ArrayList<AnswerLineDTO>());
-			}
-			answerLinesDTOsMap.get(questionKey).add(answerLineDTO);
-		}
-		return answerLinesDTOsMap;
-	}
-
-	private static AnswerLineDTO getAnswerLineDTO(QuestionAnswer questionAnswer, Map<String, List<AnswerLineDTO>> answerLineDTOs) {
-		Map<String, Integer> questionAnswerRepetitionMap = buildRepetitionMap(questionAnswer);
+	/**
+	 * Check if there is an {@link AnswerLineDTO} among <b>answerLineDTOs</b> matching given {@link QuestionAnswer questionAnswer}.
+	 * 
+	 * @param questionAnswer
+	 * @param answerLineDTOs
+	 * @return the matching {@link AnswerLineDTO} or <code>null</code> if there is no match.
+	 */
+	private static AnswerLineDTO getMatchingAnswerLineDTO(QuestionAnswer questionAnswer, List<AnswerLineDTO> answerLineDTOs) {
 		String questionKey = questionAnswer.getQuestion().getCode().getKey();
-		List<AnswerLineDTO> questionSetAnswerLineDTOs = answerLineDTOs.get(questionKey);
-		if (questionSetAnswerLineDTOs != null) {
-			for (AnswerLineDTO answerLineDTO : questionSetAnswerLineDTOs) {
-				if (answerLineDTO.getMapRepetition() != null && answerLineDTO.getMapRepetition().isEmpty()) {
-					answerLineDTO.setMapRepetition(null);
-				}
-				if ((questionAnswerRepetitionMap == null && answerLineDTO.getMapRepetition() == null) || questionAnswerRepetitionMap.equals(answerLineDTO.getMapRepetition())) {
-					return answerLineDTO;
-				}
+		Map<String, Integer> mapRepetition = QuestionAnswerToAnswerLineConverter.buildRepetitionMap(questionAnswer.getQuestionSetAnswer());
+		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
+			if (questionKey.equals(answerLineDTO.getQuestionKey()) && mapRepetition.equals(answerLineDTO.getMapRepetition())) {
+				return answerLineDTO;
 			}
 		}
 		return null;
 	}
 
-	private static Map<String, Integer> buildRepetitionMap(QuestionAnswer questionAnswer) {
-		Map<String, Integer> res = new HashMap<>();
-		QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
-		while (questionSetAnswer != null) {
-			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
-			if (questionSet.getRepetitionAllowed()) {
-				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
+	private static QuestionSetAnswer findQuestionSetAnswer(String questionSetKey, Map<String, Integer> repetitionMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+		for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
+			if (questionSetKey.equals(questionSetAnswer.getQuestionSet().getCode().getKey()) && repetitionMap.equals(QuestionAnswerToAnswerLineConverter.buildRepetitionMap(questionSetAnswer))) {
+				return questionSetAnswer;
+			}		
+			QuestionSetAnswer childQuestionSetAnswer = findQuestionSetAnswer(questionSetKey, repetitionMap, questionSetAnswer.getChildren());
+			if (childQuestionSetAnswer != null) {
+				return childQuestionSetAnswer;
 			}
-			questionSetAnswer = questionSetAnswer.getParent();
 		}
-		if (res.isEmpty()) {
-			res = null;
-		}
-		return res;
+		return null;
 	}
 
-	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
-	public Result getFormProgress(Long periodId, Long scopeId){
-
-		//1. control the owner of the scope
-		Scope scope = scopeService.findById(scopeId);
-
-		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
-			throw new RuntimeException("This scope doesn't owned by your organization");
+	private static LocalDateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
+		if ((allQuestionAnswers == null) || allQuestionAnswers.isEmpty()) {
+			return null;
 		}
-
-		//2. load period
-		Period period = periodService.findById(periodId);
-
-		//3. load formProgress
-		List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
-
-		return ok(conversionService.convert(formProgressList, FormProgressListDTO.class));
-
+		LocalDateTime maxLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
+		for (int i = 1; i < allQuestionAnswers.size(); i++) {
+			LocalDateTime lastUpdateDate = allQuestionAnswers.get(i).getTechnicalSegment().getLastUpdateDate();
+			if (lastUpdateDate.isAfter(maxLastUpdateDate)) {
+				maxLastUpdateDate = lastUpdateDate;
+			}
+		}
+		return maxLastUpdateDate;
 	}
 
-	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
-	public Result setFormProgress(){
-
-		Logger.info("public Result setFormProgress(){");
-
-		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
-
-		Period period = periodService.findById(formProgressDTO.getPeriod());
-		Scope scope = scopeService.findById(formProgressDTO.getScope());
-		Form form = formService.findByIdentifier(formProgressDTO.getForm());
-
-
-		//control percentage
-		Integer percentage = formProgressDTO.getPercentage();
-		if(percentage<0 || percentage>100){
-			throw new RuntimeException("Percentage must be more than 0 and less than 100. Currently : "+percentage);
+	private static void validateUserRightsForScope(Account currentUser, Scope scope) {
+		Organization scopeOrganization = null;
+		ScopeTypeCode scopeType = scope.getScopeType();
+		if (ScopeTypeCode.ORG.equals(scopeType)) {
+			scopeOrganization = scope.getOrganization();
+		} else if (ScopeTypeCode.SITE.equals(scopeType)) {
+			scopeOrganization = scope.getSite().getOrganization();
+		} else if (ScopeTypeCode.PRODUCT.equals(scopeType)) {
+			scopeOrganization = scope.getProduct().getOrganization();
 		}
-
-		//control scope
-		if(!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
-			throw new RuntimeException("This scope doesn't owned by your organization. Scope asked : "+scope.toString());
+		if (!scopeOrganization.equals(currentUser.getOrganization())) {
+			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scopeOrganization + "'");
 		}
+	}
 
-		//try to load
-		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period, scope, form);
-
-		//update...
-		if(formProgress != null){
-			formProgress.setPercentage(percentage);
+	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
+		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
+		if (dto == null) {
+			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
 		}
-		//...or create a new formProgress
-		else{
-			formProgress = new FormProgress(period,form,scope,percentage);
-		}
-
-		formProgressService.saveOrUpdate(formProgress);
-
-		return ok();
+		return dto;
 	}
 
 }

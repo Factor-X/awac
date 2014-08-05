@@ -6,12 +6,10 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Component;
 
+import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -30,23 +28,23 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		Criteria criteria = session.createCriteria(QuestionSetAnswer.class);
 
 		if (searchParameter.getForm() != null) {
-			DetachedCriteria formCriteria = DetachedCriteria.forClass(Form.class);
-			formCriteria.add(Restrictions.eq("id", searchParameter.getForm().getId()));
-			formCriteria.createAlias("questionSets", "fqs");
-			formCriteria.setProjection(Projections.property("fqs.id"));
-
-			criteria.add(Subqueries.propertyIn("questionSet.id", formCriteria));
+			Form form = searchParameter.getForm();
+			if (searchParameter.getWithChildren()) {
+				criteria.add(Restrictions.in("questionSet", form.getAllQuestionSets()));
+			} else {
+				criteria.add(Restrictions.in("questionSet", form.getQuestionSets()));
+			}
 		}
 
 		if (searchParameter.getScope() != null) {
-			criteria.add(Restrictions.eq("scope.id", searchParameter.getScope().getId()));
+			criteria.add(Restrictions.eq("scope", searchParameter.getScope()));
 		}
 
 		if (searchParameter.getPeriod() != null) {
-			criteria.add(Restrictions.eq("period.id", searchParameter.getPeriod().getId()));
+			criteria.add(Restrictions.eq("period", searchParameter.getPeriod()));
 		}
 
-		if (!searchParameter.getWithSubItems()) {
+		if (!searchParameter.getWithChildren()) {
 			criteria.add(Restrictions.isNull("parent"));
 		}
 		criteria.setCacheable(true);
@@ -74,6 +72,33 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 	public List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId) {
 		List<Period> resultList = JPA.em().createNamedQuery(QuestionSetAnswer.FIND_DISTINCT_PERIODS, Period.class).setParameter("scopeId", scopeId).getResultList();
 		return resultList;
+	}
+
+	@Override
+	public void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form) {
+		deleteEmptyQuestionSetAnswers(findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope).appendPeriod(period).appendForm(form)));
+	}
+
+	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
+		for (int i = questionSetAnswers.size() - 1; i >= 0; i--) { // thx to Florian for the tip!!
+			QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
+
+			// first delete empty children (if any)
+			if (!questionSetAnswer.getChildren().isEmpty()) {
+				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
+			}
+			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
+				QuestionSetAnswer parent = questionSetAnswer.getParent();
+				Logger.info("DELETING (empty) {}", questionSetAnswer);
+				if (parent == null) {
+					remove(questionSetAnswer);
+				} else {
+					// in case of there is a parent, we have to update it (by simply removing the link with child, see "children" JPA annotation in QuestionSetAnswer entity)
+					parent.getChildren().remove(questionSetAnswer);
+					update(parent);
+				}
+			}
+		}
 	}
 
 }

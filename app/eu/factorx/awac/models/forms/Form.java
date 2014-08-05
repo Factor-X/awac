@@ -1,11 +1,20 @@
 package eu.factorx.awac.models.forms;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.data.question.QuestionSet;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Table(name = "form")
@@ -59,4 +68,16 @@ public class Form extends AbstractEntity {
 		this.questionSets = questionSet;
 	}
 
+	public List<QuestionSet> getAllQuestionSets() {
+		return getAllQuestionSets(this.getQuestionSets());
+	}
+
+	private List<QuestionSet> getAllQuestionSets(List<QuestionSet> questionSets) {
+		List<QuestionSet> result = new ArrayList<>();
+		for (QuestionSet questionSet : questionSets) {
+			result.add(questionSet);
+			result.addAll(getAllQuestionSets(questionSet.getChildren()));
+		}
+		return result;
+	}
 }

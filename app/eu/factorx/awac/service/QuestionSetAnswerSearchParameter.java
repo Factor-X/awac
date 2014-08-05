@@ -16,19 +16,19 @@ public class QuestionSetAnswerSearchParameter implements Serializable {
 
 	private Period period;
 
-	private Boolean withSubItems;
+	private Boolean withChildren;
 
-	public QuestionSetAnswerSearchParameter(Boolean withSubItems) {
+	public QuestionSetAnswerSearchParameter(Boolean withChildren) {
 		super();
-		this.withSubItems = withSubItems;
+		this.withChildren = withChildren;
 	}
 
-	public Boolean getWithSubItems() {
-		return withSubItems;
+	public Boolean getWithChildren() {
+		return withChildren;
 	}
 
-	public void setWithSubItems(Boolean withSubItems) {
-		this.withSubItems = withSubItems;
+	public void setWithChildren(Boolean withSubItems) {
+		this.withChildren = withSubItems;
 	}
 
 	public Form getForm() {
