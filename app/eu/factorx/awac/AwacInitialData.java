@@ -1133,48 +1133,48 @@ public class AwacInitialData {
 
 		// == A79 =========================================================================
 		// Catégorie de véhicule
-		// A13(Consommation de combustibles) > A79 (Catégorie de véhicule)
-		session.saveOrUpdate(new StringQuestion(a13, 0, QuestionCode.A79, null));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A79 (Catégorie de véhicule)
+		session.saveOrUpdate(new StringQuestion(a78, 0, QuestionCode.A79, null));
 
 		// == A80 =========================================================================
 		// S'agit-il d'une catégorie de véhicules appartenant ou sous le contrôle à la société ou pas?
-		// A13(Consommation de combustibles) > A80 (S'agit-il d'une catégorie de véhicules appartenant ou sous le contrôle à la société ou pas?)
-		session.saveOrUpdate(new BooleanQuestion(a13, 0, QuestionCode.A80, null));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A80 (S'agit-il d'une catégorie de véhicules appartenant ou sous le contrôle à la société ou pas?)
+		session.saveOrUpdate(new BooleanQuestion(a78, 0, QuestionCode.A80, null));
 
 		// == A81 =========================================================================
 		// Motif de déplacement
-		// A13(Consommation de combustibles) > A81 (Motif de déplacement)
-		session.saveOrUpdate(new ValueSelectionQuestion(a13, 0, QuestionCode.A81, CodeList.MOTIFDEPLACEMENT));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A81 (Motif de déplacement)
+		session.saveOrUpdate(new ValueSelectionQuestion(a78, 0, QuestionCode.A81, CodeList.MOTIFDEPLACEMENT));
 
 		// == A83 =========================================================================
 		// Quel type de carburant utilise-t-il ?
-		// A13(Consommation de combustibles) > A83 (Quel type de carburant utilise-t-il ?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a13, 0, QuestionCode.A83, CodeList.CARBURANT));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A83 (Quel type de carburant utilise-t-il ?)
+		session.saveOrUpdate(new ValueSelectionQuestion(a78, 0, QuestionCode.A83, CodeList.CARBURANT));
 
 		// == A88 =========================================================================
 		// Quel est le montant annuel de dépenses en carburant?
-		// A13(Consommation de combustibles) > A88 (Quel est le montant annuel de dépenses en carburant?)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A88, moneyUnits, null));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A88 (Quel est le montant annuel de dépenses en carburant?)
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A88, moneyUnits, null));
 
 		// == A89 =========================================================================
 		// Prix moyen du litre d'essence
-		// A13(Consommation de combustibles) > A89 (Prix moyen du litre d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A89, moneyUnits, 1.3));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A89 (Prix moyen du litre d'essence)
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A89, moneyUnits, 1.3));
 
 		// == A90 =========================================================================
 		// Prix moyen du litre de diesel
-		// A13(Consommation de combustibles) > A90 (Prix moyen du litre de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A90, moneyUnits, 1.45));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A90 (Prix moyen du litre de diesel)
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A90, moneyUnits, 1.45));
 
 		// == A91 =========================================================================
 		// Prix moyen du litre de biodiesel
-		// A13(Consommation de combustibles) > A91 (Prix moyen du litre de biodiesel)
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A91, moneyUnits, 1.44));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A91 (Prix moyen du litre de biodiesel)
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A91, moneyUnits, 1.44));
 
 		// == A92 =========================================================================
 		// Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL)
-		// A13(Consommation de combustibles) > A92 (Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a13, 0, QuestionCode.A92, moneyUnits, 1.1));
+		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A92 (Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL))
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A92, moneyUnits, 1.1));
 
 		// == A95 =========================================================================
 		// Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
@@ -1552,8 +1552,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(new ValueSelectionQuestion(a194, 0, QuestionCode.A195, CodeList.TRAITEUREAU));
 
 		// == A198 ========================================================================
-		// Source de rejetnull
-		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A197(Méthode par la quantité de m³ rejetés) > A198 (Source de rejetnull)
+		// Source de rejet
+		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A197(Méthode par la quantité de m³ rejetés) > A198 (Source de rejet)
 		session.saveOrUpdate(new ValueSelectionQuestion(a197, 0, QuestionCode.A198, CodeList.ORIGINEEAUUSEE));
 
 		// == A199 ========================================================================
@@ -2070,11 +2070,6 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
-
-
-
-
-
 
 	}
 

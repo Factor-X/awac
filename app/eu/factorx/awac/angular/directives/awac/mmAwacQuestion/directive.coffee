@@ -247,6 +247,8 @@ angular
 
 
 
+            scope.logQuestionCode = ->
+                console.log scope.getQuestionCode()
 
 
 
