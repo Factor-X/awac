@@ -150,7 +150,7 @@ public class AnswerController extends Controller {
 	public Result getPeriodsForComparison(Long scopeId) {
 		List<PeriodDTO> periodDTOs = new ArrayList<>();
 		List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
-		for (Period period : periods) {			
+		for (Period period : periods) {
 			periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
 		}
 		return ok(new ListPeriodsDTO(periodDTOs));
@@ -348,11 +348,11 @@ public class AnswerController extends Controller {
 
 	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, Map<String, List<QuestionSetAnswer>> createdQuestionSetAnswers) {
 		Object answerValue = answerLineDTO.getValue();
-		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {			
+		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {
 			Logger.warn("Cannot create a new QuestionAnswer from answer line {}: value is null", answerLineDTO);
 			return;
 		}
-		
+
 		Question question = getAndVerifyQuestion(answerLineDTO);
 		QuestionSet questionSet = question.getQuestionSet();
 
@@ -513,6 +513,18 @@ public class AnswerController extends Controller {
 
 			// add to the list
 			answerValue.add(doubleAnswerValue);
+			break;
+		case PERCENTAGE:
+
+			DoubleAnswerValue percentageAnswerValue = new DoubleAnswerValue(questionAnswer, Double.valueOf(rawAnswerValue.toString()),null);
+
+			// test if the value is not null
+			if (percentageAnswerValue.getValue() == null) {
+				throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+			}
+
+			// add to the list
+			answerValue.add(percentageAnswerValue);
 			break;
 		case VALUE_SELECTION:
 
