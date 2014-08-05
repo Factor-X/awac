@@ -34,8 +34,8 @@ public abstract class AbstractBaseModelTest implements ApplicationContextAware {
         em = jpaPlugin.get().em("default");
         JPA.bindForCurrentThread(em);
 		// in order to call getControllerInstance
-		Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/"));
-		Logger.info("fakeRequest result: " + result.toString());
+		//Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/"));
+		//Logger.info("fakeRequest result: " + result.toString());
 	}
 
     // after class

@@ -6,9 +6,14 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(Cucumber.class)
-@Cucumber.Options(format = {"pretty"})
+//@Cucumber.Options(format = {"pretty"})
+@Cucumber.Options(
+		format = "pretty",
+		tags = {"~@Ignore"},
+		features = "test/features",  //refer to Feature file
+		glue = { "eu.factorx.awac.functional", "eu.factorx.awac.functional.hooks" }
+)
 
 public class RunCucumber {
 
 }
-

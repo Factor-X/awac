@@ -1,9 +1,12 @@
+package eu.factorx.awac.functional.example;
+
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import static org.fest.assertions.Assertions.assertThat;
+import eu.factorx.awac.functional.hooks.GlobalHooks;
 
-public class Steps {
+
+public class ExampleSteps {
 	@Given("^I have setup Play$")
 	public void I_have_setup_Play() throws Throwable {
 	}
