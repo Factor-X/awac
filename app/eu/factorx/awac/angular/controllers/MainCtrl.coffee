@@ -114,7 +114,10 @@ angular
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
 
-    $scope.periodToCompare = null
+    $scope.periodsForComparison = [
+        {'id': 'default', 'label': 'aucune periode'}
+    ]
+    $scope.periodToCompare = 'default'
 
 
     #
@@ -148,15 +151,13 @@ angular
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
 
-                $scope.$root.periodsForComparison = []
+                $scope.periodsForComparison = [
+                    {'id': 'default', 'label': 'aucune periode'}
+                ]
                 for period in data.periodDTOList
                     if period.id != $routeParams.period
-                        $scope.$root.periodsForComparison[$scope.$root.periodsForComparison.length] = period
+                        $scope.periodsForComparison[$scope.periodsForComparison.length] = period
 
-                if $scope.$root.periodsForComparison == 0
-                    $scope.$root.periodsForComparison = [
-                        {'id': null, 'label': '-'}
-                    ]
                 return
 
             promise.error (data, status, headers, config) ->
@@ -185,11 +186,15 @@ angular
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
             console.log "TIME : "+args.time
-            date = new Date(args.time)
 
-            # adapt for the current time zone
-            minuteToAdd = new Date().getTimezoneOffset()
-            date = new Date(date.getTime() - minuteToAdd*60000)
+            if args.time == null
+                date = null
+            else
+                date = new Date(args.time)
+
+                # adapt for the current time zone
+                minuteToAdd = new Date().getTimezoneOffset()
+                date = new Date(date.getTime() - minuteToAdd*60000)
         else
             date = new Date()
 
@@ -198,9 +203,7 @@ angular
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
-    $rootScope.periodsForComparison = [
-        {'id': null, 'label': '-'}
-    ]
+
 
     #
     # Redirect user to login view if not logged in

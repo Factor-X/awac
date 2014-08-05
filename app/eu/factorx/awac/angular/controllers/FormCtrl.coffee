@@ -43,7 +43,7 @@ angular
                     $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition))
 
         #
-        # add default value to answer
+        # add default value to answer and unit
         #
         $scope.addDefaultValue = (questionSetDTO) ->
             for question in questionSetDTO.questions
@@ -51,6 +51,7 @@ angular
                     for answer in $scope.answerList
                         if answer.questionKey == question.code && answer.value == null
                             answer.value = question.defaultValue
+
             for child in questionSetDTO.children
                 $scope.addDefaultValue(child)
 
@@ -168,7 +169,7 @@ angular
     # get list choice by question code
     #
     $scope.getUnitCategories = (code) ->
-        if $scope.loading
+        if $scope.getQuestion(code) ==null
             return null
 
         #recover the question
@@ -262,7 +263,7 @@ angular
             value = null
             defaultUnitId = null
             wasEdited = false
-            if $scope.loading == false
+            if $scope.getQuestion(code) !=null
                 question = $scope.getQuestion(code)
 
                 if question.defaultValue != null
@@ -271,6 +272,9 @@ angular
 
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
+                    console.log "Wainting unit for question : "
+                    console.log code
+                    console.log $scope.getUnitCategories(code)
                     defaultUnitId = $scope.getUnitCategories(code).mainUnitId
 
 
@@ -420,12 +424,12 @@ angular
 
     $scope.dataToCompare = null
 
-
     $scope.$parent.$watch 'periodToCompare', () ->
-        if $scope.periodToCompare != null && $scope.$parent != null
+
+        if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
             promise = $http
                 method: "GET"
-                url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.periodToCompare + "/" + $scope.$parent.scopeId
+                url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
