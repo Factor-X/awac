@@ -94,7 +94,6 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
                     StoredFile storedFile = documentAnswerValue.getStoredFile();
                     ((HashMap<Long,String>)rawAnswerValue).put(storedFile.getId(),storedFile.getOriginalName());
                 }
-
                 break;
 		}
 
