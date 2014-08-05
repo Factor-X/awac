@@ -9,10 +9,15 @@ div(class="question_field",
         div.status(ng-class="getStatusClass()")
         span( ng-include="getTemplate(false)")
         .user_icon {{getUserName(false,true)}}
-            div {{getUserName(false,false)}}
+            div
+                span {{getUserName(false,false)}}
+                img(src='/awac/assets/images/user_icon_arrow.png')
+
     div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
         button( ng-click="copyDataToCompare()",
         title="Copier la valeur") <<
         span( ng-include="getTemplate(true)")
         .user_icon {{getUserName(true,true)}}
-            div {{getUserName(true,false)}}
+            div
+                div {{getUserName(true,false)}}
+                img(src='/awac/assets/images/user_icon_arrow.png')

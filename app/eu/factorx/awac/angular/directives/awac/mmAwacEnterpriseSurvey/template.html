@@ -49,13 +49,13 @@
 
             <div class="data_date_compare">
                 <div>Comparaison avec</div>
-                <select ng-options="p.id as p.label for p in $root.periodsForComparison" ng-model="periodToCompare"></select>
+                <select ng-options="p.id as p.label for p in periodsForComparison" ng-model="periodToCompare" placeholder="Selectionner une période"></select>
             </div>
 
             <div class="big_separator"></div>
 
             <div class="data_save">
-                <div class="last_save">
+                <div class="last_save" ng-hide="lastSaveTime===null">
                     <span ng-bind-html="'LAST_SAVE' | translate"></span><br>
                     {{lastSaveTime | date: 'medium' }}
                 </div>

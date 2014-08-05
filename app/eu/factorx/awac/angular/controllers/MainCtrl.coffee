@@ -114,7 +114,10 @@ angular
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
 
-    $scope.periodToCompare = null
+    $scope.periodsForComparison = [
+        {'id': 'default', 'label': 'aucune periode'}
+    ]
+    $scope.periodToCompare = 'default'
 
 
     #
@@ -137,8 +140,9 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        url = 'answer/getPeriodsForComparison/' + $scope.scopeId
-        if $scope.scopeId != null && $scope.scopeId != undefined && $scope.scopeId != NaN && $scope.scopeId != 'NaN'
+
+        url ='answer/getPeriodsForComparison/' + $scope.scopeId
+        if $scope.scopeId != null && $scope.scopeId != undefined && $scope.scopeId != NaN  && $scope.scopeId != 'NaN'
 
             promise = $http
                 method: "GET"
@@ -146,15 +150,14 @@ angular
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
-                $scope.$root.periodsForComparison = []
+
+                $scope.periodsForComparison = [
+                    {'id': 'default', 'label': 'aucune periode'}
+                ]
                 for period in data.periodDTOList
                     if period.id != $routeParams.period
-                        $scope.$root.periodsForComparison[$scope.$root.periodsForComparison.length] = period
+                        $scope.periodsForComparison[$scope.periodsForComparison.length] = period
 
-                if $scope.$root.periodsForComparison == 0
-                    $scope.$root.periodsForComparison = [
-                        {'id': null, 'label': '-'}
-                    ]
                 return
 
             promise.error (data, status, headers, config) ->
@@ -171,24 +174,27 @@ angular
     $scope.formProgress = null
 
     $scope.loadFormProgress = ->
-        if $scope.scopeId != undefined && $scope.scopeId != null && $scope.period != null && $scope.period != undefined
+        if $scope.scopeId !=undefined && $scope.scopeId !=null && $scope.period != null && $scope.period != undefined
             promise = $http
-                method: "GET"
-                url: "answer/formProgress/" + $scope.period + "/" + $scope.scopeId
-                headers:
-                    "Content-Type": "application/json"
+                method:"GET"
+                url: "answer/formProgress/"+$scope.period+"/"+$scope.scopeId
+                headers:"Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
                 $scope.formProgress = data.listFormProgress
                 return
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
-            console.log "TIME : " + args.time
-            date = new Date(args.time)
+            console.log "TIME : "+args.time
 
-            # adapt for the current time zone
-            minuteToAdd = new Date().getTimezoneOffset()
-            date = new Date(date.getTime() - minuteToAdd * 60000)
+            if args.time == null
+                date = null
+            else
+                date = new Date(args.time)
+
+                # adapt for the current time zone
+                minuteToAdd = new Date().getTimezoneOffset()
+                date = new Date(date.getTime() - minuteToAdd*60000)
         else
             date = new Date()
 
@@ -197,15 +203,12 @@ angular
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
-    $rootScope.periodsForComparison = [
-        {'id': null, 'label': '-'}
-    ]
+
 
     #
     # Redirect user to login view if not logged in
     #
     if not $rootScope.currentPerson
-        $rootScope.referrer = $location.path()
         $location.path('/login')
 
     #
@@ -240,10 +243,7 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
 
-        if $rootScope.referrer
-            $location.path($rootScope.referrer)
-        else
-            $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+        $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
 
 
     #get user

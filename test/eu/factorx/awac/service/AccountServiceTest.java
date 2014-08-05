@@ -33,20 +33,23 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 	@Transactional (readOnly = true)
     public void _001_createAccount() {
 
+		//Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/login"));
+		//Logger.info("fakeRequest result: " + result.toString());
+
 		Organization org = new Organization("testing");
         Account ac = new Account(org,"gho","passwd","gaston","hollands");
         ac.setAge(new Integer(20)); // constraints should it be a constraint ?
 
-        //em.getTransaction().begin();
+        em.getTransaction().begin();
         em.persist(ac);
-        //em.getTransaction().commit();
+        em.getTransaction().commit();
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
 		//Logger.info("Id:" + ac.getId());
 
     } // end of test method
 
-	@Test
+	//@Test
 	public void _002_retrieveAccountSuccessByService() {
 		//AccountServiceImpl accountService = new AccountServiceImpl ();
 
@@ -90,7 +93,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 	} // end of test
 
 
-	@Test
+	//@Test
 	public void _004_retrieveAccountFailureByService() {
 		//AccountServiceImpl accountService = new AccountServiceImpl ();
 
