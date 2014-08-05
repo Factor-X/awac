@@ -596,6 +596,7 @@ button.comments {
     left: 0;
     right: 0;
     min-width: 1000px;
+    padding-bottom: 150px;
 }
 
 .element {
@@ -898,18 +899,34 @@ button.comments {
     vertical-align: middle;
 }
 
-.user_icon:hover > div {
-
-}
 
 .user_icon > div{
     display:none;
     position: absolute;
-    padding: 5px;
+    margin-left: -112px;
+    margin-top:-25px;
+}
+
+.user_icon > div > *{
+    display: inline-block;
+}
+
+.user_icon > div > *:first-child{
     background-color: #cccccc;
     border: 1px solid #777777;
     width: 100px;
-    margin-left: -80px;
+    padding: 5px;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.user_icon > div > *:last-child{
+    vertical-align: top;
+    margin-top: 4px;
+    margin-left: -1px;
+    z-index: 2;
+
 }
 
 .user_icon:hover > div,

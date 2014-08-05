@@ -10,7 +10,11 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-ehcache" % "4.2.6.Final",
   javaCore,
   javaJpa,
-  cache
+  cache,
+  "com.google.inject" % "guice" % "3.0" % "test",
+  "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
+  "info.cukes" % "cucumber-java" % "1.1.5" % "test",
+  "info.cukes" % "cucumber-junit" % "1.1.5" % "test"
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"
@@ -41,5 +45,7 @@ libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excl
 
 
 play.Project.playJavaSettings
+
+unmanagedResourceDirectories in Test <+= baseDirectory( _ / "features" )
 
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
