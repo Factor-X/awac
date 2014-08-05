@@ -29,9 +29,13 @@ import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
+import play.Play;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.concurrent.Semaphore;
+
+import org.springframework.transaction.annotation.Transactional;
 
 // Spring imports
 
@@ -42,7 +46,7 @@ public class Global extends GlobalSettings {
 	private static Semaphore semaphore = new Semaphore(1);
 
 	// Spring global context
-	private ApplicationContext ctx;
+	private ApplicationContext applicationContext;
 
 	@Override
 	public void onStart(Application app) {
@@ -60,19 +64,26 @@ public class Global extends GlobalSettings {
 		// INTERNAL SPRING SERVICES
 		// ========================================
 
-		if (app.isTest()) {
-			// read spring configuration and instanciate context for test purposes
-			ctx = new ClassPathXmlApplicationContext("components-test.xml");
-		} else {
-			// read spring configuration and instanciate context
-			ctx = new ClassPathXmlApplicationContext("components.xml");
-		}
+		String configLocation = Play.application().configuration().getString("spring.context.location");
+		applicationContext = new ClassPathXmlApplicationContext(configLocation);
+		play.Logger.info("Spring Startup @" + new Date(applicationContext.getStartupDate()));
+
+//		if (app.isTest()) {
+//			// read spring configuration and instanciate context for test purposes
+//			ctx = new ClassPathXmlApplicationContext(configLocation);
+//		} else {
+//			// read spring configuration and instanciate context
+//			ctx = new ClassPathXmlApplicationContext("components.xml");
+//		}
+
+
 
 		try {
 			semaphore.acquire();
 
+
 			if (thread == null) {
-				thread = new InitializationThread(ctx);
+				thread = new InitializationThread(applicationContext);
 				thread.start();
 			}
 
@@ -102,7 +113,7 @@ public class Global extends GlobalSettings {
 
 		Action action;
 
-		System.out.println(Thread.currentThread().getId());
+		// WTF -- System.out.println(Thread.currentThread().getId());
 
 		if (!thread.isInitialized()) {
 			action = new Action() {
@@ -124,15 +135,22 @@ public class Global extends GlobalSettings {
 	@Override
 	public <A> A getControllerInstance(Class<A> clazz) {
 
+		play.Logger.info("Spring getControllerInstance called @" + new Date(applicationContext.getStartupDate()));
+		//return applicationContext.getBean(clazz);
+
 		// filter clazz annotation to avoid messing win non Spring annotation
 		if (clazz.isAnnotationPresent(Component.class)
 				|| clazz.isAnnotationPresent(Controller.class)
 				|| clazz.isAnnotationPresent(Service.class)
 				|| clazz.isAnnotationPresent(Repository.class))
-			return ctx.getBean(clazz);
-		else
-
+			{
+			Logger.info("getControllerInstance <clazz> " + clazz +" getBean : " + applicationContext.getBean(clazz));
+			return applicationContext.getBean(clazz);
+			}
+		else {
+			Logger.info("getControllerInstance <clazz>" + clazz +" returning null to Play instance controller");
 			return null;
+			}
 	}
 
 	@Override
