@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -634,13 +634,13 @@ public class AnswerController extends Controller {
 		return null;
 	}
 
-	private static LocalDateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
+	private static DateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
 		if ((allQuestionAnswers == null) || allQuestionAnswers.isEmpty()) {
 			return null;
 		}
-		LocalDateTime maxLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
+		DateTime maxLastUpdateDate = allQuestionAnswers.get(0).getTechnicalSegment().getLastUpdateDate();
 		for (int i = 1; i < allQuestionAnswers.size(); i++) {
-			LocalDateTime lastUpdateDate = allQuestionAnswers.get(i).getTechnicalSegment().getLastUpdateDate();
+			DateTime lastUpdateDate = allQuestionAnswers.get(i).getTechnicalSegment().getLastUpdateDate();
 			if (lastUpdateDate.isAfter(maxLastUpdateDate)) {
 				maxLastUpdateDate = lastUpdateDate;
 			}
