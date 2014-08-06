@@ -100,7 +100,7 @@ body {
     background-color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    min-width: 1000px;
+    min-width: 1200px;
     overflow: auto !important;
 }
 
@@ -124,6 +124,34 @@ select {
     height: 70px;
     padding: 5px;
     color: white;
+    overflow: hidden;
+}
+
+.header-option{
+    float: right;
+}
+
+.header-option  tr:first-child {
+    text-align: center;
+}
+
+
+.header-option td {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.header-option td {
+    border-right: 1px solid #61605b;
+}
+
+
+.header-option select {
+    padding: 2px;
+    min-width: 100px;
+    background-color: #61605b;
+    color: white;
+    margin-bottom: 5px;
 }
 
 .header > div {
@@ -155,18 +183,6 @@ select {
     font-weight: bold;
 }
 
-.lg_cf_help, .users, .header > .small_separator {
-    text-align: right;
-    float: right;
-}
-
-.lg_cf_help select {
-    padding: 2px;
-    min-width: 100px;
-    background-color: #61605b;
-    color: white;
-    margin-bottom: 5px;
-}
 
 .users {
     margin-right: 10px;
@@ -182,12 +198,6 @@ select {
     border-bottom: 3px solid white;
 }
 
-.header .small_separator {
-    margin: 20px 40px;
-    background-color: #61605b;
-    height: 20px;
-    width: 1px;
-}
 
 /*-----------------------------------------------------
 	[ 2.b Data menu ]
@@ -595,7 +605,7 @@ button.comments {
     border-top-width: 15px;
     left: 0;
     right: 0;
-    min-width: 1000px;
+    min-width: 1200px;
     padding-bottom: 150px;
 }
 

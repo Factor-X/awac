@@ -1,55 +1,93 @@
 <ng-virtual>
     <div ng-hide="$root.isLogin()">
         <div class="header">
+
+            <!-- user block -->
+            <table class="header-option">
+
+                <tr>
+                    <td>
+                        <div>
+                            <select ng-model="$parent.language">
+                                <option value="en" ng-bind-html="'EN' | translate"></option>
+                                <option value="fr" ng-bind-html="'FR' | translate"></option>
+                                <option value="nl" ng-bind-html="'NL' | translate"></option>
+                            </select>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div>Gestion</div>
+                    </td>
+                    <td>
+                        <div ng-show="$root.currentPerson!=null"><span
+                                ng-bind-html="'WELCOME' | translate"></span>, <span
+                                class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
+                        </div>
+                        <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>
+
+                        <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
+                        <button type="button" class="help" mm-not-implemented>Assistance</button>
+                    </td>
+                    <!--<div class="small_separator"></div>-->
+
+                    <td>
+
+
+                        <!-- site manager button -->
+                        <button type="button"
+                                class="user_manage"
+                                ng-bind-html="'SITE_MANAGER_BUTTON' | translate"
+                                ng-click="nav('/site_manager')">
+                        </button>
+
+                        <!-- user manager button -->
+                        <button type="button"
+                                class="user_manage"
+                                ng-bind-html="'USER_MANAGER_BUTTON' | translate"
+                                ng-click="nav('/user_manager')">
+                        </button>
+
+                    </td>
+
+                    <!--<div class="small_separator"></div>-->
+
+
+                    <td>
+
+
+                        <!-- user data button -->
+                        <button type="button"
+                                class="user_manage"
+                                ng-bind-html="'USER_DATA_BUTTON' | translate"
+                                ng-click="nav('/user_data')">
+                        </button>
+
+                        <!-- logout button -->
+                        <button ng-show="$root.currentPerson!=null"
+                                type="button"
+                                ng-click="$root.logout();"
+                                ng-bind-html="'LOGOUT_BUTTON' | translate"
+                                class="user_manage">
+                        </button>
+
+                    </td>
+                </tr>
+            </table>
+
+
             <div class="wallonie_logo"></div>
             <div class="awac_logo"></div>
             <div>
                 <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
                 <div class="entreprise_name">{{ $root.organization.name }}</div>
-            </div>
-
-            <div class="users">
-                <div ng-show="$root.currentPerson!=null"><span ng-bind-html="'WELCOME' | translate"></span>, <span
-                        class="username">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span>
-                </div>
-                <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
-
-                <!-- user manager button -->
-                <button type="button"
-                        class="user_manage"
-                        ng-bind-html="'USER_MANAGER_BUTTON' | translate"
-                        ng-click="nav('/user_manager')">
-                </button>
-
-                <!-- user data button -->
-                <button type="button"
-                        class="user_manage"
-                        ng-bind-html="'USER_DATA_BUTTON' | translate"
-                        ng-click="nav('/user_data')">
-                </button>
-
-                <!-- logout button -->
-                <button ng-show="$root.currentPerson!=null"
-                        type="button"
-                        ng-click="$root.logout();"
-                        ng-bind-html="'LOGOUT_BUTTON' | translate"
-                        class="user_manage">
-                </button>
-
-            </div>
-
-            <div class="small_separator"></div>
-
-            <div class="lg_cf_help">
-                <div>
-                    <select ng-model="$parent.language">
-                        <option value="en" ng-bind-html="'EN' | translate"></option>
-                        <option value="fr" ng-bind-html="'FR' | translate"></option>
-                        <option value="nl" ng-bind-html="'NL' | translate"></option>
-                    </select>
-                </div>
-                <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
-                <button type="button" class="help" mm-not-implemented>Assistance</button>
             </div>
 
         </div>
