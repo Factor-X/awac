@@ -101,6 +101,13 @@
             <div class="big_separator"></div>
 
             <div class="data_date_compare">
+                <div>Site sélectionné</div>
+                <select ng-options="p.id as p.name for p in $root.organization.sites" ng-model="scopeId"></select>
+            </div>
+
+            <div class="big_separator"></div>
+
+            <div class="data_date_compare">
                 <div>Comparaison avec</div>
                 <select ng-options="p.id as p.label for p in periodsForComparison" ng-model="periodToCompare"
                         placeholder="Selectionner une période"></select>
@@ -126,10 +133,6 @@
             <div class="nav_entreprise">
                 <div class="site_menu">
                     <div class="site">
-                        <button type="button" class="site_manage" mm-not-implemented>Gérer les sites</button>
-                        <div>Site</div>
-                        <div class="small_separator"></div>
-                        <div class="sitename">{{ $root.organization.sites[0].name }}</div>
                         <button type="button" class="verification" mm-not-implemented>Vérification</button>
                     </div>
                     <div class="menu">
