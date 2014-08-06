@@ -27,9 +27,20 @@ angular
 .module('app.controllers')
 .config ($routeProvider) ->
     $routeProvider
+
     .when('/login', {
             templateUrl: '$/angular/views/login.html'
             controller: 'LoginCtrl'
+        }
+    )
+    .when('/user_data/:period/:scope', {
+            templateUrl: '$/angular/views/user_data.html'
+            controller: 'UserDataCtrl'
+        }
+    )
+    .when('/user_manager/:period/:scope', {
+            templateUrl: '$/angular/views/user_manager.html'
+            controller: 'UserManagerCtrl'
         }
     )
     .when('/form1/:period/:scope', {
