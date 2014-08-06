@@ -1,7 +1,13 @@
 angular
 .module('app.controllers')
 .controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier, $timeout) ->
+
     $scope.formIdentifier = formIdentifier
+
+
+    # declare the dataToCompare variable. This variable is used to display data to compare
+    # the content is a FormDTO object (after loading by the $scope.$parent.$watch function
+    $scope.dataToCompare = null
 
     #this variable contains all answer, new and old
     $scope.answerList = []
@@ -20,6 +26,9 @@ angular
     #display the loading modal
     modalService.show(modalService.LOADING)
 
+    #
+    # load the form and treat structure and data
+    #
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         console.log "data"
         console.log data
@@ -90,14 +99,19 @@ angular
         console.log $scope.answerList
         #, 200)
 
-
         return
 
+
+    $scope.$on 'SAVE_AND_NAV', (event, args) ->
+        $scope.save(args)
 
     #
     # save the result of this form
     #
     $scope.$on 'SAVE', () ->
+        $scope.save()
+
+    $scope.save = (argToNav=null) ->
 
         #display the loading modal
         modalService.show(modalService.LOADING)
@@ -119,14 +133,6 @@ angular
                     # add the answer of the listAnswerToSave
                     listAnswerToSave[listAnswerToSave.length] = answer
 
-
-        ###
-        if answer.value && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
-            if answer.hasValidCondition == undefined || answer.hasValidCondition == true
-                if answer.wasEdited != undefined
-                    answer['wasEdited'] = false
-                listAnswerToSave[listAnswerToSave.length] = answer
-        ###
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
@@ -157,6 +163,10 @@ angular
 
                 #refresh the progress bar
                 $scope.saveFormProgress()
+
+                #nav
+                if argToNav != null
+                    $scope.$root.$broadcast('NAV', argToNav)
                 return
 
             promise.error (data, status, headers, config) ->
@@ -232,7 +242,10 @@ angular
                         return result
         return null
 
-
+    #
+    # get the answer to compare by code and mapIteration
+    # return null if this answer doesn't exist
+    #
     $scope.getAnswerToCompare = (code, mapIteration) ->
         if $scope.dataToCompare != null
             for answer in $scope.dataToCompare.answersSave.listAnswers
@@ -413,7 +426,15 @@ angular
             $scope.mapRepetition[questionSetCode] = []
             $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
-
+    #
+    # this function return an object with the modal service wanted (CONFIRMATION_EXIT_FORM)
+    # and a valid parameter that is true is none answer was gave by the user.
+    # Structure of the object :
+    #   modalForConfirm => the constant of the modal expected
+    #   valid => false if the confirmation modal is needed
+    #
+    # This function is used to display a warning modal if some data was not saved
+    #
     $scope.validNavigation = ->
         result = {}
         result.modalForConfirm = modalService.CONFIRMATION_EXIT_FORM
@@ -425,8 +446,11 @@ angular
 
         return result
 
-    $scope.dataToCompare = null
 
+    #
+    # watch 'periodToCompare' variable and load the data to compare when the value is different than 'default'
+    # the result is savec to $scope.dataToCompare
+    #
     $scope.$parent.$watch 'periodToCompare', () ->
 
         if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
@@ -442,6 +466,11 @@ angular
             promise.error (data, status, headers, config) ->
                 return
 
+    #
+    # save the progresses of this form
+    # compute a percentage of progression, refresh the progress bar displayed and
+    # create a formProgressDTO and send it to the server
+    #
     $scope.saveFormProgress = ->
 
         #compute percentage
@@ -481,6 +510,17 @@ angular
         formProgressDTO.scope = $scope.$parent.scopeId
         formProgressDTO.percentage = percentage
 
+        # refresh progress bar
+        founded = false
+        for formProgress in $scope.$parent.formProgress
+            console.log formProgress.form + "-" + $scope.formIdentifier
+            if formProgress.form == $scope.formIdentifier
+                founded = true
+                formProgress.percentage = percentage
+        if founded == false
+            $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
+
+        # send computed progress bar to the server
         promise = $http
             method: "POST"
             url: 'answer/formProgress'
@@ -488,13 +528,6 @@ angular
                 "Content-Type": "application/json"
             data: formProgressDTO
         promise.success (data, status, headers, config) ->
-            founded = false
-            for formProgress in $scope.$parent.formProgress
-                console.log formProgress.form + "-" + $scope.formIdentifier
-                if formProgress.form == $scope.formIdentifier
-                    founded = true
-                    formProgress.percentage = percentage
-            if founded == false
-                $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
+
             return
 

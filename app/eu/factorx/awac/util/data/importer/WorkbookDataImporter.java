@@ -28,7 +28,7 @@ public abstract class WorkbookDataImporter {
 
 	protected Session session;
 
-	public synchronized void run() {
+	public void run() {
 		try {
 			String className = getClass().getSimpleName();
 			Logger.info(className + " - START OF IMPORT");
