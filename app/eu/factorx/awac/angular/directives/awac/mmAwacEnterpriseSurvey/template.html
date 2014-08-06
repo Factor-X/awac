@@ -14,13 +14,28 @@
                 </div>
                 <div ng-show="$root.currentPerson==null">Your are currently not connected</div>
 
+                <!-- user manager button -->
+                <button type="button"
+                        class="user_manage"
+                        ng-bind-html="'USER_MANAGER_BUTTON' | translate"
+                        ng-click="nav('/user_manager')">
+                </button>
+
+                <!-- user data button -->
+                <button type="button"
+                        class="user_manage"
+                        ng-bind-html="'USER_DATA_BUTTON' | translate"
+                        ng-click="nav('/user_data')">
+                </button>
+
+                <!-- logout button -->
                 <button ng-show="$root.currentPerson!=null"
                         type="button"
                         ng-click="$root.logout();"
                         ng-bind-html="'LOGOUT_BUTTON' | translate"
                         class="user_manage">
                 </button>
-                <!--<button type="button" class="user_manage">Gestion utilisateurs</button>-->
+
             </div>
 
             <div class="small_separator"></div>
@@ -49,7 +64,8 @@
 
             <div class="data_date_compare">
                 <div>Comparaison avec</div>
-                <select ng-options="p.id as p.label for p in periodsForComparison" ng-model="periodToCompare" placeholder="Selectionner une période"></select>
+                <select ng-options="p.id as p.label for p in periodsForComparison" ng-model="periodToCompare"
+                        placeholder="Selectionner une période"></select>
             </div>
 
             <div class="big_separator"></div>

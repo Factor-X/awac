@@ -43,8 +43,11 @@ angular
             $scope.close()
 
         $scope.save= ->
-            $scope.$root.$broadcast 'SAVE'
-            $scope.continue()
+            arg={}
+            arg.loc = $scope.loc
+            arg.confirmed = true
+            $scope.$root.$broadcast 'SAVE_AND_NAV',arg
+            $scope.close()
 
 
 
