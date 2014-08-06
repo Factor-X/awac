@@ -24,7 +24,7 @@ import play.libs.*;
 import play.test.*;
 import static play.test.Helpers.*;
 
-import com.avaje.ebean.Ebean;
+//import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;

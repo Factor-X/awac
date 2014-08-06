@@ -7,9 +7,11 @@ import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.service.AccountService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
 import play.Logger;
 
 import static org.junit.Assert.assertEquals;
@@ -19,22 +21,20 @@ import play.mvc.Content;
 import play.mvc.Result;
 import play.test.Helpers;
 
-//import java.util.List;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
 
+@ContextConfiguration(locations = {"classpath:/components-test.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Component
 public class AccountServiceTest extends AbstractBaseModelTest {
 
 	@Autowired
 	private AccountService accountService;
 
     @Test
-	@Transactional (readOnly = true)
     public void _001_createAccount() {
-
-		//Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/login"));
-		//Logger.info("fakeRequest result: " + result.toString());
 
 		Organization org = new Organization("testing");
         Account ac = new Account(org,"gho","passwd","gaston","hollands");
@@ -49,16 +49,10 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
     } // end of test method
 
-	//@Test
+	@Test
 	public void _002_retrieveAccountSuccessByService() {
-		//AccountServiceImpl accountService = new AccountServiceImpl ();
 
-
-		//Logger.info("applicationContext Startup Date",new Date(applicationContext.getStartupDate()));
-
-		//AccountServiceImpl accountService = applicationContext.getBean(AccountServiceImpl.class);
-
-		Result result = Helpers.routeAndCall(Helpers.fakeRequest(Helpers.GET, "/awac/"));
+		play.Logger.info("Spring @" + new Date(applicationContext.getStartupDate()));
 
 		Account account = null;
 		account = accountService.findByIdentifier("gho");
@@ -93,7 +87,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 	} // end of test
 
 
-	//@Test
+	@Test
 	public void _004_retrieveAccountFailureByService() {
 		//AccountServiceImpl accountService = new AccountServiceImpl ();
 

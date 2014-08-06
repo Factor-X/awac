@@ -19,7 +19,7 @@ import play.mvc.*;
 import play.libs.*;
 import play.test.*;
 import static play.test.Helpers.*;
-import com.avaje.ebean.Ebean;
+//import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
 public class LoginTest extends WithApplication {
