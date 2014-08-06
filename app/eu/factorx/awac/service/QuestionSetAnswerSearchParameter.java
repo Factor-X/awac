@@ -23,50 +23,34 @@ public class QuestionSetAnswerSearchParameter implements Serializable {
 		this.withChildren = withChildren;
 	}
 
-	public Boolean getWithChildren() {
-		return withChildren;
-	}
-
-	public void setWithChildren(Boolean withSubItems) {
-		this.withChildren = withSubItems;
-	}
-
 	public Form getForm() {
 		return form;
-	}
-
-	public void setForm(Form form) {
-		this.form = form;
 	}
 
 	public Scope getScope() {
 		return scope;
 	}
 
-	public void setScope(Scope scope) {
-		this.scope = scope;
-	}
-
 	public Period getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(Period period) {
-		this.period = period;
+	public Boolean getWithChildren() {
+		return withChildren;
 	}
 
 	public QuestionSetAnswerSearchParameter appendForm(Form form) {
-		setForm(form);
+		this.form = form;
 		return this;
 	}
 
 	public QuestionSetAnswerSearchParameter appendScope(Scope scope) {
-		setScope(scope);
+		this.scope = scope;
 		return this;
 	}
 
 	public QuestionSetAnswerSearchParameter appendPeriod(Period period) {
-		setPeriod(period);
+		this.period = period;
 		return this;
 	}
 

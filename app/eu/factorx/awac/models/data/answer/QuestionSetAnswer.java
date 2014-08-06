@@ -45,7 +45,7 @@ public class QuestionSetAnswer extends AbstractEntity {
 
 	private Integer repetitionIndex = 0;
 
-	@OneToMany(mappedBy = "questionSetAnswer", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, orphanRemoval = true)
+	@OneToMany(mappedBy = "questionSetAnswer", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<QuestionAnswer> questionAnswers;
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
