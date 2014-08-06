@@ -355,7 +355,9 @@ angular
             question = $scope.answerList[len]
             if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
                 if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
-                    $scope.answerList.splice(len, 1)
+                	if $scope.answerList[len].value!=null
+	                    $scope.answerList[len].value=null
+	                    $scope.answerList[len].wasEdited=true
 
         # delete iteration
         # check all iteration because it must remove the iteration linked to the iteration to delete
@@ -367,7 +369,8 @@ angular
                     iteration = $scope.mapRepetition[key][len]
                     if $scope.compareRepetitionMap(iteration,mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
                         $scope.mapRepetition[key].splice(len, 1)
-
+         
+		
     #
     # compare to mapRepetition
     # if the mapContained is null or undefined, the result is true
