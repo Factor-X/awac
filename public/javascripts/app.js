@@ -70,6 +70,43 @@ angular.module('app.controllers').config(function($routeProvider) {
     redirectTo: '/login'
   });
   return;
+});angular.module('app.services').service("messageFlash", function(flash) {
+  this.displaySuccess = function(message) {
+    return flash.success = message.replace("\n", '<br />');
+  };
+  this.displayError = function(message) {
+    return flash.error = message.replace(/\n/g, '<br />');
+  };
+  return;
+});angular.module('app.services').service("downloadService", function($http) {
+  this.downloadsInProgress = 0;
+  this.getDownloadsInProgress = function() {
+    return this.downloadsInProgress;
+  };
+  this.getJson = function(url, callback) {
+    var promise;
+    this.downloadsInProgress++;
+    promise = $http({
+      method: "GET",
+      url: url,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    promise.success(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback(data, status, headers, config);
+      return;
+    });
+    promise.error(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback(null, status, headers, config);
+      console.log("error when loading from " + url);
+      return;
+    });
+    return promise;
+  };
+  return;
 });angular.module('app.services').service("directiveService", function($sce) {
   this.autoScope = function(s) {
     var k, res, v;
@@ -120,14 +157,6 @@ angular.module('app.controllers').config(function($routeProvider) {
     return s.html = function(v) {
       return $sce.trustAsHtml(v);
     };
-  };
-  return;
-});angular.module('app.services').service("messageFlash", function(flash) {
-  this.displaySuccess = function(message) {
-    return flash.success = message.replace("\n", '<br />');
-  };
-  this.displayError = function(message) {
-    return flash.error = message.replace(/\n/g, '<br />');
   };
   return;
 });angular.module('app.services').service("modalService", function($rootScope) {
@@ -186,35 +215,6 @@ angular.module('app.controllers').config(function($routeProvider) {
       txt = v.fallback || '';
     }
     return txt;
-  };
-  return;
-});angular.module('app.services').service("downloadService", function($http) {
-  this.downloadsInProgress = 0;
-  this.getDownloadsInProgress = function() {
-    return this.downloadsInProgress;
-  };
-  this.getJson = function(url, callback) {
-    var promise;
-    this.downloadsInProgress++;
-    promise = $http({
-      method: "GET",
-      url: url,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    promise.success(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback(data, status, headers, config);
-      return;
-    });
-    promise.error(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback(null, status, headers, config);
-      console.log("error when loading from " + url);
-      return;
-    });
-    return promise;
   };
   return;
 });angular.module('app.filters').filter("translate", function($sce, translationService) {
