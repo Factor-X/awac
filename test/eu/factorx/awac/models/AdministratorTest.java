@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 
 // for YAML tests
-import com.avaje.ebean.*;
+//import com.avaje.ebean.*;
 
 import play.*;
 import play.libs.*;

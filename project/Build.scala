@@ -15,7 +15,7 @@ object ApplicationBuild extends Build {
         // Add your project dependencies here,
         javaCore,
         javaJdbc,
-        javaEbean,
+        //javaEbean,
         //	"com.github.play2war.ext" %% "jboss7-reflections-vfs-integration-play2" % "1.0.0", // add this after your others dependencies,
         //	"com.github.play2war.ext" %% "redirect-playlogger" % "1.0.1", // add this after your others dependencies
         "org.xhtmlrenderer" % "core-renderer" % "R8",
@@ -25,6 +25,7 @@ object ApplicationBuild extends Build {
         "org.springframework" % "spring-context" % "3.2.3.RELEASE",
         "org.springframework" % "spring-expression" % "3.2.3.RELEASE",
         "org.springframework" % "spring-orm" % "3.1.1.RELEASE",
+        "org.springframework" % "spring-test" % "3.2.5.RELEASE",
         "com.google.inject" % "guice" % "3.0" % "test",
         "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
         "info.cukes" % "cucumber-java" % "1.1.5" % "test",
