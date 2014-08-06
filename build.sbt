@@ -46,6 +46,6 @@ libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excl
 
 play.Project.playJavaSettings
 
-unmanagedResourceDirectories in Test <+= baseDirectory( _ / "features" )
+unmanagedResourceDirectories in Test <+= baseDirectory( _ / "test/features" )
 
 javaOptions in Test += "-Dconfig.file=conf/test.conf"

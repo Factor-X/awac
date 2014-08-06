@@ -55,6 +55,7 @@ public class AccountTest extends AbstractBaseModelTest {
 		} catch (Exception empty) {
 			Logger.info("account is null");
 		}
+		assertEquals(account.getIdentifier(), "gho");
     } // end of test
 
 	@Test
