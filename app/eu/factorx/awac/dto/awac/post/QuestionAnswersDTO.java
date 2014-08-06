@@ -2,7 +2,7 @@ package eu.factorx.awac.dto.awac.post;
 
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -26,7 +26,7 @@ public class QuestionAnswersDTO extends DTO {
 	public QuestionAnswersDTO() {
 	}
 
-	public QuestionAnswersDTO(Long formId, Long scopeId, Long periodId, LocalDateTime lastUpdateDate, List<AnswerLineDTO> listAnswers) {
+	public QuestionAnswersDTO(Long formId, Long scopeId, Long periodId, DateTime lastUpdateDate, List<AnswerLineDTO> listAnswers) {
 		this.formId = formId;
 		this.scopeId = scopeId;
 		this.periodId = periodId;

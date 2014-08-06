@@ -43,4 +43,6 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 	 */
 	List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId);
 
+	void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form);
+
 }

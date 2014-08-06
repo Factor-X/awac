@@ -135,7 +135,7 @@ public class Global extends GlobalSettings {
 	@Override
 	public <A> A getControllerInstance(Class<A> clazz) {
 
-		play.Logger.info("Spring getControllerInstance called @" + new Date(applicationContext.getStartupDate()));
+		play.Logger.debug("Spring getControllerInstance called @" + new Date(applicationContext.getStartupDate()));
 		//return applicationContext.getBean(clazz);
 
 		// filter clazz annotation to avoid messing win non Spring annotation
@@ -144,11 +144,11 @@ public class Global extends GlobalSettings {
 				|| clazz.isAnnotationPresent(Service.class)
 				|| clazz.isAnnotationPresent(Repository.class))
 			{
-			Logger.info("getControllerInstance <clazz> " + clazz +" getBean : " + applicationContext.getBean(clazz));
+			Logger.debug("getControllerInstance <clazz> " + clazz +" getBean : " + applicationContext.getBean(clazz));
 			return applicationContext.getBean(clazz);
 			}
 		else {
-			Logger.info("getControllerInstance <clazz>" + clazz +" returning null to Play instance controller");
+			Logger.debug("getControllerInstance <clazz>" + clazz +" returning null to Play instance controller");
 			return null;
 			}
 	}

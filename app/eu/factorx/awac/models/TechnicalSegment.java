@@ -3,7 +3,7 @@ package eu.factorx.awac.models;
 import javax.persistence.Embeddable;
 
 import org.hibernate.annotations.Type;
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 
 import play.mvc.Http.Context;
 import play.mvc.Http.Session;
@@ -11,13 +11,13 @@ import play.mvc.Http.Session;
 @Embeddable
 public class TechnicalSegment {
 
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-	private LocalDateTime creationDate;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime creationDate;
 
 	private String creationUser;
 
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-	private LocalDateTime lastUpdateDate;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private DateTime lastUpdateDate;
 
 	private String lastUpdateUser;
 
@@ -25,11 +25,11 @@ public class TechnicalSegment {
 		super();
 	}
 
-	public LocalDateTime getCreationDate() {
+	public DateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
+	public void setCreationDate(DateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -41,11 +41,11 @@ public class TechnicalSegment {
 		this.creationUser = creationUser;
 	}
 
-	public LocalDateTime getLastUpdateDate() {
+	public DateTime getLastUpdateDate() {
 		return lastUpdateDate;
 	}
 
-	public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+	public void setLastUpdateDate(DateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
@@ -58,7 +58,7 @@ public class TechnicalSegment {
 	}
 
 	public void update() {
-		this.lastUpdateDate = LocalDateTime.now();
+		this.lastUpdateDate = DateTime.now();
 		this.lastUpdateUser = getCurrentUser();
 	}
 
@@ -72,7 +72,7 @@ public class TechnicalSegment {
 
 	public static TechnicalSegment newInstance() {
 		TechnicalSegment res = new TechnicalSegment();
-		LocalDateTime now = LocalDateTime.now();
+		DateTime now = DateTime.now();
 		String creationUser = getCurrentUser();
 		res.creationDate = now;
 		res.creationUser = creationUser;

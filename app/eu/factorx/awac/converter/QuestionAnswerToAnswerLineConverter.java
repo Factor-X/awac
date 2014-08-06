@@ -101,30 +101,22 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		answerLine.setValue(rawAnswerValue);
 		answerLine.setQuestionKey(question.getCode().getKey());
 		answerLine.setUnitId(unitId);
-		answerLine.setMapRepetition(getRepetitionMap(questionAnswer));
+		answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
 		answerLine.setLastUpdateUser(questionAnswer.getTechnicalSegment().getLastUpdateUser());
 
 		return answerLine;
 	}
 
-	private Map<String, Integer> getRepetitionMap(QuestionAnswer questionAnswer) {
-		Map<String, Integer> repetitionMap = new HashMap<>();
-		putRepetitionIndex(repetitionMap, questionAnswer.getQuestionSetAnswer());
-		return repetitionMap;
-	}
-
-	private void putRepetitionIndex(Map<String, Integer> repetitionMap, QuestionSetAnswer questionSetAnswer) {
-		QuestionSet questionSet = questionSetAnswer.getQuestionSet();
-		if (questionSet.getRepetitionAllowed()) {
-			String code = questionSet.getCode().getKey();
-			Integer repetitionIndex = questionSetAnswer.getRepetitionIndex();
-			repetitionMap.put(code, repetitionIndex);
-		}
-
-		QuestionSetAnswer parent = questionSetAnswer.getParent();
-		if (parent != null) {
-			putRepetitionIndex(repetitionMap, parent);
-		}
-	}
+    public static Map<String, Integer> buildRepetitionMap(QuestionSetAnswer questionSetAnswer) {
+        Map<String, Integer> res = new HashMap<>();
+        while (questionSetAnswer != null) {
+            QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+            if (questionSet.getRepetitionAllowed()) {
+                res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
+            }
+            questionSetAnswer = questionSetAnswer.getParent();
+        }
+        return res;
+    }
 
 }
