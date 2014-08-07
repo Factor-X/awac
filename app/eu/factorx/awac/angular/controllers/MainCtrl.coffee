@@ -96,7 +96,7 @@ angular
 
         #hide data to compare if the period is the same than the period to answer
         if $scope.period == $scope.periodToCompare
-            $scope.periodToCompare = null
+            $scope.periodToCompare = 'default'
 
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
