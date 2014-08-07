@@ -3,23 +3,23 @@ package eu.factorx.awac.dto.awac.get;
 import eu.factorx.awac.dto.DTO;
 
 public class PeriodDTO extends DTO {
-	private Long id;
+	private String key;
 	private String label;
 
 	public PeriodDTO() {
 	}
 
-	public PeriodDTO(Long id, String label) {
-		this.id = id;
+	public PeriodDTO(String key, String label) {
+		this.key = key;
 		this.label = label;
 	}
 
-	public Long getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getLabel() {
@@ -32,7 +32,7 @@ public class PeriodDTO extends DTO {
 
 	public String toString() {
 		String content = "[";
-		content += "id:" + id;
+		content += "key:" + key;
 		content += ",label:" + label;
 		content += "]";
 		return content;

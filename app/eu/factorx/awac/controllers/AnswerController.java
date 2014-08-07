@@ -1,10 +1,6 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -29,19 +25,14 @@ import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.LanguageCode;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
-import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DocumentAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
-import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
-import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
+import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -91,10 +82,10 @@ public class AnswerController extends Controller {
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
-	public Result getByForm(String formIdentifier, Long periodId, Long scopeId) {
+	public Result getByForm(String formIdentifier, String periodKey, Long scopeId) {
 
 		Form form = formService.findByIdentifier(formIdentifier);
-		Period period = periodService.findById(periodId);
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 
 		// TODO The user language should be saved in a session attribute, and it should be possible to update it with a request parameter (change language request).
@@ -119,7 +110,7 @@ public class AnswerController extends Controller {
 			Logger.info("\t" + answerLineDTO);
 		}
 
-		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, periodId, getMaxLastUpdateDate(questionAnswers), answerLineDTOs);
+		QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, period.getId(), getMaxLastUpdateDate(questionAnswers), answerLineDTOs);
 
 		return ok(new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO));
 	}
@@ -166,7 +157,7 @@ public class AnswerController extends Controller {
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
-	public Result getFormProgress(Long periodId, Long scopeId) {
+	public Result getFormProgress(String periodKey, Long scopeId) {
 
 		// 1. control the owner of the scope
 		Scope scope = scopeService.findById(scopeId);
@@ -176,7 +167,7 @@ public class AnswerController extends Controller {
 		}
 
 		// 2. load period
-		Period period = periodService.findById(periodId);
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
 
 		// 3. load formProgress
 		List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
@@ -193,7 +184,7 @@ public class AnswerController extends Controller {
 
 		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
 
-		Period period = periodService.findById(formProgressDTO.getPeriod());
+		Period period = periodService.findByCode(new PeriodCode(formProgressDTO.getPeriod()));
 		Scope scope = scopeService.findById(formProgressDTO.getScope());
 		Form form = formService.findByIdentifier(formProgressDTO.getForm());
 
