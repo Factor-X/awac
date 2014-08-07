@@ -1,8 +1,9 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier, $timeout) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier, $timeout,displayFormMenu) ->
 
     $scope.formIdentifier = formIdentifier
+    $scope.displayFormMenu=displayFormMenu
 
     # declare the dataToCompare variable. This variable is used to display data to compare
     # the content is a FormDTO object (after loading by the $scope.$parent.$watch function
