@@ -206,9 +206,7 @@ angular
 
     $scope.displayMenu =->
 
-        console.log $location.path()
-
-        if $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
             return true
         return false
 

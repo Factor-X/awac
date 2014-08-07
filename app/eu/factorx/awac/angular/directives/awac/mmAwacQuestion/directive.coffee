@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacQuestion", (directiveService, translationService) ->
+.directive "mmAwacQuestion", (directiveService, translationService,$compile) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngQuestionCode: '='
@@ -13,6 +13,10 @@ angular
             directiveService.autoScopeImpl scope
 
 
+            scope.$watch '$parent.o', ->
+                scope.getTemplate(true)
+                scope.getTemplate(false)
+
             #
             # this function return the specific template for the
             # question in function of the question type, get by the model
@@ -21,31 +25,49 @@ angular
             #
             scope.getTemplate = (dataToCompare)->
 
-                toCompare = ""
-                if  dataToCompare == true
-                    toCompare = "ToCompare"
+                if $('.inject-data:first',element).html() ==''
 
-                if scope.getQuestion() != null
-                    answerType = scope.getQuestion().answerType
 
-                    #call the directive by the type of the question
-                    if answerType == 'BOOLEAN'
-                        return "mmAwacBooleanQuestion" + toCompare
-                    else if answerType == 'INTEGER'
-                        return "mmAwacIntegerQuestion" + toCompare
-                    else if answerType == 'DOUBLE'
-                        if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
-                            return "mmAwacRealWithUnitQuestion" + toCompare
+                    toCompare = ""
+                    directiveName =""
+
+
+                    if  dataToCompare == true
+                        toCompare = "true"
+                    else
+                        toCompare = "false"
+
+                    if scope.getQuestion() != null
+                        answerType = scope.getQuestion().answerType
+
+                        #call the directive by the type of the question
+                        if answerType == 'BOOLEAN'
+                            directiveName = "boolean-question"
+                        else if answerType == 'INTEGER'
+                            directiveName = "integer-question"
+                        else if answerType == 'DOUBLE'
+                            if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
+                                directiveName =  "real-with-unit-question"
+                            else
+                                directiveName =  "real-question"
+                        else if answerType == 'PERCENTAGE'
+                            directiveName =  "percentage-question"
+                        else if answerType == 'STRING'
+                            directiveName =  "string-question"
+                        else if answerType == 'VALUE_SELECTION'
+                            directiveName =  "select-question"
+                        else if answerType == 'DOCUMENT'
+                            directiveName =  "document-question"
+
+                        directive = $compile("<mm-awac-"+directiveName+" ng-data-to-compare=\""+toCompare+"\"></mm-awac-"+directiveName+">")(scope)
+
+                        if dataToCompare == true
+                            $('.inject-data-to-compare:first',element).append(directive)
                         else
-                            return "mmAwacRealQuestion" + toCompare
-                    else if answerType == 'PERCENTAGE'
-                        return "mmAwacPercentageQuestion" + toCompare
-                    else if answerType == 'STRING'
-                        return "mmAwacStringQuestion" + toCompare
-                    else if answerType == 'VALUE_SELECTION'
-                        return "mmAwacSelectQuestion" + toCompare
-                    else if answerType == 'DOCUMENT'
-                        return "mmAwacDocumentQuestion" + toCompare
+                            $('.inject-data:first',element).append(directive)
+
+
+
 
 
             scope.getQuestion = ->
