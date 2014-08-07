@@ -9,7 +9,7 @@ public class LoginResultDTO extends DTO {
 
 	private PersonDTO person;
 
-	private Long defaultPeriod;
+	private String defaultPeriod;
 
 	private List<PeriodDTO> availablePeriods;
 	private OrganizationDTO organization;
@@ -25,11 +25,11 @@ public class LoginResultDTO extends DTO {
 		this.person = person;
 	}
 
-	public Long getDefaultPeriod() {
+	public String getDefaultPeriod() {
 		return defaultPeriod;
 	}
 
-	public void setDefaultPeriod(Long defaultPeriod) {
+	public void setDefaultPeriod(String defaultPeriod) {
 		this.defaultPeriod = defaultPeriod;
 	}
 
