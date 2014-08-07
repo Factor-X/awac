@@ -5,7 +5,7 @@ import eu.factorx.awac.dto.DTO;
 
 public class FormProgressDTO extends DTO{
 
-	private Long period;
+	private String period;
 
 	private Long scope;
 
@@ -16,18 +16,18 @@ public class FormProgressDTO extends DTO{
 	public FormProgressDTO() {
 	}
 
-	public FormProgressDTO(Long period, Long scope, String form, Integer percentage) {
+	public FormProgressDTO(String period, Long scope, String form, Integer percentage) {
 		this.period = period;
 		this.scope = scope;
 		this.form = form;
 		this.percentage = percentage;
 	}
 
-	public Long getPeriod() {
+	public String getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(Long period) {
+	public void setPeriod(String period) {
 		this.period = period;
 	}
 
@@ -58,8 +58,8 @@ public class FormProgressDTO extends DTO{
 	@Override
 	public String toString() {
 		return "FormProgressDTO{" +
-				"period=" + period +
-				", scope=" + scope +
+				"period='" + period +
+				"', scope=" + scope +
 				", form='" + form + '\'' +
 				", percentage=" + percentage +
 				'}';
