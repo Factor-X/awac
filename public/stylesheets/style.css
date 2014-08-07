@@ -538,6 +538,10 @@ button[type="button"]:disabled {
     background-color: #808080;
 }
 
+button[type="button"].selected{
+    background-color: #305b2e !important;
+}
+
 /*-----------------------------------------------------
 	[ 3.b Specific ]
 -------------------------------------------------------
@@ -596,10 +600,23 @@ button.comments {
 -------------------------------------------------------
 */
 
-.content {
+.content-with-menu {
     position: absolute;
     bottom: 0;
     top: 238px;
+    overflow: auto;
+    border: 5px solid #305b2e;
+    border-top-width: 15px;
+    left: 0;
+    right: 0;
+    min-width: 1200px;
+    padding-bottom: 150px;
+}
+
+.content-without-menu {
+    position: absolute;
+    bottom: 0;
+    top: 198px;
     overflow: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;

@@ -1,6 +1,9 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, downloadService, $http) ->
+.controller "ResultsCtrl", ($scope, downloadService, $http,displayFormMenu) ->
+
+    $scope.displayFormMenu=displayFormMenu
+
     downloadService.getJson "result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 

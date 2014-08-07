@@ -31,11 +31,11 @@ angular
     #
     # Tabs
     #
-    $scope.getMenuCurrentClass = (loc) ->
+    $scope.isMenuCurrentlySelected = (loc) ->
         if $location.path().substring(0, loc.length) == loc
-            return "menu_current"
+            return true
         else
-            return ""
+            return false
 
     #
     # ask confirmation before leave the site
@@ -79,6 +79,9 @@ angular
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+
+            # used to recompute the displaying of the menu
+            $scope.$apply()
 
     #
     # Periods
@@ -200,6 +203,23 @@ angular
 
         $scope.lastSaveTime = date
 
+
+    $scope.displayMenu =->
+
+        console.log $location.path()
+
+        if $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+            return true
+        return false
+
+    $scope.getClassContent = ->
+        if $scope.$root.isLogin() == false
+            if $scope.getMainScope()?
+                if $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+                    return 'content-with-menu'
+                else
+                    return 'content-without-menu'
+        return ''
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
