@@ -13,7 +13,7 @@ div(class="question_field",
                 span {{getUserName(false,false)}}
                 img(src='/awac/assets/images/user_icon_arrow.png')
 
-    div(ng-show="displayOldDatas() && getAnswerToCompare() != null")
+    div(ng-show="displayOldDatas() === true && getAnswer(true) != null")
         button( ng-click="copyDataToCompare()",
         title="Copier la valeur") <<
         span( ng-include="getTemplate(true)")

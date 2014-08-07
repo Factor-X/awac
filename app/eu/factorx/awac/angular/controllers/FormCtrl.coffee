@@ -4,7 +4,6 @@ angular
 
     $scope.formIdentifier = formIdentifier
 
-
     # declare the dataToCompare variable. This variable is used to display data to compare
     # the content is a FormDTO object (after loading by the $scope.$parent.$watch function
     $scope.dataToCompare = null
@@ -30,10 +29,22 @@ angular
     # load the form and treat structure and data
     #
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+
         console.log "data"
         console.log data
         $scope.o = angular.copy(data)
 
+
+        #build the list of answers
+        #recove answerSave
+        if $scope.o.answersSave != null && $scope.o.answersSave != undefined
+            answerSave = $scope.o.answersSave
+            #save answer        i
+            $scope.answerList = answerSave.listAnswers
+
+        #
+        # compute mapRepetition
+        #
         $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
             if questionSetDTO.repetitionAllowed == true
 
@@ -70,12 +81,6 @@ angular
 
         $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
 
-        #build the list of answers
-        #recove answerSave
-        if $scope.o.answersSave != null && $scope.o.answersSave != undefined
-            answerSave = $scope.o.answersSave
-            #save answer        i
-            $scope.answerList = answerSave.listAnswers
 
         #build list of repetition for the mmAwacRepetition
         for qSet in $scope.o.questionSets
@@ -88,16 +93,19 @@ angular
         for questionSetDTO in $scope.o.questionSets
             $scope.addDefaultValue(questionSetDTO)
 
+        $timeout(->
+            # broadcast a condition event to compute condition a first time
+            # this first condition computing do not edit question
+            ###
+            console.log "COMPUTE COND START -------------------------"
+            $scope.$root.$broadcast('CONDITION')
+            console.log "COMPUTE COND END -------------------------"
+            ###
 
-        # broadcast a condition event to compute condition a first time
-        # this first condition computing do not edit question
-        $scope.$root.$broadcast('CONDITION')
-
-        #$timeout(->
-        modalService.hide(modalService.LOADING)
-        $scope.loading = false
-        console.log $scope.answerList
-        #, 200)
+            modalService.hide(modalService.LOADING)
+            $scope.loading = false
+            console.log $scope.answerList
+        , 0)
 
         return
 
@@ -111,7 +119,7 @@ angular
     $scope.$on 'SAVE', () ->
         $scope.save()
 
-    $scope.save = (argToNav=null) ->
+    $scope.save = (argToNav = null) ->
 
         #display the loading modal
         modalService.show(modalService.LOADING)
@@ -179,7 +187,7 @@ angular
     # get list choice by question code
     #
     $scope.getUnitCategories = (code) ->
-        if $scope.getQuestion(code) ==null
+        if $scope.getQuestion(code) == null
             return null
 
         #recover the question
@@ -216,7 +224,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -276,7 +284,7 @@ angular
             value = null
             defaultUnitId = null
             wasEdited = false
-            if $scope.getQuestion(code) !=null
+            if $scope.getQuestion(code) != null
                 question = $scope.getQuestion(code)
 
                 if question.defaultValue != null
@@ -285,9 +293,6 @@ angular
 
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
-                    console.log "Wainting unit for question : "
-                    console.log code
-                    console.log $scope.getUnitCategories(code)
                     defaultUnitId = $scope.getUnitCategories(code).mainUnitId
 
 
@@ -341,7 +346,7 @@ angular
         #exemple : {'A273' : 1,'A243':2}
 
         #if there is already a mapRepetition, used it for the new repetitionToAdd
-        if mapRepetition != null && mapRepetition != undefined
+        if mapRepetition?
             repetitionToAdd = angular.copy(mapRepetition)
 
         if $scope.mapRepetition[code] == null || $scope.mapRepetition[code] == undefined
@@ -366,11 +371,11 @@ angular
         len = $scope.answerList.length
         while (len--)
             question = $scope.answerList[len]
-            if question.mapRepetition != null && question.mapRepetition != undefined && $scope.compareRepetitionMap(question.mapRepetition,mapRepetition)
+            if question.mapRepetition? && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)
                 if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
-                	if $scope.answerList[len].value!=null
-	                    $scope.answerList[len].value=null
-	                    $scope.answerList[len].wasEdited=true
+                    if $scope.answerList[len].value != null
+                        $scope.answerList[len].value = null
+                        $scope.answerList[len].wasEdited = true
 
         # delete iteration
         # check all iteration because it must remove the iteration linked to the iteration to delete
@@ -380,10 +385,10 @@ angular
                 len = $scope.mapRepetition[key].length
                 while (len--)
                     iteration = $scope.mapRepetition[key][len]
-                    if $scope.compareRepetitionMap(iteration,mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
+                    if $scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
                         $scope.mapRepetition[key].splice(len, 1)
-         
-		
+
+
     #
     # compare to mapRepetition
     # if the mapContained is null or undefined, the result is true
@@ -465,6 +470,8 @@ angular
 
             promise.error (data, status, headers, config) ->
                 return
+        else
+            $scope.dataToCompare = null
 
     #
     # save the progresses of this form
