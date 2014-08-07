@@ -29,7 +29,7 @@ angular
     #
     # load the form and treat structure and data
     #
-    downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+    downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
 
         console.log "data"
         console.log data
@@ -514,7 +514,7 @@ angular
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.period
+        formProgressDTO.period = $scope.$parent.periodKey
         formProgressDTO.scope = $scope.$parent.scopeId
         formProgressDTO.percentage = percentage
 

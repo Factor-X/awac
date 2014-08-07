@@ -78,7 +78,7 @@ angular
                 params.loc = loc
                 modalService.show result.modalForConfirm, params
         if canBeContinue
-            $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+            $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
             # used to recompute the displaying of the menu
             $scope.$apply()
@@ -86,9 +86,9 @@ angular
     #
     # Periods
     #
-    $scope.period = 0
-    $scope.$watch 'period', () ->
-        $routeParams.period = $scope.period
+    $scope.periodKey = null
+    $scope.$watch 'periodKey', () ->
+        $routeParams.period = $scope.periodKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -98,14 +98,14 @@ angular
             $location.path(p)
 
         #hide data to compare if the period is the same than the period to answer
-        if $scope.period == $scope.periodToCompare
+        if $scope.periodKey == $scope.periodToCompare
             $scope.periodToCompare = 'default'
 
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
 
     $scope.$watch 'scopeId', () ->
-        $routeParams.period = $scope.period
+        $routeParams.period = $scope.periodKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -134,7 +134,7 @@ angular
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
-        $scope.period = parseInt($routeParams.period)
+        $scope.periodKey = parseInt($routeParams.period)
         $scope.scopeId = parseInt($routeParams.scope)
 
 
@@ -177,10 +177,10 @@ angular
     $scope.formProgress = null
 
     $scope.loadFormProgress = ->
-        if $scope.scopeId !=undefined && $scope.scopeId !=null && $scope.period != null && $scope.period != undefined
+        if $scope.scopeId? && $scope.periodKey?
             promise = $http
                 method:"GET"
-                url: "answer/formProgress/"+$scope.period+"/"+$scope.scopeId
+                url: "answer/formProgress/"+$scope.periodKey+"/"+$scope.scopeId
                 headers:"Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
                 $scope.formProgress = data.listFormProgress

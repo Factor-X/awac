@@ -31,15 +31,17 @@ public class ResultController extends Controller {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReport(Long periodId, Long scopeId) {
+
+	public Result getReport(String periodId, Long scopeId) {
+        /*
 		Period period = periodService.findById(periodId);
 		Scope scope = scopeService.findById(scopeId);
 		Report report = reportService.getReport(scope, period);
 		Logger.info("Built report on the basis of {} base activity results:", report.getActivityResults().size());
 		for (BaseActivityResult activityResult : report.getActivityResults()) {
 			Logger.info("\t{}", activityResult);
-		}
-		return ok(conversionService.convert(report, ReportDTO.class));
+		}*/
+		return ok();//conversionService.convert(report, ReportDTO.class));
 	}
 
 }
