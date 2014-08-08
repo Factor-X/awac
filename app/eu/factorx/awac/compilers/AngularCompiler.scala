@@ -92,6 +92,7 @@ class AngularCompiler {
         val directives = angular / "directives" ** "*.coffee"
         val directivesTemplates = (angular / "directives" ** "*.jade") ++ (angular / "directives" ** "*.html")
         val controllers = angular / "controllers" ** "*.coffee"
+        val views = (angular / "views" ** "*.jade") ++ (angular / "views" ** "*.html")
 
         val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
 
@@ -100,7 +101,9 @@ class AngularCompiler {
         compileFiles(filters, Path.fromString("tmp/sources/"))
         compileFiles(directives, Path.fromString("tmp/sources/"))
         compileFiles(directivesTemplates, Path.fromString("tmp/sources/"))
+        compileFiles(views, Path.fromString("tmp/sources/"))
         compileFiles(controllers, Path.fromString("tmp/sources/"))
+
 
         compileFiles(validators, Path.fromString("tmp/validators/"))
 
@@ -116,11 +119,16 @@ class AngularCompiler {
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
                 ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
                 ++ (Path.fromString("tmp/templates/") ** "*.js"),
-            Path.fromString("tmp/concatenated/"))
+            Path.fromString("tmp/concatenated/")
+        )
 
         // compiledMain + compiledServices + compiledFilters + compiledDirectives + compiledControllers
 
-        scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
+        val res = scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
+
+        Logger.info("ANGULAR APP COMPILED")
+
+        res
     }
 
     private def compileFile(f: Path, folder: Path) {
@@ -196,30 +204,44 @@ class AngularCompiler {
 
         if (mustRemake) {
             Logger.info("[ASSEMBLING] " + (folder / "templates.js").path)
+            Logger.info(angular.path)
+
             var result = "angular.module('app.directives').run(function($templateCache) {"
             for (f <- files) {
+
+                Logger.info(f.path)
 
                 // now, escape string so that it can be embedded as a variable
                 val mapper: ObjectMapper = new ObjectMapper()
 
-                // compute a decent url for the template
-                var usefulPath = f.path.substring((angular / "directives").path.length)
+                var url = ""
 
-                // to dashed
-                val regex = "([a-z])([A-Z])"
-                val replacement = "$1-$2"
-                usefulPath = usefulPath.replaceAll(regex, replacement).toLowerCase
+                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "directives").path)) {
+                    Logger.info("DIRECTIVE")
+                    // compute a decent url for the template
+                    var usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "directives").path.length)
 
-                // now split and format it correctly
-                var usefulPathParts = usefulPath.split("[/\\\\]")
-                usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
-                usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
+                    // to dashed
+                    val regex = "([a-z])([A-Z])"
+                    val replacement = "$1-$2"
+                    usefulPath = usefulPath.replaceAll(regex, replacement).toLowerCase
 
-                val url = "$/angular/templates/" + usefulPath + ".html"
+                    // now split and format it correctly
+                    var usefulPathParts = usefulPath.split("[/\\\\]")
+                    usefulPathParts = usefulPathParts.slice(0, usefulPathParts.length - 1)
+                    usefulPath = usefulPathParts.slice(usefulPathParts.length - 1, usefulPathParts.length).mkString
+
+                    url = "$/angular/templates/" + usefulPath + ".html"
+                }
+
+                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "views").path)) {
+                    Logger.info("VIEW")
+                    val usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "views").path.length)
+                    url = "$/angular/views" + usefulPath
+                }
+
                 val content = mapper.writeValueAsString(scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n"))
-
                 result += "$templateCache.put('" + url + "', " + content + ");"
-
             }
             result += "});"
 

@@ -1,21 +1,19 @@
 package eu.factorx.awac.util.data.importer;
 
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.label.CodeLabel;
+import java.util.Map;
+
 import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
+
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 
 @Component
 public class TranslationImporter extends WorkbookDataImporter {
 
-	private static final String CODE_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
-
-	private static Workbook wb = null;
+	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
 
 	public TranslationImporter() {
 		super();
@@ -28,11 +26,9 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	@Override
 	protected void importData() throws Exception {
-		WorkbookSettings ws = new WorkbookSettings();
-		ws.setEncoding(CP1252_ENCODING);
-		wb = Workbook.getWorkbook(new File(CODE_TO_IMPORT_WORKBOOK_PATH), ws);
+		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 
-		Sheet survey = wb.getSheet("SURVEY");
+		Sheet survey = wbSheets.get("SURVEY");
 
 		for (int i = 1; i < survey.getRows(); i++) {
 
@@ -47,7 +43,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 		}
 
-		Sheet ui = wb.getSheet("INTERFACE");
+		Sheet ui = wbSheets.get("INTERFACE");
 
 		for (int i = 1; i < ui.getRows(); i++) {
 

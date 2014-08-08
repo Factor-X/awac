@@ -1,6 +1,7 @@
 <!doctype html>
 <html ng-app="app">
     <head>
+        <title>AWAC</title>
 
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
@@ -77,15 +78,19 @@
 
     </head>
     <body ng-controller="MainCtrl">
-
+        
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>
 
         <!-- list modal -->
+        <mm-awac-modal-manager></mm-awac-modal-manager>
+        <!--
         <mm-awac-modal-login></mm-awac-modal-login>
         <mm-awac-modal-loading></mm-awac-modal-loading>
         <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
+        <mm-awac-modal-document-manager></mm-awac-modal-document-manager>
+        -->
 
         <!-- success flash message. -->
         <div flash-alert="success" active-class="in" class="alert fade">
@@ -98,10 +103,6 @@
             <strong class="alert-heading">Erreur!</strong>
             <span class="alert-message" ng-bind-html="flash.message"></span>
         </div>
-
-        <!--
-            <ng-virtual ng-show="isLogin()" ng-view></ng-virtual>
-         -->
 
         <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
     </body>

@@ -1,17 +1,18 @@
 package eu.factorx.awac.util.data.importer;
 
+import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 
+import play.Logger;
 import eu.factorx.awac.models.AbstractEntity;
 
 public abstract class WorkbookDataImporter {
@@ -21,19 +22,41 @@ public abstract class WorkbookDataImporter {
 	public static final String NEW_LINE = System.getProperty("line.separator");
 
 	protected Session session;
-	
-	public synchronized void run() {
+
+	public void run() {
 		try {
 			String className = getClass().getSimpleName();
-		   	System.out.println("========= " + className + " - START OF IMPORT =========");
+			Logger.info(className + " - START OF IMPORT");
+			long startTime = System.currentTimeMillis();
 			importData();
-		   	System.out.println("========= " + className + " - END OF IMPORT =========");
+			long endTime = System.currentTimeMillis() - startTime;
+			Logger.info(className + " - END OF IMPORT (took " + endTime + " msec)");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	protected abstract void importData() throws Exception;
+
+	protected static Map<String, Sheet> getWorkbookSheets(String path) {
+		return getWorkbookSheets(path, CP1252_ENCODING);
+	}
+
+	protected static Map<String, Sheet> getWorkbookSheets(String path, String encoding) {
+		WorkbookSettings ws = new WorkbookSettings();
+		ws.setEncoding(encoding);
+		ws.setSuppressWarnings(true);
+		Workbook workbook = null;
+		try {
+			workbook = Workbook.getWorkbook(new File(path), ws);
+		} catch (Exception e) {
+			throw new RuntimeException("Exception while loading workbook '" + path + "'", e);
+		}
+
+		// save all sheets in a map (by workbookPath and sheetName)
+		// => reduces by 80% the time of import! (huge performance leak in Workbook.getSheet(String) method)
+		return getAllSheets(workbook);
+	}
 
 	protected static Set<String> getColumnContent(Sheet sheet, int column) {
 		return getColumnContent(sheet, column, 1);
@@ -77,8 +100,8 @@ public abstract class WorkbookDataImporter {
 		try {
 			return NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
 		} catch (ParseException e) {
-			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", "
-					+ column + "} : " + cellContents, e);
+			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", " + column + "} : "
+					+ cellContents, e);
 		}
 	}
 
@@ -94,6 +117,14 @@ public abstract class WorkbookDataImporter {
 
 	protected <T extends AbstractEntity> void updateEntity(T entity) {
 		session.merge(entity);
+	}
+
+	private static Map<String, Sheet> getAllSheets(Workbook workbook) {
+		Map<String, Sheet> workbookSheets = new HashMap<>();
+		for (Sheet sheet : workbook.getSheets()) {
+			workbookSheets.put(sheet.getName(), sheet);
+		}
+		return workbookSheets;
 	}
 
 }

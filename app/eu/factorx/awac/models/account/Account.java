@@ -44,7 +44,7 @@ public class Account extends Person {
 	@Embedded
 	private Vat vat;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	private Organization organization;
 
 	protected Account() {

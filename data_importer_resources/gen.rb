@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'spreadsheet'
 require 'i18n'
+require './bad.rb'
 
 Spreadsheet.client_encoding = 'UTF-8'
 
@@ -36,6 +37,7 @@ tabs = []
 question_sets = []
 questions = []
 options_lists = []
+bad_list = []
 
 current_tab = nil
 
@@ -73,6 +75,24 @@ sheet.each do |row|
   type = row[13]
   options = row[14]
   repeatable = loop_desc!=nil
+
+  #bad
+  bad_key = row[1]
+  bad_name = row[2]
+  bad_method = row[3]
+  bad_rank = row[4]
+  bad_specific_purpose = row[5]
+  bad_ac_key = row[6]
+  bad_ac = row[7]
+  bad_asc_key = row[8]
+  bad_asc = row[9]
+  bad_at_key = row[10]
+  bad_at = row[11]
+  bad_as_key = row[12]
+  bad_as = row[13]
+  bad_ao = row[14]
+  bad_a_unit = row[15]
+  bad_value = row[16]
 
 
   if current_tab != nil and current_tab.number != '1'
@@ -158,8 +178,35 @@ sheet.each do |row|
 
 
     end
-
   end
+
+  if ref == nil && bad_key != nil
+
+    # build bad
+    bad = Bad.new(bad_key,
+                 bad_name,
+                 bad_method,
+                 bad_rank,
+                 bad_specific_purpose,
+                 bad_ac_key,
+                 bad_ac,
+                 bad_asc_key,
+                 bad_asc,
+                 bad_at_key,
+                 bad_at,
+                 bad_as_key,
+                 bad_as,
+                 bad_ao,
+                 bad_a_unit,
+                 bad_value)
+
+    bad.name = bad_key
+
+
+    puts "BAD : "+bad.toString
+  end
+
+
 end
 
 def make_tab(t)
@@ -294,7 +341,7 @@ def make_question(q)
   if q.type == 'DOCUMENT'
     found= true
 
-    txt = 'session.saveOrUpdate(new StringQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
+    txt = 'session.saveOrUpdate(new DocumentQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
   end
@@ -367,10 +414,14 @@ def make_question(q)
   if q.type == 'PCT'
     found= true
 
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, null, __DEFAULT__));'
+    if driver == nil or driver.strip.length == 0
+      driver = 'null'
+    end
+
+    txt = 'session.saveOrUpdate(new PercentageQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, __DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
-    txt = txt.gsub /__DEFAULT__/, driver.inspect
+    txt = txt.gsub /__DEFAULT__/, driver
   end
 
   if found
@@ -432,7 +483,7 @@ def create_ws(b, ln, good_sheet)
 
   bold = Spreadsheet::Format.new :weight => :bold
 
-  if good_sheet[0, 0] == 'ActivitySource_KEY' or good_sheet[0, 0] == 'ActivityType_KEY'
+  if good_sheet[0, 0] == 'ActivitySource_KEY' or good_sheet[0, 0] == 'ActivityType_KEY' or good_sheet[0, 0] == 'ActivitySubCategory_KEY'
     s[0, 0] = good_sheet[0, 0]
 
     s.row(0).set_format(0, bold)

@@ -1,21 +1,24 @@
 package eu.factorx.awac.models;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import play.Logger;
+import java.io.Serializable;
 
 import javax.persistence.*;
-import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import play.Logger;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractEntity implements Serializable {
 
-	public static final String FIND_ALL = "Entity.findAll";
+	private static final long serialVersionUID = 1139875066271860505L;
 
-	public static final String TOTAL_RESULT = "Entity.totalResult";
-
-	private static final long serialVersionUID = 1L;
+	private static final String PERSISTING_ENTITY = "JPA Event - Persisting new {} entity";
+	private static final String UPDATING_ENTITY = "JPA Event - Updating {} entity with ID = {}";
+	private static final String REMOVING_ENTITY = "JPA Event - Removing {} entity with ID = {}";
+	private static final String LOADED_ENTITY = "JPA Event - Loaded {} entity with ID = {}";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +34,22 @@ public abstract class AbstractEntity implements Serializable {
 
 	@PrePersist
 	public void prePersist() {
-		Logger.info("===== Persisting " + getClass().getName() + " entity");
+		Logger.debug(PERSISTING_ENTITY, getClass().getName());
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		Logger.info("===== Updating " + getClass().getName() + " entity with ID = " + getId());
+		Logger.debug(UPDATING_ENTITY, getClass().getName(), getId());
+	}
+
+	@PreRemove
+	public void preRemove() {
+		Logger.debug(REMOVING_ENTITY, getClass().getName(), getId());
+	}
+
+	@PostLoad
+	public void postLoad() {
+		Logger.trace(LOADED_ENTITY, getClass().getName(), getId());
 	}
 
 	/**
@@ -65,4 +78,8 @@ public abstract class AbstractEntity implements Serializable {
 		return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
 	}
 
+    @Override
+    public String toString() {
+        return "AbstractEntity.id=" + id;
+    }
 }

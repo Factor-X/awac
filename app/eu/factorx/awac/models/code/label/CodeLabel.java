@@ -27,6 +27,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 		CodeLabel.COLUMN_NAME_KEY }) })
 @NamedQueries({
 		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList"),
+		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl") })
 public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
 
@@ -35,6 +36,7 @@ public class CodeLabel extends AbstractEntity implements Serializable, Comparabl
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_BY_LIST = "CodeLabel.findByList";
+	public static final String FIND_KEYS_BY_LIST = "CodeLabel.findKeysByList";
 	public static final String FIND_ALL = "CodeLabel.findAll";
 
 	@Enumerated(EnumType.STRING)

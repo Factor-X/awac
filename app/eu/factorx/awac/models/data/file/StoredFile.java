@@ -1,13 +1,18 @@
 package eu.factorx.awac.models.data.file;
 
-import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 
 import javax.persistence.*;
 
 @Entity
+@NamedQueries({ @NamedQuery(name = StoredFile.FIND_BY_STORED_NAME, query = "select q from StoredFile q where q.storedName in :storedName"),
+})
 public class StoredFile  extends AuditedAbstractEntity {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_STORED_NAME = "StoredFile.findByStoredName";
 
     private String originalName;
 
@@ -63,6 +68,7 @@ public class StoredFile  extends AuditedAbstractEntity {
     @Override
     public String toString() {
         return "StoredFile{" +
+                super.toString()+
                 "originalName='" + originalName + '\'' +
                 ", storedName='" + storedName + '\'' +
                 ", size=" + size +

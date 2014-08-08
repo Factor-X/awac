@@ -20,11 +20,11 @@ import static org.fluentlenium.core.filter.FilterConstructor.*;
 import eu.factorx.awac.controllers.*;
 
 public class Administrators extends FluentPage {
-    public String getUrl() {
-		return eu.factorx.awac.controllers.routes.Administrators.list(0, "identifier", "asc", "").url();
-    }
-
-    public void isAt() {
-        assertThat(find("h1", withText("Administrator List"))).hasSize(1);
-    }
+//    public String getUrl() {
+//		return eu.factorx.awac.controllers.routes.Administrators.list(0, "identifier", "asc", "").url();
+//    }
+//
+//    public void isAt() {
+//        assertThat(find("h1", withText("Administrator List"))).hasSize(1);
+//    }
 }

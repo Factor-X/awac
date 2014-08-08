@@ -1,11 +1,16 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractEntity;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.account.Account;
 
 @Entity
 @Table(name = "organization")
@@ -13,10 +18,14 @@ public class Organization extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@Column(unique = true)
 	private String name;
 
 	@OneToMany(mappedBy = "organization")
 	private List<Site> sites;
+	
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	List<Account> accounts;
 
 	protected Organization() {
 		super();
@@ -43,4 +52,31 @@ public class Organization extends AbstractEntity {
 		this.sites = param;
 	}
 
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Organization)) return false;
+		if (!super.equals(o)) return false;
+
+		Organization that = (Organization) o;
+
+		if (!name.equals(that.name)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + name.hashCode();
+		return result;
+	}
 }

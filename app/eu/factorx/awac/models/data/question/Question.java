@@ -1,17 +1,9 @@
 package eu.factorx.awac.models.data.question;
 
+import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
@@ -22,7 +14,7 @@ import eu.factorx.awac.models.data.answer.AnswerType;
 @DiscriminatorColumn(name = "question_type")
 @NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
 		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
-		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS, query = "select q from Question q where q.questionSet in :questionSets"),
+		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS_IDS, query = "select q from Question q where q.questionSet.id in :questionSetsIds"),
 
 })
 public abstract class Question extends AuditedAbstractEntity {
@@ -36,9 +28,9 @@ public abstract class Question extends AuditedAbstractEntity {
 	 */
 	public static final String FIND_BY_CODE = "Question.findByCode";
 	/**
-	 * :questionSets = a {@link List} of {@link QuestionSet}
+	 * :questionSetsIds = a {@link Collection} of {@link Long}
 	 */
-	public static final String FIND_BY_QUESTION_SETS = "Question.findByQuestionSets";
+	public static final String FIND_BY_QUESTION_SETS_IDS = "Question.findByQuestionSetsIds";
 
 	private static final long serialVersionUID = 1L;
 

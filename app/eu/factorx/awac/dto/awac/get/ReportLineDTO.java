@@ -16,6 +16,8 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private Double scope3Value = Double.valueOf(0);
 
+	private Double outOfScopeValue = Double.valueOf(0);
+
 	public ReportLineDTO() {
 		super();
 	}
@@ -25,19 +27,20 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.indicatorName = indicatorName;
 	}
 
-	public ReportLineDTO(String indicatorName, Double scope1Value, Double scope2Value, Double scope3Value) {
+	public ReportLineDTO(String indicatorName, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue) {
 		super();
 		this.indicatorName = indicatorName;
 		this.scope1Value = scope1Value;
 		this.scope2Value = scope2Value;
 		this.scope3Value = scope3Value;
+		this.outOfScopeValue = outOfScopeValue;
 	}
 
 	public String getIndicatorName() {
 		return indicatorName;
 	}
 
-	public void setIndicatorCategory(String indicatorName) {
+	public void setIndicatorName(String indicatorName) {
 		this.indicatorName = indicatorName;
 	}
 
@@ -65,6 +68,14 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.scope3Value = scope3Value;
 	}
 
+	public Double getOutOfScopeValue() {
+		return outOfScopeValue;
+	}
+
+	public void setOutOfScopeValue(Double outOfScopeValue) {
+		this.outOfScopeValue = outOfScopeValue;
+	}
+
 	public Double addScope1Value(Double value) {
 		return (scope1Value += value);
 	}
@@ -75,6 +86,10 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	public Double addScope3Value(Double value) {
 		return (scope3Value += value);
+	}
+
+	public Double addOutOfScopeValue(Double value) {
+		return (outOfScopeValue += value);
 	}
 
 }

@@ -1,15 +1,27 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AbstractEntity;
-
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
 @Table(name = "unit_category")
 @NamedQueries({
 		@NamedQuery(name = UnitCategory.FIND_BY_NAME, query = "select uc from UnitCategory uc where uc.name = :name"),
 })
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UnitCategory extends AbstractEntity {
 
 	/**

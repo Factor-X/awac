@@ -1,14 +1,18 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.forms.Form;
-import eu.factorx.awac.service.QuestionService;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.service.QuestionService;
 
 @Component
 public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Question> implements QuestionService {
@@ -37,9 +41,19 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 
 	@Override
 	public List<Question> findByForm(Form form) {
-		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_QUESTION_SETS, Question.class)
-				.setParameter("questionSets", form.getQuestionSets()).getResultList();
+		Set<Long> questionSetsIds = getQuestionSetsIds(form.getQuestionSets());
+		List<Question> resultList = JPA.em().createNamedQuery(Question.FIND_BY_QUESTION_SETS_IDS, Question.class)
+				.setParameter("questionSetsIds", questionSetsIds).getResultList();
 		return resultList;
+	}
+
+	private Set<Long> getQuestionSetsIds(List<QuestionSet> questionSets) {
+		Set<Long> questionSetsIds = new LinkedHashSet<>();
+		for (QuestionSet questionSet : questionSets) {
+			questionSetsIds.add(questionSet.getId());
+			questionSetsIds.addAll(getQuestionSetsIds(questionSet.getChildren()));
+		}
+		return questionSetsIds;
 	}
 
 }

@@ -16,35 +16,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period"),
-		@NamedQuery(name = QuestionSetAnswer.FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS, query = "select qsa from QuestionSetAnswer qsa where qsa.scope = :scope and qsa.period = :period and qsa.questionSet in :questionSets and qsa.parent is null"),})
+		@NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"), })
 public class QuestionSetAnswer extends AbstractEntity {
 
 	/**
-	 * @param scope
-	 * : a {@link Scope}
-	 * @param period
-	 * : a {@link Period}
+	 * @param scopeId : a {@link Long}
 	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD = "QuestionAnswer.findByScopeAndPeriod";
-
-	/**
-	 * @param codes : a Collection of {@link QuestionCode}
-	 */
-	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
-
-	/**
-	 * @param scope : a {@link Scope}
-	 * @param period : a {@link Period}
-	 * @param questionSets: a Collection of {@link QuestionSet}
-	 */
-	public static final String FIND_BY_SCOPE_AND_PERIOD_AND_QUESTION_SETS = "QuestionAnswer.findByScopeAndPeriodAndQuestionSets";
+	public static final String FIND_DISTINCT_PERIODS = "QuestionSetAnswer.findAllDistinctPeriodsByScopeId";
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,10 +45,10 @@ public class QuestionSetAnswer extends AbstractEntity {
 
 	private Integer repetitionIndex = 0;
 
-	@OneToMany(mappedBy = "questionSetAnswer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "questionSetAnswer", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<QuestionAnswer> questionAnswers;
 
-	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<QuestionSetAnswer> children;
 
 	/**
@@ -154,7 +137,7 @@ public class QuestionSetAnswer extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionSetAnswer [questionSet=" + questionSet + ", parent=" + parent + ", repetitionIndex=" + repetitionIndex + "]";
+		return "QuestionSetAnswer [questionSet=" + questionSet.getCode().getKey() + ", repetitionIndex=" + repetitionIndex + ", parent=" + parent + "]";
 	}
 
 	@Override

@@ -4,8 +4,6 @@ import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.file.StoredFile;
-import eu.factorx.awac.models.knowledge.Unit;
-import play.db.jpa.JPA;
 
 import javax.persistence.*;
 
@@ -21,7 +19,9 @@ public class DocumentAnswerValue extends AnswerValue {
     public DocumentAnswerValue() {
     }
 
-    public DocumentAnswerValue(StoredFile storedFile) {
+    public DocumentAnswerValue(QuestionAnswer questionAnswer, StoredFile storedFile) {
+        super();
+        this.questionAnswer = questionAnswer;
         this.storedFile = storedFile;
     }
 

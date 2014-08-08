@@ -3,6 +3,7 @@ package eu.factorx.awac.service.impl;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.AccountService;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import play.Logger;
 import play.db.jpa.JPA;
 

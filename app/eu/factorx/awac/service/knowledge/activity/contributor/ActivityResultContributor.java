@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
@@ -27,14 +28,15 @@ import eu.factorx.awac.service.UnitService;
 public abstract class ActivityResultContributor {
 
 	@Autowired
-	protected UnitService unitService;
+	private UnitService unitService;
 
 	@Autowired
 	private UnitConversionService unitConversionService;
 
 	@Autowired
-	@Qualifier("codeConversionServiceLabelComparisonImpl")
 	private CodeConversionService codeConversionService;
+
+	private Map<String, Unit> unitsBySymbol = null;;
 
 	public ActivityResultContributor() {
 		super();
@@ -42,11 +44,31 @@ public abstract class ActivityResultContributor {
 
 	public abstract List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers);
 
+	protected Double toDouble(QuestionAnswer questionAnswer) {
+		return toDouble(questionAnswer, null);
+	}
+
 	protected Double toDouble(QuestionAnswer questionAnswer, Unit toUnit) {
-		NumericAnswerValue numericAnswerValue = (NumericAnswerValue) questionAnswer.getAnswerValues().get(0);
-		Unit answerUnit = numericAnswerValue.getUnit();
-		Double answerValue = numericAnswerValue.doubleValue();
-		return convertNumericValue(answerValue, answerUnit, toUnit);
+		Double res = null;
+		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+		if (answerValue instanceof BooleanAnswerValue) {
+			Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+			if (Boolean.TRUE.equals(booleanValue)) {
+				res = new Double(1);
+			} else if (Boolean.FALSE.equals(booleanValue)) {
+				res = new Double(0);
+			}
+		} else if (answerValue instanceof NumericAnswerValue) {			
+			NumericAnswerValue numericAnswerValue = (NumericAnswerValue) answerValue;
+			if (numericAnswerValue.getUnit() == null) {
+				res = numericAnswerValue.doubleValue();
+			} else {
+				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit);
+			}
+		} else {
+			throw new RuntimeException("Cannot convert " + answerValue + " do Double");
+		}
+		return res;
 	}
 
 	protected String toString(QuestionAnswer questionAnswer) {
@@ -69,6 +91,11 @@ public abstract class ActivityResultContributor {
 		return codeConversionService.toActivityTypeCode(answerValue.getValue());
 	}
 
+	protected ActivitySubCategoryCode toActivitySubCategoryCode(QuestionAnswer questionAnswer) {
+		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
+		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
+	}
+
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
 		return unitConversionService.convert(value, unitFrom, toUnit, null);
 	}
@@ -81,4 +108,18 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
+	protected Unit getUnitBySymbol(String symbol) {
+		if (unitsBySymbol == null) {
+			findAllUnits();
+		}
+		return unitsBySymbol.get(symbol);
+	}
+
+	private void findAllUnits() {
+		unitsBySymbol = new HashMap<>();
+		List<Unit> units = unitService.findAll();
+		for (Unit unit : units) {
+			unitsBySymbol.put(unit.getSymbol(), unit);
+		}
+	}
 }

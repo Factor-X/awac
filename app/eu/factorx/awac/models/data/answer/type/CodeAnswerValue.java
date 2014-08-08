@@ -51,4 +51,9 @@ public class CodeAnswerValue extends AnswerValue {
 		this.value = new Code(codeList, key);
 	}
 
+	@Override
+	public String toString() {
+		return "CodeAnswerValue [value=" + value + "]";
+	}
+
 }

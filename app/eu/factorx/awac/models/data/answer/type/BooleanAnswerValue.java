@@ -46,4 +46,9 @@ public class BooleanAnswerValue extends AnswerValue {
 		this.value = rawData.getBooleanData();
 	}
 
+	@Override
+	public String toString() {
+		return "BooleanAnswerValue [value=" + value + "]";
+	}
+
 }

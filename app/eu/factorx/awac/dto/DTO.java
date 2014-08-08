@@ -1,5 +1,6 @@
 package eu.factorx.awac.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,6 +11,7 @@ import play.mvc.Content;
 
 import java.io.IOException;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DTO implements Content {
 
 	private String __type;

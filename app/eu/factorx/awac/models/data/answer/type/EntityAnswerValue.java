@@ -63,4 +63,9 @@ public class EntityAnswerValue extends AnswerValue {
 		this.entityId = rawData.getLongData();
 	}
 
+	@Override
+	public String toString() {
+		return "EntityAnswerValue [entityName=" + entityName + ", entityId=" + entityId + "]";
+	}
+
 }

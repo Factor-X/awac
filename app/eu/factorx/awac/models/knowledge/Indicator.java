@@ -21,20 +21,28 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Entity
 @Table(name = "indicator")
 @NamedQueries({
-		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS, query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = false"),
+		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS,
+				query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
 		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),})
 public class Indicator extends AbstractEntity {
 
 	/**
-	 * @param type : an {@link IndicatorCategoryCode}
-	 * @param scopeType : a {@link ScopeTypeCode}
-	 * @param activityCategory : an {@link ActivityCategoryCode}
-	 * @param activitySubCategory : an {@link ActivitySubCategoryCode}
-	 * @param activityOwnership : a {@link Boolean}
+	 * @param type: an {@link IndicatorTypeCode}
+	 * @param scopeType: a {@link ScopeTypeCode}
+	 * @param activityCategory: an {@link ActivityCategoryCode}
+	 * @param activitySubCategory: an {@link ActivitySubCategoryCode}
+	 * @param activityOwnership: a {@link Boolean}
+	 * @param deleted: a {@link Boolean}
 	 */
-	public static final String FIND_BY_PARAMETERS = "Indicator.findByParametersAndOwnership";
+	public static final String FIND_BY_PARAMETERS = "Indicator.findByParameters";
+	
 	public static final String FIND_ALL_INDICATOR_NAMES = "Indicator.findAllIndicatorNames";
+
 	private static final long serialVersionUID = 1L;
+
+	@Column(unique = true)
+	private String key;
+
 	// not unique !!
 	private String name;
 
@@ -68,10 +76,11 @@ public class Indicator extends AbstractEntity {
 		super();
 	}
 
-	public Indicator(String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
+	public Indicator(String key, String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
 	                 IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
 	                 ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
 		super();
+		this.key = key;
 		this.name = name;
 		this.type = type;
 		this.scopeType = scopeType;
@@ -82,6 +91,15 @@ public class Indicator extends AbstractEntity {
 		this.activityOwnership = activityOwnership;
 		this.unit = unit;
 		this.deleted = deleted;
+	}
+
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getName() {
@@ -166,8 +184,9 @@ public class Indicator extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return "Indicator [id=" + id + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
+		return "Indicator [key=" + key + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
 				+ ", indicatorCategory=" + indicatorCategory + ", activityCategory=" + activityCategory + ", activitySubCategory="
 				+ activitySubCategory + ", activityOwnership=" + activityOwnership + ", unit=" + unit + ", deleted=" + deleted + "]";
 	}
+
 }

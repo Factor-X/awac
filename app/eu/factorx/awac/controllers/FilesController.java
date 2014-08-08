@@ -1,10 +1,9 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.models.data.answer.type.DocumentAnswerValue;
+import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.service.StoredFileService;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
+import eu.factorx.awac.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.db.jpa.Transactional;
@@ -12,16 +11,12 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.*;
-import java.util.Enumeration;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
 import play.mvc.Http.MultipartFormData;
-
-
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
 public class FilesController extends Controller {
@@ -32,10 +27,14 @@ public class FilesController extends Controller {
     @Autowired
     private StoredFileService storedFileService;
 
-    private static final String caracters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    private static final String LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-    // authenticate action cf routes
+    /**
+     *
+     * @return
+     */
     @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
     public Result upload() {
 
         Logger.info("upload");
@@ -43,53 +42,70 @@ public class FilesController extends Controller {
 
         MultipartFormData body = request().body().asMultipartFormData();
         List<MultipartFormData.FilePart> files = body.getFiles();
-        for (MultipartFormData.FilePart filePart : files) {
-            String fileName = filePart.getFilename();
-            String contentType = filePart.getContentType();
-            File file = filePart.getFile();
+
+        Logger.info("files : "+files.size());
 
 
-            String storageKey = generateRandomKey(100);
+        FilesUploadedDTO filesUploadedDTO = null;
 
-            try {
+        if(files!=null) {
 
-                //store
-                //TODO implement for heroku
-                InputStream is = new FileInputStream(file);
+            File file = files.get(0).getFile();
+            String fileName = files.get(0).getFilename();
 
-                OutputStream os = new FileOutputStream("/home/florian/temp/" + storageKey);
+            //generate the key => test if the key is already used
+            String storageKey=null;
 
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                //read from is to buffer
-                while ((bytesRead = is.read(buffer)) != -1) {
-                    os.write(buffer, 0, bytesRead);
-                }
-                is.close();
-                //flush OutputStream to write any buffered data to file
-                os.flush();
-                os.close();
-
-
-                //create the entity
-                StoredFile storedFile = new StoredFile(file.getName(), storageKey, 0, securedController.getCurrentUser());
-
-                storedFileService.saveOrUpdate(storedFile);
-
-                Logger.info("storedFile : " + storedFile);
-
-                //TODO add documentAnswerValue to the DB
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            while(storageKey==null || storedFileService.findByStoredName(storageKey)!=null){
+                storageKey = generateRandomKey(100);
             }
 
+            //create the entity
+            StoredFile storedFile = new StoredFile(fileName, storageKey, 0, securedController.getCurrentUser());
 
-        } /*else {
-            flash("error", "Missing file");
-            return redirect(routes.Application.index());
-        }*/
-        return ok("File uploaded");
+            //and save
+            storedFileService.saveOrUpdate(storedFile);
+
+            //save the file
+            //TODO FileUtil.save(file, storageKey);
+
+            //complete the result
+            filesUploadedDTO = new FilesUploadedDTO(storedFile.getId(),storedFile.getOriginalName());
+
+            Logger.info("storedFile : " + storedFile);
+        }
+        return ok(filesUploadedDTO);
+    }
+
+    /*
+      download a file by is storedFileId
+     */
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result download(long storedFileId) {
+
+        //get the storedFile
+        StoredFile storedFile = storedFileService.findById(storedFileId);
+
+        if(storedFile==null){
+            throw new RuntimeException("File "+storedFileId+" was not found");
+        }
+
+        //create an inputStream
+        InputStream inputStream = FileUtil.getFileInputStream(storedFile.getStoredName());
+
+        //launch the download
+
+/*
+        response().setHeader(	"Content-Length",
+                "23000");
+*/
+        response().setContentType("application/octet-stream");
+        response().setHeader("Content-disposition","attachment; filename="+storedFile.getOriginalName());
+
+        Status ok = ok(inputStream);
+
+        return ok;
     }
 
 
@@ -100,13 +116,13 @@ public class FilesController extends Controller {
 	 * ----------------------------------------------------
 	 */
 
-    private static String generateRandomKey(final int nbCaracters) {
+    private static String generateRandomKey(final int nbLetter) {
 
         String result = "";
 
         final Random rand = new Random();
-        for (int i = 0; i < nbCaracters; i++) {
-            result += caracters.charAt(rand.nextInt(caracters.length()));
+        for (int i = 0; i < nbLetter; i++) {
+            result += LETTERS.charAt(rand.nextInt(LETTERS.length()));
         }
 
         return result;

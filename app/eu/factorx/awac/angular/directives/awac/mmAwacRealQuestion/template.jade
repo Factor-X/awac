@@ -1,10 +1,5 @@
-div(ng-hide="getCondition() === false",class="question_field")
-    div
-        .info(ng-show="hasDescription()")
-            .info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(class="glyphicon glyphicon-share-alt")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
-    .oneelement
-        .status.answer(mm-not-implemented)
-        input(type="text", ng-model="getAnswerValue().value", ng-pattern="/^[0-9,. ]*$/",ng-change="edited()")
-        .user_icon(mm-not-implemented) XM
+input.oneelement(   type="text",
+                    ng-model="getAnswer().value",
+                    numbers-only="double",
+                    style="text-align:right;",
+                    ng-disabled="getDataToCompare()==true")

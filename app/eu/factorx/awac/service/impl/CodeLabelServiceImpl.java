@@ -1,35 +1,59 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import play.Logger;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.service.CodeConversionService;
 import eu.factorx.awac.service.CodeLabelService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Repository;
-import play.Logger;
-
-import java.util.*;
 
 @Repository
 public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {
 
 	// custom cache! code labels are "strictly" read-only data for now...
 	// TODO Improve this
-	private static Map<CodeList, List<CodeLabel>> allLabels = null;
+	private static Map<CodeList, LinkedHashMap<String, CodeLabel>> allLabels = null;
 
-	@Override
-	public Map<CodeList, List<CodeLabel>> findAllCodeLabels() {
+	@Autowired
+	private CodeConversionService codeConversionService;
+
+	private Map<CodeList, LinkedHashMap<String, CodeLabel>> findAllCodeLabels() {
 		if (allLabels != null) {
 			return allLabels;
 		}
 
-		allLabels = new LinkedHashMap<>();
+		// add labels from codelabel table
+		allLabels = new HashMap<>();
 		for (CodeLabel codeLabel : super.findAll()) {
-			CodeList type = codeLabel.getCodeList();
-			if (!allLabels.containsKey(type)) {
-				allLabels.put(type, new ArrayList<CodeLabel>());
+			CodeList codeList = codeLabel.getCodeList();
+			if (!allLabels.containsKey(codeList)) {
+				allLabels.put(codeList, new LinkedHashMap<String, CodeLabel>());
 			}
-			allLabels.get(type).add(codeLabel);
+			allLabels.get(codeList).put(codeLabel.getKey(), codeLabel);
+		}
+
+		// add labels of sublists
+		List<CodesEquivalence> sublistsData = codeConversionService.findAllSublistsData();
+		for (CodesEquivalence codesEquivalence : sublistsData) {
+			CodeList codeList = codesEquivalence.getCodeList();
+			if (!allLabels.containsKey(codeList)) {
+				allLabels.put(codeList, new LinkedHashMap<String, CodeLabel>());
+			}
+			CodeLabel refCodeLabel = allLabels.get(codesEquivalence.getReferencedCodeList()).get(codesEquivalence.getReferencedCodeKey());
+			CodeLabel codeLabel = new CodeLabel(codeList, codesEquivalence.getCodeKey(), refCodeLabel.getLabelEn(),
+					refCodeLabel.getLabelFr(), refCodeLabel.getLabelNl());
+			allLabels.get(codeList).put(codeLabel.getKey(), codeLabel);
 		}
 
 		Set<CodeList> allLabelsCodeLists = allLabels.keySet();
@@ -40,29 +64,20 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 				Logger.warn("No labels for the code list " + codeList.name());
 			}
 		}
-		// check if all labels are linked to an existing codelist
-		if (!(CodeList.values().length == allLabelsCodeLists.size())) {
-			Logger.warn("CodeList enum contains " + CodeList.values().length + " values, since there are " + allLabelsCodeLists.size()
-					+ " distinct codeList used in all code labels");
-		}
 
 		return allLabels;
 	}
 
 	@Override
-	public List<CodeLabel> findCodeLabelsByType(CodeList type) {
-		return findAllCodeLabels().get(type);
+	public List<CodeLabel> findCodeLabelsByList(CodeList codeList) {
+		LinkedHashMap<String, CodeLabel> codeLabelsMap = findAllCodeLabels().get(codeList);
+		ArrayList<CodeLabel> codeLabels = new ArrayList<CodeLabel>(codeLabelsMap.values());
+		return codeLabels;
 	}
 
 	@Override
 	public CodeLabel findCodeLabelByCode(Code code) {
-		String key = code.getKey();
-		for (CodeLabel codeLabel : findCodeLabelsByType(code.getCodeList())) {
-			if (StringUtils.equals(key, codeLabel.getKey())) {
-				return codeLabel;
-			}
-		}
-		return null;
+		return findAllCodeLabels().get(code.getCodeList()).get(code.getKey());
 	}
 
 	@Override

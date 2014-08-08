@@ -11,7 +11,7 @@ public class PeriodToPeriodDTOConverter implements Converter<Period, PeriodDTO> 
 	@Override
 	public PeriodDTO convert(Period period) {
 		PeriodDTO dto = new PeriodDTO();
-		dto.setId(period.getId());
+		dto.setKey(period.getPeriodCode().getKey());
 		dto.setLabel(period.getLabel());
 		return dto;
 	}
