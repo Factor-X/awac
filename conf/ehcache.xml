@@ -2,10 +2,18 @@
 	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" name="config">
 
 	<diskStore path="java.io.tmpdir" />
-	<defaultCache maxElementsInMemory="10000" eternal="false"
+	<defaultCache statistics="true" maxElementsInMemory="10000" eternal="false"
 		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
 		maxElementsOnDisk="10000000" diskPersistent="false"
 		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU">
+		<cacheEventListenerFactory class="eu.factorx.awac.util.cache.EhCacheEventListenerFactory" listenFor="all" />
 	</defaultCache>
+	
+	<cache name="referencesCache" statistics="true" maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+		maxElementsOnDisk="10000000" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU">
+		<cacheEventListenerFactory class="eu.factorx.awac.util.cache.EhCacheEventListenerFactory" listenFor="all" />
+	</cache>
 
 </ehcache>

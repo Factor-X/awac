@@ -245,8 +245,9 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
 
         $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
 
-
-    #get user
+    #
+    # get user
+    #
     $rootScope.getUserByIdentifier = (identifier) ->
         for user in $rootScope.users
             if user.identifier == identifier
