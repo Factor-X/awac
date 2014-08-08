@@ -81,7 +81,8 @@ angular
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
             # used to recompute the displaying of the menu
-            $scope.$apply()
+            if !$scope.$$phase
+                $scope.$apply()
 
     #
     # Periods
@@ -118,7 +119,7 @@ angular
         $scope.loadFormProgress()
 
     $scope.periodsForComparison = [
-        {'id': 'default', 'label': 'aucune periode'}
+        {'key': 'default', 'label': 'aucune periode'}
     ]
     $scope.periodToCompare = 'default'
 
@@ -134,7 +135,7 @@ angular
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
-        $scope.periodKey = parseInt($routeParams.period)
+        $scope.periodKey = $routeParams.period
         $scope.scopeId = parseInt($routeParams.scope)
 
 
@@ -155,7 +156,7 @@ angular
             promise.success (data, status, headers, config) ->
 
                 $scope.periodsForComparison = [
-                    {'id': 'default', 'label': 'aucune periode'}
+                    {'key': 'default', 'label': 'aucune periode'}
                 ]
                 for period in data.periodDTOList
                     if period.id != $routeParams.period

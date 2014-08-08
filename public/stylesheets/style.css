@@ -312,8 +312,8 @@ select {
     border-spacing: 5px;
 }
 
-.menu > div,
-.last_menu > div {
+.menu > *,
+.last_menu > * {
     height: 88px;
     background-color: #efeee8;
     display: table-cell;
@@ -323,6 +323,7 @@ select {
     color: #3c3b37;
     vertical-align: top;
     transition: all 0.1s ease-out;
+    border:none;
 }
 
 .menu_current {
@@ -330,18 +331,18 @@ select {
     color: white !important;
 }
 
-.menu > div:hover,
-.last_menu > div:hover {
+.menu > *:hover,
+.last_menu > *:hover {
     background-color: #0988b5;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
 
-.menu > div {
-    min-width: 11.0%;
-    width: 11.0%;
-    max-width: 11.0%;
+.menu > * {
+    min-width: 14%;
+    width: 14%;
+    max-width: 14%;
     position: relative;
     margin: 0px 1px;
 }
@@ -401,7 +402,7 @@ select {
     display: table !important;
 }
 
-.last_menu > div {
+.last_menu > * {
     min-width: 49%;
     width: 49%;
     height: 118px;

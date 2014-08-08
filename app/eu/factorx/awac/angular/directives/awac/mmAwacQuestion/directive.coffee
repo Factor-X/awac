@@ -3,8 +3,11 @@ angular
 .directive "mmAwacQuestion", (directiveService, translationService,$compile) ->
     restrict: "E"
     scope: directiveService.autoScope
+        # the code of the question
         ngQuestionCode: '='
+        # a condition : optional
         ngCondition: '='
+        # the repetition map of the question if the question is into a repetition
         ngRepetitionMap: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
@@ -12,7 +15,10 @@ angular
         post: (scope, element) ->
             directiveService.autoScopeImpl scope
 
-
+            #
+            # watch the loading of the data into the parent and
+            # use the getTemplate to build the question body with the expected directive
+            #
             scope.$watch '$parent.o', ->
                 scope.getTemplate(true)
                 scope.getTemplate(false)
@@ -120,7 +126,6 @@ angular
             # called when the user change the value of the field
             #
             scope.edited = ->
-                console.log "EDITED !!!"
                 if scope.getAnswer().value !=null
                     if scope.getAnswer().value.length == 0
                         scope.getAnswer().value = null
@@ -247,12 +252,20 @@ angular
                         return 'pending_temp'
                     return 'pending'
 
+            #
+            # copy the value of the data to compare to the current value
+            #
             scope.copyDataToCompare = ->
                 if scope.getAnswer(true) != null
                     scope.getAnswer().value = scope.getAnswer(true).value
+                    if scope.getAnswer(true).unitId?
+                        scope.getAnswer().unitId = scope.getAnswer(true).unitId
                     scope.getAnswer().wasEdited = true
 
-
+            #
+            # Print the code of the question into the console
+            # used when there is a click on the name of the question
+            #
             scope.logQuestionCode = ->
                 console.log scope.getQuestionCode()
 
