@@ -131,19 +131,10 @@ select {
     float: right;
 }
 
-.header-option tr:first-child {
-    text-align: right;
-}
-
-.header-option tr:first-child td:nth-child(2) {
+.header-option  tr:first-child {
     text-align: center;
 }
 
-
-.header-option tr:last-child td,
-.header-option tr:last-child td button {
-    vertical-align: top;
-}
 
 .header-option td {
     padding-right: 10px;
@@ -190,7 +181,6 @@ select {
 .entreprise_name {
     font-size: 30px;
     font-weight: bold;
-    margin-top: -4px;
 }
 
 
@@ -206,17 +196,6 @@ select {
     font-weight: bold;
     padding-bottom: 2px;
     border-bottom: 3px solid white;
-}
-
-.user_manage.selected {
-    height: 39px;
-    border-radius: 0;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-top-left-radius: 5px;
-    -moz-border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
 }
 
 
@@ -511,6 +490,14 @@ select {
 -------------------------------------------------------
 */
 
+.modal{
+    display: block !important;
+}
+
+.modal-header > button{
+    float: right;
+}
+
 .modal-background {
     z-index: 100;
     position: fixed;
@@ -519,6 +506,11 @@ select {
     background-color: #000000;
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.question-comment-textarea{
+    width: 530px;
+    height: 189px;
 }
 
 /*-----------------------------------------------------
@@ -620,12 +612,6 @@ button.comments {
     margin-left: 0;
 }
 
-button.add {
-    height: 23px;
-    background: url('../images/add.png') 7px center no-repeat #9d9b91;
-    padding-left: 25px;
-}
-
 /*-----------------------------------------------------
 [ 4. Content ]
 -------------------------------------------------------
@@ -647,7 +633,7 @@ button.add {
 .content-without-menu {
     position: absolute;
     bottom: 0;
-    top: 70px;
+    top: 198px;
     overflow: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
@@ -656,30 +642,6 @@ button.add {
     min-width: 1200px;
     padding-bottom: 150px;
 }
-
-
-h1 {
-    background-color: #305b2e;
-    color: white;
-    font-size: 14px;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 0 0 16px 10px;
-}
-
-.menu_close {
-    background: url('../images/close.png') center bottom no-repeat;
-    width: 20px;
-    height: 15px;
-    float: right;
-    margin-right: 11px;
-    cursor: pointer;
-}
-
-.menu_close:hover {
-    background-position: center top;
-}
-
 
 .element {
     padding: 10px;
@@ -854,7 +816,7 @@ h1 {
 }
 
 .question_field .oneelement {
-    width: calc(100% - 72px);
+    width: calc(100% - 94px);
     display: inline-block;
 }
 
@@ -863,12 +825,41 @@ h1 {
 }
 
 .question_field .twoelement > *:first-child {
-    width: calc(60% - 36px);
+    width: calc(60% - 47px);
 }
 
 .question_field .twoelement > *:last-child {
-    width: calc(40% - 44px);
+    width: calc(40% - 55px);
     margin-left: 8px;
+}
+
+.question_field .error_message{
+    position: absolute;
+    margin-left: -172px;
+    margin-top:-25px;
+    z-index: 2;
+}
+
+.question_field .error_message > *{
+    display: inline-block;
+}
+
+.question_field .error_message > *:first-child{
+    background-color: #FF0000;
+    border: 1px solid #B10000;
+    width: 200px;
+    padding: 5px;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.question_field .error_message > *:last-child{
+    vertical-align: top;
+    margin-top: 4px;
+    margin-left: -1px;
+    z-index: 2;
 }
 
 .info {
@@ -966,6 +957,13 @@ h1 {
     background: url('../images/status/stop.png') no-repeat;
 }
 
+.edit_comment_icon{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 0 5px;
+}
+
 .user_icon {
     margin: 0 5px;
     display: inline-block;
@@ -980,7 +978,6 @@ h1 {
     /*font-style: italic;*/
     vertical-align: middle;
 }
-
 
 .user_icon > div{
     display:none;
@@ -1008,7 +1005,6 @@ h1 {
     margin-top: 4px;
     margin-left: -1px;
     z-index: 2;
-
 }
 
 .user_icon:hover > div,

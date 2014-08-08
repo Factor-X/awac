@@ -103,7 +103,7 @@ angular
             console.log "COMPUTE COND END -------------------------"
             ###
 
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
             $scope.loading = false
             console.log $scope.answerList
         , 0)
@@ -132,22 +132,20 @@ angular
             # test if the question was edited
             if answer.wasEdited != undefined && answer.wasEdited == true
 
-                #test if the data is valid
-                if answer.value == null || answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
-                    #test if the condition is not valid...
-                    if answer.hasValidCondition != undefined && answer.hasValidCondition == false
-                        # clean the value
-                        answer.value = null
+                #test if the condition is not valid...
+                if answer.hasValidCondition != undefined && answer.hasValidCondition == false
+                    # clean the value
+                    answer.value = null
 
-                    # add the answer of the listAnswerToSave
-                    listAnswerToSave[listAnswerToSave.length] = answer
+                # add the answer of the listAnswerToSave
+                listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
             messageFlash.displaySuccess "All answers are already saved !"
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
         else
             #and replace the list
             $scope.o.answersSave.listAnswers = listAnswerToSave
@@ -162,7 +160,7 @@ angular
 
             promise.success (data, status, headers, config) ->
                 messageFlash.displaySuccess "Your answers are saved !"
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
 
                 for answer in $scope.answerList
 
@@ -180,7 +178,7 @@ angular
 
             promise.error (data, status, headers, config) ->
                 messageFlash.displayError "An error was thrown during the save : " + data.message
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
                 return
 
 
@@ -500,7 +498,7 @@ angular
                     listTotal[listTotal.length] = answer
 
                     #test if the data is valid
-                    if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                    if answer.value != null
                         answered++
 
 
@@ -514,7 +512,7 @@ angular
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.periodKey
+        formProgressDTO.period = $scope.$parent.period
         formProgressDTO.scope = $scope.$parent.scopeId
         formProgressDTO.percentage = percentage
 

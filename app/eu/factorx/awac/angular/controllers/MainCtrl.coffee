@@ -146,7 +146,7 @@ angular
     $scope.loadPeriodForComparison = ->
 
         url ='answer/getPeriodsForComparison/' + $scope.scopeId
-        if $scope.scopeId != null && $scope.scopeId != undefined && $scope.scopeId != NaN  && $scope.scopeId != 'NaN'
+        if $scope.scopeId? && $scope.scopeId != NaN  && $scope.scopeId != 'NaN'
 
             promise = $http
                 method: "GET"
@@ -159,7 +159,7 @@ angular
                     {'key': 'default', 'label': 'aucune periode'}
                 ]
                 for period in data.periodDTOList
-                    if period.id != $routeParams.period
+                    if period.key != $scope.periodKey
                         $scope.periodsForComparison[$scope.periodsForComparison.length] = period
 
                 return
@@ -292,3 +292,4 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
     # parameter to display / hide the modal background
     #
     $rootScope.displayModalBackground = false
+

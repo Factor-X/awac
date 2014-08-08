@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacQuestion", (directiveService, translationService,$compile) ->
+.directive "mmAwacQuestion", (directiveService, translationService,$compile,$timeout,modalService) ->
     restrict: "E"
     scope: directiveService.autoScope
         # the code of the question
@@ -243,7 +243,7 @@ angular
 
                 answer = scope.getAnswer()
 
-                if answer.value != null && (answer.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                if answer.value != null
                     if answer.wasEdited != undefined && answer.wasEdited == true
                         return 'answer_temp'
                     return 'answer'
@@ -260,6 +260,8 @@ angular
                     scope.getAnswer().value = scope.getAnswer(true).value
                     if scope.getAnswer(true).unitId?
                         scope.getAnswer().unitId = scope.getAnswer(true).unitId
+                    if scope.getAnswer(true).comment?
+                        scope.getAnswer().comment = scope.getAnswer(true).comment
                     scope.getAnswer().wasEdited = true
 
             #
@@ -267,7 +269,35 @@ angular
             # used when there is a click on the name of the question
             #
             scope.logQuestionCode = ->
-                console.log scope.getQuestionCode()
+                console.log scope.getQuestionCode()+",value:"+scope.getAnswer().value+",wasEdited:"+scope.getAnswer().wasEdited
+
+            #
+            # error message if the user try to enter wrong data into the field
+            #
+            scope.errorMessage =""
+
+            #
+            # display a error message before the input
+            #
+            scope.setErrorMessage = (errorMessage)->
+                scope.errorMessage = errorMessage
+                if scope.lastTimeOut?
+                    $timeout.cancel(scope.lastTimeOut)
+
+                scope.lastTimeOut = $timeout(->
+                    scope.errorMessage =""
+                    scope.lastTimeOut = null
+                , 2000)
+
+            scope.saveComment = (comment) ->
+                scope.getAnswer().comment = comment
+                scope.getAnswer().wasEdited=true
+
+            scope.editComment = ->
+                args= {}
+                args.comment = scope.getAnswer().comment
+                args.save = scope.saveComment
+                modalService.show(modalService.QUESTION_COMMENT,args)
 
 
 
