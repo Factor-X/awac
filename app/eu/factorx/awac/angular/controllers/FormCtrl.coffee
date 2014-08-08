@@ -132,15 +132,13 @@ angular
             # test if the question was edited
             if answer.wasEdited != undefined && answer.wasEdited == true
 
-                #test if the data is valid
-                if answer.value == null || answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
-                    #test if the condition is not valid...
-                    if answer.hasValidCondition != undefined && answer.hasValidCondition == false
-                        # clean the value
-                        answer.value = null
+                #test if the condition is not valid...
+                if answer.hasValidCondition != undefined && answer.hasValidCondition == false
+                    # clean the value
+                    answer.value = null
 
-                    # add the answer of the listAnswerToSave
-                    listAnswerToSave[listAnswerToSave.length] = answer
+                # add the answer of the listAnswerToSave
+                listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
         console.log listAnswerToSave
@@ -500,7 +498,7 @@ angular
                     listTotal[listTotal.length] = answer
 
                     #test if the data is valid
-                    if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                    if answer.value != null
                         answered++
 
 
@@ -514,7 +512,7 @@ angular
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.periodKey
+        formProgressDTO.period = $scope.$parent.period
         formProgressDTO.scope = $scope.$parent.scopeId
         formProgressDTO.percentage = percentage
 

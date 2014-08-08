@@ -817,6 +817,35 @@ button.comments {
     margin-left: 8px;
 }
 
+.question_field .error_message{
+    position: absolute;
+    margin-left: -172px;
+    margin-top:-25px;
+    z-index: 2;
+}
+
+.question_field .error_message > *{
+    display: inline-block;
+}
+
+.question_field .error_message > *:first-child{
+    background-color: #FF0000;
+    border: 1px solid #B10000;
+    width: 200px;
+    padding: 5px;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.question_field .error_message > *:last-child{
+    vertical-align: top;
+    margin-top: 4px;
+    margin-left: -1px;
+    z-index: 2;
+}
+
 .info {
     display: inline-block;
     position: relative;
@@ -927,7 +956,6 @@ button.comments {
     vertical-align: middle;
 }
 
-
 .user_icon > div{
     display:none;
     position: absolute;
@@ -954,7 +982,6 @@ button.comments {
     margin-top: 4px;
     margin-left: -1px;
     z-index: 2;
-
 }
 
 .user_icon:hover > div,

@@ -6,7 +6,10 @@ div(class="question_field",
         span(ng-class="getQuestion().answerType === 'DOCUMENT' ? 'glyphicon-file' : 'glyphicon-share-alt' ",class="glyphicon")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate", ng-click="logQuestionCode()")
     div
-        div.status(ng-class="getStatusClass()")
+        .status(ng-class="getStatusClass()")
+        .error_message(ng-show="errorMessage.length>0")
+            div {{errorMessage}}
+            img(src='/awac/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
         .user_icon {{getUserName(false,true)}}
             div
