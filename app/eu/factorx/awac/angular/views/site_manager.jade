@@ -1,1 +1,20 @@
-h1 {{title}}
+.menu_close(ng-click="nav('/form1')")
+h1 site manager
+
+.element
+    button.add(type="button") add a new site
+    table.site_table
+        tr.site_table_header
+            td Site name
+            td NACE code
+            td Description
+            td
+            td users
+        tr
+            td Namur
+            td D35.30
+            td Le site de Namur est ceci ou celà, lorem ipsum
+            td
+                .button_edit
+            td
+                .user_icon XM
