@@ -1,7 +1,8 @@
 package eu.factorx.awac.util.data.importer;
 
+import java.util.Map;
+
 import jxl.Sheet;
-import jxl.Workbook;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,6 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
 
-	private static Workbook wb = null;
-
 	public TranslationImporter() {
 		super();
 	}
@@ -27,9 +26,9 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	@Override
 	protected void importData() throws Exception {
-		wb = getWorkbook(TRANSLATIONS_WORKBOOK_PATH);
+		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 
-		Sheet survey = wb.getSheet("SURVEY");
+		Sheet survey = wbSheets.get("SURVEY");
 
 		for (int i = 1; i < survey.getRows(); i++) {
 
@@ -44,7 +43,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 		}
 
-		Sheet ui = wb.getSheet("INTERFACE");
+		Sheet ui = wbSheets.get("INTERFACE");
 
 		for (int i = 1; i < ui.getRows(); i++) {
 

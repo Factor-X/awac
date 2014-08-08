@@ -1,9 +1,10 @@
 package eu.factorx.awac.util.data.importer;
 
+import java.util.Map;
+
 import javax.persistence.NoResultException;
 
 import jxl.Sheet;
-import jxl.Workbook;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,6 @@ public class AccountImporter extends WorkbookDataImporter {
 
 	private static final String ACCOUNTS_WORKBOOK_PATH = "data_importer_resources/accounts/accounts.xls";
 
-	private static Workbook wb = null;
-
 	public AccountImporter() {
 		super();
 	}
@@ -33,10 +32,10 @@ public class AccountImporter extends WorkbookDataImporter {
 
 	@Override
 	protected void importData() throws Exception {
-		wb = getWorkbook(ACCOUNTS_WORKBOOK_PATH);
+		Map<String, Sheet> wbSheets = getWorkbookSheets(ACCOUNTS_WORKBOOK_PATH);
 
 		// CREATE ORGANIZATIONS AND SITES
-		Sheet sites = wb.getSheet("SITES");
+		Sheet sites = wbSheets.get("SITES");
 		for (int i = 1; i < sites.getRows(); i++) {
 
 			String org = getCellContent(sites, 0, i);
@@ -74,7 +73,7 @@ public class AccountImporter extends WorkbookDataImporter {
 		}
 
 		// CREATE ACCOUNTS
-		Sheet accounts = wb.getSheet("ACCOUNTS");
+		Sheet accounts = wbSheets.get("ACCOUNTS");
 		for (int i = 1; i < accounts.getRows(); i++) {
 
 			String org = getCellContent(accounts, 0, i);
