@@ -550,6 +550,13 @@ public class AnswerController extends Controller {
 			break;
 		}
 
+        //add comment into each answerValue
+        if(answerLine.getComment()!=null) {
+            for (AnswerValue answerValue1 : answerValue) {
+                answerValue1.setComment(answerLine.getComment());
+            }
+        }
+
 		return answerValue;
 	}
 

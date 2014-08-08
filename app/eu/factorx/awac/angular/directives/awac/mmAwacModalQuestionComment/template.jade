@@ -1,0 +1,25 @@
+// Modal
+.modal(id="modalLogin",tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true",ng-enter="send()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button(type="button",class="close",data-dismiss="modal")
+                    span(aria-hidden="true") &times;<span
+                    span(class="sr-only") Close
+
+                h4(class="modal-title",id="myModalLabel") Ajouter un commentaire
+
+            .modal-body
+                .field_form
+                    textarea(ng-model="comment")
+            .modal-footer
+
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="save();")
+                    | Save
+
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="close();")
+                    | Cancel
