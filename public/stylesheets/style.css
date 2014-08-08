@@ -482,6 +482,14 @@ select {
 -------------------------------------------------------
 */
 
+.modal{
+    display: block !important;
+}
+
+.modal-header > button{
+    float: right;
+}
+
 .modal-background {
     z-index: 100;
     position: fixed;
@@ -490,6 +498,11 @@ select {
     background-color: #000000;
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.question-comment-textarea{
+    width: 530px;
+    height: 189px;
 }
 
 /*-----------------------------------------------------
@@ -800,7 +813,7 @@ button.comments {
 }
 
 .question_field .oneelement {
-    width: calc(100% - 72px);
+    width: calc(100% - 94px);
     display: inline-block;
 }
 
@@ -809,11 +822,11 @@ button.comments {
 }
 
 .question_field .twoelement > *:first-child {
-    width: calc(60% - 36px);
+    width: calc(60% - 47px);
 }
 
 .question_field .twoelement > *:last-child {
-    width: calc(40% - 44px);
+    width: calc(40% - 55px);
     margin-left: 8px;
 }
 
@@ -939,6 +952,13 @@ button.comments {
 
 .status.stop {
     background: url('../images/status/stop.png') no-repeat;
+}
+
+.edit_comment_icon{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 0 5px;
 }
 
 .user_icon {
@@ -1334,3 +1354,4 @@ button.comments {
 .condition-false{
     display: none !important;
 }
+

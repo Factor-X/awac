@@ -11,6 +11,7 @@ div(class="question_field",
             div {{errorMessage}}
             img(src='/awac/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
+        button(ng-click="editComment()",class="edit_comment_icon glyphicon glyphicon-pencil")
         .user_icon {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}

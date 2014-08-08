@@ -1,9 +1,9 @@
 // Modal
-.modal(id="modalLogin",tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true",ng-enter="send()")
+.modal(ng-enter="save()")
     .modal-dialog
         .modal-content
             .modal-header
-                button(type="button",class="close",data-dismiss="modal")
+                button(type="button",ng-click="close()")
                     span(aria-hidden="true") &times;<span
                     span(class="sr-only") Close
 
@@ -11,15 +11,15 @@
 
             .modal-body
                 .field_form
-                    textarea(ng-model="comment")
+                    textarea(class="question-comment-textarea",ng-model="comment")
             .modal-footer
-
-                button(type="button",
-                class="btn btn-primary",
-                ng-click="save();")
-                    | Save
 
                 button(type="button",
                 class="btn btn-primary",
                 ng-click="close();")
                     | Cancel
+
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="save();")
+                    | Save

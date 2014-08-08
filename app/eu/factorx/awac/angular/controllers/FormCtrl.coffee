@@ -103,7 +103,7 @@ angular
             console.log "COMPUTE COND END -------------------------"
             ###
 
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
             $scope.loading = false
             console.log $scope.answerList
         , 0)
@@ -145,7 +145,7 @@ angular
 
         if listAnswerToSave.length == 0
             messageFlash.displaySuccess "All answers are already saved !"
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
         else
             #and replace the list
             $scope.o.answersSave.listAnswers = listAnswerToSave
@@ -160,7 +160,7 @@ angular
 
             promise.success (data, status, headers, config) ->
                 messageFlash.displaySuccess "Your answers are saved !"
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
 
                 for answer in $scope.answerList
 
@@ -178,7 +178,7 @@ angular
 
             promise.error (data, status, headers, config) ->
                 messageFlash.displayError "An error was thrown during the save : " + data.message
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
                 return
 
 

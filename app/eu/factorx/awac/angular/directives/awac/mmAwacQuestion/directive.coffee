@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacQuestion", (directiveService, translationService,$compile,$timeout) ->
+.directive "mmAwacQuestion", (directiveService, translationService,$compile,$timeout,modalService) ->
     restrict: "E"
     scope: directiveService.autoScope
         # the code of the question
@@ -260,6 +260,8 @@ angular
                     scope.getAnswer().value = scope.getAnswer(true).value
                     if scope.getAnswer(true).unitId?
                         scope.getAnswer().unitId = scope.getAnswer(true).unitId
+                    if scope.getAnswer(true).comment?
+                        scope.getAnswer().comment = scope.getAnswer(true).comment
                     scope.getAnswer().wasEdited = true
 
             #
@@ -286,6 +288,16 @@ angular
                     scope.errorMessage =""
                     scope.lastTimeOut = null
                 , 2000)
+
+            scope.saveComment = (comment) ->
+                scope.getAnswer().comment = comment
+                scope.getAnswer().wasEdited=true
+
+            scope.editComment = ->
+                args= {}
+                args.comment = scope.getAnswer().comment
+                args.save = scope.saveComment
+                modalService.show(modalService.QUESTION_COMMENT,args)
 
 
 
