@@ -1,18 +1,13 @@
 package eu.factorx.awac.util.data.importer;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
@@ -32,8 +27,10 @@ public abstract class WorkbookDataImporter {
 		try {
 			String className = getClass().getSimpleName();
 			Logger.info(className + " - START OF IMPORT");
+			long startTime = System.currentTimeMillis();
 			importData();
-			Logger.info(className + " - END OF IMPORT");
+			long endTime = System.currentTimeMillis() - startTime;
+			Logger.info(className + " - END OF IMPORT (took " + endTime + " msec)");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -41,15 +38,24 @@ public abstract class WorkbookDataImporter {
 
 	protected abstract void importData() throws Exception;
 
-	protected static Workbook getWorkbook(String path) throws IOException, BiffException {
-		return getWorkbook(path, CP1252_ENCODING);
+	protected static Map<String, Sheet> getWorkbookSheets(String path) {
+		return getWorkbookSheets(path, CP1252_ENCODING);
 	}
 
-	protected static Workbook getWorkbook(String path, String encoding) throws IOException, BiffException {
+	protected static Map<String, Sheet> getWorkbookSheets(String path, String encoding) {
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setEncoding(encoding);
 		ws.setSuppressWarnings(true);
-		return Workbook.getWorkbook(new File(path), ws);
+		Workbook workbook = null;
+		try {
+			workbook = Workbook.getWorkbook(new File(path), ws);
+		} catch (Exception e) {
+			throw new RuntimeException("Exception while loading workbook '" + path + "'", e);
+		}
+
+		// save all sheets in a map (by workbookPath and sheetName)
+		// => reduces by 80% the time of import! (huge performance leak in Workbook.getSheet(String) method)
+		return getAllSheets(workbook);
 	}
 
 	protected static Set<String> getColumnContent(Sheet sheet, int column) {
@@ -111,6 +117,14 @@ public abstract class WorkbookDataImporter {
 
 	protected <T extends AbstractEntity> void updateEntity(T entity) {
 		session.merge(entity);
+	}
+
+	private static Map<String, Sheet> getAllSheets(Workbook workbook) {
+		Map<String, Sheet> workbookSheets = new HashMap<>();
+		for (Sheet sheet : workbook.getSheets()) {
+			workbookSheets.put(sheet.getName(), sheet);
+		}
+		return workbookSheets;
 	}
 
 }

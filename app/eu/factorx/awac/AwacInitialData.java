@@ -2,6 +2,7 @@ package eu.factorx.awac;
 
 
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
@@ -43,10 +44,10 @@ public class AwacInitialData {
 		UnitCategory timeUnits = getUnitCategoryByName("Time");
 
 		// PERIOD
-
 		for (int i = 2005; i <= 2013; i++) {
-			Period period = new Period("" + i);
-			session.saveOrUpdate(period);
+			String label = String.valueOf(i);
+			Period period1 = new Period(new PeriodCode(label), label);
+			session.saveOrUpdate(period1);
 		}
 
 		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
@@ -54,6 +55,9 @@ public class AwacInitialData {
 
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
+
+
+
 
 
 		// == TAB1 ========================================================================

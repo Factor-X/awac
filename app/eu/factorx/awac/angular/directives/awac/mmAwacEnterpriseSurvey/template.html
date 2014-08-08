@@ -36,7 +36,6 @@
                         <button type="button" class="confidentiality" mm-not-implemented>Confidentialité</button>
                         <button type="button" class="help" mm-not-implemented>Assistance</button>
                     </td>
-                    <!--<div class="small_separator"></div>-->
 
                     <td>
 
@@ -45,20 +44,19 @@
                         <button type="button"
                                 class="user_manage"
                                 ng-bind-html="'SITE_MANAGER_BUTTON' | translate"
-                                ng-click="nav('/site_manager')">
+                                ng-click="nav('/site_manager')"
+                                ng-class="{'selected': isMenuCurrentlySelected('/site_manager') == true}">
                         </button>
 
                         <!-- user manager button -->
                         <button type="button"
                                 class="user_manage"
                                 ng-bind-html="'USER_MANAGER_BUTTON' | translate"
-                                ng-click="nav('/user_manager')">
+                                ng-click="nav('/user_manager')"
+                                ng-class="{'selected': isMenuCurrentlySelected('/user_manager') == true}">
                         </button>
 
                     </td>
-
-                    <!--<div class="small_separator"></div>-->
-
 
                     <td>
 
@@ -67,7 +65,8 @@
                         <button type="button"
                                 class="user_manage"
                                 ng-bind-html="'USER_DATA_BUTTON' | translate"
-                                ng-click="nav('/user_data')">
+                                ng-click="nav('/user_data')"
+                                ng-class="{'selected': isMenuCurrentlySelected('/user_data') == true}">
                         </button>
 
                         <!-- logout button -->
@@ -92,25 +91,24 @@
 
         </div>
 
-        <div class="data_menu">
+        <div class="data_menu" ng-show="displayMenu()===true">
             <div class="data_date">
                 <div ng-bind-html="'PERIOD_DATA' | translate"></div>
-                <select ng-options="p.id as p.label for p in $root.periods" ng-model="period"></select>
+                <select ng-options="p.key as p.label for p in $root.periods" ng-model="periodKey"></select>
             </div>
 
             <div class="big_separator"></div>
 
             <div class="data_date_compare">
                 <div>Site sélectionné</div>
-                <select ng-options="p.id as p.name for p in $root.organization.sites" ng-model="scopeId"></select>
+                <select ng-options="s.id as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
             </div>
 
             <div class="big_separator"></div>
 
             <div class="data_date_compare">
                 <div>Comparaison avec</div>
-                <select ng-options="p.id as p.label for p in periodsForComparison" ng-model="periodToCompare"
-                        placeholder="Selectionner une période"></select>
+                <select ng-options="p.key as p.label for p in periodsForComparison" ng-model="periodToCompare"></select>
             </div>
 
             <div class="big_separator"></div>
@@ -136,59 +134,56 @@
                         <button type="button" class="verification" mm-not-implemented>Vérification</button>
                     </div>
                     <div class="menu">
-                        <div class="{{ getMenuCurrentClass('/form1') }}" ng-click="nav('/form1')">
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form1') == true}" ng-click="nav('/form1')">
                             <div ng-bind-html="'TAB1' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB1')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-                        <div class="{{ getMenuCurrentClass('/form2') }}" ng-click="nav('/form2')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form2') == true}" ng-click="nav('/form2')">
                             <div ng-bind-html="'TAB2' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB2')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-                        <div class="{{ getMenuCurrentClass('/form3') }}" ng-click="nav('/form3')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form3')  == true}" ng-click="nav('/form3')">
                             <div ng-bind-html="'TAB3' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB3')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-                        <div class="{{ getMenuCurrentClass('/form4') }}" ng-click="nav('/form4')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form4') == true}" ng-click="nav('/form4')">
                             <div ng-bind-html="'TAB4' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB4')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-
-                        <div class="{{ getMenuCurrentClass('/form5') }}" ng-click="nav('/form5')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form5') == true}" ng-click="nav('/form5')">
                             <div ng-bind-html="'TAB5' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB5')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-
-                        <div class="{{ getMenuCurrentClass('/form6') }}" ng-click="nav('/form6')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form6') == true}" ng-click="nav('/form6')">
                             <div ng-bind-html="'TAB6' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB6')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
-
-                        <div class="{{ getMenuCurrentClass('/form7') }}" ng-click="nav('/form7')">
+                        </button>
+                        <button ng-class="{'menu_current': isMenuCurrentlySelected('/form7') == true}" ng-click="nav('/form7')">
                             <div ng-bind-html="'TAB7' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB7')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div class="last_menu">
-                    <div class="{{ getMenuCurrentClass('/results') }}" ng-click="nav('/results')">
+                    <button ng-class="{'menu_current': isMenuCurrentlySelected('/results') == true}" ng-click="nav('/results')">
                         résultats
-                    </div>
-                    <div mm-not-implemented>
+                    </button>
+                    <button mm-not-implemented>
                         actions de réduction
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div ng-class="{true: '', false: 'content'}[$root.isLogin()]" ng-view>
+    <div class="{{getClassContent()}}" ng-view>
     </div>
 
 

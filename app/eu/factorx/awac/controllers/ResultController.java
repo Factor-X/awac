@@ -10,6 +10,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
@@ -31,8 +32,8 @@ public class ResultController extends Controller {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReport(Long periodId, Long scopeId) {
-		Period period = periodService.findById(periodId);
+	public Result getReport(String periodKey, Long scopeId) {
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Report report = reportService.getReport(scope, period);
 		Logger.info("Built report on the basis of {} base activity results:", report.getActivityResults().size());

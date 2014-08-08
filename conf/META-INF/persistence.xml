@@ -10,6 +10,7 @@
         <non-jta-data-source>DefaultDS</non-jta-data-source>
         
         <class>eu.factorx.awac.models.AbstractEntity</class>
+        <class>eu.factorx.awac.models.Analytics</class>
         <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
@@ -33,9 +34,11 @@
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
+        <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
+        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.AuditInfo</class>
@@ -58,10 +61,9 @@
         <class>eu.factorx.awac.models.data.question.type.EntitySelectionQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.IntegerQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.NumericQuestion</class>
-        <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
-        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
@@ -112,6 +114,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>TestDS</non-jta-data-source>
         <class>eu.factorx.awac.models.AbstractEntity</class>
+        <class>eu.factorx.awac.models.Analytics</class>
         <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
@@ -135,9 +138,11 @@
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
+        <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
+        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.AuditInfo</class>
@@ -160,9 +165,10 @@
         <class>eu.factorx.awac.models.data.question.type.EntitySelectionQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.IntegerQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.NumericQuestion</class>
-        <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
+        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>

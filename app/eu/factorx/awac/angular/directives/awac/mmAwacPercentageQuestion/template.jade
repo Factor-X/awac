@@ -1,8 +1,8 @@
 span.twoelement
     input(  type="text",
             ng-model="getAnswer().value",
-            ng-pattern="/^[0-9,. ]*$/",
-            ng-change="edited()",
+            numbers-only="double",
             style="text-align:right;",
+            percent,
             ng-disabled="getDataToCompare()==true")
     span(style="margin-left:5px") %

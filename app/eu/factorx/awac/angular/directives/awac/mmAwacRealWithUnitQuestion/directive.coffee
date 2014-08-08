@@ -27,8 +27,13 @@ angular
         #
         # called when the user change the value of the field
         #
-        scope.edited = ->
-            scope.$parent.edited()
+        scope.$watch 'getAnswer().value', (o,n)->
+            if ""+n != ""+o
+                scope.$parent.edited()
+
+        scope.$watch 'getAnswer().unitId', (o,n)->
+            if ""+n != ""+o
+                scope.$parent.edited()
 
         #
         # return the list of units that can be choose

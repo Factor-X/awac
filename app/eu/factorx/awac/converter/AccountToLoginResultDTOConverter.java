@@ -61,7 +61,7 @@ public class AccountToLoginResultDTOConverter implements Converter<Account, Logi
 		}
 
 		loginResultDTO.setAvailablePeriods(periodsDTO);
-		loginResultDTO.setDefaultPeriod(periods.get(0).getId());
+		loginResultDTO.setDefaultPeriod(periods.get(0).getPeriodCode().getKey());
 
 		loginResultDTO.setOrganization(organizationToOrganizationDTOConverter.convert(account.getOrganization()));
 

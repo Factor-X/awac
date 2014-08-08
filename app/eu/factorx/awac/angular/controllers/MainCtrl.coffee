@@ -31,11 +31,11 @@ angular
     #
     # Tabs
     #
-    $scope.getMenuCurrentClass = (loc) ->
+    $scope.isMenuCurrentlySelected = (loc) ->
         if $location.path().substring(0, loc.length) == loc
-            return "menu_current"
+            return true
         else
-            return ""
+            return false
 
     #
     # ask confirmation before leave the site
@@ -78,14 +78,18 @@ angular
                 params.loc = loc
                 modalService.show result.modalForConfirm, params
         if canBeContinue
-            $location.path(loc + "/" + $scope.period + "/" + $scope.scopeId)
+            $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
+
+            # used to recompute the displaying of the menu
+            if !$scope.$$phase
+                $scope.$apply()
 
     #
     # Periods
     #
-    $scope.period = 0
-    $scope.$watch 'period', () ->
-        $routeParams.period = $scope.period
+    $scope.periodKey = null
+    $scope.$watch 'periodKey', () ->
+        $routeParams.period = $scope.periodKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -95,14 +99,14 @@ angular
             $location.path(p)
 
         #hide data to compare if the period is the same than the period to answer
-        if $scope.period == $scope.periodToCompare
-            $scope.periodToCompare = null
+        if $scope.periodKey == $scope.periodToCompare
+            $scope.periodToCompare = 'default'
 
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
 
     $scope.$watch 'scopeId', () ->
-        $routeParams.period = $scope.period
+        $routeParams.period = $scope.periodKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -115,7 +119,7 @@ angular
         $scope.loadFormProgress()
 
     $scope.periodsForComparison = [
-        {'id': 'default', 'label': 'aucune periode'}
+        {'key': 'default', 'label': 'aucune periode'}
     ]
     $scope.periodToCompare = 'default'
 
@@ -131,7 +135,7 @@ angular
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
-        $scope.period = parseInt($routeParams.period)
+        $scope.periodKey = $routeParams.period
         $scope.scopeId = parseInt($routeParams.scope)
 
 
@@ -152,7 +156,7 @@ angular
             promise.success (data, status, headers, config) ->
 
                 $scope.periodsForComparison = [
-                    {'id': 'default', 'label': 'aucune periode'}
+                    {'key': 'default', 'label': 'aucune periode'}
                 ]
                 for period in data.periodDTOList
                     if period.id != $routeParams.period
@@ -174,10 +178,10 @@ angular
     $scope.formProgress = null
 
     $scope.loadFormProgress = ->
-        if $scope.scopeId !=undefined && $scope.scopeId !=null && $scope.period != null && $scope.period != undefined
+        if $scope.scopeId? && $scope.periodKey?
             promise = $http
                 method:"GET"
-                url: "answer/formProgress/"+$scope.period+"/"+$scope.scopeId
+                url: "answer/formProgress/"+$scope.periodKey+"/"+$scope.scopeId
                 headers:"Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
                 $scope.formProgress = data.listFormProgress
@@ -200,6 +204,21 @@ angular
 
         $scope.lastSaveTime = date
 
+
+    $scope.displayMenu =->
+
+        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+            return true
+        return false
+
+    $scope.getClassContent = ->
+        if $scope.$root.isLogin() == false
+            if $scope.getMainScope()?
+                if $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+                    return 'content-with-menu'
+                else
+                    return 'content-without-menu'
+        return ''
 
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->

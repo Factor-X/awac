@@ -312,8 +312,8 @@ select {
     border-spacing: 5px;
 }
 
-.menu > div,
-.last_menu > div {
+.menu > *,
+.last_menu > * {
     height: 88px;
     background-color: #efeee8;
     display: table-cell;
@@ -323,6 +323,7 @@ select {
     color: #3c3b37;
     vertical-align: top;
     transition: all 0.1s ease-out;
+    border:none;
 }
 
 .menu_current {
@@ -330,18 +331,18 @@ select {
     color: white !important;
 }
 
-.menu > div:hover,
-.last_menu > div:hover {
+.menu > *:hover,
+.last_menu > *:hover {
     background-color: #0988b5;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
 
-.menu > div {
-    min-width: 11.0%;
-    width: 11.0%;
-    max-width: 11.0%;
+.menu > * {
+    min-width: 14%;
+    width: 14%;
+    max-width: 14%;
     position: relative;
     margin: 0px 1px;
 }
@@ -401,7 +402,7 @@ select {
     display: table !important;
 }
 
-.last_menu > div {
+.last_menu > * {
     min-width: 49%;
     width: 49%;
     height: 118px;
@@ -538,6 +539,10 @@ button[type="button"]:disabled {
     background-color: #808080;
 }
 
+button[type="button"].selected{
+    background-color: #305b2e !important;
+}
+
 /*-----------------------------------------------------
 	[ 3.b Specific ]
 -------------------------------------------------------
@@ -596,10 +601,23 @@ button.comments {
 -------------------------------------------------------
 */
 
-.content {
+.content-with-menu {
     position: absolute;
     bottom: 0;
     top: 238px;
+    overflow: auto;
+    border: 5px solid #305b2e;
+    border-top-width: 15px;
+    left: 0;
+    right: 0;
+    min-width: 1200px;
+    padding-bottom: 150px;
+}
+
+.content-without-menu {
+    position: absolute;
+    bottom: 0;
+    top: 198px;
     overflow: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
@@ -799,6 +817,35 @@ button.comments {
     margin-left: 8px;
 }
 
+.question_field .error_message{
+    position: absolute;
+    margin-left: -172px;
+    margin-top:-25px;
+    z-index: 2;
+}
+
+.question_field .error_message > *{
+    display: inline-block;
+}
+
+.question_field .error_message > *:first-child{
+    background-color: #FF0000;
+    border: 1px solid #B10000;
+    width: 200px;
+    padding: 5px;
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.question_field .error_message > *:last-child{
+    vertical-align: top;
+    margin-top: 4px;
+    margin-left: -1px;
+    z-index: 2;
+}
+
 .info {
     display: inline-block;
     position: relative;
@@ -909,7 +956,6 @@ button.comments {
     vertical-align: middle;
 }
 
-
 .user_icon > div{
     display:none;
     position: absolute;
@@ -936,7 +982,6 @@ button.comments {
     margin-top: 4px;
     margin-left: -1px;
     z-index: 2;
-
 }
 
 .user_icon:hover > div,

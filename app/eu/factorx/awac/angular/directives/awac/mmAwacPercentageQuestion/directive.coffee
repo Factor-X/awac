@@ -27,6 +27,7 @@ angular
         #
         # called when the user change the value of the field
         #
-        scope.edited = ->
-            scope.$parent.edited()
+        scope.$watch 'getAnswer().value', (o,n)->
+            if ""+n != ""+o
+                scope.$parent.edited()
 
