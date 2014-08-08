@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import jxl.Sheet;
-import jxl.Workbook;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
@@ -15,14 +14,7 @@ import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Indicator;
@@ -31,7 +23,7 @@ import eu.factorx.awac.models.knowledge.Unit;
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	private static final String AWAC_DATA_WORKBOOK__PATH = "data_importer_resources/awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls";
+	private static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls";
 
 	/**
 	 * <pre>
@@ -48,7 +40,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 14: ActivityOwnership       (a {@link Boolean})
 	 * </pre>
 	 */
-	private static final String AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME = "Indicators";
+	private static final String INDICATORS_SHEET_NAME = "Indicators";
 
 	/**
 	 * <pre>
@@ -63,7 +55,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 10: Unit out             (a {@link Unit})
 	 * </pre>
 	 */
-	private static final String AWAC_DATA_WORKBOOK__FACTORS_SHEET__NAME = "EFDB_V6";
+	private static final String FACTORS_SHEET_NAME = "EFDB_V6";
 
 	private Map<String, Unit> allUnitSymbols = null;
 
@@ -83,11 +75,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	}
 
 	protected void importData() throws Exception {
-		Logger.info("== Importing Awac Indicators and Factors (from {})", AWAC_DATA_WORKBOOK__PATH);
+		Logger.info("== Importing Awac Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
 
-		Workbook awacDataWorkbook = getWorkbook(AWAC_DATA_WORKBOOK__PATH);
-		Sheet indicatorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__INDICATORS_SHEET__NAME);
-		Sheet factorsSheet = awacDataWorkbook.getSheet(AWAC_DATA_WORKBOOK__FACTORS_SHEET__NAME);
+		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
+		Sheet indicatorsSheet = awacDataWbSheets.get(INDICATORS_SHEET_NAME);
+		Sheet factorsSheet = awacDataWbSheets.get(FACTORS_SHEET_NAME);
 
 		allUnitSymbols = findAllUnits();
 

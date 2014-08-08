@@ -1,13 +1,8 @@
 package eu.factorx.awac.util.data.importer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import jxl.Sheet;
-import jxl.Workbook;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
@@ -40,20 +35,20 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	@Override
 	protected void importData() throws Exception {
 		Logger.info("== Importing Code Data (from {})", CODES_TO_IMPORT_WORKBOOK_PATH);
-		Workbook codesWkb = getWorkbook(CODES_TO_IMPORT_WORKBOOK_PATH);
+		Map<String, Sheet> codesWbSheets = getWorkbookSheets(CODES_TO_IMPORT_WORKBOOK_PATH);
 
 		// First import labels of sheets with primary key column, which can be referenced in other lists
-		importCodeLabels(codesWkb);
+		importCodeLabels(codesWbSheets);
 
 		// Then import correspondence data: sublists (only a foreign key), and linked lists (sheets with a primary key and one or more foreign keys)
-		importCodesEquivalences(codesWkb);
+		importCodesEquivalences(codesWbSheets);
 	}
 
-	private void importCodeLabels(Workbook codesWkb) {
+	private void importCodeLabels(Map<String, Sheet> codesWbSheets) {
 		Logger.info("==== Importing Code Labels");
-		for (String sheetName : codesWkb.getSheetNames()) {
+		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
-			Sheet sheet = codesWkb.getSheet(sheetName);
+			Sheet sheet = codesWbSheets.get(sheetName);
 			String firstCell = getCellContent(sheet, 0, 0);
 			if (PRIMARY_KEY_COLUMN_NAME.equals(firstCell)) {
 				LinkedHashMap<String, CodeLabel> codeLabels = importCodeLabels(sheet, codeList);
@@ -82,11 +77,11 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		return codeLabels;
 	}
 
-	private void importCodesEquivalences(Workbook codesWkb) {
+	private void importCodesEquivalences(Map<String, Sheet> codesWbSheets) {
 		Logger.info("==== Importing Codes Equivalences");
-		for (String sheetName : codesWkb.getSheetNames()) {
+		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
-			Sheet sheet = codesWkb.getSheet(sheetName);
+			Sheet sheet = codesWbSheets.get(sheetName);
 
 			// searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
 			int columns = sheet.getColumns();
