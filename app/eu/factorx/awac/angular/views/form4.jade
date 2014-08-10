@@ -11,7 +11,7 @@ mm-awac-section(title-code="A130_TITLE")
     mm-awac-question(question-code="A137", ng-condition="getAnswer('A136').value == '1'")
     mm-awac-question(question-code="A138", ng-condition="getAnswer('A136').value == '1'")
     mm-awac-question(question-code="A139", ng-condition="getAnswer('A138').value == '1'")
-    mm-awac-question(question-code="A500", ng-condition="getAnswer('A138').value == '0'")
+    mm-awac-question(question-code="A500", ng-condition="getAnswer('A138').value == '0'",ng-aggregation="0.484")
 
     mm-awac-sub-title(question-code="A140")
 
@@ -39,7 +39,12 @@ mm-awac-section(title-code="A130_TITLE")
                             mm-awac-question(question-code="A153",ng-repetition-map="itLevel1")
                             mm-awac-question(question-code="A154",ng-repetition-map="itLevel1")
                             mm-awac-question(question-code="A155",ng-repetition-map="itLevel1")
-                            mm-awac-question(question-code="A156",ng-repetition-map="itLevel1")
+
+
+                            mm-awac-question(question-code="A156",ng-repetition-map="itLevel1",
+                                            ng-aggregation="(getAnswer('A147',itLevel1).value | nullToZero)+( getAnswer('A148',itLevel1).value | nullToZero)+(getAnswer('A149',itLevel1).value | nullToZero)+(getAnswer('A150',itLevel1).value| nullToZero)+(getAnswer('A151',itLevel1).value| nullToZero)+(getAnswer('A152',itLevel1).value| nullToZero)+(getAnswer('A153',itLevel1).value| nullToZero)+(getAnswer('A154',itLevel1).value| nullToZero)+(getAnswer('A155',itLevel1).value| nullToZero)")
+
+
                         button.add-repetition-button(ng-click="addIteration('A142')", type="button")
                             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                             span(ng-bind-html="'A142_LOOPDESC' | translate")

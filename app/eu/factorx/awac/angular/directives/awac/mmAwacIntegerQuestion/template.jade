@@ -2,4 +2,4 @@ input.oneelement(   type="text",
                     ng-model="getAnswer().value",
                     numbers-only="integer",
                     style="text-align:right;",
-                    ng-disabled="getDataToCompare()==true")
+                    ng-disabled="getDataToCompare()==true || getIsAggregation()===true")

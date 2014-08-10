@@ -4,5 +4,5 @@ span.twoelement
             numbers-only="double",
             style="text-align:right;",
             percent,
-            ng-disabled="getDataToCompare()==true")
+            ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
     span(style="margin-left:5px") %

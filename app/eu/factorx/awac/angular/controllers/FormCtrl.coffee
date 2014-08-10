@@ -95,17 +95,9 @@ angular
             $scope.addDefaultValue(questionSetDTO)
 
         $timeout(->
-            # broadcast a condition event to compute condition a first time
-            # this first condition computing do not edit question
-            ###
-            console.log "COMPUTE COND START -------------------------"
-            $scope.$root.$broadcast('CONDITION')
-            console.log "COMPUTE COND END -------------------------"
-            ###
 
             modalService.close(modalService.LOADING)
             $scope.loading = false
-            console.log $scope.answerList
         , 0)
 
         return
@@ -293,7 +285,6 @@ angular
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
                     defaultUnitId = $scope.getUnitCategories(code).mainUnitId
-
 
             #if the answer was not founded, create it
             answerLine = {
@@ -512,7 +503,7 @@ angular
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.period
+        formProgressDTO.period = $scope.$parent.periodKey
         formProgressDTO.scope = $scope.$parent.scopeId
         formProgressDTO.percentage = percentage
 
