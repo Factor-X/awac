@@ -184,6 +184,11 @@ angular
                 url: "answer/formProgress/"+$scope.periodKey+"/"+$scope.scopeId
                 headers:"Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
+
+                console.log "FormProgress : answer/formProgress/"+$scope.periodKey+"/"+$scope.scopeId
+                console.log data
+
+
                 $scope.formProgress = data.listFormProgress
                 return
 

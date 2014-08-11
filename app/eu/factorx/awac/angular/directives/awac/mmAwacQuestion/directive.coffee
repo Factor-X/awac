@@ -1,19 +1,25 @@
 angular
 .module('app.directives')
-.directive "mmAwacQuestion", (directiveService, translationService,$compile,$timeout,modalService) ->
+.directive "mmAwacQuestion", (directiveService, translationService, $compile, $timeout, modalService) ->
     restrict: "E"
     scope: directiveService.autoScope
-        # the code of the question
+    # the code of the question
         ngQuestionCode: '='
-        # a condition : optional
+    # a condition : optional
         ngCondition: '='
-        # the repetition map of the question if the question is into a repetition
+    # the repetition map of the question if the question is into a repetition
         ngRepetitionMap: '='
+    # an aggregation : if the attribu is not empty, the question cannot be edited
+        ngAggregation: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
     compile: () ->
         post: (scope, element) ->
             directiveService.autoScopeImpl scope
+
+            scope.$watch 'ngAggregation', ->
+                if scope.getAggregation()?
+                    scope.getAnswer().value = scope.getAggregation()
 
             #
             # watch the loading of the data into the parent and
@@ -30,18 +36,21 @@ angular
             #   => load the template with true for the dataToCompare parameter
             #
             scope.getTemplate = (dataToCompare)->
-
-                if $('.inject-data:first',element).html() ==''
+                if $('.inject-data:first', element).html() == ''
 
 
                     toCompare = ""
-                    directiveName =""
+                    isAggregation = "false"
+                    directiveName = ""
 
 
                     if  dataToCompare == true
                         toCompare = "true"
                     else
                         toCompare = "false"
+
+                    if scope.getAggregation()?
+                        isAggregation = "true"
 
                     if scope.getQuestion() != null
                         answerType = scope.getQuestion().answerType
@@ -53,27 +62,24 @@ angular
                             directiveName = "integer-question"
                         else if answerType == 'DOUBLE'
                             if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
-                                directiveName =  "real-with-unit-question"
+                                directiveName = "real-with-unit-question"
                             else
-                                directiveName =  "real-question"
+                                directiveName = "real-question"
                         else if answerType == 'PERCENTAGE'
-                            directiveName =  "percentage-question"
+                            directiveName = "percentage-question"
                         else if answerType == 'STRING'
-                            directiveName =  "string-question"
+                            directiveName = "string-question"
                         else if answerType == 'VALUE_SELECTION'
-                            directiveName =  "select-question"
+                            directiveName = "select-question"
                         else if answerType == 'DOCUMENT'
-                            directiveName =  "document-question"
+                            directiveName = "document-question"
 
-                        directive = $compile("<mm-awac-"+directiveName+" ng-data-to-compare=\""+toCompare+"\"></mm-awac-"+directiveName+">")(scope)
+                        directive = $compile("<mm-awac-" + directiveName + " ng-data-to-compare=\"" + toCompare + "\" ng-is-aggregation=\"" + isAggregation + "\"></mm-awac-" + directiveName + ">")(scope)
 
                         if dataToCompare == true
-                            $('.inject-data-to-compare:first',element).append(directive)
+                            $('.inject-data-to-compare:first', element).append(directive)
                         else
-                            $('.inject-data:first',element).append(directive)
-
-
-
+                            $('.inject-data:first', element).append(directive)
 
 
             scope.getQuestion = ->
@@ -92,11 +98,12 @@ angular
             # if not, call the answerOrCreate parent method => return always something
             # if true, return an answer only if this answer already exists
             #
-            scope.getAnswer = (forDataToCompare=false)->
-
+            scope.getAnswer = (forDataToCompare = false)->
                 if forDataToCompare
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
+                    if scope.getAggregation()? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value == null
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value = scope.getAggregation()
                     return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
             #
@@ -126,17 +133,20 @@ angular
             # called when the user change the value of the field
             #
             scope.edited = ->
-                if scope.getAnswer().value !=null
-                    if scope.getAnswer().value.length == 0
-                        scope.getAnswer().value = null
-                scope.getAnswer().wasEdited = true
-                scope.getAnswer().lastUpdateUser = scope.$root.currentPerson.identifier
+                if scope.getAggregation()?
+                    return
+                else
+                    if scope.getAnswer().value != null
+                        if scope.getAnswer().value.length == 0
+                            scope.getAnswer().value = null
+                    scope.getAnswer().wasEdited = true
+                    scope.getAnswer().lastUpdateUser = scope.$root.currentPerson.identifier
 
 
             #
             # create a event CONDITION if the ngCondition was modified
             #
-            scope.$watch 'ngCondition', (n,o) ->
+            scope.$watch 'ngCondition', (n, o) ->
                 if n != o
                     scope.$root.$broadcast('CONDITION')
 
@@ -144,7 +154,7 @@ angular
             # call the CONDITION event :
             # test the condition of this element
             #
-            scope.$on 'CONDITION',(event,args) ->
+            scope.$on 'CONDITION', (event, args) ->
                 scope.testVisibility(element)
 
             #
@@ -153,12 +163,12 @@ angular
             # change the value by default value if
             # the value is null and the condition is true
             #
-            scope.firstComputecondition=true
+            scope.firstComputecondition = true
             scope.testVisibility = (elementToTest)->
 
                 # if the element contains the condition-false class,
                 # the condition of this question is false
-                if elementToTest.hasClass('condition-false') == true  || (scope.getCondition()? && scope.getCondition() == false)
+                if elementToTest.hasClass('condition-false') == true || (scope.getCondition()? && scope.getCondition() == false)
 
                     # print used for debug
                     # console.log "je suis "+scope.getQuestionCode()+" et me condition est fausse : loading : "+scope.$parent.loading+", value : "+scope.getAnswer().value
@@ -171,8 +181,7 @@ angular
                             scope.getAnswer().value = null
 
                             if scope.$parent.loading == false
-                                scope.getAnswer().wasEdited = true
-                                scope.getAnswer().lastUpdateUser = scope.$root.currentPerson.identifier
+                                scope.edited()
                                 scope.$root.$broadcast('CONDITION')
                             else
                                 scope.getAnswer().wasEdited = false
@@ -180,7 +189,7 @@ angular
                     return false
 
                 # the body if the limit for the test => continue if this element id not the body
-                if elementToTest.parent()[0].tagName!='BODY'
+                if elementToTest.parent()[0].tagName != 'BODY'
                     return scope.testVisibility(elementToTest.parent())
                 else
                     # print used for debug
@@ -193,7 +202,7 @@ angular
                         scope.getAnswer().hasValidCondition = true
 
                         # try to add a default value
-                        if scope.getQuestion()!=null && scope.getQuestion().defaultValue !=null && scope.getAnswer().value == null
+                        if scope.getQuestion() != null && scope.getQuestion().defaultValue != null && scope.getAnswer().value == null
                             scope.getAnswer().value = scope.getQuestion().defaultValue
 
                             # if this if the first compute, it was caused during the loading :
@@ -203,8 +212,7 @@ angular
                             #    scope.firstComputecondition=false
                             #else
                             if scope.$parent.loading == false
-                                scope.getAnswer().wasEdited = true
-                                scope.getAnswer().lastUpdateUser = scope.$root.currentPerson.identifier
+                                scope.edited()
 
                     return true
 
@@ -213,7 +221,7 @@ angular
             # forDataToCompare => return the name of the user for the dataToCompare
             # initialOnly => return initials of the name, or complete name
             #
-            scope.getUserName = (forDataToCompare,initialOnly)->
+            scope.getUserName = (forDataToCompare, initialOnly)->
                 user = null
 
                 if forDataToCompare == true
@@ -236,6 +244,8 @@ angular
             # get the status class
             #
             scope.getStatusClass = ->
+                if scope.getAggregation()?
+                    return
 
                 #there is no status for document
                 if scope.getQuestion() != null && scope.getQuestion().answerType == 'DOCUMENT'
@@ -262,19 +272,19 @@ angular
                         scope.getAnswer().unitId = scope.getAnswer(true).unitId
                     if scope.getAnswer(true).comment?
                         scope.getAnswer().comment = scope.getAnswer(true).comment
-                    scope.getAnswer().wasEdited = true
+                    scope.edited()
 
             #
             # Print the code of the question into the console
             # used when there is a click on the name of the question
             #
             scope.logQuestionCode = ->
-                console.log scope.getQuestionCode()+",value:"+scope.getAnswer().value+",wasEdited:"+scope.getAnswer().wasEdited
+                console.log scope.getQuestionCode() + ",value:" + scope.getAnswer().value + ",wasEdited:" + scope.getAnswer().wasEdited
 
             #
             # error message if the user try to enter wrong data into the field
             #
-            scope.errorMessage =""
+            scope.errorMessage = ""
 
             #
             # display a error message before the input
@@ -285,19 +295,19 @@ angular
                     $timeout.cancel(scope.lastTimeOut)
 
                 scope.lastTimeOut = $timeout(->
-                    scope.errorMessage =""
+                    scope.errorMessage = ""
                     scope.lastTimeOut = null
                 , 2000)
 
             scope.saveComment = (comment) ->
                 scope.getAnswer().comment = comment
-                scope.getAnswer().wasEdited=true
+                scope.getAnswer().wasEdited = true
 
             scope.editComment = ->
-                args= {}
+                args = {}
                 args.comment = scope.getAnswer().comment
                 args.save = scope.saveComment
-                modalService.show(modalService.QUESTION_COMMENT,args)
+                modalService.show(modalService.QUESTION_COMMENT, args)
 
 
 
