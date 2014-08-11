@@ -1409,6 +1409,10 @@ button.comments {
 
 .user_deleted .button_delete {
     background-image: url('../images/reactivate.png');
+}
 
-
+.menu_close {
+    display: block;
+    background: red;
+    height: 50px;
 }
