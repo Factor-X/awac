@@ -11,7 +11,7 @@
 
             .modal-body
                 .field_form
-                    textarea(class="question-comment-textarea",ng-model="comment")
+                    textarea(class="question-comment-textarea",ng-model="comment",ng-disabled="getParams().canBeEdited === false")
             .modal-footer
 
                 button(type="button",
@@ -21,5 +21,6 @@
 
                 button(type="button",
                 class="btn btn-primary",
-                ng-click="save();")
+                ng-click="save();",
+                ng-hide="getParams().canBeEdited === false")
                     | Save

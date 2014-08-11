@@ -56,9 +56,9 @@ mm-awac-section(title-code="A130_TITLE")
                     .element_table
                         mm-awac-question(question-code="A158")
                         mm-awac-question(question-code="A159")
-                        mm-awac-question(question-code="A160", ng-condition="getAnswer('A159').value == '3'")
-                        mm-awac-question(question-code="A161", ng-condition="getAnswer('A159').value == '2'")
-                        mm-awac-question(question-code="A162", ng-condition="getAnswer('A159').value == '1'")
+                        mm-awac-question(question-code="A160", ng-condition="getAnswer('A159').value == '3'",ng-aggregation="5000")
+                        mm-awac-question(question-code="A161", ng-condition="getAnswer('A159').value == '2'",ng-aggregation="2500")
+                        mm-awac-question(question-code="A162", ng-condition="getAnswer('A159').value == '1'",ng-aggregation="200")
 .horizontal_separator
 mm-awac-section(title-code="A163_TITLE")
 

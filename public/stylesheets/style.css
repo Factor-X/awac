@@ -806,7 +806,7 @@ button.comments {
     width: 35%;
 }
 
-.question_field.twoanswer > div:last-child > button{
+.question_field.twoanswer > div:last-child > button:first-child{
     margin-right: 12px;
     font-weight: bold;
 }
@@ -962,6 +962,11 @@ button.comments {
     height: 20px;
     display: inline-block;
     margin: 0 5px;
+    border : 0px;
+}
+
+.edit_comment_icon_selected{
+    background-color: #35b34b;
 }
 
 .user_icon {

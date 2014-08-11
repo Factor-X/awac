@@ -303,10 +303,11 @@ angular
                 scope.getAnswer().comment = comment
                 scope.getAnswer().wasEdited = true
 
-            scope.editComment = ->
+            scope.editComment = (canBeEdited=true) ->
                 args = {}
                 args.comment = scope.getAnswer().comment
                 args.save = scope.saveComment
+                args.canBeEdited=canBeEdited
                 modalService.show(modalService.QUESTION_COMMENT, args)
 
 
