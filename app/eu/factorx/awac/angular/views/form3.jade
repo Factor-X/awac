@@ -163,7 +163,7 @@ div
                             mm-awac-question(question-code="A122")
                             mm-awac-question(question-code="A123")
                             mm-awac-question(question-code="A124", ng-condition="getAnswer('A123',itLevel1).value == '0'")
-                            mm-awac-question(question-code="A125", ng-condition="getAnswer('A124',itLevel1).value == '1'")
-                            mm-awac-question(question-code="A126", ng-condition="getAnswer('A124',itLevel1).value == '0'")
+                            mm-awac-question(question-code="A125", ng-condition="getAnswer('A124',itLevel1).value == '1'",ng-aggregation="2500")
+                            mm-awac-question(question-code="A126", ng-condition="getAnswer('A124',itLevel1).value == '0'",ng-aggregation="5000")
                             mm-awac-question(question-code="A127", ng-condition="getAnswer('A123',itLevel1).value == '1'")
 

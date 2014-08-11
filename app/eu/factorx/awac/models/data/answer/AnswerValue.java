@@ -19,6 +19,8 @@ public abstract class AnswerValue extends AbstractEntity {
 
 	protected QuestionAnswer questionAnswer;
 
+    protected String comment;
+
 	protected AnswerValue() {
 		super();
 	}
@@ -37,7 +39,15 @@ public abstract class AnswerValue extends AbstractEntity {
 		this.questionAnswer = param;
 	}
 
-	@Override
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Override
 	public abstract String toString();
 
 	@Override

@@ -1,9 +1,25 @@
 angular
 .module('app.directives')
-.directive "numbersOnly", (translationService) ->
+.directive "numbersOnly", ($filter,translationService) ->
     restrict: 'A'
     require: "ngModel"
     link: (scope, element, attrs, modelCtrl) ->
+
+        nbDecimal = 2
+        if attrs.numbersOnly== "integer"
+            nbDecimal = 0
+
+        p = (viewValue) ->
+
+            value = viewValue.toLocaleString()
+
+            return $filter("number") value,6
+        f = (modelValue) ->
+            $filter("number") parseFloat(modelValue), nbDecimal
+
+        modelCtrl.$parsers.unshift p
+        modelCtrl.$formatters.unshift f
+
         modelCtrl.$parsers.push (inputValue) ->
             if inputValue is `undefined`
                 return ""

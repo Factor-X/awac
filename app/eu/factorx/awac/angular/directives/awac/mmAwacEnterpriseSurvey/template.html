@@ -127,7 +127,7 @@
         </div>
 
 
-        <div class="nav_tabs">
+        <div class="nav_tabs" ng-show="displayMenu()===true">
             <div class="nav_entreprise">
                 <div class="site_menu">
                     <div class="site">
@@ -135,37 +135,37 @@
                     </div>
                     <div class="menu">
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form1') == true}" ng-click="nav('/form1')">
-                            <div ng-bind-html="'TAB1' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB1' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB1')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form2') == true}" ng-click="nav('/form2')">
-                            <div ng-bind-html="'TAB2' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB2' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB2')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form3')  == true}" ng-click="nav('/form3')">
-                            <div ng-bind-html="'TAB3' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB3' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB3')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form4') == true}" ng-click="nav('/form4')">
-                            <div ng-bind-html="'TAB4' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB4' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB4')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form5') == true}" ng-click="nav('/form5')">
-                            <div ng-bind-html="'TAB5' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB5' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB5')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form6') == true}" ng-click="nav('/form6')">
-                            <div ng-bind-html="'TAB6' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB6' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB6')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button ng-class="{'menu_current': isMenuCurrentlySelected('/form7') == true}" ng-click="nav('/form7')">
-                            <div ng-bind-html="'TAB7' | translate"></div>
+                            <div class="tab-title" ng-bind-html="'TAB7' | translate"></div>
                             <mm-awac-tab-progress-bar ng-value="getProgress('TAB7')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
@@ -173,10 +173,10 @@
                 </div>
                 <div class="last_menu">
                     <button ng-class="{'menu_current': isMenuCurrentlySelected('/results') == true}" ng-click="nav('/results')">
-                        résultats
+                       <div class="tab-title">résultats</div>
                     </button>
                     <button mm-not-implemented>
-                        actions de réduction
+                        <div class="tab-title">actions de réduction</div>
                     </button>
                 </div>
             </div>

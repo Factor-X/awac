@@ -11,7 +11,11 @@ div(class="question_field",
             div {{errorMessage}}
             img(src='/awac/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
-        .user_icon {{getUserName(false,true)}}
+        button( ng-click="editComment()",
+                class="edit_comment_icon glyphicon glyphicon-pencil",
+                ng-hide="getAggregation()!=null",
+                ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
+        .user_icon(ng-hide="getAggregation()!=null") {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}
                 img(src='/awac/assets/images/user_icon_arrow.png')
@@ -20,6 +24,8 @@ div(class="question_field",
         button( ng-click="copyDataToCompare()",
         title="Copier la valeur") <<
         span.inject-data-to-compare
+        button(ng-click="editComment(false)",class="edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected", ng-hide="getAggregation()!=null || getAnswer(true).comment ==null")
+        div.edit_comment_icon(ng-hide="getAnswer(true).comment !=null")
         .user_icon {{getUserName(true,true)}}
             div
                 div {{getUserName(true,false)}}

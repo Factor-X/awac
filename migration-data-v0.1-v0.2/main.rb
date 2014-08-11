@@ -30,13 +30,13 @@ local = PG.connect(
 
 def load_table(conn, table_name, klass)
     tmp     = klass.new
-    fields  = (tmp.methods - tmp.class.methods).select { |e| e.to_s.end_with? '=' }.collect { |e| e.to_s[4..-2] }
+    fields  = (tmp.methods - tmp.class.methods).select { |e| e.to_s.end_with? '=' and e.to_s != 'ref_id=' }.collect { |e| e.to_s[0..-2] }
     results = []
     conn.exec("SELECT " + fields.join(', ') + " FROM " + table_name.to_s) do |result|
         result.each do |row|
             obj = klass.new
             for field in fields
-                obj.send("old_#{field}=", row.values_at(field)[0])
+                obj.send("#{field}=", row.values_at(field)[0])
             end
             results << obj
         end
@@ -69,36 +69,48 @@ organizations        = load_table(remote, :organization, Organization)
 periods              = load_table(remote, :period, Period)
 question_answers     = load_table(remote, :question_answer, QuestionAnswer)
 questions            = load_table(remote, :question, Question)
+question_sets        = load_table(remote, :question_set, QuestionSet)
 question_set_answers = load_table(remote, :questionsetanswer, QuestionSetAnswer)
 scopes               = load_table(remote, :scope, Scope)
 
-# Map the organizations
+# It is easier and perfectly fine to drop them all and recreate from ACCEPT
+# -- delete
+local.exec('DELETE FROM organization');
+# -- insert
 for organization in organizations
-    o = single(local, :organization, :name, organization.old_name)
+    local.exec('INSERT INTO scope (id,type,organization_id,product_id,site_id)
+                VALUES ($1,$2,$3,$4,$5)',
+               [
+                   s.id,
+                   s.type,
+                   s.organization_id,
+                   s.product_id,
+                   s.site_id
+               ])
+    s.ref_id = s.id
+end
+
+
+# Map the question_sets
+for qs in question_sets
+    o = single(local, :question_set, :code, qs.code)
     if o != nil
-        organization.ref_id = o["id"].to_i
+        qs.ref_id = o["id"].to_i
     end
 end
 
-# Map the periods
-for period in periods
-    o = single(local, :period, :label, organization.old_name)
+
+# Map the questions
+for q in question_sets
+    o = single(local, :question, :code, q.code)
     if o != nil
-        period.ref_id = o["id"].to_i
+        q.ref_id = o["id"].to_i
     end
 end
-
-
-
-
-
-
 
 
 puts Oj::dump organizations, :indent => 2
-
-
-
+puts Oj::dump periods, :indent => 2
 
 
 

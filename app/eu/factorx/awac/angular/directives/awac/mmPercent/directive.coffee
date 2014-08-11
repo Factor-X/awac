@@ -2,10 +2,7 @@ angular
 .module('app.directives')
 .directive "percent", ($filter) ->
     p = (viewValue) ->
-        m = viewValue.match(/^(\d+)\/(\d+)/)
-        return $filter("number")(parseInt(m[1]) / parseInt(m[2]), 2)  if m?
-        $filter("number") parseFloat(viewValue) / 100, 2
-
+        return $filter("number") viewValue / 100,6
     f = (modelValue) ->
         $filter("number") parseFloat(modelValue) * 100, 2
 

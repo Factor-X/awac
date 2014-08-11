@@ -1,1 +1,55 @@
-h1 {{title}}
+.menu_close(ng-click="nav('/form1')")
+h1 USER MANAGER
+
+.element
+    button.add(type="button") invite users
+    table.user_table
+        tr.user_table_header
+            td Username
+            td Admin
+            td
+        tr
+            td Xavier Marichal
+            td
+                input(
+                type="checkbox",
+                name="id1",
+                value="1")
+            td
+                .button_delete
+        tr.user_deleted
+            td Florian Jeanmart
+            td
+                input(
+                type="checkbox",
+                name="id2",
+                value="0")
+            td
+                .button_delete
+        tr
+            td Autre user
+            td
+                input(
+                type="checkbox",
+                name="id3",
+                value="0")
+            td
+                .button_delete
+        tr
+            td Aude Grillot
+            td
+                input(
+                type="checkbox",
+                name="id4",
+                value="1")
+            td
+                .button_delete
+        tr.user_deleted
+            td Userfirstname van userlastname
+            td
+                input(
+                type="checkbox",
+                name="id5",
+                value="0")
+            td
+                .button_delete

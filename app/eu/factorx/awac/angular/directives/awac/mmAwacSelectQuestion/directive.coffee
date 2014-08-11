@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope:  directiveService.autoScope
         ngDataToCompare: '='
+        ngIsAggregation:'='
     templateUrl: "$/angular/templates/mm-awac-select-question.html"
     replace: true
     link: (scope) ->
