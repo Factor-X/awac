@@ -57,9 +57,6 @@ public class AwacInitialData {
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 
 
-
-
-
 		// == TAB1 ========================================================================
 
 		Form tab1Form = new Form("TAB1");
@@ -1663,7 +1660,7 @@ public class AwacInitialData {
 		// == A227 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224(Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)) > A227 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A227, null, null));
+		session.saveOrUpdate(new StringQuestion(a224, 0, QuestionCode.A227, null));
 
 		// == A228 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
@@ -1713,7 +1710,7 @@ public class AwacInitialData {
 		// == A241 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A241 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A241, null, null));
+		session.saveOrUpdate(new StringQuestion(a238, 0, QuestionCode.A241, null));
 
 		// == A242 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
@@ -2064,6 +2061,7 @@ public class AwacInitialData {
 		// Emissions indirectes totales (tCO2e)
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
+
 
 	}
 

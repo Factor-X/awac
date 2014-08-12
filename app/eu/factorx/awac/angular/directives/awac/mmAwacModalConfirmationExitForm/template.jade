@@ -3,7 +3,7 @@
     .modal-dialog
         .modal-content
             .modal-header
-                button( type="button",
+                button.button( type="button",
                         ng-click="close()")
                     span(aria-hidden="true") &times;<span
                     span(class="sr-only") Close
@@ -13,9 +13,9 @@
             .modal-body
                 .field_form Vous allez perdre toutes vos modifications depuis la dernière sauvegarde. Êtes-vous sûr de vouloir continuer ?
             .modal-footer
-                button(type="button",
+                button.button(type="button",
                     ng-click="continue();")  Continuer sans sauvegarder
-                button(type="button",
+                button.button(type="button",
                         ng-click="save()") Enregister et continuer
-                button(type="button",
+                button.button(type="button",
                     ng-click="close()") Annuler

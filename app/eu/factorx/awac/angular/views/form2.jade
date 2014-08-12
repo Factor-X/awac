@@ -9,7 +9,7 @@ mm-awac-section(title-code="A13_TITLE")
 
         mm-awac-question(question-code="A17",ng-repetition-map="itLevel1")
 
-    button.add-repetition-button(ng-click="addIteration('A15')", type="button")
+    button.add-repetition-button.button(ng-click="addIteration('A15')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A15_LOOPDESC' | translate")
 
@@ -31,7 +31,7 @@ mm-awac-section(title-code="A20_TITLE")
         mm-awac-question(question-code="A27",ng-repetition-map="itLevel1")
         mm-awac-question(question-code="A28",ng-repetition-map="itLevel1")
 
-    button.add-repetition-button(ng-click="addIteration('A25')", type="button")
+    button.add-repetition-button.button(ng-click="addIteration('A25')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A25_LOOPDESC' | translate")
 
@@ -52,7 +52,7 @@ mm-awac-section(title-code="A31_TITLE")
 
             mm-awac-question(question-code="A36",ng-repetition-map="itLevel1")
 
-        button.add-repetition-button(ng-click="addIteration('A34')", type="button")
+        button.add-repetition-button.button(ng-click="addIteration('A34')", type="button")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'A34_LOOPDESC' | translate")
 
@@ -79,7 +79,7 @@ mm-awac-block(ng-condition="getAnswer('A38').value == '1'")
                             mm-awac-repetition-question(question-set-code="A42", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A42')")
                                 mm-awac-question(question-code="A43",ng-repetition-map="itLevel1")
                                 mm-awac-question(question-code="A44",ng-repetition-map="itLevel1")
-                            button.add-repetition-button(ng-click="addIteration('A42')", type="button")
+                            button.add-repetition-button.button(ng-click="addIteration('A42')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A42_LOOPDESC' | translate")
 

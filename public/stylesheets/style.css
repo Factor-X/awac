@@ -208,7 +208,7 @@ select {
     border-bottom: 3px solid white;
 }
 
-.user_manage.selected {
+.button.user_manage.selected {
     height: 39px;
     border-radius: 0;
     -webkit-border-top-left-radius: 5px;
@@ -540,7 +540,7 @@ select {
 -------------------------------------------------------
 */
 
-button[type="button"] {
+button.button[type="button"] {
     height: 25px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -556,27 +556,27 @@ button[type="button"] {
     transition: all 0.1s ease-out;
 }
 
-button[type="button"]:hover:enabled {
+button.button[type="button"]:hover:enabled {
     color: white;
-    background-color: #0988b5 !important;
+    background-color: #0988b5;
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
 
-button[type="button"]:active:enabled {
+button.button[type="button"]:active:enabled {
     color: white;
-    background-color: #0988b5 !important;
+    background-color: #0988b5;
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
 
-button[type="button"]:disabled {
+button.button[type="button"]:disabled {
     color: white;
     background-color: #808080;
 }
 
-button[type="button"].selected{
-    background-color: #305b2e !important;
+button.button[type="button"].selected{
+    background-color: #305b2e;
 }
 
 /*-----------------------------------------------------
@@ -584,32 +584,32 @@ button[type="button"].selected{
 -------------------------------------------------------
 */
 
-button.confidentiality {
+button.button.confidentiality {
     background-color: #fccc93;
     color: #f16c23;
 }
 
-button.help {
+button.button.help {
     background-color: #acd595;
     color: #305b2e;
 }
 
-button.save {
+button.button.save {
     background-color: #f16c23;
     color: white;
 }
 
-button.site_manage {
+button.button.site_manage {
     background-color: #3c3b37;
 }
 
-button.verification {
+button.button.verification {
     float: right;
     background-color: #35b34b;
     color: white;
 }
 
-button.upload {
+button.button.upload {
     float: right;
     height: 23px;
     padding-left: 25px;
@@ -617,7 +617,7 @@ button.upload {
     color: #3c3b37;
 }
 
-button.comments {
+button.button.comments {
     height: 22px;
     width: -moz-calc(100% - 70px);
     width: -webkit-calc(100% - 70px);
@@ -632,7 +632,7 @@ button.comments {
     margin-left: 0;
 }
 
-button.add {
+button.button.add {
     height: 23px;
     background: url('../images/add.png') 7px center no-repeat #9d9b91;
     padding-left: 25px;
@@ -912,7 +912,7 @@ h1 {
     z-index: 2;
 }
 
-.info {
+.question_info {
     display: inline-block;
     position: relative;
     float: right;
@@ -921,7 +921,7 @@ h1 {
     background: url('../images/info.png') no-repeat center center;
 }
 
-.info_popup {
+.question_info_popup {
     font-weight: normal;
     font-size: 12px;
     display: none;
@@ -939,12 +939,12 @@ h1 {
     z-index: 9999;
 }
 
-.info:hover .info_popup,
-.info_popup:hover {
+.question_info:hover .info_popup,
+.question_info_popup:hover {
     display: block;
 }
 
-.info + div {
+.question_info + div {
     padding-right: 20px;
 
 }
