@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-orm" % "3.1.1.RELEASE",
   "org.springframework" % "spring-test" % "3.2.5.RELEASE",
   "org.springframework" % "spring-context-support" % "3.2.3.RELEASE",
+  "org.springframework.security" % "spring-security-core" % "3.2.3.RELEASE",
   "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final",
   "org.hibernate" % "hibernate-ehcache" % "4.2.6.Final",
   javaCore,

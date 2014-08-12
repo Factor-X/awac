@@ -49,7 +49,7 @@ public abstract class AbstractEntity implements Serializable {
 
 	@PostLoad
 	public void postLoad() {
-		Logger.trace(LOADED_ENTITY, getClass().getName(), getId());
+		Logger.debug(LOADED_ENTITY, getClass().getName(), getId());
 	}
 
 	/**
