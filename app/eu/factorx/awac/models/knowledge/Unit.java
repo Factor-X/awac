@@ -1,8 +1,17 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AbstractEntity;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
 @Table(name = "unit")
@@ -10,6 +19,8 @@ import javax.persistence.*;
 		@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
 		@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
 })
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Unit extends AbstractEntity {
 
 	public static final String COLUMN_NAME_REF = "ref";

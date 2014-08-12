@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope:  directiveService.autoScope
         ngDataToCompare: '='
+        ngIsAggregation:'='
     templateUrl: "$/angular/templates/mm-awac-string-question.html"
     replace: true
     link: (scope) ->
@@ -27,5 +28,6 @@ angular
         #
         # called when the user change the value of the field
         #
-        scope.edited = ->
-            scope.$parent.edited()
+        scope.$watch 'getAnswer().value', (o,n)->
+            if ""+n != ""+o
+                scope.$parent.edited()

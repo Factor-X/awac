@@ -9,6 +9,9 @@ angular
     templateUrl: "$/angular/templates/mm-awac-modal-document-manager.html"
     controller: ($scope, modalService,$http,$location,$window) ->
 
+        $scope.listDocuments = []
+
+
         #change option of the modal
         $('#modalDocumentManager').modal({
             backdrop: false
@@ -18,7 +21,6 @@ angular
         modalName = modalService.DOCUMENT_MANAGER
         $scope.show = false
         $scope.loc =null
-        $scope.listDocuments = []
 
         $scope.$on 'SHOW_MODAL_'+modalName,(event,args) ->
             if args.show

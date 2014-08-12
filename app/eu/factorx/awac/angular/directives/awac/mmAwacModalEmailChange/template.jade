@@ -1,0 +1,41 @@
+// Modal
+.modal(ng-enter="save()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;<span
+                    span(class="sr-only") Close
+
+                h4(class="modal-title",id="myModalLabel") Modification de votre adresse mail
+
+            .modal-body
+                .fields
+                    .field
+                        .label
+                            span(ng-bind-html="'USER_PASSWORD' | translate")
+                        .editor
+                            input(type="password",ng-model="password")
+                    .field
+                        .label
+                            span(ng-bind-html="'USER_OLD_EMAIL' | translate")
+                        .editor
+                            input(type="text", disabled, ng-model="oldEmail")
+                    .field
+                        .label
+                            span(ng-bind-html="'USER_NEW_EMAIL' | translate")
+                        .editor
+                            input(type="text", ng-model="newEmail")
+
+            .modal-footer
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="close()")
+                    | Cancel
+
+                button(type="button",
+                class="btn btn-primary",
+                ng-click="save()")
+                    | Save
+
+

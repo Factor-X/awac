@@ -11,4 +11,5 @@
         type="button",
         class="btn btn-primary",
         ng-bind-html="'LOGIN_BUTTON' | translate",
-        ng-click="send()")
+        ng-click="send()",
+        ng-disabled="!allFieldValid()")

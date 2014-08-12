@@ -1,15 +1,14 @@
 // Modal
-.modal(ng-show="show",id="modalDocumentManager",tabindex="-1",role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+.modal()
     .modal-dialog
         .modal-content
             .modal-header
                 button( type="button",
-                    ng-click="close()",
-                    style="float:right")
+                    ng-click="close()")
                         span(aria-hidden="true") &times;<span
                         span(class="sr-only") Close
 
-                h4(class="modal-title",id="myModalLabel") Docuements uploaded
+                h4(class="modal-title") Documents uploaded
 
             .modal-body
 

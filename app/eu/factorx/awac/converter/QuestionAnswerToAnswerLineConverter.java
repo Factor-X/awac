@@ -103,6 +103,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		answerLine.setUnitId(unitId);
 		answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
 		answerLine.setLastUpdateUser(questionAnswer.getTechnicalSegment().getLastUpdateUser());
+        answerLine.setComment(answerValue.getComment());
 
 		return answerLine;
 	}

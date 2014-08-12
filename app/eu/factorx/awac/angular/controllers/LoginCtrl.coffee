@@ -7,16 +7,23 @@ angular
         fieldTitle: "Your login"
         fieldType: "text"
         placeholder: "your login"
-        validationMessage: "between 5 and 20 letters"
+        validationRegex: "^\\S{5,20}$"
+        validationMessage: "between 5 and 20 letters and without withe spaces"
         field: ""
         isValid: false
 
     $scope.passwordInfo =
         fieldTitle: "Your password"
         fieldType: "password"
-        validationMessage: "between 5 and 20 letters"
+        validationRegex: "^\\S{5,20}$"
+        validationMessage: "between 5 and 20 letters and without withe spaces"
         field: ""
         isValid: false
+
+    $scope.allFieldValid = () ->
+        if $scope.loginInfo.isValid && $scope.passwordInfo.isValid
+            return true
+        return false
 
     #send the request to the server
     $scope.send = () ->

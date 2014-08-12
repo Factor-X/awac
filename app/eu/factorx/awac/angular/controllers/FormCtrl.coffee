@@ -95,17 +95,9 @@ angular
             $scope.addDefaultValue(questionSetDTO)
 
         $timeout(->
-            # broadcast a condition event to compute condition a first time
-            # this first condition computing do not edit question
-            ###
-            console.log "COMPUTE COND START -------------------------"
-            $scope.$root.$broadcast('CONDITION')
-            console.log "COMPUTE COND END -------------------------"
-            ###
 
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
             $scope.loading = false
-            console.log $scope.answerList
         , 0)
 
         return
@@ -132,22 +124,20 @@ angular
             # test if the question was edited
             if answer.wasEdited != undefined && answer.wasEdited == true
 
-                #test if the data is valid
-                if answer.value == null || answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true
-                    #test if the condition is not valid...
-                    if answer.hasValidCondition != undefined && answer.hasValidCondition == false
-                        # clean the value
-                        answer.value = null
+                #test if the condition is not valid...
+                if answer.hasValidCondition != undefined && answer.hasValidCondition == false
+                    # clean the value
+                    answer.value = null
 
-                    # add the answer of the listAnswerToSave
-                    listAnswerToSave[listAnswerToSave.length] = answer
+                # add the answer of the listAnswerToSave
+                listAnswerToSave[listAnswerToSave.length] = answer
 
         console.log "listAnswerToSave"
         console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
             messageFlash.displaySuccess "All answers are already saved !"
-            modalService.hide(modalService.LOADING)
+            modalService.close(modalService.LOADING)
         else
             #and replace the list
             $scope.o.answersSave.listAnswers = listAnswerToSave
@@ -162,7 +152,7 @@ angular
 
             promise.success (data, status, headers, config) ->
                 messageFlash.displaySuccess "Your answers are saved !"
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
 
                 for answer in $scope.answerList
 
@@ -180,7 +170,7 @@ angular
 
             promise.error (data, status, headers, config) ->
                 messageFlash.displayError "An error was thrown during the save : " + data.message
-                modalService.hide(modalService.LOADING)
+                modalService.close(modalService.LOADING)
                 return
 
 
@@ -295,7 +285,6 @@ angular
                 #compute defaultUnitId
                 if question.unitCategoryId != null && question.unitCategoryId != undefined
                     defaultUnitId = $scope.getUnitCategories(code).mainUnitId
-
 
             #if the answer was not founded, create it
             answerLine = {
@@ -500,7 +489,7 @@ angular
                     listTotal[listTotal.length] = answer
 
                     #test if the data is valid
-                    if answer.value != null && (answer.value.$valid == null || answer.value.$valid == undefined || answer.value.$valid == true)
+                    if answer.value != null
                         answered++
 
 
