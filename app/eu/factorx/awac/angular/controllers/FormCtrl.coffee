@@ -136,7 +136,7 @@ angular
         console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
-            messageFlash.displaySuccess "All answers are already saved !"
+            messageFlash.displayInfo "All answers are already saved !"
             modalService.close(modalService.LOADING)
         else
             #and replace the list
