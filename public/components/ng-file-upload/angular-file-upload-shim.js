@@ -1,7 +1,7 @@
 /**!
  * AngularJS file upload shim for HTML5 FormData
  * @author  Danial  <danial.farid@gmail.com>
- * @version 1.6.1
+ * @version 1.6.5
  */
 (function() {
 
@@ -118,7 +118,7 @@ if (window.XMLHttpRequest) {
 							Object.defineProperty(xhr, 'responseText', {get: function() {return fileApiXHR.responseText}});
 							Object.defineProperty(xhr, 'response', {get: function() {return fileApiXHR.responseText}});
 							xhr.__fileApiXHR = fileApiXHR;
-							xhr.onreadystatechange();
+							if (xhr.onreadystatechange) xhr.onreadystatechange();
 						},
 						fileprogress: function(e) {
 							e.target = xhr;
@@ -161,14 +161,17 @@ if (!window.FormData || (window.FileAPI && FileAPI.forceLoad)) {
 		}
 		var el = angular.element(elem);
 		if (!el.hasClass('js-fileapi-wrapper') && (elem.getAttribute('ng-file-select') != null || elem.getAttribute('data-ng-file-select') != null)) {
-//			var wrap = document.createElement('div');
-//			wrap.innerHTML = '<div class="js-fileapi-wrapper" style="position:relative; overflow:hidden"></div>';
-//			wrap = wrap.firstChild;
-//			var parent = elem.parentNode;
-//			parent.insertBefore(wrap, elem);
-//			parent.removeChild(elem);
-//			wrap.appendChild(elem);
-			el.addClass('js-fileapi-wrapper');
+			if (FileAPI.wrapInsideDiv) {
+				var wrap = document.createElement('div');
+				wrap.innerHTML = '<div class="js-fileapi-wrapper" style="position:relative; overflow:hidden"></div>';
+				wrap = wrap.firstChild;
+				var parent = elem.parentNode;
+				parent.insertBefore(wrap, elem);
+				parent.removeChild(elem);
+				wrap.appendChild(elem);
+			} else {
+				el.addClass('js-fileapi-wrapper');
+			}
 		}
 	};
 	var changeFnWrapper = function(fn) {
@@ -191,7 +194,7 @@ if (!window.FormData || (window.FileAPI && FileAPI.forceLoad)) {
 			(evt.__files_ || evt.target.files).item = function(i) {
 				return (evt.__files_ || evt.target.files)[i] || null;
 			}
-			fn(evt);
+			if (fn) fn.apply(this, [evt]);
 		};
 	};
 	var isFileChange = function(elem, e) {
@@ -214,7 +217,12 @@ if (!window.FormData || (window.FileAPI && FileAPI.forceLoad)) {
 			return function(e, fn) {
 				if (isFileChange(this, e)) {
 					addFlash(this);
-					origAttachEvent.apply(this, [e, changeFnWrapper(fn)]);
+					if (window.jQuery) {
+						// fix for #281 jQuery on IE8
+						angular.element(this).bind("change", changeFnWrapper(null));
+					} else {
+						origAttachEvent.apply(this, [e, changeFnWrapper(fn)]);
+					}
 				} else {
 					origAttachEvent.apply(this, [e, fn]);
 				}

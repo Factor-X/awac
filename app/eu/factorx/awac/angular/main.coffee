@@ -10,7 +10,7 @@ angular.module 'app.services', []
 
 angular.module 'app.controllers', ['app.services', 'ngRoute', 'angular-flash.service',
                                    'angular-flash.flash-alert-directive',
-                                   'angularFileUpload']
+                                   'angularFileUpload','tmh.dynamicLocale']
 
 angular.module 'app', [
     'app.directives',
@@ -18,6 +18,11 @@ angular.module 'app', [
     'app.services',
     'app.controllers'
 ]
+
+
+angular.module("tmh.dynamicLocale").config (tmhDynamicLocaleProvider)->
+    tmhDynamicLocaleProvider.localeLocationPattern('assets/components/angular-i18n/angular-locale_{{locale}}.js')
+
 
 #
 # Routes
