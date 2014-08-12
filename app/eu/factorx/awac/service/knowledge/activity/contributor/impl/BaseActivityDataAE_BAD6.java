@@ -31,7 +31,11 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("kW");
 
 		// Get reference Electrical Consumption
-		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);		if ((questionSetAnswersA22 == null) || questionSetAnswersA22.isEmpty()) {			return res;		}		QuestionSetAnswer questionSet22Answer = questionSetAnswersA22.get(0);
+		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);
+		if ((questionSetAnswersA22 == null) || questionSetAnswersA22.isEmpty()) {
+			return res;
+		}
+		QuestionSetAnswer questionSet22Answer = questionSetAnswersA22.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet22AnswerQuestionAnswers = byQuestionCode(questionSet22Answer.getQuestionAnswers());
 		QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
 		QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);
@@ -40,17 +44,24 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 				questionA24Answer == null) {
 			return res;
 		}
-
 		Double elecConsumption = 0.0;
+        //TODO convertion impossible entre unité d'énergie et de puissance
+        /*
 		if (questionA23Answer != null) {
 			elecConsumption += toDouble(questionA23Answer, baseActivityDataUnit);
 		}
 		if (questionA24Answer != null) {
 			elecConsumption += toDouble(questionA24Answer, baseActivityDataUnit);
 		}
+		*/
 
 		// For each set of answers in A47, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);		if (questionSetAnswersA47 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA47) {
+		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);
+		if (questionSetAnswersA47 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA47) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

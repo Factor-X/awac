@@ -25,7 +25,7 @@ public class BaseActivityDataAE_BAD31H extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		Unit baseActivityDataUnit = getUnitBySymbol("tonne.km");
+		Unit baseActivityDataUnit = getUnitBySymbol("tonnes.km");
 
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
 			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {

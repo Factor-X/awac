@@ -9,9 +9,9 @@ ng-virtual
             th Scope 3
         tbody
             tr(ng-repeat="rl in o.reportLines")
-                td {{rl.indicatorName}}
-                td {{rl.scope1Value}}
-                td {{rl.scope2Value}}
-                td {{rl.scope3Value}}
+                td(ng-bind-html="rl.indicatorName")
+                td(ng-bind-html="rl.scope1Value | numberToI18N")
+                td(ng-bind-html="rl.scope2Value | numberToI18N")
+                td(ng-bind-html="rl.scope3Value | numberToI18N")
 
     fs-donut(bind="temp.browsers")
