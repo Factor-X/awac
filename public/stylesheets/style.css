@@ -939,7 +939,7 @@ h1 {
     z-index: 9999;
 }
 
-.question_info:hover .info_popup,
+.question_info:hover .question_info_popup,
 .question_info_popup:hover {
     display: block;
 }

@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, modalService, formIdentifier, $timeout,displayFormMenu) ->
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
 
     $scope.formIdentifier = formIdentifier
     $scope.displayFormMenu=displayFormMenu
@@ -136,7 +136,8 @@ angular
         console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
-            messageFlash.displayInfo "All answers are already saved !"
+            messageFlash.displayInfo translationService.get('ALL_ANSWERS_ALREADY_SAVED')
+
             modalService.close(modalService.LOADING)
         else
             #and replace the list
@@ -151,7 +152,7 @@ angular
                 data: $scope.o.answersSave
 
             promise.success (data, status, headers, config) ->
-                messageFlash.displaySuccess "Your answers are saved !"
+                messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
                 modalService.close(modalService.LOADING)
 
                 for answer in $scope.answerList
@@ -169,7 +170,7 @@ angular
                 return
 
             promise.error (data, status, headers, config) ->
-                messageFlash.displayError "An error was thrown during the save : " + data.message
+                messageFlash.displayError translationService.get('ERROR_THROWN_ON_SAVE') + data.message
                 modalService.close(modalService.LOADING)
                 return
 
