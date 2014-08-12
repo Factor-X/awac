@@ -14,7 +14,7 @@ class QuestionSet
 end
 
 class Question
-  attr_accessor :ref, :accronym, :text, :type, :options, :question_set, :tab, :driver
+  attr_accessor :ref, :accronym, :text, :type, :options, :question_set, :tab, :driver, :unit_default
 end
 
 def make_code(str)
@@ -74,6 +74,7 @@ sheet.each do |row|
   loop_desc = row[15]
   type = row[13]
   options = row[14]
+  defaultUnit = row[20]
   repeatable = loop_desc!=nil
 
   #bad
@@ -170,6 +171,9 @@ sheet.each do |row|
       if driver != nil
         q.driver = driver
       end
+      if defaultUnit != nil
+          q.unit_default = defaultUnit
+       end
 
 
       questions.push(q)
@@ -217,6 +221,10 @@ def make_tab(t)
   txt = txt.gsub /__N__/, t.number.to_s
   header = '        // == TAB' + t.number.to_s + ' ' + ('=' * (80 - t.number.to_s.length - 7))
   header + "\n" + txt + "\n" + "\n"
+end
+
+def find_unit(unitSymbol)
+
 end
 
 def make_question_set(qs)
@@ -267,6 +275,12 @@ def make_question(q)
     driver = driver.to_s.strip
   end
 
+  unit_default = 'null'
+
+  if q.unit_default != nil
+    unit_default = 'getUnitBySymbol("'+q.unit_default+'")'
+  end
+
   found = false
   txt = nil
 
@@ -277,6 +291,7 @@ def make_question(q)
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+
   end
 
   if q.type == 'MULTIPLE'
@@ -348,58 +363,65 @@ def make_question(q)
 
   if q.type == 'UNIT_ENERGY'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, energyUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, energyUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_MASS' or q.type == 'UNIT_MASS_KG'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, massUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, massUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_POWER'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, powerUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, powerUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_TIME'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, timeUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, timeUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_LENGTH'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, lengthUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, lengthUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_VOLUME'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, volumeUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, volumeUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'UNIT_MONEY'
     found= true
-    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, moneyUnits, __DEFAULT__));'
+    txt = 'session.saveOrUpdate(new DoubleQuestion(__PARENT__, 0, QuestionCode.__ACCRONYM__, moneyUnits, __DEFAULT__, __UNIT_DEFAULT__));'
     txt = txt.gsub /__PARENT__/, q.question_set.accronym.downcase
     txt = txt.gsub /__ACCRONYM__/, q.accronym.upcase
     txt = txt.gsub /__DEFAULT__/, driver
+    txt = txt.gsub /__UNIT_DEFAULT__/, unit_default
   end
 
   if q.type == 'TEXT'

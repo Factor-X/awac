@@ -11,5 +11,5 @@ angular
         directiveService.autoScopeImpl scope
 
         scope.$watch 'ngCondition', (n,o) ->
-            if n != o
-                scope.$root.$broadcast('CONDITION')
+            #if n != o
+            scope.$root.$broadcast('CONDITION')
