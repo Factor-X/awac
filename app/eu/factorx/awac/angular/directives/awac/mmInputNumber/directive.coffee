@@ -18,19 +18,14 @@ angular
 
         scope.$root.$on '$localeChangeSuccess', (event, current, previous) ->
             if modelCtrl.$modelValue?
-                console.log "reformat : "
-                console.log modelCtrl
-                result = convertToString(parseFloat(modelCtrl.$modelValue)) #$filter("number") parseFloat(modelCtrl.$modelValue), nbDecimal
+                result = convertToString(parseFloat(modelCtrl.$modelValue))
                 if result?
-                    console.log "to print : " + modelCtrl.$modelValue + "-" + parseFloat(modelCtrl.$modelValue) + "=>" + result
                     modelCtrl.$setViewValue result.toString()
                     modelCtrl.$render()
 
         modelCtrl.$parsers.unshift (viewValue) ->
             if viewValue == ""
                 return null
-
-            console.log "viewValue:" + viewValue
 
             formats = $locale.NUMBER_FORMATS
 
@@ -64,10 +59,9 @@ angular
             result=parseFloat(modelValue)
             if  attrs.numbersOnly == "percent"
                 result=result*100
-            return convertToString(result) #$filter("number") result, nbDecimal
+            return convertToString(result)
 
         displayError = ->
-            console.log "PRINT ERROR : "+scope.errorMessage+"+"+scope.$parent
             # try to display the message like a error message.
             # used by the mmAwacQuestion directive
             if scope.$parent?
@@ -75,11 +69,11 @@ angular
 
         convertToString = (value) ->
 
+            if !value? || isNaN value
+                return ""
+
             formats = $locale.NUMBER_FORMATS
-
-            result = value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP)
-
-            return result
+            result= value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP)
 
 
         filterFloat = (value) ->

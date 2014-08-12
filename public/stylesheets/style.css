@@ -1404,7 +1404,7 @@ h1 {
 }
 
 *:disabled {
-    opacity: 0.50;
+    opacity: 0.75;
     color: black;
 }
 

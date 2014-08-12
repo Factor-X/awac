@@ -172,20 +172,20 @@ angular
                 if elementToTest.hasClass('condition-false') == true || (scope.getCondition()? && scope.getCondition() == false)
 
                     # print used for debug
-                    console.log "je suis "+scope.getQuestionCode()+" et me condition est fausse : loading : "+scope.$parent.loading+", value : "+scope.getAnswer().value
+                    # console.log "je suis "+scope.getQuestionCode()+" et me condition est fausse : loading : "+scope.$parent.loading+", value : "+scope.getAnswer().value
 
                     # if there was modification the the validity of the condition ...
                     if scope.getAnswer().hasValidCondition != false
                         #...change the parameter into the answer
                         scope.getAnswer().hasValidCondition = false
+                        if scope.getAnswer().value != null
 
-                        if scope.$parent.loading == false
-                            scope.edited()
-                            scope.$root.$broadcast('CONDITION')
-                        else
-                            if scope.getAnswer().value != null
+                            if scope.$parent.loading == false
                                 scope.getAnswer().value = null
-                            scope.getAnswer().wasEdited = false
+                                scope.edited()
+                                scope.$root.$broadcast('CONDITION')
+                            else
+                                scope.getAnswer().wasEdited = false
 
                     return false
 
@@ -194,7 +194,7 @@ angular
                     return scope.testVisibility(elementToTest.parent())
                 else
                     # print used for debug
-                    console.log "je suis "+scope.getQuestionCode()+" et me condition est vraie : loading : "+scope.$parent.loading+", value : "+scope.getAnswer().value
+                    # console.log "je suis "+scope.getQuestionCode()+" et me condition est vraie : loading : "+scope.$parent.loading+", value : "+scope.getAnswer().value
 
                     # if this element is the body, the condition is true
                     # if there was modification the the validity of the condition ...

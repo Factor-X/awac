@@ -971,17 +971,16 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
           scope.firstComputecondition = true;
           scope.testVisibility = function(elementToTest) {
             if (elementToTest.hasClass('condition-false') === true || ((scope.getCondition() != null) && scope.getCondition() === false)) {
-              console.log("je suis " + scope.getQuestionCode() + " et me condition est fausse : loading : " + scope.$parent.loading + ", value : " + scope.getAnswer().value);
               if (scope.getAnswer().hasValidCondition !== false) {
                 scope.getAnswer().hasValidCondition = false;
-                if (scope.$parent.loading === false) {
-                  scope.edited();
-                  scope.$root.$broadcast('CONDITION');
-                } else {
-                  if (scope.getAnswer().value !== null) {
+                if (scope.getAnswer().value !== null) {
+                  if (scope.$parent.loading === false) {
                     scope.getAnswer().value = null;
+                    scope.edited();
+                    scope.$root.$broadcast('CONDITION');
+                  } else {
+                    scope.getAnswer().wasEdited = false;
                   }
-                  scope.getAnswer().wasEdited = false;
                 }
               }
               return false;
@@ -989,7 +988,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
             if (elementToTest.parent()[0].tagName !== 'BODY') {
               return scope.testVisibility(elementToTest.parent());
             } else {
-              console.log("je suis " + scope.getQuestionCode() + " et me condition est vraie : loading : " + scope.$parent.loading + ", value : " + scope.getAnswer().value);
               if (scope.getAnswer().hasValidCondition !== true) {
                 scope.getAnswer().hasValidCondition = true;
                 if (scope.getQuestion() !== null && scope.getQuestion().defaultValue !== null && scope.getAnswer().value === null) {
@@ -1390,11 +1388,8 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
       scope.$root.$on('$localeChangeSuccess', function(event, current, previous) {
         var result;
         if (modelCtrl.$modelValue != null) {
-          console.log("reformat : ");
-          console.log(modelCtrl);
           result = convertToString(parseFloat(modelCtrl.$modelValue));
           if (result != null) {
-            console.log("to print : " + modelCtrl.$modelValue + "-" + parseFloat(modelCtrl.$modelValue) + "=>" + result);
             modelCtrl.$setViewValue(result.toString());
             return modelCtrl.$render();
           }
@@ -1405,7 +1400,6 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         if (viewValue === "") {
           return null;
         }
-        console.log("viewValue:" + viewValue);
         formats = $locale.NUMBER_FORMATS;
         decimalRegex = formats.DECIMAL_SEP;
         if (decimalRegex === ".") {
@@ -1443,16 +1437,17 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         return convertToString(result);
       });
       displayError = function() {
-        console.log("PRINT ERROR : " + scope.errorMessage + "+" + scope.$parent);
         if (scope.$parent != null) {
           return scope.$parent.setErrorMessage(scope.errorMessage);
         }
       };
       convertToString = function(value) {
         var formats, result;
+        if (!(value != null) || isNaN(value)) {
+          return "";
+        }
         formats = $locale.NUMBER_FORMATS;
-        result = value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP);
-        return result;
+        return result = value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP);
       };
       return filterFloat = function(value) {
         var regexFloat;
