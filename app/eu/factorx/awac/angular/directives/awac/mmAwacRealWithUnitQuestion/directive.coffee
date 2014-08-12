@@ -30,8 +30,7 @@ angular
         #
         if scope.getDataToCompare() == false && scope.getIsAggregation() == false
             scope.$watch 'getAnswer().value', (o,n)->
-                if !(n? && o?) && ""+n != ""+o
-                    console.log "WasEdited : |"+n+"|"+o+"|"
+                if ""+n != ""+o
                     scope.$parent.edited()
 
             scope.$watch 'getAnswer().unitId', (o,n)->
