@@ -7,7 +7,8 @@ angular
     @DOCUMENT_MANAGER = 'DOCUMENT_MANAGER'
     @CONFIRMATION_EXIT_FORM = 'confirmation-exit-form'
     @QUESTION_COMMENT = 'question-comment'
-
+    @EMAIL_CHANGE = 'email-change'
+    @PASSWORD_CHANGE = 'password-change'
 
     @show = (modalName,params) ->
 

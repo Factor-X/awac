@@ -8,7 +8,7 @@ angular
     replace: true
     controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
         $scope.controlField = () ->
-            if $scope.getInfo().field.length > 4 && $scope.getInfo().field.length < 20
+            if $scope.getInfo().field.match($scope.getInfo().validationRegex)
                 $scope.getInfo().isValid = true
             else
                 $scope.getInfo().isValid = false

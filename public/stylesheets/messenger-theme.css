@@ -1,0 +1,47 @@
+ul.messenger-theme-flat .messenger-message.alert-success {
+    background: #5fca4a;
+    color: #183313;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-info {
+    background: #61c4b8;
+    color: #1a3330;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-error {
+    background: #dd6a45;
+    color: #331810;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-success .messenger-close {
+    color: #183313;
+}
+
+
+ul.messenger-theme-flat .messenger-message.alert-info .messenger-close {
+    color: #1a3330;
+}
+
+
+ul.messenger-theme-flat .messenger-message.alert-error .messenger-close {
+    color: #331810;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-success {
+    -webkit-box-shadow: inset 48px 0px 0px #183313 !important;
+    -moz-box-shadow: inset 48px 0px 0px #183313 !important;
+    box-shadow: inset 48px 0px 0px #183313 !important;
+}
+
+ul.messenger-theme-flat .messenger-message.message-info {
+    -webkit-box-shadow: inset 48px 0px 0px #1a3330 !important;
+    -moz-box-shadow: inset 48px 0px 0px #1a3330 !important;
+    box-shadow: inset 48px 0px 0px #1a3330 !important;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-error {
+    -webkit-box-shadow: inset 48px 0px 0px #331810 !important;
+    -moz-box-shadow: inset 48px 0px 0px #331810 !important;
+    box-shadow: inset 48px 0px 0px #331810 !important;
+}
+

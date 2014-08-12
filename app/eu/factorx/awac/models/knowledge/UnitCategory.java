@@ -40,6 +40,7 @@ public class UnitCategory extends AbstractEntity {
 	private Unit mainUnit;
 
 	@OneToMany(mappedBy = "category")
+	@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 	private List<Unit> units;
 
 	public UnitCategory() {

@@ -42,3 +42,7 @@ GET     /result/getReport/:period/:scope         @eu.factorx.awac.controllers.Re
 POST     /file/upload/                           @eu.factorx.awac.controllers.FilesController.upload()
 GET      /file/download/:storedFileId            @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
 
+# user profile
+GET     /user/profile                            @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()
+POST    /user/profile/save                       @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
+POST    /user/email/save                         @eu.factorx.awac.controllers.UserProfileController.updateEmail()

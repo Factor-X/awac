@@ -3,7 +3,7 @@
     .modal-dialog
         .modal-content
             .modal-header
-                button(type="button",ng-click="close()")
+                button.button(type="button",ng-click="close()")
                     span(aria-hidden="true") &times;<span
                     span(class="sr-only") Close
 
@@ -14,12 +14,12 @@
                     textarea(class="question-comment-textarea",ng-model="comment",ng-disabled="getParams().canBeEdited === false")
             .modal-footer
 
-                button(type="button",
+                button.button(type="button",
                 class="btn btn-primary",
                 ng-click="close();")
                     | Cancel
 
-                button(type="button",
+                button.button(type="button",
                 class="btn btn-primary",
                 ng-click="save();",
                 ng-hide="getParams().canBeEdited === false")
