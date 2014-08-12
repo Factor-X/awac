@@ -6,7 +6,7 @@ angular
 
     $scope.graphs = {}
 
-    downloadService.getJson "result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+    downloadService.getJson "result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
 
