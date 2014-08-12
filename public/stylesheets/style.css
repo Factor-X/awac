@@ -808,7 +808,7 @@ h1 {
     margin: 5px;
 }
 
-.repetition-question .remove-button {
+.repetition-question .button.remove-button {
     display: inline-block;
     position: absolute;
     right: 0;
@@ -819,7 +819,7 @@ h1 {
     background-color: #8a6060;
 }
 
-.add-repetition-button {
+.button.add-repetition-button {
     margin-left: 40px !important;
 }
 
