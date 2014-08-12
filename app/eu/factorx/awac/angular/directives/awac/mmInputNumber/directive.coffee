@@ -20,7 +20,7 @@ angular
             if modelCtrl.$modelValue?
                 console.log "reformat : "
                 console.log modelCtrl
-                result = $filter("number") parseFloat(modelCtrl.$modelValue), nbDecimal
+                result = convertToString(parseFloat(modelCtrl.$modelValue)) #$filter("number") parseFloat(modelCtrl.$modelValue), nbDecimal
                 if result?
                     console.log "to print : " + modelCtrl.$modelValue + "-" + parseFloat(modelCtrl.$modelValue) + "=>" + result
                     modelCtrl.$setViewValue result.toString()
@@ -34,19 +34,13 @@ angular
 
             formats = $locale.NUMBER_FORMATS
 
-            groupRegex = formats.GROUP_SEP
-            if groupRegex == "."
-                groupRegex = "\\."
             decimalRegex = formats.DECIMAL_SEP
             if decimalRegex == "."
                 decimalRegex = "\\."
 
-            value = viewValue.replace(new RegExp(groupRegex, "g"), "")
-            value = value.replace(new RegExp(decimalRegex, "g"), ".")
+            value = viewValue.replace(new RegExp(decimalRegex, "g"), ".")
 
             result = filterFloat value
-
-            console.log "result:"+result+"=>"+value+"/"+decimalRegex
 
             if isNaN result
                 displayError()
@@ -70,7 +64,7 @@ angular
             result=parseFloat(modelValue)
             if  attrs.numbersOnly == "percent"
                 result=result*100
-            $filter("number") result, nbDecimal
+            return convertToString(result) #$filter("number") result, nbDecimal
 
         displayError = ->
             console.log "PRINT ERROR : "+scope.errorMessage+"+"+scope.$parent
@@ -79,11 +73,16 @@ angular
             if scope.$parent?
                 scope.$parent.setErrorMessage(scope.errorMessage)
 
-        filterFloat = (value) ->
+        convertToString = (value) ->
+
             formats = $locale.NUMBER_FORMATS
 
-            groupRegex = formats.GROUP_SEP.replace(/\\./g, "\\.")
-            decimalRegex = formats.DECIMAL_SEP.replace(/\\./g, "\\.")
+            result = value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP)
+
+            return result
+
+
+        filterFloat = (value) ->
 
             if  attrs.numbersOnly == "integer"
                 regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$")

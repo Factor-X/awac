@@ -971,16 +971,17 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
           scope.firstComputecondition = true;
           scope.testVisibility = function(elementToTest) {
             if (elementToTest.hasClass('condition-false') === true || ((scope.getCondition() != null) && scope.getCondition() === false)) {
+              console.log("je suis " + scope.getQuestionCode() + " et me condition est fausse : loading : " + scope.$parent.loading + ", value : " + scope.getAnswer().value);
               if (scope.getAnswer().hasValidCondition !== false) {
                 scope.getAnswer().hasValidCondition = false;
-                if (scope.getAnswer().value !== null) {
-                  scope.getAnswer().value = null;
-                  if (scope.$parent.loading === false) {
-                    scope.edited();
-                    scope.$root.$broadcast('CONDITION');
-                  } else {
-                    scope.getAnswer().wasEdited = false;
+                if (scope.$parent.loading === false) {
+                  scope.edited();
+                  scope.$root.$broadcast('CONDITION');
+                } else {
+                  if (scope.getAnswer().value !== null) {
+                    scope.getAnswer().value = null;
                   }
+                  scope.getAnswer().wasEdited = false;
                 }
               }
               return false;
@@ -988,6 +989,7 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
             if (elementToTest.parent()[0].tagName !== 'BODY') {
               return scope.testVisibility(elementToTest.parent());
             } else {
+              console.log("je suis " + scope.getQuestionCode() + " et me condition est vraie : loading : " + scope.$parent.loading + ", value : " + scope.getAnswer().value);
               if (scope.getAnswer().hasValidCondition !== true) {
                 scope.getAnswer().hasValidCondition = true;
                 if (scope.getQuestion() !== null && scope.getQuestion().defaultValue !== null && scope.getAnswer().value === null) {
@@ -1375,7 +1377,7 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
     restrict: 'A',
     require: "ngModel",
     link: function(scope, element, attrs, modelCtrl) {
-      var displayError, filterFloat, nbDecimal;
+      var convertToString, displayError, filterFloat, nbDecimal;
       if (attrs.numbersOnly === "integer") {
         scope.errorMessage = translationService.get('FIELD_INTEGER_ERROR_MESSAGE');
       } else {
@@ -1390,7 +1392,7 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         if (modelCtrl.$modelValue != null) {
           console.log("reformat : ");
           console.log(modelCtrl);
-          result = $filter("number")(parseFloat(modelCtrl.$modelValue), nbDecimal);
+          result = convertToString(parseFloat(modelCtrl.$modelValue));
           if (result != null) {
             console.log("to print : " + modelCtrl.$modelValue + "-" + parseFloat(modelCtrl.$modelValue) + "=>" + result);
             modelCtrl.$setViewValue(result.toString());
@@ -1399,24 +1401,18 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         }
       });
       modelCtrl.$parsers.unshift(function(viewValue) {
-        var decimalRegex, formats, groupRegex, result, resultString, value;
+        var decimalRegex, formats, result, resultString, value;
         if (viewValue === "") {
           return null;
         }
         console.log("viewValue:" + viewValue);
         formats = $locale.NUMBER_FORMATS;
-        groupRegex = formats.GROUP_SEP;
-        if (groupRegex === ".") {
-          groupRegex = "\\.";
-        }
         decimalRegex = formats.DECIMAL_SEP;
         if (decimalRegex === ".") {
           decimalRegex = "\\.";
         }
-        value = viewValue.replace(new RegExp(groupRegex, "g"), "");
-        value = value.replace(new RegExp(decimalRegex, "g"), ".");
+        value = viewValue.replace(new RegExp(decimalRegex, "g"), ".");
         result = filterFloat(value);
-        console.log("result:" + result + "=>" + value + "/" + decimalRegex);
         if (isNaN(result)) {
           displayError();
           if (scope.lastValidValue != null) {
@@ -1444,7 +1440,7 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
         if (attrs.numbersOnly === "percent") {
           result = result * 100;
         }
-        return $filter("number")(result, nbDecimal);
+        return convertToString(result);
       });
       displayError = function() {
         console.log("PRINT ERROR : " + scope.errorMessage + "+" + scope.$parent);
@@ -1452,11 +1448,14 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
           return scope.$parent.setErrorMessage(scope.errorMessage);
         }
       };
-      return filterFloat = function(value) {
-        var decimalRegex, formats, groupRegex, regexFloat;
+      convertToString = function(value) {
+        var formats, result;
         formats = $locale.NUMBER_FORMATS;
-        groupRegex = formats.GROUP_SEP.replace(/\\./g, "\\.");
-        decimalRegex = formats.DECIMAL_SEP.replace(/\\./g, "\\.");
+        result = value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP);
+        return result;
+      };
+      return filterFloat = function(value) {
+        var regexFloat;
         if (attrs.numbersOnly === "integer") {
           regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$");
         } else {
