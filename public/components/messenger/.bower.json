@@ -48,6 +48,5 @@
   },
   "_source": "git://github.com/HubSpot/messenger.git",
   "_target": "~1.4.1",
-  "_originalSource": "messenger",
-  "_direct": true
+  "_originalSource": "messenger"
 }

@@ -1528,3 +1528,16 @@ h1 {
     text-align: right;
     padding: 30px;
 }
+
+.result_table{
+    padding:15px;
+
+}
+
+.result_table td{
+    padding : 2px;
+}
+
+.result_table td:nth-child(n+2){
+    text-align: right;
+}
