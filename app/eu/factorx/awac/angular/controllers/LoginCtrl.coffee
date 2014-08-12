@@ -8,7 +8,7 @@ angular
         fieldType: "text"
         placeholder: "your login"
         validationRegex: "^\\S{5,20}$"
-        validationMessage: "between 5 and 20 letters and without withe spaces"
+        validationMessage: "between 5 and 20 letters and without white spaces"
         field: ""
         isValid: false
 
@@ -16,7 +16,7 @@ angular
         fieldTitle: "Your password"
         fieldType: "password"
         validationRegex: "^\\S{5,20}$"
-        validationMessage: "between 5 and 20 letters and without withe spaces"
+        validationMessage: "between 5 and 20 letters and without white spaces"
         field: ""
         isValid: false
 
