@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -26,10 +23,15 @@ public class BaseActivityDataAE_BAD27L extends ActivityResultContributor {
 
 		// Get Target Unit (euros in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.euros)
-		Unit baseActivityDataUnit = getUnitBySymbol("euros");
+		Unit baseActivityDataUnit = getUnitBySymbol("EUR");
 
 		// For each set of answers in A209, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA209 = questionSetAnswers.get(QuestionCode.A209);		if (questionSetAnswersA209 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA209) {
+		List<QuestionSetAnswer> questionSetAnswersA209 = questionSetAnswers.get(QuestionCode.A209);
+		if (questionSetAnswersA209 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA209) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -46,7 +48,7 @@ public class BaseActivityDataAE_BAD27L extends ActivityResultContributor {
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
-			//TODO   baseActivityData.setKey(BaseActivityDataCode.AE_BAD27L);
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD27L);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(toString(questionA210Answer));
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);

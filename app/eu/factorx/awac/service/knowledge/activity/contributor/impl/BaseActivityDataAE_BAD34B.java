@@ -26,7 +26,7 @@ public class BaseActivityDataAE_BAD34B extends BaseActivityDataForProducts {
 
 		// Get Target Unit (kWh in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
-		Unit baseActivityDataUnit = getUnitBySymbol("kWh");
+		Unit baseActivityDataUnit = getUnitBySymbol("kW.h");
 
 		// For each set of answers in A284, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren())

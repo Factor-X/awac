@@ -72,6 +72,7 @@ public class BaseActivityDataCode extends Code {
 	public static final BaseActivityDataCode AE_BAD27A = new BaseActivityDataCode("66");
 	public static final BaseActivityDataCode AE_BAD27B = new BaseActivityDataCode("67");
 	public static final BaseActivityDataCode AE_BAD27C = new BaseActivityDataCode("68");
+
 	public static final BaseActivityDataCode AE_BAD28 = new BaseActivityDataCode("69");
 	public static final BaseActivityDataCode AE_BAD29A = new BaseActivityDataCode("70");
 	public static final BaseActivityDataCode AE_BAD29B = new BaseActivityDataCode("71");
@@ -109,6 +110,17 @@ public class BaseActivityDataCode extends Code {
 	public static final BaseActivityDataCode AE_BAD38C = new BaseActivityDataCode("103");
 	public static final BaseActivityDataCode AE_BAD39A = new BaseActivityDataCode("104");
 	public static final BaseActivityDataCode AE_BAD39B = new BaseActivityDataCode("105");
+
+    public static final BaseActivityDataCode AE_BAD27D = new BaseActivityDataCode("106");
+    public static final BaseActivityDataCode AE_BAD27E = new BaseActivityDataCode("107");
+    public static final BaseActivityDataCode AE_BAD27F = new BaseActivityDataCode("108");
+    public static final BaseActivityDataCode AE_BAD27G = new BaseActivityDataCode("109");
+    public static final BaseActivityDataCode AE_BAD27H = new BaseActivityDataCode("110");
+    public static final BaseActivityDataCode AE_BAD27I = new BaseActivityDataCode("111");
+    public static final BaseActivityDataCode AE_BAD27J = new BaseActivityDataCode("112");
+    public static final BaseActivityDataCode AE_BAD27K = new BaseActivityDataCode("113");
+    public static final BaseActivityDataCode AE_BAD27L = new BaseActivityDataCode("114");
+
 	private static final long serialVersionUID = 1L;
 
 	protected BaseActivityDataCode() {
