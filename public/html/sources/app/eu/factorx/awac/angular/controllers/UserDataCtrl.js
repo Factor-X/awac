@@ -1,0 +1,1 @@
+angular.module('app.controllers').controller("UserDataCtrl", function($scope) {});

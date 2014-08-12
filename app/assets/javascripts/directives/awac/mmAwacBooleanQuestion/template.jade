@@ -1,0 +1,19 @@
+span.twoelement
+    span(style="text-align:center")
+        span(style="vertical-align:middle;margin-right : 15px;") oui
+        input(  type="radio",
+                name="{{getQuestionCode()}}",
+                ng-model="getAnswer().value",
+                value="1",
+                style="width :20px !important;margin:0;vertical-align:middle;",
+                ng-change="edited()",
+                ng-disabled="getDataToCompare()==true")
+    span(style="text-align:center")
+        span(style="vertical-align:middle;margin-right : 15px;") non
+        input(  type="radio",
+                name="{{getQuestionCode()}}",
+                ng-model="getAnswer().value",
+                value="0",
+                style="width :20px !important;margin:0;vertical-align:middle;",
+                ng-change="edited()",
+                ng-disabled="getDataToCompare()==true")

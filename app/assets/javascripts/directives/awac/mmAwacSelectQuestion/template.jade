@@ -1,0 +1,4 @@
+select.oneelement(  ng-options="p.key as p.label for p in getOptions()",
+                    ng-model="getAnswer().value",
+                    ng-change="edited()",
+                    ng-disabled="getDataToCompare()==true")

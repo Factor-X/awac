@@ -5,7 +5,7 @@ angular
     scope: {
 
     }
-    templateUrl: "$/angular/templates/mm-awac-modal-confirmation-exit-form.html"
+    templateUrl: "assets/html/sources/app/eu/factorx/awac/angular/directives/awac/mmAwacModalConfirmationExitForm/template.html"
     controller: ($scope,modalService) ->
 
         #change option of the modal

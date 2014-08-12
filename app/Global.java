@@ -89,10 +89,10 @@ public class Global extends GlobalSettings {
 
 			if (app.isDev()) {
 
-				if (recompilerThread == null) {
-					recompilerThread = new RecompilerThread();
-					recompilerThread.start();
-				}
+//				if (recompilerThread == null) {
+//					recompilerThread = new RecompilerThread();
+//					recompilerThread.start();
+//				}
 			}
 
 			semaphore.release();

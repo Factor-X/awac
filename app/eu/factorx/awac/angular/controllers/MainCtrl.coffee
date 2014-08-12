@@ -222,7 +222,6 @@ angular
 #rootScope
 angular.module('app').run ($rootScope, $location, $http, flash)->
 
-
     #
     # Redirect user to login view if not logged in
     #

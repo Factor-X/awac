@@ -1,0 +1,108 @@
+angular.module('app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'dangle']);
+angular.module('app.filters', []);
+angular.module('app.services', []);
+angular.module('app.controllers', ['app.services', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'angularFileUpload']);
+angular.module('app', ['app.directives', 'app.filters', 'app.services', 'app.controllers']);
+angular.module('app.controllers').config(function($routeProvider) {
+  $routeProvider.when('/login', {
+    templateUrl: '$/angular/views/login.html',
+    controller: 'LoginCtrl'
+  }).when('/user_data/:period/:scope', {
+    templateUrl: '$/angular/views/user_data.html',
+    controller: 'UserDataCtrl'
+  }).when('/user_manager/:period/:scope', {
+    templateUrl: '$/angular/views/user_manager.html',
+    controller: 'UserManagerCtrl'
+  }).when('/site_manager/:period/:scope', {
+    templateUrl: '$/angular/views/site_manager.html',
+    controller: 'SiteManagerCtrl'
+  }).when('/form1/:period/:scope', {
+    templateUrl: '$/angular/views/form1.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB1';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form2/:period/:scope', {
+    templateUrl: '$/angular/views/form2.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB2';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form3/:period/:scope', {
+    templateUrl: '$/angular/views/form3.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB3';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form4/:period/:scope', {
+    templateUrl: '$/angular/views/form4.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB4';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form5/:period/:scope', {
+    templateUrl: '$/angular/views/form5.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB5';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form6/:period/:scope', {
+    templateUrl: '$/angular/views/form6.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB6';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/form7/:period/:scope', {
+    templateUrl: '$/angular/views/form7.html',
+    controller: 'FormCtrl',
+    resolve: {
+      formIdentifier: function() {
+        return 'TAB7';
+      },
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).when('/results/:period/:scope', {
+    templateUrl: '$/angular/views/results.html',
+    controller: 'ResultsCtrl',
+    resolve: {
+      displayFormMenu: function() {
+        return true;
+      }
+    }
+  }).otherwise({
+    redirectTo: '/login'
+  });
+  return;
+});

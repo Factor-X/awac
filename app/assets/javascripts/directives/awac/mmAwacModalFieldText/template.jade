@@ -1,0 +1,15 @@
+tr
+    td {{getInfo().fieldTitle}}
+        td
+            input(  ng-keyup='controlField()',
+            type='{{getInfo().fieldType}}',
+            ng-model='getInfo().field',
+            placeholder='{{getInfo().placeholder}}')
+        td
+            img(    ng-show='getInfo().isValid',
+            src='/awac/assets/images/field_valid.png')
+
+            .error_message(ng-hide='getInfo().isValid')
+
+                img(src='/awac/assets/images/field_invalid.png')
+                div {{getInfo().validationMessage}}

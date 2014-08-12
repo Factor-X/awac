@@ -1,0 +1,15 @@
+<mm-awac-section title-code="A1_TITLE">
+    <mm-awac-sub-title question-code="A1"></mm-awac-sub-title>
+    <mm-awac-question question-code="A2"></mm-awac-question>
+    <mm-awac-question question-code="A3"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A3').value == '1'" question-code="A4"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A3').value == '2' || getAnswer('A3').value == '3'"
+                      question-code="A5"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A3').value == '4'" question-code="A6"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A3').value == '4'" question-code="A7"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A7').value == '1'" question-code="A8"></mm-awac-question>
+    <mm-awac-question question-code="A9"></mm-awac-question>
+    <mm-awac-question question-code="A10"></mm-awac-question>
+    <mm-awac-question ng-condition="getAnswer('A3').value != '4'" question-code="A11"></mm-awac-question>
+    <mm-awac-question question-code="A12"></mm-awac-question>
+</mm-awac-section>

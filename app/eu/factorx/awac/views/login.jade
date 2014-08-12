@@ -1,0 +1,14 @@
+.loginBackground
+    .loginFrame(ng-enter="send()")
+        div(class="field_form")
+            mm-awac-modal-field-text(ng-info="loginInfo")
+            mm-awac-modal-field-text(ng-info="passwordInfo")
+
+        p(ng-show="errorMessage.length > 0",
+        style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+
+        button(
+        type="button",
+        class="btn btn-primary",
+        ng-bind-html="'LOGIN_BUTTON' | translate",
+        ng-click="send()")

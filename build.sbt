@@ -18,7 +18,17 @@ libraryDependencies ++= Seq(
   "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
   "info.cukes" % "cucumber-java" % "1.1.5" % "test",
   "info.cukes" % "cucumber-junit" % "1.1.5" % "test",
-  "net.sf.ehcache" % "ehcache" % "2.7.2"
+  "net.sf.ehcache" % "ehcache" % "2.7.2",
+  "de.neuland" % "jade4j" % "0.3.17",
+  "org.webjars" % "underscorejs" % "1.6.0-1",
+  "org.webjars" % "jquery" % "1.11.0-1",
+  "org.webjars" % "bootstrap" % "3.1.1" exclude("org.webjars", "jquery"),
+  "org.webjars" % "angularjs" % "1.2.14" exclude("org.webjars", "jquery"),
+  "org.webjars" % "requirejs" % "2.1.11-1",
+  "org.webjars" % "angular-ui-bootstrap" % "0.11.0-2",
+  "org.webjars" % "d3js" % "3.4.11",
+  "org.webjars" % "angular-file-upload" % "1.6.5",
+  "org.webjars" %% "webjars-play" % "2.2.1-2"
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"
@@ -53,3 +63,17 @@ play.Project.playJavaSettings
 unmanagedResourceDirectories in Test <+= baseDirectory( _ / "test/features" )
 
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
+
+// Scala Compiler Options
+scalacOptions in ThisBuild ++= Seq(
+  "-target:jvm-1.7",
+  "-encoding", "UTF-8",
+  "-deprecation", // warning and location for usages of deprecated APIs
+  "-feature", // warning and location for usages of features that should be imported explicitly
+  "-unchecked", // additional warnings where generated code depends on assumptions
+  "-Xlint", // recommended additional warnings
+  "-Ywarn-adapted-args", // Warn if an argument list is modified to match the receiver
+  "-Ywarn-value-discard", // Warn when non-Unit expression results are unused
+  "-Ywarn-inaccessible",
+  "-Ywarn-dead-code"
+)

@@ -3,38 +3,46 @@
     <head>
         <title>AWAC</title>
 
+       <!-- ------------------------------------------------------------------ -->
+       <!-- User REQUIREJS                                                     -->
+       <!-- ------------------------------------------------------------------ -->
+
+        @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/main").url)
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
         <!-- ------------------------------------------------------------------ -->
 
         <!-- Angular dependencies local -->
-        <script src='@routes.Assets.at("components/angular/angular.min.js")'></script>
-        <script src='@routes.Assets.at("components/angular-animate/angular-animate.min.js")'></script>
-        <script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>
-        <script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>
-        <script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>
-        <script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>
-        <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload-shim.min.js")'></script>
-        <script src='@routes.Assets.at("components/ng-file-upload/angular.min.js")'></script>
-        <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>
+        @*<script src='@routes.Assets.at("components/angular/angular.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-animate/angular-animate.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload-shim.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>*@
 
         <!-- Underscore -->
-        <script src='@routes.Assets.at("components/underscore/underscore.js")'></script>
+        @*<script src='@routes.Assets.at("components/underscore/underscore.js")'></script>*@
 
         <!-- jQuery -->
-        <script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>
+        @*<script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>*@
 
         <!-- Bootstrap -->
-        <script src='@routes.Assets.at("components/bootstrap/dist/js/bootstrap.min.js")'></script>
+        @*<script src='@routes.Assets.at("components/bootstrap/dist/js/bootstrap.min.js")'></script>*@
 
         <!-- D3 -->
-        <script src='@routes.Assets.at("components/d3/d3.min.js")'></script>
+        @*<script src='@routes.Assets.at("components/d3/d3.min.js")'></script>*@
 
         <!-- Dangle -->
-        <script src='@routes.Assets.at("components/dangle/dist/dangle.min.js")'></script>
+        @*<script src='@routes.Assets.at("components/dangle/dist/dangle.min.js")'></script>*@
 
         <!-- web app -->
-        <script src='@routes.Assets.at("javascripts/app.js")'></script>
+        @*<script src='@routes.Assets.at("javascripts/main.js")'></script>*@
+
+            <!-- web app -->
+        @*<script src='@routes.Assets.at("javascripts/controllers/MainCtrl.js")'></script>*@
 
         <!-- ------------------------------------------------------------------ -->
         <!-- STYLES                                                             -->
@@ -56,29 +64,41 @@
         <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
 
         <!-- Developer's helper for translations -->
-        <script>
-            $(function () {
-                $('body').keydown(function (evt) {
-                    // console.log(evt);
-                    if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
-                        if (window.debug) {
-                            window.debug = false;
-                            $('.translation-code').remove();
-                        } else {
-                            window.debug = true;
-                            $('.translated-text').each(function () {
-                                var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
-                                $(this).append(e)
-                            })
-                        }
-                    }
-                })
-            });
-        </script>
+        @*<script>*@
+            @*$(function () {*@
+                @*$('body').keydown(function (evt) {*@
+                    @*// console.log(evt);*@
+                    @*if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {*@
+                        @*if (window.debug) {*@
+                            @*window.debug = false;*@
+                            @*$('.translation-code').remove();*@
+                        @*} else {*@
+                            @*window.debug = true;*@
+                            @*$('.translated-text').each(function () {*@
+                                @*var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')*@
+                                @*$(this).append(e)*@
+                            @*})*@
+                        @*}*@
+                    @*}*@
+                @*})*@
+            @*});*@
+        @*</script>*@
 
     </head>
+
+    @*<body>*@
+    @*<ul class="menu">*@
+
+         @*<li><a href="#/view1">view1</a></li>*@
+         @*<li><a href="#/view2">view2</a></li>*@
+    @*</ul>*@
+
+    @*<div data-ng-view></div>*@
+
+    @*<div>Angular Require seed app: v<span app-version></span></div>*@
+
     <body ng-controller="MainCtrl">
-        
+
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>

@@ -1,0 +1,11 @@
+span.twoelement
+    input(  type="text",
+            ng-model="getAnswer().value",
+            ng-pattern="/^[0-9,. ]*$/",
+            ng-change="edited()",
+            style="text-align:right;",
+            ng-disabled="getDataToCompare()==true")
+    select( ng-options="p.id as p.name for p in getUnits()",
+            ng-model="getAnswer().unitId",
+            ng-change="edited()",
+            ng-disabled="getDataToCompare()==true")

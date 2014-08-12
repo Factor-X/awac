@@ -34,7 +34,17 @@ object ApplicationBuild extends Build {
         "com.google.inject" % "guice" % "3.0" % "test",
         "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
         "info.cukes" % "cucumber-java" % "1.1.5" % "test",
-        "info.cukes" % "cucumber-junit" % "1.1.5" % "test"
+        "info.cukes" % "cucumber-junit" % "1.1.5" % "test",
+        "de.neuland" % "jade4j" % "0.3.17",
+        "org.webjars" % "underscorejs" % "1.6.0-1",
+        "org.webjars" % "jquery" % "1.11.0-1",
+        "org.webjars" % "bootstrap" % "3.1.1" exclude("org.webjars", "jquery"),
+        "org.webjars" % "angularjs" % "1.2.14" exclude("org.webjars", "jquery"),
+        "org.webjars" % "requirejs" % "2.1.11-1",
+        "org.webjars" % "angular-ui-bootstrap" % "0.11.0-2",
+        "org.webjars" % "d3js" % "3.4.11",
+        "org.webjars" % "angular-file-upload" % "1.6.5",
+        "org.webjars" %% "webjars-play" % "2.2.1-2"
     )
 
     libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
@@ -65,6 +75,21 @@ object ApplicationBuild extends Build {
 //                } yield newArg
 //            }
 //        )
+//       .settings(
+//         javascriptEntryPoints <<= baseDirectory(base =>
+//           base / "app" / "assets" / "javascripts"  ** "*.js")
+//       )
+      .settings (
+        // This tells Play to optimize this file and its dependencies
+        requireJs += "main.js",
+        // The main config file
+        // See http://requirejs.org/docs/optimization.html#mainConfigFile
+        requireJsShim := "main.js"
+    )
+        .settings(
+        resolvers += "jade4j-releases" at "https://github.com/neuland/jade4j/raw/master/releases",
+        resolvers += "webjars" at "http://webjars.github.com/m2"
+        )
         .settings(
             downloadTranslationsTask
         )
@@ -73,5 +98,8 @@ object ApplicationBuild extends Build {
 //        )
     // Add your own project settings here
 
+  val base = new File("./target/scala-2.10/resource_managed/main/public/")
+  val list = ((base / "javascripts" ** "*.js") --- (base / "scala-2.10" ** "_*")).get.sortBy(_.name)
+  list.foreach(println)
 
 }

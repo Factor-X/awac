@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8">
+        <title>My AngularJS App</title>
+
+        @*<script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/dangle/dist/dangle.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload-shim.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular.min.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>*@
+
+
+        <link rel="stylesheet" href=@routes.Assets.at("stylesheets/jade.css").url />
+        @*<script src='@routes.Assets.at("components/dangle/dist/dangle.js")'></script>*@
+        @*<script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>*@
+
+        org.webjars.play.RequireJS
+
+    @Html(eu.factorx.awac.controllers.RequireJS.setup(eu.factorx.awac.views.html.helpers.mainScriptSrc(scriptName = "main")))
+
+    </head>
+    <body>
+        <ul class="menu">
+            <li><a href="#/board">board</a></li>
+        </ul>
+
+        <div ng-view></div>
+
+        <div>Angular seed app: v<span app-version></span></div>
+
+    </body>
+</html>

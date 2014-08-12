@@ -4,7 +4,7 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngInfo: '='
-    templateUrl: "$/angular/templates/mm-awac-modal-field-text.html"
+    templateUrl: "assets/html/sources/app/eu/factorx/awac/angular/directives/awac/mmAwacModalFieldText/template.html"
     replace: true
     controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
         $scope.controlField = () ->
