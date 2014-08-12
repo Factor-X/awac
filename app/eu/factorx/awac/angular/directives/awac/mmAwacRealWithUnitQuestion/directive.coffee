@@ -28,13 +28,15 @@ angular
         #
         # called when the user change the value of the field
         #
-        scope.$watch 'getAnswer().value', (o,n)->
-            if ""+n != ""+o
-                scope.$parent.edited()
+        if scope.getDataToCompare() == false && scope.getIsAggregation() == false
+            scope.$watch 'getAnswer().value', (o,n)->
+                if !(n? && o?) && ""+n != ""+o
+                    console.log "WasEdited : |"+n+"|"+o+"|"
+                    scope.$parent.edited()
 
-        scope.$watch 'getAnswer().unitId', (o,n)->
-            if ""+n != ""+o
-                scope.$parent.edited()
+            scope.$watch 'getAnswer().unitId', (o,n)->
+                if ""+n != ""+o
+                    scope.$parent.edited()
 
         #
         # return the list of units that can be choose

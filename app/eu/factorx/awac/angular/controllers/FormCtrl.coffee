@@ -283,8 +283,11 @@ angular
                     wasEdited = true
 
                 #compute defaultUnitId
-                if question.unitCategoryId != null && question.unitCategoryId != undefined
-                    defaultUnitId = $scope.getUnitCategories(code).mainUnitId
+                if question.unitCategoryId?
+                    if question.defaultUnit?
+                        defaultUnitId = question.defaultUnit.id
+                    else
+                        defaultUnitId = $scope.getUnitCategories(code).mainUnitId
 
             #if the answer was not founded, create it
             answerLine = {
@@ -484,13 +487,15 @@ angular
 
                 if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
 
-                    # clean the value
-                    total++
-                    listTotal[listTotal.length] = answer
+                    if answer.isAggregation != true
 
-                    #test if the data is valid
-                    if answer.value != null
-                        answered++
+                        # clean the value
+                        total++
+                        listTotal[listTotal.length] = answer
+
+                        #test if the data is valid
+                        if answer.value != null
+                            answered++
 
 
         percentage = answered / total * 100

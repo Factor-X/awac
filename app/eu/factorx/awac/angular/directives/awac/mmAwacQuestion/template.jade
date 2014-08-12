@@ -3,7 +3,7 @@ div(class="question_field",
     div
         .question_info(ng-show="hasDescription()")
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(ng-class="getQuestion().answerType === 'DOCUMENT' ? 'glyphicon-file' : 'glyphicon-share-alt' ",class="glyphicon")
+        span(ng-class="getIcon()",class="glyphicon")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate", ng-click="logQuestionCode()")
     div
         .status(ng-class="getStatusClass()")

@@ -102,8 +102,9 @@ angular
                 if forDataToCompare
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
-                    if scope.getAggregation()? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value == null
+                    if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value == null
                         scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value = scope.getAggregation()
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).isAggregation = true
                     return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
 
             #
@@ -280,11 +281,20 @@ angular
             #
             scope.logQuestionCode = ->
                 console.log scope.getQuestionCode() + ",value:" + scope.getAnswer().value + ",wasEdited:" + scope.getAnswer().wasEdited
+                console.log scope.getAnswer()
 
             #
             # error message if the user try to enter wrong data into the field
             #
             scope.errorMessage = ""
+
+            scope.getIcon =->
+                if scope.ngAggregation?
+                    return 'glyphicon-cog'
+                if scope.getQuestion()? && scope.getQuestion().answerType == 'DOCUMENT'
+                    return 'glyphicon-file'
+                return 'glyphicon-share-alt'
+
 
             #
             # display a error message before the input
