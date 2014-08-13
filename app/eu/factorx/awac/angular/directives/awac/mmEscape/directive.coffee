@@ -5,6 +5,6 @@ angular
         element.bind "keydown keypress", (event) ->
             if event.which == 27
                 scope.$apply () ->
-                    scope.$eval(attrs.ngEnter)
+                    scope.$eval(attrs.ngEscape)
                 event.preventDefault()
 
