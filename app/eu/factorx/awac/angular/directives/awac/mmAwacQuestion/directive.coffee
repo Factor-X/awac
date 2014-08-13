@@ -179,9 +179,9 @@ angular
                         #...change the parameter into the answer
                         scope.getAnswer().hasValidCondition = false
                         if scope.getAnswer().value != null
-                            scope.getAnswer().value = null
 
                             if scope.$parent.loading == false
+                                scope.getAnswer().value = null
                                 scope.edited()
                                 scope.$root.$broadcast('CONDITION')
                             else

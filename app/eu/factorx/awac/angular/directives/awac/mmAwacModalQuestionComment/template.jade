@@ -1,5 +1,5 @@
 // Modal
-.modal(ng-enter="save()")
+.modal(ng-enter="save()",ng-escape="close()")
     .modal-dialog
         .modal-content
             .modal-header
@@ -11,7 +11,7 @@
 
             .modal-body
                 .field_form
-                    textarea(class="question-comment-textarea",ng-model="comment",ng-disabled="getParams().canBeEdited === false")
+                    textarea(class="question-comment-textarea",ng-model="comment",ng-disabled="getParams().canBeEdited === false",focus-me)
             .modal-footer
 
                 button.button(type="button",
