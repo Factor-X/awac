@@ -1,10 +1,1 @@
-//
-    .oneelement.document-question-block.document-question
-        span(ng-hide="getDataToCompare()==true|| getIsAggregation()===true") Upload new documents
-        div(class="document-question-progress-bar",ng-show="inDownload")
-            div(ng-style="style")
-                spa
-        .document-question-progress-percentage(ng-show="inDownload") {{percent}} %
-        input(ng-hide="inDownload",type='file', ng-file-select='onFileSelect($files)',ng-hide="getDataToCompare()==true|| getIsAggregation()===true")
-        div(ng-show="getFileNumber()>0") {{getFileNumber()}} document had already uploaded
-    button.button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()") consult this documents
+div

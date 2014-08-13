@@ -98,6 +98,7 @@ angular
 
             modalService.close(modalService.LOADING)
             $scope.loading = false
+            $scope.$root.$broadcast('FORM_LOADING_FINISH')
         , 0)
 
         return
