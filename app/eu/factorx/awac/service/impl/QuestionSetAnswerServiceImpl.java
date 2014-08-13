@@ -76,7 +76,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 
 	@Override
 	public void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form) {
-		List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope).appendPeriod(period).appendForm(form));
+		List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
 		deleteEmptyQuestionSetAnswers(questionSetAnswers);
 	}
 
@@ -88,6 +88,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 			if (!questionSetAnswer.getChildren().isEmpty()) {
 				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
 			}
+
 			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
 				QuestionSetAnswer parent = questionSetAnswer.getParent();
 				Logger.info("DELETING (empty) {}", questionSetAnswer);

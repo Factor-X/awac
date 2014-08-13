@@ -45,7 +45,7 @@ public class AwacInitialData {
 		UnitCategory timeUnits = getUnitCategoryByName("Time");
 
 		// PERIOD
-		for (int i = 2005; i <= 2013; i++) {
+		for (int i = 2013; i >= 2005; i--) {
 			String label = String.valueOf(i);
 			Period period1 = new Period(new PeriodCode(label), label);
 			session.saveOrUpdate(period1);
