@@ -51,11 +51,16 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = true)
 	public Result authenticate() {
 
+		Logger.debug ("DTO Test debug Json: " + request().body().asJson());
+
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {
 			throw new RuntimeException("The request cannot be convert");
 		}
+
+		Logger.debug ("DTO Test debug login: " + connectionFormDTO.getLogin());
+		Logger.debug ("DTO Test debug password: " + connectionFormDTO.getPassword());
 
 		//test if the login exist
 		Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
