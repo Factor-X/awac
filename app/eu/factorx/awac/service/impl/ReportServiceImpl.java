@@ -88,7 +88,11 @@ public class ReportServiceImpl implements ReportService {
 	private List<BaseActivityData> getActivityData(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
 		List<BaseActivityData> res = new ArrayList<>();
 		for (ActivityResultContributor contributor : activityResultContributors) {
-			res.addAll(contributor.getBaseActivityData(allQuestionSetAnswers));
+			try {
+				res.addAll(contributor.getBaseActivityData(allQuestionSetAnswers));
+			} catch (Exception e) {
+				Logger.error("Error wile retrieving base activity data from BAD: " + contributor.getClass().getSimpleName());
+			}
 		}
 		return res;
 	}
