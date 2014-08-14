@@ -19,7 +19,7 @@ angular
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             field: ""
             isValid: false
-            autofocus: true
+            focus: true
 
         $scope.oldEmailInfo =
             fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE"
