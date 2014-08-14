@@ -1,0 +1,36 @@
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;<span
+                    span(class="sr-only") Close
+                h4(class="modal-title",id="myModalLabel") Modification de votre adresse e-mail
+
+            .modal-body
+                .field_form
+                    mm-awac-modal-field-text(ng-info="passwordInfo")
+                    mm-awac-modal-field-text(ng-info="oldEmailInfo")
+                    mm-awac-modal-field-text(ng-info="newEmailInfo")
+
+                    p(ng-show="errorMessage.length > 0",
+                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save();",
+                    ng-disabled="!allFieldValid()")
+                        | Save
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();")
+                        | Cancel
+
+                img(ng-show="isLoading",src="/awac/assets/images/modal-loading.gif")
+
+
