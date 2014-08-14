@@ -14,9 +14,10 @@
 
 # Constants
 REGEX = /^([^#\s]+)\s+(\S+)\s+(.*)$/
+PATH = 'conf/routes'
 
 # Read the lines
-lines = IO.readlines('conf/routes')
+lines = IO.readlines(PATH)
 
 # First pass: find column' sizes
 m_size = 0
@@ -44,7 +45,7 @@ for l in lines
 end
 
 # Second pass: pad and write
-File.open('conf/routes', 'w') do |file|
+File.open(PATH, 'w') do |file|
   for l in lines
     l = l.strip
     m = REGEX.match(l.strip)
