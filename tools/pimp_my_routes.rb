@@ -1,8 +1,21 @@
+# =========================================================================== #
+# = PIMP MY ROUTES                                                          = #
+# =========================================================================== #
+#                                                                             #
+# -- Usage ------------------------------------------------------------------ #
+#                                                                             #
+# In the root directory, type:                                                #
+#                                                                             #
+#                                                                             #
+#                      $ ruby tools/pimp_my_routes.rb                         #
+#                                                                             #
+#                                                                             #
+# =========================================================================== #
+
+# Read the lines
 lines = IO.readlines('conf/routes')
 
-
-# first pass: sizes
-
+# First pass: find column' sizes
 m_size = 0
 p_size = 0
 a_size= 0
@@ -27,8 +40,7 @@ for l in lines
   end
 end
 
-# second pass: padding
-
+# Second pass: pad and write
 File.open('conf/routes', 'w') do |file|
   for l in lines
     l = l.strip
