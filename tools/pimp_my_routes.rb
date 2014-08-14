@@ -12,6 +12,9 @@
 #                                                                             #
 # =========================================================================== #
 
+# Constants
+REGEX = /^([^#\s]+)\s+(\S+)\s+(.*)$/
+
 # Read the lines
 lines = IO.readlines('conf/routes')
 
@@ -22,7 +25,7 @@ a_size= 0
 
 for l in lines
   l = l.strip
-  m = /^([^#\s]+)\s+(\S+)\s+(.*)$/.match(l.strip)
+  m = REGEX.match(l.strip)
   if m
     method, path, action = m.captures
 
@@ -44,9 +47,9 @@ end
 File.open('conf/routes', 'w') do |file|
   for l in lines
     l = l.strip
-    m = /^([^#\s]+)\s+(\S+)\s+(.*)$/.match(l.strip)
+    m = REGEX.match(l.strip)
     if m
-      method, path, action = /^(\S+)\s+(\S+)\s+(.*)$/.match(l.strip).captures
+      method, path, action = REGEX.match(l.strip).captures
       file.puts method.ljust(m_size, ' ') + '    ' + path.ljust(p_size, ' ') + '    ' + action.ljust(a_size, ' ')
     else
       file.puts l
