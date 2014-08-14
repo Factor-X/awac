@@ -44,7 +44,7 @@
                         <button type="button"
                                 class="button user_manage"
                                 ng-bind-html="'SITE_MANAGER_BUTTON' | translate"
-                                mm-not-implemented
+                                ng-click="nav('/site_manager')"
                                 ng-class="{'selected': isMenuCurrentlySelected('/site_manager') == true}">
                         </button>
 
@@ -52,7 +52,7 @@
                         <button type="button"
                                 class="button user_manage"
                                 ng-bind-html="'USER_MANAGER_BUTTON' | translate"
-                                mm-not-implemented
+                                ng-click="nav('/user_manager')"
                                 ng-class="{'selected': isMenuCurrentlySelected('/user_manager') == true}">
                         </button>
 
@@ -65,7 +65,7 @@
                         <button type="button"
                                 class="button user_manage"
                                 ng-bind-html="'USER_DATA_BUTTON' | translate"
-                                mm-not-implemented
+                                ng-click="nav('/user_data')"
                                 ng-class="{'selected': isMenuCurrentlySelected('/user_data') == true}">
                         </button>
 
@@ -172,7 +172,7 @@
                     </div>
                 </div>
                 <div class="last_menu">
-                    <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/results') == true}"  mm-not-implemented>
+                    <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/results') == true}" ng-click="nav('/results')">
                        <div class="tab-title">résultats</div>
                     </button>
                     <button class="button" mm-not-implemented>

@@ -15,7 +15,7 @@ public abstract class AnswerValue extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-		protected AnswerRawData rawData;
+	protected AnswerRawData rawData;
 
 	protected QuestionAnswer questionAnswer;
 

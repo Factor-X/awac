@@ -16,7 +16,6 @@ angular
             nbDecimal = 0
 
 
-
         scope.$root.$on '$localeChangeSuccess', (event, current, previous) ->
             if modelCtrl.$modelValue?
                 result = convertToString(parseFloat(modelCtrl.$modelValue))
