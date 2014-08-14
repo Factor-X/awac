@@ -1,22 +1,22 @@
 angular
 .module('app.controllers')
 .controller "LoginCtrl", ($scope, downloadService, $http, $location, messageFlash) ->
-    console.log("je suis le logincontroller")
 
     $scope.loginInfo =
-        fieldTitle: "Your login"
+        fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
-        placeholder: "your login"
+        placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER"
         validationRegex: "^\\S{5,20}$"
-        validationMessage: "between 5 and 20 letters and without white spaces"
+        validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
+        focus:true
 
     $scope.passwordInfo =
-        fieldTitle: "Your password"
+        fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
         fieldType: "password"
         validationRegex: "^\\S{5,20}$"
-        validationMessage: "between 5 and 20 letters and without white spaces"
+        validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
 

@@ -23,7 +23,7 @@ h1 user profile
             .label
                 span(ng-bind-html="'USER_LASTNAME' | translate")
             .editor
-                input(type="text", ng-model="user.lastName")
+                input(type="text", ng-model="user.lastName", focus-me="true")
 
         .field
             .label

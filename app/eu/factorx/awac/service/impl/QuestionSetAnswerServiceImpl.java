@@ -88,6 +88,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 			if (!questionSetAnswer.getChildren().isEmpty()) {
 				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
 			}
+
 			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
 				QuestionSetAnswer parent = questionSetAnswer.getParent();
 				Logger.info("DELETING (empty) {}", questionSetAnswer);
