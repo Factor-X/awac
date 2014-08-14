@@ -4,8 +4,8 @@
         .modal-content
             .modal-header
                 button.button(type="button",ng-click="close()")
-                    span(aria-hidden="true") &times;<span
-                    span(class="sr-only") Close
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
 
                 h4(class="modal-title",id="myModalLabel") Ajouter un commentaire
 
@@ -16,11 +16,11 @@
 
                 button.button(type="button",
                 class="btn btn-primary",
-                ng-click="close();")
-                    | Cancel
+                ng-click="close();",
+                ng-bind-html="'CANCEL_BUTTON' | translate")
 
                 button.button(type="button",
                 class="btn btn-primary",
                 ng-click="save();",
-                ng-hide="getParams().canBeEdited === false")
-                    | Save
+                ng-hide="getParams().canBeEdited === false"
+                ng-bind-html="'SAVE_BUTTON' | translate")
