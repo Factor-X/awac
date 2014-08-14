@@ -46,3 +46,4 @@ GET      /file/download/:storedFileId            @eu.factorx.awac.controllers.Fi
 GET     /user/profile                            @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()
 POST    /user/profile/save                       @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
 POST    /user/email/save                         @eu.factorx.awac.controllers.UserProfileController.updateEmail()
+POST    /user/password/save                      @eu.factorx.awac.controllers.UserProfileController.updatePassword()
