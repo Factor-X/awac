@@ -1541,3 +1541,39 @@ h1 {
 .result_table td:nth-child(n+2){
     text-align: right;
 }
+ul.messenger.messenger-fixed.messenger-on-top {
+    list-style-type: none;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-success,
+ul.messenger-theme-flat .messenger-message.alert-error,
+ul.messenger-theme-flat .messenger-message.alert-info{
+     box-shadow : none !important;
+     -webkit-box-shadow:none !important;
+    -moz-box-shadow:none !important;
+}
+
+ul.messenger-theme-flat .messenger-message.alert-success{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+ul.messenger-theme-flat .messenger-message.alert-error{
+    color: #ffffff;
+    background-color: #ff0000;
+    border-color: #ff0000;
+}
+ul.messenger-theme-flat .messenger-message.alert-info{
+    /*color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    */
+}
+
+ul.messenger-theme-flat .messenger-message .messenger-message-inner:before{
+    width:0 !important;
+    height:0 !important;
+}
+ul.messenger > li{
+    box-shadow: 5px 5px 5px #888888;
+}

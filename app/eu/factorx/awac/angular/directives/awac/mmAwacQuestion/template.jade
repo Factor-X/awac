@@ -5,7 +5,7 @@ div(class="question_field",
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(ng-class="getIcon()",class="glyphicon")
         span(ng-bind-html="getQuestionCode() + '_TITLE' | translate", ng-click="logQuestionCode()")
-    div
+    div(ng-hide="getQuestion().answerType == 'DOCUMENT'")
         .status(ng-class="getStatusClass()")
         .error_message(ng-show="errorMessage.length>0")
             div {{errorMessage}}
@@ -20,7 +20,7 @@ div(class="question_field",
                 span {{getUserName(false,false)}}
                 img(src='/awac/assets/images/user_icon_arrow.png')
 
-    div(ng-show="displayOldDatas() === true && getAnswer(true) != null")
+    div(ng-show="displayOldDatas() === true && getAnswer(true) != null && getQuestion().answerType != 'DOCUMENT'")
         button.button( ng-click="copyDataToCompare()",
         title="Copier la valeur") <<
         span.inject-data-to-compare

@@ -16,6 +16,7 @@ angular
             nbDecimal = 0
 
 
+
         scope.$root.$on '$localeChangeSuccess', (event, current, previous) ->
             if modelCtrl.$modelValue?
                 result = convertToString(parseFloat(modelCtrl.$modelValue))
@@ -27,15 +28,7 @@ angular
             if viewValue == ""
                 return null
 
-            formats = $locale.NUMBER_FORMATS
-
-            decimalRegex = formats.DECIMAL_SEP
-            if decimalRegex == "."
-                decimalRegex = "\\."
-
-            value = viewValue.replace(new RegExp(decimalRegex, "g"), ".")
-
-            result = filterFloat value
+            result = convertToFloat(viewValue)
 
             if isNaN result
                 displayError()
@@ -72,9 +65,24 @@ angular
             if !value? || isNaN value
                 return ""
 
+            value=value.toFixed(nbDecimal)
+
             formats = $locale.NUMBER_FORMATS
             result= value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP)
 
+        convertToFloat = (viewValue) ->
+            if viewValue == ""
+                return NaN
+
+            formats = $locale.NUMBER_FORMATS
+
+            decimalRegex = formats.DECIMAL_SEP
+            if decimalRegex == "."
+                decimalRegex = "\\."
+
+            value = viewValue.replace(new RegExp(decimalRegex, "g"), ".")
+
+            return filterFloat value
 
         filterFloat = (value) ->
 
@@ -85,3 +93,7 @@ angular
 
             return Number(value)  if regexFloat.test(value)
             return NaN
+
+        scope.$root.$on 'FORM_LOADING_FINISH', (event, current, previous) ->
+            if modelCtrl.$modelValue?
+                scope.lastValidValue = modelCtrl.$modelValue
