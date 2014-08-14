@@ -263,6 +263,7 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 
 		List <Unit> lu = unitService.findAll();
 
+		//Logger.info(" null?" + lu);
 		assertNotNull(lu);
 		assertEquals(228,lu.size());
 
@@ -499,9 +500,12 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 				"unit",
 				"kg éq CO2/kW froid",
 				"heure",
-				"kgCO2e")));
+				"kgCO2e",
+				"employé",
+				"MW.h")));
 
 		for (Unit unit : lu) {
+			//Logger.info("unit : " + unit.getSymbol());
 			assertTrue(col.contains(unit.getSymbol()));
 		}
 
