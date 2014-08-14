@@ -6,12 +6,10 @@ angular
         ngInfo: '='
     templateUrl: "$/angular/templates/mm-awac-modal-field-text.html"
     replace: true
-    controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
-        $scope.controlField = () ->
-            if $scope.getInfo().field.match($scope.getInfo().validationRegex)
-                $scope.getInfo().isValid = true
-            else
-                $scope.getInfo().isValid = false
-
-    link: (scope) ->
+    link: (scope,element) ->
         directiveService.autoScopeImpl scope
+        scope.controlField = () ->
+            scope.getInfo().isValid = true
+            if scope.getInfo().validationRegex? && !scope.getInfo().field.match(scope.getInfo().validationRegex)
+                scope.getInfo().isValid = false
+            return

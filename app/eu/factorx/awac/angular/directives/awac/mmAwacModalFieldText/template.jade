@@ -1,15 +1,14 @@
 tr
-    td {{getInfo().fieldTitle}}
+    td {{getInfo().fieldTitle | translateText}}
         td
             input(  ng-keyup='controlField()',
                     type='{{getInfo().fieldType}}',
+                    ng-disabled='getInfo().disabled',
                     ng-model='getInfo().field',
-                    placeholder='{{getInfo().placeholder}}')
+                    placeholder='{{getInfo().placeholder | translateText}}',
+                    ng-class="{'focusMe': getInfo().autofocus }" )
         td
-            img(    ng-show='getInfo().isValid',
-            src='/awac/assets/images/field_valid.png')
-
+            img(ng-show='getInfo().isValid', src='/awac/assets/images/field_valid.png')
             .error_message(ng-hide='getInfo().isValid')
-
                 img(src='/awac/assets/images/field_invalid.png')
-                div {{getInfo().validationMessage}}
+                div {{getInfo().validationMessage | translateText}}
