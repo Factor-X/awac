@@ -1,15 +1,32 @@
-lines = IO.readlines('conf/routes')
+# =========================================================================== #
+# = PIMP MY ROUTES                                                          = #
+# =========================================================================== #
+#                                                                             #
+# -- Usage ------------------------------------------------------------------ #
+#                                                                             #
+# In the root directory, type:                                                #
+#                                                                             #
+#                                                                             #
+#                      $ ruby tools/pimp_my_routes.rb                         #
+#                                                                             #
+#                                                                             #
+# =========================================================================== #
 
+# Constants
+REGEX = /^([^#\s]+)\s+(\S+)\s+(.*)$/
+PATH = 'conf/routes'
 
-# first pass: sizes
+# Read the lines
+lines = IO.readlines(PATH)
 
+# First pass: find column' sizes
 m_size = 0
 p_size = 0
 a_size= 0
 
 for l in lines
   l = l.strip
-  m = /^([^#\s]+)\s+(\S+)\s+(.*)$/.match(l.strip)
+  m = REGEX.match(l.strip)
   if m
     method, path, action = m.captures
 
@@ -27,14 +44,13 @@ for l in lines
   end
 end
 
-# second pass: padding
-
-File.open('conf/routes', 'w') do |file|
+# Second pass: pad and write
+File.open(PATH, 'w') do |file|
   for l in lines
     l = l.strip
-    m = /^([^#\s]+)\s+(\S+)\s+(.*)$/.match(l.strip)
+    m = REGEX.match(l.strip)
     if m
-      method, path, action = /^(\S+)\s+(\S+)\s+(.*)$/.match(l.strip).captures
+      method, path, action = REGEX.match(l.strip).captures
       file.puts method.ljust(m_size, ' ') + '    ' + path.ljust(p_size, ' ') + '    ' + action.ljust(a_size, ' ')
     else
       file.puts l
