@@ -1,12 +1,11 @@
 tr
     td {{getInfo().fieldTitle | translateText}}
         td
-            input(  ng-keyup='controlField()',
-                    type='{{getInfo().fieldType}}',
+            input(  type='{{getInfo().fieldType}}',
                     ng-disabled='getInfo().disabled',
                     ng-model='getInfo().field',
                     placeholder='{{getInfo().placeholder | translateText}}',
-                    ng-class="{'focusMe': getInfo().autofocus }" )
+                    focus-me="{{getInfo().focus}}")
         td
             img(ng-show='getInfo().isValid', src='/awac/assets/images/field_valid.png')
             .error_message(ng-hide='getInfo().isValid')

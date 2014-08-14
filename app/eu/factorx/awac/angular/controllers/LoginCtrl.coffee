@@ -11,6 +11,7 @@ angular
         validationMessage: "between 5 and 20 letters and without white spaces"
         field: ""
         isValid: false
+        focus:true
 
     $scope.passwordInfo =
         fieldTitle: "Your password"
