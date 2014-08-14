@@ -49,7 +49,7 @@ angular
                 downloadService.postJson 'user/email/save', {password: $scope.passwordInfo.field, oldEmail: $scope.oldEmailInfo.field, newEmail: $scope.newEmailInfo.field}, (data, status, headers, config) ->
                     $scope.isLoading = false
                     if data?
-                        messageFlash.displaySuccess "Your changes have been saved !"
+                        messageFlash.displaySuccess translationService.get "ANSWERS_SAVED"
                         $scope.close()
                         if $scope.getParams().cb?
                             $scope.getParams().cb($scope.newEmailInfo.field)

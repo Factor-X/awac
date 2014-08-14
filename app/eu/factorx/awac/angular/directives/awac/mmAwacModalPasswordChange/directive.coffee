@@ -40,7 +40,7 @@ angular
             isValid: false
 
         $scope.allFieldValid = () ->
-            if $scope.newPasswordInfo.isValid && newPasswordInfoRepeat.isValid && (newPasswordInfo.field == newPasswordInfoRepeat.field)
+            if $scope.newPasswordInfo.isValid && $scope.newPasswordInfoRepeat.isValid && ($scope.newPasswordInfo.field == $scope.newPasswordInfoRepeat.field)
                 return true
             return false
 
