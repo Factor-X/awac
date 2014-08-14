@@ -6,13 +6,13 @@
                 button.button(type="button",ng-click="close()")
                     span(aria-hidden="true") &times;<span
                     span(class="sr-only") Close
-                h4(class="modal-title",id="myModalLabel") Modification de votre adresse e-mail
+                h4(class="modal-title",id="myModalLabel") {{ "PASSWORD_CHANGE_FORM_TITLE" | translate }}
 
             .modal-body
                 .field_form
-                    mm-awac-modal-field-text(ng-info="passwordInfo")
-                    mm-awac-modal-field-text(ng-info="oldEmailInfo")
-                    mm-awac-modal-field-text(ng-info="newEmailInfo")
+                    mm-awac-modal-field-text(ng-info="oldPasswordInfo")
+                    mm-awac-modal-field-text(ng-info="newPasswordInfo")
+                    mm-awac-modal-field-text(ng-info="newPasswordInfoRepeat")
 
                     p(ng-show="errorMessage.length > 0",
                     style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
