@@ -1,9 +1,8 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
-
+.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, translationService, modalService, formIdentifier, $timeout, displayFormMenu) ->
     $scope.formIdentifier = formIdentifier
-    $scope.displayFormMenu=displayFormMenu
+    $scope.displayFormMenu = displayFormMenu
 
     # declare the dataToCompare variable. This variable is used to display data to compare
     # the content is a FormDTO object (after loading by the $scope.$parent.$watch function
@@ -30,7 +29,6 @@ angular
     # load the form and treat structure and data
     #
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
-
         console.log "data"
         console.log data
         $scope.o = angular.copy(data)
@@ -95,9 +93,11 @@ angular
             $scope.addDefaultValue(questionSetDTO)
 
         $timeout(->
-
-            modalService.close(modalService.LOADING)
-            $scope.loading = false
+            $scope.truc()
+            $timeout(->
+                modalService.close(modalService.LOADING)
+                $scope.loading = false
+            , 0)
         , 0)
 
         return
@@ -216,7 +216,7 @@ angular
             for repetition in $scope.mapRepetition[code]
 
                 #control map
-                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition, mapRepetition)
+                if mapRepetition == null || mapRepetition == undefined || $scope.compareRepetitionMap(repetition,mapRepetition)
                     listRepetition[listRepetition.length] = repetition
 
         return listRepetition
@@ -379,7 +379,7 @@ angular
                 len = $scope.mapRepetition[key].length
                 while (len--)
                     iteration = $scope.mapRepetition[key][len]
-                    if $scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
+                    if $scope.compareRepetitionMap(iteration,mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] == iterationToDelete[questionSetCode]
                         $scope.mapRepetition[key].splice(len, 1)
 
 
@@ -451,7 +451,6 @@ angular
     # the result is savec to $scope.dataToCompare
     #
     $scope.$parent.$watch 'periodToCompare', () ->
-
         if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
             promise = $http
                 method: "GET"
@@ -531,6 +530,78 @@ angular
                 "Content-Type": "application/json"
             data: formProgressDTO
         promise.success (data, status, headers, config) ->
-
             return
+
+    #
+    # 'tabSet name' :{
+    #       'master' : tab_name
+    #       'tab name' : {
+    #           'isFinish' : true / false
+    #       }
+    #       listToCompute
+    # }
+    #
+    $scope.tabSet = {}
+
+
+    $scope.truc = ->
+        for answer in $scope.answerList
+            if answer.tabSet?
+
+                tabSet = answer.tabSet
+                tab = answer.tab
+
+                if !$scope.tabSet[tabSet]?
+                    $scope.tabSet[tabSet] = {}
+                if !$scope.tabSet[tabSet][tab]?
+                    $scope.tabSet[tabSet][tab] = {}
+
+                if !$scope.tabSet[tabSet][tab].listToCompute?
+                    $scope.tabSet[tabSet][tab].listToCompute = []
+                i = $scope.tabSet[tabSet][tab].listToCompute.length
+
+                $scope.tabSet[tabSet][tab].listToCompute[i] = answer
+
+                $scope.a(tabSet, tab, i)
+
+    $scope.a = (tabSet, tab, i)->
+        $scope.$watch 'tabSet[' + tabSet + '][' + tab + '].listToCompute[' + i + '].value', ->
+            $scope.bazar(tabSet, tab)
+
+
+    $scope.bazar = (tabSet, tab)->
+        isFinish = true
+
+        for answer in $scope.tabSet[tabSet][tab].listToCompute
+            if answer.value == null
+                isFinish = false
+
+        $scope.tabSet[tabSet][tab].isFinish=isFinish
+
+        if isFinish == true
+            if !$scope.tabSet[tabSet].master? || $scope.tabSet[tabSet].master > tab
+                $scope.tabSet[tabSet].master = tab
+
+        else if $scope.tabSet[tabSet].master == tab
+
+            delete $scope.tabSet[tabSet].master
+
+            for key in Object.keys($scope.tabSet[tabSet])
+                if key != '$$hashKey' && key != 'master'
+                    value = $scope.tabSet[tabSet][key]
+                    if value.isFinish == true
+                        if !$scope.tabSet[tabSet].master? || parseFloat($scope.tabSet[tabSet].master) > parseFloat key
+                            $scope.tabSet[tabSet].master = parseFloat key
+
+        if $scope.loading == true && $scope.tabSet[tabSet].master?
+            for key in Object.keys($scope.tabSet[tabSet])
+                if key != '$$hashKey' && key != 'master' && key != 'active'
+                    if parseFloat(key) == parseFloat($scope.tabSet[tabSet].master)
+                        $scope.tabSet[tabSet][key].active=true
+                    else
+                        $scope.tabSet[tabSet][key].active=false
+
+        console.log "$scope.tabSet"
+        console.log $scope.tabSet
+
 
