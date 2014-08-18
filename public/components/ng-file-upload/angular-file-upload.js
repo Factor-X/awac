@@ -1,7 +1,7 @@
 /**!
  * AngularJS file upload/drop directive with http post and progress
  * @author  Danial  <danial.farid@gmail.com>
- * @version 1.6.1
+ * @version 1.6.5
  */
 (function() {
 
@@ -209,8 +209,8 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 				evt.preventDefault();
 				$timeout.cancel(leaveTimeout);
 				if (!elem[0].__drag_over_class_) {
-					var dragOverClassFn = $parse(attr['ngFileDragOverClass']);
-					if (dragOverClassFn instanceof Function) {
+					if (attr['ngFileDragOverClass'].search(/\) *$/) > -1) {
+						dragOverClassFn = $parse(attr['ngFileDragOverClass']);
 						var dragOverClass = dragOverClassFn(scope, {
 							$event : evt
 						});					
@@ -229,7 +229,7 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 				leaveTimeout = $timeout(function() {
 					elem.removeClass(elem[0].__drag_over_class_);
 					elem[0].__drag_over_class_ = null;
-				});
+				}, attr['ngFileDragOverDelay'] || 1);
 			}, false);
 			var fn = $parse(attr['ngFileDrop']);
 			elem[0].addEventListener("drop", function(evt) {
@@ -251,15 +251,14 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 
 			function extractFiles(evt, callback) {
 				var files = [], items = evt.dataTransfer.items;
-				if (items && items.length > 0 && items[0].webkitGetAsEntry && $location.protocol() != 'file' && 
-						items[0].webkitGetAsEntry().isDirectory) {
+				if (items && items.length > 0 && items[0].webkitGetAsEntry && $location.protocol() != 'file') {
 					for (var i = 0; i < items.length; i++) {
 						var entry = items[i].webkitGetAsEntry();
 						if (entry != null) {
 							//fix for chrome bug https://code.google.com/p/chromium/issues/detail?id=149735
 							if (isASCII(entry.name)) {
 								traverseFileTree(files, entry);
-							} else {
+							} else if (!items[i].webkitGetAsEntry().isDirectory) {
 								files.push(items[i].getAsFile());
 							}
 						}
@@ -284,14 +283,14 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 			}
 			
 			var processing = 0;
-			function traverseFileTree(files, entry) {
+			function traverseFileTree(files, entry, path) {
 				if (entry != null) {
 					if (entry.isDirectory) {
 						var dirReader = entry.createReader();
 						processing++;
 						dirReader.readEntries(function(entries) {
 							for (var i = 0; i < entries.length; i++) {
-								traverseFileTree(files, entries[i]);
+								traverseFileTree(files, entries[i], (path ? path : "") + entry.name + "/");
 							}
 							processing--;
 						});
@@ -299,6 +298,7 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 						processing++;
 						entry.file(function(file) {
 							processing--;
+							file._relativePath = (path ? path : "") + file.name;
 							files.push(file);
 						});
 					}

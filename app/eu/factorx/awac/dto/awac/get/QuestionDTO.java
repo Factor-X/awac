@@ -5,18 +5,20 @@ import eu.factorx.awac.models.data.answer.AnswerType;
 
 public class QuestionDTO extends DTO {
 
-	private String code;
+    private String code;
 
-	private AnswerType answerType;
+    private AnswerType answerType;
 
-	// if AnswerType = VALUE_SELECTION
-	private String codeListName;
+    // if AnswerType = VALUE_SELECTION
+    private String codeListName;
 
-	// if AnswerType = INTEGER or DOUBLE
-	private Long unitCategoryId;
+    // if AnswerType = INTEGER or DOUBLE
+    private Long unitCategoryId;
 
     //a default value for the answer
     private Object defaultValue;
+
+    private UnitDTO defaultUnit;
 
 
     public QuestionDTO() {
@@ -35,6 +37,15 @@ public class QuestionDTO extends DTO {
         this.codeListName = codeListName;
         this.unitCategoryId = unitCategoryId;
         this.defaultValue = defaultValue;
+    }
+
+    public QuestionDTO(String code, AnswerType answerType, String codeListName, Long unitCategoryId, Object defaultValue, UnitDTO defaultUnit) {
+        this.code = code;
+        this.answerType = answerType;
+        this.codeListName = codeListName;
+        this.unitCategoryId = unitCategoryId;
+        this.defaultValue = defaultValue;
+        this.defaultUnit = defaultUnit;
     }
 
     public String getCode() {
@@ -77,14 +88,23 @@ public class QuestionDTO extends DTO {
         this.defaultValue = defaultValue;
     }
 
+    public UnitDTO getDefaultUnit() {
+        return defaultUnit;
+    }
+
+    public void setDefaultUnit(UnitDTO defaultUnit) {
+        this.defaultUnit = defaultUnit;
+    }
+
     @Override
     public String toString() {
         return "QuestionDTO{" +
-                "code='" + code + '\'' +
-                ", answerType=" + answerType +
-                ", codeListName='" + codeListName + '\'' +
-                ", unitCategoryId=" + unitCategoryId +
+                "defaultUnit=" + defaultUnit +
                 ", defaultValue=" + defaultValue +
+                ", unitCategoryId=" + unitCategoryId +
+                ", codeListName='" + codeListName + '\'' +
+                ", answerType=" + answerType +
+                ", code='" + code + '\'' +
                 '}';
     }
 }

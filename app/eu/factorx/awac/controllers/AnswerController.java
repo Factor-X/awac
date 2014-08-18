@@ -276,37 +276,37 @@ public class AnswerController extends Controller {
 	private void saveAnswsersDTO(Account currentUser, Form form, Period period, Scope scope, List<AnswerLineDTO> newAnswersInfos) {
 
 		// get current form data
-		List<QuestionSetAnswer> allCurrentQuestionSetAnswers = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(true).appendForm(form).appendPeriod(period)
+		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(true).appendForm(form).appendPeriod(period)
 				.appendScope(scope));
-		Map<String, Map<Map<String, Integer>, QuestionAnswer>> allCurrentAnswers = asQuestionAnswersMap(allCurrentQuestionSetAnswers);
+		Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswers);
 
 		Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
-		updateOrDeleteQuestionAnswers(newAnswersInfos, allCurrentAnswers);
+		updateOrDeleteQuestionAnswers(newAnswersInfos, questionAnswersMap);
 
 		Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
-		createQuestionAnswers(newAnswersInfos, currentUser, period, scope, allCurrentQuestionSetAnswers);
+		createQuestionAnswers(newAnswersInfos, currentUser, period, scope, questionSetAnswers);
 
 		Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
 		questionSetAnswerService.deleteEmptyQuestionSetAnswers(scope, period, form);
 	}
 
 	/**
-	 * For each {@link QuestionSetAnswer} in <code>currentQuestionSetAnswers</code>, check if there is an {@link AnswerLineDTO} in <code>newAnswersInfos</code> matching a
-	 * QuestionAnswer of this {@link QuestionSetAnswer}
+	 * For each new answer info in <code>newAnswersInfos</code> parameter, check if there is an already registered answer (ie a matching entry in given <code>questionAnswersMap</code>).
+	 * If found, this answer is updated or deleted, belong the new answer info (and this 'new answer info' is removed in <code>newAnswersInfos</code> list).
 	 * 
 	 * @param newAnswersInfos
-	 * @param allCurrentAnswers
+	 * @param questionAnswersMap
 	 */
-	private void updateOrDeleteQuestionAnswers(List<AnswerLineDTO> newAnswersInfos, Map<String, Map<Map<String, Integer>, QuestionAnswer>> allCurrentAnswers) {
+	private void updateOrDeleteQuestionAnswers(List<AnswerLineDTO> newAnswersInfos, Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap) {
 		for (int i = newAnswersInfos.size() - 1; i >= 0; i--) {
-			AnswerLineDTO answerLineDTO = newAnswersInfos.get(i);
-			if (answerLineDTO.getMapRepetition() == null) {
-				answerLineDTO.setMapRepetition(new HashMap<String, Integer>());
+			AnswerLineDTO newAnswerInfo = newAnswersInfos.get(i);
+			if (newAnswerInfo.getMapRepetition() == null) {
+				newAnswerInfo.setMapRepetition(new HashMap<String, Integer>());
 			}
-			QuestionAnswer questionAnswer = getMatchingAnswer(answerLineDTO, allCurrentAnswers);
+			QuestionAnswer questionAnswer = findExistingQuestionAnswer(newAnswerInfo, questionAnswersMap);
 			if (questionAnswer != null) {
-				updateOrDeleteQuestionAnswer(questionAnswer, answerLineDTO);
-				newAnswersInfos.remove(answerLineDTO);
+				updateOrDeleteQuestionAnswer(questionAnswer, newAnswerInfo);
+				newAnswersInfos.remove(i);
 			}
 		}
 	}
@@ -353,7 +353,7 @@ public class AnswerController extends Controller {
 		Question question = getAndVerifyQuestion(answerLineDTO);
 		QuestionSet questionSet = question.getQuestionSet();
 
-		// normalize AnswerLineDTO repetition map (required to create each QuestionSetAnswer)
+		// normalize AnswerLineDTO repetition map (required for creating each parent QuestionSetAnswer(s))
 		Map<String, Integer> normalizedRepetitionMap = getNormalizedRepetitionMap(questionSet, answerLineDTO);
 
 		// find QuestionSetAnswer matching QuestionSet key and (if existing)
@@ -614,10 +614,13 @@ public class AnswerController extends Controller {
 		return res;
 	}
 
-	private static QuestionAnswer getMatchingAnswer(AnswerLineDTO answerLineDTO, Map<String, Map<Map<String, Integer>, QuestionAnswer>> allAnswers) {
-		Map<Map<String, Integer>, QuestionAnswer> questionAnswers = allAnswers.get(answerLineDTO.getQuestionKey());
+	private static QuestionAnswer findExistingQuestionAnswer(AnswerLineDTO answerLineDTO, Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap) {
+		String questionKey = answerLineDTO.getQuestionKey();
+		Map<String, Integer> mapRepetition = answerLineDTO.getMapRepetition();
+
+		Map<Map<String, Integer>, QuestionAnswer> questionAnswers = questionAnswersMap.get(questionKey);
 		if (questionAnswers != null) {
-			return questionAnswers.get(answerLineDTO.getMapRepetition());
+			return questionAnswers.get(mapRepetition);
 		}
 		return null;
 

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import jxl.Sheet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
@@ -28,36 +29,24 @@ public class TranslationImporter extends WorkbookDataImporter {
 	protected void importData() throws Exception {
 		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 
-		Sheet survey = wbSheets.get("SURVEY");
+		importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);
+		importTranslations(wbSheets.get("INTERFACE"), CodeList.TRANSLATIONS_INTERFACE);
+		importTranslations(wbSheets.get("ERROR_MESSAGES"), CodeList.TRANSLATIONS_ERROR_MESSAGES);
+	}
 
-		for (int i = 1; i < survey.getRows(); i++) {
+	private void importTranslations(Sheet sheet, CodeList codeList) {
+		for (int i = 1; i < sheet.getRows(); i++) {
 
-			String key = getCellContent(survey, 0, i);
-			if (key == null || key.trim().length() == 0) continue;
-			String labelEn = getCellContent(survey, 1, i);
-			String labelFr = getCellContent(survey, 2, i);
-			String labelNl = getCellContent(survey, 3, i);
+			String key = getCellContent(sheet, 0, i);
+			if (StringUtils.isBlank(key)) {
+				continue;
+			}
 
-			CodeLabel cl = new CodeLabel(CodeList.TRANSLATIONS_SURVEY, key, labelEn, labelFr, labelNl);
-			session.saveOrUpdate(cl);
+			String labelEn = getCellContent(sheet, 1, i);
+			String labelFr = getCellContent(sheet, 2, i);
+			String labelNl = getCellContent(sheet, 3, i);
 
+			session.saveOrUpdate(new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
 		}
-
-		Sheet ui = wbSheets.get("INTERFACE");
-
-		for (int i = 1; i < ui.getRows(); i++) {
-
-			String key = getCellContent(ui, 0, i);
-			if (key == null || key.trim().length() == 0) continue;
-
-			String labelEn = getCellContent(ui, 1, i);
-			String labelFr = getCellContent(ui, 2, i);
-			String labelNl = getCellContent(ui, 3, i);
-
-			CodeLabel cl = new CodeLabel(CodeList.TRANSLATIONS_INTERFACE, key, labelEn, labelFr, labelNl);
-			session.saveOrUpdate(cl);
-
-		}
-
 	}
 }

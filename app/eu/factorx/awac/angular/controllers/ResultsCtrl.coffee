@@ -4,26 +4,39 @@ angular
 
     $scope.displayFormMenu=displayFormMenu
 
-    downloadService.getJson "result/getReport/" + $scope.$parent.period + "/" + $scope.$parent.scopeId, (data) ->
+    $scope.graphs = {}
+
+    downloadService.getJson "result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
         $scope.o = data
 
-    $scope.temp = {}
-    $scope.temp.browsers =
-        _type: 'terms'
-        missing: 0
-        total: 454
-        other: 0
-        terms: [
-            {
-                term: 'Prod-A'
-                count: 306
-            } ,
-            {
-                term: 'Prod-B'
-                count: 148
-            } ,
-            {
-                term: 'Prod-C'
-                count: 25
-            }
-        ]
+
+        # All scopes
+        totalScope1 = 10;
+        totalScope2 = 10;
+        totalScope3 = 10;
+
+        for rl in $scope.o.reportLines
+            totalScope1 += rl.scope1Value
+            totalScope2 += rl.scope2Value
+            totalScope3 += rl.scope3Value
+
+        $scope.graphs.allScopes =
+            _type: 'terms'
+            missing: 0
+            total: totalScope1 + totalScope2 + totalScope3
+            other: 0
+            terms: [
+                {
+                    term: 'Scope 1'
+                    count: totalScope1
+                } ,
+                {
+                    term: 'Scope 2'
+                    count: totalScope2
+                } ,
+                {
+                    term: 'Scope 3'
+                    count: totalScope3
+                }
+            ]
+

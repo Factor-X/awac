@@ -1,8 +1,7 @@
 span.twoelement
     input(  type="text",
             ng-model="getAnswer().value",
-            numbers-only="double",
+            numbers-only="percent",
             style="text-align:right;",
-            percent,
-            ng-disabled="getDataToCompare()==true")
+            ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
     span(style="margin-left:5px") %

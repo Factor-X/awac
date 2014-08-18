@@ -13,7 +13,7 @@ mm-awac-section(title-code="A243_TITLE")
             // Transport
             mm-awac-sub-title(question-code="A250")
 
-            mm-awac-question(question-code="A251")
+            mm-awac-question(question-code="A251",ng-repetition-map="itLevel1")
 
             mm-awac-sub-sub-title(question-code="A252")
 
@@ -38,7 +38,8 @@ mm-awac-section(title-code="A243_TITLE")
                                 mm-awac-question(question-code="A262",ng-repetition-map="itLevel1")
                                 mm-awac-question(question-code="A263",ng-repetition-map="itLevel1")
                                 mm-awac-question(question-code="A264",ng-repetition-map="itLevel1")
-                                mm-awac-question(question-code="A265",ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="A265",ng-repetition-map="itLevel1",
+                                ng-aggregation="(getAnswer('A256',itLevel1).value | nullToZero)+( getAnswer('A257',itLevel1).value | nullToZero)+(getAnswer('A258',itLevel1).value | nullToZero)+(getAnswer('A259',itLevel1).value| nullToZero)+(getAnswer('A260',itLevel1).value| nullToZero)+(getAnswer('A261',itLevel1).value| nullToZero)+(getAnswer('A262',itLevel1).value| nullToZero)+(getAnswer('A263',itLevel1).value| nullToZero)+(getAnswer('A264',itLevel1).value| nullToZero)")
                     tab.tab-color-green
                         tab-heading
                             i.glyphicon.glyphicon-bell
@@ -47,9 +48,9 @@ mm-awac-section(title-code="A243_TITLE")
                             .element_table
                                 mm-awac-question(question-code="A267", ng-repetition-map="itLevel1")
                                 mm-awac-question(question-code="A268", ng-repetition-map="itLevel1")
-                                mm-awac-question(question-code="A269", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '3'")
-                                mm-awac-question(question-code="A270", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '2'")
-                                mm-awac-question(question-code="A271", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '1'")
+                                mm-awac-question(question-code="A269", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '3'",ng-aggregation="5000")
+                                mm-awac-question(question-code="A270", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '2'",ng-aggregation="2500")
+                                mm-awac-question(question-code="A271", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '1'",ng-aggregation="200")
 
         mm-awac-block(ng-condition="getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'")
             // Distribution
@@ -64,7 +65,7 @@ mm-awac-section(title-code="A243_TITLE")
                 mm-awac-repetition-question(question-set-code="A275", ng-iteration="itLevel3", ng-repetition-map="itLevel2", ng-repeat="itLevel3 in getRepetitionMapByQuestionSet('A275',itLevel2)")
                     mm-awac-question(question-code="A276",ng-repetition-map="itLevel3")
                     mm-awac-question(question-code="A277",ng-repetition-map="itLevel3")
-                button.add-repetition-button(ng-click="addIteration('A275',itLevel2)", type="button")
+                button.button.add-repetition-button(ng-click="addIteration('A275',itLevel2)", type="button")
                     span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                     span(ng-bind-html="'A275_LOOPDESC' | translate")
 
@@ -75,24 +76,24 @@ mm-awac-section(title-code="A243_TITLE")
                     mm-awac-question(question-code="A280",ng-repetition-map="itLevel3")
                     mm-awac-question(question-code="A281",ng-repetition-map="itLevel3")
 
-                button.add-repetition-button(ng-click="addIteration('A279',itLevel2)", type="button")
+                button.button.add-repetition-button(ng-click="addIteration('A279',itLevel2)", type="button")
                     span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                     span(ng-bind-html="'A279_LOOPDESC' | translate")
 
-            button.add-repetition-button(ng-click="addIteration('A273',itLevel1)", type="button")
+            button.button.add-repetition-button(ng-click="addIteration('A273',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A273_LOOPDESC' | translate")
 
         mm-awac-block(ng-condition="getAnswer('A249',itLevel1).value == '1'")
             // Traitement
             mm-awac-sub-title(question-code="A282")
-            mm-awac-question(question-code="A283")
+            mm-awac-question(question-code="A283",ng-repetition-map="itLevel1")
 
             mm-awac-repetition-name(question-code="A284")
             mm-awac-repetition-question(question-set-code="A284", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A284',itLevel1)")
                 mm-awac-question(question-code="A285",ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="A286",ng-repetition-map="itLevel2")
-            button.add-repetition-button(ng-click="addIteration('A284',itLevel1)", type="button")
+            button.button.add-repetition-button(ng-click="addIteration('A284',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A284_LOOPDESC' | translate")
 
@@ -102,14 +103,14 @@ mm-awac-section(title-code="A243_TITLE")
             mm-awac-repetition-question(question-set-code="A288", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A288',itLevel1)")
                 mm-awac-question(question-code="A289",ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="A290",ng-repetition-map="itLevel2")
-            button.add-repetition-button(ng-click="addIteration('A288',itLevel1)", type="button")
+            button.button.add-repetition-button(ng-click="addIteration('A288',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A288_LOOPDESC' | translate")
 
         mm-awac-block(ng-condition="getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'")
             // Utilisation
             mm-awac-sub-title(question-code="A291")
-            mm-awac-question(question-code="A292")
+            mm-awac-question(question-code="A292",ng-repetition-map="itLevel1")
 
             mm-awac-question(question-code="A293",ng-repetition-map="itLevel1")
             mm-awac-question(question-code="A294",ng-repetition-map="itLevel1")
@@ -120,14 +121,14 @@ mm-awac-section(title-code="A243_TITLE")
             mm-awac-repetition-question(question-set-code="A297", ng-iteration="itLevel2", ng-repetition-map="itLevel1", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A297',itLevel1)")
                 mm-awac-question(question-code="A298",ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="A299",ng-repetition-map="itLevel2")
-            button.add-repetition-button(ng-click="addIteration('A297',itLevel1)", type="button")
+            button.button.add-repetition-button(ng-click="addIteration('A297',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A297_LOOPDESC' | translate")
 
         mm-awac-block(ng-condition="getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'")
             // Fin de vie
             mm-awac-sub-title(question-code="A300")
-            mm-awac-question(question-code="A301")
+            mm-awac-question(question-code="A301",ng-repetition-map="itLevel1")
 
             mm-awac-question(question-code="A302",ng-repetition-map="itLevel1")
 
@@ -138,10 +139,10 @@ mm-awac-section(title-code="A243_TITLE")
                 mm-awac-question(question-code="A306",ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="A307",ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="A308",ng-repetition-map="itLevel2")
-            button.add-repetition-button(ng-click="addIteration('A303',itLevel1)", type="button")
+            button.button.add-repetition-button(ng-click="addIteration('A303',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A303_LOOPDESC' | translate")
 
-    button.add-repetition-button(ng-click="addIteration('A244')", type="button")
+    button.button.add-repetition-button(ng-click="addIteration('A244')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'A244_LOOPDESC' | translate")

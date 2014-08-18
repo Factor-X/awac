@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope:  directiveService.autoScope
         ngDataToCompare: '='
+        ngIsAggregation:'='
     templateUrl: "$/angular/templates/mm-awac-select-question.html"
     replace: true
     link: (scope) ->
@@ -27,9 +28,10 @@ angular
         #
         # called when the user change the value of the field
         #
-        scope.$watch 'getAnswer().value', (o,n)->
-            if ""+n != ""+o
-                scope.$parent.edited()
+        if scope.getDataToCompare() == false && scope.getIsAggregation() == false
+            scope.$watch 'getAnswer().value', (o,n)->
+                if ""+n != ""+o
+                    scope.$parent.edited()
 
         #
         # return the list of options that can be choose

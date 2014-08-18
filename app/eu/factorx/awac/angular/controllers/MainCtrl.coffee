@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService,tmhDynamicLocale) ->
 
     #
     # First loading
@@ -27,6 +27,7 @@ angular
 
     $scope.$watch 'language', (lang) ->
         translationService.initialize(lang)
+        tmhDynamicLocale.set(lang.toLowerCase())
 
     #
     # Tabs
@@ -144,9 +145,8 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-
-        url ='answer/getPeriodsForComparison/' + $scope.scopeId
-        if $scope.scopeId? && $scope.scopeId != NaN  && $scope.scopeId != 'NaN'
+        url = 'answer/getPeriodsForComparison/' + $scope.scopeId
+        if $scope.scopeId? && $scope.scopeId != NaN && $scope.scopeId != 'NaN'
 
             promise = $http
                 method: "GET"
@@ -154,7 +154,6 @@ angular
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
-
                 $scope.periodsForComparison = [
                     {'key': 'default', 'label': 'aucune periode'}
                 ]
@@ -180,16 +179,21 @@ angular
     $scope.loadFormProgress = ->
         if $scope.scopeId? && $scope.periodKey?
             promise = $http
-                method:"GET"
-                url: "answer/formProgress/"+$scope.periodKey+"/"+$scope.scopeId
-                headers:"Content-Type": "application/json"
+                method: "GET"
+                url: "answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
+                headers:
+                    "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
+                console.log "FormProgress : answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
+                console.log data
+
+
                 $scope.formProgress = data.listFormProgress
                 return
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
-            console.log "TIME : "+args.time
+            console.log "TIME : " + args.time
 
             if args.time == null
                 date = null
@@ -198,30 +202,29 @@ angular
 
                 # adapt for the current time zone
                 minuteToAdd = new Date().getTimezoneOffset()
-                date = new Date(date.getTime() - minuteToAdd*60000)
+                date = new Date(date.getTime() - minuteToAdd * 60000)
         else
             date = new Date()
 
         $scope.lastSaveTime = date
 
 
-    $scope.displayMenu =->
-
-        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+    $scope.displayMenu = ->
+        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
             return true
         return false
 
     $scope.getClassContent = ->
         if $scope.$root.isLogin() == false
             if $scope.getMainScope()?
-                if $scope.getMainScope().displayFormMenu? &&  $scope.getMainScope().displayFormMenu == true
+                if $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
                     return 'content-with-menu'
                 else
                     return 'content-without-menu'
         return ''
 
 #rootScope
-angular.module('app').run ($rootScope, $location, $http, flash)->
+angular.module('app').run ($rootScope, $location, $http)->
 
 
     #
@@ -288,8 +291,4 @@ angular.module('app').run ($rootScope, $location, $http, flash)->
     promise.error (data, status, headers, config) ->
         return
 
-    #
-    # parameter to display / hide the modal background
-    #
-    $rootScope.displayModalBackground = false
 

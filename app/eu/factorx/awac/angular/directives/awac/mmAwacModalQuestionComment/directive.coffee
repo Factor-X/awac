@@ -9,7 +9,7 @@ angular
         ngParams: '='
     templateUrl: "$/angular/templates/mm-awac-modal-question-comment.html"
     controller: ($scope, modalService) ->
-        directiveService.autoScope
+        directiveService.autoScopeImpl $scope
 
         $scope.close = ->
             modalService.close modalService.QUESTION_COMMENT

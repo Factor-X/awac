@@ -9,6 +9,7 @@
 
         <!-- Angular dependencies local -->
         <script src='@routes.Assets.at("components/angular/angular.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular/angular-locale_fr-fr.js")'></script>
         <script src='@routes.Assets.at("components/angular-animate/angular-animate.min.js")'></script>
         <script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>
         <script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>
@@ -17,6 +18,7 @@
         <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload-shim.min.js")'></script>
         <script src='@routes.Assets.at("components/ng-file-upload/angular.min.js")'></script>
         <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-dynamic-locale/src/tmhDynamicLocale.js")'></script>
 
         <!-- Underscore -->
         <script src='@routes.Assets.at("components/underscore/underscore.js")'></script>
@@ -32,6 +34,10 @@
 
         <!-- Dangle -->
         <script src='@routes.Assets.at("components/dangle/dist/dangle.min.js")'></script>
+
+        <!-- Messenger -->
+        <script src='@routes.Assets.at("components/messenger/build/js/messenger.min.js")'></script>
+        <script src='@routes.Assets.at("components/messenger/build/js/messenger-theme-flat.js")'></script>
 
         <!-- web app -->
         <script src='@routes.Assets.at("javascripts/app.js")'></script>
@@ -49,6 +55,11 @@
         <!-- Dangle -->
         <link rel="stylesheet" href='@routes.Assets.at("components/dangle/css/dangle.css")'>
 
+        <!-- Messenger -->
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/messenger-theme.css")'>
+
         <!-- Main (hacks) -->
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
 
@@ -57,6 +68,11 @@
 
         <!-- Developer's helper for translations -->
         <script>
+            Messenger.options = {
+                extraClasses: 'messenger-fixed messenger-on-top',
+                theme: 'flat'
+            }
+
             $(function () {
                 $('body').keydown(function (evt) {
                     // console.log(evt);
@@ -91,18 +107,6 @@
         <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
         <mm-awac-modal-document-manager></mm-awac-modal-document-manager>
         -->
-
-        <!-- success flash message. -->
-        <div flash-alert="success" active-class="in" class="alert fade">
-            <strong class="alert-heading">Succès!</strong>
-            <span class="alert-message" ng-bind-html="flash.message"></span>
-        </div>
-
-        <!-- Error flash message -->
-        <div flash-alert="error" active-class="in" class="alert fade alert-error">
-            <strong class="alert-heading">Erreur!</strong>
-            <span class="alert-message" ng-bind-html="flash.message"></span>
-        </div>
 
         <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
     </body>

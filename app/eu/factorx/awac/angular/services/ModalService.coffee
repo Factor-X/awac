@@ -7,7 +7,8 @@ angular
     @DOCUMENT_MANAGER = 'DOCUMENT_MANAGER'
     @CONFIRMATION_EXIT_FORM = 'confirmation-exit-form'
     @QUESTION_COMMENT = 'question-comment'
-
+    @EMAIL_CHANGE = 'email-change'
+    @PASSWORD_CHANGE = 'password-change'
 
     @show = (modalName,params) ->
 
@@ -15,14 +16,15 @@ angular
         args.show = true
         args.params = params
         args.target = modalName
-
+        $rootScope.displayModalBackground = true
         $rootScope.$broadcast('SHOW_MODAL', args)
 
     @close = (modalName) ->
-        
+
         args = []
         args.show = false
         args.target = modalName
+        $rootScope.displayModalBackground = false
         $rootScope.$broadcast('SHOW_MODAL', args)
 
     return

@@ -28,10 +28,15 @@ public class BaseActivityDataAE_BAD19B extends ActivityResultContributor {
 
 		// Get Target Unit (kWh in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
-		Unit baseActivityDataUnit = getUnitBySymbol("kWh");
+		Unit baseActivityDataUnit = getUnitBySymbol("kW.h");
 
 		// For each set of answers in A164, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA164 = questionSetAnswers.get(QuestionCode.A164);		if (questionSetAnswersA164 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA164) {
+		List<QuestionSetAnswer> questionSetAnswersA164 = questionSetAnswers.get(QuestionCode.A164);
+		if (questionSetAnswersA164 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA164) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

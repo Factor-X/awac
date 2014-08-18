@@ -21,7 +21,7 @@ public class UnitCategoryServiceImpl extends AbstractJPAPersistenceServiceImpl<U
 		criteria.setCacheable(true);
 		@SuppressWarnings("unchecked")
 		List<UnitCategory> result = criteria.list();
-		Logger.debug("UnitCategoryServiceImpl.findAll() - Took " + (System.currentTimeMillis() - start) + "msec");
+		Logger.info(">>>>>>>>>>> UnitCategoryServiceImpl.findAll() - Took " + (System.currentTimeMillis() - start) + "msec");
 		return result;
 	}
 

@@ -26,6 +26,8 @@
     "inweb-roboto": "*",
     "underscore": "*",
     "angular-flash": "*",
-    "ng-file-upload": "*"
+    "ng-file-upload": "*",
+    "angular-dynamic-locale": "*",
+    "messenger": "~1.4.1"
   }
 }

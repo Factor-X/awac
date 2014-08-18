@@ -1,2 +1,48 @@
 .menu_close(ng-click="nav('/form1')")
-h1 my profile
+h1 user profile
+
+.user_data
+    .fields
+        .field
+            .label
+                span(ng-bind-html="'USER_IDENTIFIER' | translate")
+            .editor
+                input(type="text", disabled, ng-model="user.identifier")
+
+        .field
+            .label
+                span(ng-bind-html="'USER_PASSWORD' | translate")
+            .editor
+                .dtable.wide
+                    .dtable-row
+                        .dtable-cell.wide
+                            input.wide(type="text", disabled, value="*****")
+                        .dtable-cell
+                            button(type="button", class="glyphicon glyphicon-pencil", ng-click="changePassword()", title="{{translate('UPDATE_PASSWORD_BUTTON')}}")
+        .field
+            .label
+                span(ng-bind-html="'USER_LASTNAME' | translate")
+            .editor
+                input(type="text", ng-model="user.lastName", focus-me="true")
+
+        .field
+            .label
+                span(ng-bind-html="'USER_FIRSTNAME' | translate")
+            .editor
+                input(type="text", ng-model="user.firstName")
+
+        .field
+            .label
+                span(ng-bind-html="'USER_EMAIL' | translate")
+            .editor
+                .dtable.wide
+                    .dtable-row
+                        .dtable-cell.wide
+                            input.wide(type="text", disabled, ng-model="user.email")
+                        .dtable-cell
+                            button(type="button", class="glyphicon glyphicon-pencil", ng-click="changeEmail()", title="{{translate('UPDATE_EMAIL_BUTTON')}}")
+
+    .actions
+        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_USER_DATA_BUTTON' | translate", ng-click="send()")
+
+

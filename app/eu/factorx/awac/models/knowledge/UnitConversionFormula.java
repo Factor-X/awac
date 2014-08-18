@@ -4,10 +4,15 @@ import eu.factorx.awac.models.AbstractEntity;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @NamedQueries({
 		@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
 })
+@Cacheable
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UnitConversionFormula extends AbstractEntity {
 
 	public static final String FIND_BY_UNIT_AND_YEAR = "UnitConversionFormula.findByUnitAndYear";

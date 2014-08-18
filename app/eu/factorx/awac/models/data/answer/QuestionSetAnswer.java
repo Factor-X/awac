@@ -1,15 +1,11 @@
 package eu.factorx.awac.models.data.answer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,12 +16,12 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"), })
+@NamedQueries({ @NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"), })
 public class QuestionSetAnswer extends AbstractEntity {
 
 	/**
-	 * @param scopeId : a {@link Long}
+	 * @param scopeId
+	 *            : a {@link Long}
 	 */
 	public static final String FIND_DISTINCT_PERIODS = "QuestionSetAnswer.findAllDistinctPeriodsByScopeId";
 
@@ -58,8 +54,7 @@ public class QuestionSetAnswer extends AbstractEntity {
 	 * @param parent
 	 * @param repetitionIndex
 	 */
-	public QuestionSetAnswer(Scope scope, Period period, QuestionSet questionSet,
-            			Integer repetitionIndex, QuestionSetAnswer parent) {
+	public QuestionSetAnswer(Scope scope, Period period, QuestionSet questionSet, Integer repetitionIndex, QuestionSetAnswer parent) {
 		super();
 		this.scope = scope;
 		this.period = period;
@@ -135,6 +130,32 @@ public class QuestionSetAnswer extends AbstractEntity {
 		return this;
 	}
 
+	public static Map<String, Integer> createRepetitionMap(QuestionSetAnswer questionSetAnswer) {
+		Map<String, Integer> res = new HashMap<>();
+		while (questionSetAnswer != null) {
+			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+			if (questionSet.getRepetitionAllowed()) {
+				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
+			}
+			questionSetAnswer = questionSetAnswer.getParent();
+		}
+		return res;
+	}
+
+	public static Map<String, Integer> createNormalizedRepetitionMap(QuestionSetAnswer questionSetAnswer) {
+		Map<String, Integer> res = new HashMap<>();
+		while (questionSetAnswer != null) {
+			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+			if (questionSet.getRepetitionAllowed()) {
+				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
+			} else {
+				res.put(questionSet.getCode().getKey(), 0);
+			}
+			questionSetAnswer = questionSetAnswer.getParent();
+		}
+		return res;
+	}
+
 	@Override
 	public String toString() {
 		return "QuestionSetAnswer [questionSet=" + questionSet.getCode().getKey() + ", repetitionIndex=" + repetitionIndex + ", parent=" + parent + "]";
@@ -152,13 +173,12 @@ public class QuestionSetAnswer extends AbstractEntity {
 			return false;
 		}
 		QuestionSetAnswer rhs = (QuestionSetAnswer) obj;
-		return new EqualsBuilder().append(this.questionSet, rhs.questionSet).append(this.period, rhs.period).append(this.scope, rhs.scope)
-				.append(this.parent, rhs.parent).append(this.repetitionIndex, rhs.repetitionIndex).isEquals();
+		return new EqualsBuilder().append(this.questionSet, rhs.questionSet).append(this.period, rhs.period).append(this.scope, rhs.scope).append(this.parent, rhs.parent)
+				.append(this.repetitionIndex, rhs.repetitionIndex).isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(47, 89).append(this.questionSet).append(this.period).append(this.scope).append(this.parent)
-				.append(this.repetitionIndex).toHashCode();
+		return new HashCodeBuilder(47, 89).append(this.questionSet).append(this.period).append(this.scope).append(this.parent).append(this.repetitionIndex).toHashCode();
 	}
 }

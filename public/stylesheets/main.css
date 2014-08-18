@@ -87,6 +87,7 @@ input.ng-invalid {
     display: block;
 }
 
+/*
 .alert {
     z-index : 1000;
     position: fixed;
@@ -102,7 +103,7 @@ input.ng-invalid {
     background-color: #ff0000;
     color: #ffffff;
 }
-
+*/
 
 
 

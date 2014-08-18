@@ -73,6 +73,17 @@ public class InitializationThread extends Thread {
 			nlDTO.put(codeLabel.getKey(), codeLabel.getLabelNl());
 		}
 
+		// ERROR MESSAGES
+		codeLabels = JPA.em().createQuery("select o from CodeLabel o where o.codeList = :cl", CodeLabel.class)
+				.setParameter("cl", CodeList.TRANSLATIONS_ERROR_MESSAGES)
+				.getResultList();
+
+		for (CodeLabel codeLabel : codeLabels) {
+			enDTO.put(codeLabel.getKey(), codeLabel.getLabelEn());
+			frDTO.put(codeLabel.getKey(), codeLabel.getLabelFr());
+			nlDTO.put(codeLabel.getKey(), codeLabel.getLabelNl());
+		}
+
 		InMemoryData.translations.put("EN", enDTO);
 		InMemoryData.translations.put("FR", frDTO);
 		InMemoryData.translations.put("NL", nlDTO);

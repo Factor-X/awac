@@ -8,6 +8,7 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.util.data.importer.*;
 import org.hibernate.Session;
@@ -44,7 +45,7 @@ public class AwacInitialData {
 		UnitCategory timeUnits = getUnitCategoryByName("Time");
 
 		// PERIOD
-		for (int i = 2005; i <= 2013; i++) {
+		for (int i = 2013; i >= 2000; i--) {
 			String label = String.valueOf(i);
 			Period period1 = new Period(new PeriodCode(label), label);
 			session.saveOrUpdate(period1);
@@ -943,7 +944,7 @@ public class AwacInitialData {
 		// == A17 =========================================================================
 		// Quantité
 		// A13(Consommation de combustibles) > A15(Combustion de combustible par les sources statiques des sites de l'entreprise) > A17 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a15, 0, QuestionCode.A17, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a15, 0, QuestionCode.A17, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A21 =========================================================================
 		// Pièces documentaires liées aux achats d'électricité et de vapeur
@@ -953,12 +954,12 @@ public class AwacInitialData {
 		// == A23 =========================================================================
 		// Consommation d'électricité verte
 		// A20(Electricité et vapeur achetées) > A22(Electricité) > A23 (Consommation d'électricité verte)
-		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A23, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A23, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A24 =========================================================================
 		// Consommation d'électricité grise
 		// A20(Electricité et vapeur achetées) > A22(Electricité) > A24 (Consommation d'électricité grise)
-		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A24, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A24, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A26 =========================================================================
 		// Energie primaire utilisée pour produire la vapeur:
@@ -973,7 +974,7 @@ public class AwacInitialData {
 		// == A28 =========================================================================
 		// Quantité achetée
 		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A28 (Quantité achetée)
-		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A28, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A28, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A32 =========================================================================
 		// Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
@@ -993,7 +994,7 @@ public class AwacInitialData {
 		// == A36 =========================================================================
 		// Quantité
 		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A36 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A36, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A36, massUnits, null, getUnitBySymbol("t")));
 
 		// == A38 =========================================================================
 		// Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
@@ -1013,12 +1014,12 @@ public class AwacInitialData {
 		// == A44 =========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A44 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a42, 0, QuestionCode.A44, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a42, 0, QuestionCode.A44, massUnits, null, null));
 
 		// == A46 =========================================================================
 		// Quel est la puissance frigorifique des groupes froid?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45(Estimation des émissions à partir de la puissance du groupe de froid) > A46 (Quel est la puissance frigorifique des groupes froid?)
-		session.saveOrUpdate(new DoubleQuestion(a45, 0, QuestionCode.A46, powerUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a45, 0, QuestionCode.A46, powerUnits, null, null));
 
 		// == A48 =========================================================================
 		// Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
@@ -1028,7 +1029,7 @@ public class AwacInitialData {
 		// == A49 =========================================================================
 		// Quel est le nombre d'heures de fonctionnement annuel du site?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
-		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits, null, null));
 
 		// == A51 =========================================================================
 		// Pièces documentaires liées à la mobilité
@@ -1038,47 +1039,47 @@ public class AwacInitialData {
 		// == A55 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A55 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A55, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A55, volumeUnits, null, null));
 
 		// == A56 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A56 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A56, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A56, volumeUnits, null, null));
 
 		// == A57 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A54(Véhicules de société ou détenus par l'entreprise) > A57 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A57, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a54, 0, QuestionCode.A57, volumeUnits, null, null));
 
 		// == A59 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A59 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A59, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A59, volumeUnits, null, null));
 
 		// == A60 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A60 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A60, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A60, volumeUnits, null, null));
 
 		// == A61 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A58(Autres véhicules: déplacements domicile-travail des employés) > A61 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A61, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a58, 0, QuestionCode.A61, volumeUnits, null, null));
 
 		// == A63 =========================================================================
 		// Consommation d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A63 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A63, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A63, volumeUnits, null, null));
 
 		// == A64 =========================================================================
 		// Consommation de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A64 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A64, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A64, volumeUnits, null, null));
 
 		// == A65 =========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A53(Calcul par les consommations) > A62(Autres véhicules: Déplacements professionnels & visiteurs) > A65 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A65, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a62, 0, QuestionCode.A65, volumeUnits, null, null));
 
 		// == A68 =========================================================================
 		// Catégorie de véhicule
@@ -1148,27 +1149,27 @@ public class AwacInitialData {
 		// == A88 =========================================================================
 		// Quel est le montant annuel de dépenses en carburant?
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A88 (Quel est le montant annuel de dépenses en carburant?)
-		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A88, moneyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A88, moneyUnits, null, getUnitBySymbol("EUR")));
 
 		// == A89 =========================================================================
 		// Prix moyen du litre d'essence
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A89 (Prix moyen du litre d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A89, moneyUnits, 1.3));
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A89, moneyUnits, 1.3, getUnitBySymbol("EUR")));
 
 		// == A90 =========================================================================
 		// Prix moyen du litre de diesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A90 (Prix moyen du litre de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A90, moneyUnits, 1.45));
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A90, moneyUnits, 1.45, getUnitBySymbol("EUR")));
 
 		// == A91 =========================================================================
 		// Prix moyen du litre de biodiesel
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A91 (Prix moyen du litre de biodiesel)
-		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A91, moneyUnits, 1.44));
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A91, moneyUnits, 1.44, getUnitBySymbol("EUR")));
 
 		// == A92 =========================================================================
 		// Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL)
 		// A50(Mobilité) > A52(Transport routier (méthode au choix)) > A77(Calcul par euros dépensés) > A78(Créez autant de catégories de véhicules que souhaité) > A92 (Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A92, moneyUnits, 1.1));
+		session.saveOrUpdate(new DoubleQuestion(a78, 0, QuestionCode.A92, moneyUnits, 1.1, getUnitBySymbol("EUR")));
 
 		// == A95 =========================================================================
 		// Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
@@ -1233,12 +1234,12 @@ public class AwacInitialData {
 		// == A107 ========================================================================
 		// Taxi pour déplacement domicile-travail des employés (en valeur)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A107 (Taxi pour déplacement domicile-travail des employés (en valeur))
-		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A107, moneyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A107, moneyUnits, null, getUnitBySymbol("EUR")));
 
 		// == A108 ========================================================================
 		// Taxi pour déplacements professionnels & des visiteurs (en valeur)
 		// A50(Mobilité) > A93(Transport en commun) > A94(Estimation par le détail des déplacements) > A108 (Taxi pour déplacements professionnels & des visiteurs (en valeur))
-		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A108, moneyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a94, 0, QuestionCode.A108, moneyUnits, null, getUnitBySymbol("EUR")));
 
 		// == A110 ========================================================================
 		// Etes-vous situés à proximité d'une gare (< 1 km)?
@@ -1278,7 +1279,7 @@ public class AwacInitialData {
 		// == A120 ========================================================================
 		// Distance moyenne A/R (km)
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A114(Méthode par le détail des vols) > A115(Créez autant de catégories de vol que nécessaire) > A120 (Distance moyenne A/R (km))
-		session.saveOrUpdate(new DoubleQuestion(a115, 0, QuestionCode.A120, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a115, 0, QuestionCode.A120, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A122 ========================================================================
 		// % des employés qui réalisent des déplacements en avion
@@ -1298,17 +1299,17 @@ public class AwacInitialData {
 		// == A125 ========================================================================
 		// Km moyen assignés par employé voyageant
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A125 (Km moyen assignés par employé voyageant)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A125, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A125, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A126 ========================================================================
 		// Km moyen assignés par employé voyageant
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A126 (Km moyen assignés par employé voyageant)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A126, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A126, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A127 ========================================================================
 		// km moyen parcourus sur l'année:
 		// A50(Mobilité) > A113(Transport en avion (déplacements professionnels ou des visiteurs)) > A121(Méthode des moyennes) > A127 (km moyen parcourus sur l'année:)
-		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A127, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a121, 0, QuestionCode.A127, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A129 ========================================================================
 		// Pièces documentaires liées au transport et stockage amont
@@ -1318,17 +1319,17 @@ public class AwacInitialData {
 		// == A133 ========================================================================
 		// Consommation d'essence
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A133 (Consommation d'essence)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A133, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A133, volumeUnits, null, null));
 
 		// == A134 ========================================================================
 		// Consommation de diesel
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A134 (Consommation de diesel)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A134, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A134, volumeUnits, null, null));
 
 		// == A135 ========================================================================
 		// Consommation de gaz de pétrole liquéfié (GPL)
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A135 (Consommation de gaz de pétrole liquéfié (GPL))
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A135, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A135, volumeUnits, null, null));
 
 		// == A136 ========================================================================
 		// Est-ce les marchandises sont refrigérées durant le transport?
@@ -1348,12 +1349,12 @@ public class AwacInitialData {
 		// == A139 ========================================================================
 		// Quantité de recharge annuelle
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A139 (Quantité de recharge annuelle)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A139, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A139, massUnits, null, null));
 
 		// == A500 ========================================================================
 		// Quantité de recharge annuelle
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A131(Transport avec des véhicules détenus par l'entreprise) > A132(Méthode par consommation de carburants) > A500 (Quantité de recharge annuelle)
-		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A500, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a132, 0, QuestionCode.A500, massUnits, null, null));
 
 		// == A143 ========================================================================
 		// Marchandise
@@ -1363,12 +1364,12 @@ public class AwacInitialData {
 		// == A145 ========================================================================
 		// Poids total transporté:
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A145 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A145, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A145, massUnits, null, getUnitBySymbol("t")));
 
 		// == A146 ========================================================================
 		// Distance totale entre le point de départ et le point d'arrivée de la marchandise:
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A141(Méthode des kilomètres) > A142(Créez autant de marchandises que nécessaire) > A146 (Distance totale entre le point de départ et le point d'arrivée de la marchandise:)
-		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A146, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a142, 0, QuestionCode.A146, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A147 ========================================================================
 		// % de distance effectuée par transport routier local par camion
@@ -1423,7 +1424,7 @@ public class AwacInitialData {
 		// == A158 ========================================================================
 		// Quel est le poids total des marchandises?
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A158 (Quel est le poids total des marchandises?)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A158, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A158, massUnits, null, getUnitBySymbol("t")));
 
 		// == A159 ========================================================================
 		// Quelle est la provenance ou destination des marchandises?
@@ -1433,17 +1434,17 @@ public class AwacInitialData {
 		// == A160 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A160 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A160, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A160, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A161 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A161 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A161, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A161, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A162 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A128(Transport et distribution de marchandises amont) > A130(Transport amont) > A140(Transport effectué par des transporteurs) > A157(Méthode des moyennes) > A162 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A162, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a157, 0, QuestionCode.A162, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A165 ========================================================================
 		// Entrepôt
@@ -1458,12 +1459,12 @@ public class AwacInitialData {
 		// == A168 ========================================================================
 		// Quantité
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A166(Listez les totaux de combustibles utilisés en amont) > A168 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a166, 0, QuestionCode.A168, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a166, 0, QuestionCode.A168, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A169 ========================================================================
 		// Electricité
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A169 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a164, 0, QuestionCode.A169, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a164, 0, QuestionCode.A169, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A171 ========================================================================
 		// Type de gaz
@@ -1473,7 +1474,7 @@ public class AwacInitialData {
 		// == A172 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A128(Transport et distribution de marchandises amont) > A163(Distribution amont: Energie et froid des entrepôts de stockage) > A164(Créez autant d'entrepôts de stockage que nécessaire) > A170(Listez les gaz réfrigérants utilisés pour les marchandises amont) > A172 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a170, 0, QuestionCode.A172, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a170, 0, QuestionCode.A172, massUnits, null, null));
 
 		// == A174 ========================================================================
 		// Pièces documentaires liées aux déchets
@@ -1498,7 +1499,7 @@ public class AwacInitialData {
 		// == A179 ========================================================================
 		// Quantité
 		// A173(Déchets générés par les opérations) > A175(Listez vos différents postes de déchets) > A179 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a175, 0, QuestionCode.A179, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a175, 0, QuestionCode.A179, massUnits, null, getUnitBySymbol("t")));
 
 		// == A183 ========================================================================
 		// Nombre d'ouvriers
@@ -1553,7 +1554,7 @@ public class AwacInitialData {
 		// == A199 ========================================================================
 		// Quantités de m³ rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A197(Méthode par la quantité de m³ rejetés) > A199 (Quantités de m³ rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a197, 0, QuestionCode.A199, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a197, 0, QuestionCode.A199, volumeUnits, null, null));
 
 		// == A200 ========================================================================
 		// Méthode de traitement des eaux usées
@@ -1568,12 +1569,12 @@ public class AwacInitialData {
 		// == A202 ========================================================================
 		// Quantités de DCO rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A201(Méthode par le poids de CO2 chimique des effluents rejetés) > A202 (Quantités de DCO rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A202, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A202, massUnits, null, null));
 
 		// == A203 ========================================================================
 		// Quantités d'azote rejetés
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A196(Méthodes alternatives) > A201(Méthode par le poids de CO2 chimique des effluents rejetés) > A203 (Quantités d'azote rejetés)
-		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A203, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a201, 0, QuestionCode.A203, massUnits, null, null));
 
 		// == A204 ========================================================================
 		// Méthode de traitement des eaux usées
@@ -1643,12 +1644,12 @@ public class AwacInitialData {
 		// == A221 ========================================================================
 		// Quantité
 		// A208(Méthode par détail des achats) > A209(Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)) > A221 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A221, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A221, massUnits, null, getUnitBySymbol("t")));
 
 		// == A222 ========================================================================
 		// Quantité
 		// A208(Méthode par détail des achats) > A209(Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)) > A222 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A222, moneyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a209, 0, QuestionCode.A222, moneyUnits, null, getUnitBySymbol("EUR")));
 
 		// == A225 ========================================================================
 		// Poste d'achat
@@ -1663,7 +1664,7 @@ public class AwacInitialData {
 		// == A227 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A208(Méthode par détail des achats) > A223(Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate) > A224(Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)) > A227 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a224, 0, QuestionCode.A227, null, null));
+		session.saveOrUpdate(new StringQuestion(a224, 0, QuestionCode.A227, null));
 
 		// == A228 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
@@ -1693,7 +1694,7 @@ public class AwacInitialData {
 		// == A235 ========================================================================
 		// Quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A231(Créez et nommez vos postes d'infrastructure) > A235 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A235, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a231, 0, QuestionCode.A235, massUnits, null, getUnitBySymbol("t")));
 
 		// == A236 ========================================================================
 		// Quantité
@@ -1713,7 +1714,7 @@ public class AwacInitialData {
 		// == A241 ========================================================================
 		// Unité dans laquelle s'exprime cette quantité
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A241 (Unité dans laquelle s'exprime cette quantité)
-		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A241, null, null));
+		session.saveOrUpdate(new StringQuestion(a238, 0, QuestionCode.A241, null));
 
 		// == A242 ========================================================================
 		// Facteur d'émission en tCO2e par unité ci-dessus
@@ -1753,12 +1754,12 @@ public class AwacInitialData {
 		// == A254 ========================================================================
 		// Poids total transporté:
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A254 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A254, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A254, massUnits, null, getUnitBySymbol("t")));
 
 		// == A255 ========================================================================
 		// Distance totale entre le point de vente et le client particulier ou entre le point de vente et le client professionnel
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A253(Méthode par kilométrage) > A255 (Distance totale entre le point de vente et le client particulier ou entre le point de vente et le client professionnel)
-		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A255, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a253, 0, QuestionCode.A255, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A256 ========================================================================
 		// % de distance effectuée par transport routier local par camion
@@ -1813,7 +1814,7 @@ public class AwacInitialData {
 		// == A267 ========================================================================
 		// Poids total transporté:
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A267 (Poids total transporté:)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A267, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A267, massUnits, null, getUnitBySymbol("t")));
 
 		// == A268 ========================================================================
 		// Quelle est la destination géographique des produits vendus?
@@ -1823,17 +1824,17 @@ public class AwacInitialData {
 		// == A269 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A269 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A269, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A269, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A270 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A270 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A270, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A270, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A271 ========================================================================
 		// Km assignés en moyenne aux marchandises
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A250(Transport et distribution aval) > A252(Transport aval: choix de méthodes) > A266(Méthode des moyennes) > A271 (Km assignés en moyenne aux marchandises)
-		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A271, lengthUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a266, 0, QuestionCode.A271, lengthUnits, null, getUnitBySymbol("km")));
 
 		// == A274 ========================================================================
 		// Entrepôt
@@ -1848,12 +1849,12 @@ public class AwacInitialData {
 		// == A277 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A275(Listez les totaux de combustibles utilisés) > A277 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a275, 0, QuestionCode.A277, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a275, 0, QuestionCode.A277, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A278 ========================================================================
 		// Electricité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A278 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a273, 0, QuestionCode.A278, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a273, 0, QuestionCode.A278, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A280 ========================================================================
 		// Type de gaz
@@ -1863,7 +1864,7 @@ public class AwacInitialData {
 		// == A281 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A272(Distribution avale: Energie et Froid des entrepôts de stockage) > A273(Créez autant d'entrepôts de stockage que nécessaire) > A279(Listez les gaz réfrigérants) > A281 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a279, 0, QuestionCode.A281, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a279, 0, QuestionCode.A281, massUnits, null, null));
 
 		// == A283 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -1878,12 +1879,12 @@ public class AwacInitialData {
 		// == A286 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A284(Listez les totaux de combustibles) > A286 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a284, 0, QuestionCode.A286, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a284, 0, QuestionCode.A286, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A287 ========================================================================
 		// Electricité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A287 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a282, 0, QuestionCode.A287, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a282, 0, QuestionCode.A287, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A289 ========================================================================
 		// Type de gaz
@@ -1893,7 +1894,7 @@ public class AwacInitialData {
 		// == A290 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A282(Traitement) > A288(Listez les gaz réfrigérants) > A290 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a288, 0, QuestionCode.A290, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a288, 0, QuestionCode.A290, massUnits, null, null));
 
 		// == A292 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -1908,17 +1909,17 @@ public class AwacInitialData {
 		// == A294 ========================================================================
 		// Consommation de diesel par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A294 (Consommation de diesel par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A294, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A294, volumeUnits, null, getUnitBySymbol("l")));
 
 		// == A295 ========================================================================
 		// Consommation d'essence par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A295 (Consommation d'essence par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A295, volumeUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A295, volumeUnits, null, getUnitBySymbol("l")));
 
 		// == A296 ========================================================================
 		// Consommation d'électricité par utilisation de produit
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A296 (Consommation d'électricité par utilisation de produit)
-		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A296, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a291, 0, QuestionCode.A296, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A298 ========================================================================
 		// Gaz émis
@@ -1928,7 +1929,7 @@ public class AwacInitialData {
 		// == A299 ========================================================================
 		// Quantité
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A291(Utilisation) > A297(Listez les gaz émis par utilisation de produit) > A299 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a297, 0, QuestionCode.A299, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a297, 0, QuestionCode.A299, massUnits, null, null));
 
 		// == A301 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -1938,7 +1939,7 @@ public class AwacInitialData {
 		// == A302 ========================================================================
 		// Poids total de produit vendu
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A302 (Poids total de produit vendu)
-		session.saveOrUpdate(new DoubleQuestion(a300, 0, QuestionCode.A302, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a300, 0, QuestionCode.A302, massUnits, null, getUnitBySymbol("t")));
 
 		// == A304 ========================================================================
 		// Catégorie de déchet
@@ -1948,7 +1949,7 @@ public class AwacInitialData {
 		// == A305 ========================================================================
 		// Poids total de cette catégorie de déchet issu des produits vendus
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A303(Créez autant de catégories de déchet que nécessaire) > A305 (Poids total de cette catégorie de déchet issu des produits vendus)
-		session.saveOrUpdate(new DoubleQuestion(a303, 0, QuestionCode.A305, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a303, 0, QuestionCode.A305, massUnits, null, getUnitBySymbol("t")));
 
 		// == A306 ========================================================================
 		// Type principal de ce déchet:
@@ -1983,12 +1984,12 @@ public class AwacInitialData {
 		// == A315 ========================================================================
 		// Quantité
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A315 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A316 ========================================================================
 		// Electricité
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A316 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A318 ========================================================================
 		// Type de gaz
@@ -1998,7 +1999,7 @@ public class AwacInitialData {
 		// == A319 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A319 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits, null, null));
 
 		// == A321 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2023,12 +2024,12 @@ public class AwacInitialData {
 		// == A327 ========================================================================
 		// Quantité
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A327 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A328 ========================================================================
 		// Electricité (moyenne par franchisé)
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A328 (Electricité (moyenne par franchisé))
-		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A330 ========================================================================
 		// Type de gaz
@@ -2038,7 +2039,7 @@ public class AwacInitialData {
 		// == A331 ========================================================================
 		// Quantité de recharge nécessaire pour l'année
 		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A331 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits, null));
+		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits, null, null));
 
 		// == A333 ========================================================================
 		// Fournir ici les documents éventuels justifiant les données suivantes
@@ -2065,10 +2066,15 @@ public class AwacInitialData {
 		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
 		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
 
+
 	}
 
 	private static UnitCategory getUnitCategoryByName(String name) {
 		return JPA.em().createNamedQuery(UnitCategory.FIND_BY_NAME, UnitCategory.class).setParameter("name", name).getSingleResult();
+	}
+
+	private static Unit getUnitBySymbol(String symbol) {
+		return JPA.em().createNamedQuery(Unit.FIND_BY_SYMBOL, Unit.class).setParameter("symbol", symbol).getSingleResult();
 	}
 
 }
