@@ -38,6 +38,11 @@ angular
             controller: 'LoginCtrl'
         }
     )
+    .when('/admin', {
+            templateUrl: '$/angular/views/admin.html'
+            controller: 'AdminCtrl'
+        }
+    )
     .when('/user_data/:period/:scope', {
             templateUrl: '$/angular/views/user_data.html'
             controller: 'UserDataCtrl'

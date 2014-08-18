@@ -1,6 +1,8 @@
 package eu.factorx.awac;
 
 
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
@@ -52,13 +54,16 @@ public class AwacInitialData {
 		}
 
 		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
+
+		// NOTIFICATION
+		Notification notification = new Notification();
+		notification.setKind(NotificationKind.ERROR);
+		notification.setMessageFr("The website will be in maintenance tomorrow 2014-08-15.");
+		session.saveOrUpdate(notification);
 	}
 
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
-
-
-
 
 
 		// == TAB1 ========================================================================

@@ -6,13 +6,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.Validator;
+import eu.factorx.awac.service.NotificationService;
 import eu.factorx.awac.util.MyrmexRunTimeException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import play.mvc.Content;
 
 import java.io.IOException;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DTO implements Content {
+
+	@Autowired
+	private NotificationService notificationService;
+	@Autowired
+	private ConversionService   conversionService;
 
 	private String __type;
 
@@ -64,6 +72,5 @@ public class DTO implements Content {
 			throw new MyrmexRunTimeException("Validation failed for DTO: " + e.getMessage());
 		}
 	}
-
 
 }

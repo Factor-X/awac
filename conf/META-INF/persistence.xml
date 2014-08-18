@@ -16,6 +16,7 @@
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
+        <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.Vat</class>
         <class>eu.factorx.awac.models.business.Organization</class>
@@ -76,6 +77,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
+        <class>eu.factorx.awac.models.Notification</class>
  		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
  		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
