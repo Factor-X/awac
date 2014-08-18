@@ -5,13 +5,16 @@ angular
     $scope.formIdentifier = formIdentifier
     $scope.displayFormMenu=displayFormMenu
 
+    # store the structure and the status of tabSet and tab
+    $scope.tabSet = {}
+
     # declare the dataToCompare variable. This variable is used to display data to compare
     # the content is a FormDTO object (after loading by the $scope.$parent.$watch function
     $scope.dataToCompare = null
 
     #this variable contains all answer, new and old
     $scope.answerList = []
-    $scope.mapRepetition = []
+    $scope.mapRepetition = {}
     ###
     illustration of the structures
     $scope.mapRepetition['A15'] = [{'A15':1},
@@ -30,7 +33,6 @@ angular
     # load the form and treat structure and data
     #
     downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
-
         console.log "data"
         console.log data
         $scope.o = angular.copy(data)
@@ -95,10 +97,12 @@ angular
             $scope.addDefaultValue(questionSetDTO)
 
         $timeout(->
-
-            modalService.close(modalService.LOADING)
-            $scope.loading = false
-            $scope.$root.$broadcast('FORM_LOADING_FINISH')
+            $scope.createTabSet()
+            $timeout(->
+                modalService.close(modalService.LOADING)
+                $scope.loading = false
+                $scope.$root.$broadcast('FORM_LOADING_FINISH')
+            , 0)
         , 0)
 
         return
@@ -156,13 +160,49 @@ angular
                 messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
                 modalService.close(modalService.LOADING)
 
-                for answer in $scope.answerList
+                #refresh the progress bar
+
+                listToRemove = []
+
+                for key in Object.keys($scope.mapRepetition)
+                    if key != '$$hashKey'
+                        i=0
+                        while i < $scope.mapRepetition[key].length
+                            repetition =  $scope.mapRepetition[key][i]
+
+                            founded=false
+                            for answer in $scope.answerList
+                                if answer.value? &&  (!answer.isAggregation? || answer.isAggregation != true) && $scope.compareRepetitionMap(answer.mapRepetition,repetition)
+                                    founded=true
+                                    break
+                            if founded == false
+                                it = listToRemove.length
+                                listToRemove[it] = {}
+                                listToRemove[it].code = key
+                                listToRemove[it].iteration = {}
+                                listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key]
+                                j = angular.copy($scope.mapRepetition[key][i])
+
+                                delete j[key]
+                                listToRemove[it].map = j
+                            i++
+
+                for repetitionToRemove in listToRemove
+                    $scope.removeIteration(repetitionToRemove.code,repetitionToRemove.iteration,repetitionToRemove.map)
+
+
+                i=$scope.answerList.length-1
+                while i>=0
+                    answer = $scope.answerList[i]
 
                     # test if the question was edited
-                    if answer.wasEdited != undefined && answer.wasEdited == true
+                    if answer.wasEdited == true
                         answer.wasEdited = false
 
-                #refresh the progress bar
+                    if answer.toRemove == true
+                        $scope.answerList.splice(i, 1)
+                    i--
+
                 $scope.saveFormProgress()
 
                 #nav
@@ -271,6 +311,8 @@ angular
 
         result = $scope.getAnswer(code, mapIteration)
         if result
+            if result.toRemove?
+                result.toRemove = false
             return result
         else
             #compute default value
@@ -368,6 +410,7 @@ angular
             question = $scope.answerList[len]
             if question.mapRepetition? && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)
                 if question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] == iterationToDelete[questionSetCode]
+                    $scope.answerList[len].toRemove = true
                     if $scope.answerList[len].value != null
                         $scope.answerList[len].value = null
                         $scope.answerList[len].wasEdited = true
@@ -452,7 +495,6 @@ angular
     # the result is savec to $scope.dataToCompare
     #
     $scope.$parent.$watch 'periodToCompare', () ->
-
         if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
             promise = $http
                 method: "GET"
@@ -532,6 +574,72 @@ angular
                 "Content-Type": "application/json"
             data: formProgressDTO
         promise.success (data, status, headers, config) ->
-
             return
+
+    #
+    # used at the last of the loading. Create the tabSet variable and add watcher for each questions concerned
+    # by tabSet
+    #
+    $scope.createTabSet = ->
+        for answer in $scope.answerList
+            if answer.tabSet?
+
+                tabSet = answer.tabSet
+                tab = answer.tab
+
+                if !$scope.tabSet[tabSet]?
+                    $scope.tabSet[tabSet] = {}
+                if !$scope.tabSet[tabSet][tab]?
+                    $scope.tabSet[tabSet][tab] = {}
+
+                if !$scope.tabSet[tabSet][tab].listToCompute?
+                    $scope.tabSet[tabSet][tab].listToCompute = []
+                i = $scope.tabSet[tabSet][tab].listToCompute.length
+
+                $scope.tabSet[tabSet][tab].listToCompute[i] = answer
+
+                $scope.createTabWatcher(tabSet, tab, i)
+
+    #
+    # create a watcher for a tab
+    #
+    $scope.createTabWatcher = (tabSet, tab, i)->
+        $scope.$watch 'tabSet[' + tabSet + '][' + tab + '].listToCompute[' + i + '].value', ->
+            $scope.computeTab(tabSet, tab)
+
+    #
+    # compute the progression of a tab
+    #
+    $scope.computeTab = (tabSet, tab)->
+        isFinish = true
+
+        for answer in $scope.tabSet[tabSet][tab].listToCompute
+            if answer.value == null
+                isFinish = false
+
+        $scope.tabSet[tabSet][tab].isFinish=isFinish
+
+        if isFinish == true
+            if !$scope.tabSet[tabSet].master? || $scope.tabSet[tabSet].master > tab
+                $scope.tabSet[tabSet].master = tab
+
+        else if $scope.tabSet[tabSet].master == tab
+
+            delete $scope.tabSet[tabSet].master
+
+            for key in Object.keys($scope.tabSet[tabSet])
+                if key != '$$hashKey' && key != 'master'
+                    value = $scope.tabSet[tabSet][key]
+                    if value.isFinish == true
+                        if !$scope.tabSet[tabSet].master? || parseFloat($scope.tabSet[tabSet].master) > parseFloat key
+                            $scope.tabSet[tabSet].master = parseFloat key
+
+        if $scope.loading == true && $scope.tabSet[tabSet].master?
+            for key in Object.keys($scope.tabSet[tabSet])
+                if key != '$$hashKey' && key != 'master' && key != 'active'
+                    if parseFloat(key) == parseFloat($scope.tabSet[tabSet].master)
+                        $scope.tabSet[tabSet][key].active=true
+                    else
+                        $scope.tabSet[tabSet][key].active=false
+
 

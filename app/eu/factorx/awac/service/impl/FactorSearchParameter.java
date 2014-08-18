@@ -98,8 +98,8 @@ public class FactorSearchParameter {
 
 	@Override
 	public String toString() {
-		return "FactorSearchParameter [indicatorCategory='" + indicatorCategory.getKey() + "', activitySource='" + activitySource.getKey() + "', activityType='"
-				+ activityType.getKey() + "', unitIn='" + unitIn.getSymbol() + "', unitOut='" + unitOut.getSymbol() + "']";
+		return "FactorSearchParameter [indicatorCategory='" + indicatorCategory + "', activitySource='" + activitySource + "', activityType='"
+				+ activityType + "', unitIn='" + unitIn + "', unitOut='" + unitOut + "']";
 	}
 
 }
