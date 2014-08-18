@@ -50,7 +50,7 @@ angular
             result = $scope.getMainScope().validNavigation()
 
             if result.valid == false
-                return "Certaines données n'ont pas été sauvegardées. Êtes-vous sûr de vouloir quittez cette page ?"
+                return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE')
 
     #
     # use the nav from an event
@@ -120,7 +120,7 @@ angular
         $scope.loadFormProgress()
 
     $scope.periodsForComparison = [
-        {'key': 'default', 'label': 'aucune periode'}
+        {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
     ]
     $scope.periodToCompare = 'default'
 
@@ -155,7 +155,7 @@ angular
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
                 $scope.periodsForComparison = [
-                    {'key': 'default', 'label': 'aucune periode'}
+                    {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
                 ]
                 for period in data.periodDTOList
                     if period.key != $scope.periodKey

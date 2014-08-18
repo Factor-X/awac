@@ -2,6 +2,7 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
+import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
@@ -15,6 +16,8 @@ import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
 public class UserProfileController extends Controller {
+
+	public static final String ERROR_MSG_PASSWORD_IS_INCORRECT = "PASSWORD_IS_INCORRECT";
 
 	@Autowired
 	private SecuredController securedController;
@@ -58,10 +61,27 @@ public class UserProfileController extends Controller {
 
 		// TODO Implement a real security check... and password should be encoded!
 		if (!currentUser.getPassword().equals(emailChangeDTO.getPassword())) {
-			throw new RuntimeException("Password is incorrect!");
+			throw new RuntimeException(ERROR_MSG_PASSWORD_IS_INCORRECT);
 		}
 
 		currentUser.setEmail(emailChangeDTO.getNewEmail());
+		accountService.saveOrUpdate(currentUser);
+
+		return ok(new ReturnDTO());
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result updatePassword() {
+		Account currentUser = securedController.getCurrentUser();
+		PasswordChangeDTO passwordChangeDTO = extractDTOFromRequest(PasswordChangeDTO.class);
+
+		// TODO Implement a real security check... and password should be encoded!
+		if (!currentUser.getPassword().equals(passwordChangeDTO.getOlPassword())) {
+			throw new RuntimeException(ERROR_MSG_PASSWORD_IS_INCORRECT);
+		}
+
+		currentUser.setPassword(passwordChangeDTO.getNewPassword());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());

@@ -21,7 +21,7 @@ mm-awac-section(title-code="A130_TITLE")
         tabset
             tab.tab-color-lightgreen(active="tabSet[1][1].active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell
+                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
                     span(ng-bind-html="'A141_TITLE' | translate")
                 .sub_block.tab-color-lightgreen
                     .element_table
@@ -51,7 +51,7 @@ mm-awac-section(title-code="A130_TITLE")
                             span(ng-bind-html="'A142_LOOPDESC' | translate")
             tab.tab-color-green(active="tabSet[1][2].active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell
+                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
                     span(ng-bind-html="'A157_TITLE' | translate")
                 .sub_block.tab-color-green
                     .element_table

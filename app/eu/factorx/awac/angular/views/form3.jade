@@ -13,7 +13,7 @@ div
             tabset
                 tab.tab-color-lightgreen(active="tabSet[1][1].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
                         span(ng-bind-html="'A53_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
@@ -37,7 +37,7 @@ div
 
                 tab.tab-color-green(active="tabSet[1][2].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
                         span(ng-bind-html="'A66_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
@@ -69,7 +69,7 @@ div
 
                 tab.tab-color-yellow(active="tabSet[1][3].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 3")
                         span(ng-bind-html="'A77_TITLE' | translate")
                     .sub_block.tab-color-yellow
                         .element_table
@@ -99,7 +99,7 @@ div
             tabset
                 tab.tab-color-lightgreen(active="tabSet[2][1].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[2].master === 1")
                         span(ng-bind-html="'A94_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
@@ -120,7 +120,7 @@ div
 
                 tab.tab-color-green(active="tabSet[2][2].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[2].master === 2")
                         span(ng-bind-html="'A109_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
@@ -139,7 +139,7 @@ div
             tabset
                 tab.tab-color-lightgreen(active="tabSet[3][1].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[3].master === 1")
                         span(ng-bind-html="'A114_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
@@ -156,7 +156,7 @@ div
 
                 tab.tab-color-green(active="tabSet[3][2].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[3].master === 2")
                         span(ng-bind-html="'A121_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
