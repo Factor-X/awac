@@ -1,12 +1,13 @@
-import eu.factorx.awac.AwacInitialData;
-import eu.factorx.awac.InMemoryData;
+package eu.factorx.awac;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
+
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
+
 import play.db.jpa.JPA;
 import play.libs.F;
 import play.libs.Yaml;
@@ -31,7 +32,7 @@ public class InitializationThread extends Thread {
 			@Override
 			public void invoke() throws Throwable {
 				createInitialData(ctx);
-				createInMemoryData(ctx);
+				createInMemoryData();
 				initialized = true;
 			}
 		});
@@ -39,11 +40,11 @@ public class InitializationThread extends Thread {
 	}
 
 
-	private void createInMemoryData(ApplicationContext ctx) {
-		createInMemoryTranslations(ctx);
+	public static void createInMemoryData() {
+		createInMemoryTranslations();
 	}
 
-	private void createInMemoryTranslations(ApplicationContext ctx) {
+	public static void createInMemoryTranslations() {
 
 		TranslationsDTO enDTO = new TranslationsDTO("EN");
 		TranslationsDTO frDTO = new TranslationsDTO("FR");

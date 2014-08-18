@@ -12,6 +12,8 @@ public interface CodeLabelService extends PersistenceService<CodeLabel> {
 
 	CodeLabel findCodeLabelByCode(Code code);
 
+	int removeCodeLabelsByList(CodeList codeList);
+
 	void resetCache();
 
 }
