@@ -1,48 +1,30 @@
 .menu_close(ng-click="nav('/form1')")
 h1 user profile
 
+style
+    .edit_icon {
+        width: 22px;
+        height: 22px;
+        top: -1px;
+    }
+
 .user_data
-    .fields
-        .field
-            .label
-                span(ng-bind-html="'USER_IDENTIFIER' | translate")
-            .editor
-                input(type="text", disabled, ng-model="user.identifier")
+    div(class="field_form", style="display:table")
+        mm-awac-modal-field-text(ng-info="identifierInfo")
+        mm-awac-modal-field-text(ng-info="passwordInfo")
+            button(type="button", title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}", ng-click="changePassword()", class="edit_icon glyphicon glyphicon-pencil")
+        mm-awac-modal-field-text(ng-info="lastNameInfo")
+        mm-awac-modal-field-text(ng-info="firstNameInfo")
+        mm-awac-modal-field-text(ng-info="emailInfo")
+            button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
 
-        .field
-            .label
-                span(ng-bind-html="'USER_PASSWORD' | translate")
-            .editor
-                .dtable.wide
-                    .dtable-row
-                        .dtable-cell.wide
-                            input.wide(type="text", disabled, value="*****")
-                        .dtable-cell
-                            button(type="button", class="glyphicon glyphicon-pencil", ng-click="changePassword()", title="{{translate('UPDATE_PASSWORD_BUTTON')}}")
-        .field
-            .label
-                span(ng-bind-html="'USER_LASTNAME' | translate")
-            .editor
-                input(type="text", ng-model="user.lastName", focus-me="true")
+        br
+        div(style="display:table-row")
+            div(style="display:table-cell")
+            div(style="display:table-cell")
+            div(style="display:table-cell")
+                div(ng-hide="isLoading", style="text-align: right")
+                    button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="send()", ng-disabled="!allFieldValid()")
 
-        .field
-            .label
-                span(ng-bind-html="'USER_FIRSTNAME' | translate")
-            .editor
-                input(type="text", ng-model="user.firstName")
-
-        .field
-            .label
-                span(ng-bind-html="'USER_EMAIL' | translate")
-            .editor
-                .dtable.wide
-                    .dtable-row
-                        .dtable-cell.wide
-                            input.wide(type="text", disabled, ng-model="user.email")
-                        .dtable-cell
-                            button(type="button", class="glyphicon glyphicon-pencil", ng-click="changeEmail()", title="{{translate('UPDATE_EMAIL_BUTTON')}}")
-
-    .actions
-        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_USER_DATA_BUTTON' | translate", ng-click="send()")
-
+                img(ng-show="isLoading",src="/awac/assets/images/modal-loading.gif")
 

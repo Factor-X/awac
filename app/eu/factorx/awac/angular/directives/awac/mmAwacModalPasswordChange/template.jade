@@ -11,25 +11,23 @@
             .modal-body
                 .field_form
                     mm-awac-modal-field-text(ng-info="oldPasswordInfo")
+                    br
                     mm-awac-modal-field-text(ng-info="newPasswordInfo")
-                    mm-awac-modal-field-text(ng-info="newPasswordInfoRepeat")
-
-                    p(ng-show="errorMessage.length > 0",
-                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+                    mm-awac-modal-field-text(ng-info="newPasswordConfirmInfo")
 
             .modal-footer
 
                 div(ng-hide="isLoading")
                     button.button(type="button",
                     class="btn btn-primary",
-                    ng-click="save();",
-                    ng-disabled="!allFieldValid()",
-                    ng-bind-html="'SAVE_BUTTON' | translate")
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
 
                     button.button(type="button",
                     class="btn btn-primary",
-                    ng-click="close();",
-                    ng-bind-html="'CANCEL_BUTTON' | translate")
+                    ng-click="save();",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SAVE_BUTTON' | translate")
 
                 img(ng-show="isLoading",src="/awac/assets/images/modal-loading.gif")
 

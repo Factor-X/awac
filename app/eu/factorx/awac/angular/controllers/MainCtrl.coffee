@@ -277,6 +277,23 @@ angular.module('app').run ($rootScope, $location, $http)->
         return null
 
     #
+    # refresh user data
+    #
+    $rootScope.refreshUserData = () ->
+        promise = $http
+            method: "GET"
+            url: 'user/profile'
+            headers:
+                "Content-Type": "application/json"
+        promise.success (data, status, headers, config) ->
+            $rootScope.currentPerson = data
+            return
+
+        promise.error (data, status, headers, config) ->
+            messageFlash.displayError data.message
+            return
+
+    #
     # test if the user is currently connected on the server
     #
     promise = $http

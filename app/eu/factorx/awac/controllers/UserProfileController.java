@@ -4,11 +4,15 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.util.BusinessErrorType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -16,8 +20,6 @@ import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
 public class UserProfileController extends Controller {
-
-	public static final String ERROR_MSG_PASSWORD_IS_INCORRECT = "PASSWORD_IS_INCORRECT";
 
 	@Autowired
 	private SecuredController securedController;
@@ -43,7 +45,7 @@ public class UserProfileController extends Controller {
 		PersonDTO personDTO = extractDTOFromRequest(PersonDTO.class);
 
 		if (!personDTO.getIdentifier().equals(currentUser.getIdentifier())) {
-			return unauthorized();
+			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
 		}
 
 		currentUser.setLastname(personDTO.getLastName());
@@ -61,7 +63,7 @@ public class UserProfileController extends Controller {
 
 		// TODO Implement a real security check... and password should be encoded!
 		if (!currentUser.getPassword().equals(emailChangeDTO.getPassword())) {
-			throw new RuntimeException(ERROR_MSG_PASSWORD_IS_INCORRECT);
+			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
 		currentUser.setEmail(emailChangeDTO.getNewEmail());
@@ -77,8 +79,8 @@ public class UserProfileController extends Controller {
 		PasswordChangeDTO passwordChangeDTO = extractDTOFromRequest(PasswordChangeDTO.class);
 
 		// TODO Implement a real security check... and password should be encoded!
-		if (!currentUser.getPassword().equals(passwordChangeDTO.getOlPassword())) {
-			throw new RuntimeException(ERROR_MSG_PASSWORD_IS_INCORRECT);
+		if (!currentUser.getPassword().equals(passwordChangeDTO.getOldPassword())) {
+			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
 		currentUser.setPassword(passwordChangeDTO.getNewPassword());

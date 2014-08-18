@@ -1,51 +1,89 @@
 angular
 .module('app.controllers')
-.controller "UserDataCtrl", ($scope, downloadService, translationService, messageFlash, modalService, $timeout) ->
+.controller "UserDataCtrl", ($scope, downloadService, $http, translationService, messageFlash, modalService, $timeout) ->
 
-    $scope.user =
-        identifier: ""
-        password: ""
-        lastName: ""
-        firstName: ""
-        email: ""
+    $scope.isLoading = false
 
-    $scope.translate = (input) ->
-        return translationService.get input
+    $scope.identifierInfo =
+        fieldTitle: "USER_IDENTIFIER"
+        disabled: true
+        field: $scope.$root.currentPerson.identifier
 
-    #activate loading mode
-    $scope.isLoading = true
+    $scope.passwordInfo =
+        fieldTitle: "USER_PASSWORD"
+        fieldType: "password"
+        disabled: true
+        field: "***"
 
-    #get data
-    downloadService.getJson 'user/profile', (data, status, headers, config) ->
-        $scope.isLoading = false
-        if data?
-            $scope.user.identifier = data.identifier
-            $scope.user.lastName = data.lastName
-            $scope.user.firstName = data.firstName
-            $scope.user.email = data.email
-        else
-            messageFlash.displayError data.message
-        return
+    $scope.lastNameInfo =
+        fieldTitle: "USER_LASTNAME"
+        validationRegex: "^\\S{1,255}$"
+        validationMessage: "LASTNAME_VALIDATION_WRONG_LENGTH"
+        field: $scope.$root.currentPerson.lastName
+        hideIsValidIcon: true
+        isValid: true
+        focus: true
+
+    $scope.firstNameInfo =
+        fieldTitle: "USER_FIRSTNAME"
+        fieldType: "text"
+        validationRegex: "^\\S{1,255}$"
+        validationMessage: "FIRSTNAME_VALIDATION_WRONG_LENGTH"
+        field: $scope.$root.currentPerson.firstName
+        hideIsValidIcon: true
+        isValid: true
+
+    $scope.emailInfo =
+        fieldTitle: "USER_EMAIL"
+        disabled: true
+        field: $scope.$root.currentPerson.email
+
+    $scope.allFieldValid = () ->
+        if $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid
+            return true
+        return false
+
+    #refresh user data
+    $scope.$root.refreshUserData();
 
     #send data
     $scope.send = () ->
-        downloadService.postJson 'user/profile/save', $scope.user, (data, status, headers, config) ->
+        if !$scope.allFieldValid
+            return false
+
+        $scope.isLoading = true
+
+        promise = $http
+            method: "POST"
+            url: 'user/profile/save'
+            headers:
+                "Content-Type": "application/json"
+            data:
+                identifier: $scope.identifierInfo.field
+                lastName: $scope.lastNameInfo.field
+                firstName: $scope.firstNameInfo.field
+                email: $scope.emailInfo.field
+
+        promise.success (data, status, headers, config) ->
+            messageFlash.displaySuccess "CHANGES_SAVED"
+            $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field
+            $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field
             $scope.isLoading = false
-            if data?
-                messageFlash.displaySuccess "Your changes have been saved !"
-            else
-                messageFlash.displayError data.message
             return
 
+        promise.error (data, status, headers, config) ->
+            messageFlash.displayError data.message
+            $scope.isLoading = false
+            return
+
+        return false
+
     $scope.setNewEmail = (newEmail) ->
-        $scope.user.email = newEmail
+        $scope.emailInfo.field = newEmail
+        $scope.$root.currentPerson.email = newEmail
 
     $scope.changeEmail = () ->
-        modalService.show(modalService.EMAIL_CHANGE, { oldEmail: $scope.user.email, cb : $scope.setNewEmail })
+        modalService.show(modalService.EMAIL_CHANGE, { oldEmail: $scope.emailInfo.field, cb : $scope.setNewEmail })
 
     $scope.changePassword = () ->
         modalService.show(modalService.PASSWORD_CHANGE, {})
-
-
-
-
