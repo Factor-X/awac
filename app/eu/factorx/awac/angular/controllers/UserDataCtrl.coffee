@@ -13,12 +13,12 @@ angular
         fieldTitle: "USER_PASSWORD"
         fieldType: "password"
         disabled: true
-        field: "***"
+        field: "*****"
 
     $scope.lastNameInfo =
         fieldTitle: "USER_LASTNAME"
         validationRegex: "^\\S{1,255}$"
-        validationMessage: "LASTNAME_VALIDATION_WRONG_LENGTH"
+        validationMessage: "USER_LASTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.lastName
         hideIsValidIcon: true
         isValid: true
@@ -28,7 +28,7 @@ angular
         fieldTitle: "USER_FIRSTNAME"
         fieldType: "text"
         validationRegex: "^\\S{1,255}$"
-        validationMessage: "FIRSTNAME_VALIDATION_WRONG_LENGTH"
+        validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.firstName
         hideIsValidIcon: true
         isValid: true

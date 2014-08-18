@@ -6,7 +6,7 @@ angular
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
         placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER"
-        validationRegex: /^\S{5,20}$/g
+        validationRegex: "^\\S{5,20}$"
         validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
@@ -15,7 +15,7 @@ angular
     $scope.passwordInfo =
         fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
         fieldType: "password"
-        validationRegex: /^\S{5,20}$/g
+        validationRegex: "^\\S{5,20}$"
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false

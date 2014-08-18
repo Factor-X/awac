@@ -18,8 +18,6 @@ public class DTO implements Content {
 	private String __type;
 
 	public static <T extends DTO> T getDTO(JsonNode data, Class<T> type) {
-		Logger.info(">>>>>>> getDTO() - data = " + data);
-		Logger.info(">>>>>>> getDTO() - type = " + type);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonParser jp = data.traverse();
 		try {

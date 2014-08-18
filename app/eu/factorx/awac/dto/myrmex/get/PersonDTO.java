@@ -1,12 +1,11 @@
 package eu.factorx.awac.dto.myrmex.get;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.validation.annotations.NotNull;
-import eu.factorx.awac.dto.validation.annotations.Pattern;
 
+/**
+ * Created by florian on 4/07/14.
+ */
 public class PersonDTO extends DTO {
-	@NotNull
-	@Pattern(regexp = "/.*/")
 	private String identifier;
 	private String firstName;
 	private String lastName;

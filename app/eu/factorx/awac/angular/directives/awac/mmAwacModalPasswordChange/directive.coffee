@@ -15,7 +15,7 @@ angular
             if $scope.newPasswordConfirmInfo.field.match("^\\S{5,20}$")
                 if ($scope.newPasswordInfo.field == $scope.newPasswordConfirmInfo.field)
                     return true
-                $scope.newPasswordConfirmInfo.validationMessage = "Passwords do not match!"
+                $scope.newPasswordConfirmInfo.validationMessage = "PASSWORD_VALIDATION_WRONG_CONFIRMATION"
             else
                 $scope.newPasswordConfirmInfo.validationMessage = "PASSWORD_VALIDATION_WRONG_LENGTH"
             return false
