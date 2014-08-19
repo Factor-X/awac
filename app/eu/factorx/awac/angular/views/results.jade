@@ -1,10 +1,10 @@
-ng-virtual
+div
     h1 Results
 
     br
 
 
-    table.result_table
+    table.result_table(ng-show="o.reportLines != null")
         tr
             td
                 table.indicators_table
