@@ -2,47 +2,63 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#
 # Home page
-GET     /                           @eu.factorx.awac.controllers.Application.index()
+#
+GET     /                                         @eu.factorx.awac.controllers.Application.index()                                                  
+GET     /translations/:lang                       @eu.factorx.awac.controllers.Translation.fetch(lang:String)                                       
 
-GET     /translations/:lang         @eu.factorx.awac.controllers.Translation.fetch(lang:String)
+#
+# Notifications
+#
+GET     /notifications/get_notifications          @eu.factorx.awac.controllers.NotificationController.getNotifications()
 
+#
+# Login rest api
+#
+POST    /login                                    @eu.factorx.awac.controllers.AuthenticationController.authenticate()                              
+POST    /logout                                   @eu.factorx.awac.controllers.AuthenticationController.logout()                                    
+POST    /testAuthentication                       @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()                        
 
-# login rest api
-POST    /login                      @eu.factorx.awac.controllers.AuthenticationController.authenticate()
-POST    /logout                     @eu.factorx.awac.controllers.AuthenticationController.logout()
-POST    /testAuthentication         @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()
-
+#
 # VIES Service
-GET     /vies/vatcheck/:uid/:vat    @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
+#
+GET     /vies/vatcheck/:uid/:vat                  @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)             
 
+#
 # Javascript routing
-GET    /assets/javascripts/routes   @eu.factorx.awac.controllers.Application.javascriptRoutes()
+#
+GET     /assets/javascripts/routes                @eu.factorx.awac.controllers.Application.javascriptRoutes()                                       
 
-
+#
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+#
+GET     /assets/*file                             controllers.Assets.at(path="/public", file)                                                       
+GET     /tests                                    eu.factorx.awac.controllers.TestController.index()                                                
 
-GET     /tests                      eu.factorx.awac.controllers.TestController.index()
+#
+# Answer controller => used to save answer
+#
+GET     /answer/getByForm/:form/:period/:scope    @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
+POST    /answer/save                              @eu.factorx.awac.controllers.AnswerController.save()                                              
+GET     /answer/getPeriodsForComparison/:scope    @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)                
+POST    /answer/formProgress                      @eu.factorx.awac.controllers.AnswerController.setFormProgress()                                   
+GET     /answer/formProgress/:period/:scope       @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)        
 
-
-#answer controller => used to save answer
-GET     /answer/getByForm/:form/:period/:scope          @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
-POST    /answer/save                                    @eu.factorx.awac.controllers.AnswerController.save()
-GET     /answer/getPeriodsForComparison/:scope          @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
-POST	/answer/formProgress							@eu.factorx.awac.controllers.AnswerController.setFormProgress()
-GET		/answer/formProgress/:period/:scope				@eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)
-
-
+#
 # ResultController => used to get report
-GET     /result/getReport/:period/:scope         @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)
+#
+GET     /result/getReport/:period/:scope          @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)              
 
+#
+# Upload
+#
+POST    /file/upload/                             @eu.factorx.awac.controllers.FilesController.upload()                                             
+GET     /file/download/:storedFileId              @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)                         
 
-# upload
-POST     /file/upload/                           @eu.factorx.awac.controllers.FilesController.upload()
-GET      /file/download/:storedFileId            @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
-
+#
 # user profile
+#
 GET     /user/profile                            @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()
 POST    /user/profile/save                       @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
 POST    /user/email/save                         @eu.factorx.awac.controllers.UserProfileController.updateEmail()

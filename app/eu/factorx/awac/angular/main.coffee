@@ -2,7 +2,7 @@
 # Modules
 #
 
-angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'dangle']
+angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']
 
 angular.module 'app.filters', []
 
@@ -36,6 +36,11 @@ angular
     .when('/login', {
             templateUrl: '$/angular/views/login.html'
             controller: 'LoginCtrl'
+        }
+    )
+    .when('/admin', {
+            templateUrl: '$/angular/views/admin.html'
+            controller: 'AdminCtrl'
         }
     )
     .when('/user_data/:period/:scope', {

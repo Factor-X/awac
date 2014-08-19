@@ -1,3 +1,6 @@
+ul.messenger > li {
+    box-shadow: none !important;
+}
 ul.messenger-theme-flat .messenger-message.alert-success {
     background: #5fca4a;
     color: #183313;
