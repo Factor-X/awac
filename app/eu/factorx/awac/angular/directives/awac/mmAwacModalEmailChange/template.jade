@@ -4,9 +4,9 @@
         .modal-content
             .modal-header
                 button.button(type="button",ng-click="close()")
-                    span(aria-hidden="true") &times;<span
-                    span(class="sr-only") Close
-                h4(class="modal-title",id="myModalLabel") {{ "EMAIL_CHANGE_FORM_TITLE" | translate }}
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(class="modal-title",id="myModalLabel", ng-bind-html="'EMAIL_CHANGE_FORM_TITLE' | translate")
 
             .modal-body
                 .field_form
@@ -23,13 +23,13 @@
                     button.button(type="button",
                     class="btn btn-primary",
                     ng-click="save();",
-                    ng-disabled="!allFieldValid()")
-                        | Save
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SAVE_BUTTON' | translate")
 
                     button.button(type="button",
                     class="btn btn-primary",
-                    ng-click="close();")
-                        | Cancel
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
 
                 img(ng-show="isLoading",src="/awac/assets/images/modal-loading.gif")
 

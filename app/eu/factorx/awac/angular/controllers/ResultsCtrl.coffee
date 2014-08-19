@@ -1,8 +1,7 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, downloadService, $http,displayFormMenu) ->
-
-    $scope.displayFormMenu=displayFormMenu
+.controller "ResultsCtrl", ($scope, downloadService, $http, displayFormMenu) ->
+    $scope.displayFormMenu = displayFormMenu
 
     $scope.graphs = {}
 
@@ -11,10 +10,9 @@ angular
 
 
         # All scopes
-        totalScope1 = 10;
-        totalScope2 = 10;
-        totalScope3 = 10;
-
+        totalScope1 = 0;
+        totalScope2 = 0;
+        totalScope3 = 0;
         for rl in $scope.o.reportLines
             totalScope1 += rl.scope1Value
             totalScope2 += rl.scope2Value
@@ -23,6 +21,7 @@ angular
         $scope.graphs.allScopes =
             _type: 'terms'
             missing: 0
+            visible: (totalScope1 + totalScope2 + totalScope3 > 0)
             total: totalScope1 + totalScope2 + totalScope3
             other: 0
             terms: [
@@ -39,4 +38,36 @@ angular
                     count: totalScope3
                 }
             ]
+
+
+        # Scope 1
+        data = []
+        for rl in $scope.o.reportLines
+            if rl.scope1Value > 0
+                data.push
+                    label: rl.indicatorName,
+                    value: rl.scope1Value
+
+        $scope.graphs.scope1 = data
+
+        # Scope 1
+        data = []
+        for rl in $scope.o.reportLines
+            if rl.scope2Value > 0
+                data.push
+                    label: rl.indicatorName,
+                    value: rl.scope2Value
+
+        $scope.graphs.scope2 = data
+
+        # Scope 1
+        data = []
+        for rl in $scope.o.reportLines
+            if rl.scope3Value > 0
+                data.push
+                    label: rl.indicatorName,
+                    value: rl.scope3Value
+
+        $scope.graphs.scope3 = data
+
 

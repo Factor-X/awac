@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService,tmhDynamicLocale) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService, tmhDynamicLocale) ->
 
     #
     # First loading
@@ -82,8 +82,8 @@ angular
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
             # used to recompute the displaying of the menu
-            if !$scope.$$phase
-                $scope.$apply()
+            #if !$scope.$$phase
+            #    $scope.$apply()
 
     #
     # Periods
@@ -223,8 +223,9 @@ angular
                     return 'content-without-menu'
         return ''
 
+
 #rootScope
-angular.module('app').run ($rootScope, $location, $http)->
+angular.module('app').run ($rootScope, $location, $http, downloadService, messageFlash, $timeout)->
 
 
     #
@@ -291,4 +292,16 @@ angular.module('app').run ($rootScope, $location, $http)->
     promise.error (data, status, headers, config) ->
         return
 
+    #
+    # Get notifications and show them every hour
+    #
+    $rootScope.refreshNotifications = () ->
+        # fetch and display
+        downloadService.getJson 'notifications/get_notifications', (data) ->
+            if data?
+                for n in data.notifications
+                    messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
+        # schedule a refresh
+        $timeout $rootScope.refreshNotifications, 3600 * 1000
 
+    $rootScope.refreshNotifications()

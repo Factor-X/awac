@@ -1,17 +1,34 @@
 ng-virtual
     h1 Results
 
-    table.result_table(border="1")
-        thead
-            th
-            th Scope 1
-            th Scope 2
-            th Scope 3
-        tbody
-            tr(ng-repeat="rl in o.reportLines")
-                td(ng-bind-html="rl.indicatorName")
-                td(ng-bind-html="rl.scope1Value | numberToI18N")
-                td(ng-bind-html="rl.scope2Value | numberToI18N")
-                td(ng-bind-html="rl.scope3Value | numberToI18N")
+    br
 
-    fs-donut(bind="graphs.allScopes")
+
+    table.result_table
+        tr
+            td
+                table.indicators_table
+                    thead
+                        th(width="100%")
+                        th.align-right Scope 1
+                        th.align-right Scope 2
+                        th.align-right Scope 3
+                    tbody
+                        tr(ng-repeat="rl in o.reportLines")
+                            td(ng-bind-html="rl.indicatorName")
+                            td(ng-bind-html="rl.scope1Value | numberToI18N")
+                            td(ng-bind-html="rl.scope2Value | numberToI18N")
+                            td(ng-bind-html="rl.scope3Value | numberToI18N")
+        tr
+            td
+                b Scope 1
+                br
+                mm-awac-graph-donut(ng-items="graphs.scope1")
+
+                b Scope 2
+                br
+                mm-awac-graph-donut(ng-items="graphs.scope2")
+
+                b Scope 3
+                br
+                mm-awac-graph-donut(ng-items="graphs.scope3")

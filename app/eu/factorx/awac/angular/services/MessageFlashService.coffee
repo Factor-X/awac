@@ -6,31 +6,31 @@ angular
     #
     # display a success message
     # TODO => display multiple messages
-    @displaySuccess = (message) ->
-        Messenger().post
+    @display = (type, message, opts) ->
+        options =
             message: message
-            type: 'success'
+            type: type
             hideAfter: 5
             showCloseButton: true
+
+        Messenger().post angular.extend(options, angular.copy(opts))
+
+    #
+    # display a success message
+    # TODO => display multiple messages
+    @displaySuccess = (message, opts) ->
+        @display('success', message, opts)
 
     #
     # display an info message
     # TODO => display multiple messages
-    @displayInfo = (message) ->
-        Messenger().post
-            message: message
-            type: 'info'
-            hideAfter: 5
-            showCloseButton: true
+    @displayInfo = (message, opts) ->
+        @display('info', message, opts)
 
     #
     # display an error message
     # TODO => display multiple messages
-    @displayError = (message) ->
-        Messenger().post
-            message: message
-            type: 'error'
-            hideAfter: 5
-            showCloseButton: true
+    @displayError = (message, opts) ->
+        @display('error', message, opts)
 
     return

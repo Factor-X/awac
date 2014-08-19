@@ -1,0 +1,31 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'update',
+1 verbose cli   '-g',
+1 verbose cli   'bower' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 verbose url raw bower
+5 verbose url resolving [ 'https://registry.npmjs.org/', './bower' ]
+6 verbose url resolved https://registry.npmjs.org/bower
+7 info trying registry request attempt 1 at 10:40:31
+8 verbose etag "3O48P1JVAEJTUTBN4RX6BV3YG"
+9 http GET https://registry.npmjs.org/bower
+10 info outdated updating []
+11 error Failed to parse json
+11 error Unexpected end of input
+12 error File: /usr/local/lib/node_modules/jade/node_modules/with/node_modules/uglify-js/node_modules/async/package.json
+13 error Failed to parse package.json data.
+13 error package.json must be actual JSON, not just JavaScript.
+13 error
+13 error This is not a bug in npm.
+13 error Tell the package author to fix their package.json file. JSON.parse
+14 error System Linux 3.2.0-67-generic
+15 error command "/usr/local/bin/node" "/usr/local/bin/npm" "update" "-g" "bower"
+16 error cwd /home/gaetan/Projects/awac3/awac
+17 error node -v v0.10.26
+18 error npm -v 1.4.3
+19 error file /usr/local/lib/node_modules/jade/node_modules/with/node_modules/uglify-js/node_modules/async/package.json
+20 error code EJSONPARSE
+21 verbose exit [ 1, true ]

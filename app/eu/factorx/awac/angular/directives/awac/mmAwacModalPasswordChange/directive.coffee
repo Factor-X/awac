@@ -19,7 +19,7 @@ angular
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             field: ""
             isValid: false
-            autofocus: true
+            focus: true
 
         $scope.newPasswordInfo =
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE"
@@ -40,7 +40,7 @@ angular
             isValid: false
 
         $scope.allFieldValid = () ->
-            if $scope.newPasswordInfo.isValid && newPasswordInfoRepeat.isValid && (newPasswordInfo.field == newPasswordInfoRepeat.field)
+            if $scope.newPasswordInfo.isValid && $scope.newPasswordInfoRepeat.isValid && ($scope.newPasswordInfo.field == $scope.newPasswordInfoRepeat.field)
                 return true
             return false
 
