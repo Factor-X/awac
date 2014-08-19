@@ -30,7 +30,12 @@ public class BaseActivityDataAE_BAD5 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("kg");
 
 		// For each set of answers in A42, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA42 = questionSetAnswers.get(QuestionCode.A42);		if (questionSetAnswersA42 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA42) {
+		List<QuestionSetAnswer> questionSetAnswersA42 = questionSetAnswers.get(QuestionCode.A42);
+		if (questionSetAnswersA42 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA42) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -48,7 +53,7 @@ public class BaseActivityDataAE_BAD5 extends ActivityResultContributor {
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD5);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_2);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_3);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_5);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_8);
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA43Answer));

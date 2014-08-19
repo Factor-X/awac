@@ -81,7 +81,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD6);
 			baseActivityData.setRank(3);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_2);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_3);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_5);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_10);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_161);

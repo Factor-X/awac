@@ -55,7 +55,7 @@ public class BaseActivityDataAE_BAD2A extends ActivityResultContributor {
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_1);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-			baseActivityData.setActivitySource(ActivitySourceCode.AS_43);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
 			baseActivityData.setActivityOwnership(true);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA24Answer, baseActivityDataUnit));
