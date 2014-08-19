@@ -357,11 +357,11 @@ select {
 }
 
 .menu > * {
-    min-width: 14%;
-    width: 14%;
-    max-width: 14%;
+    min-width: calc((100% / 6.0) - 6px);
+    width: calc((100% / 6.0) - 6px);
+    max-width: calc((100% / 6.0) - 6px);
     position: relative;
-    margin: 0px 1px;
+    margin: 0px 3px;
 }
 
 .nav_entreprise > div {
@@ -1589,15 +1589,15 @@ ul.messenger > li {
     padding: 0.5em 1em;
     border-bottom: dotted #666 1px;
 }
+
 .indicators_table > tbody > tr > td {
     border-left: dotted #666 1px;
     border-right: dotted #666 1px;
 }
 
-.indicators_table > tbody > tr:hover{
+.indicators_table > tbody > tr:hover {
     background: #d7edd5;
 }
-
 
 .chart-legend {
     text-align: left;
