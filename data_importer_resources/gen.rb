@@ -473,27 +473,42 @@ end
 
 # Create the options lists
 
-puts "BEGIN_CODE"
+puts "BEGIN WRITING CODE..."
+
+path = "/tmp/codes/"
+
+dirName = File.dirname(path)
+unless File.directory?(dirName)
+  FileUtils.mkdir_p(dirName)
+end
+
+stringContent=""
+
 for t in tabs
 
-  puts make_tab(t)
+  stringContent+=make_tab(t)
 
 end
 
 for qs in question_sets
 
-  puts make_question_set(qs)
+  stringContent+=make_question_set(qs)
 
 end
 
 
 for q in questions
 
-  puts make_question(q)
+  stringContent+=make_question(q)
 
 end
 
-puts "END_CODE"
+puts "CODE WRTIGING SUCCESSFULL INTO : "+path+"method_structure.txt"
+
+file = File.open(path+'method_structure.txt', 'w')
+file.write(stringContent)
+
+
 
 
 b = Spreadsheet::Workbook.new

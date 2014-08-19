@@ -1,0 +1,4 @@
+- lancer la moulinette pour générer les trads.
+- réimplémenter les trad. dans la DB
+- désactiver "Gérer les sites" et "Gérer les utilisateurs"
+- (éventuellement) désactiver "resultat"
