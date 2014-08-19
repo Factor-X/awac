@@ -1,0 +1,12 @@
+<FindBugsFilter>
+    <!-- See docs/examples at http://findbugs.sourceforge.net/manual/filter.html -->
+    <Match>
+        <Class name="~eu.factorx.awac.views\.html\..*"/>
+    </Match>
+    <Match>
+        <Class name="~eu.factorx.awac.Routes.*"/>
+    </Match>
+    <Match>
+        <Class name="~eu.factorx.awac.controllers\.routes.*"/>
+    </Match>
+</FindBugsFilter>
