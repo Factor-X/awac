@@ -5,9 +5,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
 
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
+import jxl.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
@@ -93,16 +91,19 @@ public abstract class WorkbookDataImporter {
 	}
 
 	protected static Double getNumericCellContent(Sheet sheet, int column, int row) {
-		String cellContents = StringUtils.trimToNull(sheet.getCell(column, row).getContents());
-		if (cellContents == null) {
-			return null;
+		Cell cell = sheet.getCell(column, row);
+		Double value = null;
+		if (cell instanceof NumberCell) {
+			value = ((NumberCell) cell).getValue();
+		} else {
+			String cellContents = StringUtils.trimToNull(cell.getContents());
+			try {
+				value = NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
+			} catch (ParseException e) {
+				throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", " + column + "} : " + cellContents, e);
+			}
 		}
-		try {
-			return NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
-		} catch (ParseException e) {
-			throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", " + column + "} : "
-					+ cellContents, e);
-		}
+		return value;
 	}
 
 	protected <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
