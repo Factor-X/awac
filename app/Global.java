@@ -9,14 +9,17 @@
  *
  */
 
+import eu.factorx.awac.InitializationThread;
 import eu.factorx.awac.compilers.RecompilerThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -34,8 +37,6 @@ import play.Play;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
-
-import org.springframework.transaction.annotation.Transactional;
 
 // Spring imports
 

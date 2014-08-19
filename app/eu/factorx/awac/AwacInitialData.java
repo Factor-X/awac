@@ -13,11 +13,15 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.util.data.importer.*;
 import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
+import play.Logger;
 import play.db.jpa.JPA;
 
 public class AwacInitialData {
 
 	public static void createAwacInitialData(ApplicationContext ctx, Session session) {
+
+		Logger.info("===> CREATE AWAC INITIAL DATA -- START");
+		long startTime = System.currentTimeMillis();
 
 		// IMPORT MYRMEX UNITS
 		new MyrmexUnitsImporter(session).run();
@@ -52,6 +56,8 @@ public class AwacInitialData {
 		}
 
 		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
+
+		Logger.info("===> CREATE AWAC INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
 	}
 
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,

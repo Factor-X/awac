@@ -6,12 +6,24 @@ angular
         ngInfo: '='
     templateUrl: "$/angular/templates/mm-awac-modal-field-text.html"
     replace: true
-    link: (scope, element) ->
+    transclude: true
+    link: (scope) ->
         directiveService.autoScopeImpl scope
 
-        scope.getInfo().isValid = !scope.getInfo().validationRegex?
+        scope.isValidationDefined = scope.getInfo().validationRegex? || scope.getInfo().validationFct?
+        scope.hideIsValidIcon = !!scope.getInfo().hideIsValidIcon
+        scope.fieldType = if (scope.getInfo().fieldType?) then scope.getInfo().fieldType else "text"
 
-        scope.$watch 'getInfo().field', (n, o) ->
-            if n != o && scope.getInfo().validationRegex?
-                scope.getInfo().isValid = scope.getInfo().field.match(scope.getInfo().validationRegex)
+        if !scope.getInfo().isValid?
+            scope.getInfo().isValid = !scope.isValidationDefined
+
+        if scope.isValidationDefined
+            scope.$watch 'getInfo().field', (n, o) ->
+                if n != o
+                    isValid = true
+                    if scope.getInfo().validationRegex?
+                        isValid = scope.getInfo().field.match(scope.getInfo().validationRegex)
+                    if scope.getInfo().validationFct?
+                        isValid = isValid && scope.getInfo().validationFct()
+                    scope.getInfo().isValid = isValid
             return

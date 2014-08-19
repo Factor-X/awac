@@ -1408,6 +1408,10 @@ h1 {
     color: black;
 }
 
+input:disabled {
+    background: #dddddd;
+}
+
 .condition-false{
     display: none !important;
 }
@@ -1483,50 +1487,6 @@ h1 {
 
 .dtable-cell {
     display: table-cell;
-}
-
-.user_data
-{
-    width: 40%;
-    min-width: 600px;
-}
-
-.fields
-{
-    display: table;
-    width: 100%;
-    padding: 30px;
-}
-
-.fields .field {
-    display: table-row;
-    padding: 30px;
-}
-
-.fields .field .label {
-    display: table-cell;
-    width: 30%;
-    min-width: 150px;
-    text-align: left;
-    padding: 5px;
-    padding-right: 10px;
-    color: #3c3b37;
-    font-size:12px;
-}
-
-.fields .field .editor {
-    display: table-cell;
-    width: 70%;
-    min-width: 300px;
-    padding: 5px;
-}
-
-.fields .field .editor > *{
-    width: 100%;
-}
-.actions {
-    text-align: right;
-    padding: 30px;
 }
 
 .result_table{

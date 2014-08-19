@@ -6,7 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.Validator;
-import eu.factorx.awac.util.MyrmexRunTimeException;
+import eu.factorx.awac.util.MyrmexRuntimeException;
+import play.Logger;
 import play.mvc.Content;
 
 import java.io.IOException;
@@ -22,13 +23,13 @@ public class DTO implements Content {
 		try {
 			T dto = mapper.readValue(jp, type);
 			if (dto == null) {
-				throw new MyrmexRunTimeException("Validation of DTO creation");
+				throw new MyrmexRuntimeException("Validation of DTO creation");
 			}
 			dto.validate();
 			return dto;
 
 		} catch (IOException e) {
-			throw new MyrmexRunTimeException("Validation of DTO creation");
+			throw new MyrmexRuntimeException(e, "Validation of DTO creation");
 		}
 	}
 
@@ -38,7 +39,7 @@ public class DTO implements Content {
 
 	public void set__type(String __type) {
 		if (!get__type().equals(__type)) {
-			throw new MyrmexRunTimeException("Wrong type of DTO received");
+			throw new MyrmexRuntimeException("Wrong type of DTO received");
 		}
 	}
 
@@ -48,7 +49,7 @@ public class DTO implements Content {
 		try {
 			return mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			throw new MyrmexRunTimeException(e, e.getMessage());
+			throw new MyrmexRuntimeException(e, e.getMessage());
 		}
 	}
 
@@ -61,7 +62,7 @@ public class DTO implements Content {
 		try {
 			Validator.validate(this);
 		} catch (Exception e) {
-			throw new MyrmexRunTimeException("Validation failed for DTO: " + e.getMessage());
+			throw new MyrmexRuntimeException("Validation failed for DTO: " + e.getMessage());
 		}
 	}
 

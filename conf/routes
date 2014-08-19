@@ -47,3 +47,6 @@ GET     /user/profile                            @eu.factorx.awac.controllers.Us
 POST    /user/profile/save                       @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
 POST    /user/email/save                         @eu.factorx.awac.controllers.UserProfileController.updateEmail()
 POST    /user/password/save                      @eu.factorx.awac.controllers.UserProfileController.updatePassword()
+
+# admin
+GET		/admin/translations/reset				 @eu.factorx.awac.controllers.AdminController.resetTranslations()
