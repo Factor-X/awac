@@ -63,7 +63,7 @@ public class BaseActivityResult implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BaseActivityResult [indicator='" + indicator.getKey() + "' (scope " + indicator.getIsoScope().getKey() +  "), activityData='" + activityData.getKey().getKey() + "', factor='" + factor.getKey() + "']";
+		return "BaseActivityResult [indicator='" + indicator.getKey() + "' (scope " + indicator.getIsoScope().getKey() +  "), activityData='" + activityData.getKey().getKey() + "', factor='" + factor.getKey() + "', value = " + getNumericValue() + "]";
 	}
 
 }
