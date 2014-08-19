@@ -5,12 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -28,7 +23,7 @@ public class BaseActivityDataAE_BAD12M extends ActivityResultContributor {
 
 		// Get Target Unit (euros in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.euros)
-		Unit baseActivityDataUnit = getUnitBySymbol("EUR");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5170);
 
 		// For each set of answers in A94, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA94 = questionSetAnswers.get(QuestionCode.A94);

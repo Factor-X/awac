@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -27,7 +23,7 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 
 		// Get Target Unit (employé in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.employé)
-		Unit baseActivityDataUnit = getUnitBySymbol("employé");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5336);
 
 		// Get reference Number of Employees
 		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...

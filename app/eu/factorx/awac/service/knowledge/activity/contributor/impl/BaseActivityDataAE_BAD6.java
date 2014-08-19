@@ -5,12 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -28,7 +23,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 
 		// Get Target Unit (kW in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = getUnitBySymbol("kW");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5324);
 
 		// Get reference Electrical Consumption
 		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);
@@ -91,7 +86,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 				baseActivityData.setValue(0.0);
 			} else {
 			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
+				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitByCode(UnitCode.U5147)));
 			}
 			res.add(baseActivityData);
 		}

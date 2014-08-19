@@ -23,7 +23,7 @@ public class BaseActivityDataAE_BAD27L extends ActivityResultContributor {
 
 		// Get Target Unit (euros in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.euros)
-		Unit baseActivityDataUnit = getUnitBySymbol("EUR");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5170);
 
 		// For each set of answers in A209, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA209 = questionSetAnswers.get(QuestionCode.A209);

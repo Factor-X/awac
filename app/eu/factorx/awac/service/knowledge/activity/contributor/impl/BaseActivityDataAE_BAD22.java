@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -26,7 +23,7 @@ public class BaseActivityDataAE_BAD22 extends ActivityResultContributor {
 
 		// Get Target Unit (équivalent.habitant in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
-		Unit baseActivityDataUnit = getUnitBySymbol("équivalent.habitant");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5330);
 
 		// For each set of answers in A185, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA185 = questionSetAnswers.get(QuestionCode.A185);		if (questionSetAnswersA185 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA185) {

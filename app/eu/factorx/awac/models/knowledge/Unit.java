@@ -1,17 +1,12 @@
 package eu.factorx.awac.models.knowledge;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.UnitCode;
 
 @Entity
 @Table(name = "unit")
@@ -23,6 +18,8 @@ import eu.factorx.awac.models.AbstractEntity;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Unit extends AbstractEntity {
 
+	private static final long serialVersionUID = 1L;
+
 	public static final String COLUMN_NAME_REF = "ref";
 	public static final String COLUMN_NAME_SYMBOL = "symbol";
 	public static final String FIND_ALL = "Unit.findAll";
@@ -30,13 +27,14 @@ public class Unit extends AbstractEntity {
 	 * @param symbol : a {@link String}
 	 */
 	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
-	private static final long serialVersionUID = 1L;
+
 	// TODO labels? i18n?
 	@Column(nullable = true)
 	private String name = null;
 
-	@Column(name = COLUMN_NAME_REF, nullable = false, unique = true)
-	private String ref;
+	@Embedded
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = COLUMN_NAME_REF))})
+	private UnitCode unitCode;
 
 	@Column(name = COLUMN_NAME_SYMBOL, nullable = false)
 	private String symbol;
@@ -48,20 +46,20 @@ public class Unit extends AbstractEntity {
 		super();
 	}
 
-	public Unit(String ref, String name, String symbol, UnitCategory category) {
+	public Unit(UnitCode unitCode, String name, String symbol, UnitCategory category) {
 		super();
-		this.ref = ref;
+		this.unitCode = unitCode;
 		this.name = name;
 		this.symbol = symbol;
 		this.category = category;
 	}
 
-	public String getRef() {
-		return ref;
+	public UnitCode getUnitCode() {
+		return unitCode;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setUnitCode(UnitCode unitCode) {
+		this.unitCode = unitCode;
 	}
 
 	public String getName() {

@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -24,7 +20,7 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		Unit baseActivityDataUnit = getUnitBySymbol("l");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
 			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {

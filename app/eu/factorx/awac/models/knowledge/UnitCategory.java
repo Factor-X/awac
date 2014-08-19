@@ -2,18 +2,13 @@ package eu.factorx.awac.models.knowledge;
 
 import java.util.List;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.UnitCategoryCode;
 
 @Entity
 @Table(name = "unit_category")
@@ -24,12 +19,16 @@ import eu.factorx.awac.models.AbstractEntity;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UnitCategory extends AbstractEntity {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @param String name : a {@link String}
 	 */
 	public static final String FIND_BY_NAME = "UnitCategory.findByName";
-	private static final long serialVersionUID = 1L;
-	private String ref;
+
+	@Embedded
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "ref"))})
+	private UnitCategoryCode unitCategoryCode;
 
 	// TODO i18n?
 	private String name;
@@ -47,20 +46,20 @@ public class UnitCategory extends AbstractEntity {
 		super();
 	}
 
-	public UnitCategory(String ref, String name, String symbol, Unit mainUnit) {
+	public UnitCategory(UnitCategoryCode unitCategoryCode, String name, String symbol, Unit mainUnit) {
 		super();
-		this.ref = ref;
+		this.unitCategoryCode = unitCategoryCode;
 		this.name = name;
 		this.symbol = symbol;
 		this.mainUnit = mainUnit;
 	}
 
-	public String getRef() {
-		return ref;
+	public UnitCategoryCode getUnitCategoryCode() {
+		return unitCategoryCode;
 	}
 
-	public void setRef(String ref) {
-		this.ref = ref;
+	public void setUnitCategoryCode(UnitCategoryCode unitCategoryCode) {
+		this.unitCategoryCode = unitCategoryCode;
 	}
 
 	public String getName() {
