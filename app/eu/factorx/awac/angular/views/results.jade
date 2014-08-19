@@ -10,8 +10,11 @@ ng-virtual
         tbody
             tr(ng-repeat="rl in o.reportLines")
                 td(ng-bind-html="rl.indicatorName")
-                td(ng-bind-html="rl.scope1Value | numberToI18N")
-                td(ng-bind-html="rl.scope2Value | numberToI18N")
-                td(ng-bind-html="rl.scope3Value | numberToI18N")
+                td
+                    div(ng-bind-html="rl.scope1Value | numberToI18N", ng-show="rl.scope1Value!=0")
+                td
+                    div(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope1Value!=0")
+                td
+                    div(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope1Value!=0")
 
     fs-donut(bind="graphs.allScopes")
