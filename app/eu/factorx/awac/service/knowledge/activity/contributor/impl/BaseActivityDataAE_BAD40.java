@@ -24,7 +24,12 @@ public class BaseActivityDataAE_BAD40 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5324);
 
 		// For each set of answers in A45, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA45 = questionSetAnswers.get(QuestionCode.A45);		if (questionSetAnswersA45 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA45) {
+		List<QuestionSetAnswer> questionSetAnswersA45 = questionSetAnswers.get(QuestionCode.A45);
+		if (questionSetAnswersA45 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA45) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -40,7 +45,7 @@ public class BaseActivityDataAE_BAD40 extends ActivityResultContributor {
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD40);
 			baseActivityData.setRank(2);
 			baseActivityData.setSpecificPurpose(null);
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_2);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_3);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_5);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_10);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_161);

@@ -72,40 +72,40 @@ public class AwacInitialData {
 	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
 
 
-		// == TAB2 ========================================================================
+		// == TABTAB2 =====================================================================
 
-		Form tab2Form = new Form("TAB2");
-		session.saveOrUpdate(tab2Form);
-
-
-		// == TAB3 ========================================================================
-
-		Form tab3Form = new Form("TAB3");
-		session.saveOrUpdate(tab3Form);
+		Form TAB2Form = new Form("TAB2");
+		session.saveOrUpdate(TAB2Form);
 
 
-		// == TAB4 ========================================================================
+		// == TABTAB3 =====================================================================
 
-		Form tab4Form = new Form("TAB4");
-		session.saveOrUpdate(tab4Form);
-
-
-		// == TAB5 ========================================================================
-
-		Form tab5Form = new Form("TAB5");
-		session.saveOrUpdate(tab5Form);
+		Form TAB3Form = new Form("TAB3");
+		session.saveOrUpdate(TAB3Form);
 
 
-		// == TAB6 ========================================================================
+		// == TABTAB4 =====================================================================
 
-		Form tab6Form = new Form("TAB6");
-		session.saveOrUpdate(tab6Form);
+		Form TAB4Form = new Form("TAB4");
+		session.saveOrUpdate(TAB4Form);
 
 
-		// == TAB7 ========================================================================
+		// == TABTAB5 =====================================================================
 
-		Form tab7Form = new Form("TAB7");
-		session.saveOrUpdate(tab7Form);
+		Form TAB5Form = new Form("TAB5");
+		session.saveOrUpdate(TAB5Form);
+
+
+		// == TABTAB6 =====================================================================
+
+		Form TAB6Form = new Form("TAB6");
+		session.saveOrUpdate(TAB6Form);
+
+
+		// == TABTAB7 =====================================================================
+
+		Form TAB7Form = new Form("TAB7");
+		session.saveOrUpdate(TAB7Form);
 
 
 		// == A1 ==========================================================================
@@ -116,8 +116,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a1);
 
 
-		tab2Form.getQuestionSets().add(a1);
-		session.saveOrUpdate(tab2Form);
+		TAB2Form.getQuestionSets().add(a1);
+		session.saveOrUpdate(TAB2Form);
 
 		// == A13 =========================================================================
 		// Consommation de combustibles
@@ -127,8 +127,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a13);
 
 
-		tab2Form.getQuestionSets().add(a13);
-		session.saveOrUpdate(tab2Form);
+		TAB2Form.getQuestionSets().add(a13);
+		session.saveOrUpdate(TAB2Form);
 
 		// == A15 =========================================================================
 		// Combustion de combustible par les sources statiques des sites de l'entreprise
@@ -140,15 +140,18 @@ public class AwacInitialData {
 
 		// == A20 =========================================================================
 		// Electricité et vapeur achetées
-		// A1(Données générales) > A20 (Electricité et vapeur achetées)
+		// A20 (Electricité et vapeur achetées)
 
-		QuestionSet a20 = new QuestionSet(QuestionCode.A20, false, a1);
+		QuestionSet a20 = new QuestionSet(QuestionCode.A20, false, null);
 		session.saveOrUpdate(a20);
 
 
+		TAB2Form.getQuestionSets().add(a20);
+		session.saveOrUpdate(TAB2Form);
+
 		// == A22 =========================================================================
 		// Electricité
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A22 (Electricité)
+		// A20(Electricité et vapeur achetées) > A22 (Electricité)
 
 		QuestionSet a22 = new QuestionSet(QuestionCode.A22, false, a20);
 		session.saveOrUpdate(a22);
@@ -156,7 +159,7 @@ public class AwacInitialData {
 
 		// == A25 =========================================================================
 		// Vapeur
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A25 (Vapeur)
+		// A20(Electricité et vapeur achetées) > A25 (Vapeur)
 
 		QuestionSet a25 = new QuestionSet(QuestionCode.A25, true, a20);
 		session.saveOrUpdate(a25);
@@ -164,15 +167,18 @@ public class AwacInitialData {
 
 		// == A31 =========================================================================
 		// GES des processus de production
-		// A1(Données générales) > A31 (GES des processus de production)
+		// A31 (GES des processus de production)
 
-		QuestionSet a31 = new QuestionSet(QuestionCode.A31, false, a1);
+		QuestionSet a31 = new QuestionSet(QuestionCode.A31, false, null);
 		session.saveOrUpdate(a31);
 
 
+		TAB2Form.getQuestionSets().add(a31);
+		session.saveOrUpdate(TAB2Form);
+
 		// == A34 =========================================================================
 		// Type de GES émis par la production
-		// A1(Données générales) > A31(GES des processus de production) > A34 (Type de GES émis par la production)
+		// A31(GES des processus de production) > A34 (Type de GES émis par la production)
 
 		QuestionSet a34 = new QuestionSet(QuestionCode.A34, true, a31);
 		session.saveOrUpdate(a34);
@@ -180,15 +186,18 @@ public class AwacInitialData {
 
 		// == A37 =========================================================================
 		// Systèmes de refroidissement
-		// A1(Données générales) > A37 (Systèmes de refroidissement)
+		// A37 (Systèmes de refroidissement)
 
-		QuestionSet a37 = new QuestionSet(QuestionCode.A37, false, a1);
+		QuestionSet a37 = new QuestionSet(QuestionCode.A37, false, null);
 		session.saveOrUpdate(a37);
 
 
+		TAB2Form.getQuestionSets().add(a37);
+		session.saveOrUpdate(TAB2Form);
+
 		// == A40 =========================================================================
 		// Méthodes au choix
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40 (Méthodes au choix)
+		// A37(Systèmes de refroidissement) > A40 (Méthodes au choix)
 
 		QuestionSet a40 = new QuestionSet(QuestionCode.A40, false, a37);
 		session.saveOrUpdate(a40);
@@ -196,7 +205,7 @@ public class AwacInitialData {
 
 		// == A41 =========================================================================
 		// Estimation des émissions à partir des recharges de gaz
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41 (Estimation des émissions à partir des recharges de gaz)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41 (Estimation des émissions à partir des recharges de gaz)
 
 		QuestionSet a41 = new QuestionSet(QuestionCode.A41, false, a40);
 		session.saveOrUpdate(a41);
@@ -204,7 +213,7 @@ public class AwacInitialData {
 
 		// == A42 =========================================================================
 		// Listes des types de gaz réfrigérants utilisés
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42 (Listes des types de gaz réfrigérants utilisés)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42 (Listes des types de gaz réfrigérants utilisés)
 
 		QuestionSet a42 = new QuestionSet(QuestionCode.A42, true, a41);
 		session.saveOrUpdate(a42);
@@ -212,7 +221,7 @@ public class AwacInitialData {
 
 		// == A45 =========================================================================
 		// Estimation des émissions à partir de la puissance du groupe de froid
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45 (Estimation des émissions à partir de la puissance du groupe de froid)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45 (Estimation des émissions à partir de la puissance du groupe de froid)
 
 		QuestionSet a45 = new QuestionSet(QuestionCode.A45, false, a40);
 		session.saveOrUpdate(a45);
@@ -220,7 +229,7 @@ public class AwacInitialData {
 
 		// == A47 =========================================================================
 		// Estimation des émissions à partir de la consommation électrique du site
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47 (Estimation des émissions à partir de la consommation électrique du site)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47 (Estimation des émissions à partir de la consommation électrique du site)
 
 		QuestionSet a47 = new QuestionSet(QuestionCode.A47, false, a40);
 		session.saveOrUpdate(a47);
@@ -234,8 +243,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a50);
 
 
-		tab3Form.getQuestionSets().add(a50);
-		session.saveOrUpdate(tab3Form);
+		TAB3Form.getQuestionSets().add(a50);
+		session.saveOrUpdate(TAB3Form);
 
 		// == A52 =========================================================================
 		// Transport routier (méthode au choix)
@@ -373,8 +382,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a128);
 
 
-		tab4Form.getQuestionSets().add(a128);
-		session.saveOrUpdate(tab4Form);
+		TAB4Form.getQuestionSets().add(a128);
+		session.saveOrUpdate(TAB4Form);
 
 		// == A130 ========================================================================
 		// Transport amont
@@ -472,8 +481,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a173);
 
 
-		tab5Form.getQuestionSets().add(a173);
-		session.saveOrUpdate(tab5Form);
+		TAB5Form.getQuestionSets().add(a173);
+		session.saveOrUpdate(TAB5Form);
 
 		// == A175 ========================================================================
 		// Listez vos différents postes de déchets
@@ -571,8 +580,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a205);
 
 
-		tab6Form.getQuestionSets().add(a205);
-		session.saveOrUpdate(tab6Form);
+		TAB6Form.getQuestionSets().add(a205);
+		session.saveOrUpdate(TAB6Form);
 
 		// == A208 ========================================================================
 		// Méthode par détail des achats
@@ -582,8 +591,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a208);
 
 
-		tab6Form.getQuestionSets().add(a208);
-		session.saveOrUpdate(tab6Form);
+		TAB6Form.getQuestionSets().add(a208);
+		session.saveOrUpdate(TAB6Form);
 
 		// == A209 ========================================================================
 		// Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
@@ -617,8 +626,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a229);
 
 
-		tab6Form.getQuestionSets().add(a229);
-		session.saveOrUpdate(tab6Form);
+		TAB6Form.getQuestionSets().add(a229);
+		session.saveOrUpdate(TAB6Form);
 
 		// == A231 ========================================================================
 		// Créez et nommez vos postes d'infrastructure
@@ -644,6 +653,95 @@ public class AwacInitialData {
 		session.saveOrUpdate(a238);
 
 
+		// == A309 ========================================================================
+		// Actifs loués (aval)
+		// A309 (Actifs loués (aval))
+
+		QuestionSet a309 = new QuestionSet(QuestionCode.A309, false, null);
+		session.saveOrUpdate(a309);
+
+
+		TAB6Form.getQuestionSets().add(a309);
+		session.saveOrUpdate(TAB6Form);
+
+		// == A311 ========================================================================
+		// Créez autant de catégories d'actifs loués que nécessaire
+		// A309(Actifs loués (aval)) > A311 (Créez autant de catégories d'actifs loués que nécessaire)
+
+		QuestionSet a311 = new QuestionSet(QuestionCode.A311, true, a309);
+		session.saveOrUpdate(a311);
+
+
+		// == A313 ========================================================================
+		// Listez les totaux de combustibles utilisés pour les actifs loués
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313 (Listez les totaux de combustibles utilisés pour les actifs loués)
+
+		QuestionSet a313 = new QuestionSet(QuestionCode.A313, true, a311);
+		session.saveOrUpdate(a313);
+
+
+		// == A317 ========================================================================
+		// Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317 (Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués)
+
+		QuestionSet a317 = new QuestionSet(QuestionCode.A317, true, a311);
+		session.saveOrUpdate(a317);
+
+
+		// == A320 ========================================================================
+		// Franchises
+		// A320 (Franchises)
+
+		QuestionSet a320 = new QuestionSet(QuestionCode.A320, false, null);
+		session.saveOrUpdate(a320);
+
+
+		TAB6Form.getQuestionSets().add(a320);
+		session.saveOrUpdate(TAB6Form);
+
+		// == A322 ========================================================================
+		// Créez autant de catégories de franchisés que nécessaire
+		// A320(Franchises) > A322 (Créez autant de catégories de franchisés que nécessaire)
+
+		QuestionSet a322 = new QuestionSet(QuestionCode.A322, true, a320);
+		session.saveOrUpdate(a322);
+
+
+		// == A325 ========================================================================
+		// Listez les moyennes de combustibles utilisés par franchisé
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325 (Listez les moyennes de combustibles utilisés par franchisé)
+
+		QuestionSet a325 = new QuestionSet(QuestionCode.A325, true, a322);
+		session.saveOrUpdate(a325);
+
+
+		// == A329 ========================================================================
+		// Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329 (Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé)
+
+		QuestionSet a329 = new QuestionSet(QuestionCode.A329, true, a322);
+		session.saveOrUpdate(a329);
+
+
+		// == A332 ========================================================================
+		// Activités d'investissement
+		// A332 (Activités d'investissement)
+
+		QuestionSet a332 = new QuestionSet(QuestionCode.A332, false, null);
+		session.saveOrUpdate(a332);
+
+
+		TAB6Form.getQuestionSets().add(a332);
+		session.saveOrUpdate(TAB6Form);
+
+		// == A334 ========================================================================
+		// Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
+		// A332(Activités d'investissement) > A334 (Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit)
+
+		QuestionSet a334 = new QuestionSet(QuestionCode.A334, true, a332);
+		session.saveOrUpdate(a334);
+
+
 		// == A243 ========================================================================
 		// Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus
 		// A243 (Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus)
@@ -652,8 +750,8 @@ public class AwacInitialData {
 		session.saveOrUpdate(a243);
 
 
-		tab7Form.getQuestionSets().add(a243);
-		session.saveOrUpdate(tab7Form);
+		TAB7Form.getQuestionSets().add(a243);
+		session.saveOrUpdate(TAB7Form);
 
 		// == A244 ========================================================================
 		// Lister les différents produits ou groupes de produits vendus par l'entreprise
@@ -783,95 +881,6 @@ public class AwacInitialData {
 		session.saveOrUpdate(a303);
 
 
-		// == A309 ========================================================================
-		// Actifs loués (aval)
-		// A309 (Actifs loués (aval))
-
-		QuestionSet a309 = new QuestionSet(QuestionCode.A309, false, null);
-		session.saveOrUpdate(a309);
-
-
-		tab6Form.getQuestionSets().add(a309);
-		session.saveOrUpdate(tab6Form);
-
-		// == A311 ========================================================================
-		// Créez autant de catégories d'actifs loués que nécessaire
-		// A309(Actifs loués (aval)) > A311 (Créez autant de catégories d'actifs loués que nécessaire)
-
-		QuestionSet a311 = new QuestionSet(QuestionCode.A311, true, a309);
-		session.saveOrUpdate(a311);
-
-
-		// == A313 ========================================================================
-		// Listez les totaux de combustibles utilisés pour les actifs loués
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313 (Listez les totaux de combustibles utilisés pour les actifs loués)
-
-		QuestionSet a313 = new QuestionSet(QuestionCode.A313, true, a311);
-		session.saveOrUpdate(a313);
-
-
-		// == A317 ========================================================================
-		// Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317 (Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués)
-
-		QuestionSet a317 = new QuestionSet(QuestionCode.A317, true, a311);
-		session.saveOrUpdate(a317);
-
-
-		// == A320 ========================================================================
-		// Franchises
-		// A320 (Franchises)
-
-		QuestionSet a320 = new QuestionSet(QuestionCode.A320, false, null);
-		session.saveOrUpdate(a320);
-
-
-		tab6Form.getQuestionSets().add(a320);
-		session.saveOrUpdate(tab6Form);
-
-		// == A322 ========================================================================
-		// Créez autant de catégories de franchisés que nécessaire
-		// A320(Franchises) > A322 (Créez autant de catégories de franchisés que nécessaire)
-
-		QuestionSet a322 = new QuestionSet(QuestionCode.A322, true, a320);
-		session.saveOrUpdate(a322);
-
-
-		// == A325 ========================================================================
-		// Listez les moyennes de combustibles utilisés par franchisé
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325 (Listez les moyennes de combustibles utilisés par franchisé)
-
-		QuestionSet a325 = new QuestionSet(QuestionCode.A325, true, a322);
-		session.saveOrUpdate(a325);
-
-
-		// == A329 ========================================================================
-		// Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329 (Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé)
-
-		QuestionSet a329 = new QuestionSet(QuestionCode.A329, true, a322);
-		session.saveOrUpdate(a329);
-
-
-		// == A332 ========================================================================
-		// Activités d'investissement
-		// A332 (Activités d'investissement)
-
-		QuestionSet a332 = new QuestionSet(QuestionCode.A332, false, null);
-		session.saveOrUpdate(a332);
-
-
-		tab6Form.getQuestionSets().add(a332);
-		session.saveOrUpdate(tab6Form);
-
-		// == A334 ========================================================================
-		// Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
-		// A332(Activités d'investissement) > A334 (Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit)
-
-		QuestionSet a334 = new QuestionSet(QuestionCode.A334, true, a332);
-		session.saveOrUpdate(a334);
-
-
 		// == A2 ==========================================================================
 		// Année de référence pour comparaison du présent bilan GES
 		// A1(Données générales) > A2 (Année de référence pour comparaison du présent bilan GES)
@@ -944,87 +953,87 @@ public class AwacInitialData {
 
 		// == A21 =========================================================================
 		// Pièces documentaires liées aux achats d'électricité et de vapeur
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A21 (Pièces documentaires liées aux achats d'électricité et de vapeur)
+		// A20(Electricité et vapeur achetées) > A21 (Pièces documentaires liées aux achats d'électricité et de vapeur)
 		session.saveOrUpdate(new DocumentQuestion(a20, 0, QuestionCode.A21));
 
 		// == A23 =========================================================================
 		// Consommation d'électricité verte
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A22(Electricité) > A23 (Consommation d'électricité verte)
+		// A20(Electricité et vapeur achetées) > A22(Electricité) > A23 (Consommation d'électricité verte)
 		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A23, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A24 =========================================================================
 		// Consommation d'électricité grise
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A22(Electricité) > A24 (Consommation d'électricité grise)
+		// A20(Electricité et vapeur achetées) > A22(Electricité) > A24 (Consommation d'électricité grise)
 		session.saveOrUpdate(new DoubleQuestion(a22, 0, QuestionCode.A24, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A26 =========================================================================
 		// Energie primaire utilisée pour produire la vapeur:
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A25(Vapeur) > A26 (Energie primaire utilisée pour produire la vapeur:)
+		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A26 (Energie primaire utilisée pour produire la vapeur:)
 		session.saveOrUpdate(new ValueSelectionQuestion(a25, 0, QuestionCode.A26, CodeList.ENERGIEVAPEUR));
 
 		// == A27 =========================================================================
 		// Efficacité de la chaudière
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A25(Vapeur) > A27 (Efficacité de la chaudière)
+		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A27 (Efficacité de la chaudière)
 		session.saveOrUpdate(new PercentageQuestion(a25, 0, QuestionCode.A27, null));
 
 		// == A28 =========================================================================
 		// Quantité achetée
-		// A1(Données générales) > A20(Electricité et vapeur achetées) > A25(Vapeur) > A28 (Quantité achetée)
+		// A20(Electricité et vapeur achetées) > A25(Vapeur) > A28 (Quantité achetée)
 		session.saveOrUpdate(new DoubleQuestion(a25, 0, QuestionCode.A28, energyUnits, null, getUnitBySymbol("kW.h")));
 
 		// == A32 =========================================================================
 		// Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
-		// A1(Données générales) > A31(GES des processus de production) > A32 (Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?)
+		// A31(GES des processus de production) > A32 (Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?)
 		session.saveOrUpdate(new BooleanQuestion(a31, 0, QuestionCode.A32, null));
 
 		// == A33 =========================================================================
 		// Pièces documentaires liées aux GES des processus de production
-		// A1(Données générales) > A31(GES des processus de production) > A33 (Pièces documentaires liées aux GES des processus de production)
+		// A31(GES des processus de production) > A33 (Pièces documentaires liées aux GES des processus de production)
 		session.saveOrUpdate(new DocumentQuestion(a31, 0, QuestionCode.A33));
 
 		// == A35 =========================================================================
 		// Type de GES
-		// A1(Données générales) > A31(GES des processus de production) > A34(Type de GES émis par la production) > A35 (Type de GES)
+		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A35 (Type de GES)
 		session.saveOrUpdate(new ValueSelectionQuestion(a34, 0, QuestionCode.A35, CodeList.GES));
 
 		// == A36 =========================================================================
 		// Quantité
-		// A1(Données générales) > A31(GES des processus de production) > A34(Type de GES émis par la production) > A36 (Quantité)
+		// A31(GES des processus de production) > A34(Type de GES émis par la production) > A36 (Quantité)
 		session.saveOrUpdate(new DoubleQuestion(a34, 0, QuestionCode.A36, massUnits, null, getUnitBySymbol("t")));
 
 		// == A38 =========================================================================
 		// Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A38 (Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?)
+		// A37(Systèmes de refroidissement) > A38 (Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?)
 		session.saveOrUpdate(new BooleanQuestion(a37, 0, QuestionCode.A38, null));
 
 		// == A39 =========================================================================
 		// Pièces documentaires liées aux systèmes de refroidissement
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A39 (Pièces documentaires liées aux systèmes de refroidissement)
+		// A37(Systèmes de refroidissement) > A39 (Pièces documentaires liées aux systèmes de refroidissement)
 		session.saveOrUpdate(new DocumentQuestion(a37, 0, QuestionCode.A39));
 
 		// == A43 =========================================================================
 		// Type de gaz
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A43 (Type de gaz)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A43 (Type de gaz)
 		session.saveOrUpdate(new ValueSelectionQuestion(a42, 0, QuestionCode.A43, CodeList.FRIGORIGENE));
 
 		// == A44 =========================================================================
 		// Quantité de recharge nécessaire pour l'année
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A44 (Quantité de recharge nécessaire pour l'année)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A41(Estimation des émissions à partir des recharges de gaz) > A42(Listes des types de gaz réfrigérants utilisés) > A44 (Quantité de recharge nécessaire pour l'année)
 		session.saveOrUpdate(new DoubleQuestion(a42, 0, QuestionCode.A44, massUnits, null, null));
 
 		// == A46 =========================================================================
 		// Quel est la puissance frigorifique des groupes froid?
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45(Estimation des émissions à partir de la puissance du groupe de froid) > A46 (Quel est la puissance frigorifique des groupes froid?)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A45(Estimation des émissions à partir de la puissance du groupe de froid) > A46 (Quel est la puissance frigorifique des groupes froid?)
 		session.saveOrUpdate(new DoubleQuestion(a45, 0, QuestionCode.A46, powerUnits, null, null));
 
 		// == A48 =========================================================================
 		// Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A48 (Est-ce que votre entreprise produit du sucre ou des pâtes sèches?)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A48 (Est-ce que votre entreprise produit du sucre ou des pâtes sèches?)
 		session.saveOrUpdate(new BooleanQuestion(a47, 0, QuestionCode.A48, null));
 
 		// == A49 =========================================================================
 		// Quel est le nombre d'heures de fonctionnement annuel du site?
-		// A1(Données générales) > A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
+		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
 		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits, null, null));
 
 		// == A51 =========================================================================
@@ -1717,6 +1726,106 @@ public class AwacInitialData {
 		// A229(Infrastructures (achetées durant l'année de déclaration)) > A237(Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate) > A238(Créez et nommez vos postes d'infrastructure spécifiques) > A242 (Facteur d'émission en tCO2e par unité ci-dessus)
 		session.saveOrUpdate(new IntegerQuestion(a238, 0, QuestionCode.A242, null, null));
 
+		// == A310 ========================================================================
+		// Fournir ici les documents éventuels justifiant les données suivantes
+		// A309(Actifs loués (aval)) > A310 (Fournir ici les documents éventuels justifiant les données suivantes)
+		session.saveOrUpdate(new DocumentQuestion(a309, 0, QuestionCode.A310));
+
+		// == A312 ========================================================================
+		// Catégorie d'actif loué
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A312 (Catégorie d'actif loué)
+		session.saveOrUpdate(new StringQuestion(a311, 0, QuestionCode.A312, null));
+
+		// == A314 ========================================================================
+		// Combustible utilisé
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A314 (Combustible utilisé)
+		session.saveOrUpdate(new ValueSelectionQuestion(a313, 0, QuestionCode.A314, CodeList.COMBUSTIBLE));
+
+		// == A315 ========================================================================
+		// Quantité
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A315 (Quantité)
+		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits, null, getUnitBySymbol("kW.h")));
+
+		// == A316 ========================================================================
+		// Electricité
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A316 (Electricité)
+		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits, null, getUnitBySymbol("kW.h")));
+
+		// == A318 ========================================================================
+		// Type de gaz
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A318 (Type de gaz)
+		session.saveOrUpdate(new ValueSelectionQuestion(a317, 0, QuestionCode.A318, CodeList.FRIGORIGENE));
+
+		// == A319 ========================================================================
+		// Quantité de recharge nécessaire pour l'année
+		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A319 (Quantité de recharge nécessaire pour l'année)
+		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits, null, null));
+
+		// == A321 ========================================================================
+		// Fournir ici les documents éventuels justifiant les données suivantes
+		// A320(Franchises) > A321 (Fournir ici les documents éventuels justifiant les données suivantes)
+		session.saveOrUpdate(new DocumentQuestion(a320, 0, QuestionCode.A321));
+
+		// == A323 ========================================================================
+		// Catégorie de franchisé
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A323 (Catégorie de franchisé)
+		session.saveOrUpdate(new StringQuestion(a322, 0, QuestionCode.A323, null));
+
+		// == A324 ========================================================================
+		// Nombre de franchisés
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A324 (Nombre de franchisés)
+		session.saveOrUpdate(new IntegerQuestion(a322, 0, QuestionCode.A324, null, null));
+
+		// == A326 ========================================================================
+		// Combustible utilisé
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A326 (Combustible utilisé)
+		session.saveOrUpdate(new ValueSelectionQuestion(a325, 0, QuestionCode.A326, CodeList.COMBUSTIBLE));
+
+		// == A327 ========================================================================
+		// Quantité
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A327 (Quantité)
+		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits, null, getUnitBySymbol("kW.h")));
+
+		// == A328 ========================================================================
+		// Electricité (moyenne par franchisé)
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A328 (Electricité (moyenne par franchisé))
+		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits, null, getUnitBySymbol("kW.h")));
+
+		// == A330 ========================================================================
+		// Type de gaz
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A330 (Type de gaz)
+		session.saveOrUpdate(new ValueSelectionQuestion(a329, 0, QuestionCode.A330, CodeList.FRIGORIGENE));
+
+		// == A331 ========================================================================
+		// Quantité de recharge nécessaire pour l'année
+		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A331 (Quantité de recharge nécessaire pour l'année)
+		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits, null, null));
+
+		// == A333 ========================================================================
+		// Fournir ici les documents éventuels justifiant les données suivantes
+		// A332(Activités d'investissement) > A333 (Fournir ici les documents éventuels justifiant les données suivantes)
+		session.saveOrUpdate(new DocumentQuestion(a332, 0, QuestionCode.A333));
+
+		// == A335 ========================================================================
+		// Nom du projet
+		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A335 (Nom du projet)
+		session.saveOrUpdate(new StringQuestion(a334, 0, QuestionCode.A335, null));
+
+		// == A336 ========================================================================
+		// Part d'investissements dans le projet
+		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A336 (Part d'investissements dans le projet)
+		session.saveOrUpdate(new PercentageQuestion(a334, 0, QuestionCode.A336, null));
+
+		// == A337 ========================================================================
+		// Emissions directes totales (tCO2e)
+		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A337 (Emissions directes totales (tCO2e))
+		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A337, null, null));
+
+		// == A338 ========================================================================
+		// Emissions indirectes totales (tCO2e)
+		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
+		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
+
 		// == A245 ========================================================================
 		// Nom du produit ou groupe de produits
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A245 (Nom du produit ou groupe de produits)
@@ -1962,105 +2071,7 @@ public class AwacInitialData {
 		// A243(Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus) > A244(Lister les différents produits ou groupes de produits vendus par l'entreprise) > A300(Traitement de fin de vie) > A303(Créez autant de catégories de déchet que nécessaire) > A308 (Proportion du déchet issu du produit, traité par la méthode précédemment renseignée)
 		session.saveOrUpdate(new ValueSelectionQuestion(a303, 0, QuestionCode.A308, CodeList.POURCENTSIMPLIFIE));
 
-		// == A310 ========================================================================
-		// Fournir ici les documents éventuels justifiant les données suivantes
-		// A309(Actifs loués (aval)) > A310 (Fournir ici les documents éventuels justifiant les données suivantes)
-		session.saveOrUpdate(new DocumentQuestion(a309, 0, QuestionCode.A310));
 
-		// == A312 ========================================================================
-		// Catégorie d'actif loué
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A312 (Catégorie d'actif loué)
-		session.saveOrUpdate(new StringQuestion(a311, 0, QuestionCode.A312, null));
-
-		// == A314 ========================================================================
-		// Combustible utilisé
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A314 (Combustible utilisé)
-		session.saveOrUpdate(new ValueSelectionQuestion(a313, 0, QuestionCode.A314, CodeList.COMBUSTIBLE));
-
-		// == A315 ========================================================================
-		// Quantité
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A313(Listez les totaux de combustibles utilisés pour les actifs loués) > A315 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a313, 0, QuestionCode.A315, energyUnits, null, getUnitBySymbol("kW.h")));
-
-		// == A316 ========================================================================
-		// Electricité
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A316 (Electricité)
-		session.saveOrUpdate(new DoubleQuestion(a311, 0, QuestionCode.A316, energyUnits, null, getUnitBySymbol("kW.h")));
-
-		// == A318 ========================================================================
-		// Type de gaz
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A318 (Type de gaz)
-		session.saveOrUpdate(new ValueSelectionQuestion(a317, 0, QuestionCode.A318, CodeList.FRIGORIGENE));
-
-		// == A319 ========================================================================
-		// Quantité de recharge nécessaire pour l'année
-		// A309(Actifs loués (aval)) > A311(Créez autant de catégories d'actifs loués que nécessaire) > A317(Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués) > A319 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a317, 0, QuestionCode.A319, massUnits, null, null));
-
-		// == A321 ========================================================================
-		// Fournir ici les documents éventuels justifiant les données suivantes
-		// A320(Franchises) > A321 (Fournir ici les documents éventuels justifiant les données suivantes)
-		session.saveOrUpdate(new DocumentQuestion(a320, 0, QuestionCode.A321));
-
-		// == A323 ========================================================================
-		// Catégorie de franchisé
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A323 (Catégorie de franchisé)
-		session.saveOrUpdate(new StringQuestion(a322, 0, QuestionCode.A323, null));
-
-		// == A324 ========================================================================
-		// Nombre de franchisés
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A324 (Nombre de franchisés)
-		session.saveOrUpdate(new IntegerQuestion(a322, 0, QuestionCode.A324, null, null));
-
-		// == A326 ========================================================================
-		// Combustible utilisé
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A326 (Combustible utilisé)
-		session.saveOrUpdate(new ValueSelectionQuestion(a325, 0, QuestionCode.A326, CodeList.COMBUSTIBLE));
-
-		// == A327 ========================================================================
-		// Quantité
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A325(Listez les moyennes de combustibles utilisés par franchisé) > A327 (Quantité)
-		session.saveOrUpdate(new DoubleQuestion(a325, 0, QuestionCode.A327, energyUnits, null, getUnitBySymbol("kW.h")));
-
-		// == A328 ========================================================================
-		// Electricité (moyenne par franchisé)
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A328 (Electricité (moyenne par franchisé))
-		session.saveOrUpdate(new DoubleQuestion(a322, 0, QuestionCode.A328, energyUnits, null, getUnitBySymbol("kW.h")));
-
-		// == A330 ========================================================================
-		// Type de gaz
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A330 (Type de gaz)
-		session.saveOrUpdate(new ValueSelectionQuestion(a329, 0, QuestionCode.A330, CodeList.FRIGORIGENE));
-
-		// == A331 ========================================================================
-		// Quantité de recharge nécessaire pour l'année
-		// A320(Franchises) > A322(Créez autant de catégories de franchisés que nécessaire) > A329(Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé) > A331 (Quantité de recharge nécessaire pour l'année)
-		session.saveOrUpdate(new DoubleQuestion(a329, 0, QuestionCode.A331, massUnits, null, null));
-
-		// == A333 ========================================================================
-		// Fournir ici les documents éventuels justifiant les données suivantes
-		// A332(Activités d'investissement) > A333 (Fournir ici les documents éventuels justifiant les données suivantes)
-		session.saveOrUpdate(new DocumentQuestion(a332, 0, QuestionCode.A333));
-
-		// == A335 ========================================================================
-		// Nom du projet
-		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A335 (Nom du projet)
-		session.saveOrUpdate(new StringQuestion(a334, 0, QuestionCode.A335, null));
-
-		// == A336 ========================================================================
-		// Part d'investissements dans le projet
-		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A336 (Part d'investissements dans le projet)
-		session.saveOrUpdate(new PercentageQuestion(a334, 0, QuestionCode.A336, null));
-
-		// == A337 ========================================================================
-		// Emissions directes totales (tCO2e)
-		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A337 (Emissions directes totales (tCO2e))
-		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A337, null, null));
-
-		// == A338 ========================================================================
-		// Emissions indirectes totales (tCO2e)
-		// A332(Activités d'investissement) > A334(Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit) > A338 (Emissions indirectes totales (tCO2e))
-		session.saveOrUpdate(new IntegerQuestion(a334, 0, QuestionCode.A338, null, null));
 
 
 

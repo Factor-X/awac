@@ -266,7 +266,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
 
-        $location.path('/form2/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+        $location.path('/TAB2/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
 
     #
     # get user

@@ -58,8 +58,8 @@ angular
             controller: 'SiteManagerCtrl'
         }
     )
-    .when('/form2/:period/:scope', {
-            templateUrl: '$/angular/views/form2.html'
+    .when('/TAB2/:period/:scope', {
+            templateUrl: '$/angular/views/TAB2.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
@@ -69,8 +69,8 @@ angular
             }
         }
     )
-    .when('/form3/:period/:scope', {
-            templateUrl: '$/angular/views/form3.html'
+    .when('/TAB3/:period/:scope', {
+            templateUrl: '$/angular/views/TAB3.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
@@ -80,8 +80,8 @@ angular
             }
         }
     )
-    .when('/form4/:period/:scope', {
-            templateUrl: '$/angular/views/form4.html'
+    .when('/TAB4/:period/:scope', {
+            templateUrl: '$/angular/views/TAB4.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
@@ -91,8 +91,8 @@ angular
             }
         }
     )
-    .when('/form5/:period/:scope', {
-            templateUrl: '$/angular/views/form5.html'
+    .when('/TAB5/:period/:scope', {
+            templateUrl: '$/angular/views/TAB5.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
@@ -102,8 +102,8 @@ angular
             }
         }
     )
-    .when('/form6/:period/:scope', {
-            templateUrl: '$/angular/views/form6.html'
+    .when('/TAB6/:period/:scope', {
+            templateUrl: '$/angular/views/TAB6.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
@@ -113,8 +113,8 @@ angular
             }
         }
     )
-    .when('/form7/:period/:scope', {
-            templateUrl: '$/angular/views/form7.html'
+    .when('/TAB7/:period/:scope', {
+            templateUrl: '$/angular/views/TAB7.html'
             controller: 'FormCtrl'
             resolve:{
                 formIdentifier: () ->
