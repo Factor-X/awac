@@ -98,28 +98,25 @@ sheet.each do |row|
   bad_value = row[16]
 
   # handle tabs
-  if tab != nil
-    if tab.start_with? "à remettre dans le TAB"
+  if tab != nil && tab.length > 0 && tab != 'Aggregation' && tab != 'Method'
 
-      current_tab = tabs.select { |t| t.number == tab.gsub("à remettre dans le TAB", "").strip }.first
+        puts '--->|'+tab.to_s+'|'
 
-    else
-      if tab.to_s.start_with? 'TAB'
+        m = /^(.+):\s*(.*)$/.match(tab.to_s)
 
-        m = /^TAB([0-9]+):\s*(.*)$/.match(tab.to_s)
+        if m != nil
 
-        current_tab = Tab.new
-        current_tab.number = m[1]
-        current_tab.name = m[2]
-        current_tab.code = make_code(m[2])
+          current_tab = Tab.new
+          current_tab.number = m[1]
+          current_tab.name = m[2]
+          current_tab.code = make_code(m[2])
 
-        tabs.push(current_tab)
+          tabs.push(current_tab)
 
-        puts "TAB" + current_tab.number.to_s + "\t" + current_tab.name+ "\t" + current_tab.name+ "\t" + current_tab.name
+          puts current_tab.number + "\t" + current_tab.name+ "\t" + current_tab.name+ "\t" + current_tab.name
 
-        # puts "Tab created: " + current_tab.code
-      end
-    end
+          # puts "Tab created: " + current_tab.code
+        end
   end
 
 
@@ -210,11 +207,11 @@ end
 
 def make_tab(t)
   txt = '
-    Form tab__N__Form = new Form("TAB__N__");
-    session.saveOrUpdate(tab__N__Form);
+    Form __N__Form = new Form("__N__");
+    session.saveOrUpdate(__N__Form);
   '
-  txt = txt.gsub /__N__/, t.number.to_s
-  header = '        // == TAB' + t.number.to_s + ' ' + ('=' * (80 - t.number.to_s.length - 7))
+  txt = txt.gsub /__N__/, t.number
+  header = '        // == TAB' + t.number + ' ' + ('=' * (80 - t.number.length - 7))
   header + "\n" + txt + "\n" + "\n"
 end
 
@@ -238,7 +235,7 @@ def make_question_set(qs)
   txt = txt.gsub /__PARENT__/, ((qs.parent != nil) ? qs.parent.accronym.downcase : 'null')
 
   txt2 = txt2.gsub /__VARNAME__/, qs.accronym.downcase
-  txt2 = txt2.gsub /__TABNAME__/, ('tab'+ qs.tab.number.to_s + 'Form')
+  txt2 = txt2.gsub /__TABNAME__/, (qs.tab.number + 'Form')
 
   header = qs.accronym + ' (' + qs.text + ')'
   qss = qs.parent
