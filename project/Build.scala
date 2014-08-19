@@ -34,7 +34,8 @@ object ApplicationBuild extends Build {
         "com.google.inject" % "guice" % "3.0" % "test",
         "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
         "info.cukes" % "cucumber-java" % "1.1.5" % "test",
-        "info.cukes" % "cucumber-junit" % "1.1.5" % "test"
+        "info.cukes" % "cucumber-junit" % "1.1.5" % "test",
+        "com.google.guava" % "guava" % "14.0"
     )
 
     libraryDependencies += "org.apache.commons" % "commons-email" % "1.3.1"
