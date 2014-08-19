@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
@@ -78,6 +79,11 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	@Override
 	public CodeLabel findCodeLabelByCode(Code code) {
 		return findAllCodeLabels().get(code.getCodeList()).get(code.getKey());
+	}
+
+	@Override
+	public int removeCodeLabelsByList(CodeList codeList) {
+		return JPA.em().createNamedQuery(CodeLabel.REMOVE_BY_LIST).setParameter("codeList", codeList).executeUpdate();
 	}
 
 	@Override

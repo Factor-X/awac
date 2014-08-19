@@ -11,6 +11,10 @@ angular
         ngRepetitionMap: '='
     # an aggregation : if the attribu is not empty, the question cannot be edited
         ngAggregation: '='
+    #
+        ngTabSet:'='
+    #
+        ngTab:'='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
     compile: () ->
@@ -102,6 +106,9 @@ angular
                 if forDataToCompare
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
+                    if scope.getTabSet()? && !scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tabSet?
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tabSet =scope.getTabSet()
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tab =scope.getTab()
                     if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value == null
                         scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value = scope.getAggregation()
                         scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).isAggregation = true

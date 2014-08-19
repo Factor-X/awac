@@ -1,14 +1,14 @@
 # simple download service
 angular
 .module('app.services')
-.service "messageFlash", (flash) ->
+.service "messageFlash", (flash, translateTextFilter) ->
 
     #
     # display a success message
     # TODO => display multiple messages
     @display = (type, message, opts) ->
         options =
-            message: message
+            message: translateTextFilter(message)
             type: type
             hideAfter: 5
             showCloseButton: true

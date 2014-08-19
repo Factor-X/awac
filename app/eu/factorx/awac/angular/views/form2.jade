@@ -69,33 +69,33 @@ mm-awac-block(ng-condition="getAnswer('A38').value == '1'")
         .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
         .method
             tabset
-                tab.tab-color-lightgreen
+                tab.tab-color-lightgreen(active="tabSet[1][1].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
                         span(ng-bind-html="'A41_TITLE' | translate")
                     .sub_block.tab-color-lightgreen
                         .element_table
                             mm-awac-repetition-name(question-code="A42")
                             mm-awac-repetition-question(question-set-code="A42", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A42')")
-                                mm-awac-question(question-code="A43",ng-repetition-map="itLevel1")
-                                mm-awac-question(question-code="A44",ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="A43",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="1")
+                                mm-awac-question(question-code="A44",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="1")
                             button.button.add-repetition-button(ng-click="addIteration('A42')", type="button")
                                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                                 span(ng-bind-html="'A42_LOOPDESC' | translate")
 
-                tab.tab-color-green
+                tab.tab-color-green(active="tabSet[1][2].active")
                     tab-heading
-                        i.glyphicon.glyphicon-bell
+                        i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
                         span(ng-bind-html="'A45_TITLE' | translate")
                     .sub_block.tab-color-green
                         .element_table
-                            mm-awac-question(question-code="A46")
+                            mm-awac-question(question-code="A46",ng-tab-set="1",ng-tab="2")
                 mm-awac-block(ng-condition="getAnswer('A5').value == '1' || getAnswer('A5').value == '2'")
-                    tab.tab-color-yellow
+                    tab.tab-color-yellow(active="tabSet[1][3].active")
                         tab-heading
-                            i.glyphicon.glyphicon-bell
+                            i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 3")
                             span(ng-bind-html="'A47_TITLE' | translate")
                         .sub_block.tab-color-yellow
                             mm-awac-block.element_table(ng-condition="getAnswer('A5').value == '1' || getAnswer('A5').value == '2'")
-                                mm-awac-question(question-code="A48")
-                                mm-awac-question(question-code="A49")
+                                mm-awac-question(question-code="A48",ng-tab-set="1",ng-tab="3")
+                                mm-awac-question(question-code="A49",ng-tab-set="1",ng-tab="3")

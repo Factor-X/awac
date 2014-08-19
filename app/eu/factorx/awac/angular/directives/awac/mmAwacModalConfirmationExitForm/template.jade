@@ -1,21 +1,24 @@
 // Modal
-.modal(ng-enter="save()")
+.modal(ng-enter="save()",ng-escape="close()")
     .modal-dialog
         .modal-content
             .modal-header
                 button.button( type="button",
                         ng-click="close()")
                     span(aria-hidden="true") &times;<span
-                    span(class="sr-only") Close
+                    span(class="sr-only",ng-bind-html="'CLOSE_BUTTON' | translate")
 
-                h4(class="modal-title") Attention
+                h4(class="modal-title",ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_TITLE' | translate")
 
             .modal-body
-                .field_form Vous allez perdre toutes vos modifications depuis la dernière sauvegarde. Êtes-vous sûr de vouloir continuer ?
+                .field_form(ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_MESSAGE' | translate")
             .modal-footer
                 button.button(type="button",
-                    ng-click="continue();")  Continuer sans sauvegarder
+                    ng-click="continue();",
+                    ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_CONTINUE' | translate")
                 button.button(type="button",
-                        ng-click="save()") Enregister et continuer
+                    ng-click="save()",
+                    ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_SAVE' | translate")
                 button.button(type="button",
-                    ng-click="close()") Annuler
+                    ng-click="close()",
+                    ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_CANCEL' | translate")

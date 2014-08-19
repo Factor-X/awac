@@ -12,30 +12,27 @@ angular
         directiveService.autoScopeImpl $scope
 
         $scope.passwordInfo =
-            fieldTitle: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_TITLE"
+            field: ""
             fieldType: "password"
+            fieldTitle: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_TITLE"
             placeholder: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_PLACEHOLDER"
             validationRegex: "^\\S{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
-            field: ""
-            isValid: false
+            hideIsValidIcon: true
             focus: true
 
         $scope.oldEmailInfo =
-            fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE"
-            fieldType: "text"
             field: $scope.getParams().oldEmail
-            isValid: true
+            fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE"
             disabled: true
 
         $scope.newEmailInfo =
+            field: ""
             fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
-            fieldType: "text"
             placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
             validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
             validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
-            field: ""
-            isValid: false
+            hideIsValidIcon: true
 
         $scope.allFieldValid = () ->
             if $scope.passwordInfo.isValid && $scope.newEmailInfo.isValid
@@ -44,6 +41,9 @@ angular
 
         #send the request to the server
         $scope.save = () ->
+
+            if !$scope.allFieldValid()
+                return false
 
             $scope.isLoading = true
 
@@ -54,18 +54,17 @@ angular
                     "Content-Type": "application/json"
                 data:
                     password: $scope.passwordInfo.field
-                    oldEmail: $scope.oldEmailInfo.field
                     newEmail: $scope.newEmailInfo.field
 
             promise.success (data, status, headers, config) ->
-                messageFlash.displaySuccess translationService.get "ANSWERS_SAVED"
+                messageFlash.displaySuccess "CHANGES_SAVED"
                 $scope.close()
                 if $scope.getParams().cb?
                     $scope.getParams().cb($scope.newEmailInfo.field)
                 return
 
             promise.error (data, status, headers, config) ->
-                messageFlash.displayError translationService.get data.message
+                messageFlash.displayError data.message
                 $scope.isLoading = false
                 return
 

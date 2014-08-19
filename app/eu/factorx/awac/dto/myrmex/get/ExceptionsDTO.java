@@ -1,10 +1,8 @@
 package eu.factorx.awac.dto.myrmex.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.util.BusinessErrorType;
 
-/**
- * Created by florian on 4/07/14.
- */
 public class ExceptionsDTO extends DTO {
 
 	private final String message;
@@ -14,6 +12,10 @@ public class ExceptionsDTO extends DTO {
 
 	public ExceptionsDTO(String message) {
 		this.message = message;
+	}
+
+	public ExceptionsDTO(BusinessErrorType businessError) {
+		this.message = businessError.toString();
 	}
 
 	public String getMessage() {

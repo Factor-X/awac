@@ -1,21 +1,23 @@
 package eu.factorx.awac.dto.awac.post;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
+import eu.factorx.awac.dto.validation.annotations.Pattern;
 
 public class EmailChangeDTO extends DTO {
 
+	@NotNull
 	private String password;
 
-	private String oldEmail;
-
+	@NotNull
+	@Pattern(regexp = Pattern.EMAIL)
 	private String newEmail;
 
 	public EmailChangeDTO() {
 	}
 
-	public EmailChangeDTO(String password, String oldEmail, String newEmail) {
+	public EmailChangeDTO(String password, String newEmail) {
 		this.password = password;
-		this.oldEmail = oldEmail;
 		this.newEmail = newEmail;
 	}
 
@@ -27,14 +29,6 @@ public class EmailChangeDTO extends DTO {
 		this.password = password;
 	}
 
-	public String getOldEmail() {
-		return oldEmail;
-	}
-
-	public void setOldEmail(String oldEmail) {
-		this.oldEmail = oldEmail;
-	}
-
 	public String getNewEmail() {
 		return newEmail;
 	}
@@ -42,4 +36,10 @@ public class EmailChangeDTO extends DTO {
 	public void setNewEmail(String newEmail) {
 		this.newEmail = newEmail;
 	}
+
+	@Override
+	public String toString() {
+		return "EmailChangeDTO [newEmail=" + newEmail + "]";
+	}
+
 }

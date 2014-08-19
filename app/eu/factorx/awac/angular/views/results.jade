@@ -16,19 +16,26 @@ ng-virtual
                     tbody
                         tr(ng-repeat="rl in o.reportLines")
                             td(ng-bind-html="rl.indicatorName")
-                            td(ng-bind-html="rl.scope1Value | numberToI18N")
-                            td(ng-bind-html="rl.scope2Value | numberToI18N")
-                            td(ng-bind-html="rl.scope3Value | numberToI18N")
+                            td.align-right
+                                span(ng-bind-html="rl.scope1Value | numberToI18N", ng-show="rl.scope1Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope2Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope3Value > 0")
         tr
             td
-                b Scope 1
                 br
-                mm-awac-graph-donut(ng-items="graphs.scope1")
+                br
+                br
 
-                b Scope 2
-                br
-                mm-awac-graph-donut(ng-items="graphs.scope2")
+                h2 Scope 1
+                mm-awac-graph-donut(ng-items="graphs.scope1", ng-show="graphs.scope1.length > 0")
 
-                b Scope 3
+                h2 Scope 2
+                mm-awac-graph-donut(ng-items="graphs.scope2", ng-show="graphs.scope2.length > 0")
+
+                h2 Scope 3
+                mm-awac-graph-donut(ng-items="graphs.scope3", ng-show="graphs.scope3.length > 0")
+
                 br
-                mm-awac-graph-donut(ng-items="graphs.scope3")
+                br

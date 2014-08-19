@@ -3,7 +3,6 @@ table
         td
             canvas.holder(width="400", height="200")
 
-        td
+        td.chart-legend
             b Legend
-            div
-                p(ng-repeat="i in ngItems") {{ i.label }}
+            div(ng-bind-html="legend")

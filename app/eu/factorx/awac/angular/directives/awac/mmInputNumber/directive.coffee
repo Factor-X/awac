@@ -33,9 +33,14 @@ angular
                 displayError()
                 if scope.lastValidValue?
                     resultString = scope.lastValidValue.toString()
+                    if  attrs.numbersOnly == "percent"
+                        resultToDisplay = (scope.lastValidValue*100).toString()
+                    else
+                        resultToDisplay = scope.lastValidValue.toString()
                 else
                     resultString = ""
-                modelCtrl.$setViewValue resultString
+                    resultToDisplay =""
+                modelCtrl.$setViewValue resultToDisplay
                 modelCtrl.$render()
             else
                 if  attrs.numbersOnly == "percent"

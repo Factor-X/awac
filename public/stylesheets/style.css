@@ -1517,19 +1517,6 @@ h1 {
     padding: 30px;
 }
 
-.result_table {
-    padding: 15px;
-
-}
-
-.result_table td {
-    padding: 2px;
-}
-
-.result_table td:nth-child(n+2) {
-    text-align: right;
-}
-
 ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
 }
@@ -1583,18 +1570,41 @@ ul.messenger > li {
     margin: auto;
 }
 
+.result_table h2 {
+    font-size: 1.5em;
+    border-bottom: solid 2px #666;
+}
+
 .indicators_table {
     width: 100%;
 }
 
 .indicators_table > thead > tr > th {
     white-space: nowrap;
-    padding: 1em;
-    text-align: center;
+    padding: 0.5em 1em;
     border-bottom: solid #666 2px;
 }
 
 .indicators_table > tbody > tr > td {
-    padding: 1em;
+    padding: 0.5em 1em;
     border-bottom: dotted #666 1px;
+}
+
+.indicators_table > tbody > tr:hover{
+    background: #d7edd5;
+}
+
+
+.chart-legend {
+    text-align: left;
+    vertical-align: top;
+}
+
+.chart-legend-bullet-color {
+    vertical-align: middle;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 2px;
+    margin-right: 0.5em;
 }
