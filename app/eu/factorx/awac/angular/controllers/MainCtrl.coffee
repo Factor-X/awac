@@ -265,7 +265,7 @@ angular.module('app').run ($rootScope, $location, $http)->
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
 
-        $location.path('/form1/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+        $location.path('/form2/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
 
     #
     # get user

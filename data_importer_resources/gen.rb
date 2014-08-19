@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'rubygems'
 require 'spreadsheet'
 require 'i18n'
@@ -95,12 +97,13 @@ sheet.each do |row|
   bad_a_unit = row[15]
   bad_value = row[16]
 
-
-  if current_tab != nil and current_tab.number != '1'
+  ###
+  if current_tab != nil and current_tab.number != '2'
     if parent == 1
       parent = nil
     end
   end
+  ###
 
   # handle tabs
   if tab != nil
