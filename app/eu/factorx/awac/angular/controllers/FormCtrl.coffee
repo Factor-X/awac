@@ -524,22 +524,43 @@ angular
 
         listTotal = []
 
+
+        # compute value for non tab-set answer
         for answer in $scope.answerList
 
-            # document questions are optional : do not count them into total
-            if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
+            if !answer.tabSet?
 
-                if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                # document questions are optional : do not count them into total
+                if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
 
-                    if answer.isAggregation != true
+                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
 
-                        # clean the value
-                        total++
-                        listTotal[listTotal.length] = answer
+                        if answer.isAggregation != true
 
-                        #test if the data is valid
-                        if answer.value != null
+                            # clean the value
+                            total++
+                            listTotal[listTotal.length] = answer
+
+                            #test if the data is valid
+                            if answer.value != null
+                                answered++
+
+        # compute value for non tab-set answer
+        for key in Object.keys($scope.tabSet)
+            if key != '$$hashKey'
+                tabSet= $scope.tabSet[key]
+                if tabSet.master?
+                    for answer in $scope.answerList
+                        if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == parseFloat(tabSet.master)
+                            total++
                             answered++
+                else
+                    for answer in $scope.answerList
+                        if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == 1
+                            total++
+                            if answer.value!=null
+                                answered++
+
 
 
         percentage = answered / total * 100

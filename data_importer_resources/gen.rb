@@ -97,14 +97,6 @@ sheet.each do |row|
   bad_a_unit = row[15]
   bad_value = row[16]
 
-  ###
-  if current_tab != nil and current_tab.number != '2'
-    if parent == 1
-      parent = nil
-    end
-  end
-  ###
-
   # handle tabs
   if tab != nil
     if tab.start_with? "à remettre dans le TAB"
