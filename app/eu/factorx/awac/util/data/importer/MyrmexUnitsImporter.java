@@ -93,6 +93,9 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			String symbol = getCellContent(unitsSheet, 2, i);
 			String categoryRef = getCellContent(unitsSheet, 3, i);
 			UnitCategory category = unitCategoriesByRef.get(categoryRef);
+			if (category == null) {
+				Logger.warn("No unit category defined for unit with symbol: '{}'!", symbol);
+			}
 			unitsByRef.put(ref, new Unit(ref, name, symbol, category));
 		}
 		persistEntities(unitsByRef.values());
