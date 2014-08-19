@@ -12,6 +12,8 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.account.SystemAdministrator;
 import eu.factorx.awac.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,13 @@ public class SecuredController extends Security.Authenticator {
 	public boolean isAdministrator() {
 		return false;//(((Person)getCurrentUser()) instanceof Administrator);
 	} // end of check administrator
+
+	public boolean isSystemAdministrator() {
+		return (((Person)getCurrentUser()) instanceof SystemAdministrator);
+	}
+
+
+
 /*
 	
     @Override

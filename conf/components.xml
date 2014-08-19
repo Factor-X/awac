@@ -27,6 +27,7 @@
 				<bean class="eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter" />
                 <bean class="eu.factorx.awac.converter.FormProgressListToFormProgressListDTOConverter" />
                 <bean class="eu.factorx.awac.converter.FormProgressToFormProgressDTOConverter" />
+                <bean class="eu.factorx.awac.converter.NotificationToNotificationDTOConverter" />
             </set>
         </property>
     </bean>
