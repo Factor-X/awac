@@ -53,17 +53,6 @@ angular
             controller: 'SiteManagerCtrl'
         }
     )
-    .when('/form1/:period/:scope', {
-            templateUrl: '$/angular/views/form1.html'
-            controller: 'FormCtrl'
-            resolve:{
-                formIdentifier: () ->
-                    return 'TAB1'
-                displayFormMenu: () ->
-                    return true
-            }
-        }
-    )
     .when('/form2/:period/:scope', {
             templateUrl: '$/angular/views/form2.html'
             controller: 'FormCtrl'

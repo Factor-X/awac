@@ -360,9 +360,9 @@ select {
 }
 
 .menu > * {
-    min-width: 14%;
-    width: 14%;
-    max-width: 14%;
+    min-width: 16.40%;
+    width: 16.40%;
+    max-width: 16.40%;
     position: relative;
     margin: 0px 1px;
 }
@@ -1531,15 +1531,22 @@ h1 {
 
 .result_table{
     padding:15px;
-
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 30px;
 }
 
 .result_table td{
     padding : 2px;
 }
 
+.result_table td:first-child{
+    width: 55%;
+}
+
 .result_table td:nth-child(n+2){
     text-align: right;
+    width: 15%;
 }
 ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
