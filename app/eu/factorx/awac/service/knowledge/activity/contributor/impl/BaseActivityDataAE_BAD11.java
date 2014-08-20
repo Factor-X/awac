@@ -70,6 +70,7 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
             } else {
                 baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
             }
+
             baseActivityData.setActivityType(ActivityTypeCode.AT_1);
             baseActivityData.setActivitySource(toActivitySourceCode(questionA83Answer));
             baseActivityData.setActivityOwnership(toBoolean(questionA80Answer));
