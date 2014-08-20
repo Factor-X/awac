@@ -10,19 +10,17 @@
  */
 
 import eu.factorx.awac.InitializationThread;
-import eu.factorx.awac.compilers.RecompilerThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.Play;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.F;
@@ -32,7 +30,6 @@ import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
-import play.Play;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -43,15 +40,19 @@ import java.util.concurrent.Semaphore;
 public class Global extends GlobalSettings {
 
 	private static InitializationThread thread;
-	private static RecompilerThread recompilerThread;
 	private static Semaphore semaphore = new Semaphore(1);
 
 	// Spring global context
 	private ApplicationContext applicationContext;
 
+	// App
+	private Application app;
+
+
 	@Override
 	public void onStart(Application app) {
 
+		this.app = app;
 
 		play.Logger.info("Starting AWAC");
 		// force default language to FR - test purpose
@@ -78,7 +79,6 @@ public class Global extends GlobalSettings {
 //		}
 
 
-
 		try {
 			semaphore.acquire();
 
@@ -86,14 +86,6 @@ public class Global extends GlobalSettings {
 			if (thread == null) {
 				thread = new InitializationThread(applicationContext);
 				thread.start();
-			}
-
-			if (app.isDev()) {
-
-				if (recompilerThread == null) {
-					recompilerThread = new RecompilerThread();
-					recompilerThread.start();
-				}
 			}
 
 			semaphore.release();
@@ -114,9 +106,7 @@ public class Global extends GlobalSettings {
 
 		Action action;
 
-		// WTF -- System.out.println(Thread.currentThread().getId());
-
-		if (!thread.isInitialized()) {
+		if (!app.isDev() && !thread.isInitialized()) {
 			action = new Action() {
 				@Override
 				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
@@ -141,17 +131,15 @@ public class Global extends GlobalSettings {
 
 		// filter clazz annotation to avoid messing win non Spring annotation
 		if (clazz.isAnnotationPresent(Component.class)
-				|| clazz.isAnnotationPresent(Controller.class)
-				|| clazz.isAnnotationPresent(Service.class)
-				|| clazz.isAnnotationPresent(Repository.class))
-			{
-			Logger.debug("getControllerInstance <clazz> " + clazz +" getBean : " + applicationContext.getBean(clazz));
+			|| clazz.isAnnotationPresent(Controller.class)
+			|| clazz.isAnnotationPresent(Service.class)
+			|| clazz.isAnnotationPresent(Repository.class)) {
+			Logger.debug("getControllerInstance <clazz> " + clazz + " getBean : " + applicationContext.getBean(clazz));
 			return applicationContext.getBean(clazz);
-			}
-		else {
-			Logger.debug("getControllerInstance <clazz>" + clazz +" returning null to Play instance controller");
+		} else {
+			Logger.debug("getControllerInstance <clazz>" + clazz + " returning null to Play instance controller");
 			return null;
-			}
+		}
 	}
 
 	@Override
