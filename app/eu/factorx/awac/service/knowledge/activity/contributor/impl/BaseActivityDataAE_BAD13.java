@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import play.Logger;
 
 /**
  * CHECK XM
@@ -30,12 +27,11 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitBySymbol("employé");
 
 		// Get reference Number of Employees
-		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
-		List<QuestionSetAnswer> questionSetAnswersA12 = questionSetAnswers.get(QuestionCode.A12);
-		if ((questionSetAnswersA12 == null) || questionSetAnswersA12.isEmpty()) {
+		List<QuestionSetAnswer> questionSetAnswersA1 = questionSetAnswers.get(QuestionCode.A1);
+		if ((questionSetAnswersA1 == null) || questionSetAnswersA1.isEmpty()) {
 			return res;
 		}
-		QuestionSetAnswer questionSet12Answer = questionSetAnswersA12.get(0);
+		QuestionSetAnswer questionSet12Answer = questionSetAnswersA1.get(0);
 		Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = byQuestionCode(questionSet12Answer.getQuestionAnswers());
 		QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
 
@@ -44,14 +40,13 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 			return res;
 		}
 
-
 		// For each set of answers in A109, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA109 = questionSetAnswers.get(QuestionCode.A109);
 		if (questionSetAnswersA109 == null) {
 			return res;
 		}
 
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA109) {
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA109) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -69,40 +64,41 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD13);
 			baseActivityData.setRank(2);
-			baseActivityData.setSpecificPurpose(toString(questionA110Answer));
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_5);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_8);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_17);
-			// TODO: utiliser codes pour assigner la source
-			/*if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus en agglo");
-                    } else {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare et bus hors agglo");
+
+            if (toBoolean(questionA110Answer)) {
+                if (toBoolean(questionA111Answer)) {
+                    if (toBoolean(questionA112Answer)) {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_172);
+                    } else /* A112 false */ {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_171);
                     }
-                } else {
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus en agglo");
-                    } else {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie,  gare pas de bus hors agglo");
-                    }
-                }
-            } else {
-                if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus en agglo");
-                    } else {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare mais bus hors agglo");
-                    }
-                } else {
-                    if (getValueBoolean(answersByCode.get(QuestionCode.A110))) {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus en agglo");
-                    } else {
-                        baseActivityData.setActivitySource(ActivitySourceCode."Wallonie, sans gare ni bus hors agglo");
+                } else /* A111 false */ {
+                    if (toBoolean(questionA112Answer)) {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_170);
+                    } else /* A112 false */ {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_169);
                     }
                 }
-            }*/
-			baseActivityData.setActivityOwnership(false);
+            } else /* A110 false */ {
+                if (toBoolean(questionA111Answer)) {
+                    if (toBoolean(questionA112Answer)) {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_168);
+                    } else /* A112 false */ {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_167);
+                    }
+                } else /* A111 false */ {
+                    if (toBoolean(questionA112Answer)) {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_166);
+                    } else /* A112 false */ {
+                        baseActivityData.setActivitySource(ActivitySourceCode.AS_165);
+                    }
+                }
+            }
+
+            baseActivityData.setActivityOwnership(false);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA12Answer, baseActivityDataUnit));
 
