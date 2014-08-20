@@ -25,7 +25,7 @@ public class EmailService {
      */
     
     public EmailService() throws IOException {
-        system = ActorSystem.create("easychatsystem");
+        system = ActorSystem.create("awacsystem");
         emailActorRef = system.actorOf(new Props(EmailServiceActor.class).withRouter
                 (new SmallestMailboxRouter(1)), "emailService");
     }

@@ -28,8 +28,7 @@ GET         /vies/vatcheck/:uid/:vat                      @eu.factorx.awac.contr
 #
 # Email Service
 #
-POST    /email/submit                                           @eu.factorx.awac.controllers.EmailController.submit()
-GET     /email/confirm/:id                                      @eu.factorx.awac.controllers.EmailController.confirm(id:Long)
+POST        /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
 
 #
 # Javascript routing
