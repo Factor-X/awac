@@ -32,7 +32,6 @@ import java.sql.Timestamp;
 @DiscriminatorColumn(name = "person_type")
 @NamedQueries({
 		@NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
-//    @NamedQuery(name = Person.FIND_BY_TYPE, query = "select p from Person p where p.type = :type")
 })
 public abstract class Person extends AbstractEntity {
 	/**
@@ -43,10 +42,6 @@ public abstract class Person extends AbstractEntity {
 	public static final String FIND_BY_TYPE = "Person.findByType";
 
 	private static final long serialVersionUID = 1L;
-
-	@Version
-	// in order to improve optimistic locking.
-	private Timestamp lastUpdate;
 
 	@Required
 	private String identifier;
@@ -66,9 +61,6 @@ public abstract class Person extends AbstractEntity {
 
 	@Email
 	private String email;
-
-	@Embedded
-	private Address address;
 
 	// set status to unactive by default.
 	@Required
@@ -94,7 +86,6 @@ public abstract class Person extends AbstractEntity {
 		this.password = password;
 		this.lastname = lastname;
 		this.firstname = firstname;
-		this.address = address;
 	}
 
 	public String toString() {
@@ -103,17 +94,9 @@ public abstract class Person extends AbstractEntity {
 		string = string.concat("lastname:" + lastname);
 		string = string.concat("firstname:" + firstname);
 		string = string.concat("email:" + email);
-		string = string.concat("address:" + address);
 		return string;
 	}
 
-	public Timestamp getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
 
 	public String getIdentifier() {
 		return identifier;
@@ -155,14 +138,6 @@ public abstract class Person extends AbstractEntity {
 		this.email = email;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
 	public AccountStatusType getAccountStatus() {
 		return accountStatus;
 	}
@@ -171,34 +146,4 @@ public abstract class Person extends AbstractEntity {
 		this.accountStatus = accountStatus;
 	}
 
-	// public static Finder<Long, Person> find = new Finder<Long, Person>(
-	// Long.class, Person.class
-	// );
-	//
-//	 /**
-//	 * Retrieve a Person from identifier
-//	 */
-//	 public static Person findByIdentifier(String identifier) {
-//		 return find.where().eq("identifier", identifier).findUnique();
-
-//	 }
-	//
-	// /**
-	// * Rename a Person with newName
-	// */
-	// public static String rename(Long personId, String newName) {
-	// play.Logger.info("entering Personne.rename - id: " + personId +
-	// " new name: " + newName);
-	// Person person = find.ref(personId);
-	// person.lastname = newName;
-	// person.update();
-	// return newName;
-	// }
-
-	/**
-	 * getter and setter of embedded object address useful to avoid NPE when
-	 * saving an embedded object
-	 */
-
-
-} // end of Person class
+}

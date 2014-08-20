@@ -2,14 +2,21 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
+import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Administrator;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.AdministratorService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.util.BusinessErrorType;
 
+import eu.factorx.awac.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -29,6 +36,12 @@ public class UserProfileController extends Controller {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Autowired
+	private AdministratorService  administratorService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -66,7 +79,7 @@ public class UserProfileController extends Controller {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
-		currentUser.setEmail(emailChangeDTO.getNewEmail());
+		currentUser.setEmail(emailChangeDTO.getNewEmail().toLowerCase());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());
@@ -88,6 +101,72 @@ public class UserProfileController extends Controller {
 
 		return ok(new ReturnDTO());
 	}
+
+	@Transactional(readOnly = false)
+	public Result forgotPassword(String identifierOrEmail){
+
+		Account account;
+
+		if(identifierOrEmail.contains("@")){
+			account = accountService.findByEmail(identifierOrEmail.toLowerCase());
+		}
+		else{
+			account = accountService.findByIdentifier(identifierOrEmail);
+		}
+
+
+		if(account == null){
+			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
+		}
+
+		//generate password
+		String password = KeyGenerator.generateRandomPassword(10);
+
+		//TODO generate email
+
+		//TODO send email
+
+		//save new password
+		//TODO encode password !!
+		account.setPassword(password);
+		accountService.saveOrUpdate(account);
+
+		return ok(new ReturnDTO());
+	}
+
+	@Transactional(readOnly = false)
+	public Result createAccountForEnterprise(){
+
+		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
+
+		//control identifier
+		Account account = accountService.findByIdentifier(dto.getPersonDTO().getIdentifier());
+		if(account!=null){
+			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED));
+		}
+
+		// control
+		Organization organization = organizationService.findByName(dto.getOrganizationName());
+		if(account!=null){
+			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
+		}
+
+		//create organization
+		organization = new Organization(dto.getOrganizationName());
+
+		organizationService.saveOrUpdate(organization);
+
+		//create account
+		//TODO encode password !!
+		Administrator administrator = new Administrator(organization,dto.getPersonDTO().getIdentifier(), dto.getPassword(), dto.getPersonDTO().getLastName(), dto.getPersonDTO().getFirstName());
+
+		//save account
+		administratorService.saveOrUpdate(administrator);
+
+		return ok(new ReturnDTO());
+	}
+
+
 
 	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);

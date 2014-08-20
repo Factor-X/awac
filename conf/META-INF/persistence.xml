@@ -14,11 +14,9 @@
         <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
-        <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
-        <class>eu.factorx.awac.models.account.Vat</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>

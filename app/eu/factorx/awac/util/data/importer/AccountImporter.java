@@ -98,7 +98,6 @@ public class AccountImporter extends WorkbookDataImporter {
 				accountEntity = (Account) JPA.em().createQuery("select o from Account o where o.identifier = :login").setParameter("login", login).getSingleResult();
 			} catch (NoResultException ex) {
 				accountEntity = new Account(organizationEntity, login, password, lastname, firstname);
-				accountEntity.setAge(age);
 				session.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}

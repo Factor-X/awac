@@ -1,14 +1,21 @@
 package eu.factorx.awac.dto.myrmex.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.Pattern;
+import eu.factorx.awac.dto.validation.annotations.Size;
 
-/**
- * Created by florian on 4/07/14.
- */
 public class PersonDTO extends DTO {
+
+	@Pattern(regexp=Pattern.IDENTIFIER)
 	private String identifier;
+
+	@Size(min=1,max=255)
 	private String firstName;
+
+	@Size(min=1,max=255)
 	private String lastName;
+
+	@Pattern(regexp=Pattern.EMAIL)
 	private String email;
 
 	public PersonDTO() {
