@@ -1,8 +1,9 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.knowledge.UnitCategory;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +11,9 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.Logger;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.knowledge.Unit;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -265,7 +264,7 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 
 		//Logger.info(" null?" + lu);
 		assertNotNull(lu);
-		assertEquals(227,lu.size());
+		assertEquals(226,lu.size());
 
 //		for (Unit unit : lu) {
 //			//assertTrue(col.contains(unit.getSymbol()));
@@ -487,8 +486,6 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 				"ZMW",
 				"m3/y",
 				"GJ",
-				"MWh",
-				"kWh",
 				"kW",
 				"k€",
 				"km.passager",
@@ -498,8 +495,6 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 				"équivalent.habitant",
 				"tCO2e",
 				"unit",
-				"kg éq CO2/kW froid",
-				"heure",
 				"kgCO2e",
 				"employé",
 				"MW.h")));

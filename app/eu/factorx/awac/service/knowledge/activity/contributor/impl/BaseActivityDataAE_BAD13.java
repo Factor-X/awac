@@ -24,7 +24,7 @@ public class BaseActivityDataAE_BAD13 extends ActivityResultContributor {
 
 		// Get Target Unit (employé in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.employé)
-		Unit baseActivityDataUnit = getUnitBySymbol("employé");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5336);
 
 		// Get reference Number of Employees
 		List<QuestionSetAnswer> questionSetAnswersA1 = questionSetAnswers.get(QuestionCode.A1);

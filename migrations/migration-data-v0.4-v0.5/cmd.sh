@@ -17,3 +17,6 @@ echo "delete from form where id = 1;" >> /tmp/migration/useful_data.sql
 
 # execute the script
 cat /tmp/migration/useful_data.sql | psql -h localhost -U play -d awac -W
+
+# execute the units refactoring
+cat /migrations/migration-data-v0.4-v0.5/unit_refactoring.sql | psql -h localhost -U play -d awac -W

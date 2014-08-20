@@ -23,7 +23,7 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
 
 		// Get Target Unit (l in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
-		Unit baseActivityDataUnit = getUnitBySymbol("l");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
 		// For each set of answers in A78, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA78 = questionSetAnswers.get(QuestionCode.A78);

@@ -1,15 +1,31 @@
-package eu.factorx.awac.compilers
-
 import java.io.FileWriter
 import java.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.jcoffeescript._
-import play.Logger
 
-import scalax.file.Path
+import scalax.file.{Path, PathSet}
+
 
 class AngularCompiler {
+
+
+    def setContentIfDifferent(path: String, content: String) {
+
+        var same = false
+        try {
+            val existingContent = scala.io.Source.fromFile(path).getLines().mkString("\n")
+            same = (existingContent == content)
+        } catch {
+            case e: Exception =>
+        }
+
+        if (!same) {
+            val fw = new FileWriter(path)
+            fw.write(content)
+            fw.close()
+        }
+    }
 
     def validatorsToDirectives(ps: Iterable[Path], folder: Path) = {
 
@@ -61,18 +77,16 @@ class AngularCompiler {
 
             if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
                 // nothing to do, tempfile is up-to-date
-                Logger.debug("[UP-TO-DATE] " + f.path)
+                println("[UP-TO-DATE] " + f.path)
             } else {
-                Logger.debug("[BUILDING] " + f.path)
+                println("[BUILDING] " + f.path)
 
                 val script = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
                 val name: String = f.simpleName.replaceAll("\\.js$ ", "")
                 val dname: String = name.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase
                 val result = template.replaceAll("__NAME__", name).replaceAll("__DNAME__", dname).replaceAll("__SCRIPT__", script)
 
-                val fw = new FileWriter(tempFile)
-                fw.write(result)
-                fw.close()
+                setContentIfDifferent(tempFile.getPath, result)
 
             }
 
@@ -84,49 +98,66 @@ class AngularCompiler {
     def compile(path: String): String = {
 
         val angular = Path.fromString(path)
-        val tmp = Path.fromString("tmp")
+        val tmp = Path.fromString(".tmp")
 
-        val roots = angular * "*.coffee"
-        val services = angular / "services" ** "*.coffee"
-        val filters = angular / "filters" ** "*.coffee"
-        val directives = angular / "directives" ** "*.coffee"
-        val directivesTemplates = (angular / "directives" ** "*.jade") ++ (angular / "directives" ** "*.html")
-        val controllers = angular / "controllers" ** "*.coffee"
-        val views = (angular / "views" ** "*.jade") ++ (angular / "views" ** "*.html")
+        val roots: PathSet[Path] = angular * "*.coffee"
+        val routes: PathSet[Path] = angular / "routes" ** "*.coffee"
+        val services: PathSet[Path] = angular / "services" ** "*.coffee"
+        val filters: PathSet[Path] = angular / "filters" ** "*.coffee"
+        val directives: PathSet[Path] = angular / "directives" ** "*.coffee"
+        val directivesTemplates: PathSet[Path] = (angular / "directives" ** "*.jade") ++ (angular / "directives" ** "*.html")
+        val controllers: PathSet[Path] = angular / "controllers" ** "*.coffee"
+        val views: PathSet[Path] = (angular / "views" ** "*.jade") ++ (angular / "views" ** "*.html")
 
         val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
 
-        compileFiles(roots, Path.fromString("tmp/sources/"))
-        compileFiles(services, Path.fromString("tmp/sources/"))
-        compileFiles(filters, Path.fromString("tmp/sources/"))
-        compileFiles(directives, Path.fromString("tmp/sources/"))
-        compileFiles(directivesTemplates, Path.fromString("tmp/sources/"))
-        compileFiles(views, Path.fromString("tmp/sources/"))
-        compileFiles(controllers, Path.fromString("tmp/sources/"))
+        /*
+                compileFiles(roots, Path.fromString(".tmp/sources/"))
+                compileFiles(routes, Path.fromString(".tmp/sources/"))
+                compileFiles(services, Path.fromString(".tmp/sources/"))
+                compileFiles(filters, Path.fromString(".tmp/sources/"))
+                compileFiles(directives, Path.fromString(".tmp/sources/"))
+                compileFiles(directivesTemplates, Path.fromString(".tmp/sources/"))
+                compileFiles(views, Path.fromString(".tmp/sources/"))
+                compileFiles(controllers, Path.fromString(".tmp/sources/"))
+        */
+
+        val m: List[Thread] = List(routes, roots, services, filters, directives, directivesTemplates, views, controllers).map { v =>
+            var t = new Thread(new Runnable {
+                def run() {
+                    compileFiles(v, Path.fromString(".tmp/sources/"))
+                }
+            })
+            t.start()
+            t
+        }
+        m.foreach { t => t.join()}
 
 
-        compileFiles(validators, Path.fromString("tmp/validators/"))
+        compileFiles(validators, Path.fromString(".tmp/validators/"))
 
-        validatorsToDirectives(Path.fromString("tmp/validators/") ** "*.js", Path.fromString("tmp/validators-directives/"))
 
-        assembleTemplates(Path.fromString("tmp/sources/") ** "*.html", Path.fromString("tmp/templates/"), angular)
+        validatorsToDirectives(Path.fromString(".tmp/validators/") ** "*.js", Path.fromString(".tmp/validators-directives/"))
+
+        assembleTemplates(Path.fromString(".tmp/sources/") ** "*.html", Path.fromString(".tmp/templates/"), angular)
 
         concatenate(
-            (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/") * "*.js")
-                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/services") ** "*.js")
-                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/filters") ** "*.js")
-                ++ (Path.fromString("tmp/validators-directives") ** "*.js")
-                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
-                ++ (Path.fromString("tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
-                ++ (Path.fromString("tmp/templates/") ** "*.js"),
-            Path.fromString("tmp/concatenated/")
+            (Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/routes") * "*.js"
+                ++ Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/") * "*.js")
+                ++ (Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/services") ** "*.js")
+                ++ (Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/filters") ** "*.js")
+                ++ (Path.fromString(".tmp/validators-directives") ** "*.js")
+                ++ (Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/directives") ** "*.js")
+                ++ (Path.fromString(".tmp/sources/app/eu/factorx/awac/angular/controllers") ** "*.js")
+                ++ (Path.fromString(".tmp/templates/") ** "*.js"),
+            Path.fromString(".tmp/concatenated/")
         )
 
         // compiledMain + compiledServices + compiledFilters + compiledDirectives + compiledControllers
 
-        val res = scala.io.Source.fromFile("tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
+        val res = scala.io.Source.fromFile(".tmp/concatenated/concatenated.js", "utf-8").getLines().mkString("\n")
 
-        Logger.info("ANGULAR APP COMPILED")
+        println("ANGULAR APP COMPILED")
 
         res
     }
@@ -154,10 +185,10 @@ class AngularCompiler {
 
         if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
             // nothing to do, tempfile is up-to-date
-            Logger.debug("[UP-TO-DATE] " + f.path)
+            println("[UP-TO-DATE] " + f.path)
         } else {
             var result = ""
-            Logger.info("[COMPILING] " + f.path)
+            println("[COMPILING] " + f.path)
 
             if (sourceExtension == "coffee") {
                 val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
@@ -178,17 +209,27 @@ class AngularCompiler {
                 result = source
             }
 
-            val fw = new FileWriter(tempFile)
-            fw.write(result)
-            fw.close()
-
+            setContentIfDifferent(tempFile.getPath, result)
         }
     }
 
     private def compileFiles(files: Iterable[Path], folder: Path) {
-        for (f <- files) {
-            compileFile(f, folder)
+        val m: List[Thread] = files.toList.map { v =>
+            var t = new Thread(new Runnable {
+                def run() {
+                    compileFile(v, folder)
+                }
+            })
+            t.start()
+            t
         }
+        m.foreach { t => t.join()}
+
+        /*
+                for (f <- files) {
+                    compileFile(f, folder)
+                }
+                */
     }
 
     private def assembleTemplates(files: Iterable[Path], folder: Path, angular: Path) {
@@ -203,23 +244,23 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
-            Logger.info("[ASSEMBLING] " + (folder / "templates.js").path)
-            Logger.info(angular.path)
+            println("[ASSEMBLING] " + (folder / "templates.js").path)
+            println(angular.path)
 
             var result = "angular.module('app.directives').run(function($templateCache) {"
             for (f <- files) {
 
-                Logger.info(f.path)
+                println(f.path)
 
                 // now, escape string so that it can be embedded as a variable
                 val mapper: ObjectMapper = new ObjectMapper()
 
                 var url = ""
 
-                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "directives").path)) {
-                    Logger.info("DIRECTIVE")
+                if (f.path.startsWith((Path.fromString(".tmp") / "sources" / angular / "directives").path)) {
+                    println("DIRECTIVE")
                     // compute a decent url for the template
-                    var usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "directives").path.length)
+                    var usefulPath = f.path.substring((Path.fromString(".tmp") / "sources" / angular / "directives").path.length)
 
                     // to dashed
                     val regex = "([a-z])([A-Z])"
@@ -234,9 +275,9 @@ class AngularCompiler {
                     url = "$/angular/templates/" + usefulPath + ".html"
                 }
 
-                if (f.path.startsWith((Path.fromString("tmp") / "sources" / angular / "views").path)) {
-                    Logger.info("VIEW")
-                    val usefulPath = f.path.substring((Path.fromString("tmp") / "sources" / angular / "views").path.length)
+                if (f.path.startsWith((Path.fromString(".tmp") / "sources" / angular / "views").path)) {
+                    println("VIEW")
+                    val usefulPath = f.path.substring((Path.fromString(".tmp") / "sources" / angular / "views").path.length)
                     url = "$/angular/views" + usefulPath
                 }
 
@@ -245,11 +286,10 @@ class AngularCompiler {
             }
             result += "});"
 
-            val fw = new FileWriter(tempFile)
-            fw.write(result)
-            fw.close()
+            setContentIfDifferent(tempFile.getPath, result)
+
         } else {
-            Logger.debug("[UP-TO-DATE] " + (folder / "templates.js").path)
+            println("[UP-TO-DATE] " + (folder / "templates.js").path)
         }
     }
 
@@ -265,17 +305,15 @@ class AngularCompiler {
         }
 
         if (mustRemake) {
-            Logger.info("[CONCATENATING] " + (folder / "concatenated.js").path)
+            println("[CONCATENATING] " + (folder / "concatenated.js").path)
             var result = ""
             for (f <- files) {
                 result += scala.io.Source.fromFile(f.path, "utf-8").getLines().mkString("\n")
             }
 
-            val fw = new FileWriter(tempFile)
-            fw.write(result)
-            fw.close()
+            setContentIfDifferent(tempFile.getPath, result)
         } else {
-            Logger.debug("[UP-TO-DATE] " + (folder / "concatenated.js").path)
+            println("[UP-TO-DATE] " + (folder / "concatenated.js").path)
         }
     }
 

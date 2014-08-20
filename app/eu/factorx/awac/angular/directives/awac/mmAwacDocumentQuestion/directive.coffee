@@ -91,7 +91,7 @@ angular
                         file: file
                     ).progress((evt) ->
                         scope.percent = parseInt(100.0 * evt.loaded / evt.total)
-                        console.log "percent: " + scope.percent
+                        #console.log "percent: " + scope.percent
                         return
                     ).success((data, status, headers, config) ->
                         # file is uploaded successfully
@@ -99,15 +99,15 @@ angular
                         scope.inDownload = false
                         fileName = "??"
                         messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
-                        console.log data
+                        #console.log data
 
                         #add the file to the answer
                         if scope.getAnswer().value == null || scope.getAnswer().value == undefined
                             scope.getAnswer().value = {}
                         scope.getAnswer().value[data.id] =  data.name
 
-                        console.log "AnswerValue : "
-                        console.log scope.getAnswer()
+                        #console.log "AnswerValue : "
+                        #console.log scope.getAnswer()
 
                         return
                     ).error((data, status, headers, config) ->

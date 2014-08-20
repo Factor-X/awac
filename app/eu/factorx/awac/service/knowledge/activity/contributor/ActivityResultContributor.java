@@ -7,10 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -36,7 +33,7 @@ public abstract class ActivityResultContributor {
 	@Autowired
 	private CodeConversionService codeConversionService;
 
-	private Map<String, Unit> unitsBySymbol = null;
+	private Map<String, Unit> unitsByCodeKey = null;
 
 	public ActivityResultContributor() {
 		super();
@@ -66,7 +63,7 @@ public abstract class ActivityResultContributor {
 				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit);
 			}
 		} else {
-			throw new RuntimeException("Cannot convert " + answerValue + " do Double");
+			throw new RuntimeException("Cannot convert " + answerValue + " to Double value");
 		}
 		return res;
 	}
@@ -108,18 +105,18 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
-	protected Unit getUnitBySymbol(String symbol) {
-		if (unitsBySymbol == null) {
+	protected Unit getUnitByCode(UnitCode unitCode) {
+		if (unitsByCodeKey == null) {
 			findAllUnits();
 		}
-		return unitsBySymbol.get(symbol);
+		return unitsByCodeKey.get(unitCode.getKey());
 	}
 
 	private void findAllUnits() {
-		unitsBySymbol = new HashMap<>();
+		unitsByCodeKey = new HashMap<>();
 		List<Unit> units = unitService.findAll();
 		for (Unit unit : units) {
-			unitsBySymbol.put(unit.getSymbol(), unit);
+			unitsByCodeKey.put(unit.getUnitCode().getKey(), unit);
 		}
 	}
 }

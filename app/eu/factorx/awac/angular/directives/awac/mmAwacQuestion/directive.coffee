@@ -106,13 +106,10 @@ angular
                 if forDataToCompare
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
-                    if scope.getTabSet()? && !scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tabSet?
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tabSet =scope.getTabSet()
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).tab =scope.getTab()
-                    if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value == null
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).value = scope.getAggregation()
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap()).isAggregation = true
-                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap())
+                    if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value = scope.getAggregation()
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).isAggregation = true
+                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab())
 
             #
             # return the list of unit for the question

@@ -19,9 +19,9 @@ mm-awac-section(title-code="A130_TITLE")
         .element_text Plusieurs méthodes différentes existent pour rapporter le transport effectué par des transporteurs. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
     .method
         tabset
-            tab.tab-color-lightgreen(active="tabSet[1][1].active")
+            tab.tab-color-lightgreen(active="getTab(1,1).active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
+                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
                     span(ng-bind-html="'A141_TITLE' | translate")
                 .sub_block.tab-color-lightgreen
                     .element_table
@@ -49,9 +49,9 @@ mm-awac-section(title-code="A130_TITLE")
                         button.button.add-repetition-button(ng-click="addIteration('A142')", type="button")
                             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                             span(ng-bind-html="'A142_LOOPDESC' | translate")
-            tab.tab-color-green(active="tabSet[1][2].active")
+            tab.tab-color-green(active="getTab(1,2).active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
+                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
                     span(ng-bind-html="'A157_TITLE' | translate")
                 .sub_block.tab-color-green
                     .element_table

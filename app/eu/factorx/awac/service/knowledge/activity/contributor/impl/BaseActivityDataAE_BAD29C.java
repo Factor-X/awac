@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -24,7 +21,7 @@ public class BaseActivityDataAE_BAD29C extends ActivityResultContributor {
 
 		// Get Target Unit (Unit in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.Unit)
-		Unit baseActivityDataUnit = getUnitBySymbol("Unit");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5332);
 
 		// For each set of answers in A231, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA231 = questionSetAnswers.get(QuestionCode.A231);		if (questionSetAnswersA231 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA231) {

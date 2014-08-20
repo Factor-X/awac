@@ -18,7 +18,8 @@
                     ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_CONTINUE' | translate")
                 button.button(type="button",
                     ng-click="save()",
-                    ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_SAVE' | translate")
+                    ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_SAVE' | translate",
+                    focus-me="true")
                 button.button(type="button",
                     ng-click="close()",
                     ng-bind-html="'MODAL_CONFIRMATION_EXIT_FORM_CANCEL' | translate")

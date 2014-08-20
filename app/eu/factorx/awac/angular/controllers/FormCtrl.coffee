@@ -32,80 +32,83 @@ angular
     #
     # load the form and treat structure and data
     #
-    downloadService.getJson "answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data) ->
-        console.log "data"
-        console.log data
-        $scope.o = angular.copy(data)
+    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data, status) ->
+
+        if status != 200
+            messageFlash.displayError 'Unable to load data...'
+            modalService.close(modalService.LOADING)
+        else
+            $scope.o = angular.copy(data)
 
 
-        #build the list of answers
-        #recove answerSave
-        if $scope.o.answersSave != null && $scope.o.answersSave != undefined
-            answerSave = $scope.o.answersSave
-            #save answer        i
-            $scope.answerList = answerSave.listAnswers
+            #build the list of answers
+            #recove answerSave
+            if $scope.o.answersSave != null && $scope.o.answersSave != undefined
+                answerSave = $scope.o.answersSave
+                #save answer        i
+                $scope.answerList = answerSave.listAnswers
 
-        #
-        # compute mapRepetition
-        #
-        $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
-            if questionSetDTO.repetitionAllowed == true
+            #
+            # compute mapRepetition
+            #
+            $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
+                if questionSetDTO.repetitionAllowed == true
 
-                listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
+                    listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
 
-                #find if the answer are already repeated on this repetition
-                for answer in $scope.answerList
-                    if answer.mapRepetition != null && answer.mapRepetition != undefined
-                        if answer.mapRepetition[questionSetDTO.code] != null && answer.mapRepetition[questionSetDTO.code] != undefined && answer.mapRepetition[questionSetDTO.code] != 0
-                            $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition,
-                                listQuestionSetRepetition)
-
-
-            if questionSetDTO.children
-                for child in questionSetDTO.children
-                    $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition))
-
-        #
-        # add default value to answer and unit
-        #
-        $scope.addDefaultValue = (questionSetDTO) ->
-            for question in questionSetDTO.questions
-                if question.defaultValue != undefined && question.defaultValue != null
+                    #find if the answer are already repeated on this repetition
                     for answer in $scope.answerList
-                        if answer.questionKey == question.code && answer.value == null
-                            answer.value = question.defaultValue
-
-            for child in questionSetDTO.children
-                $scope.addDefaultValue(child)
-
-        args = {}
-
-        args.time = $scope.o.answersSave.lastUpdateDate
-
-        $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
+                        if answer.mapRepetition != null && answer.mapRepetition != undefined
+                            if answer.mapRepetition[questionSetDTO.code] != null && answer.mapRepetition[questionSetDTO.code] != undefined && answer.mapRepetition[questionSetDTO.code] != 0
+                                $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition,
+                                    listQuestionSetRepetition)
 
 
-        #build list of repetition for the mmAwacRepetition
-        for qSet in $scope.o.questionSets
-            $scope.loopRepetition(qSet)
+                if questionSetDTO.children
+                    for child in questionSetDTO.children
+                        $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition))
 
-        console.log "$scope.mapRepetition"
-        console.log $scope.mapRepetition
+            #
+            # add default value to answer and unit
+            #
+            $scope.addDefaultValue = (questionSetDTO) ->
+                for question in questionSetDTO.questions
+                    if question.defaultValue != undefined && question.defaultValue != null
+                        for answer in $scope.answerList
+                            if answer.questionKey == question.code && answer.value == null
+                                answer.value = question.defaultValue
 
-        #use the defaultValues to completed null value
-        for questionSetDTO in $scope.o.questionSets
-            $scope.addDefaultValue(questionSetDTO)
+                for child in questionSetDTO.children
+                    $scope.addDefaultValue(child)
 
-        $timeout(->
-            $scope.createTabSet()
+            args = {}
+
+            args.time = $scope.o.answersSave.lastUpdateDate
+
+            $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
+
+
+            #build list of repetition for the mmAwacRepetition
+            for qSet in $scope.o.questionSets
+                $scope.loopRepetition(qSet)
+
+            #console.log "$scope.mapRepetition"
+            #console.log $scope.mapRepetition
+
+            #use the defaultValues to completed null value
+            for questionSetDTO in $scope.o.questionSets
+                $scope.addDefaultValue(questionSetDTO)
+
             $timeout(->
-                modalService.close(modalService.LOADING)
-                $scope.loading = false
-                $scope.$root.$broadcast('FORM_LOADING_FINISH')
+                $scope.createTabSet()
+                $timeout(->
+                    modalService.close(modalService.LOADING)
+                    $scope.loading = false
+                    $scope.$root.$broadcast('FORM_LOADING_FINISH')
+                , 0)
             , 0)
-        , 0)
 
-        return
+            return
 
 
     $scope.$on 'SAVE_AND_NAV', (event, args) ->
@@ -137,8 +140,8 @@ angular
                 # add the answer of the listAnswerToSave
                 listAnswerToSave[listAnswerToSave.length] = answer
 
-        console.log "listAnswerToSave"
-        console.log listAnswerToSave
+        #console.log "listAnswerToSave"
+        #console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
             messageFlash.displayInfo translationService.get('ALL_ANSWERS_ALREADY_SAVED')
@@ -151,7 +154,7 @@ angular
 
             promise = $http
                 method: "POST"
-                url: 'answer/save'
+                url: '/awac/answer/save'
                 headers:
                     "Content-Type": "application/json"
                 data: $scope.o.answersSave
@@ -498,7 +501,7 @@ angular
         if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
             promise = $http
                 method: "GET"
-                url: 'answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId
+                url: '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
@@ -524,51 +527,31 @@ angular
 
         listTotal = []
 
-
-        # compute value for non tab-set answer
         for answer in $scope.answerList
 
-            if !answer.tabSet?
+            # document questions are optional : do not count them into total
+            if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
 
-                # document questions are optional : do not count them into total
-                if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT'
+                if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
 
-                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                    if answer.isAggregation != true
 
-                        if answer.isAggregation != true
+                        # clean the value
+                        total++
+                        listTotal[listTotal.length] = answer
 
-                            # clean the value
-                            total++
-                            listTotal[listTotal.length] = answer
-
-                            #test if the data is valid
-                            if answer.value != null
-                                answered++
-
-        # compute value for non tab-set answer
-        for key in Object.keys($scope.tabSet)
-            if key != '$$hashKey'
-                tabSet= $scope.tabSet[key]
-                if tabSet.master?
-                    for answer in $scope.answerList
-                        if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == parseFloat(tabSet.master)
-                            total++
+                        #test if the data is valid
+                        if answer.value != null
                             answered++
-                else
-                    for answer in $scope.answerList
-                        if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == 1
-                            total++
-                            if answer.value!=null
-                                answered++
-
 
 
         percentage = answered / total * 100
 
         percentage = Math.floor(percentage)
 
-        console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
-        console.log listTotal
+
+        #console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
+        #console.log listTotal
 
         #build formProgressDTO
         formProgressDTO = {}
@@ -580,7 +563,7 @@ angular
         # refresh progress bar
         founded = false
         for formProgress in $scope.$parent.formProgress
-            console.log formProgress.form + "-" + $scope.formIdentifier
+            #console.log formProgress.form + "-" + $scope.formIdentifier
             if formProgress.form == $scope.formIdentifier
                 founded = true
                 formProgress.percentage = percentage
@@ -590,7 +573,7 @@ angular
         # send computed progress bar to the server
         promise = $http
             method: "POST"
-            url: 'answer/formProgress'
+            url: '/awac/answer/formProgress'
             headers:
                 "Content-Type": "application/json"
             data: formProgressDTO

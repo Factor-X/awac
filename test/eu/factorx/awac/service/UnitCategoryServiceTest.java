@@ -56,7 +56,7 @@ public class UnitCategoryServiceTest extends AbstractBaseModelTest {
 
 		List<UnitCategory> luc = unitCategoryService.findAll();
 		assertNotNull(luc);
-		assertEquals(16,luc.size());
+		assertEquals(15,luc.size());
 
 		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
 				"Length",
@@ -73,8 +73,7 @@ public class UnitCategoryServiceTest extends AbstractBaseModelTest {
 				"Temperature",
 				"Currency",
 				"Water Consumption",
-				"Global Warming Potential",
-				"Time")));
+				"Global Warming Potential")));
 
 		for (UnitCategory unitCategory : luc) {
 			assertTrue(col.contains(unitCategory.getName()));

@@ -5,64 +5,77 @@
 #
 # Home page
 #
-GET     /                                         @eu.factorx.awac.controllers.Application.index()                                                  
-GET     /translations/:lang                       @eu.factorx.awac.controllers.Translation.fetch(lang:String)                                       
+GET     /                                              @eu.factorx.awac.controllers.Application.index()                                                  
+GET     /enterprise                                    @eu.factorx.awac.controllers.Application.enterprise()                                             
+GET     /municipality                                  @eu.factorx.awac.controllers.Application.municipality()                                           
+
+#
+# Translations
+#
+GET     /awac/translations/:lang                       @eu.factorx.awac.controllers.Translation.fetch(lang:String)                                       
 
 #
 # Notifications
 #
-GET     /notifications/get_notifications          @eu.factorx.awac.controllers.NotificationController.getNotifications()
+GET     /awac/notifications/get_notifications          @eu.factorx.awac.controllers.NotificationController.getNotifications()                            
 
 #
 # Login rest api
 #
-POST    /login                                    @eu.factorx.awac.controllers.AuthenticationController.authenticate()                              
-POST    /logout                                   @eu.factorx.awac.controllers.AuthenticationController.logout()                                    
-POST    /testAuthentication                       @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()                        
+POST    /awac/login                                    @eu.factorx.awac.controllers.AuthenticationController.authenticate()                              
+POST    /awac/logout                                   @eu.factorx.awac.controllers.AuthenticationController.logout()                                    
+POST    /awac/testAuthentication                       @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()                        
 
 #
 # VIES Service
 #
-GET     /vies/vatcheck/:uid/:vat                  @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)             
+GET     /vies/vatcheck/:uid/:vat                       @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)             
+
+#
+# Email Service
+#
+POST        /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
 
 #
 # Javascript routing
 #
-GET     /assets/javascripts/routes                @eu.factorx.awac.controllers.Application.javascriptRoutes()                                       
+GET     /assets/javascripts/routes                     @eu.factorx.awac.controllers.Application.javascriptRoutes()                                       
 
 #
 # Map static resources from the /public folder to the /assets URL path
 #
-GET     /assets/*file                             controllers.Assets.at(path="/public", file)                                                       
-GET     /tests                                    eu.factorx.awac.controllers.TestController.index()                                                
+GET     /assets/*file                                  controllers.Assets.at(path="/public", file)                                                       
+GET     /tests                                         eu.factorx.awac.controllers.TestController.index()                                                
 
 #
 # Answer controller => used to save answer
 #
-GET     /answer/getByForm/:form/:period/:scope    @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
-POST    /answer/save                              @eu.factorx.awac.controllers.AnswerController.save()                                              
-GET     /answer/getPeriodsForComparison/:scope    @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)                
-POST    /answer/formProgress                      @eu.factorx.awac.controllers.AnswerController.setFormProgress()                                   
-GET     /answer/formProgress/:period/:scope       @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)        
+GET     /awac/answer/getByForm/:form/:period/:scope    @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
+POST    /awac/answer/save                              @eu.factorx.awac.controllers.AnswerController.save()                                              
+GET     /awac/answer/getPeriodsForComparison/:scope    @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)                
+POST    /awac/answer/formProgress                      @eu.factorx.awac.controllers.AnswerController.setFormProgress()                                   
+GET     /awac/answer/formProgress/:period/:scope       @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)        
 
 #
 # ResultController => used to get report
 #
-GET     /result/getReport/:period/:scope          @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)              
+GET     /awac/result/getReport/:period/:scope          @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)              
 
 #
 # Upload
 #
-POST    /file/upload/                             @eu.factorx.awac.controllers.FilesController.upload()                                             
-GET     /file/download/:storedFileId              @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)                         
+POST    /awac/file/upload/                             @eu.factorx.awac.controllers.FilesController.upload()                                             
+GET     /awac/file/download/:storedFileId              @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)                         
 
 #
-# user profile
+# User profile
 #
-GET     /user/profile                            @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()
-POST    /user/profile/save                       @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
-POST    /user/email/save                         @eu.factorx.awac.controllers.UserProfileController.updateEmail()
-POST    /user/password/save                      @eu.factorx.awac.controllers.UserProfileController.updatePassword()
+GET     /awac/user/profile                             @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()                           
+POST    /awac/user/profile/save                        @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()                          
+POST    /awac/user/email/save                          @eu.factorx.awac.controllers.UserProfileController.updateEmail()                                  
+POST    /awac/user/password/save                       @eu.factorx.awac.controllers.UserProfileController.updatePassword()                               
 
-# admin
-GET		/admin/translations/reset				 @eu.factorx.awac.controllers.AdminController.resetTranslations()
+#
+# Admin
+#
+GET     /awac/admin/translations/reset                 @eu.factorx.awac.controllers.AdminController.resetTranslations()
