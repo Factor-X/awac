@@ -10,12 +10,9 @@ import eu.factorx.awac.models.code.type.UnitCode;
 
 @Entity
 @Table(name = "unit")
-@NamedQueries({
-		@NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
-		@NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
-})
+@NamedQueries({ @NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"), @NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"), })
 @Cacheable
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Unit extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +21,8 @@ public class Unit extends AbstractEntity {
 	public static final String COLUMN_NAME_SYMBOL = "symbol";
 	public static final String FIND_ALL = "Unit.findAll";
 	/**
-	 * @param symbol : a {@link String}
+	 * @param symbol
+	 *            : a {@link String}
 	 */
 	public static final String FIND_BY_SYMBOL = "Unit.findBySymbol";
 
@@ -33,7 +31,7 @@ public class Unit extends AbstractEntity {
 	private String name = null;
 
 	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = COLUMN_NAME_REF))})
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = COLUMN_NAME_REF)) })
 	private UnitCode unitCode;
 
 	@Column(name = COLUMN_NAME_SYMBOL, nullable = false)
@@ -84,6 +82,11 @@ public class Unit extends AbstractEntity {
 
 	public void setCategory(UnitCategory category) {
 		this.category = category;
+	}
+
+	@Override
+	public String toString() {
+		return "Unit [unitCode=" + unitCode + ", symbol=" + symbol + "]";
 	}
 
 }

@@ -237,7 +237,6 @@ public class UnitCode extends Code {
 	public static final UnitCode U5330 = new UnitCode("U5330");
 	public static final UnitCode U5331 = new UnitCode("U5331");
 	public static final UnitCode U5332 = new UnitCode("U5332");
-	public static final UnitCode U5334 = new UnitCode("U5334");
 	public static final UnitCode U5335 = new UnitCode("U5335");
 	public static final UnitCode U5336 = new UnitCode("U5336");
 	public static final UnitCode U5337 = new UnitCode("U5337");

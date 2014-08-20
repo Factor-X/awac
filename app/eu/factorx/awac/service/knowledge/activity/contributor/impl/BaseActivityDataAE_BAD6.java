@@ -1,4 +1,3 @@
-
 package eu.factorx.awac.service.knowledge.activity.contributor.impl;
 
 import java.util.ArrayList;
@@ -19,11 +18,11 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
-				List<BaseActivityData> res = new ArrayList<>();
+		List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (kW in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5324);
+		Unit kW = getUnitByCode(UnitCode.U5324);
+		Unit kWh = getUnitByCode(UnitCode.U5156);
+		Unit hour = getUnitByCode(UnitCode.U5147);
 
 		// Get reference Electrical Consumption
 		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);
@@ -35,20 +34,17 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
 		QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);
 
-		if (questionA23Answer == null &&
-				questionA24Answer == null) {
+		if (questionA23Answer == null && questionA24Answer == null) {
 			return res;
 		}
+
 		Double elecConsumption = 0.0;
-        //TODO convertion impossible entre unité d'énergie et de puissance
-        /*
 		if (questionA23Answer != null) {
-			elecConsumption += toDouble(questionA23Answer, baseActivityDataUnit);
+			elecConsumption += toDouble(questionA23Answer, kWh);
 		}
 		if (questionA24Answer != null) {
-			elecConsumption += toDouble(questionA24Answer, baseActivityDataUnit);
+			elecConsumption += toDouble(questionA24Answer, kWh);
 		}
-		*/
 
 		// For each set of answers in A47, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);
@@ -81,12 +77,11 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 			baseActivityData.setActivityType(ActivityTypeCode.AT_10);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_161);
 			baseActivityData.setActivityOwnership(true);
+			baseActivityData.setUnit(kW);
 			if (!toBoolean(questionA48Answer)) {
-			baseActivityData.setUnit(baseActivityDataUnit);
 				baseActivityData.setValue(0.0);
 			} else {
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitByCode(UnitCode.U5147)));
+				baseActivityData.setValue(elecConsumption / toDouble(questionA49Answer, hour));
 			}
 			res.add(baseActivityData);
 		}

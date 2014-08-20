@@ -14,6 +14,7 @@ import eu.factorx.awac.models.code.type.UnitCategoryCode;
 @Table(name = "unit_category")
 @NamedQueries({
 		@NamedQuery(name = UnitCategory.FIND_BY_NAME, query = "select uc from UnitCategory uc where uc.name = :name"),
+		@NamedQuery(name = UnitCategory.FIND_BY_CODE, query = "select uc from UnitCategory uc where uc.unitCategoryCode = :unitCategoryCode"),
 })
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -25,6 +26,11 @@ public class UnitCategory extends AbstractEntity {
 	 * @param String name : a {@link String}
 	 */
 	public static final String FIND_BY_NAME = "UnitCategory.findByName";
+
+	/**
+	 * @param UnitCategoryCode unitCategoryCode : a {@link UnitCategoryCode}
+	 */
+	public static final String FIND_BY_CODE = "UnitCategory.findByCode";
 
 	@Embedded
 	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "ref"))})
