@@ -91,7 +91,7 @@ public class ReportServiceImpl implements ReportService {
 			try {
 				res.addAll(contributor.getBaseActivityData(allQuestionSetAnswers));
 			} catch (Exception e) {
-				Logger.error("Error wile retrieving base activity data from BAD: " + contributor.getClass().getSimpleName());
+				Logger.error("Error wile retrieving base activity data from BAD: " + contributor.getClass().getSimpleName(), e);
 			}
 		}
 		return res;
