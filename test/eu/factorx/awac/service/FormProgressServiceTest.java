@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import play.Logger;
+import play.api.Play;
 
 import java.util.List;
 
@@ -111,7 +113,10 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 
 		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period,scope,form);
 
+		//Logger.info("id:" + formProgress.getId());
+		em.getTransaction().begin();
 		formProgressService.remove(formProgress);
+		em.getTransaction().commit();
 		assertTrue(true);
 
 	} // end of test
