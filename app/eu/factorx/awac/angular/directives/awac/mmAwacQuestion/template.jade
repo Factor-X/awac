@@ -9,7 +9,7 @@ div(class="question_field",
         .status(ng-class="getStatusClass()")
         .error_message(ng-show="errorMessage.length>0")
             div {{errorMessage}}
-            img(src='/awac/assets/images/question_field_error_message_icon_arrow.png')
+            img(src='/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
         button.button( ng-click="editComment()",
                 class="edit_comment_icon glyphicon glyphicon-pencil",
@@ -18,7 +18,7 @@ div(class="question_field",
         .user_icon(ng-hide="getAggregation()!=null || getAnswer().value == null") {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}
-                img(src='/awac/assets/images/user_icon_arrow.png')
+                img(src='/assets/images/user_icon_arrow.png')
 
     div(ng-show="displayOldDatas() === true && getAnswer(true) != null")
         button.button( ng-click="copyDataToCompare()",
@@ -29,4 +29,4 @@ div(class="question_field",
         .user_icon {{getUserName(true,true)}}
             div
                 div {{getUserName(true,false)}}
-                img(src='/awac/assets/images/user_icon_arrow.png')
+                img(src='/assets/images/user_icon_arrow.png')

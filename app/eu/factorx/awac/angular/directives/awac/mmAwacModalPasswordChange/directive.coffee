@@ -63,7 +63,7 @@ angular
 
             promise = $http
                 method: "POST"
-                url: 'user/password/save'
+                url: '/awac/user/password/save'
                 headers:
                     "Content-Type": "application/json"
                 data:

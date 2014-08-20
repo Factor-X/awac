@@ -12,6 +12,7 @@ div
                         th.align-right Scope 1
                         th.align-right Scope 2
                         th.align-right Scope 3
+                        th.align-right Hors scope
                     tbody
                         tr(ng-repeat="rl in o.reportLines")
                             td(ng-bind-html="rl.indicatorName")
@@ -21,11 +22,16 @@ div
                                 span(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope2Value > 0")
                             td.align-right
                                 span(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope3Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.outOfScopeValue | numberToI18N", ng-show="rl.outOfScopeValue > 0")
         tr
             td
                 br
                 br
                 br
+
+                h2 By scope
+                mm-awac-graph-donut(ng-items="graphs.scopes", ng-show="graphs.scopes.length > 0")
 
                 h2 Scope 1
                 mm-awac-graph-donut(ng-items="graphs.scope1", ng-show="graphs.scope1.length > 0")
@@ -35,6 +41,9 @@ div
 
                 h2 Scope 3
                 mm-awac-graph-donut(ng-items="graphs.scope3", ng-show="graphs.scope3.length > 0")
+
+                h2 Out of scope
+                mm-awac-graph-donut(ng-items="graphs.outOfScope", ng-show="graphs.outOfScope.length > 0")
 
                 br
                 br
