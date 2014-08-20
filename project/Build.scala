@@ -41,13 +41,14 @@ object ApplicationBuild extends Build {
 
     libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion
 
-    libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
+    // libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
 
-    lazy val downloadTranslations = TaskKey[Unit]("download-translations", "Download translations from Google Spreadsheet")
-    val downloadTranslationsTask = downloadTranslations := {
-        new DownloadTranslationsTask().execute()
+    libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
+
+    lazy val angularCompileTask = TaskKey[Unit]("angular-compile", "Compile angular app")
+    val angularCompileSettings = angularCompileTask := {
+        new AngularCompileTask().execute()
     }
-
 
     val main = play.Project(appName, appVersion, appDependencies)
         //.settings(Play2WarPlugin.play2WarSettings: _*)
@@ -55,22 +56,24 @@ object ApplicationBuild extends Build {
         // set war plugin  for 3.0 servlet container as Servlet 3.0: Tomcat 7, JBoss 7, JBoss EAP 6, Glassfish 3, Jetty 8
         //  Play2WarKeys.servletVersion := "3.0"
         //  )
-//        .settings(
-//            // work around regarding unit testing problem on 2.1.3
-//            testOptions in Test ~= { args =>
-//                for {
-//                    arg <- args
-//                    val ta: Tests.Argument = arg.asInstanceOf[Tests.Argument]
-//                    val newArg = if (ta.framework == Some(TestFrameworks.JUnit)) ta.copy(args = List.empty[String]) else ta
-//                } yield newArg
-//            }
-//        )
+        //        .settings(
+        //            // work around regarding unit testing problem on 2.1.3
+        //            testOptions in Test ~= { args =>
+        //                for {
+        //                    arg <- args
+        //                    val ta: Tests.Argument = arg.asInstanceOf[Tests.Argument]
+        //                    val newArg = if (ta.framework == Some(TestFrameworks.JUnit)) ta.copy(args = List.empty[String]) else ta
+        //                } yield newArg
+        //            }
+        //        )
         .settings(
-            downloadTranslationsTask
+            angularCompileSettings, resources in Compile <<= (resources in Compile).dependsOn(angularCompileTask)
         )
-//        .settings (
-//          unmanagedResourceDirectories in Test &lt;+= baseDirectory( _ / "features" )
-//        )
+
+
+    //        .settings (
+    //          unmanagedResourceDirectories in Test &lt;+= baseDirectory( _ / "features" )
+    //        )
     // Add your own project settings here
 
 

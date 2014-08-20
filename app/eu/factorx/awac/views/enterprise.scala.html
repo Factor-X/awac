@@ -2,6 +2,7 @@
 <html ng-app="app">
     <head>
         <title>AWAC</title>
+        <meta name="app" content="enterprise"/>
 
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
@@ -63,16 +64,51 @@
 
         <!-- Style -->
         <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
+        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/enterprise.css")'>
+
+        <!-- Messenger andDeveloper's helper for translations -->
+        <script>
+            Messenger.options = {
+                extraClasses: 'messenger-fixed messenger-on-top',
+                theme: 'flat'
+            }
+
+            $(function () {
+                $('body').keydown(function (evt) {
+                    // console.log(evt);
+                    if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
+                        if (window.debug) {
+                            window.debug = false;
+                            $('.translation-code').remove();
+                        } else {
+                            window.debug = true;
+                            $('.translated-text').each(function () {
+                                var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
+                                $(this).append(e)
+                            })
+                        }
+                    }
+                })
+            });
+        </script>
 
     </head>
-    <body>
+    <body ng-controller="MainCtrl">
+        
+        <!-- background for modal -->
+        <div class="modal-background" ng-show="$root.displayModalBackground">
+        </div>
 
-        <h1>Root app: choose</h1>
-        <ul>
-            <li><a href="enterprise">Enterprise</a></li>
-            <li><a href="municipality">Municipality</a></li>
-        </ul>
+        <!-- list modal -->
+        <mm-awac-modal-manager></mm-awac-modal-manager>
+        <!--
+        <mm-awac-modal-login></mm-awac-modal-login>
+        <mm-awac-modal-loading></mm-awac-modal-loading>
+        <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
+        <mm-awac-modal-document-manager></mm-awac-modal-document-manager>
+        -->
 
+        <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
     </body>
 </html>
 

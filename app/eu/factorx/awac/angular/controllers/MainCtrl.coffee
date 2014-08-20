@@ -145,8 +145,8 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        url = 'answer/getPeriodsForComparison/' + $scope.scopeId
-        if $scope.scopeId? && $scope.scopeId != NaN && $scope.scopeId != 'NaN'
+        url = '/awac/answer/getPeriodsForComparison/' + $scope.scopeId
+        if $scope.scopeId? and not isNaN($scope.scopeId)
 
             promise = $http
                 method: "GET"
@@ -180,12 +180,12 @@ angular
         if $scope.scopeId? && $scope.periodKey?
             promise = $http
                 method: "GET"
-                url: "answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
+                url: "/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
                 headers:
                     "Content-Type": "application/json"
             promise.success (data, status, headers, config) ->
-                console.log "FormProgress : answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
-                console.log data
+                #console.log "FormProgress : answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
+                #console.log data
 
 
                 $scope.formProgress = data.listFormProgress
@@ -193,7 +193,7 @@ angular
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
-            console.log "TIME : " + args.time
+            #console.log "TIME : " + args.time
 
             if args.time == null
                 date = null
@@ -246,7 +246,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     $rootScope.logout = () ->
         promise = $http
             method: "POST"
-            url: 'logout'
+            url: '/awac/logout'
             headers:
                 "Content-Type": "application/json"
         promise.success (data, status, headers, config) ->
@@ -265,8 +265,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
         $rootScope.currentPerson = data.person
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
-
-        $location.path('/form2/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+        $rootScope.onLoginSuccess(data)
 
     #
     # get user
@@ -283,7 +282,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     $rootScope.refreshUserData = () ->
         promise = $http
             method: "GET"
-            url: 'user/profile'
+            url: '/awac/user/profile'
             headers:
                 "Content-Type": "application/json"
         promise.success (data, status, headers, config) ->
@@ -299,7 +298,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     #
     promise = $http
         method: "POST"
-        url: 'testAuthentication'
+        url: '/awac/testAuthentication'
         headers:
             "Content-Type": "application/text"
     promise.success (data, status, headers, config) ->
@@ -314,7 +313,7 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     #
     $rootScope.refreshNotifications = () ->
         # fetch and display
-        downloadService.getJson 'notifications/get_notifications', (data) ->
+        downloadService.getJson '/awac/notifications/get_notifications', (data) ->
             if data?
                 for n in data.notifications
                     messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
