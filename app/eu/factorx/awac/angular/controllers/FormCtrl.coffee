@@ -654,8 +654,6 @@ angular
                     $scope.tabSet[tabSet][ite] = {}
                     $scope.tabSet[tabSet][ite].mapRepetition = answer.mapRepetition
 
-            console.log $scope.tabSet
-
             if !$scope.tabSet[tabSet][ite][tab]?
                 $scope.tabSet[tabSet][ite][tab] = {}
                 $scope.tabSet[tabSet][ite][tab].active = (tab == 1 ? true:false)
