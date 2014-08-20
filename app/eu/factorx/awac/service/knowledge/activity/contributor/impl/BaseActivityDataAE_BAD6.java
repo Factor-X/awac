@@ -1,16 +1,10 @@
-
 package eu.factorx.awac.service.knowledge.activity.contributor.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -24,11 +18,11 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
-				List<BaseActivityData> res = new ArrayList<>();
+		List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (kW in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kW)
-		Unit baseActivityDataUnit = getUnitBySymbol("kW");
+		Unit kW = getUnitByCode(UnitCode.U5324);
+		Unit kWh = getUnitByCode(UnitCode.U5156);
+		Unit hour = getUnitByCode(UnitCode.U5147);
 
 		// Get reference Electrical Consumption
 		List<QuestionSetAnswer> questionSetAnswersA22 = questionSetAnswers.get(QuestionCode.A22);
@@ -40,20 +34,17 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 		QuestionAnswer questionA23Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A23);
 		QuestionAnswer questionA24Answer = questionSet22AnswerQuestionAnswers.get(QuestionCode.A24);
 
-		if (questionA23Answer == null &&
-				questionA24Answer == null) {
+		if (questionA23Answer == null && questionA24Answer == null) {
 			return res;
 		}
+
 		Double elecConsumption = 0.0;
-        //TODO convertion impossible entre unité d'énergie et de puissance
-        /*
 		if (questionA23Answer != null) {
-			elecConsumption += toDouble(questionA23Answer, baseActivityDataUnit);
+			elecConsumption += toDouble(questionA23Answer, kWh);
 		}
 		if (questionA24Answer != null) {
-			elecConsumption += toDouble(questionA24Answer, baseActivityDataUnit);
+			elecConsumption += toDouble(questionA24Answer, kWh);
 		}
-		*/
 
 		// For each set of answers in A47, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA47 = questionSetAnswers.get(QuestionCode.A47);
@@ -86,12 +77,11 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 			baseActivityData.setActivityType(ActivityTypeCode.AT_10);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_161);
 			baseActivityData.setActivityOwnership(true);
+			baseActivityData.setUnit(kW);
 			if (!toBoolean(questionA48Answer)) {
-			baseActivityData.setUnit(baseActivityDataUnit);
 				baseActivityData.setValue(0.0);
 			} else {
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
+				baseActivityData.setValue(elecConsumption / toDouble(questionA49Answer, hour));
 			}
 			res.add(baseActivityData);
 		}

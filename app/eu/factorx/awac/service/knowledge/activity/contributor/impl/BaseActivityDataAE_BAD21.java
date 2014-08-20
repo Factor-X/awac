@@ -23,7 +23,7 @@ public class BaseActivityDataAE_BAD21 extends ActivityResultContributor {
 
 		// Get Target Unit (équivalent.habitant in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.équivalent.habitant)
-		Unit baseActivityDataUnit = getUnitBySymbol("équivalent.habitant");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5330);
 
 		// For each set of answers in A182, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA182 = questionSetAnswers.get(QuestionCode.A182);		if (questionSetAnswersA182 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA182) {

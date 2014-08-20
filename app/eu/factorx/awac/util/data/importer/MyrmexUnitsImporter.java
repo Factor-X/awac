@@ -13,6 +13,8 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
+import eu.factorx.awac.models.code.type.UnitCategoryCode;
+import eu.factorx.awac.models.code.type.UnitCode;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.models.knowledge.UnitConversionFormula;
@@ -79,7 +81,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
 			String name = getCellContent(unitCategoriesSheet, 1, i);
-			unitCategoriesByRef.put(ref, new UnitCategory(ref, name, "", null));
+			unitCategoriesByRef.put(ref, new UnitCategory(new UnitCategoryCode(ref), name, "", null));
 		}
 		persistEntities(unitCategoriesByRef.values());
 		Logger.info("==== Imported {} Unit Categories", unitCategoriesByRef.size());
@@ -96,7 +98,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			if (category == null) {
 				Logger.warn("No unit category defined for unit with symbol: '{}'!", symbol);
 			}
-			unitsByRef.put(ref, new Unit(ref, name, symbol, category));
+			unitsByRef.put(ref, new Unit(new UnitCode(ref), name, symbol, category));
 		}
 		persistEntities(unitsByRef.values());
 		Logger.info("==== Imported {} Units", unitsByRef.size());

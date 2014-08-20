@@ -1,11 +1,17 @@
 package eu.factorx.awac;
 
 
+import org.hibernate.Session;
+import org.springframework.context.ApplicationContext;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.UnitCategoryCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
@@ -13,10 +19,6 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.util.data.importer.*;
-import org.hibernate.Session;
-import org.springframework.context.ApplicationContext;
-import play.Logger;
-import play.db.jpa.JPA;
 
 public class AwacInitialData {
 
@@ -41,14 +43,15 @@ public class AwacInitialData {
 		new TranslationImporter(session).run();
 
 		// REFERENCES DATA
-		UnitCategory surfaceUnits = getUnitCategoryByName("Area");
-		UnitCategory energyUnits = getUnitCategoryByName("Energy");
-		UnitCategory massUnits = getUnitCategoryByName("Mass");
-		UnitCategory volumeUnits = getUnitCategoryByName("Volume");
-		UnitCategory lengthUnits = getUnitCategoryByName("Length");
-		UnitCategory powerUnits = getUnitCategoryByName("Power");
-		UnitCategory moneyUnits = getUnitCategoryByName("Currency");
-		UnitCategory timeUnits = getUnitCategoryByName("Time");
+		UnitCategory surfaceUnits = getUnitCategoryByCode(UnitCategoryCode.AREA);
+		UnitCategory energyUnits = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
+		UnitCategory massUnits = getUnitCategoryByCode(UnitCategoryCode.MASS);
+		UnitCategory volumeUnits = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
+		UnitCategory lengthUnits = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
+		UnitCategory powerUnits = getUnitCategoryByCode(UnitCategoryCode.POWER);
+		UnitCategory moneyUnits = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
+		UnitCategory durationUnits = getUnitCategoryByCode(UnitCategoryCode.DURATION);
+		
 
 		// PERIOD
 		for (int i = 2013; i >= 2000; i--) {
@@ -57,7 +60,7 @@ public class AwacInitialData {
 			session.saveOrUpdate(period1);
 		}
 
-		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, timeUnits);
+		createAll(session, lengthUnits, surfaceUnits, volumeUnits, massUnits, energyUnits, powerUnits, moneyUnits, durationUnits);
 
 		// NOTIFICATION
 		Notification notification = new Notification();
@@ -69,7 +72,7 @@ public class AwacInitialData {
 	}
 
 	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
-	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory timeUnits) {
+	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory durationUnits) {
 
 
 		// == TABTAB2 =====================================================================
@@ -1034,7 +1037,7 @@ public class AwacInitialData {
 		// == A49 =========================================================================
 		// Quel est le nombre d'heures de fonctionnement annuel du site?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
-		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, timeUnits, null, null));
+		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, durationUnits, null, null));
 
 		// == A51 =========================================================================
 		// Pièces documentaires liées à la mobilité
@@ -2077,8 +2080,8 @@ public class AwacInitialData {
 
 	}
 
-	private static UnitCategory getUnitCategoryByName(String name) {
-		return JPA.em().createNamedQuery(UnitCategory.FIND_BY_NAME, UnitCategory.class).setParameter("name", name).getSingleResult();
+	private static UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
+		return JPA.em().createNamedQuery(UnitCategory.FIND_BY_CODE, UnitCategory.class).setParameter("unitCategoryCode", unitCategoryCode).getSingleResult();
 	}
 
 	private static Unit getUnitBySymbol(String symbol) {

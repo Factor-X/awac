@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -26,10 +23,15 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 
 		// Get Target Unit (km.passager in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = getUnitBySymbol("km.passager");
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5326);
 
 		// For each set of answers in A115, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA115 = questionSetAnswers.get(QuestionCode.A115);		if (questionSetAnswersA115 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA115) {
+		List<QuestionSetAnswer> questionSetAnswersA115 = questionSetAnswers.get(QuestionCode.A115);
+		if (questionSetAnswersA115 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA115) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -46,7 +48,6 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 					questionA116Answer == null) {
 				continue;
 			}
-
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 

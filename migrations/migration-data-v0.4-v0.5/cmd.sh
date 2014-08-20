@@ -39,3 +39,6 @@ echo "alter table person drop column lastUpdate;" >> /tmp/migration/useful_data.
 
 # execute the script
 cat /tmp/migration/useful_data.sql | psql -h localhost -U play -d awac -W
+
+# execute the units refactoring
+cat /migrations/migration-data-v0.4-v0.5/unit_refactoring.sql | psql -h localhost -U play -d awac -W
