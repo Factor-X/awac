@@ -1,0 +1,116 @@
+<!doctype html>
+<html ng-app="app">
+    <head>
+        <title>AWAC</title>
+        <meta name="app" content="enterprise"/>
+
+        <!-- ------------------------------------------------------------------ -->
+        <!-- JAVASCRIPTS                                                        -->
+        <!-- ------------------------------------------------------------------ -->
+
+        <!-- Angular dependencies local -->
+        <script src='@routes.Assets.at("components/angular/angular.js")'></script>
+        <script src='@routes.Assets.at("components/angular-i18n/angular-locale_fr-fr.js")'></script>
+        <script src='@routes.Assets.at("components/angular-animate/angular-animate.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-sanitize/angular-sanitize.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-route/angular-route.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-bootstrap/ui-bootstrap-tpls.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-flash/dist/angular-flash.min.js")'></script>
+        <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload-shim.min.js")'></script>
+        <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>
+        <script src='@routes.Assets.at("components/angular-dynamic-locale/src/tmhDynamicLocale.js")'></script>
+
+        <!-- Underscore -->
+        <script src='@routes.Assets.at("components/underscore/underscore.js")'></script>
+
+        <!-- jQuery -->
+        <script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>
+
+        <!-- Bootstrap -->
+        <script src='@routes.Assets.at("components/bootstrap/dist/js/bootstrap.min.js")'></script>
+
+        <!-- Graphael -->
+        <script src='@routes.Assets.at("components/raphael/raphael-min.js")'></script>
+        <script src='@routes.Assets.at("components/graphael/g.raphael-min.js")'></script>
+        <script src='@routes.Assets.at("components/graphael/g.pie-min.js")'></script>
+
+        <!-- Messenger -->
+        <script src='@routes.Assets.at("components/messenger/build/js/messenger.min.js")'></script>
+        <script src='@routes.Assets.at("components/messenger/build/js/messenger-theme-flat.js")'></script>
+
+        <!-- ChartJS -->
+        <script src='@routes.Assets.at("components/chartjs/Chart.min.js")'></script>
+
+        <!-- Tinycolor -->
+        <script src='@routes.Assets.at("components/tinycolor/tinycolor.js")'></script>
+
+        <!-- web app -->
+        <script src='@routes.Assets.at("javascripts/app.js")'></script>
+
+        <!-- ------------------------------------------------------------------ -->
+        <!-- STYLES                                                             -->
+        <!-- ------------------------------------------------------------------ -->
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href='@routes.Assets.at("components/bootstrap/dist/css/bootstrap.min.css")'>
+
+        <!-- Messenger -->
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/messenger-theme.css")'>
+
+        <!-- Main (hacks) -->
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>
+
+        <!-- Style -->
+        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
+        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/enterprise.css")'>
+
+        <!-- Messenger andDeveloper's helper for translations -->
+        <script>
+            Messenger.options = {
+                extraClasses: 'messenger-fixed messenger-on-top',
+                theme: 'flat'
+            }
+
+            $(function () {
+                $('body').keydown(function (evt) {
+                    // console.log(evt);
+                    if (evt.which == 190 && evt.ctrlKey && evt.shiftKey && evt.altKey) {
+                        if (window.debug) {
+                            window.debug = false;
+                            $('.translation-code').remove();
+                        } else {
+                            window.debug = true;
+                            $('.translated-text').each(function () {
+                                var e = $('<span class="translation-code">' + $(this).data('code') + '</span>')
+                                $(this).append(e)
+                            })
+                        }
+                    }
+                })
+            });
+        </script>
+
+    </head>
+    <body ng-controller="MainCtrl">
+        
+        <!-- background for modal -->
+        <div class="modal-background" ng-show="$root.displayModalBackground">
+        </div>
+
+        <!-- list modal -->
+        <mm-awac-modal-manager></mm-awac-modal-manager>
+        <!--
+        <mm-awac-modal-login></mm-awac-modal-login>
+        <mm-awac-modal-loading></mm-awac-modal-loading>
+        <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
+        <mm-awac-modal-document-manager></mm-awac-modal-document-manager>
+        -->
+
+        <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
+    </body>
+</html>
+
+
+

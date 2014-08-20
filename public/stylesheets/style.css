@@ -357,9 +357,6 @@ select {
 }
 
 .menu > * {
-    min-width: calc((100% / 6.0) - 6px);
-    width: calc((100% / 6.0) - 6px);
-    max-width: calc((100% / 6.0) - 6px);
     position: relative;
     margin: 0px 3px;
 }

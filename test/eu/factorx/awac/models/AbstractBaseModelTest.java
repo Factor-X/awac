@@ -15,6 +15,8 @@ import play.test.FakeApplication;
 import play.test.Helpers;
 import scala.Option;
 
+import static java.lang.Thread.sleep;
+
 public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
     protected static EntityManager em;
@@ -30,6 +32,13 @@ public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
         FakeApplication app = Helpers.fakeApplication();
         Helpers.start(app);
+		// TODO - this needs to be tunned
+		// wait 2 seconds to be sure app is started on all environments
+		try {
+			sleep(2000);
+		} catch (Exception e) {
+			// do nothing
+		}
         Option<JPAPlugin> jpaPlugin = app.getWrappedApplication().plugin(JPAPlugin.class);
         em = jpaPlugin.get().em("default");
         JPA.bindForCurrentThread(em);

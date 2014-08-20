@@ -34,7 +34,7 @@ angular
         #send request
         promise = $http
             method: "POST"
-            url: 'login'
+            url: '/awac/login'
             headers:
                 "Content-Type": "application/json"
             data:

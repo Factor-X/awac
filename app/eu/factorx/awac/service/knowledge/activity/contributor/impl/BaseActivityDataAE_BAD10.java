@@ -20,7 +20,7 @@ public class BaseActivityDataAE_BAD10 extends ActivityResultContributor {
 
 	@Override
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
-				List<BaseActivityData> res = new ArrayList<>();
+		List<BaseActivityData> res = new ArrayList<>();
 
 		// Get Target Unit (l in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
@@ -47,15 +47,15 @@ public class BaseActivityDataAE_BAD10 extends ActivityResultContributor {
 			QuestionAnswer questionA68Answer = answersByCode.get(QuestionCode.A68);
 
 			if (questionA68Answer == null ||
-                    questionA69Answer == null ||
-                    (toBoolean(questionA69Answer) == Boolean.FALSE
-                            && questionA70Answer == null) ||
+					questionA69Answer == null ||
+					(toBoolean(questionA69Answer) == Boolean.FALSE
+							&& questionA70Answer == null) ||
 					questionA71Answer == null ||
 					(questionA73Answer == null &&
 							questionA74Answer == null &&
 							questionA75Answer == null) ||
-                     questionA76Answer == null)
-                    {
+					questionA76Answer == null)
+			{
 				continue;
 			}
 
@@ -66,22 +66,22 @@ public class BaseActivityDataAE_BAD10 extends ActivityResultContributor {
 			baseActivityData.setSpecificPurpose(toString(questionA68Answer));
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_5);
 			if (toBoolean(questionA69Answer) == Boolean.FALSE) {
-                baseActivityData.setActivitySubCategory(toActivitySubCategoryCode(questionA70Answer));
-            } else {
-                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
-            }
+				baseActivityData.setActivitySubCategory(toActivitySubCategoryCode(questionA70Answer));
+			} else {
+				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
+			}
 			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA71Answer));
 			baseActivityData.setActivityOwnership(toBoolean(questionA69Answer));
-            baseActivityData.setUnit(baseActivityDataUnit);
+			baseActivityData.setUnit(baseActivityDataUnit);
 
-            if (questionA73Answer != null) {
-            	baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA73Answer, baseActivityDataUnit)));
-            } else if (questionA74Answer != null) {
-            	baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA74Answer, baseActivityDataUnit)));
-            } else {
-            	baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA75Answer, baseActivityDataUnit)));
-            }
+			if (questionA73Answer != null) {
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA73Answer, baseActivityDataUnit)));
+			} else if (questionA74Answer != null) {
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA74Answer, baseActivityDataUnit)));
+			} else {
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA75Answer, baseActivityDataUnit)));
+			}
 
 			res.add(baseActivityData);
 		}

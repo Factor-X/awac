@@ -45,9 +45,9 @@ mm-awac-section(title-code="A180_TITLE")
 
     .method
         tabset
-            tab.tab-color-lightgreen(active="tabSet[1][1].active")
+            tab.tab-color-lightgreen(active="getTab(1,1).active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
+                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
                     span(ng-bind-html="'A197_TITLE' | translate")
                 .sub_block.tab-color-lightgreen
                     .element_table
@@ -56,9 +56,9 @@ mm-awac-section(title-code="A180_TITLE")
                         mm-awac-question(question-code="A199",ng-tab-set="1",ng-tab="1")
                         mm-awac-question(question-code="A200",ng-tab-set="1",ng-tab="1")
 
-            tab.tab-color-green(active="tabSet[1][2].active")
+            tab.tab-color-green(active="getTab(1,2).active")
                 tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
+                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
                     span(ng-bind-html="'A201_TITLE' | translate")
                 .sub_block.tab-color-green
                     .element_table

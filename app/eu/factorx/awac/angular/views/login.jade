@@ -1,4 +1,12 @@
 .loginBackground
+    .router-bar
+        .awac_logo
+        ul
+            li
+                a(href="/enterprise") Enterprise
+            li
+                a(href="/municipality") Municipality
+
     .loginFrame(ng-enter="send()")
         div(class="field_form")
             mm-awac-modal-field-text(ng-info="loginInfo")
