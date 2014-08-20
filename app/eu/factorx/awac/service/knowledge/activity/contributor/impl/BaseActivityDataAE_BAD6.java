@@ -91,7 +91,7 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 				baseActivityData.setValue(0.0);
 			} else {
 			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA48Answer, baseActivityDataUnit) * elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
+				baseActivityData.setValue(elecConsumption / toDouble(questionA49Answer, getUnitBySymbol("h")));
 			}
 			res.add(baseActivityData);
 		}
