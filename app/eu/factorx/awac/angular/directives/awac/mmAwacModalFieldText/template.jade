@@ -6,12 +6,11 @@ tr
                 ng-model='getInfo().field',
                 placeholder='{{getInfo().placeholder | translateText}}',
                 focus-me="{{getInfo().focus}}")
-        div REGEX2 : {{getInfo().validationRegex}}
     td
         div(ng-if='isValidationDefined')
-            img(ng-if='!hideIsValidIcon', ng-show='getInfo().isValid', src='/awac/assets/images/field_valid.png')
+            img(ng-if='!hideIsValidIcon', ng-show='getInfo().isValid', src='/assets/images/field_valid.png')
             .error_message(ng-hide='getInfo().isValid')
-                img(src='/awac/assets/images/field_invalid.png')
+                img(src='/assets/images/field_invalid.png')
                 div(ng-bind-html='getInfo().validationMessage | translate')
         div(ng-transclude)
 

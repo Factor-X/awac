@@ -7,6 +7,7 @@ import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.business.Organization;
@@ -98,38 +99,6 @@ public class UserProfileController extends Controller {
 
 		currentUser.setPassword(passwordChangeDTO.getNewPassword());
 		accountService.saveOrUpdate(currentUser);
-
-		return ok(new ReturnDTO());
-	}
-
-	@Transactional(readOnly = false)
-	public Result forgotPassword(String identifierOrEmail){
-
-		Account account;
-
-		if(identifierOrEmail.contains("@")){
-			account = accountService.findByEmail(identifierOrEmail.toLowerCase());
-		}
-		else{
-			account = accountService.findByIdentifier(identifierOrEmail);
-		}
-
-
-		if(account == null){
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
-		}
-
-		//generate password
-		String password = KeyGenerator.generateRandomPassword(10);
-
-		//TODO generate email
-
-		//TODO send email
-
-		//save new password
-		//TODO encode password !!
-		account.setPassword(password);
-		accountService.saveOrUpdate(account);
 
 		return ok(new ReturnDTO());
 	}

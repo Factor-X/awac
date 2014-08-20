@@ -28,13 +28,13 @@ angular
             else
                 $scope.close()
 
-            console.log "args"
-            console.log args
+            #console.log "args"
+            #console.log args
 
             $scope.listDocuments = args.params['listDocuments']
 
-            console.log "listDocuments"
-            console.log $scope.listDocuments
+            #console.log "listDocuments"
+            #console.log $scope.listDocuments
 
 
         $scope.display = ()->
@@ -45,7 +45,7 @@ angular
             modalService.hide "SHOW_MODAL_"+modalName
 
         $scope.download = (storedFileId) ->
-            url = $location.absUrl().replace(/#.*$/, "")+'file/download/'+storedFileId
+            url = '/awac/file/download/'+storedFileId
             $window.open(url);
 
         $scope.removeDoc = (storedFileId) ->

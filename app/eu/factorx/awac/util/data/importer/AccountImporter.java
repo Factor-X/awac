@@ -81,7 +81,6 @@ public class AccountImporter extends WorkbookDataImporter {
 			String password = getCellContent(accounts, 2, i);
 			String firstname = getCellContent(accounts, 3, i);
 			String lastname = getCellContent(accounts, 4, i);
-			int age = getNumericCellContent(accounts, 5, i).intValue();
 
 			// do we have the organization in DB ?
 			Organization organizationEntity;

@@ -1,15 +1,61 @@
 .loginBackground
+    .router-bar
+        .awac_logo
+        ul
+            li
+                a(href="/enterprise") Enterprise
+            li
+                a(href="/municipality") Municipality
+
     .loginFrame(ng-enter="send()")
-        div(class="field_form")
-            mm-awac-modal-field-text(ng-info="loginInfo")
-            mm-awac-modal-field-text(ng-info="passwordInfo")
+        tabset
+            tab.tab-color-lightgreen
+                tab-heading
+                    span(ng-bind-html="'LOGIN_CONNECTION' | translate")
+                div
+                    div(class="field_form")
+                        mm-awac-modal-field-text(ng-info="loginInfo")
+                        mm-awac-modal-field-text(ng-info="passwordInfo")
 
-        p(ng-show="errorMessage.length > 0",
-        style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+                    p(ng-show="errorMessage.length > 0",
+                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
 
-        button.button(
-        type="button",
-        class="btn btn-primary",
-        ng-bind-html="'LOGIN_BUTTON' | translate",
-        ng-click="send()",
-        ng-disabled="!allFieldValid()")
+                    button.button(
+                        type="button",
+                        class="btn btn-primary",
+                        ng-bind-html="'LOGIN_BUTTON' | translate",
+                        ng-click="send()",
+                        ng-disabled="!connectionFieldValid()")
+
+            tab.tab-color-lightgreen
+                tab-heading
+                    span(ng-bind-html="'LOGIN_FORGOT_PASSWORD' | translate")
+                div
+                    div(ng-bind-html="'LOGIN_FORGOT_PASSWORD_DESC' | translate")
+
+                    div(class="field_form")
+                        mm-awac-modal-field-text(ng-info="forgotPasswordInfo")
+
+                    p(ng-show="errorMessage.length > 0",
+                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+
+                    button.button(
+                        type="button",
+                        class="btn btn-primary",
+                        ng-bind-html="'SUBMIT' | translate",
+                        ng-click="sendForgotPassword()",
+                        ng-disabled="!forgotPasswordFieldValid()")
+
+            tab.tab-color-lightgreen
+                tab-heading
+                    span(ng-bind-html="'LOGIN_REGISTRATION' | translate")
+                div
+                    div "Lost password ? Submit your email or your identifient."
+                        div(class="field_form")
+                        mm-awac-modal-field-text(ng-info="loginInfo")
+                    button.button(
+                    type="button",
+                    class="btn btn-primary",
+                    ng-bind-html="'LOGIN_BUTTON' | translate",
+                    ng-click="send()",
+                    ng-disabled="!allFieldValid()")
