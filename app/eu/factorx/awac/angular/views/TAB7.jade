@@ -21,9 +21,9 @@ mm-awac-section(title-code="A243_TITLE")
                 .element_text Plusieurs méthodes différentes existent pour rapporter le transport aval. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
             .method
                 tabset
-                    tab.tab-color-lightgreen(active="tabSet[1][1].active")
+                    tab.tab-color-lightgreen(active="getTab(1,1,itLevel1).active")
                         tab-heading
-                            i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 1")
+                            i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1,itLevel1)")
                             span(ng-bind-html="'A253_TITLE' | translate")
                         .sub_block.tab-color-lightgreen
                             .element_table
@@ -41,17 +41,17 @@ mm-awac-section(title-code="A243_TITLE")
                                 mm-awac-question(question-code="A265",ng-repetition-map="itLevel1",
                                 ng-aggregation="(getAnswer('A256',itLevel1).value | nullToZero)+( getAnswer('A257',itLevel1).value | nullToZero)+(getAnswer('A258',itLevel1).value | nullToZero)+(getAnswer('A259',itLevel1).value| nullToZero)+(getAnswer('A260',itLevel1).value| nullToZero)+(getAnswer('A261',itLevel1).value| nullToZero)+(getAnswer('A262',itLevel1).value| nullToZero)+(getAnswer('A263',itLevel1).value| nullToZero)+(getAnswer('A264',itLevel1).value| nullToZero)",
                                 ng-tab-set="1",ng-tab="1")
-                    tab.tab-color-green(active="tabSet[1][2].active")
+                    tab.tab-color-green(active="getTab(1,2,itLevel1).active")
                         tab-heading
-                            i.glyphicon.glyphicon-bell(ng-show="tabSet[1].master === 2")
+                            i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2,itLevel1)")
                             span(ng-bind-html="'A266_TITLE' | translate")
                         .sub_block.tab-color-green
                             .element_table
                                 mm-awac-question(question-code="A267", ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
                                 mm-awac-question(question-code="A268", ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                mm-awac-question(question-code="A269", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '3'",ng-aggregation="5000",ng-tab-set="1",ng-tab="2")
-                                mm-awac-question(question-code="A270", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '2'",ng-aggregation="2500",ng-tab-set="1",ng-tab="2")
-                                mm-awac-question(question-code="A271", ng-repetition-map="itLevel1", ng-condition="getAnswer('A268',itLevel1).value == '1'",ng-aggregation="200",ng-tab-set="1",ng-tab="2")
+                                mm-awac-question(question-code="A269", ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2", ng-condition="getAnswer('A268',itLevel1).value == '3'",ng-aggregation="5000")
+                                mm-awac-question(question-code="A270", ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2", ng-condition="getAnswer('A268',itLevel1).value == '2'",ng-aggregation="2500")
+                                mm-awac-question(question-code="A271", ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2", ng-condition="getAnswer('A268',itLevel1).value == '1'",ng-aggregation="200")
 
         mm-awac-block(ng-condition="getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'")
             // Distribution
