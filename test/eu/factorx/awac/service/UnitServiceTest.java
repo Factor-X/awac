@@ -265,7 +265,7 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 
 		//Logger.info(" null?" + lu);
 		assertNotNull(lu);
-		assertEquals(228,lu.size());
+		assertEquals(227,lu.size());
 
 //		for (Unit unit : lu) {
 //			//assertTrue(col.contains(unit.getSymbol()));

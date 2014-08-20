@@ -37,7 +37,7 @@ public class FactorServiceTest extends AbstractBaseModelTest {
 		List <Factor> lf = factorService.findAll();
 
 		assertNotNull(lf);
-		assertEquals(649,lf.size());
+		assertEquals(653,lf.size());
 
 	} // end of test
 
