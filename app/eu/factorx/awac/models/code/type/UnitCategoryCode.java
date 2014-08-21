@@ -29,7 +29,6 @@ public class UnitCategoryCode extends Code {
 	public static final UnitCategoryCode CURRENCY = new UnitCategoryCode("UC5014");
 	public static final UnitCategoryCode WATER_CONSUMPTION = new UnitCategoryCode("UC5015");
 	public static final UnitCategoryCode GWP = new UnitCategoryCode("UC5016");
-	public static final UnitCategoryCode TIME = new UnitCategoryCode("UC5017");
 
 	protected UnitCategoryCode() {
 		super(CodeList.UNIT_CATEGORY);
