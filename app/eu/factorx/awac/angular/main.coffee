@@ -33,3 +33,9 @@ if iName == "municipality"
     initializeMunicipalityRoutes()
 if iName == "enterprise"
     initializeEnterpriseRoutes()
+
+angular
+.module('app')
+.run ($rootScope) ->
+    $rootScope.instanceName = iName
+
