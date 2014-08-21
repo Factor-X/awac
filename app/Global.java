@@ -84,7 +84,6 @@ public class Global extends GlobalSettings {
 
 			if (thread == null) {
 				thread =  applicationContext.getBean(InitializationThread.class);
-//						new InitializationThread(applicationContext);
 				thread.start();
 
 				if(app.isDev()){

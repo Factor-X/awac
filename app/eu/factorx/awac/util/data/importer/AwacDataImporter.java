@@ -202,9 +202,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			Unit unitOut = allUnitSymbols.get(unitOutSymbol);
 
 			Factor factor = new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution);
-			factors.add(factor);
-			factorValues.add(new FactorValue(value, null, null, factor));
 			factorService.saveOrUpdate(factor);
+			FactorValue factorvalue = new FactorValue(value, null, null, factor);
+			factor.getValues().add(factorvalue);
+			factorService.saveOrUpdate(factor);
+			factors.add(factor);
 		}
 		Logger.info("====== Imported {} factors", factors.size());
 	}

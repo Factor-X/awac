@@ -3,7 +3,6 @@ package eu.factorx.awac;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -47,7 +46,7 @@ public class AwacInitialData {
 	@Autowired
 	private UnitService unitService;
 
-	public void createAwacInitialData(ApplicationContext ctx, Session session) {
+	public void createAwacInitialData(Session session) {
 
 		Logger.info("===> CREATE AWAC INITIAL DATA -- START");
 		long startTime = System.currentTimeMillis();

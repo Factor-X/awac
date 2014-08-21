@@ -5,9 +5,7 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import play.db.jpa.JPA;
 import play.libs.F;
@@ -20,21 +18,12 @@ public class InitializationThread extends Thread {
 
 	private boolean initialized;
 
-	private ApplicationContext ctx;
-
 	@Autowired
 	private AwacInitialData awacInitialData;
 
 	
-	/**
-	 * 
-	 */
 	public InitializationThread() {
 		super();
-	}
-
-	public InitializationThread(ApplicationContext ctx) {
-		this.ctx = ctx;
 		initialized = false;
 	}
 
@@ -43,14 +32,14 @@ public class InitializationThread extends Thread {
 
 			@Override
 			public void invoke() throws Throwable {
-				createInitialData(ctx);
+				createInitialData();
 				initialized = true;
 			}
 		});
 
 	}
 
-	private void createInitialData(ApplicationContext ctx) {
+	private void createInitialData() {
 		// Get Hibernate session
 		Session session = JPA.em().unwrap(Session.class);
 
@@ -72,7 +61,7 @@ public class InitializationThread extends Thread {
 				session.saveOrUpdate(entity);
 			}
 
-			awacInitialData.createAwacInitialData(ctx, session);
+			awacInitialData.createAwacInitialData(session);
 		}
 	}
 

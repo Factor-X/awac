@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
-import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.UnitCategoryService;
 
