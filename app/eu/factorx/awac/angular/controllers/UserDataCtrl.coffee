@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "UserDataCtrl", ($scope, downloadService, $http, translationService, messageFlash, modalService, $timeout) ->
+.controller "UserDataCtrl", ($scope, downloadService, translationService, messageFlash, modalService, $timeout) ->
 
     $scope.isLoading = false
 
@@ -17,7 +17,7 @@ angular
 
     $scope.lastNameInfo =
         fieldTitle: "USER_LASTNAME"
-        validationRegex: "^\\S{1,255}$"
+        validationRegex: "^.{1,255}$"
         validationMessage: "USER_LASTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.lastName
         hideIsValidIcon: true
@@ -27,7 +27,7 @@ angular
     $scope.firstNameInfo =
         fieldTitle: "USER_FIRSTNAME"
         fieldType: "text"
-        validationRegex: "^\\S{1,255}$"
+        validationRegex: "^.{1,255}$"
         validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.firstName
         hideIsValidIcon: true
@@ -53,28 +53,22 @@ angular
 
         $scope.isLoading = true
 
-        promise = $http
-            method: "POST"
-            url: '/awac/user/profile/save'
-            headers:
-                "Content-Type": "application/json"
-            data:
-                identifier: $scope.identifierInfo.field
-                lastName: $scope.lastNameInfo.field
-                firstName: $scope.firstNameInfo.field
-                email: $scope.emailInfo.field
+        data =
+            identifier: $scope.identifierInfo.field
+            lastName: $scope.lastNameInfo.field
+            firstName: $scope.firstNameInfo.field
+            email: $scope.emailInfo.field
 
-        promise.success (data, status, headers, config) ->
-            messageFlash.displaySuccess "CHANGES_SAVED"
-            $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field
-            $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field
-            $scope.isLoading = false
-            return
+        downloadService.postJson '/awac/user/profile/save', data, (result) ->
+            if result.success
+                messageFlash.displaySuccess "CHANGES_SAVED"
+                $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field
+                $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field
+                $scope.isLoading = false
+            else
+                messageFlash.displayError result.data.message
+                $scope.isLoading = false
 
-        promise.error (data, status, headers, config) ->
-            messageFlash.displayError data.message
-            $scope.isLoading = false
-            return
 
         return false
 

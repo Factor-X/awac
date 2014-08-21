@@ -28,35 +28,16 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "person")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "person_type")
 @NamedQueries({
-		@NamedQuery(name = Person.FIND_BY_IDENTIFIER, query = "select p from Person p where p.identifier = :identifier"),
-//    @NamedQuery(name = Person.FIND_BY_TYPE, query = "select p from Person p where p.type = :type")
+		@NamedQuery(name = Person.FIND_BY_EMAIL, query = "select p from Person p where p.email = :email"),
 })
-public abstract class Person extends AbstractEntity {
+public class Person extends AbstractEntity {
 	/**
 	 * :identifier = ...
 	 */
-	public static final String FIND_BY_IDENTIFIER = "Person.findByIdentifier";
-
-	public static final String FIND_BY_TYPE = "Person.findByType";
+	public static final String FIND_BY_EMAIL = "Person.findByEmail";
 
 	private static final long serialVersionUID = 1L;
-
-	@Version
-	// in order to improve optimistic locking.
-	private Timestamp lastUpdate;
-
-	@Required
-	private String identifier;
-
-	@JsonIgnore
-	// ignore password field when render in JSON
-	@XmlTransient
-	// ignore password field when render in XML
-	@Required
-	private String password;
 
 	@Required
 	private String lastname;
@@ -65,70 +46,25 @@ public abstract class Person extends AbstractEntity {
 	private String firstname;
 
 	@Email
+	@Column(nullable = false)
 	private String email;
-
-	@Embedded
-	private Address address;
-
-	// set status to unactive by default.
-	@Required
-	private AccountStatusType accountStatus = AccountStatusType.UNACTIVE;
 
 	protected Person() {
 	}
 
-	public Person(String identifier, String password, String lastname,
-	              String firstname) {
-		// Dans le constructeur de la classe Personne
-		this.identifier = identifier;
-		this.password = password;
+	public Person(String lastname,
+	              String firstname,String email) {
 		this.lastname = lastname;
 		this.firstname = firstname;
-	}
-
-	// for YAML load
-	public Person(String identifier, String password, String lastname,
-	              String firstname, Address address) {
-		// Dans le constructeur de la classe Personne
-		this.identifier = identifier;
-		this.password = password;
-		this.lastname = lastname;
-		this.firstname = firstname;
-		this.address = address;
+		this.email = email;
 	}
 
 	public String toString() {
 		String string = "";
-		string = string.concat("identifier:" + identifier);
 		string = string.concat("lastname:" + lastname);
 		string = string.concat("firstname:" + firstname);
 		string = string.concat("email:" + email);
-		string = string.concat("address:" + address);
 		return string;
-	}
-
-	public Timestamp getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getLastname() {
@@ -155,50 +91,4 @@ public abstract class Person extends AbstractEntity {
 		this.email = email;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public AccountStatusType getAccountStatus() {
-		return accountStatus;
-	}
-
-	public void setAccountStatus(AccountStatusType accountStatus) {
-		this.accountStatus = accountStatus;
-	}
-
-	// public static Finder<Long, Person> find = new Finder<Long, Person>(
-	// Long.class, Person.class
-	// );
-	//
-//	 /**
-//	 * Retrieve a Person from identifier
-//	 */
-//	 public static Person findByIdentifier(String identifier) {
-//		 return find.where().eq("identifier", identifier).findUnique();
-
-//	 }
-	//
-	// /**
-	// * Rename a Person with newName
-	// */
-	// public static String rename(Long personId, String newName) {
-	// play.Logger.info("entering Personne.rename - id: " + personId +
-	// " new name: " + newName);
-	// Person person = find.ref(personId);
-	// person.lastname = newName;
-	// person.update();
-	// return newName;
-	// }
-
-	/**
-	 * getter and setter of embedded object address useful to avoid NPE when
-	 * saving an embedded object
-	 */
-
-
-} // end of Person class
+}

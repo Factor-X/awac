@@ -505,6 +505,7 @@ select {
 
 .modal {
     display: block !important;
+    z-index: 11000;
 }
 
 .modal-header > button {
@@ -512,13 +513,22 @@ select {
 }
 
 .modal-background {
-    z-index: 100;
+    z-index: 10000;
     position: fixed;
     width: 100%;
     height: 100%;
     background-color: #000000;
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+.modal-content {
+    display: block;
+    border-radius: 0;
+    border: 5px solid #A4A298;
+    padding: 10px 10px 35px;
+    background-color: #CFCDC0;
+    margin: 10% auto auto;
 }
 
 .question-comment-textarea {

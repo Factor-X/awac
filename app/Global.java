@@ -82,10 +82,13 @@ public class Global extends GlobalSettings {
 		try {
 			semaphore.acquire();
 
-
 			if (thread == null) {
 				thread = new InitializationThread(applicationContext);
 				thread.start();
+
+				if(app.isDev()){
+					thread.join();
+				}
 			}
 
 			semaphore.release();

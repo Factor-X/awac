@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import jxl.Sheet;
 
 import org.hibernate.Session;
@@ -81,7 +83,7 @@ public class AccountImporter extends WorkbookDataImporter {
 			String password = getCellContent(accounts, 2, i);
 			String firstname = getCellContent(accounts, 3, i);
 			String lastname = getCellContent(accounts, 4, i);
-			int age = getNumericCellContent(accounts, 5, i).intValue();
+			String email = getCellContent(accounts, 5, i);
 
 			// do we have the organization in DB ?
 			Organization organizationEntity;
@@ -97,8 +99,11 @@ public class AccountImporter extends WorkbookDataImporter {
 			try {
 				accountEntity = (Account) JPA.em().createQuery("select o from Account o where o.identifier = :login").setParameter("login", login).getSingleResult();
 			} catch (NoResultException ex) {
-				accountEntity = new Account(organizationEntity, login, password, lastname, firstname);
-				accountEntity.setAge(age);
+				Person person = new Person(lastname, firstname,email);
+
+				session.saveOrUpdate(person);
+
+				accountEntity = new Account(organizationEntity, person, login, password, InterfaceTypeCode.ENTERPRISE);
 				session.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}

@@ -13,7 +13,9 @@ import eu.factorx.awac.models.code.CodeList;
 public class UnitCode extends Code {
 
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * ceci est u litre
+	 */
 	public static final UnitCode U5101 = new UnitCode("U5101");
 	public static final UnitCode U5102 = new UnitCode("U5102");
 	public static final UnitCode U5103 = new UnitCode("U5103");

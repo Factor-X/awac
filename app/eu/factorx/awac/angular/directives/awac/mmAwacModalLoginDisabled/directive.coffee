@@ -7,7 +7,7 @@ angular
     restrict: "E"
     scope: {}
     templateUrl: "$/angular/templates/mm-awac-modal-login.html"
-    controller: ($scope, downloadService, translationService, $sce, $modal, $http) ->
+    controller: ($scope, downloadService) ->
 
         #change option of the modal
         $('#modalLogin').modal({
@@ -63,29 +63,25 @@ angular
                 $scope.isLoading = true
 
                 #send request
-                promise = $http
-                    method: "POST"
-                    url: '/awac/login'
-                    headers:
-                        "Content-Type": "application/json"
-                    data:
-                        login: $scope.loginInfo.field
-                        password: $scope.passwordInfo.field
 
-                promise.success (data, status, headers, config) ->
-                    $scope.$parent.setCurrentUser(data)
-                    #close the modal
-                    $('#modalLogin').modal('hide')
-                    $scope.$apply()
-                    return
 
-                promise.error (data, status, headers, config) ->
-                    #display the error message
-                    $scope.errorMessage = "Error : " + data.message
-                    #disactive loading mode
-                    $scope.isLoading = false
-                    return
+                data =
+                    login: $scope.loginInfo.field
+                    password: $scope.passwordInfo.field
+
+                downloadService.postJson '/awac/login', data, (result) ->
+                    if result.success
+                        $scope.$parent.setCurrentUser(result.data)
+                        # close the modal
+                        $('#modalLogin').modal('hide')
+                    else
+                        # TODO ERROR HANDLING
+                        #display the error message
+                        $scope.errorMessage = "Error : " + result.data.message
+                        #disactive loading mode
+                        $scope.isLoading = false
 
             return false
+
     link: (scope) ->
 

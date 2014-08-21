@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope, downloadService, $http, $location, messageFlash) ->
-
+.controller "LoginCtrl", ($scope, downloadService, $location, messageFlash) ->
     $scope.loginInfo =
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
@@ -10,7 +9,7 @@ angular
         validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
-        focus:true
+        focus: true
 
     $scope.passwordInfo =
         fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
@@ -20,8 +19,21 @@ angular
         field: ""
         isValid: false
 
-    $scope.allFieldValid = () ->
+    $scope.forgotPasswordInfo =
+        fieldTitle: "IDENTIFIENT_OR_EMAIL"
+        fieldType: "text"
+        validationRegex: "^\\S+$"
+        validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
+        field: ""
+        isValid: false
+
+    $scope.connectionFieldValid = () ->
         if $scope.loginInfo.isValid && $scope.passwordInfo.isValid
+            return true
+        return false
+
+    $scope.forgotPasswordFieldValid = () ->
+        if $scope.forgotPasswordInfo.isValid && $scope.forgotPasswordInfo.isValid
             return true
         return false
 
@@ -32,28 +44,33 @@ angular
         $scope.isLoading = true
 
         #send request
-        promise = $http
-            method: "POST"
-            url: '/awac/login'
-            headers:
-                "Content-Type": "application/json"
-            data:
-                login: $scope.loginInfo.field
-                password: $scope.passwordInfo.field
-
-        promise.success (data, status, headers, config) ->
-            $scope.$root.loginSuccess(data)
-            messageFlash.displaySuccess "You are now connected"
-            return
-
-        promise.error (data, status, headers, config) ->
-            #display the error message
-            messageFlash.displayError data.message
-            #disactive loading mode
-            $scope.isLoading = false
-            return
+        downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
+            if result.success
+                $scope.$root.loginSuccess(result.data)
+                messageFlash.displaySuccess "You are now connected"
+            else
+                #display the error message
+                messageFlash.displayError result.data.message
+                #disactive loading mode
+                $scope.isLoading = false
 
         return false
 
-    $scope.test = () ->
-        $('#modalLogin').modal('show')
+    $scope.sendForgotPassword = () ->
+
+        #active loading mode
+        $scope.isLoading = true
+
+        #send request
+        downloadService.postJson '/awac/forgotPassword', { identifier: $scope.forgotPasswordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
+            if result.success
+                messageFlash.displaySuccess translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS')
+                return
+            else
+                #display the error message
+                messageFlash.displayError data.message
+                #disactive loading mode
+                $scope.isLoading = false
+                return
+
+        return false

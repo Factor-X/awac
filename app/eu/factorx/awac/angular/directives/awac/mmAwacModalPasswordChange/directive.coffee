@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalPasswordChange", (directiveService, $http, translationService, messageFlash) ->
+.directive "mmAwacModalPasswordChange", (directiveService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -24,7 +24,7 @@ angular
             fieldTitle: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_PLACEHOLDER"
-            validationRegex: "^\\S{5,20}$"
+            validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             field: ""
             hideIsValidIcon: true
@@ -34,7 +34,7 @@ angular
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER"
-            validationRegex: "^\\S{5,20}$"
+            validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             hideIsValidIcon: true
             field: ""
@@ -61,24 +61,18 @@ angular
 
             $scope.isLoading = true
 
-            promise = $http
-                method: "POST"
-                url: '/awac/user/password/save'
-                headers:
-                    "Content-Type": "application/json"
-                data:
-                    oldPassword: $scope.oldPasswordInfo.field
-                    newPassword: $scope.newPasswordInfo.field
+            data =
+                oldPassword: $scope.oldPasswordInfo.field
+                newPassword: $scope.newPasswordInfo.field
 
-            promise.success (data, status, headers, config) ->
-                messageFlash.displaySuccess "CHANGES_SAVED"
-                $scope.close()
-                return
-
-            promise.error (data, status, headers, config) ->
-                messageFlash.displayError data.message
-                $scope.isLoading = false
-                return
+            downloadService.postJson '/awac/user/password/save', data, (result) ->
+                if result.success
+                    messageFlash.displaySuccess "CHANGES_SAVED"
+                    $scope.close()
+                else
+                    # TODO ERROR HANDLING
+                    messageFlash.displayError result.data.message
+                    $scope.isLoading = false
 
             return false
 

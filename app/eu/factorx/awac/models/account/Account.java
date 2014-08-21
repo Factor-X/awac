@@ -10,70 +10,80 @@
  */
 package eu.factorx.awac.models.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.QuestionCode;
 import play.data.validation.Constraints.Max;
 import play.data.validation.Constraints.Min;
 import play.data.validation.Constraints.Required;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 // import for JAXB annotations -- JAXB stack
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue("account")
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
+		@NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, query = "select a from Account a, Person p where p.email = :email and a.person = p and a.interfaceCode = :interface_code"),
 })
-public class Account extends Person {
+public class Account extends AbstractEntity {
 
 	/**
 	 * :identifier = ...
 	 */
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+	public static final String FIND_BY_EMAIL_AND_INTERFACE_CODE = "Account.findByEmailAndInterfaceCode";
 	private static final long serialVersionUID = 1L;
 
-	//public int accessRights; // not used for now
-
-	// specific fields for an account.
-	@Required
-	@Min(value = 18)
-	@Max(value = 100)
-	private Integer age;
-
-	@Embedded
-	private Vat vat;
-
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Organization organization;
 
-	protected Account() {
-		super();
+	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
+	private Person person;
+
+	@Column(nullable = false)
+	private String identifier;
+
+	@JsonIgnore
+	// ignore password field when render in JSON
+	@XmlTransient
+	// ignore password field when render in XML
+	@Required
+	@Column(nullable = false)
+	private String password;
+
+	@Column(nullable = false)
+	private Boolean active = Boolean.TRUE;
+
+	@Column(nullable = false, name = "need_change_password")
+	private Boolean needChangePassword = Boolean.FALSE;
+
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "interface_code")) })
+	private InterfaceTypeCode interfaceCode;
+
+	public Account() {
 	}
 
-    /*
-     * Constructor
-     */
-
-	public Account(Organization organization, String identifier, String password, String lastname, String firstname) {
-		super(identifier, password, lastname, firstname, new Address("", "", "", ""));
+	public Account(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
 		this.organization = organization;
+		this.person = person;
+		this.identifier = identifier;
+		this.password = password;
+		this.interfaceCode = interfaceCode;
 	}
 
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
-	public Vat getVat() {
-		return vat;
-	}
-
-	public void setVat(Vat vat) {
-		this.vat = vat;
+	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode) {
+		this.organization = organization;
+		this.person = person;
+		this.identifier = identifier;
+		this.password = password;
+		this.active = active;
+		this.needChangePassword = needChangePassword;
+		this.interfaceCode = interfaceCode;
 	}
 
 	public Organization getOrganization() {
@@ -84,49 +94,64 @@ public class Account extends Person {
 		this.organization = organization;
 	}
 
-	public String toString() {
-		String string = super.toString();
-		string = string.concat("age:" + age);
-		return string;
+	public Person getPerson() {
+		return person;
 	}
 
-    /*
-     * Finder
-     */
+	public void setPerson(Person person) {
+		this.person = person;
+	}
 
-//    public static Finder<Long, Account> find = new Finder<Long, Account>(
-//            Long.class, Account.class
-//    );
+	public String getIdentifier() {
+		return identifier;
+	}
 
-	/**
-	 * Return a page of account
-	 *
-	 * @param page     Page to display
-	 * @param pageSize Number of administrators per page
-	 * @param sortBy   Administrator property used for sorting
-	 * @param order    Sort order (either or asc or desc)
-	 * @param filter   Filter applied on the name column
-	 */
-//    public static Page<Account> page(int page, int pageSize, String sortBy, String order, String filter) {
-//        return
-//                find.where()
-//                        .ilike("identifier", "%" + filter + "%")
-//                        .orderBy(sortBy + " " + order)
-//                                //.fetch("company")
-//                        .findPagingList(pageSize)
-//                        .getPage(page);
-//    }
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
 
+	public String getPassword() {
+		return password;
+	}
 
-	/**
-	 * Return a list of account to select from
-	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-//    public static Map<String, String> options() {
-//        LinkedHashMap<String, String> options = new LinkedHashMap<String, String>();
-//        for (Account a : Account.find.orderBy("identifier").findList()) {
-//            options.put(a.personId.toString(), a.identifier);
-//        }
-//        return options;
-//    }
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public Boolean getNeedChangePassword() {
+		return needChangePassword;
+	}
+
+	public void setNeedChangePassword(Boolean needChangePassword) {
+		this.needChangePassword = needChangePassword;
+	}
+
+	public InterfaceTypeCode getInterfaceCode() {
+		return interfaceCode;
+	}
+
+	public void setInterfaceCode(InterfaceTypeCode interfaceCode) {
+		this.interfaceCode = interfaceCode;
+	}
+
+	@Override
+	public String toString() {
+		return "Account{" +
+				"organization=" + organization +
+				", person=" + person +
+				", identifier='" + identifier + '\'' +
+				", password='" + password + '\'' +
+				", active=" + active +
+				", needChangePassword=" + needChangePassword +
+				", interfaceCode=" + interfaceCode +
+				'}';
+	}
 }

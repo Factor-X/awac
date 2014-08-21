@@ -1,5 +1,6 @@
 package eu.factorx.awac;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
+import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.code.CodeList;
@@ -91,29 +92,16 @@ public class InitializationThread extends Thread {
 
 	}
 
-
 	private void createInitialData(ApplicationContext ctx) {
 		// Get Hibernate session
 		Session session = JPA.em().unwrap(Session.class);
 
 		// Check if the database is empty
 		@SuppressWarnings("unchecked")
-		List<Administrator> administrators = session.createCriteria(Person.class).list();
-		if (administrators.isEmpty()) {
-			@SuppressWarnings("unchecked")
-			Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
-			// save data into DB in relevant order.
 
-			for (Object entity : all.get("organizations")) {
-				session.saveOrUpdate(entity);
-			}
-			for (Object entity : all.get("administrators")) {
-				session.saveOrUpdate(entity);
-			}
-			for (Object entity : all.get("accounts")) {
-				session.saveOrUpdate(entity);
-			}
+		List<Account> account = session.createCriteria(Account.class).list();
 
+		if(account.isEmpty()){
 			AwacInitialData.createAwacInitialData(ctx, session);
 		}
 	}

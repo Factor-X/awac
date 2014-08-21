@@ -1,25 +1,17 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.controllers.Application;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.service.AccountService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
-import play.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import play.db.jpa.Transactional;
-import play.mvc.Content;
-import play.mvc.Result;
-import play.test.Helpers;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

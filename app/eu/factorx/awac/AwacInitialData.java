@@ -39,7 +39,7 @@ public class AwacInitialData {
 		// ACCOUNTS
 		new AccountImporter(session).run();
 
-		// ACCOUNTS
+		// TRANSLATION
 		new TranslationImporter(session).run();
 
 		// REFERENCES DATA

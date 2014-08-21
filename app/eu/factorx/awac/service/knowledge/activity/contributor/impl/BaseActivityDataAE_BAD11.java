@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
 		// For each set of answers in A78, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA78 = questionSetAnswers.get(QuestionCode.A78);		if (questionSetAnswersA78 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA78) {
+		List<QuestionSetAnswer> questionSetAnswersA78 = questionSetAnswers.get(QuestionCode.A78);
+		if (questionSetAnswersA78 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA78) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -40,15 +45,16 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
 			QuestionAnswer questionA91Answer = answersByCode.get(QuestionCode.A91);
 			QuestionAnswer questionA92Answer = answersByCode.get(QuestionCode.A92);
 
-			if (questionA80Answer == null ||
-					(questionA80Answer == null &&
-							questionA81Answer == null) ||
+			if (questionA79Answer == null ||
+                    questionA80Answer == null ||
+                    (toBoolean(questionA80Answer) == Boolean.FALSE
+							&& questionA81Answer == null) ||
+                    questionA83Answer == null ||
 					questionA88Answer == null ||
 					(questionA89Answer == null &&
 							questionA90Answer == null &&
 							questionA91Answer == null &&
-							questionA92Answer == null) ||
-					questionA83Answer == null) {
+							questionA92Answer == null)) {
 				continue;
 			}
 
@@ -59,26 +65,26 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
 			baseActivityData.setRank(2);
 			baseActivityData.setSpecificPurpose(toString(questionA79Answer));
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_5);
-			// TODO
-			// Conversion des codes réponses A81 en DPRO et DDT
-			baseActivityData.setActivitySubCategory(toActivitySubCategoryCode(questionA81Answer));
-			baseActivityData.setActivityType(ActivityTypeCode.AT_1);
-			baseActivityData.setActivitySource(toActivitySourceCode(questionA83Answer));
-			baseActivityData.setActivityOwnership(toBoolean(questionA80Answer));
-			// TODO
-			// Constantes adéquates de la réponse
-			// if getCode(questionA83Answer,CODE) == 1
-			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA89Answer, baseActivityDataUnit)));
-			// if getCode(questionA83Answer,CODE) == 2
-			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA90Answer, baseActivityDataUnit)));
-			// if getCode(questionA83Answer,CODE) == 3
-			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA91Answer, baseActivityDataUnit)));
-			// if getCode(questionA83Answer,CODE) == 4
-			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA92Answer, baseActivityDataUnit)));
+            if (toBoolean(questionA80Answer) == Boolean.FALSE) {
+                baseActivityData.setActivitySubCategory(toActivitySubCategoryCode(questionA81Answer));
+            } else {
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
+            }
+
+            baseActivityData.setActivityType(ActivityTypeCode.AT_1);
+            baseActivityData.setActivitySource(toActivitySourceCode(questionA83Answer));
+            baseActivityData.setActivityOwnership(toBoolean(questionA80Answer));
+            baseActivityData.setUnit(baseActivityDataUnit);
+
+            if (questionA89Answer != null) {
+    			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA89Answer, baseActivityDataUnit)));
+            } else if (questionA90Answer != null) {
+	    		baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA90Answer, baseActivityDataUnit)));
+            } else if (questionA91Answer != null) {
+		    	baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA91Answer, baseActivityDataUnit)));
+            } else {
+			    baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA92Answer, baseActivityDataUnit)));
+            }
 
 			res.add(baseActivityData);
 		}

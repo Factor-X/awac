@@ -15,11 +15,8 @@
         <class>eu.factorx.awac.models.Notification</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
-        <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
-        <class>eu.factorx.awac.models.account.SystemAdministrator</class>
-        <class>eu.factorx.awac.models.account.Vat</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
@@ -88,7 +85,7 @@
  
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
  
-            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />   
 
@@ -122,10 +119,8 @@
         <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
-        <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
-        <class>eu.factorx.awac.models.account.Vat</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>

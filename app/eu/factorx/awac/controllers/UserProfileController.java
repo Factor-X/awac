@@ -2,14 +2,24 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
+import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Administrator;
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.AdministratorService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.util.BusinessErrorType;
 
+import eu.factorx.awac.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -30,6 +40,12 @@ public class UserProfileController extends Controller {
 	@Autowired
 	private AccountService accountService;
 
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Autowired
+	private AdministratorService  administratorService;
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result getUserProfileData() {
@@ -48,8 +64,8 @@ public class UserProfileController extends Controller {
 			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
 		}
 
-		currentUser.setLastname(personDTO.getLastName());
-		currentUser.setFirstname(personDTO.getFirstName());
+		currentUser.getPerson().setLastname(personDTO.getLastName());
+		currentUser.getPerson().setFirstname(personDTO.getFirstName());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());
@@ -66,7 +82,7 @@ public class UserProfileController extends Controller {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
-		currentUser.setEmail(emailChangeDTO.getNewEmail());
+		currentUser.getPerson().setEmail(emailChangeDTO.getNewEmail().toLowerCase());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());
@@ -88,6 +104,7 @@ public class UserProfileController extends Controller {
 
 		return ok(new ReturnDTO());
 	}
+
 
 	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
