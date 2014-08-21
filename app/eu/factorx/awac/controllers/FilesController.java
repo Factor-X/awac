@@ -4,6 +4,7 @@ import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.service.StoredFileService;
 import eu.factorx.awac.util.FileUtil;
+import eu.factorx.awac.util.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.db.jpa.Transactional;
@@ -26,8 +27,6 @@ public class FilesController extends Controller {
 
     @Autowired
     private StoredFileService storedFileService;
-
-    private static final String LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     /**
      *
@@ -57,7 +56,7 @@ public class FilesController extends Controller {
             String storageKey=null;
 
             while(storageKey==null || storedFileService.findByStoredName(storageKey)!=null){
-                storageKey = generateRandomKey(100);
+                storageKey = KeyGenerator.generateRandomKey(100);
             }
 
             //create the entity
@@ -106,26 +105,6 @@ public class FilesController extends Controller {
         Status ok = ok(inputStream);
 
         return ok;
-    }
-
-
-
-	/*
-     * ----------------------------------------------------
-	 * ----------------- PRIVATE FUNCTIONS -----------------
-	 * ----------------------------------------------------
-	 */
-
-    private static String generateRandomKey(final int nbLetter) {
-
-        String result = "";
-
-        final Random rand = new Random();
-        for (int i = 0; i < nbLetter; i++) {
-            result += LETTERS.charAt(rand.nextInt(LETTERS.length()));
-        }
-
-        return result;
     }
 
 }

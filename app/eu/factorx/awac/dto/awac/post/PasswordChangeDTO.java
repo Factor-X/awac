@@ -2,13 +2,14 @@ package eu.factorx.awac.dto.awac.post;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
+import eu.factorx.awac.dto.validation.annotations.Pattern;
 
 public class PasswordChangeDTO extends DTO {
 
-	@NotNull
+	@Pattern(regexp = Pattern.PASSWORD)
 	private String oldPassword;
 
-	@NotNull
+	@Pattern(regexp = Pattern.PASSWORD)
 	private String newPassword;
 
 	public PasswordChangeDTO() {

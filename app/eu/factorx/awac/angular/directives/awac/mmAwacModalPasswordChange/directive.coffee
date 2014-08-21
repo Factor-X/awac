@@ -24,7 +24,7 @@ angular
             fieldTitle: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_PLACEHOLDER"
-            validationRegex: "^\\S{5,20}$"
+            validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             field: ""
             hideIsValidIcon: true
@@ -34,7 +34,7 @@ angular
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER"
-            validationRegex: "^\\S{5,20}$"
+            validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             hideIsValidIcon: true
             field: ""
