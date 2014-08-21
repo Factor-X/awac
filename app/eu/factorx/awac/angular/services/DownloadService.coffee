@@ -17,13 +17,22 @@ angular
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--
-            callback data, status, headers, config
+            callback
+                data: data,
+                status: status,
+                headers: headers,
+                config: config,
+                success: true
             return
 
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
-            callback data, status, headers, config
-            console.log "error when loading from " + url
+            callback
+                data: data,
+                status: status,
+                headers: headers,
+                config: config,
+                success: false
             return
 
         promise
@@ -39,13 +48,22 @@ angular
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--
-            callback data, status, headers, config
+            callback
+                data: data,
+                status: status,
+                headers: headers,
+                config: config,
+                success: true
             return
 
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
-            callback null, status, headers, config
-            console.log "error when loading from " + url
+            callback
+                data: data,
+                status: status,
+                headers: headers,
+                config: config,
+                success: false
             return
 
         promise

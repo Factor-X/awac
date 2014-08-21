@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEmailChange", (directiveService, $http, translationService, messageFlash) ->
+.directive "mmAwacModalEmailChange", (directiveService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -47,26 +47,19 @@ angular
 
             $scope.isLoading = true
 
-            promise = $http
-                method: "POST"
-                url: '/awac/user/email/save'
-                headers:
-                    "Content-Type": "application/json"
-                data:
-                    password: $scope.passwordInfo.field
-                    newEmail: $scope.newEmailInfo.field
+            data =
+                password: $scope.passwordInfo.field
+                newEmail: $scope.newEmailInfo.field
 
-            promise.success (data, status, headers, config) ->
-                messageFlash.displaySuccess "CHANGES_SAVED"
-                $scope.close()
-                if $scope.getParams().cb?
-                    $scope.getParams().cb($scope.newEmailInfo.field)
-                return
-
-            promise.error (data, status, headers, config) ->
-                messageFlash.displayError data.message
-                $scope.isLoading = false
-                return
+            downloadService.postJson '/awac/user/email/save', data, (result) ->
+                if result.success
+                    messageFlash.displaySuccess "CHANGES_SAVED"
+                    $scope.close()
+                    if $scope.getParams().cb?
+                        $scope.getParams().cb($scope.newEmailInfo.field)
+                else
+                    messageFlash.displayError result.data.message
+                    $scope.isLoading = false
 
             return false
 

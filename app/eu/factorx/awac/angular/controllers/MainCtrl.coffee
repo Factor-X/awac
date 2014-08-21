@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $http, $location, $route, $routeParams, modalService, tmhDynamicLocale) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, tmhDynamicLocale) ->
 
     #
     # First loading
@@ -148,23 +148,17 @@ angular
         url = '/awac/answer/getPeriodsForComparison/' + $scope.scopeId
         if $scope.scopeId? and not isNaN($scope.scopeId)
 
-            promise = $http
-                method: "GET"
-                url: url
-                headers:
-                    "Content-Type": "application/json"
-            promise.success (data, status, headers, config) ->
-                $scope.periodsForComparison = [
-                    {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
-                ]
-                for period in data.periodDTOList
-                    if period.key != $scope.periodKey
-                        $scope.periodsForComparison[$scope.periodsForComparison.length] = period
+            downloadService.getJson url, (result) ->
+                if result.success
+                    $scope.periodsForComparison = [
+                        {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
+                    ]
+                    for period in result.data.periodDTOList
+                        if period.key != $scope.periodKey
+                            $scope.periodsForComparison[$scope.periodsForComparison.length] = period
+                else
+                    # TODO ERROR HANDLING
 
-                return
-
-            promise.error (data, status, headers, config) ->
-                return
 
     $scope.getProgress = (form)->
         if $scope.formProgress != null
@@ -178,18 +172,11 @@ angular
 
     $scope.loadFormProgress = ->
         if $scope.scopeId? && $scope.periodKey?
-            promise = $http
-                method: "GET"
-                url: "/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
-                headers:
-                    "Content-Type": "application/json"
-            promise.success (data, status, headers, config) ->
-                #console.log "FormProgress : answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId
-                #console.log data
-
-
-                $scope.formProgress = data.listFormProgress
-                return
+            downloadService.getJson "/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId, (result) ->
+                if result.success
+                    $scope.formProgress = result.data.listFormProgress
+                else
+                    # TODO ERROR HANDLING
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
@@ -225,7 +212,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, $http, downloadService, messageFlash, $timeout)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout)->
 
 
     #
@@ -244,19 +231,15 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     # logout the current user
     #
     $rootScope.logout = () ->
-        promise = $http
-            method: "POST"
-            url: '/awac/logout'
-            headers:
-                "Content-Type": "application/json"
-        promise.success (data, status, headers, config) ->
-            $rootScope.currentPerson = null
-            $location.path('/login')
-            return
 
-        promise.error (data, status, headers, config) ->
-            $location.path('/login')
-            return
+        downloadService.postJson '/awac/logout', null, (result) ->
+            if result.success
+                $rootScope.currentPerson = null
+                $location.path('/login')
+            else
+                # TODO ERROR HANDLING
+                $location.path('/login')
+
     #
     # success after login => store some datas, display the path
     #
@@ -280,43 +263,33 @@ angular.module('app').run ($rootScope, $location, $http, downloadService, messag
     # refresh user data
     #
     $rootScope.refreshUserData = () ->
-        promise = $http
-            method: "GET"
-            url: '/awac/user/profile'
-            headers:
-                "Content-Type": "application/json"
-        promise.success (data, status, headers, config) ->
-            $rootScope.currentPerson = data
-            return
 
-        promise.error (data, status, headers, config) ->
-            messageFlash.displayError data.message
-            return
+        downloadService.getJson '/awac/user/profile', (result) ->
+            if result.success
+                $rootScope.currentPerson = result.data
+            else
+                messageFlash.displayError result.data.message
 
     #
     # test if the user is currently connected on the server
     #
-    promise = $http
-        method: "POST"
-        url: '/awac/testAuthentication'
-        headers:
-            "Content-Type": "application/text"
-    promise.success (data, status, headers, config) ->
-        $rootScope.loginSuccess data
-        return
-
-    promise.error (data, status, headers, config) ->
-        return
+    downloadService.postJson '/awac/testAuthentication', null, (result) ->
+        if result.success
+            $rootScope.loginSuccess data
+        else
+            # TODO ERROR HANDLING
 
     #
     # Get notifications and show them every hour
     #
     $rootScope.refreshNotifications = () ->
         # fetch and display
-        downloadService.getJson '/awac/notifications/get_notifications', (data) ->
-            if data?
-                for n in data.notifications
+        downloadService.getJson '/awac/notifications/get_notifications', (result) ->
+            if result.success
+                for n in result.data.notifications
                     messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
+            else
+                # TODO ERROR HANDLING
         # schedule a refresh
         $timeout $rootScope.refreshNotifications, 3600 * 1000
 

@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, $http, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
+.controller "FormCtrl", ($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
 
     $scope.formIdentifier = formIdentifier
     $scope.displayFormMenu=displayFormMenu
@@ -32,14 +32,14 @@ angular
     #
     # load the form and treat structure and data
     #
-    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (data, status) ->
+    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
 
-        if status != 200
+        if not result.success
+            # TODO ERROR HANDLING
             messageFlash.displayError 'Unable to load data...'
             modalService.close(modalService.LOADING)
         else
-            $scope.o = angular.copy(data)
-
+            $scope.o = angular.copy(result.data)
 
             #build the list of answers
             #recove answerSave
@@ -152,70 +152,64 @@ angular
             $scope.o.answersSave.listAnswers = listAnswerToSave
 
 
-            promise = $http
-                method: "POST"
-                url: '/awac/answer/save'
-                headers:
-                    "Content-Type": "application/json"
-                data: $scope.o.answersSave
+            downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
+                if result.success
+                    messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
+                    modalService.close(modalService.LOADING)
 
-            promise.success (data, status, headers, config) ->
-                messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
-                modalService.close(modalService.LOADING)
+                    #refresh the progress bar
 
-                #refresh the progress bar
+                    listToRemove = []
 
-                listToRemove = []
+                    for key in Object.keys($scope.mapRepetition)
+                        if key != '$$hashKey'
+                            i=0
+                            while i < $scope.mapRepetition[key].length
+                                repetition =  $scope.mapRepetition[key][i]
 
-                for key in Object.keys($scope.mapRepetition)
-                    if key != '$$hashKey'
-                        i=0
-                        while i < $scope.mapRepetition[key].length
-                            repetition =  $scope.mapRepetition[key][i]
+                                founded=false
+                                for answer in $scope.answerList
+                                    if answer.value? &&  (!answer.isAggregation? || answer.isAggregation != true) && $scope.compareRepetitionMap(answer.mapRepetition,repetition)
+                                        founded=true
+                                        break
+                                if founded == false
+                                    it = listToRemove.length
+                                    listToRemove[it] = {}
+                                    listToRemove[it].code = key
+                                    listToRemove[it].iteration = {}
+                                    listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key]
+                                    j = angular.copy($scope.mapRepetition[key][i])
 
-                            founded=false
-                            for answer in $scope.answerList
-                                if answer.value? &&  (!answer.isAggregation? || answer.isAggregation != true) && $scope.compareRepetitionMap(answer.mapRepetition,repetition)
-                                    founded=true
-                                    break
-                            if founded == false
-                                it = listToRemove.length
-                                listToRemove[it] = {}
-                                listToRemove[it].code = key
-                                listToRemove[it].iteration = {}
-                                listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key]
-                                j = angular.copy($scope.mapRepetition[key][i])
+                                    delete j[key]
+                                    listToRemove[it].map = j
+                                i++
 
-                                delete j[key]
-                                listToRemove[it].map = j
-                            i++
-
-                for repetitionToRemove in listToRemove
-                    $scope.removeIteration(repetitionToRemove.code,repetitionToRemove.iteration,repetitionToRemove.map)
+                    for repetitionToRemove in listToRemove
+                        $scope.removeIteration(repetitionToRemove.code,repetitionToRemove.iteration,repetitionToRemove.map)
 
 
-                i=$scope.answerList.length-1
-                while i>=0
-                    answer = $scope.answerList[i]
+                    i=$scope.answerList.length-1
+                    while i>=0
+                        answer = $scope.answerList[i]
 
-                    # test if the question was edited
-                    if answer.wasEdited == true
-                        answer.wasEdited = false
+                        # test if the question was edited
+                        if answer.wasEdited == true
+                            answer.wasEdited = false
 
-                    if answer.toRemove == true
-                        $scope.answerList.splice(i, 1)
-                    i--
+                        if answer.toRemove == true
+                            $scope.answerList.splice(i, 1)
+                        i--
 
-                $scope.saveFormProgress()
+                    $scope.saveFormProgress()
 
-                #nav
-                if argToNav != null
-                    $scope.$root.$broadcast('NAV', argToNav)
-                return
+                    #nav
+                    if argToNav != null
+                        $scope.$root.$broadcast('NAV', argToNav)
 
-            promise.error (data, status, headers, config) ->
-                messageFlash.displayError translationService.get('ERROR_THROWN_ON_SAVE') + data.message
-                modalService.close(modalService.LOADING)
+                else
+                    messageFlash.displayError translationService.get('ERROR_THROWN_ON_SAVE') + result.data.message
+                    modalService.close(modalService.LOADING)
+
                 return
 
 
@@ -499,17 +493,11 @@ angular
     #
     $scope.$parent.$watch 'periodToCompare', () ->
         if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
-            promise = $http
-                method: "GET"
-                url: '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId
-                headers:
-                    "Content-Type": "application/json"
-            promise.success (data, status, headers, config) ->
-                $scope.dataToCompare = data
-                return
-
-            promise.error (data, status, headers, config) ->
-                return
+            downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId, (result)->
+                if result.success
+                    $scope.dataToCompare = result.data
+                else
+                    # TODO ERROR HANDLING !!!!!
         else
             $scope.dataToCompare = null
 
@@ -571,14 +559,11 @@ angular
             $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
 
         # send computed progress bar to the server
-        promise = $http
-            method: "POST"
-            url: '/awac/answer/formProgress'
-            headers:
-                "Content-Type": "application/json"
-            data: formProgressDTO
-        promise.success (data, status, headers, config) ->
-            return
+        downloadService.postJson '/awac/answer/formProgress', formProgressDTO, (result) ->
+            if result.success
+                return
+            else
+                # TODO ERROR HANDLING !!!!!
 
     #
     # used at the last of the loading. Create the tabSet variable and add watcher for each questions concerned

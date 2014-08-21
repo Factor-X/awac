@@ -190,26 +190,31 @@ class AngularCompiler {
             var result = ""
             println("[COMPILING] " + f.path)
 
-            if (sourceExtension == "coffee") {
-                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
-                result = new JCoffeeScriptCompiler(util.Arrays.asList(Option.BARE)).compile(source)
-            }
+            try {
+                if (sourceExtension == "coffee") {
+                    val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                    result = new JCoffeeScriptCompiler(util.Arrays.asList(Option.BARE)).compile(source)
+                }
 
-            if (sourceExtension == "js") {
-                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
-                result = source
-            }
+                if (sourceExtension == "js") {
+                    val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                    result = source
+                }
 
-            if (sourceExtension == "jade") {
-                result = de.neuland.jade4j.Jade4J.render(f.path, null)
-            }
+                if (sourceExtension == "jade") {
+                    result = de.neuland.jade4j.Jade4J.render(f.path, null)
+                }
 
-            if (sourceExtension == "html") {
-                val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
-                result = source
-            }
+                if (sourceExtension == "html") {
+                    val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
+                    result = source
+                }
 
-            setContentIfDifferent(tempFile.getPath, result)
+                setContentIfDifferent(tempFile.getPath, result)
+            } catch {
+                case e: Exception =>
+                    println("[ERROR] " + f.path + " : " + e.getMessage + "\n" + e.getStackTraceString)
+            }
         }
     }
 
