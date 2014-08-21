@@ -5,9 +5,9 @@
 #
 # Home page
 #
-GET     /                                              @eu.factorx.awac.controllers.Application.index()                                                  
-GET     /enterprise                                    @eu.factorx.awac.controllers.Application.enterprise()                                             
-GET     /municipality                                  @eu.factorx.awac.controllers.Application.municipality()                                           
+GET     /                                              @eu.factorx.awac.controllers.ApplicationController.index()
+GET     /enterprise                                    @eu.factorx.awac.controllers.ApplicationController.enterprise()
+GET     /municipality                                  @eu.factorx.awac.controllers.ApplicationController.municipality()
 
 #
 # Translations
@@ -40,7 +40,7 @@ POST        /email/send                                   @eu.factorx.awac.contr
 #
 # Javascript routing
 #
-GET     /assets/javascripts/routes                     @eu.factorx.awac.controllers.Application.javascriptRoutes()                                       
+GET     /assets/javascripts/routes                     @eu.factorx.awac.controllers.ApplicationController.javascriptRoutes()
 
 #
 # Map static resources from the /public folder to the /assets URL path

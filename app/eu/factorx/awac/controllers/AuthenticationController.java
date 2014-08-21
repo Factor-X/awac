@@ -18,6 +18,7 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
@@ -55,16 +56,11 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = true)
 	public Result authenticate() {
 
-		Logger.debug ("DTO Test debug Json: " + request().body().asJson());
-
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {
 			throw new RuntimeException("The request cannot be convert");
 		}
-
-		Logger.debug ("DTO Test debug login: " + connectionFormDTO.getLogin());
-		Logger.debug ("DTO Test debug password: " + connectionFormDTO.getPassword());
 
 		//test if the login exist
 		Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
@@ -106,10 +102,12 @@ public class AuthenticationController extends Controller {
 
 		ForgotPasswordDTO dto = extractDTOFromRequest(ForgotPasswordDTO.class);
 
+		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(dto.getInterfaceCode());
+
 		Account account;
 
 		if(dto.getIdentifier().contains("@")){
-			account = accountService.findByEmail(dto.getIdentifier().toLowerCase());
+			account = accountService.findByEmailAndInterfaceCode(dto.getIdentifier().toLowerCase(),interfaceTypeCode);
 		}
 		else{
 			account = accountService.findByIdentifier(dto.getIdentifier());

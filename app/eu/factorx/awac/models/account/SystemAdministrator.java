@@ -10,25 +10,25 @@
  */
 package eu.factorx.awac.models.account;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import play.data.validation.Constraints;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 // import for JAXB annotations -- JAXB stack
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("system_admin")
-public class SystemAdministrator extends Person {
+public class SystemAdministrator extends Account {
 
 	private static final long serialVersionUID = 1L;
 
-	protected SystemAdministrator() {
+	public SystemAdministrator(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
+		super(organization, person, identifier, password, interfaceCode);
 	}
-
-	public SystemAdministrator(String identifier, String password, String lastname, String firstname) {
-		super(identifier, password, lastname, firstname, new Address("", "", "", ""));
-	}
-
 }

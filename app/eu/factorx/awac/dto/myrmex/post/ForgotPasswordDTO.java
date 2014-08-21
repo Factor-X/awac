@@ -7,11 +7,14 @@ public class ForgotPasswordDTO extends DTO{
 
 	private String identifier;
 
+	private String interfaceCode;
+
 	public ForgotPasswordDTO() {
 	}
 
-	public ForgotPasswordDTO(String identifier) {
+	public ForgotPasswordDTO(String identifier, String interfaceCode) {
 		this.identifier = identifier;
+		this.interfaceCode = interfaceCode;
 	}
 
 	public String getIdentifier() {
@@ -22,10 +25,19 @@ public class ForgotPasswordDTO extends DTO{
 		this.identifier = identifier;
 	}
 
+	public String getInterfaceCode() {
+		return interfaceCode;
+	}
+
+	public void setInterfaceCode(String interfaceCode) {
+		this.interfaceCode = interfaceCode;
+	}
+
 	@Override
 	public String toString() {
 		return "ForgotPasswordDTO{" +
-				"identifier='" + identifier + '\'' +
+				"interfaceCode='" + interfaceCode + '\'' +
+				", identifier='" + identifier + '\'' +
 				'}';
 	}
 }

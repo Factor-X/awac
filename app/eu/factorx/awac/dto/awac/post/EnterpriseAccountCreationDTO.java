@@ -17,13 +17,16 @@ public class EnterpriseAccountCreationDTO extends DTO{
 	@Size(min = 1, max = 255)
 	private String organizationName;
 
+	private String interfaceCode;
+
 	public EnterpriseAccountCreationDTO() {
 	}
 
-	public EnterpriseAccountCreationDTO(PersonDTO personDTO, String password, String organizationName) {
+	public EnterpriseAccountCreationDTO(PersonDTO personDTO, String password, String organizationName, String interfaceCode) {
 		this.personDTO = personDTO;
 		this.password = password;
 		this.organizationName = organizationName;
+		this.interfaceCode = interfaceCode;
 	}
 
 	public PersonDTO getPersonDTO() {
@@ -50,10 +53,19 @@ public class EnterpriseAccountCreationDTO extends DTO{
 		this.organizationName = organizationName;
 	}
 
+	public String getInterfaceCode() {
+		return interfaceCode;
+	}
+
+	public void setInterfaceCode(String interfaceCode) {
+		this.interfaceCode = interfaceCode;
+	}
+
 	@Override
 	public String toString() {
 		return "EnterpriseAccountCreationDTO{" +
-				"organizationName='" + organizationName + '\'' +
+				"interfaceCode='" + interfaceCode + '\'' +
+				", organizationName='" + organizationName + '\'' +
 				", password='" + password + '\'' +
 				", personDTO=" + personDTO +
 				'}';

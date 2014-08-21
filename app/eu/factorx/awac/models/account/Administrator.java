@@ -11,6 +11,7 @@
 package eu.factorx.awac.models.account;
 
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -26,10 +27,11 @@ public class Administrator extends Account {
 
 	private static final long serialVersionUID = 1L;
 
-	protected Administrator() {
+	public Administrator() {
+		super();
 	}
 
-	public Administrator(Organization organization, String identifier, String password, String lastname, String firstname) {
-		super(organization, identifier, password, lastname, firstname);
+	public Administrator(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
+		super(organization, person, identifier, password, interfaceCode);
 	}
 }
