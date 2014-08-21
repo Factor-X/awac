@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,9 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 	}
 
 	@Override
-	public Account findByEmail(String email){
-		List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL, Account.class)
-				.setParameter("email", email).getResultList();
+	public Account findByEmailAndInterfaceCode(String email, InterfaceTypeCode interfaceTypeCode){
+		List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, Account.class)
+				.setParameter("email", email).setParameter("interface_code", interfaceTypeCode).getResultList();
 		if (resultList.size() > 1) {
 			String errorMsg = "More than one account with identifier = '" + email + "'";
 			Logger.error(errorMsg);

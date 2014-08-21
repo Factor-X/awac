@@ -3,10 +3,14 @@ package eu.factorx.awac.dto.validation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.annotations.*;
 import eu.factorx.awac.util.FileUtil;
+import org.apache.commons.io.IOUtils;
+import play.Application;
 import play.Logger;
+import play.api.Play;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -46,7 +50,12 @@ public class Validator {
 						ScriptEngine engine = factory.getEngineByName("JavaScript");
 						// evaluate JavaScript code from String
 						String name = annotation.annotationType().getSimpleName();
-						String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
+						//String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
+						//String javascript = FileUtil.getContents("public/javascripts/scripts/"+ name + ".js");
+
+						InputStream is = play.Play.application().resourceAsStream("public/javascripts/scripts/" + name + ".js");
+						String javascript = IOUtils.toString(is, "UTF-8");
+
 						engine.eval(javascript);
 
 						Map<String, Object> parameters = new HashMap<>();

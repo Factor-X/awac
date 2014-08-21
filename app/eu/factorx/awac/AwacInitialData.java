@@ -36,13 +36,13 @@ public class AwacInitialData {
 
 	@Autowired
 	private AccountImporter accountImporter;
-	
+
 	@Autowired
 	private TranslationImporter translationImporter;
-	
+
 	@Autowired
 	private UnitCategoryService unitCategoryService;
-	
+
 	@Autowired
 	private UnitService unitService;
 
@@ -75,7 +75,7 @@ public class AwacInitialData {
 		UnitCategory powerUnits = getUnitCategoryByCode(UnitCategoryCode.POWER);
 		UnitCategory moneyUnits = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
 		UnitCategory durationUnits = getUnitCategoryByCode(UnitCategoryCode.DURATION);
-		
+
 
 		// PERIOD
 		for (int i = 2013; i >= 2000; i--) {
@@ -96,7 +96,7 @@ public class AwacInitialData {
 	}
 
 	private void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
-	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory durationUnits) {
+						   UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory durationUnits) {
 
 
 		// == TABTAB2 =====================================================================

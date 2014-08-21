@@ -1,7 +1,6 @@
 package eu.factorx.awac;
 
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,7 @@ import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
 import play.libs.F;
-import play.libs.Yaml;
-import eu.factorx.awac.models.account.Administrator;
-import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.account.Account;
 
 @Component
 public class InitializationThread extends Thread {
@@ -21,7 +18,6 @@ public class InitializationThread extends Thread {
 	@Autowired
 	private AwacInitialData awacInitialData;
 
-	
 	public InitializationThread() {
 		super();
 		initialized = false;
@@ -45,22 +41,9 @@ public class InitializationThread extends Thread {
 
 		// Check if the database is empty
 		@SuppressWarnings("unchecked")
-		List<Administrator> administrators = session.createCriteria(Person.class).list();
-		if (administrators.isEmpty()) {
-			@SuppressWarnings("unchecked")
-			Map<String, List<Object>> all = (Map<String, List<Object>>) Yaml.load("initial-data-awac.yml");
-			// save data into DB in relevant order.
+		List<Account> account = session.createCriteria(Account.class).list();
 
-			for (Object entity : all.get("organizations")) {
-				session.saveOrUpdate(entity);
-			}
-			for (Object entity : all.get("administrators")) {
-				session.saveOrUpdate(entity);
-			}
-			for (Object entity : all.get("accounts")) {
-				session.saveOrUpdate(entity);
-			}
-
+		if (account.isEmpty()) {
 			awacInitialData.createAwacInitialData(session);
 		}
 	}

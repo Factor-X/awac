@@ -10,7 +10,9 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Administrator;
+import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AdministratorService;
 import eu.factorx.awac.service.OrganizationService;
@@ -62,8 +64,8 @@ public class UserProfileController extends Controller {
 			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
 		}
 
-		currentUser.setLastname(personDTO.getLastName());
-		currentUser.setFirstname(personDTO.getFirstName());
+		currentUser.getPerson().setLastname(personDTO.getLastName());
+		currentUser.getPerson().setFirstname(personDTO.getFirstName());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());
@@ -80,7 +82,7 @@ public class UserProfileController extends Controller {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
-		currentUser.setEmail(emailChangeDTO.getNewEmail().toLowerCase());
+		currentUser.getPerson().setEmail(emailChangeDTO.getNewEmail().toLowerCase());
 		accountService.saveOrUpdate(currentUser);
 
 		return ok(new ReturnDTO());
@@ -102,39 +104,6 @@ public class UserProfileController extends Controller {
 
 		return ok(new ReturnDTO());
 	}
-
-	@Transactional(readOnly = false)
-	public Result createAccountForEnterprise(){
-
-		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
-
-		//control identifier
-		Account account = accountService.findByIdentifier(dto.getPersonDTO().getIdentifier());
-		if(account!=null){
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED));
-		}
-
-		// control
-		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if(account!=null){
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
-		}
-
-		//create organization
-		organization = new Organization(dto.getOrganizationName());
-
-		organizationService.saveOrUpdate(organization);
-
-		//create account
-		//TODO encode password !!
-		Administrator administrator = new Administrator(organization,dto.getPersonDTO().getIdentifier(), dto.getPassword(), dto.getPersonDTO().getLastName(), dto.getPersonDTO().getFirstName());
-
-		//save account
-		administratorService.saveOrUpdate(administrator);
-
-		return ok(new ReturnDTO());
-	}
-
 
 
 	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {

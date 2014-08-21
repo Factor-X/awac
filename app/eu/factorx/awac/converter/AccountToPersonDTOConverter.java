@@ -17,9 +17,9 @@ public class AccountToPersonDTOConverter implements Converter<Account, PersonDTO
 		PersonDTO personDTO = new PersonDTO();
 
 		personDTO.setIdentifier(account.getIdentifier());
-		personDTO.setEmail(account.getEmail());
-		personDTO.setFirstName(account.getFirstname());
-		personDTO.setLastName(account.getLastname());
+		personDTO.setEmail(account.getPerson().getEmail());
+		personDTO.setFirstName(account.getPerson().getFirstname());
+		personDTO.setLastName(account.getPerson().getLastname());
 
 		return personDTO;
 	}

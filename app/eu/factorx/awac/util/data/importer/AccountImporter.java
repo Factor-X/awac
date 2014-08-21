@@ -12,13 +12,12 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.*;
 
 @Component
 public class AccountImporter extends WorkbookDataImporter {
@@ -37,6 +36,9 @@ public class AccountImporter extends WorkbookDataImporter {
 	@Autowired
 	private ScopeService scopeService;
 
+	@Autowired
+	private PersonService personService;
+	
 	public AccountImporter() {
 		super();
 	}
@@ -92,6 +94,7 @@ public class AccountImporter extends WorkbookDataImporter {
 			String password = getCellContent(accounts, 2, i);
 			String firstname = getCellContent(accounts, 3, i);
 			String lastname = getCellContent(accounts, 4, i);
+			String email = getCellContent(accounts, 5, i);
 
 			// do we have the organization in DB ?
 			Organization organizationEntity;
@@ -107,7 +110,11 @@ public class AccountImporter extends WorkbookDataImporter {
 			try {
 				accountEntity = (Account) JPA.em().createQuery("select o from Account o where o.identifier = :login").setParameter("login", login).getSingleResult();
 			} catch (NoResultException ex) {
-				accountEntity = new Account(organizationEntity, login, password, lastname, firstname);
+				Person person = new Person(lastname, firstname,email);
+
+				personService.saveOrUpdate(person);
+
+				accountEntity = new Account(organizationEntity, person, login, password, InterfaceTypeCode.ENTERPRISE);
 				accountService.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}

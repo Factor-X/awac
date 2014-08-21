@@ -12,6 +12,7 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.account.SystemAdministrator;
 import eu.factorx.awac.service.AccountService;
@@ -50,39 +51,11 @@ public class SecuredController extends Security.Authenticator {
 	}
 
 	public boolean isAdministrator() {
-		return false;//(((Person)getCurrentUser()) instanceof Administrator);
-	} // end of check administrator
+		return (((Account)getCurrentUser()) instanceof Administrator);
+	}
 
 	public boolean isSystemAdministrator() {
-		return (((Person)getCurrentUser()) instanceof SystemAdministrator);
+		return (((Account)getCurrentUser()) instanceof SystemAdministrator);
 	}
-
-
-
-/*
-	
-    @Override
-    public String getUsername(Context ctx) {
-        return ctx.session().get("identifier");
-    }
-
-    @Override
-    public Result onUnauthorized(Context ctx) {
-        return null;//redirect(eu.factorx.awac.controllers.routes.Authentication.login());
-    }
-
-	public boolean isAuthenticated() {
-		return (Context.current().session().get("identifier")==null)?false:true;
-	}
-
-
-    public String getCurrentIdentifier () {
-
-        return Context.current().session().get("identifier");
-    }
-
-
-
-*/
 }
 

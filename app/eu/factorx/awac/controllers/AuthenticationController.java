@@ -18,9 +18,14 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
+import eu.factorx.awac.util.email.messages.EmailMessage;
+import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -32,6 +37,9 @@ import play.mvc.Result;
 public class AuthenticationController extends Controller {
 
 	@Autowired
+	private PersonService personService;
+
+	@Autowired
 	private AccountService accountService;
 
 	@Autowired
@@ -39,6 +47,9 @@ public class AuthenticationController extends Controller {
 
 	@Autowired
 	private SecuredController securedController;
+
+	@Autowired
+	private EmailService emailService;
 
 	@Transactional(readOnly = true)
 	public Result testAuthentication() {
@@ -55,20 +66,16 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = true)
 	public Result authenticate() {
 
-		Logger.debug ("DTO Test debug Json: " + request().body().asJson());
-
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {
 			throw new RuntimeException("The request cannot be convert");
 		}
 
-		Logger.debug ("DTO Test debug login: " + connectionFormDTO.getLogin());
-		Logger.debug ("DTO Test debug password: " + connectionFormDTO.getPassword());
-
 		//test if the login exist
 		Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
 
+		//control account
 		if (account == null) {
 			//use the same message for both login and password error
 			return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
@@ -78,6 +85,14 @@ public class AuthenticationController extends Controller {
 		if (!account.getPassword().equals(connectionFormDTO.getPassword())) {
 			//use the same message for both login and password error
 			return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+		}
+
+		//control interface
+		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
+
+		if(interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())){
+			//use the same message for both login and password error
+			return unauthorized(new ExceptionsDTO("This account is not for "+interfaceTypeCode.getKey()+" but for "+account.getInterfaceCode().getKey()+". Please switch calculator and retry."));
 		}
 
 		//if the login and the password are ok, refresh the session
@@ -106,10 +121,26 @@ public class AuthenticationController extends Controller {
 
 		ForgotPasswordDTO dto = extractDTOFromRequest(ForgotPasswordDTO.class);
 
+		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(dto.getInterfaceName());
+
 		Account account;
 
 		if(dto.getIdentifier().contains("@")){
-			account = accountService.findByEmail(dto.getIdentifier().toLowerCase());
+			Person person = personService.getByEmail(dto.getIdentifier().toLowerCase());
+
+			if(person != null ){
+				account = accountService.findByEmailAndInterfaceCode(dto.getIdentifier().toLowerCase(), interfaceTypeCode);
+
+				if(account == null){
+					return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_BAD_INTERFACE));
+				}
+
+			}
+			else{
+				return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
+			}
+
+
 		}
 		else{
 			account = accountService.findByIdentifier(dto.getIdentifier());
@@ -123,13 +154,14 @@ public class AuthenticationController extends Controller {
 		//generate password
 		String password = KeyGenerator.generateRandomPassword(10);
 
-		//TODO generate email
-		play.Logger.info("SEND email : " + password);
-		//TODO send email
+		//generate email
+		EmailMessage emailMessage = new EmailMessage(account.getPerson().getEmail(), "New password", "blabla your new password : "+password);
+		emailService.send(emailMessage);
 
 		//save new password
 		//TODO encode password !!
 		account.setPassword(password);
+		account.setNeedChangePassword(true);
 		accountService.saveOrUpdate(account);
 
 		return ok(new ReturnDTO());
