@@ -50,12 +50,4 @@
                 tab-heading
                     span(ng-bind-html="'LOGIN_REGISTRATION' | translate")
                 div
-                    div "Lost password ? Submit your email or your identifient."
-                        div(class="field_form")
-                        mm-awac-modal-field-text(ng-info="loginInfo")
-                    button.button(
-                    type="button",
-                    class="btn btn-primary",
-                    ng-bind-html="'LOGIN_BUTTON' | translate",
-                    ng-click="send()",
-                    ng-disabled="!allFieldValid()")
+                    mm-awac-account-creation-enterprise

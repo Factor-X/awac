@@ -32,7 +32,7 @@ public class InitializationThread extends Thread {
 
 			@Override
 			public void invoke() throws Throwable {
-				//createInitialData(ctx);
+				createInitialData(ctx);
 				createInMemoryData();
 				initialized = true;
 			}
@@ -105,6 +105,7 @@ public class InitializationThread extends Thread {
 			AwacInitialData.createAwacInitialData(ctx, session);
 		}
 	}
+
 	public boolean isInitialized() {
 		return initialized;
 	}

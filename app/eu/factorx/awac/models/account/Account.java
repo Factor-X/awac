@@ -25,8 +25,6 @@ import javax.xml.bind.annotation.XmlTransient;
 // import for JAXB annotations -- JAXB stack
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue("account")
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, query = "select a from Account a, Person p where p.email = :email and a.person = p and a.interfaceCode = :interface_code"),

@@ -21,8 +21,6 @@ import javax.persistence.InheritanceType;
 // import for JAXB annotations -- JAXB stack
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue("admin")
 public class Administrator extends Account {
 
 	private static final long serialVersionUID = 1L;

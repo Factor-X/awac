@@ -111,6 +111,7 @@ echo "update account set person_id = person.id from person where person.id = acc
 
 # remove foreign key account.id
 echo "alter table account drop constraint fk_3kyk3bnync56s8n23hqj89q4d;" >> /tmp/migration/migration_script.sql
+echo "ALTER TABLE account ALTER COLUMN id SET DEFAULT nextval('account_id_seq'::regclass);" >> /tmp/migration/migration_script.sql
 
 # account.person_id = not null
 echo "alter table account alter account set not null;" >> /tmp/migration/migration_script.sql

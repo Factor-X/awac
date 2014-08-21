@@ -28,14 +28,15 @@ POST    /awac/testAuthentication                       @eu.factorx.awac.controll
 POST    /awac/forgotPassword                           @eu.factorx.awac.controllers.AuthenticationController.forgotPassword()
 
 #
-# VIES Service
+# registration ctrl
 #
-#GET     /vies/vatcheck/:uid/:vat                       @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
+POST    /enterprise/registration                       @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
+POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.enterpriseMunicipality()
 
 #
 # Email Service
 #
-POST        /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+POST    /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
 
 #
 # Javascript routing

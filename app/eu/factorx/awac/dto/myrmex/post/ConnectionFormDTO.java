@@ -17,15 +17,15 @@ public class ConnectionFormDTO extends DTO {
 	@Pattern(regexp = Pattern.PASSWORD, message = "Password between 5 and 20 letters")
 	private String password;
 
-	private String interfaceCode;
+	private String interfaceName;
 
 	protected ConnectionFormDTO() {
 	}
 
-	public ConnectionFormDTO(String login, String password, String interfaceCode) {
+	public ConnectionFormDTO(String login, String password, String interfaceName) {
 		this.login = login;
 		this.password = password;
-		this.interfaceCode = interfaceCode;
+		this.interfaceName = interfaceName;
 	}
 
 	public String getLogin() {
@@ -44,20 +44,20 @@ public class ConnectionFormDTO extends DTO {
 		this.password = password;
 	}
 
-	public String getInterfaceCode() {
-		return interfaceCode;
+	public String getInterfaceName() {
+		return interfaceName;
 	}
 
-	public void setInterfaceCode(String interfaceCode) {
-		this.interfaceCode = interfaceCode;
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
 	}
 
 	@Override
 	public String toString() {
 		return "ConnectionFormDTO{" +
-				"login='" + login + '\'' +
+				"interfaceName='" + interfaceName + '\'' +
 				", password='" + password + '\'' +
-				", interfaceCode='" + interfaceCode + '\'' +
+				", login='" + login + '\'' +
 				'}';
 	}
 }

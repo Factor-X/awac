@@ -5,7 +5,7 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.validation.annotations.Pattern;
 import eu.factorx.awac.dto.validation.annotations.Size;
 
-public class EnterpriseAccountCreationDTO extends DTO{
+public class MunicipalityAccountCreationDTO extends DTO{
 
 	//account data
 	private PersonDTO person;
@@ -15,15 +15,15 @@ public class EnterpriseAccountCreationDTO extends DTO{
 	private String password;
 
 	@Size(min = 1, max = 255)
-	private String organizationName;
+	private String municipalityName;
 
-	public EnterpriseAccountCreationDTO() {
+	public MunicipalityAccountCreationDTO() {
 	}
 
-	public EnterpriseAccountCreationDTO(PersonDTO person, String password, String organizationName) {
+	public MunicipalityAccountCreationDTO(PersonDTO person, String password, String municipalityName) {
 		this.person = person;
 		this.password = password;
-		this.organizationName = organizationName;
+		this.municipalityName = municipalityName;
 	}
 
 	public PersonDTO getPerson() {
@@ -42,20 +42,20 @@ public class EnterpriseAccountCreationDTO extends DTO{
 		this.password = password;
 	}
 
-	public String getOrganizationName() {
-		return organizationName;
+	public String getMunicipalityName() {
+		return municipalityName;
 	}
 
-	public void setOrganizationName(String organizationName) {
-		this.organizationName = organizationName;
+	public void setMunicipalityName(String municipalityName) {
+		this.municipalityName = municipalityName;
 	}
 
 	@Override
 	public String toString() {
-		return "EnterpriseAccountCreationDTO{" +
+		return "MunicipalityAccountCreationDTO{" +
 				"person=" + person +
 				", password='" + password + '\'' +
-				", organizationName='" + organizationName + '\'' +
+				", municipalityName='" + municipalityName + '\'' +
 				'}';
 	}
 }

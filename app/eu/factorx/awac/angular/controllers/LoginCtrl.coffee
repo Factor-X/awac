@@ -44,7 +44,7 @@ angular
         $scope.isLoading = true
 
         #send request
-        downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field }, (result) ->
+        downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
             if result.success
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess "You are now connected"
@@ -62,26 +62,15 @@ angular
         $scope.isLoading = true
 
         #send request
-        promise = $http
-            method: "POST"
-            url: '/awac/forgotPassword'
-            headers:
-                "Content-Type": "application/json"
-            data:
-                identifier: $scope.forgotPasswordInfo.field
-
-        promise.success (data, status, headers, config) ->
-            messageFlash.displaySuccess translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS')
-            return
-
-        promise.error (data, status, headers, config) ->
-            #display the error message
-            messageFlash.displayError data.message
-            #disactive loading mode
-            $scope.isLoading = false
-            return
+        downloadService.postJson '/awac/forgotPassword', { identifier: $scope.forgotPasswordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
+            if result.success
+                messageFlash.displaySuccess translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS')
+                return
+            else
+                #display the error message
+                messageFlash.displayError data.message
+                #disactive loading mode
+                $scope.isLoading = false
+                return
 
         return false
-
-    $scope.test = () ->
-        $('#modalLogin').modal('show')

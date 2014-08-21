@@ -17,7 +17,7 @@ angular
 
     $scope.lastNameInfo =
         fieldTitle: "USER_LASTNAME"
-        validationRegex: "^\\S{1,255}$"
+        validationRegex: "^.{1,255}$"
         validationMessage: "USER_LASTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.lastName
         hideIsValidIcon: true
@@ -27,7 +27,7 @@ angular
     $scope.firstNameInfo =
         fieldTitle: "USER_FIRSTNAME"
         fieldType: "text"
-        validationRegex: "^\\S{1,255}$"
+        validationRegex: "^.{1,255}$"
         validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
         field: $scope.$root.currentPerson.firstName
         hideIsValidIcon: true

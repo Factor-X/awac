@@ -101,6 +101,8 @@ public class AccountImporter extends WorkbookDataImporter {
 			} catch (NoResultException ex) {
 				Person person = new Person(lastname, firstname,email);
 
+				session.saveOrUpdate(person);
+
 				accountEntity = new Account(organizationEntity, person, login, password, InterfaceTypeCode.ENTERPRISE);
 				session.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);

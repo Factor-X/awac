@@ -28,8 +28,6 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "person")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "person_type")
 @NamedQueries({
 		@NamedQuery(name = Person.FIND_BY_EMAIL, query = "select p from Person p where p.email = :email"),
 })

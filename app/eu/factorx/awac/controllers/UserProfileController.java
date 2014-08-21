@@ -105,44 +105,6 @@ public class UserProfileController extends Controller {
 		return ok(new ReturnDTO());
 	}
 
-	@Transactional(readOnly = false)
-	public Result createAccountForEnterprise(){
-
-		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
-
-		//control identifier
-		Account account = accountService.findByIdentifier(dto.getPersonDTO().getIdentifier());
-		if(account!=null){
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED));
-			//TODO control if the person already exist
-		}
-
-		// control
-		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if(account!=null){
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
-		}
-
-		//create organization
-		organization = new Organization(dto.getOrganizationName());
-
-		organizationService.saveOrUpdate(organization);
-
-		InterfaceTypeCode interfaceCode = new InterfaceTypeCode(dto.getInterfaceCode());
-
-		Person person = new Person(dto.getPersonDTO().getLastName(), dto.getPersonDTO().getFirstName(), dto.getPersonDTO().getEmail());
-
-		//create account
-		//TODO encode password !!
-		Administrator administrator = new Administrator(organization,person,dto.getPersonDTO().getIdentifier(), dto.getPassword(), interfaceCode);
-
-		//save account
-		administratorService.saveOrUpdate(administrator);
-
-		return ok(new ReturnDTO());
-	}
-
-
 
 	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
