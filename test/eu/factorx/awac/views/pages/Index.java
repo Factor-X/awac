@@ -21,7 +21,7 @@ import eu.factorx.awac.controllers.*;
 
 public class Index extends FluentPage {
     public String getUrl() {
-		return eu.factorx.awac.controllers.routes.Application.index().url();
+		return eu.factorx.awac.controllers.routes.ApplicationController.index().url();
     }
 
     public void isAt() {

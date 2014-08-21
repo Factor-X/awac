@@ -46,7 +46,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _001_authenticateActionSuccess() {
 
 	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password");
+	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
 
 	//Json node
 	Map<String, String> map = new HashMap<String, String>();
@@ -94,7 +94,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _002_authenticateActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password","interfacename");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
@@ -137,7 +137,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _003_testAuthenticationActionSuccess() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
@@ -169,7 +169,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _004_testAuthenticationActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
