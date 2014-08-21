@@ -5,13 +5,16 @@ import java.util.*;
 import jxl.Sheet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.service.CodeConversionService;
+import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.CodesEquivalenceService;
 
 @Component
 public class CodeLabelImporter extends WorkbookDataImporter {
@@ -23,13 +26,17 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
 	private Map<CodeList, LinkedHashMap<String, CodeLabel>> importedCodeLists = new HashMap<>();
 
+	@Autowired
+	private CodeLabelService codeLabelService;
+	
+	@Autowired
+	private CodesEquivalenceService codesEquivalenceService;
+
+	@Autowired
+	private CodeConversionService codeConversionService;
+	
 	public CodeLabelImporter() {
 		super();
-	}
-
-	public CodeLabelImporter(Session session) {
-		super();
-		this.session = session;
 	}
 
 	@Override
@@ -69,9 +76,10 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			String labelEn = getCellContent(sheet, 1, i);
 			String labelFr = getCellContent(sheet, 2, i);
 			String labelNl = getCellContent(sheet, 3, i);
-			codeLabels.put(key, new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
+			CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
+			codeLabelService.saveOrUpdate(codeLabel);
+			codeLabels.put(key, codeLabel);
 		}
-		persistEntities(codeLabels.values());
 
 		Logger.info("====== Imported code list '{}' ({} items)", codeList, codeLabels.size());
 		return codeLabels;
@@ -117,9 +125,10 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			if (referencedCodeKey == null) {
 				break;
 			}
-			codesEquivalences.add(new CodesEquivalence(codeList, referencedCodeKey, referencedCodeList, referencedCodeKey));
+			CodesEquivalence codesEquivalence = new CodesEquivalence(codeList, referencedCodeKey, referencedCodeList, referencedCodeKey);
+			codesEquivalenceService.saveOrUpdate(codesEquivalence);
+			codesEquivalences.add(codesEquivalence);
 		}
-		persistEntities(codesEquivalences);
 		Logger.info("====== Imported code list '{}' ({} items) (sublist of '{}')", codeList, codesEquivalences.size(), referencedCodeList);
 	}
 
@@ -133,9 +142,10 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 				break;
 			}
 			String referencedCodeKey = getCellContent(sheet, refKeyColumnIndex, i);
-			codesEquivalences.add(new CodesEquivalence(codeList, codeKey, referencedCodeList, referencedCodeKey));
+			CodesEquivalence codesEquivalence = new CodesEquivalence(codeList, codeKey, referencedCodeList, referencedCodeKey);
+			codesEquivalenceService.saveOrUpdate(codesEquivalence);
+			codesEquivalences.add(codesEquivalence);
 		}
-		persistEntities(codesEquivalences);
 	}
 
 	private static CodeList getCodeListBySheetName(String sheetName) {

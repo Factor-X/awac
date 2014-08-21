@@ -36,7 +36,7 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 
 		// add labels from codelabel table
 		allLabels = new HashMap<>();
-		for (CodeLabel codeLabel : super.findAll()) {
+		for (CodeLabel codeLabel : findAll()) {
 			CodeList codeList = codeLabel.getCodeList();
 			if (!allLabels.containsKey(codeList)) {
 				allLabels.put(codeList, new LinkedHashMap<String, CodeLabel>());
@@ -91,7 +91,6 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	@Override
 	public void resetCache() {
 		allLabels = null;
-		findAllCodeLabels();
 	}
 
 }

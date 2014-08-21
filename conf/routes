@@ -12,7 +12,7 @@ GET     /municipality                                  @eu.factorx.awac.controll
 #
 # Translations
 #
-GET     /awac/translations/:lang                       @eu.factorx.awac.controllers.Translation.fetch(lang:String)                                       
+GET     /awac/translations/:lang                       @eu.factorx.awac.controllers.TranslationController.fetch(lang:String)                                       
 
 #
 # Notifications

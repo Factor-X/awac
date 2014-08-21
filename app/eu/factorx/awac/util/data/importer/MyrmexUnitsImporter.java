@@ -9,7 +9,7 @@ import java.util.Map;
 import jxl.Sheet;
 import jxl.read.biff.BiffException;
 
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -18,6 +18,9 @@ import eu.factorx.awac.models.code.type.UnitCode;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.models.knowledge.UnitConversionFormula;
+import eu.factorx.awac.service.UnitCategoryService;
+import eu.factorx.awac.service.UnitConversionService;
+import eu.factorx.awac.service.UnitService;
 
 @Component
 public class MyrmexUnitsImporter extends WorkbookDataImporter {
@@ -53,13 +56,17 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 	private Map<String, UnitCategory> unitCategoriesByRef = new LinkedHashMap<>();
 	private Map<String, Unit> unitsByRef = new LinkedHashMap<String, Unit>();
 
+	@Autowired
+	private UnitCategoryService unitCategoryService;
+	
+	@Autowired
+	private UnitService unitService;
+
+	@Autowired
+	private UnitConversionService unitConversionService;
+
 	public MyrmexUnitsImporter() {
 		super();
-	}
-
-	public MyrmexUnitsImporter(Session session) {
-		super();
-		this.session = session;
 	}
 
 	protected void importData() throws BiffException, IOException {
@@ -81,9 +88,10 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
 			String name = getCellContent(unitCategoriesSheet, 1, i);
-			unitCategoriesByRef.put(ref, new UnitCategory(new UnitCategoryCode(ref), name, "", null));
+			UnitCategory unitCategory = new UnitCategory(new UnitCategoryCode(ref), name, "", null);
+			unitCategoryService.saveOrUpdate(unitCategory);
+			unitCategoriesByRef.put(ref, unitCategory);
 		}
-		persistEntities(unitCategoriesByRef.values());
 		Logger.info("==== Imported {} Unit Categories", unitCategoriesByRef.size());
 	}
 
@@ -98,9 +106,10 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			if (category == null) {
 				Logger.warn("No unit category defined for unit with symbol: '{}'!", symbol);
 			}
-			unitsByRef.put(ref, new Unit(new UnitCode(ref), name, symbol, category));
+			Unit unit = new Unit(new UnitCode(ref), name, symbol, category);
+			unitService.saveOrUpdate(unit);
+			unitsByRef.put(ref, unit);
 		}
-		persistEntities(unitsByRef.values());
 		Logger.info("==== Imported {} Units", unitsByRef.size());
 	}
 
@@ -116,7 +125,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 						+ "'");
 			}
 			category.setMainUnit(mainUnit);
-			updateEntity(category);
+			unitCategoryService.saveOrUpdate(category);
 		}
 	}
 
@@ -136,9 +145,10 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			if (strYear != null) {
 				year = Integer.valueOf(strYear);
 			}
-			conversionFormulas.add(new UnitConversionFormula(unit, unitToReferenceFormula, referenceToUnitFormula, year));
+			UnitConversionFormula conversionFormula = new UnitConversionFormula(unit, unitToReferenceFormula, referenceToUnitFormula, year);
+			unitConversionService.saveOrUpdate(conversionFormula);
+			conversionFormulas.add(conversionFormula);
 		}
-		persistEntities(conversionFormulas);
 		Logger.info("==== Imported {} Unit Conversion Formulas", conversionFormulas.size());
 	}
 

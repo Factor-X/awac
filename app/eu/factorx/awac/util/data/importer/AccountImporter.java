@@ -4,32 +4,43 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import jxl.Sheet;
 
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.*;
 
 @Component
 public class AccountImporter extends WorkbookDataImporter {
 
 	private static final String ACCOUNTS_WORKBOOK_PATH = "data_importer_resources/accounts/accounts.xls";
 
+	@Autowired
+	private AccountService accountService;
+
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Autowired
+	private SiteService siteService;
+
+	@Autowired
+	private ScopeService scopeService;
+
+	@Autowired
+	private PersonService personService;
+	
 	public AccountImporter() {
 		super();
-	}
-
-	public AccountImporter(Session session) {
-		super();
-		this.session = session;
 	}
 
 	@Override
@@ -50,7 +61,7 @@ public class AccountImporter extends WorkbookDataImporter {
 				organizationEntity = (Organization) JPA.em().createQuery("select o from Organization o where o.name = :name").setParameter("name", org).getSingleResult();
 			} catch (NoResultException ex) {
 				organizationEntity = new Organization(org);
-				session.saveOrUpdate(organizationEntity);
+				organizationService.saveOrUpdate(organizationEntity);
 				Logger.info("Created organization " + org);
 			}
 
@@ -64,10 +75,10 @@ public class AccountImporter extends WorkbookDataImporter {
 			} catch (NoResultException ex) {
 
 				siteEntity = new Site(organizationEntity, site);
-				session.saveOrUpdate(siteEntity);
+				siteService.saveOrUpdate(siteEntity);
 
 				Scope scope = new Scope(siteEntity);
-				session.saveOrUpdate(scope);
+				scopeService.saveOrUpdate(scope);
 
 				Logger.info("Created site (with scope) " + site + " for organization " + org);
 			}
@@ -101,10 +112,10 @@ public class AccountImporter extends WorkbookDataImporter {
 			} catch (NoResultException ex) {
 				Person person = new Person(lastname, firstname,email);
 
-				session.saveOrUpdate(person);
+				personService.saveOrUpdate(person);
 
 				accountEntity = new Account(organizationEntity, person, login, password, InterfaceTypeCode.ENTERPRISE);
-				session.saveOrUpdate(accountEntity);
+				accountService.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}
 		}
