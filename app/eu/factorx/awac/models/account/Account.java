@@ -10,17 +10,16 @@
  */
 package eu.factorx.awac.models.account;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+
+import play.data.validation.Constraints.Required;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
-import play.data.validation.Constraints.Max;
-import play.data.validation.Constraints.Min;
-import play.data.validation.Constraints.Required;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
 
 // import for JAXB annotations -- JAXB stack
 
