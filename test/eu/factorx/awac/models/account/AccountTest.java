@@ -2,6 +2,7 @@ package eu.factorx.awac.models.account;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.impl.AccountServiceImpl;
 import play.Logger;
 
@@ -23,8 +24,10 @@ public class AccountTest extends AbstractBaseModelTest {
     public void _001_createAccount() {
 
         Organization org = new Organization("testing");
-        Account ac = new Account(org,"gho","passwd","gaston","hollands");
-        ac.setAge(new Integer(20)); // constraints should it be a constraint ?
+
+		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
+        Account ac = new Account(org,person,"gho","passwd",InterfaceTypeCode.ENTERPRISE);
+		ac.setActive(false);
 
         em.getTransaction().begin();
         em.persist(ac);
