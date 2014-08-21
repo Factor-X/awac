@@ -20,7 +20,7 @@ import eu.factorx.awac.service.CodesEquivalenceService;
 public class CodeLabelImporter extends WorkbookDataImporter {
 
 	private static final String PRIMARY_KEY_COLUMN_NAME = "KEY";
-	private static final String FOREIGN_KEY_SUFFIX = "_" + PRIMARY_KEY_COLUMN_NAME;
+	private static final String FOREIGN_KEY_SUFFIX = "_KEY";
 
 	private static final String CODES_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_full.xls";
 
@@ -92,8 +92,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			Sheet sheet = codesWbSheets.get(sheetName);
 
 			// searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
-			int columns = sheet.getColumns();
-			for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
+			for (int columnIndex = 0; columnIndex < sheet.getColumns(); columnIndex++) {
 				String columnName = getCellContent(sheet, columnIndex, 0);
 				if (!columnName.endsWith(FOREIGN_KEY_SUFFIX)) {
 					continue;
