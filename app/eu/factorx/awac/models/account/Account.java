@@ -24,6 +24,7 @@ import javax.persistence.*;
 @DiscriminatorValue("account")
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
+		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select p from Account p where p.email = :email"),
 })
 public class Account extends Person {
 
@@ -31,18 +32,8 @@ public class Account extends Person {
 	 * :identifier = ...
 	 */
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
+	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 	private static final long serialVersionUID = 1L;
-
-	//public int accessRights; // not used for now
-
-	// specific fields for an account.
-	@Required
-	@Min(value = 18)
-	@Max(value = 100)
-	private Integer age;
-
-	@Embedded
-	private Vat vat;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	private Organization organization;
@@ -60,22 +51,6 @@ public class Account extends Person {
 		this.organization = organization;
 	}
 
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
-	public Vat getVat() {
-		return vat;
-	}
-
-	public void setVat(Vat vat) {
-		this.vat = vat;
-	}
-
 	public Organization getOrganization() {
 		return organization;
 	}
@@ -86,47 +61,6 @@ public class Account extends Person {
 
 	public String toString() {
 		String string = super.toString();
-		string = string.concat("age:" + age);
 		return string;
 	}
-
-    /*
-     * Finder
-     */
-
-//    public static Finder<Long, Account> find = new Finder<Long, Account>(
-//            Long.class, Account.class
-//    );
-
-	/**
-	 * Return a page of account
-	 *
-	 * @param page     Page to display
-	 * @param pageSize Number of administrators per page
-	 * @param sortBy   Administrator property used for sorting
-	 * @param order    Sort order (either or asc or desc)
-	 * @param filter   Filter applied on the name column
-	 */
-//    public static Page<Account> page(int page, int pageSize, String sortBy, String order, String filter) {
-//        return
-//                find.where()
-//                        .ilike("identifier", "%" + filter + "%")
-//                        .orderBy(sortBy + " " + order)
-//                                //.fetch("company")
-//                        .findPagingList(pageSize)
-//                        .getPage(page);
-//    }
-
-
-	/**
-	 * Return a list of account to select from
-	 */
-
-//    public static Map<String, String> options() {
-//        LinkedHashMap<String, String> options = new LinkedHashMap<String, String>();
-//        for (Account a : Account.find.orderBy("identifier").findList()) {
-//            options.put(a.personId.toString(), a.identifier);
-//        }
-//        return options;
-//    }
 }

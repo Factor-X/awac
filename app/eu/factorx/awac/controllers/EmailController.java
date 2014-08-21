@@ -27,13 +27,13 @@ public class EmailController {
 	private EmailService emailService;
 
 	/**
-	 * Handle the form submission.
+	 * Handle the email submission.
 	 */
-	public Result submit() {
+	public Result send(String destinationEmail,String subject, String message) {
 
 			try {
 				// send mail
-				EmailMessage email = new EmailMessage("gaston.hollands@factorx.eu","AWAC Registration Confirmation","http://localhost:9000/easychat/confirm/"+"1");
+				EmailMessage email = new EmailMessage(destinationEmail,subject,message);
 				emailService.send(email);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -43,17 +43,4 @@ public class EmailController {
 
 			return ok();
 		}
-
-	/**
-	 * Handle the confirm.
-	 */
-
-	public Result confirm (Long id) {
-
-		//send confirmation mail of activated account
-		EmailMessage email = new EmailMessage("gaston.hollands@factorx.eu","AWAC Registration Activation","Your account is activated. Please log in the system using http://localhost:9000/awac/login");
-		emailService.send(email);
-		return ok();
-	}
-
 }

@@ -24,18 +24,18 @@ GET     /awac/notifications/get_notifications          @eu.factorx.awac.controll
 #
 POST    /awac/login                                    @eu.factorx.awac.controllers.AuthenticationController.authenticate()                              
 POST    /awac/logout                                   @eu.factorx.awac.controllers.AuthenticationController.logout()                                    
-POST    /awac/testAuthentication                       @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()                        
+POST    /awac/testAuthentication                       @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()
+POST    /awac/forgotPassword                           @eu.factorx.awac.controllers.AuthenticationController.forgotPassword()
 
 #
 # VIES Service
 #
-GET     /vies/vatcheck/:uid/:vat                       @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)             
+#GET     /vies/vatcheck/:uid/:vat                       @eu.factorx.awac.controllers.vies.VatViesService.checkVat(uid : String, vat : String)
 
 #
 # Email Service
 #
-POST    /email/submit                                           @eu.factorx.awac.controllers.EmailController.submit()
-GET     /email/confirm/:id                                      @eu.factorx.awac.controllers.EmailController.confirm(id:Long)
+POST        /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
 
 #
 # Javascript routing

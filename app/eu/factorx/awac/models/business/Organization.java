@@ -2,19 +2,22 @@ package eu.factorx.awac.models.business;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.account.Account;
 
 @Entity
 @Table(name = "organization")
+@NamedQueries({
+		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
+})
 public class Organization extends AbstractEntity {
+
+	/**
+	 * :identifier = ...
+	 */
+	public static final String FIND_BY_NAME = "Organization.findByName";
 
 	private static final long serialVersionUID = 1L;
 

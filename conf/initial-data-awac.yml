@@ -28,16 +28,6 @@ addresses:
         city:           Bruxelles
         country:        Belgium
 
-vat:
-
-    - &vatA !!eu.factorx.awac.models.account.Vat
-        vatNumber:      BE0849213125
-        viesVerified:   false     
-
-    - &vatB !!eu.factorx.awac.models.account.Vat
-        vatNumber:      
-        viesVerified:   false     
-
 
 # Administrator
 
@@ -50,7 +40,6 @@ administrators:
         firstname:      Gaston
         email:          gaston.hollands@rimshot.be
         accountStatus:  ACTIVE
-        address:        *addressA
 
     - &administrator2 !!eu.factorx.awac.models.account.Administrator
         identifier:     admin2
@@ -59,7 +48,6 @@ administrators:
         firstname:      Murielle
         email:          murielle.schorils@rimshot.be
         accountStatus:  ACTIVE
-        address:        *addressA
 
 # Accounts
 
@@ -70,11 +58,8 @@ accounts:
         password:       password
         lastname:       Hollands
         firstname:      Gaston
-        age:            46
         accountStatus:  ACTIVE
         email:          gaston.hollands@rimshot.be
-        address:        *addressA
-        vat:            *vatA
         organization:   *org1
 
     
@@ -83,11 +68,8 @@ accounts:
         password:       password
         lastname:       Schorils
         firstname:      Murielle
-        age:            46
         accountStatus:  ACTIVE
         email:          murielle.schorils@rimshot.be
-        address:        *addressA
-        vat:            *vatB
         organization:   *org1
         
     - &account3 !!eu.factorx.awac.models.account.Account
@@ -95,10 +77,7 @@ accounts:
         password:       password
         lastname:       Hollands
         firstname:      Ludovic
-        age:            18
         accountStatus:  UNACTIVE
         email:          ludovic.hollands@rimshot.be
-        address:        *addressA
-        vat:            *vatB        
         organization:   *org1
 

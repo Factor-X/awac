@@ -42,8 +42,8 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 		UnitCategory targetUnitCategory = targetUnit.getCategory();
 
 		if (!unitCategory.equals(targetUnitCategory)) {
-			throw new RuntimeException("Cannot convert a unit of category '" + unitCategory.getSymbol() + "' ("
-					+ currentUnit + ") to a unit of category '" + targetUnitCategory.getSymbol() + "' (" + targetUnit
+			throw new RuntimeException("Cannot convert a unit of category '" + unitCategory.getName() + "' ("
+					+ currentUnit + ") to a unit of category '" + targetUnitCategory.getName() + "' (" + targetUnit
 					+ ")");
 		}
 
@@ -57,7 +57,7 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 	public Double convertToReferenceUnit(Double value, Unit currentUnit, Integer year) {
 		UnitConversionFormula conversionFormula = findByUnitAndYear(currentUnit, year);
 		if (conversionFormula == null) {
-			throw new RuntimeException("Cannot find a conversion formula for unit = '" + currentUnit.getSymbol()
+			throw new RuntimeException("Cannot find a conversion formula for unit = '" + currentUnit
 					+ "' and year = " + year);
 		}
 		String unitToReferenceFormula = conversionFormula.getUnitToReference();
@@ -68,7 +68,7 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 	public Double convertFromReferenceUnit(Double value, Unit targetUnit, Integer year) {
 		UnitConversionFormula conversionFormula = findByUnitAndYear(targetUnit, year);
 		if (conversionFormula == null) {
-			throw new RuntimeException("Cannot find a conversion formula for unit = '" + targetUnit.getSymbol()
+			throw new RuntimeException("Cannot find a conversion formula for unit = '" + targetUnit
 					+ "' and year = " + year);
 		}
 		String referenceToUnitFormula = conversionFormula.getReferenceToUnit();

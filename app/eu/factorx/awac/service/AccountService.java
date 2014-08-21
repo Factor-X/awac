@@ -6,4 +6,6 @@ public interface AccountService extends PersistenceService<Account> {
 
 	public Account findByIdentifier(String identifier);
 
+	public Account findByEmail(String email);
+
 }
