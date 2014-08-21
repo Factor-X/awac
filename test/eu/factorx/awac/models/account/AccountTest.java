@@ -30,6 +30,8 @@ public class AccountTest extends AbstractBaseModelTest {
 		ac.setActive(false);
 
         em.getTransaction().begin();
+		em.persist(org);
+		em.persist(person);
         em.persist(ac);
         em.getTransaction().commit();
 
@@ -166,6 +168,32 @@ public class AccountTest extends AbstractBaseModelTest {
 
 		try {
 			reload = em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertNull(reload);
+	} // end of test
+
+	// for DB cleanup
+	@Test
+	public void _009_deleteAssociatedPerson() {
+
+		Person person = null;
+		String query = "select p from Person p where p.lastname = 'gaston'";
+
+		try {
+			person = em.createQuery(query, Person.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertEquals(person.getLastname(), "gaston");
+
+		em.getTransaction().begin();
+		em.remove(person);
+		em.getTransaction().commit();
+
+		Person reload=null;
+
+		try {
+			reload = em.createQuery(query, Person.class).getResultList().get(0);
 		} catch (Exception empty) {}
 
 		assertNull(reload);
