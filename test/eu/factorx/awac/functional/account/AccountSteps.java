@@ -28,6 +28,8 @@ public class AccountSteps {
 		ac.setActive(false);
 
 		GlobalHooks.em.getTransaction().begin();
+		GlobalHooks.em.persist(org);
+		GlobalHooks.em.persist(person);
 		GlobalHooks.em.persist(ac);
 		GlobalHooks.em.getTransaction().commit();
 	}
@@ -96,6 +98,29 @@ public class AccountSteps {
 
 		try {
 			reload = GlobalHooks.em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertNull(reload);
+	}
+	@Then("^Perform delete of the person$")
+	public void Perform_delete_of_the_person() throws Throwable {
+		Person person = null;
+		String query = "select p from Person p where p.lastname = 'gaston'";
+
+		try {
+			person = GlobalHooks.em.createQuery(query, Person.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertEquals(person.getLastname(), "gaston");
+
+		GlobalHooks.em.getTransaction().begin();
+		GlobalHooks.em.remove(person);
+		GlobalHooks.em.getTransaction().commit();
+
+		Person reload=null;
+
+		try {
+			reload = GlobalHooks.em.createQuery(query, Person.class).getResultList().get(0);
 		} catch (Exception empty) {}
 
 		assertNull(reload);

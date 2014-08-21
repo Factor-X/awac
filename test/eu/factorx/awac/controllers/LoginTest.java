@@ -16,6 +16,7 @@ import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _001_authenticateActionSuccess() {
 
 	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
+	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.toString());
 
 	//Json node
 	Map<String, String> map = new HashMap<String, String>();
