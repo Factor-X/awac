@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope, downloadService, $http, $location, messageFlash,translationService) ->
-
+.controller "LoginCtrl", ($scope, downloadService, $location, messageFlash) ->
     $scope.loginInfo =
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
@@ -10,7 +9,7 @@ angular
         validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
-        focus:true
+        focus: true
 
     $scope.passwordInfo =
         fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
@@ -45,26 +44,15 @@ angular
         $scope.isLoading = true
 
         #send request
-        promise = $http
-            method: "POST"
-            url: '/awac/login'
-            headers:
-                "Content-Type": "application/json"
-            data:
-                login: $scope.loginInfo.field
-                password: $scope.passwordInfo.field
-
-        promise.success (data, status, headers, config) ->
-            $scope.$root.loginSuccess(data)
-            messageFlash.displaySuccess "You are now connected"
-            return
-
-        promise.error (data, status, headers, config) ->
-            #display the error message
-            messageFlash.displayError data.message
-            #disactive loading mode
-            $scope.isLoading = false
-            return
+        downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field }, (result) ->
+            if result.success
+                $scope.$root.loginSuccess(result.data)
+                messageFlash.displaySuccess "You are now connected"
+            else
+                #display the error message
+                messageFlash.displayError result.data.message
+                #disactive loading mode
+                $scope.isLoading = false
 
         return false
 

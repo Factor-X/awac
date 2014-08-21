@@ -7,8 +7,7 @@ angular
     restrict: "E"
     scope: {}
     templateUrl: "$/angular/templates/mm-awac-modal-document-manager.html"
-    controller: ($scope, modalService,$http,$location,$window) ->
-
+    controller: ($scope, modalService, $location, $window) ->
         $scope.listDocuments = []
 
 
@@ -20,9 +19,9 @@ angular
 
         modalName = modalService.DOCUMENT_MANAGER
         $scope.show = false
-        $scope.loc =null
+        $scope.loc = null
 
-        $scope.$on 'SHOW_MODAL_'+modalName,(event,args) ->
+        $scope.$on 'SHOW_MODAL_' + modalName, (event, args) ->
             if args.show
                 $scope.display()
             else
@@ -33,19 +32,19 @@ angular
 
             $scope.listDocuments = args.params['listDocuments']
 
-            #console.log "listDocuments"
-            #console.log $scope.listDocuments
+        #console.log "listDocuments"
+        #console.log $scope.listDocuments
 
 
         $scope.display = ()->
             $scope.show = true
 
-        $scope.close= ->
+        $scope.close = ->
             $scope.show = false
-            modalService.hide "SHOW_MODAL_"+modalName
+            modalService.hide "SHOW_MODAL_" + modalName
 
         $scope.download = (storedFileId) ->
-            url = '/awac/file/download/'+storedFileId
+            url = '/awac/file/download/' + storedFileId
             $window.open(url);
 
         $scope.removeDoc = (storedFileId) ->
