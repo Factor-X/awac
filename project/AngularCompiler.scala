@@ -109,7 +109,10 @@ class AngularCompiler {
         val controllers: PathSet[Path] = angular / "controllers" ** "*.coffee"
         val views: PathSet[Path] = (angular / "views" ** "*.jade") ++ (angular / "views" ** "*.html")
 
-        val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
+        /* GHO modif 21082014 */
+        /* annotation js moved to public/javascripts/scripts */
+        //val validators = Path.fromString("app/eu/factorx/awac") / "dto" / "validation" / "scripts" * "*.js"
+        val validators = Path.fromString("public/javascripts") / "scripts" * "*.js"
 
         /*
                 compileFiles(roots, Path.fromString(".tmp/sources/"))
