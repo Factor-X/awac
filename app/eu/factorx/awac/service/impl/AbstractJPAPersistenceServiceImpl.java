@@ -57,7 +57,6 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	}
 
 	@Override
-	@Transactional
 	public List<E> findAll() {
 		Criteria criteria = JPA.em().unwrap(Session.class).createCriteria(entityClass);
 		@SuppressWarnings("unchecked")

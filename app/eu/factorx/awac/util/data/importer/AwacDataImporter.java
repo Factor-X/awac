@@ -7,7 +7,7 @@ import java.util.Map;
 
 import jxl.Sheet;
 
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -19,6 +19,8 @@ import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.service.FactorService;
+import eu.factorx.awac.service.IndicatorService;
 
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
@@ -57,6 +59,12 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 */
 	private static final String FACTORS_SHEET_NAME = "EFDB_V6";
 
+	@Autowired
+	private IndicatorService indicatorService;
+
+	@Autowired
+	private FactorService factorService;
+
 	private Map<String, Unit> allUnitSymbols = null;
 
 	private List<String> allIndicatorCategoryKeys = null;
@@ -67,11 +75,6 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	public AwacDataImporter() {
 		super();
-	}
-
-	public AwacDataImporter(Session session) {
-		super();
-		this.session = session;
 	}
 
 	protected void importData() throws Exception {
@@ -140,10 +143,10 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			ActivityCategoryCode activityCategory = new ActivityCategoryCode(activityCategoryKey);
 			ActivitySubCategoryCode activitySubCategory = new ActivitySubCategoryCode(activitySubCategoryKey);
 
-			indicators.add(new Indicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory,
-					activitySubCategory, activityOwnership, unit, deleted));
+			Indicator indicator = new Indicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit, deleted);
+			indicatorService.saveOrUpdate(indicator);
+			indicators.add(indicator);
 		}
-		persistEntities(indicators);
 		Logger.info("====== Imported {} indicators (including {} marked as 'deleted')", indicators.size(), deletedIndicators);
 	}
 
@@ -201,9 +204,8 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			Factor factor = new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution);
 			factors.add(factor);
 			factorValues.add(new FactorValue(value, null, null, factor));
+			factorService.saveOrUpdate(factor);
 		}
-		persistEntities(factors);
-		persistEntities(factorValues);
 		Logger.info("====== Imported {} factors", factors.size());
 	}
 

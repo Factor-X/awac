@@ -15,8 +15,10 @@
         <class>eu.factorx.awac.models.Notification</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
+        <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
+        <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
@@ -77,7 +79,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
- 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
  		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
@@ -117,10 +119,13 @@
         <class>eu.factorx.awac.models.AbstractEntity</class>
         <class>eu.factorx.awac.models.Analytics</class>
         <class>eu.factorx.awac.models.AuditedAbstractEntity</class>
+        <class>eu.factorx.awac.models.Notification</class>
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
+        <class>eu.factorx.awac.models.account.Address</class>
         <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
+        <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.Product</class>
         <class>eu.factorx.awac.models.business.Scope</class>
@@ -141,6 +146,8 @@
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.UnitCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.UnitCode</class>
         <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
@@ -167,7 +174,6 @@
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
-        <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
@@ -180,7 +186,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+       	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
