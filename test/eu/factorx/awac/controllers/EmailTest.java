@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.Configuration;
+import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -43,6 +45,9 @@ public class EmailTest extends AbstractBaseModelTest {
   	@Test
 	public void _001_submitActionSuccess() {
 
+	// try to get a bash env
+	String smtpPassword = Configuration.root().getString("mail.smtp.password");
+	assertNotNull(smtpPassword);
 
 	// Fake request
 	FakeRequest fr = new FakeRequest();
