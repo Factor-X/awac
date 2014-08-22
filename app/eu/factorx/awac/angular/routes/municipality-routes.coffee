@@ -17,77 +17,55 @@ initializeMunicipalityRoutes = () ->
         $routeProvider
 
         .when('/municipality-tab1/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB1.html'
+                templateUrl: '$/angular/views/municipality/TAB_C1.html'
                 controller: 'FormCtrl'
                 resolve:{
                     formIdentifier: () ->
-                        return 'TAB1'
+                        return 'TAB_C1'
                     displayFormMenu: () ->
                         return true
                 }
             }
         )
         .when('/municipality-tab2/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB2.html'
+                templateUrl: '$/angular/views/municipality/TAB_C2.html'
                 controller: 'FormCtrl'
                 resolve:{
                     formIdentifier: () ->
-                        return 'TAB2'
+                        return 'TAB_C2'
                     displayFormMenu: () ->
                         return true
                 }
             }
         )
         .when('/municipality-tab3/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB3.html'
+                templateUrl: '$/angular/views/municipality/TAB_C3.html'
                 controller: 'FormCtrl'
                 resolve:{
                     formIdentifier: () ->
-                        return 'TAB3'
+                        return 'TAB_C3'
                     displayFormMenu: () ->
                         return true
                 }
             }
         )
         .when('/municipality-tab4/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB4.html'
+                templateUrl: '$/angular/views/municipality/TAB_C4.html'
                 controller: 'FormCtrl'
                 resolve:{
                     formIdentifier: () ->
-                        return 'TAB4'
+                        return 'TAB_C4'
                     displayFormMenu: () ->
                         return true
                 }
             }
         )
         .when('/municipality-tab5/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB5.html'
+                templateUrl: '$/angular/views/municipality/TAB_C5.html'
                 controller: 'FormCtrl'
                 resolve:{
                     formIdentifier: () ->
-                        return 'TAB5'
-                    displayFormMenu: () ->
-                        return true
-                }
-            }
-        )
-        .when('/municipality-tab6/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB6.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB6'
-                    displayFormMenu: () ->
-                        return true
-                }
-            }
-        )
-        .when('/municipality-tab7/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB7.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB7'
+                        return 'TAB_C5'
                     displayFormMenu: () ->
                         return true
                 }

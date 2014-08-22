@@ -1,0 +1,33 @@
+//achat bien et service
+mm-awac-section(title-code="AC130_TITLE")
+
+    mm-awac-question(question-code="AC131")
+
+    mm-awac-repetition-name(question-code="AC132")
+    mm-awac-repetition-question(question-set-code="AC132", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC132')")
+        
+        mm-awac-question(question-code="AC133", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC134", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC133',itLevel1).value == '1' || getAnswer('AC133',itLevel1).value == '2' || getAnswer('AC133',itLevel1).value == '3' || getAnswer('AC133',itLevel1).value == '4' || getAnswer('AC133',itLevel1).value == '5' || getAnswer('AC133',itLevel1).value == '6' || getAnswer('AC133',itLevel1).value == '7' || getAnswer('AC133',itLevel1).value == 8' || getAnswer('AC133',itLevel1).value == '9' || getAnswer('AC133',itLevel1).value == '10' || getAnswer('AC133',itLevel1).value == '11' || getAnswer('AC133',itLevel1).value == '12' || getAnswer('AC133',itLevel1).value == '13' || getAnswer('AC133',itLevel1).value == '14' || getAnswer('AC133',itLevel1).value == '15' || getAnswer('AC133',itLevel1).value == '16' || getAnswer('AC133',itLevel1).value == '17' || getAnswer('AC133',itLevel1).value == '23'")
+        mm-awac-question(question-code="AC135", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21' || getAnswer('AC133',itLevel1).value == '22'")
+        mm-awac-question(question-code="AC136", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'")
+    
+    button.button.add-repetition-button(ng-click="addIteration('AC132')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'AC132_LOOPDESC' | translate")
+
+// investissement AC137
+mm-awac-section(title-code="AC137_TITLE")
+    
+    mm-awac-question(question-code="AC138")
+    
+    mm-awac-repetition-name(question-code="AC139")
+    mm-awac-repetition-question(question-set-code="AC139", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC139')")
+        
+        mm-awac-question(question-code="AC140", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC141", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC142", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC143", ng-repetition-map="itLevel1")
+    
+    button.button.add-repetition-button(ng-click="addIteration('AC139')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'AC139_LOOPDESC' | translate")

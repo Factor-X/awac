@@ -41,45 +41,31 @@ public class BaseActivityDataAE_BAD18C extends ActivityResultContributor {
 			QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
 			QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
-			if (questionA158Answer == null ||
-					questionA159Answer == null ||
-					(questionA160Answer == null &&
-							questionA161Answer == null &&
-							questionA162Answer == null)) {
-				continue;
-			}
-
-			Double belgianTruckRatio = 0.854;
-			Double internationalTruckRatio = 0.287;
-			Double belgianDistance = 0.0;
-			Double internationalDistance = 0.0;
-			// TODO: codes
-            /*
-            if (getCode(questionA159Answer, CODE) == CODE("Belgique")) {
-                belgianDistance = 200.0;
-                internationalDistance = 0.0;
-            } else if (getCode(questionA159Answer, CODE) == CODE("Europe")) {
-                belgianDistance = 0.0;
-                internationalDistance = 2500.0;
-            } else {
-                belgianDistance = 0.0;
-                internationalDistance = 5000.0;
+            if (questionA158Answer == null ||
+                    questionA159Answer == null) {
+                continue;
             }
-            */
+
+            if (!getCode(questionA159Answer).getKey().equals("1")) { // NOT Belgium
+                continue;
+            }
+
+            Double belgianTruckRatio = 0.854;
+			Double internationalTruckRatio = 0.287;
+			Double belgianDistance = 200.0;
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD18C);
 			baseActivityData.setRank(3);
-			baseActivityData.setSpecificPurpose("-ref marchandise");
+			baseActivityData.setSpecificPurpose("");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_6);
-			// TODO: FLORIAN
-			// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_34);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_178);
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA158Answer, baseActivityDataUnit) * belgianDistance);
+			baseActivityData.setValue(toDouble(questionA158Answer, getUnitByCode(UnitCode.U5135)) * belgianDistance);
 
 			res.add(baseActivityData);
 		}

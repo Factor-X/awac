@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD24 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5330);
 
 		// For each set of answers in A191, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA191 = questionSetAnswers.get(QuestionCode.A191);		if (questionSetAnswersA191 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA191) {
+		List<QuestionSetAnswer> questionSetAnswersA191 = questionSetAnswers.get(QuestionCode.A191);
+		if (questionSetAnswersA191 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA191) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -46,13 +51,11 @@ public class BaseActivityDataAE_BAD24 extends ActivityResultContributor {
 			baseActivityData.setSpecificPurpose("-cantine");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_7);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
-			// TODO: FLORIAN
-			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			// TODO: FLORIAN
-			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+            baseActivityData.setActivityType(ActivityTypeCode.AT_55);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_191);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA192Answer, baseActivityDataUnit) / 4 * toDouble(questionA193Answer, baseActivityDataUnit) / 365);
+			baseActivityData.setValue(toDouble(questionA192Answer) / 4 * toDouble(questionA193Answer) / 365);
 
 			res.add(baseActivityData);
 		}

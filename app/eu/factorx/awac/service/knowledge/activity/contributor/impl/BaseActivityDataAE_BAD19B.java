@@ -41,35 +41,26 @@ public class BaseActivityDataAE_BAD19B extends ActivityResultContributor {
 				continue;
 			}
 
-			for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-				if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A166)) {
+            QuestionAnswer questionA169Answer = answersByCode.get(QuestionCode.A169);
 
-					Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
-
-
-					QuestionAnswer questionA169Answer = answersByCodeChild.get(QuestionCode.A169);
-
-
-					if (questionA169Answer == null) {
-						continue;
-					}
-
-					BaseActivityData baseActivityData = new BaseActivityData();
-
-					baseActivityData.setKey(BaseActivityDataCode.AE_BAD19B);
-					baseActivityData.setRank(1);
-					baseActivityData.setSpecificPurpose(toString(questionA165Answer));
-					baseActivityData.setActivityCategory(ActivityCategoryCode.AC_6);
-					baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
-					baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-					baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
-					baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-					baseActivityData.setValue(toDouble(questionA169Answer, baseActivityDataUnit));
-
-					res.add(baseActivityData);
-				}
+			if (questionA169Answer == null) {
+				continue;
 			}
+
+			BaseActivityData baseActivityData = new BaseActivityData();
+
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD19B);
+			baseActivityData.setRank(1);
+			baseActivityData.setSpecificPurpose(toString(questionA165Answer));
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_6);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_3);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
+			baseActivityData.setActivityOwnership(null);
+			baseActivityData.setUnit(baseActivityDataUnit);
+			baseActivityData.setValue(toDouble(questionA169Answer, baseActivityDataUnit));
+
+			res.add(baseActivityData);
 		}
 		return res;
 	}

@@ -99,8 +99,8 @@ angular
             for qSet in $scope.o.questionSets
                 $scope.loopRepetition(qSet)
 
-            #console.log "$scope.mapRepetition"
-            #console.log $scope.mapRepetition
+            console.log "$scope.mapRepetition"
+            console.log $scope.mapRepetition
 
             #use the defaultValues to completed null value
             for questionSetDTO in $scope.o.questionSets
@@ -155,8 +155,8 @@ angular
                 # add the answer of the listAnswerToSave
                 listAnswerToSave[listAnswerToSave.length] = answer
 
-        #console.log "listAnswerToSave"
-        #console.log listAnswerToSave
+        console.log "listAnswerToSave"
+        console.log listAnswerToSave
 
         if listAnswerToSave.length == 0
             messageFlash.displayInfo translationService.get('ALL_ANSWERS_ALREADY_SAVED')

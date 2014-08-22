@@ -1061,7 +1061,7 @@ public class AwacInitialData {
 		// == A49 =========================================================================
 		// Quel est le nombre d'heures de fonctionnement annuel du site?
 		// A37(Systèmes de refroidissement) > A40(Méthodes au choix) > A47(Estimation des émissions à partir de la consommation électrique du site) > A49 (Quel est le nombre d'heures de fonctionnement annuel du site?)
-		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, durationUnits, null, null));
+		session.saveOrUpdate(new DoubleQuestion(a47, 0, QuestionCode.A49, durationUnits, null, getUnitBySymbol("h")));
 
 		// == A51 =========================================================================
 		// Pièces documentaires liées à la mobilité
@@ -1576,7 +1576,7 @@ public class AwacInitialData {
 		// == A195 ========================================================================
 		// Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A195 (Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a194, 0, QuestionCode.A195, CodeList.TRAITEUREAU));
+		session.saveOrUpdate(new ValueSelectionQuestion(a197, 0, QuestionCode.A195, CodeList.TRAITEUREAU));
 
 		// == A198 ========================================================================
 		// Source de rejet
@@ -1596,7 +1596,7 @@ public class AwacInitialData {
 		// == A501 ========================================================================
 		// Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
 		// A173(Déchets générés par les opérations) > A180(Eaux usées) > A194(Eaux usées industrielles) > A501 (Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?)
-		session.saveOrUpdate(new ValueSelectionQuestion(a194, 0, QuestionCode.A501, CodeList.TRAITEUREAU));
+		session.saveOrUpdate(new ValueSelectionQuestion(a201, 0, QuestionCode.A501, CodeList.TRAITEUREAU));
 
 		// == A202 ========================================================================
 		// Quantités de DCO rejetés
