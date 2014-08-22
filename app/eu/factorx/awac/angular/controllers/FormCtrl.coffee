@@ -169,8 +169,6 @@ angular
 
             downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
                 if result.success
-                    messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
-                    modalService.close(modalService.LOADING)
     
                     #refresh the progress bar
     

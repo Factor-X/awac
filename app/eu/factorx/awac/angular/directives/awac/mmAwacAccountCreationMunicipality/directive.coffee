@@ -81,10 +81,11 @@ angular
 
 
             #send request
-            downloadService.postJson '/enterprise/registration', data, (result) ->
+            downloadService.postJson '/municipality/registration', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess "You are now connected"
+                    $scope.isLoading = false
                 else
                     #display the error message
                     messageFlash.displayError result.data.message

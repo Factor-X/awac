@@ -15,6 +15,7 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
+                <bean class="eu.factorx.awac.converter.AdministratorToLoginResultDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.AccountToPersonDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.ProductToProductDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.SiteToSiteDTOConverter"/>

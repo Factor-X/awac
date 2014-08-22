@@ -101,7 +101,7 @@
 
             <div class="data_date_compare">
                 <div>Site sélectionné</div>
-                <select ng-options="s.id as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
+                <select ng-options="s.scope as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
             </div>
 
             <div class="big_separator"></div>

@@ -57,5 +57,12 @@ public class SecuredController extends Security.Authenticator {
 	public boolean isSystemAdministrator() {
 		return (((Account)getCurrentUser()) instanceof SystemAdministrator);
 	}
+
+	public void storeIdentifier(String identifier){
+
+		//if the login and the password are ok, refresh the session
+		Context.current().session().clear();
+		Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, identifier);
+	}
 }
 

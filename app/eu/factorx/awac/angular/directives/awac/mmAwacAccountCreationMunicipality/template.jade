@@ -7,12 +7,11 @@ div(class="field_form")
     mm-awac-modal-field-text(ng-info="passwordConfirmInfo").field_form_separator
     mm-awac-modal-field-text(ng-info="municipalityNameInfo")
 
-    p(ng-show="errorMessage.length > 0",
-    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
-
-    button.button(
+    div(ng-hide="isLoading")
+        button.button(
         type="button",
         class="btn btn-primary",
         ng-bind-html="'REGISTRATION_BUTTON' | translate",
         ng-click="registration()",
         ng-disabled="!registrationFieldValid()")
+    img(ng-show="isLoading",src="/assets/images/modal-loading.gif")

@@ -91,6 +91,7 @@ angular
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess "You are now connected"
+                    $scope.isLoading = false
                 else
                     #display the error message
                     messageFlash.displayError result.data.message

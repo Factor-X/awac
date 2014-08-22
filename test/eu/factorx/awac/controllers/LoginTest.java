@@ -125,11 +125,8 @@ public class LoginTest extends AbstractBaseModelTest {
 		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
 
 		// should return a ExceptionDTO
-		String content = new String(contentAsBytes(result));
-		JsonNode jsonResponse = Json.parse(content);
-		//Logger.info("jsonNode: " + jsonResponse.toString());
+		ExceptionsDTO loginResult = getDTO(result,ExceptionsDTO.class);
 
-		ExceptionsDTO loginResult = Json.fromJson(jsonResponse,ExceptionsDTO.class);
 		// verify lastname of user1 is Dupont.
 		assertEquals(loginResult.getMessage(),"The couple login / password was not found");
 	} // end of authenticateSuccess test

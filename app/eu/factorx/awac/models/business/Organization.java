@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -24,11 +25,11 @@ public class Organization extends AbstractEntity {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(mappedBy = "organization")
-	private List<Site> sites;
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Site> sites = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	List<Account> accounts;
+	List<Account> accounts = new ArrayList<>();
 
 	protected Organization() {
 		super();

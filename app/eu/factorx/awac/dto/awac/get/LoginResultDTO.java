@@ -9,6 +9,8 @@ public class LoginResultDTO extends DTO {
 
 	private PersonDTO person;
 
+	private boolean isAdministrator = false;
+
 	private String defaultPeriod;
 
 	private List<PeriodDTO> availablePeriods;
@@ -17,12 +19,28 @@ public class LoginResultDTO extends DTO {
 	public LoginResultDTO() {
 	}
 
+	public LoginResultDTO(PersonDTO person, boolean isAdministrator, String defaultPeriod, List<PeriodDTO> availablePeriods, OrganizationDTO organization) {
+		this.person = person;
+		this.isAdministrator = isAdministrator;
+		this.defaultPeriod = defaultPeriod;
+		this.availablePeriods = availablePeriods;
+		this.organization = organization;
+	}
+
 	public PersonDTO getPerson() {
 		return person;
 	}
 
 	public void setPerson(PersonDTO person) {
 		this.person = person;
+	}
+
+	public boolean isAdministrator() {
+		return isAdministrator;
+	}
+
+	public void setAdministrator(boolean isAdministrator) {
+		this.isAdministrator = isAdministrator;
 	}
 
 	public String getDefaultPeriod() {
@@ -47,5 +65,16 @@ public class LoginResultDTO extends DTO {
 
 	public void setOrganization(OrganizationDTO organization) {
 		this.organization = organization;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginResultDTO{" +
+				"person=" + person +
+				", isAdministrator=" + isAdministrator +
+				", defaultPeriod='" + defaultPeriod + '\'' +
+				", availablePeriods=" + availablePeriods +
+				", organization=" + organization +
+				'}';
 	}
 }

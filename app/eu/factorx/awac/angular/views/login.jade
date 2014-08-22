@@ -17,15 +17,19 @@
                         mm-awac-modal-field-text(ng-info="loginInfo")
                         mm-awac-modal-field-text(ng-info="passwordInfo")
 
-                    p(ng-show="errorMessage.length > 0",
-                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
 
-                    button.button(
-                        type="button",
-                        class="btn btn-primary",
-                        ng-bind-html="'LOGIN_BUTTON' | translate",
-                        ng-click="send()",
-                        ng-disabled="!connectionFieldValid()")
+                    div(ng-hide="isLoading === true")
+
+                        button.button(
+                            type="button",
+                            class="btn btn-primary",
+                            ng-bind-html="'LOGIN_BUTTON' | translate",
+                            ng-click="send()",
+                            ng-disabled="!connectionFieldValid()")
+
+                    img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
+
+
 
             tab.tab-color-lightgreen
                 tab-heading
@@ -36,15 +40,18 @@
                     div(class="field_form")
                         mm-awac-modal-field-text(ng-info="forgotPasswordInfo")
 
-                    p(ng-show="errorMessage.length > 0",
-                    style="background-color:#ff0000;color:#ffffff;padding:15px") {{errorMessage}}
+                    div(ng-hide="isLoading === true")
 
-                    button.button(
-                        type="button",
-                        class="btn btn-primary",
-                        ng-bind-html="'SUBMIT' | translate",
-                        ng-click="sendForgotPassword()",
-                        ng-disabled="!forgotPasswordFieldValid()")
+                        button.button(
+                            type="button",
+                            class="btn btn-primary",
+                            ng-bind-html="'SUBMIT' | translate",
+                            ng-click="sendForgotPassword()",
+                            ng-disabled="!forgotPasswordFieldValid()")
+
+                    img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
+
+
 
             tab.tab-color-lightgreen
                 tab-heading

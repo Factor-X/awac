@@ -43,4 +43,12 @@ public class Site extends AbstractEntity {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "Site{" +
+				super.toString()+
+				"organization=" + organization +
+				", name='" + name + '\'' +
+				'}';
+	}
 }
