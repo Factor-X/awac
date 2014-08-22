@@ -40,35 +40,27 @@ public class BaseActivityDataAE_BAD37B extends ActivityResultContributor {
 			if (questionA312Answer == null) {
 				continue;
 			}
-			for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-				if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
 
+            QuestionAnswer questionA316Answer = answersByCode.get(QuestionCode.A316);
 
-					Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
-
-					QuestionAnswer questionA316Answer = answersByCodeChild.get(QuestionCode.A316);
-
-					if (questionA316Answer == null) {
-						continue;
-					}
-
-
-					BaseActivityData baseActivityData = new BaseActivityData();
-
-					baseActivityData.setKey(BaseActivityDataCode.AE_BAD37B);
-					baseActivityData.setRank(1);
-					baseActivityData.setSpecificPurpose(toString(questionA312Answer));
-					baseActivityData.setActivityCategory(ActivityCategoryCode.AC_14);
-					baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_5);
-					baseActivityData.setActivityType(ActivityTypeCode.AT_8);
-					baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
-					baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-					baseActivityData.setValue(toDouble(questionA316Answer, baseActivityDataUnit));
-
-					res.add(baseActivityData);
-				}
+			if (questionA316Answer == null) {
+				continue;
 			}
+
+			BaseActivityData baseActivityData = new BaseActivityData();
+
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD37B);
+			baseActivityData.setRank(1);
+			baseActivityData.setSpecificPurpose(toString(questionA312Answer));
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_14);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_3);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
+			baseActivityData.setActivityOwnership(null);
+			baseActivityData.setUnit(baseActivityDataUnit);
+			baseActivityData.setValue(toDouble(questionA316Answer, baseActivityDataUnit));
+
+			res.add(baseActivityData);
 		}
 		return res;
 	}

@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD37A extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5321);
 
 		// For each set of answers in A311, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA311 = questionSetAnswers.get(QuestionCode.A311);		if (questionSetAnswersA311 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA311) {
+		List<QuestionSetAnswer> questionSetAnswersA311 = questionSetAnswers.get(QuestionCode.A311);
+		if (questionSetAnswersA311 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA311) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -36,7 +41,7 @@ public class BaseActivityDataAE_BAD37A extends ActivityResultContributor {
 				continue;
 			}
 			for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-				if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A317)) {
+				if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
 
 
 					Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
@@ -60,7 +65,7 @@ public class BaseActivityDataAE_BAD37A extends ActivityResultContributor {
 					baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 					baseActivityData.setActivitySource(toActivitySourceCode(questionA314Answer));
 					baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
+        			baseActivityData.setUnit(baseActivityDataUnit);
 					baseActivityData.setValue(toDouble(questionA315Answer, baseActivityDataUnit));
 
 					res.add(baseActivityData);
