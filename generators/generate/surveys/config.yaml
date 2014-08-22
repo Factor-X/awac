@@ -1,0 +1,10 @@
+log_level: INFO
+files :
+-
+  name  : Enterprise
+  xls   : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet : site entreprise-activityData
+-
+  name  : Municipality
+  xls   : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet : commune-activityData

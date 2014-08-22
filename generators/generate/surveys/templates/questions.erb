@@ -1,0 +1,78 @@
+    // =========================================================================
+    // QUESTIONS
+    // =========================================================================
+
+<% for q in questions %>
+    // == <%= q.accronym %>
+    // <%= q.text %>
+    <%
+       driver = q.driver.to_s
+
+       if driver == nil or driver.to_s.strip.length == 0
+           driver = 'null'
+       else
+           driver = driver.to_s.strip
+       end
+
+       if q.type == 'NUMBER'
+           driver = driver
+       end
+
+       if q.type == 'MULTIPLE'
+
+           if q.options != nil and q.options.start_with? 'Liste:'
+               driver = Code.make(q.options.gsub('Liste:', '').strip)
+           else
+               if q.options != nil and q.options.start_with? 'ListeCompound:'
+                   driver = Code.make(q.options.gsub('ListeCompound:', '').strip)
+               else
+                   driver = q.accronym.upcase + '_OPTIONS'
+               end
+           end
+       end
+
+       if q.type == 'YES_NO'
+           if driver == true or
+                   driver.upcase == 'YES' or
+                   driver.upcase == 'Y' or
+                   driver.upcase == 'OUI' or
+                   driver.upcase == 'O' or
+                   driver.upcase == 'TRUE' or
+                   driver.upcase == 'T' or
+                   driver.upcase == '1'
+               driver = 'true'
+           else
+               if driver == false or
+                       driver.upcase == 'NO' or
+                       driver.upcase == 'N' or
+                       driver.upcase == 'NON' or
+                       driver.upcase == 'N' or
+                       driver.upcase == 'FALSE' or
+                       driver.upcase == 'F' or
+                       driver.upcase == '0'
+                   driver = 'false'
+               else
+                   driver = 'null'
+               end
+           end
+
+       end
+
+       if q.type == 'PCT'
+           if driver == nil or driver.strip.length == 0
+               driver = 'null'
+           end
+           driver = driver
+       end
+    %>
+    <%= partial(
+                :template => 'questions/' + q.type.downcase,
+                :locals   => {
+                        :parent       => q.question_set.accronym.downcase,
+                        :accronym     => q.accronym,
+                        :unit_default => q.unit_default,
+                        :default      => driver
+                }
+        ) %>
+
+<% end %>

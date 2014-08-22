@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+gem 'rake'
+
+# Install gems from each plugin
+Dir.glob(File.join(File.dirname(__FILE__), '**', "Gemfile")) do |gemfile|
+    puts gemfile
+    if gemfile != __FILE__
+        eval(IO.read(gemfile))
+    end
+end
