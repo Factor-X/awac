@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope, downloadService, $location, messageFlash) ->
+.controller "LoginCtrl", ($scope,downloadService, $location, messageFlash, $compile,$timeout) ->
     $scope.loginInfo =
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
@@ -26,7 +26,7 @@ angular
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
-
+        
     $scope.connectionFieldValid = () ->
         if $scope.loginInfo.isValid && $scope.passwordInfo.isValid
             return true
@@ -74,3 +74,17 @@ angular
                 return
 
         return false
+
+    $scope.injectRegistrationDirective = ->
+        if $scope.$root?
+            if $scope.$root.instanceName == 'enterprise'
+                directiveName = "mm-awac-account-creation-enterprise"
+            else if $scope.$root.instanceName == 'municipality'
+                directiveName = "mm-awac-account-creation-municipality"
+
+            directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope)
+            $('.inject-registration-form').append(directive)
+
+    $timeout(->
+        $scope.injectRegistrationDirective()
+    , 0)

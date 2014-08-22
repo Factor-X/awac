@@ -18,19 +18,22 @@ public class DTO implements Content {
 	private String __type;
 
 	public static <T extends DTO> T getDTO(JsonNode data, Class<T> type) {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonParser jp = data.traverse();
-		try {
-			T dto = mapper.readValue(jp, type);
-			if (dto == null) {
-				throw new MyrmexRuntimeException("Validation of DTO creation");
-			}
-			dto.validate();
-			return dto;
+		if(data!=null) {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonParser jp = data.traverse();
+			try {
+				T dto = mapper.readValue(jp, type);
+				if (dto == null) {
+					throw new MyrmexRuntimeException("Validation of DTO creation");
+				}
+				dto.validate();
+				return dto;
 
-		} catch (IOException e) {
-			throw new MyrmexRuntimeException(e, "Validation of DTO creation");
+			} catch (IOException e) {
+				throw new MyrmexRuntimeException(e, "Validation of DTO creation");
+			}
 		}
+		throw new MyrmexRuntimeException("Validation of DTO : data is null");
 	}
 
 	public String get__type() {

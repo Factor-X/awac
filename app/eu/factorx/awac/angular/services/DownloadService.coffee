@@ -38,6 +38,8 @@ angular
         promise
 
     @postJson = (url, data, callback) ->
+        if data == null
+            data = {}
         @downloadsInProgress++
         promise = $http(
             method: "POST"
