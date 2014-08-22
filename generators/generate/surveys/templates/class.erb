@@ -1,0 +1,97 @@
+package eu.factorx.awac.generated;
+
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.UnitCategoryCode;
+import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.models.data.question.type.*;
+import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.service.UnitCategoryService;
+import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.util.data.importer.*;
+
+@Component
+public class Awac<%= name %>InitialData {
+
+    @Autowired
+    private MyrmexUnitsImporter myrmexUnitsImporter;
+
+    @Autowired
+    private CodeLabelImporter codeLabelImporter;
+
+    @Autowired
+    private AwacDataImporter awacDataImporter;
+
+    @Autowired
+    private AccountImporter accountImporter;
+
+    @Autowired
+    private TranslationImporter translationImporter;
+
+    @Autowired
+    private UnitCategoryService unitCategoryService;
+
+    @Autowired
+    private UnitService unitService;
+
+    private void createSurvey(Session session) {
+        Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- START");
+        long startTime = System.currentTimeMillis();
+
+        UnitCategory energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
+        UnitCategory massUnits    = getUnitCategoryByCode(UnitCategoryCode.MASS);
+        UnitCategory volumeUnits  = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
+        UnitCategory lengthUnits  = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
+        UnitCategory areaUnits    = getUnitCategoryByCode(UnitCategoryCode.AREA);
+        UnitCategory powerUnits   = getUnitCategoryByCode(UnitCategoryCode.POWER);
+        UnitCategory moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
+        UnitCategory timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
+
+<%= partial(
+            :template => 'forms',
+            :locals   => {
+                    :forms => forms
+            }
+    ) %>
+
+<%= partial(
+            :template => 'question_sets',
+            :locals   => {
+                    :question_sets => question_sets
+            }
+    ) %>
+
+<%= partial(
+            :template => 'questions',
+            :locals   => {
+                    :questions => questions
+            }
+    ) %>
+
+
+        Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
+    }
+
+    private UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
+        return unitCategoryService.findByCode(unitCategoryCode);
+    }
+
+    private Unit getUnitBySymbol(String symbol) {
+        return unitService.findBySymbol(symbol);
+    }
+
+}
+
+
+
