@@ -124,7 +124,8 @@
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38A" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38B" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39A" />
+                <bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39A" />
+                <bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39B" />
  			</set>
         </property>				
 	</bean>
