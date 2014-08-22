@@ -42,7 +42,7 @@ public class BaseActivityDataAE_BAD27I extends ActivityResultContributor {
 
 			if (questionA210Answer == null ||
 					questionA211Answer == null ||
-					questionA216Answer == null ||
+                    questionA216Answer == null ||
 					questionA221Answer == null) {
 				continue;
 			}

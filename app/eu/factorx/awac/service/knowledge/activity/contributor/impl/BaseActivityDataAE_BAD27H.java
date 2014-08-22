@@ -58,10 +58,22 @@ public class BaseActivityDataAE_BAD27H extends ActivityResultContributor {
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
 			baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
-			// TODO: transformé code en identique mais 100% recyclé             baseActivityData.setActivitySource(getCode(questionA215Answer, ActivitySourceCode.class + "100% recyclé"));
-			baseActivityData.setActivityOwnership(null);
+
+            if (ActivitySourceCode.AS_240.equals(toActivitySourceCode(questionA215Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_245);
+            } else             if (ActivitySourceCode.AS_241.equals(toActivitySourceCode(questionA215Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_246);
+            } else            if (ActivitySourceCode.AS_242.equals(toActivitySourceCode(questionA215Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_247);
+            } else            if (ActivitySourceCode.AS_243.equals(toActivitySourceCode(questionA215Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_248);
+            } else            if (ActivitySourceCode.AS_244.equals(toActivitySourceCode(questionA215Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_249);
+            }
+
+            baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer));
 
 			res.add(baseActivityData);
 		}

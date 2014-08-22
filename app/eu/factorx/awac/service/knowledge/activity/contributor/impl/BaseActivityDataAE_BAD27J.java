@@ -38,11 +38,11 @@ public class BaseActivityDataAE_BAD27J extends ActivityResultContributor {
 			QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
 			QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
 			QuestionAnswer questionA217Answer = answersByCode.get(QuestionCode.A217);
-			QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
 
 			if (questionA210Answer == null ||
 					questionA211Answer == null ||
-					questionA217Answer == null ||
+                    questionA217Answer == null ||
 					questionA221Answer == null) {
 				continue;
 			}
