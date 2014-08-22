@@ -10,6 +10,7 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import play.Logger;
 
 /**
  * CHECK XM
@@ -62,10 +63,10 @@ public class BaseActivityDataAE_BAD6 extends ActivityResultContributor {
 			if (questionA48Answer == null) {
 				continue;
 			}
-			if (toBoolean(questionA48Answer) && questionA49Answer == null) {
+
+            if (toBoolean(questionA48Answer) && questionA49Answer == null) {
 				continue;
 			}
-
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 

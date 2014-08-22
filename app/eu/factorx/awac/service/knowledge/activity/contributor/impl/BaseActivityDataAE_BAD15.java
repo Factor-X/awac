@@ -21,21 +21,19 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (km.passager in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5326);
+		// Get Target Unit (passagers.km in this case)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5328);
 		Unit kmUnit = getUnitByCode(UnitCode.U5106);
 		Unit employesUnit = getUnitByCode(UnitCode.U5336);
 
 		// Get reference Number of Employees
-		// TODO : check si 12 est bien aussi son propre question set? et faire que question12Answer soit du coup correct...
-		List<QuestionSetAnswer> questionSetAnswersA12 = questionSetAnswers.get(QuestionCode.A12);
-		if ((questionSetAnswersA12 == null) || questionSetAnswersA12.isEmpty()) {
+		List<QuestionSetAnswer> questionSetAnswersA1 = questionSetAnswers.get(QuestionCode.A1);
+		if ((questionSetAnswersA1 == null) || questionSetAnswersA1.isEmpty()) {
 			return res;
 		}
-		QuestionSetAnswer questionSet12Answer = questionSetAnswersA12.get(0);
-		Map<QuestionCode, QuestionAnswer> questionSet12AnswerQuestionAnswers = byQuestionCode(questionSet12Answer.getQuestionAnswers());
-		QuestionAnswer questionA12Answer = questionSet12AnswerQuestionAnswers.get(QuestionCode.A12);
+		QuestionSetAnswer questionSet1Answer = questionSetAnswersA1.get(0);
+		Map<QuestionCode, QuestionAnswer> questionSet1AnswerQuestionAnswers = byQuestionCode(questionSet1Answer.getQuestionAnswers());
+		QuestionAnswer questionA12Answer = questionSet1AnswerQuestionAnswers.get(QuestionCode.A12);
 
 		if (questionA12Answer == null) {
 			return res;
@@ -62,35 +60,10 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 			if (questionA122Answer == null ||
 					questionA123Answer == null ||
 					(toBoolean(questionA123Answer) && questionA127Answer == null) ||
-					(!toBoolean(questionA123Answer) && questionA124Answer == null) ||
-					(!toBoolean(questionA123Answer) && questionA125Answer == null && questionA126Answer == null)) {
+					(!toBoolean(questionA123Answer) && questionA124Answer == null)) {
 				continue;
 			}
 
-			// intermediate variables to estimate flights
-			Double travelDistance;
-			// TODO: flight codes in variable
-           /* FlightCode flightType;
-            if (toBoolean(questionA123Answer)) {
-                travelDistance = toDouble(questionA127Answer, kmUnit);
-                // TODO code de vol
-                FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
-            } else {
-                //TODO code destination
-                if (getCode(questionA124Answer, code) == Europe) {
-                    travelDistance = 2500.0;
-                    // TODO code de vol
-                    FlightCode = "Vols europe (<4000km A/R)";
-                } else {
-                    travelDistance = 5000.0;
-                    // TODO code de vol
-                    FlightCode = "Vols Intercontinentaux (>4000 km A/R)";
-                }
-            }
-
-            // TODO: comment déclarer que A122 est un %, i.e. sans unité?
-            travelDistance *= toDouble(questionA12Answer, employesUnit) * toDouble(questionA122Answer);
-*/
 			BaseActivityData baseActivityData = new BaseActivityData();
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD15);
@@ -99,11 +72,23 @@ public class BaseActivityDataAE_BAD15 extends ActivityResultContributor {
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_5);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_21);
-			//TODO baseActivityData.setActivitySource(ActivitySourceCode.flightType);
-			baseActivityData.setActivityOwnership(false);
-			//TODO baseActivityData.setValue(travelDistance);
+            baseActivityData.setActivityOwnership(false);
+            baseActivityData.setUnit(baseActivityDataUnit);
 
-			res.add(baseActivityData);
+            if (toBoolean(questionA123Answer))  {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_174);
+                baseActivityData.setValue(toDouble(questionA12Answer) * toDouble(questionA122Answer) * toDouble(questionA127Answer,getUnitByCode(UnitCode.U5106)));
+            } else  {
+                if (toBoolean(questionA124Answer))  {
+                    baseActivityData.setActivitySource(ActivitySourceCode.AS_173);
+                    baseActivityData.setValue(toDouble(questionA12Answer) * toDouble(questionA122Answer) * 2500.0);
+                } else  {
+                    baseActivityData.setActivitySource(ActivitySourceCode.AS_174);
+                    baseActivityData.setValue(toDouble(questionA12Answer) * toDouble(questionA122Answer) * 5000.0);
+                }
+            }
+
+            res.add(baseActivityData);
 		}
 		return res;
 	}
