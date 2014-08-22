@@ -1,10 +1,11 @@
 package eu.factorx.awac.models.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 
 @Entity
@@ -12,7 +13,7 @@ import eu.factorx.awac.models.account.Account;
 @NamedQueries({
 		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
 })
-public class Organization extends AbstractEntity {
+public class Organization extends AuditedAbstractEntity {
 
 	/**
 	 * :identifier = ...
@@ -24,11 +25,11 @@ public class Organization extends AbstractEntity {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(mappedBy = "organization")
-	private List<Site> sites;
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Site> sites = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	List<Account> accounts;
+	List<Account> accounts = new ArrayList<>();
 
 	protected Organization() {
 		super();

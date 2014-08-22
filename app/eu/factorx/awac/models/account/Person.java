@@ -11,15 +11,11 @@
 
 package eu.factorx.awac.models.account;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.factorx.awac.common.AccountStatusType;
-import eu.factorx.awac.models.AbstractEntity;
+import javax.persistence.*;
+
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
-import java.sql.Timestamp;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 
 // import for TimeStamp
 // imports for validation and constraints annotations
@@ -31,7 +27,7 @@ import java.sql.Timestamp;
 @NamedQueries({
 		@NamedQuery(name = Person.FIND_BY_EMAIL, query = "select p from Person p where p.email = :email"),
 })
-public class Person extends AbstractEntity {
+public class Person extends AuditedAbstractEntity {
 	/**
 	 * :identifier = ...
 	 */

@@ -1,13 +1,15 @@
 package eu.factorx.awac.models;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+
 @Entity
 public class Analytics extends AuditedAbstractEntity {
+
+	private static final long serialVersionUID = 1L;
 
 	// start
 	protected org.joda.time.DateTime requestStart;

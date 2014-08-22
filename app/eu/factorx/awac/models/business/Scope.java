@@ -1,9 +1,9 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractEntity;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-
 import javax.persistence.*;
+
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "scope")
@@ -11,7 +11,7 @@ import javax.persistence.*;
 		@NamedQuery(name = Scope.FIND_BY_SITE, query = "select s from Scope s where s.site = :site"),
 		@NamedQuery(name = Scope.FIND_BY_ORGANIZATION, query = "select s from Scope s where s.organization = :organization"),
 		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"),})
-public class Scope extends AbstractEntity {
+public class Scope extends AuditedAbstractEntity {
 
 	public static final String FIND_BY_SITE = "Scope.findBySite";
 	public static final String FIND_BY_ORGANIZATION = "Scope.findByOrganization";

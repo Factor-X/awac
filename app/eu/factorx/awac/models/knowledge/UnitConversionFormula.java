@@ -1,11 +1,11 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AbstractEntity;
-
 import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import eu.factorx.awac.models.AuditedAbstractEntity;
 
 @Entity
 @NamedQueries({
@@ -13,7 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 })
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class UnitConversionFormula extends AbstractEntity {
+public class UnitConversionFormula extends AuditedAbstractEntity {
 
 	public static final String FIND_BY_UNIT_AND_YEAR = "UnitConversionFormula.findByUnitAndYear";
 	public static final String VARIABLE_NAME = "(x|X)";

@@ -17,7 +17,7 @@ import play.data.validation.Constraints.Required;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
@@ -28,7 +28,7 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, query = "select a from Account a, Person p where p.email = :email and a.person = p and a.interfaceCode = :interface_code"),
 })
-public class Account extends AbstractEntity {
+public class Account extends AuditedAbstractEntity {
 
 	/**
 	 * :identifier = ...

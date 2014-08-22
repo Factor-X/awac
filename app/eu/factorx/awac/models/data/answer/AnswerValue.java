@@ -1,17 +1,17 @@
 package eu.factorx.awac.models.data.answer;
 
-import eu.factorx.awac.models.AbstractEntity;
-
 import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import eu.factorx.awac.models.AuditedAbstractEntity;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "answer_value")
 @Access(AccessType.PROPERTY)
-public abstract class AnswerValue extends AbstractEntity {
+public abstract class AnswerValue extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
