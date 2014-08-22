@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD26B extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
 		// For each set of answers in A201, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA201 = questionSetAnswers.get(QuestionCode.A201);		if (questionSetAnswersA201 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA201) {
+		List<QuestionSetAnswer> questionSetAnswersA201 = questionSetAnswers.get(QuestionCode.A201);
+		if (questionSetAnswersA201 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA201) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -49,10 +54,12 @@ public class BaseActivityDataAE_BAD26B extends ActivityResultContributor {
 			baseActivityData.setSpecificPurpose(null);
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_7);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
-			// TODO:  baseActivityData.setActivityType(toDouble(questionA204Answer));
-			// TODO: Code à matcher
-			// TODO:  baseActivityData.setActivitySource(getCode(ActivitySourceCode("eaux usées industrielles"));
-			baseActivityData.setActivityOwnership(toBoolean(questionA501Answer));
+            baseActivityData.setActivityType(toActivityTypeCode(questionA204Answer));
+            baseActivityData.setActivitySource(ActivitySourceCode.AS_208);
+            if (getCode(questionA501Answer).getKey().equals("1"))
+                baseActivityData.setActivityOwnership(Boolean.TRUE);
+            else
+                baseActivityData.setActivityOwnership(Boolean.FALSE);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA203Answer, baseActivityDataUnit));
 

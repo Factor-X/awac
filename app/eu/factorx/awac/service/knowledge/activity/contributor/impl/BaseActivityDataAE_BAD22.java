@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD22 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5330);
 
 		// For each set of answers in A185, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA185 = questionSetAnswers.get(QuestionCode.A185);		if (questionSetAnswersA185 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA185) {
+		List<QuestionSetAnswer> questionSetAnswersA185 = questionSetAnswers.get(QuestionCode.A185);
+		if (questionSetAnswersA185 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA185) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -46,13 +51,11 @@ public class BaseActivityDataAE_BAD22 extends ActivityResultContributor {
 			baseActivityData.setSpecificPurpose("-bureau");
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_7);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
-			// TODO: FLORIAN
-			// baseActivityData.setActivityType(ActivityTypeCode.EPURATION);
-			// TODO: FLORIAN
-			// baseActivityData.setActivitySource(ActivitySourceCode.EAU_USEE);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_55);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_191);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA186Answer, baseActivityDataUnit) / 3 * toDouble(questionA187Answer, baseActivityDataUnit) / 365);
+			baseActivityData.setValue(toDouble(questionA186Answer) / 3 * toDouble(questionA187Answer) / 365);
 
 			res.add(baseActivityData);
 		}

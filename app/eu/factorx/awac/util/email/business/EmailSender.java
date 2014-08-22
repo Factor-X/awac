@@ -13,6 +13,8 @@ import javax.mail.internet.MimeMessage;
 
 import eu.factorx.awac.models.email.MailConfig;
 import eu.factorx.awac.util.email.messages.EmailMessage;
+import play.Configuration;
+import play.Logger;
 
 public class EmailSender {
 
@@ -34,7 +36,9 @@ public class EmailSender {
     public void sendEmail(EmailMessage email) throws MessagingException {
     	play.Logger.info("Sending email ...");
         final String username = MailConfig.username;
-        final String password = MailConfig.password;
+		// mail.smpt.password must be define in conf/application.conf
+		final String password = Configuration.root().getString("mail.smtp.password");
+
 
         Properties props = new Properties();
         props.put(MAIL_SMTP_AUTH_KEY, MailConfig.smtpAuth);
