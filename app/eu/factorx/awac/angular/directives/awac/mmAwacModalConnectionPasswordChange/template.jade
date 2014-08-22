@@ -9,6 +9,9 @@
                 h4(class="modal-title",id="myModalLabel", ng-bind-html="'PASSWORD_CHANGE_FORM_TITLE' | translate")
 
             .modal-body
+
+                div(ng-bind-html="'CONNECTION_PASSWORD_CHANGE_FORM_DESC' | translate")
+
                 .field_form
                     mm-awac-modal-field-text(ng-info="newPasswordInfo")
                     mm-awac-modal-field-text(ng-info="newPasswordConfirmInfo")
