@@ -47,12 +47,13 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _001_authenticateActionSuccess() {
 
 	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.toString());
+	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey());
 
 	//Json node
 	Map<String, String> map = new HashMap<String, String>();
 	map.put("login",cfDto.getLogin());
 	map.put("password",cfDto.getPassword());
+	map.put("interfaceName",cfDto.getInterfaceName());
 	JsonNode node = Json.toJson(map);
 
 
@@ -95,12 +96,13 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _002_authenticateActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password","interfacename");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password",InterfaceTypeCode.ENTERPRISE.getKey());
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("login",cfDto.getLogin());
 		map.put("password",cfDto.getPassword());
+		map.put("interfaceName",cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -132,18 +134,17 @@ public class LoginTest extends AbstractBaseModelTest {
 		assertEquals(loginResult.getMessage(),"The couple login / password was not found");
 	} // end of authenticateSuccess test
 
-
-
 	@Test
 	public void _003_testAuthenticationActionSuccess() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey());
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("login",cfDto.getLogin());
 		map.put("password",cfDto.getPassword());
+		map.put("interfaceName",cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -170,12 +171,13 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _004_testAuthenticationActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey());
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("login",cfDto.getLogin());
 		map.put("password",cfDto.getPassword());
+		map.put("interfaceName",cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -209,6 +211,49 @@ public class LoginTest extends AbstractBaseModelTest {
 	// expecting an HTTP 200 return code
 	assertEquals(200, status(result));
   } // end of authenticated test
+
+	@Test
+	public void _006_authenticateWithBadInterfaceNameActionFailure() {
+
+		// ConnectionFormDTO
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.MUNICIPALITY.getKey());
+
+		//Json node
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("login",cfDto.getLogin());
+		map.put("password",cfDto.getPassword());
+		map.put("interfaceName",cfDto.getInterfaceName());
+		JsonNode node = Json.toJson(map);
+
+
+		// Fake request
+		FakeRequest fr = new FakeRequest();
+		fr.withHeader("Content-type", "application/json");
+		fr.withJsonBody(node);
+
+		// Call controller action
+		Result result = callAction(
+				eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
+				fr
+		); // callAction
+
+		// test results
+
+		// expecting an HTTP 401 return code
+		assertEquals(401, status(result));
+		// verify user identifier in session is null
+		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
+
+		// should return a ExceptionDTO
+		String content = new String(contentAsBytes(result));
+		JsonNode jsonResponse = Json.parse(content);
+		//Logger.info("jsonNode: " + jsonResponse.toString());
+
+		ExceptionsDTO loginResult = Json.fromJson(jsonResponse,ExceptionsDTO.class);
+		// verify lastname of user1 is Dupont.
+		assertEquals(loginResult.getMessage(),"This account is not for municipality but for enterprise. Please switch calculator and retry.");
+	} // end of authenticateSuccess test
+
 
 }
 

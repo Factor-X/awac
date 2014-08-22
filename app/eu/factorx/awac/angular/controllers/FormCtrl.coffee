@@ -112,9 +112,16 @@ angular
                 $timeout(->
                     modalService.close(modalService.LOADING)
                     $scope.loading = false
+
+                    # remove value from answer with a false condition
+                    for answer in $scope.answerList
+                        if answer.hasValidCondition == false && answer.value != null
+                            answer.value = null
+
                     $scope.$root.$broadcast('FORM_LOADING_FINISH')
                 , 0)
             , 0)
+
 
             return
 
@@ -744,7 +751,7 @@ angular
             if $scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)
                 if !tabSetToTest[tab]?
                     tabSetToTest[tab] = {}
-                    tabSetToTest[tab].active = (tab == 1 ? true:false)
+                    tabSetToTest[tab].active = (parseFloat(tab) == 1 ? true:false)
                     return tabSetToTest[tab]
                 return tabSetToTest[tab]
         return null

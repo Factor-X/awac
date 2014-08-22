@@ -273,9 +273,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     # test if the user is currently connected on the server
     #
-    downloadService.postJson '/awac/testAuthentication', null, (result) ->
+    downloadService.postJson '/awac/testAuthentication', {interfaceName:$rootScope.instanceName}, (result) ->
         if result.success
-            $rootScope.loginSuccess data
+            $rootScope.loginSuccess result.data
         else
             # TODO ERROR HANDLING
 

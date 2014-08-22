@@ -21,9 +21,8 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (km.passager in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.km.passager)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5326);
+		// Get Target Unit (passagers.km in this case)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5328);
 
 		// For each set of answers in A115, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA115 = questionSetAnswers.get(QuestionCode.A115);
@@ -40,8 +39,7 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 			QuestionAnswer questionA120Answer = answersByCode.get(QuestionCode.A120);
 			QuestionAnswer questionA118Answer = answersByCode.get(QuestionCode.A118);
 			QuestionAnswer questionA116Answer = answersByCode.get(QuestionCode.A116);
-
-			if (questionA117Answer == null ||
+            if (questionA117Answer == null ||
 					questionA119Answer == null ||
 					questionA120Answer == null ||
 					questionA118Answer == null ||

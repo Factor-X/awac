@@ -17,13 +17,16 @@ public class EnterpriseAccountCreationDTO extends DTO{
 	@Size(min = 1, max = 255)
 	private String organizationName;
 
+	private String firstSiteName;
+
 	public EnterpriseAccountCreationDTO() {
 	}
 
-	public EnterpriseAccountCreationDTO(PersonDTO person, String password, String organizationName) {
+	public EnterpriseAccountCreationDTO(PersonDTO person, String password, String organizationName, String firstSiteName) {
 		this.person = person;
 		this.password = password;
 		this.organizationName = organizationName;
+		this.firstSiteName = firstSiteName;
 	}
 
 	public PersonDTO getPerson() {
@@ -50,12 +53,21 @@ public class EnterpriseAccountCreationDTO extends DTO{
 		this.organizationName = organizationName;
 	}
 
+	public String getFirstSiteName() {
+		return firstSiteName;
+	}
+
+	public void setFirstSiteName(String firstSiteName) {
+		this.firstSiteName = firstSiteName;
+	}
+
 	@Override
 	public String toString() {
 		return "EnterpriseAccountCreationDTO{" +
 				"person=" + person +
 				", password='" + password + '\'' +
 				", organizationName='" + organizationName + '\'' +
+				", firstSiteName='" + firstSiteName + '\'' +
 				'}';
 	}
 }

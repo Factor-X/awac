@@ -82,4 +82,12 @@ public class Organization extends AbstractEntity {
 		result = 31 * result + name.hashCode();
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "Organization{" +
+				super.toString()+
+				"name='" + name + '\'' +
+				'}';
+	}
 }

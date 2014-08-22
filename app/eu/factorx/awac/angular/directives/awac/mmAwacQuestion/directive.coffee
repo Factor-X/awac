@@ -162,6 +162,7 @@ angular
             scope.$on 'CONDITION', (event, args) ->
                 scope.testVisibility(element)
 
+
             #
             # test if the condition of this element
             # change the hasValidCondition in function and

@@ -46,7 +46,7 @@ public class Person extends AbstractEntity {
 	private String firstname;
 
 	@Email
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	protected Person() {

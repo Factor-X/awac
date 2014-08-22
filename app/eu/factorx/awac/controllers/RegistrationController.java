@@ -10,13 +10,12 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.AdministratorService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.PersonService;
+import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
@@ -41,6 +40,9 @@ public class RegistrationController  extends Controller {
 	@Autowired
 	private AdministratorService administratorService;
 
+	@Autowired
+	private SiteService siteService;
+
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
 
@@ -61,8 +63,13 @@ public class RegistrationController  extends Controller {
 		try {
 			createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.ENTERPRISE,organization);
 		} catch (MyrmexException e) {
-			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+			throw new MyrmexRuntimeException(e.getToClientMessage()); //return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
+
+		//create site
+		Site site = new Site(organization, dto.getFirstSiteName());
+		siteService.saveOrUpdate(site);
+
 
 		return ok(new ReturnDTO());
 	}
@@ -91,6 +98,10 @@ public class RegistrationController  extends Controller {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
+		//create site
+		Site site = new Site(organization, dto.getMunicipalityName());
+		siteService.saveOrUpdate(site);
+
 		return ok(new ReturnDTO());
 	}
 
@@ -100,6 +111,7 @@ public class RegistrationController  extends Controller {
 		Person person = personService.getByEmail(personDTO.getEmail());
 
 		if(person !=null){
+			throw new MyrmexException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
 			//TODO email already existing
 		}
 
@@ -115,11 +127,6 @@ public class RegistrationController  extends Controller {
 
 		//create account
 		//TODO encode password !!
-		play.Logger.info("organizaiton : " + organization);
-		play.Logger.info("person : " + person);
-		play.Logger.info("id : " + personDTO.getIdentifier());
-		play.Logger.info("pass : " + password);
-		play.Logger.info("iter : " + interfaceCode);
 		Administrator administrator = new Administrator(organization,person,personDTO.getIdentifier(), password, interfaceCode);
 
 		//save account

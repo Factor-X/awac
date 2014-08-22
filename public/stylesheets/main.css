@@ -93,6 +93,10 @@ input.ng-invalid {
     display: block;
 }
 
+.field_form_separator{
+    border-bottom: 1px solid #737373;
+}
+
 /*
 .alert {
     z-index : 1000;
