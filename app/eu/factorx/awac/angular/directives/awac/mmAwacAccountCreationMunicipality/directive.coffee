@@ -1,9 +1,9 @@
 angular
 .module('app.directives')
-.directive "mmAwacAccountCreationEnterprise", (directiveService,downloadService,messageFlash) ->
+.directive "mmAwacAccountCreationMunicipality", (directiveService,downloadService,messageFlash) ->
     restrict: "E"
     scope:{}
-    templateUrl: "$/angular/templates/mm-awac-account-creation-enterprise.html"
+    templateUrl: "$/angular/templates/mm-awac-account-creation-municipality.html"
     replace:true
     controller: ($scope) ->
 
@@ -50,17 +50,11 @@ angular
             validationFct: $scope.validatePasswordConfirmField
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
 
-        $scope.organizationNameInfo =
-            fieldTitle: "ORGANIZATION_NAME"
+        $scope.municipalityNameInfo =
+            fieldTitle: "MUNICIPALITY_NAME"
             fieldType: "text"
             validationRegex: "^.{1,255}$"
-            validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
-
-        $scope.firstSiteNameInfo =
-            fieldTitle: "MAIN_SITE_NAME"
-            fieldType: "text"
-            validationRegex: "^.{1,255}$"
-            validationMessage: "SITE_NAME_WRONG_LENGTH"
+            validationMessage: "MUNICIPALITY_NAME_WRONG_LENGTH"
 
 
 

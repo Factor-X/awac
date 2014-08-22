@@ -17,6 +17,7 @@ import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
+import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -54,8 +55,15 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = true)
 	public Result testAuthentication() {
 
+		TestAuthenticateDTO dto = extractDTOFromRequest(TestAuthenticateDTO.class);
+
 		if (securedController.isAuthenticated()) {
-			return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
+
+			Account account = securedController.getCurrentUser();
+
+			if(account.getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
+				return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
+			}
 
 		}
 		return unauthorized();
@@ -107,12 +115,12 @@ public class AuthenticationController extends Controller {
 	} // end of authenticate action
 
 	// logout action cf routes
+	@Transactional(readOnly = true)
 	public Result logout() {
 
 		session().clear();
-		Logger.debug(SecuredController.SESSION_IDENTIFIER_STORE + ":" + session().get(SecuredController.SESSION_IDENTIFIER_STORE));
 
-		return ok("Stop");
+		return ok(new ReturnDTO());
 	}
 
 
