@@ -26,7 +26,12 @@ public class BaseActivityDataAE_BAD25 extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5122);
 
 		// For each set of answers in A197, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA197 = questionSetAnswers.get(QuestionCode.A197);		if (questionSetAnswersA197 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA197) {
+		List<QuestionSetAnswer> questionSetAnswersA197 = questionSetAnswers.get(QuestionCode.A197);
+		if (questionSetAnswersA197 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA197) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -34,14 +39,12 @@ public class BaseActivityDataAE_BAD25 extends ActivityResultContributor {
 			QuestionAnswer questionA199Answer = answersByCode.get(QuestionCode.A199);
 			QuestionAnswer questionA200Answer = answersByCode.get(QuestionCode.A200);
 			QuestionAnswer questionA195Answer = answersByCode.get(QuestionCode.A195);
-
-			if (questionA198Answer == null ||
+            if (questionA198Answer == null ||
 					questionA199Answer == null ||
 					questionA200Answer == null ||
 					questionA195Answer == null) {
 				continue;
 			}
-
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -52,7 +55,10 @@ public class BaseActivityDataAE_BAD25 extends ActivityResultContributor {
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
 			baseActivityData.setActivityType(toActivityTypeCode(questionA200Answer));
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA198Answer));
-			baseActivityData.setActivityOwnership(toBoolean(questionA195Answer));
+            if (getCode(questionA195Answer).getKey().equals("1"))
+    			baseActivityData.setActivityOwnership(Boolean.TRUE);
+            else
+                baseActivityData.setActivityOwnership(Boolean.FALSE);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA199Answer, baseActivityDataUnit));
 
