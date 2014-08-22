@@ -1,3 +1,11 @@
+# encoding: UTF-8
+
+# == DEPENDENCIES =========================================================== #
+
+require_relative '../util/log.rb'
+
+# == CODE =================================================================== #
+
 class QuestionCodeWriter
     def self.execute(name, codes)
 
@@ -7,9 +15,9 @@ class QuestionCodeWriter
         outfile = infile
         begin
             @logger.info 'READING ' + infile
-            source     = IO.read(infile)
+            source = IO.read(infile)
 
-            lines = codes.sort { |a,b| a.match('([0-9]+)')[0].to_i <=> b.match('([0-9]+)')[0].to_i }.collect { |code| 'public static final QuestionCode ' + code+ ' = new QuestionCode("'+ code +'");' }
+            lines = codes.sort { |a, b| a.match('([0-9]+)')[0].to_i <=> b.match('([0-9]+)')[0].to_i }.collect { |code| 'public static final QuestionCode ' + code+ ' = new QuestionCode("'+ code +'");' }
 
             begin_text = '/* BEGIN GENERATED QUESTION_CODES ' + Code.make(name) + ' */'
             end_text   = '/* END GENERATED QUESTION_CODES ' + Code.make(name) + ' */'

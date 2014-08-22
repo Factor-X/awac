@@ -11,9 +11,10 @@ require_relative 'util/code.rb'
 # XLS Scanner
 require_relative 'xls/scanner.rb'
 
-# Class writer
+# Survey writer
 require_relative 'xls/survey_class_writer.rb'
 
+# Question code writer
 require_relative 'xls/question_code_writer.rb'
 
 # YAML

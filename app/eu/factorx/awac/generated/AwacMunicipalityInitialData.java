@@ -310,7 +310,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC8
     // Superficie du territoire
-    session.saveOrUpdate(new DoubleQuestion( ac2, 0, QuestionCode.AC8, areaUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac2, 0, QuestionCode.AC8, areaUnits, null, getUnitBySymbol("ha") ));
 
     // == AC11
     // Nom du bâtiment ou groupe de bâtiments
@@ -350,11 +350,11 @@ public class AwacMunicipalityInitialData {
 
     // == AC20
     // Quelle est la superficie totale du (groupe de) bâtiment?
-    session.saveOrUpdate(new DoubleQuestion( ac10, 0, QuestionCode.AC20, areaUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac10, 0, QuestionCode.AC20, areaUnits, null, getUnitBySymbol("m2") ));
 
     // == AC21
     // Quelle est la superficie chauffée sur tout le (groupe de) bâtiment?
-    session.saveOrUpdate(new DoubleQuestion( ac10, 0, QuestionCode.AC21, areaUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac10, 0, QuestionCode.AC21, areaUnits, null, getUnitBySymbol("m2") ));
 
     // == AC22
     // Quelle en est le % de la partie chaufée occupé par la commune?
@@ -414,27 +414,27 @@ public class AwacMunicipalityInitialData {
 
     // == AC46
     // Quantité de déchets Incinérée
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC46, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC46, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC47
     // Quantité de déchets Recyclée
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC47, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC47, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC48
     // Quantité de déchets en CET
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC48, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC48, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC49
     // Quantité de déchets utilisés en biométhanisation
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC49, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC49, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC50
     // Quantité de déchets mis en compostage
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC50, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC50, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC51
     // Quantité de déchets traités autrement
-    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC51, massUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac44, 0, QuestionCode.AC51, massUnits, null, getUnitBySymbol("t") ));
 
     // == AC53
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -538,11 +538,11 @@ public class AwacMunicipalityInitialData {
 
     // == AC88
     // Quel est le montant annuel de dépenses en carburant?
-    session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC88, moneyUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC88, moneyUnits, null, getUnitBySymbol("EUR") ));
 
     // == AC89
     // Prix unitaire de carburant
-    session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC89, moneyUnits, 1.3, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC89, moneyUnits, 1.3, getUnitBySymbol("EUR") ));
 
     // == AC90
     // Dépenses pour des véhicules communaux ou autres?
@@ -590,7 +590,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC104
     // Taxi (en montant dépensé)
-    session.saveOrUpdate(new DoubleQuestion( ac98, 0, QuestionCode.AC104, moneyUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac98, 0, QuestionCode.AC104, moneyUnits, null, getUnitBySymbol("EUR") ));
 
     // == AC105
     // TGV (en km.passagers)
@@ -614,7 +614,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC112
     // Distance moyenne A/R (km)
-    session.saveOrUpdate(new DoubleQuestion( ac107, 0, QuestionCode.AC112, lengthUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac107, 0, QuestionCode.AC112, lengthUnits, null, getUnitBySymbol("km") ));
 
     // == AC113
     // Motif de déplacement
@@ -674,7 +674,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC129
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( ac116, 0, QuestionCode.AC129, moneyUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac116, 0, QuestionCode.AC129, moneyUnits, null, getUnitBySymbol("EUR") ));
 
     // == AC131
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -686,7 +686,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC134
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( ac132, 0, QuestionCode.AC134, areaUnits, null, getUnitBySymbol("") ));
+    session.saveOrUpdate(new DoubleQuestion( ac132, 0, QuestionCode.AC134, areaUnits, null, getUnitBySymbol("m2") ));
 
     // == AC135
     // Quantité
