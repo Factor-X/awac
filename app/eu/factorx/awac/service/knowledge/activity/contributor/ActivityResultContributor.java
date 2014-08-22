@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
@@ -15,6 +16,7 @@ import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
 import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
 import eu.factorx.awac.models.data.answer.type.NumericAnswerValue;
 import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.CodeConversionService;
@@ -91,6 +93,14 @@ public abstract class ActivityResultContributor {
 	protected ActivitySubCategoryCode toActivitySubCategoryCode(QuestionAnswer questionAnswer) {
 		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
 		return codeConversionService.toActivitySubCategoryCode(answerValue.getValue());
+	}
+
+	protected Code getCode(QuestionAnswer questionAnswer) {
+		if (!(questionAnswer.getQuestion() instanceof ValueSelectionQuestion)) {
+			throw new RuntimeException("Cannot extract a code from the question answer " + questionAnswer + " : not a ValueSelectionQuestion");
+		}
+		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
+		return answerValue.getValue();
 	}
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
