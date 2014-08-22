@@ -60,7 +60,7 @@ public class BaseActivityDataAE_BAD14 extends ActivityResultContributor {
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA117Answer));
 			baseActivityData.setActivityOwnership(false);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA119Answer, baseActivityDataUnit) * toDouble(questionA120Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA119Answer, getUnitByCode(UnitCode.U5332)) * toDouble(questionA120Answer, getUnitByCode(UnitCode.U5101)));
 
 			res.add(baseActivityData);
 		}

@@ -77,13 +77,13 @@ public class BaseActivityDataAE_BAD11 extends ActivityResultContributor {
             baseActivityData.setUnit(baseActivityDataUnit);
 
             if (questionA89Answer != null) {
-    			baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA89Answer, baseActivityDataUnit)));
+    			baseActivityData.setValue(toDouble(questionA88Answer, getUnitByCode(UnitCode.U5170)) / (toDouble(questionA89Answer, getUnitByCode(UnitCode.U5170))));
             } else if (questionA90Answer != null) {
-	    		baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA90Answer, baseActivityDataUnit)));
+	    		baseActivityData.setValue(toDouble(questionA88Answer, getUnitByCode(UnitCode.U5170)) / (toDouble(questionA90Answer, getUnitByCode(UnitCode.U5170))));
             } else if (questionA91Answer != null) {
-		    	baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA91Answer, baseActivityDataUnit)));
+		    	baseActivityData.setValue(toDouble(questionA88Answer, getUnitByCode(UnitCode.U5170)) / (toDouble(questionA91Answer, getUnitByCode(UnitCode.U5170))));
             } else {
-			    baseActivityData.setValue(toDouble(questionA88Answer, baseActivityDataUnit) / (toDouble(questionA92Answer, baseActivityDataUnit)));
+			    baseActivityData.setValue(toDouble(questionA88Answer, getUnitByCode(UnitCode.U5170)) / (toDouble(questionA92Answer, getUnitByCode(UnitCode.U5170))));
             }
 
 			res.add(baseActivityData);
