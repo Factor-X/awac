@@ -43,34 +43,25 @@ public class BaseActivityDataAE_BAD38B extends ActivityResultContributor {
 				continue;
 			}
 
-			for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-				if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A325)) {
+            QuestionAnswer questionA328Answer = answersByCode.get(QuestionCode.A328);
 
-					Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
-
-					QuestionAnswer questionA328Answer = answersByCodeChild.get(QuestionCode.A328);
-
-					if (questionA328Answer == null) {
-						continue;
-					}
-
-					BaseActivityData baseActivityData = new BaseActivityData();
-
-					baseActivityData.setKey(BaseActivityDataCode.AE_BAD38B);
-					baseActivityData.setRank(1);
-					baseActivityData.setSpecificPurpose(toString(questionA323Answer));
-					baseActivityData.setActivityCategory(ActivityCategoryCode.AC_15);
-					baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
-					baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-					baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
-					baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-					baseActivityData.setValue(toDouble(questionA328Answer, baseActivityDataUnit) * toDouble(questionA324Answer, baseActivityDataUnit));
-
-					res.add(baseActivityData);
-				}
+			if (questionA328Answer == null) {
+				continue;
 			}
 
+			BaseActivityData baseActivityData = new BaseActivityData();
+
+			baseActivityData.setKey(BaseActivityDataCode.AE_BAD38B);
+			baseActivityData.setRank(1);
+			baseActivityData.setSpecificPurpose(toString(questionA323Answer));
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_15);
+			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
+			baseActivityData.setActivityType(ActivityTypeCode.AT_3);
+			baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
+			baseActivityData.setActivityOwnership(null);
+			baseActivityData.setUnit(baseActivityDataUnit);
+			baseActivityData.setValue(toDouble(questionA328Answer, baseActivityDataUnit) * toDouble(questionA324Answer));
+			res.add(baseActivityData);
 		}
 		return res;
 	}
