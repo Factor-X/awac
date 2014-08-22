@@ -1,7 +1,15 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.InMemoryData;
-import eu.factorx.awac.InitializationThread;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.db.jpa.Transactional;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
@@ -11,18 +19,6 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.NotificationService;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class AdminController extends Controller {
@@ -36,6 +32,9 @@ public class AdminController extends Controller {
 	private SecuredController   securedController;
 	@Autowired
 	private CodeLabelService    codeLabelService;
+	
+	@Autowired
+	private TranslationImporter translationImporter;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -74,13 +73,10 @@ public class AdminController extends Controller {
 	public Result resetTranslations() {
 		// remove old translations code labels
 		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY, CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES);
-		// import new translations code labels
-		new TranslationImporter(JPA.em().unwrap(Session.class)).run();
 		// reset code labels cache
 		codeLabelService.resetCache();
-		// refresh InMemory data
-		InMemoryData.translations = new HashMap<>();
-		InitializationThread.createInMemoryTranslations();
+		// import new translations code labels
+		translationImporter.run();
 
 		return (ok());
 	}

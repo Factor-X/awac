@@ -6,3 +6,4 @@ Feature: Testing AWAC Integration
     Then The account should be "gho"
     And  Perform delete of the account
     And Perform delete of the organization
+    And Perform delete of the person

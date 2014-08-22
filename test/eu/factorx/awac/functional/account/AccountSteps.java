@@ -6,7 +6,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import eu.factorx.awac.functional.hooks.GlobalHooks;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import play.Logger;
 
 import static org.junit.Assert.assertEquals;
@@ -21,10 +23,13 @@ public class AccountSteps {
 		// Express the Regexp above with the code you wish you had
 
 		Organization org = new Organization("testing");
-		Account ac = new Account(org,"gho","passwd","gaston","hollands");
-		ac.setAge(new Integer(20)); // constraints should it be a constraint ?
+		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
+		Account ac = new Account(org,person,"gho","passwd", InterfaceTypeCode.ENTERPRISE);
+		ac.setActive(false);
 
 		GlobalHooks.em.getTransaction().begin();
+		GlobalHooks.em.persist(org);
+		GlobalHooks.em.persist(person);
 		GlobalHooks.em.persist(ac);
 		GlobalHooks.em.getTransaction().commit();
 	}
@@ -93,6 +98,29 @@ public class AccountSteps {
 
 		try {
 			reload = GlobalHooks.em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertNull(reload);
+	}
+	@Then("^Perform delete of the person$")
+	public void Perform_delete_of_the_person() throws Throwable {
+		Person person = null;
+		String query = "select p from Person p where p.lastname = 'gaston'";
+
+		try {
+			person = GlobalHooks.em.createQuery(query, Person.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertEquals(person.getLastname(), "gaston");
+
+		GlobalHooks.em.getTransaction().begin();
+		GlobalHooks.em.remove(person);
+		GlobalHooks.em.getTransaction().commit();
+
+		Person reload=null;
+
+		try {
+			reload = GlobalHooks.em.createQuery(query, Person.class).getResultList().get(0);
 		} catch (Exception empty) {}
 
 		assertNull(reload);

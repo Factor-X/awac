@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -55,8 +56,8 @@ public class Factor extends AbstractEntity {
 
 	private String institution;
 
-	@OneToMany(mappedBy = "factor", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<FactorValue> values;
+	@OneToMany(mappedBy = "factor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<FactorValue> values = new ArrayList<>();
 
 	protected Factor() {
 		super();

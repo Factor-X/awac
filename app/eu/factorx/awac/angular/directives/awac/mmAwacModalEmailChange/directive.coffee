@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEmailChange", (directiveService, translationService, messageFlash) ->
+.directive "mmAwacModalEmailChange", (directiveService, downloadService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope

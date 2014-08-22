@@ -8,18 +8,14 @@ import java.util.*;
 import jxl.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
 
 import play.Logger;
-import eu.factorx.awac.models.AbstractEntity;
 
 public abstract class WorkbookDataImporter {
 
 	public static final String CP1252_ENCODING = "Cp1252"; // for Windows files
 	public static final NumberFormat NUMBER_WITH_DECIMAL_COMMA_FORMAT = NumberFormat.getInstance(Locale.FRANCE); // for decimal numbers with comma
 	public static final String NEW_LINE = System.getProperty("line.separator");
-
-	protected Session session;
 
 	public void run() {
 		try {
@@ -104,20 +100,6 @@ public abstract class WorkbookDataImporter {
 			}
 		}
 		return value;
-	}
-
-	protected <T extends AbstractEntity> void persistEntities(Collection<T> entities) {
-		for (T entity : entities) {
-			persistEntity(entity);
-		}
-	}
-
-	protected <T extends AbstractEntity> void persistEntity(T entity) {
-		session.persist(entity);
-	}
-
-	protected <T extends AbstractEntity> void updateEntity(T entity) {
-		session.merge(entity);
 	}
 
 	private static Map<String, Sheet> getAllSheets(Workbook workbook) {

@@ -83,7 +83,7 @@ public class Global extends GlobalSettings {
 			semaphore.acquire();
 
 			if (thread == null) {
-				thread = new InitializationThread(applicationContext);
+				thread =  applicationContext.getBean(InitializationThread.class);
 				thread.start();
 
 				if(app.isDev()){

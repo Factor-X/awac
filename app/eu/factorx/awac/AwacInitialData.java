@@ -2,10 +2,10 @@ package eu.factorx.awac;
 
 
 import org.hibernate.Session;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import play.Logger;
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
@@ -18,29 +18,53 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.service.UnitCategoryService;
+import eu.factorx.awac.service.UnitService;
 import eu.factorx.awac.util.data.importer.*;
 
+@Component
 public class AwacInitialData {
 
-	public static void createAwacInitialData(ApplicationContext ctx, Session session) {
+	@Autowired
+	private MyrmexUnitsImporter myrmexUnitsImporter;
+
+	@Autowired
+	private CodeLabelImporter codeLabelImporter;
+
+	@Autowired
+	private AwacDataImporter awacDataImporter;
+
+	@Autowired
+	private AccountImporter accountImporter;
+
+	@Autowired
+	private TranslationImporter translationImporter;
+
+	@Autowired
+	private UnitCategoryService unitCategoryService;
+
+	@Autowired
+	private UnitService unitService;
+
+	public void createAwacInitialData(Session session) {
 
 		Logger.info("===> CREATE AWAC INITIAL DATA -- START");
 		long startTime = System.currentTimeMillis();
 
 		// IMPORT MYRMEX UNITS
-		new MyrmexUnitsImporter(session).run();
+		myrmexUnitsImporter.run();
 
 		// IMPORT CODES
-		new CodeLabelImporter(session).run();
+		codeLabelImporter.run();
 
 		// IMPORT AWAC DATA
-		new AwacDataImporter(session).run();
+		awacDataImporter.run();
 
 		// ACCOUNTS
-		new AccountImporter(session).run();
+		accountImporter.run();
 
-		// TRANSLATION
-		new TranslationImporter(session).run();
+		// ACCOUNTS
+		translationImporter.run();
 
 		// REFERENCES DATA
 		UnitCategory surfaceUnits = getUnitCategoryByCode(UnitCategoryCode.AREA);
@@ -51,7 +75,7 @@ public class AwacInitialData {
 		UnitCategory powerUnits = getUnitCategoryByCode(UnitCategoryCode.POWER);
 		UnitCategory moneyUnits = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
 		UnitCategory durationUnits = getUnitCategoryByCode(UnitCategoryCode.DURATION);
-		
+
 
 		// PERIOD
 		for (int i = 2013; i >= 2000; i--) {
@@ -71,8 +95,8 @@ public class AwacInitialData {
 		Logger.info("===> CREATE AWAC INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
 	}
 
-	private static void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
-	                              UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory durationUnits) {
+	private void createAll(Session session, UnitCategory lengthUnits, UnitCategory surfaceUnits, UnitCategory volumeUnits,
+						   UnitCategory massUnits, UnitCategory energyUnits, UnitCategory powerUnits, UnitCategory moneyUnits, UnitCategory durationUnits) {
 
 
 		// == TABTAB2 =====================================================================
@@ -2080,12 +2104,12 @@ public class AwacInitialData {
 
 	}
 
-	private static UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
-		return JPA.em().createNamedQuery(UnitCategory.FIND_BY_CODE, UnitCategory.class).setParameter("unitCategoryCode", unitCategoryCode).getSingleResult();
+	private UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
+		return unitCategoryService.findByCode(unitCategoryCode);
 	}
 
-	private static Unit getUnitBySymbol(String symbol) {
-		return JPA.em().createNamedQuery(Unit.FIND_BY_SYMBOL, Unit.class).setParameter("symbol", symbol).getSingleResult();
+	private Unit getUnitBySymbol(String symbol) {
+		return unitService.findBySymbol(symbol);
 	}
 
 }

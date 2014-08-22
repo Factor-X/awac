@@ -11,7 +11,7 @@
             <!--base-package="eu.factorx.awac.models,eu.factorx.awac.service"/>-->
 
     <context:component-scan
-            base-package="eu.factorx.awac.models, eu.factorx.awac.controllers, eu.factorx.awac.service, eu.factorx.awac.converter, eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email"/>
+            base-package="eu.factorx.awac, eu.factorx.awac.models, eu.factorx.awac.controllers, eu.factorx.awac.service, eu.factorx.awac.converter, eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email"/>
 
     <context:annotation-config/>
 

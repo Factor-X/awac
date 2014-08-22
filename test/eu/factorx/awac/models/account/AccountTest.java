@@ -2,6 +2,7 @@ package eu.factorx.awac.models.account;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.impl.AccountServiceImpl;
 import play.Logger;
 
@@ -23,10 +24,14 @@ public class AccountTest extends AbstractBaseModelTest {
     public void _001_createAccount() {
 
         Organization org = new Organization("testing");
-        Account ac = new Account(org,"gho","passwd","gaston","hollands");
-        ac.setAge(new Integer(20)); // constraints should it be a constraint ?
+
+		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
+        Account ac = new Account(org,person,"gho","passwd",InterfaceTypeCode.ENTERPRISE);
+		ac.setActive(false);
 
         em.getTransaction().begin();
+		em.persist(org);
+		em.persist(person);
         em.persist(ac);
         em.getTransaction().commit();
 
@@ -163,6 +168,32 @@ public class AccountTest extends AbstractBaseModelTest {
 
 		try {
 			reload = em.createQuery(query, Organization.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertNull(reload);
+	} // end of test
+
+	// for DB cleanup
+	@Test
+	public void _009_deleteAssociatedPerson() {
+
+		Person person = null;
+		String query = "select p from Person p where p.lastname = 'gaston'";
+
+		try {
+			person = em.createQuery(query, Person.class).getResultList().get(0);
+		} catch (Exception empty) {}
+
+		assertEquals(person.getLastname(), "gaston");
+
+		em.getTransaction().begin();
+		em.remove(person);
+		em.getTransaction().commit();
+
+		Person reload=null;
+
+		try {
+			reload = em.createQuery(query, Person.class).getResultList().get(0);
 		} catch (Exception empty) {}
 
 		assertNull(reload);

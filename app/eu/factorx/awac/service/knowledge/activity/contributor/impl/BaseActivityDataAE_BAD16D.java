@@ -11,6 +11,7 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import play.Logger;
 
 /**
  * CHECK XM
@@ -26,25 +27,33 @@ public class BaseActivityDataAE_BAD16D extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5133);
 
 		// For each set of answers in A132, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA132 = questionSetAnswers.get(QuestionCode.A132);		if (questionSetAnswersA132 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA132) {
+		List<QuestionSetAnswer> questionSetAnswersA132 = questionSetAnswers.get(QuestionCode.A132);
+		if (questionSetAnswersA132 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA132) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
+            QuestionAnswer questionA136Answer = answersByCode.get(QuestionCode.A136);
 			QuestionAnswer questionA137Answer = answersByCode.get(QuestionCode.A137);
-			QuestionAnswer questionA136Answer = answersByCode.get(QuestionCode.A136);
 			QuestionAnswer questionA138Answer = answersByCode.get(QuestionCode.A138);
 			QuestionAnswer questionA139Answer = answersByCode.get(QuestionCode.A139);
 			QuestionAnswer questionA500Answer = answersByCode.get(QuestionCode.A500);
 
 			if (questionA136Answer == null ||
-					(questionA136Answer == null && (
-							questionA137Answer == null ||
-									questionA138Answer == null ||
-									(questionA139Answer == null &&
-											questionA500Answer == null)))) {
+					(questionA136Answer != null &&
+                            (questionA137Answer == null ||
+                                questionA138Answer == null)) ||
+                    (questionA138Answer != null &&
+									(toBoolean(questionA138Answer) && questionA139Answer == null))) {
 				continue;
 			}
-
+            // if A136 is FALSE, no need to compute the BAD
+            if (toBoolean(questionA136Answer) == Boolean.FALSE) {
+                continue;
+            }
 
 			BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -56,10 +65,13 @@ public class BaseActivityDataAE_BAD16D extends ActivityResultContributor {
 			baseActivityData.setActivityType(ActivityTypeCode.AT_8);
 			baseActivityData.setActivitySource(toActivitySourceCode(questionA137Answer));
 			baseActivityData.setActivityOwnership(true);
-			// TODO: toutes les valeurs ne sont pas exprimées dans la même unité ! Comment gérer?
-			// TODO: OK d'utiliser A138 comm eune valeur 1 ou 0 au lieu d'un booleén?
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA136Answer, baseActivityDataUnit) * (toDouble(questionA138Answer, baseActivityDataUnit) * toDouble(questionA139Answer, baseActivityDataUnit) + (1 - toDouble(questionA138Answer, baseActivityDataUnit)) * toDouble(questionA500Answer, baseActivityDataUnit)));
+
+            if (questionA139Answer != null) {
+                baseActivityData.setValue(toDouble(questionA139Answer, baseActivityDataUnit));
+            } else {
+                baseActivityData.setValue(0.484);
+            }
 
 			res.add(baseActivityData);
 		}

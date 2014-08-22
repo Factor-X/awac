@@ -5,24 +5,23 @@ import java.util.Map;
 import jxl.Sheet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.service.CodeLabelService;
 
 @Component
 public class TranslationImporter extends WorkbookDataImporter {
 
 	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
 
+	@Autowired
+	private CodeLabelService codeLabelService;
+	
 	public TranslationImporter() {
 		super();
-	}
-
-	public TranslationImporter(Session session) {
-		super();
-		this.session = session;
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 			String labelFr = getCellContent(sheet, 2, i);
 			String labelNl = getCellContent(sheet, 3, i);
 
-			session.saveOrUpdate(new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
+			codeLabelService.saveOrUpdate(new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
 		}
 	}
 }
