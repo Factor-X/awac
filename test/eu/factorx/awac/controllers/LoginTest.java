@@ -47,7 +47,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _001_authenticateActionSuccess() {
 
 	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey());
+	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
 
 	//Json node
 	Map<String, String> map = new HashMap<String, String>();
@@ -96,7 +96,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _002_authenticateActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password",InterfaceTypeCode.ENTERPRISE.getKey());
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
@@ -125,11 +125,8 @@ public class LoginTest extends AbstractBaseModelTest {
 		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
 
 		// should return a ExceptionDTO
-		String content = new String(contentAsBytes(result));
-		JsonNode jsonResponse = Json.parse(content);
-		//Logger.info("jsonNode: " + jsonResponse.toString());
+		ExceptionsDTO loginResult = getDTO(result,ExceptionsDTO.class);
 
-		ExceptionsDTO loginResult = Json.fromJson(jsonResponse,ExceptionsDTO.class);
 		// verify lastname of user1 is Dupont.
 		assertEquals(loginResult.getMessage(),"The couple login / password was not found");
 	} // end of authenticateSuccess test
@@ -138,7 +135,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _003_testAuthenticationActionSuccess() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey());
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
@@ -171,7 +168,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _004_testAuthenticationActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey());
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
@@ -216,7 +213,7 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _006_authenticateWithBadInterfaceNameActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.MUNICIPALITY.getKey());
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.MUNICIPALITY.getKey(),"");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();

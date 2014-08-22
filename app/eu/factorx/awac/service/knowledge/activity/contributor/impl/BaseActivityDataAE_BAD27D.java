@@ -58,10 +58,26 @@ public class BaseActivityDataAE_BAD27D extends ActivityResultContributor {
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
 			baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
-			// TODO: transformé code en identique mais 100% recyclé            baseActivityData.setActivitySource(getCode(questionA213Answer, ActivitySourceCode.class + "100% recyclé"));
+
+            if (ActivitySourceCode.AS_222.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_229);
+            } else             if (ActivitySourceCode.AS_223.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_230);
+            } else            if (ActivitySourceCode.AS_224.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_231);
+            } else            if (ActivitySourceCode.AS_225.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_232);
+            } else            if (ActivitySourceCode.AS_226.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_233);
+            } else            if (ActivitySourceCode.AS_227.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_234);
+            } else            if (ActivitySourceCode.AS_228.equals(toActivitySourceCode(questionA213Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_235);
+            }
+
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer));
 
 			res.add(baseActivityData);
 		}

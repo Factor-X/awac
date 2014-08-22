@@ -3,6 +3,7 @@ package eu.factorx.awac.converter;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by root on 15/07/14.
- */
+
 @Component
 public class AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
 
@@ -40,6 +39,14 @@ public class AccountToLoginResultDTOConverter implements Converter<Account, Logi
 
 		//create the person
 		loginResultDTO.setPerson(accountToPersonDTOConverter.convert(account));
+
+		// is administrator ?
+		if(account instanceof Administrator){
+			loginResultDTO.setAdministrator(true);
+		}
+		else{
+			loginResultDTO.setAdministrator(false);
+		}
 
 		//create periodDTO
 		List<PeriodDTO> periodsDTO = new ArrayList<>();

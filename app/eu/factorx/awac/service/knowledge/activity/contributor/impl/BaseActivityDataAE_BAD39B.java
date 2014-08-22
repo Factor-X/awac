@@ -24,35 +24,39 @@ public class BaseActivityDataAE_BAD39B extends ActivityResultContributor {
 		// Get Target Unit (tCO2e in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5331);
-
-		// For each set of answers in A322, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA322 = questionSetAnswers.get(QuestionCode.A322);		if (questionSetAnswersA322 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA322) {
+        System.out.println("HERE");
+        // For each set of answers in A322, build an ActivityBaseData (see specifications)
+		List<QuestionSetAnswer> questionSetAnswersA334 = questionSetAnswers.get(QuestionCode.A334);
+		if (questionSetAnswersA334 == null) {
+			return res;
+		}
+        System.out.println("HERE 2");
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA334) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
 			QuestionAnswer questionA336Answer = answersByCode.get(QuestionCode.A336);
 			QuestionAnswer questionA338Answer = answersByCode.get(QuestionCode.A338);
 			QuestionAnswer questionA335Answer = answersByCode.get(QuestionCode.A335);
-
-			if (questionA336Answer == null ||
+            System.out.println("HERE 3");
+            if (questionA336Answer == null ||
 					questionA338Answer == null ||
 					questionA335Answer == null) {
 				continue;
 			}
-
-
-			BaseActivityData baseActivityData = new BaseActivityData();
+            System.out.println("HERE 4");
+            BaseActivityData baseActivityData = new BaseActivityData();
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD39B);
 			baseActivityData.setRank(1);
 			baseActivityData.setSpecificPurpose(toString(questionA335Answer));
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_17);
+			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_16);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_11);
 			baseActivityData.setActivityType(ActivityTypeCode.AT_69);
 			baseActivityData.setActivitySource(ActivitySourceCode.AS_344);
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA336Answer, baseActivityDataUnit) * toDouble(questionA338Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA336Answer) * toDouble(questionA338Answer, baseActivityDataUnit));
 
 			res.add(baseActivityData);
 		}

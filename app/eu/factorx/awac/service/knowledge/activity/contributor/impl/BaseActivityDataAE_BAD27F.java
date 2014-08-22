@@ -58,10 +58,16 @@ public class BaseActivityDataAE_BAD27F extends ActivityResultContributor {
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
 			baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
-			// TODO: transformé code en identique mais 100% recyclé             baseActivityData.setActivitySource(getCode(questionA214Answer, ActivitySourceCode.class + "100% recyclé"));
-			baseActivityData.setActivityOwnership(null);
+
+            if (ActivitySourceCode.AS_236.equals(toActivitySourceCode(questionA214Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_237);
+            } else             if (ActivitySourceCode.AS_238.equals(toActivitySourceCode(questionA214Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_239);
+            }
+
+            baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer, baseActivityDataUnit));
+			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer));
 
 			res.add(baseActivityData);
 		}

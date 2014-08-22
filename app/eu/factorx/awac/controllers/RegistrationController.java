@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
@@ -17,6 +18,7 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -41,7 +43,13 @@ public class RegistrationController  extends Controller {
 	private AdministratorService administratorService;
 
 	@Autowired
+	private ConversionService conversionService;
+
+	@Autowired
 	private SiteService siteService;
+
+	@Autowired
+	private SecuredController securedController;
 
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
@@ -60,18 +68,25 @@ public class RegistrationController  extends Controller {
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
+		Account account = null;
 		try {
-			createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.ENTERPRISE,organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.ENTERPRISE,organization);
 		} catch (MyrmexException e) {
-			throw new MyrmexRuntimeException(e.getToClientMessage()); //return notFound(new ExceptionsDTO(e.getToClientMessage()));
+			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
 		//create site
 		Site site = new Site(organization, dto.getFirstSiteName());
 		siteService.saveOrUpdate(site);
+		organization.getSites().add(site);
 
+		//if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account.getIdentifier());
 
-		return ok(new ReturnDTO());
+		//create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+		return ok(resultDto);
 	}
 
 
