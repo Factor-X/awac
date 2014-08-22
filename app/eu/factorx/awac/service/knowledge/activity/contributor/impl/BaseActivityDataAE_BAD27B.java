@@ -17,50 +17,70 @@ import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultCont
  */
 public class BaseActivityDataAE_BAD27B extends ActivityResultContributor {
 
-	@Override
-	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
-				List<BaseActivityData> res = new ArrayList<>();
+    @Override
+    public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
+        List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (t in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
+        // Get Target Unit (t in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+        Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
-		// For each set of answers in A209, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA209 = questionSetAnswers.get(QuestionCode.A209);		if (questionSetAnswersA209 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA209) {
+        // For each set of answers in A209, build an ActivityBaseData (see specifications)
+        List<QuestionSetAnswer> questionSetAnswersA209 = questionSetAnswers.get(QuestionCode.A209);
+        if (questionSetAnswersA209 == null) {
+            return res;
+        }
 
-			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA209) {
 
-			QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
-			QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
-			QuestionAnswer questionA212Answer = answersByCode.get(QuestionCode.A212);
-			QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
-			QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+            Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
-			if (questionA210Answer == null ||
-					questionA211Answer == null ||
-					questionA212Answer == null ||
-					questionA220Answer == null ||
-					questionA221Answer == null) {
-				continue;
-			}
+            QuestionAnswer questionA210Answer = answersByCode.get(QuestionCode.A210);
+            QuestionAnswer questionA211Answer = answersByCode.get(QuestionCode.A211);
+            QuestionAnswer questionA212Answer = answersByCode.get(QuestionCode.A212);
+            QuestionAnswer questionA220Answer = answersByCode.get(QuestionCode.A220);
+            QuestionAnswer questionA221Answer = answersByCode.get(QuestionCode.A221);
+
+            if (questionA210Answer == null ||
+                    questionA211Answer == null ||
+                    questionA212Answer == null ||
+                    questionA220Answer == null ||
+                    questionA221Answer == null) {
+                continue;
+            }
 
 
-			BaseActivityData baseActivityData = new BaseActivityData();
+            BaseActivityData baseActivityData = new BaseActivityData();
 
-			baseActivityData.setKey(BaseActivityDataCode.AE_BAD27B);
-			baseActivityData.setRank(1);
-			baseActivityData.setSpecificPurpose(toString(questionA210Answer));
-			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
-			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
-			baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
-			// TODO: transformé code en identique mais 100% recyclé            baseActivityData.setActivitySource(getCode(questionA212Answer, ActivitySourceCode.class + "100% recyclé"));
-			baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-			baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer, baseActivityDataUnit));
+            baseActivityData.setKey(BaseActivityDataCode.AE_BAD27B);
+            baseActivityData.setRank(1);
+            baseActivityData.setSpecificPurpose(toString(questionA210Answer));
+            baseActivityData.setActivityCategory(ActivityCategoryCode.AC_8);
+            baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
+            baseActivityData.setActivityType(toActivityTypeCode(questionA211Answer));
+            if (ActivitySourceCode.AS_209.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_216);
+            } else             if (ActivitySourceCode.AS_210.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_217);
+            } else            if (ActivitySourceCode.AS_211.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_218);
+            } else            if (ActivitySourceCode.AS_212.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_219);
+            } else            if (ActivitySourceCode.AS_213.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_220);
+            } else            if (ActivitySourceCode.AS_214.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_221);
+            } else            if (ActivitySourceCode.AS_215.equals(toActivitySourceCode(questionA212Answer))) {
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_215);
+            }
 
-			res.add(baseActivityData);
-		}
-		return res;
-	}
+            baseActivityData.setActivityOwnership(null);
+            baseActivityData.setUnit(baseActivityDataUnit);
+            baseActivityData.setValue(toDouble(questionA221Answer, baseActivityDataUnit) * toDouble(questionA220Answer));
+
+            res.add(baseActivityData);
+        }
+        return res;
+    }
 
 }

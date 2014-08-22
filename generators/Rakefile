@@ -1,0 +1,29 @@
+require 'rubygems'
+require 'rake'
+require 'optparse'
+
+#
+# Root directory
+#
+ROOT      = File.dirname(File.dirname(__FILE__))
+
+namespace :generate do
+
+    desc "Generate the surveys from the xls file"
+    task :surveys do |t, args|
+
+        options             = {}
+        options[:log_level] = 'DEBUG'
+
+        OptionParser.new(args) do |opts|
+            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
+                options[:log_level] = v.upcase
+            end
+        end.parse!
+
+        require_relative './generate/surveys/main.rb'
+        main(options)
+
+    end
+
+end
