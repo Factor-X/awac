@@ -11,7 +11,7 @@ $ bundle
 ```
 
 *Info: the Gemfile in this directory contains a "quick and useful hack" to recursively include all nested 
-Gemfiles, so **1 command to rule them all !***
+Gemfiles, so there is **1 command to rule them all !***
 
 ## Rake
 
