@@ -26,7 +26,7 @@ $ rake generate:surveys
 ## "Good-to-know" 's about existing tasks
 
 - **rake generate:surveys** :
-    - it reads the config.yaml for configuration and spec XLS files, 
+    - it reads the *config.yaml* for configuration and spec XLS files, 
     - performs some validation,
-    - then generates source files in eu.factorx.awac.generated for surveys
+    - then generates source files in *eu.factorx.awac.generated* for surveys
     - and injects question codes in *eu.factorx.awac.models.code.type.QuestionCode*
