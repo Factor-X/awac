@@ -4,11 +4,14 @@
 
 **Bundler** is the dependency tool for ruby. It reads the *Gemfile* for dependencies and download them if needed.
 
-Just run
+Just run:
 
 ```sh
 $ bundle
 ```
+
+*Info: the Gemfile in this directory contains a "quick and useful hack" to recursively include all nested 
+Gemfiles, so **1 command to rule them all !***
 
 ## Rake
 

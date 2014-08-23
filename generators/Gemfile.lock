@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  remote: https://rubygems.org/
+  specs:
+    erubis (2.7.0)
+    i18n (0.6.11)
+    logger (1.2.8)
+    rake (10.3.2)
+    ruby-ole (1.2.11.7)
+    spreadsheet (0.9.8)
+      ruby-ole (>= 1.0)
+    term-ansicolor (1.3.0)
+      tins (~> 1.0)
+    tins (1.3.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  erubis
+  i18n
+  logger
+  rake
+  spreadsheet
+  term-ansicolor
