@@ -23,6 +23,12 @@ In this example we run the task **surveys** in the namespace **generate**:
 $ rake generate:surveys
 ```
 
+To list existing tasks:
+
+```sh
+$ rake -T
+```
+
 ## "Good-to-know" 's about existing tasks
 
 - **rake generate:surveys** :
