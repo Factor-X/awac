@@ -45,7 +45,7 @@ public class AwacMunicipalityInitialData {
     @Autowired
     private UnitService unitService;
 
-    private void createSurvey(Session session) {
+    public void createSurvey(Session session) {
         Logger.info("===> CREATE AWAC Municipality INITIAL DATA -- START");
         long startTime = System.currentTimeMillis();
 

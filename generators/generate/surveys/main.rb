@@ -9,13 +9,13 @@ require 'rubygems'
 require_relative 'util/code.rb'
 
 # XLS Scanner
-require_relative 'xls/scanner.rb'
+require_relative 'workers/scanner.rb'
 
 # Survey writer
-require_relative 'xls/survey_class_writer.rb'
+require_relative 'workers/survey_class_writer.rb'
 
 # Question code writer
-require_relative 'xls/question_code_writer.rb'
+require_relative 'workers/question_code_writer.rb'
 
 # YAML
 require 'yaml'

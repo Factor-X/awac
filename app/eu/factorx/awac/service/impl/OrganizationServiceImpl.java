@@ -1,16 +1,16 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ScopeService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.ScopeService;
 
 @Repository
 public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<Organization> implements

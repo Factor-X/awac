@@ -2,22 +2,11 @@ package eu.factorx.awac.models.code.label;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.*;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
@@ -31,7 +20,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl"),
 		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList")
 })
-public class CodeLabel extends AbstractEntity implements Serializable, Comparable<CodeLabel> {
+public class CodeLabel extends AuditedAbstractEntity implements Serializable, Comparable<CodeLabel> {
 
 	public static final String COLUMN_NAME_CODELIST = "codelist";
 	public static final String COLUMN_NAME_KEY = "key";

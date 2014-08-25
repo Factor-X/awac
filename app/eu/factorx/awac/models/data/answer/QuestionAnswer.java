@@ -98,7 +98,7 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 	public void updateAnswerValues(List<AnswerValue> answerValues) {
 		this.getAnswerValues().clear();
 		this.getAnswerValues().addAll(answerValues);
-		this.getTechnicalSegment().update();
+		this.preUpdate();
 	}
 
 	@Override

@@ -78,8 +78,12 @@ public abstract class AbstractEntity implements Serializable {
 		return new HashCodeBuilder(17, 37).append(this.id).toHashCode();
 	}
 
-    @Override
-    public String toString() {
-        return "AbstractEntity.id=" + id;
-    }
+	/**
+	 * Default implementation: override this.
+	 */
+	@Override
+	public String toString() {
+		return "AbstractEntity [id=" + id + "]";
+	}
+
 }

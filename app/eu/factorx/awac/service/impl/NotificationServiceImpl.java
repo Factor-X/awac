@@ -1,22 +1,21 @@
 package eu.factorx.awac.service.impl;
 
-
-import eu.factorx.awac.models.Notification;
-import eu.factorx.awac.service.NotificationService;
-import org.hibernate.Session;
-import org.joda.time.DateTime;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
+import java.util.List;
 
 import javax.persistence.TypedQuery;
-import java.util.List;
+
+import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.service.NotificationService;
 
 @Component
 public class NotificationServiceImpl extends AbstractJPAPersistenceServiceImpl<Notification> implements NotificationService {
 
 	@Override
 	public List<Notification> findCurrentOnes() {
-		Session session = JPA.em().unwrap(Session.class);
 
 		TypedQuery<Notification> query = JPA.em().createQuery("" +
 				"select n from Notification n " +
@@ -29,4 +28,5 @@ public class NotificationServiceImpl extends AbstractJPAPersistenceServiceImpl<N
 
 		return query.getResultList();
 	}
+
 }
