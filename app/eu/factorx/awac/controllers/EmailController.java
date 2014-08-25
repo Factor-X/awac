@@ -4,10 +4,12 @@ package eu.factorx.awac.controllers;
  * Created by gaston on 8/20/14.
  */
 
+import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.util.email.service.EmailService;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import play.*;
+import play.db.jpa.Transactional;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
@@ -21,6 +23,9 @@ import org.springframework.stereotype.Component;
 
 //annotate as Spring Component
 @Component
+@Transactional(readOnly = true)
+@Security.Authenticated(SecuredController.class)
+@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 public class EmailController {
 
 	@Autowired

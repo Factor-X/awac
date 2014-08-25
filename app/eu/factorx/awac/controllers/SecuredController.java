@@ -46,7 +46,7 @@ public class SecuredController extends Security.Authenticator {
 	@Transactional(readOnly = true)
 	public Account getCurrentUser() {
 
-		return accountService.findByIdentifier(Context.current().session().get("identifier"));
+		return accountService.findByIdentifier(Context.current().session().get(SESSION_IDENTIFIER_STORE));
 	}
 
 	public boolean isAdministrator() {
