@@ -5,6 +5,7 @@ import javax.persistence.Embeddable;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import play.Play;
 import play.mvc.Http.Context;
 import play.mvc.Http.Session;
 
@@ -63,9 +64,13 @@ public class TechnicalSegment {
 	}
 
 	private static String getCurrentUser() {
+		if (Play.application().isTest()) {
+			return "TEST";
+		}
 		if (Context.current.get() == null) {
 			return "TECH";
 		}
+
 		Session session = Context.current().session();
 		return session.get("identifier");
 	}

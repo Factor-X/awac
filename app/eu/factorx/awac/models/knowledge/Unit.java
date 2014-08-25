@@ -5,7 +5,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.UnitCode;
 
 @Entity
@@ -13,7 +13,7 @@ import eu.factorx.awac.models.code.type.UnitCode;
 @NamedQueries({ @NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"), @NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"), })
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Unit extends AbstractEntity {
+public class Unit extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,11 +1,11 @@
 package eu.factorx.awac.models.data;
 
-import eu.factorx.awac.models.AbstractEntity;
+import javax.persistence.*;
+
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
-
-import javax.persistence.*;
 
 
 @Entity
@@ -13,7 +13,9 @@ import javax.persistence.*;
 		@NamedQuery(name = FormProgress.FIND_BY_PERIOD_AND_SCOPE, query = "select fp from FormProgress fp where fp.period in :period and fp.scope in :scope"),
 		@NamedQuery(name = FormProgress.FIND_BY_PERIOD_AND_SCOPE_AND_FORM, query = "select fp from FormProgress fp where fp.period in :period and fp.scope in :scope and fp.form in :form")})
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {FormProgress.PERIOD_COLUMN, FormProgress.FORM_COLUMN, FormProgress.SCOPE_COLUMN}))
-public class FormProgress extends AbstractEntity {
+public class FormProgress extends AuditedAbstractEntity {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param period : the period wanted

@@ -4,13 +4,10 @@ import javax.persistence.EntityManager;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.JPAPlugin;
 import play.libs.Json;
@@ -24,7 +21,9 @@ import static play.test.Helpers.contentAsBytes;
 
 public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
-    protected static EntityManager em;
+	public static final String[] TABLES = {"ORGANIZATION", "PERSON", "ACCOUNT"};
+
+	protected static EntityManager em;
 	protected static ApplicationContext applicationContext;
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
@@ -32,11 +31,11 @@ public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 	}
 
 	//before class
-    @BeforeClass
-    public static void setUp() {
+	@BeforeClass
+	public static void setUp() {
 
-        FakeApplication app = Helpers.fakeApplication();
-        Helpers.start(app);
+		FakeApplication app = Helpers.fakeApplication();
+		Helpers.start(app);
 		// TODO - this needs to be tunned
 		// wait 2 seconds to be sure app is started on all environments
 		try {
@@ -44,17 +43,23 @@ public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 		} catch (Exception e) {
 			// do nothing
 		}
-        Option<JPAPlugin> jpaPlugin = app.getWrappedApplication().plugin(JPAPlugin.class);
-        em = jpaPlugin.get().em("default");
-        JPA.bindForCurrentThread(em);
+		Option<JPAPlugin> jpaPlugin = app.getWrappedApplication().plugin(JPAPlugin.class);
+		em = jpaPlugin.get().em("default");
+		JPA.bindForCurrentThread(em);
 	}
 
-    // after class
-    @AfterClass
-    public static void tearDown() {
-        JPA.bindForCurrentThread(null);
+	// after class
+	@AfterClass
+	public static void tearDown() {
+		em.getTransaction().begin();
+		for (String tableName : TABLES) {
+			JPA.em().createNativeQuery("DELETE FROM " + tableName + " WHERE CREATIONUSER = 'TEST'").executeUpdate();
+		}
+		em.getTransaction().commit();
+
+		JPA.bindForCurrentThread(null);
 		if (em.isOpen()) em.close();
-    }
+	}
 
 	public <T> T getDTO(Result result, Class<T> type){
 

@@ -1,21 +1,16 @@
 package eu.factorx.awac.models.knowledge;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.PeriodCode;
 
 @Entity
 @Table(name = "period")
-public class Period extends AbstractEntity {
+public class Period extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

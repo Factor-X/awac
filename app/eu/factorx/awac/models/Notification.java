@@ -1,14 +1,15 @@
 package eu.factorx.awac.models;
 
-import org.joda.time.DateTime;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import org.joda.time.DateTime;
+
 @Entity
 public class Notification extends AuditedAbstractEntity {
+
+	private static final long serialVersionUID = 1L;
 
 	@Enumerated(EnumType.STRING)
 	private NotificationKind kind;

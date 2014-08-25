@@ -122,3 +122,6 @@ cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
 
 # execute the units refactoring
 cat /migrations/migration-data-v0.4-v0.5/unit_refactoring.sql | psql -h localhost -U play -d awac -W
+
+# add technical segment columns to tables where it is not present
+cat /migrations/migration-data-v0.4-v0.5/add_technical_segment.sql | psql -h localhost -U play -d awac -W

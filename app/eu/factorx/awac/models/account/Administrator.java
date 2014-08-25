@@ -10,13 +10,10 @@
  */
 package eu.factorx.awac.models.account;
 
+import javax.persistence.Entity;
+
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 // import for JAXB annotations -- JAXB stack
 

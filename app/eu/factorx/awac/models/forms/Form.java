@@ -3,23 +3,15 @@ package eu.factorx.awac.models.forms;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Table(name = "form")
 @NamedQueries({ @NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier") })
-public class Form extends AbstractEntity {
+public class Form extends AuditedAbstractEntity {
 
 	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
 	private static final long serialVersionUID = 1L;
