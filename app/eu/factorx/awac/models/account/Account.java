@@ -27,6 +27,7 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, query = "select a from Account a, Person p where p.email = :email and a.person = p and a.interfaceCode = :interface_code"),
+		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a, Person p where p.email = :email and a.person = p"),
 })
 public class Account extends AbstractEntity {
 
@@ -35,6 +36,7 @@ public class Account extends AbstractEntity {
 	 */
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
 	public static final String FIND_BY_EMAIL_AND_INTERFACE_CODE = "Account.findByEmailAndInterfaceCode";
+	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)

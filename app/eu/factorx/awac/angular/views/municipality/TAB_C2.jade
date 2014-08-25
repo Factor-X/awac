@@ -18,7 +18,7 @@ mm-awac-section(title-code="AC9_TITLE")
         mm-awac-question(question-code="AC22", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
         mm-awac-question(question-code="AC23", ng-repetition-map="itLevel1")
 
-        // combistible AC24
+        // AC24
         mm-awac-sub-title(question-code="AC24")
 
         mm-awac-repetition-name(question-code="AC25")
@@ -31,14 +31,14 @@ mm-awac-section(title-code="AC9_TITLE")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'AC25_LOOPDESC' | translate")
 
-        // electricité AC28
+        // AC28
         mm-awac-sub-title(question-code="AC28")
         mm-awac-sub-sub-title(question-code="AC29")
 
         mm-awac-question(question-code="AC30", ng-repetition-map="itLevel1")
         mm-awac-question(question-code="AC31", ng-repetition-map="itLevel1")
 
-        // vapeur AC32
+        // AC32
         mm-awac-block(ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
             mm-awac-sub-title(question-code="AC32")
 
@@ -53,7 +53,7 @@ mm-awac-section(title-code="AC9_TITLE")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'AC33_LOOPDESC' | translate")
 
-        // refroidissement AC37
+        // AC37
         mm-awac-sub-title(question-code="AC37", ng-repetition-map="itLevel1")
         mm-awac-question(question-code="AC38", ng-repetition-map="itLevel1")
 
@@ -67,7 +67,7 @@ mm-awac-section(title-code="AC9_TITLE")
             span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
             span(ng-bind-html="'AC39_LOOPDESC' | translate")
 
-        //déchets AC42
+        // AC42
         mm-awac-block(ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
             mm-awac-sub-title(question-code="AC42", ng-repetition-map="itLevel1")
             mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1")
@@ -78,35 +78,35 @@ mm-awac-section(title-code="AC9_TITLE")
                 mm-awac-question(question-code="AC45", ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="AC46", ng-repetition-map="itLevel2")
                 mm-awac-question(question-code="AC47", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value != 'AS_186' || getAnswer('AC45',itLevel2).value != 'AS183'")
-                mm-awac-question(question-code="AC48", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value != 'AS_186')")
-                mm-awac-question(question-code="AC49", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183')")
-                mm-awac-question(question-code="AC50", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183')")
+                mm-awac-question(question-code="AC48", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value != 'AS_186'")
+                mm-awac-question(question-code="AC49", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183'")
+                mm-awac-question(question-code="AC50", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183'")
                 mm-awac-question(question-code="AC51", ng-repetition-map="itLevel2")
 
             button.button.add-repetition-button(ng-click="addIteration('AC44',itLevel1)", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'AC44_LOOPDESC' | translate")
 
-
-
     button.button.add-repetition-button(ng-click="addIteration('AC10')", type="button")
         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
         span(ng-bind-html="'AC10_LOOPDESC' | translate")
 
-    // éclairage public AS52
-    mm-awac-section(title-code="AC52_TITLE")
-        mm-awac-question(question-code="AC53")
-        mm-awac-question(question-code="AC54")
-        mm-awac-question(question-code="AC55")
+.horizontal_separator
 
-         // coffret de voirie AC56
-        mm-awac-repetition-name(question-code="AC56")
-        mm-awac-repetition-question(question-set-code="AC56", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC56')")
+// éclairage public AS52
+mm-awac-section(title-code="AC52_TITLE")
+    mm-awac-question(question-code="AC53")
+    mm-awac-question(question-code="AC54")
+    mm-awac-question(question-code="AC55")
 
-            mm-awac-question(question-code="AC57", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC58", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC59", ng-repetition-map="itLevel1")
 
-        button.button.add-repetition-button(ng-click="addIteration('AC56')", type="button")
-            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-            span(ng-bind-html="'AC56_LOOPDESC' | translate")
+    mm-awac-repetition-name(question-code="AC56")
+    mm-awac-repetition-question(question-set-code="AC56", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC56')")
+
+        mm-awac-question(question-code="AC57", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC58", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC59", ng-repetition-map="itLevel1")
+
+    button.button.add-repetition-button(ng-click="addIteration('AC56')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'AC56_LOOPDESC' | translate")

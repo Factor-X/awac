@@ -40,13 +40,6 @@ public class AccountToLoginResultDTOConverter implements Converter<Account, Logi
 		//create the person
 		loginResultDTO.setPerson(accountToPersonDTOConverter.convert(account));
 
-		// is administrator ?
-		if(account instanceof Administrator){
-			loginResultDTO.setAdministrator(true);
-		}
-		else{
-			loginResultDTO.setAdministrator(false);
-		}
 
 		//create periodDTO
 		List<PeriodDTO> periodsDTO = new ArrayList<>();

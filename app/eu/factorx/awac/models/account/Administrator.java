@@ -29,6 +29,11 @@ public class Administrator extends Account {
 		super();
 	}
 
+	public Administrator(Long id){
+		super();
+		setId(id);
+	}
+
 	public Administrator(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
 		super(organization, person, identifier, password, interfaceCode);
 	}

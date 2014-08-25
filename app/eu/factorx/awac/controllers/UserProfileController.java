@@ -7,6 +7,8 @@ import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.myrmex.post.ActiveAccountDTO;
+import eu.factorx.awac.dto.myrmex.post.AdminAccountDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Administrator;
@@ -20,6 +22,7 @@ import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.util.BusinessErrorType;
 
 import eu.factorx.awac.util.KeyGenerator;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -105,6 +108,81 @@ public class UserProfileController extends Controller {
 		return ok(new ReturnDTO());
 	}
 
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result activeAccount() {
+
+		//TODO control admin with annotation
+		if(!securedController.isAdministrator()){
+			throw new MyrmexRuntimeException("");
+		}
+
+		ActiveAccountDTO dto = extractDTOFromRequest(ActiveAccountDTO.class);
+
+		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
+
+		if(account == null){
+			throw new MyrmexRuntimeException("");
+		}
+
+		// not from my organization
+		if(!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			//TODO write exception
+			throw new MyrmexRuntimeException("");
+		}
+
+		// not if it's myself
+		if(account.equals(securedController.getCurrentUser())){
+			//TODO write exception
+			throw new MyrmexRuntimeException("");
+		}
+
+		account.setActive(dto.getIsActive());
+
+		accountService.saveOrUpdate(account);
+
+		return ok(new ReturnDTO());
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result isAdminAccount() {
+
+		//TODO control admin with annotation
+		if(!securedController.isAdministrator()){
+			throw new MyrmexRuntimeException("");
+		}
+
+		AdminAccountDTO dto = extractDTOFromRequest(AdminAccountDTO.class);
+
+		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
+
+		// not from my organization
+		if(!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			//TODO write exception
+			throw new MyrmexRuntimeException("");
+		}
+
+		// not if it's myself
+		if(account.equals(securedController.getCurrentUser())){
+			//TODO write exception
+			throw new MyrmexRuntimeException("");
+		}
+
+		if(account instanceof  Administrator && !dto.getIsAdmin()){
+			Administrator administrator = administratorService.findById(account.getId());
+
+			administratorService.remove(administrator);
+		}
+		else if (!(account instanceof  Administrator) && dto.getIsAdmin()){
+
+			Administrator administrator = new Administrator(account.getId());
+
+			administratorService.saveOrUpdate(administrator);
+		}
+
+		return ok(new ReturnDTO());
+	}
 
 	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
 		T dto = DTO.getDTO(request().body().asJson(), DTOclass);

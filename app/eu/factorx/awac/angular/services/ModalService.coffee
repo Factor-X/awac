@@ -10,6 +10,7 @@ angular
     @EMAIL_CHANGE = 'email-change'
     @PASSWORD_CHANGE = 'password-change'
     @CONNECTION_PASSWORD_CHANGE = 'connection-password-change'
+    @INVITE_USER = 'invite-user'
 
     @show = (modalName,params) ->
 

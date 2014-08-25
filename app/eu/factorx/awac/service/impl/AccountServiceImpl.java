@@ -9,6 +9,7 @@ import play.Logger;
 import play.db.jpa.JPA;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Account> implements AccountService {
@@ -41,5 +42,13 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 			return null;
 		}
 		return resultList.get(0);
+	}
+
+	@Override
+	public List<Account> findByEmail(String email){
+		List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL, Account.class)
+				.setParameter("email", email).getResultList();
+
+		return resultList;
 	}
 }

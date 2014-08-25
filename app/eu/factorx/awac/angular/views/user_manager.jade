@@ -2,54 +2,27 @@
 h1 USER MANAGER
 
 .element
-    button.button.add(type="button") invite users
+    button.button.add(type="button",ng-click="inviteUser()") invite users
     table.user_table
         tr.user_table_header
             td Username
             td Admin
-            td
-        tr
-            td Xavier Marichal
-            td
-                input(
-                type="checkbox",
-                name="id1",
-                value="1")
-            td
-                .button_delete
-        tr.user_deleted
-            td Florian Jeanmart
+            td Actif
+        tr(ng-repeat="user in getUserList()", ng-class="{user_deleted : user.isActive === false}")
+            td {{user.firstName}} {{user.lastName}} ({{user.email}})
+
             td
                 input(
-                type="checkbox",
-                name="id2",
-                value="0")
-            td
-                .button_delete
-        tr
-            td Autre user
-            td
-                input(
-                type="checkbox",
-                name="id3",
-                value="0")
-            td
-                .button_delete
-        tr
-            td Aude Grillot
-            td
-                input(
-                type="checkbox",
-                name="id4",
-                value="1")
-            td
-                .button_delete
-        tr.user_deleted
-            td Userfirstname van userlastname
-            td
-                input(
-                type="checkbox",
-                name="id5",
-                value="0")
-            td
-                .button_delete
+                    ng-hide="isLoading['admin'][user]=== true",
+                    type="checkbox",
+                    ng-model="user.isAdmin",
+                    ng-click="isAdminUser(user)"
+                    ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email")
+                img(src='/assets/images/modal-loading.gif',
+                    ng-show="isLoading['admin'][user] === true")
+
+            td(ng-class="{is_admin : getMyself().isAdmin === true && getMyself().email !== user.email}")
+                .button_delete(ng-click="activeUser(user)",
+                                ng-hide="isLoading['isActive'][user]=== true")
+                img(src='/assets/images/modal-loading.gif',
+                    ng-show="isLoading['isActive'][user] === true")
