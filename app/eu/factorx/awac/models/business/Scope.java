@@ -8,9 +8,9 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Entity
 @Table(name = "scope")
 @NamedQueries({
-		@NamedQuery(name = Scope.FIND_BY_SITE, query = "select s from Scope s where s.site = :site"),
-		@NamedQuery(name = Scope.FIND_BY_ORGANIZATION, query = "select s from Scope s where s.organization = :organization"),
-		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product"),})
+		@NamedQuery(name = Scope.FIND_BY_SITE, query = "select s from Scope s where s.site = :site and s.scopeType = :scopeType"),
+		@NamedQuery(name = Scope.FIND_BY_ORGANIZATION, query = "select s from Scope s where s.organization = :organization and s.scopeType = :scopeType"),
+		@NamedQuery(name = Scope.FIND_BY_PRODUCT, query = "select s from Scope s where s.product = :product and s.scopeType = :scopeType"),})
 public class Scope extends AuditedAbstractEntity {
 
 	public static final String FIND_BY_SITE = "Scope.findBySite";

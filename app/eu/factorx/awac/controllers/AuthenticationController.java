@@ -75,6 +75,9 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = false)
 	public Result authenticate() {
 
+
+
+
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {

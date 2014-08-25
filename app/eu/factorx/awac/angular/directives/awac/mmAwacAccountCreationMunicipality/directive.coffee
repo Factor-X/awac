@@ -19,19 +19,19 @@ angular
             fieldTitle: "USER_IDENTIFIER"
             validationRegex: "[a-zA-Z0-9-]{5,20}"
             validationMessage: "IDENTIFIER_CHECK_WRONG"
-            focus: true
 
         $scope.lastNameInfo =
             fieldTitle: "USER_LASTNAME"
             validationRegex: "^.{1,255}$"
             validationMessage: "USER_LASTNAME_WRONG_LENGTH"
-            focus: true
 
         $scope.firstNameInfo =
             fieldTitle: "USER_FIRSTNAME"
             fieldType: "text"
             validationRegex: "^.{1,255}$"
             validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
+            focus: ->
+                return $scope.$parent.tabActive[2]
 
         $scope.emailInfo =
             fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"

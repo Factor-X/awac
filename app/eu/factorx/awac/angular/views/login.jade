@@ -7,9 +7,9 @@
             li
                 a(href="/municipality") Municipality
 
-    .loginFrame(ng-enter="send()")
+    .loginFrame(ng-enter="enterEvent()")
         tabset
-            tab.tab-color-lightgreen
+            tab.tab-color-lightgreen(active="tabActive[0]")
                 tab-heading
                     span(ng-bind-html="'LOGIN_CONNECTION' | translate")
                 div
@@ -31,29 +31,32 @@
 
 
 
-            tab.tab-color-lightgreen
+            tab.tab-color-lightgreen(active="tabActive[1]")
                 tab-heading
                     span(ng-bind-html="'LOGIN_FORGOT_PASSWORD' | translate")
                 div
-                    div(ng-bind-html="'LOGIN_FORGOT_PASSWORD_DESC' | translate")
+                    div(ng-show="forgotEmailSuccessMessage!=null", class="forgot_password_success_message") {{forgotEmailSuccessMessage}}
 
-                    div(class="field_form")
-                        mm-awac-modal-field-text(ng-info="forgotPasswordInfo")
+                    div(ng-hide="forgotEmailSuccessMessage!=null")
+                        div(ng-bind-html="'LOGIN_FORGOT_PASSWORD_DESC' | translate")
 
-                    div(ng-hide="isLoading === true")
+                        div(class="field_form")
+                            mm-awac-modal-field-text(ng-info="forgotPasswordInfo")
 
-                        button.button(
-                            type="button",
-                            class="btn btn-primary",
-                            ng-bind-html="'SUBMIT' | translate",
-                            ng-click="sendForgotPassword()",
-                            ng-disabled="!forgotPasswordFieldValid()")
+                        div(ng-hide="isLoading === true")
 
-                    img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
+                            button.button(
+                                type="button",
+                                class="btn btn-primary",
+                                ng-bind-html="'SUBMIT' | translate",
+                                ng-click="sendForgotPassword()",
+                                ng-disabled="!forgotPasswordFieldValid()")
+
+                        img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
 
 
 
-            tab.tab-color-lightgreen
+            tab.tab-color-lightgreen(active="tabActive[2]")
                 tab-heading
                     span(ng-bind-html="'LOGIN_REGISTRATION' | translate")
                 div.inject-registration-form

@@ -1437,6 +1437,10 @@ h1 {
     padding-left: 10px;
 }
 
+.user_table tr {
+    height: 40px;
+}
+
 .user_table_header td,
 .site_table_header td {
     background-color: white;
@@ -1619,4 +1623,11 @@ ul.messenger > li {
     height: 1em;
     border-radius: 2px;
     margin-right: 0.5em;
+}
+
+.forgot_password_success_message{
+    text-align: center;
+    margin: 15px;
+    font-size: 18px;
+    color: darkgreen;
 }

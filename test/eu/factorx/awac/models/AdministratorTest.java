@@ -8,12 +8,11 @@
  * Author Gaston Hollands
  *
  */
- 
+
 package eu.factorx.awac.models;
 
 import eu.factorx.awac.models.*;
 import eu.factorx.awac.models.account.Address;
-import eu.factorx.awac.models.account.Administrator;
 
 import org.junit.*;
 
@@ -60,9 +59,9 @@ public class AdministratorTest extends BaseModelTest {
 //		play.Logger.info("isEmbeddedNewOrDirty?" + admin._ebean_isEmbeddedNewOrDirty());
 //		admin.setAddress(address);
 //
-		//play.Logger.info("isEmbeddedNewOrDirty?" + admin._ebean_isEmbeddedNewOrDirty());
-		//((Person)admin)._ebean_setEmbeddedLoaded();
-		//play.Logger.info("isEmbeddedNewOrDirty?" + admin._ebean_isEmbeddedNewOrDirty());
+	//play.Logger.info("isEmbeddedNewOrDirty?" + admin._ebean_isEmbeddedNewOrDirty());
+	//((Person)admin)._ebean_setEmbeddedLoaded();
+	//play.Logger.info("isEmbeddedNewOrDirty?" + admin._ebean_isEmbeddedNewOrDirty());
 //		admin.update();
 //
 //        Administrator find = Administrator.find.where().eq("identifier", "admin001id").findUnique();
@@ -70,12 +69,12 @@ public class AdministratorTest extends BaseModelTest {
 //        assertEquals("admin001name",find.lastname);
 //        assertNotNull(find.address);
 //		assertEquals("Emile Delva",find.address.street);
-		
-		//play.Logger.info ("address street : " + find.address.street);
-		//play.Logger.info ("address postalcode : " + find.address.postalcode);
-		//play.Logger.info ("address country: " + find.address.country);
-		//play.Logger.info ("address city : " + find.address.city);
-		
+
+	//play.Logger.info ("address street : " + find.address.street);
+	//play.Logger.info ("address postalcode : " + find.address.postalcode);
+	//play.Logger.info ("address country: " + find.address.country);
+	//play.Logger.info ("address city : " + find.address.city);
+
 
 //    } // end of test method
 
