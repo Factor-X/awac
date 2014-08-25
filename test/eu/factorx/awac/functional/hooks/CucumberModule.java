@@ -10,7 +10,7 @@ import static play.test.Helpers.*;
 
 public class CucumberModule extends AbstractModule {
 	private static int PORT = 9000;
-	private static String DOMAIN = "awac";
+	private static String DOMAIN = "awac/enterprise";
 
 	//private TestServer testServer = testServer(PORT, fakeApplication(inMemoryDatabase()));
 

@@ -125,6 +125,9 @@ echo "update account set is_admin = true from administrator where administrator.
 # remove administrator table
 echo "drop table administrator;" >> /tmp/migration/migration_script.sql
 
+# remove administrator table
+echo "alter table person add column default_language character varying(255) not null default 'FR';" >> /tmp/migration/migration_script.sql
+
 
 # execute the script
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W

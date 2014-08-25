@@ -36,7 +36,8 @@ POST    /municipality/registration                     @eu.factorx.awac.controll
 #
 # Email Service
 #
-POST    /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET    /email/send                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET    /email/sendComplete                             @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
 
 #
 # Javascript routing

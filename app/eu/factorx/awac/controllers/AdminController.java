@@ -72,7 +72,7 @@ public class AdminController extends Controller {
 	@Security.Authenticated(SecuredController.class)
 	public Result resetTranslations() {
 		// remove old translations code labels
-		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY, CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES);
+		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY, CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		// reset code labels cache
 		codeLabelService.resetCache();
 		// import new translations code labels

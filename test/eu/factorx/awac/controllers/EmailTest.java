@@ -8,7 +8,7 @@
  * Author Gaston Hollands
  *
  */
- 
+
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,35 +42,35 @@ import static play.test.Helpers.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmailTest extends AbstractBaseModelTest {
 
-  	@Test
+	@Test
 	public void _001_submitActionSuccess() {
 
-	// try to get a bash env
-	String smtpPassword = Configuration.root().getString("mail.smtp.password");
-	assertNotNull(smtpPassword);
+		// try to get a bash env
+		String smtpPassword = Configuration.root().getString("mail.smtp.password");
+		assertNotNull(smtpPassword);
 
-	// Fake request
-	FakeRequest fr = new FakeRequest();
+		// Fake request
+		FakeRequest fr = new FakeRequest();
 //	fr.withHeader("Content-type", "application/json");
 //	fr.withJsonBody(node);
 
-	// Call controller action
-    Result result = callAction(
-        eu.factorx.awac.controllers.routes.ref.EmailController.send("gaston.hollands@factorx.eu","AWAC Registration Confirmation","Need to http://localhost:9000/awac/confirm/"+"1"),
-		  fr
-	); // callAction
+		// Call controller action
+		Result result = callAction(
+				eu.factorx.awac.controllers.routes.ref.EmailController.send("gaston.hollands@factorx.eu", "AWAC Registration Confirmation", "Need to http://localhost:9000/awac/confirm/" + "1"),
+				fr
+		); // callAction
 
-	// wait some time to be sure AKKA actor has time to send the message
+		// wait some time to be sure AKKA actor has time to send the message
 
-	try {
-		Thread.sleep(10000);
-	} catch (InterruptedException e) {
-		e.printStackTrace();
-	}
-	// test results
-	// expecting an HTTP 200 return code
-    assertEquals(200, status(result));
-  } // end of authenticateSuccess test
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		// test results
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
+	} // end of authenticateSuccess test
 
 }
 

@@ -31,6 +31,8 @@ public class TranslationImporter extends WorkbookDataImporter {
 		importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);
 		importTranslations(wbSheets.get("INTERFACE"), CodeList.TRANSLATIONS_INTERFACE);
 		importTranslations(wbSheets.get("ERROR_MESSAGES"), CodeList.TRANSLATIONS_ERROR_MESSAGES);
+		importTranslations(wbSheets.get("EMAIL_MESSAGES"), CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
 	}
 
 	private void importTranslations(Sheet sheet, CodeList codeList) {

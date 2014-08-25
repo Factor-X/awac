@@ -99,7 +99,7 @@ angular
                 return
             else
                 #display the error message
-                messageFlash.displayError data.message
+                messageFlash.displayError result.data.message
                 #disactive loading mode
                 $scope.isLoading = false
                 return

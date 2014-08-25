@@ -62,7 +62,7 @@ public class AuthenticationController extends Controller {
 
 			Account account = securedController.getCurrentUser();
 
-			if(account.getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
+			if (account.getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
 				return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
 			}
 
@@ -74,8 +74,6 @@ public class AuthenticationController extends Controller {
 	// authenticate action cf routes
 	@Transactional(readOnly = false)
 	public Result authenticate() {
-
-
 
 
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
@@ -102,36 +100,35 @@ public class AuthenticationController extends Controller {
 		//control interface
 		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
 
-		if(interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())){
+		if (interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())) {
 			//use the same message for both login and password error
 			//TODO translate
-			return unauthorized(new ExceptionsDTO("This account is not for "+interfaceTypeCode.getKey()+" but for "+account.getInterfaceCode().getKey()+". Please switch calculator and retry."));
+			return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getInterfaceCode().getKey() + ". Please switch calculator and retry."));
 		}
 
 		//control acitf
-		if(!account.getActive()){
+		if (!account.getActive()) {
 			//TODO translate
 			return unauthorized(new ExceptionsDTO("Votre compte est actuellement suspendue. Contactez votre administrateur."));
 		}
 
 		//control change password
-		if(account.getNeedChangePassword()){
+		if (account.getNeedChangePassword()) {
 
-			if(connectionFormDTO.getNewPassword()!=null){
+			if (connectionFormDTO.getNewPassword() != null) {
 
 				//TODO encrypt password
 				account.setPassword(connectionFormDTO.getNewPassword());
 				account.setNeedChangePassword(false);
 				accountService.saveOrUpdate(account);
-			}
-			else {
+			} else {
 				//use the same message for both login and password error
 				return unauthorized(new MustChangePasswordExceptionsDTO());
 			}
 		}
 
 		//if the login and the password are ok, refresh the session
-		securedController.storeIdentifier(account.getIdentifier());
+		securedController.storeIdentifier(account);
 
 		//convert and send it
 		LoginResultDTO dto = conversionService.convert(account, LoginResultDTO.class);
@@ -151,7 +148,7 @@ public class AuthenticationController extends Controller {
 
 
 	@Transactional(readOnly = false)
-	public Result forgotPassword(){
+	public Result forgotPassword() {
 
 		ForgotPasswordDTO dto = extractDTOFromRequest(ForgotPasswordDTO.class);
 
@@ -159,29 +156,27 @@ public class AuthenticationController extends Controller {
 
 		Account account;
 
-		if(dto.getIdentifier().contains("@")){
+		if (dto.getIdentifier().contains("@")) {
 			Person person = personService.getByEmail(dto.getIdentifier().toLowerCase());
 
-			if(person != null ){
+			if (person != null) {
 				account = accountService.findByEmailAndInterfaceCode(dto.getIdentifier().toLowerCase(), interfaceTypeCode);
 
-				if(account == null){
+				if (account == null) {
 					return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_BAD_INTERFACE));
 				}
 
-			}
-			else{
+			} else {
 				return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
 			}
 
 
-		}
-		else{
+		} else {
 			account = accountService.findByIdentifier(dto.getIdentifier());
 		}
 
 
-		if(account == null){
+		if (account == null) {
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
 		}
 
@@ -189,7 +184,11 @@ public class AuthenticationController extends Controller {
 		String password = KeyGenerator.generateRandomPassword(10);
 
 		//generate email
-		EmailMessage emailMessage = new EmailMessage(account.getPerson().getEmail(), "New password", "blabla your new password : "+password);
+		EmailMessage emailMessage = new EmailMessage(account.getPerson().getEmail(),
+				"New password", "blabla your new password : " + password,
+				account.getInterfaceCode(),
+				account.getPerson().getDefaultLanguage());
+
 		emailService.send(emailMessage);
 
 		//save new password
