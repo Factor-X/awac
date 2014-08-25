@@ -30,11 +30,11 @@ public class BaseActivityDataAE_BAD31I extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA254Answer = answersByCode.get(QuestionCode.A254);
 				QuestionAnswer questionA255Answer = answersByCode.get(QuestionCode.A255);
-				QuestionAnswer questionA263Answer = answersByCode.get(QuestionCode.A263);
+				QuestionAnswer questionA264Answer = answersByCode.get(QuestionCode.A264);
 
 				if (questionA254Answer == null ||
 						questionA255Answer == null ||
-						questionA263Answer == null) {
+						questionA264Answer == null) {
 					continue;
 				}
 
