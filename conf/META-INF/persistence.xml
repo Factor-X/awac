@@ -33,6 +33,7 @@
         <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.InterfaceTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
