@@ -12,7 +12,6 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.account.SystemAdministrator;
 import eu.factorx.awac.service.AccountService;
@@ -51,7 +50,7 @@ public class SecuredController extends Security.Authenticator {
 	}
 
 	public boolean isAdministrator() {
-		return (((Account)getCurrentUser()) instanceof Administrator);
+		return ((Account)getCurrentUser()).getIsAdmin();
 	}
 
 	public boolean isSystemAdministrator() {

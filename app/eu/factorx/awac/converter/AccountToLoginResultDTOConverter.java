@@ -3,7 +3,6 @@ package eu.factorx.awac.converter;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,6 @@ import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
@@ -38,9 +37,6 @@ public class RegistrationController  extends Controller {
 
 	@Autowired
 	private OrganizationService organizationService;
-
-	@Autowired
-	private AdministratorService administratorService;
 
 	@Autowired
 	private ConversionService conversionService;
@@ -127,7 +123,7 @@ public class RegistrationController  extends Controller {
 		return ok(resultDto);
 	}
 
-	private Administrator createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
+	private Account createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
 
 		//control identifier
 		Account account = accountService.findByIdentifier(personDTO.getIdentifier());
@@ -156,10 +152,11 @@ public class RegistrationController  extends Controller {
 
 		//create account
 		//TODO encode password !!
-		Administrator administrator = new Administrator(organization,person,personDTO.getIdentifier(), password, interfaceCode);
+		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password, interfaceCode);
+		administrator.setIsAdmin(true);
 
 		//save account
-		administratorService.saveOrUpdate(administrator);
+		accountService.saveOrUpdate(administrator);
 
 		return administrator;
 	}

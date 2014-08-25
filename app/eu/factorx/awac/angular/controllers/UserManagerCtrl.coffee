@@ -17,33 +17,35 @@ angular
         return $scope.$root.currentPerson
 
     $scope.activeUser = (user) ->
-        data = {}
-        data.email = user.email
-        data.interfaceName = $scope.$root.instanceName
-        data.isActive = !user.isActive
+        if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email
+            data = {}
+            data.email = user.email
+            data.interfaceName = $scope.$root.instanceName
+            data.isActive = !user.isActive
 
-        $scope.isLoading['isActive'][user] = true
+            $scope.isLoading['isActive'][user] = true
 
-        downloadService.postJson "/awac/user/activeAccount", data, (result) ->
-            if result.success
-                user.isActive = !user.isActive
-                $scope.isLoading['isActive'][user] = false
-            else
-                $scope.isLoading['isActive'][user] = false
-                #todo display error message
+            downloadService.postJson "/awac/user/activeAccount", data, (result) ->
+                if result.success
+                    user.isActive = !user.isActive
+                    $scope.isLoading['isActive'][user] = false
+                else
+                    $scope.isLoading['isActive'][user] = false
+                    #todo display error message
 
 
     $scope.isAdminUser = (user) ->
-        data = {}
-        data.email = user.email
-        data.interfaceName = $scope.$root.instanceName
-        data.isAdmin = user.isAdmin
+        if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email
+            data = {}
+            data.email = user.email
+            data.interfaceName = $scope.$root.instanceName
+            data.isAdmin = user.isAdmin
 
-        $scope.isLoading['admin'][user] = true
+            $scope.isLoading['admin'][user] = true
 
-        downloadService.postJson "/awac/user/isAdminAccount", data, (result) ->
-            if result.success
-                $scope.isLoading['admin'][user] = false
-            else
-                $scope.isLoading['admin'][user] = false
-                #todo display error message
+            downloadService.postJson "/awac/user/isAdminAccount", data, (result) ->
+                if result.success
+                    $scope.isLoading['admin'][user] = false
+                else
+                    $scope.isLoading['admin'][user] = false
+                    #todo display error message

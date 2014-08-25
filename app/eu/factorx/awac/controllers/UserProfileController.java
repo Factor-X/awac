@@ -2,26 +2,18 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ActiveAccountDTO;
 import eu.factorx.awac.dto.myrmex.post.AdminAccountDTO;
-import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.AdministratorService;
 import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.util.BusinessErrorType;
 
-import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -42,12 +34,6 @@ public class UserProfileController extends Controller {
 
 	@Autowired
 	private AccountService accountService;
-
-	@Autowired
-	private OrganizationService organizationService;
-
-	@Autowired
-	private AdministratorService  administratorService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -169,17 +155,9 @@ public class UserProfileController extends Controller {
 			throw new MyrmexRuntimeException("");
 		}
 
-		if(account instanceof  Administrator && !dto.getIsAdmin()){
-			Administrator administrator = administratorService.findById(account.getId());
+		account.setIsAdmin(dto.getIsAdmin());
 
-			administratorService.remove(administrator);
-		}
-		else if (!(account instanceof  Administrator) && dto.getIsAdmin()){
-
-			Administrator administrator = new Administrator(account.getId());
-
-			administratorService.saveOrUpdate(administrator);
-		}
+		accountService.saveOrUpdate(account);
 
 		return ok(new ReturnDTO());
 	}

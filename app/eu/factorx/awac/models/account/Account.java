@@ -66,6 +66,9 @@ public class Account extends AuditedAbstractEntity {
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "interface_code")) })
 	private InterfaceTypeCode interfaceCode;
 
+	@Column(nullable = false, name = "is_admin")
+	private Boolean isAdmin = false;
+
 	public Account() {
 	}
 
@@ -77,7 +80,7 @@ public class Account extends AuditedAbstractEntity {
 		this.interfaceCode = interfaceCode;
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode) {
+	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode, Boolean isAdmin) {
 		this.organization = organization;
 		this.person = person;
 		this.identifier = identifier;
@@ -85,6 +88,7 @@ public class Account extends AuditedAbstractEntity {
 		this.active = active;
 		this.needChangePassword = needChangePassword;
 		this.interfaceCode = interfaceCode;
+		this.isAdmin = isAdmin;
 	}
 
 	public Organization getOrganization() {
@@ -143,6 +147,14 @@ public class Account extends AuditedAbstractEntity {
 		this.interfaceCode = interfaceCode;
 	}
 
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return "Account{" +
@@ -153,6 +165,7 @@ public class Account extends AuditedAbstractEntity {
 				", active=" + active +
 				", needChangePassword=" + needChangePassword +
 				", interfaceCode=" + interfaceCode +
+				", isAdmin=" + isAdmin +
 				'}';
 	}
 }
