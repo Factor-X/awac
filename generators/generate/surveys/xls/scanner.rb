@@ -37,16 +37,42 @@ class Scanner
 
         @logger.info 'READING ' + filename + '::' + sheetname
 
-        @logger.debug 'Fetching rows...'
+        @logger.info 'Fetching rows...'
         fetch_rows
 
-        @logger.debug 'Parsing forms, questions sets and questions...'
+        @logger.info 'Parsing forms, questions sets and questions...'
         parse_forms_question_sets_and_questions
 
-        @logger.debug 'Parsing bads...'
+        @logger.info 'Validating questions...'
+        validate_questions
+
+        @logger.info 'Validating question sets...'
+        validate_question_sets
+
+        @logger.info 'Parsing bads...'
         read_bads
 
         self
+    end
+
+    def validate_question_sets
+        for qs in @question_sets
+            begin
+                qs.validate
+            rescue Exception => e
+                @logger.error e.message
+            end
+        end
+    end
+
+    def validate_questions
+        for q in @questions
+            begin
+                q.validate
+            rescue Exception => e
+                @logger.error e.message
+            end
+        end
     end
 
     def fetch_rows
@@ -87,7 +113,7 @@ class Scanner
                 m = /^(.+):\s*(.*)$/.match(form.to_s)
                 if m != nil
                     current_form        = Form.new
-                    current_form.number = (m[1].gsub /^TAB/, '').to_i
+                    current_form.number = /([0-9]+)/.match(m[1])[1].to_i
                     current_form.name   = m[2].strip
                     current_form.code   = m[1].strip
                     @forms << current_form
