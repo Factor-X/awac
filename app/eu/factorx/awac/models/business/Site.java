@@ -1,14 +1,14 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractEntity;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import eu.factorx.awac.models.AuditedAbstractEntity;
+
 @Entity
 @Table(name = "site")
-public class Site extends AbstractEntity {
+public class Site extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,4 +43,12 @@ public class Site extends AbstractEntity {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "Site{" +
+				super.toString()+
+				"organization=" + organization +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

@@ -1,16 +1,33 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.service.OrganizationService;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.ScopeService;
 
 @Repository
 public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<Organization> implements
 		OrganizationService {
+
+	@Autowired
+	private ScopeService scopeService;
+
+	@Override
+	public Organization saveOrUpdate(final Organization entity) {
+		Organization organization = super.saveOrUpdate(entity);
+
+		Scope scope = new Scope(organization);
+		scopeService.saveOrUpdate(scope);
+
+		return organization;
+	}
 
 	public Organization findByName(String name){
 		List<Organization> resultList = JPA.em().createNamedQuery(Organization.FIND_BY_NAME, Organization.class)

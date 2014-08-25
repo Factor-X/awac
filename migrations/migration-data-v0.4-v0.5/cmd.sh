@@ -116,9 +116,21 @@ echo "ALTER TABLE account ALTER COLUMN id SET DEFAULT nextval('account_id_seq'::
 # account.person_id = not null
 echo "alter table account alter account set not null;" >> /tmp/migration/migration_script.sql
 
+# create isAdmin to account
+echo "alter table account add column is_admin Boolean not null default false;" >> /tmp/migration/migration_script.sql
+
+# update administrator
+echo "update account set is_admin = true from administrator where administrator.id = account.id;" >> /tmp/migration/migration_script.sql
+
+# remove administrator table
+echo "drop table administrator;" >> /tmp/migration/migration_script.sql
+
 
 # execute the script
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
 
 # execute the units refactoring
 cat /migrations/migration-data-v0.4-v0.5/unit_refactoring.sql | psql -h localhost -U play -d awac -W
+
+# add technical segment columns to tables where it is not present
+cat /migrations/migration-data-v0.4-v0.5/add_technical_segment.sql | psql -h localhost -U play -d awac -W

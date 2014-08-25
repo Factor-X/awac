@@ -39,15 +39,6 @@
 
                     <td>
 
-
-                        <!-- site manager button -->
-                        <button type="button"
-                                class="button user_manage"
-                                ng-bind-html="'SITE_MANAGER_BUTTON' | translate"
-                                ng-click="nav('/site_manager')"
-                                ng-class="{'selected': isMenuCurrentlySelected('/site_manager') == true}">
-                        </button>
-
                         <!-- user manager button -->
                         <button type="button"
                                 class="button user_manage"
@@ -85,7 +76,7 @@
             <div class="wallonie_logo"></div>
             <div class="awac_logo"></div>
             <div>
-                <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
+                <div class="calculateur_type" ng-bind-html="'TITLE_MUNICIPALITY' | translate"></div>
                 <div class="entreprise_name">{{ $root.organization.name }}</div>
             </div>
 
@@ -95,13 +86,6 @@
             <div class="data_date">
                 <div ng-bind-html="'PERIOD_DATA' | translate"></div>
                 <select ng-options="p.key as p.label for p in $root.periods" ng-model="periodKey"></select>
-            </div>
-
-            <div class="big_separator"></div>
-
-            <div class="data_date_compare">
-                <div>Site sélectionné</div>
-                <select ng-options="s.id as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
             </div>
 
             <div class="big_separator"></div>
@@ -134,34 +118,29 @@
                         <button type="button" class="button verification" mm-not-implemented>Vérification</button>
                     </div>
                     <div class="menu">
+                        <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab1') == true}" ng-click="nav('/municipality-tab1')">
+                            <div class="tab-title" ng-bind-html="'TAB_C1' | translate"></div>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB_C1')"></mm-awac-tab-progress-bar>
+                            <div class="menu_arrow"></div>
+                        </button>
                         <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab2') == true}" ng-click="nav('/municipality-tab2')">
-                            <div class="tab-title" ng-bind-html="'TAB2' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB2')"></mm-awac-tab-progress-bar>
+                            <div class="tab-title" ng-bind-html="'TAB_C2' | translate"></div>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB_C2')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab3')  == true}" ng-click="nav('/municipality-tab3')">
-                            <div class="tab-title" ng-bind-html="'TAB3' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB3')"></mm-awac-tab-progress-bar>
+                            <div class="tab-title" ng-bind-html="'TAB_C3' | translate"></div>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB_C3')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab4') == true}" ng-click="nav('/municipality-tab4')">
-                            <div class="tab-title" ng-bind-html="'TAB4' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB4')"></mm-awac-tab-progress-bar>
+                            <div class="tab-title" ng-bind-html="'TAB_C4' | translate"></div>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB_C4')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                         <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab5') == true}" ng-click="nav('/municipality-tab5')">
-                            <div class="tab-title" ng-bind-html="'TAB5' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB5')"></mm-awac-tab-progress-bar>
-                            <div class="menu_arrow"></div>
-                        </button>
-                        <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab6') == true}" ng-click="nav('/municipality-tab6')">
-                            <div class="tab-title" ng-bind-html="'TAB6' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB6')"></mm-awac-tab-progress-bar>
-                            <div class="menu_arrow"></div>
-                        </button>
-                        <button class="button" ng-class="{'menu_current': isMenuCurrentlySelected('/municipality-tab7') == true}" ng-click="nav('/municipality-tab7')">
-                            <div class="tab-title" ng-bind-html="'TAB7' | translate"></div>
-                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB7')"></mm-awac-tab-progress-bar>
+                            <div class="tab-title" ng-bind-html="'TAB_C5' | translate"></div>
+                            <mm-awac-tab-progress-bar ng-value="getProgress('TAB_C5')"></mm-awac-tab-progress-bar>
                             <div class="menu_arrow"></div>
                         </button>
                     </div>

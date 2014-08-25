@@ -62,7 +62,11 @@ public abstract class ActivityResultContributor {
 			if (numericAnswerValue.getUnit() == null) {
 				res = numericAnswerValue.doubleValue();
 			} else {
-				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit);
+				Integer year = null;
+				if (UnitCategoryCode.CURRENCY.equals(numericAnswerValue.getUnit().getCategory().getUnitCategoryCode())) {
+					year = Integer.valueOf(questionAnswer.getQuestionSetAnswer().getPeriod().getPeriodCode().getKey());
+				}
+				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit, year);
 			}
 		} else {
 			throw new RuntimeException("Cannot convert " + answerValue + " to Double value");
@@ -105,6 +109,10 @@ public abstract class ActivityResultContributor {
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
 		return unitConversionService.convert(value, unitFrom, toUnit, null);
+	}
+
+	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit, Integer year) {
+		return unitConversionService.convert(value, unitFrom, toUnit, year);
 	}
 
 	protected Map<QuestionCode, QuestionAnswer> byQuestionCode(List<QuestionAnswer> questionAnswers) {

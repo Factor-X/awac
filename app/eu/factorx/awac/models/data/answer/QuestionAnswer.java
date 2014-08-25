@@ -1,24 +1,28 @@
 package eu.factorx.awac.models.data.answer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "question_answer")
 @NamedQueries({@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),})
 public class QuestionAnswer extends AuditedAbstractEntity {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @param codes : a Collection of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
-	private static final long serialVersionUID = 1L;
+
+	public static final String QUESTION_SET_ANSWER_PROPERTY = "questionSetAnswer";
 
 	// ATTRIBUTES
 	@ManyToOne(optional = false)
@@ -94,7 +98,7 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 	public void updateAnswerValues(List<AnswerValue> answerValues) {
 		this.getAnswerValues().clear();
 		this.getAnswerValues().addAll(answerValues);
-		this.getTechnicalSegment().update();
+		this.preUpdate();
 	}
 
 	@Override

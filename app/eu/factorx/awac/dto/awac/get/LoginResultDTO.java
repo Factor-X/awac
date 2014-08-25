@@ -17,6 +17,13 @@ public class LoginResultDTO extends DTO {
 	public LoginResultDTO() {
 	}
 
+	public LoginResultDTO(PersonDTO person, String defaultPeriod, List<PeriodDTO> availablePeriods, OrganizationDTO organization) {
+		this.person = person;
+		this.defaultPeriod = defaultPeriod;
+		this.availablePeriods = availablePeriods;
+		this.organization = organization;
+	}
+
 	public PersonDTO getPerson() {
 		return person;
 	}
@@ -47,5 +54,15 @@ public class LoginResultDTO extends DTO {
 
 	public void setOrganization(OrganizationDTO organization) {
 		this.organization = organization;
+	}
+
+	@Override
+	public String toString() {
+		return "LoginResultDTO{" +
+				"person=" + person +
+				", defaultPeriod='" + defaultPeriod + '\'' +
+				", availablePeriods=" + availablePeriods +
+				", organization=" + organization +
+				'}';
 	}
 }

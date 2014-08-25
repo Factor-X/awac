@@ -1404,7 +1404,8 @@ h1 {
 
 *:disabled {
     opacity: 0.75;
-    color: black;
+    color: #f5f4f2;
+    background-color: #333333;
 }
 
 .condition-false {
@@ -1452,12 +1453,12 @@ h1 {
     background: url('../images/delete.png') center top no-repeat;
     width: 13px;
     height: 13px;
-    cursor: pointer;
     display: inline-block;
 }
 
-.button_delete:hover {
+.is_admin .button_delete:hover {
     background-position: center bottom;
+    cursor: pointer;
 }
 
 .user_deleted .button_delete {

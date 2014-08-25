@@ -1,0 +1,121 @@
+// mobilite AC60
+mm-awac-section(title-code="AC60_TITLE")
+
+    mm-awac-question(question-code="AC61")
+
+    // transport routier AC62
+    mm-awac-sub-title(question-code="AC62")
+    mm-awac-question(question-code="AC63")
+
+    mm-awac-sub-title(question-code="AC64")
+
+
+    .element_content
+        .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+        .method
+            tabset
+                tab.tab-color-lightgreen(active="getTab(1,1).active")
+                    tab-heading
+                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
+                        span(ng-bind-html="'AC65_TITLE' | translate")
+                    .sub_block.tab-color-lightgreen
+                        .element_table
+
+                            // véhicule AC66
+                            mm-awac-repetition-name(question-code="AC66")
+                            mm-awac-repetition-question(question-set-code="AC66", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC66')")
+
+                                mm-awac-question(question-code="AC67", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC68", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC69", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC68',itLevel1).value == '2'")
+                                mm-awac-question(question-code="AC70", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC71", ng-repetition-map="itLevel1")
+
+                            button.button.add-repetition-button(ng-click="addIteration('AC66')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'AC66_LOOPDESC' | translate")
+
+                tab.tab-color-green(active="getTab(1,2).active")
+                    tab-heading
+                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
+                        span(ng-bind-html="'AC72_TITLE' | translate")
+                    .sub_block.tab-color-green
+                        .element_table
+
+                            //kilomètrage AC 73
+                            mm-awac-repetition-name(question-code="AC73")
+                            mm-awac-repetition-question(question-set-code="AC73", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC73')")
+
+                                mm-awac-question(question-code="AC74", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC75", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC76", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC75',itLevel1).value == '2'")
+                                mm-awac-question(question-code="AC77", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC78", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC79", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC78',itLevel1).value == '1' || getAnswer('AC78',itLevel1).value == '2' ")
+                                mm-awac-question(question-code="AC80", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC78',itLevel1).value == '5' || getAnswer('AC78',itLevel1).value == '8'|| getAnswer('AC78',itLevel1).value == '9' ")
+                                mm-awac-question(question-code="AC81", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC78',itLevel1).value == '6' || getAnswer('AC78',itLevel1).value == '7' ")
+                                mm-awac-question(question-code="AC82", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC78',itLevel1).value == '3' || getAnswer('AC78',itLevel1).value == '4' ")
+                                mm-awac-question(question-code="AC83", ng-repetition-map="itLevel1")
+
+                            button.button.add-repetition-button(ng-click="addIteration('AC73')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'AC73_LOOPDESC' | translate")
+
+                tab.tab-color-yellow(active="getTab(1,3).active")
+                    tab-heading
+                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,3)")
+                        span(ng-bind-html="'A84_TITLE' | translate")
+                    .sub_block.tab-color-yellow
+                        .element_table
+                            
+                            // dépense AC 85
+                            mm-awac-repetition-name(question-code="AC85")
+                            mm-awac-repetition-question(question-set-code="AC85", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC85')")
+                                
+                                mm-awac-question(question-code="AC86", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC87", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC88", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC89", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC90", ng-repetition-map="itLevel1")
+                                mm-awac-question(question-code="AC91", ng-repetition-map="itLevel1",ng-condition="getAnswer('AC90',itLevel1).value == '2'")
+                            
+                            button.button.add-repetition-button(ng-click="addIteration('AC85')", type="button")
+                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                span(ng-bind-html="'AC85_LOOPDESC' | translate")
+
+    //transport public AC92
+    mm-awac-sub-title(question-code="AC92")
+    mm-awac-sub-sub-title(question-code="AC93")
+
+    mm-awac-question(question-code="AC94")
+    mm-awac-question(question-code="AC95")
+    mm-awac-question(question-code="AC96")
+    mm-awac-question(question-code="AC97")
+
+    // déplacements professionels AC98
+    mm-awac-sub-title(question-code="AC98")
+
+    mm-awac-question(question-code="AC99")
+    mm-awac-question(question-code="AC100")
+    mm-awac-question(question-code="AC101")
+    mm-awac-question(question-code="AC102")
+    mm-awac-question(question-code="AC103")
+    mm-awac-question(question-code="AC104")
+    mm-awac-question(question-code="AC105")
+        
+    // déplacement avion AC106                                  
+    mm-awac-sub-title(question-code="AC106")
+    
+    mm-awac-repetition-name(question-code="AC107")
+    mm-awac-repetition-question(question-set-code="AC107", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC107')")
+
+        mm-awac-question(question-code="AC108", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC109", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC110", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC111", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC112", ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="AC113", ng-repetition-map="itLevel1")
+
+    button.button.add-repetition-button(ng-click="addIteration('AC107')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'AC107_LOOPDESC' | translate")

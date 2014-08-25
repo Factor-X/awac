@@ -5,9 +5,6 @@ import javax.persistence.Embeddable;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import play.mvc.Http.Context;
-import play.mvc.Http.Session;
-
 @Embeddable
 public class TechnicalSegment {
 
@@ -21,8 +18,16 @@ public class TechnicalSegment {
 
 	private String lastUpdateUser;
 
-	public TechnicalSegment() {
+	protected TechnicalSegment() {
 		super();
+	}
+
+	public TechnicalSegment(DateTime creationDate, String creationUser, DateTime lastUpdateDate, String lastUpdateUser) {
+		super();
+		this.creationDate = creationDate;
+		this.creationUser = creationUser;
+		this.lastUpdateDate = lastUpdateDate;
+		this.lastUpdateUser = lastUpdateUser;
 	}
 
 	public DateTime getCreationDate() {
@@ -55,30 +60,6 @@ public class TechnicalSegment {
 
 	public void setLastUpdateUser(String lastUpdateUser) {
 		this.lastUpdateUser = lastUpdateUser;
-	}
-
-	public void update() {
-		this.lastUpdateDate = DateTime.now();
-		this.lastUpdateUser = getCurrentUser();
-	}
-
-	private static String getCurrentUser() {
-		if (Context.current.get() == null) {
-			return "TECH";
-		}
-		Session session = Context.current().session();
-		return session.get("identifier");
-	}
-
-	public static TechnicalSegment newInstance() {
-		TechnicalSegment res = new TechnicalSegment();
-		DateTime now = DateTime.now();
-		String creationUser = getCurrentUser();
-		res.creationDate = now;
-		res.creationUser = creationUser;
-		res.lastUpdateDate = now;
-		res.lastUpdateUser = creationUser;
-		return res;
 	}
 
 	@Override

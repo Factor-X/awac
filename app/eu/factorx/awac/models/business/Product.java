@@ -1,14 +1,14 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractEntity;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import eu.factorx.awac.models.AuditedAbstractEntity;
+
 @Entity
 @Table(name = "product")
-public class Product extends AbstractEntity {
+public class Product extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

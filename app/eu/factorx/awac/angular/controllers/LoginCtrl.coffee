@@ -1,6 +1,10 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope,downloadService, $location, messageFlash, $compile,$timeout) ->
+.controller "LoginCtrl", ($scope,downloadService, $location, messageFlash, $compile,$timeout,modalService) ->
+
+
+    $scope.loading = false
+
     $scope.loginInfo =
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
         fieldType: "text"
@@ -48,11 +52,19 @@ angular
             if result.success
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess "You are now connected"
-            else
-                #display the error message
-                messageFlash.displayError result.data.message
-                #disactive loading mode
                 $scope.isLoading = false
+            else
+                $scope.isLoading = false
+                if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
+                    # must change password
+                    params =
+                        login : $scope.loginInfo.field
+                        password : $scope.passwordInfo.field
+                    modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
+                else
+                    #display the error message
+                    messageFlash.displayError result.data.message
+                    #disactive loading mode
 
         return false
 
@@ -65,6 +77,7 @@ angular
         downloadService.postJson '/awac/forgotPassword', { identifier: $scope.forgotPasswordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
             if result.success
                 messageFlash.displaySuccess translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS')
+                $scope.isLoading = false
                 return
             else
                 #display the error message

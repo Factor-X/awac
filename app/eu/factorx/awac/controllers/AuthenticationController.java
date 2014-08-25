@@ -15,6 +15,7 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
@@ -71,7 +72,7 @@ public class AuthenticationController extends Controller {
 
 
 	// authenticate action cf routes
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	public Result authenticate() {
 
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
@@ -100,12 +101,34 @@ public class AuthenticationController extends Controller {
 
 		if(interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())){
 			//use the same message for both login and password error
+			//TODO translate
 			return unauthorized(new ExceptionsDTO("This account is not for "+interfaceTypeCode.getKey()+" but for "+account.getInterfaceCode().getKey()+". Please switch calculator and retry."));
 		}
 
+		//control acitf
+		if(!account.getActive()){
+			//TODO translate
+			return unauthorized(new ExceptionsDTO("Votre compte est actuellement suspendue. Contactez votre administrateur."));
+		}
+
+		//control change password
+		if(account.getNeedChangePassword()){
+
+			if(connectionFormDTO.getNewPassword()!=null){
+
+				//TODO encrypt password
+				account.setPassword(connectionFormDTO.getNewPassword());
+				account.setNeedChangePassword(false);
+				accountService.saveOrUpdate(account);
+			}
+			else {
+				//use the same message for both login and password error
+				return unauthorized(new MustChangePasswordExceptionsDTO());
+			}
+		}
+
 		//if the login and the password are ok, refresh the session
-		session().clear();
-		session(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
+		securedController.storeIdentifier(account.getIdentifier());
 
 		//convert and send it
 		LoginResultDTO dto = conversionService.convert(account, LoginResultDTO.class);

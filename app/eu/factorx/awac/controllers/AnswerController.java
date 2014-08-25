@@ -180,8 +180,6 @@ public class AnswerController extends Controller {
 	@Security.Authenticated(SecuredController.class)
 	public Result setFormProgress() {
 
-		Logger.info("public Result setFormProgress(){");
-
 		FormProgressDTO formProgressDTO = extractDTOFromRequest(FormProgressDTO.class);
 
 		Period period = periodService.findByCode(new PeriodCode(formProgressDTO.getPeriod()));

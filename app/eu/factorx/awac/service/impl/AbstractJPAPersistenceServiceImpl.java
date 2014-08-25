@@ -10,7 +10,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.service.PersistenceService;
@@ -30,7 +29,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	@Override
 	public E saveOrUpdate(final E entity) {
 		if ((entity.getId() != null) && (entity instanceof AuditedAbstractEntity)) {
-			((AuditedAbstractEntity) entity).getTechnicalSegment().update();
+			((AuditedAbstractEntity) entity).preUpdate();
 		}
 		JPA.em().unwrap(Session.class).saveOrUpdate(entity);
 		return entity;
@@ -41,7 +40,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 		if (entity instanceof AuditedAbstractEntity) {
 			// Forces update of technical segment, and then of the entity...
 			// Useful in cases where only children of entity are actually updated: in a business point of view, when we called this method, we may want that the technical segment of given entity was updated.
-			((AuditedAbstractEntity) entity).getTechnicalSegment().update();
+			((AuditedAbstractEntity) entity).preUpdate();
 		}
 		return JPA.em().merge(entity);
 	}

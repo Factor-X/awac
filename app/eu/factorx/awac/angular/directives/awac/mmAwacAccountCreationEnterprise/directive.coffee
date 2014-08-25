@@ -65,7 +65,7 @@ angular
 
 
         $scope.registrationFieldValid = () ->
-            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid
+            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid && $scope.firstSiteNameInfo.isValid
                 return true
             return false
 
@@ -91,6 +91,7 @@ angular
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess "You are now connected"
+                    $scope.isLoading = false
                 else
                     #display the error message
                     messageFlash.displayError result.data.message

@@ -18,7 +18,21 @@ public class PersonDTO extends DTO {
 	@Pattern(regexp=Pattern.EMAIL)
 	private String email;
 
+	private Boolean isAdmin;
+
+	private Boolean isActive;
+
 	public PersonDTO() {
+
+	}
+
+	public PersonDTO(String identifier, String firstName, String lastName, String email, Boolean isAdmin, Boolean isActive) {
+		this.identifier = identifier;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.isAdmin = isAdmin;
+		this.isActive = isActive;
 	}
 
 	public String getIdentifier() {
@@ -51,5 +65,33 @@ public class PersonDTO extends DTO {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	@Override
+	public String toString() {
+		return "PersonDTO{" +
+				"identifier='" + identifier + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", isAdmin=" + isAdmin +
+				", isActive=" + isActive +
+				'}';
 	}
 }

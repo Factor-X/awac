@@ -15,9 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by root on 15/07/14.
- */
+
 @Component
 public class AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
 
@@ -40,6 +38,7 @@ public class AccountToLoginResultDTOConverter implements Converter<Account, Logi
 
 		//create the person
 		loginResultDTO.setPerson(accountToPersonDTOConverter.convert(account));
+
 
 		//create periodDTO
 		List<PeriodDTO> periodsDTO = new ArrayList<>();

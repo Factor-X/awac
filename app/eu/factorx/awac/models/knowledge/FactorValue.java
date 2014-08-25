@@ -1,13 +1,14 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AbstractEntity;
+import java.util.Date;
 
 import javax.persistence.*;
-import java.util.Date;
+
+import eu.factorx.awac.models.AuditedAbstractEntity;
 
 @Entity
 @Table(name = "factor_value")
-public class FactorValue extends AbstractEntity {
+public class FactorValue extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

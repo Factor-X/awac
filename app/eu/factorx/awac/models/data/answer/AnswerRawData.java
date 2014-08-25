@@ -1,7 +1,8 @@
 package eu.factorx.awac.models.data.answer;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class AnswerRawData implements Serializable {

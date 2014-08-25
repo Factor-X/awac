@@ -7,7 +7,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
 
 @Entity
@@ -18,7 +18,7 @@ import eu.factorx.awac.models.code.type.UnitCategoryCode;
 })
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class UnitCategory extends AbstractEntity {
+public class UnitCategory extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 

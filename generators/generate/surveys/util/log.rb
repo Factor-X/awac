@@ -9,6 +9,22 @@ include Term::ANSIColor
 
 # == CODE =================================================================== #
 
+
+class Logger
+    def self.custom_level(tag)
+        SEV_LABEL << tag
+        idx = SEV_LABEL.size - 1
+
+        define_method(tag.downcase.gsub(/\W+/, '_').to_sym) do |progname, &block|
+            add(idx, nil, progname, &block)
+        end
+    end
+
+    # now add levels
+    custom_level 'SECTION'
+    custom_level 'SUB_SECTION'
+end
+
 class Log
 
     @@default_level = 'DEBUG'
@@ -34,9 +50,20 @@ class Log
 
         @instance.formatter = proc { |severity, datetime, progname, msg|
             res = ""
+
+            if severity == 'SUB_SECTION'
+                res += "\n"
+            end
+
+            if severity == 'SECTION'
+                res += "\n"
+                res += ' ' * 44 + ' ' + ('=' * 80)
+                res += "\n"
+            end
+
             res += bold
             res += add_color(severity)
-            res += '[%5s]' % [severity]
+            res += '[%12s]' % [severity]
             res += reset
             res += ' '
 
@@ -58,6 +85,11 @@ class Log
 
             res += "\n"
 
+            if severity == 'SECTION'
+                res += ' ' * 44 + ' ' + ('=' * 80)
+                res += "\n"
+            end
+
             res
         }
 
@@ -78,6 +110,12 @@ class Log
         end
         if severity == 'FATAL'
             return on_red + white
+        end
+        if severity == 'SECTION'
+            return bold + white
+        end
+        if severity == 'SUB_SECTION'
+            return bold + white
         end
     end
 
@@ -101,5 +139,12 @@ class Log
         @instance.fatal(@progname) { data }
     end
 
+    def section(data)
+        @instance.section(@progname) { data }
+    end
+
+    def sub_section(data)
+        @instance.sub_section(@progname) { '== ' + data +' '+ ('=' * (80 - 4 - data.length)) }
+    end
 
 end

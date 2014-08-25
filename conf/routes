@@ -46,8 +46,7 @@ GET     /assets/javascripts/routes                     @eu.factorx.awac.controll
 #
 # Map static resources from the /public folder to the /assets URL path
 #
-GET     /assets/*file                                  controllers.Assets.at(path="/public", file)                                                       
-GET     /tests                                         eu.factorx.awac.controllers.TestController.index()                                                
+GET     /assets/*file                                  controllers.Assets.at(path="/public", file)
 
 #
 # Answer controller => used to save answer
@@ -75,7 +74,9 @@ GET     /awac/file/download/:storedFileId              @eu.factorx.awac.controll
 GET     /awac/user/profile                             @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()                           
 POST    /awac/user/profile/save                        @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()                          
 POST    /awac/user/email/save                          @eu.factorx.awac.controllers.UserProfileController.updateEmail()                                  
-POST    /awac/user/password/save                       @eu.factorx.awac.controllers.UserProfileController.updatePassword()                               
+POST    /awac/user/password/save                       @eu.factorx.awac.controllers.UserProfileController.updatePassword()
+POST    /awac/user/isAdminAccount                      @eu.factorx.awac.controllers.UserProfileController.isAdminAccount()
+POST    /awac/user/activeAccount                       @eu.factorx.awac.controllers.UserProfileController.activeAccount()
 
 #
 # Admin

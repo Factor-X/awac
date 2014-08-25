@@ -3,6 +3,7 @@ package eu.factorx.awac.dto.awac.get;
 import eu.factorx.awac.dto.DTO;
 
 public class SiteDTO extends DTO {
+
 	private Long id;
 	private String name;
 	private Long scope;

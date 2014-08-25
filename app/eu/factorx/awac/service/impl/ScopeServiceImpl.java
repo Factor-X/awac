@@ -1,15 +1,16 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.service.ScopeService;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import java.util.List;
 
 @Component
 public class ScopeServiceImpl extends AbstractJPAPersistenceServiceImpl<Scope> implements ScopeService {

@@ -59,7 +59,7 @@ angular
 
 
         $scope.registrationFieldValid = () ->
-            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid
+            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.municipalityNameInfo.isValid
                 return true
             return false
 
@@ -76,15 +76,15 @@ angular
             data.person.firstName = $scope.firstNameInfo.field
             data.person.lastName = $scope.lastNameInfo.field
             data.password = $scope.passwordInfo.field
-            data.organizationName = $scope.organizationNameInfo.field
-            data.firstSiteName = $scope.firstSiteNameInfo.field
+            data.municipalityName = $scope.municipalityNameInfo.field
 
 
             #send request
-            downloadService.postJson '/enterprise/registration', data, (result) ->
+            downloadService.postJson '/municipality/registration', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess "You are now connected"
+                    $scope.isLoading = false
                 else
                     #display the error message
                     messageFlash.displayError result.data.message

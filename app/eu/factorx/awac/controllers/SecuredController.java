@@ -12,7 +12,6 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.account.SystemAdministrator;
 import eu.factorx.awac.service.AccountService;
@@ -47,15 +46,22 @@ public class SecuredController extends Security.Authenticator {
 	@Transactional(readOnly = true)
 	public Account getCurrentUser() {
 
-		return accountService.findByIdentifier(Context.current().session().get("identifier"));
+		return accountService.findByIdentifier(Context.current().session().get(SESSION_IDENTIFIER_STORE));
 	}
 
 	public boolean isAdministrator() {
-		return (((Account)getCurrentUser()) instanceof Administrator);
+		return ((Account)getCurrentUser()).getIsAdmin();
 	}
 
 	public boolean isSystemAdministrator() {
 		return (((Account)getCurrentUser()) instanceof SystemAdministrator);
+	}
+
+	public void storeIdentifier(String identifier){
+
+		//if the login and the password are ok, refresh the session
+		Context.current().session().clear();
+		Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, identifier);
 	}
 }
 

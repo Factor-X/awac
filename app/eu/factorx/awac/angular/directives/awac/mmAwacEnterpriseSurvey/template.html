@@ -85,7 +85,7 @@
             <div class="wallonie_logo"></div>
             <div class="awac_logo"></div>
             <div>
-                <div class="calculateur_type" ng-bind-html="'TITLE' | translate"></div>
+                <div class="calculateur_type" ng-bind-html="'TITLE_ENTERPRISE' | translate"></div>
                 <div class="entreprise_name">{{ $root.organization.name }}</div>
             </div>
 
@@ -101,7 +101,7 @@
 
             <div class="data_date_compare">
                 <div>Site sélectionné</div>
-                <select ng-options="s.id as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
+                <select ng-options="s.scope as s.name for s in $root.organization.sites" ng-model="scopeId"></select>
             </div>
 
             <div class="big_separator"></div>

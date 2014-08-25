@@ -10,14 +10,14 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"), })
-public class QuestionSetAnswer extends AbstractEntity {
+public class QuestionSetAnswer extends AuditedAbstractEntity {
 
 	/**
 	 * @param scopeId
