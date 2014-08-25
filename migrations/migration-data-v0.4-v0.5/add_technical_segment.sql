@@ -3,7 +3,7 @@ BEGIN TRANSACTION READ WRITE;
 DO $$
 
 DECLARE
-  tableNames varchar[] := ARRAY['account','person','organization','product','scope','site','codesequivalence','formprogress','answer_value',
+  tableNames varchar[] := ARRAY['account','person','organization','product','scope','site','codesequivalence','code_label','formprogress','answer_value',
     'questionsetanswer','question_set','form','factor','factor_value','indicator','period','unit','unit_category','unitconversionformula'];
   tableName varchar;
 

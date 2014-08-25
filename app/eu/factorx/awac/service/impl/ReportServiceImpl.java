@@ -1,10 +1,6 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,10 +13,7 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-import eu.factorx.awac.models.reporting.BaseActivityResult;
-import eu.factorx.awac.models.reporting.Report;
-import eu.factorx.awac.models.reporting.ReportBusinessException;
+import eu.factorx.awac.models.reporting.*;
 import eu.factorx.awac.models.reporting.ReportBusinessException.ErrorType;
 import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.IndicatorService;

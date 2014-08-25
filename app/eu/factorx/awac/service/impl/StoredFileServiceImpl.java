@@ -1,12 +1,13 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.data.file.StoredFile;
-import eu.factorx.awac.service.StoredFileService;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.data.file.StoredFile;
+import eu.factorx.awac.service.StoredFileService;
 
 @Component
 public class StoredFileServiceImpl  extends AbstractJPAPersistenceServiceImpl<StoredFile> implements StoredFileService {
