@@ -24,9 +24,12 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 // import for JAXB annotations -- JAXB stack
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("account")
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, query = "select a from Account a, Person p where p.email = :email and a.person = p and a.interfaceCode = :interface_code"),
+		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a, Person p where p.email = :email and a.person = p"),
 })
 public class Account extends AuditedAbstractEntity {
 
@@ -35,6 +38,7 @@ public class Account extends AuditedAbstractEntity {
 	 */
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
 	public static final String FIND_BY_EMAIL_AND_INTERFACE_CODE = "Account.findByEmailAndInterfaceCode";
+	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
@@ -64,6 +68,9 @@ public class Account extends AuditedAbstractEntity {
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "interface_code")) })
 	private InterfaceTypeCode interfaceCode;
 
+	@Column(nullable = false, name = "is_admin")
+	private Boolean isAdmin = false;
+
 	public Account() {
 	}
 
@@ -75,7 +82,7 @@ public class Account extends AuditedAbstractEntity {
 		this.interfaceCode = interfaceCode;
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode) {
+	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode, Boolean isAdmin) {
 		this.organization = organization;
 		this.person = person;
 		this.identifier = identifier;
@@ -83,6 +90,7 @@ public class Account extends AuditedAbstractEntity {
 		this.active = active;
 		this.needChangePassword = needChangePassword;
 		this.interfaceCode = interfaceCode;
+		this.isAdmin = isAdmin;
 	}
 
 	public Organization getOrganization() {
@@ -141,6 +149,14 @@ public class Account extends AuditedAbstractEntity {
 		this.interfaceCode = interfaceCode;
 	}
 
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return "Account{" +
@@ -151,6 +167,7 @@ public class Account extends AuditedAbstractEntity {
 				", active=" + active +
 				", needChangePassword=" + needChangePassword +
 				", interfaceCode=" + interfaceCode +
+				", isAdmin=" + isAdmin +
 				'}';
 	}
 }

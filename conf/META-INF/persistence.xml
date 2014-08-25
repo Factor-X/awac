@@ -16,7 +16,6 @@
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
-        <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.business.Organization</class>
@@ -34,6 +33,7 @@
         <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.InterfaceTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
@@ -87,7 +87,7 @@
  
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
  
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />   
 
@@ -123,7 +123,6 @@
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
-        <class>eu.factorx.awac.models.account.Administrator</class>
         <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.business.Organization</class>

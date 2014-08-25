@@ -101,8 +101,8 @@ public class FactorSearchParameter {
 		return "FactorSearchParameter [indicatorCategory='" + indicatorCategory
 				+ "', activitySource='" + activitySource
 				+ "', activityType='" + activityType
-				+ "', unitIn='" + (unitIn != null ? unitIn.getSymbol() : null)
-				+ "', unitOut='" + (unitOut != null ? unitOut.getSymbol() : null) + "']";
+				+ "', unitIn='" + unitIn
+				+ "', unitOut='" + unitOut + "']";
 	}
 
 }

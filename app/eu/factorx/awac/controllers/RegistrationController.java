@@ -8,7 +8,6 @@ import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Administrator;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
@@ -38,9 +37,6 @@ public class RegistrationController  extends Controller {
 
 	@Autowired
 	private OrganizationService organizationService;
-
-	@Autowired
-	private AdministratorService administratorService;
 
 	@Autowired
 	private ConversionService conversionService;
@@ -103,12 +99,12 @@ public class RegistrationController  extends Controller {
 
 		//create organization
 		organization = new Organization(dto.getMunicipalityName());
-
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
+		Account account = null;
 		try {
-			createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.MUNICIPALITY,organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.MUNICIPALITY,organization);
 		} catch (MyrmexException e) {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
@@ -116,19 +112,18 @@ public class RegistrationController  extends Controller {
 		//create site
 		Site site = new Site(organization, dto.getMunicipalityName());
 		siteService.saveOrUpdate(site);
+		organization.getSites().add(site);
 
-		return ok(new ReturnDTO());
+		//if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account.getIdentifier());
+
+		//create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+		return ok(resultDto);
 	}
 
-	private Administrator createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
-
-		//control email
-		Person person = personService.getByEmail(personDTO.getEmail());
-
-		if(person !=null){
-			throw new MyrmexException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
-			//TODO email already existing
-		}
+	private Account createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
 
 		//control identifier
 		Account account = accountService.findByIdentifier(personDTO.getIdentifier());
@@ -136,16 +131,32 @@ public class RegistrationController  extends Controller {
 			throw new MyrmexException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
 		}
 
-		person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
 
-		personService.saveOrUpdate(person);
+		//control email
+		Person person = personService.getByEmail(personDTO.getEmail());
+
+		// if person doesn't already exist, create it
+		if(person ==null){
+			person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
+			personService.saveOrUpdate(person);
+		}
+		else{
+			//test if an account for the same calculator already exists
+			for(Account accountToTest : accountService.findByEmail(person.getEmail())){
+				if(accountToTest.getInterfaceCode().equals(interfaceCode)){
+					//TODO translate
+					throw new MyrmexException("Un compte avec le même email existe déjà pour ce calculateur");
+				}
+			}
+		}
 
 		//create account
 		//TODO encode password !!
-		Administrator administrator = new Administrator(organization,person,personDTO.getIdentifier(), password, interfaceCode);
+		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password, interfaceCode);
+		administrator.setIsAdmin(true);
 
 		//save account
-		administratorService.saveOrUpdate(administrator);
+		accountService.saveOrUpdate(administrator);
 
 		return administrator;
 	}

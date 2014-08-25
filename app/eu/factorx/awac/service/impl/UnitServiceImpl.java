@@ -1,12 +1,13 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.service.UnitService;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.service.UnitService;
 
 @Component
 public class UnitServiceImpl extends AbstractJPAPersistenceServiceImpl<Unit> implements UnitService {

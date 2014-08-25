@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static play.test.Helpers.*;
 
@@ -33,7 +35,6 @@ import static play.test.Helpers.*;
 public class RegistrationTest extends AbstractBaseModelTest {
 
 	private static final String email1 = "test@test.test";
-	private static final String email2 = "test2@test.test";
 
 	private static final String identifier1 = "testtest";
 	private static final String identifier2 = "testtest2";
@@ -41,8 +42,9 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	private static final String organizationName1 = "testOrganization";
 	private static final String organizationName2 = "test2Organization";
 
-
 	private static final String firstName = "firstTest";
+	private static final String firstName2 = "firstTest2";
+
 	private static final String lastName = "lastTest";
 	private static final String site = "testSite";
 	private static final String password = "testPassword";
@@ -96,7 +98,7 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_registrationEnterprise() {
 
-		EnterpriseAccountCreationDTO dto = createDTO(email1, identifier2, organizationName2);
+		EnterpriseAccountCreationDTO dto = createDTO(identifier2, organizationName2);
 
 		//Json node
 		JsonNode node = Json.toJson(dto);
@@ -125,7 +127,7 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	@Test
 	public void _003_registrationEnterprise() {
 
-		EnterpriseAccountCreationDTO dto = createDTO(email2, identifier1, organizationName2);
+		EnterpriseAccountCreationDTO dto = createDTO(identifier1, organizationName1, firstName2);
 
 		//Json node
 		JsonNode node = Json.toJson(dto);
@@ -144,7 +146,11 @@ public class RegistrationTest extends AbstractBaseModelTest {
 
 		//analyse result
 		// expecting an HTTP 401 return code
-		assertEquals(404, status(result));
+		assertEquals(printError(result),200, status(result));
+
+		LoginResultDTO loginResultDTO = getDTO(result, LoginResultDTO.class);
+
+		assertNotEquals(firstName2, loginResultDTO.getPerson().getFirstName());
 
 	} // end of authenticateSuccess test
 
@@ -154,7 +160,7 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	@Test
 	public void _004_registrationEnterprise() {
 
-		EnterpriseAccountCreationDTO dto = createDTO(email2, identifier2, organizationName1);
+		EnterpriseAccountCreationDTO dto = createDTO(identifier2, organizationName1);
 
 		//Json node
 		JsonNode node = Json.toJson(dto);
@@ -178,12 +184,16 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	} // end of authenticateSuccess test
 
 
-	private EnterpriseAccountCreationDTO createDTO(String email, String identifier, String organizationName) {
+	private EnterpriseAccountCreationDTO createDTO(String identifier, String organizationName) {
+		return createDTO(identifier,organizationName,firstName);
+	}
+
+	private EnterpriseAccountCreationDTO createDTO(String identifier, String organizationName, String firstName) {
 
 		EnterpriseAccountCreationDTO dto = new EnterpriseAccountCreationDTO();
 		PersonDTO personDTO = new PersonDTO();
 
-		personDTO.setEmail(email);
+		personDTO.setEmail(email1);
 		personDTO.setFirstName(firstName);
 		personDTO.setLastName(lastName);
 		personDTO.setIdentifier(identifier);

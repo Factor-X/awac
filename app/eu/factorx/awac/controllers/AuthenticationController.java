@@ -101,7 +101,14 @@ public class AuthenticationController extends Controller {
 
 		if(interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())){
 			//use the same message for both login and password error
+			//TODO translate
 			return unauthorized(new ExceptionsDTO("This account is not for "+interfaceTypeCode.getKey()+" but for "+account.getInterfaceCode().getKey()+". Please switch calculator and retry."));
+		}
+
+		//control acitf
+		if(!account.getActive()){
+			//TODO translate
+			return unauthorized(new ExceptionsDTO("Votre compte est actuellement suspendue. Contactez votre administrateur."));
 		}
 
 		//control change password

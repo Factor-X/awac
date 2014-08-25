@@ -5,6 +5,12 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import org.joda.time.DateTime;
+
+import play.Play;
+import play.mvc.Http.Context;
+import play.mvc.Http.Session;
+
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {
 
@@ -25,18 +31,37 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		this.technicalSegment = TechnicalSegment.newInstance();
+		DateTime now = DateTime.now();
+		String creationUser = getCurrentUser();
+		this.technicalSegment = new TechnicalSegment(now, creationUser, now, creationUser);
 	}
 
 	@PreUpdate
 	@Override
 	public void preUpdate() {
 		super.preUpdate();
-		this.technicalSegment.update();
+		this.technicalSegment.setLastUpdateDate(DateTime.now());
+		this.technicalSegment.setLastUpdateUser(getCurrentUser());
 	}
 
+	private static String getCurrentUser() {
+		if (Play.application().isTest()) {
+			return "TEST_USER";
+		}
+		if (Context.current.get() == null) {
+			return "TECHNICAL";
+		}
+
+		Session session = Context.current().session();
+		return session.get("identifier");
+	}
+
+	/**
+	 * Default implementation: override this.
+	 */
 	@Override
 	public String toString() {
-		return super.toString() + " " + technicalSegment.toString();
+		return "AuditedAbstractEntity [id=" + id + ", technicalSegment=" + technicalSegment + "]";
 	}
+
 }
