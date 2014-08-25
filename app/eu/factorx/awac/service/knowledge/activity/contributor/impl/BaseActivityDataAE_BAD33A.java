@@ -30,23 +30,23 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-				if (questionA274Answer == null) {
+                System.out.println("HERE");
+                if (questionA274Answer == null) {
 					continue;
 				}
-
-
-				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
+                System.out.println("HERE 2");
+                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
 					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A275)) {
 
 						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
 
 						QuestionAnswer questionA276Answer = answersByCodeChild.get(QuestionCode.A276);
 						QuestionAnswer questionA277Answer = answersByCodeChild.get(QuestionCode.A277);
-
-						if (questionA276Answer == null || questionA277Answer == null) {
+                        System.out.println("here 4");
+                        if (questionA276Answer == null || questionA277Answer == null) {
 							continue;
 						}
-
+                        System.out.println("here 5");
 						BaseActivityData baseActivityData = new BaseActivityData();
 
 						baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);
@@ -57,7 +57,7 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 						baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 						baseActivityData.setActivitySource(toActivitySourceCode(questionA276Answer));
 						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
+            			baseActivityData.setUnit(baseActivityDataUnit);
 						baseActivityData.setValue(toDouble(questionA277Answer, baseActivityDataUnit));
 
 						res.add(baseActivityData);
@@ -67,5 +67,4 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 		}
 		return res;
 	}
-
 }

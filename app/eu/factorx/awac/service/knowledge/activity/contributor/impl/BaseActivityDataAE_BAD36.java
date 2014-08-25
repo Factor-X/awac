@@ -31,12 +31,11 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
 
-
 				if (questionA302Answer == null) {
 					continue;
 				}
 				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
+					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A303)) {
 
 						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
 
@@ -64,8 +63,8 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 						baseActivityData.setActivityType(toActivityTypeCode(questionA307Answer));
 						baseActivityData.setActivitySource(toActivitySourceCode(questionA306Answer));
 						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-						baseActivityData.setValue(toDouble(questionA308Answer, baseActivityDataUnit) * toDouble(questionA305Answer, baseActivityDataUnit));
+            			baseActivityData.setUnit(baseActivityDataUnit);
+						baseActivityData.setValue(toDouble(questionA308Answer) * toDouble(questionA305Answer, baseActivityDataUnit));
 
 						res.add(baseActivityData);
 					}
@@ -74,5 +73,4 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 		}
 		return res;
 	}
-
 }

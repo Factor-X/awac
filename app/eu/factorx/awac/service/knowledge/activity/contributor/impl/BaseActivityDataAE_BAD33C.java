@@ -20,8 +20,8 @@ public class BaseActivityDataAE_BAD33C extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (GJ in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
+		// Get Target Unit (kg in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5133);
 
 		// For each set of answers in A273, build an ActivityBaseData (see specifications)
@@ -49,7 +49,6 @@ public class BaseActivityDataAE_BAD33C extends BaseActivityDataForProducts {
 							continue;
 						}
 
-
 						BaseActivityData baseActivityData = new BaseActivityData();
 
 						baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
@@ -60,7 +59,7 @@ public class BaseActivityDataAE_BAD33C extends BaseActivityDataForProducts {
 						baseActivityData.setActivityType(ActivityTypeCode.AT_8);
 						baseActivityData.setActivitySource(toActivitySourceCode(questionA280Answer));
 						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
+	            		baseActivityData.setUnit(baseActivityDataUnit);
 						baseActivityData.setValue(toDouble(questionA281Answer, baseActivityDataUnit));
 
 						res.add(baseActivityData);

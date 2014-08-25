@@ -20,6 +20,8 @@ public class BaseActivityDataAE_BAD32D extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
+        // Get Target Unit (tonne.km in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5329);
 
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
@@ -34,40 +36,34 @@ public class BaseActivityDataAE_BAD32D extends BaseActivityDataForProducts {
 					continue;
 				}
 
-				Double belgianTruckRatio = 0.854;
-				Double internationalTruckRatio = 0.287;
-				Double belgianDistance = 0.0;
-				Double internationalDistance = 0.0;
-				// TODO: codes
-              /*  if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
-                    belgianDistance = 200.0;
-                    internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
-                    belgianDistance = 0.0;
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double internationalDistance = 0.0;
+
+                if (getCode(questionA268Answer).getKey().equals("1")) { // Belgium
+                    continue;
+                } else if (getCode(questionA268Answer).getKey().equals("2")) { // Europe
                     internationalDistance = 2500.0;
-                } else {
-                    belgianDistance = 0.0;
+                } else  { // World
                     internationalDistance = 5000.0;
                 }
-*/
-				BaseActivityData baseActivityData = new BaseActivityData();
+
+                BaseActivityData baseActivityData = new BaseActivityData();
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD32D);
 				baseActivityData.setRank(3);
 				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_12);
-				// TODO: FLORIAN
-				// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_HORS_BELGIQUE_AVAL);
+				baseActivityData.setActivityType(ActivityTypeCode.AT_36);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_178);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA267Answer, baseActivityDataUnit) * internationalDistance);
+    			baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA267Answer, getUnitByCode(UnitCode.U5135)) * internationalDistance);
 
 				res.add(baseActivityData);
 			}
 		}
 		return res;
 	}
-
 }

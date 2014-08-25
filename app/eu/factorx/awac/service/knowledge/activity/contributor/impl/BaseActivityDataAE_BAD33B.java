@@ -18,8 +18,8 @@ public class BaseActivityDataAE_BAD33B extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (GJ in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
+		// Get Target Unit (kWh in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5156);
 
 		// For each set of answers in A273, build an ActivityBaseData (see specifications)
@@ -34,37 +34,28 @@ public class BaseActivityDataAE_BAD33B extends BaseActivityDataForProducts {
 					continue;
 				}
 
+                QuestionAnswer questionA278Answer = answersByCode.get(QuestionCode.A278);
 
-				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A275)) {
+                if (questionA278Answer == null) {
+                    continue;
+                }
 
-						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
+                BaseActivityData baseActivityData = new BaseActivityData();
 
-						QuestionAnswer questionA278Answer = answersByCodeChild.get(QuestionCode.A278);
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(toString(questionA245Answer) + "-" + toString(questionA274Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.AC_10);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
+                baseActivityData.setActivityType(ActivityTypeCode.AT_3);
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA278Answer, baseActivityDataUnit));
 
-						if (questionA278Answer == null) {
-							continue;
-						}
-
-						BaseActivityData baseActivityData = new BaseActivityData();
-
-						baseActivityData.setKey(BaseActivityDataCode.AE_BAD33B);
-						baseActivityData.setRank(1);
-						baseActivityData.setSpecificPurpose(toString(questionA245Answer) + "-" + toString(questionA274Answer));
-						baseActivityData.setActivityCategory(ActivityCategoryCode.AC_10);
-						baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
-						baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-						baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
-						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-						baseActivityData.setValue(toDouble(questionA278Answer, baseActivityDataUnit));
-
-						res.add(baseActivityData);
-					}
-				}
+                res.add(baseActivityData);
 			}
 		}
 		return res;
 	}
-
 }
