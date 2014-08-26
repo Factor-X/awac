@@ -3,6 +3,7 @@ package eu.factorx.awac.service.impl;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import play.Logger;
@@ -50,5 +51,20 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 				.setParameter("email", email).getResultList();
 
 		return resultList;
+	}
+
+	@Override
+	public Account saveOrUpdate(Account account){
+		if(account.getPassword().length()> 30){
+			StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
+			account.setPassword(standardPasswordEncoder.encode(account.getPassword()));
+		}
+		return super.saveOrUpdate(account);
+	}
+
+	@Override
+	public boolean controlPassword(String password, Account account){
+		StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
+		return standardPasswordEncoder.matches(password, account.getPassword());
 	}
 }

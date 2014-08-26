@@ -264,14 +264,14 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 
 		//Logger.info(" null?" + lu);
 		assertNotNull(lu);
-		assertEquals(226,lu.size());
+		assertTrue(lu.size() > 0);
 
 //		for (Unit unit : lu) {
 //			//assertTrue(col.contains(unit.getSymbol()));
 //			Logger.info("Symbol: " + unit.getSymbol());
 //		}
 
-		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
+		Collection<String> col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
 				"m",
 				"dm",
 				"cm",
@@ -499,9 +499,18 @@ public class UnitServiceTest extends AbstractBaseModelTest {
 				"employé",
 				"MW.h")));
 
-		for (Unit unit : lu) {
-			//Logger.info("unit : " + unit.getSymbol());
-			assertTrue(col.contains(unit.getSymbol()));
+		for (String symbol : col) {
+			boolean founded=false;
+			for(Unit unit : lu){
+				if(unit.getSymbol().equals(symbol)){
+					founded=true;
+					break;
+				}
+			}
+			if(!founded) {
+				//Logger.info("unit : " + unit.getSymbol());
+				assertTrue("Symbol not found : " + symbol, false);
+			}
 		}
 
 	} // end of test
