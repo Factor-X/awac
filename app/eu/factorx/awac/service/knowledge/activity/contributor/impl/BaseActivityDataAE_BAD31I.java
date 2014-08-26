@@ -30,11 +30,11 @@ public class BaseActivityDataAE_BAD31I extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA254Answer = answersByCode.get(QuestionCode.A254);
 				QuestionAnswer questionA255Answer = answersByCode.get(QuestionCode.A255);
-				QuestionAnswer questionA263Answer = answersByCode.get(QuestionCode.A263);
+				QuestionAnswer questionA264Answer = answersByCode.get(QuestionCode.A264);
 
 				if (questionA254Answer == null ||
 						questionA255Answer == null ||
-						questionA263Answer == null) {
+						questionA264Answer == null) {
 					continue;
 				}
 
@@ -49,8 +49,8 @@ public class BaseActivityDataAE_BAD31I extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_30);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_177);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA254Answer, baseActivityDataUnit) * toDouble(questionA255Answer, baseActivityDataUnit) * toDouble(questionA263Answer, baseActivityDataUnit));
+	    		baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA254Answer, getUnitByCode(UnitCode.U5135)) * toDouble(questionA255Answer, getUnitByCode(UnitCode.U5106)) * toDouble(questionA264Answer));
 
 				res.add(baseActivityData);
 			}

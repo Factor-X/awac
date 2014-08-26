@@ -24,7 +24,7 @@ public class BaseActivityDataAE_BAD34A extends BaseActivityDataForProducts {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5321);
 
-		// For each set of answers in A273, build an ActivityBaseData (see specifications)
+		// For each set of answers in A284, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
 			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
 
@@ -38,7 +38,6 @@ public class BaseActivityDataAE_BAD34A extends BaseActivityDataForProducts {
 					continue;
 				}
 
-
 				BaseActivityData baseActivityData = new BaseActivityData();
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
@@ -49,7 +48,7 @@ public class BaseActivityDataAE_BAD34A extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 				baseActivityData.setActivitySource(toActivitySourceCode(questionA285Answer));
 				baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
+		    	baseActivityData.setUnit(baseActivityDataUnit);
 				baseActivityData.setValue(toDouble(questionA286Answer, baseActivityDataUnit));
 
 				res.add(baseActivityData);

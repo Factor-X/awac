@@ -30,14 +30,13 @@ public class BaseActivityDataAE_BAD35D extends BaseActivityDataForProducts {
 				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
 				QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
-
 				if (
 						questionA293Answer == null) {
 					continue;
 				}
 
 				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
+					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A297)) {
 
 						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
 
@@ -49,7 +48,6 @@ public class BaseActivityDataAE_BAD35D extends BaseActivityDataForProducts {
 							continue;
 						}
 
-
 						BaseActivityData baseActivityData = new BaseActivityData();
 
 						baseActivityData.setKey(BaseActivityDataCode.AE_BAD35D);
@@ -60,8 +58,8 @@ public class BaseActivityDataAE_BAD35D extends BaseActivityDataForProducts {
 						baseActivityData.setActivityType(ActivityTypeCode.AT_8);
 						baseActivityData.setActivitySource(toActivitySourceCode(questionA298Answer));
 						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-						baseActivityData.setValue(toDouble(questionA246Answer, baseActivityDataUnit) * toDouble(questionA299Answer, baseActivityDataUnit) * toDouble(questionA293Answer, baseActivityDataUnit));
+            			baseActivityData.setUnit(baseActivityDataUnit);
+						baseActivityData.setValue(toDouble(questionA246Answer) * toDouble(questionA299Answer, baseActivityDataUnit) * toDouble(questionA293Answer));
 
 						res.add(baseActivityData);
 					}

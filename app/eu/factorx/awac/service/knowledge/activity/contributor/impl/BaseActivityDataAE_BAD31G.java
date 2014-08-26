@@ -48,8 +48,8 @@ public class BaseActivityDataAE_BAD31G extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_28);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_177);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA254Answer, baseActivityDataUnit) * toDouble(questionA255Answer, baseActivityDataUnit) * toDouble(questionA262Answer, baseActivityDataUnit));
+	    		baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA254Answer, getUnitByCode(UnitCode.U5135)) * toDouble(questionA255Answer, getUnitByCode(UnitCode.U5106)) * toDouble(questionA262Answer));
 
 				res.add(baseActivityData);
 			}

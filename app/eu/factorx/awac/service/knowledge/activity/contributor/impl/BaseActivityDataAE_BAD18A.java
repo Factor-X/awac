@@ -37,9 +37,6 @@ public class BaseActivityDataAE_BAD18A extends ActivityResultContributor {
 
 			QuestionAnswer questionA158Answer = answersByCode.get(QuestionCode.A158);
 			QuestionAnswer questionA159Answer = answersByCode.get(QuestionCode.A159);
-			QuestionAnswer questionA160Answer = answersByCode.get(QuestionCode.A160);
-			QuestionAnswer questionA161Answer = answersByCode.get(QuestionCode.A161);
-			QuestionAnswer questionA162Answer = answersByCode.get(QuestionCode.A162);
 
             if (questionA158Answer == null ||
                     questionA159Answer == null) {
