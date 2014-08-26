@@ -24,13 +24,31 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                if (questionSetAnswersChild.getChildren().isEmpty()) {
+                    return res;
+                }
+                QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
+                if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
+                    return res;
+                }
+                if (questionSetA252Answer.getChildren().isEmpty()) {
+                    return res;
+                }
 
-				QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
-				QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+                for (QuestionSetAnswer questionSetAnswers266Child : questionSetA252Answer.getChildren()) {
+                QuestionSetAnswer questionSetA266Answer = questionSetA252Answer.getChildren().get(0);
+
+                if (!questionSetA266Answer.getQuestionSet().getCode().equals(QuestionCode.A266)) {
+                    return res;
+                }
+
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA266Answer.getQuestionAnswers());
+
+				QuestionAnswer questionA268Answer = answersByCodeChild.get(QuestionCode.A268);
+				QuestionAnswer questionA267Answer = answersByCodeChild.get(QuestionCode.A267);
 
 				if (questionA268Answer == null || questionA267Answer == null) {
 					continue;

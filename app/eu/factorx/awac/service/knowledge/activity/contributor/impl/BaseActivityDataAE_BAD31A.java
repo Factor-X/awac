@@ -46,12 +46,11 @@ public class BaseActivityDataAE_BAD31A extends BaseActivityDataForProducts {
 				QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
 				QuestionAnswer questionA256Answer = answersByCodeChild.get(QuestionCode.A256);
 
-				if (questionA254Answer == null ||
+                if (questionA254Answer == null ||
 						questionA255Answer == null ||
 						questionA256Answer == null) {
 					continue;
 				}
-				System.out.println("HERE !!!!!");
 
 				BaseActivityData baseActivityData = new BaseActivityData();
 
