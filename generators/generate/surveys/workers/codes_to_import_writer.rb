@@ -13,11 +13,12 @@ require_relative '../util/log.rb'
 class CodesToImportWriter
 
     def initialize(name, filename, questions)
-        @logger          = Log.new(Code.for_class(self))
-        @filename        = filename
-        @temp_filename   = "/tmp/codes_to_import_full_#{Time.now.strftime('%Y%m%dT%H%M%S')}.xls"
-        @target_filename = "#{ROOT}/data_importer_resources/codes/codes_to_import_#{name}.xls"
-        @questions       = questions
+        @logger                 = Log.new(Code.for_class(self))
+        @filename               = filename
+        @temp_filename          = "/tmp/codes_to_import_full_#{Time.now.strftime('%Y%m%dT%H%M%S')}.xls"
+        @target_filename        = "#{ROOT}/data_importer_resources/codes/codes_to_import_#{name}.xls"
+        @target_common_filename = "#{ROOT}/data_importer_resources/codes/codes_to_import_common.xls"
+        @questions              = questions
     end
 
 
@@ -25,9 +26,31 @@ class CodesToImportWriter
         @logger.info("READING #{@filename}...")
         @source_book = Spreadsheet.open @filename
 
-        @logger.info("READING #{@target_filename}...")
-        @target_book = Spreadsheet::Workbook.new
+        write_common_lists
+        write_actual_lists
+    end
 
+    def write_common_lists
+        @target_book = Spreadsheet::Workbook.new
+        common_lists = [
+            'ActivityCategory',
+            'ActivitySubCategory',
+            'ActivityType',
+            'ActivitySource',
+            'IndicatorCategory'
+        ]
+
+        for l in common_lists
+            source_sheet = get_source_sheet_by_name(l)
+            create_target_worksheet_from source_sheet
+        end
+
+        @logger.info('WRITING ' + @target_common_filename)
+        @target_book.write @target_common_filename
+    end
+
+    def write_actual_lists
+        @target_book = Spreadsheet::Workbook.new
 
         validate_options_of_all_questions
         for q in @questions
@@ -37,13 +60,13 @@ class CodesToImportWriter
             end
         end
 
-        #
-        # require 'ripl'
-        # Ripl.start :binding => binding
-        #
-
         @logger.info('WRITING ' + @target_filename)
         @target_book.write @target_filename
+    end
+
+
+    def get_source_sheet_by_name(l)
+        @source_book.worksheets.select { |s| s.name == l }.first
     end
 
     def validate_options_of_all_questions
