@@ -11,7 +11,11 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
 
-
+/**
+ * TODO Delete Me! Find a more generic way to handle products data!
+ * @author jcarton
+ *
+ */
 public class BaseActivityDataForProducts extends ActivityResultContributor {
 
 	private BaseActivityDataAE_BAD31A baseActivityDataAE_BAD31A;
