@@ -19,7 +19,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl"),
 		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList"),
-		@NamedQuery(name = CodeLabel.REMOVE_ALL, query = "delete from CodeLabel")
+		@NamedQuery(name = CodeLabel.REMOVE_ALL, query = "delete from CodeLabel cl where cl.id != null")
 })
 public class CodeLabel extends AuditedAbstractEntity implements Serializable, Comparable<CodeLabel> {
 
