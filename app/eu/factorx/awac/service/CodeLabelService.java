@@ -16,4 +16,6 @@ public interface CodeLabelService extends PersistenceService<CodeLabel> {
 
 	void resetCache();
 
+	void removeAll();
+
 }
