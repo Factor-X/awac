@@ -78,10 +78,7 @@ angular
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
             #after the nav, compute displayMenu
-            $timeout(->
-                #$scope.computeDisplayMenu()
-            ,0)
-
+            
             # used to recompute the displaying of the menu
             #if !$scope.$$phase
             #    $scope.$apply()

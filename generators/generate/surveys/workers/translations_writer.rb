@@ -14,7 +14,7 @@ class TranslationsWriter
 
     def initialize(name, forms, question_sets, questions)
         @logger          = Log.new(Code.for_class(self))
-        @target_filename = "#{ROOT}/data_importer_resources/translations/translations_#{name}.xls"
+        @target_filename = "#{ROOT}/data_importer_resources/translations/translations_#{name}.generated.xls"
         @forms           = forms
         @question_sets   = question_sets
         @questions       = questions

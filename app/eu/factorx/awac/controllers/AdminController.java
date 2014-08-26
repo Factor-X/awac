@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
+import play.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -15,7 +16,6 @@ import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.NotificationService;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
@@ -75,6 +75,9 @@ public class AdminController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result resetTranslations() {
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
 		// reset code labels cache
 		codeLabelService.resetCache();
 		// import new translations code labels
@@ -86,6 +89,9 @@ public class AdminController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result resetCodeLabels() {
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
 		// reset code labels cache
 		codeLabelService.resetCache();
 		// import new translations code labels
