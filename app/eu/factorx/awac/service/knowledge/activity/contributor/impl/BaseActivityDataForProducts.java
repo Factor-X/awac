@@ -52,8 +52,15 @@ public class BaseActivityDataForProducts extends ActivityResultContributor {
 		// Get Target Unit (tonne.km in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
 
-		// For each set of answers in A238, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA238 = questionSetAnswers.get(QuestionCode.A238);		if (questionSetAnswersA238 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA238) {
+		// For each set of answers in A244, build an ActivityBaseData (see specifications)
+		List<QuestionSetAnswer> questionSetAnswersA244 = questionSetAnswers.get(QuestionCode.A244);
+		if (questionSetAnswersA244 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA244) {
+
+            System.out.println("PRODUCTS");
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -63,6 +70,7 @@ public class BaseActivityDataForProducts extends ActivityResultContributor {
 			if (questionA245Answer == null || questionA246Answer == null) {
 				continue;
 			}
+            System.out.println("PRODUCTS DECLARED");
 
 			//resolve BAD31
 			res.addAll(baseActivityDataAE_BAD31A.getBaseActivityData(questionSetAnswer, questionA245Answer));

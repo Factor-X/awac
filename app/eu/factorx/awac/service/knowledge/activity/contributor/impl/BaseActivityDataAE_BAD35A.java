@@ -19,9 +19,9 @@ public class BaseActivityDataAE_BAD35A extends BaseActivityDataForProducts {
 	public List<BaseActivityData> getBaseActivityData(QuestionSetAnswer questionSetAnswer, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (GJ in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5321);
+		// Get Target Unit (l in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
 		// For each set of answers in A291, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
@@ -37,7 +37,6 @@ public class BaseActivityDataAE_BAD35A extends BaseActivityDataForProducts {
 					continue;
 				}
 
-
 				BaseActivityData baseActivityData = new BaseActivityData();
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD35A);
@@ -48,8 +47,8 @@ public class BaseActivityDataAE_BAD35A extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_162);
 				baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA246Answer, baseActivityDataUnit) * toDouble(questionA294Answer, baseActivityDataUnit) * toDouble(questionA293Answer, baseActivityDataUnit));
+    			baseActivityData.setUnit(baseActivityDataUnit);
+				baseActivityData.setValue(toDouble(questionA246Answer) * toDouble(questionA294Answer, baseActivityDataUnit) * toDouble(questionA293Answer));
 
 				res.add(baseActivityData);
 			}

@@ -20,6 +20,8 @@ public class BaseActivityDataAE_BAD32C extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
+        // Get Target Unit (tonne.km in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5329);
 
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
@@ -34,35 +36,26 @@ public class BaseActivityDataAE_BAD32C extends BaseActivityDataForProducts {
 					continue;
 				}
 
-				Double belgianTruckRatio = 0.854;
-				Double internationalTruckRatio = 0.287;
-				Double belgianDistance = 0.0;
-				Double internationalDistance = 0.0;
-				// TODO: codes
-             /*   if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
-                    belgianDistance = 200.0;
-                    internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
-                    belgianDistance = 0.0;
-                    internationalDistance = 2500.0;
-                } else {
-                    belgianDistance = 0.0;
-                    internationalDistance = 5000.0;
+                if (!getCode(questionA268Answer).getKey().equals("1")) { // NOT Belgium
+                    continue;
                 }
-*/
-				BaseActivityData baseActivityData = new BaseActivityData();
+
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance = 200.0;
+
+                BaseActivityData baseActivityData = new BaseActivityData();
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
 				baseActivityData.setRank(3);
 				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_12);
-				// TODO: FLORIAN
-				// baseActivityData.setActivityType(ActivityTypeCode.RAIL_TRAIN_AVION_BELGIQUE);
+				baseActivityData.setActivityType(ActivityTypeCode.AT_34);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_178);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA267Answer, baseActivityDataUnit) * belgianDistance);
+    			baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA267Answer, getUnitByCode(UnitCode.U5135)) * belgianDistance);
 
 				res.add(baseActivityData);
 			}

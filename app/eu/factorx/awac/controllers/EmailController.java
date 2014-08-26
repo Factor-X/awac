@@ -1,14 +1,15 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.util.email.service.EmailService;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import play.*;
+import play.db.jpa.Transactional;
 import play.mvc.*;
 import play.data.*;
-
 import static play.data.Form.*;
 import static play.mvc.Results.badRequest;
 import static play.mvc.Results.ok;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Component;
 
 //annotate as Spring Component
 @Component
+@Transactional(readOnly = true)
+@Security.Authenticated(SecuredController.class)
+@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 public class EmailController {
 
 	@Autowired
@@ -43,11 +47,11 @@ public class EmailController {
 		return ok();
 	}
 
-	public Result sendComplete(String destinationEmail, String subject, String message, String interfaceName, String languageKey) {
+	public Result sendComplete(String destinationEmail,String subject, String message,String interfaceName,String languageKey) {
 
 		try {
 			// send mail
-			EmailMessage email = new EmailMessage(destinationEmail, subject, message, new InterfaceTypeCode(interfaceName), new LanguageCode(languageKey));
+			EmailMessage email = new EmailMessage(destinationEmail,subject,message, new InterfaceTypeCode(interfaceName),new LanguageCode(languageKey));
 			emailService.send(email);
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -29,12 +29,10 @@ public class BaseActivityDataAE_BAD35C extends BaseActivityDataForProducts {
 
 				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
-				QuestionAnswer questionA294Answer = answersByCode.get(QuestionCode.A294);
 				QuestionAnswer questionA296Answer = answersByCode.get(QuestionCode.A296);
 				QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
 
-				if (questionA294Answer == null ||
-						questionA296Answer == null ||
+				if (questionA296Answer == null ||
 						questionA293Answer == null) {
 					continue;
 				}
@@ -47,15 +45,14 @@ public class BaseActivityDataAE_BAD35C extends BaseActivityDataForProducts {
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_12);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
 				baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-				baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
+				baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
 				baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA246Answer, baseActivityDataUnit) * toDouble(questionA296Answer, baseActivityDataUnit) * toDouble(questionA293Answer, baseActivityDataUnit));
+	    		baseActivityData.setUnit(baseActivityDataUnit);
+				baseActivityData.setValue(toDouble(questionA246Answer) * toDouble(questionA296Answer, baseActivityDataUnit) * toDouble(questionA293Answer));
 
 				res.add(baseActivityData);
 			}
 		}
 		return res;
 	}
-
 }

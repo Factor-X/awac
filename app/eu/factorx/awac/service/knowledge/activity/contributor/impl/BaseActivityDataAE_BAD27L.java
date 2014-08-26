@@ -21,7 +21,6 @@ public class BaseActivityDataAE_BAD27L extends ActivityResultContributor {
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// TODO In AWAC-enterprise-calcul_FE.xls, BAD27L is expressed in "euros", but there is no factors for this => must be replaced by "k€" 
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5325); // k€
 
 		// For each set of answers in A209, build an ActivityBaseData (see specifications)

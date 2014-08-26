@@ -27,7 +27,6 @@ public class BaseActivityDataAE_BAD31A extends BaseActivityDataForProducts {
 
 				Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
-
 				QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
 				QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
 				QuestionAnswer questionA256Answer = answersByCodeChild.get(QuestionCode.A256);
@@ -37,7 +36,6 @@ public class BaseActivityDataAE_BAD31A extends BaseActivityDataForProducts {
 						questionA256Answer == null) {
 					continue;
 				}
-
 
 				BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -49,8 +47,8 @@ public class BaseActivityDataAE_BAD31A extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_22);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_177);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA254Answer, baseActivityDataUnit) * toDouble(questionA255Answer, baseActivityDataUnit) * toDouble(questionA256Answer, baseActivityDataUnit));
+    			baseActivityData.setUnit(baseActivityDataUnit);
+				baseActivityData.setValue(toDouble(questionA254Answer, getUnitByCode(UnitCode.U5135)) * toDouble(questionA255Answer, getUnitByCode(UnitCode.U5106)) * toDouble(questionA256Answer));
 
 				res.add(baseActivityData);
 			}
