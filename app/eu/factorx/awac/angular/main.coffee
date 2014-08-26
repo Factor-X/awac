@@ -28,11 +28,12 @@ angular.module("tmh.dynamicLocale").config (tmhDynamicLocaleProvider)->
 # Routes
 #
 initializeCommonRoutes()
-iName = document.querySelector("meta[name=app]").getAttribute("content")
-if iName == "municipality"
-    initializeMunicipalityRoutes()
-if iName == "enterprise"
-    initializeEnterpriseRoutes()
+if document.querySelector("meta[name=app]")?
+    iName = document.querySelector("meta[name=app]").getAttribute("content")
+    if iName == "municipality"
+        initializeMunicipalityRoutes()
+    if iName == "enterprise"
+        initializeEnterpriseRoutes()
 
 angular
 .module('app')

@@ -53,3 +53,6 @@ angular
                 else
                     $scope.isLoading['admin'][user.email] = false
                     messageFlash.displayError result.data.message
+
+    $scope.toForm = ->
+        $scope.$parent.navToLastFormUsed()
