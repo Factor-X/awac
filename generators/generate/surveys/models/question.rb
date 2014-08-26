@@ -8,6 +8,7 @@ class Question
     attr_accessor :ref,
                   :accronym,
                   :text,
+                  :description,
                   :type,
                   :options,
                   :question_set,

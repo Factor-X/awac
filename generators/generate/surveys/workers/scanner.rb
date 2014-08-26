@@ -125,6 +125,7 @@ class Scanner
                 qs.ref        = ref
                 qs.accronym   = accronym
                 qs.repeatable = repeatable
+                qs.loop_descriptor = loop_desc
 
                 qs.text = name
                 if parent != nil
@@ -145,6 +146,7 @@ class Scanner
                     q.question_set = question_sets.select { |qs| qs.ref == parent }.first
                 end
                 q.text = name
+                q.description = desc
                 q.type = Code.make(type)
                 if q.type == "MULTIPLE"
                     q.options = options

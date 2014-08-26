@@ -20,6 +20,9 @@ require_relative 'workers/question_code_writer.rb'
 # Code to import full writer
 require_relative 'workers/codes_to_import_writer.rb'
 
+# Translations writer
+require_relative 'workers/translations_writer.rb'
+
 # YAML
 require 'yaml'
 
@@ -66,6 +69,11 @@ def main(options)
             # Update the codes_to_import_full.xls
             logger.sub_section 'Codes_to_import_full generation'
             codes_to_import_writer = CodesToImportWriter.new file['name'], "#{ROOT}/data_importer_resources/#{file['xls']}", scanner.questions
+            codes_to_import_writer.execute
+
+            # Generate the translations.xls
+            logger.sub_section 'Translations generation'
+            codes_to_import_writer = TranslationsWriter.new file['name'], scanner.forms, scanner.question_sets, scanner.questions
             codes_to_import_writer.execute
 
         end
