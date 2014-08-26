@@ -87,7 +87,7 @@ public class RegistrationController  extends Controller {
 
 
 	@Transactional(readOnly = false)
-	public Result enterpriseMunicipality() {
+	public Result municipalityRegistration() {
 
 		MunicipalityAccountCreationDTO dto = extractDTOFromRequest(MunicipalityAccountCreationDTO.class);
 

@@ -31,7 +31,7 @@ POST    /awac/forgotPassword                           @eu.factorx.awac.controll
 # registration ctrl
 #
 POST    /enterprise/registration                       @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
-POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.enterpriseMunicipality()
+POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 
 #
 # Email Service

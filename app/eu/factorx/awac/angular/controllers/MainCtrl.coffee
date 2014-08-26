@@ -21,14 +21,6 @@ angular
             $scope.initialLoad.translations = args.success
         return
 
-    translationService.initialize('fr')
-
-    $scope.language = 'fr'
-
-    $scope.$watch 'language', (lang) ->
-        translationService.initialize(lang)
-        tmhDynamicLocale.set(lang.toLowerCase())
-
     #
     # Tabs
     #
@@ -212,7 +204,30 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout,translationService)->
+
+    $rootScope.languages = []
+    $rootScope.languages[0] = {
+        value:'fr'
+        label:'Français'
+    }
+    $rootScope.languages[1] = {
+        value:'en'
+        label:'English'
+    }
+    $rootScope.languages[2] = {
+        value:'nl'
+        label:'Neederlands'
+    }
+
+    translationService.initialize('fr')
+
+    $rootScope.language = 'fr'
+
+    $rootScope.$watch 'language', (lang) ->
+        translationService.initialize(lang)
+        tmhDynamicLocale.set(lang.toLowerCase())
+
 
 
     #

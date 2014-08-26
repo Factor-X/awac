@@ -1,9 +1,9 @@
 angular
 .module('app.directives')
-.directive "mmAwacAccountCreationEnterprise", (directiveService,downloadService,messageFlash) ->
+.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash) ->
     restrict: "E"
     scope:{}
-    templateUrl: "$/angular/templates/mm-awac-account-creation-enterprise.html"
+    templateUrl: "$/angular/templates/mm-awac-registration-enterprise.html"
     replace:true
     controller: ($scope) ->
 
@@ -84,6 +84,7 @@ angular
             data.password = $scope.passwordInfo.field
             data.organizationName = $scope.organizationNameInfo.field
             data.firstSiteName = $scope.firstSiteNameInfo.field
+            data.person.defaultLanguage = $scope.$root.language
 
 
             #send request

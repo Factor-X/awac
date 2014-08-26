@@ -1631,3 +1631,28 @@ ul.messenger > li {
     font-size: 18px;
     color: darkgreen;
 }
+
+.interface_menu{
+    height : 40px;
+    list-style-type: none;
+    margin-left : 50px;
+}
+
+.interface_menu li{
+    float:left;
+    margin-right: 5px;
+}
+
+.interface_menu li a{
+    display:block;
+    color: white;
+}
+.interface_menu li a:hover{
+    text-decoration: none;
+}
+
+
+.interface_menu li .selected{
+    background-color : #000080;
+    border-color:#000080;
+}

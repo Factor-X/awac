@@ -1,13 +1,20 @@
 .loginBackground
     .router-bar
         .awac_logo
-        ul
+        ul.interface_menu
             li
-                a(href="/enterprise") Enterprise
+                a(
+                        class="btn btn-primary",
+                        ng-class="{selected:$root.instanceName == 'enterprise'}",
+                        href="/enterprise") Enterprise
             li
-                a(href="/municipality") Municipality
+                a(
+                        class="btn btn-primary",
+                        ng-class="{selected:$root.instanceName == 'municipality'}",
+                        href="/municipality") Municipality
 
     .loginFrame(ng-enter="enterEvent()")
+        select(ng-options="l.value as l.label for l in $root.languages",ng-model="$root.language",style="float:right")
         tabset
             tab.tab-color-lightgreen(active="tabActive[0]")
                 tab-heading

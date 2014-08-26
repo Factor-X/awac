@@ -52,10 +52,7 @@ public class EmailSender {
     public EmailSender() throws IOException  {
         MailConfig.loadConfigurations();
 
-		Spring.
-
 		if(emailCodeList == null){
-			codeLabelService =
 			emailCodeList = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 			footerContent = emailCodeList.get("EMAIL_FOOTER");
 			mainTitle = emailCodeList.get("EMAIL_TITLE");

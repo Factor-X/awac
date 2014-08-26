@@ -109,9 +109,9 @@ angular
     $scope.injectRegistrationDirective = ->
         if $scope.$root?
             if $scope.$root.instanceName == 'enterprise'
-                directiveName = "mm-awac-account-creation-enterprise"
+                directiveName = "mm-awac-registration-enterprise"
             else if $scope.$root.instanceName == 'municipality'
-                directiveName = "mm-awac-account-creation-municipality"
+                directiveName = "mm-awac-registration-municipality"
 
             directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope)
             $('.inject-registration-form').append(directive)

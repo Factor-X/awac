@@ -47,7 +47,7 @@ public class EmailTest extends AbstractBaseModelTest {
 
 		// try to get a bash env
 		String smtpPassword = Configuration.root().getString("mail.smtp.password");
-		assertNotNull(smtpPassword);
+		assertNotNull("Password not in the bash",smtpPassword);
 
 		// Fake request
 		FakeRequest fr = new FakeRequest();
@@ -69,7 +69,7 @@ public class EmailTest extends AbstractBaseModelTest {
 		}
 		// test results
 		// expecting an HTTP 200 return code
-		assertEquals(200, status(result));
+		assertEquals("failed -> "+result,200, status(result));
 	} // end of authenticateSuccess test
 
 }

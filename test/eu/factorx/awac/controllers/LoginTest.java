@@ -50,12 +50,10 @@ public class LoginTest extends AbstractBaseModelTest {
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
 
 		//Json node
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("login", cfDto.getLogin());
-		map.put("password", cfDto.getPassword());
-		map.put("interfaceName", cfDto.getInterfaceName());
-		JsonNode node = Json.toJson(map);
+		JsonNode node = Json.toJson(cfDto);
 
+		// perform save
+		// Fake request
 
 		// Fake request
 		FakeRequest fr = new FakeRequest();
@@ -72,6 +70,7 @@ public class LoginTest extends AbstractBaseModelTest {
 
 		// expecting an HTTP 200 return code
 		assertEquals(200, status(result));
+
 		// verify user identifier in session is not null
 		assertNotNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
 		// verify user identifier in session is the one expected

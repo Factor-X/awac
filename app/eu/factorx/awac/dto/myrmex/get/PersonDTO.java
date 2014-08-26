@@ -22,17 +22,20 @@ public class PersonDTO extends DTO {
 
 	private Boolean isActive;
 
+	private String defaultLanguage;
+
 	public PersonDTO() {
 
 	}
 
-	public PersonDTO(String identifier, String firstName, String lastName, String email, Boolean isAdmin, Boolean isActive) {
+	public PersonDTO(String identifier, String firstName, String lastName, String email, Boolean isAdmin, Boolean isActive, String defaultLanguage) {
 		this.identifier = identifier;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.isAdmin = isAdmin;
 		this.isActive = isActive;
+		this.defaultLanguage = defaultLanguage;
 	}
 
 	public String getIdentifier() {
@@ -83,6 +86,14 @@ public class PersonDTO extends DTO {
 		this.isActive = isActive;
 	}
 
+	public String getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
+
 	@Override
 	public String toString() {
 		return "PersonDTO{" +
@@ -92,6 +103,7 @@ public class PersonDTO extends DTO {
 				", email='" + email + '\'' +
 				", isAdmin=" + isAdmin +
 				", isActive=" + isActive +
+				", defaultLanguage='" + defaultLanguage + '\'' +
 				'}';
 	}
 }
