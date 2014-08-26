@@ -34,11 +34,11 @@ def main(options)
     Spreadsheet.client_encoding = 'UTF-8'
 
     # Load the configuration
-    config            = YAML.load_file(File.dirname(__FILE__) + '/config.yaml')
+    config                      = YAML.load_file(File.dirname(__FILE__) + '/config.yaml')
 
     # Initialize logger
-    Log.default_level = config['log_level']
-    logger            = Log.new('main')
+    Log.default_level           = config['log_level']
+    logger                      = Log.new('main')
 
     begin
 
@@ -67,11 +67,14 @@ def main(options)
             logger.sub_section 'Codes_to_import_full generation'
             codes_to_import_writer = CodesToImportWriter.new file['name'], "#{ROOT}/data_importer_resources/#{file['xls']}", scanner.questions
             codes_to_import_writer.execute
+
         end
+
+        logger.info 'Done'
 
     rescue Exception => e
 
-        logger.fatal e.message + "\n" + e.backtrace.collect { |l| (' '*45) + l }.join("\n")
+        logger.fatal e.message + "\n" + e.backtrace.collect { |l| (' '*55) + l }.join("\n")
 
     end
 end
