@@ -27,23 +27,15 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
         for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
             if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-                if (questionSetAnswersChild.getChildren().isEmpty()) {
-                    return res;
-                }
-                QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
-                if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
-                    return res;
-                }
-                if (questionSetA252Answer.getChildren().isEmpty()) {
-                    return res;
-                }
+            	QuestionSetAnswer questionSetA252Answer = getChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+            	if (questionSetA252Answer == null) {
+            		return res;
+            	}
 
-                for (QuestionSetAnswer questionSetAnswers266Child : questionSetA252Answer.getChildren()) {
-                QuestionSetAnswer questionSetA266Answer = questionSetA252Answer.getChildren().get(0);
-
-                if (!questionSetA266Answer.getQuestionSet().getCode().equals(QuestionCode.A266)) {
-                    return res;
-                }
+            	QuestionSetAnswer questionSetA266Answer = getChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A266);
+            	if (questionSetA266Answer == null) {
+            		return res;
+            	}            	
 
                 Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA266Answer.getQuestionAnswers());
 
