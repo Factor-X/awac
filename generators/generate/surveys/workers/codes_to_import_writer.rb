@@ -43,7 +43,7 @@ class CodesToImportWriter
         #
 
         @logger.info('WRITING ' + @target_filename)
-        @target_book.write @target_filename + '.xls'
+        @target_book.write @target_filename
     end
 
     def validate_options_of_all_questions
