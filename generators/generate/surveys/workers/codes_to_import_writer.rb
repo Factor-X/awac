@@ -41,7 +41,7 @@ class CodesToImportWriter
 
         for l in common_lists
             source_sheet = get_source_sheet_by_name(l)
-            create_target_worksheet_from source_sheet
+            create_target_worksheet_from source_sheet, true
         end
 
         @logger.info('WRITING ' + @target_common_filename)
@@ -99,9 +99,13 @@ class CodesToImportWriter
         return nil
     end
 
-    def create_target_worksheet_from(source_sheet)
+    def create_target_worksheet_from(source_sheet, preserve_case = false)
 
-        name = Code.make(source_sheet.name)
+        if preserve_case
+            name = source_sheet.name
+        else
+            name = Code.make(source_sheet.name)
+        end
 
         # If sheet already exists, skip it nicely :-)
         return if @target_book.worksheets.find { |s| s.name == name }
