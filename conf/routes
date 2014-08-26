@@ -31,12 +31,13 @@ POST    /awac/forgotPassword                           @eu.factorx.awac.controll
 # registration ctrl
 #
 POST    /enterprise/registration                       @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
-POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.enterpriseMunicipality()
+POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 
 #
 # Email Service
 #
-POST    /email/send                                   @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET    /email/send                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET    /email/sendComplete                             @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
 
 #
 # Javascript routing

@@ -19,7 +19,8 @@ angular
             validationRegex: "^\\S{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             hideIsValidIcon: true
-            focus: true
+            focus: ->
+                return true
 
         $scope.oldEmailInfo =
             field: $scope.getParams().oldEmail

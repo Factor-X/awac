@@ -14,6 +14,7 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.account.SystemAdministrator;
+import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ import play.mvc.Security;
 public class SecuredController extends Security.Authenticator {
 
 	public static final String SESSION_IDENTIFIER_STORE = "identifier";
+	public static final String SESSION_DEFAULT_LANGUAGE_STORE = "defaultLanguage";
+
 	@Autowired
 	private AccountService accountService;
 
@@ -50,18 +53,23 @@ public class SecuredController extends Security.Authenticator {
 	}
 
 	public boolean isAdministrator() {
-		return ((Account)getCurrentUser()).getIsAdmin();
+		return ((Account) getCurrentUser()).getIsAdmin();
 	}
 
 	public boolean isSystemAdministrator() {
-		return (((Account)getCurrentUser()) instanceof SystemAdministrator);
+		return (((Account) getCurrentUser()) instanceof SystemAdministrator);
 	}
 
-	public void storeIdentifier(String identifier){
+	public void storeIdentifier(Account account) {
 
 		//if the login and the password are ok, refresh the session
 		Context.current().session().clear();
-		Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, identifier);
+		Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
+		Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getPerson().getDefaultLanguage().getKey());
+	}
+
+	public LanguageCode getDefaultLanguage() {
+		return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
 	}
 }
 

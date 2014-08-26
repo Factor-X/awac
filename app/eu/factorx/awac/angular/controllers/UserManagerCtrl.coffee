@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "UserManagerCtrl", ($scope, translationService, modalService, downloadService) ->
+.controller "UserManagerCtrl", ($scope, translationService, modalService, downloadService,messageFlash) ->
     $scope.title = translationService.get('USER_MANAGER_TITLE')
 
     $scope.isLoading = {}
@@ -33,7 +33,7 @@ angular
                     $scope.isLoading['isActive'][user.email] = false
                 else
                     $scope.isLoading['isActive'][user.email] = false
-                    #todo display error message
+                    messageFlash.displayError result.data.message
 
 
     $scope.isAdminUser = (user) ->
@@ -52,4 +52,4 @@ angular
                     $scope.isLoading['admin'][user.email] = false
                 else
                     $scope.isLoading['admin'][user.email] = false
-                    #todo display error message
+                    messageFlash.displayError result.data.message

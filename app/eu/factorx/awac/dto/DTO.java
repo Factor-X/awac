@@ -42,7 +42,7 @@ public class DTO implements Content {
 
 	public void set__type(String __type) {
 		if (!get__type().equals(__type)) {
-			throw new MyrmexRuntimeException("Wrong type of DTO received");
+			throw new MyrmexRuntimeException("Wrong type of DTO received. Expected : "+get__type()+", receive : "+__type);
 		}
 	}
 

@@ -65,9 +65,8 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	}
 
 	@Override
-	public List<CodeLabel> findCodeLabelsByList(CodeList codeList) {
-		LinkedHashMap<String, CodeLabel> codeLabelsMap = findAllCodeLabels().get(codeList);
-		return new ArrayList<CodeLabel>(codeLabelsMap.values());
+	public HashMap<String,CodeLabel> findCodeLabelsByList(CodeList codeList) {
+		return findAllCodeLabels().get(codeList);
 	}
 
 	@Override

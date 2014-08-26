@@ -26,8 +26,6 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UnitCategoryServiceTest extends AbstractBaseModelTest {
 
-
-
 	@Autowired
 	private UnitCategoryService unitCategoryService;
 

@@ -1,9 +1,9 @@
 angular
 .module('app.directives')
-.directive "mmAwacAccountCreationMunicipality", (directiveService,downloadService,messageFlash) ->
+.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash) ->
     restrict: "E"
     scope:{}
-    templateUrl: "$/angular/templates/mm-awac-account-creation-municipality.html"
+    templateUrl: "$/angular/templates/mm-awac-registration-enterprise.html"
     replace:true
     controller: ($scope) ->
 
@@ -19,19 +19,19 @@ angular
             fieldTitle: "USER_IDENTIFIER"
             validationRegex: "[a-zA-Z0-9-]{5,20}"
             validationMessage: "IDENTIFIER_CHECK_WRONG"
-            focus: true
 
         $scope.lastNameInfo =
             fieldTitle: "USER_LASTNAME"
             validationRegex: "^.{1,255}$"
             validationMessage: "USER_LASTNAME_WRONG_LENGTH"
-            focus: true
 
         $scope.firstNameInfo =
             fieldTitle: "USER_FIRSTNAME"
             fieldType: "text"
             validationRegex: "^.{1,255}$"
             validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
+            focus: ->
+                return $scope.$parent.tabActive[2]
 
         $scope.emailInfo =
             fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
@@ -50,16 +50,22 @@ angular
             validationFct: $scope.validatePasswordConfirmField
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
 
-        $scope.municipalityNameInfo =
-            fieldTitle: "MUNICIPALITY_NAME"
+        $scope.organizationNameInfo =
+            fieldTitle: "ORGANIZATION_NAME"
             fieldType: "text"
             validationRegex: "^.{1,255}$"
-            validationMessage: "MUNICIPALITY_NAME_WRONG_LENGTH"
+            validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
+
+        $scope.firstSiteNameInfo =
+            fieldTitle: "MAIN_SITE_NAME"
+            fieldType: "text"
+            validationRegex: "^.{1,255}$"
+            validationMessage: "SITE_NAME_WRONG_LENGTH"
 
 
 
         $scope.registrationFieldValid = () ->
-            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.municipalityNameInfo.isValid
+            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid && $scope.firstSiteNameInfo.isValid
                 return true
             return false
 
@@ -76,11 +82,13 @@ angular
             data.person.firstName = $scope.firstNameInfo.field
             data.person.lastName = $scope.lastNameInfo.field
             data.password = $scope.passwordInfo.field
-            data.municipalityName = $scope.municipalityNameInfo.field
+            data.organizationName = $scope.organizationNameInfo.field
+            data.firstSiteName = $scope.firstSiteNameInfo.field
+            data.person.defaultLanguage = $scope.$root.language
 
 
             #send request
-            downloadService.postJson '/municipality/registration', data, (result) ->
+            downloadService.postJson '/enterprise/registration', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess "You are now connected"

@@ -13,6 +13,7 @@ package eu.factorx.awac.models.account;
 
 import javax.persistence.*;
 
+import eu.factorx.awac.models.code.type.LanguageCode;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import eu.factorx.awac.models.AuditedAbstractEntity;
@@ -45,6 +46,11 @@ public class Person extends AuditedAbstractEntity {
 	@Column(nullable = false, unique = true)
 	private String email;
 
+	@Embedded
+	@AttributeOverride(name = "key", column = @Column(name = "default_language"))
+	private LanguageCode defaultLanguage = LanguageCode.FRENCH;
+
+
 	protected Person() {
 	}
 
@@ -53,14 +59,6 @@ public class Person extends AuditedAbstractEntity {
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.email = email;
-	}
-
-	public String toString() {
-		String string = "";
-		string = string.concat("lastname:" + lastname);
-		string = string.concat("firstname:" + firstname);
-		string = string.concat("email:" + email);
-		return string;
 	}
 
 	public String getLastname() {
@@ -87,4 +85,21 @@ public class Person extends AuditedAbstractEntity {
 		this.email = email;
 	}
 
+	public LanguageCode getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(LanguageCode defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"lastname='" + lastname + '\'' +
+				", firstname='" + firstname + '\'' +
+				", email='" + email + '\'' +
+				", defaultLanguage=" + defaultLanguage +
+				'}';
+	}
 }
