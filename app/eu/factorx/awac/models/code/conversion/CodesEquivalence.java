@@ -11,8 +11,7 @@ import eu.factorx.awac.models.code.CodeList;
 				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.id"),
 		@NamedQuery(name = CodesEquivalence.FIND_BY_CODE_AND_TARGET_CODELIST,
 				query = "select eq from CodesEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey and eq.referencedCodeList = :targetCodeList"),
-		@NamedQuery(name = CodesEquivalence.REMOVE_ALL, query = "delete from CodesEquivalence"),
-				
+		@NamedQuery(name = CodesEquivalence.REMOVE_ALL, query = "delete from CodesEquivalence ce where ce.id != null"),
 })
 public class CodesEquivalence extends AuditedAbstractEntity {
 
@@ -27,7 +26,7 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 	 */
 	public static final String FIND_BY_CODE_AND_TARGET_CODELIST = "CodesEquivalence.findByCodeAndTargetCodeList";
 
-	public static final String REMOVE_ALL = "CodesEquivalence.";
+	public static final String REMOVE_ALL = "CodesEquivalence.removeAll";
 
 	@Enumerated(EnumType.STRING)
 	@Basic(optional = false)
