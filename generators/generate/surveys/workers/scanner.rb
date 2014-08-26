@@ -26,8 +26,8 @@ class Scanner
 
         # xls
         Spreadsheet.client_encoding = 'UTF-8'
-        @book                       = Spreadsheet.open(filename, 'r')
-        @main_sheet                 = @book.worksheet(sheetname)
+        @source_book                = Spreadsheet.open(filename, 'r')
+        @main_sheet                 = @source_book.worksheet(sheetname)
 
         # data
         @rows                       = []
@@ -78,9 +78,7 @@ class Scanner
     def fetch_rows
         @rows = []
         @main_sheet.each do |row|
-            if row.length == 0
-                break
-            end
+            break if row.length == 0
             @rows << row
         end
     end
@@ -127,6 +125,7 @@ class Scanner
                 qs.ref        = ref
                 qs.accronym   = accronym
                 qs.repeatable = repeatable
+                qs.loop_descriptor = loop_desc
 
                 qs.text = name
                 if parent != nil
@@ -147,6 +146,7 @@ class Scanner
                     q.question_set = question_sets.select { |qs| qs.ref == parent }.first
                 end
                 q.text = name
+                q.description = desc
                 q.type = Code.make(type)
                 if q.type == "MULTIPLE"
                     q.options = options
@@ -165,9 +165,9 @@ class Scanner
 
         end
 
-        @logger.info "FORMS found: " + forms.length.to_s
-        @logger.info "QUESTION_SETS found: " + question_sets.length.to_s
-        @logger.info "QUESTIONS found: " + questions.length.to_s
+        @logger.info "FORMS found: #{forms.length}"
+        @logger.info "QUESTION_SETS found: #{question_sets.length}"
+        @logger.info "QUESTIONS found: #{questions.length}"
 
 
     end

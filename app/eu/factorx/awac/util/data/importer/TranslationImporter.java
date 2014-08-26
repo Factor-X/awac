@@ -19,13 +19,17 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	@Autowired
 	private CodeLabelService codeLabelService;
-	
+
 	public TranslationImporter() {
 		super();
 	}
 
 	@Override
 	protected void importData() throws Exception {
+
+		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY,
+				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
 		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 
 		importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);

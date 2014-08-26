@@ -87,4 +87,10 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 		allLabels = null;
 	}
 
+	@Override
+	public void removeAll() {
+		int nbDeleted = JPA.em().createNamedQuery(CodeLabel.REMOVE_ALL).executeUpdate();
+		Logger.info("Deleted {} code labels", nbDeleted);
+	}
+
 }

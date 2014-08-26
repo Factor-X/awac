@@ -47,7 +47,7 @@ public class Person extends AuditedAbstractEntity {
 	private String email;
 
 	@Embedded
-	@AttributeOverride(name = "key", column = @Column(name = "default_language"))
+	@AttributeOverride(name = "key", column = @Column(name = "default_language", columnDefinition="character varying(2) not null default 'FR'"))
 	private LanguageCode defaultLanguage = LanguageCode.FRENCH;
 
 
