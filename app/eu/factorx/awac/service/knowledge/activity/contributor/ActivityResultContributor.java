@@ -123,6 +123,15 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
+	protected QuestionSetAnswer getChildQuestionSetAnswer(QuestionSetAnswer questionSetAnswer, QuestionCode childQuestionSetAnswerCode) {
+		for (QuestionSetAnswer childQuestionSetAnswer : questionSetAnswer.getChildren()) {
+			if (childQuestionSetAnswerCode.equals(childQuestionSetAnswer.getQuestionSet().getCode())) {
+				return childQuestionSetAnswer;
+			}
+		}
+		return null;
+	}
+
 	protected Unit getUnitByCode(UnitCode unitCode) {
 		if (unitsByCodeKey == null) {
 			findAllUnits();

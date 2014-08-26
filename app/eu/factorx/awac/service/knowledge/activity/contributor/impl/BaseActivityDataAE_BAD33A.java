@@ -30,7 +30,7 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-                System.out.println("HERE");
+                System.out.println("HERE 1");
                 if (questionA274Answer == null) {
 					continue;
 				}

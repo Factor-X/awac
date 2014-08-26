@@ -11,7 +11,11 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
 
-
+/**
+ * TODO Delete Me! Find a more generic way to handle products data!
+ * @author jcarton
+ *
+ */
 public class BaseActivityDataForProducts extends ActivityResultContributor {
 
 	private BaseActivityDataAE_BAD31A baseActivityDataAE_BAD31A;
@@ -60,8 +64,6 @@ public class BaseActivityDataForProducts extends ActivityResultContributor {
 
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA244) {
 
-            System.out.println("PRODUCTS");
-
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
 			QuestionAnswer questionA245Answer = answersByCode.get(QuestionCode.A245);
@@ -70,7 +72,6 @@ public class BaseActivityDataForProducts extends ActivityResultContributor {
 			if (questionA245Answer == null || questionA246Answer == null) {
 				continue;
 			}
-            System.out.println("PRODUCTS DECLARED");
 
 			//resolve BAD31
 			res.addAll(baseActivityDataAE_BAD31A.getBaseActivityData(questionSetAnswer, questionA245Answer));

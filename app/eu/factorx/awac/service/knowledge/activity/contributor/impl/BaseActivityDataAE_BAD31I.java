@@ -22,15 +22,31 @@ public class BaseActivityDataAE_BAD31I extends BaseActivityDataForProducts {
 
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5329);
 
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                if (questionSetAnswersChild.getChildren().isEmpty()) {
+                    return res;
+                }
+                QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
+                if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
+                    return res;
+                }
 
+                if (questionSetA252Answer.getChildren().isEmpty()) {
+                    return res;
+                }
+                QuestionSetAnswer questionSetA253Answer = questionSetA252Answer.getChildren().get(0);
+                if (!questionSetA253Answer.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+                    return res;
+                }
 
-				QuestionAnswer questionA254Answer = answersByCode.get(QuestionCode.A254);
-				QuestionAnswer questionA255Answer = answersByCode.get(QuestionCode.A255);
-				QuestionAnswer questionA264Answer = answersByCode.get(QuestionCode.A264);
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA253Answer.getQuestionAnswers());
+
+				QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
+				QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
+				QuestionAnswer questionA264Answer = answersByCodeChild.get(QuestionCode.A264);
+
 
 				if (questionA254Answer == null ||
 						questionA255Answer == null ||
