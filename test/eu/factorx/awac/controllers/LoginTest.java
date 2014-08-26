@@ -8,7 +8,7 @@
  * Author Gaston Hollands
  *
  */
- 
+
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,66 +43,65 @@ import static play.test.Helpers.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LoginTest extends AbstractBaseModelTest {
 
-  	@Test
+	@Test
 	public void _001_authenticateActionSuccess() {
 
-	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
+		// ConnectionFormDTO
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
 
-	//Json node
-	Map<String, String> map = new HashMap<String, String>();
-	map.put("login",cfDto.getLogin());
-	map.put("password",cfDto.getPassword());
-	map.put("interfaceName",cfDto.getInterfaceName());
-	JsonNode node = Json.toJson(map);
+		//Json node
+		JsonNode node = Json.toJson(cfDto);
 
+		// perform save
+		// Fake request
 
-	// Fake request
-	FakeRequest fr = new FakeRequest();
-	fr.withHeader("Content-type", "application/json");
-	fr.withJsonBody(node);
+		// Fake request
+		FakeRequest fr = new FakeRequest();
+		fr.withHeader("Content-type", "application/json");
+		fr.withJsonBody(node);
 
-	// Call controller action
-    Result result = callAction(
-        eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
-		  fr
-	); // callAction
+		// Call controller action
+		Result result = callAction(
+				eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
+				fr
+		); // callAction
 
-	// test results
+		// test results
 
-	// expecting an HTTP 200 return code
-    assertEquals(200, status(result));
-	// verify user identifier in session is not null
-	assertNotNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
-	// verify user identifier in session is the one expected
-	assertEquals(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE),cfDto.getLogin());
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
 
-	// get LoginResultDTO
-	//Logger.info("results: " + new String(contentAsBytes(result)));
-	String content = new String(contentAsBytes(result));
-	JsonNode jsonResponse = Json.parse(content);
-	LoginResultDTO loginResult = Json.fromJson(jsonResponse,LoginResultDTO.class);
+		// verify user identifier in session is not null
+		assertNotNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
+		// verify user identifier in session is the one expected
+		assertEquals(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE), cfDto.getLogin());
 
-	//Logger.info("jsonNode: " + jsonResponse.toString());
-	//Logger.info("findPath:" + jsonResponse.findPath("lastname").asText());
-	//Logger.info("lastname:" + loginResult.getPerson().getLastName());
+		// get LoginResultDTO
+		//Logger.info("results: " + new String(contentAsBytes(result)));
+		String content = new String(contentAsBytes(result));
+		JsonNode jsonResponse = Json.parse(content);
+		LoginResultDTO loginResult = Json.fromJson(jsonResponse, LoginResultDTO.class);
 
-	// verify lastname of user1 is Dupont.
-	assertEquals(loginResult.getPerson().getLastName(),"Dupont");
+		//Logger.info("jsonNode: " + jsonResponse.toString());
+		//Logger.info("findPath:" + jsonResponse.findPath("lastname").asText());
+		//Logger.info("lastname:" + loginResult.getPerson().getLastName());
 
-  } // end of authenticateSuccess test
+		// verify lastname of user1 is Dupont.
+		assertEquals(loginResult.getPerson().getLastName(), "Dupont");
+
+	} // end of authenticateSuccess test
 
 	@Test
 	public void _002_authenticateActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("unknown", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("login",cfDto.getLogin());
-		map.put("password",cfDto.getPassword());
-		map.put("interfaceName",cfDto.getInterfaceName());
+		map.put("login", cfDto.getLogin());
+		map.put("password", cfDto.getPassword());
+		map.put("interfaceName", cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -125,23 +124,23 @@ public class LoginTest extends AbstractBaseModelTest {
 		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
 
 		// should return a ExceptionDTO
-		ExceptionsDTO loginResult = getDTO(result,ExceptionsDTO.class);
+		ExceptionsDTO loginResult = getDTO(result, ExceptionsDTO.class);
 
 		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getMessage(),"The couple login / password was not found");
+		assertEquals(loginResult.getMessage(), "The couple login / password was not found");
 	} // end of authenticateSuccess test
 
 	@Test
 	public void _003_testAuthenticationActionSuccess() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("login",cfDto.getLogin());
-		map.put("password",cfDto.getPassword());
-		map.put("interfaceName",cfDto.getInterfaceName());
+		map.put("login", cfDto.getLogin());
+		map.put("password", cfDto.getPassword());
+		map.put("interfaceName", cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -149,7 +148,7 @@ public class LoginTest extends AbstractBaseModelTest {
 		FakeRequest fr = new FakeRequest();
 		fr.withHeader("Content-type", "application/json");
 		fr.withJsonBody(node);
-		fr.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
+		fr.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
 
 		// Call controller action
 		Result result = callAction(
@@ -168,13 +167,13 @@ public class LoginTest extends AbstractBaseModelTest {
 	public void _004_testAuthenticationActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.ENTERPRISE.getKey(),"");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("login",cfDto.getLogin());
-		map.put("password",cfDto.getPassword());
-		map.put("interfaceName",cfDto.getInterfaceName());
+		map.put("login", cfDto.getLogin());
+		map.put("password", cfDto.getPassword());
+		map.put("interfaceName", cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -198,28 +197,28 @@ public class LoginTest extends AbstractBaseModelTest {
 	} // end of authenticateSuccess test
 
 
-  @Test
-  public void _005_LogoutActionSuccess() {
-    Result result = callAction(
-        eu.factorx.awac.controllers.routes.ref.AuthenticationController.logout(),
-        fakeRequest()
-    );
+	@Test
+	public void _005_LogoutActionSuccess() {
+		Result result = callAction(
+				eu.factorx.awac.controllers.routes.ref.AuthenticationController.logout(),
+				fakeRequest()
+		);
 
-	// expecting an HTTP 200 return code
-	assertEquals(200, status(result));
-  } // end of authenticated test
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
+	} // end of authenticated test
 
 	@Test
 	public void _006_authenticateWithBadInterfaceNameActionFailure() {
 
 		// ConnectionFormDTO
-		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password",InterfaceTypeCode.MUNICIPALITY.getKey(),"");
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.MUNICIPALITY.getKey(), "");
 
 		//Json node
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("login",cfDto.getLogin());
-		map.put("password",cfDto.getPassword());
-		map.put("interfaceName",cfDto.getInterfaceName());
+		map.put("login", cfDto.getLogin());
+		map.put("password", cfDto.getPassword());
+		map.put("interfaceName", cfDto.getInterfaceName());
 		JsonNode node = Json.toJson(map);
 
 
@@ -246,9 +245,9 @@ public class LoginTest extends AbstractBaseModelTest {
 		JsonNode jsonResponse = Json.parse(content);
 		//Logger.info("jsonNode: " + jsonResponse.toString());
 
-		ExceptionsDTO loginResult = Json.fromJson(jsonResponse,ExceptionsDTO.class);
+		ExceptionsDTO loginResult = Json.fromJson(jsonResponse, ExceptionsDTO.class);
 		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getMessage(),"This account is not for municipality but for enterprise. Please switch calculator and retry.");
+		assertEquals(loginResult.getMessage(), "This account is not for municipality but for enterprise. Please switch calculator and retry.");
 	} // end of authenticateSuccess test
 
 

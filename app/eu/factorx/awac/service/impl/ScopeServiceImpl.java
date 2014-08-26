@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -18,7 +19,7 @@ public class ScopeServiceImpl extends AbstractJPAPersistenceServiceImpl<Scope> i
 	@Override
 	public Scope findBySite(Site site) {
 		List<Scope> resultList = JPA.em().createNamedQuery(Scope.FIND_BY_SITE, Scope.class)
-				.setParameter("site", site).getResultList();
+				.setParameter("site", site).setParameter("scopeType", ScopeTypeCode.SITE).getResultList();
 		if (resultList.size() > 1) {
 			String errorMsg = "More than one scope with site = '" + site + "'";
 			Logger.error(errorMsg);
@@ -33,7 +34,7 @@ public class ScopeServiceImpl extends AbstractJPAPersistenceServiceImpl<Scope> i
 	@Override
 	public Scope findByOrganization(Organization organization) {
 		List<Scope> resultList = JPA.em().createNamedQuery(Scope.FIND_BY_ORGANIZATION, Scope.class)
-				.setParameter("organization", organization).getResultList();
+				.setParameter("organization", organization).setParameter("scopeType", ScopeTypeCode.ORG).getResultList();
 		if (resultList.size() > 1) {
 			String errorMsg = "More than one scope with organization = '" + organization + "'";
 			Logger.error(errorMsg);
@@ -48,7 +49,7 @@ public class ScopeServiceImpl extends AbstractJPAPersistenceServiceImpl<Scope> i
 	@Override
 	public Scope findByProduct(Product product) {
 		List<Scope> resultList = JPA.em().createNamedQuery(Scope.FIND_BY_PRODUCT, Scope.class)
-				.setParameter("product", product).getResultList();
+				.setParameter("product", product).setParameter("scopeType", ScopeTypeCode.PRODUCT).getResultList();
 		if (resultList.size() > 1) {
 			String errorMsg = "More than one scope with code = '" + product + "'";
 			Logger.error(errorMsg);

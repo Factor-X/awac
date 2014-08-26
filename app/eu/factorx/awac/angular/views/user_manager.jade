@@ -13,16 +13,16 @@ h1 USER MANAGER
 
             td
                 input(
-                    ng-hide="isLoading['admin'][user]=== true",
+                    ng-hide="isLoading['admin'][user.email]=== true",
                     type="checkbox",
                     ng-model="user.isAdmin",
                     ng-click="isAdminUser(user)"
-                    ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email")
+                    ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email || user.isActive == false")
                 img(src='/assets/images/modal-loading.gif',
-                    ng-show="isLoading['admin'][user] === true")
+                    ng-show="isLoading['admin'][user.email] === true")
 
             td(ng-class="{is_admin : getMyself().isAdmin === true && getMyself().email !== user.email}")
                 .button_delete(ng-click="activeUser(user)",
-                                ng-hide="isLoading['isActive'][user]=== true")
+                                ng-hide="isLoading['isActive'][user.email]=== true")
                 img(src='/assets/images/modal-loading.gif',
-                    ng-show="isLoading['isActive'][user] === true")
+                    ng-show="isLoading['isActive'][user.email] === true")

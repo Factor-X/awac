@@ -65,9 +65,8 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	}
 
 	@Override
-	public List<CodeLabel> findCodeLabelsByList(CodeList codeList) {
-		LinkedHashMap<String, CodeLabel> codeLabelsMap = findAllCodeLabels().get(codeList);
-		return new ArrayList<CodeLabel>(codeLabelsMap.values());
+	public HashMap<String,CodeLabel> findCodeLabelsByList(CodeList codeList) {
+		return findAllCodeLabels().get(codeList);
 	}
 
 	@Override
@@ -86,6 +85,12 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 	@Override
 	public void resetCache() {
 		allLabels = null;
+	}
+
+	@Override
+	public void removeAll() {
+		int nbDeleted = JPA.em().createNamedQuery(CodeLabel.REMOVE_ALL).executeUpdate();
+		Logger.info("Deleted {} code labels", nbDeleted);
 	}
 
 }

@@ -24,13 +24,11 @@ public class BaseActivityDataAE_BAD39B extends ActivityResultContributor {
 		// Get Target Unit (tCO2e in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tCO2e)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5331);
-        System.out.println("HERE");
         // For each set of answers in A322, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA334 = questionSetAnswers.get(QuestionCode.A334);
 		if (questionSetAnswersA334 == null) {
 			return res;
 		}
-        System.out.println("HERE 2");
         for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA334) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
@@ -38,13 +36,11 @@ public class BaseActivityDataAE_BAD39B extends ActivityResultContributor {
 			QuestionAnswer questionA336Answer = answersByCode.get(QuestionCode.A336);
 			QuestionAnswer questionA338Answer = answersByCode.get(QuestionCode.A338);
 			QuestionAnswer questionA335Answer = answersByCode.get(QuestionCode.A335);
-            System.out.println("HERE 3");
             if (questionA336Answer == null ||
 					questionA338Answer == null ||
 					questionA335Answer == null) {
 				continue;
 			}
-            System.out.println("HERE 4");
             BaseActivityData baseActivityData = new BaseActivityData();
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD39B);

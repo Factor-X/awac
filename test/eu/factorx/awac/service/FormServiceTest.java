@@ -33,19 +33,8 @@ public class FormServiceTest extends AbstractBaseModelTest {
 		List <Form> fl = formService.findAll();
 
 		assertNotNull(fl);
-		assertEquals(6, fl.size());
+		assertEquals(11, fl.size());
 
-		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
-				"TAB2",
-				"TAB3",
-				"TAB4",
-				"TAB5",
-				"TAB6",
-				"TAB7")));
-
-		for (Form form : fl) {
-			assertTrue(col.contains(form.getIdentifier()));
-		}
 	} // end of test
 
 	@Test

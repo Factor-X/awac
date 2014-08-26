@@ -1,0 +1,21 @@
+div(class="field_form")
+    mm-awac-modal-field-text(ng-info="firstNameInfo")
+    mm-awac-modal-field-text(ng-info="lastNameInfo")
+    mm-awac-modal-field-text(ng-info="emailInfo")
+    mm-awac-modal-field-text(ng-info="identifierInfo")
+    mm-awac-modal-field-text(ng-info="passwordInfo")
+    mm-awac-modal-field-text(ng-info="passwordConfirmInfo").field_form_separator
+    mm-awac-modal-field-text(ng-info="organizationNameInfo").field_form_separator
+    mm-awac-modal-field-text(ng-info="firstSiteNameInfo")
+
+    div(ng-hide="isLoading")
+
+        button.button(
+        type="button",
+        class="btn btn-primary",
+        ng-bind-html="'REGISTRATION_BUTTON' | translate",
+        ng-click="registration()",
+        ng-disabled="!registrationFieldValid()")
+
+    img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

@@ -77,7 +77,7 @@ public class RegistrationController  extends Controller {
 		organization.getSites().add(site);
 
 		//if the login and the password are ok, refresh the session
-		securedController.storeIdentifier(account.getIdentifier());
+		securedController.storeIdentifier(account);
 
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -87,7 +87,7 @@ public class RegistrationController  extends Controller {
 
 
 	@Transactional(readOnly = false)
-	public Result enterpriseMunicipality() {
+	public Result municipalityRegistration() {
 
 		MunicipalityAccountCreationDTO dto = extractDTOFromRequest(MunicipalityAccountCreationDTO.class);
 
@@ -115,7 +115,7 @@ public class RegistrationController  extends Controller {
 		organization.getSites().add(site);
 
 		//if the login and the password are ok, refresh the session
-		securedController.storeIdentifier(account.getIdentifier());
+		securedController.storeIdentifier(account);
 
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);

@@ -20,37 +20,40 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
+        // Get Target Unit (l in this case)
+        // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.l)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5126);
 
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+            	QuestionSetAnswer questionSetA252Answer = getChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+            	if (questionSetA252Answer == null) {
+            		return res;
+            	}
 
+            	QuestionSetAnswer questionSetA266Answer = getChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A266);
+            	if (questionSetA266Answer == null) {
+            		return res;
+            	}            	
 
-				QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
-				QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA266Answer.getQuestionAnswers());
+
+				QuestionAnswer questionA268Answer = answersByCodeChild.get(QuestionCode.A268);
+				QuestionAnswer questionA267Answer = answersByCodeChild.get(QuestionCode.A267);
 
 				if (questionA268Answer == null || questionA267Answer == null) {
 					continue;
 				}
 
-				Double belgianTruckRatio = 0.854;
-				Double internationalTruckRatio = 0.287;
-				Double belgianDistance = 0.0;
-				Double internationalDistance = 0.0;
-				// TODO: codes
-            /*    if (getCode(questionA268Answer, CODE) == CODE("Belgique")) {
-                    belgianDistance = 200.0;
-                    internationalDistance = 0.0;
-                } else if (getCode(questionA268Answer, CODE) == CODE("Europe")) {
-                    belgianDistance = 0.0;
-                    internationalDistance = 2500.0;
-                } else {
-                    belgianDistance = 0.0;
-                    internationalDistance = 5000.0;
+                if (!getCode(questionA268Answer).getKey().equals("1")) { // NOT Belgium
+                    continue;
                 }
-*/
+
+                Double belgianTruckRatio = 0.854;
+                Double internationalTruckRatio = 0.287;
+                Double belgianDistance = 200.0;
+
 				BaseActivityData baseActivityData = new BaseActivityData();
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
@@ -58,15 +61,11 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
 				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_12);
-				// TODO: FLORIAN
-				// baseActivityData.setActivityType(ActivityTypeCode.CAMION_TRANSPORTEUR_EXT);
-				baseActivityData.setActivitySource(ActivitySourceCode.AS_179);
+                baseActivityData.setActivityType(ActivityTypeCode.AT_1);
+				baseActivityData.setActivitySource(ActivitySourceCode.AS_162);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(belgianTruckRatio *
-						belgianDistance *
-						toDouble(questionA267Answer, baseActivityDataUnit) / 11.4 / 0.4426 *
-						24.98 / 100);
+    			baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(belgianTruckRatio * belgianDistance * toDouble(questionA267Answer, getUnitByCode(UnitCode.U5135)) / 11.4 / 0.4426 * 24.98 / 100);
 
 				res.add(baseActivityData);
 			}

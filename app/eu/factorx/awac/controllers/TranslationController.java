@@ -45,9 +45,9 @@ public class TranslationController extends Controller {
 
 	private List<CodeLabel> getTranslations() {
 		List<CodeLabel> translations = new ArrayList<>();
-		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY));
-		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE));
-		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_ERROR_MESSAGES));
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_ERROR_MESSAGES).values());
 		return translations;
 	}
 

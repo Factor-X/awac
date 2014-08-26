@@ -23,34 +23,33 @@ public class BaseActivityDataAE_BAD34B extends BaseActivityDataForProducts {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5156);
 
-		// For each set of answers in A284, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren())
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A282)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
-				QuestionAnswer questionA287Answer = answersByCode.get(QuestionCode.A287);
+                QuestionAnswer questionA287Answer = answersByCode.get(QuestionCode.A287);
 
-				if (questionA287Answer == null) {
-					continue;
-				}
+                if (questionA287Answer == null) {
+                    continue;
+                }
 
-				BaseActivityData baseActivityData = new BaseActivityData();
+                BaseActivityData baseActivityData = new BaseActivityData();
 
-				baseActivityData.setKey(BaseActivityDataCode.AE_BAD34B);
-				baseActivityData.setRank(1);
-				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
-				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_11);
-				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
-				baseActivityData.setActivityType(ActivityTypeCode.AT_3);
-				baseActivityData.setActivitySource(ActivitySourceCode.AS_164);
-				baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA287Answer, baseActivityDataUnit));
+                baseActivityData.setKey(BaseActivityDataCode.AE_BAD34B);
+                baseActivityData.setRank(1);
+                baseActivityData.setSpecificPurpose(toString(questionA245Answer));
+                baseActivityData.setActivityCategory(ActivityCategoryCode.AC_11);
+                baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_2);
+                baseActivityData.setActivityType(ActivityTypeCode.AT_3);
+                baseActivityData.setActivitySource(ActivitySourceCode.AS_44);
+                baseActivityData.setActivityOwnership(null);
+                baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA287Answer, baseActivityDataUnit));
 
-				res.add(baseActivityData);
-			}
+                res.add(baseActivityData);
+            }
+        }
 		return res;
 	}
-
 }

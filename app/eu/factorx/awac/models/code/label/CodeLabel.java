@@ -18,7 +18,8 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl"),
-		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList")
+		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList"),
+		@NamedQuery(name = CodeLabel.REMOVE_ALL, query = "delete from CodeLabel")
 })
 public class CodeLabel extends AuditedAbstractEntity implements Serializable, Comparable<CodeLabel> {
 
@@ -30,6 +31,7 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 	public static final String FIND_KEYS_BY_LIST = "CodeLabel.findKeysByList";
 	public static final String FIND_ALL = "CodeLabel.findAll";
 	public static final String REMOVE_BY_LIST = "CodeLabel.removeByList";
+	public static final String REMOVE_ALL = "CodeLabel.removeAll";
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = COLUMN_NAME_CODELIST, nullable = false)

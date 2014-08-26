@@ -1437,6 +1437,10 @@ h1 {
     padding-left: 10px;
 }
 
+.user_table tr {
+    height: 40px;
+}
+
 .user_table_header td,
 .site_table_header td {
     background-color: white;
@@ -1619,4 +1623,36 @@ ul.messenger > li {
     height: 1em;
     border-radius: 2px;
     margin-right: 0.5em;
+}
+
+.forgot_password_success_message{
+    text-align: center;
+    margin: 15px;
+    font-size: 18px;
+    color: darkgreen;
+}
+
+.interface_menu{
+    height : 40px;
+    list-style-type: none;
+    margin-left : 50px;
+}
+
+.interface_menu li{
+    float:left;
+    margin-right: 5px;
+}
+
+.interface_menu li a{
+    display:block;
+    color: white;
+}
+.interface_menu li a:hover{
+    text-decoration: none;
+}
+
+
+.interface_menu li .selected{
+    background-color : #000080;
+    border-color:#000080;
 }

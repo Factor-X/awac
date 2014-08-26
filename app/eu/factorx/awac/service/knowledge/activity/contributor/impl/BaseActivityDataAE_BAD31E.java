@@ -22,12 +22,26 @@ public class BaseActivityDataAE_BAD31E extends BaseActivityDataForProducts {
 
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5329);
 
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
+                if (questionSetAnswersChild.getChildren().isEmpty()) {
+                    return res;
+                }
+                QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
+                if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
+                    return res;
+                }
 
-				Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                if (questionSetA252Answer.getChildren().isEmpty()) {
+                    return res;
+                }
+                QuestionSetAnswer questionSetA253Answer = questionSetA252Answer.getChildren().get(0);
+                if (!questionSetA253Answer.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+                    return res;
+                }
 
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA253Answer.getQuestionAnswers());
 
 				QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
 				QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
@@ -50,8 +64,8 @@ public class BaseActivityDataAE_BAD31E extends BaseActivityDataForProducts {
 				baseActivityData.setActivityType(ActivityTypeCode.AT_26);
 				baseActivityData.setActivitySource(ActivitySourceCode.AS_177);
 				baseActivityData.setActivityOwnership(false);
-			baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA254Answer, baseActivityDataUnit) * toDouble(questionA255Answer, baseActivityDataUnit) * toDouble(questionA260Answer, baseActivityDataUnit));
+    			baseActivityData.setUnit(baseActivityDataUnit);
+                baseActivityData.setValue(toDouble(questionA254Answer, getUnitByCode(UnitCode.U5135)) * toDouble(questionA255Answer, getUnitByCode(UnitCode.U5106)) * toDouble(questionA260Answer));
 
 				res.add(baseActivityData);
 			}

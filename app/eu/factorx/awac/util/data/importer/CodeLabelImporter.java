@@ -44,6 +44,9 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		Logger.info("== Importing Code Data (from {})", CODES_TO_IMPORT_WORKBOOK_PATH);
 		Map<String, Sheet> codesWbSheets = getWorkbookSheets(CODES_TO_IMPORT_WORKBOOK_PATH);
 
+		codeLabelService.removeAll();
+		codesEquivalenceService.removeAll();
+
 		// First import labels of sheets with primary key column, which can be referenced in other lists
 		importCodeLabels(codesWbSheets);
 

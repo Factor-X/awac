@@ -62,7 +62,11 @@ public abstract class ActivityResultContributor {
 			if (numericAnswerValue.getUnit() == null) {
 				res = numericAnswerValue.doubleValue();
 			} else {
-				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit);
+				Integer year = null;
+				if (UnitCategoryCode.CURRENCY.equals(numericAnswerValue.getUnit().getCategory().getUnitCategoryCode())) {
+					year = Integer.valueOf(questionAnswer.getQuestionSetAnswer().getPeriod().getPeriodCode().getKey());
+				}
+				res = convertNumericValue(numericAnswerValue.doubleValue(), numericAnswerValue.getUnit(), toUnit, year);
 			}
 		} else {
 			throw new RuntimeException("Cannot convert " + answerValue + " to Double value");
@@ -107,12 +111,25 @@ public abstract class ActivityResultContributor {
 		return unitConversionService.convert(value, unitFrom, toUnit, null);
 	}
 
+	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit, Integer year) {
+		return unitConversionService.convert(value, unitFrom, toUnit, year);
+	}
+
 	protected Map<QuestionCode, QuestionAnswer> byQuestionCode(List<QuestionAnswer> questionAnswers) {
 		Map<QuestionCode, QuestionAnswer> res = new HashMap<>();
 		for (QuestionAnswer questionAnswer : questionAnswers) {
 			res.put(questionAnswer.getQuestion().getCode(), questionAnswer);
 		}
 		return res;
+	}
+
+	protected QuestionSetAnswer getChildQuestionSetAnswer(QuestionSetAnswer questionSetAnswer, QuestionCode childQuestionSetAnswerCode) {
+		for (QuestionSetAnswer childQuestionSetAnswer : questionSetAnswer.getChildren()) {
+			if (childQuestionSetAnswerCode.equals(childQuestionSetAnswer.getQuestionSet().getCode())) {
+				return childQuestionSetAnswer;
+			}
+		}
+		return null;
 	}
 
 	protected Unit getUnitByCode(UnitCode unitCode) {

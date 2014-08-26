@@ -11,7 +11,11 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
 
-
+/**
+ * TODO Delete Me! Find a more generic way to handle products data!
+ * @author jcarton
+ *
+ */
 public class BaseActivityDataForProducts extends ActivityResultContributor {
 
 	private BaseActivityDataAE_BAD31A baseActivityDataAE_BAD31A;
@@ -52,8 +56,13 @@ public class BaseActivityDataForProducts extends ActivityResultContributor {
 		// Get Target Unit (tonne.km in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
 
-		// For each set of answers in A238, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA238 = questionSetAnswers.get(QuestionCode.A238);		if (questionSetAnswersA238 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA238) {
+		// For each set of answers in A244, build an ActivityBaseData (see specifications)
+		List<QuestionSetAnswer> questionSetAnswersA244 = questionSetAnswers.get(QuestionCode.A244);
+		if (questionSetAnswersA244 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA244) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 

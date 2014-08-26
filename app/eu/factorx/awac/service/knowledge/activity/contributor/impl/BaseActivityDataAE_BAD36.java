@@ -31,12 +31,11 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 
 				QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
 
-
 				if (questionA302Answer == null) {
 					continue;
 				}
 				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A313)) {
+					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A303)) {
 
 						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
 
@@ -64,8 +63,34 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 						baseActivityData.setActivityType(toActivityTypeCode(questionA307Answer));
 						baseActivityData.setActivitySource(toActivitySourceCode(questionA306Answer));
 						baseActivityData.setActivityOwnership(null);
-			baseActivityData.setUnit(baseActivityDataUnit);
-						baseActivityData.setValue(toDouble(questionA308Answer, baseActivityDataUnit) * toDouble(questionA305Answer, baseActivityDataUnit));
+            			baseActivityData.setUnit(baseActivityDataUnit);
+
+                        Double percentage = 0.0;
+                        if (getCode(questionA308Answer).getKey().equals("1")) { 
+                            percentage = 0.0;
+                        } else if (getCode(questionA308Answer).getKey().equals("2")) {
+                            percentage = 0.1;
+                        } else if (getCode(questionA308Answer).getKey().equals("3")) {
+                            percentage = 0.2;
+                        } else if (getCode(questionA308Answer).getKey().equals("4")) {
+                            percentage = 0.3;
+                        } else if (getCode(questionA308Answer).getKey().equals("5")) {
+                            percentage = 0.4;
+                        } else if (getCode(questionA308Answer).getKey().equals("6")) {
+                            percentage = 0.5;
+                        } else if (getCode(questionA308Answer).getKey().equals("7")) {
+                            percentage = 0.6;
+                        } else if (getCode(questionA308Answer).getKey().equals("8")) {
+                            percentage = 0.7;
+                        } else if (getCode(questionA308Answer).getKey().equals("9")) {
+                            percentage = 0.8;
+                        } else if (getCode(questionA308Answer).getKey().equals("10")) {
+                            percentage = 0.9;
+                        } else if (getCode(questionA308Answer).getKey().equals("11")) {
+                            percentage = 1.0;
+                        }
+
+						baseActivityData.setValue(percentage * toDouble(questionA305Answer, baseActivityDataUnit));
 
 						res.add(baseActivityData);
 					}
@@ -74,5 +99,4 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 		}
 		return res;
 	}
-
 }

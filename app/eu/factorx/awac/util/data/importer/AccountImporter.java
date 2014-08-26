@@ -76,11 +76,12 @@ public class AccountImporter extends WorkbookDataImporter {
 
 				siteEntity = new Site(organizationEntity, site);
 				siteService.saveOrUpdate(siteEntity);
-
+				/*
 				Scope scope = new Scope(siteEntity);
 				scopeService.saveOrUpdate(scope);
 
 				Logger.info("Created site (with scope) " + site + " for organization " + org);
+				*/
 			}
 
 		}

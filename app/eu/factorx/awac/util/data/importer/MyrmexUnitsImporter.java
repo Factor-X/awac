@@ -87,6 +87,9 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		Logger.info("== Importing Unit Categories");
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
+			if (ref == null) {
+				break;
+			}
 			String name = getCellContent(unitCategoriesSheet, 1, i);
 			UnitCategory unitCategory = new UnitCategory(new UnitCategoryCode(ref), name, "", null);
 			unitCategoryService.saveOrUpdate(unitCategory);
@@ -99,6 +102,9 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		Logger.info("== Importing Units");
 		for (int i = 1; i < unitsSheet.getRows(); i++) {
 			String ref = getCellContent(unitsSheet, 0, i);
+			if (ref == null) {
+				break;
+			}
 			String name = getCellContent(unitsSheet, 1, i);
 			String symbol = getCellContent(unitsSheet, 2, i);
 			String categoryRef = getCellContent(unitsSheet, 3, i);
@@ -117,6 +123,9 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		Logger.info("== Updating Unit Categories (setting main Unit)");
 		for (int i = 1; i < unitCategoriesSheet.getRows(); i++) {
 			String ref = getCellContent(unitCategoriesSheet, 0, i);
+			if (ref == null) {
+				break;
+			}
 			UnitCategory category = unitCategoriesByRef.get(ref);
 			String mainUnitRef = getCellContent(unitCategoriesSheet, 2, i);
 			Unit mainUnit = unitsByRef.get(mainUnitRef);
@@ -134,6 +143,9 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 		List<UnitConversionFormula> conversionFormulas = new ArrayList<>();
 		for (int i = 1; i < unitConversionsSheet.getRows(); i++) {
 			String unitRef = getCellContent(unitConversionsSheet, 0, i);
+			if (unitRef == null) {
+				break;
+			}
 			Unit unit = unitsByRef.get(unitRef);
 			if (unit == null) {
 				throw new RuntimeException("Cannot find the conversion formula for unit (ref = " + unitRef + ")");
