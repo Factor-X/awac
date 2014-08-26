@@ -82,3 +82,6 @@ angular
 
     $scope.changePassword = () ->
         modalService.show(modalService.PASSWORD_CHANGE, {})
+
+    $scope.toForm = ->
+        $scope.$parent.navToLastFormUsed()

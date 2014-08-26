@@ -673,7 +673,7 @@ button.button.add {
 }
 
 h1 {
-    background-color: #305b2e;
+    /* background-color: #305b2e; */
     color: white;
     font-size: 14px;
     text-transform: uppercase;
