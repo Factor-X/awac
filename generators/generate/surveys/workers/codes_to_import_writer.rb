@@ -63,7 +63,7 @@ class CodesToImportWriter
                 raise Exception.new "Question #{q.accronym} has not recognized options in #{@filename}: #{q.options}"
             end
         else
-            @logger.warn "Question #{q.accronym} does not follow the convertions for its options in #{@filename}: #{q.options}. Assuming it is the list name..."
+            @logger.warn "Question #{q.accronym} does not follow the conventions for its options in #{@filename}: #{q.options}. Assuming it is the list name..."
             ln = Code.make(q.options)
         end
 
@@ -89,9 +89,7 @@ class CodesToImportWriter
 
         if source_sheet[0, 0] == 'ActivitySource_KEY' or source_sheet[0, 0] == 'ActivityType_KEY' or source_sheet[0, 0] == 'ActivitySubCategory_KEY'
             target_sheet[0, 0] = source_sheet[0, 0]
-
             target_sheet.row(0).set_format(0, bold)
-
             for i in 1..source_sheet.rows.length
                 target_sheet[i, 0] = source_sheet[i, 0]
             end
@@ -112,6 +110,21 @@ class CodesToImportWriter
                 target_sheet[i, 2] = source_sheet[i, 1]
                 target_sheet[i, 3] = source_sheet[i, 1]
             end
+
+            extra_column = 4
+
+            for i in (1..source_sheet.row(0).length)
+                # Look for a foreign key column
+                if source_sheet[0, i].to_s.end_with? '_KEY'
+                    for j in 0..source_sheet.rows.length
+                        target_sheet[j, extra_column] = source_sheet[j, i]
+                    end
+                    target_sheet.row(0).set_format(extra_column, bold)
+                    extra_column = extra_column + 1
+                end
+            end
+
+
         end
 
         @logger.info "Worksheet #{name} has been created."
