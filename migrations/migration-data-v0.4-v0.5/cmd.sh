@@ -146,7 +146,7 @@ echo "update account set is_admin = true from administrator where administrator.
 echo "drop table administrator;" >> /tmp/migration/migration_script.sql
 
 # remove administrator table
-echo "alter table person add column default_language character varying(255) not null default 'FR';" >> /tmp/migration/migration_script.sql
+echo "alter table person add column default_language character varying(2) not null default 'FR';" >> /tmp/migration/migration_script.sql
 
 
 #create notification key
