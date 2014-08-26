@@ -40,7 +40,7 @@ class TranslationsWriter
 
         current_line = 1
 
-        @logger.info("Inserting FORMS ...")
+        @logger.info('Inserting FORMS ...')
         for form in @forms
 
             @main_sheet[current_line, 0] = form.code
@@ -51,7 +51,7 @@ class TranslationsWriter
 
         end
 
-        @logger.info("Inserting QUESTIONS_SETS ...")
+        @logger.info('Inserting QUESTIONS_SETS ...')
         for qs in @question_sets
 
             @main_sheet[current_line, 0] = qs.accronym + '_TITLE'
@@ -70,7 +70,7 @@ class TranslationsWriter
 
         end
 
-        @logger.info("Inserting QUESTIONS ...")
+        @logger.info('Inserting QUESTIONS ...')
         for q in @questions
 
             @main_sheet[current_line, 0] = q.accronym + '_TITLE'
