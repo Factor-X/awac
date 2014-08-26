@@ -22,47 +22,55 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	private static final String PRIMARY_KEY_COLUMN_NAME = "KEY";
 	private static final String FOREIGN_KEY_SUFFIX = "_KEY";
 
-	private static final String CODES_TO_IMPORT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_full.xls";
+	private static final String CODES_TO_IMPORT_COMMON_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_common.generated.xls";
+	private static final String CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Enterprise.generated.xls";
+	private static final String CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
 
-	private Map<CodeList, LinkedHashMap<String, CodeLabel>> importedCodeLists = new HashMap<>();
+	private Set<CodeList> importedCodeLists = new HashSet<>();
 
 	@Autowired
 	private CodeLabelService codeLabelService;
-	
+
 	@Autowired
 	private CodesEquivalenceService codesEquivalenceService;
 
 	@Autowired
 	private CodeConversionService codeConversionService;
-	
+
 	public CodeLabelImporter() {
 		super();
 	}
 
 	@Override
 	protected void importData() throws Exception {
-		Logger.info("== Importing Code Data (from {})", CODES_TO_IMPORT_WORKBOOK_PATH);
-		Map<String, Sheet> codesWbSheets = getWorkbookSheets(CODES_TO_IMPORT_WORKBOOK_PATH);
-
 		codeLabelService.removeAll();
 		codesEquivalenceService.removeAll();
 
-		// First import labels of sheets with primary key column, which can be referenced in other lists
-		importCodeLabels(codesWbSheets);
+		for (String workbookPath : new String[] { CODES_TO_IMPORT_COMMON_WORKBOOK_PATH, CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH, CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH }) {
+			Logger.info("== Importing Code Data (from {})", workbookPath);
+			Map<String, Sheet> codesWbSheets = getWorkbookSheets(workbookPath);
 
-		// Then import correspondence data: sublists (only a foreign key), and linked lists (sheets with a primary key and one or more foreign keys)
-		importCodesEquivalences(codesWbSheets);
+			// First import labels of sheets with primary key column, which can be referenced in other lists
+			importCodeLabels(codesWbSheets);
+
+			// Then import correspondence data: sublists (only a foreign key), and linked lists (sheets with a primary key and one or more foreign keys)
+			importCodesEquivalences(codesWbSheets);
+		}
 	}
 
 	private void importCodeLabels(Map<String, Sheet> codesWbSheets) {
 		Logger.info("==== Importing Code Labels");
 		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
+			if (importedCodeLists.contains(codeList)) {
+				Logger.info("====== CodeList '{}' has already been imported", codeList);
+				continue;
+			}
 			Sheet sheet = codesWbSheets.get(sheetName);
 			String firstCell = getCellContent(sheet, 0, 0);
 			if (PRIMARY_KEY_COLUMN_NAME.equals(firstCell)) {
-				LinkedHashMap<String, CodeLabel> codeLabels = importCodeLabels(sheet, codeList);
-				importedCodeLists.put(codeList, codeLabels);
+				importCodeLabels(sheet, codeList);
+				importedCodeLists.add(codeList);
 			}
 		}
 	}
@@ -92,6 +100,10 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		Logger.info("==== Importing Codes Equivalences");
 		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
+			if (importedCodeLists.contains(codeList)) {
+				Logger.info("====== CodeList '{}' has already been imported", codeList);
+				continue;
+			}
 			Sheet sheet = codesWbSheets.get(sheetName);
 
 			// searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
@@ -115,6 +127,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 					}
 					importConversionData(sheet, codeList, referencedCodeList, columnIndex);
 				}
+				importedCodeLists.add(codeList);
 			}
 		}
 	}
@@ -162,7 +175,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	private CodeList getReferencedCodeList(CodeList codeList, String sheetName, String columnName) {
 		String refCodeListName = StringUtils.left(columnName, (columnName.length() - FOREIGN_KEY_SUFFIX.length()));
 		CodeList refCodeList = CodeList.valueOf(refCodeListName);
-		if (!importedCodeLists.containsKey(refCodeList)) {
+		if (!importedCodeLists.contains(refCodeList)) {
 			throw new RuntimeException("Cannot import correspondance between CodeList '" + codeList + "' and referenced CodeList '"
 					+ refCodeList + "' (defined in column '" + columnName + "' of sheet '" + sheetName
 					+ "'): the referenced CodeList name does not match with any imported CodeList");
