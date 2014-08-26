@@ -30,7 +30,7 @@ class SurveyClassWriter
         input    = File.read(filename)
         eruby    = Erubis::Eruby.new(input)
 
-        outfile = ROOT + '/app/eu/factorx/awac/generated/Awac' + name + 'InitialData.java'
+        outfile = "#{ROOT}/app/eu/factorx/awac/generated/Awac#{name}InitialData.java"
         begin
             result = eruby.evaluate(SurveyClassWriterBindings.new(filename, {
                 :name          => name,

@@ -13,7 +13,7 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-08-25 10:02:31 +0200 */
+/* Generated the 2014-08-26 14:49:52 +0200 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -350,7 +350,7 @@ public static final QuestionCode A501 = new QuestionCode("A501");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-08-25 10:02:33 +0200 */
+/* Generated the 2014-08-26 14:49:53 +0200 */
 
 public static final QuestionCode AC2 = new QuestionCode("AC2");
 public static final QuestionCode AC3 = new QuestionCode("AC3");
