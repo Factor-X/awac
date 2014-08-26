@@ -151,7 +151,6 @@ public class RegistrationController  extends Controller {
 		}
 
 		//create account
-		//TODO encode password !!
 		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password, interfaceCode);
 		administrator.setIsAdmin(true);
 

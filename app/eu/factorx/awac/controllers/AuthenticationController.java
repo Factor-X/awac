@@ -30,6 +30,7 @@ import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
@@ -75,7 +76,6 @@ public class AuthenticationController extends Controller {
 	@Transactional(readOnly = false)
 	public Result authenticate() {
 
-
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {
@@ -92,7 +92,7 @@ public class AuthenticationController extends Controller {
 		}
 
 		//test password
-		if (!account.getPassword().equals(connectionFormDTO.getPassword())) {
+		if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
 			//use the same message for both login and password error
 			return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
 		}
@@ -116,8 +116,6 @@ public class AuthenticationController extends Controller {
 		if (account.getNeedChangePassword()) {
 
 			if (connectionFormDTO.getNewPassword() != null) {
-
-				//TODO encrypt password
 				account.setPassword(connectionFormDTO.getNewPassword());
 				account.setNeedChangePassword(false);
 				accountService.saveOrUpdate(account);
@@ -192,7 +190,6 @@ public class AuthenticationController extends Controller {
 		emailService.send(emailMessage);
 
 		//save new password
-		//TODO encode password !!
 		account.setPassword(password);
 		account.setNeedChangePassword(true);
 		accountService.saveOrUpdate(account);

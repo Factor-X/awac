@@ -25,6 +25,7 @@
     COMMAND : git  checkout -b v0.5
  6) deactivate "Invite user" button into "user manager"
     HOW TO : user_maanger.jade, l.5 : add ng-show="false"
+ 6.1) deactivate document question
  => application ready to deploy
  7) deploy the application
     COMMAND : git push awac-accept v0.5:master -f
