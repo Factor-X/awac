@@ -15,9 +15,8 @@ class CodesToImportWriter
     def initialize(name, filename, questions)
         @logger                 = Log.new(Code.for_class(self))
         @filename               = filename
-        @temp_filename          = "/tmp/codes_to_import_full_#{Time.now.strftime('%Y%m%dT%H%M%S')}.xls"
-        @target_filename        = "#{ROOT}/data_importer_resources/codes/codes_to_import_#{name}.xls"
-        @target_common_filename = "#{ROOT}/data_importer_resources/codes/codes_to_import_common.xls"
+        @target_filename        = "#{ROOT}/data_importer_resources/codes/codes_to_import_#{name}.generated.xls"
+        @target_common_filename = "#{ROOT}/data_importer_resources/codes/codes_to_import_common.generated.xls"
         @questions              = questions
     end
 
@@ -103,6 +102,10 @@ class CodesToImportWriter
     def create_target_worksheet_from(source_sheet)
 
         name = Code.make(source_sheet.name)
+
+        # If sheet already exists, skip it nicely :-)
+        return if @target_book.worksheets.find { |s| s.name == name }
+
 
         @logger.info "Creating worksheet #{name}..."
         target_sheet = @target_book.create_worksheet :name => name
