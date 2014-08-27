@@ -55,7 +55,7 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 
 	@Override
 	public Account saveOrUpdate(Account account){
-		if(account.getPassword().length()> 30){
+		if(account.getPassword().length()< 30){
 			StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
 			account.setPassword(standardPasswordEncoder.encode(account.getPassword()));
 		}

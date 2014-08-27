@@ -51,8 +51,8 @@ public class EmailController {
 
 		try {
 			// send mail
-			EmailMessage email = new EmailMessage(destinationEmail,subject,message, new InterfaceTypeCode(interfaceName),new LanguageCode(languageKey));
-			emailService.send(email);
+			// TODO waiting refactoring EmailMessage email = new EmailMessage(destinationEmail,subject,message, new InterfaceTypeCode(interfaceName),new LanguageCode(languageKey));
+			// emailService.send(email);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			Logger.error("email", "Confirmation e-mail can not be sent!!!");

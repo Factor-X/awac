@@ -47,6 +47,11 @@ import static play.test.Helpers.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AnswerTest extends AbstractBaseModelTest {
 
+
+	private final Long FormId = 2L;
+	private final Long PeriodId = 1L;
+	private final Long ScopeId = 1L;
+
   	@Test
 	public void _001_saveActionSuccess() {
 
@@ -68,9 +73,9 @@ public class AnswerTest extends AbstractBaseModelTest {
 	// QuestionAnswersDTO
 	QuestionAnswersDTO questionAnswersDto = new QuestionAnswersDTO();		 
 	questionAnswersDto.setListAnswers(answerListDto);
-	questionAnswersDto.setFormId(1L);
-	questionAnswersDto.setPeriodId(1L); // periodCode
-	questionAnswersDto.setScopeId(1L);
+	questionAnswersDto.setFormId(FormId);
+	questionAnswersDto.setPeriodId(PeriodId); // periodCode
+	questionAnswersDto.setScopeId(ScopeId);
 	questionAnswersDto.setLastUpdateDate("10102014");
 
 	//Json node

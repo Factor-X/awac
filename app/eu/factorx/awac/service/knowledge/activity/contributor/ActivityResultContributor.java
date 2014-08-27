@@ -123,7 +123,7 @@ public abstract class ActivityResultContributor {
 		return res;
 	}
 
-	protected QuestionSetAnswer getChildQuestionSetAnswer(QuestionSetAnswer questionSetAnswer, QuestionCode childQuestionSetAnswerCode) {
+	protected QuestionSetAnswer getFirstChildQuestionSetAnswer(QuestionSetAnswer questionSetAnswer, QuestionCode childQuestionSetAnswerCode) {
 		for (QuestionSetAnswer childQuestionSetAnswer : questionSetAnswer.getChildren()) {
 			if (childQuestionSetAnswerCode.equals(childQuestionSetAnswer.getQuestionSet().getCode())) {
 				return childQuestionSetAnswer;

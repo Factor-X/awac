@@ -25,19 +25,13 @@ public class BaseActivityDataAE_BAD31D extends BaseActivityDataForProducts {
         for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
             if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-                if (questionSetAnswersChild.getChildren().isEmpty()) {
-                    return res;
-                }
-                QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
-                if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
+                QuestionSetAnswer questionSetA252Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+                if (questionSetA252Answer == null) {
                     return res;
                 }
 
-                if (questionSetA252Answer.getChildren().isEmpty()) {
-                    return res;
-                }
-                QuestionSetAnswer questionSetA253Answer = questionSetA252Answer.getChildren().get(0);
-                if (!questionSetA253Answer.getQuestionSet().getCode().equals(QuestionCode.A253)) {
+                QuestionSetAnswer questionSetA253Answer = getFirstChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A253);
+                if (questionSetA253Answer == null) {
                     return res;
                 }
 

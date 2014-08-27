@@ -3,10 +3,12 @@ package eu.factorx.awac.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
 import play.Play;
+import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -14,10 +16,13 @@ import play.mvc.Security;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
+import eu.factorx.awac.generated.AwacMunicipalityInitialData;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
+import eu.factorx.awac.util.data.importer.AwacDataImporter;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 
@@ -33,12 +38,20 @@ public class AdminController extends Controller {
 	private SecuredController   securedController;
 	@Autowired
 	private CodeLabelService    codeLabelService;
+	@Autowired
+	private FormService 		formService;
 	
 	@Autowired
 	private TranslationImporter translationImporter;
 
 	@Autowired
-	private CodeLabelImporter codeLabelImporter;
+	private CodeLabelImporter 	codeLabelImporter;
+
+	@Autowired
+	private AwacDataImporter 	awacDataImporter;
+
+	@Autowired
+	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -74,13 +87,15 @@ public class AdminController extends Controller {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result resetTranslations() {
+	public Result resetCodeLabels() {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
 		// reset code labels cache
 		codeLabelService.resetCache();
-		// import new translations code labels
+		// import code labels
+		codeLabelImporter.run();
+		// import translations
 		translationImporter.run();
 
 		return (ok());
@@ -88,16 +103,27 @@ public class AdminController extends Controller {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result resetCodeLabels() {
+	public Result resetIndicatorsAndFactors() {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
-		// reset code labels cache
-		codeLabelService.resetCache();
-		// import new translations code labels
-		codeLabelImporter.run();
+		// import indicators and factors
+		awacDataImporter.run();
 
 		return (ok());
 	}
 
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result createMunicipalitySurveyData() {
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
+		if (formService.findByIdentifier("TAB_C1") != null) {
+			throw new RuntimeException("Municipality Survey Data has already been created");
+		}
+		awacMunicipalityInitialData.createSurvey(JPA.em().unwrap(Session.class));
+
+		return (ok());
+	}
 }

@@ -20,15 +20,17 @@
 
        if q.type == 'MULTIPLE'
 
-           if q.options != nil and q.options.start_with? 'Liste:'
-               driver = Code.make(q.options.gsub('Liste:', '').strip)
-           else
-               if q.options != nil and q.options.start_with? 'ListeCompound:'
-                   driver = Code.make(q.options.gsub('ListeCompound:', '').strip)
+           if q.options.include? ':'
+               parts = q.options.split(':').collect { |p| p.strip }
+               if Code.make(parts[0]) == 'LISTE' or Code.make(parts[0]) == 'LISTECOMPOUND'
+                   driver = Code.make(parts[1])
                else
-                   driver = q.accronym.upcase + '_OPTIONS'
+                   raise Exception.new "Question #{q.accronym} has not recognized options"
                end
+           else
+               driver = Code.make(q.options)
            end
+
        end
 
        if q.type == 'YES_NO'

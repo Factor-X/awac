@@ -1,7 +1,9 @@
 # Procedure
 
-steps to migrate AWAC v0.4 to v0.5
+Steps to migrate AWAC **v0.4** to **v0.5**
+
 -> modification of the data structure
+
 -> add some informations into database
 
 ## Files
@@ -33,6 +35,19 @@ steps to migrate AWAC v0.4 to v0.5
     $
     ```
 
+		V0.5 NOTE
+		---------
+		Regarding the v0.4 to v0.5 migration, the importers that have to be launched are:
+		- CodeLabelImporter (re-import all code lists and translations)
+		- AwacMunicipalityInitialData (import municipality survey data: forms, question sets, questions)
+		- AwacDataImporter (re-import all enterprise-related indicators & factors)
+		
+		You may achieve this by using the console, or the administration controller by going to these urls (works only on dev env.):
+		- http://localhost:9000/awac/admin/codelabels/reset
+		- http://localhost:9000/awac/admin/indicators_factors/reset
+		- http://localhost:9000/awac/admin/municipality_survey/create
+	
+
     => database ok
 
 5. create a branch v0.5
@@ -42,19 +57,25 @@ steps to migrate AWAC v0.4 to v0.5
 
 6. deactivate "Invite user" button into "user manager"
     HOW TO : user_maanger.jade, l.5 : add ng-show="false"
+7. deactivate "forgot password" into login
+    HOW TO : add ng-show="false" into the second tab
+    ```sh
+    $
+    ```
+    
     => application ready to deploy
     
-7. deploy the application
+8. deploy the application
     ```sh
     $ git push awac-accept v0.5:master -f
     ```
 
-8. erase the production DB with the local DB
+9. erase the production DB with the local DB
     ```sh
     $
     ```
 
-9. start the new application
+10. start the new application
     ```sh
     $
     ```

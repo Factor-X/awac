@@ -19,26 +19,27 @@ public class BaseActivityDataAE_BAD35D extends BaseActivityDataForProducts {
 	public List<BaseActivityData> getBaseActivityData(QuestionSetAnswer questionSetAnswer, QuestionAnswer questionA245Answer, QuestionAnswer questionA246Answer) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (kg in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5133);
+		// Get Target Unit (t in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
 		// For each set of answers in A291, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A291)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
-				QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
-				if (
-						questionA293Answer == null) {
-					continue;
-				}
+                QuestionAnswer questionA293Answer = answersByCode.get(QuestionCode.A293);
 
-				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A297)) {
+                if (
+                        questionA293Answer == null) {
+                    continue;
+                }
 
-						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
+                for (QuestionSetAnswer questionSetAnswersChild297 : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChild297.getQuestionSet().getCode().equals(QuestionCode.A297)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild297.getQuestionAnswers());
 
 						QuestionAnswer questionA298Answer = answersByCodeChild.get(QuestionCode.A298);
 						QuestionAnswer questionA299Answer = answersByCodeChild.get(QuestionCode.A299);
