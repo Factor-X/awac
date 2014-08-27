@@ -2,6 +2,7 @@ package eu.factorx.awac.service;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
@@ -24,6 +25,11 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FormProgressServiceTest extends AbstractBaseModelTest {
+
+	private final static PeriodCode  PERIOD_CODE= PeriodCode.P2013;
+	private final static String ORGANIZATION_NAME = "Factor-X";
+	private final static String FORM_IDENTIFIER = "TAB7";
+	private final static int EXPECTED_PERCENT = 99;
 
 	@Autowired
 	private ScopeService scopeService;
@@ -50,16 +56,16 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 		Period period;
 		Form form;
 		Scope scope;
-		Integer percentage = new Integer (99);
+		Integer percentage = new Integer (EXPECTED_PERCENT);
 
-		period = periodService.findById(6L); // id 6 = period 2013
-		form = formService.findByIdentifier("TAB7");
-		scope = scopeService.findByOrganization(organizationService.findById(2L)); // id 2 = Factorx
+		period = periodService.findByCode(PERIOD_CODE);
+		form = formService.findByIdentifier(FORM_IDENTIFIER);
+		scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
 
 		FormProgress fp = formProgressService.saveOrUpdate(new FormProgress(period, form, scope, percentage));
 
 		assertNotNull(fp);
-		assertEquals(new Integer(99),fp.getPercentage());
+		assertEquals(new Integer(EXPECTED_PERCENT),fp.getPercentage());
 
 	} // end of test
 
@@ -77,8 +83,12 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_findByPeriodAndByScope() {
 
-		Period period = periodService.findById(6L); // id 6 = period 2013
-		Scope scope = scopeService.findByOrganization(organizationService.findById(2L)); // id 2 = Factorx
+		Period period = periodService.findByCode(PERIOD_CODE);
+		Scope scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
+
+		assertNotNull("Period is null, founded by "+PERIOD_CODE, period);
+		assertNotNull("Scope is null, founded by "+ORGANIZATION_NAME, scope);
+
 		List <FormProgress> formProgress = formProgressService.findByPeriodAndByScope(period,scope);
 
 		assertNotNull(formProgress);
@@ -88,14 +98,18 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _003_findByPeriodAndByScopeAndForm() {
 
-		Period period = periodService.findById(6L); // id 6 = period 2013
-		Scope scope = scopeService.findByOrganization(organizationService.findById(2L)); // id 2 = Factorx
-		Form form = formService.findByIdentifier("TAB7");
+		Period period = periodService.findByCode(PERIOD_CODE);
+		Scope scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
+		Form form = formService.findByIdentifier(FORM_IDENTIFIER);
+
+		assertNotNull("Form is null, founded by "+FORM_IDENTIFIER, form);
+		assertNotNull("Period is null, founded by "+PERIOD_CODE, period);
+		assertNotNull("Scope is null, founded by "+ORGANIZATION_NAME, scope);
 
 		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period,scope,form);
 
-		assertNotNull(formProgress);
-		assertEquals(new Integer(99),formProgress.getPercentage());
+		assertNotNull("FormProgress not found for period/scope/form : "+period+"/"+scope+"/"+form, formProgress);
+		assertEquals("Excepected pourcentage : "+EXPECTED_PERCENT+", but found : "+formProgress.getPercentage(),new Integer(EXPECTED_PERCENT),formProgress.getPercentage());
 
 	} // end of test
 
@@ -107,9 +121,9 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 		Scope scope;
 		Integer percentage = new Integer (99);
 
-		period = periodService.findById(6L); // id 6 = period 2013
-		form = formService.findByIdentifier("TAB7");
-		scope = scopeService.findByOrganization(organizationService.findById(2L)); // id 2 = Factorx
+		period = periodService.findByCode(PERIOD_CODE);
+		form = formService.findByIdentifier(FORM_IDENTIFIER);
+		scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
 
 		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period,scope,form);
 

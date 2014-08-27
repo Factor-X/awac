@@ -1,6 +1,9 @@
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, tmhDynamicLocale) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService,$timeout) ->
+
+
+    $scope.displayMenu = true
 
     #
     # First loading
@@ -20,14 +23,6 @@ angular
         if args.type is "TRANSLATIONS"
             $scope.initialLoad.translations = args.success
         return
-
-    translationService.initialize('fr')
-
-    $scope.language = 'fr'
-
-    $scope.$watch 'language', (lang) ->
-        translationService.initialize(lang)
-        tmhDynamicLocale.set(lang.toLowerCase())
 
     #
     # Tabs
@@ -66,6 +61,7 @@ angular
     # confirmed : the modification of localisation was already confirmed by the user
     #
     $scope.nav = (loc, confirmed = false) ->
+        console.log "NAV : "+loc
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
@@ -81,9 +77,30 @@ angular
         if canBeContinue
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
+            #after the nav, compute displayMenu
+            
             # used to recompute the displaying of the menu
             #if !$scope.$$phase
             #    $scope.$apply()
+
+    $scope.$on '$routeChangeSuccess', (event, args) ->
+        $timeout(->
+            $scope.computeDisplayMenu()
+        ,0)
+
+
+    $scope.computeDisplayMenu = ->
+        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
+            $scope.displayMenu= true
+        else
+            $scope.displayMenu= false
+
+
+    #
+    # nav to the last nav used
+    #
+    $scope.navToLastFormUsed = ->
+        $scope.nav($scope.$root.getFormPath())
 
     #
     # Periods
@@ -196,11 +213,6 @@ angular
         $scope.lastSaveTime = date
 
 
-    $scope.displayMenu = ->
-        if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
-            return true
-        return false
-
     $scope.getClassContent = ->
         if $scope.$root.isLogin() == false
             if $scope.getMainScope()?
@@ -212,7 +224,31 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout,translationService,tmhDynamicLocale)->
+
+    $rootScope.languages = []
+    $rootScope.languages[0] = {
+        value:'fr'
+        label:'Français'
+    }
+    $rootScope.languages[1] = {
+        value:'en'
+        label:'English'
+    }
+    $rootScope.languages[2] = {
+        value:'nl'
+        label:'Neederlands'
+    }
+
+    translationService.initialize('fr')
+
+    $rootScope.language = 'fr'
+
+    $rootScope.$watch 'language', (lang) ->
+        translationService.initialize(lang)
+        tmhDynamicLocale.set(lang.toLowerCase())
+        #TODO save the langauge changement
+
 
 
     #
@@ -248,7 +284,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         $rootScope.currentPerson = data.person
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
-        $rootScope.onLoginSuccess(data)
+        $rootScope.onFormPath(data.defaultPeriod,data.organization.sites[0].scope)
 
     #
     # get user

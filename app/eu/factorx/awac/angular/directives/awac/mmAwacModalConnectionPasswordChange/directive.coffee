@@ -26,7 +26,8 @@ angular
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             hideIsValidIcon: true
             field: ""
-            focus: true
+            focus: ->
+                return true
 
         $scope.newPasswordConfirmInfo =
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE"

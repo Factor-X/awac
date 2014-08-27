@@ -22,7 +22,8 @@ angular
         field: $scope.$root.currentPerson.lastName
         hideIsValidIcon: true
         isValid: true
-        focus: true
+        focus: ->
+            return true
 
     $scope.firstNameInfo =
         fieldTitle: "USER_FIRSTNAME"
@@ -81,3 +82,6 @@ angular
 
     $scope.changePassword = () ->
         modalService.show(modalService.PASSWORD_CHANGE, {})
+
+    $scope.toForm = ->
+        $scope.$parent.navToLastFormUsed()

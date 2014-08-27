@@ -9,7 +9,8 @@ DECLARE
 
 BEGIN
   FOREACH tableName IN ARRAY tableNames LOOP
-    EXECUTE format('ALTER TABLE %I ADD COLUMN creationdate timestamp without time zone,
+    EXECUTE format('ALTER TABLE %I
+           ADD COLUMN creationdate timestamp without time zone default (now() at time zone ''utc''),
            ADD COLUMN creationuser character varying(255),
            ADD COLUMN lastupdatedate timestamp without time zone,
 	       ADD COLUMN lastupdateuser character varying(255)', tableName);

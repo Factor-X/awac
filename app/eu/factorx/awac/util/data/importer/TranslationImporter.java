@@ -15,22 +15,33 @@ import eu.factorx.awac.service.CodeLabelService;
 @Component
 public class TranslationImporter extends WorkbookDataImporter {
 
-	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations.xls";
-
+	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations_common.xls";
+	private static final String TRANSLATIONS_ENTERPRISES_PATH = "data_importer_resources/translations/translations_Enterprise.generated.xls";
+	private static final String TRANSLATIONS_MUNICIPALITY_PATH = "data_importer_resources/translations/translations_Municipality.generated.xls";
+	
 	@Autowired
 	private CodeLabelService codeLabelService;
-	
+
 	public TranslationImporter() {
 		super();
 	}
 
 	@Override
 	protected void importData() throws Exception {
-		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 
-		importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);
+		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY,
+				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
+		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
 		importTranslations(wbSheets.get("INTERFACE"), CodeList.TRANSLATIONS_INTERFACE);
 		importTranslations(wbSheets.get("ERROR_MESSAGES"), CodeList.TRANSLATIONS_ERROR_MESSAGES);
+		importTranslations(wbSheets.get("EMAIL_MESSAGES"), CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
+		for (String workbookPath : new String[] {TRANSLATIONS_ENTERPRISES_PATH, TRANSLATIONS_MUNICIPALITY_PATH}) {
+			wbSheets = getWorkbookSheets(workbookPath);
+			importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);
+		}
+
 	}
 
 	private void importTranslations(Sheet sheet, CodeList codeList) {

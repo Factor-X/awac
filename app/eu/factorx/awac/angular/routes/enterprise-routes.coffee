@@ -6,8 +6,10 @@ initializeEnterpriseRoutes = () ->
     angular
     .module('app')
     .run ($rootScope, $location) ->
-        $rootScope.onLoginSuccess = (data) ->
-            $location.path('/enterprise-tab2/' + data.defaultPeriod + '/' + data.organization.sites[0].scope)
+        $rootScope.onFormPath = (period,scope) ->
+            $location.path($rootScope.getFormPath()+'/' + period + '/' + scope)
+        $rootScope.getFormPath = ()->
+            return '/enterprise-tab2'
 
 
     angular

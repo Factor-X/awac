@@ -5,7 +5,7 @@ tr
                 ng-disabled='getInfo().disabled',
                 ng-model='getInfo().field',
                 placeholder='{{getInfo().placeholder | translateText}}',
-                focus-me="{{getInfo().focus}}")
+                focus-me="getInfo().focus()")
     td
         div(ng-if='isValidationDefined')
             img(ng-if='!hideIsValidIcon', ng-show='getInfo().isValid', src='/assets/images/field_valid.png')

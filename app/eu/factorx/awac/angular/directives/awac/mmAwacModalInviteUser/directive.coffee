@@ -17,7 +17,8 @@ angular
             placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
             validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
             validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
-            focus: true
+            focus: ->
+                return true
 
         $scope.allFieldValid = () ->
             if $scope.passwordInfo.isValid && $scope.newEmailInfo.isValid

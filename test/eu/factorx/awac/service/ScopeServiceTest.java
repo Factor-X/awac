@@ -25,6 +25,8 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ScopeServiceTest extends AbstractBaseModelTest {
 
+	private final static String ORGANIZATION_NAME = "Factor-X";
+
 	@Autowired
 	private ScopeService scopeService;
 
@@ -34,12 +36,10 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 	@Autowired
 	private ProductService productService;
 
-
-
 	@Test
-    public void _001_findAll() {
+	public void _001_findAll() {
 
-		List <Scope> sf = scopeService.findAll();
+		List<Scope> sf = scopeService.findAll();
 
 		assertNotNull(sf);
 		assertTrue(sf.size() > 0);
@@ -50,10 +50,10 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_findByOrganization() {
 
-		Scope scope = scopeService.findByOrganization(organizationService.findById(1L)); // id 1 = Factorx
+		Scope scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
 
-		assertNotNull(scope);
-		assertEquals("Factor-X",scope.getOrganization().getName());
+		assertNotNull("Scope not found for organization "+ORGANIZATION_NAME, scope);
+		assertEquals("Organization expected "+ORGANIZATION_NAME+" but found : "+scope.getOrganization().getName(), ORGANIZATION_NAME, scope.getOrganization().getName());
 
 	} // end of test
 

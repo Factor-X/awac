@@ -22,6 +22,7 @@ public class AccountToPersonDTOConverter implements Converter<Account, PersonDTO
 		personDTO.setLastName(account.getPerson().getLastname());
 		personDTO.setIsActive(account.getActive());
 		personDTO.setIsAdmin(account.getIsAdmin());
+		personDTO.setDefaultLanguage(account.getPerson().getDefaultLanguage().getKey());
 
 		return personDTO;
 	}

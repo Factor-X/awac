@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
+import play.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -15,9 +16,9 @@ import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.NotificationService;
+import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 
 @org.springframework.stereotype.Controller
@@ -35,6 +36,9 @@ public class AdminController extends Controller {
 	
 	@Autowired
 	private TranslationImporter translationImporter;
+
+	@Autowired
+	private CodeLabelImporter codeLabelImporter;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -71,8 +75,9 @@ public class AdminController extends Controller {
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result resetTranslations() {
-		// remove old translations code labels
-		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY, CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES);
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
 		// reset code labels cache
 		codeLabelService.resetCache();
 		// import new translations code labels
@@ -81,5 +86,18 @@ public class AdminController extends Controller {
 		return (ok());
 	}
 
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result resetCodeLabels() {
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
+		// reset code labels cache
+		codeLabelService.resetCache();
+		// import new translations code labels
+		codeLabelImporter.run();
+
+		return (ok());
+	}
 
 }

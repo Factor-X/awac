@@ -8,6 +8,7 @@ class QuestionSet
     attr_accessor :ref,
                   :accronym,
                   :text,
+                  :loop_descriptor,
                   :repeatable,
                   :parent,
                   :form

@@ -57,7 +57,7 @@ class Log
 
             if severity == 'SECTION'
                 res += "\n"
-                res += ' ' * 44 + ' ' + ('=' * 80)
+                res += ' ' * 54 + ' ' + ('=' * 80)
                 res += "\n"
             end
 
@@ -73,7 +73,7 @@ class Log
             res += ' '
 
             res += magenta
-            res += '%20s' % [progname]
+            res += '%30s' % [progname]
             res += reset
             res += ' '
 
@@ -86,7 +86,7 @@ class Log
             res += "\n"
 
             if severity == 'SECTION'
-                res += ' ' * 44 + ' ' + ('=' * 80)
+                res += ' ' * 54 + ' ' + ('=' * 80)
                 res += "\n"
             end
 

@@ -66,8 +66,7 @@ public class UserProfileController extends Controller {
 		Account currentUser = securedController.getCurrentUser();
 		EmailChangeDTO emailChangeDTO = extractDTOFromRequest(EmailChangeDTO.class);
 
-		// TODO Implement a real security check... and password should be encoded!
-		if (!currentUser.getPassword().equals(emailChangeDTO.getPassword())) {
+		if (!accountService.controlPassword(emailChangeDTO.getPassword(), currentUser)) {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
@@ -83,8 +82,7 @@ public class UserProfileController extends Controller {
 		Account currentUser = securedController.getCurrentUser();
 		PasswordChangeDTO passwordChangeDTO = extractDTOFromRequest(PasswordChangeDTO.class);
 
-		// TODO Implement a real security check... and password should be encoded!
-		if (!currentUser.getPassword().equals(passwordChangeDTO.getOldPassword())) {
+		if (!accountService.controlPassword(passwordChangeDTO.getOldPassword(), currentUser)) {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
 		}
 
@@ -99,7 +97,7 @@ public class UserProfileController extends Controller {
 	public Result activeAccount() {
 
 		//TODO control admin with annotation
-		if(!securedController.isAdministrator()){
+		if (!securedController.isAdministrator()) {
 			throw new MyrmexRuntimeException("");
 		}
 
@@ -107,18 +105,18 @@ public class UserProfileController extends Controller {
 
 		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
 
-		if(account == null){
+		if (account == null) {
 			throw new MyrmexRuntimeException("");
 		}
 
 		// not from my organization
-		if(!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+		if (!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
 			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}
 
 		// not if it's myself
-		if(account.equals(securedController.getCurrentUser())){
+		if (account.equals(securedController.getCurrentUser())) {
 			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}
@@ -135,7 +133,7 @@ public class UserProfileController extends Controller {
 	public Result isAdminAccount() {
 
 		//TODO control admin with annotation
-		if(!securedController.isAdministrator()){
+		if (!securedController.isAdministrator()) {
 			throw new MyrmexRuntimeException("");
 		}
 
@@ -144,13 +142,13 @@ public class UserProfileController extends Controller {
 		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
 
 		// not from my organization
-		if(!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+		if (!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
 			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}
 
 		// not if it's myself
-		if(account.equals(securedController.getCurrentUser())){
+		if (account.equals(securedController.getCurrentUser())) {
 			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}

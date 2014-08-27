@@ -17,6 +17,12 @@ require_relative 'workers/survey_class_writer.rb'
 # Question code writer
 require_relative 'workers/question_code_writer.rb'
 
+# Code to import full writer
+require_relative 'workers/codes_to_import_writer.rb'
+
+# Translations writer
+require_relative 'workers/translations_writer.rb'
+
 # YAML
 require 'yaml'
 
@@ -27,12 +33,15 @@ require_relative 'util/log.rb'
 
 def main(options)
 
+
+    Spreadsheet.client_encoding = 'UTF-8'
+
     # Load the configuration
-    config            = YAML.load_file(File.dirname(__FILE__) + '/config.yaml')
+    config                      = YAML.load_file(File.dirname(__FILE__) + '/config.yaml')
 
     # Initialize logger
-    Log.default_level = config['log_level']
-    logger            = Log.new('main')
+    Log.default_level           = config['log_level']
+    logger                      = Log.new('main')
 
     begin
 
@@ -56,11 +65,24 @@ def main(options)
             codes += scanner.question_sets.collect { |qs| qs.accronym }
             codes += scanner.questions.collect { |q| q.accronym }
             QuestionCodeWriter.execute file['name'], codes
+
+            # Update the codes_to_import_full.xls
+            logger.sub_section 'Codes_to_import_full generation'
+            codes_to_import_writer = CodesToImportWriter.new file['name'], "#{ROOT}/data_importer_resources/#{file['xls']}", scanner.questions
+            codes_to_import_writer.execute
+
+            # Generate the translations.xls
+            logger.sub_section 'Translations generation'
+            codes_to_import_writer = TranslationsWriter.new file['name'], scanner.forms, scanner.question_sets, scanner.questions
+            codes_to_import_writer.execute
+
         end
+
+        logger.info 'Done'
 
     rescue Exception => e
 
-        logger.fatal e
+        logger.fatal e.message + "\n" + e.backtrace.collect { |l| (' '*55) + l }.join("\n")
 
     end
 end
