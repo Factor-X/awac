@@ -21,9 +21,9 @@ public class BaseActivityDataAE_BAD5 extends ActivityResultContributor {
 	public List<BaseActivityData> getBaseActivityData(Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers) {
 				List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (kg in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5133);
+		// Get Target Unit (t in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
 		// For each set of answers in A42, build an ActivityBaseData (see specifications)
 		List<QuestionSetAnswer> questionSetAnswersA42 = questionSetAnswers.get(QuestionCode.A42);
