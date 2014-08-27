@@ -182,13 +182,14 @@ public class AuthenticationController extends Controller {
 		String password = KeyGenerator.generateRandomPassword(10);
 
 		//generate email
+		/* TODO waiting email refactoring
 		EmailMessage emailMessage = new EmailMessage(account.getPerson().getEmail(),
 				"New password", "blabla your new password : " + password,
 				account.getInterfaceCode(),
 				account.getPerson().getDefaultLanguage());
 
 		emailService.send(emailMessage);
-
+		*/
 		//save new password
 		account.setPassword(password);
 		account.setNeedChangePassword(true);

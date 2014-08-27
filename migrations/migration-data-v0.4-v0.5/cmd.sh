@@ -183,22 +183,21 @@ echo "ALTER TABLE ONLY systemadministrator
     ADD CONSTRAINT fk_rkca7sfx1qlw8tep2y4pj1day FOREIGN KEY (id) REFERENCES account(id);" >> /tmp/migration/migration_script.sql
 
 #encrypt password
-echo "update account set password = 'd3b1dd06b7d9e76b02e8531eec43f4c48c9d664aaa9ff724324ef268be95c2eacb8fbaebb68c3a29' where identifier = 'user1;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '0ec1974fe0bfce8a9879293440264280ba4e1b5e89e17c4f92fa3274420ed56110dae201467c767f' where identifier = 'user1;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '3640622fc183ef1c7a1719f6fc4bd766b8fa01a5f4cf6442d5ce2a62f4f5852fe3825fc2485f469c' where identifier = 'user2;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '73917cbaacd4ffac191ca1ac3280f6194685c8daa35a23578fa0a365794b7a4c1a809819a35fb8fa' where identifier = 'user-awac;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '6453343570b00684eabd8e23b4733f8a666e844fed5320ba5fde35c075dc00def1cecad8383e7c03' where identifier = 'user-bemis;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '05888eeff0837194cc51b962709df0157494b47b04b53b71606253186d9d69af213168c1a773ff3e' where identifier = 'user-hch;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '90691309f9682048bd59eda3a7bacfe3d04cef9c2aaf346f04b8cd15b6d1ac9e1937bdbff9e249dc' where identifier = 'user-akzonobel;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '3ec0ece715a968c6e5697930b38a8d87fa866d28fb617238f6ada2a4c5c6a859a4d69d767446a3d0' where identifier = 'User-gerresheimer;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '0fe32d927bb8ede71e76ce5cb75a9e061a7c4e115037bc03445469a406bf09c29b9eeddb6e0d99d8' where identifier = 'user-Ellipse;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = 'dc635f46bc1139543d6ed6c646c50c3b21b00db9c3897c55d9a70f5b2150a86356f227d8e4666470' where identifier = 'user-ampacet;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '4e8f5d1da99c5fe51c189832d99f4350530daec5a7c327ea5244b9f9f1e097715d24e34aca401d5e' where identifier = 'user-jindalfilms;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '707d978ff279e415b763613d77e0be7b9bfb9aa4761b59c8019e2cc2ac59d09d00debd6df5d778cc' where identifier = 'user-mydibel;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '0b58da8e10328be537660f63e759205ee45d61c4b1538289a20421d4186423625736ccdcb2e814c9' where identifier = 'user-erachem;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = 'd68bcb128082e91d0d3088168b686ac183c1ac6960acea43847d1dfd5889c73b6c547361f4fcdcae' where identifier = 'user-laborelec;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = 'd62db6a3e46406b53306f319767586607817de492f541bc175c413b0b44236e58bb96956a083f16a' where identifier = 'user-agc;'" >> /tmp/migration/migration_script.sql
-echo "update account set password = '6c9f7bdab40df70e166e761392a0309f191d8096fe61e19853dc55336098ace7a0a69e5af46c218e' where identifier = 'user-climact;'" >> /tmp/migration/migration_script.sql
+echo "update account set password = '3640622fc183ef1c7a1719f6fc4bd766b8fa01a5f4cf6442d5ce2a62f4f5852fe3825fc2485f469c' where identifier = 'user1';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '3640622fc183ef1c7a1719f6fc4bd766b8fa01a5f4cf6442d5ce2a62f4f5852fe3825fc2485f469c' where identifier = 'user2';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '73917cbaacd4ffac191ca1ac3280f6194685c8daa35a23578fa0a365794b7a4c1a809819a35fb8fa' where identifier = 'user-awac';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '6453343570b00684eabd8e23b4733f8a666e844fed5320ba5fde35c075dc00def1cecad8383e7c03' where identifier = 'user-bemis';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '05888eeff0837194cc51b962709df0157494b47b04b53b71606253186d9d69af213168c1a773ff3e' where identifier = 'user-hch';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '90691309f9682048bd59eda3a7bacfe3d04cef9c2aaf346f04b8cd15b6d1ac9e1937bdbff9e249dc' where identifier = 'user-akzonobel';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '3ec0ece715a968c6e5697930b38a8d87fa866d28fb617238f6ada2a4c5c6a859a4d69d767446a3d0' where identifier = 'User-gerresheimer';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '0fe32d927bb8ede71e76ce5cb75a9e061a7c4e115037bc03445469a406bf09c29b9eeddb6e0d99d8' where identifier = 'user-Ellipse';" >> /tmp/migration/migration_script.sql
+echo "update account set password = 'dc635f46bc1139543d6ed6c646c50c3b21b00db9c3897c55d9a70f5b2150a86356f227d8e4666470' where identifier = 'user-ampacet';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '4e8f5d1da99c5fe51c189832d99f4350530daec5a7c327ea5244b9f9f1e097715d24e34aca401d5e' where identifier = 'user-jindalfilms';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '707d978ff279e415b763613d77e0be7b9bfb9aa4761b59c8019e2cc2ac59d09d00debd6df5d778cc' where identifier = 'user-mydibel';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '0b58da8e10328be537660f63e759205ee45d61c4b1538289a20421d4186423625736ccdcb2e814c9' where identifier = 'user-erachem';" >> /tmp/migration/migration_script.sql
+echo "update account set password = 'd68bcb128082e91d0d3088168b686ac183c1ac6960acea43847d1dfd5889c73b6c547361f4fcdcae' where identifier = 'user-laborelec';" >> /tmp/migration/migration_script.sql
+echo "update account set password = 'd62db6a3e46406b53306f319767586607817de492f541bc175c413b0b44236e58bb96956a083f16a' where identifier = 'user-agc';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '6c9f7bdab40df70e166e761392a0309f191d8096fe61e19853dc55336098ace7a0a69e5af46c218e' where identifier = 'user-climact';" >> /tmp/migration/migration_script.sql
 
 echo "insert into scope (type, organization_id) values
         (1,2),

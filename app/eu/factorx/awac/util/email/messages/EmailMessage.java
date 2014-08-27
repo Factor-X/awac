@@ -19,8 +19,6 @@ public class EmailMessage {
 	private String toAddress;
 	private String subject;
 	private String content;
-	private InterfaceTypeCode fromInterface = null;
-	private LanguageCode languageCode = null;
 
 	public EmailMessage(String toAddress, String subject, String content) {
 		this.toAddress = toAddress;
@@ -28,31 +26,36 @@ public class EmailMessage {
 		this.content = content;
 	}
 
-	public EmailMessage(String toAddress, String subject, String content, InterfaceTypeCode fromInterface, LanguageCode languageCode) {
-		this.toAddress = toAddress;
-		this.subject = subject;
-		this.content = content;
-		this.fromInterface = fromInterface;
-		this.languageCode = languageCode;
-	}
-
 	public String getToAddress() {
 		return toAddress;
+	}
+
+	public void setToAddress(String toAddress) {
+		this.toAddress = toAddress;
 	}
 
 	public String getSubject() {
 		return subject;
 	}
 
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	public String getContent() {
 		return content;
 	}
 
-	public InterfaceTypeCode getFromInterface() {
-		return fromInterface;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public LanguageCode getLanguageCode() {
-		return languageCode;
+	@Override
+	public String toString() {
+		return "EmailMessage{" +
+				"toAddress='" + toAddress + '\'' +
+				", subject='" + subject + '\'' +
+				", content='" + content + '\'' +
+				'}';
 	}
 }
