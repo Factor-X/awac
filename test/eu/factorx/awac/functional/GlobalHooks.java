@@ -1,14 +1,12 @@
-package eu.factorx.awac.functional.hooks;
+package eu.factorx.awac.functional;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import play.api.Play;
 import play.db.jpa.JPA;
 import play.db.jpa.JPAPlugin;
 import play.test.FakeApplication;
-import play.test.Helpers;
 import play.test.TestBrowser;
 import play.test.TestServer;
 import scala.Option;
@@ -50,25 +48,28 @@ public class GlobalHooks {
 		}
 	}
 
-	//@After
-	public void after() {
-		play.Logger.info("Entering Cucumber GlobalHooks @After");
-		if (initialised) {
-			JPA.bindForCurrentThread(null);
-			if (em.isOpen()) em.close();
-			initialised=false;
-		}
-	}
+//	@After
+//	public void after() {
+//		play.Logger.info("Entering Cucumber GlobalHooks @After");
+//		if (initialised) {
+//			JPA.bindForCurrentThread(null);
+//			//if (em.isOpen()) em.close();
+//			play.Logger.info("stopping browser and server");
+//			initialised=false;
+//		}
+//	}
 
 	// used for browser tests - to be continued...
 	public void startupForBrowser () {
 		if (!initialised) {
 
+			play.Logger.info("Staring server");
 			start(testServer);
 
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
 				public void run() {
+					play.Logger.info("stopping browser and server");
 					testBrowser.quit();
 					testServer.stop();
 				}

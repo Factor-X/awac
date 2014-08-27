@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
   "info.cukes" % "cucumber-java" % "1.1.5" % "test",
   "info.cukes" % "cucumber-junit" % "1.1.5" % "test",
+  "info.cukes" % "cucumber-scala_2.10" % "1.1.5" % "test",
   "net.sf.ehcache" % "ehcache" % "2.7.2"
 )
 
@@ -56,3 +57,17 @@ play.Project.playJavaSettings
 unmanagedResourceDirectories in Test <+= baseDirectory( _ / "test/features" )
 
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
+
+cucumberSettings
+
+cucumberFeaturesLocation := "./test/features"
+
+cucumberStepsBasePackage := "eu.factorx.awac.functional"
+
+cucumberJunitReport := true
+
+cucumberHtmlReport := true
+
+cucumberHtmlReportDir := new File("../target/cucumber")
+
+cucumberJsonReport := true

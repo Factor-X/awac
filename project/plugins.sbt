@@ -6,6 +6,8 @@ logLevel := Level.Warn
 // The Typesafe repository
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
+resolvers += "Templemore Repository" at "http://templemore.co.uk/repo"
+
 // Use the Play sbt plugin for Play projects
 
 // Add PMD and Checkstyle libraries.
@@ -28,4 +30,7 @@ addSbtPlugin("de.johoop" % "jacoco4sbt" % "2.1.6")
 
 // Add Findbugs plugin library
 addSbtPlugin("de.johoop" % "findbugs4sbt" % "1.2.2")
+
+// add cucumber plugin
+addSbtPlugin("templemore" % "sbt-cucumber-plugin" % "0.8.0")
 

@@ -1,8 +1,7 @@
-package eu.factorx.awac.functional.hooks;
+package eu.factorx.awac.functional;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import play.api.test.FakeApplication;
 import play.test.Helpers;
 import play.test.TestBrowser;
 import play.test.TestServer;

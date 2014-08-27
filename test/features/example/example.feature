@@ -1,3 +1,4 @@
+@TestingExample
 Feature: Testing Cucumber Integration
 
   Scenario: Cucumber Integration
