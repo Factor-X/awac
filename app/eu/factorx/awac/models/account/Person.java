@@ -11,17 +11,15 @@
 
 package eu.factorx.awac.models.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
-import eu.factorx.awac.models.code.type.LanguageCode;
 import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.Required;
 import eu.factorx.awac.models.AuditedAbstractEntity;
-
-// import for TimeStamp
-// imports for validation and constraints annotations
-// import for Json annotations -- jackson stack
-// import for JAXB annotations -- JAXB stack
+import eu.factorx.awac.models.code.type.LanguageCode;
 
 @Entity
 @Table(name = "person")
@@ -47,9 +45,11 @@ public class Person extends AuditedAbstractEntity {
 	private String email;
 
 	@Embedded
-	@AttributeOverride(name = "key", column = @Column(name = "default_language", columnDefinition="character varying(2) not null default 'FR'"))
+	@AttributeOverride(name = "key", column = @Column(name = "default_language", columnDefinition = "character varying(2) not null default 'FR'"))
 	private LanguageCode defaultLanguage = LanguageCode.FRENCH;
 
+	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+	private List<Account> accounts = new ArrayList<>();
 
 	protected Person() {
 	}
@@ -93,13 +93,16 @@ public class Person extends AuditedAbstractEntity {
 		this.defaultLanguage = defaultLanguage;
 	}
 
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
 	@Override
 	public String toString() {
-		return "Person{" +
-				"lastname='" + lastname + '\'' +
-				", firstname='" + firstname + '\'' +
-				", email='" + email + '\'' +
-				", defaultLanguage=" + defaultLanguage +
-				'}';
+		return "Person [lastname=" + lastname + ", firstname=" + firstname + ", email=" + email + ", defaultLanguage=" + defaultLanguage + "]";
 	}
 }
