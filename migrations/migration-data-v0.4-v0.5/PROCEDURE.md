@@ -1,7 +1,9 @@
 # Procedure
 
-steps to migrate AWAC v0.4 to v0.5
+Steps to migrate AWAC **v0.4** to **v0.5**
+
 -> modification of the data structure
+
 -> add some informations into database
 
 ## Files

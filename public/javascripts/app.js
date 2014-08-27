@@ -3595,7 +3595,8 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     }
     return;
   });
-});angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, tmhDynamicLocale) {
+});angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) {
+  $scope.displayMenu = true;
   $scope.isLoading = function() {
     var k;
     for (k in $scope.initialLoad) {
@@ -3639,6 +3640,7 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     if (confirmed == null) {
       confirmed = false;
     }
+    console.log("NAV : " + loc);
     canBeContinue = true;
     if ($scope.getMainScope().validNavigation !== void 0 && confirmed === false) {
       result = $scope.getMainScope().validNavigation();
@@ -3652,6 +3654,21 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     if (canBeContinue) {
       return $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId);
     }
+  };
+  $scope.$on('$routeChangeSuccess', function(event, args) {
+    return $timeout(function() {
+      return $scope.computeDisplayMenu();
+    }, 0);
+  });
+  $scope.computeDisplayMenu = function() {
+    if (($scope.getMainScope() != null) && ($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
+      return $scope.displayMenu = true;
+    } else {
+      return $scope.displayMenu = false;
+    }
+  };
+  $scope.navToLastFormUsed = function() {
+    return $scope.nav($scope.$root.getFormPath());
   };
   $scope.periodKey = null;
   $scope.$watch('periodKey', function() {
@@ -3770,12 +3787,6 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     }
     return $scope.lastSaveTime = date;
   });
-  $scope.displayMenu = function() {
-    if (($scope.getMainScope() != null) && ($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
-      return true;
-    }
-    return false;
-  };
   return $scope.getClassContent = function() {
     if ($scope.$root.isLogin() === false) {
       if ($scope.getMainScope() != null) {
@@ -3789,7 +3800,7 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     return '';
   };
 });
-angular.module('app').run(function($rootScope, $location, downloadService, messageFlash, $timeout, translationService) {
+angular.module('app').run(function($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale) {
   $rootScope.languages = [];
   $rootScope.languages[0] = {
     value: 'fr',
@@ -3830,7 +3841,7 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
     $rootScope.currentPerson = data.person;
     $rootScope.organization = data.organization;
     $rootScope.users = data.organization.users;
-    return $rootScope.onLoginSuccess(data);
+    return $rootScope.onFormPath(data.defaultPeriod, data.organization.sites[0].scope);
   };
   $rootScope.getUserByIdentifier = function(identifier) {
     var user, _i, _len, _ref;
