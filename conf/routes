@@ -82,6 +82,6 @@ POST    /awac/user/activeAccount                       @eu.factorx.awac.controll
 #
 # Admin
 #
-GET     /awac/admin/translations/reset                 @eu.factorx.awac.controllers.AdminController.resetTranslations()
 GET     /awac/admin/codelabels/reset                   @eu.factorx.awac.controllers.AdminController.resetCodeLabels()
 GET 	/awac/admin/indicators_factors/reset	       @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
+GET		/awac/admin/municipality_survey/create	       @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
