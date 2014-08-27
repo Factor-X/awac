@@ -6,6 +6,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
+import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.service.IndicatorService;
@@ -30,6 +31,12 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 		List<String> resultList = JPA.em().createNamedQuery(Indicator.FIND_ALL_INDICATOR_NAMES, String.class)
 				.getResultList();
 		return resultList;
+	}
+
+	@Override
+	public void removeAll() {
+		int nbDeleted = JPA.em().createNamedQuery(Indicator.REMOVE_ALL).executeUpdate();
+		Logger.info("Deleted {} indicators", nbDeleted);
 	}
 
 }

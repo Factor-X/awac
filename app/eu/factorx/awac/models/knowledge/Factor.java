@@ -14,6 +14,7 @@ import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 @Table(name = "factor")
 @NamedQueries({
 		@NamedQuery(name = Factor.FIND_BY_PARAMETERS, query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"),
+		@NamedQuery(name = Factor.REMOVE_ALL, query = "delete from Factor f where f.id != null")
 })
 public class Factor extends AuditedAbstractEntity {
 
@@ -26,6 +27,7 @@ public class Factor extends AuditedAbstractEntity {
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
 	private static final long serialVersionUID = 1L;
+	public static final String REMOVE_ALL = "Factor.removeAll";
 
 	@Column(unique=true)
 	private String key;
@@ -47,7 +49,7 @@ public class Factor extends AuditedAbstractEntity {
 
 	private String institution;
 
-	@OneToMany(mappedBy = "factor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "factor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<FactorValue> values = new ArrayList<>();
 
 	protected Factor() {

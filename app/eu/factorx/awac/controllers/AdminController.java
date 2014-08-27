@@ -18,6 +18,7 @@ import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.NotificationService;
+import eu.factorx.awac.util.data.importer.AwacDataImporter;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 
@@ -39,6 +40,9 @@ public class AdminController extends Controller {
 
 	@Autowired
 	private CodeLabelImporter codeLabelImporter;
+
+	@Autowired
+	private AwacDataImporter awacDataImporter;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -80,7 +84,7 @@ public class AdminController extends Controller {
 		}
 		// reset code labels cache
 		codeLabelService.resetCache();
-		// import new translations code labels
+		// import translations code labels
 		translationImporter.run();
 
 		return (ok());
@@ -94,8 +98,20 @@ public class AdminController extends Controller {
 		}
 		// reset code labels cache
 		codeLabelService.resetCache();
-		// import new translations code labels
+		// import code labels
 		codeLabelImporter.run();
+
+		return (ok());
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result resetIndicatorsAndFactors() {
+		if (!Play.application().isDev()) {
+			return unauthorized();
+		}
+		// import indicators and factors
+		awacDataImporter.run();
 
 		return (ok());
 	}
