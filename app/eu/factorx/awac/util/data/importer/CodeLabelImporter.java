@@ -25,7 +25,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
 	private static final String CODES_TO_IMPORT_COMMON_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_common.generated.xls";
 	private static final String CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Enterprise.generated.xls";
-	private static final String CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
+	private static final String CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
 
 	private Set<CodeList> importedCodeLists = new HashSet<>();
 	private Set<Pair<CodeList, CodeList>> importedCodesEquivalences = new HashSet<>();
@@ -57,8 +57,8 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		importCodeLabels(enterpriseWbSheets);
 		importCodesEquivalences(enterpriseWbSheets);
 
-		Logger.info("== Importing Municipality Code Data (from {})", CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH);
-		Map<String, Sheet> municipalityWbSheets = getWorkbookSheets(CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH);
+		Logger.info("== Importing Municipality Code Data (from {})", CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH);
+		Map<String, Sheet> municipalityWbSheets = getWorkbookSheets(CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH);
 		importCodeLabels(municipalityWbSheets);
 		importCodesEquivalences(municipalityWbSheets);
 	}
