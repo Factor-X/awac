@@ -25,23 +25,18 @@ public class BaseActivityDataAE_BAD31A extends BaseActivityDataForProducts {
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
 			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-				if (questionSetAnswersChild.getChildren().isEmpty()) {
-					return res;
-				}
-				QuestionSetAnswer questionSetA252Answer = questionSetAnswersChild.getChildren().get(0);
-				if (!questionSetA252Answer.getQuestionSet().getCode().equals(QuestionCode.A252)) {
-					return res;
-				}
-				
-				if (questionSetA252Answer.getChildren().isEmpty()) {
-					return res;
-				}
-				QuestionSetAnswer questionSetA253Answer = questionSetA252Answer.getChildren().get(0);
-				if (!questionSetA253Answer.getQuestionSet().getCode().equals(QuestionCode.A253)) {
-					return res;
-				}
-				
-				Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA253Answer.getQuestionAnswers());
+                QuestionSetAnswer questionSetA252Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+                if (questionSetA252Answer == null) {
+                    return res;
+                }
+
+                QuestionSetAnswer questionSetA253Answer = getFirstChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A253);
+                if (questionSetA253Answer == null) {
+                    return res;
+                }
+
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA253Answer.getQuestionAnswers());
+
 				QuestionAnswer questionA254Answer = answersByCodeChild.get(QuestionCode.A254);
 				QuestionAnswer questionA255Answer = answersByCodeChild.get(QuestionCode.A255);
 				QuestionAnswer questionA256Answer = answersByCodeChild.get(QuestionCode.A256);
