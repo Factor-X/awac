@@ -128,7 +128,7 @@ echo "CREATE SEQUENCE account_id_seq
           INCREMENT 1
           MINVALUE 1
           MAXVALUE 9223372036854775807
-          START 19
+        START 20
           CACHE 1;
         ALTER TABLE account_id_seq
           OWNER TO play;" >> /tmp/migration/migration_script.sql
