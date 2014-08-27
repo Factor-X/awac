@@ -48,7 +48,7 @@ ng-virtual
         mm-awac-repetition-question(question-set-code="A231", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A231')")
             mm-awac-question(question-code="A232",ng-repetition-map="itLevel1")
             mm-awac-question(question-code="A233",ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="A234",ng-repetition-map="itLevel1", ng-condition="getAnswer('A233',itLevel1).value < '18' || getAnswer('A233',itLevel1).value == '23'")
+            mm-awac-question(question-code="A234",ng-repetition-map="itLevel1", ng-condition="(getAnswer('A233',itLevel1).value | stringToFloat) < 18   || getAnswer('A233',itLevel1).value == '23'")
             mm-awac-question(question-code="A235",ng-repetition-map="itLevel1", ng-condition="getAnswer('A233',itLevel1).value == '20' || getAnswer('A233',itLevel1).value == '21'|| getAnswer('A233',itLevel1).value == '22'")
             mm-awac-question(question-code="A236",ng-repetition-map="itLevel1", ng-condition="getAnswer('A233',itLevel1).value == '18' || getAnswer('A233',itLevel1).value == '19'")
         button.button.add-repetition-button(ng-click="addIteration('A231')", type="button")

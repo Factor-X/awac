@@ -22,17 +22,22 @@ public class BaseActivityDataAE_BAD33B extends BaseActivityDataForProducts {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5156);
 
-		// For each set of answers in A273, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
+        // For each set of answers in A273, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A272)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                QuestionSetAnswer questionSetA273Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A273);
+                if (questionSetA273Answer == null) {
+                    return res;
+                }
 
-				QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
+                Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetA273Answer.getQuestionAnswers());
 
-				if (questionA274Answer == null) {
-					continue;
-				}
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
+
+                if (questionA274Answer == null) {
+                    continue;
+                }
 
                 QuestionAnswer questionA278Answer = answersByCode.get(QuestionCode.A278);
 

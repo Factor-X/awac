@@ -17,7 +17,8 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 public class BaseActivityDataAE_BAD34B extends BaseActivityDataForProducts {
 
 	public List<BaseActivityData> getBaseActivityData(QuestionSetAnswer questionSetAnswer, QuestionAnswer questionA245Answer) {
-				List<BaseActivityData> res = new ArrayList<>();
+
+		List<BaseActivityData> res = new ArrayList<>();
 
 		// Get Target Unit (kWh in this case)
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kWh)

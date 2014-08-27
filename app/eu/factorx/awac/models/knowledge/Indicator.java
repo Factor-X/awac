@@ -10,8 +10,12 @@ import eu.factorx.awac.models.code.type.*;
 @NamedQueries({
 		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS,
 				query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
-		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),})
+		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),
+		@NamedQuery(name = Indicator.REMOVE_ALL, query = "delete from Indicator i where i.id != null"),
+})
 public class Indicator extends AuditedAbstractEntity {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param type: an {@link IndicatorTypeCode}
@@ -22,10 +26,10 @@ public class Indicator extends AuditedAbstractEntity {
 	 * @param deleted: a {@link Boolean}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Indicator.findByParameters";
-	
+
 	public static final String FIND_ALL_INDICATOR_NAMES = "Indicator.findAllIndicatorNames";
 
-	private static final long serialVersionUID = 1L;
+	public static final String REMOVE_ALL = "Indicator.removeAll";
 
 	@Column(unique = true)
 	private String key;

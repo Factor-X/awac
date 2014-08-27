@@ -24,7 +24,12 @@ public class BaseActivityDataAE_BAD29B extends ActivityResultContributor {
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
 		// For each set of answers in A231, build an ActivityBaseData (see specifications)
-		List<QuestionSetAnswer> questionSetAnswersA231 = questionSetAnswers.get(QuestionCode.A231);		if (questionSetAnswersA231 == null) {			return res;		}		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA231) {
+		List<QuestionSetAnswer> questionSetAnswersA231 = questionSetAnswers.get(QuestionCode.A231);
+		if (questionSetAnswersA231 == null) {
+			return res;
+		}
+
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA231) {
 
 			Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswer.getQuestionAnswers());
 
@@ -46,8 +51,8 @@ public class BaseActivityDataAE_BAD29B extends ActivityResultContributor {
 			baseActivityData.setSpecificPurpose(toString(questionA232Answer));
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_9);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);
-			// TODO: utiliser les codes qui sortent en fonction de la table "Infrastructures"             baseActivityData.setActivityType(SPLIT_DE_toActivityTypeCode(questionA233Answer)_);
-			//TODO           baseActivityData.setActivitySource(split de toActivitySourceCode(questionA233Answer) *);
+            baseActivityData.setActivityType(toActivityTypeCode(questionA233Answer));
+            baseActivityData.setActivitySource(toActivitySourceCode(questionA233Answer));
 			baseActivityData.setActivityOwnership(null);
 			baseActivityData.setUnit(baseActivityDataUnit);
 			baseActivityData.setValue(toDouble(questionA235Answer, baseActivityDataUnit));

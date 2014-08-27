@@ -24,34 +24,38 @@ public class BaseActivityDataAE_BAD34A extends BaseActivityDataForProducts {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.GJ)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5321);
 
-		// For each set of answers in A284, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A284)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A282)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                for (QuestionSetAnswer questionSetAnswersChild284 : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChild284.getQuestionSet().getCode().equals(QuestionCode.A284)) {
 
-				QuestionAnswer questionA285Answer = answersByCode.get(QuestionCode.A285);
-				QuestionAnswer questionA286Answer = answersByCode.get(QuestionCode.A286);
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild284.getQuestionAnswers());
 
-				if (questionA285Answer == null ||
-						questionA286Answer == null) {
-					continue;
-				}
+                        QuestionAnswer questionA285Answer = answersByCodeChild.get(QuestionCode.A285);
+                        QuestionAnswer questionA286Answer = answersByCodeChild.get(QuestionCode.A286);
 
-				BaseActivityData baseActivityData = new BaseActivityData();
+                        if (questionA285Answer == null ||
+                                questionA286Answer == null) {
+                            continue;
+                        }
 
-				baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
-				baseActivityData.setRank(1);
-				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
-				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_11);
-				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
-				baseActivityData.setActivityType(ActivityTypeCode.AT_1);
-				baseActivityData.setActivitySource(toActivitySourceCode(questionA285Answer));
-				baseActivityData.setActivityOwnership(null);
-		    	baseActivityData.setUnit(baseActivityDataUnit);
-				baseActivityData.setValue(toDouble(questionA286Answer, baseActivityDataUnit));
+                        BaseActivityData baseActivityData = new BaseActivityData();
 
-				res.add(baseActivityData);
+                        baseActivityData.setKey(BaseActivityDataCode.AE_BAD34A);
+                        baseActivityData.setRank(1);
+                        baseActivityData.setSpecificPurpose(toString(questionA245Answer));
+                        baseActivityData.setActivityCategory(ActivityCategoryCode.AC_11);
+                        baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_1);
+                        baseActivityData.setActivityType(ActivityTypeCode.AT_1);
+                        baseActivityData.setActivitySource(toActivitySourceCode(questionA285Answer));
+                        baseActivityData.setActivityOwnership(null);
+                        baseActivityData.setUnit(baseActivityDataUnit);
+                        baseActivityData.setValue(toDouble(questionA286Answer, baseActivityDataUnit));
+
+                        res.add(baseActivityData);
+                    }
+                }
 			}
 		}
 		return res;

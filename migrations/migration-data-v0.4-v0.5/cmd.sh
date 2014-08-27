@@ -183,8 +183,7 @@ echo "ALTER TABLE ONLY systemadministrator
     ADD CONSTRAINT fk_rkca7sfx1qlw8tep2y4pj1day FOREIGN KEY (id) REFERENCES account(id);" >> /tmp/migration/migration_script.sql
 
 #encrypt password
-echo "update account set password = 'd3b1dd06b7d9e76b02e8531eec43f4c48c9d664aaa9ff724324ef268be95c2eacb8fbaebb68c3a29' where identifier = 'user1';" >> /tmp/migration/migration_script.sql
-echo "update account set password = '0ec1974fe0bfce8a9879293440264280ba4e1b5e89e17c4f92fa3274420ed56110dae201467c767f' where identifier = 'user1';" >> /tmp/migration/migration_script.sql
+echo "update account set password = '3640622fc183ef1c7a1719f6fc4bd766b8fa01a5f4cf6442d5ce2a62f4f5852fe3825fc2485f469c' where identifier = 'user1';" >> /tmp/migration/migration_script.sql
 echo "update account set password = '3640622fc183ef1c7a1719f6fc4bd766b8fa01a5f4cf6442d5ce2a62f4f5852fe3825fc2485f469c' where identifier = 'user2';" >> /tmp/migration/migration_script.sql
 echo "update account set password = '73917cbaacd4ffac191ca1ac3280f6194685c8daa35a23578fa0a365794b7a4c1a809819a35fb8fa' where identifier = 'user-awac';" >> /tmp/migration/migration_script.sql
 echo "update account set password = '6453343570b00684eabd8e23b4733f8a666e844fed5320ba5fde35c075dc00def1cecad8383e7c03' where identifier = 'user-bemis';" >> /tmp/migration/migration_script.sql

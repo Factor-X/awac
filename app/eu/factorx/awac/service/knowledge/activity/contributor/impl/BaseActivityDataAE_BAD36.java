@@ -23,21 +23,23 @@ public class BaseActivityDataAE_BAD36 extends BaseActivityDataForProducts {
 		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
-		// For each set of answers in A300, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A300)) {
+        // For each set of answers in A300, build an ActivityBaseData (see specifications)
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A300)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
 
-				QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
+                QuestionAnswer questionA302Answer = answersByCode.get(QuestionCode.A302);
 
-				if (questionA302Answer == null) {
-					continue;
-				}
-				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A303)) {
+                if (
+                        questionA302Answer == null) {
+                    continue;
+                }
 
-						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
+                for (QuestionSetAnswer questionSetAnswersChild303 : questionSetAnswersChild.getChildren()) {
+                    if (questionSetAnswersChild303.getQuestionSet().getCode().equals(QuestionCode.A303)) {
+
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild303.getQuestionAnswers());
 
 						QuestionAnswer questionA304Answer = answersByCodeChild.get(QuestionCode.A304);
 						QuestionAnswer questionA307Answer = answersByCodeChild.get(QuestionCode.A307);

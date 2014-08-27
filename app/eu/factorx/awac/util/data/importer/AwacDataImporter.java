@@ -25,7 +25,7 @@ import eu.factorx.awac.service.IndicatorService;
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	private static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls";
+	private static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
 	/**
 	 * <pre>
@@ -42,7 +42,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 14: ActivityOwnership       (a {@link Boolean})
 	 * </pre>
 	 */
-	private static final String INDICATORS_SHEET_NAME = "Indicators";
+	private static final String ENTERPRISE_INDICATORS_SHEET_NAME = "Indicators";
 
 	/**
 	 * <pre>
@@ -57,7 +57,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 10: Unit out             (a {@link Unit})
 	 * </pre>
 	 */
-	private static final String FACTORS_SHEET_NAME = "EFDB_V6";
+	private static final String ENTERPRISE_FACTORS_SHEET_NAME = "EFDB_V6";
 
 	@Autowired
 	private IndicatorService indicatorService;
@@ -78,11 +78,15 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	}
 
 	protected void importData() throws Exception {
-		Logger.info("== Importing Awac Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
-
+		indicatorService.removeAll();
+		factorService.removeAll();
+		
+		Logger.info("== Importing AWAC Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
 		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
-		Sheet indicatorsSheet = awacDataWbSheets.get(INDICATORS_SHEET_NAME);
-		Sheet factorsSheet = awacDataWbSheets.get(FACTORS_SHEET_NAME);
+
+		
+		Sheet indicatorsSheet = awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME);
+		Sheet factorsSheet = awacDataWbSheets.get(ENTERPRISE_FACTORS_SHEET_NAME);
 
 		allUnitSymbols = findAllUnits();
 
@@ -92,13 +96,13 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		allActivityCategoryKeys = findAllCodeKeys(CodeList.ActivityCategory);
 		allActivitySubCategoryKeys = findAllCodeKeys(CodeList.ActivitySubCategory);
 
+		Logger.info("==== Importing Enterprise Indicators");
 		saveIndicators(indicatorsSheet);
+		Logger.info("==== Importing Enterprise Factors");
 		saveFactors(factorsSheet);
-
 	}
 
 	private void saveIndicators(Sheet indicatorsSheet) {
-		Logger.info("==== Importing indicators");
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitSymbols.get("tCO2e");
 		Integer deletedIndicators = 0;
@@ -153,7 +157,6 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	private void saveFactors(Sheet factorsSheet) {
 		Logger.info("==== Importing factors");
 		List<Factor> factors = new ArrayList<>();
-		List<FactorValue> factorValues = new ArrayList<>();
 		for (int i = 1; i < factorsSheet.getRows(); i++) {
 			String key = getCellContent(factorsSheet, 0, i);
 
@@ -185,8 +188,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 			Double value = getNumericCellContent(factorsSheet, 9, i);
 			if (value == null) {
-				Logger.error("Cannot import factor '{}': Value is null!", key);
-				continue;
+				Logger.warn("Value of factor '{}' is null!", key);
 			}
 
 			String unitOutSymbol = getCellContent(factorsSheet, 10, i);
@@ -203,9 +205,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 			Factor factor = new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution);
 			factorService.saveOrUpdate(factor);
-			FactorValue factorvalue = new FactorValue(value, null, null, factor);
-			factor.getValues().add(factorvalue);
-			factorService.saveOrUpdate(factor);
+			if (value != null) {				
+				FactorValue factorvalue = new FactorValue(value, null, null, factor);
+				factor.getValues().add(factorvalue);
+				factorService.saveOrUpdate(factor);
+			}
 			factors.add(factor);
 		}
 		Logger.info("====== Imported {} factors", factors.size());

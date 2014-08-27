@@ -44,19 +44,25 @@ Steps to migrate AWAC **v0.4** to **v0.5**
 
 6. deactivate "Invite user" button into "user manager"
     HOW TO : user_maanger.jade, l.5 : add ng-show="false"
+7. deactivate "forgot password" into login
+    HOW TO : add ng-show="false" into the second tab
+    ```sh
+    $
+    ```
+    
     => application ready to deploy
     
-7. deploy the application
+8. deploy the application
     ```sh
     $ git push awac-accept v0.5:master -f
     ```
 
-8. erase the production DB with the local DB
+9. erase the production DB with the local DB
     ```sh
     $
     ```
 
-9. start the new application
+10. start the new application
     ```sh
     $
     ```

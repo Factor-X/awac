@@ -2,7 +2,6 @@ package eu.factorx.awac.util.data.importer;
 
 import java.io.File;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.*;
 
 import jxl.*;
@@ -95,8 +94,8 @@ public abstract class WorkbookDataImporter {
 			String cellContents = StringUtils.trimToNull(cell.getContents());
 			try {
 				value = NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
-			} catch (ParseException e) {
-				throw new RuntimeException("Exception while parsing number from the content of cell {" + row + ", " + column + "} : " + cellContents, e);
+			} catch (Exception e) {
+				Logger.debug("Exception while parsing number from the content of cell [{}, {}] : {}", row, column, cellContents);
 			}
 		}
 		return value;
