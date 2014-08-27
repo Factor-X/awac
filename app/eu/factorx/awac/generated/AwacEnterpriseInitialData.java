@@ -5,19 +5,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.util.data.importer.*;
 
 @Component
 public class AwacEnterpriseInitialData {
+
+    @Autowired
+    private MyrmexUnitsImporter myrmexUnitsImporter;
+
+    @Autowired
+    private CodeLabelImporter codeLabelImporter;
+
+    @Autowired
+    private AwacDataImporter awacDataImporter;
+
+    @Autowired
+    private AccountImporter accountImporter;
+
+    @Autowired
+    private TranslationImporter translationImporter;
 
     @Autowired
     private UnitCategoryService unitCategoryService;
@@ -599,11 +619,13 @@ public class AwacEnterpriseInitialData {
 
     // == A9
     // Indiquez la surface totale du site:
-    session.saveOrUpdate(new DoubleQuestion( a1, 0, QuestionCode.A9, areaUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a1, 0, QuestionCode.A9, areaUnits, null, areaUnits.getMainUnit() ));
+
 
     // == A10
     // Quelle est la surface des bureaux?
-    session.saveOrUpdate(new DoubleQuestion( a1, 0, QuestionCode.A10, areaUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a1, 0, QuestionCode.A10, areaUnits, null, areaUnits.getMainUnit() ));
+
 
     // == A11
     // Etes-vous participant aux accords de branche de 2ème génération?
@@ -623,7 +645,8 @@ public class AwacEnterpriseInitialData {
 
     // == A17
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a15, 0, QuestionCode.A17, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a15, 0, QuestionCode.A17, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A21
     // Pièces documentaires liées aux achats d'électricité et de vapeur
@@ -631,11 +654,13 @@ public class AwacEnterpriseInitialData {
 
     // == A23
     // Consommation d'électricité verte
-    session.saveOrUpdate(new DoubleQuestion( a22, 0, QuestionCode.A23, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a22, 0, QuestionCode.A23, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A24
     // Consommation d'électricité grise
-    session.saveOrUpdate(new DoubleQuestion( a22, 0, QuestionCode.A24, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a22, 0, QuestionCode.A24, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A26
     // Energie primaire utilisée pour produire la vapeur:
@@ -647,7 +672,8 @@ public class AwacEnterpriseInitialData {
 
     // == A28
     // Quantité achetée
-    session.saveOrUpdate(new DoubleQuestion( a25, 0, QuestionCode.A28, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a25, 0, QuestionCode.A28, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A32
     // Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
@@ -663,7 +689,8 @@ public class AwacEnterpriseInitialData {
 
     // == A36
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a34, 0, QuestionCode.A36, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a34, 0, QuestionCode.A36, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A38
     // Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
@@ -679,11 +706,13 @@ public class AwacEnterpriseInitialData {
 
     // == A44
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a42, 0, QuestionCode.A44, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a42, 0, QuestionCode.A44, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A46
     // Quel est la puissance frigorifique des groupes froid?
-    session.saveOrUpdate(new DoubleQuestion( a45, 0, QuestionCode.A46, powerUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a45, 0, QuestionCode.A46, powerUnits, null, powerUnits.getMainUnit() ));
+
 
     // == A48
     // Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
@@ -691,7 +720,8 @@ public class AwacEnterpriseInitialData {
 
     // == A49
     // Quel est le nombre d'heures de fonctionnement annuel du site?
-    session.saveOrUpdate(new DoubleQuestion( a47, 0, QuestionCode.A49, timeUnits, null, getUnitBySymbol("h") ));
+        session.saveOrUpdate(new DoubleQuestion( a47, 0, QuestionCode.A49, timeUnits, null, getUnitBySymbol("h") ));
+
 
     // == A51
     // Pièces documentaires liées à la mobilité
@@ -699,39 +729,48 @@ public class AwacEnterpriseInitialData {
 
     // == A55
     // Consommation d'essence
-    session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A55, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A55, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A56
     // Consommation de diesel
-    session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A56, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A56, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A57
     // Consommation de gaz de pétrole liquéfié (GPL)
-    session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A57, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a54, 0, QuestionCode.A57, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A59
     // Consommation d'essence
-    session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A59, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A59, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A60
     // Consommation de diesel
-    session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A60, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A60, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A61
     // Consommation de gaz de pétrole liquéfié (GPL)
-    session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A61, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a58, 0, QuestionCode.A61, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A63
     // Consommation d'essence
-    session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A63, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A63, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A64
     // Consommation de diesel
-    session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A64, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A64, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A65
     // Consommation de gaz de pétrole liquéfié (GPL)
-    session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A65, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a62, 0, QuestionCode.A65, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A68
     // Catégorie de véhicule
@@ -787,23 +826,28 @@ public class AwacEnterpriseInitialData {
 
     // == A88
     // Quel est le montant annuel de dépenses en carburant?
-    session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A88, moneyUnits, null, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A88, moneyUnits, null, getUnitBySymbol("EUR") ));
+
 
     // == A89
     // Prix moyen du litre d'essence
-    session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A89, moneyUnits, 1.3, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A89, moneyUnits, 1.3, getUnitBySymbol("EUR") ));
+
 
     // == A90
     // Prix moyen du litre de diesel
-    session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A90, moneyUnits, 1.45, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A90, moneyUnits, 1.45, getUnitBySymbol("EUR") ));
+
 
     // == A91
     // Prix moyen du litre de biodiesel
-    session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A91, moneyUnits, 1.44, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A91, moneyUnits, 1.44, getUnitBySymbol("EUR") ));
+
 
     // == A92
     // Prix moyen du litre de Gaz de Prétrole Liquéfié (GPL)
-    session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A92, moneyUnits, 1.1, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a78, 0, QuestionCode.A92, moneyUnits, 1.1, getUnitBySymbol("EUR") ));
+
 
     // == A95
     // Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
@@ -855,11 +899,13 @@ public class AwacEnterpriseInitialData {
 
     // == A107
     // Taxi pour déplacement domicile-travail des employés (en valeur)
-    session.saveOrUpdate(new DoubleQuestion( a94, 0, QuestionCode.A107, moneyUnits, null, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a94, 0, QuestionCode.A107, moneyUnits, null, getUnitBySymbol("EUR") ));
+
 
     // == A108
     // Taxi pour déplacements professionnels & des visiteurs (en valeur)
-    session.saveOrUpdate(new DoubleQuestion( a94, 0, QuestionCode.A108, moneyUnits, null, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a94, 0, QuestionCode.A108, moneyUnits, null, getUnitBySymbol("EUR") ));
+
 
     // == A110
     // Etes-vous situés à proximité d'une gare (< 1 km)?
@@ -891,7 +937,8 @@ public class AwacEnterpriseInitialData {
 
     // == A120
     // Distance moyenne A/R (km)
-    session.saveOrUpdate(new DoubleQuestion( a115, 0, QuestionCode.A120, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a115, 0, QuestionCode.A120, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A122
     // % des employés qui réalisent des déplacements en avion
@@ -907,15 +954,18 @@ public class AwacEnterpriseInitialData {
 
     // == A125
     // Km moyen assignés par employé voyageant
-    session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A125, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A125, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A126
     // Km moyen assignés par employé voyageant
-    session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A126, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A126, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A127
     // km moyen parcourus sur l'année:
-    session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A127, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A127, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A129
     // Pièces documentaires liées au transport et stockage amont
@@ -923,15 +973,18 @@ public class AwacEnterpriseInitialData {
 
     // == A133
     // Consommation d'essence
-    session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A133, volumeUnits, null, getUnitBySymbol("l") ));
+        session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A133, volumeUnits, null, getUnitBySymbol("l") ));
+
 
     // == A134
     // Consommation de diesel
-    session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A134, volumeUnits, null, getUnitBySymbol("l") ));
+        session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A134, volumeUnits, null, getUnitBySymbol("l") ));
+
 
     // == A135
     // Consommation de gaz de pétrole liquéfié (GPL)
-    session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A135, volumeUnits, null, getUnitBySymbol("l") ));
+        session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A135, volumeUnits, null, getUnitBySymbol("l") ));
+
 
     // == A136
     // Est-ce les marchandises sont refrigérées durant le transport?
@@ -947,11 +1000,13 @@ public class AwacEnterpriseInitialData {
 
     // == A139
     // Quantité de recharge annuelle
-    session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A139, massUnits, null, getUnitBySymbol("kg") ));
+        session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A139, massUnits, null, getUnitBySymbol("kg") ));
+
 
     // == A500
     // Quantité de recharge annuelle
-    session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A500, massUnits, null, getUnitBySymbol("kg") ));
+        session.saveOrUpdate(new DoubleQuestion( a132, 0, QuestionCode.A500, massUnits, null, getUnitBySymbol("kg") ));
+
 
     // == A143
     // Marchandise
@@ -959,11 +1014,13 @@ public class AwacEnterpriseInitialData {
 
     // == A145
     // Poids total transporté:
-    session.saveOrUpdate(new DoubleQuestion( a142, 0, QuestionCode.A145, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a142, 0, QuestionCode.A145, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A146
     // Distance totale entre le point de départ et le point d'arrivée de la marchandise:
-    session.saveOrUpdate(new DoubleQuestion( a142, 0, QuestionCode.A146, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a142, 0, QuestionCode.A146, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A147
     // % de distance effectuée par transport routier local par camion
@@ -1007,7 +1064,8 @@ public class AwacEnterpriseInitialData {
 
     // == A158
     // Quel est le poids total des marchandises?
-    session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A158, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A158, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A159
     // Quelle est la provenance ou destination des marchandises?
@@ -1015,15 +1073,18 @@ public class AwacEnterpriseInitialData {
 
     // == A160
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A160, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A160, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A161
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A161, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A161, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A162
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A162, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a157, 0, QuestionCode.A162, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A165
     // Entrepôt
@@ -1035,11 +1096,13 @@ public class AwacEnterpriseInitialData {
 
     // == A168
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a166, 0, QuestionCode.A168, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a166, 0, QuestionCode.A168, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A169
     // Electricité
-    session.saveOrUpdate(new DoubleQuestion( a164, 0, QuestionCode.A169, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a164, 0, QuestionCode.A169, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A171
     // Type de gaz
@@ -1047,7 +1110,8 @@ public class AwacEnterpriseInitialData {
 
     // == A172
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a170, 0, QuestionCode.A172, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a170, 0, QuestionCode.A172, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A174
     // Pièces documentaires liées aux déchets
@@ -1067,7 +1131,8 @@ public class AwacEnterpriseInitialData {
 
     // == A179
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a175, 0, QuestionCode.A179, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a175, 0, QuestionCode.A179, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A183
     // Nombre d'ouvriers
@@ -1111,7 +1176,8 @@ public class AwacEnterpriseInitialData {
 
     // == A199
     // Quantités de m³ rejetés
-    session.saveOrUpdate(new DoubleQuestion( a197, 0, QuestionCode.A199, volumeUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a197, 0, QuestionCode.A199, volumeUnits, null, volumeUnits.getMainUnit() ));
+
 
     // == A200
     // Méthode de traitement des eaux usées
@@ -1123,11 +1189,13 @@ public class AwacEnterpriseInitialData {
 
     // == A202
     // Quantités de DCO rejetés
-    session.saveOrUpdate(new DoubleQuestion( a201, 0, QuestionCode.A202, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a201, 0, QuestionCode.A202, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A203
     // Quantités d'azote rejetés
-    session.saveOrUpdate(new DoubleQuestion( a201, 0, QuestionCode.A203, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a201, 0, QuestionCode.A203, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A204
     // Méthode de traitement des eaux usées
@@ -1183,11 +1251,13 @@ public class AwacEnterpriseInitialData {
 
     // == A221
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A221, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A221, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A222
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A222, moneyUnits, null, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A222, moneyUnits, null, getUnitBySymbol("EUR") ));
+
 
     // == A225
     // Poste d'achat
@@ -1219,11 +1289,13 @@ public class AwacEnterpriseInitialData {
 
     // == A234
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a231, 0, QuestionCode.A234, areaUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a231, 0, QuestionCode.A234, areaUnits, null, areaUnits.getMainUnit() ));
+
 
     // == A235
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a231, 0, QuestionCode.A235, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a231, 0, QuestionCode.A235, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A236
     // Quantité
@@ -1259,11 +1331,13 @@ public class AwacEnterpriseInitialData {
 
     // == A315
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a313, 0, QuestionCode.A315, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a313, 0, QuestionCode.A315, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A316
     // Electricité
-    session.saveOrUpdate(new DoubleQuestion( a311, 0, QuestionCode.A316, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a311, 0, QuestionCode.A316, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A318
     // Type de gaz
@@ -1271,7 +1345,8 @@ public class AwacEnterpriseInitialData {
 
     // == A319
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a317, 0, QuestionCode.A319, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a317, 0, QuestionCode.A319, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A321
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -1291,11 +1366,13 @@ public class AwacEnterpriseInitialData {
 
     // == A327
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a325, 0, QuestionCode.A327, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a325, 0, QuestionCode.A327, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A328
     // Electricité (moyenne par franchisé)
-    session.saveOrUpdate(new DoubleQuestion( a322, 0, QuestionCode.A328, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a322, 0, QuestionCode.A328, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A330
     // Type de gaz
@@ -1303,7 +1380,8 @@ public class AwacEnterpriseInitialData {
 
     // == A331
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a329, 0, QuestionCode.A331, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a329, 0, QuestionCode.A331, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A333
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -1351,11 +1429,13 @@ public class AwacEnterpriseInitialData {
 
     // == A254
     // Poids total transporté:
-    session.saveOrUpdate(new DoubleQuestion( a253, 0, QuestionCode.A254, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a253, 0, QuestionCode.A254, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A255
     // Distance totale entre le point de vente et le client particulier ou entre le point de vente et le client professionnel
-    session.saveOrUpdate(new DoubleQuestion( a253, 0, QuestionCode.A255, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a253, 0, QuestionCode.A255, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A256
     // % de distance effectuée par transport routier local par camion
@@ -1399,7 +1479,8 @@ public class AwacEnterpriseInitialData {
 
     // == A267
     // Poids total transporté:
-    session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A267, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A267, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A268
     // Quelle est la destination géographique des produits vendus?
@@ -1407,15 +1488,18 @@ public class AwacEnterpriseInitialData {
 
     // == A269
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A269, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A269, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A270
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A270, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A270, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A271
     // Km assignés en moyenne aux marchandises
-    session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A271, lengthUnits, null, getUnitBySymbol("km") ));
+        session.saveOrUpdate(new DoubleQuestion( a266, 0, QuestionCode.A271, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == A274
     // Entrepôt
@@ -1427,11 +1511,13 @@ public class AwacEnterpriseInitialData {
 
     // == A277
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a275, 0, QuestionCode.A277, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a275, 0, QuestionCode.A277, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A278
     // Electricité
-    session.saveOrUpdate(new DoubleQuestion( a273, 0, QuestionCode.A278, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a273, 0, QuestionCode.A278, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A280
     // Type de gaz
@@ -1439,7 +1525,8 @@ public class AwacEnterpriseInitialData {
 
     // == A281
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a279, 0, QuestionCode.A281, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a279, 0, QuestionCode.A281, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A283
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -1451,11 +1538,13 @@ public class AwacEnterpriseInitialData {
 
     // == A286
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a284, 0, QuestionCode.A286, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a284, 0, QuestionCode.A286, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A287
     // Electricité
-    session.saveOrUpdate(new DoubleQuestion( a282, 0, QuestionCode.A287, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a282, 0, QuestionCode.A287, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A289
     // Type de gaz
@@ -1463,7 +1552,8 @@ public class AwacEnterpriseInitialData {
 
     // == A290
     // Quantité de recharge nécessaire pour l'année
-    session.saveOrUpdate(new DoubleQuestion( a288, 0, QuestionCode.A290, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a288, 0, QuestionCode.A290, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A292
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -1475,15 +1565,18 @@ public class AwacEnterpriseInitialData {
 
     // == A294
     // Consommation de diesel par utilisation de produit
-    session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A294, volumeUnits, null, getUnitBySymbol("l") ));
+        session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A294, volumeUnits, null, getUnitBySymbol("l") ));
+
 
     // == A295
     // Consommation d'essence par utilisation de produit
-    session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A295, volumeUnits, null, getUnitBySymbol("l") ));
+        session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A295, volumeUnits, null, getUnitBySymbol("l") ));
+
 
     // == A296
     // Consommation d'électricité par utilisation de produit
-    session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A296, energyUnits, null, getUnitBySymbol("kW.h") ));
+        session.saveOrUpdate(new DoubleQuestion( a291, 0, QuestionCode.A296, energyUnits, null, getUnitBySymbol("kW.h") ));
+
 
     // == A298
     // Gaz émis
@@ -1491,7 +1584,8 @@ public class AwacEnterpriseInitialData {
 
     // == A299
     // Quantité
-    session.saveOrUpdate(new DoubleQuestion( a297, 0, QuestionCode.A299, massUnits, null, getUnitBySymbol("") ));
+        session.saveOrUpdate(new DoubleQuestion( a297, 0, QuestionCode.A299, massUnits, null, massUnits.getMainUnit() ));
+
 
     // == A301
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -1499,7 +1593,8 @@ public class AwacEnterpriseInitialData {
 
     // == A302
     // Poids total de produit vendu
-    session.saveOrUpdate(new DoubleQuestion( a300, 0, QuestionCode.A302, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a300, 0, QuestionCode.A302, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A304
     // Catégorie de déchet
@@ -1507,7 +1602,8 @@ public class AwacEnterpriseInitialData {
 
     // == A305
     // Poids total de cette catégorie de déchet issu des produits vendus
-    session.saveOrUpdate(new DoubleQuestion( a303, 0, QuestionCode.A305, massUnits, null, getUnitBySymbol("t") ));
+        session.saveOrUpdate(new DoubleQuestion( a303, 0, QuestionCode.A305, massUnits, null, getUnitBySymbol("t") ));
+
 
     // == A306
     // Type principal de ce déchet:

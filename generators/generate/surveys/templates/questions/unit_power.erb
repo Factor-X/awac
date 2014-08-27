@@ -1,1 +1,5 @@
-session.saveOrUpdate(new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, powerUnits, <%= default %>, getUnitBySymbol("<%= unit_default %>") ));
+<% if unit_default == nil %>
+    session.saveOrUpdate(new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, powerUnits, <%= default %>, powerUnits.getMainUnit() ));
+<% else %>
+    session.saveOrUpdate(new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, powerUnits, <%= default %>, getUnitBySymbol("<%= unit_default %>") ));
+<% end %>
