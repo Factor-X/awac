@@ -24,29 +24,31 @@ public class BaseActivityDataAE_BAD33A extends BaseActivityDataForProducts {
 
 		// For each set of answers in A273, build an ActivityBaseData (see specifications)
 		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A272)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                QuestionSetAnswer questionSetA273Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A273);
+                if (questionSetA273Answer == null) {
+                    return res;
+                }
 
-				QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
+				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetA273Answer.getQuestionAnswers());
 
-                System.out.println("HERE 1");
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
+
                 if (questionA274Answer == null) {
-					continue;
-				}
-                System.out.println("HERE 2");
-                for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A275)) {
+                    continue;
+                }
 
-						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
+                for (QuestionSetAnswer questionSetAnswersChild273 : questionSetA273Answer.getChildren()) {
+					if (questionSetAnswersChild273.getQuestionSet().getCode().equals(QuestionCode.A275)) {
+
+						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild273.getQuestionAnswers());
 
 						QuestionAnswer questionA276Answer = answersByCodeChild.get(QuestionCode.A276);
 						QuestionAnswer questionA277Answer = answersByCodeChild.get(QuestionCode.A277);
-                        System.out.println("here 4");
                         if (questionA276Answer == null || questionA277Answer == null) {
 							continue;
 						}
-                        System.out.println("here 5");
 						BaseActivityData baseActivityData = new BaseActivityData();
 
 						baseActivityData.setKey(BaseActivityDataCode.AE_BAD33A);

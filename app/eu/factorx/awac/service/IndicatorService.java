@@ -11,4 +11,6 @@ public interface IndicatorService extends PersistenceService<Indicator> {
 
 	List<String> findAllIndicatorNames();
 
+	void removeAll();
+
 }

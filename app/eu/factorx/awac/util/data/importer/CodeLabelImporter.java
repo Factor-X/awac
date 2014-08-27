@@ -5,6 +5,7 @@ import java.util.*;
 import jxl.Sheet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	private static final String CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
 
 	private Set<CodeList> importedCodeLists = new HashSet<>();
+	private Set<Pair<CodeList, CodeList>> importedCodesEquivalences = new HashSet<>();
 
 	@Autowired
 	private CodeLabelService codeLabelService;
@@ -46,16 +48,19 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		codeLabelService.removeAll();
 		codesEquivalenceService.removeAll();
 
-		for (String workbookPath : new String[] { CODES_TO_IMPORT_COMMON_WORKBOOK_PATH, CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH, CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH }) {
-			Logger.info("== Importing Code Data (from {})", workbookPath);
-			Map<String, Sheet> codesWbSheets = getWorkbookSheets(workbookPath);
+		Logger.info("== Importing Common Code Data (from {})", CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
+		Map<String, Sheet> commonWbSheets = getWorkbookSheets(CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
+		importCodeLabels(commonWbSheets);
 
-			// First import labels of sheets with primary key column, which can be referenced in other lists
-			importCodeLabels(codesWbSheets);
+		Logger.info("== Importing Enterprise Code Data (from {})", CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH);
+		Map<String, Sheet> enterpriseWbSheets = getWorkbookSheets(CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH);
+		importCodeLabels(enterpriseWbSheets);
+		importCodesEquivalences(enterpriseWbSheets);
 
-			// Then import correspondence data: sublists (only a foreign key), and linked lists (sheets with a primary key and one or more foreign keys)
-			importCodesEquivalences(codesWbSheets);
-		}
+		Logger.info("== Importing Municipality Code Data (from {})", CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH);
+		Map<String, Sheet> municipalityWbSheets = getWorkbookSheets(CODES_TO_IMPORT_ENTERPRISE_MUNICIPALITY_PATH);
+		importCodeLabels(municipalityWbSheets);
+		importCodesEquivalences(municipalityWbSheets);
 	}
 
 	private void importCodeLabels(Map<String, Sheet> codesWbSheets) {
@@ -63,7 +68,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
 			if (importedCodeLists.contains(codeList)) {
-				Logger.info("====== CodeList '{}' has already been imported", codeList);
+				Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> CodeList '{}' has already been imported", codeList);
 				continue;
 			}
 			Sheet sheet = codesWbSheets.get(sheetName);
@@ -100,10 +105,6 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		Logger.info("==== Importing Codes Equivalences");
 		for (String sheetName : codesWbSheets.keySet()) {
 			CodeList codeList = getCodeListBySheetName(sheetName);
-			if (importedCodeLists.contains(codeList)) {
-				Logger.info("====== CodeList '{}' has already been imported", codeList);
-				continue;
-			}
 			Sheet sheet = codesWbSheets.get(sheetName);
 
 			// searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
@@ -127,13 +128,16 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 					}
 					importConversionData(sheet, codeList, referencedCodeList, columnIndex);
 				}
-				importedCodeLists.add(codeList);
 			}
 		}
 	}
 
 	// Columns: 0:REF_KEY
 	private void importSubListData(Sheet sheet, CodeList codeList, CodeList referencedCodeList) {
+		if (importedCodeLists.contains(codeList)) {
+			Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> CodeList '{}' has already been imported", codeList);
+			return;
+		}
 		List<CodesEquivalence> codesEquivalences = new ArrayList<>();
 		for (int i = 1; i < sheet.getRows(); i++) {
 			String referencedCodeKey = getCellContent(sheet, 0, i);
@@ -144,12 +148,16 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			codesEquivalenceService.saveOrUpdate(codesEquivalence);
 			codesEquivalences.add(codesEquivalence);
 		}
+		importedCodeLists.add(codeList);
 		Logger.info("====== Imported code list '{}' ({} items) (sublist of '{}')", codeList, codesEquivalences.size(), referencedCodeList);
 	}
 
 	// Columns: 0:KEY, refKeyColumnIndex:REF_KEY
 	private void importConversionData(Sheet sheet, CodeList codeList, CodeList referencedCodeList, int refKeyColumnIndex) {
-		Logger.info("====== Importing data for conversion from code list '{}' to code list '{}'", codeList, referencedCodeList);
+		if (importedCodesEquivalences.contains(Pair.of(codeList, referencedCodeList))) {
+			Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> Data for conversion from code list '{}' to code list '{}' has already been imported", codeList, referencedCodeList);
+			return;
+		}
 		List<CodesEquivalence> codesEquivalences = new ArrayList<>();
 		for (int i = 1; i < sheet.getRows(); i++) {
 			String codeKey = getCellContent(sheet, 0, i);
@@ -161,6 +169,8 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 			codesEquivalenceService.saveOrUpdate(codesEquivalence);
 			codesEquivalences.add(codesEquivalence);
 		}
+		importedCodesEquivalences.add(Pair.of(codeList, referencedCodeList));
+		Logger.info("====== Imported data for conversion from code list '{}' to code list '{}' ({} items)", codeList, referencedCodeList, codesEquivalences.size());
 	}
 
 	private static CodeList getCodeListBySheetName(String sheetName) {

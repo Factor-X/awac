@@ -24,13 +24,23 @@ public class BaseActivityDataAE_BAD32D extends BaseActivityDataForProducts {
         // Allow finding unit by a UnitCode: getUnitByCode(UnitCode.tonne.km)
 		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5329);
 
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A266)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                QuestionSetAnswer questionSetA252Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+                if (questionSetA252Answer == null) {
+                    return res;
+                }
 
-				QuestionAnswer questionA268Answer = answersByCode.get(QuestionCode.A268);
-				QuestionAnswer questionA267Answer = answersByCode.get(QuestionCode.A267);
+                QuestionSetAnswer questionSetA266Answer = getFirstChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A266);
+                if (questionSetA266Answer == null) {
+                    return res;
+                }
+
+                Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA266Answer.getQuestionAnswers());
+
+                QuestionAnswer questionA268Answer = answersByCodeChild.get(QuestionCode.A268);
+                QuestionAnswer questionA267Answer = answersByCodeChild.get(QuestionCode.A267);
 
 				if (questionA268Answer == null || questionA267Answer == null) {
 					continue;

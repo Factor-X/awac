@@ -20,27 +20,29 @@ public class BaseActivityDataAE_BAD33C extends BaseActivityDataForProducts {
 		
 		List<BaseActivityData> res = new ArrayList<>();
 
-		// Get Target Unit (kg in this case)
-		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.kg)
-		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5133);
+		// Get Target Unit (t in this case)
+		// Allow finding unit by a UnitCode: getUnitByCode(UnitCode.t)
+		Unit baseActivityDataUnit = getUnitByCode(UnitCode.U5135);
 
 		// For each set of answers in A273, build an ActivityBaseData (see specifications)
-		for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
-			if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A273)) {
+        for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
+            if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A272)) {
 
-				Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetAnswersChild.getQuestionAnswers());
+                QuestionSetAnswer questionSetA273Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A273);
+                if (questionSetA273Answer == null) {
+                    return res;
+                }
 
-				QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
+                Map<QuestionCode, QuestionAnswer> answersByCode = byQuestionCode(questionSetA273Answer.getQuestionAnswers());
 
-				if (questionA274Answer == null) {
-					continue;
-				}
+                QuestionAnswer questionA274Answer = answersByCode.get(QuestionCode.A274);
 
-
-				for (QuestionSetAnswer questionSetAnswersChildChild : questionSetAnswersChild.getChildren()) {
-					if (questionSetAnswersChildChild.getQuestionSet().getCode().equals(QuestionCode.A279)) {
-
-						Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChildChild.getQuestionAnswers());
+                if (questionA274Answer == null) {
+                    continue;
+                }
+                for (QuestionSetAnswer questionSetAnswersChild273 : questionSetA273Answer.getChildren()) {
+                    if (questionSetAnswersChild273.getQuestionSet().getCode().equals(QuestionCode.A279)) {
+                        Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetAnswersChild273.getQuestionAnswers());
 
 						QuestionAnswer questionA280Answer = answersByCodeChild.get(QuestionCode.A280);
 						QuestionAnswer questionA281Answer = answersByCodeChild.get(QuestionCode.A281);
@@ -48,8 +50,7 @@ public class BaseActivityDataAE_BAD33C extends BaseActivityDataForProducts {
 						if (questionA280Answer == null || questionA281Answer == null) {
 							continue;
 						}
-
-						BaseActivityData baseActivityData = new BaseActivityData();
+                        BaseActivityData baseActivityData = new BaseActivityData();
 
 						baseActivityData.setKey(BaseActivityDataCode.AE_BAD33C);
 						baseActivityData.setRank(1);

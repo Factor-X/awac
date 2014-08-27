@@ -27,15 +27,15 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
         for (QuestionSetAnswer questionSetAnswersChild : questionSetAnswer.getChildren()) {
             if (questionSetAnswersChild.getQuestionSet().getCode().equals(QuestionCode.A250)) {
 
-            	QuestionSetAnswer questionSetA252Answer = getChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
+                QuestionSetAnswer questionSetA252Answer = getFirstChildQuestionSetAnswer(questionSetAnswersChild, QuestionCode.A252);
             	if (questionSetA252Answer == null) {
             		return res;
             	}
 
-            	QuestionSetAnswer questionSetA266Answer = getChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A266);
+            	QuestionSetAnswer questionSetA266Answer = getFirstChildQuestionSetAnswer(questionSetA252Answer, QuestionCode.A266);
             	if (questionSetA266Answer == null) {
             		return res;
-            	}            	
+            	}
 
                 Map<QuestionCode, QuestionAnswer> answersByCodeChild = byQuestionCode(questionSetA266Answer.getQuestionAnswers());
 
@@ -56,7 +56,7 @@ public class BaseActivityDataAE_BAD32A extends BaseActivityDataForProducts {
 
 				BaseActivityData baseActivityData = new BaseActivityData();
 
-				baseActivityData.setKey(BaseActivityDataCode.AE_BAD31A);
+				baseActivityData.setKey(BaseActivityDataCode.AE_BAD32A);
 				baseActivityData.setRank(2);
 				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
