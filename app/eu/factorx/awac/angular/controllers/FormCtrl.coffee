@@ -582,11 +582,11 @@ angular
                                 total++
                                 if answer.value!=null
                                     answered++
-
-
-        percentage = answered / total * 100
-
-        percentage = Math.floor(percentage)
+        if answered == 0
+            percentage = 0
+        else
+            percentage = answered / total * 100
+            percentage = Math.floor(percentage)
 
         console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
         console.log listTotal
@@ -615,6 +615,33 @@ angular
             else
                 # TODO ERROR HANDLING !!!!!
 
+    $scope.addTabSet = (tabSet,tab, mapRepetition) ->
+        console.log "...et jajoute !!"
+        ite=null
+        if !$scope.tabSet[tabSet]?
+            $scope.tabSet[tabSet] = []
+            $scope.tabSet[tabSet][0] = {}
+            $scope.tabSet[tabSet][0].mapRepetition = mapRepetition
+            ite = 0
+        else
+            i=0
+            while i < $scope.tabSet[tabSet].length
+                if $scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)
+                    ite = i
+                    break
+                i++
+            if ite == null
+                ite = $scope.tabSet[tabSet].length
+                $scope.tabSet[tabSet][ite] = {}
+                $scope.tabSet[tabSet][ite].mapRepetition = mapRepetition
+
+        if !$scope.tabSet[tabSet][ite][tab]?
+            $scope.tabSet[tabSet][ite][tab] = {}
+            $scope.tabSet[tabSet][ite][tab].active = (tab == 1 ? true:false)
+
+        if !$scope.tabSet[tabSet][ite][tab].listToCompute?
+            $scope.tabSet[tabSet][ite][tab].listToCompute = []
+        return ite
     #
     # create a watcher for an answer : all new answer or loaded answer use this function
     #
@@ -626,8 +653,10 @@ angular
             tabSet = answer.tabSet
             tab = answer.tab
 
-            # create the elements of the $scope.tabSet variable
+            ite=$scope.addTabSet(tabSet,tab,answer.mapRepetition)
 
+            # create the elements of the $scope.tabSet variable
+            ###
             ite=null
 
             if !$scope.tabSet[tabSet]?
@@ -653,6 +682,7 @@ angular
 
             if !$scope.tabSet[tabSet][ite][tab].listToCompute?
                 $scope.tabSet[tabSet][ite][tab].listToCompute = []
+            ###
 
             # test if an answer with the same questionKey / mapRepetition is already contains into the list of answer
             j = $scope.tabSet[tabSet][ite][tab].listToCompute.length

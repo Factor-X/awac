@@ -7,11 +7,20 @@ angular
         ngIteration: '='
         ngRepetitionMap: '='
         ngCondition: '='
+        ngTabSet:'='
+        ngTab:'='
     templateUrl: "$/angular/templates/mm-awac-repetition-question.html"
     replace: true
     transclude: true
     link: (scope) ->
         directiveService.autoScopeImpl scope
+
+        console.log "je suis une répétition... 2"
+        console.log scope.getTabSet()
+
+        if scope.getTabSet()?
+            console.log "et je suis okkkk !!"
+            scope.$parent.addTabSet(scope.getTabSet(), scope.getTab(),scope.getRepetitionMap())
 
         scope.getQuestionSet = () ->
             return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
