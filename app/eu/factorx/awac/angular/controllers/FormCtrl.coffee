@@ -771,10 +771,8 @@ angular
     # if the loading is not finish yet, return a fake object with active = undefined
     #
     $scope.getTab = (tabSet,tab,mapRepetition=null) ->
-        if $scope.loading == true
-            tps = {}
-            tps.active = undefined
-            return tps
+        if $scope.loading == true || !$scope.tabSet[tabSet]?
+            $scope.addTabSet(tabSet,tab,mapRepetition)
         for tabSetToTest in $scope.tabSet[tabSet]
             if $scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)
                 if !tabSetToTest[tab]?
@@ -789,7 +787,7 @@ angular
     # return false if the loading is not finish
     #
     $scope.tabIsMaster = (tabSet,tab, mapRepetition =null) ->
-        if $scope.loading == true
+        if $scope.loading == true || !$scope.tabSet[tabSet]?
             return false
         for tabSetToTest in $scope.tabSet[tabSet]
             if $scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)
