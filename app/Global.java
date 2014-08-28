@@ -45,14 +45,9 @@ public class Global extends GlobalSettings {
 	// Spring global context
 	private ApplicationContext applicationContext;
 
-	// App
-	private Application app;
-
 
 	@Override
 	public void onStart(Application app) {
-
-		this.app = app;
 
 		play.Logger.info("Starting AWAC");
 		// force default language to FR - test purpose
@@ -83,10 +78,10 @@ public class Global extends GlobalSettings {
 			semaphore.acquire();
 
 			if (thread == null) {
-				thread =  applicationContext.getBean(InitializationThread.class);
+				thread = applicationContext.getBean(InitializationThread.class);
 				thread.start();
 
-				if(app.isDev()){
+				if (app.isDev()) {
 					thread.join();
 				}
 			}
@@ -106,20 +101,28 @@ public class Global extends GlobalSettings {
 	@Override
 	public Action onRequest(Http.Request request, Method actionMethod) {
 		// Analytics analytics = AnalyticsUtil.start(request);
-
 		Action action;
 
-		if (!app.isDev() && !thread.isInitialized()) {
+		// ENFORCE HTTPS on production
+		if (Play.isProd() && !isHttpsRequest(request)) {
 			action = new Action() {
 				@Override
 				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
-					return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
+					return Promise.<SimpleResult>pure(Results.redirect("https://" + ctx.request().host() + ctx.request().uri()));
 				}
 			};
 		} else {
-			action = super.onRequest(request, actionMethod);
+			if (!Play.isDev() && !thread.isInitialized()) {
+				action = new Action() {
+					@Override
+					public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
+						return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
+					}
+				};
+			} else {
+				action = super.onRequest(request, actionMethod);
+			}
 		}
-
 
 		//AnalyticsUtil.end(analytics);
 		return action;
@@ -154,6 +157,16 @@ public class Global extends GlobalSettings {
 
 		return Promise.<SimpleResult>pure(Results.internalServerError(exceptionsDTO
 		));
+	}
+
+
+	private static final String SSL_HEADER = "x-forwarded-proto";
+
+	private static boolean isHttpsRequest(Http.Request request) {
+		// heroku passes header on
+		return request.getHeader(SSL_HEADER) != null
+			&& request.getHeader(SSL_HEADER)
+			.contains("https");
 	}
 
 }
