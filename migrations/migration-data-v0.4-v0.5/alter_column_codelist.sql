@@ -1,0 +1,58 @@
+BEGIN TRANSACTION READ WRITE;
+
+ALTER TABLE valueselectionquestion ALTER COLUMN codelist TYPE character varying(255);
+
+update valueselectionquestion set codelist = 'SECTEURPRINCIPAL' where id = 2;
+update valueselectionquestion set codelist = 'SECTEURPRIMAIRE' where id = 3;
+update valueselectionquestion set codelist = 'SECTEURSECONDAIRE' where id = 4;
+update valueselectionquestion set codelist = 'SECTEURTERTIAIRE' where id = 5;
+update valueselectionquestion set codelist = 'SECTEURTYPE' where id = 7;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 13;
+update valueselectionquestion set codelist = 'ENERGIEVAPEUR' where id = 18;
+update valueselectionquestion set codelist = 'GES' where id = 23;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 27;
+update valueselectionquestion set codelist = 'MOTIFDEPLACEMENT' where id = 44;
+update valueselectionquestion set codelist = 'CARBURANT' where id = 45;
+update valueselectionquestion set codelist = 'TYPEVEHICULE' where id = 46;
+update valueselectionquestion set codelist = 'MOTIFDEPLACEMENT' where id = 53;
+update valueselectionquestion set codelist = 'CARBURANT' where id = 54;
+update valueselectionquestion set codelist = 'TYPEVOL' where id = 78;
+update valueselectionquestion set codelist = 'CATEGORIEVOL' where id = 79;
+update valueselectionquestion set codelist = 'FRIGORIGENEBASE' where id = 93;
+update valueselectionquestion set codelist = 'PROVENANCESIMPLIFIEE' where id = 111;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 116;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 119;
+update valueselectionquestion set codelist = 'TYPEDECHET' where id = 123;
+update valueselectionquestion set codelist = 'TRAITEMENTDECHET' where id = 124;
+update valueselectionquestion set codelist = 'TRAITEUREAU' where id = 134;
+update valueselectionquestion set codelist = 'ORIGINEEAUUSEE' where id = 135;
+update valueselectionquestion set codelist = 'TRAITEMENTEAU' where id = 137;
+update valueselectionquestion set codelist = 'TRAITEUREAU' where id = 138;
+update valueselectionquestion set codelist = 'TRAITEMENTEAU' where id = 141;
+update valueselectionquestion set codelist = 'TYPEACHAT' where id = 144;
+update valueselectionquestion set codelist = 'ACHATMETAL' where id = 145;
+update valueselectionquestion set codelist = 'ACHATPLASTIQUE' where id = 146;
+update valueselectionquestion set codelist = 'ACHATPAPIER' where id = 147;
+update valueselectionquestion set codelist = 'ACHATVERRE' where id = 148;
+update valueselectionquestion set codelist = 'ACHATCHIMIQUE' where id = 149;
+update valueselectionquestion set codelist = 'ACHATROUTE' where id = 150;
+update valueselectionquestion set codelist = 'ACHATAGRO' where id = 151;
+update valueselectionquestion set codelist = 'ACHATSERVICE' where id = 152;
+update valueselectionquestion set codelist = 'INFRASTRUCTURE' where id = 162;
+update valueselectionquestion set codelist = 'TYPEPRODUIT' where id = 173;
+update valueselectionquestion set codelist = 'PROVENANCESIMPLIFIEE' where id = 189;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 194;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 197;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 200;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 203;
+update valueselectionquestion set codelist = 'GESSIMPLIFIE' where id = 210;
+update valueselectionquestion set codelist = 'TYPEDECHET' where id = 216;
+update valueselectionquestion set codelist = 'TRAITEMENTDECHET' where id = 217;
+update valueselectionquestion set codelist = 'POURCENTSIMPLIFIE' where id = 218;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 221;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 224;
+update valueselectionquestion set codelist = 'COMBUSTIBLE' where id = 229;
+update valueselectionquestion set codelist = 'FRIGORIGENE' where id = 232;
+
+COMMIT;
+
