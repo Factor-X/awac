@@ -125,7 +125,6 @@ public class Global extends GlobalSettings {
 		}
 
 		//AnalyticsUtil.end(analytics);
-		
 		return action;
 	}
 
