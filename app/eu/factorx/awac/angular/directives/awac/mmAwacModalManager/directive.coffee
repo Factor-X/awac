@@ -16,7 +16,7 @@ angular
                 scope.removeModal(args.target)
 
             return
-            
+
         # insert modal into html
         scope.displayModal = (target,params) ->
 
