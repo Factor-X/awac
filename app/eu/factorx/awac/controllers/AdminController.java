@@ -86,7 +86,6 @@ public class AdminController extends Controller {
 	}
 
 	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
 	public Result resetCodeLabels() {
 		if (!Play.application().isDev()) {
 			return unauthorized();
@@ -102,7 +101,6 @@ public class AdminController extends Controller {
 	}
 
 	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
 	public Result resetIndicatorsAndFactors() {
 		if (!Play.application().isDev()) {
 			return unauthorized();
@@ -114,7 +112,6 @@ public class AdminController extends Controller {
 	}
 
 	@Transactional(readOnly = false)
-	@Security.Authenticated(SecuredController.class)
 	public Result createMunicipalitySurveyData() {
 		if (!Play.application().isDev()) {
 			return unauthorized();
