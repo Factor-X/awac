@@ -1,7 +1,7 @@
 .loginBackground
     .router-bar
         .awac_logo
-        ul.interface_menu
+        ul.interface_menu(ng-show="false")
             li
                 a(
                         class="btn btn-primary",
@@ -38,7 +38,7 @@
 
 
 
-            tab.tab-color-lightgreen(active="tabActive[1]")
+            tab.tab-color-lightgreen(active="tabActive[1]", ng-show="false")
                 tab-heading
                     span(ng-bind-html="'LOGIN_FORGOT_PASSWORD' | translate")
                 div
