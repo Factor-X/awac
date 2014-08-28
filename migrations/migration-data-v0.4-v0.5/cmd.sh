@@ -227,3 +227,28 @@ cat ./add_technical_segment.sql | psql -h localhost -U play -d awac -W
 # alter column CODELIST of VALUESELECTIONQUESTION table (@Enumerated(EnumType.ORDINAL) => @Enumerated(EnumType.STRING)
 cat ./alter_column_codelist.sql | psql -h localhost -U play -d awac -W
 
+# call the importers
+cd ../../
+bash -c 'export TERM=dumb; sbt run < /dev/zero > /dev/null 2>/dev/null &'  
+cd -
+
+echo -n "check port 9000."
+while true; do
+	echo -n '.'
+	netstat -lnt | egrep ':9000\b' > /dev/null && echo "found :-)" && break
+	sleep 1
+done
+echo ''
+	
+echo "http://127.0.0.1:9000/awac/admin/codelabels/reset ... " && 
+curl -L http://127.0.0.1:9000/awac/admin/codelabels/reset &&
+echo && 
+echo "http://127.0.0.1:9000/awac/admin/indicators_factors/reset ... " && 
+curl -L http://127.0.0.1:9000/awac/admin/indicators_factors/reset && 
+echo && 
+echo "http://127.0.0.1:9000/awac/admin/municipality_survey/create ... " && 
+curl -L http://127.0.0.1:9000/awac/admin/municipality_survey/create &&
+echo && 
+
+kill -9 $(netstat -a -p -n 2>/dev/null | egrep ':9000\b' | grep 'LISTEN' | awk '{ print $7 }' | cut -d/ -f1 )
+
