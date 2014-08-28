@@ -1,4 +1,5 @@
-Feature: Testing AWAC Integration
+@TestingAccount
+Feature: Testing Account
 
   Scenario: AWAC Integration
     Given I have created new account

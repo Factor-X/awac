@@ -35,6 +35,19 @@ Steps to migrate AWAC **v0.4** to **v0.5**
     $
     ```
 
+		V0.5 NOTE
+		---------
+		Regarding the v0.4 to v0.5 migration, the importers that have to be launched are:
+		- CodeLabelImporter (re-import all code lists and translations)
+		- AwacMunicipalityInitialData (import municipality survey data: forms, question sets, questions)
+		- AwacDataImporter (re-import all enterprise-related indicators & factors)
+		
+		You may achieve this by using the console, or the administration controller by going to these urls (works only on dev env.):
+		- http://localhost:9000/awac/admin/codelabels/reset
+		- http://localhost:9000/awac/admin/indicators_factors/reset
+		- http://localhost:9000/awac/admin/municipality_survey/create
+	
+
     => database ok
 
 5. create a branch v0.5

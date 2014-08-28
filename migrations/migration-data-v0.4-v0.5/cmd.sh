@@ -223,3 +223,7 @@ cat ./unit_refactoring.sql | psql -h localhost -U play -d awac -W
 
 # add technical segment columns to tables where it is not present
 cat ./add_technical_segment.sql | psql -h localhost -U play -d awac -W
+
+# alter column CODELIST of VALUESELECTIONQUESTION table (@Enumerated(EnumType.ORDINAL) => @Enumerated(EnumType.STRING)
+cat ./alter_column_codelist.sql | psql -h localhost -U play -d awac -W
+

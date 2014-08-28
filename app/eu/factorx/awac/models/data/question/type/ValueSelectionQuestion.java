@@ -7,6 +7,7 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Entity
@@ -14,7 +15,7 @@ public class ValueSelectionQuestion extends Question {
 
 	private static final long serialVersionUID = 1L;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private CodeList codeList;
 
 	protected ValueSelectionQuestion() {

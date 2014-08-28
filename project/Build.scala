@@ -35,6 +35,7 @@ object ApplicationBuild extends Build {
         "info.cukes" % "cucumber-guice" % "1.1.5" % "test",
         "info.cukes" % "cucumber-java" % "1.1.5" % "test",
         "info.cukes" % "cucumber-junit" % "1.1.5" % "test",
+        "info.cukes" % "cucumber-scala_2.10" % "1.1.5" % "test",
         "com.google.guava" % "guava" % "14.0"
     )
 
@@ -77,5 +78,6 @@ object ApplicationBuild extends Build {
     //        )
     // Add your own project settings here
 
+  //javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
 
 }

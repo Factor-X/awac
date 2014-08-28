@@ -66,7 +66,12 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 
 	@Override
 	public HashMap<String,CodeLabel> findCodeLabelsByList(CodeList codeList) {
-		return findAllCodeLabels().get(codeList);
+		HashMap<String, CodeLabel> res = findAllCodeLabels().get(codeList);
+		if (res == null) {
+			Logger.error("CodeLabelService - No code labels for code list: '{}'! Try again after resetting code labels data!", codeList);
+			res = new HashMap<String,CodeLabel>();
+		}
+		return res;
 	}
 
 	@Override
