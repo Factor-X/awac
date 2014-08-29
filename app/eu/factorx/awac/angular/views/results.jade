@@ -1,9 +1,14 @@
 div
     h1 Results
 
+
     br
 
     table.result_table(ng-show="o.reportLines != null")
+        tr
+            td
+                button.button.btn.btn-success(ng-click="downloadAsXls()") Télécharger le fichier Excel
+
         tr
             td
                 table.indicators_table
@@ -47,3 +52,4 @@ div
 
                 br
                 br
+

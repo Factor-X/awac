@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, downloadService, displayFormMenu) ->
+.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.graphs = {}
@@ -80,3 +80,6 @@ angular
 
         else
             # TODO ERROR HANDLING
+
+    $scope.downloadAsXls = () ->
+        $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null
