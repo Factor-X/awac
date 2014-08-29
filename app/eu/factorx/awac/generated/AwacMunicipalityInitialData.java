@@ -192,7 +192,7 @@ public class AwacMunicipalityInitialData {
     session.saveOrUpdate(ac62);
 
     // == AC64
-    // Calcul des gaz à effets de serres émis par les déplacements
+    // Déplacements en véhicule routier
     QuestionSet ac64 = new QuestionSet(QuestionCode.AC64, false, ac62);
     session.saveOrUpdate(ac64);
 
@@ -365,11 +365,11 @@ public class AwacMunicipalityInitialData {
 
 
     // == AC22
-    // Quelle en est le % de la partie chaufée occupé par la commune?
+    // Quelle en est le % de la partie chauffée occupé par la commune?
     session.saveOrUpdate(new PercentageQuestion( ac10, 0, QuestionCode.AC22, null ));
 
     // == AC23
-    // Fournir ici les documents éventuels justifiant les données suivantes
+    // Fournir ici les documents éventuels justifiant les données de consommation (combustibles, électricité, vapeur)
     session.saveOrUpdate(new DocumentQuestion( ac10, 0, QuestionCode.AC23));
 
     // == AC26
@@ -383,12 +383,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC30
     // Electricité grise
-        session.saveOrUpdate(new DoubleQuestion( ac29, 0, QuestionCode.AC30, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac29, 0, QuestionCode.AC30, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC31
     // Electricité verte
-        session.saveOrUpdate(new DoubleQuestion( ac29, 0, QuestionCode.AC31, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac29, 0, QuestionCode.AC31, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC34
@@ -461,12 +461,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC54
     // Eclairage public: consommation d'électricité verte
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC55
     // Eclairage public: consommation d'électricité grise
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC57
@@ -475,12 +475,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC58
     // Consommation d'électricité verte du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC59
     // Consommation d'électricité grise du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC61
@@ -508,8 +508,8 @@ public class AwacMunicipalityInitialData {
     session.saveOrUpdate(new ValueSelectionQuestion( ac66, 0, QuestionCode.AC70, CodeList.CARBURANT ));
 
     // == AC71
-    // Quelle est la quantité totale de carburant consommé/an ?
-        session.saveOrUpdate(new DoubleQuestion( ac66, 0, QuestionCode.AC71, volumeUnits, null, volumeUnits.getMainUnit() ));
+    // Quelle est la quantité totale de carburant consommée par an ?
+        session.saveOrUpdate(new DoubleQuestion( ac66, 0, QuestionCode.AC71, volumeUnits, null, getUnitBySymbol("l") ));
 
 
     // == AC74
@@ -549,8 +549,9 @@ public class AwacMunicipalityInitialData {
     session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC82, null, 10 ));
 
     // == AC83
-    // Quelle est le nombre de kilomètres parcourus par an?
-    session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC83, null, null ));
+    // Quelle est la distance parcourue par an?
+        session.saveOrUpdate(new DoubleQuestion( ac73, 0, QuestionCode.AC83, lengthUnits, null, getUnitBySymbol("km") ));
+
 
     // == AC86
     // Dépense
@@ -698,7 +699,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC128
     // Quantité
-        session.saveOrUpdate(new DoubleQuestion( ac116, 0, QuestionCode.AC128, massUnits, null, massUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac116, 0, QuestionCode.AC128, massUnits, null, getUnitBySymbol("t") ));
 
 
     // == AC129
@@ -721,7 +722,7 @@ public class AwacMunicipalityInitialData {
 
     // == AC135
     // Quantité
-        session.saveOrUpdate(new DoubleQuestion( ac132, 0, QuestionCode.AC135, massUnits, null, massUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac132, 0, QuestionCode.AC135, massUnits, null, getUnitBySymbol("t") ));
 
 
     // == AC136
