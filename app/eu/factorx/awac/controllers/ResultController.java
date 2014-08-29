@@ -11,6 +11,7 @@ import eu.factorx.awac.service.ReportService;
 import eu.factorx.awac.service.ResultExcelGeneratorService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.util.Table;
+import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -56,7 +57,7 @@ public class ResultController extends Controller {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReportAsXls(String periodKey, Long scopeId) throws IOException, WriteException {
+	public Result getReportAsXls(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Report report = reportService.getReport(scope, period);
@@ -88,7 +89,7 @@ public class ResultController extends Controller {
 		}
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		resultExcelGeneratorService.generateExcelInStream(stream, allScopes, scope1, scope2, scope3, outOfScope);
+		resultExcelGeneratorService.generateExcelInStream(stream, scope.getSite().getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
 //		response().setHeader("Content-Type", "application/octet-stream");
 		response().setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
 		return ok(new ByteArrayInputStream(stream.toByteArray()));

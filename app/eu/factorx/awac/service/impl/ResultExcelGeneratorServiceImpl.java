@@ -4,10 +4,13 @@ import eu.factorx.awac.service.ResultExcelGeneratorService;
 import eu.factorx.awac.util.Table;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
 import org.springframework.stereotype.Component;
+import play.Play;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -15,23 +18,39 @@ import java.io.OutputStream;
 public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorService {
 
 	@Override
-	public void generateExcelInStream(OutputStream stream, Table allScopes, Table scope1, Table scope2, Table scope3, Table outOfScope) throws IOException, WriteException {
+	public void generateExcelInStream(OutputStream stream, String site, String period, Table allScopes, Table scope1, Table scope2, Table scope3, Table outOfScope)
+		throws IOException, WriteException, BiffException {
 
-		WorkbookSettings ws = new WorkbookSettings();
-		ws.setEncoding("Cp1252");
-		WritableWorkbook workbook = Workbook.createWorkbook(stream, ws);
+		Workbook template = Workbook.getWorkbook(new File(Play.application().path() + "/templates/results_template.xls"));
 
-		WritableSheet sheetAllScopes = workbook.createSheet("Tous les scopes", 0);
-		WritableSheet sheetScope1 = workbook.createSheet("Scope 1", 1);
-		WritableSheet sheetScope2 = workbook.createSheet("Scope 2", 2);
-		WritableSheet sheetScope3 = workbook.createSheet("Scope 3", 3);
-		WritableSheet sheetOutOfScope = workbook.createSheet("Hors scope", 4);
+		WritableWorkbook workbook = Workbook.createWorkbook(stream, template);
 
-		writeSheet(sheetAllScopes, 0, 3, allScopes);
-		writeSheet(sheetScope1, 0, 3, scope1);
-		writeSheet(sheetScope2, 0, 3, scope2);
-		writeSheet(sheetScope3, 0, 3, scope3);
-		writeSheet(sheetOutOfScope, 0, 3, outOfScope);
+		WritableSheet sheetAllScopes = workbook.getSheet(0);
+		WritableSheet sheetScope1 = workbook.getSheet(1);
+		WritableSheet sheetScope2 = workbook.getSheet(2);
+		WritableSheet sheetScope3 = workbook.getSheet(3);
+		WritableSheet sheetOutOfScope = workbook.getSheet(4);
+
+		writeSheet(sheetAllScopes, 0, 5, allScopes);
+		writeSheet(sheetScope1, 0, 5, scope1);
+		writeSheet(sheetScope2, 0, 5, scope2);
+		writeSheet(sheetScope3, 0, 5, scope3);
+		writeSheet(sheetOutOfScope, 0, 5, outOfScope);
+
+		sheetAllScopes.addCell(new Label(0, 2, site));
+		sheetAllScopes.addCell(new Label(1, 2, period));
+
+		sheetScope1.addCell(new Label(0, 2, site));
+		sheetScope1.addCell(new Label(1, 2, period));
+
+		sheetScope2.addCell(new Label(0, 2, site));
+		sheetScope2.addCell(new Label(1, 2, period));
+
+		sheetScope3.addCell(new Label(0, 2, site));
+		sheetScope3.addCell(new Label(1, 2, period));
+
+		sheetOutOfScope.addCell(new Label(0, 2, site));
+		sheetOutOfScope.addCell(new Label(1, 2, period));
 
 		workbook.write();
 		workbook.close();
