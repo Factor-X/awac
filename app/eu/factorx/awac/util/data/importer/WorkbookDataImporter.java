@@ -1,8 +1,11 @@
 package eu.factorx.awac.util.data.importer;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jxl.*;
 
@@ -66,6 +69,16 @@ public abstract class WorkbookDataImporter {
 		return res;
 	}
 
+	protected static String getCellStringContent(Sheet sheet, int column, int row) {
+
+		String content = sheet.getCell(column, row).getContents();
+
+		if(content==null || content.length() == 0 || content.equals("0")){
+			return null;
+		}
+		return content;
+	}
+
 	protected static String getCellContent(Sheet sheet, int column, int row) {
 		return StringUtils.trimToNull(sheet.getCell(column, row).getContents());
 	}
@@ -107,6 +120,34 @@ public abstract class WorkbookDataImporter {
 			workbookSheets.put(sheet.getName(), sheet);
 		}
 		return workbookSheets;
+	}
+
+
+	protected static String normalize(String text) {
+
+		text = text.replaceAll("(é|ê|è)", "e");
+
+		text = text.replaceAll("[^a-zA-Z0-9]", "_");
+
+		text = text.toUpperCase().replace(" ", "_").replace("-", "_");
+		text = Normalizer.normalize(text, Normalizer.Form.NFD);
+
+		Pattern pattern = Pattern.compile("(.*?)_$");
+		Pattern patternB = Pattern.compile("^_(.*?)");
+
+		Matcher m = pattern.matcher(text);
+		Matcher mB = patternB.matcher(text);
+
+		if (m.find()) {
+			text = m.group(1);
+		}
+		if (mB.find()) {
+			text = mB.group(1);
+		}
+
+		text = text.replaceAll("_+", "_");
+
+		return text;
 	}
 
 }

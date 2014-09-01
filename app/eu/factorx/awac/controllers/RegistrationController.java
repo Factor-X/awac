@@ -140,15 +140,6 @@ public class RegistrationController  extends Controller {
 			person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
 			personService.saveOrUpdate(person);
 		}
-		else{
-			//test if an account for the same calculator already exists
-			for(Account accountToTest : accountService.findByEmail(person.getEmail())){
-				if(accountToTest.getInterfaceCode().equals(interfaceCode)){
-					//TODO translate
-					throw new MyrmexException("Un compte avec le même email existe déjà pour ce calculateur");
-				}
-			}
-		}
 
 		//create account
 		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password, interfaceCode);

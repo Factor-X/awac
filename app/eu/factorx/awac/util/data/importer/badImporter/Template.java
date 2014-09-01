@@ -1,6 +1,5 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.bad.utils.Function;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
@@ -33,6 +32,6 @@ public class Template {
 
         template.merge(velocityContext, writer);
 
-        Function.save(writer.toString(), "files/results/", fileName, true);
+        //TODO Function.save(writer.toString(), "files/results/", fileName, true);
     }
 }

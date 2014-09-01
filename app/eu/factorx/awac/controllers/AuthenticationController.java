@@ -152,27 +152,7 @@ public class AuthenticationController extends Controller {
 
 		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(dto.getInterfaceName());
 
-		Account account;
-
-		if (dto.getIdentifier().contains("@")) {
-			Person person = personService.getByEmail(dto.getIdentifier().toLowerCase());
-
-			if (person != null) {
-				account = accountService.findByEmailAndInterfaceCode(dto.getIdentifier().toLowerCase(), interfaceTypeCode);
-
-				if (account == null) {
-					return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER_BAD_INTERFACE));
-				}
-
-			} else {
-				return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
-			}
-
-
-		} else {
-			account = accountService.findByIdentifier(dto.getIdentifier());
-		}
-
+		Account account = accountService.findByIdentifier(dto.getIdentifier());
 
 		if (account == null) {
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_IDENTIFIER));
