@@ -1,7 +1,6 @@
 div
     h1 Results
 
-
     br
 
     table.result_table(ng-show="o.reportLines != null")
@@ -11,29 +10,6 @@ div
 
         tr
             td
-                table.indicators_table
-                    thead
-                        th(width="100%")
-                        th.align-right Scope 1
-                        th.align-right Scope 2
-                        th.align-right Scope 3
-                        th.align-right Hors scope
-                    tbody
-                        tr(ng-repeat="rl in o.reportLines")
-                            td(ng-bind-html="rl.indicatorName")
-                            td.align-right
-                                span(ng-bind-html="rl.scope1Value | numberToI18N", ng-show="rl.scope1Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope2Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope3Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.outOfScopeValue | numberToI18N", ng-show="rl.outOfScopeValue > 0")
-        tr
-            td
-                br
-                br
-                br
 
                 h2 By scope
                 mm-awac-graph-donut(ng-items="graphs.scopes", ng-show="graphs.scopes.length > 0")
@@ -53,3 +29,36 @@ div
                 br
                 br
 
+        tr
+            td
+                table.indicators_table
+                    thead
+                        th(width="100%")
+                        th.align-right Scope 1 (tCO2e)
+                        th.align-right Scope 2(tCO2e)
+                        th.align-right Scope 3 (tCO2e)
+                        th.align-right Hors scope (tCO2e)
+                    tbody
+                        tr(ng-repeat="rl in o.reportLines")
+                            td(ng-bind-html="rl.indicatorName")
+                            td.align-right
+                                span(ng-bind-html="rl.scope1Value | numberToI18N", ng-show="rl.scope1Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope2Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope3Value > 0")
+                            td.align-right
+                                span(ng-bind-html="rl.outOfScopeValue | numberToI18N", ng-show="rl.outOfScopeValue > 0")
+                    tfoot
+                        tr
+                            td Total: {{ (totalScope1 + totalScope2 + totalScope3 + totalOutOfScope) | numberToI18N }} (tCO2e)
+                            td.align-right
+                                span(ng-bind-html="totalScope1 | numberToI18N")
+                            td.align-right
+                                span(ng-bind-html="totalScope2 | numberToI18N")
+                            td.align-right
+                                span(ng-bind-html="totalScope3 | numberToI18N")
+                            td.align-right
+                                span(ng-bind-html="totalOutOfScope | numberToI18N")
+                br
+                br

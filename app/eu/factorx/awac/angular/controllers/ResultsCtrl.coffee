@@ -20,6 +20,12 @@ angular
                 totalScope2 += rl.scope2Value
                 totalScope3 += rl.scope3Value
 
+            $scope.totalScope1 = totalScope1
+            $scope.totalScope2 = totalScope2
+            $scope.totalScope3 = totalScope3
+            $scope.totalOutOfScope = totalOutOfScope
+
+
             data = []
             data.push
                 label: 'Scope 1',
@@ -76,7 +82,6 @@ angular
                         value: rl.outOfScopeValue
 
             $scope.graphs.outOfScope = data
-
 
         else
             # TODO ERROR HANDLING

@@ -78,6 +78,6 @@ object ApplicationBuild extends Build {
     //        )
     // Add your own project settings here
 
-  //javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
+    //javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
 
 }
