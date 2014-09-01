@@ -86,4 +86,18 @@ public class Scope extends AuditedAbstractEntity {
 		this.product = product;
 	}
 
+	@Override
+	public String toString() {
+		if (ScopeTypeCode.ORG.equals(this.getScopeType())) {			
+			return "Scope [organization=" + organization.getName() + "]";
+		}
+		if (ScopeTypeCode.SITE.equals(this.getScopeType())) {			
+			return "Scope [site=" + site.getName() + "]";
+		}
+		if (ScopeTypeCode.PRODUCT.equals(this.getScopeType())) {			
+			return "Scope [product=" + product.getName() + "]";
+		}
+		return null;
+	}
+
 }

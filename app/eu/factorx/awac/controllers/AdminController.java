@@ -3,10 +3,12 @@ package eu.factorx.awac.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
+import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -120,6 +122,17 @@ public class AdminController extends Controller {
 			throw new RuntimeException("Municipality Survey Data has already been created");
 		}
 		awacMunicipalityInitialData.createSurvey(JPA.em().unwrap(Session.class));
+
+		return (ok());
+	}
+
+	@Transactional(readOnly = true)
+	public Result runBADImporter(){
+
+		BADImporter badImporter = new BADImporter();
+
+		badImporter.run();
+
 
 		return (ok());
 	}

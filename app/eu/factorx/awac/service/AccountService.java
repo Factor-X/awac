@@ -10,8 +10,6 @@ public interface AccountService extends PersistenceService<Account> {
 
 	public Account findByIdentifier(String identifier);
 
-	public Account findByEmailAndInterfaceCode(String email, InterfaceTypeCode interfaceTypeCode);
-
 	public List<Account> findByEmail(String email);
 
 	public boolean controlPassword(String password, Account account);

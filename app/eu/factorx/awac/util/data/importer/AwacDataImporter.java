@@ -25,7 +25,7 @@ import eu.factorx.awac.service.IndicatorService;
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	private static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
+	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
 	/**
 	 * <pre>
@@ -42,7 +42,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 14: ActivityOwnership       (a {@link Boolean})
 	 * </pre>
 	 */
-	private static final String ENTERPRISE_INDICATORS_SHEET_NAME = "Indicators";
+	public static final String ENTERPRISE_INDICATORS_SHEET_NAME = "Indicators";
 
 	/**
 	 * <pre>
@@ -57,7 +57,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 10: Unit out             (a {@link Unit})
 	 * </pre>
 	 */
-	private static final String ENTERPRISE_FACTORS_SHEET_NAME = "EFDB_V6";
+	public static final String ENTERPRISE_FACTORS_SHEET_NAME = "EFDB_V6";
 
 	@Autowired
 	private IndicatorService indicatorService;
