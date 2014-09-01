@@ -1,88 +1,73 @@
 # Procedure
 
-Steps to migrate AWAC to one upper version 
+Steps to migrate AWAC **v0.4** to **v0.5**
+
+-> modification of the data structure
+
+-> add some informations into database
+
+## Files
+
+ cmd.sh => contains the migration script for the database structure
+
+ add_technical_segment.sql (used by cmd.sh)  => add the technical segment to some table into database
+
+ unit_refactoring.sql => edit some information into unit and unit_category table
 
 ## Steps
 
-All commands are given from the root play directory.
+1. stop the production application
+    HOW TO : ?
 
-1. Establish a release note with:
-    - all new features
-    - all bug fixes
-    - all changes of behavior in the application
-    - all removed/disabled features (should not happen)
-
-2. Set the production instance to maitenance mode to avoid side effects
-
+2. import production database to local
     ```sh
-    $ heroku maintenance:on -a awac-accept
-    ``` 
-
-3. import production database to local and make a backup (backups are NOT COMMITTED !!! and this is intended)
-
-    **This tool requires:**
-        - pg_dump and psql
-        - the heroku toolbelt
-        - an account on heroku with admin access to the instance
-        - curl
-
-    ```sh
-    $ ./deployment.sh
+    $ pg_dump --no-privileges --no-owner --no-reconnect -h ec2-54-217-206-100.eu-west-1.compute.amazonaws.com -d ddd59omo17fsbr -U u9q6jlsnjtkir0 -W
     ```
     
-4. execute the cmd.sh script which contains all migrations (SQL + through controller)
+3. execute the cmd.sh script
 
     ```sh
-    $ cd migrations/migration-data-v0.4-v0.5
     $ ./cmd.sh
-    $ cd ../..
     ```
-5. Re-run the tests
 
+4. use importers with console to add information for the municipality forms and new activity lists and translations
     ```sh
-    $ activator test
+    $
     ```
 
-6. Send the local database to production
+		V0.5 NOTE
+		---------
+		Regarding the v0.4 to v0.5 migration, you don't have to do anything for this step: the importers are launched by cmd.sh.
+	
 
+    => database ok
+
+5. create a branch v0.5
     ```sh
-    $ ./deployment.sh --step4
+    $ git  checkout -b v0.5
     ```
 
-7. Deploy the application
-
+6. deactivate "Invite user" button into "user manager"
+    HOW TO : user_maanger.jade, l.5 : add ng-show="false"
+7. deactivate "forgot password" into login
+    HOW TO : add ng-show="false" into the second tab
     ```sh
-    $ heroku repo:purge_cache -a awac-accept
-    $ git push awac-accept local_branch:master -f
+    $
     ```
-    - **-f** is used to ignore parenting problems between remote and local repositories (REQUIRED)
-
-    **Note:** If an error *"SOURCE"* or *"GZIP"* occurs during the deployment, juste re-run it. This is a known problem in Play2, will be fixed in the future.
-
-8. Put the production instance online
-
+    
+    => application ready to deploy
+    
+8. deploy the application
     ```sh
-    $ heroku maintenance:off -a awac-accept
+    $ git push awac-accept v0.5:master -f
     ```
 
-9. Test the deployed instance (old and new features).
-   - Technique:
-       - Verify that **public/javascript/app.js** is in the last version by comparing with the local version. If not, see notes.
-       - Verify at least one new and one old logins
-       - Verify all translations
-   - Features:
-       - Check all features of the release note are present in the deployed version
-   - Cross check: ask a 2nd person to test.
+9. erase the production DB with the local DB
+    ```sh
+    $
+    ```
 
-10. Everything ok ? Make a tag with the version ( for example: "v0.5" ) and keep the SQL backup in safety on at least 2 external hard drives (what about the synology ?).
-
-11. May the force be with you
-
-## Notes
-
-- It frequently appears that the deployed app is **not the last version**. This is a cache problem in the Heroku Slug system. Re-run the **cache purge** again and again (yes... on that point heroku sucks and there is currently no fix, use the force Luke).
-
-- The **deployment is slow**, yeah we know... however it should work (heroku allows a compiling of max 15 minutes, that time elapsed, the compiler slug gets killed, brutaly... no mercy)
-
-
-
+10. start the new application
+    ```sh
+    $
+    ```
