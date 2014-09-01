@@ -5,36 +5,19 @@ import eu.factorx.awac.dto.DTO;
 
 public class AdminAccountDTO extends DTO{
 
-	private String email;
-
-	private String interfaceName;
+	private String identifier;
 
 	private Boolean isAdmin;
 
 	public AdminAccountDTO() {
 	}
 
-
-	public AdminAccountDTO(String email, String interfaceName, Boolean isAdmin) {
-		this.email = email;
-		this.interfaceName = interfaceName;
-		this.isAdmin = isAdmin;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getInterfaceName() {
-		return interfaceName;
-	}
-
-	public void setInterfaceName(String interfaceName) {
-		this.interfaceName = interfaceName;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public Boolean getIsAdmin() {
@@ -48,9 +31,8 @@ public class AdminAccountDTO extends DTO{
 	@Override
 	public String toString() {
 		return "AdminAccountDTO{" +
-				"email='" + email + '\'' +
-				", interfaceName='" + interfaceName + '\'' +
-				", isAdmin=" + isAdmin +
+				"isAdmin=" + isAdmin +
+				", identifier='" + identifier + '\'' +
 				'}';
 	}
 }

@@ -1,21 +1,14 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
 import eu.factorx.awac.models.code.type.*;
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-import eu.factorx.awac.util.data.importer.AwacDataImporter;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import jxl.Sheet;
-import sun.rmi.runtime.Log;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by florian on 29/08/14.

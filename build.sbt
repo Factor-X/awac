@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.18"
 
+libraryDependencies += "org.postgresql" % "postgresql" % "9.3-1101-jdbc41"
 
 libraryDependencies += "com.google.code.maven-play-plugin.com.github.yeungda.jcoffeescript" % "jcoffeescript" % "1.0"
 
@@ -41,19 +42,19 @@ libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.8.5"
 libraryDependencies += "org.apache.velocity" % "velocity" % "1.7"
 
 libraryDependencies += "net.sourceforge.jexcelapi" % "jxl" % "2.6.12" excludeAll(
-    ExclusionRule(organization = "com.sun.jdmk"),
-    ExclusionRule(organization = "com.sun.jmx"),
-    ExclusionRule(organization = "javax.jms")
- )
+  ExclusionRule(organization = "com.sun.jdmk"),
+  ExclusionRule(organization = "com.sun.jmx"),
+  ExclusionRule(organization = "javax.jms")
+  )
 
-libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll(
-    ExclusionRule(organization = "org.hibernate")
- )
+libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll (
+  ExclusionRule(organization = "org.hibernate")
+  )
 
 
 play.Project.playJavaSettings
 
-unmanagedResourceDirectories in Test <+= baseDirectory( _ / "test/features" )
+unmanagedResourceDirectories in Test <+= baseDirectory(_ / "test/features")
 
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
 

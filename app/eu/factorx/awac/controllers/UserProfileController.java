@@ -103,7 +103,7 @@ public class UserProfileController extends Controller {
 
 		ActiveAccountDTO dto = extractDTOFromRequest(ActiveAccountDTO.class);
 
-		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
+		Account account = accountService.findByIdentifier(dto.getIdentifier());
 
 		if (account == null) {
 			throw new MyrmexRuntimeException("");
@@ -139,7 +139,7 @@ public class UserProfileController extends Controller {
 
 		AdminAccountDTO dto = extractDTOFromRequest(AdminAccountDTO.class);
 
-		Account account = accountService.findByEmailAndInterfaceCode(dto.getEmail(), new InterfaceTypeCode(dto.getInterfaceName()));
+		Account account = accountService.findByIdentifier(dto.getIdentifier());
 
 		// not from my organization
 		if (!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
