@@ -11,26 +11,26 @@
 
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.GlobalVariables;
 import play.Routes;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.With;
 
 @org.springframework.stereotype.Controller
 public class ApplicationController extends Controller {
 
 	@Transactional
 	public Result index() {
-		return ok(eu.factorx.awac.views.html.index.render());
+		return ok(eu.factorx.awac.views.html.index.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
 	}
 
 	public Result enterprise() {
-		return ok(eu.factorx.awac.views.html.enterprise.render());
+		return ok(eu.factorx.awac.views.html.enterprise.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
 	}
 
 	public Result municipality() {
-		return ok(eu.factorx.awac.views.html.municipality.render());
+		return ok(eu.factorx.awac.views.html.municipality.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
 	}
 
 	public Result javascriptRoutes() {
