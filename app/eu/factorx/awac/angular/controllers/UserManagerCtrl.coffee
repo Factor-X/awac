@@ -21,8 +21,7 @@ angular
         if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email
 
             data = {}
-            data.email = user.email
-            data.interfaceName = $scope.$root.instanceName
+            data.identifier = user.identifier
             data.isActive = !user.isActive
 
             $scope.isLoading['isActive'][user.email] = true
@@ -41,8 +40,7 @@ angular
         if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email && user.isActive == true
 
             data = {}
-            data.email = user.email
-            data.interfaceName = $scope.$root.instanceName
+            data.identifier = user.identifier
             data.isAdmin = !user.isAdmin
 
             $scope.isLoading['admin'][user.email] = true

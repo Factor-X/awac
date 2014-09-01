@@ -6,36 +6,19 @@ import eu.factorx.awac.dto.DTO;
 public class ActiveAccountDTO extends DTO {
 
 
-	private String email;
-
-	private String interfaceName;
+	private String identifier;
 
 	private Boolean isActive;
 
 	public ActiveAccountDTO() {
 	}
 
-
-	public ActiveAccountDTO(String email, String interfaceName, Boolean isActive) {
-		this.email = email;
-		this.interfaceName = interfaceName;
-		this.isActive = isActive;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getInterfaceName() {
-		return interfaceName;
-	}
-
-	public void setInterfaceName(String interfaceName) {
-		this.interfaceName = interfaceName;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public Boolean getIsActive() {
@@ -49,8 +32,7 @@ public class ActiveAccountDTO extends DTO {
 	@Override
 	public String toString() {
 		return "ActiveAccountDTO{" +
-				"email='" + email + '\'' +
-				", interfaceName='" + interfaceName + '\'' +
+				"identifier='" + identifier + '\'' +
 				", isActive=" + isActive +
 				'}';
 	}

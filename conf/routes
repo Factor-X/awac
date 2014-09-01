@@ -86,3 +86,6 @@ POST    /awac/user/activeAccount                       @eu.factorx.awac.controll
 GET     /awac/admin/codelabels/reset                   @eu.factorx.awac.controllers.AdminController.resetCodeLabels()
 GET 	/awac/admin/indicators_factors/reset	       @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
 GET		/awac/admin/municipality_survey/create	       @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
+GET		/awac/admin/badImporter             	       @eu.factorx.awac.controllers.AdminController.runBADImporter()
+
+

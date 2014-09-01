@@ -11,6 +11,7 @@
 
 import eu.factorx.awac.InitializationThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,8 @@ import java.util.concurrent.Semaphore;
 // Spring imports
 
 public class Global extends GlobalSettings {
+
+
 
 	private static InitializationThread thread;
 	private static Semaphore semaphore = new Semaphore(1);

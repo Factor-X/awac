@@ -31,21 +31,6 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 	}
 
 	@Override
-	public Account findByEmailAndInterfaceCode(String email, InterfaceTypeCode interfaceTypeCode){
-		List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL_AND_INTERFACE_CODE, Account.class)
-				.setParameter("email", email).setParameter("interface_code", interfaceTypeCode).getResultList();
-		if (resultList.size() > 1) {
-			String errorMsg = "More than one account with identifier = '" + email + "'";
-			Logger.error(errorMsg);
-			throw new RuntimeException(errorMsg);
-		}
-		if (resultList.size() == 0) {
-			return null;
-		}
-		return resultList.get(0);
-	}
-
-	@Override
 	public List<Account> findByEmail(String email){
 		List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL, Account.class)
 				.setParameter("email", email).getResultList();

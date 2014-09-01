@@ -21,8 +21,8 @@ angular
                     total += d.value
 
                 for d, i in data
-                    color = tinycolor({h: 360.0 * i / (data.length), s: 0.5, l: 0.5})
-                    colorh = tinycolor({h: 360.0 * i / (data.length), s: 0.75, l: 0.66})
+                    color = tinycolor({h: 360.0 * i / (data.length), s: 0.5, l: 0.5}).toHexString(true)
+                    colorh = tinycolor({h: 360.0 * i / (data.length), s: 0.75, l: 0.66}).toHexString(true)
 
                     d.color = color
                     d.highlight = colorh
@@ -30,7 +30,7 @@ angular
 
                 myDoughnutChart = new Chart(ctx).Doughnut(data, {
                     tooltipTemplate: (o) ->
-                        f(100.0 * (o.endAngle - o.startAngle) / (Math.PI * 2)) + "% (" + f(o.value) + " tCO2)"
+                        f(100.0 * (o.endAngle - o.startAngle) / (Math.PI * 2)) + "% (" + f(o.value) + " tCO2e)"
                     animation: false
                     legendTemplate: "" +
                         "<% for (var i=0; i<segments.length; i++){%>" +
