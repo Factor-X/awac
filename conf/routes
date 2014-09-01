@@ -34,6 +34,12 @@ POST    /enterprise/registration                       @eu.factorx.awac.controll
 POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 
 #
+# invitation ctrl
+#
+
+POST    /awac/invitation                               @eu.factorx.awac.controllers.InvitationController.launchInvitation()
+
+#
 # Email Service
 #
 GET    /email/send                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
