@@ -15,6 +15,8 @@ angular
             else
                 scope.removeModal(args.target)
 
+            return
+
         # insert modal into html
         scope.displayModal = (target,params) ->
 
@@ -25,11 +27,13 @@ angular
             directive = $compile("<mm-awac-modal-"+target+" ng-params=\""+paramName+"\" ></mm-awac-modal-"+target+">")(scope)
             element.append(directive)
 
+            return
+
 
         # remove when the modal is closed
         scope.removeModal = (target)->
             for child in element.children()
                 if child.tagName.toLowerCase() == 'mm-awac-modal-'+target.toLowerCase()
-                    child.remove()
+                    angular.element(child).remove()
 
-
+            return

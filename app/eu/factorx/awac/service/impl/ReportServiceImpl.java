@@ -75,7 +75,7 @@ public class ReportServiceImpl implements ReportService {
 			}
 		}
 
-		return new Report(activityResults);
+		return new Report(activityResults, indicatorService);
 	}
 
 	private List<BaseActivityData> getActivityData(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
