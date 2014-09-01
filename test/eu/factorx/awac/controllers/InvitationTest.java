@@ -35,7 +35,7 @@ import static play.test.Helpers.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class InvitationTest extends AbstractBaseModelTest {
 
-	private static final String invitationEmail = "test1@test.test";
+	private static final String invitationEmail = "gaston.hollands@factorx.eu";
 	private static final String email2 = "test2@test.test";
 
 	private static final String identifier1 = "testtest";
@@ -83,13 +83,18 @@ public class InvitationTest extends AbstractBaseModelTest {
 				fr
 		); // callAction
 
+		// wait some time to be sure AKKA actor has time to send the message
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		//analyse result
 		// expecting an HTTP 200 return code
 		assertEquals(200, status(result));
 
 		//analyse result
 		InvitationResultDTO resultDTO = getDTO(result, InvitationResultDTO.class);
-
 
 	} // end of authenticateSuccess test
 

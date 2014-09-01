@@ -19,7 +19,10 @@ import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.PersonService;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexException;
+import eu.factorx.awac.util.email.messages.EmailMessage;
+import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -35,29 +38,26 @@ import play.mvc.Security;
 @org.springframework.stereotype.Controller
 public class InvitationController extends Controller {
 
-	@Autowired
-	private PersonService personService;
 
 	@Autowired
-	private AccountService accountService;
+	private EmailService emailService;
 
-	@Autowired
-	private OrganizationService organizationService;
-
-	@Autowired
-	private ConversionService conversionService;
-
-	@Autowired
-	private SiteService siteService;
-
-	@Autowired
-	private SecuredController securedController;
 
 	@Transactional(readOnly = false)
 	public Result launchInvitation () {
 
+		// get InvitationDTO from request
 		EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
 		Logger.info("Email Invitation : " + dto.getInvitationEmail());
+
+		// compute key
+		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
+		Logger.info("Email Invitation generated key : " + key);
+
+		// send email for invitation
+		// send mail
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/registration/" + key);
+		emailService.send(email);
 
 		//create InvitationResultDTO
 		InvitationResultDTO resultDto = new InvitationResultDTO ();
