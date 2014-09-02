@@ -3,7 +3,8 @@ package eu.factorx.awac.util.data.importer.badImporter;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
-import jxl.Sheet;
+import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
+import eu.factorx.awac.util.data.importer.badImporter.Reader.ExcelReader;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.Map;
  * !! the column F of the excel file is used to detect a bad : if the column is not empty, it's a BAD !!
  */
 public class BADImporter extends WorkbookDataImporter {
+
+	private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_COPY.xls";
 
 	private final static boolean DEBUG = false;
 
@@ -72,23 +75,22 @@ public class BADImporter extends WorkbookDataImporter {
 
 		play.Logger.info("run badimporter....");
 
-		//1. load file
-		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets("data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_COPY.xls");//AwacDataImporter.AWAC_DATA_WORKBOOK_PATH);
 
+		ExcelReader excelReader = new ExcelReader();
 
-		Sheet sheet = awacDataWbSheets.get(ENTERPRISE_METHOD);
+		Data data = excelReader.readFile(FILE_PATH,ENTERPRISE_METHOD);
 
 		//2. read
-		reader(sheet);
+		reader(data);
 
 		play.Logger.info("run badimporter end !");
 
 	}
 
-	public void reader(Sheet sheet) {
+	public void reader(Data data) {
 
 
-		for (int line = 1; line < sheet.getRows(); line++) {
+		for (int line = 1; line < data.getNbRows(); line++) {
 
 			//escape the first line : presentation
 			if (line == 1) {
@@ -96,58 +98,58 @@ public class BADImporter extends WorkbookDataImporter {
 			}
 
 			//F is the reference column => not empty = it's a BAD !
-			if (getCellStringContent(sheet, ExcelEquivalenceColumn.B, line) != null &&
-					!getCellStringContent(sheet, ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
-					getCellStringContent(sheet, ExcelEquivalenceColumn.B, line).contains("BAD")) {
+			if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
+					!data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
+					data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
 				// activity data founded
 
 				//print the line in DEBUG
-				addToLog(LogType.INFO, line, "This is a BAD " + getCellStringContent(sheet, ExcelEquivalenceColumn.B, line));
+				addToLog(LogType.INFO, line, "This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
 
 
 				//create and write new BAD
 				boolean toGenerate = true;
 
 				// --- test badKey ---
-				String badKey = normalize(getCellStringContent(sheet, BAD_KEY_COL, line));
+				String badKey = normalize(data.getData(BAD_KEY_COL, line));
 				if (badKey == null || badKey.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no badKey : " + getCellStringContent(sheet, BAD_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no badKey : " + data.getData(BAD_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 
 				if (!controlList(BaseActivityDataCode.class, badKey)) {
-					addToLog(LogType.ERROR, line, "This is not a badKey : " + getCellStringContent(sheet, BAD_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "This is not a badKey : " + data.getData(BAD_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 
 				// ---- name ----
-				String name = getCellStringContent(sheet, BAD_NAME_COL, line);
+				String name = data.getData(BAD_NAME_COL, line);
 				if (name == null || name.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no name: " + getCellStringContent(sheet, BAD_NAME_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no name: " + data.getData(BAD_NAME_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 
 				// ---- control rank ---
 				// TODO can be null
 				Integer rank = null;
-				if (getCellStringContent(sheet, BAD_RANK_COL, line) == null || getCellStringContent(sheet, BAD_RANK_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no rank : " + getCellStringContent(sheet, BAD_RANK_COL, line) + ". The bad was not generated");
+				if (data.getData(BAD_RANK_COL, line) == null || data.getData(BAD_RANK_COL, line).length() == 0) {
+					addToLog(LogType.ERROR, line, "There is no rank : " + data.getData(BAD_RANK_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				try {
-					rank = Integer.parseInt(getCellStringContent(sheet, BAD_RANK_COL, line));
+					rank = Integer.parseInt(data.getData(BAD_RANK_COL, line));
 				} catch (NumberFormatException e) {
-					addToLog(LogType.ERROR, line, "The rank is not a valid number  : " + getCellStringContent(sheet, BAD_RANK_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "The rank is not a valid number  : " + data.getData(BAD_RANK_COL, line) + ". The bad was not generated");
 				}
 
 				// ---- specific purpose ----
 				String specificPurpose = null;
 				//!! can be an activityCode or an answer or can be null
 				//excepted in fine => String
-				if (getCellStringContent(sheet, BAD_SPECIFIC_PURPOSE_COL, line) != null && getCellStringContent(sheet, BAD_SPECIFIC_PURPOSE_COL, line).length() > 0) {
+				if (data.getData(BAD_SPECIFIC_PURPOSE_COL, line) != null && data.getData(BAD_SPECIFIC_PURPOSE_COL, line).length() > 0) {
 
 
-					specificPurpose = getCellStringContent(sheet, BAD_SPECIFIC_PURPOSE_COL, line);
+					specificPurpose = data.getData(BAD_SPECIFIC_PURPOSE_COL, line);
 
 					//test if the specific purpose is a code
 					if (controlList(ActivityCategoryCode.class, specificPurpose)) {
@@ -161,9 +163,9 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// ---- activityCategory ---
 				//not null, always an activityCategory
-				String activityCategory = getCellStringContent(sheet, BAD_ACTIVITY_CATEGORY_KEY_COL, line);
+				String activityCategory = data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line);
 				if (activityCategory == null || activityCategory.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityCategory : " + getCellStringContent(sheet, BAD_ACTIVITY_CATEGORY_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no activityCategory : " + data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 
@@ -175,9 +177,9 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// --- activitySubCategory ---
 				//not null, ActivitySubCat or answer(control list content) or more complex
-				String activitySubCategory = getCellStringContent(sheet, BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line);
+				String activitySubCategory = data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line);
 				if (activitySubCategory == null || activitySubCategory.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activitySubCategory : " + getCellStringContent(sheet, BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no activitySubCategory : " + data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				//test if the activitySubCategory is a code
@@ -191,9 +193,9 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// --- ActivityType ---
 				//not null, ActivityType or answer(control list content) or more complex
-				String activityType = getCellStringContent(sheet, BAD_ACTIVITY_TYPE_KEY_COL, line);
+				String activityType = data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line);
 				if (activityType == null || activityType.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityType : " + getCellStringContent(sheet, BAD_ACTIVITY_TYPE_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no activityType : " + data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				//test if the activityType is a code
@@ -208,9 +210,9 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// --- ActivitySource ---
 				//not null, ActivitySubCat or answer(control list content) or more complex
-				String activitySource = getCellStringContent(sheet, BAD_ACTIVITY_SOURCE_KEY_COL, line);
+				String activitySource = data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line);
 				if (activitySource == null || activitySource.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activitySource : " + getCellStringContent(sheet, BAD_ACTIVITY_SOURCE_KEY_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no activitySource : " + data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				//test if the activityType is a code
@@ -225,35 +227,35 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// --- activityOwnerShip ---
 				// boolean expected. Can be null, boolean value or answer boolean type or comparaison
-				Boolean activityOwnerShip = null;//getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line);
-				if (getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line) == null || getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityOwnerShip : " + getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
+				Boolean activityOwnerShip = null;//data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line);
+				if (data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) == null || data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line).length() == 0) {
+					addToLog(LogType.ERROR, line, "There is no activityOwnerShip : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				try {
-					activityOwnerShip = Boolean.parseBoolean(getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line));
+					activityOwnerShip = Boolean.parseBoolean(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line));
 				} catch (NumberFormatException e) {
-					addToLog(LogType.ERROR, line, "The activityOwnerShip is not a valid boolean  : " + getCellStringContent(sheet, BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "The activityOwnerShip is not a valid boolean  : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
 				}
 
 				// ---- unit ---
 				// excepted unti code
-				String unit = getCellStringContent(sheet, BAD_UNIT_COL, line);
-				if (getCellStringContent(sheet, BAD_UNIT_COL, line) == null || getCellStringContent(sheet, BAD_UNIT_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no unit : " + getCellStringContent(sheet, BAD_UNIT_COL, line) + ". The bad was not generated");
+				String unit = data.getData(BAD_UNIT_COL, line);
+				if (data.getData(BAD_UNIT_COL, line) == null || data.getData(BAD_UNIT_COL, line).length() == 0) {
+					addToLog(LogType.ERROR, line, "There is no unit : " + data.getData(BAD_UNIT_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 				//test if the activityType is a code
-				if (!controlList(UnitCode.class, getCellStringContent(sheet, BAD_UNIT_COL, line))) {
+				if (!controlList(UnitCode.class, data.getData(BAD_UNIT_COL, line))) {
 					addToLog(LogType.ERROR, line, "This is not a unit code : " + unit);
 				}
 
 
 				// --- value ---
 				// formule => compute formule
-				String value = getCellStringContent(sheet, BAD_VALUE_COL, line);
+				String value = data.getData(BAD_VALUE_COL, line);
 				if (value == null || value.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no value : " + getCellStringContent(sheet, BAD_VALUE_COL, line) + ". The bad was not generated");
+					addToLog(LogType.ERROR, line, "There is no value : " + data.getData(BAD_VALUE_COL, line) + ". The bad was not generated");
 					toGenerate = false;
 				}
 
@@ -275,9 +277,7 @@ public class BADImporter extends WorkbookDataImporter {
 
 					listBAD.add(bad);
 				}
-
 			}
-
 		}
 	}
 
@@ -296,7 +296,6 @@ public class BADImporter extends WorkbookDataImporter {
 				play.Logger.debug("Line " + line + "=>" + message);
 				break;
 		}
-
 	}
 
 	public enum LogType {

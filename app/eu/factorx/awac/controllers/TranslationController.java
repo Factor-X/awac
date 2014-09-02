@@ -15,7 +15,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.service.CodeLabelService;
 
 @org.springframework.stereotype.Controller
-public class TranslationController extends Controller {
+public class TranslationController extends AbstractController {
 
 	@Autowired
 	private CodeLabelService codeLabelService;

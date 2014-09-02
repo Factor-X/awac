@@ -13,7 +13,10 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 
 @Entity
 @Table(name = "question_set")
-@NamedQuery(name = QuestionSet.FIND_ONLY_PARENTS, query = "select qs from QuestionSet qs where qs.parent is null and qs in :questionSets")
+@NamedQueries({	
+	@NamedQuery(name = QuestionSet.FIND_ONLY_PARENTS, query = "select qs from QuestionSet qs where qs.parent is null and qs in :questionSets"),
+	@NamedQuery(name = QuestionSet.FIND_BY_CODE, query = "select qs from QuestionSet qs where qs.code = :code")
+})
 public class QuestionSet extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +28,8 @@ public class QuestionSet extends AuditedAbstractEntity {
 	 *            a collection of QuestionSet
 	 */
 	public static final String FIND_ONLY_PARENTS = "QuestionSet.findOnlyParents";
+
+	public static final String FIND_BY_CODE = "QuestionSet.findByCode";
 
 	@Enumerated
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })

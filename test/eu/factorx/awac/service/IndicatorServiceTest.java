@@ -69,7 +69,7 @@ public class IndicatorServiceTest extends AbstractBaseModelTest {
 	public void _003_findAllIndicatorNames() {
 		
 		/*
-		Data @07082014
+		DataCell @07082014
 			"Transport et stockage de marchandises amont - véhicules propres: froid",
 			"Utilisation des produits vendus",
 			"Mobilité - déplacements professionnels - véhicules propres",

@@ -1,5 +1,5 @@
 tr
-    td(ng-bind-html='getInfo().fieldTitle | translate')
+    td(ng-bind-html='getInfo().fieldTitle | translate',ng-click="logField()")
     td
         input(  type='{{fieldType}}',
                 ng-disabled='getInfo().disabled',

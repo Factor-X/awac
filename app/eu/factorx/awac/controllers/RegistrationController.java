@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 
 @org.springframework.stereotype.Controller
-public class RegistrationController  extends Controller {
+public class RegistrationController  extends AbstractController {
 
 	@Autowired
 	private PersonService personService;
@@ -43,9 +43,6 @@ public class RegistrationController  extends Controller {
 
 	@Autowired
 	private SiteService siteService;
-
-	@Autowired
-	private SecuredController securedController;
 
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
@@ -149,15 +146,6 @@ public class RegistrationController  extends Controller {
 		accountService.saveOrUpdate(administrator);
 
 		return administrator;
-	}
-
-
-	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
 	}
 
 

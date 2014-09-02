@@ -29,15 +29,14 @@ import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 
 @org.springframework.stereotype.Controller
-public class AdminController extends Controller {
+public class AdminController extends AbstractController {
 
 
 	@Autowired
 	private ConversionService   conversionService;
 	@Autowired
 	private NotificationService notificationService;
-	@Autowired
-	private SecuredController   securedController;
+
 	@Autowired
 	private CodeLabelService    codeLabelService;
 	@Autowired
@@ -79,14 +78,6 @@ public class AdminController extends Controller {
 //		}
 	}
 
-	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
-	}
-
 	@Transactional(readOnly = false)
 	public Result resetCodeLabels() {
 		if (!Play.application().isDev()) {
@@ -119,7 +110,7 @@ public class AdminController extends Controller {
 			return unauthorized();
 		}
 		if (formService.findByIdentifier("TAB_C1") != null) {
-			throw new RuntimeException("Municipality Survey Data has already been created");
+			throw new RuntimeException("Municipality Survey DataCell has already been created");
 		}
 		awacMunicipalityInitialData.createSurvey(JPA.em().unwrap(Session.class));
 

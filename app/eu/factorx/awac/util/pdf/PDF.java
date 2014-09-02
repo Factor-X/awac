@@ -87,7 +87,7 @@ public class PDF {
 			Reader reader = new StringReader(string);
 			ITextRenderer renderer = new ITextRenderer();
 			addFontDirectory(renderer.getFontResolver(), Play.current().path()
-					+ "/conf/fonts");
+					+ "/public/fonts");
 			MyUserAgent myUserAgent = new MyUserAgent(
 					renderer.getOutputDevice());
 			myUserAgent.setSharedContext(renderer.getSharedContext());
