@@ -1,3 +1,5 @@
+import sbt.ExclusionRule
+
 name := "awac"
 
 version := "1.0-SNAPSHOT"
@@ -51,6 +53,13 @@ libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excl
   ExclusionRule(organization = "org.hibernate")
   )
 
+libraryDependencies += "xalan" % "xalan" % "2.7.1"
+
+libraryDependencies += "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" excludeAll (
+    ExclusionRule(organization = "org.apache.xalan"),
+    ExclusionRule(organization = "org.apache.xerces"),
+    ExclusionRule(organization = "org.xhtmlrenderer")
+  )
 
 play.Project.playJavaSettings
 

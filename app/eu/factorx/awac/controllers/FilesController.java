@@ -20,10 +20,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
-public class FilesController extends Controller {
-
-    @Autowired
-    private SecuredController securedController;
+public class FilesController extends AbstractController {
 
     @Autowired
     private StoredFileService storedFileService;

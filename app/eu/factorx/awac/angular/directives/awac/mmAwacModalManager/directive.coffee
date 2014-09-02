@@ -20,9 +20,15 @@ angular
         # insert modal into html
         scope.displayModal = (target,params) ->
 
+
             paramName = 'params_'+target.replace(/-/g,"_")
 
             scope[paramName] = params
+
+
+            console.log "display mode"
+            console.log params
+            console.log "<mm-awac-modal-"+target+" ng-params=\""+paramName+"\" ></mm-awac-modal-"+target+">"
 
             directive = $compile("<mm-awac-modal-"+target+" ng-params=\""+paramName+"\" ></mm-awac-modal-"+target+">")(scope)
             element.append(directive)

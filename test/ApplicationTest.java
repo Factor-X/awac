@@ -46,9 +46,9 @@ public class ApplicationTest {
     
     //@Test
     public void renderTemplate() {
-        Content html = eu.factorx.awac.views.html.index.render();
-        assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+//        Content html = eu.factorx.awac.views.html.index.render();
+//        assertThat(contentType(html)).isEqualTo("text/html");
+//        assertThat(contentAsString(html)).contains("Your new application is ready.");
     }
   
    
