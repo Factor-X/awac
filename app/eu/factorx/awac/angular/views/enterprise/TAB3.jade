@@ -82,7 +82,7 @@ div
                                 mm-awac-question(question-code="A88",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
                                 mm-awac-question(question-code="A89",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == 'AS_5'",ng-tab-set="1",ng-tab="3")
                                 mm-awac-question(question-code="A90",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == 'AS_162'",ng-tab-set="1",ng-tab="3")
-                                mm-awac-question(question-code="A91",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == 'AS_6'",ng-tab-set="1",ng-tab="3")
+                                mm-awac-question(question-code="A91",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == 'AS_6' || getAnswer('A83',itLevel1).value == 'AS_7'",ng-tab-set="1",ng-tab="3")
                                 mm-awac-question(question-code="A92",ng-repetition-map="itLevel1", ng-condition="getAnswer('A83',itLevel1).value == 'AS_163'",ng-tab-set="1",ng-tab="3")
 
                             button.button.add-repetition-button(ng-click="addIteration('A78')", type="button")
