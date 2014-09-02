@@ -47,9 +47,12 @@ libraryDependencies += "net.sourceforge.jexcelapi" % "jxl" % "2.6.12" excludeAll
   ExclusionRule(organization = "javax.jms")
   )
 
+libraryDependencies += "org.jfree" % "jfreechart" % "1.0.19"
+
 libraryDependencies += "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll (
   ExclusionRule(organization = "org.hibernate")
   )
+
 
 
 play.Project.playJavaSettings

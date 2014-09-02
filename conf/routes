@@ -63,6 +63,7 @@ GET     /awac/answer/formProgress/:period/:scope       @eu.factorx.awac.controll
 #
 GET     /awac/result/getReport/:period/:scope          @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)              
 GET     /awac/result/getReportAsXls/:period/:scope     @eu.factorx.awac.controllers.ResultController.getReportAsXls(period: String, scope: Long)
+GET     /awac/result/getReportAsPdf/:period/:scope     @eu.factorx.awac.controllers.ResultController.getReportAsPdf(period: String, scope: Long)
 
 #
 # Upload

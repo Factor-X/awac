@@ -87,12 +87,13 @@ public class PDF {
 			Reader reader = new StringReader(string);
 			ITextRenderer renderer = new ITextRenderer();
 			addFontDirectory(renderer.getFontResolver(), Play.current().path()
-					+ "/conf/fonts");
+					+ "/public/fonts");
 			MyUserAgent myUserAgent = new MyUserAgent(
 					renderer.getOutputDevice());
 			myUserAgent.setSharedContext(renderer.getSharedContext());
 			renderer.getSharedContext().setUserAgentCallback(myUserAgent);
-			Document document = XMLResource.load(reader).getDocument();
+			XMLResource xmlResource = XMLResource.load(reader);
+			Document document = xmlResource.getDocument();
 			renderer.setDocument(document, documentBaseURL);
 			renderer.layout();
 			renderer.createPDF(os);
