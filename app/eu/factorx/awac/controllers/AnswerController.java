@@ -2,6 +2,7 @@ package eu.factorx.awac.controllers;
 
 import java.util.*;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.*;
 
 @org.springframework.stereotype.Controller
-public class AnswerController extends Controller {
+public class AnswerController extends AbstractController {
 
 	private static final String ERROR_ANSWER_UNIT_NOT_AUTHORIZED = "The question identified by key '%s' does not accept unit, since a unit (id = %s) is present in client answer";
 	private static final String ERROR_ANSWER_UNIT_REQUIRED = "The question identified by key '%s' requires a unit of the category '%s', but no unit is present in client answer";
@@ -73,8 +74,6 @@ public class AnswerController extends Controller {
 	private CodeLabelService codeLabelService;
 	@Autowired
 	private ConversionService conversionService;
-	@Autowired
-	private SecuredController securedController;
 	@Autowired
 	private StoredFileService storedFileService;
 	@Autowired
@@ -105,7 +104,7 @@ public class AnswerController extends Controller {
 		List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
 		List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
 
-		Logger.info("GET '{}' Data:", form.getIdentifier());
+		Logger.info("GET '{}' DataCell:", form.getIdentifier());
 		for (AnswerLineDTO answerLineDTO : answerLineDTOs) {
 			Logger.info("\t" + answerLineDTO);
 		}
@@ -144,7 +143,7 @@ public class AnswerController extends Controller {
 		validateUserRightsForScope(currentUser, scope);
 
 		// log posted data
-		Logger.info("POST '{}' Data:", form.getIdentifier());
+		Logger.info("POST '{}' DataCell:", form.getIdentifier());
 		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
 			Logger.info("\t" + answerLine);
 		}
@@ -373,12 +372,14 @@ public class AnswerController extends Controller {
 	private QuestionSetAnswer getQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, Map<String, Integer> normalizedRepetitionMap, List<QuestionSetAnswer> allCurrentQuestionSetAnswers) {
 		String questionSetKey = questionSet.getCode().getKey();
 		Integer repetitionIndex = normalizedRepetitionMap.get(questionSetKey);
-		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(questionSetKey, repetitionIndex, allCurrentQuestionSetAnswers);
+		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(normalizedRepetitionMap, allCurrentQuestionSetAnswers);
 		if (questionSetAnswer == null) {
 			// first create parent (if necessary)
 			QuestionSetAnswer parentQuestionSetAnswer = null;
 			if (questionSet.getParent() != null) {
-				parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), normalizedRepetitionMap, allCurrentQuestionSetAnswers);
+				Map<String, Integer> parentRepetitionMap = new HashMap<String, Integer>(normalizedRepetitionMap);
+				parentRepetitionMap.remove(questionSetKey);
+				parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), parentRepetitionMap, allCurrentQuestionSetAnswers);
 			}
 			// save new QuestionSetAnswer
 			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, parentQuestionSetAnswer);
@@ -624,9 +625,9 @@ public class AnswerController extends Controller {
 
 	}
 
-	private static QuestionSetAnswer findQuestionSetAnswer(String questionSetKey, Integer repetitionIndex, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+	private static QuestionSetAnswer findQuestionSetAnswer(Map<String, Integer> normalizedRepetitionMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
 		for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
-			if (questionSetKey.equals(questionSetAnswer.getQuestionSet().getCode().getKey()) && repetitionIndex.equals(questionSetAnswer.getRepetitionIndex())) {					
+			if (normalizedRepetitionMap.equals(QuestionSetAnswer.createNormalizedRepetitionMap(questionSetAnswer))) {					
 				return questionSetAnswer;
 			}
 		}
@@ -660,14 +661,6 @@ public class AnswerController extends Controller {
 		if (!scopeOrganization.equals(currentUser.getOrganization())) {
 			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scopeOrganization + "'");
 		}
-	}
-
-	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
 	}
 
 }

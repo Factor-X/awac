@@ -1,15 +1,11 @@
 package eu.factorx.awac.models.reporting;
 
+import java.io.Serializable;
+
+import javax.persistence.*;
+
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.Unit;
-
-import javax.persistence.Basic;
-import javax.persistence.Embedded;
-import javax.persistence.ManyToOne;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-
-import java.io.Serializable;
 
 @Embeddable
 public class BaseActivityData implements Serializable {
@@ -51,12 +47,19 @@ public class BaseActivityData implements Serializable {
 	@Basic(optional = true)
 	private String specificPurpose;
 
+	/**
+	 * When this field is not null, we have to check all BADs having the same 'alternative group', and keep BADs with lowest rank
+	 */
+	@Basic(optional = true)
+	private String alternativeGroup;
+	
 	public BaseActivityData() {
 		super();
 	}
 
 	/**
-	 * @param key
+	 * Deprecated! Use instead the constructor taking a 'alternativeGroup' parameter
+	 * @param keyalternativeGroup
 	 * @param activityCategory
 	 * @param activitySubCategory
 	 * @param activityType
@@ -67,6 +70,7 @@ public class BaseActivityData implements Serializable {
 	 * @param rank
 	 * @param specificPurpose
 	 */
+	@Deprecated
 	public BaseActivityData(BaseActivityDataCode key, ActivityCategoryCode activityCategory,
 	                        ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
 	                        ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank,
@@ -82,6 +86,35 @@ public class BaseActivityData implements Serializable {
 		this.unit = unit;
 		this.rank = rank;
 		this.specificPurpose = specificPurpose;
+	}
+	
+	/**
+	 * @param key
+	 * @param activityCategory
+	 * @param activitySubCategory
+	 * @param activityType
+	 * @param activitySource
+	 * @param activityOwnership
+	 * @param value
+	 * @param unit
+	 * @param rank
+	 * @param specificPurpose
+	 * @param alternativeGroup
+	 */
+	public BaseActivityData(BaseActivityDataCode key, ActivityCategoryCode activityCategory, ActivitySubCategoryCode activitySubCategory, ActivityTypeCode activityType,
+			ActivitySourceCode activitySource, Boolean activityOwnership, Double value, Unit unit, Integer rank, String specificPurpose, String alternativeGroup) {
+		super();
+		this.key = key;
+		this.activityCategory = activityCategory;
+		this.activitySubCategory = activitySubCategory;
+		this.activityType = activityType;
+		this.activitySource = activitySource;
+		this.activityOwnership = activityOwnership;
+		this.value = value;
+		this.unit = unit;
+		this.rank = rank;
+		this.specificPurpose = specificPurpose;
+		this.alternativeGroup = alternativeGroup;
 	}
 
 	public BaseActivityDataCode getKey() {
@@ -164,12 +197,19 @@ public class BaseActivityData implements Serializable {
 		this.specificPurpose = specificPurpose;
 	}
 
+	public String getAlternativeGroup() {
+		return alternativeGroup;
+	}
+
+	public void setAlternativeGroup(String alternativeGroup) {
+		this.alternativeGroup = alternativeGroup;
+	}
+
 	@Override
 	public String toString() {
 		return "BaseActivityData [key=" + key + ", activityCategory=" + activityCategory + ", activitySubCategory=" + activitySubCategory
 				+ ", activityType=" + activityType + ", activitySource=" + activitySource + ", activityOwnership=" + activityOwnership
-				+ ", value=" + value + ", unit=" + unit + ", rank=" + rank + ", specificPurpose=" + specificPurpose + "]";
+				+ ", value=" + value + ", unit=" + unit + ", rank=" + rank + ", specificPurpose=" + specificPurpose + ", alternativeGroup=" + alternativeGroup + "]";
 	}
-
 	
 }
