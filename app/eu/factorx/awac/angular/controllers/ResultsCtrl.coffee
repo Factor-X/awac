@@ -88,3 +88,5 @@ angular
 
     $scope.downloadAsXls = () ->
         $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null
+
+    $scope.downloadPdf = () ->

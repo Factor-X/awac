@@ -1,26 +1,35 @@
-.arial {
-    font-family: Arial Unicode MS;
-}
-
-.blue {
-    color: blue;
+body {
+    font-size: 10px;
+    font-family: Roboto;
+    color: #333;
 }
 
 table {
     border-collapse: collapse;
-    width: 90%;
-    border: 2px solid black;
+    width: 100%;
 }
 
-th, td {
-    border: 2px solid black;
-    width: 20%;
+th {
+    border-bottom: 0.5pt solid #333;
+    padding: 0.25em 0.5em;
 }
 
-td, th {
-    text-align: center;
+td {
+    padding: 0.25em 0.5em;
+    white-space: nowrap;
 }
 
-caption {
-    font-weight: bold
+td.dotted {
+    border: 0.25pt dotted #333;
+}
+
+.align-right {
+    text-align: right
+}
+
+h1 {
+    border-bottom: solid 1pt #333;
+}
+
+h2{
 }
