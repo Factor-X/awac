@@ -25,6 +25,8 @@ echo "alter table site add column percent_owned decimal default 100;" >> /tmp/mi
 
 echo "update site set percent_owned = 100;" >> /tmp/migration/migration_script.sql
 
+# create new invitation table
+cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 
 
 # execute the script

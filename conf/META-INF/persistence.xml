@@ -79,6 +79,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
+        <class>eu.factorx.awac.models.invitation.Invitation</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
  		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -185,6 +186,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
+        <class>eu.factorx.awac.models.invitation.Invitation</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

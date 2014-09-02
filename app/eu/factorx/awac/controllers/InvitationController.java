@@ -54,6 +54,9 @@ public class InvitationController extends Controller {
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
 		Logger.info("Email Invitation generated key : " + key);
 
+		// store key and user
+
+
 		// send email for invitation
 		// send mail
 		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/registration/" + key);
