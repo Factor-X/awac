@@ -18,7 +18,7 @@ import play.mvc.Result;
 import play.mvc.With;
 
 @org.springframework.stereotype.Controller
-public class ApplicationController extends Controller {
+public class ApplicationController extends AbstractController {
 
 	@Transactional
 	public Result index() {

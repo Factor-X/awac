@@ -2280,7 +2280,7 @@
 		name: "Doughnut",
 		//Providing a defaults will also register the deafults in the chart namespace
 		defaults : defaultConfig,
-		//Initialize is fired when the chart is initialized - Data is passed in as a parameter
+		//Initialize is fired when the chart is initialized - DataCell is passed in as a parameter
 		//Config is automatically merged by the core of Chart.js, and is available at this.options
 		initialize:  function(data){
 
@@ -2844,7 +2844,7 @@
 		name: "PolarArea",
 		//Providing a defaults will also register the deafults in the chart namespace
 		defaults : defaultConfig,
-		//Initialize is fired when the chart is initialized - Data is passed in as a parameter
+		//Initialize is fired when the chart is initialized - DataCell is passed in as a parameter
 		//Config is automatically merged by the core of Chart.js, and is available at this.options
 		initialize:  function(data){
 			this.segments = [];

@@ -17,10 +17,8 @@ import play.mvc.Security;
  * Created by root on 6/07/14.
  */
 @org.springframework.stereotype.Controller
-public class ProductController extends Controller {
+public class ProductController extends AbstractController {
 
-	@Autowired
-	private SecuredController securedController;
 
 	@Autowired
 	private ProductService productService;

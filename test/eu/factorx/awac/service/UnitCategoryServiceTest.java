@@ -32,7 +32,7 @@ public class UnitCategoryServiceTest extends AbstractBaseModelTest {
     @Test
     public void _001_getAllCategories() {
 
-		// Data to consider @07/08/2014
+		// DataCell to consider @07/08/2014
 		/*
 				"Length",
 				"Area",

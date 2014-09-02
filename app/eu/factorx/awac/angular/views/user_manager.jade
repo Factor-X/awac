@@ -5,9 +5,9 @@ h1 USER MANAGER
     button.button.add(type="button",ng-click="inviteUser()") invite users
     table.user_table
         tr.user_table_header
-            td Username
-            td Admin
-            td Actif
+            td {{'NAME' | translateText}}
+            td {{'USER_MANAGER_ADMINISTRATOR' | translateText}}
+            td {{'USER_MANAGER_ACTIF' | translateText}}
         tr(ng-repeat="user in getUserList()", ng-class="{user_deleted : user.isActive === false}")
             td {{user.firstName}} {{user.lastName}} ({{user.email}})
 

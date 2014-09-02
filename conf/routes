@@ -88,4 +88,9 @@ GET 	/awac/admin/indicators_factors/reset	       @eu.factorx.awac.controllers.Ad
 GET		/awac/admin/municipality_survey/create	       @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET		/awac/admin/badImporter             	       @eu.factorx.awac.controllers.AdminController.runBADImporter()
 
+#
+# site
+#
+POST    /awac/site/edit                                 @eu.factorx.awac.controllers.SiteController.edit()
+POST    /awac/site/create                               @eu.factorx.awac.controllers.SiteController.create()
 

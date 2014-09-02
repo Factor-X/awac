@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Transactional(readOnly = true)
 @Security.Authenticated(SecuredController.class)
 @SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
-public class EmailController extends Controller {
+public class EmailController extends AbstractController {
 
 	@Autowired
 	private EmailService emailService;

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Controller
-public class ResultController extends Controller {
+public class ResultController extends AbstractController {
 
 	@Autowired
 	private PeriodService               periodService;

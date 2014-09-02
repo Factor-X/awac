@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import eu.factorx.awac.models.business.Site;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,11 +22,18 @@ public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<O
 
 	@Override
 	public Organization saveOrUpdate(final Organization entity) {
+
+		boolean createScope = false;
+		if (entity.getId() == null) {
+			createScope = true;
+		}
+
 		Organization organization = super.saveOrUpdate(entity);
 
-		Scope scope = new Scope(organization);
-		scopeService.saveOrUpdate(scope);
-
+		if (createScope) {
+			Scope scope = new Scope(organization);
+			scopeService.saveOrUpdate(scope);
+		}
 		return organization;
 	}
 
