@@ -34,6 +34,19 @@ POST    /enterprise/registration                       @eu.factorx.awac.controll
 POST    /municipality/registration                     @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 
 #
+# invitation ctrl
+#
+
+POST        /awac/invitation                                   @eu.factorx.awac.controllers.InvitationController.launchInvitation()
+
+#
+# PDF controller
+#
+
+GET        /awac/pdf                                          eu.factorx.awac.controllers.PdfController.asPdf()
+GET        /awac/svg                                          eu.factorx.awac.controllers.PdfController.withSvg()
+
+#
 # Email Service
 #
 GET    /email/send                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
@@ -88,5 +101,11 @@ GET     /awac/admin/codelabels/reset                   @eu.factorx.awac.controll
 GET 	/awac/admin/indicators_factors/reset	       @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
 GET		/awac/admin/municipality_survey/create	       @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET		/awac/admin/badImporter             	       @eu.factorx.awac.controllers.AdminController.runBADImporter()
+
+#
+# site
+#
+POST    /awac/site/edit                                 @eu.factorx.awac.controllers.SiteController.edit()
+POST    /awac/site/create                               @eu.factorx.awac.controllers.SiteController.create()
 
 

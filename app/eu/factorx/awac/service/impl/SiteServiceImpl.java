@@ -16,10 +16,18 @@ public class SiteServiceImpl extends AbstractJPAPersistenceServiceImpl<Site> imp
 
 	@Override
 	public Site saveOrUpdate(final Site entity) {
+
+		boolean createScope = false;
+		if (entity.getId() == null) {
+			createScope = true;
+		}
+
 		Site site = super.saveOrUpdate(entity);
 
-		Scope scope = new Scope(site);
-		scopeService.saveOrUpdate(scope);
+		if (createScope) {
+			Scope scope = new Scope(site);
+			scopeService.saveOrUpdate(scope);
+		}
 
 		return site;
 	}

@@ -49,7 +49,7 @@ public class EmailTest extends AbstractBaseModelTest {
 
 	// try to get a bash env
 	String smtpPassword = Configuration.root().getString("mail.smtp.password");
-	assertNotNull(smtpPassword);
+	assertNotNull("The password for the email server is not in the bash",smtpPassword);
 
 	// ConnectionFormDTO
 	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");

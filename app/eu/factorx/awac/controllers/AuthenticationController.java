@@ -37,7 +37,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 @org.springframework.stereotype.Controller
-public class AuthenticationController extends Controller {
+public class AuthenticationController extends AbstractController {
 
 	@Autowired
 	private PersonService personService;
@@ -47,9 +47,6 @@ public class AuthenticationController extends Controller {
 
 	@Autowired
 	private ConversionService conversionService;
-
-	@Autowired
-	private SecuredController securedController;
 
 	@Autowired
 	private EmailService emailService;
@@ -75,6 +72,13 @@ public class AuthenticationController extends Controller {
 	// authenticate action cf routes
 	@Transactional(readOnly = false)
 	public Result authenticate() {
+
+		StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
+		Logger.info(standardPasswordEncoder.encode("password"));
+		Logger.info(standardPasswordEncoder.encode("76FCHN3"));
+		Logger.info(standardPasswordEncoder.encode("823FGH52"));
+		Logger.info(standardPasswordEncoder.encode("2446GHJ7"));
+		Logger.info(standardPasswordEncoder.encode("554DDG3"));
 
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
@@ -176,14 +180,6 @@ public class AuthenticationController extends Controller {
 		accountService.saveOrUpdate(account);
 
 		return ok(new ReturnDTO());
-	}
-
-	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
 	}
 
 } // end of controller class

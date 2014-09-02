@@ -2,19 +2,27 @@
 h1 site manager
 
 .element
-    button.button.add(type="button") add a new site
-    table.site_table
-        tr.site_table_header
-            td Site name
-            td NACE code
-            td Description
+    button.button.add(type="button", ng-click="editOrCreateSite()") add a new site
+    table.user_table
+        tr.user_table_header
+            td {{'NAME' | translateText}}
+            td {{'DESCRIPTION' | translateText}}
+            td {{'SITE_MANAGER_NACE_CODE' | translateText}}
+            td {{'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText}}
+            td {{'SITE_MANAGER_ECONOMIC_INTEREST' | translateText}}
+            td {{'SITE_MANAGER_OPERATING_POLICY' | translateText}}
+            td {{'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText}}
+            td {{'SITE_MANAGER_PERCENT_OWNED' | translateText}}
+            td {{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}
+
+        tr(ng-repeat="site in getSiteList()")
+            td {{site.name}}
+            td {{site.description}}
+            td {{site.naceCode}}
+            td {{site.organizationalStructure}}
+            td {{site.economicInterest}}
+            td {{site.operatingPolicy}}
+            td {{site.accountingTreatment}}
+            td {{site.percentOwned}}
             td
-            td users
-        tr
-            td Namur
-            td D35.30
-            td Le site de Namur est ceci ou celà, lorem ipsum
-            td
-                .button_edit
-            td
-                .user_icon XM
+                button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateSite(site)", class="edit_icon glyphicon glyphicon-pencil")

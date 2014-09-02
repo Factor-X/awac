@@ -7402,7 +7402,7 @@ function headersGetter(headers) {
  *
  * This function is used for both request and response transforming
  *
- * @param {*} data Data to transform.
+ * @param {*} data DataCell to transform.
  * @param {function(string=)} headers Http headers getter fn.
  * @param {(Function|Array.<Function>)} fns Function or an array of functions.
  * @returns {*} Transformed data.
@@ -7901,7 +7901,7 @@ function $HttpProvider() {
      *    - **params** – `{Object.<string|Object>}` – Map of strings or objects which will be turned
      *      to `?key1=value1&key2=value2` after the url. If the value is not a string, it will be
      *      JSONified.
-     *    - **data** – `{string|Object}` – Data to be sent as the request message data.
+     *    - **data** – `{string|Object}` – DataCell to be sent as the request message data.
      *    - **headers** – `{Object}` – Map of strings or functions which return strings representing
      *      HTTP headers to send to the server. If the return value of a function is null, the
      *      header will not be sent.

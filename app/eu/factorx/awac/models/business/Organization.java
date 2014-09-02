@@ -31,6 +31,10 @@ public class Organization extends AuditedAbstractEntity {
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	List<Account> accounts = new ArrayList<>();
 
+	private String naceCode;
+
+	private String description;
+
 	protected Organization() {
 		super();
 	}

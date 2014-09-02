@@ -11,7 +11,7 @@ angular
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
 
-        $scope.emailInfo =
+        $scope.inviteEmailInfo =
             field: ""
             fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
             placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
@@ -21,12 +21,14 @@ angular
                 return true
 
         $scope.allFieldValid = () ->
-            if $scope.passwordInfo.isValid && $scope.newEmailInfo.isValid
+            if $scope.inviteEmailInfo.isValid
                 return true
             return false
 
         #send the request to the server
         $scope.save = () ->
+
+            console.log("entering save() of Invite users");
 
             if !$scope.allFieldValid()
                 return false
@@ -34,15 +36,14 @@ angular
             $scope.isLoading = true
 
             data =
-                password: $scope.passwordInfo.field
-                newEmail: $scope.newEmailInfo.field
+                invitationEmail: $scope.inviteEmailInfo.field
 
-            downloadService.postJson '/awac/user/email/save', data, (result) ->
+            downloadService.postJson '/awac/invitation', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess "CHANGES_SAVED"
                     $scope.close()
                     if $scope.getParams().cb?
-                        $scope.getParams().cb($scope.newEmailInfo.field)
+                        $scope.getParams().cb($scope.inviteEmailInfo.field)
                 else
                     messageFlash.displayError result.data.message
                     $scope.isLoading = false

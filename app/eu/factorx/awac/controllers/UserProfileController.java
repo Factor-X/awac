@@ -24,10 +24,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
-public class UserProfileController extends Controller {
-
-	@Autowired
-	private SecuredController securedController;
+public class UserProfileController extends AbstractController {
 
 	@Autowired
 	private ConversionService conversionService;
@@ -158,14 +155,6 @@ public class UserProfileController extends Controller {
 		accountService.saveOrUpdate(account);
 
 		return ok(new ReturnDTO());
-	}
-
-	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-		if (dto == null) {
-			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-		}
-		return dto;
 	}
 
 }
