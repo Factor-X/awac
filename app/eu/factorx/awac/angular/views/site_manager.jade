@@ -1,19 +1,19 @@
 .menu_close(ng-click="toForm()")
-h1 site manager
+h1(ng-bind-html="'SITE_MANAGER_BUTTON' | translateText")
 
 .element
-    button.button.add(type="button", ng-click="editOrCreateSite()") add a new site
-    table.user_table
-        tr.user_table_header
-            td {{'NAME' | translateText}}
-            td {{'DESCRIPTION' | translateText}}
-            td {{'SITE_MANAGER_NACE_CODE' | translateText}}
-            td {{'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText}}
-            td {{'SITE_MANAGER_ECONOMIC_INTEREST' | translateText}}
-            td {{'SITE_MANAGER_OPERATING_POLICY' | translateText}}
-            td {{'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText}}
-            td {{'SITE_MANAGER_PERCENT_OWNED' | translateText}}
-            td {{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}
+
+    table.site_table
+        tr.site_table_header
+            td(ng-bind-html="'NAME' | translateText")
+            td(ng-bind-html="'DESCRIPTION' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_NACE_CODE' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_ECONOMIC_INTEREST' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_OPERATING_POLICY' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_PERCENT_OWNED' | translateText")
+            td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
 
         tr(ng-repeat="site in getSiteList()")
             td {{site.name}}
@@ -23,6 +23,8 @@ h1 site manager
             td {{site.economicInterest}}
             td {{site.operatingPolicy}}
             td {{site.accountingTreatment}}
-            td {{site.percentOwned}}
+            td {{site.percentOwned}} %
             td
                 button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateSite(site)", class="edit_icon glyphicon glyphicon-pencil")
+
+    button.button.add(type="button", ng-click="editOrCreateSite()",ng-bind-html="'SITE_MANAGER_ADD_SITE_BUTTON' | translateText")

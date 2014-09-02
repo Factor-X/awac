@@ -1,20 +1,40 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.Pattern;
+import eu.factorx.awac.dto.validation.annotations.Size;
+import eu.factorx.awac.dto.validation.annotations.Value;
 
 import javax.persistence.Column;
 
 public class SiteDTO extends DTO {
 
 	private Long id;
+
+	@Size(min = 1, max = 255)
 	private String name;
+
 	private Long scope;
+
+	@Size(max = 255)
 	private String naceCode;
+
+	@Size(max = 65000)
 	private String description;
+
+	@Size(max = 255)
 	private String organizationalStructure;
+
+	@Size(max = 255)
 	private String economicInterest;
+
+	@Size(max = 255)
 	private String operatingPolicy;
+
+	@Size(max = 255)
 	private String accountingTreatment;
+
+	@Value(min = 0, max = 100)
 	private Double percentOwned;
 
 	public SiteDTO() {

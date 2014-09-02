@@ -10,7 +10,15 @@ angular
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
 
-        $scope.site =  angular.copy($scope.getParams().site)
+        $scope.createNewSite = true
+
+        if $scope.getParams().site?
+            $scope.site =  angular.copy($scope.getParams().site)
+            $scope.createNewSite =false
+        else
+            $scope.site = {}
+            #create a default value for percentOwned
+            $scope.site.percentOwned = 100
 
         $scope.fields = {
 
@@ -73,7 +81,6 @@ angular
                     return false
                 validationMessage: "CONTROL_FIELD_DEFAULT_PERCENT_MAX_100"
                 field:$scope.site.percentOwned
-                hideIsValidIcon: true
                 fieldType : 'double'
             }
         }
@@ -93,7 +100,7 @@ angular
                 #create DTO
                 data = {}
                 data.name = $scope.fields.name.field
-                data.description = $scope.fields.name.field
+                data.description = $scope.fields.description.field
                 data.naceCode = $scope.fields.nace.field
                 data.organizationalStructure = $scope.fields.orgStructure.field
                 data.economicInterest = $scope.fields.ecoInterest.field
@@ -109,20 +116,40 @@ angular
                     data.id = $scope.getParams().site.id
                     downloadService.postJson '/awac/site/edit', data, (result) ->
                         if result.success
+
+                            #display success message
                             messageFlash.displaySuccess "CHANGES_SAVED"
+
+                            #edit site
+                            $scope.getParams().site.name = $scope.fields.name.field
+                            $scope.getParams().site.description = $scope.fields.description.field
+                            $scope.getParams().site.naceCode = $scope.fields.nace.field
+                            $scope.getParams().site.organizationalStructure = $scope.fields.orgStructure.field
+                            $scope.getParams().site.economicInterest = $scope.fields.ecoInterest.field
+                            $scope.getParams().site.operatingPolicy = $scope.fields.opePolicy.field
+                            $scope.getParams().site.accountingTreatment = $scope.fields.accountingTreatment.field
+                            $scope.getParams().site.percentOwned = $scope.fields.percentOwned.field
+
+                            #close window
                             $scope.close()
                         else
-                            # TODO ERROR HANDLING
+                            #display success message
                             messageFlash.displayError result.data.message
                             $scope.isLoading = false
                 else
                     #create site
                     downloadService.postJson '/awac/site/create', data, (result) ->
                         if result.success
+
+                            #display success message
                             messageFlash.displaySuccess "CHANGES_SAVED"
+
+                            # add new site to the list
+                            $scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
+
+                            #close window
                             $scope.close()
                         else
-                            # TODO ERROR HANDLING
                             messageFlash.displayError result.data.message
                             $scope.isLoading = false
             return false

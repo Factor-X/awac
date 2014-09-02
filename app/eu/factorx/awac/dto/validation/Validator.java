@@ -85,6 +85,8 @@ public class Validator {
 								failureMessage += ((Size) annotation).message();
 							} else if (annotation instanceof Pattern) {
 								failureMessage += ((Pattern) annotation).message();
+							} else if (annotation instanceof Value) {
+								failureMessage += ((Value) annotation).message();
 							} else {
 								failureMessage += field.getName() + " is not valid";
 							}

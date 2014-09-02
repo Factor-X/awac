@@ -7,6 +7,7 @@ import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -19,8 +20,11 @@ public class SiteController  extends AbstractController {
 	@Autowired
 	private SiteService siteService;
 
+	@Autowired
+	private ConversionService conversionService;
 
-	@Transactional(readOnly = true)
+
+	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 	public Result edit(){
@@ -56,10 +60,10 @@ public class SiteController  extends AbstractController {
 		siteService.saveOrUpdate(site);
 
 
-		return ok(new ReturnDTO());
+		return ok(conversionService.convert(site,SiteDTO.class));
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 	public Result create(){
@@ -80,7 +84,7 @@ public class SiteController  extends AbstractController {
 
 		siteService.saveOrUpdate(site);
 
-
-		return ok(new ReturnDTO());
+		// return the new site because some new information are added, like id and scope
+		return ok(conversionService.convert(site,SiteDTO.class));
 	}
 }

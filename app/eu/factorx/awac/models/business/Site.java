@@ -1,11 +1,11 @@
 package eu.factorx.awac.models.business;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.knowledge.Period;
+
+import java.util.List;
 
 @Entity
 @Table(name = "site")
@@ -38,6 +38,12 @@ public class Site extends AuditedAbstractEntity {
 
 	@Column(name = "percent_owned",columnDefinition="Double default '100.00'")
 	private Double percentOwned;
+
+	@ManyToMany
+	@JoinTable(name = "mm_site_period",
+			joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "period_id", referencedColumnName = "id"))
+	private List<Period> listPeriodAvailable;
 
 	protected Site() {
 		super();
