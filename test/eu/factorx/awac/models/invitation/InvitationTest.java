@@ -35,7 +35,7 @@ public class InvitationTest extends AbstractBaseModelTest {
 
 
     @Test
-    public void _003_retrieveInvitationSuccess() {
+    public void _002_retrieveInvitationByEmailSuccess() {
 
 		Invitation invitation = null;
 
@@ -48,10 +48,25 @@ public class InvitationTest extends AbstractBaseModelTest {
 		assertEquals(invitation.getEmail(),INVITATION_EMAIL);
     } // end of test
 
+	@Test
+	public void _003_retrieveInvitationByGenKeySuccess() {
+
+		Invitation invitation = null;
+
+		String query = "select i from Invitation i where i.genkey = '" + INVITATION_GENKEY + "'";
+		try {
+			invitation = em.createQuery(query, Invitation.class).getResultList().get(0);
+		} catch (Exception empty) {
+			Logger.info("invitation is null");
+		}
+		assertEquals(invitation.getGenkey(),INVITATION_GENKEY);
+	} // end of test
+
+
 
 	// for DB cleanup
 	@Test
-	public void _009_deleteInvitation() {
+	public void _004_deleteInvitation() {
 
 
 		Invitation invitation = null;
