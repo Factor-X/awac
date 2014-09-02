@@ -11,6 +11,7 @@ import eu.factorx.awac.service.ReportService;
 import eu.factorx.awac.service.ResultExcelGeneratorService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.util.Table;
+import eu.factorx.awac.util.pdf.PDF;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ import play.mvc.Security;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @org.springframework.stereotype.Controller
@@ -40,6 +43,8 @@ public class ResultController extends AbstractController {
 	private ReportService               reportService;
 	@Autowired
 	private ResultExcelGeneratorService resultExcelGeneratorService;
+	@Autowired
+	private SecuredController           securedController;
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
@@ -90,9 +95,69 @@ public class ResultController extends AbstractController {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		resultExcelGeneratorService.generateExcelInStream(stream, scope.getSite().getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
-//		response().setHeader("Content-Type", "application/octet-stream");
 		response().setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
 		return ok(new ByteArrayInputStream(stream.toByteArray()));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result getReportAsPdf(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
+		Scope scope = scopeService.findById(scopeId);
+		Report report = reportService.getReport(scope, period);
+
+		Table allScopes = new Table();
+		Table scope1 = new Table();
+		Table scope2 = new Table();
+		Table scope3 = new Table();
+		Table outOfScope = new Table();
+
+
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(securedController.getCurrentUser().getPerson().getDefaultLanguage().getKey()));
+		nf.setMaximumFractionDigits(2);
+
+		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+			if (entry.getValue().get(0) > 0) {
+				int row = allScopes.getRowCount();
+				allScopes.setCell(0, row, entry.getKey());
+
+				if (entry.getValue().get(1) > 0)
+					allScopes.setCell(1, row, nf.format(entry.getValue().get(1)));
+
+				if (entry.getValue().get(2) > 0)
+					allScopes.setCell(2, row, nf.format(entry.getValue().get(2)));
+
+				if (entry.getValue().get(3) > 0)
+					allScopes.setCell(3, row, nf.format(entry.getValue().get(3)));
+
+				if (entry.getValue().get(4) > 0)
+					allScopes.setCell(4, row, nf.format(entry.getValue().get(4)));
+			}
+
+			if (entry.getValue().get(1) > 0) {
+				int row = scope1.getRowCount();
+				scope1.setCell(0, row, entry.getKey());
+				scope1.setCell(1, row, nf.format(entry.getValue().get(1)));
+			}
+			if (entry.getValue().get(2) > 0) {
+				int row = scope2.getRowCount();
+				scope2.setCell(0, row, entry.getKey());
+				scope2.setCell(1, row, nf.format(entry.getValue().get(2)));
+			}
+			if (entry.getValue().get(3) > 0) {
+				int row = scope3.getRowCount();
+				scope3.setCell(0, row, entry.getKey());
+				scope3.setCell(1, row, nf.format(entry.getValue().get(3)));
+			}
+			if (entry.getValue().get(4) > 0) {
+				int row = outOfScope.getRowCount();
+				outOfScope.setCell(0, row, entry.getKey());
+				outOfScope.setCell(1, row, nf.format(entry.getValue().get(4)));
+			}
+		}
+
+
+		return PDF.ok(eu.factorx.awac.views.html.pdf.results.render(allScopes, scope1, scope2, scope3, outOfScope));
 	}
 
 }
