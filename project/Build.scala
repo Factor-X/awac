@@ -43,6 +43,14 @@ object ApplicationBuild extends Build {
 
     libraryDependencies += "com.typesafe" %% "play-plugins-util" % buildVersion
 
+    libraryDependencies += "xalan" % "xalan" % "2.7.1"
+
+    libraryDependencies += "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" excludeAll (
+      ExclusionRule(organization = "org.apache.xalan"),
+      ExclusionRule(organization = "org.apache.xerces"),
+      ExclusionRule(organization = "org.xhtmlrenderer")
+      )
+
     // libraryDependencies += "com.google.gdata" % "core" % "1.47.1"
 
     libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
@@ -78,6 +86,6 @@ object ApplicationBuild extends Build {
     //        )
     // Add your own project settings here
 
-  //javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
+    //javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
 
 }

@@ -1611,6 +1611,13 @@ ul.messenger > li {
     background: #d7edd5;
 }
 
+.indicators_table > tfoot > tr > td {
+    white-space: nowrap;
+    padding: 0.5em 1em;
+    border-top: solid #666 2px;
+    font-weight: bold;
+}
+
 .chart-legend {
     text-align: left;
     vertical-align: top;
