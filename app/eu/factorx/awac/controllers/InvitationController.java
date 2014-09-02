@@ -62,7 +62,7 @@ public class InvitationController extends Controller {
 
 		// send email for invitation
 		// send mail
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/registration/" + key);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/enterprise#/registration/" + key);
 		emailService.send(email);
 
 		//create InvitationResultDTO
