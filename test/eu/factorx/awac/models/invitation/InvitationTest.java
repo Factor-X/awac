@@ -16,8 +16,8 @@ import static org.junit.Assert.assertNull;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class InvitationTest extends AbstractBaseModelTest {
 
-	private static String INVITATION_EMAIL= "gaston.hollands@factorx.eu";
-	private static String INVITATION_GENKEY= "12345678901234567890";
+	public static String INVITATION_EMAIL= "banzaiiii@factorx.eu";
+	public static String INVITATION_GENKEY= "12345678901234567890";
 
     @Test
     public void _001_createInvitation() {

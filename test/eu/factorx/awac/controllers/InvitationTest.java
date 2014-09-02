@@ -36,22 +36,6 @@ import static play.test.Helpers.*;
 public class InvitationTest extends AbstractBaseModelTest {
 
 	private static final String invitationEmail = "gaston.hollands@factorx.eu";
-	private static final String email2 = "test2@test.test";
-
-	private static final String identifier1 = "testtest";
-	private static final String identifier2 = "testtestt";
-
-	private static final String organizationName1 = "testOrganization";
-	private static final String organizationName2 = "testOrganizationn";
-	private static final String municipalityName = "testMunicipality";
-
-
-	private static final String firstName = "firstTest";
-	private static final String firstName2 = "firstTestt";
-
-	private static final String lastName = "lastTest";
-	private static final String site = "testSite";
-	private static final String password = "testPassword";
 
 	/**
 	 * create a account + person + organization and scope + site and scope
