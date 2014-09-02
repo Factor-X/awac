@@ -29,7 +29,7 @@ public class PDFTest extends AbstractBaseModelTest {
 
 
 
-	@Test
+	//@Test
 	public void _001_pdfGeneration() {
 
 		// ConnectionFormDTO
@@ -52,7 +52,7 @@ public class PDFTest extends AbstractBaseModelTest {
 		assertEquals(200, status(result));
 	} // end of authenticateSuccess test
 
-	@Test
+	//@Test
 	public void _001_pdfWithSvgGeneration() {
 
 		// ConnectionFormDTO
