@@ -43,7 +43,7 @@ public class PDFTest extends AbstractBaseModelTest {
 
 		// Call controller action
 		Result result = callAction(
-				routes.ref.PdfController.asPdf(),
+				eu.factorx.awac.controllers.routes.ref.PdfController.asPdf(),
 				fr
 		); // callAction
 
@@ -65,7 +65,7 @@ public class PDFTest extends AbstractBaseModelTest {
 
 		// Call controller action
 		Result result = callAction(
-				routes.ref.PdfController.withSvg(),
+				eu.factorx.awac.controllers.routes.ref.PdfController.withSvg(),
 				fr
 		); // callAction
 
