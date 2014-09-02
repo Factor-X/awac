@@ -106,13 +106,4 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		}
 	}
 
-	@Override
-	public void deleteByScopeAndPeriod(Scope scope, Period period) {
-		List<QuestionSetAnswer> toDelete = findByParameters(new QuestionSetAnswerSearchParameter(false).appendPeriod(period).appendScope(scope));
-		for (QuestionSetAnswer questionSetAnswer : toDelete) {
-			Logger.info("Removing {}", questionSetAnswer);
-			remove(questionSetAnswer);
-		}
-	}
-
 }

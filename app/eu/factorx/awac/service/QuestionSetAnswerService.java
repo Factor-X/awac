@@ -45,5 +45,4 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 
 	void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form);
 
-	public void deleteByScopeAndPeriod(Scope scope, Period period);
 }

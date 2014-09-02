@@ -65,11 +65,10 @@ public class ReportServiceWithRankImpl implements ReportService {
 
 		for (Indicator indicator : indicators) {
 
-			Logger.info("Indicator '{}'", indicator.getKey());
 			List<BaseActivityData> activityData = filterByIndicator(allActivityData, indicator);
 			if (activityData.size() > 1) {
-				Logger.info("---> {} BADs found for indicator '{}' => filtering by rank...", activityData.size(), indicator.getKey());
-				activityData = filterByRank(activityData);
+				Logger.info("Indicator '{}': found {} BADs", indicator.getKey(), activityData.size());
+				activityData = filterByRank(indicator.getKey(), activityData);
 			}
 
 			for (BaseActivityData baseActivityData : activityData) {
@@ -109,7 +108,7 @@ public class ReportServiceWithRankImpl implements ReportService {
 		return res;
 	}
 
-	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs) {
+	private static List<BaseActivityData> filterByRank(String indicatorKey, List<BaseActivityData> indicatorBADs) {
 		List<BaseActivityData> res = new ArrayList<>();
 		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
 		for (BaseActivityData baseActivityData : indicatorBADs) {
@@ -121,6 +120,8 @@ public class ReportServiceWithRankImpl implements ReportService {
 				Integer minRank = minRankByAlternativeGroup.get(alternativeGroup);
 				if (rank == minRank) {
 					res.add(baseActivityData);
+				} else {
+					Logger.info("");
 				}
 			}
 		}
@@ -128,13 +129,13 @@ public class ReportServiceWithRankImpl implements ReportService {
 	}
 
 	private static Map<String, Integer> getMinRankByAlternativeGroup(List<BaseActivityData> indicatorBADs) {
-		Map<String, Integer> minRankByAlternativeGroup =new HashMap<>();
+		Map<String, Integer> minRankByAlternativeGroup = new HashMap<>();
 		for (BaseActivityData baseActivityData : indicatorBADs) {
-			String specificPurpose = StringUtils.trimToEmpty(baseActivityData.getSpecificPurpose());
-			String alternativeGroup = StringUtils.trimToEmpty(baseActivityData.getAlternativeGroup());
-//			if (StringUtils.trimToEmpty(str)) {
-//				continue;
-//			}
+//			String specificPurpose = StringUtils.trimToEmpty(baseActivityData.getSpecificPurpose());
+			String alternativeGroup = StringUtils.trimToNull(baseActivityData.getAlternativeGroup());
+			if (alternativeGroup == null) {
+				continue;
+			}
 			Integer rank = baseActivityData.getRank();
 			if (minRankByAlternativeGroup.containsKey(alternativeGroup)) {
 				Integer minRank = minRankByAlternativeGroup.get(alternativeGroup);
