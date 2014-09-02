@@ -2,6 +2,7 @@ package eu.factorx.awac.controllers;
 
 import java.util.*;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -371,12 +372,14 @@ public class AnswerController extends AbstractController {
 	private QuestionSetAnswer getQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, Map<String, Integer> normalizedRepetitionMap, List<QuestionSetAnswer> allCurrentQuestionSetAnswers) {
 		String questionSetKey = questionSet.getCode().getKey();
 		Integer repetitionIndex = normalizedRepetitionMap.get(questionSetKey);
-		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(questionSetKey, repetitionIndex, allCurrentQuestionSetAnswers);
+		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(normalizedRepetitionMap, allCurrentQuestionSetAnswers);
 		if (questionSetAnswer == null) {
 			// first create parent (if necessary)
 			QuestionSetAnswer parentQuestionSetAnswer = null;
 			if (questionSet.getParent() != null) {
-				parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), normalizedRepetitionMap, allCurrentQuestionSetAnswers);
+				Map<String, Integer> parentRepetitionMap = new HashMap<String, Integer>(normalizedRepetitionMap);
+				parentRepetitionMap.remove(questionSetKey);
+				parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), parentRepetitionMap, allCurrentQuestionSetAnswers);
 			}
 			// save new QuestionSetAnswer
 			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, parentQuestionSetAnswer);
@@ -622,9 +625,9 @@ public class AnswerController extends AbstractController {
 
 	}
 
-	private static QuestionSetAnswer findQuestionSetAnswer(String questionSetKey, Integer repetitionIndex, List<QuestionSetAnswer> createdQuestionSetAnswers) {
+	private static QuestionSetAnswer findQuestionSetAnswer(Map<String, Integer> normalizedRepetitionMap, List<QuestionSetAnswer> createdQuestionSetAnswers) {
 		for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
-			if (questionSetKey.equals(questionSetAnswer.getQuestionSet().getCode().getKey()) && repetitionIndex.equals(questionSetAnswer.getRepetitionIndex())) {					
+			if (normalizedRepetitionMap.equals(QuestionSetAnswer.createNormalizedRepetitionMap(questionSetAnswer))) {					
 				return questionSetAnswer;
 			}
 		}

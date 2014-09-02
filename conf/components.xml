@@ -33,7 +33,7 @@
     </bean>
 
 
-	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceImpl">
+	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceWithRankImpl">
 		<property name="activityResultContributors">
             <set>
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD1" />

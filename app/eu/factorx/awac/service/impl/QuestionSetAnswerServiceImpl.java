@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +48,8 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		if (!searchParameter.getWithChildren()) {
 			criteria.add(Restrictions.isNull("parent"));
 		}
+		criteria.addOrder(Order.asc("repetitionIndex"));
+
 		criteria.setCacheable(true);
 		@SuppressWarnings("unchecked")
 		List<QuestionSetAnswer> result = criteria.list();
@@ -100,6 +103,15 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 					update(parent);
 				}
 			}
+		}
+	}
+
+	@Override
+	public void deleteByScopeAndPeriod(Scope scope, Period period) {
+		List<QuestionSetAnswer> toDelete = findByParameters(new QuestionSetAnswerSearchParameter(false).appendPeriod(period).appendScope(scope));
+		for (QuestionSetAnswer questionSetAnswer : toDelete) {
+			Logger.info("Removing {}", questionSetAnswer);
+			remove(questionSetAnswer);
 		}
 	}
 

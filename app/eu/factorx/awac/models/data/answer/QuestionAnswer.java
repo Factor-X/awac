@@ -103,7 +103,7 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionAnswer [question=" + question.getCode().getKey() + ", answerValues=" + answerValues + ", questionSetAnswer=" + questionSetAnswer + "]";
+		return "QuestionAnswer [id=" + id + ", question=" + question.getCode().getKey() + ", answerValues=" + answerValues + ", questionSetAnswerId=" + questionSetAnswer.getId() + "]";
 	}
 
 	
