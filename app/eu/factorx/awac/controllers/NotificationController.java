@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
-public class NotificationController extends Controller {
+public class NotificationController extends AbstractController {
 
 	@Autowired
 	private ConversionService   conversionService;

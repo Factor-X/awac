@@ -45,7 +45,12 @@ angular
             messageFlash.displayError 'Unable to load data...'
             modalService.close(modalService.LOADING)
         else
+
+            console.log result.data
+
             $scope.o = angular.copy(result.data)
+
+
 
 
             #build the list of answers
@@ -616,7 +621,6 @@ angular
                 # TODO ERROR HANDLING !!!!!
 
     $scope.addTabSet = (tabSet,tab, mapRepetition) ->
-        console.log "...et jajoute !!"
         ite=null
         if !$scope.tabSet[tabSet]?
             $scope.tabSet[tabSet] = []

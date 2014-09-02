@@ -48,16 +48,16 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		codeLabelService.removeAll();
 		codesEquivalenceService.removeAll();
 
-		Logger.info("== Importing Common Code Data (from {})", CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
+		Logger.info("== Importing Common Code DataCell (from {})", CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
 		Map<String, Sheet> commonWbSheets = getWorkbookSheets(CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
 		importCodeLabels(commonWbSheets);
 
-		Logger.info("== Importing Enterprise Code Data (from {})", CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH);
+		Logger.info("== Importing Enterprise Code DataCell (from {})", CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH);
 		Map<String, Sheet> enterpriseWbSheets = getWorkbookSheets(CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH);
 		importCodeLabels(enterpriseWbSheets);
 		importCodesEquivalences(enterpriseWbSheets);
 
-		Logger.info("== Importing Municipality Code Data (from {})", CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH);
+		Logger.info("== Importing Municipality Code DataCell (from {})", CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH);
 		Map<String, Sheet> municipalityWbSheets = getWorkbookSheets(CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH);
 		importCodeLabels(municipalityWbSheets);
 		importCodesEquivalences(municipalityWbSheets);
@@ -155,7 +155,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 	// Columns: 0:KEY, refKeyColumnIndex:REF_KEY
 	private void importConversionData(Sheet sheet, CodeList codeList, CodeList referencedCodeList, int refKeyColumnIndex) {
 		if (importedCodesEquivalences.contains(Pair.of(codeList, referencedCodeList))) {
-			Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> Data for conversion from code list '{}' to code list '{}' has already been imported", codeList, referencedCodeList);
+			Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> DataCell for conversion from code list '{}' to code list '{}' has already been imported", codeList, referencedCodeList);
 			return;
 		}
 		List<CodesEquivalence> codesEquivalences = new ArrayList<>();

@@ -26,7 +26,7 @@ public class UnitServiceTest extends AbstractBaseModelTest {
     @Test
     public void _001_verifyAllSymbols() {
 
-		// Data to consider @07/08/2014
+		// DataCell to consider @07/08/2014
 		//	Expected size 228.
 
 		/*

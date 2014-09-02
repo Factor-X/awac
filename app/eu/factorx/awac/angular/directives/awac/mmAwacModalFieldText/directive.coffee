@@ -14,16 +14,27 @@ angular
         scope.hideIsValidIcon = !!scope.getInfo().hideIsValidIcon
         scope.fieldType = if (scope.getInfo().fieldType?) then scope.getInfo().fieldType else "text"
 
+        if !scope.getInfo().field?
+            scope.getInfo().field=""
+
         if !scope.getInfo().isValid?
             scope.getInfo().isValid = !scope.isValidationDefined
 
         if scope.isValidationDefined
             scope.$watch 'getInfo().field', (n, o) ->
                 if n != o
-                    isValid = true
-                    if scope.getInfo().validationRegex?
-                        isValid = scope.getInfo().field.match(scope.getInfo().validationRegex)
-                    if scope.getInfo().validationFct?
-                        isValid = isValid && scope.getInfo().validationFct()
-                    scope.getInfo().isValid = isValid
+                    scope.isValid()
+
+        scope.isValid = ->
+            isValid = true
+            if scope.getInfo().validationRegex?
+                isValid = scope.getInfo().field.match(scope.getInfo().validationRegex)
+            if scope.getInfo().validationFct?
+                isValid = isValid && scope.getInfo().validationFct()
+            scope.getInfo().isValid = isValid
             return
+
+        scope.isValid()
+
+        scope.logField = ->
+            console.log scope.getInfo()
