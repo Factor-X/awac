@@ -34,7 +34,7 @@ public class AssignPeriodToSiteDTO extends DTO{
 		this.siteId = siteId;
 	}
 
-	public Boolean isAssign() {
+	public Boolean getAssign() {
 		return assign;
 	}
 

@@ -12,6 +12,7 @@ import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -120,20 +121,20 @@ public class SiteController  extends AbstractController {
 		}
 
 		//assign period to site
-		boolean toAdd = dto.isAssign();
+		boolean toAdd = dto.getAssign();
 
 		//control is the period is already into site
 		if(site.getListPeriodAvailable()!=null){
 			for(Period periodToTest : site.getListPeriodAvailable()){
-				if(periodToTest.equals(period)){
 
+				if(periodToTest.equals(period)){
 					//founded and to assign => useless to add
-					if(dto.isAssign()){
+					if(dto.getAssign()){
 						toAdd = false;
 					}
 					//founded and to remove => remove
 					else{
-						site.getListPeriodAvailable().remove(dto.isAssign());
+						site.getListPeriodAvailable().remove(periodToTest);
 					}
 					break;
 				}
@@ -150,5 +151,28 @@ public class SiteController  extends AbstractController {
 
 
 		return ok(new ReturnDTO());
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	public Result getSite(long siteId){
+
+		//load the site
+		Site site = siteService.findById(siteId);
+
+		if(site == null){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//test owner
+		if(!securedController.getCurrentUser().getOrganization().equals(site.getOrganization())){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//convert
+		return  ok(conversionService.convert(site,SiteDTO.class));
 	}
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "site")
-public class Site extends AuditedAbstractEntity {
+public class Site extends AuditedAbstractEntity implements Comparable<Site>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -149,5 +149,10 @@ public class Site extends AuditedAbstractEntity {
 				", percentOwned=" + percentOwned +
 				", listPeriodAvailable=" + listPeriodAvailable +
 				'}';
+	}
+
+	@Override
+	public int compareTo(Site o) {
+		return this.getTechnicalSegment().getCreationDate().compareTo(o.getTechnicalSegment().getCreationDate());
 	}
 }
