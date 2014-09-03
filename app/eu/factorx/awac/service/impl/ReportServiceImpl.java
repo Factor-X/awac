@@ -2,12 +2,16 @@ package eu.factorx.awac.service.impl;
 
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
+import eu.factorx.awac.models.code.type.BaseActivityDataCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Factor;
@@ -49,33 +53,114 @@ public class ReportServiceImpl implements ReportService {
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = getAllQuestionSetAnswers(scope, period);
 
 		// find all activity data
-		List<BaseActivityData> activityData = getActivityData(allQuestionSetAnswers);
+		List<BaseActivityData> allActivityData = getActivityData(allQuestionSetAnswers);
+		Logger.info("Built {} BADs for scope: {} and period: {}", allActivityData.size(), scope, period.getLabel());
+		Set<BaseActivityDataCode> matchingIndicatorBADs = new HashSet<>();
 
-		// build activity results (== link suitable indicators and factors to each activity data)
+		// find all carbon indicators for sites
+		List<Indicator> indicators = indicatorService.findAllCarbonIndicatorsForSites();
+
+		// calculate activity results
 		List<BaseActivityResult> activityResults = new ArrayList<>();
-		for (BaseActivityData baseActivityData : activityData) {
-			String baseActivityDataKey = baseActivityData.getKey().getKey();
-			IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(baseActivityData);
-			List<Indicator> indicators = indicatorService.findByParameters(indicatorSearchParam);
-			if (indicators.isEmpty()) {
-				Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataKey, indicatorSearchParam);
-				saveNoSuitableIndicatorError(baseActivityDataKey, indicatorSearchParam);
+
+		for (Indicator indicator : indicators) {
+
+			List<BaseActivityData> activityData = filterByIndicator(allActivityData, indicator);
+			for (BaseActivityData baseActivityData : activityData) {				
+				matchingIndicatorBADs.add(baseActivityData.getKey());
 			}
-			for (Indicator indicator : indicators) {
-				String indicatorKey = indicator.getKey();
+
+			if (!activityData.isEmpty()) {
+				Logger.info("Indicator '{}': found {} BADs", indicator.getKey(), activityData.size());
+				activityData = filterByRank(indicator.getKey(), activityData);
+			}
+
+			for (BaseActivityData baseActivityData : activityData) {
 				FactorSearchParameter factorSearchParam = new FactorSearchParameter(indicator, baseActivityData);
 				Factor factor = factorService.findByParameters(factorSearchParam);
 				if (factor == null) {
-					Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityDataKey, indicatorKey, factorSearchParam);
-					saveNoSuitableFactorError(baseActivityDataKey, indicatorKey, factorSearchParam);
+					saveNoSuitableFactorError(baseActivityData, indicator, factorSearchParam);
 				} else {
-					BaseActivityResult baseActivityResult = new BaseActivityResult(indicator, baseActivityData, factor);
-					activityResults.add(baseActivityResult);
+					activityResults.add(new BaseActivityResult(indicator, baseActivityData, factor));
 				}
 			}
 		}
 
+		// check not used BADs
+		for (BaseActivityData bad : allActivityData) {
+			if (!matchingIndicatorBADs.contains(bad.getKey())) {
+				saveNoSuitableIndicatorError(bad);
+			}
+		}
+
 		return new Report(activityResults, indicatorService);
+	}
+
+	private static List<BaseActivityData> filterByIndicator(List<BaseActivityData> allBads, Indicator indicator) {
+		ActivityCategoryCode category = indicator.getActivityCategory();
+		ActivitySubCategoryCode subCategory = indicator.getActivitySubCategory();
+		Boolean ownership = indicator.getActivityOwnership();
+
+		List<BaseActivityData> res = new ArrayList<>();
+		for (BaseActivityData bad : allBads) {
+			if (category.equals(bad.getActivityCategory()) && subCategory.equals(bad.getActivitySubCategory())
+					&& ((ownership == null) || ownership.equals(bad.getActivityOwnership()))) {
+				res.add(bad);
+			}
+		}
+		return res;
+	}
+
+	private static List<BaseActivityData> filterByRank(String indicatorKey, List<BaseActivityData> indicatorBADs) {
+		List<BaseActivityData> res = new ArrayList<>();
+		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
+		for (BaseActivityData baseActivityData : indicatorBADs) {
+			String alternativeGroup = getAlternativeGroupKey(baseActivityData);
+			if (alternativeGroup == null) {
+				res.add(baseActivityData);
+			} else {
+				Integer rank = baseActivityData.getRank();
+				Integer minRank = minRankByAlternativeGroup.get(alternativeGroup);
+				if (rank == minRank) {
+					res.add(baseActivityData);
+				} else {
+					Logger.info("--> Excluding BAD '{}' with rank = {} (lowest rank for alternative group '{}' = {})", baseActivityData.getKey().getKey(), rank, alternativeGroup, minRank);
+				}
+			}
+		}
+		return res;
+	}
+
+	private static Map<String, Integer> getMinRankByAlternativeGroup(List<BaseActivityData> indicatorBADs) {
+		Map<String, Integer> minRankByAlternativeGroup = new HashMap<>();
+		for (BaseActivityData baseActivityData : indicatorBADs) {
+			String alternativeGroupKey = getAlternativeGroupKey(baseActivityData);
+			if (alternativeGroupKey == null) {
+				continue;
+			}
+			Integer rank = baseActivityData.getRank();
+			if (minRankByAlternativeGroup.containsKey(alternativeGroupKey)) {
+				Integer minRank = minRankByAlternativeGroup.get(alternativeGroupKey);
+				if (rank < minRank) {
+					minRankByAlternativeGroup.put(alternativeGroupKey, rank);
+				}
+			} else {
+				minRankByAlternativeGroup.put(alternativeGroupKey, rank);
+			}
+		}
+		return minRankByAlternativeGroup;
+	}
+
+	private static String getAlternativeGroupKey(BaseActivityData baseActivityData) {
+		String alternativeGroup = StringUtils.trimToNull(baseActivityData.getAlternativeGroup());
+		if (alternativeGroup == null) {
+			return null;
+		}
+		String specificPurpose = StringUtils.trimToNull(baseActivityData.getSpecificPurpose());
+		if (specificPurpose != null) {
+			alternativeGroup += ("-" + specificPurpose);
+		}
+		return alternativeGroup;
 	}
 
 	private List<BaseActivityData> getActivityData(Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers) {
@@ -105,12 +190,18 @@ public class ReportServiceImpl implements ReportService {
 		return res;
 	}
 
-	private void saveNoSuitableIndicatorError(String baseActivityDataKey, IndicatorSearchParameter indicatorSearchParam) {
-		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityDataKey, null, indicatorSearchParam.toString()));
+	private void saveNoSuitableIndicatorError(BaseActivityData bad) {
+		BaseActivityDataCode baseActivityDataCode = bad.getKey();
+		IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(bad);
+		Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorSearchParam);
+		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityDataCode.getKey(), null, indicatorSearchParam.toString()));
 	}
 
-	private void saveNoSuitableFactorError(String baseActivityDataKey, String indicatorKey, FactorSearchParameter factorSearchParam) {
-		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityDataKey, indicatorKey, factorSearchParam.toString()));
+	private void saveNoSuitableFactorError(BaseActivityData bad, Indicator indicator, FactorSearchParameter factorSearchParam) {
+		BaseActivityDataCode baseActivityDataCode = bad.getKey();
+		String indicatorKey = indicator.getKey();
+		Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorKey, factorSearchParam);
+		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityDataCode.getKey(), indicatorKey, factorSearchParam.toString()));
 	}
 
 	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
