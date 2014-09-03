@@ -1,9 +1,7 @@
 package eu.factorx.awac.models.data.answer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.*;
 
@@ -131,32 +129,6 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 		return this;
 	}
 
-	public static Map<String, Integer> createRepetitionMap(QuestionSetAnswer questionSetAnswer) {
-		Map<String, Integer> res = new HashMap<>();
-		while (questionSetAnswer != null) {
-			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
-			if (questionSet.getRepetitionAllowed()) {
-				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
-			}
-			questionSetAnswer = questionSetAnswer.getParent();
-		}
-		return res;
-	}
-
-	public static Map<String, Integer> createNormalizedRepetitionMap(QuestionSetAnswer questionSetAnswer) {
-		Map<String, Integer> res = new HashMap<>();
-		while (questionSetAnswer != null) {
-			QuestionSet questionSet = questionSetAnswer.getQuestionSet();
-			if (questionSet.getRepetitionAllowed()) {
-				res.put(questionSet.getCode().getKey(), questionSetAnswer.getRepetitionIndex());
-			} else {
-				res.put(questionSet.getCode().getKey(), 0);
-			}
-			questionSetAnswer = questionSetAnswer.getParent();
-		}
-		return res;
-	}
-
 	@Override
 	public String toString() {
 		Long parentId = (parent == null ? null : parent.getId());
@@ -187,8 +159,9 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	@Override
 	public int compareTo(QuestionSetAnswer o) {
 		if (this.questionSet.getCode().equals(o.questionSet.getCode()) && this.period.equals(o.period) && this.scope.equals(o.scope) && this.parent.equals(o.parent)) {
-			return new CompareToBuilder().append(this.repetitionIndex, o.repetitionIndex).toComparison();			
+			return new CompareToBuilder().append(this.repetitionIndex, o.repetitionIndex).toComparison();
 		}
 		return 0;
 	}
+
 }
