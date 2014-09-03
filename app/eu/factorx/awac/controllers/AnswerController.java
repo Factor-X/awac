@@ -89,7 +89,7 @@ public class AnswerController extends AbstractController {
 		LanguageCode lang = LanguageCode.ENGLISH;
 
 		if (form == null || period == null || scope == null) {
-			throw new RuntimeException("Invalid request parameters : ");
+			throw new RuntimeException("Invalid request parameters : form = " + form + "; period = " + period + "; scope = " + scope);
 		}
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
