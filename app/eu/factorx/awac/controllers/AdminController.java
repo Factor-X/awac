@@ -54,6 +54,9 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 
+	@Autowired
+	private BADImporter badImporter;
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	// @AuthenticatedAsSystemAdmin
@@ -119,8 +122,6 @@ public class AdminController extends AbstractController {
 
 	@Transactional(readOnly = true)
 	public Result runBADImporter(){
-
-		BADImporter badImporter = new BADImporter();
 
 		badImporter.run();
 

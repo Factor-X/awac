@@ -75,7 +75,7 @@ public abstract class WorkbookDataImporter {
 
 		String content = sheet.getCell(column, row).getContents();
 
-		if(content==null || content.length() == 0 || content.equals("0")){
+		if(content==null || content.length() == 0 ||content == "null"){
 			return null;
 		}
 		return content;
