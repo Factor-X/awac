@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -17,7 +18,7 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"), })
-public class QuestionSetAnswer extends AuditedAbstractEntity {
+public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparable<QuestionSetAnswer> {
 
 	/**
 	 * @param scopeId
@@ -158,7 +159,8 @@ public class QuestionSetAnswer extends AuditedAbstractEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionSetAnswer [questionSet=" + questionSet.getCode().getKey() + ", repetitionIndex=" + repetitionIndex + ", parent=" + parent + "]";
+		Long parentId = (parent == null ? null : parent.getId());
+		return "QuestionSetAnswer [id=" + id + ", questionSet=" + questionSet.getCode().getKey() + ", repetitionIndex=" + repetitionIndex + ", parentId=" + parentId + "]";
 	}
 
 	@Override
@@ -180,5 +182,13 @@ public class QuestionSetAnswer extends AuditedAbstractEntity {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(47, 89).append(this.questionSet).append(this.period).append(this.scope).append(this.parent).append(this.repetitionIndex).toHashCode();
+	}
+
+	@Override
+	public int compareTo(QuestionSetAnswer o) {
+		if (this.questionSet.getCode().equals(o.questionSet.getCode()) && this.period.equals(o.period) && this.scope.equals(o.scope) && this.parent.equals(o.parent)) {
+			return new CompareToBuilder().append(this.repetitionIndex, o.repetitionIndex).toComparison();			
+		}
+		return 0;
 	}
 }

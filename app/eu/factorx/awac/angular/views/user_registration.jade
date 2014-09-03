@@ -1,0 +1,72 @@
+.loginBackground
+    .router-bar
+        .awac_logo
+        ul.interface_menu
+            li
+                a(
+                class="btn btn-primary",
+                ng-class="{selected:$root.instanceName == 'enterprise'}",
+                href="/enterprise") Entreprises
+            li
+                a(
+                class="btn btn-primary",
+                ng-class="{selected:$root.instanceName == 'municipality'}",
+                href="/municipality") Communes
+
+    .loginFrame(ng-enter="enterEvent()")
+        select(ng-options="l.value as l.label for l in $root.languages",ng-model="$root.language",style="float:right")
+        tabset
+            tab.tab-color-lightgreen(active="tabActive[0]")
+                tab-heading
+                    span(ng-bind-html="'LOGIN_CONNECTION' | translate")
+                div
+                    div(class="field_form")
+                        mm-awac-modal-field-text(ng-info="loginInfo")
+                        mm-awac-modal-field-text(ng-info="passwordInfo")
+                        mm-awac-modal-field-text(ng-info="lastNameInfo")
+                        mm-awac-modal-field-text(ng-info="firstNameInfo")
+                        mm-awac-modal-field-text(ng-info="emailInfo")
+
+
+                    div(ng-hide="isLoading === true")
+
+                        button.button(
+                        type="button",
+                        class="btn btn-primary",
+                        ng-bind-html="'LOGIN_BUTTON' | translate",
+                        ng-click="send()",
+                        ng-disabled="!connectionFieldValid()")
+
+                    img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
+
+
+
+            tab.tab-color-lightgreen(active="tabActive[1]", ng-show="false")
+                tab-heading
+                    span(ng-bind-html="'LOGIN_FORGOT_PASSWORD' | translate")
+                div
+                    div(ng-show="forgotEmailSuccessMessage!=null", class="forgot_password_success_message") {{forgotEmailSuccessMessage}}
+
+                    div(ng-hide="forgotEmailSuccessMessage!=null")
+                        div(ng-bind-html="'LOGIN_FORGOT_PASSWORD_DESC' | translate")
+
+                        div(class="field_form")
+                            mm-awac-modal-field-text(ng-info="forgotPasswordInfo")
+
+                        div(ng-hide="isLoading === true")
+
+                            button.button(
+                            type="button",
+                            class="btn btn-primary",
+                            ng-bind-html="'SUBMIT' | translate",
+                            ng-click="sendForgotPassword()",
+                            ng-disabled="!forgotPasswordFieldValid()")
+
+                        img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
+
+
+
+            tab.tab-color-lightgreen(active="tabActive[2]")
+                tab-heading
+                    span(ng-bind-html="'LOGIN_REGISTRATION' | translate")
+                div.inject-registration-form

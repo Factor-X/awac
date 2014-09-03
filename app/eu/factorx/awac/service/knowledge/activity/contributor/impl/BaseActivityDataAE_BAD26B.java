@@ -51,6 +51,7 @@ public class BaseActivityDataAE_BAD26B extends ActivityResultContributor {
 
 			baseActivityData.setKey(BaseActivityDataCode.AE_BAD26B);
 			baseActivityData.setRank(2);
+			baseActivityData.setAlternativeGroup("ALT_E_6_EAU");
 			baseActivityData.setSpecificPurpose(null);
 			baseActivityData.setActivityCategory(ActivityCategoryCode.AC_7);
 			baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_10);

@@ -32,6 +32,11 @@ initializeCommonRoutes = () ->
                 controller: 'SiteManagerCtrl'
             }
         )
+        .when('/registration/:key', {
+                templateUrl: '$/angular/views/user_registration.html'
+                controller: 'RegistrationCtrl'
+            }
+        )
         .otherwise({ redirectTo: '/login' })
 
         return
