@@ -73,13 +73,6 @@ public class AuthenticationController extends AbstractController {
 	@Transactional(readOnly = false)
 	public Result authenticate() {
 
-		StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
-		Logger.info(standardPasswordEncoder.encode("password"));
-		Logger.info(standardPasswordEncoder.encode("76FCHN3"));
-		Logger.info(standardPasswordEncoder.encode("823FGH52"));
-		Logger.info(standardPasswordEncoder.encode("2446GHJ7"));
-		Logger.info(standardPasswordEncoder.encode("554DDG3"));
-
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {

@@ -76,6 +76,7 @@ GET     /awac/answer/formProgress/:period/:scope       @eu.factorx.awac.controll
 #
 GET     /awac/result/getReport/:period/:scope          @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)              
 GET     /awac/result/getReportAsXls/:period/:scope     @eu.factorx.awac.controllers.ResultController.getReportAsXls(period: String, scope: Long)
+GET     /awac/result/getReportAsPdf/:period/:scope     @eu.factorx.awac.controllers.ResultController.getReportAsPdf(period: String, scope: Long)
 
 #
 # Upload
@@ -106,5 +107,6 @@ GET		/awac/admin/badImporter             	       @eu.factorx.awac.controllers.Ad
 #
 POST    /awac/site/edit                                 @eu.factorx.awac.controllers.SiteController.edit()
 POST    /awac/site/create                               @eu.factorx.awac.controllers.SiteController.create()
+POST    /awac/site/assignPeriodToSite                   @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()
 
 

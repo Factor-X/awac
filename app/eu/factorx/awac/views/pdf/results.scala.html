@@ -1,0 +1,131 @@
+@(allScopes: eu.factorx.awac.util.Table, scope1: eu.factorx.awac.util.Table, scope2: eu.factorx.awac.util.Table, scope3: eu.factorx.awac.util.Table, outOfScope: eu.factorx.awac.util.Table)
+<!DOCTYPE html>
+
+<head>
+    <title>Account list</title>
+    <link rel="stylesheet" href="/public/stylesheets/pdf.css"/>
+</head>
+
+<body>
+
+    <h1>Rapport</h1>
+
+    <table>
+        <tr>
+            <td colspan="2">
+                <h2>Tous les scopes</h2>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Indicateur</th>
+            <th class="align-right">Scope 1 (tCO2e)</th>
+            <th class="align-right">Scope 2 (tCO2e)</th>
+            <th class="align-right">Scope 3 (tCO2e)</th>
+            <th class="align-right">Hors scope (tCO2e)</th>
+        </tr>
+
+        @for(i <- 0 to allScopes.getRowCount()-1) {
+        <tr>
+            <td class="dotted">@allScopes.getCell(0, i)</td>
+            <td class="dotted align-right">@allScopes.getCell(1, i)</td>
+            <td class="dotted align-right">@allScopes.getCell(2, i)</td>
+            <td class="dotted align-right">@allScopes.getCell(3, i)</td>
+            <td class="dotted align-right">@allScopes.getCell(4, i)</td>
+        </tr>
+        }
+
+        <tr>
+            <td colspan="5">
+
+                <table>
+                    <tr>
+                        <td>
+
+                            
+                        </td>
+                        <td><img src="http://lorempixel.com/200/150" /></td>
+                        <td><img src="http://lorempixel.com/200/150" /></td>
+                        <td><img src="http://lorempixel.com/200/150" /></td>
+                    </tr>
+                </table>
+
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <h2>Scope 1</h2>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Indicateur</th>
+            <th class="align-right">tCO2e</th>
+        </tr>
+
+        @for(i <- 0 to scope1.getRowCount()-1) {
+        <tr>
+            <td class="dotted" colspan="4">@scope1.getCell(0, i)</td>
+            <td class="dotted align-right">@scope1.getCell(1, i)</td>
+        </tr>
+        }
+
+        <tr>
+            <td colspan="2">
+                <h2>Scope 2</h2>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Indicateur</th>
+            <th class="align-right">tCO2e</th>
+        </tr>
+
+        @for(i <- 0 to scope2.getRowCount()-1) {
+        <tr>
+            <td class="dotted" colspan="4">@scope2.getCell(0, i)</td>
+            <td class="dotted align-right">@scope2.getCell(1, i)</td>
+        </tr>
+        }
+
+        <tr>
+            <td colspan="2">
+                <h2>Scope 3</h2>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Indicateur</th>
+            <th class="align-right">tCO2e</th>
+        </tr>
+
+        @for(i <- 0 to scope3.getRowCount()-1) {
+        <tr>
+            <td class="dotted" colspan="4">@scope3.getCell(0, i)</td>
+            <td class="dotted align-right">@scope3.getCell(1, i)</td>
+        </tr>
+        }
+
+        <tr>
+            <td colspan="2">
+                <h2>Hors scope</h2>
+            </td>
+        </tr>
+
+        <tr>
+            <th colspan="4">Indicateur</th>
+            <th class="align-right">tCO2e</th>
+        </tr>
+        @for(i <- 0 to outOfScope.getRowCount()-1) {
+        <tr>
+            <td class="dotted" colspan="4">@outOfScope.getCell(0, i)</td>
+            <td class="dotted align-right">@outOfScope.getCell(1, i)</td>
+        </tr>
+        }
+    </table>
+</body>
+
+
+

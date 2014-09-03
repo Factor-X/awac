@@ -36,7 +36,7 @@ public class Site extends AuditedAbstractEntity {
 	@Column(name = "accounting_treatment")
 	private String accountingTreatment;
 
-	@Column(name = "percent_owned",columnDefinition="Double default '100.00'")
+	@Column(name = "percent_owned",columnDefinition="double precision default '100.00'")
 	private Double percentOwned;
 
 	@ManyToMany
@@ -127,6 +127,14 @@ public class Site extends AuditedAbstractEntity {
 		this.percentOwned = percentOwned;
 	}
 
+	public List<Period> getListPeriodAvailable() {
+		return listPeriodAvailable;
+	}
+
+	public void setListPeriodAvailable(List<Period> listPeriodAvailable) {
+		this.listPeriodAvailable = listPeriodAvailable;
+	}
+
 	@Override
 	public String toString() {
 		return "Site{" +
@@ -139,6 +147,7 @@ public class Site extends AuditedAbstractEntity {
 				", operatingPolicy='" + operatingPolicy + '\'' +
 				", accountingTreatment='" + accountingTreatment + '\'' +
 				", percentOwned=" + percentOwned +
+				", listPeriodAvailable=" + listPeriodAvailable +
 				'}';
 	}
 }

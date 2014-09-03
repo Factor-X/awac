@@ -2,8 +2,12 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,9 @@ public class SiteController  extends AbstractController {
 
 	@Autowired
 	private ConversionService conversionService;
+
+	@Autowired
+	private PeriodService periodService;
 
 
 	@Transactional(readOnly = false)
@@ -86,5 +93,62 @@ public class SiteController  extends AbstractController {
 
 		// return the new site because some new information are added, like id and scope
 		return ok(conversionService.convert(site,SiteDTO.class));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	public Result assignPeriodToSite(){
+
+		AssignPeriodToSiteDTO dto = extractDTOFromRequest(AssignPeriodToSiteDTO.class);
+
+
+		//load period
+		Period period = periodService.findByCode(new PeriodCode(dto.getPeriodKeyCode()));
+
+		if(period==null){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//load site
+		Site site = siteService.findById(dto.getSiteId());
+
+		if(site == null || !site.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//assign period to site
+		boolean toAdd = dto.isAssign();
+
+		//control is the period is already into site
+		if(site.getListPeriodAvailable()!=null){
+			for(Period periodToTest : site.getListPeriodAvailable()){
+				if(periodToTest.equals(period)){
+
+					//founded and to assign => useless to add
+					if(dto.isAssign()){
+						toAdd = false;
+					}
+					//founded and to remove => remove
+					else{
+						site.getListPeriodAvailable().remove(dto.isAssign());
+					}
+					break;
+				}
+			}
+		}
+
+		//add ig it's needed
+		if(toAdd){
+			site.getListPeriodAvailable().add(period);
+		}
+
+		//save
+		siteService.saveOrUpdate(site);
+
+
+		return ok(new ReturnDTO());
 	}
 }

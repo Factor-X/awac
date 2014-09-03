@@ -1,13 +1,13 @@
-div
+div.pdf-able
     h1 Results
 
     br
 
     table.result_table(ng-show="o.reportLines != null")
-        tr(ng-show="false")
+        tr
             td
                 button.button.btn.btn-success(ng-click="downloadAsXls()") Télécharger le fichier Excel
-
+                button.button.btn.btn-success(ng-click="downloadPdf()") Télécharger le fichier Pdf
         tr
             td
 

@@ -3,6 +3,8 @@ package eu.factorx.awac.converter;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.ScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -28,6 +30,11 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 		dto.setPercentOwned(site.getPercentOwned());
 		dto.setOrganizationalStructure(site.getOrganizationalStructure());
 
+		if (site.getListPeriodAvailable() != null) {
+			for (Period period : site.getListPeriodAvailable()) {
+				dto.addPeriodAvailable(period.getPeriodCode().getKey());
+			}
+		}
 
 		Scope scope = scopeService.findBySite(site);
 		dto.setScope(scope.getId());
