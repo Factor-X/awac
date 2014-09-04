@@ -63,9 +63,9 @@ public abstract class WorkbookDataImporter {
 	protected static Set<String> getColumnContent(Sheet sheet, int column, int firstRow) {
 		Set<String> res = new LinkedHashSet<>();
 		for (int i = firstRow; i < sheet.getRows(); i++) {
-			String identifier = getCellContent(sheet, column, i);
-			if (identifier != null) {
-				res.add(identifier);
+			String cellContent = getCellContent(sheet, column, i);
+			if (cellContent != null) {
+				res.add(cellContent);
 			}
 		}
 		return res;
@@ -75,7 +75,7 @@ public abstract class WorkbookDataImporter {
 
 		String content = sheet.getCell(column, row).getContents();
 
-		if(content==null || content.length() == 0 || content.equals("0")){
+		if(content==null || content.length() == 0 ||content == "null"){
 			return null;
 		}
 		return content;
@@ -110,7 +110,7 @@ public abstract class WorkbookDataImporter {
 			try {
 				value = NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
 			} catch (Exception e) {
-				Logger.debug("Exception while parsing number from the content of cell [{}, {}] : {}", row, column, cellContents);
+				Logger.error("Exception while parsing number from the content of cell [{}, {}] : {}", row, column, cellContents);
 			}
 		}
 		return value;
@@ -123,7 +123,6 @@ public abstract class WorkbookDataImporter {
 		}
 		return workbookSheets;
 	}
-
 
 	protected static String normalize(String text) {
 

@@ -106,6 +106,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitKeys.get("U5331");
 		Integer deletedIndicators = 0;
+
 		for (int i = 1; i < indicatorsSheet.getRows(); i++) {
 			String key = getCellContent(indicatorsSheet, 1, i);
 			String name = getCellContent(indicatorsSheet, 2, i);
@@ -151,12 +152,14 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			indicatorService.saveOrUpdate(indicator);
 			indicators.add(indicator);
 		}
-		Logger.info("====== Imported {} indicators (including {} marked as 'deleted')", indicators.size(), deletedIndicators);
+		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
 	}
 
 	private void saveFactors(Sheet factorsSheet) {
 		Logger.info("==== Importing factors");
 		List<Factor> factors = new ArrayList<>();
+		Integer noValueFactors = 0;
+
 		for (int i = 1; i < factorsSheet.getRows(); i++) {
 			String key = getCellContent(factorsSheet, 0, i);
 
@@ -203,16 +206,24 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			Unit unitIn = allUnitKeys.get(unitInKey);
 			Unit unitOut = allUnitKeys.get(unitOutKey);
 
-			Factor factor = new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution);
-			factorService.saveOrUpdate(factor);
-			if (value != null) {
+			Factor factor = factorService.saveOrUpdate(new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution));
+
+			if (value == null) {
+				noValueFactors++;
+			} else {
 				FactorValue factorvalue = new FactorValue(value, null, null, factor);
 				factor.getValues().add(factorvalue);
 				factorService.saveOrUpdate(factor);
 			}
+
 			factors.add(factor);
 		}
-		Logger.info("====== Imported {} factors", factors.size());
+
+		if (noValueFactors == 0) {
+			Logger.info("====== Imported {} factors");
+		} else {
+			Logger.info("====== Imported {} factors (including {} factors without value(s), and therefore unusable)", factors.size(), noValueFactors);
+		}
 	}
 
 	private Map<String, Unit> findAllUnits() {

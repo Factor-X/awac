@@ -53,8 +53,8 @@ public class ReportServiceImpl implements ReportService {
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = getAllQuestionSetAnswers(scope, period);
 
 		// find all activity data
-		List<BaseActivityData> allActivityData = getActivityData(allQuestionSetAnswers);
-		Logger.info("Built {} BADs for scope: {} and period: {}", allActivityData.size(), scope, period.getLabel());
+		List<BaseActivityData> allBADs = getActivityData(allQuestionSetAnswers);
+		Logger.info("Built {} BADs for scope: {} and period: {}", allBADs.size(), scope, period.getLabel());
 		Set<BaseActivityDataCode> matchingIndicatorBADs = new HashSet<>();
 
 		// find all carbon indicators for sites
@@ -65,17 +65,16 @@ public class ReportServiceImpl implements ReportService {
 
 		for (Indicator indicator : indicators) {
 
-			List<BaseActivityData> activityData = filterByIndicator(allActivityData, indicator);
-			for (BaseActivityData baseActivityData : activityData) {				
-				matchingIndicatorBADs.add(baseActivityData.getKey());
+			List<BaseActivityData> indicatorBADs = filterByIndicator(allBADs, indicator);
+			if (indicatorBADs.isEmpty()) {
+				continue;
 			}
 
-			if (!activityData.isEmpty()) {
-				Logger.info("Indicator '{}': found {} BADs", indicator.getKey(), activityData.size());
-				activityData = filterByRank(indicator.getKey(), activityData);
-			}
+			Logger.info("Indicator '{}': found {} BADs", indicator.getKey(), indicatorBADs.size());
+			
+			indicatorBADs = filterByRank(indicator.getKey(), indicatorBADs);
 
-			for (BaseActivityData baseActivityData : activityData) {
+			for (BaseActivityData baseActivityData : indicatorBADs) {
 				FactorSearchParameter factorSearchParam = new FactorSearchParameter(indicator, baseActivityData);
 				Factor factor = factorService.findByParameters(factorSearchParam);
 				if (factor == null) {
@@ -87,7 +86,7 @@ public class ReportServiceImpl implements ReportService {
 		}
 
 		// check not used BADs
-		for (BaseActivityData bad : allActivityData) {
+		for (BaseActivityData bad : allBADs) {
 			if (!matchingIndicatorBADs.contains(bad.getKey())) {
 				saveNoSuitableIndicatorError(bad);
 			}

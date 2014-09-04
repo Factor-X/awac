@@ -9,14 +9,15 @@ import org.joda.time.DateTime;
 
 import play.Play;
 import play.mvc.Http.Context;
-import play.mvc.Http.Session;
-
-import java.util.logging.Logger;
 
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1711298010541869994L;
+
+	public static final String TECHNICAL_USER = "TECHNICAL";
+	public static final String TEST_USER = "TEST_USER";
+	public static final String IDENTIFIER_HTTP_SESSION_ATTR_NAME = "identifier";
 
 	@Embedded
 	protected TechnicalSegment technicalSegment;
@@ -33,29 +34,42 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		DateTime now = DateTime.now();
-		String creationUser = getCurrentUser();
-		this.technicalSegment = new TechnicalSegment(now, creationUser, now, creationUser);
+		this.technicalSegment = new TechnicalSegment(DateTime.now(), getCurrentUser());
 	}
 
 	@PreUpdate
 	@Override
 	public void preUpdate() {
 		super.preUpdate();
-		this.technicalSegment.setLastUpdateDate(DateTime.now());
-		this.technicalSegment.setLastUpdateUser(getCurrentUser());
+		if (this.technicalSegment == null) {
+			this.technicalSegment = new TechnicalSegment(DateTime.now(), getCurrentUser());
+		} else {			
+			this.technicalSegment.setLastUpdateDate(DateTime.now());
+			this.technicalSegment.setLastUpdateUser(getCurrentUser());
+		}
+	}
+
+	private void createTechnicalSegment() {
+	}
+
+	private void updateTechnicalSegment() {
+		if (this.technicalSegment == null) {
+			createTechnicalSegment();
+		} else {			
+			this.technicalSegment.setLastUpdateDate(DateTime.now());
+			this.technicalSegment.setLastUpdateUser(getCurrentUser());
+		}
 	}
 
 	private static String getCurrentUser() {
 		if (Play.application().isTest()) {
-			return "TEST_USER";
+			return TEST_USER;
 		}
-		if (Context.current.get() == null) {
-			return "TECHNICAL";
+		if (Context.current.get() == null) { // == if no http context
+			return TECHNICAL_USER;
 		}
 
-		Session session = Context.current().session();
-		return session.get("identifier");
+		return Context.current().session().get(IDENTIFIER_HTTP_SESSION_ATTR_NAME);
 	}
 
 	/**

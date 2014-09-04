@@ -67,7 +67,9 @@
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculator</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
@@ -79,7 +81,6 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
-        <class>eu.factorx.awac.models.invitation.Invitation</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
  		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -141,6 +142,7 @@
         <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
+        <class>eu.factorx.awac.models.code.type.InterfaceTypeCode</class>
         <class>eu.factorx.awac.models.code.type.LanguageCode</class>
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
@@ -174,7 +176,9 @@
         <class>eu.factorx.awac.models.data.question.type.PercentageQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculator</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
@@ -186,7 +190,6 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
-        <class>eu.factorx.awac.models.invitation.Invitation</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
