@@ -38,6 +38,7 @@ POST    /municipality/registration                     @eu.factorx.awac.controll
 #
 
 POST        /awac/invitation                                   @eu.factorx.awac.controllers.InvitationController.launchInvitation()
+POST        /awac/register                                     @eu.factorx.awac.controllers.InvitationController.registerInvitation()
 
 #
 # PDF controller
