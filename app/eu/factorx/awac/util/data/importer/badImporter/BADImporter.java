@@ -1,317 +1,258 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.ExcelReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by florian on 29/08/14.
  * <p/>
  * !! the column F of the excel file is used to detect a bad : if the column is not empty, it's a BAD !!
  */
+@Component
 public class BADImporter extends WorkbookDataImporter {
 
-	private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_COPY.xls";
+    private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
-	private final static boolean DEBUG = false;
+    private final static boolean DEBUG = false;
 
-	private final static int TOTAL_COL = ExcelEquivalenceColumn.T;
+    private final static int TOTAL_COL = ExcelEquivalenceColumn.T;
 
-	//only string => ref to a BaseActivityDataKey
-	private final static int BAD_KEY_COL = ExcelEquivalenceColumn.B;
+    //only string => ref to a BaseActivityDataKey
+    private final static int BAD_KEY_COL = ExcelEquivalenceColumn.B;
 
-	//only string
-	private final static int BAD_NAME_COL = ExcelEquivalenceColumn.C;
+    //only string
+    private final static int BAD_NAME_COL = ExcelEquivalenceColumn.C;
 
-	//only integer
-	private final static int BAD_RANK_COL = ExcelEquivalenceColumn.E;
+    //only integer
+    private final static int BAD_RANK_COL = ExcelEquivalenceColumn.E;
 
-	//can be an answer
-	private final static int BAD_SPECIFIC_PURPOSE_COL = ExcelEquivalenceColumn.F;
+    //can be an answer
+    private final static int BAD_SPECIFIC_PURPOSE_COL = ExcelEquivalenceColumn.F;
 
-	//ActivityCategoryKey
-	private final static int BAD_ACTIVITY_CATEGORY_KEY_COL = ExcelEquivalenceColumn.G;
+    //condition
+    private final static int BAD_CONDITION_COL = ExcelEquivalenceColumn.G;
 
-	//ActivitySubCategoryKey
-	private final static int BAD_ACTIVITY_SUB_CATEGORY_KEY_COL = ExcelEquivalenceColumn.I;
+    //ActivityCategoryKey
+    private final static int BAD_ACTIVITY_CATEGORY_KEY_COL = ExcelEquivalenceColumn.H;
 
-	//ActivityTypeKey
-	private final static int BAD_ACTIVITY_TYPE_KEY_COL = ExcelEquivalenceColumn.K;
+    //ActivitySubCategoryKey
+    private final static int BAD_ACTIVITY_SUB_CATEGORY_KEY_COL = ExcelEquivalenceColumn.J;
 
-	//ActivitySourceKey or answer
-	private final static int BAD_ACTIVITY_SOURCE_KEY_COL = ExcelEquivalenceColumn.M;
+    //ActivityTypeKey
+    private final static int BAD_ACTIVITY_TYPE_KEY_COL = ExcelEquivalenceColumn.L;
 
-	//UnitCode
-	private final static int BAD_UNIT_COL = ExcelEquivalenceColumn.P;
+    //ActivitySourceKey or answer
+    private final static int BAD_ACTIVITY_SOURCE_KEY_COL = ExcelEquivalenceColumn.N;
 
-	//activityOwnerShip : boolean
-	private final static int BAD_ACTIVITY_OWNERSHIP_COL = ExcelEquivalenceColumn.O;
+    //UnitCode
+    private final static int BAD_UNIT_COL = ExcelEquivalenceColumn.Q;
 
-	//value
-	private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.Q;
+    //activityOwnerShip : boolean
+    private final static int BAD_ACTIVITY_OWNERSHIP_COL = ExcelEquivalenceColumn.P;
 
-
-	private List<BAD> listBAD = new ArrayList<>();
-
-	public void run() {
-		try {
-			importData();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
-
-	@Override
-	protected void importData() throws Exception {
-
-		play.Logger.info("run badimporter....");
+    //value
+    private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.S;
 
 
-		ExcelReader excelReader = new ExcelReader();
+    private List<BAD> listBAD = new ArrayList<>();
 
-		Data data = excelReader.readFile(FILE_PATH,ENTERPRISE_METHOD);
+    private BADLog badLog = new BADLog();
 
-		//2. read
-		reader(data);
+    @Autowired
+    private QuestionService questionService;
 
-		play.Logger.info("run badimporter end !");
-
-	}
-
-	public void reader(Data data) {
+    @Autowired
+    private BADControlElement badControlElement;
 
 
-		for (int line = 1; line < data.getNbRows(); line++) {
 
-			//escape the first line : presentation
-			if (line == 1) {
-				continue;
-			}
+    public void run() {
+        try {
+            importData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-			//F is the reference column => not empty = it's a BAD !
-			if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
-					!data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
-					data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
-				// activity data founded
+    public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
 
-				//print the line in DEBUG
-				addToLog(LogType.INFO, line, "This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
+    @Override
+    protected void importData() throws Exception {
 
-
-				//create and write new BAD
-				boolean toGenerate = true;
-
-				// --- test badKey ---
-				String badKey = normalize(data.getData(BAD_KEY_COL, line));
-				if (badKey == null || badKey.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no badKey : " + data.getData(BAD_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-
-				if (!controlList(BaseActivityDataCode.class, badKey)) {
-					addToLog(LogType.ERROR, line, "This is not a badKey : " + data.getData(BAD_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-
-				// ---- name ----
-				String name = data.getData(BAD_NAME_COL, line);
-				if (name == null || name.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no name: " + data.getData(BAD_NAME_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-
-				// ---- control rank ---
-				// TODO can be null
-				Integer rank = null;
-				if (data.getData(BAD_RANK_COL, line) == null || data.getData(BAD_RANK_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no rank : " + data.getData(BAD_RANK_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				try {
-					rank = Integer.parseInt(data.getData(BAD_RANK_COL, line));
-				} catch (NumberFormatException e) {
-					addToLog(LogType.ERROR, line, "The rank is not a valid number  : " + data.getData(BAD_RANK_COL, line) + ". The bad was not generated");
-				}
-
-				// ---- specific purpose ----
-				String specificPurpose = null;
-				//!! can be an activityCode or an answer or can be null
-				//excepted in fine => String
-				if (data.getData(BAD_SPECIFIC_PURPOSE_COL, line) != null && data.getData(BAD_SPECIFIC_PURPOSE_COL, line).length() > 0) {
+        play.Logger.info("run badimporter....");
 
 
-					specificPurpose = data.getData(BAD_SPECIFIC_PURPOSE_COL, line);
+        ExcelReader excelReader = new ExcelReader();
 
-					//test if the specific purpose is a code
-					if (controlList(ActivityCategoryCode.class, specificPurpose)) {
-						addToLog(LogType.DEBUG, line, "There is a SpecificPurpose and it's an activityCode");
-					} else if (controlList(QuestionCode.class, specificPurpose)) {
-						addToLog(LogType.DEBUG, line, "There is a SpecificPurpose and it's a question");
-					} else {
-						addToLog(LogType.WARNING, line, "There is a SpecificPurpose but it's not an activityCode or an answer.");
-					}
-				}
+        Data data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
 
-				// ---- activityCategory ---
-				//not null, always an activityCategory
-				String activityCategory = data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line);
-				if (activityCategory == null || activityCategory.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityCategory : " + data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
+        //2. read
+        reader(data);
 
-				//save all data into one object
-				if (!controlList(ActivityCategoryCode.class, activityCategory)) {
-					addToLog(LogType.ERROR, line, "This activityCategory was not found : " + activityCategory + ". The bad was not generated");
-					continue;
-				}
+        play.Logger.info("run badimporter end !");
 
-				// --- activitySubCategory ---
-				//not null, ActivitySubCat or answer(control list content) or more complex
-				String activitySubCategory = data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line);
-				if (activitySubCategory == null || activitySubCategory.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activitySubCategory : " + data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				//test if the activitySubCategory is a code
-				if (controlList(ActivitySubCategoryCode.class, activitySubCategory)) {
-					addToLog(LogType.DEBUG, line, "There is a activitySubCategory and it's an ActivitySubCategoryCode");
-				} else if (controlList(QuestionCode.class, activitySubCategory)) {
-					addToLog(LogType.DEBUG, line, "There is a activitySubCategory and it's a question");
-				} else {
-					addToLog(LogType.ERROR, line, "There is a activitySubCategory but it's not an ActivitySubCategoryCode or an answer."+activitySubCategory);
-				}
-
-				// --- ActivityType ---
-				//not null, ActivityType or answer(control list content) or more complex
-				String activityType = data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line);
-				if (activityType == null || activityType.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityType : " + data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				//test if the activityType is a code
-				if (controlList(ActivityTypeCode.class, activityType)) {
-					addToLog(LogType.DEBUG, line, "There is a activityType and it's an ActivityTypeCode");
-				} else if (controlList(QuestionCode.class, activityType)) {
-					addToLog(LogType.DEBUG, line, "There is a activityType and it's a question");
-				} else {
-					addToLog(LogType.ERROR, line, "There is a activityType but it's not an ActivityTypeCode or an answer."+activityType);
-				}
+    }
 
 
-				// --- ActivitySource ---
-				//not null, ActivitySubCat or answer(control list content) or more complex
-				String activitySource = data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line);
-				if (activitySource == null || activitySource.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activitySource : " + data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				//test if the activityType is a code
-				if (controlList(ActivitySourceCode.class, activitySource)) {
-					addToLog(LogType.DEBUG, line, "There is a activitySource and it's an ActivitySourceCode");
-				} else if (controlList(QuestionCode.class, activitySource)) {
-					addToLog(LogType.DEBUG, line, "There is a activitySource and it's a question");
-				} else {
-					addToLog(LogType.ERROR, line, "There is a activitySource but it's not an ActivitySourceCode or an answer : "+activitySource);
-				}
+    //not null, ActivityType or answer(control list content) or more complex
+
+    public void reader(Data data) {
+
+        badControlElement.setBadLog(badLog);
+        BADGenerator badGenerator = new BADGenerator();
+
+        for (int line = 1; line < data.getNbRows(); line++) {
+
+            //escape the first line : presentation
+            if (line == 1) {
+                continue;
+            }
+
+            //F is the reference column => not empty = it's a BAD !
+            if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
+                    !data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
+                    data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
+                // activity data founded
+
+                //print the line in DEBUG
+                badLog.addToLog(BADLog.LogType.INFO, line, "This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
 
 
-				// --- activityOwnerShip ---
-				// boolean expected. Can be null, boolean value or answer boolean type or comparaison
-				Boolean activityOwnerShip = null;//data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line);
-				if (data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) == null || data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityOwnerShip : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				try {
-					activityOwnerShip = Boolean.parseBoolean(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line));
-				} catch (NumberFormatException e) {
-					addToLog(LogType.ERROR, line, "The activityOwnerShip is not a valid boolean  : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
-				}
-
-				// ---- unit ---
-				// excepted unti code
-				String unit = data.getData(BAD_UNIT_COL, line);
-				if (data.getData(BAD_UNIT_COL, line) == null || data.getData(BAD_UNIT_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no unit : " + data.getData(BAD_UNIT_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
-				//test if the activityType is a code
-				if (!controlList(UnitCode.class, data.getData(BAD_UNIT_COL, line))) {
-					addToLog(LogType.ERROR, line, "This is not a unit code : " + unit);
-				}
+                //create and write new BAD
+                boolean toGenerate = true;
 
 
-				// --- value ---
-				// formule => compute formule
-				String value = data.getData(BAD_VALUE_COL, line);
-				if (value == null || value.length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no value : " + data.getData(BAD_VALUE_COL, line) + ". The bad was not generated");
-					toGenerate = false;
-				}
+                // --- test badKey ---
+                String badKey = null;
+                try {
+                    badKey = badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ---- name ----
+                String name = null;
+                try {
+                    name = badControlElement.controlName(data.getData(BAD_NAME_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ---- control rank ---
+                Integer rank = null;
+                try {
+                    rank = badControlElement.controlRank(data.getData(BAD_RANK_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ---- specific purpose ----
+                String specificPurpose = null;
+                try {
+                    specificPurpose = badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ---- activityCategory ---
+                String activityCategory = null;
+                try {
+                    activityCategory = badControlElement.controlActivityCategory(data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // --- activitySubCategory ---
+                String activitySubCategory = null;
+                try {
+                    activitySubCategory = badControlElement.controlActivitySubCategory(data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // --- ActivityType ---
+                String activityType = null;
+                try {
+                    activityType = badControlElement.controlActivityType(data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // --- ActivitySource ---
+                String activitySource = null;
+                try {
+                    activitySource = badControlElement.controlActivitySource(data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // --- activityOwnerShip ---
+                String activityOwnerShip = null;
+                try {
+                    activityOwnerShip = badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ---- unit ---
+                String unit = null;
+                try {
+                    unit = badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // --- value ---
+                String value = null;
+                try {
+                    value = badControlElement.controlValue(data.getData(BAD_VALUE_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
+
+                // ----- condition ---
+                String condition = null;
+                try {
+                    condition = badControlElement.controlCondition(data.getData(BAD_CONDITION_COL, line), line);
+                } catch (MyrmexException e) {
+                    toGenerate = false;
+                }
 
 
-				//create BAD
-				if (toGenerate) {
-					BAD bad = new BAD();
-					bad.setBaseActivityDataCode(badKey);
-					bad.setName(name);
-					bad.setRank(rank);
-					bad.setSpecificPurpose(specificPurpose);
-					bad.setActivityCategoryCode(activityCategory);
-					bad.setActivitySubCategory(activitySubCategory);
-					bad.setActivityType(activityType);
-					bad.setActivitySource(activitySource);
-					bad.setActivityOwnership(activityOwnerShip);
-					bad.setUnit(unit);
-					bad.setValue(value);
+                //create BAD
+                if (toGenerate) {
+                    BAD bad = new BAD();
+                    bad.setBaseActivityDataCode(badKey);
+                    bad.setName(name);
+                    bad.setRank(rank);
+                    bad.setSpecificPurpose(specificPurpose);
+                    bad.setActivityCategoryCode(activityCategory);
+                    bad.setActivitySubCategory(activitySubCategory);
+                    bad.setActivityType(activityType);
+                    bad.setActivitySource(activitySource);
+                    bad.setActivityOwnership(activityOwnerShip);
+                    bad.setUnit(unit);
+                    bad.setValue(value);
+                    bad.setCondition(condition);
 
-					listBAD.add(bad);
-				}
-			}
-		}
-	}
+                    //print
+                    //Logger.info(bad.toString());
 
-	public void addToLog(LogType logType, int line, String message) {
-		switch (logType) {
-			case INFO:
-				play.Logger.info("Line " + line + "=>" + message);
-				break;
-			case ERROR:
-				play.Logger.error("Line " + line + "=>" + message);
-				break;
-			case WARNING:
-				play.Logger.warn("Line " + line + "=>" + message);
-				break;
-			case DEBUG:
-				play.Logger.debug("Line " + line + "=>" + message);
-				break;
-		}
-	}
+                    listBAD.add(bad);
 
-	public enum LogType {
-		INFO, WARNING, ERROR, DEBUG;
-
-
-	}
-
-	public boolean controlList(Class classToTest, String code) {
-		for (Field field : classToTest.getDeclaredFields()) {
-			if (field.getName().equals(code)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
+                    //write
+                    badGenerator.generateBAD(bad);
+                }
+            }
+        }
+    }
 }

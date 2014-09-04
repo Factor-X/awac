@@ -124,6 +124,7 @@ public abstract class WorkbookDataImporter {
 		return workbookSheets;
 	}
 
+
 	protected static String normalize(String text) {
 
 		text = text.replaceAll("(é|ê|è)", "e");

@@ -1,19 +1,19 @@
 package eu.factorx.awac.models;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Embeddable
 public class TechnicalSegment {
 
-	@Column(columnDefinition = "timestamp without time zone DEFAULT timezone('utc'::text, now())")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime creationDate;
 
-	@Column(columnDefinition = "character varying(255) DEFAULT '" + AuditedAbstractEntity.TECHNICAL_USER + "'")
 	private String creationUser;
 
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime lastUpdateDate;
 
 	private String lastUpdateUser;
@@ -22,12 +22,12 @@ public class TechnicalSegment {
 		super();
 	}
 
-	public TechnicalSegment(DateTime creationDate, String creationUser) {
+	public TechnicalSegment(DateTime creationDate, String creationUser, DateTime lastUpdateDate, String lastUpdateUser) {
 		super();
 		this.creationDate = creationDate;
 		this.creationUser = creationUser;
-		this.lastUpdateDate = creationDate;
-		this.lastUpdateUser = creationUser;
+		this.lastUpdateDate = lastUpdateDate;
+		this.lastUpdateUser = lastUpdateUser;
 	}
 
 	public DateTime getCreationDate() {
