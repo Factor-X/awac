@@ -9,14 +9,16 @@
  *
  */
 
-package eu.factorx.awac.util.pdf;
+package eu.factorx.awac.service.impl;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
+import eu.factorx.awac.service.PdfGenerator;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.*;
@@ -32,27 +34,41 @@ import scala.Option;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-public class PDF {
+@Component
+public class PdfGeneratorImpl implements PdfGenerator {
 
-	private static final String PLAY_DEFAULT_URL = "http://localhost:9000";
+	private final String PLAY_DEFAULT_URL = "http://localhost:9000";
+	private final ITextRenderer         renderer;
+	private final PdfGeneratorUserAgent userAgent;
 
-	public static Result ok(Html html) {
+	public PdfGeneratorImpl() throws IOException, DocumentException {
+		renderer = new ITextRenderer();
+		addFontDirectory(renderer.getFontResolver(), Play.current().path() + "/public/fonts");
+		userAgent = new PdfGeneratorUserAgent(renderer.getOutputDevice());
+		userAgent.setSharedContext(renderer.getSharedContext());
+		renderer.getSharedContext().setUserAgentCallback(userAgent);
+	}
+
+	public Result ok(Html html) {
 		byte[] pdf = toBytes(tidify(html.body()));
 		return Results.ok(pdf).as("application/pdf");
 	}
 
-	public static byte[] toBytes(Html html) {
+	public byte[] toBytes(Html html) {
 		byte[] pdf = toBytes(tidify(html.body()));
 		return pdf;
 	}
 
-	public static byte[] toBytes(String string) {
+	public byte[] toBytes(String string) {
 		return toBytes(string, PLAY_DEFAULT_URL);
 	}
 
-	private static String tidify(String body) {
+	private String tidify(String body) {
 		Tidy tidy = new Tidy();
 		// configure jtidy to avoid logging
 		tidy.setShowErrors(0);
@@ -65,36 +81,30 @@ public class PDF {
 		return writer.getBuffer().toString();
 	}
 
-	public static Result ok(Html html, String documentBaseURL) {
+	public Result ok(Html html, String documentBaseURL) {
 		byte[] pdf = toBytes(tidify(html.body()), documentBaseURL);
 		return Results.ok(pdf).as("application/pdf");
 	}
 
-	public static byte[] toBytes(Html html, String documentBaseURL) {
+	public byte[] toBytes(Html html, String documentBaseURL) {
 		byte[] pdf = toBytes(tidify(html.body()), documentBaseURL);
 		return pdf;
 	}
 
-	public static byte[] toBytes(String string, String documentBaseURL) {
+	public byte[] toBytes(String string, String documentBaseURL) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		toStream(string, os, documentBaseURL);
 		return os.toByteArray();
 	}
 
-	public static void toStream(String string, OutputStream os) {
+	public void toStream(String string, OutputStream os) {
 		toStream(string, os, PLAY_DEFAULT_URL);
 	}
 
-	public static void toStream(String string, OutputStream os, String documentBaseURL) {
+	public void toStream(String string, OutputStream os, String documentBaseURL) {
 		try {
 			Reader reader = new StringReader(string);
-			ITextRenderer renderer = new ITextRenderer();
-			addFontDirectory(renderer.getFontResolver(), Play.current().path()
-				+ "/public/fonts");
-			MyUserAgent myUserAgent = new MyUserAgent(
-				renderer.getOutputDevice());
-			myUserAgent.setSharedContext(renderer.getSharedContext());
-			renderer.getSharedContext().setUserAgentCallback(myUserAgent);
+
 			XMLResource xmlResource = XMLResource.load(reader);
 			Document document = xmlResource.getDocument();
 			renderer.setDocument(document, documentBaseURL);
@@ -105,8 +115,13 @@ public class PDF {
 		}
 	}
 
-	private static void addFontDirectory(ITextFontResolver fontResolver,
-	                                     String directory) throws DocumentException, IOException {
+	@Override
+	public void setMemoryResource(String s, Object data) {
+		userAgent.setMemoryResource(s, data);
+	}
+
+	private void addFontDirectory(ITextFontResolver fontResolver,
+	                              String directory) throws DocumentException, IOException {
 		File dir = new File(directory);
 		for (File file : dir.listFiles()) {
 			fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,
@@ -114,31 +129,23 @@ public class PDF {
 		}
 	}
 
-	public static class MyUserAgent extends ITextUserAgent {
+	public class PdfGeneratorUserAgent extends ITextUserAgent {
 
-		public MyUserAgent(ITextOutputDevice outputDevice) {
+		private Map<String, Object> memoryData;
+
+		public PdfGeneratorUserAgent(ITextOutputDevice outputDevice) {
 			super(outputDevice);
+			memoryData = new HashMap<>();
 		}
 
 		@Override
 		public ImageResource getImageResource(String uri) {
-			Option<InputStream> option = Play.current().resourceAsStream(uri);
-			if (option.isDefined()) {
-				InputStream stream = option.get();
-				try {
-					Image image = Image.getInstance(getData(stream));
-					scaleToOutputResolution(image);
-					return new ImageResource(new ITextFSImage(image));
-				} catch (Exception e) {
-					Logger.error("fetching image " + uri, e);
-					throw new RuntimeException(e);
-				}
-			} else {
-				ImageResource imageResource = super.getImageResource(uri);
-				if (imageResource.getImage() == null) {
+
+			if (memoryData.containsKey(uri)) {
+				URI u = URI.create(uri);
+				if (u.getHost().toLowerCase().equals("svg")) {
 					try {
-						uri = "http://127.0.0.1:9000" + uri;
-						TranscoderInput input_svg_image = new TranscoderInput(uri);
+						TranscoderInput input_svg_image = new TranscoderInput(new StringReader(memoryData.get(uri).toString()));
 						ByteArrayOutputStream png_ostream = new ByteArrayOutputStream();
 						TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
 						PNGTranscoder my_converter = new PNGTranscoder();
@@ -153,7 +160,28 @@ public class PDF {
 						throw new RuntimeException(e);
 					}
 				} else {
+					String message = "Unrecognized memory Resource " + uri;
+					Logger.error(message);
+					throw new RuntimeException(message);
+				}
+			} else {
+
+				Option<InputStream> option = Play.current().resourceAsStream(uri);
+				if (option.isDefined()) {
+					InputStream stream = option.get();
+					try {
+						Image image = Image.getInstance(getData(stream));
+						scaleToOutputResolution(image);
+						return new ImageResource(new ITextFSImage(image));
+					} catch (Exception e) {
+						Logger.error("fetching image " + uri, e);
+						throw new RuntimeException(e);
+					}
+				} else {
+					ImageResource imageResource = super.getImageResource(uri);
+
 					return imageResource;
+
 				}
 			}
 		}
@@ -225,6 +253,10 @@ public class PDF {
 				if (len < buffer.length)
 					break;
 			}
+		}
+
+		public void setMemoryResource(String s, Object data) {
+			memoryData.put(s, data);
 		}
 	}
 
