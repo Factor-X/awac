@@ -144,6 +144,10 @@ public class BaseActivityDataCode extends Code {
 	public static final BaseActivityDataCode AE_BAD32B = new BaseActivityDataCode("BAD32B");
 	public static final BaseActivityDataCode AE_BAD32C = new BaseActivityDataCode("BAD32C");
 	public static final BaseActivityDataCode AE_BAD32D = new BaseActivityDataCode("BAD32D");
+
+    public static final BaseActivityDataCode AE_BAD32E = new BaseActivityDataCode("BAD32E");
+    public static final BaseActivityDataCode AE_BAD32F = new BaseActivityDataCode("BAD32F");
+
 	public static final BaseActivityDataCode AE_BAD33A = new BaseActivityDataCode("BAD33A");
 	public static final BaseActivityDataCode AE_BAD33B = new BaseActivityDataCode("BAD33B");
 	public static final BaseActivityDataCode AE_BAD33C = new BaseActivityDataCode("BAD33C");

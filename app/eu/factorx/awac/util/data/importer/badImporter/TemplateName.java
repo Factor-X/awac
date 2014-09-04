@@ -5,7 +5,7 @@ package eu.factorx.awac.util.data.importer.badImporter;
  */
 public enum TemplateName {
 
-    BAD("files/template/bad.vm");
+    BAD("public/template/bad.vm");
 
     private final String url;
 
