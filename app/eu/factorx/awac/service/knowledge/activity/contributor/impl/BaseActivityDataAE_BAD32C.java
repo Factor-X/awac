@@ -58,6 +58,7 @@ public class BaseActivityDataAE_BAD32C extends BaseActivityDataForProducts {
 
 				baseActivityData.setKey(BaseActivityDataCode.AE_BAD32C);
 				baseActivityData.setRank(3);
+				baseActivityData.setAlternativeGroup("ALT_E_7_AVAL");
 				baseActivityData.setSpecificPurpose(toString(questionA245Answer));
 				baseActivityData.setActivityCategory(ActivityCategoryCode.AC_4);
 				baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_12);

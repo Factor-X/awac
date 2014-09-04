@@ -2,11 +2,17 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -19,8 +25,14 @@ public class SiteController  extends AbstractController {
 	@Autowired
 	private SiteService siteService;
 
+	@Autowired
+	private ConversionService conversionService;
 
-	@Transactional(readOnly = true)
+	@Autowired
+	private PeriodService periodService;
+
+
+	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 	public Result edit(){
@@ -56,10 +68,10 @@ public class SiteController  extends AbstractController {
 		siteService.saveOrUpdate(site);
 
 
-		return ok(new ReturnDTO());
+		return ok(conversionService.convert(site,SiteDTO.class));
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 	public Result create(){
@@ -80,7 +92,87 @@ public class SiteController  extends AbstractController {
 
 		siteService.saveOrUpdate(site);
 
+		// return the new site because some new information are added, like id and scope
+		return ok(conversionService.convert(site,SiteDTO.class));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	public Result assignPeriodToSite(){
+
+		AssignPeriodToSiteDTO dto = extractDTOFromRequest(AssignPeriodToSiteDTO.class);
+
+
+		//load period
+		Period period = periodService.findByCode(new PeriodCode(dto.getPeriodKeyCode()));
+
+		if(period==null){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//load site
+		Site site = siteService.findById(dto.getSiteId());
+
+		if(site == null || !site.getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//assign period to site
+		boolean toAdd = dto.getAssign();
+
+		//control is the period is already into site
+		if(site.getListPeriodAvailable()!=null){
+			for(Period periodToTest : site.getListPeriodAvailable()){
+
+				if(periodToTest.equals(period)){
+					//founded and to assign => useless to add
+					if(dto.getAssign()){
+						toAdd = false;
+					}
+					//founded and to remove => remove
+					else{
+						site.getListPeriodAvailable().remove(periodToTest);
+					}
+					break;
+				}
+			}
+		}
+
+		//add ig it's needed
+		if(toAdd){
+			site.getListPeriodAvailable().add(period);
+		}
+
+		//save
+		siteService.saveOrUpdate(site);
+
 
 		return ok(new ReturnDTO());
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	public Result getSite(long siteId){
+
+		//load the site
+		Site site = siteService.findById(siteId);
+
+		if(site == null){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//test owner
+		if(!securedController.getCurrentUser().getOrganization().equals(site.getOrganization())){
+			throw new MyrmexRuntimeException("");
+			//TODO error
+		}
+
+		//convert
+		return  ok(conversionService.convert(site,SiteDTO.class));
 	}
 }

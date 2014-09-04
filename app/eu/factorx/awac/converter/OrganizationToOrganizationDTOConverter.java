@@ -9,6 +9,9 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 
+import java.util.Collections;
+import java.util.List;
+
 @Component
 public class OrganizationToOrganizationDTOConverter implements Converter<Organization, OrganizationDTO> {
 
@@ -23,7 +26,13 @@ public class OrganizationToOrganizationDTOConverter implements Converter<Organiz
 		OrganizationDTO dto = new OrganizationDTO();
 		dto.setId(org.getId());
 		dto.setName(org.getName());
-		for (Site site : org.getSites()) {
+
+		//order site list
+		List<Site> siteList = org.getSites();
+
+		Collections.sort(siteList);
+
+		for (Site site : siteList) {
 			dto.getSites().add(siteToSiteDTOConverter.convert(site));
 		}
 		for (Account account : org.getAccounts()) {

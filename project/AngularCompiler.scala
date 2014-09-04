@@ -107,9 +107,9 @@ class AngularCompiler {
         val controllers: PathSet[Path] = angular / "controllers" ** "*.coffee"
         val views: PathSet[Path] = (angular / "views" ** "*.jade") ++ (angular / "views" ** "*.html")
 
-        val validators = Path.fromString("public/javascripts") / "scripts" * "*.js"
+        val validators = Path.fromString("public") / "javascripts" / "scripts" * "*.js"
 
-        val m: List[Thread] = List(routes, roots, services, filters, validators, directives, directivesTemplates, views, controllers).map { v =>
+        val m: List[Thread] = List(routes, roots, services, filters, directives, directivesTemplates, views, controllers).map { v =>
             val t = new Thread(new Runnable {
                 def run() {
                     compileFiles(v, Path.fromString(".tmp/sources/"))
@@ -119,6 +119,9 @@ class AngularCompiler {
             t
         }
         m.foreach { t => t.join()}
+
+        compileFiles(validators, Path.fromString(".tmp/validators/"))
+
 
         validatorsToDirectives(Path.fromString(".tmp/validators/") ** "*.js", Path.fromString(".tmp/validators-directives/"))
 

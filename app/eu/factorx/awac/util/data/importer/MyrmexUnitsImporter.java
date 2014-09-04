@@ -25,7 +25,7 @@ import eu.factorx.awac.service.UnitService;
 @Component
 public class MyrmexUnitsImporter extends WorkbookDataImporter {
 
-	private static final String MYRMEX_UNITS_WORKBOOK_PATH = "data_importer_resources/myrmex_data_10-07-2014/myrmex_unit.xls";
+	//private static final String MYRMEX_UNITS_WORKBOOK_PATH = "data_importer_resources/myrmex_data_10-07-2014/myrmex_unit.xls";
 
 	/**
 	 * Columns:<br>
@@ -33,7 +33,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 	 * 1: NAME<br>
 	 * 2: MAIN_UNIT_REF
 	 */
-	private static final String UNIT_CATEGORIES_SHEET_NAME = "categories";
+	private static final String UNIT_CATEGORIES_SHEET_NAME = "unit_categories";
 
 	/**
 	 * Columns:<br>
@@ -51,7 +51,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 	 * 2: REFERENCE_TO_UNIT<br>
 	 * 3: YEAR
 	 */
-	private static final String UNIT_CONVERSIONS_SHEET_NAME = "conversions";
+	private static final String UNIT_CONVERSIONS_SHEET_NAME = "unit_conversions";
 
 	private Map<String, UnitCategory> unitCategoriesByRef = new LinkedHashMap<>();
 	private Map<String, Unit> unitsByRef = new LinkedHashMap<String, Unit>();
@@ -71,7 +71,7 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 
 	protected void importData() throws BiffException, IOException {
 
-		Map<String, Sheet> myrmexUnitsWbSheets = getWorkbookSheets(MYRMEX_UNITS_WORKBOOK_PATH);
+		Map<String, Sheet> myrmexUnitsWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
 
 		Sheet unitCategoriesSheet = myrmexUnitsWbSheets.get(UNIT_CATEGORIES_SHEET_NAME);
 		Sheet unitsSheet = myrmexUnitsWbSheets.get(UNITS_SHEET_NAME);

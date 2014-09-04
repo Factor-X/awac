@@ -6404,7 +6404,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
             if ($template.length != 1 || compileNode.nodeType !== 1) {
               throw $compileMinErr('tplrt',
-                  "Template for directive '{0}' must have exactly one root element. {1}",
+                  "BADTemplate for directive '{0}' must have exactly one root element. {1}",
                   directiveName, '');
             }
 
@@ -6835,7 +6835,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
             if ($template.length != 1 || compileNode.nodeType !== 1) {
               throw $compileMinErr('tplrt',
-                  "Template for directive '{0}' must have exactly one root element. {1}",
+                  "BADTemplate for directive '{0}' must have exactly one root element. {1}",
                   origAsyncDirective.name, templateUrl);
             }
 

@@ -18,6 +18,7 @@ public abstract class WorkbookDataImporter {
 	public static final String CP1252_ENCODING = "Cp1252"; // for Windows files
 	public static final NumberFormat NUMBER_WITH_DECIMAL_COMMA_FORMAT = NumberFormat.getInstance(Locale.FRANCE); // for decimal numbers with comma
 	public static final String NEW_LINE = System.getProperty("line.separator");
+	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
 	public void run() {
 		try {
@@ -28,6 +29,7 @@ public abstract class WorkbookDataImporter {
 			long endTime = System.currentTimeMillis() - startTime;
 			Logger.info(className + " - END OF IMPORT (took " + endTime + " msec)");
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
@@ -73,7 +75,7 @@ public abstract class WorkbookDataImporter {
 
 		String content = sheet.getCell(column, row).getContents();
 
-		if(content==null || content.length() == 0 || content.equals("0")){
+		if(content==null || content.length() == 0 ||content == "null"){
 			return null;
 		}
 		return content;
