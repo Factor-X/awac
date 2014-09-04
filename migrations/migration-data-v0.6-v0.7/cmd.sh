@@ -25,6 +25,24 @@ echo "alter table site add column percent_owned decimal default 100;" >> /tmp/mi
 
 echo "update site set percent_owned = 100;" >> /tmp/migration/migration_script.sql
 
+echo " CREATE TABLE mm_site_period(
+          site_id bigint NOT NULL,
+          period_id bigint NOT NULL,
+          CONSTRAINT fk_g9f4tnhyxrvp53v2vuc9r2m2k FOREIGN KEY (site_id)
+              REFERENCES site (id) MATCH SIMPLE
+              ON UPDATE NO ACTION ON DELETE NO ACTION,
+          CONSTRAINT fk_nn5ipj5ssh6ulm9ipliocbx5q FOREIGN KEY (period_id)
+              REFERENCES period (id) MATCH SIMPLE
+              ON UPDATE NO ACTION ON DELETE NO ACTION
+        )
+        WITH (
+          OIDS=FALSE
+        );
+        ALTER TABLE mm_site_period
+         OWNER TO play;" >> /tmp/migration/migration_script.sql
+
+# create new invitation table
+cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 
 
 # execute the script

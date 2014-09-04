@@ -15,6 +15,8 @@ public class BAD {
 	private int rank;
 	private String SpecificPurpose;
 
+	private String condition;
+
 	//it's always an activityCategoryCode
 	private String activityCategoryCode;
 
@@ -24,27 +26,13 @@ public class BAD {
 
 	private String activitySource;
 
-	private boolean activityOwnership;
+	private String activityOwnership;
 
 	private String unit;
 
 	private String value;
 
 	public BAD() {
-	}
-
-	public BAD(String baseActivityDataCode, String name, int rank, String specificPurpose, String activityCategoryCode, String activitySubCategory, String activityType, String activitySource, boolean activityOwnership, String unit, String value) {
-		this.baseActivityDataCode = baseActivityDataCode;
-		this.name = name;
-		this.rank = rank;
-		SpecificPurpose = specificPurpose;
-		this.activityCategoryCode = activityCategoryCode;
-		this.activitySubCategory = activitySubCategory;
-		this.activityType = activityType;
-		this.activitySource = activitySource;
-		this.activityOwnership = activityOwnership;
-		this.unit = unit;
-		this.value = value;
 	}
 
 	public String getBaseActivityDataCode() {
@@ -111,11 +99,11 @@ public class BAD {
 		this.activitySource = activitySource;
 	}
 
-	public boolean isActivityOwnership() {
+	public String getActivityOwnership() {
 		return activityOwnership;
 	}
 
-	public void setActivityOwnership(boolean activityOwnership) {
+	public void setActivityOwnership(String activityOwnership) {
 		this.activityOwnership = activityOwnership;
 	}
 
@@ -135,6 +123,14 @@ public class BAD {
 		this.value = value;
 	}
 
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
 	@Override
 	public String toString() {
 		return "BAD{" +
@@ -142,11 +138,12 @@ public class BAD {
 				", name='" + name + '\'' +
 				", rank=" + rank +
 				", SpecificPurpose='" + SpecificPurpose + '\'' +
+				", condition='" + condition + '\'' +
 				", activityCategoryCode='" + activityCategoryCode + '\'' +
 				", activitySubCategory='" + activitySubCategory + '\'' +
 				", activityType='" + activityType + '\'' +
 				", activitySource='" + activitySource + '\'' +
-				", activityOwnership=" + activityOwnership +
+				", activityOwnership='" + activityOwnership + '\'' +
 				", unit='" + unit + '\'' +
 				", value='" + value + '\'' +
 				'}';

@@ -52,9 +52,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 3: ActivityType_KEY      (an {@link ActivityTypeCode})
 	 * 5: ActivitySource_KEK    (an {@link ActivitySourceCode})
 	 * 7: Unit IN               (a {@link Unit})
-	 * 8: Institution           (a {@link String})
-	 * 9: Value                 (a {@link Double})
-	 * 10: Unit out             (a {@link Unit})
+	 * 9: Institution           (a {@link String})
+	 * 10: Value                 (a {@link Double})
+	 * 11: Unit out             (a {@link Unit})
 	 * </pre>
 	 */
 	public static final String ENTERPRISE_FACTORS_SHEET_NAME = "EFDB_V6";
@@ -65,7 +65,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	@Autowired
 	private FactorService factorService;
 
-	private Map<String, Unit> allUnitSymbols = null;
+	private Map<String, Unit> allUnitKeys = null;
 
 	private List<String> allIndicatorCategoryKeys = null;
 	private List<String> allActivityTypeKeys = null;
@@ -80,15 +80,15 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	protected void importData() throws Exception {
 		indicatorService.removeAll();
 		factorService.removeAll();
-		
+
 		Logger.info("== Importing AWAC Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
 		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
 
-		
+
 		Sheet indicatorsSheet = awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME);
 		Sheet factorsSheet = awacDataWbSheets.get(ENTERPRISE_FACTORS_SHEET_NAME);
 
-		allUnitSymbols = findAllUnits();
+		allUnitKeys = findAllUnits();
 
 		allIndicatorCategoryKeys = findAllCodeKeys(CodeList.IndicatorCategory);
 		allActivityTypeKeys = findAllCodeKeys(CodeList.ActivityType);
@@ -104,7 +104,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	private void saveIndicators(Sheet indicatorsSheet) {
 		List<Indicator> indicators = new ArrayList<>();
-		Unit unit = allUnitSymbols.get("tCO2e");
+		Unit unit = allUnitKeys.get("U5331");
 		Integer deletedIndicators = 0;
 		for (int i = 1; i < indicatorsSheet.getRows(); i++) {
 			String key = getCellContent(indicatorsSheet, 1, i);
@@ -178,34 +178,34 @@ public class AwacDataImporter extends WorkbookDataImporter {
 				continue;
 			}
 
-			String unitInSymbol = getCellContent(factorsSheet, 7, i);
-			if (!allUnitSymbols.containsKey(unitInSymbol)) {
-				Logger.error("Cannot import factor '{}': Invalid UnitIN symbol '{}'!", key, unitInSymbol);
+			String unitInKey = getCellContent(factorsSheet, 7, i);
+			if (!allUnitKeys.containsKey(unitInKey)) {
+				Logger.error("Cannot import factor '{}': Invalid UnitIN symbol '{}'!", key, unitInKey);
 				continue;
 			}
 
-			String institution = getCellContent(factorsSheet, 8, i);
+			String institution = getCellContent(factorsSheet, 9, i);
 
-			Double value = getNumericCellContent(factorsSheet, 9, i);
+			Double value = getNumericCellContent(factorsSheet,10, i);
 			if (value == null) {
 				Logger.warn("Value of factor '{}' is null!", key);
 			}
 
-			String unitOutSymbol = getCellContent(factorsSheet, 10, i);
-			if (!allUnitSymbols.containsKey(unitInSymbol)) {
-				Logger.error("Cannot import factor '{}': Invalid UnitIN symbol '{}'!", key, unitInSymbol);
+			String unitOutKey = getCellContent(factorsSheet, 11, i);
+			if (!allUnitKeys.containsKey(unitOutKey)) {
+				Logger.error("Cannot import factor '{}': Invalid UnitOUT symbol '{}'!", key, unitOutKey);
 				continue;
 			}
 
 			IndicatorCategoryCode indicatorCategory = new IndicatorCategoryCode(indicatorCategoryKey);
 			ActivityTypeCode activityType = new ActivityTypeCode(activityTypeKey);
 			ActivitySourceCode activitySource = new ActivitySourceCode(activitySourceKey);
-			Unit unitIn = allUnitSymbols.get(unitInSymbol);
-			Unit unitOut = allUnitSymbols.get(unitOutSymbol);
+			Unit unitIn = allUnitKeys.get(unitInKey);
+			Unit unitOut = allUnitKeys.get(unitOutKey);
 
 			Factor factor = new Factor(key, indicatorCategory, activityType, activitySource, unitIn, unitOut, institution);
 			factorService.saveOrUpdate(factor);
-			if (value != null) {				
+			if (value != null) {
 				FactorValue factorvalue = new FactorValue(value, null, null, factor);
 				factor.getValues().add(factorvalue);
 				factorService.saveOrUpdate(factor);
@@ -219,7 +219,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		List<Unit> units = JPA.em().createNamedQuery(Unit.FIND_ALL, Unit.class).getResultList();
 		Map<String, Unit> unitsBySymbol = new HashMap<>();
 		for (Unit unit : units) {
-			unitsBySymbol.put(unit.getSymbol(), unit);
+			unitsBySymbol.put(unit.getUnitCode().getKey(), unit);
 		}
 		return unitsBySymbol;
 	}

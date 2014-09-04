@@ -1,10 +1,17 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
 import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.type.BooleanQuestion;
+import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.ExcelReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,9 +23,10 @@ import java.util.Map;
  * <p/>
  * !! the column F of the excel file is used to detect a bad : if the column is not empty, it's a BAD !!
  */
+@Component
 public class BADImporter extends WorkbookDataImporter {
 
-	private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_COPY.xls";
+	private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
 	private final static boolean DEBUG = false;
 
@@ -36,29 +44,36 @@ public class BADImporter extends WorkbookDataImporter {
 	//can be an answer
 	private final static int BAD_SPECIFIC_PURPOSE_COL = ExcelEquivalenceColumn.F;
 
+	//condition
+	private final static int BAD_CONDITION_COL = ExcelEquivalenceColumn.G;
+
 	//ActivityCategoryKey
-	private final static int BAD_ACTIVITY_CATEGORY_KEY_COL = ExcelEquivalenceColumn.G;
+	private final static int BAD_ACTIVITY_CATEGORY_KEY_COL = ExcelEquivalenceColumn.H;
 
 	//ActivitySubCategoryKey
-	private final static int BAD_ACTIVITY_SUB_CATEGORY_KEY_COL = ExcelEquivalenceColumn.I;
+	private final static int BAD_ACTIVITY_SUB_CATEGORY_KEY_COL = ExcelEquivalenceColumn.J;
 
 	//ActivityTypeKey
-	private final static int BAD_ACTIVITY_TYPE_KEY_COL = ExcelEquivalenceColumn.K;
+	private final static int BAD_ACTIVITY_TYPE_KEY_COL = ExcelEquivalenceColumn.L;
 
 	//ActivitySourceKey or answer
-	private final static int BAD_ACTIVITY_SOURCE_KEY_COL = ExcelEquivalenceColumn.M;
+	private final static int BAD_ACTIVITY_SOURCE_KEY_COL = ExcelEquivalenceColumn.N;
 
 	//UnitCode
-	private final static int BAD_UNIT_COL = ExcelEquivalenceColumn.P;
+	private final static int BAD_UNIT_COL = ExcelEquivalenceColumn.Q;
 
 	//activityOwnerShip : boolean
-	private final static int BAD_ACTIVITY_OWNERSHIP_COL = ExcelEquivalenceColumn.O;
+	private final static int BAD_ACTIVITY_OWNERSHIP_COL = ExcelEquivalenceColumn.P;
 
 	//value
-	private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.Q;
+	private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.S;
 
 
 	private List<BAD> listBAD = new ArrayList<>();
+
+	@Autowired
+	private QuestionService questionService;
+
 
 	public void run() {
 		try {
@@ -227,16 +242,32 @@ public class BADImporter extends WorkbookDataImporter {
 
 				// --- activityOwnerShip ---
 				// boolean expected. Can be null, boolean value or answer boolean type or comparaison
-				Boolean activityOwnerShip = null;//data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line);
-				if (data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) == null || data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line).length() == 0) {
-					addToLog(LogType.ERROR, line, "There is no activityOwnerShip : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
-					toGenerate = false;
+				String activityOwnerShip = null;//data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line);
+				boolean activityOwnerShipValid = false;
+				if (data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) == null) {
+					addToLog(LogType.WARNING, line, "ActivityOwnerShip is null");
 				}
-				try {
-					activityOwnerShip = Boolean.parseBoolean(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line));
-				} catch (NumberFormatException e) {
-					addToLog(LogType.ERROR, line, "The activityOwnerShip is not a valid boolean  : " + data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line) + ". The bad was not generated");
+				else {
+
+					//try to convert to boolean
+					activityOwnerShip = controlBoolean(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line));
+
+					if (activityOwnerShip == null) {
+						//try to convert to BooleanQuestion
+						try {
+							if (controlQuestionType(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), BooleanQuestion.class)) {
+								activityOwnerShip = data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line);
+							}
+							else{
+								addToLog(LogType.ERROR, line, "ActivityOwnerShip  : this is a questionCode but this question is not BooleanQuestion");
+							}
+						} catch (MyrmexException e) {
+							addToLog(LogType.ERROR, line, "ActivityOwnerShip is not null but it's not a boolean or a question");
+						}
+					}
 				}
+
+
 
 				// ---- unit ---
 				// excepted unti code
@@ -259,6 +290,10 @@ public class BADImporter extends WorkbookDataImporter {
 					toGenerate = false;
 				}
 
+				// ----- condition ---
+				String condition = data.getData(BAD_CONDITION_COL, line);
+				//TODO test condition
+
 
 				//create BAD
 				if (toGenerate) {
@@ -274,6 +309,10 @@ public class BADImporter extends WorkbookDataImporter {
 					bad.setActivityOwnership(activityOwnerShip);
 					bad.setUnit(unit);
 					bad.setValue(value);
+					bad.setCondition(condition);
+
+					//print
+					//Logger.info(bad.toString());
 
 					listBAD.add(bad);
 				}
@@ -306,11 +345,40 @@ public class BADImporter extends WorkbookDataImporter {
 
 	public boolean controlList(Class classToTest, String code) {
 		for (Field field : classToTest.getDeclaredFields()) {
-			if (field.getName().equals(code)) {
+			if (field.getName().equalsIgnoreCase(code)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public <T extends Question> boolean controlQuestionType(String questionCode, Class<T> questionClass) throws MyrmexException {
+
+		//control code
+		if(!controlList(QuestionCode.class, questionCode)){
+			throw new MyrmexException("This is not a questionCode");
+		}
+
+		Question question = questionService.findByCode(new QuestionCode(questionCode));
+
+		if(questionClass.isInstance(questionCode)){
+			return true;
+		}
+		return false;
+	}
+
+
+
+	protected static String controlBoolean(String s){
+		if(s != null){
+			if(s.equals("1") || s.equals("true")){
+				return "true";
+			}
+			else if(s.equals("0") || s.equals("false")){
+				return "false";
+			}
+		}
+		return null;
 	}
 
 

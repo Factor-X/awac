@@ -66,4 +66,8 @@ public class Period extends AuditedAbstractEntity {
 		return new HashCodeBuilder(19, 67).append(this.label).toHashCode();
 	}
 
+	public String toString(){
+		return "Period[preiodCode : "+periodCode.toString()+", label: "+label+"]";
+	}
+
 }

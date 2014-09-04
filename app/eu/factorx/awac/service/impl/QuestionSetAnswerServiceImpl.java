@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +48,8 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		if (!searchParameter.getWithChildren()) {
 			criteria.add(Restrictions.isNull("parent"));
 		}
+		criteria.addOrder(Order.asc("repetitionIndex"));
+
 		criteria.setCacheable(true);
 		@SuppressWarnings("unchecked")
 		List<QuestionSetAnswer> result = criteria.list();
@@ -76,7 +79,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 
 	@Override
 	public void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form) {
-		List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope).appendPeriod(period).appendForm(form));
+		List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
 		deleteEmptyQuestionSetAnswers(questionSetAnswers);
 	}
 
@@ -90,12 +93,12 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 			}
 
 			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
+				Logger.info("--> DELETING (empty) {}", questionSetAnswer);
 				QuestionSetAnswer parent = questionSetAnswer.getParent();
-				Logger.info("DELETING (empty) {}", questionSetAnswer);
 				if (parent == null) {
 					remove(questionSetAnswer);
 				} else {
-					// in case of there is a parent, we have to update it (by simply removing the link with child, see "children" JPA annotation in QuestionSetAnswer entity)
+					// in case of there is a parent, we have to update it (by removing the link with child; children are automatically deleted due to 'orphanRemoval' attribute value)
 					parent.getChildren().remove(questionSetAnswer);
 					update(parent);
 				}

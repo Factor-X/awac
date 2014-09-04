@@ -14,10 +14,8 @@ import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.PersonService;
-import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.models.invitation.Invitation;
+import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexException;
@@ -42,6 +40,10 @@ public class InvitationController extends Controller {
 	@Autowired
 	private EmailService emailService;
 
+	@Autowired
+	private InvitationService invitationService;
+
+
 
 	@Transactional(readOnly = false)
 	public Result launchInvitation () {
@@ -54,9 +56,13 @@ public class InvitationController extends Controller {
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
 		Logger.info("Email Invitation generated key : " + key);
 
+		// store key and user
+		Invitation invitation = new Invitation(dto.getInvitationEmail(),key);
+		invitationService.saveOrUpdate(invitation);
+
 		// send email for invitation
 		// send mail
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/registration/" + key);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/enterprise#/registration/" + key);
 		emailService.send(email);
 
 		//create InvitationResultDTO

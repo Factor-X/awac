@@ -1,21 +1,46 @@
 package eu.factorx.awac.dto.awac.get;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.Size;
+import eu.factorx.awac.dto.validation.annotations.Value;
+import eu.factorx.awac.models.code.type.PeriodCode;
 
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SiteDTO extends DTO {
 
 	private Long id;
+
+	@Size(min = 1, max = 255)
 	private String name;
+
 	private Long scope;
+
+	@Size(max = 255)
 	private String naceCode;
+
+	@Size(max = 65000)
 	private String description;
+
+	@Size(max = 255)
 	private String organizationalStructure;
+
+	@Size(max = 255)
 	private String economicInterest;
+
+	@Size(max = 255)
 	private String operatingPolicy;
+
+	@Size(max = 255)
 	private String accountingTreatment;
+
+	@Value(min = 0, max = 100)
 	private Double percentOwned;
+
+	private List<String> listPeriodAvailable;
 
 	public SiteDTO() {
 	}
@@ -105,6 +130,14 @@ public class SiteDTO extends DTO {
 		this.percentOwned = percentOwned;
 	}
 
+	public List<String> getListPeriodAvailable() {
+		return listPeriodAvailable;
+	}
+
+	public void setListPeriodAvailable(List<String> listPeriodAvailable) {
+		this.listPeriodAvailable = listPeriodAvailable;
+	}
+
 	@Override
 	public String toString() {
 		return "SiteDTO{" +
@@ -118,6 +151,19 @@ public class SiteDTO extends DTO {
 				", operatingPolicy='" + operatingPolicy + '\'' +
 				", accountingTreatment='" + accountingTreatment + '\'' +
 				", percentOwned=" + percentOwned +
+				", listPeriodAvailable=" + listPeriodAvailable +
 				'}';
+	}
+
+
+	/***********************
+	 *  NOT AUTO_GENERATED !!
+	 *********************/
+
+	public void addPeriodAvailable(String periodAvailableCode){
+		if(this.listPeriodAvailable==null){
+			this.listPeriodAvailable = new ArrayList<>();
+		}
+		this.listPeriodAvailable.add(periodAvailableCode);
 	}
 }

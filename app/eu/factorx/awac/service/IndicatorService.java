@@ -9,8 +9,11 @@ public interface IndicatorService extends PersistenceService<Indicator> {
 
 	List<Indicator> findByParameters(IndicatorSearchParameter searchParameter);
 
+	List<Indicator> findAllCarbonIndicatorsForSites();
+
 	List<String> findAllIndicatorNames();
 
 	void removeAll();
+
 
 }

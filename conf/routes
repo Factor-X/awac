@@ -107,6 +107,8 @@ GET     /awac/admin/badImporter                                       @eu.factor
 #
 # site
 #
-POST    /awac/site/edit                                               @eu.factorx.awac.controllers.SiteController.edit()                                                                                                      
-POST    /awac/site/create                                             @eu.factorx.awac.controllers.SiteController.create()                                                                                                    
+POST    /awac/site/edit                                 @eu.factorx.awac.controllers.SiteController.edit()
+POST    /awac/site/create                               @eu.factorx.awac.controllers.SiteController.create()
+POST    /awac/site/assignPeriodToSite                   @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()
+GET     /awac/site/:siteId                              @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)
 

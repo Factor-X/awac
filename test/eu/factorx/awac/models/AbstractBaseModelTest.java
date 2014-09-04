@@ -106,6 +106,6 @@ public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
 	public String printError(Result result){
 		ExceptionsDTO exceptionDTO = getDTO(result,ExceptionsDTO.class);
-		return exceptionDTO.toString();
+		return "Exception : "+exceptionDTO.toString();
 	}
 }

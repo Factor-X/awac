@@ -1,15 +1,15 @@
 package eu.factorx.awac.models.business;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.knowledge.Period;
+
+import java.util.List;
 
 @Entity
 @Table(name = "site")
-public class Site extends AuditedAbstractEntity {
+public class Site extends AuditedAbstractEntity implements Comparable<Site>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,8 +36,14 @@ public class Site extends AuditedAbstractEntity {
 	@Column(name = "accounting_treatment")
 	private String accountingTreatment;
 
-	@Column(name = "percent_owned",columnDefinition="Double default '100.00'")
+	@Column(name = "percent_owned",columnDefinition="double precision default '100.00'")
 	private Double percentOwned;
+
+	@ManyToMany
+	@JoinTable(name = "mm_site_period",
+			joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "period_id", referencedColumnName = "id"))
+	private List<Period> listPeriodAvailable;
 
 	protected Site() {
 		super();
@@ -121,6 +127,14 @@ public class Site extends AuditedAbstractEntity {
 		this.percentOwned = percentOwned;
 	}
 
+	public List<Period> getListPeriodAvailable() {
+		return listPeriodAvailable;
+	}
+
+	public void setListPeriodAvailable(List<Period> listPeriodAvailable) {
+		this.listPeriodAvailable = listPeriodAvailable;
+	}
+
 	@Override
 	public String toString() {
 		return "Site{" +
@@ -133,6 +147,12 @@ public class Site extends AuditedAbstractEntity {
 				", operatingPolicy='" + operatingPolicy + '\'' +
 				", accountingTreatment='" + accountingTreatment + '\'' +
 				", percentOwned=" + percentOwned +
+				", listPeriodAvailable=" + listPeriodAvailable +
 				'}';
+	}
+
+	@Override
+	public int compareTo(Site o) {
+		return this.getTechnicalSegment().getCreationDate().compareTo(o.getTechnicalSegment().getCreationDate());
 	}
 }

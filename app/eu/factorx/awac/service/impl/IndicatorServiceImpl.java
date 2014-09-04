@@ -4,10 +4,15 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
 import play.db.jpa.JPA;
+import eu.factorx.awac.models.code.type.IndicatorTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.service.IndicatorService;
 
@@ -24,6 +29,21 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 				.setParameter("activityOwnership", searchParameter.getActivityOwnership())
 				.setParameter("deleted", searchParameter.getDeleted());
 		return query.getResultList();
+	}
+
+	@Override
+	public List<Indicator> findAllCarbonIndicatorsForSites() {
+		Session session = JPA.em().unwrap(Session.class);
+		Criteria criteria = session.createCriteria(Indicator.class);
+		criteria.add(Restrictions.eq("deleted", Boolean.FALSE));
+		criteria.add(Restrictions.eq("type", IndicatorTypeCode.CARBON));
+		criteria.add(Restrictions.eq("scopeType", ScopeTypeCode.SITE));
+
+		criteria.setCacheable(true);
+		@SuppressWarnings("unchecked")
+		List<Indicator> result = criteria.list();
+
+		return result;
 	}
 
 	@Override

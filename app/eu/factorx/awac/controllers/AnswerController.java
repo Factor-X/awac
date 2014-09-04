@@ -9,11 +9,9 @@ import org.springframework.core.convert.ConversionService;
 
 import play.Logger;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
-import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
@@ -91,7 +89,7 @@ public class AnswerController extends AbstractController {
 		LanguageCode lang = LanguageCode.ENGLISH;
 
 		if (form == null || period == null || scope == null) {
-			throw new RuntimeException("Invalid request parameters : ");
+			throw new RuntimeException("Invalid request parameters : form = " + form + "; period = " + period + "; scope = " + scope);
 		}
 
 		Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
@@ -245,10 +243,7 @@ public class AnswerController extends AbstractController {
 	}
 
 	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = new ArrayList(codeLabelService.findCodeLabelsByList(codeList).values());
-		if (codeLabels == null) {
-			throw new RuntimeException("No code labels for the code list: " + codeList);
-		}
+		List<CodeLabel> codeLabels = new ArrayList<CodeLabel>(codeLabelService.findCodeLabelsByList(codeList).values());
 		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
 		for (CodeLabel codeLabel : codeLabels) {
 			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
@@ -272,18 +267,29 @@ public class AnswerController extends AbstractController {
 	private void saveAnswsersDTO(Account currentUser, Form form, Period period, Scope scope, List<AnswerLineDTO> newAnswersInfos) {
 
 		// get current form data
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(true).appendForm(form).appendPeriod(period)
+		List<QuestionSetAnswer> questionSetAnswersList = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(false).appendForm(form).appendPeriod(period)
 				.appendScope(scope));
-		Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswers);
+		Map<Map<QuestionCode, Integer>, QuestionSetAnswer> questionSetAnswersMap = byRepetitionMap(questionSetAnswersList);
+		
+		Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswersList);
 
 		Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
 		updateOrDeleteQuestionAnswers(newAnswersInfos, questionAnswersMap);
 
 		Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
-		createQuestionAnswers(newAnswersInfos, currentUser, period, scope, questionSetAnswers);
+		createQuestionAnswers(newAnswersInfos, currentUser, period, scope, questionSetAnswersMap);
 
 		Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
 		questionSetAnswerService.deleteEmptyQuestionSetAnswers(scope, period, form);
+	}
+
+	private static Map<Map<QuestionCode, Integer>, QuestionSetAnswer> byRepetitionMap(List<QuestionSetAnswer> questionSetAnswers) {
+		Map<Map<QuestionCode, Integer>, QuestionSetAnswer> res = new HashMap<Map<QuestionCode,Integer>, QuestionSetAnswer>();
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			res.put(getNormalizedRepetitionMap(questionSetAnswer), questionSetAnswer);
+			res.putAll(byRepetitionMap(questionSetAnswer.getChildren()));
+		}
+		return res;
 	}
 
 	/**
@@ -333,13 +339,13 @@ public class AnswerController extends AbstractController {
 		}
 	}
 
-	private void createQuestionAnswers(List<AnswerLineDTO> newAnswersInfos, Account currentUser, Period period, Scope scope, List<QuestionSetAnswer> allCurrentQuestionSetAnswers) {
+	private void createQuestionAnswers(List<AnswerLineDTO> newAnswersInfos, Account currentUser, Period period, Scope scope, Map<Map<QuestionCode, Integer>, QuestionSetAnswer> existingQuestionSetAnswers) {
 		for (AnswerLineDTO answerLineDTO : newAnswersInfos) {
-			createQuestionAnswer(currentUser, period, scope, answerLineDTO, allCurrentQuestionSetAnswers);
+			createQuestionAnswer(currentUser, period, scope, answerLineDTO, existingQuestionSetAnswers);
 		}
 	}
 
-	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, List<QuestionSetAnswer> allCurrentQuestionSetAnswers) {
+	private void createQuestionAnswer(Account currentUser, Period period, Scope scope, AnswerLineDTO answerLineDTO, Map<Map<QuestionCode, Integer>, QuestionSetAnswer> existingQuestionSetAnswers) {
 		Object answerValue = answerLineDTO.getValue();
 		if ((answerValue == null) || StringUtils.isBlank(answerValue.toString())) {
 			Logger.warn("Cannot create a new QuestionAnswer from answer line {}: value is null", answerLineDTO);
@@ -349,11 +355,8 @@ public class AnswerController extends AbstractController {
 		Question question = getAndVerifyQuestion(answerLineDTO);
 		QuestionSet questionSet = question.getQuestionSet();
 
-		// normalize AnswerLineDTO repetition map (required for creating each parent QuestionSetAnswer(s))
-		Map<String, Integer> normalizedRepetitionMap = getNormalizedRepetitionMap(questionSet, answerLineDTO);
-
-		// find QuestionSetAnswer matching QuestionSet key and (if existing)
-		QuestionSetAnswer questionSetAnswer = getQuestionSetAnswer(period, scope, questionSet, normalizedRepetitionMap, allCurrentQuestionSetAnswers);
+		// get QuestionSetAnswer
+		QuestionSetAnswer questionSetAnswer = findOrCreateQuestionSetAnswer(period, scope, questionSet, answerLineDTO, existingQuestionSetAnswers);
 
 		// create and save QuestionAnswer
 		QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
@@ -365,52 +368,85 @@ public class AnswerController extends AbstractController {
 		questionSetAnswer.getQuestionAnswers().add(questionAnswer);
 		questionAnswerService.saveOrUpdate(questionAnswer);
 		questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-		Logger.info("CREATED {}", questionAnswer);
+		Logger.info("--> CREATED {}", questionAnswer);
 	}
 
-	private QuestionSetAnswer getQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, Map<String, Integer> normalizedRepetitionMap, List<QuestionSetAnswer> allCurrentQuestionSetAnswers) {
-		String questionSetKey = questionSet.getCode().getKey();
-		Integer repetitionIndex = normalizedRepetitionMap.get(questionSetKey);
-		QuestionSetAnswer questionSetAnswer = findQuestionSetAnswer(questionSetKey, repetitionIndex, allCurrentQuestionSetAnswers);
-		if (questionSetAnswer == null) {
-			// first create parent (if necessary)
-			QuestionSetAnswer parentQuestionSetAnswer = null;
-			if (questionSet.getParent() != null) {
-				parentQuestionSetAnswer = getQuestionSetAnswer(period, scope, questionSet.getParent(), normalizedRepetitionMap, allCurrentQuestionSetAnswers);
-			}
-			// save new QuestionSetAnswer
-			questionSetAnswer = new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, parentQuestionSetAnswer);
-			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-			// update parent (add child)
-			if (parentQuestionSetAnswer != null) {
-				parentQuestionSetAnswer.getChildren().add(questionSetAnswer);
-				questionSetAnswerService.saveOrUpdate(parentQuestionSetAnswer);
-			}
-			allCurrentQuestionSetAnswers.add(questionSetAnswer);
-			Logger.info("CREATED {}", questionSetAnswer);
+	private QuestionSetAnswer findOrCreateQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, AnswerLineDTO answerLineDTO, Map<Map<QuestionCode, Integer>, QuestionSetAnswer> existingQuestionSetAnswers) {
+		Map<QuestionCode, Integer> repetitionMap = getNormalizedRepetitionMap(questionSet, answerLineDTO.getMapRepetition());
+
+		// Check if QuestionSetAnswer already exists
+		QuestionSetAnswer questionSetAnswer = existingQuestionSetAnswers.get(repetitionMap);
+		if (questionSetAnswer != null) {
+			return questionSetAnswer;
 		}
+
+		// If not, create a new QuestionSetAnswer...
+		// if questionSet has a parent, find or create related parent QuestionSetAnswer
+		QuestionSetAnswer parentQuestionSetAnswer = null;
+		if (questionSet.getParent() != null) {
+			parentQuestionSetAnswer = findOrCreateQuestionSetAnswer(period, scope, questionSet.getParent(), answerLineDTO, existingQuestionSetAnswers);
+		}
+		// create QuestionSetAnswer
+		Integer repetitionIndex = repetitionMap.get(questionSet.getCode());
+		questionSetAnswer = questionSetAnswerService.saveOrUpdate(new QuestionSetAnswer(scope, period, questionSet, repetitionIndex, parentQuestionSetAnswer));
+		// link new QuestionSetAnswer to his parent (if existing)
+		if (parentQuestionSetAnswer != null) {
+			parentQuestionSetAnswer.getChildren().add(questionSetAnswer);
+			questionSetAnswerService.saveOrUpdate(parentQuestionSetAnswer);
+		}
+		// add new QuestionSetAnswer to existingQuestionSetAnswers map
+		existingQuestionSetAnswers.put(repetitionMap, questionSetAnswer);
+		Logger.info("--> CREATED {}", questionSetAnswer);
 		return questionSetAnswer;
 	}
 
-	private Map<String, Integer> getNormalizedRepetitionMap(QuestionSet questionSet, AnswerLineDTO answerLineDTO) {
-		Map<String, Integer> repMap = answerLineDTO.getMapRepetition();
-		if (repMap == null) {
-			repMap = new HashMap<String, Integer>();
-		}
-		while (questionSet != null) {
-			String questionSetKey = questionSet.getCode().getKey();
-			Integer repetitionIndex = repMap.get(questionSetKey);
-			if (repetitionIndex == null) {
-				if (questionSet.getRepetitionAllowed()) {
-					throw new RuntimeException("Invalid answerLineDTO (" + answerLineDTO + "): repetition map (" + repMap + ") doesn not contain entry for parent questionSet (" + questionSetKey
-							+ "), while repetion is allowed in this questionSet");
-				} else {
-					repMap.put(questionSetKey, 0);
-				}
+	/**
+	 * Extract the 'normalized' repetition Map from a given 'raw' repetition Map, and for a given QuestionSet: entries linked to children of this question set won't be included in result.
+	 * @param questionSet
+	 * @param rawRepetitionMap
+	 * @return
+	 */
+	private static Map<QuestionCode, Integer> getNormalizedRepetitionMap(QuestionSet questionSet, Map<String, Integer> rawRepetitionMap) {
+		Map<QuestionCode, Integer> res = new HashMap<>();
+
+		QuestionCode questionSetCode = questionSet.getCode();
+		Integer repetitionIndex = rawRepetitionMap.get(questionSetCode.getKey());
+
+		if (repetitionIndex == null) {
+			if (questionSet.getRepetitionAllowed()) {
+				throw new RuntimeException("Invalid repetition map (" + rawRepetitionMap + "): does not contain entry for QuestionSet '" + questionSetCode
+						+ "' (while repetion is allowed in this QuestionSet)");
+			} else {
+				res.put(questionSetCode, 0);
 			}
-			questionSet = questionSet.getParent();
+		} else {
+			res.put(questionSetCode, repetitionIndex);
 		}
-		return repMap;
+
+		if (questionSet.getParent() != null) {
+			res.putAll(getNormalizedRepetitionMap(questionSet.getParent(), rawRepetitionMap));
+		}
+		return res;
+	}
+
+	/**
+	 * Extract the 'normalized' repetition map from a given questionSetAnswer
+	 * @param questionSetAnswer
+	 * @return
+	 */
+	private static Map<QuestionCode, Integer> getNormalizedRepetitionMap(QuestionSetAnswer questionSetAnswer) {
+		Map<QuestionCode, Integer> res = new HashMap<>();
+		
+		QuestionSet questionSet = questionSetAnswer.getQuestionSet();
+		if (questionSet.getRepetitionAllowed()) {
+			res.put(questionSet.getCode(), questionSetAnswer.getRepetitionIndex());
+		} else {
+			res.put(questionSet.getCode(), 0);
+		}
+		if (questionSetAnswer.getParent() != null) {
+			res.putAll(getNormalizedRepetitionMap(questionSetAnswer.getParent()));
+		}
+		return res;
 	}
 
 	private List<AnswerValue> getAnswerValues(AnswerLineDTO answerLine, QuestionAnswer questionAnswer) {
@@ -605,7 +641,13 @@ public class AnswerController extends AbstractController {
 				}
 				res.get(questionKey).put(QuestionAnswerToAnswerLineConverter.buildRepetitionMap(questionSetAnswer), questionAnswer);
 			}
-			res.putAll(asQuestionAnswersMap(questionSetAnswer.getChildren()));
+			Map<String, Map<Map<String, Integer>, QuestionAnswer>> childrenQuestionAnswers = asQuestionAnswersMap(questionSetAnswer.getChildren());
+			for (String questionKey : childrenQuestionAnswers.keySet()) {
+				if (!res.containsKey(questionKey)) {
+					res.put(questionKey, new HashMap<Map<String, Integer>, QuestionAnswer>());		
+				}
+				res.get(questionKey).putAll(childrenQuestionAnswers.get(questionKey));
+			}
 		}
 		return res;
 	}
@@ -620,15 +662,6 @@ public class AnswerController extends AbstractController {
 		}
 		return null;
 
-	}
-
-	private static QuestionSetAnswer findQuestionSetAnswer(String questionSetKey, Integer repetitionIndex, List<QuestionSetAnswer> createdQuestionSetAnswers) {
-		for (QuestionSetAnswer questionSetAnswer : createdQuestionSetAnswers) {
-			if (questionSetKey.equals(questionSetAnswer.getQuestionSet().getCode().getKey()) && repetitionIndex.equals(questionSetAnswer.getRepetitionIndex())) {					
-				return questionSetAnswer;
-			}
-		}
-		return null;
 	}
 
 	private static DateTime getMaxLastUpdateDate(List<QuestionAnswer> allQuestionAnswers) {
