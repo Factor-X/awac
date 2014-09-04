@@ -24,14 +24,14 @@ import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
-
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 @org.springframework.stereotype.Controller
 public class InvitationController extends AbstractController {
 
@@ -43,6 +43,7 @@ public class InvitationController extends AbstractController {
 	private InvitationService invitationService;
 
 
+	@Transactional
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result launchInvitation () {
