@@ -37,6 +37,15 @@ public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<O
 		return organization;
 	}
 
+	@Override
+	public void remove(final Organization organization) {
+
+		Scope scope = scopeService.findByOrganization(organization);
+		scopeService.remove(scope);
+
+		super.remove(organization);
+	}
+
 	public Organization findByName(String name){
 		List<Organization> resultList = JPA.em().createNamedQuery(Organization.FIND_BY_NAME, Organization.class)
 				.setParameter("name", name).getResultList();

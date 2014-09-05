@@ -31,11 +31,17 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 	@Autowired
 	private InvitationService invitationService;
 
-    @Test
+
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Test
     public void _001_createInvitation() {
 
-		Invitation invitation = new Invitation (InvitationTest.INVITATION_EMAIL,InvitationTest.INVITATION_GENKEY);
+		Organization org = new Organization ("gaston");
+		organizationService.saveOrUpdate(org);
 
+		Invitation invitation = new Invitation (InvitationTest.INVITATION_EMAIL,InvitationTest.INVITATION_GENKEY,org);
 		invitationService.saveOrUpdate(invitation);
 
     } // end of test method
@@ -76,6 +82,7 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 		// suppress
 		em.getTransaction().begin();
 		invitationService.remove(invitation);
+		organizationService.remove(invitation.getOrganization());
 		em.getTransaction().commit();
 
 		List<Invitation> invitationReloadList = null;
