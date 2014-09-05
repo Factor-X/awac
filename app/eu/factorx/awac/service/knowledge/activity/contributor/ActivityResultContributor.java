@@ -1,5 +1,6 @@
 package eu.factorx.awac.service.knowledge.activity.contributor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,19 @@ public abstract class ActivityResultContributor {
 		}
 		return null;
 	}
+
+
+    protected List<QuestionSetAnswer> getChildrenQuestionSetAnswers(QuestionSetAnswer questionSetAnswer, QuestionCode childQuestionSetAnswerCode) {
+
+        List<QuestionSetAnswer> result = new ArrayList<>();
+
+        for (QuestionSetAnswer childQuestionSetAnswer : questionSetAnswer.getChildren()) {
+            if (childQuestionSetAnswerCode.equals(childQuestionSetAnswer.getQuestionSet().getCode())) {
+                result.add(childQuestionSetAnswer);
+            }
+        }
+        return result;
+    }
 
 	protected Unit getUnitByCode(UnitCode unitCode) {
 		if (unitsByCodeKey == null) {

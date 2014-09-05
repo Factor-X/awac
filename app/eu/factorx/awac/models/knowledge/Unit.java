@@ -10,7 +10,10 @@ import eu.factorx.awac.models.code.type.UnitCode;
 
 @Entity
 @Table(name = "unit")
-@NamedQueries({ @NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"), @NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"), })
+@NamedQueries({ @NamedQuery(name = Unit.FIND_ALL, query = "select u from Unit u"),
+                @NamedQuery(name = Unit.FIND_BY_SYMBOL, query = "select u from Unit u where u.symbol = :symbol"),
+                @NamedQuery(name = Unit.FIND_BY_CODE, query = "select u from Unit u where u.unitCode = :unitCode"),
+})
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Unit extends AuditedAbstractEntity {
@@ -20,6 +23,11 @@ public class Unit extends AuditedAbstractEntity {
 	public static final String COLUMN_NAME_REF = "ref";
 	public static final String COLUMN_NAME_SYMBOL = "symbol";
 	public static final String FIND_ALL = "Unit.findAll";
+    /**
+     * @param code
+     *            : a {@link String}
+     */
+    public static final String FIND_BY_CODE  = "Unit.findByCode";
 	/**
 	 * @param symbol
 	 *            : a {@link String}

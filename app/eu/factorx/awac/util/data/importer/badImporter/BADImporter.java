@@ -6,7 +6,10 @@ import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.ExcelReader;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import java.util.List;
  * !! the column F of the excel file is used to detect a bad : if the column is not empty, it's a BAD !!
  */
 @Component
-public class BADImporter extends WorkbookDataImporter {
+public class BADImporter extends WorkbookDataImporter implements ApplicationContextAware {
 
     private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
@@ -62,9 +65,6 @@ public class BADImporter extends WorkbookDataImporter {
     //value
     private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.S;
 
-
-    private List<BAD> listBAD = new ArrayList<>();
-
     private BADLog badLog = new BADLog();
 
     @Autowired
@@ -72,6 +72,12 @@ public class BADImporter extends WorkbookDataImporter {
 
     @Autowired
     private BADControlElement badControlElement;
+
+    private ApplicationContext ctx = null;
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        // Assign the ApplicationContext into a static method
+        this.ctx = ctx;
+    }
 
 
 
@@ -108,7 +114,7 @@ public class BADImporter extends WorkbookDataImporter {
     public void reader(Data data) {
 
         badControlElement.setBadLog(badLog);
-        BADGenerator badGenerator = new BADGenerator();
+
 
         for (int line = 1; line < data.getNbRows(); line++) {
 
@@ -124,134 +130,60 @@ public class BADImporter extends WorkbookDataImporter {
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.INFO, line, "This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
+                badLog.addToLog(BADLog.LogType.INFO, line, " ----------------------------------------> This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
 
 
-                //create and write new BAD
-                boolean toGenerate = true;
+                //create the bad
+                BAD bad = new BAD();
 
 
                 // --- test badKey ---
-                String badKey = null;
-                try {
-                    badKey = badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line), line, bad);
 
                 // ---- name ----
-                String name = null;
-                try {
-                    name = badControlElement.controlName(data.getData(BAD_NAME_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlName(data.getData(BAD_NAME_COL, line), line, bad);
 
                 // ---- control rank ---
-                Integer rank = null;
-                try {
-                    rank = badControlElement.controlRank(data.getData(BAD_RANK_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlRank(data.getData(BAD_RANK_COL, line), line, bad);
 
                 // ---- specific purpose ----
-                String specificPurpose = null;
-                try {
-                    specificPurpose = badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line), line, bad);
 
                 // ---- activityCategory ---
-                String activityCategory = null;
-                try {
-                    activityCategory = badControlElement.controlActivityCategory(data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlActivityCategory(data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line), line, bad);
 
                 // --- activitySubCategory ---
-                String activitySubCategory = null;
-                try {
-                    activitySubCategory = badControlElement.controlActivitySubCategory(data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlActivitySubCategory(data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line), line, bad);
 
                 // --- ActivityType ---
-                String activityType = null;
-                try {
-                    activityType = badControlElement.controlActivityType(data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlActivityType(data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line), line, bad);
 
                 // --- ActivitySource ---
-                String activitySource = null;
-                try {
-                    activitySource = badControlElement.controlActivitySource(data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlActivitySource(data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line), line, bad);
 
                 // --- activityOwnerShip ---
-                String activityOwnerShip = null;
-                try {
-                    activityOwnerShip = badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), line, bad);
 
                 // ---- unit ---
-                String unit = null;
-                try {
-                    unit = badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line, bad);
 
                 // --- value ---
-                String value = null;
-                try {
-                    value = badControlElement.controlValue(data.getData(BAD_VALUE_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlValue(data.getData(BAD_VALUE_COL, line), line, bad);
 
                 // ----- condition ---
-                String condition = null;
-                try {
-                    condition = badControlElement.controlCondition(data.getData(BAD_CONDITION_COL, line), line);
-                } catch (MyrmexException e) {
-                    toGenerate = false;
-                }
+                badControlElement.controlCondition(data.getData(BAD_CONDITION_COL, line), line, bad);
 
 
                 //create BAD
-                if (toGenerate) {
-                    BAD bad = new BAD();
-                    bad.setBaseActivityDataCode(badKey);
-                    bad.setName(name);
-                    bad.setRank(rank);
-                    bad.setSpecificPurpose(specificPurpose);
-                    bad.setActivityCategoryCode(activityCategory);
-                    bad.setActivitySubCategory(activitySubCategory);
-                    bad.setActivityType(activityType);
-                    bad.setActivitySource(activitySource);
-                    bad.setActivityOwnership(activityOwnerShip);
-                    bad.setUnit(unit);
-                    bad.setValue(value);
-                    bad.setCondition(condition);
+                //if (bad.isCanBeGenerated()) {
 
-                    //print
-                    //Logger.info(bad.toString());
 
-                    listBAD.add(bad);
+
+                BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                     //write
                     badGenerator.generateBAD(bad);
-                }
+                //}
             }
         }
     }

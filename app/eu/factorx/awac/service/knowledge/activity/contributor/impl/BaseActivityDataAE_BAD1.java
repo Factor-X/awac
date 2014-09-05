@@ -76,4 +76,8 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 		return res;
 	}
 
+
+
+
+
 }
