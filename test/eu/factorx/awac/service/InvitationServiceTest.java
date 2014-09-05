@@ -80,10 +80,10 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 		assertEquals(invitation.getEmail(),InvitationTest.INVITATION_EMAIL);
 
 		// suppress
-		em.getTransaction().begin();
+		//em.getTransaction().begin();
 		invitationService.remove(invitation);
 		organizationService.remove(invitation.getOrganization());
-		em.getTransaction().commit();
+		//em.getTransaction().commit();
 
 		List<Invitation> invitationReloadList = null;
 
