@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.Indicator;
@@ -47,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
 	private Set<ActivityResultContributor> activityResultContributors;
 
 	@Override
-	public Report getReport(Scope scope, Period period) {
+	public Report getReport(InterfaceTypeCode interfaceType, Scope scope, Period period) {
 
 		// find all question set answers (only "parents" => find where qsa.parent is null)
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = getAllQuestionSetAnswers(scope, period);
@@ -58,7 +55,7 @@ public class ReportServiceImpl implements ReportService {
 		Set<BaseActivityDataCode> matchingIndicatorBADs = new HashSet<>();
 
 		// find all carbon indicators for sites
-		List<Indicator> indicators = indicatorService.findAllCarbonIndicatorsForSites();
+		List<Indicator> indicators = indicatorService.findAllCarbonIndicatorsForSites(interfaceType);
 
 		// calculate activity results
 		List<BaseActivityResult> activityResults = new ArrayList<>();
@@ -71,6 +68,9 @@ public class ReportServiceImpl implements ReportService {
 			}
 
 			Logger.info("Indicator '{}': found {} BADs", indicator.getKey(), indicatorBADs.size());
+			for (BaseActivityData baseActivityData : indicatorBADs) {
+				matchingIndicatorBADs.add(baseActivityData.getKey());
+			}
 			
 			indicatorBADs = filterByRank(indicator.getKey(), indicatorBADs);
 
@@ -88,7 +88,7 @@ public class ReportServiceImpl implements ReportService {
 		// check not used BADs
 		for (BaseActivityData bad : allBADs) {
 			if (!matchingIndicatorBADs.contains(bad.getKey())) {
-				saveNoSuitableIndicatorError(bad);
+				saveNoSuitableIndicatorError(interfaceType, bad);
 			}
 		}
 
@@ -189,9 +189,9 @@ public class ReportServiceImpl implements ReportService {
 		return res;
 	}
 
-	private void saveNoSuitableIndicatorError(BaseActivityData bad) {
+	private void saveNoSuitableIndicatorError(InterfaceTypeCode interfaceType, BaseActivityData bad) {
 		BaseActivityDataCode baseActivityDataCode = bad.getKey();
-		IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(bad);
+		IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(interfaceType, bad);
 		Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorSearchParam);
 		JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityDataCode.getKey(), null, indicatorSearchParam.toString()));
 	}

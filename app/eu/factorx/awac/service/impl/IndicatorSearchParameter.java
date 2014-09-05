@@ -1,12 +1,11 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 
 public class IndicatorSearchParameter {
+
+	private InterfaceTypeCode interfaceType;
 
 	private IndicatorTypeCode type;
 
@@ -31,9 +30,10 @@ public class IndicatorSearchParameter {
 	 * @param activitySubCategory
 	 * @param activityOwnership
 	 */
-	public IndicatorSearchParameter(ActivityCategoryCode activityCategory, ActivitySubCategoryCode activitySubCategory,
+	public IndicatorSearchParameter(InterfaceTypeCode interfaceType, ActivityCategoryCode activityCategory, ActivitySubCategoryCode activitySubCategory,
 			Boolean activityOwnership) {
 		super();
+		this.interfaceType = interfaceType;
 		this.type = IndicatorTypeCode.CARBON;
 		this.scopeType = ScopeTypeCode.SITE;
 		this.activityCategory = activityCategory;
@@ -47,8 +47,16 @@ public class IndicatorSearchParameter {
 	 * 
 	 * @param baseActivityData
 	 */
-	public IndicatorSearchParameter(BaseActivityData baseActivityData) {
-		this(baseActivityData.getActivityCategory(), baseActivityData.getActivitySubCategory(), baseActivityData.getActivityOwnership());
+	public IndicatorSearchParameter(InterfaceTypeCode interfaceType, BaseActivityData baseActivityData) {
+		this(interfaceType, baseActivityData.getActivityCategory(), baseActivityData.getActivitySubCategory(), baseActivityData.getActivityOwnership());
+	}
+
+	public InterfaceTypeCode getInterfaceType() {
+		return interfaceType;
+	}
+
+	public void setInterfaceType(InterfaceTypeCode interfaceType) {
+		this.interfaceType = interfaceType;
 	}
 
 	public IndicatorTypeCode getType() {
