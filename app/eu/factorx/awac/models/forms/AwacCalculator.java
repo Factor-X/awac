@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.forms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -14,6 +15,8 @@ public class AwacCalculator extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String INTERFACE_TYPE_CODE_PROPERTY = "interfaceTypeCode";
+
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	@Column(unique = true, nullable = false)
@@ -23,7 +26,7 @@ public class AwacCalculator extends AuditedAbstractEntity {
 	@JoinTable(name = "mm_calculator_indicator",
 			joinColumns = @JoinColumn(name = "calculator_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"))
-	private List<Indicator> indicators;
+	private List<Indicator> indicators = new ArrayList<>();
 
 	public AwacCalculator() {
 		super();

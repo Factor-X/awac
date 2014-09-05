@@ -110,7 +110,7 @@ public abstract class WorkbookDataImporter {
 			try {
 				value = NUMBER_WITH_DECIMAL_COMMA_FORMAT.parse(cellContents.replaceAll("\\.", ",")).doubleValue();
 			} catch (Exception e) {
-				Logger.error("Exception while parsing number from the content of cell [{}, {}] : {}", row, column, cellContents);
+				Logger.debug("Exception while parsing number from the content of cell [{}, {}] : {}", row, column, cellContents);
 			}
 		}
 		return value;

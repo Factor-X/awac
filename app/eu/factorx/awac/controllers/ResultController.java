@@ -54,7 +54,7 @@ public class ResultController extends AbstractController {
 	public Result getReport(String periodKey, Long scopeId) {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(scope, period);
+		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 		Logger.info("Built report on the basis of {} base activity results:", report.getActivityResults().size());
 		for (BaseActivityResult activityResult : report.getActivityResults()) {
 			Logger.info("\t{}", activityResult);
@@ -68,7 +68,7 @@ public class ResultController extends AbstractController {
 	public Result getReportAsXls(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(scope, period);
+		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 
 
 		Table allScopes = new Table();
@@ -107,7 +107,7 @@ public class ResultController extends AbstractController {
 	public Result getReportAsPdf(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(scope, period);
+		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 
 		Table allScopes = new Table();
 		Table scope1 = new Table();
@@ -175,7 +175,7 @@ public class ResultController extends AbstractController {
 	public Result getSvgDonutForScope(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(scope, period);
+		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 
