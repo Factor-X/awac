@@ -8,6 +8,7 @@ import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
+import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
@@ -36,10 +37,13 @@ import static play.test.Helpers.*;
 public class InvitationTest extends AbstractBaseModelTest {
 
 	private static final String invitationEmail = "gaston.hollands@factorx.eu";
+	private static final String login = "gaston.hollands";
+	private static final String password = "factorx.eu";
+	private static final String firstName = "hollands";
+	private static final String lastName = "gaston";
+	private static final String interfaceName = "enterprise";
+	private static final String key = "01234567890123456789";
 
-	/**
-	 * create a account + person + organization and scope + site and scope
-	 */
 
 	// Test does not work
 	@Test
@@ -81,6 +85,50 @@ public class InvitationTest extends AbstractBaseModelTest {
 		InvitationResultDTO resultDTO = getDTO(result, InvitationResultDTO.class);
 
 	} // end of authenticateSuccess test
+
+	// Test does not work
+	@Test
+	public void _001_registerInvitation() {
+
+		// ConnectionFormDTO
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
+
+		// InvitationDTO
+		RegisterInvitationDTO dto = new RegisterInvitationDTO(login,password,lastName,firstName,interfaceName,invitationEmail,key);
+
+
+		//Json node
+		JsonNode node = Json.toJson(dto);
+
+		// perform call to invitation process
+		// Fake request
+		FakeRequest fr = new FakeRequest();
+		fr.withHeader("Content-type", "application/json");
+		fr.withJsonBody(node);
+
+		// Call controller action
+		Result result = callAction(
+				eu.factorx.awac.controllers.routes.ref.InvitationController.registerInvitation(),
+				fr
+		); // callAction
+
+		// wait some time to be sure AKKA actor has time to send the message
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//analyse result
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
+
+		//analyse result
+		InvitationResultDTO resultDTO = getDTO(result, InvitationResultDTO.class);
+
+	} // end of authenticateSuccess test
+
+
+
 
 	// class to handle EmailInvitationDTO
 
