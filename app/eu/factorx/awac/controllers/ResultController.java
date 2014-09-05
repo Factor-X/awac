@@ -6,19 +6,17 @@ import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.Report;
-import eu.factorx.awac.service.PeriodService;
-import eu.factorx.awac.service.ReportService;
-import eu.factorx.awac.service.ResultExcelGeneratorService;
-import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.NumberFormatWrapper;
 import eu.factorx.awac.util.Table;
-import eu.factorx.awac.util.pdf.PDF;
+import eu.factorx.awac.views.html.pdf.results;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
+import play.api.templates.Html;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -45,6 +43,11 @@ public class ResultController extends AbstractController {
 	private ResultExcelGeneratorService resultExcelGeneratorService;
 	@Autowired
 	private SecuredController           securedController;
+	@Autowired
+	private PdfGenerator                pdfGenerator;
+	@Autowired
+	private SvgGenerator                svgGenerator;
+
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
@@ -113,51 +116,82 @@ public class ResultController extends AbstractController {
 		Table outOfScope = new Table();
 
 
-		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(securedController.getCurrentUser().getPerson().getDefaultLanguage().getKey()));
-		nf.setMaximumFractionDigits(2);
-
 		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
 			if (entry.getValue().get(0) > 0) {
 				int row = allScopes.getRowCount();
 				allScopes.setCell(0, row, entry.getKey());
 
 				if (entry.getValue().get(1) > 0)
-					allScopes.setCell(1, row, nf.format(entry.getValue().get(1)));
+					allScopes.setCell(1, row, entry.getValue().get(1));
 
 				if (entry.getValue().get(2) > 0)
-					allScopes.setCell(2, row, nf.format(entry.getValue().get(2)));
+					allScopes.setCell(2, row, entry.getValue().get(2));
 
 				if (entry.getValue().get(3) > 0)
-					allScopes.setCell(3, row, nf.format(entry.getValue().get(3)));
+					allScopes.setCell(3, row, entry.getValue().get(3));
 
 				if (entry.getValue().get(4) > 0)
-					allScopes.setCell(4, row, nf.format(entry.getValue().get(4)));
+					allScopes.setCell(4, row, entry.getValue().get(4));
 			}
 
 			if (entry.getValue().get(1) > 0) {
 				int row = scope1.getRowCount();
 				scope1.setCell(0, row, entry.getKey());
-				scope1.setCell(1, row, nf.format(entry.getValue().get(1)));
+				scope1.setCell(1, row, entry.getValue().get(1));
 			}
 			if (entry.getValue().get(2) > 0) {
 				int row = scope2.getRowCount();
 				scope2.setCell(0, row, entry.getKey());
-				scope2.setCell(1, row, nf.format(entry.getValue().get(2)));
+				scope2.setCell(1, row, entry.getValue().get(2));
 			}
 			if (entry.getValue().get(3) > 0) {
 				int row = scope3.getRowCount();
 				scope3.setCell(0, row, entry.getKey());
-				scope3.setCell(1, row, nf.format(entry.getValue().get(3)));
+				scope3.setCell(1, row, entry.getValue().get(3));
 			}
 			if (entry.getValue().get(4) > 0) {
 				int row = outOfScope.getRowCount();
 				outOfScope.setCell(0, row, entry.getKey());
-				outOfScope.setCell(1, row, nf.format(entry.getValue().get(4)));
+				outOfScope.setCell(1, row, entry.getValue().get(4));
 			}
 		}
 
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(securedController.getCurrentUser().getPerson().getDefaultLanguage().getKey()));
+		nf.setMaximumFractionDigits(2);
+		NumberFormatWrapper wrapper = new NumberFormatWrapper(nf);
 
-		return PDF.ok(eu.factorx.awac.views.html.pdf.results.render(allScopes, scope1, scope2, scope3, outOfScope));
+		Html rendered = results.render(wrapper, allScopes, scope1, scope2, scope3, outOfScope);
+
+
+		pdfGenerator.setMemoryResource("mem://svg/donut/2013/2/1", svgGenerator.getDonut(scope1));
+
+
+		return pdfGenerator.ok(rendered);
+	}
+
+
+	@Transactional(readOnly = false)
+	//@Security.Authenticated(SecuredController.class)
+	public Result getSvgDonutForScope(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
+		Scope scope = scopeService.findById(scopeId);
+		Report report = reportService.getReport(scope, period);
+
+		Table scopeTable = new Table();
+
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
+		nf.setMaximumFractionDigits(2);
+
+		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+			if (entry.getValue().get(scopeType) > 0) {
+				int row = scopeTable.getRowCount();
+				scopeTable.setCell(0, row, entry.getKey());
+				scopeTable.setCell(1, row, entry.getValue().get(scopeType));
+				scopeTable.setCell(2, row, nf.format(entry.getValue().get(scopeType)));
+			}
+		}
+
+		return ok(eu.factorx.awac.views.html.svg.donut.render(scopeTable));
 	}
 
 }

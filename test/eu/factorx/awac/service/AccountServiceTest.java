@@ -35,11 +35,9 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 		Account ac = new Account(org,person,"gho","passwd", InterfaceTypeCode.ENTERPRISE);
 		ac.setActive(false);
 
-        em.getTransaction().begin();
 		em.persist(org);
 		em.persist(person);
         em.persist(ac);
-        em.getTransaction().commit();
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
 		//Logger.info("Id:" + ac.getId());
@@ -70,9 +68,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 		assertEquals(account.getIdentifier(), "gho");
 
-		em.getTransaction().begin();
 		em.remove(account);
-		em.getTransaction().commit();
 
 		Account reload=null;
 
@@ -108,9 +104,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 		assertEquals(org.getName(), "testing");
 
-		em.getTransaction().begin();
 		em.remove(org);
-		em.getTransaction().commit();
 
 		Organization reload=null;
 
@@ -134,9 +128,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 		assertEquals(person.getLastname(), "gaston");
 
-		em.getTransaction().begin();
 		em.remove(person);
-		em.getTransaction().commit();
 
 		Person reload=null;
 

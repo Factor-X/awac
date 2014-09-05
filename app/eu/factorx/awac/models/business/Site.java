@@ -5,6 +5,7 @@ import javax.persistence.*;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.knowledge.Period;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,7 +44,7 @@ public class Site extends AuditedAbstractEntity implements Comparable<Site>{
 	@JoinTable(name = "mm_site_period",
 			joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "period_id", referencedColumnName = "id"))
-	private List<Period> listPeriodAvailable;
+	private List<Period> listPeriodAvailable = new ArrayList<>();
 
 	protected Site() {
 		super();

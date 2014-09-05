@@ -97,13 +97,13 @@ class Scanner
             parent      = row[1]
             i_or_iset   = row[2]
             driver      = row[4]
-            accronym    = row[7]
-            name        = row[11]
-            desc        = row[12]
-            loop_desc   = row[15]
-            type        = row[13]
-            options     = row[14]
-            defaultUnit = row[20]
+            accronym    = row[8]
+            name        = row[12]
+            desc        = row[13]
+            loop_desc   = row[16]
+            type        = row[14]
+            options     = row[15]
+            defaultUnit = row[22]
             repeatable  = loop_desc!=nil
 
             # Form
