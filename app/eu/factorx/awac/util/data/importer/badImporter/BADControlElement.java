@@ -383,7 +383,14 @@ public class BADControlElement {
                 //test unit
                 if (unitCategoryQuestion != null) {
                     if (matcher.group(2) == null || matcher.group(2).length() == 0) {
-                        badLog.addToLog(BADLog.LogType.WARNING, line, "The value contains a questionCode without unit specified : " + questionCodeKey);
+
+                        //control equivalence between BAD unit.unitCat and question.unitCat
+                        if(!((DoubleQuestion) question).getUnitCategory().equals(bad.getUnit().getCategory())){
+                            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
+                        }
+                        else {
+                            badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
+                        }
                     } else {
 
                         String unitExpected = matcher.group(3);
