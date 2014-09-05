@@ -67,6 +67,9 @@ libraryDependencies += "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" exc
 
 libraryDependencies += "org.apache.xmlgraphics" % "batik-codec" % "1.7"
 
+// velocity plugin
+libraryDependencies += "jp.furyu" %% "play-velocity-plugin" % "1.2"
+
 play.Project.playJavaSettings
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "test/features")

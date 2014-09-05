@@ -55,6 +55,10 @@ object ApplicationBuild extends Build {
 
     libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 
+    // velocity plugin
+    libraryDependencies += "jp.furyu" %% "play-velocity-plugin" % "1.2"
+
+
     lazy val angularCompileTask = TaskKey[Unit]("angular-compile", "Compile angular app")
     val angularCompileSettings = angularCompileTask := {
         new AngularCompileTask().execute()
