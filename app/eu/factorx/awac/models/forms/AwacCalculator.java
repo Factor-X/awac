@@ -1,9 +1,10 @@
 package eu.factorx.awac.models.forms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Cascade;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -22,14 +23,23 @@ public class AwacCalculator extends AuditedAbstractEntity {
 	@Column(unique = true, nullable = false)
 	private InterfaceTypeCode interfaceTypeCode;
 
-	@ManyToMany
+	@ManyToMany(cascade={CascadeType.MERGE,CascadeType.REMOVE, CascadeType.DETACH})
 	@JoinTable(name = "mm_calculator_indicator",
 			joinColumns = @JoinColumn(name = "calculator_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"))
-	private List<Indicator> indicators = new ArrayList<>();
+	@Cascade({org.hibernate.annotations.CascadeType.ALL})
+	private List<Indicator> indicators;
 
 	public AwacCalculator() {
 		super();
+	}
+
+	/**
+	 * @param interfaceTypeCode
+	 */
+	public AwacCalculator(InterfaceTypeCode interfaceTypeCode) {
+		super();
+		this.interfaceTypeCode = interfaceTypeCode;
 	}
 
 	public InterfaceTypeCode getInterfaceTypeCode() {

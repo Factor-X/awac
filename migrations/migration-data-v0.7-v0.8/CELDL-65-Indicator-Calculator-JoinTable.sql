@@ -34,16 +34,10 @@ CREATE TABLE mm_calculator_indicator
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_mlxk7iq56m38pkxk26onc4q5f FOREIGN KEY (indicator_id)
       REFERENCES indicator (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE CASCADE ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE mm_calculator_indicator
   OWNER TO play;
-
-  
--- Insert Enterprise & Municipality calculators
-
-INSERT INTO awaccalculator(code) VALUES ('enterprise');
-INSERT INTO awaccalculator(code) VALUES ('municipality');
