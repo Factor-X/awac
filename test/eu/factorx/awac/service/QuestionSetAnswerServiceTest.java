@@ -1,6 +1,5 @@
 package eu.factorx.awac.service;
 
-import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,19 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
-import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.knowledge.Period;
 
 /**
  * Test CRUD operations on Municipality form ''

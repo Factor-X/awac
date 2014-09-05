@@ -1,9 +1,10 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.data.FormProgress;
-import eu.factorx.awac.models.forms.Form;
-import eu.factorx.awac.models.knowledge.UnitCategory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.forms.Form;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

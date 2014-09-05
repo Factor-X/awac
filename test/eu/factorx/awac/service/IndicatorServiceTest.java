@@ -1,12 +1,9 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.code.type.*;
-import eu.factorx.awac.models.knowledge.Factor;
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.impl.FactorSearchParameter;
-import eu.factorx.awac.service.impl.IndicatorSearchParameter;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,13 +11,13 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.Logger;
 
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.ActivityCategoryCode;
+import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.service.impl.IndicatorSearchParameter;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,12 +41,13 @@ public class IndicatorServiceTest extends AbstractBaseModelTest {
 	public void _002_findByParameters() {
 
 
-		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
+		Collection<String> col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
 				"Electricité et vapeur achetées",
 				"Production de l'électricité et vapeur achetées")));
 
 		// assume following search parameters
 		IndicatorSearchParameter searchParameter = new IndicatorSearchParameter(
+														InterfaceTypeCode.ENTERPRISE,
 														ActivityCategoryCode.AC_1,
 														ActivitySubCategoryCode.ASC_3,
 														false
@@ -100,7 +98,7 @@ public class IndicatorServiceTest extends AbstractBaseModelTest {
 
 		 */
 
-		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
+		Collection<String> col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
 				"Transport et stockage de marchandises amont - véhicules propres: froid",
 				"Utilisation des produits vendus",
 				"Mobilité - déplacements professionnels - véhicules propres",

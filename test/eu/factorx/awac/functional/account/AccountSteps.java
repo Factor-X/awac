@@ -1,6 +1,8 @@
 package eu.factorx.awac.functional.account;
 
-import cucumber.api.java.Before;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import play.Logger;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -9,20 +11,6 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import play.Logger;
-import play.db.jpa.JPA;
-import play.db.jpa.JPAPlugin;
-import play.test.Helpers;
-import play.test.TestBrowser;
-import play.test.TestServer;
-import scala.Option;
-
-import javax.persistence.EntityManager;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static play.test.Helpers.*;
-import static play.test.Helpers.start;
 
 public class AccountSteps {
 

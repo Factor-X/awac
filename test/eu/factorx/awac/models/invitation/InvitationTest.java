@@ -24,9 +24,7 @@ public class InvitationTest extends AbstractBaseModelTest {
 
 		Invitation invitation = new Invitation (INVITATION_EMAIL,INVITATION_GENKEY);
 
-        em.getTransaction().begin();
 		em.persist(invitation);
-        em.getTransaction().commit();
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
 		//Logger.info("Id:" + ac.getId());
@@ -79,9 +77,7 @@ public class InvitationTest extends AbstractBaseModelTest {
 		}
 		assertEquals(invitation.getEmail(),INVITATION_EMAIL);
 
-		em.getTransaction().begin();
 		em.remove(invitation);
-		em.getTransaction().commit();
 
 		Invitation reload=null;
 

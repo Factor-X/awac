@@ -1,16 +1,13 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.business.Organization;
-import org.hibernate.Session;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.springframework.transaction.annotation.Transactional;
-import play.api.Play;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import eu.factorx.awac.models.AbstractBaseModelTest;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -20,9 +17,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
     @Test
     public void _001_createOrganisation() {
 
-        em.getTransaction().begin();
         em.persist(new Organization("factorx"));
-        em.getTransaction().commit();
     } // end of test method
 
 
@@ -59,9 +54,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
         assertEquals(org.getName(), "factorx");
 
-        em.getTransaction().begin();
         em.remove(org);
-        em.getTransaction().commit();
 
         Organization reload=null;
 
@@ -78,9 +71,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
 
         // Create
-        em.getTransaction().begin();
         em.persist(new Organization("carrefour"));
-        em.getTransaction().commit();
 
         // Check persistence
         Organization org = null;
@@ -94,9 +85,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
         // update org name
         org.setName("CarrefourCamelCase");
-        em.getTransaction().begin();
         em.persist(org);
-        em.getTransaction().commit();
 
         // Check update persistence
         Organization modifiedOrg = null;
@@ -122,9 +111,7 @@ public class OrganisationTest extends AbstractBaseModelTest {
 
 		assertEquals(org.getName(), "CarrefourCamelCase");
 
-		em.getTransaction().begin();
 		em.remove(org);
-		em.getTransaction().commit();
 
 		Organization reload=null;
 
