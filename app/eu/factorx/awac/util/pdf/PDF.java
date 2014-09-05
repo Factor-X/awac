@@ -14,6 +14,9 @@ package eu.factorx.awac.util.pdf;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.w3c.dom.Document;
 import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.*;
@@ -87,9 +90,9 @@ public class PDF {
 			Reader reader = new StringReader(string);
 			ITextRenderer renderer = new ITextRenderer();
 			addFontDirectory(renderer.getFontResolver(), Play.current().path()
-					+ "/public/fonts");
+				+ "/public/fonts");
 			MyUserAgent myUserAgent = new MyUserAgent(
-					renderer.getOutputDevice());
+				renderer.getOutputDevice());
 			myUserAgent.setSharedContext(renderer.getSharedContext());
 			renderer.getSharedContext().setUserAgentCallback(myUserAgent);
 			XMLResource xmlResource = XMLResource.load(reader);
@@ -107,7 +110,7 @@ public class PDF {
 		File dir = new File(directory);
 		for (File file : dir.listFiles()) {
 			fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,
-					BaseFont.EMBEDDED);
+				BaseFont.EMBEDDED);
 		}
 	}
 
@@ -131,7 +134,27 @@ public class PDF {
 					throw new RuntimeException(e);
 				}
 			} else {
-				return super.getImageResource(uri);
+				ImageResource imageResource = super.getImageResource(uri);
+				if (imageResource.getImage() == null) {
+					try {
+						uri = "http://127.0.0.1:9000" + uri;
+						TranscoderInput input_svg_image = new TranscoderInput(uri);
+						ByteArrayOutputStream png_ostream = new ByteArrayOutputStream();
+						TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
+						PNGTranscoder my_converter = new PNGTranscoder();
+						my_converter.transcode(input_svg_image, output_png_image);
+						png_ostream.flush();
+						png_ostream.close();
+						Image image = Image.getInstance(getData(new ByteArrayInputStream(png_ostream.toByteArray())));
+						scaleToOutputResolution(image);
+						return new ImageResource(new ITextFSImage(image));
+					} catch (Exception e) {
+						Logger.error("fetching image " + uri, e);
+						throw new RuntimeException(e);
+					}
+				} else {
+					return imageResource;
+				}
 			}
 		}
 
@@ -141,7 +164,7 @@ public class PDF {
 				// uri is in fact a complete URL
 				String path = new URL(uri).getPath();
 				Option<InputStream> option = Play.current().resourceAsStream(
-						path);
+					path);
 				if (option.isDefined()) {
 					return new CSSResource(option.get());
 				} else {
@@ -184,7 +207,7 @@ public class PDF {
 		private void scaleToOutputResolution(Image image) {
 			float factor = getSharedContext().getDotsPerPixel();
 			image.scaleAbsolute(image.getPlainWidth() * factor,
-					image.getPlainHeight() * factor);
+				image.getPlainHeight() * factor);
 		}
 
 		private byte[] getData(InputStream stream) throws IOException {
@@ -194,7 +217,7 @@ public class PDF {
 		}
 
 		private void copy(InputStream stream, OutputStream os)
-				throws IOException {
+			throws IOException {
 			byte[] buffer = new byte[1024];
 			while (true) {
 				int len = stream.read(buffer);

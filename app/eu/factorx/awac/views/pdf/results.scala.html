@@ -1,4 +1,5 @@
-@(allScopes: eu.factorx.awac.util.Table, scope1: eu.factorx.awac.util.Table, scope2: eu.factorx.awac.util.Table, scope3: eu.factorx.awac.util.Table, outOfScope: eu.factorx.awac.util.Table)
+@(nf: eu.factorx.awac.util.NumberFormatWrapper, allScopes: eu.factorx.awac.util.Table, scope1: eu.factorx.awac.util.Table, scope2: eu.factorx.awac.util.Table, scope3: eu.factorx.awac.util.Table, outOfScope: eu.factorx.awac.util.Table)
+@import eu.factorx.awac.util.Colors;
 <!DOCTYPE html>
 
 <head>
@@ -10,120 +11,152 @@
 
     <h1>Rapport</h1>
 
-    <table>
-        <tr>
-            <td colspan="2">
-                <h2>Tous les scopes</h2>
-            </td>
-        </tr>
 
+    <h2>Tous les scopes</h2>
+
+    <table class="indicators-table">
         <tr>
-            <th>Indicateur</th>
-            <th class="align-right">Scope 1 (tCO2e)</th>
-            <th class="align-right">Scope 2 (tCO2e)</th>
-            <th class="align-right">Scope 3 (tCO2e)</th>
-            <th class="align-right">Hors scope (tCO2e)</th>
+            <th class="header" width="100%">Indicateur</th>
+            <th class="header align-right">Scope 1 (tCO2e)</th>
+            <th class="header align-right">Scope 2 (tCO2e)</th>
+            <th class="header align-right">Scope 3 (tCO2e)</th>
+            <th class="header align-right">Hors scope (tCO2e)</th>
         </tr>
 
         @for(i <- 0 to allScopes.getRowCount()-1) {
         <tr>
             <td class="dotted">@allScopes.getCell(0, i)</td>
-            <td class="dotted align-right">@allScopes.getCell(1, i)</td>
-            <td class="dotted align-right">@allScopes.getCell(2, i)</td>
-            <td class="dotted align-right">@allScopes.getCell(3, i)</td>
-            <td class="dotted align-right">@allScopes.getCell(4, i)</td>
+            <td class="dotted align-right">@nf.format(allScopes.getCell(1, i))</td>
+            <td class="dotted align-right">@nf.format(allScopes.getCell(2, i))</td>
+            <td class="dotted align-right">@nf.format(allScopes.getCell(3, i))</td>
+            <td class="dotted align-right">@nf.format(allScopes.getCell(4, i))</td>
         </tr>
         }
 
         <tr>
-            <td colspan="5">
-
-                <table>
-                    <tr>
-                        <td>
-
-                            
-                        </td>
-                        <td><img src="http://lorempixel.com/200/150" /></td>
-                        <td><img src="http://lorempixel.com/200/150" /></td>
-                        <td><img src="http://lorempixel.com/200/150" /></td>
-                    </tr>
-                </table>
-
-
-            </td>
+            <th class="footer" width="100%">Total</th>
+            <th class="footer align-right">@{ nf.format(     scope1.sum( 1,0,1, scope1.getRowCount()-1 )     ) }</th>
+            <th class="footer align-right">@{ nf.format(     scope2.sum( 1,0,1, scope2.getRowCount()-1 )     ) }</th>
+            <th class="footer align-right">@{ nf.format(     scope3.sum( 1,0,1, scope3.getRowCount()-1 )     ) }</th>
+            <th class="footer align-right">@{ nf.format( outOfScope.sum( 1,0,1, outOfScope.getRowCount()-1 ) ) }</th>
         </tr>
+    </table>
 
-        <tr>
-            <td colspan="2">
-                <h2>Scope 1</h2>
-            </td>
-        </tr>
+    <h2>Scope 1</h2>
 
+    <table class="indicators-table">
         <tr>
-            <th colspan="4">Indicateur</th>
-            <th class="align-right">tCO2e</th>
+            <th class="header" width="100%">Indicateur</th>
+            <th class="header align-right">tCO2e</th>
         </tr>
 
         @for(i <- 0 to scope1.getRowCount()-1) {
         <tr>
-            <td class="dotted" colspan="4">@scope1.getCell(0, i)</td>
-            <td class="dotted align-right">@scope1.getCell(1, i)</td>
+            <td class="dotted">
+                <span style="display: inline-block; vertical-align: middle; width: 1em; height: 1em; background: #@{Colors.makeGoodColorForSerieElement(i+1, scope1.getRowCount())}; color: #@{Colors.makeGoodColorForSerieElement(i+1, scope1.getRowCount())}">
+                    -
+                </span>
+                @scope1.getCell(0, i)
+            </td>
+            <td class="dotted align-right">@nf.format(scope1.getCell(1, i))</td>
         </tr>
         }
 
         <tr>
-            <td colspan="2">
-                <h2>Scope 2</h2>
+            <td colspan="2" class="align-center">
+                <img src="mem://svg/donut/2013/2/1"
+                     style="height: 4cm; width: 4cm"/>
             </td>
         </tr>
+    </table>
 
+    <h2>Scope 2</h2>
+
+    <table class="indicators-table">
         <tr>
-            <th colspan="4">Indicateur</th>
-            <th class="align-right">tCO2e</th>
+            <th class="header" width="100%">Indicateur</th>
+            <th class="header align-right">tCO2e</th>
         </tr>
 
         @for(i <- 0 to scope2.getRowCount()-1) {
         <tr>
-            <td class="dotted" colspan="4">@scope2.getCell(0, i)</td>
-            <td class="dotted align-right">@scope2.getCell(1, i)</td>
+            <td class="dotted">
+                <span style="display: inline-block; vertical-align: middle; width: 1em; height: 1em; background: #@{Colors.makeGoodColorForSerieElement(i+1, scope2.getRowCount())}; color: #@{Colors.makeGoodColorForSerieElement(i+1, scope2.getRowCount())}">
+                    -
+                </span>
+                @scope2.getCell(0, i)
+            </td>
+            <td class="dotted align-right">@nf.format(scope2.getCell(1, i))</td>
         </tr>
         }
 
         <tr>
-            <td colspan="2">
-                <h2>Scope 3</h2>
+            <td colspan="2" class="align-center">
+                <!--<img src="http://127.0.0.1:9000/awac/result/getSvgDonutForScope/2013/2/2"-->
+                     <!--style="height: 4cm; width: 4cm"/>-->
             </td>
         </tr>
 
+    </table>
+
+    <h2>Scope 3</h2>
+
+    <table class="indicators-table">
         <tr>
-            <th colspan="4">Indicateur</th>
-            <th class="align-right">tCO2e</th>
+            <th class="header" width="100%">Indicateur</th>
+            <th class="header align-right">tCO2e</th>
         </tr>
 
         @for(i <- 0 to scope3.getRowCount()-1) {
         <tr>
-            <td class="dotted" colspan="4">@scope3.getCell(0, i)</td>
-            <td class="dotted align-right">@scope3.getCell(1, i)</td>
+            <td class="dotted">
+                <span style="display: inline-block; vertical-align: middle; width: 1em; height: 1em; background: #@{Colors.makeGoodColorForSerieElement(i+1, scope3.getRowCount())}; color: #@{Colors.makeGoodColorForSerieElement(i+1, scope3.getRowCount())}">
+                    -
+                </span>
+                @scope3.getCell(0, i)
+            </td>
+            <td class="dotted align-right">@nf.format(scope3.getCell(1, i))</td>
         </tr>
         }
 
         <tr>
-            <td colspan="2">
-                <h2>Hors scope</h2>
+            <td colspan="2" class="align-center">
+                <!--<img src='@eu.factorx.awac.controllers.routes.ResultController.getSvgDonutForScope("2013", 2L, 3)' style="height: 4cm; width: 4cm"/>-->
+
+                <!--<img src="http://127.0.0.1:9000/awac/result/getSvgDonutForScope/2013/2/3"-->
+                     <!--style="height: 4cm; width: 4cm"/>-->
             </td>
         </tr>
 
+    </table>
+
+    <h2>Hors scope</h2>
+
+    <table class="indicators-table">
         <tr>
-            <th colspan="4">Indicateur</th>
-            <th class="align-right">tCO2e</th>
+            <th class="header" width="100%">Indicateur</th>
+            <th class="header align-right">tCO2e</th>
         </tr>
         @for(i <- 0 to outOfScope.getRowCount()-1) {
         <tr>
-            <td class="dotted" colspan="4">@outOfScope.getCell(0, i)</td>
-            <td class="dotted align-right">@outOfScope.getCell(1, i)</td>
+            <td class="dotted">
+                <span style="display: inline-block; vertical-align: middle; width: 1em; height: 1em; background: #@{Colors.makeGoodColorForSerieElement(i+1, outOfScope.getRowCount())}; color: #@{Colors.makeGoodColorForSerieElement(i+1, outOfScope.getRowCount())}">
+                    -
+                </span>
+                @outOfScope.getCell(0, i)
+            </td>
+            <td class="dotted align-right">@nf.format(outOfScope.getCell(1, i))</td>
         </tr>
         }
+
+        <tr>
+            <td colspan="2" class="align-center">
+                <!--<img src="http://127.0.0.1:9000/awac/result/getSvgDonutForScope/2013/2/4"-->
+                     <!--style="height: 4cm; width: 4cm"/>-->
+            </td>
+        </tr>
+
+
     </table>
 </body>
 

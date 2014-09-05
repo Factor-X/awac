@@ -4,7 +4,7 @@ div.pdf-able
     br
 
     table.result_table(ng-show="o.reportLines != null")
-        tr
+        tr(ng-show="false")
             td
                 button.button.btn.btn-success(ng-click="downloadAsXls()") Télécharger le fichier Excel
                 button.button.btn.btn-success(ng-click="downloadPdf()") Télécharger le fichier Pdf

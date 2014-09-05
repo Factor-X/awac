@@ -1,10 +1,9 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.dto.awac.get.UnitCategoryDTO;
-import eu.factorx.awac.dto.awac.get.UnitDTO;
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.knowledge.UnitCategory;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,14 +11,9 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.Logger;
 
-
-import eu.factorx.awac.service.UnitCategoryService;
-
-import java.util.*;
-
-import static org.junit.Assert.*;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.knowledge.UnitCategory;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,7 +50,7 @@ public class UnitCategoryServiceTest extends AbstractBaseModelTest {
 		assertNotNull(luc);
 		assertEquals(15,luc.size());
 
-		Collection col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
+		Collection<String> col = Collections.unmodifiableList(new ArrayList<String>(Arrays.asList(
 				"Length",
 				"Area",
 				"Volume",

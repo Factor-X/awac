@@ -102,4 +102,13 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 		return resultList.get(0);
 	}
 
+	@Override
+	public Boolean isSublistOf(CodeList subList, CodeList mainList) {
+		if (sublists == null) {
+			findAllSublistsData();
+		}
+		List<CodeList> mainListSublists = sublists.get(mainList);
+		return (mainListSublists != null) && mainListSublists.contains(subList);
+	}
+
 }

@@ -9,9 +9,16 @@ table {
     width: 100%;
 }
 
-th {
+th.header {
     border-bottom: 0.5pt solid #333;
     padding: 0.25em 0.5em;
+    white-space: nowrap;
+}
+
+th.footer {
+    border-top: 0.5pt solid #333;
+    padding: 0.25em 0.5em;
+    white-space: nowrap;
 }
 
 td {
@@ -19,17 +26,32 @@ td {
     white-space: nowrap;
 }
 
+.indicators-table td:first-child {
+    width: 100%;
+}
+
 td.dotted {
-    border: 0.25pt dotted #333;
+    border-bottom: 0.25pt dotted #333;
 }
 
 .align-right {
     text-align: right
 }
 
+.align-center {
+    text-align: center
+}
+
 h1 {
     border-bottom: solid 1pt #333;
 }
 
-h2{
+h2 {
+    page-break-before: auto;
+    page-break-after: avoid;
+}
+
+img {
+    max-width: 100%;
+    width: 100%;
 }

@@ -10,6 +10,7 @@ initializeCommonRoutes = () ->
         .when('/login', {
                 templateUrl: '$/angular/views/login.html'
                 controller: 'LoginCtrl'
+                anonymousAllowed: true
             }
         )
         .when('/admin', {
@@ -35,6 +36,7 @@ initializeCommonRoutes = () ->
         .when('/registration/:key', {
                 templateUrl: '$/angular/views/user_registration.html'
                 controller: 'RegistrationCtrl'
+                anonymousAllowed: true
             }
         )
         .otherwise({ redirectTo: '/login' })

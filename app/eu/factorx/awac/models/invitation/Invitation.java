@@ -12,6 +12,7 @@ package eu.factorx.awac.models.invitation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.business.Organization;
 import play.data.validation.Constraints.Required;
 
 import javax.persistence.*;
@@ -47,20 +48,25 @@ public class Invitation extends AuditedAbstractEntity {
 	@Column(nullable = false)
 	private String email;
 
+	@OneToOne
+	private Organization organization;
+
 	public Invitation() {
 	}
 
-	public Invitation(String email, String genkey) {
+	public Invitation(String email, String genkey, Organization organization) {
 		this.setEmail(email);
 		this.setGenkey(genkey);
+		this.setOrganization(organization);
+
 	}
 
-	@Override
-	public String toString() {
-		return "Invitation{" +
-				"email=" + getEmail() +
-				", genkey=" + getGenkey() +
-				'}';
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public String getGenkey() {
@@ -78,4 +84,16 @@ public class Invitation extends AuditedAbstractEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Invitation{" +
+				"email=" + getEmail() +
+				", genkey=" + getGenkey() +
+				", organization=" + getOrganization().getName() +
+				'}';
+	}
+
+
 }

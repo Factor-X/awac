@@ -214,7 +214,8 @@ angular
 
 
     $scope.getClassContent = ->
-        if $scope.$root.isLogin() == false
+#        if $scope.$root.isLogin() == false
+        if $scope.$root.hideHeader() == false
             if $scope.getMainScope()?
                 if $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
                     return 'content-with-menu'
@@ -224,7 +225,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout,translationService,tmhDynamicLocale)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout,translationService,tmhDynamicLocale,$routeParams)->
 
     $rootScope.languages = []
     $rootScope.languages[0] = {
@@ -250,18 +251,54 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         #TODO save the langauge changement
 
 
+    #GHO route 03/09/2014
+    $rootScope.$on '$routeChangeStart', (event, current) ->
+        console.log("entering routeChangeStart")
+        console.log("current path : " + $location.path())
+        console.log("routeParams path : " + $routeParams.key)
+        console.log("current:")
+        console.log current
+
+        $rootScope.key = $routeParams.key
+        # Check if the user is logged in
+
+        if not $rootScope.currentPerson and not current.$$route.anonymousAllowed
+          #redirect to login page
+          console.log("redirect to login ")
+          $location.path('/login');
+        else
+          console.log("default router processing")
 
     #
     # Redirect user to login view if not logged in
     #
-    if not $rootScope.currentPerson
-        $location.path('/login')
+    #if not $rootScope.currentPerson
+    #    console.log("entering not current person")
+    #    $location.path('/login')
+
+    #
+    # getRegisterKey
+    #
+    $rootScope.getRegisterKey = () ->
+      return $rootScope.key
+
 
     #
     # Is login
+    # should not be used anymore
+    # prefer showHeader method
     #
     $rootScope.isLogin = () ->
         return $location.path().substring(0, 6) == "/login"
+
+    #
+    # evaluation conditions whenever show a header in pages (mains enterprise/municipality directives)
+    #
+    #
+    $rootScope.hideHeader = () ->
+        console.log("hideHeader:" + $location.path().substring(0, 13))
+        return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration")
+
 
     #
     # logout the current user

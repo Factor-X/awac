@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalInviteUser", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalInviteUser", (directiveService, downloadService, translationService, messageFlash, $rootScope) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -13,8 +13,8 @@ angular
 
         $scope.inviteEmailInfo =
             field: ""
-            fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
-            placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
+            fieldTitle: "USER_INVITATION_EMAIL_FIELD_TITLE"
+            placeholder: "USER_INVITATION_EMAIL_FIELD_PLACEHOLDER"
             validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
             validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
             focus: ->
@@ -37,13 +37,14 @@ angular
 
             data =
                 invitationEmail: $scope.inviteEmailInfo.field
+                organization: $rootScope.organization
 
             downloadService.postJson '/awac/invitation', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess "CHANGES_SAVED"
                     $scope.close()
-                    if $scope.getParams().cb?
-                        $scope.getParams().cb($scope.inviteEmailInfo.field)
+#                    if $scope.getParams().cb?
+#                        $scope.getParams().cb($scope.inviteEmailInfo.field)
                 else
                     messageFlash.displayError result.data.message
                     $scope.isLoading = false

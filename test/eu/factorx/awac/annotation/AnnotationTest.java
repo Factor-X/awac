@@ -1,22 +1,19 @@
 package eu.factorx.awac.annotation;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.service.impl.AccountServiceImpl;
-import eu.factorx.awac.util.FileUtil;
-import org.apache.commons.io.IOUtils;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import play.Logger;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.apache.commons.io.IOUtils;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import play.Logger;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.util.FileUtil;
 
 //import java.util.List;
 

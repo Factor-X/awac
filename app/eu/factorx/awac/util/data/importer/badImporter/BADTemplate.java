@@ -83,7 +83,7 @@ public class BADTemplate {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-        } 
+        }
             //Logger.info("file already exist and can't be erase");
 
     }
