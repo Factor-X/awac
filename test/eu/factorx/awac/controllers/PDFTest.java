@@ -23,11 +23,9 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PDFTest extends AbstractBaseModelTest {
-
-
 
 	//@Test
 	public void _001_pdfGeneration() {

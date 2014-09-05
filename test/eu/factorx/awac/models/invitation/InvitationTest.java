@@ -1,6 +1,7 @@
 package eu.factorx.awac.models.invitation;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.invitation.Invitation;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -22,9 +23,13 @@ public class InvitationTest extends AbstractBaseModelTest {
     @Test
     public void _001_createInvitation() {
 
-		Invitation invitation = new Invitation (INVITATION_EMAIL,INVITATION_GENKEY);
+		Organization org = new Organization("gaston");
+		Invitation invitation = new Invitation (INVITATION_EMAIL,INVITATION_GENKEY,org);
 
+        em.getTransaction().begin();
+		em.persist(org);
 		em.persist(invitation);
+        em.getTransaction().commit();
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
 		//Logger.info("Id:" + ac.getId());
@@ -77,7 +82,10 @@ public class InvitationTest extends AbstractBaseModelTest {
 		}
 		assertEquals(invitation.getEmail(),INVITATION_EMAIL);
 
+		em.getTransaction().begin();
 		em.remove(invitation);
+		em.remove(invitation.getOrganization());
+		em.getTransaction().commit();
 
 		Invitation reload=null;
 

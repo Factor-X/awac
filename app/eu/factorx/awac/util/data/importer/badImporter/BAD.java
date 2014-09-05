@@ -5,147 +5,181 @@ import eu.factorx.awac.models.code.type.BaseActivityDataCode;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by florian on 29/08/14.
  */
 public class BAD {
 
-	private String baseActivityDataCode;
-	private String name;
-	private int rank;
-	private String SpecificPurpose;
+    private String baseActivityDataCode;
+    private String name;
+    private int rank;
+    private String SpecificPurpose;
 
-	private String condition;
+    private String condition;
 
-	//it's always an activityCategoryCode
-	private String activityCategoryCode;
+    //it's always an activityCategoryCode
+    private String activityCategoryCode;
 
-	private String activitySubCategory;
+    private String activitySubCategory;
 
-	private String activityType;
+    private String activityType;
 
-	private String activitySource;
+    private String activitySource;
 
-	private String activityOwnership;
+    private String activityOwnership;
 
-	private String unit;
+    private Unit unit;
 
-	private String value;
+    private String value;
 
-	public BAD() {
-	}
+    private boolean canBeGenerated = true;
 
-	public String getBaseActivityDataCode() {
-		return baseActivityDataCode;
-	}
+    private List<String> listQuestion= new ArrayList<>();
 
-	public void setBaseActivityDataCode(String baseActivityDataCode) {
-		this.baseActivityDataCode = baseActivityDataCode;
-	}
+    public BAD() {
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getBaseActivityDataCode() {
+        return baseActivityDataCode;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setBaseActivityDataCode(String baseActivityDataCode) {
+        this.baseActivityDataCode = baseActivityDataCode;
+    }
 
-	public int getRank() {
-		return rank;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getSpecificPurpose() {
-		return SpecificPurpose;
-	}
+    public int getRank() {
+        return rank;
+    }
 
-	public void setSpecificPurpose(String specificPurpose) {
-		SpecificPurpose = specificPurpose;
-	}
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
-	public String getActivityCategoryCode() {
-		return activityCategoryCode;
-	}
+    public String getSpecificPurpose() {
+        return SpecificPurpose;
+    }
 
-	public void setActivityCategoryCode(String activityCategoryCode) {
-		this.activityCategoryCode = activityCategoryCode;
-	}
+    public void setSpecificPurpose(String specificPurpose) {
+        SpecificPurpose = specificPurpose;
+    }
 
-	public String getActivitySubCategory() {
-		return activitySubCategory;
-	}
+    public String getActivityCategoryCode() {
+        return activityCategoryCode;
+    }
 
-	public void setActivitySubCategory(String activitySubCategory) {
-		this.activitySubCategory = activitySubCategory;
-	}
+    public void setActivityCategoryCode(String activityCategoryCode) {
+        this.activityCategoryCode = activityCategoryCode;
+    }
 
-	public String getActivityType() {
-		return activityType;
-	}
+    public String getActivitySubCategory() {
+        return activitySubCategory;
+    }
 
-	public void setActivityType(String activityType) {
-		this.activityType = activityType;
-	}
+    public void setActivitySubCategory(String activitySubCategory) {
+        this.activitySubCategory = activitySubCategory;
+    }
 
-	public String getActivitySource() {
-		return activitySource;
-	}
+    public String getActivityType() {
+        return activityType;
+    }
 
-	public void setActivitySource(String activitySource) {
-		this.activitySource = activitySource;
-	}
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
+    }
 
-	public String getActivityOwnership() {
-		return activityOwnership;
-	}
+    public String getActivitySource() {
+        return activitySource;
+    }
 
-	public void setActivityOwnership(String activityOwnership) {
-		this.activityOwnership = activityOwnership;
-	}
+    public void setActivitySource(String activitySource) {
+        this.activitySource = activitySource;
+    }
 
-	public String getUnit() {
-		return unit;
-	}
+    public String getActivityOwnership() {
+        return activityOwnership;
+    }
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
+    public void setActivityOwnership(String activityOwnership) {
+        this.activityOwnership = activityOwnership;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public Unit getUnit() {
+        return unit;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
 
-	public String getCondition() {
-		return condition;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	@Override
-	public String toString() {
-		return "BAD{" +
-				"baseActivityDataCode='" + baseActivityDataCode + '\'' +
-				", name='" + name + '\'' +
-				", rank=" + rank +
-				", SpecificPurpose='" + SpecificPurpose + '\'' +
-				", condition='" + condition + '\'' +
-				", activityCategoryCode='" + activityCategoryCode + '\'' +
-				", activitySubCategory='" + activitySubCategory + '\'' +
-				", activityType='" + activityType + '\'' +
-				", activitySource='" + activitySource + '\'' +
-				", activityOwnership='" + activityOwnership + '\'' +
-				", unit='" + unit + '\'' +
-				", value='" + value + '\'' +
-				'}';
-	}
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    @Override
+    public String toString() {
+        return "BAD{" +
+                "baseActivityDataCode='" + baseActivityDataCode + '\'' +
+                ", name='" + name + '\'' +
+                ", rank=" + rank +
+                ", SpecificPurpose='" + SpecificPurpose + '\'' +
+                ", condition='" + condition + '\'' +
+                ", activityCategoryCode='" + activityCategoryCode + '\'' +
+                ", activitySubCategory='" + activitySubCategory + '\'' +
+                ", activityType='" + activityType + '\'' +
+                ", activitySource='" + activitySource + '\'' +
+                ", activityOwnership='" + activityOwnership + '\'' +
+                ", unit='" + unit + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
+
+    public void setCanBeGenerated(boolean canBeGenerated) {
+        this.canBeGenerated = canBeGenerated;
+    }
+
+    public boolean isCanBeGenerated() {
+        return canBeGenerated;
+    }
+
+    public void addQuestion(String unit) {
+
+        boolean founded = false;
+        for (String unitToTest : listQuestion) {
+            if (unitToTest.equals(unit)) {
+                founded = true;
+            }
+        }
+        if (!founded) {
+            this.listQuestion.add(unit);
+        }
+
+
+    }
+
+    public List<String> getListQuestions() {
+        return listQuestion;
+    }
 }

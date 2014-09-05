@@ -1,12 +1,12 @@
 package eu.factorx.awac.service;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-import java.util.List;
-
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.invitation.Invitation;
+import eu.factorx.awac.models.invitation.InvitationTest;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.invitation.Invitation;
-import eu.factorx.awac.models.invitation.InvitationTest;
+import java.util.Date;
+import java.util.List;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,11 +31,17 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 	@Autowired
 	private InvitationService invitationService;
 
-    @Test
+
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Test
     public void _001_createInvitation() {
 
-		Invitation invitation = new Invitation (InvitationTest.INVITATION_EMAIL,InvitationTest.INVITATION_GENKEY);
+		Organization org = new Organization ("gaston");
+		organizationService.saveOrUpdate(org);
 
+		Invitation invitation = new Invitation (InvitationTest.INVITATION_EMAIL,InvitationTest.INVITATION_GENKEY,org);
 		invitationService.saveOrUpdate(invitation);
 
     } // end of test method
@@ -70,7 +80,10 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 		assertEquals(invitation.getEmail(),InvitationTest.INVITATION_EMAIL);
 
 		// suppress
+		em.getTransaction().begin();
 		invitationService.remove(invitation);
+		organizationService.remove(invitation.getOrganization());
+		em.getTransaction().commit();
 
 		List<Invitation> invitationReloadList = null;
 

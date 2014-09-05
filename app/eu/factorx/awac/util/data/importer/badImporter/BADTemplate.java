@@ -5,6 +5,8 @@ import org.apache.velocity.app.Velocity;
 import play.Logger;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by florian on 29/08/14.
@@ -21,8 +23,21 @@ public class BADTemplate {
     }
 
 
+
+    public void addParameter(String key, List<?> content) {
+        if (content == null) {
+            velocityContext.put(key, new ArrayList<>());
+        } else {
+            velocityContext.put(key, content);
+        }
+    }
+
     public void addParameter(String key, String content) {
-        velocityContext.put(key, content);
+        if (content == null) {
+            velocityContext.put(key, "null");
+        } else {
+            velocityContext.put(key, content);
+        }
     }
 
 
@@ -38,7 +53,7 @@ public class BADTemplate {
 
     public static void save(final String text, final String path, final String name, boolean erase) {
 
-        Logger.info("Try to save " + name + " at " + path + ".. ");
+        //Logger.info("Try to save " + name + " at " + path + ".. ");
 
         final String nameFile = path + name;
 
@@ -51,9 +66,9 @@ public class BADTemplate {
             }
             try {
                 file.createNewFile();
-                System.out.println("saved !");
+                //System.out.println("saved !");
             } catch (final IOException e) {
-                System.out.println("file no created");
+                //System.out.println("file no created");
             }
 
             file.setWritable(true);
@@ -68,8 +83,8 @@ public class BADTemplate {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-        } else
-            Logger.info("file already exist and can't be erase");
+        }
+            //Logger.info("file already exist and can't be erase");
 
     }
 }

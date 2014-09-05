@@ -42,6 +42,17 @@ public class InvitationController extends AbstractController {
 	@Autowired
 	private InvitationService invitationService;
 
+	@Autowired
+	private AccountService accountService;
+
+	@Autowired
+	private PersonService personService;
+
+	@Autowired
+	private ConversionService conversionService;
+
+
+
 
 	@Transactional
 	@Security.Authenticated(SecuredController.class)
@@ -50,19 +61,24 @@ public class InvitationController extends AbstractController {
 
 		// get InvitationDTO from request
 		EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
-		Logger.info("Email Invitation : " + dto.getInvitationEmail());
+		Logger.info("Host Organization Invitation Name: " + dto.getOrganization().getName());
+		Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
+
+		Organization org = new Organization (dto.getOrganization().getName());
+		org.setId(dto.getOrganization().getId());
 
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
 		Logger.info("Email Invitation generated key : " + key);
 
 		// store key and user
-		Invitation invitation = new Invitation(dto.getInvitationEmail(),key);
+		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,org);
 		invitationService.saveOrUpdate(invitation);
 
 		// send email for invitation
 		// send mail
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation", "http://localhost:9000/enterprise#/registration/" + key);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation from " + dto.getOrganization().getName() + ".",
+																	   "http://localhost:9000/enterprise#/registration/" + key);
 		emailService.send(email);
 
 		//create InvitationResultDTO
@@ -70,13 +86,37 @@ public class InvitationController extends AbstractController {
 		return ok(resultDto);
 	}
 
+	@Transactional (readOnly = false)
 	public Result registerInvitation () {
 
 		Logger.info("request body:" + request().body().asJson());
 		// get InvitationDTO from request
 		RegisterInvitationDTO dto = extractDTOFromRequest(RegisterInvitationDTO.class);
 		Logger.info("Registering Invitation : " + dto.getEmail());
-		Logger.info("dump" + dto.toString());
+		Logger.info("dump: " + dto.toString());
+
+		// check if invitation exist
+		Invitation invitation=invitationService.findByGenkey(dto.getKey());
+		if (invitation==null) {
+			return unauthorized(new ExceptionsDTO("This invitation is not longer valid. Please verify invitation with host organization or verify your account is already set up."));
+		}
+
+
+		// create person
+		Person person = new Person (dto.getLastName(),dto.getFirstName(),dto.getEmail());
+		personService.saveOrUpdate(person);
+
+		// create account
+		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+		accountService.saveOrUpdate(account);
+
+		// delete invitation
+		invitationService.remove(invitation);
+
+		// send confirmation email
+		EmailMessage email = new EmailMessage(dto.getEmail(),"AWAC - registering confirmation ", "Your user " + dto.getLogin() + " is created");
+		emailService.send(email);
+
 
 		//create InvitationResultDTO
 		InvitationResultDTO resultDto = new InvitationResultDTO ();
@@ -91,7 +131,6 @@ public class InvitationController extends AbstractController {
 //		}
 //		return dto;
 //	}
-
 
 
 }

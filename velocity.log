@@ -1,321 +1,172 @@
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,621 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,625 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,625 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,625 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,625 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,625 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,625 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,626 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,626 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,626 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,626 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,628 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,629 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,629 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,629 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,629 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,629 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,630 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,630 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,630 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,630 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,633 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,633 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,633 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,633 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,633 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,633 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,634 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,634 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,634 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,634 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,637 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,637 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,637 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,637 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,638 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,641 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,641 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,641 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,641 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,641 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,642 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,642 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,642 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,642 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,642 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,645 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,646 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,647 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,647 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,650 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,650 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,650 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,651 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,655 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,655 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,655 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,655 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,655 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,655 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,656 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,656 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,656 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,656 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,659 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,659 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,659 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,659 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,660 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,660 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,660 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,660 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,660 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,663 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,663 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,663 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,663 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,663 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,663 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,664 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,664 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,664 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,666 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,666 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,667 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,670 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,670 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,670 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,670 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,670 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,671 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,671 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,671 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,671 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,674 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,674 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,675 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,675 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,677 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,677 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,677 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,678 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,681 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,681 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,682 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,683 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,685 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,685 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,686 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,689 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,689 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,689 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,689 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,690 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,690 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,690 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,690 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,690 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,693 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,693 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,693 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,693 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,694 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,694 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,694 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,694 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,694 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,697 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,697 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,698 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,701 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,701 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,701 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,701 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,702 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,702 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,702 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,702 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,702 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,705 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,705 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,705 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,706 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,709 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,709 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,710 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,712 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,712 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,713 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,713 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,715 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,717 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,717 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,717 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,717 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,718 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,720 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,720 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,723 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,723 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,724 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,724 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,726 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,727 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,728 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,728 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,730 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,730 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,731 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,733 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,733 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,733 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,734 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,736 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,736 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,737 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,740 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,740 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,741 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,741 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
-2014-09-04 12:19:21,744 - ResourceManager : found public/template/bad.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
-2014-09-04 12:19:21,744 - Null reference [template 'public/template/bad.vm', line 1, column 30] : $BAD-KEY cannot be resolved.
-2014-09-04 12:19:21,744 - Null reference [template 'public/template/bad.vm', line 13, column 69] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,744 - Null reference [template 'public/template/bad.vm', line 14, column 60] : $UNIT-KEY cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 47, column 37] : $BAD-KEY-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 49, column 49] : $SPECIFIC-PURPOSE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 50, column 50] : $ACTIVITY-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 51, column 53] : $ACTIVITY-SUB-CATEGORY-CODE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 52, column 46] : $ACTIVITY-TYPE-COMPLETE cannot be resolved.
-2014-09-04 12:19:21,745 - Null reference [template 'public/template/bad.vm', line 56, column 51] : $ACTIVITY-OWNERSHIP cannot be resolved.
+2014-09-05 11:57:11,957 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,957 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,957 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,977 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,977 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,978 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,978 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,978 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,998 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,998 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,998 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,998 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:11,998 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,022 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,022 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,022 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,023 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,023 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,048 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,048 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,049 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,049 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,049 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,071 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,072 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,072 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,072 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,072 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,095 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,096 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,096 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,096 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,096 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,190 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,191 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,191 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,213 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,214 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,214 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,237 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,238 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,238 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,268 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,268 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,422 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,422 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,449 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,449 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,481 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,481 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,514 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,514 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,545 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,545 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,584 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,584 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,616 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,617 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,645 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,645 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,674 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,674 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,708 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,708 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,742 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,742 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,766 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,766 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,793 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,793 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,793 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,816 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,817 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,841 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,841 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,861 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,862 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,896 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,896 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,896 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,918 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,918 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,939 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,939 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,977 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:12,977 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,017 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,017 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,038 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,039 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,069 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,069 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,091 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,091 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,112 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,113 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,139 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,139 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,161 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,161 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,186 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,186 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,209 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,209 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,231 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,231 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,251 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,251 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,272 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,272 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,292 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,292 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,311 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,311 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,322 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,322 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,323 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,323 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,323 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,331 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,331 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,331 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,331 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,331 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,338 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,338 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,339 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,339 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,339 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,345 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,346 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,346 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,346 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,346 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,354 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,354 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,354 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,354 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,354 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,361 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,361 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,361 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,362 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,362 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,375 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,375 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,375 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,375 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,375 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,384 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,384 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,384 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,384 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,397 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,398 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,398 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,398 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,398 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,421 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,421 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,435 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,435 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,462 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,462 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,488 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,489 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,512 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,512 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,534 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,535 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,564 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]
+2014-09-05 11:57:13,564 - Left side ($repetition.getQuestionList().size) of '>' operation has null value at public/template/bad.vm[line 56, column 54]

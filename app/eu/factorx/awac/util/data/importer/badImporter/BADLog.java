@@ -24,7 +24,5 @@ public class BADLog {
 
     public enum LogType {
         INFO, WARNING, ERROR, DEBUG;
-
-
     }
 }
