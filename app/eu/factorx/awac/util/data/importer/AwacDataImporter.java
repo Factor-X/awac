@@ -15,10 +15,12 @@ import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Unit;
+import eu.factorx.awac.service.AwacCalculatorService;
 import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.IndicatorService;
 
@@ -43,6 +45,8 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * </pre>
 	 */
 	public static final String ENTERPRISE_INDICATORS_SHEET_NAME = "Indicators";
+	public static final String MUNICIPALITY_INDICATORS_SHEET_NAME = "Indicators-commune";
+	public static final String HOUSEHOLD_INDICATORS_SHEET_NAME = "indicators-menage";
 
 	/**
 	 * <pre>
@@ -65,6 +69,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	@Autowired
 	private FactorService factorService;
 
+	@Autowired
+	private AwacCalculatorService awacCalculatorService;
+	
 	private Map<String, Unit> allUnitKeys = null;
 
 	private List<String> allIndicatorCategoryKeys = null;
@@ -97,12 +104,13 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		allActivitySubCategoryKeys = findAllCodeKeys(CodeList.ActivitySubCategory);
 
 		Logger.info("==== Importing Enterprise Indicators");
-		saveIndicators(indicatorsSheet);
+		saveIndicators(indicatorsSheet, InterfaceTypeCode.ENTERPRISE);
 		Logger.info("==== Importing Enterprise Factors");
 		saveFactors(factorsSheet);
 	}
 
-	private void saveIndicators(Sheet indicatorsSheet) {
+	private void saveIndicators(Sheet indicatorsSheet, InterfaceTypeCode interfaceTypeCode) {
+
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitKeys.get("U5331");
 		Integer deletedIndicators = 0;
@@ -153,6 +161,10 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			indicators.add(indicator);
 		}
 		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
+		
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
+		awacCalculator.setIndicators(indicators);
+		awacCalculatorService.saveOrUpdate(awacCalculator);
 	}
 
 	private void saveFactors(Sheet factorsSheet) {
