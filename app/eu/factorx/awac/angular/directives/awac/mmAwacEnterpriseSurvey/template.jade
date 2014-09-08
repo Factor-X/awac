@@ -20,7 +20,7 @@ ng-virtual
                         button.button.help(type='button', mm-not-implemented='mm-not-implemented') Assistance
                     td
                         //  site manager button
-                        button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',mm-not-implemented='mm-not-implemented')
+                        button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-click='nav(\'/site_manager\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}')
                         // user manager button
                         button.button.user_manage(type='button', ng-bind-html='\'USER_MANAGER_BUTTON\' | translate', ng-click='nav(\'/user_manager\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}')
                     td
