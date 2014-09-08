@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VELOCITY ${title}</title>
+</head>
+<body>
+    $name
+</body>
+</html>

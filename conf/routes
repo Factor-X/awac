@@ -44,7 +44,15 @@ POST    /awac/register                                                @eu.factor
 #
 
 GET     /awac/pdf                                                     eu.factorx.awac.controllers.PdfController.asPdf()                                                                                                       
-GET     /awac/svg                                                     eu.factorx.awac.controllers.PdfController.withSvg()                                                                                                     
+GET     /awac/svg                                                     eu.factorx.awac.controllers.PdfController.withSvg()
+
+
+#
+# Velocity controller
+#
+
+GET     /awac/velocity                                               @eu.factorx.awac.controllers.VelocityController.velocity()
+
 
 #
 # Email Service

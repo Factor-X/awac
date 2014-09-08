@@ -71,7 +71,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	@Autowired
 	private AwacCalculatorService awacCalculatorService;
-	
+
 	private Map<String, Unit> allUnitKeys = null;
 
 	private List<String> allIndicatorCategoryKeys = null;
@@ -85,12 +85,15 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	}
 
 	protected void importData() throws Exception {
+		AwacCalculator enterpriseCalculator = awacCalculatorService.findByCode(InterfaceTypeCode.ENTERPRISE);
+		if (enterpriseCalculator == null) {
+			enterpriseCalculator = new AwacCalculator(InterfaceTypeCode.ENTERPRISE);
+		}
 		indicatorService.removeAll();
 		factorService.removeAll();
 
 		Logger.info("== Importing AWAC Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
 		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
-
 
 		Sheet indicatorsSheet = awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME);
 		Sheet factorsSheet = awacDataWbSheets.get(ENTERPRISE_FACTORS_SHEET_NAME);
@@ -104,12 +107,12 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		allActivitySubCategoryKeys = findAllCodeKeys(CodeList.ActivitySubCategory);
 
 		Logger.info("==== Importing Enterprise Indicators");
-		saveIndicators(indicatorsSheet, InterfaceTypeCode.ENTERPRISE);
+		saveIndicators(indicatorsSheet, enterpriseCalculator);
 		Logger.info("==== Importing Enterprise Factors");
 		saveFactors(factorsSheet);
 	}
 
-	private void saveIndicators(Sheet indicatorsSheet, InterfaceTypeCode interfaceTypeCode) {
+	private void saveIndicators(Sheet indicatorsSheet, AwacCalculator awacCalculator) {
 
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitKeys.get("U5331");
@@ -161,8 +164,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			indicators.add(indicator);
 		}
 		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
-		
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
+
 		awacCalculator.setIndicators(indicators);
 		awacCalculatorService.saveOrUpdate(awacCalculator);
 	}
@@ -201,7 +203,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 			String institution = getCellContent(factorsSheet, 9, i);
 
-			Double value = getNumericCellContent(factorsSheet,10, i);
+			Double value = getNumericCellContent(factorsSheet, 10, i);
 			if (value == null) {
 				Logger.warn("Value of factor '{}' is null!", key);
 			}

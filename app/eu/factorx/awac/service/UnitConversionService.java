@@ -1,8 +1,10 @@
 package eu.factorx.awac.service;
 
+import org.springframework.expression.ExpressionException;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitConversionFormula;
-import org.springframework.stereotype.Component;
 
 @Component
 public interface UnitConversionService extends PersistenceService<UnitConversionFormula> {
@@ -14,5 +16,7 @@ public interface UnitConversionService extends PersistenceService<UnitConversion
 	Double convertFromReferenceUnit(Double value, Unit targetUnit, Integer year);
 
 	Double convert(Double value, Unit currentUnit, Unit targetUnit, Integer year);
+
+	Double evaluateExpression(String strExpression, Double variableValue) throws ExpressionException;
 
 }
