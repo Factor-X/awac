@@ -133,8 +133,20 @@ public class InvitationController extends AbstractController {
 		// delete invitation
 		invitationService.remove(invitation);
 
+		// prepare email
+		Map values = new HashMap<String,Object>();
+		final String awacHostname = Configuration.root().getString("awac.hostname");
+		String title = "AWAC - registering confirmation.";
+		String link = "http://"+awacHostname+":9000/login";
+
+		values.put("title",title);
+		values.put("link",link);
+		values.put("hostname",awacHostname);
+
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+
 		// send confirmation email
-		EmailMessage email = new EmailMessage(dto.getEmail(),"AWAC - registering confirmation ", "Your user " + dto.getLogin() + " is created");
+		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);
 		emailService.send(email);
 
 
