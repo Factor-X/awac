@@ -28,6 +28,8 @@
                 <bean class="eu.factorx.awac.converter.FormProgressListToFormProgressListDTOConverter" />
                 <bean class="eu.factorx.awac.converter.FormProgressToFormProgressDTOConverter" />
                 <bean class="eu.factorx.awac.converter.NotificationToNotificationDTOConverter" />
+                <!-- admin -->
+                <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>
         </property>
     </bean>

@@ -22,7 +22,7 @@ public class BADGenerator {
 
 
     private RepeatableElement repeatableElementRoot = null;
-    private List<Question> listQuestionWithoutRepetition = new ArrayList<>();
+    //private List<Question> listQuestionWithoutRepetition = new ArrayList<>();
 
 
     @Autowired
@@ -40,6 +40,18 @@ public class BADGenerator {
             completHashMap(question);
         }
 
+        //TEMP print result
+        //TODO erreur dans les listes : les questions doivent être récupéré dans leur parent direct et pas dans la répéition
+        /*
+        if (bad.getListQuestions().size() > 0) {
+            Logger.info("getListQuestions:" + bad.getListQuestions().toString());
+
+            if (repeatableElementRoot != null) {
+                Logger.info("repeatableElementRoot:" + repeatableElementRoot.toString());
+            }
+            //Logger.info("listQuestionWithoutRepetition:" + listQuestionWithoutRepetition.toString());
+        }
+*/
         //baseActivityDate key and name
         badTemplate.addParameter("BAD-KEY", bad.getBaseActivityDataCode());
         badTemplate.addParameter("BAD-NAME", bad.getName());
@@ -107,9 +119,9 @@ public class BADGenerator {
         Question question = questionService.findByCode(new QuestionCode(questionCode));
 
         //there is a loop bottom the question ?
-        if (foundRepetition(question.getQuestionSet())) {
+        //if (foundRepetition(question.getQuestionSet())) {
 
-            //find a repetition
+            //try to add question
             if (!addQuestion(question.getQuestionSet(), question)) {
 
                 if (repeatableElementRoot == null) {
@@ -122,9 +134,9 @@ public class BADGenerator {
                     Logger.info("CANNOT FOUND REPETITION ELEMEBNT FOR "+questionCode);
                 }
             }
-        } else {
-            listQuestionWithoutRepetition.add(question);
-        }
+       // } else {
+       //     listQuestionWithoutRepetition.add(question);
+        //}
 
     }
 
