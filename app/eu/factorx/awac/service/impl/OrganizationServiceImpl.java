@@ -40,9 +40,9 @@ public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<O
 	@Override
 	public void remove(final Organization organization) {
 
+		//play.Logger.info("remove Organization:" + organization.toString());
 		Scope scope = scopeService.findByOrganization(organization);
 		scopeService.remove(scope);
-
 		super.remove(organization);
 	}
 
