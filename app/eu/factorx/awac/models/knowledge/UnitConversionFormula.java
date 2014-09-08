@@ -12,7 +12,7 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 		@NamedQuery(name = UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, query = "select ucf from UnitConversionFormula ucf where (ucf.year is null or ucf.year = :year) and ucf.unit = :unit"),
 })
 @Cacheable
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UnitConversionFormula extends AuditedAbstractEntity {
 
 	public static final String FIND_BY_UNIT_AND_YEAR = "UnitConversionFormula.findByUnitAndYear";
@@ -72,6 +72,11 @@ public class UnitConversionFormula extends AuditedAbstractEntity {
 
 	public void setYear(Integer year) {
 		this.year = year;
+	}
+
+	@Override
+	public String toString() {
+		return "UnitConversionFormula [id=" + id + ", unit=" + unit.getUnitCode().getKey() + " (symbol = '" + unit.getSymbol() + "'), unitToReference='" + unitToReference + "', referenceToUnit='" + referenceToUnit + "', year=" + year + "]";
 	}
 
 }
