@@ -34,6 +34,9 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
         //2. build BAD
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
         #foreach ($repetition in $repetitions)
+
+            #set($repetitionCount = $foreach.count)
+
             #if( ${foreach.count} == 1)
                 List<QuestionSetAnswer> questionSetAnswers$repetition.mainQuestionSet = questionSetAnswers.get(QuestionCode.$repetition.mainQuestionSet);
                 //2.2 control if the list if different than null
@@ -56,12 +59,13 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
 
                 //load question for this level
                 #foreach ($question in $repetition.getQuestionList())
-                    QuestionAnswer question${question}Answer = answersByCode${foreach.count}.get(QuestionCode.$question);
+                    QuestionAnswer question${question}Answer = answersByCode${repetitionCount}.get(QuestionCode.$question);
                 #end
 
                     //control them
                     if (#foreach ($question in $repetition.getQuestionList())
-                            #if( ${foreach.count} != 1)||#end question${question}Answer == null
+                            question${question}Answer == null #if( ${foreach.count} != $repetition.getQuestionList().size - 2)||
+                            #end
                         #end
                         ) {
                        continue;

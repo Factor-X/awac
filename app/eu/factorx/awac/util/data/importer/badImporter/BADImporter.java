@@ -10,6 +10,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     //value
     private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.S;
 
-    private BADLog badLog = new BADLog();
+    //private
 
     @Autowired
     private QuestionService questionService;
@@ -81,18 +82,25 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
 
 
-    public void run() {
+    public BADLog importBAD() {
+        BADLog badLog = new BADLog();
         try {
-            importData();
+
+            importDatas(badLog);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return badLog;
     }
 
     public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
 
     @Override
     protected void importData() throws Exception {
+        //useless
+    }
+
+    protected void importDatas(BADLog badLog) throws Exception {
 
         play.Logger.info("run badimporter....");
 
@@ -102,7 +110,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         Data data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
 
         //2. read
-        reader(data);
+        reader(data,badLog);
 
         play.Logger.info("run badimporter end !");
 
@@ -111,7 +119,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
     //not null, ActivityType or answer(control list content) or more complex
 
-    public void reader(Data data) {
+    public void reader(Data data,BADLog badLog) {
 
         badControlElement.setBadLog(badLog);
 
@@ -130,7 +138,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.INFO, line, " ----------------------------------------> This is a BAD " + data.getData(ExcelEquivalenceColumn.B, line));
+                badLog.addToLog(BADLog.LogType.ID, line, data.getData(ExcelEquivalenceColumn.B, line));
 
 
                 //create the bad

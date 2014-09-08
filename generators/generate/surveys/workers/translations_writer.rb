@@ -54,7 +54,7 @@ class TranslationsWriter
         @logger.info('Inserting QUESTIONS_SETS ...')
         for qs in @question_sets
 
-            @main_sheet[current_line, 0] = qs.accronym + '_TITLE'
+            @main_sheet[current_line, 0] = qs.accronym
             @main_sheet[current_line, 1] = qs.text
             @main_sheet[current_line, 2] = qs.text
             @main_sheet[current_line, 3] = qs.text
@@ -73,7 +73,7 @@ class TranslationsWriter
         @logger.info('Inserting QUESTIONS ...')
         for q in @questions
 
-            @main_sheet[current_line, 0] = q.accronym + '_TITLE'
+            @main_sheet[current_line, 0] = q.accronym
             @main_sheet[current_line, 1] = q.text
             @main_sheet[current_line, 2] = q.text
             @main_sheet[current_line, 3] = q.text

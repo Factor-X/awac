@@ -31,7 +31,7 @@ CREATE TABLE mm_calculator_indicator
   indicator_id bigint NOT NULL,
   CONSTRAINT fk_6at3lg5o0qbvp3qh2nba9ropv FOREIGN KEY (calculator_id)
       REFERENCES awaccalculator (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_mlxk7iq56m38pkxk26onc4q5f FOREIGN KEY (indicator_id)
       REFERENCES indicator (id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE

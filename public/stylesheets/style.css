@@ -119,7 +119,7 @@ select {
     padding: 1px 0 0;
 }
 
-.header {
+.survey-header {
     background-color: #3c3b37;
     height: 70px;
     padding: 5px;
@@ -127,33 +127,33 @@ select {
     overflow: hidden;
 }
 
-.header-option {
+.survey-header-option {
     float: right;
 }
 
-.header-option tr:first-child {
+.survey-header-option tr:first-child {
     text-align: center;
 }
 
-.header-option tr:first-child td:nth-child(2) {
+.survey-header-option tr:first-child td:nth-child(2) {
     text-align: center;
 }
 
-.header-option tr:last-child td,
-.header-option tr:last-child td button {
+.survey-header-option tr:last-child td,
+.survey-header-option tr:last-child td button {
     vertical-align: top;
 }
 
-.header-option td {
+.survey-header-option td {
     padding-right: 10px;
     padding-left: 10px;
 }
 
-.header-option td {
+.survey-header-option td {
     border-right: 1px solid #61605b;
 }
 
-.header-option select {
+.survey-header-option select {
     padding: 2px;
     min-width: 100px;
     background-color: #61605b;
@@ -161,7 +161,7 @@ select {
     margin-bottom: 5px;
 }
 
-.header > div {
+.survey-header > div {
     display: inline-block;
 }
 
@@ -1666,4 +1666,12 @@ ul.messenger > li {
 .interface_menu li .selected{
     background-color : #000080;
     border-color:#000080;
+}
+
+.admin-table-import-bad td{
+    border-right: 1px solid #ddd;
+}
+
+.admin-table-import-bad ul{
+    list-style-type: none;
 }
