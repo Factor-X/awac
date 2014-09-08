@@ -1,3 +1,15 @@
-h1 Admin
-
-p {{msg}}
+div
+    h1 Admin
+    tabset(style="margin-top:20px")
+        tab.tab-color-lightgreen
+            tab-heading(style="margin-left:25px")
+                span(ng-bind-html="'BAD Importer'")
+            div(style="border-top : 1px solid black")
+                .element_table
+                    mm-awac-admin-bad-importer
+        tab.tab-color-lightgreen
+            tab-heading
+                span(ng-bind-html="'Other .... '")
+            div(style="border-top : 1px solid black")
+                .element_table
+                    div something

@@ -2,7 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
-import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionException;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
@@ -17,18 +17,19 @@ import eu.factorx.awac.service.UnitConversionService;
 public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<UnitConversionFormula> implements
 		UnitConversionService {
 
+	private static ExpressionParser expressionParser = new SpelExpressionParser();
+
 	@Override
 	public UnitConversionFormula findByUnitAndYear(Unit unit, Integer year) {
 		List<UnitConversionFormula> resultList = JPA.em()
 				.createNamedQuery(UnitConversionFormula.FIND_BY_UNIT_AND_YEAR, UnitConversionFormula.class)
 				.setParameter("unit", unit).setParameter("year", year).getResultList();
-		if (resultList.size() > 1) {
-			String errorMsg = "More than one conversion formula for unit = '" + unit.getSymbol() + "' and year = "
-					+ year;
-			throw new RuntimeException(errorMsg);
-		}
 		if (resultList.size() == 0) {
 			return null;
+		}
+		if (resultList.size() > 1) {
+			String errorMsg = "More than one conversion formula for unit = '" + unit.getSymbol() + "' and year = " + year;
+			throw new RuntimeException(errorMsg);
 		}
 		return resultList.get(0);
 	}
@@ -62,7 +63,7 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 					+ "' and year = " + year);
 		}
 		String unitToReferenceFormula = conversionFormula.getUnitToReference();
-		return evaluateFormula(unitToReferenceFormula, value);
+		return evaluateExpression(unitToReferenceFormula, value);
 	}
 
 	@Override
@@ -73,15 +74,14 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 					+ "' and year = " + year);
 		}
 		String referenceToUnitFormula = conversionFormula.getReferenceToUnit();
-		return evaluateFormula(referenceToUnitFormula, value);
+		return evaluateExpression(referenceToUnitFormula, value);
 	}
 
-	private Double evaluateFormula(String formula, Double value) {
-		ExpressionParser parser = new SpelExpressionParser();
-		formula = formula.replaceAll(",", ".");
-		formula = formula.replaceAll(UnitConversionFormula.VARIABLE_NAME, String.valueOf(value));
-		Expression expression = parser.parseExpression(formula);
-		return expression.getValue(Double.class);
+	public Double evaluateExpression(String strExpression, Double variableValue) throws ExpressionException {
+		strExpression = strExpression.replaceAll(",", ".");
+		strExpression = strExpression.replaceAll(UnitConversionFormula.VARIABLE_NAME, String.valueOf(variableValue));
+
+		return expressionParser.parseExpression(strExpression).getValue(Double.class);
 	}
 
 }

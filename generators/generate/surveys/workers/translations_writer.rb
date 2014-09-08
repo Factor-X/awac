@@ -22,69 +22,88 @@ class TranslationsWriter
 
     def execute
         @logger.info("READING #{@target_filename}...")
+
         @target_book = Spreadsheet::Workbook.new
+        bold         = Spreadsheet::Format.new :weight => :bold
 
-        @main_sheet = @target_book.create_worksheet :name => 'SURVEY'
+        @forms_sheet       = @target_book.create_worksheet :name => 'FORMS'
+        @forms_sheet[0, 0] = 'KEY'
+        @forms_sheet[0, 1] = 'LABEL_EN'
+        @forms_sheet[0, 2] = 'LABEL_FR'
+        @forms_sheet[0, 3] = 'LABEL_NL'
+        @forms_sheet.row(0).set_format(0, bold)
+        @forms_sheet.row(0).set_format(1, bold)
+        @forms_sheet.row(0).set_format(2, bold)
+        @forms_sheet.row(0).set_format(3, bold)
 
+        @question_sets_sheet       = @target_book.create_worksheet :name => 'QUESTION_SETS'
+        @question_sets_sheet[0, 0] = 'KEY'
+        @question_sets_sheet[0, 1] = 'LABEL_EN'
+        @question_sets_sheet[0, 2] = 'LABEL_FR'
+        @question_sets_sheet[0, 3] = 'LABEL_NL'
+        @question_sets_sheet.row(0).set_format(0, bold)
+        @question_sets_sheet.row(0).set_format(1, bold)
+        @question_sets_sheet.row(0).set_format(2, bold)
+        @question_sets_sheet.row(0).set_format(3, bold)
 
-        @main_sheet[0, 0] = 'KEY'
-        @main_sheet[0, 1] = 'LABEL_EN'
-        @main_sheet[0, 2] = 'LABEL_FR'
-        @main_sheet[0, 3] = 'LABEL_NL'
-
-        bold = Spreadsheet::Format.new :weight => :bold
-        @main_sheet.row(0).set_format(0, bold)
-        @main_sheet.row(0).set_format(1, bold)
-        @main_sheet.row(0).set_format(2, bold)
-        @main_sheet.row(0).set_format(3, bold)
+        @questions_sheet       = @target_book.create_worksheet :name => 'QUESTIONS'
+        @questions_sheet[0, 0] = 'KEY'
+        @questions_sheet[0, 1] = 'LABEL_EN'
+        @questions_sheet[0, 2] = 'LABEL_FR'
+        @questions_sheet[0, 3] = 'LABEL_NL'
+        @questions_sheet.row(0).set_format(0, bold)
+        @questions_sheet.row(0).set_format(1, bold)
+        @questions_sheet.row(0).set_format(2, bold)
+        @questions_sheet.row(0).set_format(3, bold)
 
         current_line = 1
-
         @logger.info('Inserting FORMS ...')
         for form in @forms
 
-            @main_sheet[current_line, 0] = form.code
-            @main_sheet[current_line, 1] = form.name
-            @main_sheet[current_line, 2] = form.name
-            @main_sheet[current_line, 3] = form.name
-            current_line                 = current_line + 1
+            @forms_sheet[current_line, 0] = form.code
+            @forms_sheet[current_line, 1] = form.name
+            @forms_sheet[current_line, 2] = form.name
+            @forms_sheet[current_line, 3] = form.name
+            current_line                  = current_line + 1
 
         end
 
+        current_line = 1
         @logger.info('Inserting QUESTIONS_SETS ...')
         for qs in @question_sets
 
-            @main_sheet[current_line, 0] = qs.accronym + '_TITLE'
-            @main_sheet[current_line, 1] = qs.text
-            @main_sheet[current_line, 2] = qs.text
-            @main_sheet[current_line, 3] = qs.text
-            current_line                 = current_line + 1
+            @question_sets_sheet[current_line, 0] = qs.accronym
+            @question_sets_sheet[current_line, 1] = qs.text
+            @question_sets_sheet[current_line, 2] = qs.text
+            @question_sets_sheet[current_line, 3] = qs.text
+            current_line                          = current_line + 1
 
             if qs.loop_descriptor != nil
-                @main_sheet[current_line, 0] = qs.accronym + '_LOOPDESC'
-                @main_sheet[current_line, 1] = qs.loop_descriptor
-                @main_sheet[current_line, 2] = qs.loop_descriptor
-                @main_sheet[current_line, 3] = qs.loop_descriptor
-                current_line                 = current_line + 1
+                @question_sets_sheet[current_line, 0] = qs.accronym + '_LOOPDESC'
+                @question_sets_sheet[current_line, 1] = qs.loop_descriptor
+                @question_sets_sheet[current_line, 2] = qs.loop_descriptor
+                @question_sets_sheet[current_line, 3] = qs.loop_descriptor
+                current_line                          = current_line + 1
             end
 
         end
 
+        current_line = 1
         @logger.info('Inserting QUESTIONS ...')
         for q in @questions
 
-            @main_sheet[current_line, 0] = q.accronym + '_TITLE'
-            @main_sheet[current_line, 1] = q.text
-            @main_sheet[current_line, 2] = q.text
-            @main_sheet[current_line, 3] = q.text
-            current_line                 = current_line + 1
+            @questions_sheet[current_line, 0] = q.accronym
+            @questions_sheet[current_line, 1] = q.text
+            @questions_sheet[current_line, 2] = q.text
+            @questions_sheet[current_line, 3] = q.text
+            current_line                      = current_line + 1
 
             if q.description != nil
-                @main_sheet[current_line, 0] = q.accronym + '_DESC'
-                @main_sheet[current_line, 1] = q.description
-                @main_sheet[current_line, 2] = q.description
-                @main_sheet[current_line, 3] = q.description
-                current_line                 = current_line + 1
+                @questions_sheet[current_line, 0] = q.accronym + '_DESC'
+                @questions_sheet[current_line, 1] = q.description
+                @questions_sheet[current_line, 2] = q.description
+                @questions_sheet[current_line, 3] = q.description
+                current_line                      = current_line + 1
             end
         end
 

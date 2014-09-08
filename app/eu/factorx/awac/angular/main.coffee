@@ -10,7 +10,7 @@ angular.module 'app.services', []
 
 angular.module 'app.controllers', ['app.services', 'ngRoute', 'angular-flash.service',
                                    'angular-flash.flash-alert-directive',
-                                   'angularFileUpload','tmh.dynamicLocale']
+                                   'angularFileUpload','tmh.dynamicLocale','ngTable']
 
 angular.module 'app', [
     'app.directives',
