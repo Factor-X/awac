@@ -76,7 +76,7 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 
 	@Override
 	public CodeLabel findCodeLabelByCode(Code code) {
-		return findAllCodeLabels().get(code.getCodeList()).get(code.getKey());
+		return findCodeLabelsByList(code.getCodeList()).get(code.getKey());
 	}
 
 	@Override

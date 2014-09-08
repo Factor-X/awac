@@ -1,5 +1,6 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
 import eu.factorx.awac.models.data.question.Question;
@@ -7,6 +8,7 @@ import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.models.knowledge.UnitConversionFormula;
+import eu.factorx.awac.service.CodeConversionService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.service.UnitService;
 import eu.factorx.awac.util.MyrmexException;
@@ -35,6 +37,9 @@ public class BADControlElement {
 
     @Autowired
     private UnitService unitService;
+
+    @Autowired
+            private CodeConversionService codeConversionService;
 
 
     BADLog badLog;
@@ -69,7 +74,7 @@ public class BADControlElement {
         }
 
         //complete the bad
-        bad.setBaseActivityDataCode(badKey);
+        bad.setBaseActivityDataCode(badKey.toUpperCase());
     }
 
     /**
@@ -123,7 +128,7 @@ public class BADControlElement {
 
             //test if the specific purpose is a code
             //control if the question is a text
-            try {
+            if (controlList(QuestionCode.class, content)) {
                 if (controlQuestionType(content, StringQuestion.class)) {
                     badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a SpecificPurpose and it's a Stringquestion");
 
@@ -133,7 +138,7 @@ public class BADControlElement {
                 } else {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "SpecificPurpose : it's a question but not a StringQuestion : SpecificPurpose will be null");
                 }
-            } catch (MyrmexException e) {
+            } else {
                 badLog.addToLog(BADLog.LogType.WARNING, line, "SpecificPurpose is a string");
                 bad.setSpecificPurpose("\"" + content + "\"");
             }
@@ -187,9 +192,18 @@ public class BADControlElement {
             bad.setActivitySubCategory("ActivitySubCategoryCode." + content);
 
         } else if (controlList(QuestionCode.class, content)) {
-            //TODO control the type of the question
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activitySubCategory and it's a question");
 
+            //load the question
+            Question question = questionService.findByCode(new QuestionCode(content));
+
+            if(question instanceof ValueSelectionQuestion){
+                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivitySubCategory)){
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                }
+            }
+            else{
+                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+            }
 
             //add to bad
             bad.setActivitySubCategory("toActivitySubCategoryCode(question" + content + "Answer)");
@@ -223,8 +237,18 @@ public class BADControlElement {
             bad.setActivityType("ActivityTypeCode." + content);
 
         } else if (controlList(QuestionCode.class, content)) {
-            //TODO control the type of the question
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activityType and it's a question");
+
+            //load the question
+            Question question = questionService.findByCode(new QuestionCode(content));
+
+            if(question instanceof ValueSelectionQuestion){
+                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivityType)){
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                }
+            }
+            else{
+                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+            }
 
             //add to bad
             bad.setActivityType("toActivityTypeCode(question" + content + "Answer)");
@@ -257,8 +281,18 @@ public class BADControlElement {
             bad.setActivitySource("ActivitySourceCode." + content);
 
         } else if (controlList(QuestionCode.class, content)) {
-            //TODO control the type of the question
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activitySource and it's a question");
+
+            //load the question
+            Question question = questionService.findByCode(new QuestionCode(content));
+
+            if(question instanceof ValueSelectionQuestion){
+                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivitySource)){
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                }
+            }
+            else{
+                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+            }
 
             //add to bad
             bad.setActivitySource("toActivitySourceCode(question" + content + "Answer)");
@@ -286,18 +320,113 @@ public class BADControlElement {
             }
 
             //try to convert to BooleanQuestion
-            try {
+            if (controlList(QuestionCode.class, content)) {
                 if (controlQuestionType(content, BooleanQuestion.class)) {
 
                     //add to bad
                     bad.setActivityOwnership("toBoolean(question" + content + "Answer)");
                     bad.addQuestion(content);
 
-                } else {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivityOwnerShip  : this is a questionCode but this question is not BooleanQuestion : " + content);
                 }
-            } catch (MyrmexException e) {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivityOwnerShip is not null but it's not a boolean or a question : " + content);
+            } else {
+                //try to parse like a condition
+                String condition = content;
+                String value = content;
+
+                //find question
+                String patternString = "(A[A-Z0-9]+)(\\[(.+?)\\])?";
+                Pattern pattern = Pattern.compile(patternString);
+
+                Matcher matcher = pattern.matcher(condition);
+
+                while (matcher.find()) {
+
+                    String questionCodeKey = matcher.group(1);
+
+                    //test question
+                    if (!controlList(QuestionCode.class, questionCodeKey)) {
+                        badLog.addToLog(BADLog.LogType.ERROR, line, "The ownerShip contains a questionCode unknown : " + questionCodeKey);
+                    } else {
+
+                        //load question
+                        Question question = questionService.findByCode(new QuestionCode(questionCodeKey));
+                        UnitCategory unitCategoryQuestion = null;
+                        Unit unit = null;
+
+                        //find unit
+                        if (question instanceof DoubleQuestion) {
+                            if (((DoubleQuestion) question).getUnitCategory() != null) {
+                                unitCategoryQuestion = ((DoubleQuestion) question).getUnitCategory();
+                            }
+                        } else if (question instanceof IntegerQuestion) {
+                            if (((IntegerQuestion) question).getUnitCategory() != null) {
+                                unitCategoryQuestion = ((IntegerQuestion) question).getUnitCategory();
+                            }
+                        } else if (question instanceof PercentageQuestion) {
+                            //no unit
+                        } else {
+                            // in other case : no unit badLog.addToLog(BADLogDTO.LogType.ERROR, line, "The ownerShip contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion, but : " + question.getClass());
+                        }
+
+
+                        //test unit
+                        if (unitCategoryQuestion != null) {
+                            if (matcher.group(2) == null || matcher.group(2).length() == 0) {
+
+                                //control equivalence between BAD unit.unitCat and question.unitCat
+                                if (!((DoubleQuestion) question).getUnitCategory().equals(bad.getUnit().getCategory())) {
+                                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
+                                } else {
+                                    badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
+                                }
+                            } else {
+
+                                String unitExpected = matcher.group(3);
+
+                                //test unit expected
+                                if (!controlList(UnitCode.class, unitExpected)) {
+                                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode with unit specified, but this unit was not found : " + matcher.group() + ", " + unitExpected);
+                                } else {
+
+                                    //load unit
+                                    unit = unitService.findByCode(new UnitCode(unitExpected));
+
+
+                                    //test unit
+                                    if (!unitCategoryQuestion.equals(unit.getCategory())) {
+                                        badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode, but the specified unit do not " +
+                                                "come from the unitCategory of the question : " + questionCodeKey + ", unitCategory of the question : " + unitCategoryQuestion + ", unitCategory of the unit : " + unit.getCategory());
+                                    }
+                                }
+                            }
+                        }
+
+
+                        // toDouble(questionA17Answer, baseActivityDataUnit)
+                        if (unitCategoryQuestion != null) {
+
+                            if (unit != null) {
+                                value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
+                            } else {
+                                value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
+                            }
+                        } else {
+                            value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer)");
+                        }
+
+                        bad.addQuestion(matcher.group(1));
+                        //replace into equation
+                        condition = condition.replaceAll(patternString, "1");
+                    }
+                }
+
+                //control euqation
+                if (!evaluateCondition(condition)) {
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivityOwnerShip  : this is not a boolean or a question or a condition : " + content);
+                }
+
+                bad.setActivityOwnership(value);
+
             }
         }
     }
@@ -350,9 +479,6 @@ public class BADControlElement {
         Matcher matcher = pattern.matcher(equation);
 
         while (matcher.find()) {
-
-            //TODO test unit
-
             String questionCodeKey = matcher.group(1);
 
             //test question
@@ -383,7 +509,13 @@ public class BADControlElement {
                 //test unit
                 if (unitCategoryQuestion != null) {
                     if (matcher.group(2) == null || matcher.group(2).length() == 0) {
-                        badLog.addToLog(BADLog.LogType.WARNING, line, "The value contains a questionCode without unit specified : " + questionCodeKey);
+
+                        //control equivalence between BAD unit.unitCat and question.unitCat
+                        if (!((DoubleQuestion) question).getUnitCategory().equals(bad.getUnit().getCategory())) {
+                            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
+                        } else {
+                            badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
+                        }
                     } else {
 
                         String unitExpected = matcher.group(3);
@@ -467,6 +599,26 @@ public class BADControlElement {
         return true;
     }
 
+    private boolean evaluateCondition(String formula) {
+
+        //convert , to .
+        formula = formula.replaceAll(",", ".");
+
+        Boolean result = null;
+        try {
+            ExpressionParser parser = new SpelExpressionParser();
+            Expression expression = parser.parseExpression(formula);
+            result = expression.getValue(Boolean.class);
+        } catch (ParseException | NullPointerException e1) {
+            return false;
+        }
+        if (result == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean controlList(Class classToTest, String code) {
         for (Field field : classToTest.getDeclaredFields()) {
             if (field.getName().equalsIgnoreCase(code)) {
@@ -476,12 +628,7 @@ public class BADControlElement {
         return false;
     }
 
-    private <T extends Question> boolean controlQuestionType(String questionCode, Class<T> questionClass) throws MyrmexException {
-
-        //control code
-        if (!controlList(QuestionCode.class, questionCode)) {
-            throw new MyrmexException("This is not a questionCode");
-        }
+    private <T extends Question> boolean controlQuestionType(String questionCode, Class<T> questionClass) {
 
         Question question = questionService.findByCode(new QuestionCode(questionCode));
 
