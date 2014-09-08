@@ -2,5 +2,5 @@ div
     .sub_sub_title
         .question_info(ng-show="hasDescription()")
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+        span(ng-bind-html="getQuestionCode() | translate")
         ng-virtual(ng-transclude=true)

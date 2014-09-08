@@ -3,6 +3,7 @@ package eu.factorx.awac.util.data.importer.badImporter;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -27,6 +28,9 @@ public class BADGenerator {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private CodeLabelService codeLabelService;
 
 
     public void generateBAD(BAD bad) {
@@ -96,6 +100,15 @@ public class BADGenerator {
         //repetition
         badTemplate.addParameter("repetitions", repetition);
 
+        //condition
+        if(bad.getCondition()!=null && bad.getCondition().length()>0){
+            badTemplate.addParameter("HAS_CONDITION", true);
+            badTemplate.addParameter("CONDITION", bad.getCondition());
+        }
+        else{
+            badTemplate.addParameter("HAS_CONDITION", false);
+        }
+
         //TODO ...
 
 
@@ -106,7 +119,11 @@ public class BADGenerator {
         if (repeatableElement == null) {
             return;
         }
-        listRepeatableElements.add(repeatableElement);
+
+        //ignore questionSet if there is first and not repeatable or doesn't have liked question
+        if (listRepeatableElements.size() > 0 || repeatableElement.getMainQuestionSet().getRepetitionAllowed() || repeatableElement.getQuestionList().size() > 0) {
+            listRepeatableElements.add(repeatableElement);
+        }
         if (repeatableElement.getChild() != null) {
             buildListRepetition(repeatableElement.getChild(), listRepeatableElements);
         }
@@ -121,21 +138,21 @@ public class BADGenerator {
         //there is a loop bottom the question ?
         //if (foundRepetition(question.getQuestionSet())) {
 
-            //try to add question
-            if (!addQuestion(question.getQuestionSet(), question)) {
+        //try to add question
+        if (!addQuestion(question.getQuestionSet(), question)) {
 
-                if (repeatableElementRoot == null) {
-                    //build the structure
-                    buildStructure(question.getQuestionSet(), question);
-                } else {
-                    //TODO try to add the repetition into the existent structure
+            if (repeatableElementRoot == null) {
+                //build the structure
+                buildStructure(question.getQuestionSet(), question);
+            } else {
+                //TODO try to add the repetition into the existent structure
 
-                    //TODO LOGGER TEMP
-                    Logger.info("CANNOT FOUND REPETITION ELEMEBNT FOR "+questionCode);
-                }
+                //TODO LOGGER TEMP
+                Logger.info("CANNOT FOUND REPETITION ELEMEBNT FOR " + questionCode);
             }
-       // } else {
-       //     listQuestionWithoutRepetition.add(question);
+        }
+        // } else {
+        //     listQuestionWithoutRepetition.add(question);
         //}
 
     }
@@ -211,7 +228,7 @@ public class BADGenerator {
      */
     private void buildStructure(QuestionSet questionSet, Question questionToAdd, RepeatableElement lastRepetition) {
 
-        RepeatableElement repeatableElement = new RepeatableElement(questionSet.getCode().getKey());
+        RepeatableElement repeatableElement = new RepeatableElement(questionSet);
         repeatableElement.setRepeteable(questionSet.getRepetitionAllowed());
 
         if (questionToAdd != null) {
@@ -237,9 +254,13 @@ public class BADGenerator {
      * This class store a structure of mainQuestionSet.
      * The main QuestionSet is a repetition mainQuestionSet, and the Map contains mainQuestionSet children of the mainQuestionSet
      */
-    public static class RepeatableElement {
+    public class RepeatableElement {
 
-        private String mainQuestionSet;
+        private QuestionSet mainQuestionSet;
+
+        private String mainQuestionSetString;
+
+        private String mainQuestionSetDescription;
 
         private boolean isRepeteable;
 
@@ -247,12 +268,24 @@ public class BADGenerator {
 
         private RepeatableElement child;
 
-        private RepeatableElement(String mainQuestionSet) {
-            this.mainQuestionSet = mainQuestionSet;
+        public QuestionSet getMainQuestionSet() {
+            return mainQuestionSet;
         }
 
-        public String getMainQuestionSet() {
-            return mainQuestionSet;
+        public RepeatableElement(QuestionSet mainQuestionSet) {
+            this.setMainQuestionSet(mainQuestionSet);
+        }
+
+        public void setMainQuestionSet(QuestionSet mainQuestionSet) {
+            this.mainQuestionSet = mainQuestionSet;
+            this.mainQuestionSetString = mainQuestionSet.getCode().getKey();
+            Logger.info("CODE : "+mainQuestionSet.getCode());
+            Logger.info("LABEL : "+codeLabelService.findCodeLabelByCode(mainQuestionSet.getCode()));
+            mainQuestionSetDescription = codeLabelService.findCodeLabelByCode(mainQuestionSet.getCode()).getLabelFr();
+        }
+
+        public String getMainQuestionSetString() {
+            return mainQuestionSetString;
         }
 
         public RepeatableElement getChild() {

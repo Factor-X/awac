@@ -38,19 +38,19 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
             #set($repetitionCount = $foreach.count)
 
             #if( ${foreach.count} == 1)
-                List<QuestionSetAnswer> questionSetAnswers$repetition.mainQuestionSet = questionSetAnswers.get(QuestionCode.$repetition.mainQuestionSet);
+                List<QuestionSetAnswer> questionSetAnswers$repetition.mainQuestionSetString = questionSetAnswers.get(QuestionCode.$repetition.mainQuestionSetString);
                 //2.2 control if the list if different than null
-                if (questionSetAnswers$repetition.mainQuestionSet == null) {
+                if (questionSetAnswers$repetition.mainQuestionSetString == null) {
                     return res;
                 }
             #end
 
-            //loop
+            //loop ($repetition.mainQuestionSetDescription)
             #if( ${foreach.count} == 1)
-                for (QuestionSetAnswer questionSetAnswer${foreach.count} : questionSetAnswers$repetition.mainQuestionSet) {
+                for (QuestionSetAnswer questionSetAnswer${foreach.count} : questionSetAnswers$repetition.mainQuestionSetString) {
              #else
                  #set($lastCount = $foreach.count - 1)
-                 for (QuestionSetAnswer questionSetAnswer${foreach.count} : getChildrenQuestionSetAnswers(questionSetAnswer${lastCount},QuestionCode.$repetition.mainQuestionSet)) {
+                 for (QuestionSetAnswer questionSetAnswer${foreach.count} : getChildrenQuestionSetAnswers(questionSetAnswer${lastCount},QuestionCode.$repetition.mainQuestionSetString)) {
              #end
 
             #if ($repetition.getQuestionList().size() >0)
@@ -73,6 +73,10 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
             #end
         #end
 
+            #if($HAS_CONDITION)
+            if($CONDITION){
+            #end
+
             //build the bad
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -89,6 +93,10 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
             baseActivityData.setUnit(baseActivityDataUnit);
             baseActivityData.setValue($VALUE);
             res.add(baseActivityData);
+
+            #if($HAS_CONDITION)
+            }
+            #end
 
          #foreach ($rep in $repetitions)
                 }

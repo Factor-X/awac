@@ -39,7 +39,7 @@ public class BADControlElement {
     private UnitService unitService;
 
     @Autowired
-            private CodeConversionService codeConversionService;
+    private CodeConversionService codeConversionService;
 
 
     BADLog badLog;
@@ -196,12 +196,11 @@ public class BADControlElement {
             //load the question
             Question question = questionService.findByCode(new QuestionCode(content));
 
-            if(question instanceof ValueSelectionQuestion){
-                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivitySubCategory)){
+            if (question instanceof ValueSelectionQuestion) {
+                if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySubCategory)) {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
-            }
-            else{
+            } else {
                 badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
@@ -241,12 +240,11 @@ public class BADControlElement {
             //load the question
             Question question = questionService.findByCode(new QuestionCode(content));
 
-            if(question instanceof ValueSelectionQuestion){
-                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivityType)){
+            if (question instanceof ValueSelectionQuestion) {
+                if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
-            }
-            else{
+            } else {
                 badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
@@ -285,12 +283,11 @@ public class BADControlElement {
             //load the question
             Question question = questionService.findByCode(new QuestionCode(content));
 
-            if(question instanceof ValueSelectionQuestion){
-                if(!codeConversionService.isSublistOf(((ValueSelectionQuestion)question).getCodeList(), CodeList.ActivitySource)){
+            if (question instanceof ValueSelectionQuestion) {
+                if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
-            }
-            else{
+            } else {
                 badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
@@ -329,6 +326,8 @@ public class BADControlElement {
 
                 }
             } else {
+
+
                 //try to parse like a condition
                 String condition = content;
                 String value = content;
@@ -343,81 +342,16 @@ public class BADControlElement {
 
                     String questionCodeKey = matcher.group(1);
 
-                    //test question
-                    if (!controlList(QuestionCode.class, questionCodeKey)) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "The ownerShip contains a questionCode unknown : " + questionCodeKey);
-                    } else {
-
-                        //load question
-                        Question question = questionService.findByCode(new QuestionCode(questionCodeKey));
-                        UnitCategory unitCategoryQuestion = null;
-                        Unit unit = null;
-
-                        //find unit
-                        if (question instanceof DoubleQuestion) {
-                            if (((DoubleQuestion) question).getUnitCategory() != null) {
-                                unitCategoryQuestion = ((DoubleQuestion) question).getUnitCategory();
-                            }
-                        } else if (question instanceof IntegerQuestion) {
-                            if (((IntegerQuestion) question).getUnitCategory() != null) {
-                                unitCategoryQuestion = ((IntegerQuestion) question).getUnitCategory();
-                            }
-                        } else if (question instanceof PercentageQuestion) {
-                            //no unit
-                        } else {
-                            // in other case : no unit badLog.addToLog(BADLogDTO.LogType.ERROR, line, "The ownerShip contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion, but : " + question.getClass());
-                        }
-
-
-                        //test unit
-                        if (unitCategoryQuestion != null) {
-                            if (matcher.group(2) == null || matcher.group(2).length() == 0) {
-
-                                //control equivalence between BAD unit.unitCat and question.unitCat
-                                if (!((DoubleQuestion) question).getUnitCategory().equals(bad.getUnit().getCategory())) {
-                                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
-                                } else {
-                                    badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
-                                }
-                            } else {
-
-                                String unitExpected = matcher.group(3);
-
-                                //test unit expected
-                                if (!controlList(UnitCode.class, unitExpected)) {
-                                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode with unit specified, but this unit was not found : " + matcher.group() + ", " + unitExpected);
-                                } else {
-
-                                    //load unit
-                                    unit = unitService.findByCode(new UnitCode(unitExpected));
-
-
-                                    //test unit
-                                    if (!unitCategoryQuestion.equals(unit.getCategory())) {
-                                        badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode, but the specified unit do not " +
-                                                "come from the unitCategory of the question : " + questionCodeKey + ", unitCategory of the question : " + unitCategoryQuestion + ", unitCategory of the unit : " + unit.getCategory());
-                                    }
-                                }
-                            }
-                        }
-
-
-                        // toDouble(questionA17Answer, baseActivityDataUnit)
-                        if (unitCategoryQuestion != null) {
-
-                            if (unit != null) {
-                                value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
-                            } else {
-                                value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
-                            }
-                        } else {
-                            value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer)");
-                        }
-
-                        bad.addQuestion(matcher.group(1));
-                        //replace into equation
-                        condition = condition.replaceAll(patternString, "1");
+                    String unitCode = null;
+                    if(matcher.group(3)!=null){
+                        unitCode = matcher.group(3);
                     }
+
+                    value = controlQuestionForEquation(line, questionCodeKey, unitCode, bad.getUnit().getCategory(), false);
+
+                    bad.addQuestion(questionCodeKey);
+                    //replace into equation
+                    condition = condition.replaceAll(patternString, "1");
                 }
 
                 //control euqation
@@ -482,78 +416,11 @@ public class BADControlElement {
             String questionCodeKey = matcher.group(1);
 
             //test question
-            if (!controlList(QuestionCode.class, questionCodeKey)) {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode unknown : " + questionCodeKey);
-            } else {
+            value = controlQuestionForEquation(line, questionCodeKey, matcher.group(3), bad.getUnit().getCategory(), true);
 
-                //load question
-                Question question = questionService.findByCode(new QuestionCode(questionCodeKey));
-                UnitCategory unitCategoryQuestion = null;
-                Unit unit = null;
-
-                //find unit
-                if (question instanceof DoubleQuestion) {
-                    if (((DoubleQuestion) question).getUnitCategory() != null) {
-                        unitCategoryQuestion = ((DoubleQuestion) question).getUnitCategory();
-                    }
-                } else if (question instanceof IntegerQuestion) {
-                    if (((IntegerQuestion) question).getUnitCategory() != null) {
-                        unitCategoryQuestion = ((IntegerQuestion) question).getUnitCategory();
-                    }
-                } else if (question instanceof PercentageQuestion) {
-                    //no unit
-                } else {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion, but : " + question.getClass());
-                }
-
-                //test unit
-                if (unitCategoryQuestion != null) {
-                    if (matcher.group(2) == null || matcher.group(2).length() == 0) {
-
-                        //control equivalence between BAD unit.unitCat and question.unitCat
-                        if (!((DoubleQuestion) question).getUnitCategory().equals(bad.getUnit().getCategory())) {
-                            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
-                        } else {
-                            badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
-                        }
-                    } else {
-
-                        String unitExpected = matcher.group(3);
-
-                        //test unit expected
-                        if (!controlList(UnitCode.class, unitExpected)) {
-                            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode with unit specified, but this unit was not found : " + matcher.group() + ", " + unitExpected);
-                        } else {
-
-                            //load unit
-                            unit = unitService.findByCode(new UnitCode(unitExpected));
-
-
-                            //test unit
-                            if (!unitCategoryQuestion.equals(unit.getCategory())) {
-                                badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode, but the specified unit do not " +
-                                        "come from the unitCategory of the question : " + questionCodeKey + ", unitCategory of the question : " + unitCategoryQuestion + ", unitCategory of the unit : " + unit.getCategory());
-                            }
-                        }
-                    }
-                }
-
-                // toDouble(questionA17Answer, baseActivityDataUnit)
-                if (unitCategoryQuestion != null) {
-
-                    if (unit != null) {
-                        value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
-                    } else {
-                        value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
-                    }
-                } else {
-                    value = value.replaceAll(patternString, "toDouble(question" + questionCodeKey + "Answer)");
-                }
-
-                bad.addQuestion(matcher.group(1));
-                //replace into equation
-                equation = equation.replaceAll(patternString, "1");
-            }
+            bad.addQuestion(questionCodeKey);
+            //replace into equation
+            equation = equation.replaceAll(patternString, "1");
         }
 
         //control euqation
@@ -651,5 +518,91 @@ public class BADControlElement {
         return null;
     }
 
+    /**
+     * @param line
+     * @param questionCodeKey
+     * @param unitExpected
+     * @param unitCategoryExpected
+     * @param equation
+     *      If there is a condition, accept only DoubleQuestion, IntegerQuestion and PercentageQuestion
+     *      Control if there is an expected unit if the question requires one, or if the unitCategory expected by the BAD is the same of the question
+     * @return
+     */
+    private String controlQuestionForEquation(int line, String questionCodeKey, String unitExpected, UnitCategory unitCategoryExpected, boolean equation) {
 
+        //test question
+        if (!controlList(QuestionCode.class, questionCodeKey)) {
+            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode unknown : " + questionCodeKey);
+        } else {
+
+            //load question
+            Question question = questionService.findByCode(new QuestionCode(questionCodeKey));
+            UnitCategory unitCategoryQuestion = null;
+            Unit unit = null;
+
+            //question type => accpet DoubleQuestion, IntegerQuestion or PercentageQuestion
+            //get the unitCategory expected by the question
+
+            if (question instanceof DoubleQuestion) {
+                if (((DoubleQuestion) question).getUnitCategory() != null) {
+                    unitCategoryQuestion = ((DoubleQuestion) question).getUnitCategory();
+                }
+            } else if (question instanceof IntegerQuestion) {
+                if (((IntegerQuestion) question).getUnitCategory() != null) {
+                    unitCategoryQuestion = ((IntegerQuestion) question).getUnitCategory();
+                }
+            } else if (question instanceof PercentageQuestion) {
+                //no unit
+            } else {
+                //for equation : do  not accept an other type of question
+                if (equation) {
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
+                }
+            }
+
+            //test unit if the question expected a unitCategory
+            //the unitCategory must be the same ad that of the bad
+            if (unitCategoryQuestion != null) {
+                if (unitExpected == null || unitExpected.length() == 0) {
+
+                    //control equivalence between BAD unit.unitCat and question.unitCat
+                    if (!((DoubleQuestion) question).getUnitCategory().equals(unitCategoryExpected)) {
+                        badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
+                    } else {
+                        badLog.addToLog(BADLog.LogType.INFO, line, "The value contains a questionCode without unit specified, but the unitCat is the same than the BAD");
+                    }
+                } else {
+
+                    //test unit expected
+                    if (!controlList(UnitCode.class, unitExpected)) {
+                        badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode with unit specified, but this unit was not found : " + unitExpected);
+                    } else {
+
+                        //load unit
+                        unit = unitService.findByCode(new UnitCode(unitExpected));
+
+
+                        //test unit
+                        if (!unitCategoryQuestion.equals(unit.getCategory())) {
+                            badLog.addToLog(BADLog.LogType.ERROR, line, "The value contains a questionCode, but the specified unit do not " +
+                                    "come from the unitCategory of the question : " + questionCodeKey + ", unitCategory of the question : " + unitCategoryQuestion + ", unitCategory of the unit : " + unit.getCategory());
+                        }
+                    }
+                }
+            }
+
+            // parse the content to return a double
+            if (unitCategoryQuestion != null) {
+
+                if (unit != null) {
+                    return "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))";
+                } else {
+                    return "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)";
+                }
+            } else {
+                return "toDouble(question" + questionCodeKey + "Answer)";
+            }
+        }
+        return null;
+    }
 }

@@ -2,15 +2,11 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.service.VelocityGeneratorService;
-import eu.factorx.awac.util.email.messages.EmailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.libs.Scala;
-import jp.furyu.play.velocity.mvc.package$;
 
 
 import java.util.HashMap;

@@ -40,6 +40,9 @@ public class BADTemplate {
         }
     }
 
+    public void addParameter(String key, boolean content) {
+        velocityContext.put(key, content);
+    }
 
     public void generate() {
         org.apache.velocity.Template template = Velocity.getTemplate(templateName.getUrl());
