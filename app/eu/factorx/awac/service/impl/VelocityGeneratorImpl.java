@@ -42,7 +42,7 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 	public String generate (String templateName,Map values) {
 		StringBuffer html = new StringBuffer();
 		html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
-		Logger.info("HTML generated:" + html.toString());
+		//Logger.info("HTML generated:" + html.toString());
 		return(html.toString());
 	}
 
