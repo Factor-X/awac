@@ -25,11 +25,15 @@ import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
+import play.Configuration;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Transactional(readOnly = false)
 @org.springframework.stereotype.Controller
@@ -51,6 +55,11 @@ public class InvitationController extends AbstractController {
 	@Autowired
 	private ConversionService conversionService;
 
+	@Autowired
+	private VelocityGeneratorService velocityGeneratorService;
+
+	private static String INVITATION_TITLE = "AWAC - invitation from ";
+	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
 
 
 
@@ -75,10 +84,21 @@ public class InvitationController extends AbstractController {
 		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,org);
 		invitationService.saveOrUpdate(invitation);
 
+		final String awacHostname = Configuration.root().getString("awac.hostname");
+
+		String title = INVITATION_TITLE +  dto.getOrganization().getName() + ".";
+		String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
+
+		Map values = new HashMap<String,Object>();
+		values.put("title",title);
+		values.put("link",link);
+		values.put("hostname",awacHostname);
+
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+
 		// send email for invitation
 		// send mail
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),"AWAC - invitation from " + dto.getOrganization().getName() + ".",
-																	   "http://localhost:9000/enterprise#/registration/" + key);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
 		emailService.send(email);
 
 		//create InvitationResultDTO

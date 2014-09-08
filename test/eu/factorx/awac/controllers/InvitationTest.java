@@ -66,9 +66,6 @@ public class InvitationTest extends AbstractBaseModelTest {
 	@Autowired
 	private AccountService accountService;
 
-
-
-
 	@Test
 	public void _001_launchInvitation() {
 

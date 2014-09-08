@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+<table width="700" border="0" cellspacing="0">
+    <tr>
+        <td>Header Image Area</td>
+    </tr>
+    <tr>
+        <td>Content Area ${name}</td>
+    </tr>
+    <tr>
+        <td>Footer Area</td>
+    </tr>
+</table>
+</body>
+</html>

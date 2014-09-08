@@ -114,7 +114,8 @@ public class EmailSender implements ApplicationContextAware {
             //mimeMessage.setSubject("Testing Subject");
             mimeMessage.setSubject(email.getSubject());
             //mimeMessage.setText("Mail Body");
-            mimeMessage.setText(email.getContent());
+			mimeMessage.setContent(email.getContent(),"text/html");
+            //mimeMessage.setText(email.getContent());
             Transport.send(mimeMessage);
 
             play.Logger.info("Email Successfully sent to " + email.getToAddress());
