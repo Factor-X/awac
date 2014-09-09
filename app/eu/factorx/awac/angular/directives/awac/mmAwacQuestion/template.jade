@@ -4,7 +4,7 @@ div(class="question_field",
         .question_info(ng-show="hasDescription()")
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(ng-class="getIcon()",class="glyphicon")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate", ng-click="logQuestionCode()")
+        span(ng-bind-html="getQuestionCode() | translate", ng-click="logQuestionCode()")
     div
         .status(ng-class="getStatusClass()")
         .error_message(ng-show="errorMessage.length>0")

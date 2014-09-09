@@ -3,5 +3,5 @@ div
         .question_info(ng-show="hasDescription()")
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
         span(class="glyphicon glyphicon-record")
-        span(ng-bind-html="getQuestionCode() + '_TITLE' | translate")
+        span(ng-bind-html="getQuestionCode() | translate")
         ng-virtual(ng-transclude=true)
