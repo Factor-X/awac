@@ -154,8 +154,42 @@ angular
                             $scope.isLoading = false
             return false
 
+        # user selection - begin
+        $scope.employees=[{name:'John', age:25, gender:'boy'},
+            {name:'Jessie', age:30, gender:'girl'},
+            {name:'Johanna', age:28, gender:'girl'},
+            {name:'Joy', age:15, gender:'girl'},
+            {name:'Mary', age:28, gender:'girl'},
+            {name:'Peter', age:95, gender:'boy'},
+            {name:'Sebastian', age:50, gender:'boy'},
+            {name:'Erika', age:27, gender:'girl'},
+            {name:'Patrick', age:40, gender:'boy'},
+            {name:'Samantha', age:60, gender:'girl'}];
+
+        $scope.selection=[];
+
+        # toggle selection for a given employee by name
+        $scope.toggleSelection = (employeeName) ->
+            console.log "entering toggleSelection"
+            console.log employeeName
+
+            idx = $scope.selection.indexOf(employeeName)
+            console.log idx
+
+            # is currently selected
+            if idx > -1
+              # remove from selection
+              $scope.selection.splice(idx,1);
+              # is newly selected
+            else
+              # add to selection
+              $scope.selection.push(employeeName);
+        # user selection - end
+
         $scope.close = ->
             modalService.close modalService.ADD_USER_SITE
+
+
 
     link: (scope) ->
 

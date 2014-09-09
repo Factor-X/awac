@@ -20,6 +20,23 @@
                     mm-awac-modal-field-text(ng-info="fields.accountingTreatment")
                     mm-awac-modal-field-text(ng-info="fields.percentOwned")
 
+                    div(class="panel")
+                        div(ng-repeat="employee in employees")
+                            div(class="action-checkbox")
+                                input(
+                                    id='employee.name',
+                                    type='checkbox',
+                                    value='employee.name',
+                                    ng-disabled='getInfo().disabled',
+                                    ng-model='employee.name',
+                                    ng-checked='selection.indexOf(employee.name) > -1',
+                                    ng-click='toggleSelection(employee.name)')
+#                                label(for="employee.name")
+#                                    {{employee.name}}
+
+                        div(ng-repeat="name in selection",class="selected-item")
+                            {{name}}
+
             .modal-footer
 
                 div(ng-hide="isLoading")
