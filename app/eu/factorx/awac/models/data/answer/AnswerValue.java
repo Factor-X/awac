@@ -8,8 +8,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "answer_value")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Access(AccessType.PROPERTY)
 public abstract class AnswerValue extends AuditedAbstractEntity {
 
