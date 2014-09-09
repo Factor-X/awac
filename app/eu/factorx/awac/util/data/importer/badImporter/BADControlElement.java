@@ -588,9 +588,9 @@ public class BADControlElement {
                         //control booleanQuestion
                         else if (question instanceof BooleanQuestion) {
 
-                            if (comparisonMember.equals("1") || comparisonMember.equals("true")) {
+                            if (comparisonMember.equals("1") || comparisonMember.equalsIgnoreCase("true") || comparisonMember.equalsIgnoreCase("yes")) {
                                 questionValue = "toBoolean(question" + questionCodeKey + "Answer) == true";
-                            } else if (comparisonMember.equals("0") || comparisonMember.equals("false")) {
+                            } else if (comparisonMember.equals("0") || comparisonMember.equalsIgnoreCase("false") || comparisonMember.equalsIgnoreCase("no")) {
                                 questionValue = "toBoolean(question" + questionCodeKey + "Answer) == false";
                             } else {
                                 badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the comparison member (" + comparisonMember + ") is not compatible with the BooleanQuestion type for the question : " + questionCodeKey);
