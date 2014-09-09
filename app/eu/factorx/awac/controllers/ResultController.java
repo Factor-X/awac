@@ -172,11 +172,12 @@ public class ResultController extends AbstractController {
 
 
 	@Transactional(readOnly = false)
-	//@Security.Authenticated(SecuredController.class)
+	@Security.Authenticated(SecuredController.class)
 	public Result getSvgDonutForScope(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		Account currentUser = securedController.getCurrentUser();
+		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 
@@ -192,7 +193,9 @@ public class ResultController extends AbstractController {
 			}
 		}
 
-		return ok(eu.factorx.awac.views.html.svg.donut.render(scopeTable));
+		markNoCache();
+
+		return ok(toSvg(svgGenerator.getDonut(scopeTable)));
 	}
 
 	@Transactional(readOnly = false)
@@ -217,12 +220,10 @@ public class ResultController extends AbstractController {
 			}
 		}
 
-
 		markNoCache();
 
 		return ok(toSvg(svgGenerator.getWeb(scopeTable)));
 	}
-
 
 
 }

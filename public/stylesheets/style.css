@@ -1760,7 +1760,7 @@ ul.messenger > li {
 }
 
 .charts-panel-tab.active .charts-panel-tab-title {
-    background: #363;
+    background-color: #363;
 }
 
 .charts-panel-tab.active .charts-panel-tab-arrow {
@@ -1768,7 +1768,7 @@ ul.messenger > li {
 }
 
 .charts-panel-tab:hover .charts-panel-tab-title {
-    background: #484;
+    background-color: #484;
 }
 
 .charts-panel-tab:hover .charts-panel-tab-arrow {
@@ -1794,4 +1794,59 @@ ul.messenger > li {
     border: solid 1px black;
     text-align: center;
     margin-right: 6px;
+}
+
+.results_disclaimer {
+    text-align: right;
+}
+
+
+.results_disclaimer_text {
+    text-align: left;
+    display: inline-block;
+    padding: 0.5em;
+    border: solid 1px #333;
+}
+
+.tab_donut {
+    background-image: url('/assets/images/schemas/schema_pieChart.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+
+.tab_web {
+    background-image: url('/assets/images/schemas/schema_araignee.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_numbers {
+    background-image: url('/assets/images/schemas/schema_chiffres.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_constant_factors {
+    background-image: url('/assets/images/schemas/schema_facteursConstants.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_fe {
+    background-image: url('/assets/images/schemas/schema_FE.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_calculus {
+    background-image: url('/assets/images/schemas/schema_calcul.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_bars {
+    background-image: url('/assets/images/schemas/schema_barchart.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
 }
