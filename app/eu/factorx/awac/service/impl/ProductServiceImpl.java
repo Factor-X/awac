@@ -1,6 +1,5 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +29,15 @@ public class ProductServiceImpl extends AbstractJPAPersistenceServiceImpl<Produc
 			scopeService.saveOrUpdate(scope);
 		}
 		return product;
+	}
+
+	@Override
+	public void remove (final Product entity) {
+		Scope scope = scopeService.findByProduct(entity);
+		if (scope != null) {
+			scopeService.remove(scope);
+		}
+		super.remove(entity);
 	}
 
 }
