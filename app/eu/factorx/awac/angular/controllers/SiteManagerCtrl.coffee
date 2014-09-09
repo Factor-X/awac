@@ -26,6 +26,11 @@ angular
             params.site = site
         modalService.show(modalService.EDIT_SITE, params)
 
+    $scope.addUsers = (site) ->
+      params = {}
+      if site?
+        params.site = site
+      modalService.show(modalService.ADD_USER_SITE, params)
 
     $scope.periodAssignTo = (nbPeriod,site) ->
         if site.listPeriodAvailable?
