@@ -1,11 +1,15 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu) ->
+.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService) ->
     $scope.displayFormMenu = displayFormMenu
+
+
 
     $scope.graphs = {}
 
+    modalService.show modalService.LOADING
     downloadService.getJson "/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
+        modalService.close modalService.LOADING
         if result.success
             $scope.o = result.data
 
@@ -55,7 +59,7 @@ angular
 
             # Scope 2
             data = []
-            for rl in $scope.o.reportLines
+            for rl in $scope.o.reportLine
                 if rl.scope2Value > 0
                     data.push
                         label: rl.indicatorName,
@@ -88,5 +92,24 @@ angular
 
     $scope.downloadAsXls = () ->
         $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null
+
+
+    $scope.charts = {
+        webUrl: "/awac/result/getWebForScope/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
+
+        getNumber: (rl) ->
+            result = null
+            index = 0
+            for l in $scope.o.reportLines
+                if l.scope1Value + l.scope2Value + l.scope3Value + l.outOfScopeValue > 0
+                    index += 1
+                    if l == rl
+                        result = index
+                        break
+            console.log result
+            result
+    }
+
+    $scope.current_tab = 5;
 
     $scope.downloadPdf = () ->

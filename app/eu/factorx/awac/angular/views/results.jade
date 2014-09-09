@@ -1,64 +1,248 @@
 div.pdf-able
-    h1 Results
+    h1
+        span(ng-bind-html="'RESULTS' | translate")
 
     br
 
-    table.result_table(ng-show="o.reportLines != null")
-        tr(ng-show="false")
-            td
-                button.button.btn.btn-success(ng-click="downloadAsXls()") Télécharger le fichier Excel
-                button.button.btn.btn-success(ng-click="downloadPdf()") Télécharger le fichier Pdf
+    div
+        span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
+        button
+            span(ng-bind-html="'XLS_EXPORT' | translate")
+        button
+            span(ng-bind-html="'PDF_EXPORT' | translate")
+
+    table.wide
         tr
-            td
+            td.top-aligned
+                .sites-panel
+                    .sites-panel-title
+                        span(ng-bind-html="'SITES_LIST' | translate")
 
-                h2 By scope
-                mm-awac-graph-donut(ng-items="graphs.scopes", ng-show="graphs.scopes.length > 0")
+                    .sites-panel-all-items
+                        table
+                            tr
+                                td
+                                    span(ng-bind-html="'ALL_SITES_SELECTED' | translate")
+                                td
+                                    input(type="checkbox")
 
-                h2 Scope 1
-                mm-awac-graph-donut(ng-items="graphs.scope1", ng-show="graphs.scope1.length > 0")
+                    .sites-panel-items
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
+                        .sites-panel-item
+                            table
+                                tr
+                                    td Namur
+                                    td
+                                        input(type="checkbox")
 
-                h2 Scope 2
-                mm-awac-graph-donut(ng-items="graphs.scope2", ng-show="graphs.scope2.length > 0")
 
-                h2 Scope 3
-                mm-awac-graph-donut(ng-items="graphs.scope3", ng-show="graphs.scope3.length > 0")
+            td.top-aligned.horizontally-padded.wide
 
-                h2 Out of scope
-                mm-awac-graph-donut(ng-items="graphs.outOfScope", ng-show="graphs.outOfScope.length > 0")
+                div
+                    span(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+
+                div(ng-show="current_tab == 1")
+                    h2
+                        span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
+
+                    br
+
+                div(ng-show="current_tab == 2")
+                    h2
+                        span(ng-bind-html="'IMPACTS_PARTITION' | translate")
+
+                    br
+
+                div(ng-show="current_tab == 3")
+                    h2
+                        span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
+                    br
+
+                    center
+                        img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.webUrl }}")
+
+                    br
+
+                    table.indicators_table
+                        thead
+                            th(width="100%")
+                            th.align-right.scope1
+                                div
+                                    span
+                                        span.wrapped(ng-bind-html="'SCOPE_1' | translate")
+                                        span (tCO2e)
+                            th.align-right.scope2
+                                div
+                                    span
+                                        span.wrapped(ng-bind-html="'SCOPE_2' | translate")
+                                        span (tCO2e)
+                            th.align-right.scope3
+                                div
+                                    span
+                                        span.wrapped(ng-bind-html="'SCOPE_3' | translate")
+                                        span (tCO2e)
+                            th.align-right.out-of-scope
+                                div
+                                    span
+                                        span.wrapped(ng-bind-html="'OUT_OF_SCOPE' | translate")
+                                        span (tCO2e)
+                        tbody
+                            tr(ng-repeat="rl in o.reportLines", ng-show="showAll || (rl.scope1Value + rl.scope2Value + rl.scope3Value + rl.outOfScopeValue > 0)")
+                                td(ng-bind-html="rl.indicatorName")
+                                td.align-right.scope1
+                                    span(ng-bind-html="rl.scope1Value | numberToI18NOrLess", ng-show="rl.scope1Value > 0")
+                                td.align-right.scope2
+                                    span(ng-bind-html="rl.scope2Value | numberToI18NOrLess", ng-show="rl.scope2Value > 0")
+                                td.align-right.scope3
+                                    span(ng-bind-html="rl.scope3Value | numberToI18NOrLess", ng-show="rl.scope3Value > 0")
+                                td.align-right.out-of-scope
+                                    span(ng-bind-html="rl.outOfScopeValue | numberToI18NOrLess", ng-show="rl.outOfScopeValue > 0")
+                        tfoot
+                            tr
+                                td
+                                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
+                                    span {{ (totalScope1 + totalScope2 + totalScope3 + totalOutOfScope) | numberToI18N }}
+                                    span (tCO2e)
+                                td.align-right.scope1
+                                    span(ng-bind-html="totalScope1 | numberToI18NOrLess")
+                                td.align-right.scope2
+                                    span(ng-bind-html="totalScope2 | numberToI18NOrLess")
+                                td.align-right.scope3
+                                    span(ng-bind-html="totalScope3 | numberToI18NOrLess")
+                                td.align-right.out-of-scope
+                                    span(ng-bind-html="totalOutOfScope | numberToI18NOrLess")
+
+                    div
+                        input(type="checkbox", ng-model="showAll")
+                        label
+                            span(ng-bind-html="'SHOW_ALL_INDICATORS' | translate')
+
+                div(ng-show="current_tab == 4")
+                    h2
+                        span(ng-bind-html="'NUMBERS' | translate")
+                    table.indicators_table
+                        thead
+                            th(width="100%")
+                            th.align-right.scope1.wrapped
+                                div
+                                    span
+                                        span(ng-bind-html="'SCOPE_1' | translate")
+                                        span (tCO2e)
+                            th.align-right.scope2.wrapped
+                                div
+                                    span
+                                        span(ng-bind-html="'SCOPE_2' | translate")
+                                        span (tCO2e)
+                            th.align-right.scope3.wrapped
+                                div
+                                    span
+                                        span(ng-bind-html="'SCOPE_3' | translate")
+                                        span (tCO2e)
+                            th.align-right.out-of-scope.wrapped
+                                div
+                                    span
+                                        span(ng-bind-html="'OUT_OF_SCOPE' | translate")
+                                        span (tCO2e)
+                        tbody
+                            tr(ng-repeat="rl in o.reportLines")
+                                td(ng-bind-html="rl.indicatorName")
+                                td.align-right.scope1
+                                    span(ng-bind-html="rl.scope1Value | numberToI18NOrLess", ng-show="rl.scope1Value > 0")
+                                td.align-right.scope2
+                                    span(ng-bind-html="rl.scope2Value | numberToI18NOrLess", ng-show="rl.scope2Value > 0")
+                                td.align-right.scope3
+                                    span(ng-bind-html="rl.scope3Value | numberToI18NOrLess", ng-show="rl.scope3Value > 0")
+                                td.align-right.out-of-scope
+                                    span(ng-bind-html="rl.outOfScopeValue | numberToI18NOrLess", ng-show="rl.outOfScopeValue > 0")
+                        tfoot
+                            tr
+                                td
+                                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
+                                    span {{ (totalScope1 + totalScope2 + totalScope3 + totalOutOfScope) | numberToI18N }}
+                                    span (tCO2e)
+                                td.align-right.scope1
+                                    span(ng-bind-html="totalScope1 | numberToI18NOrLess")
+                                td.align-right.scope2
+                                    span(ng-bind-html="totalScope2 | numberToI18NOrLess")
+                                td.align-right.scope3
+                                    span(ng-bind-html="totalScope3 | numberToI18NOrLess")
+                                td.align-right.out-of-scope
+                                    span(ng-bind-html="totalOutOfScope | numberToI18NOrLess")
+
+
+                div(ng-show="current_tab == 5")
+                    h2
+                        span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+
+                div(ng-show="current_tab == 6")
+                    h2
+                        span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+
+                div(ng-show="current_tab == 7")
+                    h2
+                        span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
 
                 br
                 br
+                br
 
-        tr
-            td
-                table.indicators_table
-                    thead
-                        th(width="100%")
-                        th.align-right Scope 1 (tCO2e)
-                        th.align-right Scope 2(tCO2e)
-                        th.align-right Scope 3 (tCO2e)
-                        th.align-right Hors scope (tCO2e)
-                    tbody
-                        tr(ng-repeat="rl in o.reportLines")
-                            td(ng-bind-html="rl.indicatorName")
-                            td.align-right
-                                span(ng-bind-html="rl.scope1Value | numberToI18N", ng-show="rl.scope1Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.scope2Value | numberToI18N", ng-show="rl.scope2Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.scope3Value | numberToI18N", ng-show="rl.scope3Value > 0")
-                            td.align-right
-                                span(ng-bind-html="rl.outOfScopeValue | numberToI18N", ng-show="rl.outOfScopeValue > 0")
-                    tfoot
-                        tr
-                            td Total: {{ (totalScope1 + totalScope2 + totalScope3 + totalOutOfScope) | numberToI18N }} (tCO2e)
-                            td.align-right
-                                span(ng-bind-html="totalScope1 | numberToI18N")
-                            td.align-right
-                                span(ng-bind-html="totalScope2 | numberToI18N")
-                            td.align-right
-                                span(ng-bind-html="totalScope3 | numberToI18N")
-                            td.align-right
-                                span(ng-bind-html="totalOutOfScope | numberToI18N")
-                br
-                br
+            td.top-aligned
+                .charts-panel-tabset
+                    .charts-panel-tab(ng-click="current_tab = 1", ng-class="{ active: current_tab == 1 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 2", ng-class="{ active: current_tab == 2 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'IMPACTS_PARTITION' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 3", ng-class="{ active: current_tab == 3 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 4", ng-class="{ active: current_tab == 4 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'NUMBERS' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 6", ng-class="{ active: current_tab == 6 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+
+                    .charts-panel-tab(ng-click="current_tab = 7", ng-class="{ active: current_tab == 7 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
+
+
