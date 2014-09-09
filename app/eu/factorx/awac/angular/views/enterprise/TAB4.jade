@@ -1,3 +1,42 @@
+mm-awac-section(title-code="A205_TITLE")
+    mm-awac-question(question-code="A206")
+    mm-awac-sub-title(question-code="A208")
+    mm-awac-repetition-name(question-code="A209")
+
+    mm-awac-repetition-question(question-set-code="A209", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A209')")
+        mm-awac-question(question-code="A210",ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="A211",ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="A212",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_61'")
+        mm-awac-question(question-code="A213",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_62'")
+        mm-awac-question(question-code="A214",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_63'")
+        mm-awac-question(question-code="A215",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_64'")
+        mm-awac-question(question-code="A216",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_65'")
+        mm-awac-question(question-code="A217",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_66'")
+        mm-awac-question(question-code="A218",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_67'")
+        mm-awac-question(question-code="A219",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_68'")
+        mm-awac-question(question-code="A220",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_61' || getAnswer('A211',itLevel1).value == 'AT_62' || getAnswer('A211',itLevel1).value == 'AT_63' || getAnswer('A211',itLevel1).value == 'AT_64'")
+        mm-awac-question(question-code="A221",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value != 'AT_68'")
+        mm-awac-question(question-code="A222",ng-repetition-map="itLevel1", ng-condition="getAnswer('A211',itLevel1).value == 'AT_68'")
+
+    button.button.add-repetition-button(ng-click="addIteration('A209')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'A209_LOOPDESC' | translate")
+
+    mm-awac-sub-title(question-code="A223")
+    mm-awac-repetition-name(question-code="A224")
+
+    mm-awac-repetition-question(question-set-code="A224", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A224')")
+        mm-awac-question(question-code="A225",ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="A226",ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="A227",ng-repetition-map="itLevel1")
+        mm-awac-question(question-code="A228",ng-repetition-map="itLevel1")
+
+    button.button.add-repetition-button(ng-click="addIteration('A224')", type="button")
+        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+        span(ng-bind-html="'A224_LOOPDESC' | translate")
+
+.horizontal_separator
+
 mm-awac-section(title-code="A128_TITLE")
     mm-awac-question(question-code="A129")
 .horizontal_separator
