@@ -73,7 +73,7 @@ public class AwacEnterpriseInitialData {
     session.saveOrUpdate(form3);
 
     // == TAB4
-    // TRANSPORT ET DISTRIBUTION AMONT
+    // ACHATS, TRANSPORT ET DISTRIBUTION AMONT
     Form form4 = new Form("TAB4");
     session.saveOrUpdate(form4);
 
@@ -83,7 +83,7 @@ public class AwacEnterpriseInitialData {
     session.saveOrUpdate(form5);
 
     // == TAB6
-    // ACHATS ET INVESTISSEMENTS
+    // INFRASTRUCTURES, ACTIFS, FRANCHISES ET INVESTISSEMENTS
     Form form6 = new Form("TAB6");
     session.saveOrUpdate(form6);
 
@@ -265,6 +265,35 @@ public class AwacEnterpriseInitialData {
     QuestionSet a121 = new QuestionSet(QuestionCode.A121, false, a113);
     session.saveOrUpdate(a121);
 
+    // == A205
+    // Achat de biens et services
+    QuestionSet a205 = new QuestionSet(QuestionCode.A205, false, null);
+    session.saveOrUpdate(a205);
+        form4.getQuestionSets().add(a205);
+        session.saveOrUpdate(form4);
+
+    // == A208
+    // Méthode par détail des achats
+    QuestionSet a208 = new QuestionSet(QuestionCode.A208, false, null);
+    session.saveOrUpdate(a208);
+        form4.getQuestionSets().add(a208);
+        session.saveOrUpdate(form4);
+
+    // == A209
+    // Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
+    QuestionSet a209 = new QuestionSet(QuestionCode.A209, true, a208);
+    session.saveOrUpdate(a209);
+
+    // == A223
+    // Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
+    QuestionSet a223 = new QuestionSet(QuestionCode.A223, false, a208);
+    session.saveOrUpdate(a223);
+
+    // == A224
+    // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
+    QuestionSet a224 = new QuestionSet(QuestionCode.A224, true, a223);
+    session.saveOrUpdate(a224);
+
     // == A128
     // Transport et distribution de marchandises amont
     QuestionSet a128 = new QuestionSet(QuestionCode.A128, false, null);
@@ -388,35 +417,6 @@ public class AwacEnterpriseInitialData {
     // Méthode par le poids de CO2 chimique des effluents rejetés
     QuestionSet a201 = new QuestionSet(QuestionCode.A201, false, a196);
     session.saveOrUpdate(a201);
-
-    // == A205
-    // Achat de biens et services
-    QuestionSet a205 = new QuestionSet(QuestionCode.A205, false, null);
-    session.saveOrUpdate(a205);
-        form6.getQuestionSets().add(a205);
-        session.saveOrUpdate(form6);
-
-    // == A208
-    // Méthode par détail des achats
-    QuestionSet a208 = new QuestionSet(QuestionCode.A208, false, null);
-    session.saveOrUpdate(a208);
-        form6.getQuestionSets().add(a208);
-        session.saveOrUpdate(form6);
-
-    // == A209
-    // Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
-    QuestionSet a209 = new QuestionSet(QuestionCode.A209, true, a208);
-    session.saveOrUpdate(a209);
-
-    // == A223
-    // Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
-    QuestionSet a223 = new QuestionSet(QuestionCode.A223, false, a208);
-    session.saveOrUpdate(a223);
-
-    // == A224
-    // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
-    QuestionSet a224 = new QuestionSet(QuestionCode.A224, true, a223);
-    session.saveOrUpdate(a224);
 
     // == A229
     // Infrastructures (achetées durant l'année de déclaration)
@@ -967,6 +967,80 @@ public class AwacEnterpriseInitialData {
         session.saveOrUpdate(new DoubleQuestion( a121, 0, QuestionCode.A127, lengthUnits, null, getUnitBySymbol("km") ));
 
 
+    // == A206
+    // Pièces documentaires liées aux achats
+    session.saveOrUpdate(new DocumentQuestion( a205, 0, QuestionCode.A206));
+
+    // == A210
+    // Poste d'achat
+    session.saveOrUpdate(new StringQuestion( a209, 0, QuestionCode.A210, null ));
+
+    // == A211
+    // Catégorie
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A211, CodeList.TYPEACHAT ));
+
+    // == A212
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A212, CodeList.ACHATMETAL ));
+
+    // == A213
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A213, CodeList.ACHATPLASTIQUE ));
+
+    // == A214
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A214, CodeList.ACHATPAPIER ));
+
+    // == A215
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A215, CodeList.ACHATVERRE ));
+
+    // == A216
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A216, CodeList.ACHATCHIMIQUE ));
+
+    // == A217
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A217, CodeList.ACHATROUTE ));
+
+    // == A218
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A218, CodeList.ACHATAGRO ));
+
+    // == A219
+    // Type
+    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A219, CodeList.ACHATSERVICE ));
+
+    // == A220
+    // Taux de recyclé
+    session.saveOrUpdate(new PercentageQuestion( a209, 0, QuestionCode.A220, null ));
+
+    // == A221
+    // Quantité
+        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A221, massUnits, null, getUnitBySymbol("t") ));
+
+
+    // == A222
+    // Quantité
+        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A222, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == A225
+    // Poste d'achat
+    session.saveOrUpdate(new StringQuestion( a224, 0, QuestionCode.A225, null ));
+
+    // == A226
+    // Quantité
+    session.saveOrUpdate(new IntegerQuestion( a224, 0, QuestionCode.A226, null, null ));
+
+    // == A227
+    // Unité dans laquelle s'exprime cette quantité
+    session.saveOrUpdate(new StringQuestion( a224, 0, QuestionCode.A227, null ));
+
+    // == A228
+    // Facteur d'émission en tCO2e par unité ci-dessus
+    session.saveOrUpdate(new IntegerQuestion( a224, 0, QuestionCode.A228, null, null ));
+
     // == A129
     // Pièces documentaires liées au transport et stockage amont
     session.saveOrUpdate(new DocumentQuestion( a128, 0, QuestionCode.A129));
@@ -1200,80 +1274,6 @@ public class AwacEnterpriseInitialData {
     // == A204
     // Méthode de traitement des eaux usées
     session.saveOrUpdate(new ValueSelectionQuestion( a201, 0, QuestionCode.A204, CodeList.TRAITEMENTEAU ));
-
-    // == A206
-    // Pièces documentaires liées aux achats
-    session.saveOrUpdate(new DocumentQuestion( a205, 0, QuestionCode.A206));
-
-    // == A210
-    // Poste d'achat
-    session.saveOrUpdate(new StringQuestion( a209, 0, QuestionCode.A210, null ));
-
-    // == A211
-    // Catégorie
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A211, CodeList.TYPEACHAT ));
-
-    // == A212
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A212, CodeList.ACHATMETAL ));
-
-    // == A213
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A213, CodeList.ACHATPLASTIQUE ));
-
-    // == A214
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A214, CodeList.ACHATPAPIER ));
-
-    // == A215
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A215, CodeList.ACHATVERRE ));
-
-    // == A216
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A216, CodeList.ACHATCHIMIQUE ));
-
-    // == A217
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A217, CodeList.ACHATROUTE ));
-
-    // == A218
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A218, CodeList.ACHATAGRO ));
-
-    // == A219
-    // Type
-    session.saveOrUpdate(new ValueSelectionQuestion( a209, 0, QuestionCode.A219, CodeList.ACHATSERVICE ));
-
-    // == A220
-    // Taux de recyclé
-    session.saveOrUpdate(new PercentageQuestion( a209, 0, QuestionCode.A220, null ));
-
-    // == A221
-    // Quantité
-        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A221, massUnits, null, getUnitBySymbol("t") ));
-
-
-    // == A222
-    // Quantité
-        session.saveOrUpdate(new DoubleQuestion( a209, 0, QuestionCode.A222, moneyUnits, null, getUnitBySymbol("EUR") ));
-
-
-    // == A225
-    // Poste d'achat
-    session.saveOrUpdate(new StringQuestion( a224, 0, QuestionCode.A225, null ));
-
-    // == A226
-    // Quantité
-    session.saveOrUpdate(new IntegerQuestion( a224, 0, QuestionCode.A226, null, null ));
-
-    // == A227
-    // Unité dans laquelle s'exprime cette quantité
-    session.saveOrUpdate(new StringQuestion( a224, 0, QuestionCode.A227, null ));
-
-    // == A228
-    // Facteur d'émission en tCO2e par unité ci-dessus
-    session.saveOrUpdate(new IntegerQuestion( a224, 0, QuestionCode.A228, null, null ));
 
     // == A230
     // Pièces documentaires liées aux infrastructures
