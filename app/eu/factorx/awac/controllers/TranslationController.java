@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.code.CodeList;
@@ -48,6 +47,7 @@ public class TranslationController extends AbstractController {
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_ERROR_MESSAGES).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.QUESTION).values());
 		return translations;
 	}
 
