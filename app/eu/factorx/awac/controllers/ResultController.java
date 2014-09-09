@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.ReportDTO;
+import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
@@ -171,11 +172,12 @@ public class ResultController extends AbstractController {
 
 
 	@Transactional(readOnly = false)
-	//@Security.Authenticated(SecuredController.class)
+	@Security.Authenticated(SecuredController.class)
 	public Result getSvgDonutForScope(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		Account currentUser = securedController.getCurrentUser();
+		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 
@@ -191,7 +193,37 @@ public class ResultController extends AbstractController {
 			}
 		}
 
-		return ok(eu.factorx.awac.views.html.svg.donut.render(scopeTable));
+		markNoCache();
+
+		return ok(toSvg(svgGenerator.getDonut(scopeTable)));
 	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result getWebForScope(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
+		Scope scope = scopeService.findById(scopeId);
+		Account currentUser = securedController.getCurrentUser();
+		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
+
+		Table scopeTable = new Table();
+
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
+		nf.setMaximumFractionDigits(2);
+
+		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+			double v = entry.getValue().get(1) + entry.getValue().get(2) + entry.getValue().get(3) + entry.getValue().get(4);
+			if (v > 0) {
+				int row = scopeTable.getRowCount();
+				scopeTable.setCell(0, row, entry.getKey());
+				scopeTable.setCell(1, row, v);
+			}
+		}
+
+		markNoCache();
+
+		return ok(toSvg(svgGenerator.getWeb(scopeTable)));
+	}
+
 
 }

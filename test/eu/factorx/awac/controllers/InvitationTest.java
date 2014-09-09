@@ -21,6 +21,7 @@ import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.InvitationService;
 import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.PersonService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +45,7 @@ import static play.test.Helpers.*;
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class InvitationTest extends AbstractBaseModelTest {
+public class InvitationTest extends AbstractBaseControllerTest {
 
 	private static final String invitationEmail = "gaston.hollands@factorx.eu";
 	private static final String login = "gaston.hollands";
@@ -65,6 +66,10 @@ public class InvitationTest extends AbstractBaseModelTest {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private PersonService personService;
+
 
 	@Test
 	public void _001_launchInvitation() {
@@ -204,7 +209,21 @@ public class InvitationTest extends AbstractBaseModelTest {
 
 	} // end of authenticateSuccess test
 
+	@Test
+	public void _004_cleanTestData() {
 
+		// remove account for test DB sanity
+
+		// verify account creation
+		List<Account> accountList = accountService.findByEmail(invitationEmail);
+
+		assertNotNull(accountList.get(0));
+		assertEquals(accountList.get(0).getIdentifier(),login);
+
+		accountService.remove(accountList.get(0));
+		personService.remove(accountList.get(0).getPerson());
+
+	}
 
 	// class to handle EmailInvitationDTO
 

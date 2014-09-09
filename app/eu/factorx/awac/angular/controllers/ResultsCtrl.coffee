@@ -1,90 +1,24 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu) ->
+.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService) ->
     $scope.displayFormMenu = displayFormMenu
 
-    $scope.graphs = {}
-
+    modalService.show modalService.LOADING
     downloadService.getJson "/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
+        modalService.close modalService.LOADING
         if result.success
             $scope.o = result.data
-
-            # All scopes
-            totalOutOfScope = 0;
-            totalScope1 = 0;
-            totalScope2 = 0;
-            totalScope3 = 0;
-            for rl in $scope.o.reportLines
-                totalOutOfScope += rl.outOfScopeValue
-                totalScope1 += rl.scope1Value
-                totalScope2 += rl.scope2Value
-                totalScope3 += rl.scope3Value
-
-            $scope.totalScope1 = totalScope1
-            $scope.totalScope2 = totalScope2
-            $scope.totalScope3 = totalScope3
-            $scope.totalOutOfScope = totalOutOfScope
-
-
-            data = []
-            data.push
-                label: 'Scope 1',
-                value: totalScope1
-            data.push
-                label: 'Scope 2',
-                value: totalScope2
-            data.push
-                label: 'Scope 3',
-                value: totalScope3
-            data.push
-                label: 'Out of scope',
-                value: totalOutOfScope
-
-            $scope.graphs.scopes = data
-
-
-            # Scope 1
-            data = []
-            for rl in $scope.o.reportLines
-                if rl.scope1Value > 0
-                    data.push
-                        label: rl.indicatorName,
-                        value: rl.scope1Value
-
-            $scope.graphs.scope1 = data
-
-            # Scope 2
-            data = []
-            for rl in $scope.o.reportLines
-                if rl.scope2Value > 0
-                    data.push
-                        label: rl.indicatorName,
-                        value: rl.scope2Value
-
-            $scope.graphs.scope2 = data
-
-            # Scope 3
-            data = []
-            for rl in $scope.o.reportLines
-                if rl.scope3Value > 0
-                    data.push
-                        label: rl.indicatorName,
-                        value: rl.scope3Value
-
-            $scope.graphs.scope3 = data
-
-            # Out of Scope
-            data = []
-            for rl in $scope.o.reportLines
-                if rl.outOfScopeValue > 0
-                    data.push
-                        label: rl.indicatorName,
-                        value: rl.outOfScopeValue
-
-            $scope.graphs.outOfScope = data
-
         else
             # TODO ERROR HANDLING
+
+    $scope.charts = {
+        webUrl: "/awac/result/getWebForScope/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
+        donutUrl1: "/awac/result/getSvgDonutForScope/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/1"
+        donutUrl2: "/awac/result/getSvgDonutForScope/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/2"
+        donutUrl3: "/awac/result/getSvgDonutForScope/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/3"
+    }
+
+    $scope.current_tab = 1;
 
     $scope.downloadAsXls = () ->
         $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null

@@ -86,7 +86,7 @@ GET     /awac/result/getReport/:period/:scope                         @eu.factor
 GET     /awac/result/getReportAsXls/:period/:scope                    @eu.factorx.awac.controllers.ResultController.getReportAsXls(period: String, scope: Long)                                                               
 GET     /awac/result/getReportAsPdf/:period/:scope                    @eu.factorx.awac.controllers.ResultController.getReportAsPdf(period: String, scope: Long)                                                               
 GET     /awac/result/getSvgDonutForScope/:period/:scope/:scopeType    @eu.factorx.awac.controllers.ResultController.getSvgDonutForScope(period: String, scope: Long, scopeType: Integer )                                     
-
+GET     /awac/result/getWebForScope/:period/:scope                    @eu.factorx.awac.controllers.ResultController.getWebForScope(period: String, scope: Long)
 
 #
 # Upload

@@ -61,7 +61,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 11: Unit out             (a {@link Unit})
 	 * </pre>
 	 */
-	public static final String ENTERPRISE_FACTORS_SHEET_NAME = "EFDB_V6";
+	public static final String FACTORS_SHEET_NAME = "EFDB_V6";
 
 	@Autowired
 	private IndicatorService indicatorService;
@@ -85,18 +85,8 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	}
 
 	protected void importData() throws Exception {
-		AwacCalculator enterpriseCalculator = awacCalculatorService.findByCode(InterfaceTypeCode.ENTERPRISE);
-		if (enterpriseCalculator == null) {
-			enterpriseCalculator = new AwacCalculator(InterfaceTypeCode.ENTERPRISE);
-		}
 		indicatorService.removeAll();
 		factorService.removeAll();
-
-		Logger.info("== Importing AWAC Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
-		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
-
-		Sheet indicatorsSheet = awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME);
-		Sheet factorsSheet = awacDataWbSheets.get(ENTERPRISE_FACTORS_SHEET_NAME);
 
 		allUnitKeys = findAllUnits();
 
@@ -106,13 +96,23 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		allActivityCategoryKeys = findAllCodeKeys(CodeList.ActivityCategory);
 		allActivitySubCategoryKeys = findAllCodeKeys(CodeList.ActivitySubCategory);
 
+		Logger.info("== Importing AWAC Indicators and Factors (from {})", AWAC_DATA_WORKBOOK_PATH);
+		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
+
 		Logger.info("==== Importing Enterprise Indicators");
-		saveIndicators(indicatorsSheet, enterpriseCalculator);
-		Logger.info("==== Importing Enterprise Factors");
-		saveFactors(factorsSheet);
+		saveIndicators(awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME), InterfaceTypeCode.ENTERPRISE);
+
+		Logger.info("==== Importing Municipality Indicators");
+		saveIndicators(awacDataWbSheets.get(MUNICIPALITY_INDICATORS_SHEET_NAME), InterfaceTypeCode.MUNICIPALITY);
+
+		Logger.info("==== Importing Household Indicators");
+		saveIndicators(awacDataWbSheets.get(HOUSEHOLD_INDICATORS_SHEET_NAME), InterfaceTypeCode.HOUSEHOLD);
+
+		Logger.info("==== Importing Factors");
+		saveFactors(awacDataWbSheets.get(FACTORS_SHEET_NAME));
 	}
 
-	private void saveIndicators(Sheet indicatorsSheet, AwacCalculator awacCalculator) {
+	private void saveIndicators(Sheet indicatorsSheet, InterfaceTypeCode interfaceTypeCode) {
 
 		List<Indicator> indicators = new ArrayList<>();
 		Unit unit = allUnitKeys.get("U5331");
@@ -159,14 +159,21 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			ActivityCategoryCode activityCategory = new ActivityCategoryCode(activityCategoryKey);
 			ActivitySubCategoryCode activitySubCategory = new ActivitySubCategoryCode(activitySubCategoryKey);
 
-			Indicator indicator = new Indicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit, deleted);
+			Indicator indicator = new Indicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit,
+					deleted);
 			indicatorService.saveOrUpdate(indicator);
 			indicators.add(indicator);
 		}
-		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
 
+		// Update calculator-indicator links
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
+		if (awacCalculator == null) {
+			awacCalculator = new AwacCalculator(InterfaceTypeCode.ENTERPRISE);
+		}
 		awacCalculator.setIndicators(indicators);
 		awacCalculatorService.saveOrUpdate(awacCalculator);
+
+		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
 	}
 
 	private void saveFactors(Sheet factorsSheet) {

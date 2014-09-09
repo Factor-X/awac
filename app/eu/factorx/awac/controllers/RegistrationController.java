@@ -52,6 +52,7 @@ public class RegistrationController  extends AbstractController {
 		// control organization name
 		Organization organization = organizationService.findByName(dto.getOrganizationName());
 		if(organization!=null){
+			play.Logger.info("Myrmex exception: Organization already exists...");
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
 		}
 
@@ -65,6 +66,7 @@ public class RegistrationController  extends AbstractController {
 		try {
 			account = createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.ENTERPRISE,organization);
 		} catch (MyrmexException e) {
+			play.Logger.info("Myrmex exception:" + e.getToClientMessage());
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
