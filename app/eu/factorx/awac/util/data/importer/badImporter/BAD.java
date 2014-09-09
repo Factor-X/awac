@@ -38,6 +38,7 @@ public class BAD {
     private boolean canBeGenerated = true;
 
     private List<String> listQuestion= new ArrayList<>();
+    private int line;
 
     public BAD() {
     }
@@ -164,16 +165,16 @@ public class BAD {
         return canBeGenerated;
     }
 
-    public void addQuestion(String unit) {
+    public void addQuestion(String questionCodeKey) {
 
         boolean founded = false;
         for (String unitToTest : listQuestion) {
-            if (unitToTest.equals(unit)) {
+            if (unitToTest.equals(questionCodeKey)) {
                 founded = true;
             }
         }
         if (!founded) {
-            this.listQuestion.add(unit);
+            this.listQuestion.add(questionCodeKey);
         }
 
 
@@ -181,5 +182,13 @@ public class BAD {
 
     public List<String> getListQuestions() {
         return listQuestion;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
     }
 }

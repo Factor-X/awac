@@ -8,11 +8,11 @@ import eu.factorx.awac.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import play.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by florian on 4/09/14.
@@ -33,7 +33,7 @@ public class BADGenerator {
     private CodeLabelService codeLabelService;
 
 
-    public void generateBAD(BAD bad) {
+    public void generateBAD(BAD bad,BADLog badLog) {
 
         //create template
         BADTemplate badTemplate = new BADTemplate(TemplateName.BAD, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
@@ -41,11 +41,10 @@ public class BADGenerator {
         //add parameters
         //start to build the map of repetition to load question
         for (String question : bad.getListQuestions()) {
-            completHashMap(question);
+            completHashMap(question,badLog, bad.getLine());
         }
 
         //TEMP print result
-        //TODO erreur dans les listes : les questions doivent être récupéré dans leur parent direct et pas dans la répéition
         /*
         if (bad.getListQuestions().size() > 0) {
             Logger.info("getListQuestions:" + bad.getListQuestions().toString());
@@ -101,11 +100,10 @@ public class BADGenerator {
         badTemplate.addParameter("repetitions", repetition);
 
         //condition
-        if(bad.getCondition()!=null && bad.getCondition().length()>0){
+        if (bad.getCondition() != null && bad.getCondition().length() > 0) {
             badTemplate.addParameter("HAS_CONDITION", true);
             badTemplate.addParameter("CONDITION", bad.getCondition());
-        }
-        else{
+        } else {
             badTemplate.addParameter("HAS_CONDITION", false);
         }
 
@@ -130,7 +128,7 @@ public class BADGenerator {
     }
 
 
-    private void completHashMap(String questionCode) {
+    private void completHashMap(String questionCode, BADLog badLog,int line) {
 
         //load the question
         Question question = questionService.findByCode(new QuestionCode(questionCode));
@@ -139,40 +137,66 @@ public class BADGenerator {
         //if (foundRepetition(question.getQuestionSet())) {
 
         //try to add question
-        if (!addQuestion(question.getQuestionSet(), question)) {
+        if (!addQuestion(question)) {
 
             if (repeatableElementRoot == null) {
                 //build the structure
                 buildStructure(question.getQuestionSet(), question);
             } else {
-                //TODO try to add the repetition into the existent structure
 
-                //TODO LOGGER TEMP
-                Logger.info("CANNOT FOUND REPETITION ELEMEBNT FOR " + questionCode);
+                // get last child
+                RepeatableElement repeatableElementLastChild = getLastChild(repeatableElementRoot);
+
+                //try to match questionCode.questionSet with this element
+                QuestionSet questionSetCompatible = getCompatibleQuestionSet(repeatableElementLastChild, question.getQuestionSet(),null);
+                if (questionSetCompatible == null) {
+                    badLog.addToLog(BADLog.LogType.ERROR,line,"error : "+question.getQuestionSet().getCode().getKey()+" cannot be insert into the questionSet structure (root : "+repeatableElementRoot.getMainQuestionSetString()+",lastChild : "+repeatableElementLastChild.getMainQuestionSetString()+", question : "+questionCode+")");
+                } else {
+                    //add
+                    play.Logger.info("LINE = " + line + "=>" + questionSetCompatible + " " + question + " " + repeatableElementLastChild);
+                    addToStructure(question.getQuestionSet(), question, repeatableElementLastChild);
+                }
             }
         }
-        // } else {
-        //     listQuestionWithoutRepetition.add(question);
-        //}
+    }
 
+    private QuestionSet getCompatibleQuestionSet(RepeatableElement repeatableElement, QuestionSet questionSet, QuestionSet lastQuestionSet) {
+        if (repeatableElement.getMainQuestionSet().equals(questionSet)) {
+            return lastQuestionSet;
+        } else if (questionSet.getParent() != null) {
+            return getCompatibleQuestionSet(repeatableElement, questionSet.getParent(), questionSet);
+        }
+        return null;
+    }
+
+    /**
+     * return the last child
+     *
+     * @param repeatableElement
+     * @return
+     */
+    private RepeatableElement getLastChild(RepeatableElement repeatableElement) {
+        if (repeatableElement.getChild() != null) {
+            return getLastChild(repeatableElement.getChild());
+        } else {
+            return repeatableElement;
+        }
     }
 
     /**
      * Try to add a question into the existing structure
      * return true if the question was addeds
      */
-    private boolean addQuestion(QuestionSet questionSet, Question questionToAdd) {
+    private boolean addQuestion(Question questionToAdd) {
+
+        play.Logger.info("try to add "+questionToAdd);
 
 
         //test if this QuestionSet is already know
-        if (getRepeatableElement(questionSet) != null) {
-            getRepeatableElement(questionSet).addQuestion(questionToAdd.getCode().getKey());
+        if (getRepeatableElement(questionToAdd.getQuestionSet()) != null) {
+            getRepeatableElement(questionToAdd.getQuestionSet()).addQuestion(questionToAdd.getCode().getKey());
+            play.Logger.info("      SUCEZSS !! ");
             return true;
-        }
-
-        //continue
-        if (questionSet.getParent() != null) {
-            return addQuestion(questionSet.getParent(), questionToAdd);
         }
         return false;
     }
@@ -194,7 +218,7 @@ public class BADGenerator {
             }
             repeatableElement = repeatableElementRoot;
         }
-        if (repeatableElement.getMainQuestionSet().equals(questionSet.getCode().getKey())) {
+        if (repeatableElement.getMainQuestionSet().equals(questionSet)) {
             return repeatableElement;
         }
         if (repeatableElement.getChild() != null) {
@@ -215,6 +239,34 @@ public class BADGenerator {
         }
         return false;
     }
+
+
+    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference){
+        addToStructure(questionSetToAdd,questionToAdd,repetitionReference,null);
+    }
+
+    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference, RepeatableElement lastRepetition){
+
+        if(questionSetToAdd.equals(repetitionReference.getMainQuestionSet())){
+            repetitionReference.setChild(lastRepetition);
+        }
+        else {
+
+            RepeatableElement repeatableElement = new RepeatableElement(questionSetToAdd);
+            repeatableElement.setRepeteable(questionSetToAdd.getRepetitionAllowed());
+
+            if (questionToAdd.getQuestionSet().equals(questionSetToAdd)) {
+                repeatableElement.addQuestion(questionToAdd.getCode().getKey());
+            }
+
+            if (lastRepetition != null) {
+                repeatableElement.setChild(lastRepetition);
+            }
+
+            addToStructure(questionSetToAdd.getParent(),questionToAdd,repetitionReference,repeatableElement);
+        }
+    }
+
 
     /**
      * build structure - initialization
@@ -279,9 +331,7 @@ public class BADGenerator {
         public void setMainQuestionSet(QuestionSet mainQuestionSet) {
             this.mainQuestionSet = mainQuestionSet;
             this.mainQuestionSetString = mainQuestionSet.getCode().getKey();
-            Logger.info("CODE : "+mainQuestionSet.getCode());
-            Logger.info("LABEL : "+codeLabelService.findCodeLabelByCode(mainQuestionSet.getCode()));
-            mainQuestionSetDescription = codeLabelService.findCodeLabelByCode(mainQuestionSet.getCode()).getLabelFr();
+            //TODO mainQuestionSetDescription = codeLabelService.findCodeLabelByCode(mainQuestionSet.getCode()).getLabelFr();
         }
 
         public String getMainQuestionSetString() {

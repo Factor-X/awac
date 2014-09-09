@@ -138,11 +138,13 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line)+"("+data.getData(BAD_NAME_COL, line)+")");
+                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line)+" ("+data.getData(BAD_NAME_COL, line)+")");
 
 
                 //create the bad
                 BAD bad = new BAD();
+
+                bad.setLine(line);
 
 
                 // --- test badKey ---
@@ -190,7 +192,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                     //write
-                    badGenerator.generateBAD(bad);
+                    badGenerator.generateBAD(bad,badLog);
                 //}
             }
         }

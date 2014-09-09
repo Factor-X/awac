@@ -64,7 +64,7 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
 
                     //control them
                     if (#foreach ($question in $repetition.getQuestionList())
-                            question${question}Answer == null #if( ${foreach.count} != $repetition.getQuestionList().size - 2)||
+                            question${question}Answer == null #if( $foreach.count < $repetition.getQuestionList().size()) ||
                             #end
                         #end
                         ) {
