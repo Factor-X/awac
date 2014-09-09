@@ -10,11 +10,20 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.SiteService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import play.Logger;
@@ -23,15 +32,17 @@ import play.mvc.Result;
 import play.test.FakeRequest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.*;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RegistrationTest extends AbstractBaseModelTest {
+public class RegistrationTest extends AbstractBaseControllerTest {
 
 	private static final String email1 = "test1@test.test";
 	private static final String email2 = "test2@test.test";
@@ -50,6 +61,19 @@ public class RegistrationTest extends AbstractBaseModelTest {
 	private static final String lastName = "lastTest";
 	private static final String site = "testSite";
 	private static final String password = "testPassword";
+
+	@Autowired
+	OrganizationService organizationService;
+
+	@Autowired
+	SiteService siteService;
+
+	@Autowired
+	ScopeService scopeService;
+
+	@Autowired
+	AccountService accountService;
+
 
 	/**
 	 * create a account + person + organization and scope + site and scope
@@ -190,7 +214,43 @@ public class RegistrationTest extends AbstractBaseModelTest {
 
 	} // end of authenticateSuccess test
 
+	@Test
+	public void _005_cleanTestData() {
 
+		// remove organization for test DB sanity
+		//cleanData(organizationName1,identifier1);
+		//cleanData(municipalityName,identifier2);
+	}
+
+
+	private void cleanData (String organisationName, String identifier) {
+
+		Account account = null;
+		Organization organization = null;
+		List<Site> siteList=null;
+
+
+		account = accountService.findByIdentifier(identifier);
+		assertNotNull(account);
+		accountService.remove(account);
+
+		organization = organizationService.findByName(organisationName);
+		assertNotNull(organization);
+
+		siteList=organization.getSites();
+		assertNotNull(siteList);
+
+		for (Site site : siteList) {
+			assertNotNull(site);
+			play.Logger.info("Site for orgrganisation:" + site.getName());
+			//Scope siteScope = scopeService.findBySite(site);
+			//scopeService.remove(scopeService.findBySite(site));
+			//scopeService.remove(scopeService.findByOrganization(organization))
+			siteService.remove(site);
+		}
+
+		organizationService.remove(organization);
+	}
 
 	private EnterpriseAccountCreationDTO createDTO(String email,String identifier, String organizationName) {
 

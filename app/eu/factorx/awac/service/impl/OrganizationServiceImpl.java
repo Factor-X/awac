@@ -2,7 +2,6 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
-import eu.factorx.awac.models.business.Site;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -39,10 +38,10 @@ public class OrganizationServiceImpl extends AbstractJPAPersistenceServiceImpl<O
 
 	@Override
 	public void remove(final Organization organization) {
-
 		Scope scope = scopeService.findByOrganization(organization);
-		scopeService.remove(scope);
-
+		if (scope != null) {
+			scopeService.remove(scope);
+		}
 		super.remove(organization);
 	}
 

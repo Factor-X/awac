@@ -32,4 +32,13 @@ public class SiteServiceImpl extends AbstractJPAPersistenceServiceImpl<Site> imp
 		return site;
 	}
 
+	@Override
+	public void remove (final Site entity) {
+		Scope scope = scopeService.findBySite(entity);
+		if (scope != null) {
+			scopeService.remove(scope);
+		}
+		super.remove(entity);
+	}
+
 }

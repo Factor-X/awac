@@ -55,6 +55,10 @@ public class BADLog {
             if(!messages.containsKey(logType)){
                 messages.put(logType,new ArrayList<String>());
             }
+            if(logType != LogType.ID) {
+                message = (messages.get(logType).size() + 1) + ". " + message;
+            }
+
             messages.get(logType).add(message);
         }
 

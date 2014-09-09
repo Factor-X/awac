@@ -24,7 +24,7 @@ public class SvgGeneratorServiceTest extends AbstractBaseModelTest {
 	private SvgGenerator svgGenerator;
 
 	@Test
-	public void _001_basic() {
+	public void _001_donut() {
 
 		assertNotNull(svgGenerator);
 
@@ -43,4 +43,46 @@ public class SvgGeneratorServiceTest extends AbstractBaseModelTest {
 
 	} // end of test
 
+
+	@Test
+	public void _002_web() {
+
+		assertNotNull(svgGenerator);
+
+		Table table = new Table();
+
+		for (int i = 0; i < 10; i++) {
+			table.setCell(0,i, "Line #" + (i+1));
+			table.setCell(1,i, Math.random() * 10 );
+			table.setCell(2,i, Math.random() * 10 );
+			table.setCell(3,i, Math.random() * 10 );
+		}
+
+		String code = svgGenerator.getWeb(table);
+
+		System.out.println(code);
+
+		assertNotNull(code);
+
+	} // end of test
+
+	@Test
+	public void _003_histogram() {
+
+		assertNotNull(svgGenerator);
+
+		Table table = new Table();
+
+		for (int i = 0; i < 10; i++) {
+			table.setCell(0,i, "Line #" + (i+1));
+			table.setCell(1,i, Math.random() * 10 );
+		}
+
+		String code = svgGenerator.getHistogram(table);
+
+		System.out.println(code);
+
+		assertNotNull(code);
+
+	} // end of test
 } // end of class

@@ -58,8 +58,6 @@ angular
 					,
 						total: 0 # length of data
 						getData: ($defer, params) ->
-
-
 							orderedData = $filter("orderBy")(result.data.logLines, params.orderBy())
 							$defer.resolve orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count())
 							params.total result.data.logLines.length

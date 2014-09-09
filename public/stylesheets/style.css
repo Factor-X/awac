@@ -1599,6 +1599,7 @@ ul.messenger > li {
     white-space: nowrap;
     padding: 0.5em 1em;
     border-bottom: solid #666 2px;
+
 }
 
 .indicators_table > tbody > tr > td {
@@ -1622,6 +1623,15 @@ ul.messenger > li {
     font-weight: bold;
 }
 
+
+.indicators_table > tbody > tr > td.scope1{
+    border-left: dashed 2px #666;
+}
+.indicators_table > tbody > tr > td.out-of-scope{
+    border-right: dashed 2px #666;
+}
+
+
 .chart-legend {
     text-align: left;
     vertical-align: top;
@@ -1636,32 +1646,37 @@ ul.messenger > li {
     margin-right: 0.5em;
 }
 
-.forgot_password_success_message{
+.forgot_password_success_message {
     text-align: center;
     margin: 15px;
     font-size: 18px;
     color: darkgreen;
 }
 
-.interface_menu{
-    height : 40px;
+.interface_menu {
+    height: 40px;
     list-style-type: none;
-    margin-left : 50px;
+    margin-left: 50px;
 }
 
-.interface_menu li{
-    float:left;
+.interface_menu li {
+    float: left;
     margin-right: 5px;
 }
 
-.interface_menu li a{
-    display:block;
+.interface_menu li a {
+    display: block;
     color: white;
 }
-.interface_menu li a:hover{
+
+.interface_menu li a:hover {
     text-decoration: none;
 }
 
+.interface_menu li .selected {
+    background-color: #000080;
+    border-color: #000080;
+}
 
 .interface_menu li .selected{
     background-color : #000080;
@@ -1672,6 +1687,166 @@ ul.messenger > li {
     border-right: 1px solid #ddd;
 }
 
-.admin-table-import-bad ul{
+.admin-table-import-bad ul {
     list-style-type: none;
+}
+
+/*
+ * sites-panel
+ */
+.sites-panel {
+    width: 300px;
+}
+
+.sites-panel-title {
+    background: #333;
+    color: #eee;
+    font-weight: bold;
+    margin-bottom: 4px;
+    width: 100%;
+    padding: 0.25em 0.5em;
+}
+
+.sites-panel-items {
+    width: 100%;
+}
+
+.sites-panel-item, .sites-panel-all-items {
+    background: #ccc;
+    padding: 0.25em 0.5em;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.sites-panel-item > table {
+    width: 100%;
+}
+
+.sites-panel-item > table td:first-child {
+    width: 100%;
+}
+
+/*
+ * charts-panel
+ */
+.charts-panel-tabset {
+    white-space: nowrap;
+}
+
+.charts-panel-tab {
+    margin-bottom: 4px;
+}
+
+.charts-panel-tab-title {
+    display: inline-block;
+    background: #333;
+    color: #eee;
+    font-weight: bold;
+    padding: 0.5em 0em;
+    margin: 0;
+    width: 300px;
+    height: 7em;
+    vertical-align: middle;
+}
+
+.charts-panel-tab-arrow {
+    display: inline-block;
+    width: 3.5em;
+    height: 7em;
+    border-top: 3.5em solid transparent;
+    border-bottom: 3.5em solid transparent;
+    border-right: 3.5em solid #333;
+    vertical-align: middle;
+}
+
+.charts-panel-tab.active .charts-panel-tab-title {
+    background-color: #363;
+}
+
+.charts-panel-tab.active .charts-panel-tab-arrow {
+    border-right-color: #363;
+}
+
+.charts-panel-tab:hover .charts-panel-tab-title {
+    background-color: #484;
+}
+
+.charts-panel-tab:hover .charts-panel-tab-arrow {
+    border-right-color: #484;
+}
+
+
+.top-aligned {
+    vertical-align: top;
+}
+
+.horizontally-padded {
+    padding: 0em 1em;
+}
+
+
+.circled-number {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 9px;
+    border: solid 1px black;
+    text-align: center;
+    margin-right: 6px;
+}
+
+.results_disclaimer {
+    text-align: right;
+}
+
+
+.results_disclaimer_text {
+    text-align: left;
+    display: inline-block;
+    padding: 0.5em;
+    border: solid 1px #333;
+}
+
+.tab_donut {
+    background-image: url('/assets/images/schemas/schema_pieChart.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+
+.tab_web {
+    background-image: url('/assets/images/schemas/schema_araignee.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_numbers {
+    background-image: url('/assets/images/schemas/schema_chiffres.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_constant_factors {
+    background-image: url('/assets/images/schemas/schema_facteursConstants.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_fe {
+    background-image: url('/assets/images/schemas/schema_FE.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_calculus {
+    background-image: url('/assets/images/schemas/schema_calcul.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
+.tab_bars {
+    background-image: url('/assets/images/schemas/schema_barchart.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
 }
