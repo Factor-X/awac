@@ -7,10 +7,6 @@ import org.springframework.stereotype.Component;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-<<<<<<< HEAD
-
-=======
->>>>>>> dd944104fcd69e650939affc676cfa30c615173c
 
 import java.util.HashMap;
 import java.util.Map;
