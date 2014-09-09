@@ -138,11 +138,13 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.ID, line, data.getData(ExcelEquivalenceColumn.B, line));
+                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line)+" ("+data.getData(BAD_NAME_COL, line)+")");
 
 
                 //create the bad
                 BAD bad = new BAD();
+
+                bad.setLine(line);
 
 
                 // --- test badKey ---
@@ -153,6 +155,9 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
                 // ---- control rank ---
                 badControlElement.controlRank(data.getData(BAD_RANK_COL, line), line, bad);
+
+                // ---- unit ---
+                badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line, bad);
 
                 // ---- specific purpose ----
                 badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line), line, bad);
@@ -172,9 +177,6 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // --- activityOwnerShip ---
                 badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), line, bad);
 
-                // ---- unit ---
-                badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line, bad);
-
                 // --- value ---
                 badControlElement.controlValue(data.getData(BAD_VALUE_COL, line), line, bad);
 
@@ -190,7 +192,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                     //write
-                    badGenerator.generateBAD(bad);
+                    badGenerator.generateBAD(bad,badLog);
                 //}
             }
         }
