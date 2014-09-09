@@ -153,7 +153,6 @@ public class BADGenerator {
                     badLog.addToLog(BADLog.LogType.ERROR,line,"error : "+question.getQuestionSet().getCode().getKey()+" cannot be insert into the questionSet structure (root : "+repeatableElementRoot.getMainQuestionSetString()+",lastChild : "+repeatableElementLastChild.getMainQuestionSetString()+", question : "+questionCode+")");
                 } else {
                     //add
-                    play.Logger.info("LINE = " + line + "=>" + questionSetCompatible + " " + question + " " + repeatableElementLastChild);
                     addToStructure(question.getQuestionSet(), question, repeatableElementLastChild);
                 }
             }
@@ -189,13 +188,9 @@ public class BADGenerator {
      */
     private boolean addQuestion(Question questionToAdd) {
 
-        play.Logger.info("try to add "+questionToAdd);
-
-
         //test if this QuestionSet is already know
         if (getRepeatableElement(questionToAdd.getQuestionSet()) != null) {
             getRepeatableElement(questionToAdd.getQuestionSet()).addQuestion(questionToAdd.getCode().getKey());
-            play.Logger.info("      SUCEZSS !! ");
             return true;
         }
         return false;

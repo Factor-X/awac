@@ -15,7 +15,7 @@ public class BADTemplate {
 
 
     //private final static String ROOT = "tmp/BadResults/";
-    private final static String ROOT = "app/eu/factorx/awac/service/Knowledge/activity/constributor/tps";
+    private final static String ROOT = "app/eu/factorx/awac/service/knowledge/activity/contributor/tps/";
 
 
     private final VelocityContext velocityContext;

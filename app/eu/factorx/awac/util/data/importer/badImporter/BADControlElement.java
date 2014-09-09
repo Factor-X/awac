@@ -496,12 +496,23 @@ public class BADControlElement {
         String value = content;
 
         // 1) find all question
-        String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?";
+        String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?( *(==|!=|<|>|<=|>=) *([A-Za-z0-9_.]+|true|false))?";
+
+        //group(1) => questionCodeKey
+        //group(2) => unit with [] (optional)
+        //group(3) => unit (optional)
+        //group(4) => comparison group (optional)
+        //group(5) operator
+        //group(6) comparison  member
+
+
         Pattern pattern = Pattern.compile(patternString);
 
         Matcher matcher = pattern.matcher(content);
 
         while (matcher.find()) {
+
+            Logger.info("|"+matcher.group()+"|"+matcher.group(3)+"|"+matcher.group(4)+"|"+matcher.group(5)+"|");
 
 
             String questionCodeKey = matcher.group(1);
@@ -527,21 +538,23 @@ public class BADControlElement {
                     }
 
                     // d) control comparison member
-                    String patternStringEquation = "((" + convertToRegex(questionCodeKey) + ") *(==|!=|<|>|<=|>=) *)([A-Za-z0-9_]+|true|false)";
-                    Pattern patternEquation = Pattern.compile(patternStringEquation);
+                    //String patternStringEquation = "((" + convertToRegex(questionCodeKey) + ") *(==|!=|<|>|<=|>=) *)([A-Za-z0-9_]+|true|false)";
+                    //Pattern patternEquation = Pattern.compile(patternStringEquation);
 
-                    Matcher matcherEquation = patternEquation.matcher(content);
+                    //Matcher matcherEquation = patternEquation.matcher(content);
 
-                    String  comparisonMember= null;
+                    String comparison = matcher.group(4);
+                    String comparisonMember = null;
                     String operator = null;
-                    String questionValue = null;
+                    String questionValue = matcher.group(0);
 
                     //there is a member comparison
-                    if (matcherEquation.find()) {
+                    if (comparison != null) {
 
-                        comparisonMember = matcherEquation.group(4);
-                        operator = matcherEquation.group(3);
-                        questionValue = matcherEquation.group(0);
+
+                        comparisonMember = matcher.group(6);
+                        operator = matcher.group(5);
+                        questionValue = matcher.group(0);
 
                         //control by questionType
                         if (question instanceof ValueSelectionQuestion) {
@@ -566,7 +579,7 @@ public class BADControlElement {
                                 } else {
 
                                     //operator invalid : error !
-                                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the operator " + operator + " is not valid for the comparison " + matcherEquation.group() + " because thr question is a codeList (== or != only accepted)");
+                                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the operator " + operator + " is not valid for the comparison " + matcher.group() + " because thr question is a codeList (== or != only accepted)");
                                 }
                             }
 
@@ -591,7 +604,7 @@ public class BADControlElement {
                     } else {
                         //boolean ?
                         if (question instanceof BooleanQuestion) {
-                            questionValue = "toBoolean(question\" + questionCodeKey + \"Answer)";
+                            questionValue = "toBoolean(question" + questionCodeKey + "Answer)";
                         } else {
                             badLog.addToLog(BADLog.LogType.ERROR, line, type + " : cannot found the other member of the comparison : " + content + " for question " + questionCodeKey);
                         }
@@ -599,13 +612,13 @@ public class BADControlElement {
 
                     // e) replace
                     //replace comparison element
-                    if(comparisonMember!=null) {
-                        value = value.replaceAll(convertToRegex(matcherEquation.group()), questionValue);
+                    if (comparisonMember != null) {
+                        value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
 
                         //replace into condition
-                        condition = condition.replaceAll(convertToRegex(matcherEquation.group()), "true");
-                    }
-                    else{
+                        condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
+                    } else {
+                        Logger.info(value+" "+matcher.group()+" "+questionValue);
                         value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
 
                         //replace into condition
