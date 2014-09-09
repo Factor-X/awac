@@ -15,16 +15,19 @@ angular
             for rl in scope.ngModel.reportLines
                 total += rl.scope1Value
             return total
+            
         scope.getTotalScope2 = () ->
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.scope2Value
             return total
+
         scope.getTotalScope3 = () ->
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.scope3Value
             return total
+
         scope.getTotalOutOfScope = () ->
             total = 0;
             for rl in scope.ngModel.reportLines

@@ -92,7 +92,7 @@ public class ReportServiceImpl implements ReportService {
 			}
 		}
 
-		return new Report(activityResults, indicatorService);
+		return new Report(activityResults, indicatorService.findAllIndicatorNames());
 	}
 
 	private static List<BaseActivityData> filterByIndicator(List<BaseActivityData> allBads, Indicator indicator) {
