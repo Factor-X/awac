@@ -41,9 +41,6 @@ echo " CREATE TABLE mm_site_period(
         ALTER TABLE mm_site_period
          OWNER TO play;" >> /tmp/migration/migration_script.sql
 
-# create new invitation table
-cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
-
 # create new 'awaccalculator' and 'mm_calculator_indicator' tables (in order to link indicators and calculators - JIRA CELDL-65)
 cat ./CELDL-65-Indicator-Calculator-JoinTable.sql >> /tmp/migration/migration_script.sql
 
