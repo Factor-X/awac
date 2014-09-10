@@ -1,68 +1,69 @@
-// mm-awac-section("Déchets")
-// It lacks a proper fild code for "D2chets alone" -> TODO : insert into Excel file as an additional line
-mm-awac-section(title-code="A173")
+div
+    // mm-awac-section("Déchets")
+    // It lacks a proper fild code for "D2chets alone" -> TODO : insert into Excel file as an additional line
+    mm-awac-section(title-code="A173")
 
-    mm-awac-question(question-code="A174")
+        mm-awac-question(question-code="A174")
 
-.horizontal_separator
+    .horizontal_separator
 
-mm-awac-section(title-code="A173")
-    mm-awac-repetition-name(question-code="A175")
-    mm-awac-repetition-question(question-set-code="A175", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A175')")
-        mm-awac-question(question-code="A176",ng-repetition-map="itLevel1")
-        mm-awac-question(question-code="A177",ng-repetition-map="itLevel1")
-        mm-awac-question(question-code="A178",ng-repetition-map="itLevel1")
-        mm-awac-question(question-code="A179",ng-repetition-map="itLevel1")
-    button.button.add-repetition-button(ng-click="addIteration('A175')", type="button")
-        span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-        span(ng-bind-html="'A175_LOOPDESC' | translate")
+    mm-awac-section(title-code="A173")
+        mm-awac-repetition-name(question-code="A175")
+        mm-awac-repetition-question(question-set-code="A175", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A175')")
+            mm-awac-question(question-code="A176",ng-repetition-map="itLevel1")
+            mm-awac-question(question-code="A177",ng-repetition-map="itLevel1")
+            mm-awac-question(question-code="A178",ng-repetition-map="itLevel1")
+            mm-awac-question(question-code="A179",ng-repetition-map="itLevel1")
+        button.button.add-repetition-button(ng-click="addIteration('A175')", type="button")
+            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+            span(ng-bind-html="'A175_LOOPDESC' | translate")
 
 
-.horizontal_separator
+    .horizontal_separator
 
-mm-awac-section(title-code="A180")
-    mm-awac-sub-title(question-code="A181")
+    mm-awac-section(title-code="A180")
+        mm-awac-sub-title(question-code="A181")
 
-    mm-awac-sub-sub-title(question-code="A182")
-    mm-awac-question(question-code="A183")
-    mm-awac-question(question-code="A184")
+        mm-awac-sub-sub-title(question-code="A182")
+        mm-awac-question(question-code="A183")
+        mm-awac-question(question-code="A184")
 
-    mm-awac-sub-sub-title(question-code="A185")
-    mm-awac-question(question-code="A186")
-    mm-awac-question(question-code="A187")
+        mm-awac-sub-sub-title(question-code="A185")
+        mm-awac-question(question-code="A186")
+        mm-awac-question(question-code="A187")
 
-    mm-awac-sub-sub-title(question-code="A188")
-    mm-awac-question(question-code="A189")
-    mm-awac-question(question-code="A190")
+        mm-awac-sub-sub-title(question-code="A188")
+        mm-awac-question(question-code="A189")
+        mm-awac-question(question-code="A190")
 
-    mm-awac-sub-sub-title(question-code="A191")
-    mm-awac-question(question-code="A192")
-    mm-awac-question(question-code="A193")
+        mm-awac-sub-sub-title(question-code="A191")
+        mm-awac-question(question-code="A192")
+        mm-awac-question(question-code="A193")
 
-    mm-awac-sub-title(question-code="A194")
+        mm-awac-sub-title(question-code="A194")
 
-    .element_text Plusieurs méthodes différentes existent pour rapporter les eaux usées industrielles. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+        .element_text Plusieurs méthodes différentes existent pour rapporter les eaux usées industrielles. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
 
-    .method
-        tabset
-            tab.tab-color-lightgreen(active="getTab(1,1).active")
-                tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
-                    span(ng-bind-html="'A197' | translate")
-                .sub_block.tab-color-lightgreen
-                    .element_table
-                        mm-awac-question(question-code="A195",ng-tab-set="1",ng-tab="1")
-                        mm-awac-question(question-code="A198",ng-tab-set="1",ng-tab="1")
-                        mm-awac-question(question-code="A199",ng-tab-set="1",ng-tab="1")
-                        mm-awac-question(question-code="A200",ng-tab-set="1",ng-tab="1")
+        .method
+            tabset
+                tab.tab-color-lightgreen(active="getTab(1,1).active")
+                    tab-heading
+                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
+                        span(ng-bind-html="'A197' | translate")
+                    .sub_block.tab-color-lightgreen
+                        .element_table
+                            mm-awac-question(question-code="A195",ng-tab-set="1",ng-tab="1")
+                            mm-awac-question(question-code="A198",ng-tab-set="1",ng-tab="1")
+                            mm-awac-question(question-code="A199",ng-tab-set="1",ng-tab="1")
+                            mm-awac-question(question-code="A200",ng-tab-set="1",ng-tab="1")
 
-            tab.tab-color-green(active="getTab(1,2).active")
-                tab-heading
-                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
-                    span(ng-bind-html="'A201' | translate")
-                .sub_block.tab-color-green
-                    .element_table
-                        mm-awac-question(question-code="A501",ng-tab-set="1",ng-tab="2")
-                        mm-awac-question(question-code="A202",ng-tab-set="1",ng-tab="2")
-                        mm-awac-question(question-code="A203",ng-tab-set="1",ng-tab="2")
-                        mm-awac-question(question-code="A204",ng-tab-set="1",ng-tab="2")
+                tab.tab-color-green(active="getTab(1,2).active")
+                    tab-heading
+                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
+                        span(ng-bind-html="'A201' | translate")
+                    .sub_block.tab-color-green
+                        .element_table
+                            mm-awac-question(question-code="A501",ng-tab-set="1",ng-tab="2")
+                            mm-awac-question(question-code="A202",ng-tab-set="1",ng-tab="2")
+                            mm-awac-question(question-code="A203",ng-tab-set="1",ng-tab="2")
+                            mm-awac-question(question-code="A204",ng-tab-set="1",ng-tab="2")
