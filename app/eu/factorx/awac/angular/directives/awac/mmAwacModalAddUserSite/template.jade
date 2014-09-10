@@ -10,32 +10,51 @@
                 h4(ng-hide="createNewSite === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_SITE_TITLE_EDIT' | translate")
 
             .modal-body
+                //.field_form
+                //    mm-awac-modal-field-text(ng-info="fields.name")
+                //    mm-awac-modal-field-text(ng-info="fields.description")
+                //    mm-awac-modal-field-text(ng-info="fields.nace")
+                //    mm-awac-modal-field-text(ng-info="fields.orgStructure")
+                //    mm-awac-modal-field-text(ng-info="fields.ecoInterest")
+                //    mm-awac-modal-field-text(ng-info="fields.opePolicy")
+                //    mm-awac-modal-field-text(ng-info="fields.accountingTreatment")
+                //    mm-awac-modal-field-text(ng-info="fields.percentOwned")
+
                 .field_form
-                    mm-awac-modal-field-text(ng-info="fields.name")
-                    mm-awac-modal-field-text(ng-info="fields.description")
-                    mm-awac-modal-field-text(ng-info="fields.nace")
-                    mm-awac-modal-field-text(ng-info="fields.orgStructure")
-                    mm-awac-modal-field-text(ng-info="fields.ecoInterest")
-                    mm-awac-modal-field-text(ng-info="fields.opePolicy")
-                    mm-awac-modal-field-text(ng-info="fields.accountingTreatment")
-                    mm-awac-modal-field-text(ng-info="fields.percentOwned")
+                    table.document-manager-table
+                        thead
+                            tr
+                                td  Users
+                                td  Selected
+                        tbody
+                            tr(ng-repeat="employee in employees")
+                                td  {{employee.name}}
+                                td
+                                    input(
+                                        type='checkbox',
+                                        name='{{employee.name}}',
+                                        value='{{employee.name}}',
+                                        ng-checked='selection.indexOf(employee.name) > -1',
+                                        ng-click='toggleSelection(employee.name)')
 
-                    div(class="panel")
-                        div(ng-repeat="employee in employees")
-                            div(class="action-checkbox")
-                                input(
-                                    id='employee.name',
-                                    type='checkbox',
-                                    value='employee.name',
-                                    ng-disabled='getInfo().disabled',
-                                    ng-model='employee.name',
-                                    ng-checked='selection.indexOf(employee.name) > -1',
-                                    ng-click='toggleSelection(employee.name)')
-#                                label(for="employee.name")
-#                                    {{employee.name}}
+                    table.document-manager-table
+                        thead
+                            tr
+                                td  List
+                        tbody
+                            tr(ng-repeat="name in selection")
+                                td {{name}}
 
-                        div(ng-repeat="name in selection",class="selected-item")
-                            {{name}}
+                    //label(ng-repeat="employee in employees")
+                    //    {{employee.name}}
+                    //    input(
+                    //        type='checkbox',
+                    //        name='{{employee.name}}',
+                    //        value='{{employee.name}}',
+                    //        ng-checked='selection.indexOf(employee.name) > -1',
+                    //        ng-click='toggleSelection(employee.name)')
+
+                    //label(ng-repeat="name in selection") {{name}}
 
             .modal-footer
 
