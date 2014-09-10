@@ -116,7 +116,7 @@ public class BADControlElement {
             return;
         }
         try {
-            bad.setRank(Integer.parseInt(content));
+            bad.setRank(new Double(Double.parseDouble(content)).intValue());
         } catch (NumberFormatException e) {
             badLog.addToLog(BADLog.LogType.ERROR, line, "The rank is not null but it's not a valid number  : " + content);
         }
@@ -482,9 +482,9 @@ public class BADControlElement {
 
     private static String controlBoolean(String s) {
         if (s != null) {
-            if (s.equals("1") || s.equals("true")) {
+            if (s.equals("1") || s.equalsIgnoreCase("true") || s.equals("1.0") || s.equalsIgnoreCase("yes")) {
                 return "true";
-            } else if (s.equals("0") || s.equals("false")) {
+            } else if (s.equals("0") || s.equals("false") || s.equals("0.0") || s.equalsIgnoreCase("no")) {
                 return "false";
             }
         }
@@ -506,15 +506,13 @@ public class BADControlElement {
         //group(5) operator
         //group(6) comparison  member
 
+        StringBuffer sb = new StringBuffer();
 
         Pattern pattern = Pattern.compile(patternString);
 
         Matcher matcher = pattern.matcher(content);
 
         while (matcher.find()) {
-
-            Logger.info("|" + matcher.group() + "|" + matcher.group(3) + "|" + matcher.group(4) + "|" + matcher.group(5) + "|");
-
 
             String questionCodeKey = matcher.group(1);
 
@@ -614,13 +612,12 @@ public class BADControlElement {
                     // e) replace
                     //replace comparison element
                     if (comparisonMember != null) {
-                        value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
+                        matcher.appendReplacement(sb,  questionValue);
 
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
                     } else {
-                        Logger.info(value + " " + matcher.group() + " " + questionValue);
-                        value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
+                        matcher.appendReplacement(sb,  questionValue);
 
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
@@ -632,6 +629,10 @@ public class BADControlElement {
                 }
             }
         }
+
+        matcher.appendTail(sb);
+
+        value = sb.toString();
 
         //control euqation
         try {
@@ -767,7 +768,11 @@ public class BADControlElement {
 
         Matcher matcher = pattern.matcher(content);
 
+        Logger.info("content : "+content);
+
         while (matcher.find()) {
+
+            Logger.info("catched : "+matcher.group());
 
             String questionCodeKey = matcher.group(1);
 
@@ -804,18 +809,6 @@ public class BADControlElement {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
                 }
 
-/*
-                Pattern p = Pattern.compile("cat");
-                Matcher m = p.matcher("one cat two cats in the yard");
-
-                int i=0;
-                while (m.find()) {
-                    m.appendReplacement(sb, "dog-"+i);
-                    i++;
-                }
-                m.appendTail(sb);
-                Logger.info("=>>>"+sb.toString());
-  */
                 //d) replace code
                 if (unitCategoryQuestion != null) {
                     if (unit != null) {
@@ -828,10 +821,16 @@ public class BADControlElement {
 
                 }
 
+                Logger.info("VALUE : "+sb.toString());
+
                 // replace into equation
                 equation = equation.replaceAll(convertToRegex(matcher.group()), "1");
             }
         }
+
+        matcher.appendTail(sb);
+
+        Logger.info("FINAL : "+sb.toString());
 
         value = sb.toString();
 
