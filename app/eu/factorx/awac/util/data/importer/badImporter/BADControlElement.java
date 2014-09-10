@@ -5,7 +5,10 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.type.*;
+import eu.factorx.awac.models.data.question.type.BooleanQuestion;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
+import eu.factorx.awac.models.data.question.type.StringQuestion;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.CodeConversionService;
@@ -15,17 +18,15 @@ import eu.factorx.awac.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.expression.ParseException;
-import play.Logger;
 
 /**
  * Created by florian on 4/09/14.
@@ -115,7 +116,7 @@ public class BADControlElement {
             return;
         }
         try {
-            bad.setRank(Integer.parseInt(content));
+            bad.setRank(new Double(Double.parseDouble(content)).intValue());
         } catch (NumberFormatException e) {
             badLog.addToLog(BADLog.LogType.ERROR, line, "The rank is not null but it's not a valid number  : " + content);
         }
@@ -481,9 +482,9 @@ public class BADControlElement {
 
     private static String controlBoolean(String s) {
         if (s != null) {
-            if (s.equals("1") || s.equals("true")) {
+            if (s.equals("1") || s.equalsIgnoreCase("true") || s.equals("1.0") || s.equalsIgnoreCase("yes")) {
                 return "true";
-            } else if (s.equals("0") || s.equals("false")) {
+            } else if (s.equals("0") || s.equals("false") || s.equals("0.0") || s.equalsIgnoreCase("no")) {
                 return "false";
             }
         }
@@ -496,13 +497,22 @@ public class BADControlElement {
         String value = content;
 
         // 1) find all question
-        String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?";
+        String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?( *(==|!=|<|>|<=|>=) *([A-Za-z0-9_.]+|true|false))?";
+
+        //group(1) => questionCodeKey
+        //group(2) => unit with [] (optional)
+        //group(3) => unit (optional)
+        //group(4) => comparison group (optional)
+        //group(5) operator
+        //group(6) comparison  member
+
+        StringBuffer sb = new StringBuffer();
+
         Pattern pattern = Pattern.compile(patternString);
 
         Matcher matcher = pattern.matcher(content);
 
         while (matcher.find()) {
-
 
             String questionCodeKey = matcher.group(1);
 
@@ -527,21 +537,23 @@ public class BADControlElement {
                     }
 
                     // d) control comparison member
-                    String patternStringEquation = "((" + convertToRegex(questionCodeKey) + ") *(==|!=|<|>|<=|>=) *)([A-Za-z0-9_]+|true|false)";
-                    Pattern patternEquation = Pattern.compile(patternStringEquation);
+                    //String patternStringEquation = "((" + convertToRegex(questionCodeKey) + ") *(==|!=|<|>|<=|>=) *)([A-Za-z0-9_]+|true|false)";
+                    //Pattern patternEquation = Pattern.compile(patternStringEquation);
 
-                    Matcher matcherEquation = patternEquation.matcher(content);
+                    //Matcher matcherEquation = patternEquation.matcher(content);
 
-                    String  comparisonMember= null;
+                    String comparison = matcher.group(4);
+                    String comparisonMember = null;
                     String operator = null;
-                    String questionValue = null;
+                    String questionValue = matcher.group(0);
 
                     //there is a member comparison
-                    if (matcherEquation.find()) {
+                    if (comparison != null) {
 
-                        comparisonMember = matcherEquation.group(4);
-                        operator = matcherEquation.group(3);
-                        questionValue = matcherEquation.group(0);
+
+                        comparisonMember = matcher.group(6);
+                        operator = matcher.group(5);
+                        questionValue = matcher.group(0);
 
                         //control by questionType
                         if (question instanceof ValueSelectionQuestion) {
@@ -566,7 +578,7 @@ public class BADControlElement {
                                 } else {
 
                                     //operator invalid : error !
-                                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the operator " + operator + " is not valid for the comparison " + matcherEquation.group() + " because thr question is a codeList (== or != only accepted)");
+                                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the operator " + operator + " is not valid for the comparison " + matcher.group() + " because thr question is a codeList (== or != only accepted)");
                                 }
                             }
 
@@ -575,9 +587,9 @@ public class BADControlElement {
                         //control booleanQuestion
                         else if (question instanceof BooleanQuestion) {
 
-                            if (comparisonMember.equals("1") || comparisonMember.equals("true")) {
+                            if (comparisonMember.equals("1") || comparisonMember.equalsIgnoreCase("true") || comparisonMember.equalsIgnoreCase("yes")) {
                                 questionValue = "toBoolean(question" + questionCodeKey + "Answer) == true";
-                            } else if (comparisonMember.equals("0") || comparisonMember.equals("false")) {
+                            } else if (comparisonMember.equals("0") || comparisonMember.equalsIgnoreCase("false") || comparisonMember.equalsIgnoreCase("no")) {
                                 questionValue = "toBoolean(question" + questionCodeKey + "Answer) == false";
                             } else {
                                 badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the comparison member (" + comparisonMember + ") is not compatible with the BooleanQuestion type for the question : " + questionCodeKey);
@@ -591,7 +603,7 @@ public class BADControlElement {
                     } else {
                         //boolean ?
                         if (question instanceof BooleanQuestion) {
-                            questionValue = "toBoolean(question\" + questionCodeKey + \"Answer)";
+                            questionValue = "toBoolean(question" + questionCodeKey + "Answer)";
                         } else {
                             badLog.addToLog(BADLog.LogType.ERROR, line, type + " : cannot found the other member of the comparison : " + content + " for question " + questionCodeKey);
                         }
@@ -599,14 +611,13 @@ public class BADControlElement {
 
                     // e) replace
                     //replace comparison element
-                    if(comparisonMember!=null) {
-                        value = value.replaceAll(convertToRegex(matcherEquation.group()), questionValue);
+                    if (comparisonMember != null) {
+                        matcher.appendReplacement(sb,  questionValue);
 
                         //replace into condition
-                        condition = condition.replaceAll(convertToRegex(matcherEquation.group()), "true");
-                    }
-                    else{
-                        value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
+                        condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
+                    } else {
+                        matcher.appendReplacement(sb,  questionValue);
 
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
@@ -618,6 +629,10 @@ public class BADControlElement {
                 }
             }
         }
+
+        matcher.appendTail(sb);
+
+        value = sb.toString();
 
         //control euqation
         try {
@@ -749,10 +764,15 @@ public class BADControlElement {
         //1) find all question
         String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?";
         Pattern pattern = Pattern.compile(patternString);
+        StringBuffer sb = new StringBuffer();
 
         Matcher matcher = pattern.matcher(content);
 
+        Logger.info("content : "+content);
+
         while (matcher.find()) {
+
+            Logger.info("catched : "+matcher.group());
 
             String questionCodeKey = matcher.group(1);
 
@@ -792,23 +812,43 @@ public class BADControlElement {
                 //d) replace code
                 if (unitCategoryQuestion != null) {
                     if (unit != null) {
-                        value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
+                        matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
                     } else {
-                        value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
+                        matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
                     }
                 } else {
-                    value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer)");
+                    matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer)");
+
                 }
+
+                Logger.info("VALUE : "+sb.toString());
 
                 // replace into equation
                 equation = equation.replaceAll(convertToRegex(matcher.group()), "1");
             }
         }
+
+        matcher.appendTail(sb);
+
+        Logger.info("FINAL : "+sb.toString());
+
+        value = sb.toString();
+
         // 2) control equation with replace elements
         try {
             evaluateFormula(equation);
         } catch (Exception e) {
             badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " cannot be convert to equation: " + equation + " (" + content + ") =>" + e.getMessage());
+        }
+
+        //replace , by .  in number
+        String patternPuntString = "([0-9]+),([0-9]+)";
+        Pattern patternPunt = Pattern.compile(patternPuntString);
+
+        Matcher matcherPunt = patternPunt.matcher(content);
+
+        while (matcherPunt.find()) {
+            value = value.replace(matcherPunt.group(),matcherPunt.group(1)+"."+matcherPunt.group(2));
         }
 
         //return value
