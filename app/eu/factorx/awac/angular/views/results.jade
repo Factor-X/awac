@@ -76,6 +76,10 @@ div.pdf-able
 
                     br
 
+                    center
+                        img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.histogramUrl }}")
+
+
                 div(ng-show="current_tab == 2")
                     h2
                         span(ng-bind-html="'IMPACTS_PARTITION' | translate")

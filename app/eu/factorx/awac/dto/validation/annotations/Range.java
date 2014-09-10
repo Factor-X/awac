@@ -5,7 +5,10 @@ import java.lang.annotation.RetentionPolicy;
 
 @java.lang.annotation.Target({ElementType.FIELD})
 @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
+public @interface Range {
+	String message() default "The expected number is wrong";
 
-public @interface NotNull {
-	String message() default "The field  cannot be null";
+	double min() default 0;
+
+	double max() default Double.MAX_VALUE;
 }

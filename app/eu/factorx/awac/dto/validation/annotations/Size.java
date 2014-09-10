@@ -1,8 +1,11 @@
 package eu.factorx.awac.dto.validation.annotations;
 
-/**
- * Created by root on 8/07/14.
- */
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.RetentionPolicy;
+
+@java.lang.annotation.Target({ElementType.FIELD})
+@java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
 public @interface Size {
 	String message() default "The expected number of letter is wrong";
 

@@ -215,10 +215,10 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 		// numbers
 		for (int i = 0; i < count; i++) {
-			double x = left + histoWidth * i + histoWidth / 2.0 - 15;
+			double x = left + histoWidth * i + histoWidth / 3.0;
 			double y = size * 0.875 + 20;
-			sb.append(String.format("<text x='%s' y='%s' text-anchor='middle' dominant-baseline='central' fill='#000'>%s</text>", x, y, i + 1));
 			sb.append(String.format("<circle cx='%s' cy='%s' r='15' fill='none' stroke='#000' stroke-width='1' />", x, y));
+			sb.append(String.format("<text x='%s' y='%s' text-anchor='middle' dominant-baseline='central' style='fill: #000; stroke: none; font-size: 12px'>%s</text>", x, y, i + 1));
 		}
 
 

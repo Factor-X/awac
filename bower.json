@@ -18,7 +18,6 @@
     "angular-animate": "*",
     "angular-bootstrap": "*",
     "angular-dynamic-locale": "*",
-    "angular-flash": "*",
     "angular-i18n": "*",
     "angular-route": "*",
     "angular-sanitize": "*",
