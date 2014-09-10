@@ -7,7 +7,6 @@ import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import play.db.jpa.JPA;
 
 @Component
 public class SiteServiceImpl extends AbstractJPAPersistenceServiceImpl<Site> implements SiteService {
@@ -36,8 +35,9 @@ public class SiteServiceImpl extends AbstractJPAPersistenceServiceImpl<Site> imp
 	@Override
 	public void remove (final Site entity) {
 		Scope scope = scopeService.findBySite(entity);
-		//play.Logger.info("remove Site:" + entity.toString());
-		scopeService.remove(scope);
+		if (scope != null) {
+			scopeService.remove(scope);
+		}
 		super.remove(entity);
 	}
 

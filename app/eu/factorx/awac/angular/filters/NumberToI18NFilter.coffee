@@ -3,5 +3,7 @@ angular
 .filter "numberToI18N", ($filter) ->
     (input) ->
         if input?
-            return $filter("number") parseFloat(input), 2
+            original = parseFloat(input)
+            rounded = Math.round(original * 100.0) / 100.0
+            return $filter("number") rounded, 2
         return ""

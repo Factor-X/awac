@@ -88,4 +88,20 @@ public class Table {
 
 		return result;
 	}
+
+	public double max(int x1, int y1, int x2, int y2) {
+
+		double result = Double.NEGATIVE_INFINITY;
+
+		for (int y = y1; y <= y2; y++) {
+			for (int x = x1; x <= x2; x++) {
+				Object v = getCell(x, y);
+				if (v != null && v instanceof Double && (Double) v > result) {
+					result = (Double) v;
+				}
+			}
+		}
+
+		return result;
+	}
 }

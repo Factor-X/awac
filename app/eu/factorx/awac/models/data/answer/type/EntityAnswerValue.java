@@ -1,17 +1,15 @@
 package eu.factorx.awac.models.data.answer.type;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
+import org.apache.commons.lang3.StringUtils;
+
 import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Transient;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class EntityAnswerValue extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
