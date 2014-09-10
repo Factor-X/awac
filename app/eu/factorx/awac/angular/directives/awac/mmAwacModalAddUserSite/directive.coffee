@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalAddUserSite", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalAddUserSite", (directiveService, downloadService, translationService, messageFlash, $rootScope) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -190,6 +190,28 @@ angular
             modalService.close modalService.ADD_USER_SITE
 
 
+        #get list of all users associated to organisation
+        $scope.getAssociatedUsers = () ->
+          console.log("entering getAssociatedUsers")
+
+          #create DTO
+          data = {}
+          organization: $rootScope.organization
+
+          downloadService.postJson '/awac/organization/accounts', data, (result) ->
+            if result.success
+              #display success message
+              messageFlash.displaySuccess "Accounts loaded"
+
+            else
+              messageFlash.displayError result.data.message
+
+          $scope.isLoading = false
+
 
     link: (scope) ->
+      console.log("entering mmAwacModalAddUserSite")
+      scope.getAssociatedUsers()
+
+
 

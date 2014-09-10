@@ -10,15 +10,6 @@
                 h4(ng-hide="createNewSite === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_SITE_TITLE_EDIT' | translate")
 
             .modal-body
-                //.field_form
-                //    mm-awac-modal-field-text(ng-info="fields.name")
-                //    mm-awac-modal-field-text(ng-info="fields.description")
-                //    mm-awac-modal-field-text(ng-info="fields.nace")
-                //    mm-awac-modal-field-text(ng-info="fields.orgStructure")
-                //    mm-awac-modal-field-text(ng-info="fields.ecoInterest")
-                //    mm-awac-modal-field-text(ng-info="fields.opePolicy")
-                //    mm-awac-modal-field-text(ng-info="fields.accountingTreatment")
-                //    mm-awac-modal-field-text(ng-info="fields.percentOwned")
 
                 .field_form
                     table.document-manager-table
@@ -44,17 +35,6 @@
                         tbody
                             tr(ng-repeat="name in selection")
                                 td {{name}}
-
-                    //label(ng-repeat="employee in employees")
-                    //    {{employee.name}}
-                    //    input(
-                    //        type='checkbox',
-                    //        name='{{employee.name}}',
-                    //        value='{{employee.name}}',
-                    //        ng-checked='selection.indexOf(employee.name) > -1',
-                    //        ng-click='toggleSelection(employee.name)')
-
-                    //label(ng-repeat="name in selection") {{name}}
 
             .modal-footer
 
