@@ -29,7 +29,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 	@Override
 	protected void importData() throws Exception {
 
-		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY,
+		codeLabelService.removeCodeLabelsByList(CodeList.TRANSLATIONS_SURVEY, CodeList.QUESTION,
 				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 
 		Map<String, Sheet> wbSheets = getWorkbookSheets(TRANSLATIONS_WORKBOOK_PATH);
