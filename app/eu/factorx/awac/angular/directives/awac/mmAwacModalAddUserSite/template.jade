@@ -15,26 +15,28 @@
                     table.document-manager-table
                         thead
                             tr
-                                td  Users
+                                td  Name
+                                td  Login
                                 td  Selected
                         tbody
                             tr(ng-repeat="employee in employees")
-                                td  {{employee.name}}
+                                td  {{employee.person.firstName}} {{employee.person.lastName}}
+                                td  {{employee.identifier}}
                                 td
                                     input(
                                         type='checkbox',
-                                        name='{{employee.name}}',
-                                        value='{{employee.name}}',
-                                        ng-checked='selection.indexOf(employee.name) > -1',
-                                        ng-click='toggleSelection(employee.name)')
+                                        name='{{employee.identifier}}',
+                                        value='{{employee.identifier}}',
+                                        ng-checked='selection.indexOf(employee.identifier) > -1',
+                                        ng-click='toggleSelection(employee.identifier)')
 
                     table.document-manager-table
                         thead
                             tr
                                 td  List
                         tbody
-                            tr(ng-repeat="name in selection")
-                                td {{name}}
+                            tr(ng-repeat="identifier in selection")
+                                td {{identifier}}
 
             .modal-footer
 

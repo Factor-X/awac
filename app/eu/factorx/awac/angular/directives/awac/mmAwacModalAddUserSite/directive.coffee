@@ -155,16 +155,18 @@ angular
             return false
 
         # user selection - begin
-        $scope.employees=[{name:'John', age:25, gender:'boy'},
-            {name:'Jessie', age:30, gender:'girl'},
-            {name:'Johanna', age:28, gender:'girl'},
-            {name:'Joy', age:15, gender:'girl'},
-            {name:'Mary', age:28, gender:'girl'},
-            {name:'Peter', age:95, gender:'boy'},
-            {name:'Sebastian', age:50, gender:'boy'},
-            {name:'Erika', age:27, gender:'girl'},
-            {name:'Patrick', age:40, gender:'boy'},
-            {name:'Samantha', age:60, gender:'girl'}];
+#        $scope.employees=[{name:'John', age:25, gender:'boy'},
+#            {name:'Jessie', age:30, gender:'girl'},
+#            {name:'Johanna', age:28, gender:'girl'},
+#            {name:'Joy', age:15, gender:'girl'},
+#            {name:'Mary', age:28, gender:'girl'},
+#            {name:'Peter', age:95, gender:'boy'},
+#            {name:'Sebastian', age:50, gender:'boy'},
+#            {name:'Erika', age:27, gender:'girl'},
+#            {name:'Patrick', age:40, gender:'boy'},
+#            {name:'Samantha', age:60, gender:'girl'}];
+
+        $scope.employees=[];
 
         $scope.selection=[];
 
@@ -195,14 +197,15 @@ angular
           console.log("entering getAssociatedUsers")
 
           #create DTO
-          data = {}
-          organization: $rootScope.organization
+
+          data =
+            organization: $rootScope.organization
 
           downloadService.postJson '/awac/organization/accounts', data, (result) ->
             if result.success
               #display success message
-              messageFlash.displaySuccess "Accounts loaded"
-
+              for user in result.data.users
+                $scope.employees.push(user);
             else
               messageFlash.displayError result.data.message
 
