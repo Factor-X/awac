@@ -5,7 +5,10 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.type.*;
+import eu.factorx.awac.models.data.question.type.BooleanQuestion;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
+import eu.factorx.awac.models.data.question.type.StringQuestion;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.CodeConversionService;
@@ -15,17 +18,15 @@ import eu.factorx.awac.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.expression.ParseException;
-import play.Logger;
 
 /**
  * Created by florian on 4/09/14.
@@ -512,7 +513,7 @@ public class BADControlElement {
 
         while (matcher.find()) {
 
-            Logger.info("|"+matcher.group()+"|"+matcher.group(3)+"|"+matcher.group(4)+"|"+matcher.group(5)+"|");
+            Logger.info("|" + matcher.group() + "|" + matcher.group(3) + "|" + matcher.group(4) + "|" + matcher.group(5) + "|");
 
 
             String questionCodeKey = matcher.group(1);
@@ -618,7 +619,7 @@ public class BADControlElement {
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
                     } else {
-                        Logger.info(value+" "+matcher.group()+" "+questionValue);
+                        Logger.info(value + " " + matcher.group() + " " + questionValue);
                         value = value.replaceAll(convertToRegex(matcher.group()), questionValue);
 
                         //replace into condition
@@ -762,6 +763,7 @@ public class BADControlElement {
         //1) find all question
         String patternString = "(A[A-Z]*[0-9]+)(\\[(.+?)\\])?";
         Pattern pattern = Pattern.compile(patternString);
+        StringBuffer sb = new StringBuffer();
 
         Matcher matcher = pattern.matcher(content);
 
@@ -802,26 +804,52 @@ public class BADControlElement {
                     badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
                 }
 
+/*
+                Pattern p = Pattern.compile("cat");
+                Matcher m = p.matcher("one cat two cats in the yard");
+
+                int i=0;
+                while (m.find()) {
+                    m.appendReplacement(sb, "dog-"+i);
+                    i++;
+                }
+                m.appendTail(sb);
+                Logger.info("=>>>"+sb.toString());
+  */
                 //d) replace code
                 if (unitCategoryQuestion != null) {
                     if (unit != null) {
-                        value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
+                        matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))");
                     } else {
-                        value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
+                        matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)");
                     }
                 } else {
-                    value = value.replaceAll(convertToRegex(matcher.group()), "toDouble(question" + questionCodeKey + "Answer)");
+                    matcher.appendReplacement(sb, "toDouble(question" + questionCodeKey + "Answer)");
+
                 }
 
                 // replace into equation
                 equation = equation.replaceAll(convertToRegex(matcher.group()), "1");
             }
         }
+
+        value = sb.toString();
+
         // 2) control equation with replace elements
         try {
             evaluateFormula(equation);
         } catch (Exception e) {
             badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " cannot be convert to equation: " + equation + " (" + content + ") =>" + e.getMessage());
+        }
+
+        //replace , by .  in number
+        String patternPuntString = "([0-9]+),([0-9]+)";
+        Pattern patternPunt = Pattern.compile(patternPuntString);
+
+        Matcher matcherPunt = patternPunt.matcher(content);
+
+        while (matcherPunt.find()) {
+            value = value.replace(matcherPunt.group(),matcherPunt.group(1)+"."+matcherPunt.group(2));
         }
 
         //return value

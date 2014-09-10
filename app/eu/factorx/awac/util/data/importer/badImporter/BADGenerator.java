@@ -32,8 +32,10 @@ public class BADGenerator {
     @Autowired
     private CodeLabelService codeLabelService;
 
+    private List<QuestionWithoutRepetition> questionWithoutRepetitionList = new ArrayList<>();
 
-    public void generateBAD(BAD bad,BADLog badLog) {
+
+    public void generateBAD(BAD bad, BADLog badLog) {
 
         //create template
         BADTemplate badTemplate = new BADTemplate(TemplateName.BAD, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
@@ -41,7 +43,7 @@ public class BADGenerator {
         //add parameters
         //start to build the map of repetition to load question
         for (String question : bad.getListQuestions()) {
-            completHashMap(question,badLog, bad.getLine());
+            completHashMap(question, badLog, bad.getLine());
         }
 
         //TEMP print result
@@ -99,6 +101,9 @@ public class BADGenerator {
         //repetition
         badTemplate.addParameter("repetitions", repetition);
 
+        //question without repetition
+        badTemplate.addParameter("question-without-repetition", questionWithoutRepetitionList);
+
         //condition
         if (bad.getCondition() != null && bad.getCondition().length() > 0) {
             badTemplate.addParameter("HAS_CONDITION", true);
@@ -128,7 +133,7 @@ public class BADGenerator {
     }
 
 
-    private void completHashMap(String questionCode, BADLog badLog,int line) {
+    private void completHashMap(String questionCode, BADLog badLog, int line) {
 
         //load the question
         Question question = questionService.findByCode(new QuestionCode(questionCode));
@@ -148,9 +153,27 @@ public class BADGenerator {
                 RepeatableElement repeatableElementLastChild = getLastChild(repeatableElementRoot);
 
                 //try to match questionCode.questionSet with this element
-                QuestionSet questionSetCompatible = getCompatibleQuestionSet(repeatableElementLastChild, question.getQuestionSet(),null);
+                QuestionSet questionSetCompatible = getCompatibleQuestionSet(repeatableElementLastChild, question.getQuestionSet(), null);
                 if (questionSetCompatible == null) {
-                    badLog.addToLog(BADLog.LogType.ERROR,line,"error : "+question.getQuestionSet().getCode().getKey()+" cannot be insert into the questionSet structure (root : "+repeatableElementRoot.getMainQuestionSetString()+",lastChild : "+repeatableElementLastChild.getMainQuestionSetString()+", question : "+questionCode+")");
+
+                    //try if the question has a repetition into his parents
+                    if (haveRepetitionParent(question.getQuestionSet())) {
+                        badLog.addToLog(BADLog.LogType.ERROR, line, "error : " + question.getQuestionSet().getCode().getKey() + " cannot be insert into the questionSet structure (root : " + repeatableElementRoot.getMainQuestionSetString() + ",lastChild : " + repeatableElementLastChild.getMainQuestionSetString() + ", question : " + questionCode + ")");
+                    }
+
+                    //add question to questionWithoutRepetitionList
+                    boolean founded = false;
+                    for (QuestionWithoutRepetition questionWithoutRepetition : questionWithoutRepetitionList) {
+                        if (questionWithoutRepetition.getQuestionSet().equals(question.getQuestionSet())) {
+                            questionWithoutRepetition.addQuestion(question);
+                            founded = true;
+                            break;
+                        }
+                    }
+                    if (!founded) {
+                        questionWithoutRepetitionList.add(new QuestionWithoutRepetition(question.getQuestionSet(), question));
+                    }
+
                 } else {
                     //add
                     addToStructure(question.getQuestionSet(), question, repeatableElementLastChild);
@@ -222,30 +245,16 @@ public class BADGenerator {
         return null;
     }
 
-    /**
-     * return true if the mainQuestionSet or one of them parent are a repetition
-     */
-    private boolean foundRepetition(QuestionSet questionSet) {
-        if (questionSet.getRepetitionAllowed()) {
-            return true;
-        }
-        if (questionSet.getParent() != null) {
-            return foundRepetition(questionSet.getParent());
-        }
-        return false;
+
+    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference) {
+        addToStructure(questionSetToAdd, questionToAdd, repetitionReference, null);
     }
 
+    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference, RepeatableElement lastRepetition) {
 
-    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference){
-        addToStructure(questionSetToAdd,questionToAdd,repetitionReference,null);
-    }
-
-    private void addToStructure(QuestionSet questionSetToAdd, Question questionToAdd, RepeatableElement repetitionReference, RepeatableElement lastRepetition){
-
-        if(questionSetToAdd.equals(repetitionReference.getMainQuestionSet())){
+        if (questionSetToAdd.equals(repetitionReference.getMainQuestionSet())) {
             repetitionReference.setChild(lastRepetition);
-        }
-        else {
+        } else {
 
             RepeatableElement repeatableElement = new RepeatableElement(questionSetToAdd);
             repeatableElement.setRepeteable(questionSetToAdd.getRepetitionAllowed());
@@ -258,7 +267,7 @@ public class BADGenerator {
                 repeatableElement.setChild(lastRepetition);
             }
 
-            addToStructure(questionSetToAdd.getParent(),questionToAdd,repetitionReference,repeatableElement);
+            addToStructure(questionSetToAdd.getParent(), questionToAdd, repetitionReference, repeatableElement);
         }
     }
 
@@ -295,6 +304,15 @@ public class BADGenerator {
             repeatableElementRoot = lastRepetition;
         }
 
+    }
+
+    public boolean haveRepetitionParent(QuestionSet questionSet) {
+        if (questionSet.getRepetitionAllowed()) {
+            return true;
+        } else if (questionSet.getParent() != null) {
+            return haveRepetitionParent(questionSet.getParent());
+        }
+        return false;
     }
 
     /**
@@ -365,6 +383,53 @@ public class BADGenerator {
 
         public List<String> getQuestionList() {
             return questionList;
+        }
+    }
+
+    public class QuestionWithoutRepetition {
+
+        private QuestionSet questionSet;
+
+        private List<Question> questionList;
+
+        public QuestionWithoutRepetition(QuestionSet questionSet, Question question) {
+            this.questionSet = questionSet;
+            this.addQuestion(question);
+        }
+
+        public QuestionSet getQuestionSet() {
+            return questionSet;
+        }
+
+        public void setQuestionSet(QuestionSet questionSet) {
+            this.questionSet = questionSet;
+        }
+
+        public List<Question> getQuestionList() {
+            return questionList;
+        }
+
+        public List<String> getQuestionListString() {
+            List<String> result = new ArrayList<>();
+            for (Question question : getQuestionList()) {
+                result.add(question.getCode().getKey());
+            }
+            return result;
+        }
+
+        public void setQuestionList(List<Question> questionList) {
+            this.questionList = questionList;
+        }
+
+        public void addQuestion(Question question) {
+            if (questionList == null) {
+                questionList = new ArrayList<>();
+            }
+            questionList.add(question);
+        }
+
+        public String getQuestionSetString() {
+            return questionSet.getCode().getKey();
         }
     }
 
