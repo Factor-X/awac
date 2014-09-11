@@ -18,10 +18,13 @@ import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;
 import eu.factorx.awac.dto.awac.get.InvitationResultDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.OrganizationService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,9 +61,17 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	@Autowired
 	ConversionService conversionService;
 
+	@Autowired
+	OrganizationService organisationService;
+
+
+
 	private final String ORGANISATION_NAME = "Factor-X";
 	private final String USER1_IDENTIFIER = "user1";
 	private final String USER2_IDENTIFIER = "user2";
+	private final String SITE = "P3";
+
+
 
   	@Test
 	public void _001_getAllAccounts() {
@@ -104,10 +115,12 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_saveAssociatedAccounts() {
 
+		List sites = new ArrayList<Site> ();
 
-		Organization org = new Organization(ORGANISATION_NAME);
+		Organization org = organisationService.findByName(ORGANISATION_NAME);
 		SiteAddUsersDTO dto = createDTO(org);
 
+		// add fake associated accounts
 		AccountDTO account1 = new AccountDTO();
 		account1.setIdentifier(USER1_IDENTIFIER);
 
@@ -119,6 +132,7 @@ public class OrganizationTest extends AbstractBaseModelTest {
 		associatedAccountList.add(account2);
 
 		dto.setSelectedAccounts(associatedAccountList);
+
 
 		// ConnectionFormDTO
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
