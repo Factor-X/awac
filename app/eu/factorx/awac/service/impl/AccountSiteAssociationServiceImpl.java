@@ -18,7 +18,7 @@ public class AccountSiteAssociationServiceImpl extends AbstractJPAPersistenceSer
 	@Override
 	public List<AccountSiteAssociation> findBySite (Site site) {
 		List<AccountSiteAssociation> resultList = JPA.em().createNamedQuery(AccountSiteAssociation.FIND_BY_SITE, AccountSiteAssociation.class)
-				.setParameter("site.id", site.getId()).getResultList();
+				.setParameter("site_id", site.getId()).getResultList();
 		if (resultList.size() == 0) {
 			return null;
 		}

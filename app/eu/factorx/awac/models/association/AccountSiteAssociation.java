@@ -50,7 +50,6 @@ public class AccountSiteAssociation extends AuditedAbstractEntity {
 	public AccountSiteAssociation(Site site, Account account) {
 		this.setSite(site);
 		this.setAccount(account);
-
 	}
 
 	public Site getSite() {

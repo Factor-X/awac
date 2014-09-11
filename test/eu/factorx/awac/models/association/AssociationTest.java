@@ -148,8 +148,8 @@ public class AssociationTest extends AbstractBaseModelTest {
 		}
 		assertNotNull(site);
 
-		em.remove(site);
-		em.remove(org);
+		//em.remove(site);
+		//em.remove(org);
 		em.remove(acc);
 		em.remove(person);
 
