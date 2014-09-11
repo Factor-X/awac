@@ -9,7 +9,7 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 @Entity
 @Table(name = "factor_value")
 @NamedQueries({
-	@NamedQuery(name = FactorValue.REMOVE_ALL, query = "delete from FactorValue fv where fv.id != null")
+	@NamedQuery(name = FactorValue.REMOVE_ALL, query = "delete from FactorValue fv where fv.id is not null")
 })
 public class FactorValue extends AuditedAbstractEntity {
 

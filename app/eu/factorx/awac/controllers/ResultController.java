@@ -3,6 +3,7 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
@@ -98,7 +99,7 @@ public class ResultController extends AbstractController {
 		}
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		resultExcelGeneratorService.generateExcelInStream(stream, scope.getSite().getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
+		resultExcelGeneratorService.generateExcelInStream(stream, ((Site)scope).getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
 		response().setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
 		return ok(new ByteArrayInputStream(stream.toByteArray()));
 	}

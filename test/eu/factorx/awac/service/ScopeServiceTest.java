@@ -45,7 +45,7 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_findByOrganization() {
 
-		Scope scope = scopeService.findByOrganization(organizationService.findByName(ORGANIZATION_NAME));
+		Scope scope = organizationService.findByName(ORGANIZATION_NAME);
 
 		assertNotNull("Scope not found for organization "+ORGANIZATION_NAME, scope);
 		assertEquals("Organization expected "+ORGANIZATION_NAME+" but found : "+scope.getOrganization().getName(), ORGANIZATION_NAME, scope.getOrganization().getName());
@@ -57,7 +57,8 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 
 		Scope scope = null;
 		try {
-			scope = scopeService.findByProduct(productService.findAll().get(0)); // No product for AWAC
+			scope = productService.findAll().get(0); // No product for AWAC
+			fail("Getting first product should throw an IndexOutOfBoundsException! (no product in AWAC)");
 		} catch (IndexOutOfBoundsException noProductFound) {
 			// no product is available for AWAC
 			// assume test is OK if scope is null

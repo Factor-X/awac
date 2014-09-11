@@ -11,8 +11,6 @@ import play.Play;
 import play.mvc.Http.Context;
 import play.mvc.Http.Session;
 
-import java.util.logging.Logger;
-
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {
 
