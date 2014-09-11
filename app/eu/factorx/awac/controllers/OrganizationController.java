@@ -57,21 +57,14 @@ public class OrganizationController extends AbstractController {
 
 		//Logger.info("Account List");
 		for (Account account : associatedAccountList) {
-			//Logger.info("Account ID : " + account.getIdentifier());
 			AccountDTO adto = conversionService.convert(account, AccountDTO.class);
-			//Logger.info("adto ID : " + adto.getIdentifier());
 			associatedAccountDtoList.add(adto);
 		}
-
-//		for (AccountDTO accountDto : associatedAccountDtoList) {
-//			Logger.info("AccountDto ID : " + accountDto.getIdentifier());
-//		}
 
 		// create return DTO
 		SiteAddUsersResultDTO resultDto = new SiteAddUsersResultDTO(associatedAccountDtoList);
 
 		// return list of associated
 		return ok(resultDto);
-
 	}
 }
