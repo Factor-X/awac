@@ -2,6 +2,7 @@ span.twoelement
     input(  type="text",
             ng-model="getAnswer().value",
             numbers-only="percent",
+            name="{{ getQuestionCode() }}",
             style="text-align:right;",
             ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
     span(style="margin-left:5px") %

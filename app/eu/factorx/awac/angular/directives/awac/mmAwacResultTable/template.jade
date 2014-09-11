@@ -4,23 +4,23 @@ ng-virtual
             th(width="100%")
             th.align-right.scope1
                 div
-                    span
-                        span.wrapped(ng-bind-html="'SCOPE_1' | translate")
+                    span.wrapped
+                        span(ng-bind-html="'SCOPE_1' | translate")
                         span (tCO2e)
             th.align-right.scope2
                 div
-                    span
-                        span.wrapped(ng-bind-html="'SCOPE_2' | translate")
+                    span.wrapped
+                        span(ng-bind-html="'SCOPE_2' | translate")
                         span (tCO2e)
             th.align-right.scope3
                 div
-                    span
-                        span.wrapped(ng-bind-html="'SCOPE_3' | translate")
+                    span.wrapped
+                        span(ng-bind-html="'SCOPE_3' | translate")
                         span (tCO2e)
             th.align-right.out-of-scope
                 div
-                    span
-                        span.wrapped(ng-bind-html="'OUT_OF_SCOPE' | translate")
+                    span.wrapped
+                        span(ng-bind-html="'OUT_OF_SCOPE' | translate")
                         span (tCO2e)
 
         tbody

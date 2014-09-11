@@ -3,6 +3,7 @@ tr
     td
         input(  type='{{fieldType}}',
                 ng-disabled='getInfo().disabled',
+                name="{{ getInfo().fieldTitle }}",
                 ng-model='getInfo().field',
                 placeholder='{{getInfo().placeholder | translateText}}',
                 focus-me="getInfo().focus()")
