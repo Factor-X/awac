@@ -40,9 +40,9 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope().validNavigation != undefined
+        if $scope.getMainScope?().validNavigation != undefined
             # ask a confirmation to quite the view
-            result = $scope.getMainScope().validNavigation()
+            result = $scope.getMainScope?().validNavigation?()
 
             if result.valid == false
                 return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE')
@@ -65,9 +65,9 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope().validNavigation != undefined && confirmed == false
+        if $scope.getMainScope?().validNavigation != undefined && confirmed == false
             # ask a confirmation to quite the view
-            result = $scope.getMainScope().validNavigation()
+            result = $scope.getMainScope?().validNavigation?()
 
             if result.valid == false
                 canBeContinue = false

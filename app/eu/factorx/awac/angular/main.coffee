@@ -8,8 +8,7 @@ angular.module 'app.filters', []
 
 angular.module 'app.services', []
 
-angular.module 'app.controllers', ['app.services', 'ngRoute', 'angular-flash.service',
-                                   'angular-flash.flash-alert-directive',
+angular.module 'app.controllers', ['app.services', 'ngRoute',
                                    'angularFileUpload','tmh.dynamicLocale','ngTable']
 
 angular.module 'app', [

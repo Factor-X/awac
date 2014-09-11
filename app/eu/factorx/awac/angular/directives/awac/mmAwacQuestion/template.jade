@@ -12,19 +12,22 @@ div(class="question_field",
             img(src='/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
         button.button( ng-click="editComment()",
-                class="edit_comment_icon glyphicon glyphicon-pencil",
-                ng-hide="getAggregation()!=null",
-                ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
+                       name="{{ getQuestionCode() }}_COMMENT",
+                       class="edit_comment_icon glyphicon glyphicon-pencil",
+                       ng-hide="getAggregation()!=null",
+                       ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
         .user_icon(ng-hide="getAggregation()!=null || getAnswer().value == null") {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}
                 img(src='/assets/images/user_icon_arrow.png')
 
     div(ng-show="displayOldDatas() === true && getAnswer(true) != null")
-        button.button( ng-click="copyDataToCompare()",
-        title="Copier la valeur") <<
+        button.button( ng-click="copyDataToCompare()", title="Copier la valeur" ) <<
         span.inject-data-to-compare
-        button.button(ng-click="editComment(false)",class="edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected", ng-hide="getAggregation()!=null || getAnswer(true).comment ==null")
+        button.button( ng-click="editComment(false)",
+                       name="OLD_{{ getQuestionCode() }}_COMMENT",
+                       class="edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected",
+                       ng-hide="getAggregation()!=null || getAnswer(true).comment ==null")
         div.edit_comment_icon(ng-hide="getAnswer(true).comment !=null")
         .user_icon {{getUserName(true,true)}}
             div

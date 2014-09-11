@@ -21,8 +21,6 @@ import play.api.templates.Html;
 import play.libs.Scala;
 import play.mvc.Result;
 import play.mvc.Results;
-import scala.Option;
-import scala.collection.mutable.*;
 
 import java.util.Map;
 

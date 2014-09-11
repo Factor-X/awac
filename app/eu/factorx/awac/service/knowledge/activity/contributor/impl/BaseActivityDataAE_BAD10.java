@@ -76,11 +76,11 @@ public class BaseActivityDataAE_BAD10 extends ActivityResultContributor {
 			baseActivityData.setUnit(baseActivityDataUnit);
 
 			if (questionA73Answer != null) {
-				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA73Answer, baseActivityDataUnit)));
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA73Answer, baseActivityDataUnit))/100);
 			} else if (questionA74Answer != null) {
-				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA74Answer, baseActivityDataUnit)));
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA74Answer, baseActivityDataUnit))/100);
 			} else {
-				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA75Answer, baseActivityDataUnit)));
+				baseActivityData.setValue(toDouble(questionA76Answer, baseActivityDataUnit) * (toDouble(questionA75Answer, baseActivityDataUnit))/100);
 			}
 
 			res.add(baseActivityData);

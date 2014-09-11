@@ -12,6 +12,12 @@ import java.util.List;
  * Created by florian on 29/08/14.
  */
 public class BADTemplate {
+
+
+    //private final static String ROOT = "tmp/BadResults/";
+    private final static String ROOT = "app/eu/factorx/awac/service/knowledge/activity/contributor/tps/";
+
+
     private final VelocityContext velocityContext;
     private final TemplateName templateName;
     private final String fileName;
@@ -40,6 +46,9 @@ public class BADTemplate {
         }
     }
 
+    public void addParameter(String key, boolean content) {
+        velocityContext.put(key, content);
+    }
 
     public void generate() {
         org.apache.velocity.Template template = Velocity.getTemplate(templateName.getUrl());
@@ -48,7 +57,7 @@ public class BADTemplate {
 
         template.merge(velocityContext, writer);
 
-        save(writer.toString(), "tmp/BadResults/", fileName, true);
+        save(writer.toString(), ROOT, fileName, true);
     }
 
     public static void save(final String text, final String path, final String name, boolean erase) {

@@ -44,7 +44,7 @@ bad_list = []
 current_tab = nil
 
 
-book = Spreadsheet.open('awac_data_25-07-2014/AWAC-entreprise-calcul_FE.xls', 'r')
+book = Spreadsheet.open('awac_data_09-08-2014/AWAC-tous-calcul_FE.xls', 'r')
 
 sheet = book.worksheet('site entreprise-activityData') # can use an index or worksheet name
 

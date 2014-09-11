@@ -1,10 +1,27 @@
 @(startupDateIdentifier: String)
 
 <!doctype html>
-<html ng-app="app">
+<html xmlns:ng="http://angularjs.org" id="app" ng-app="app" >
     <head>
+
+        <!--[if lte IE 8]>
+        <script>
+            document.createElement('ng-include');
+            document.createElement('ng-pluralize');
+            document.createElement('ng-view');
+
+            // Optionally these for CSS
+            document.createElement('ng:include');
+            document.createElement('ng:pluralize');
+            document.createElement('ng:view');
+        </script>
+        <![endif]-->
+
         <title>AWAC</title>
         <meta name="app" content="enterprise"/>
+
+
+
 
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
@@ -101,7 +118,7 @@
         </script>
     </head>
     <body ng-controller="MainCtrl">
-        
+
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>
