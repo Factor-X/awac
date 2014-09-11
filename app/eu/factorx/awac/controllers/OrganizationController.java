@@ -67,4 +67,31 @@ public class OrganizationController extends AbstractController {
 		// return list of associated
 		return ok(resultDto);
 	}
+
+	/**
+	 * save all associated accounts for specified organization
+	 */
+	@Transactional
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+	public Result saveAssociatedAccounts() {
+
+		SiteAddUsersDTO dto = extractDTOFromRequest(SiteAddUsersDTO.class);
+		Logger.info("Organization Name: " + dto.getOrganization().getName());
+
+		// get associated accounts
+		List<AccountDTO> associatedAccountDtoList = dto.getSelectedAccounts();
+
+		Logger.info("Account List");
+		for (AccountDTO account : associatedAccountDtoList) {
+			Logger.info("Account List");
+			Logger.info("Account : " + account.getIdentifier());
+		}
+
+		// create return DTO
+		SiteAddUsersResultDTO resultDto = new SiteAddUsersResultDTO(associatedAccountDtoList);
+
+		// return list of associated
+		return ok(resultDto);
+	}
 }

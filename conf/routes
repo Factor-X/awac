@@ -125,5 +125,6 @@ GET         /awac/site/:siteId                                                @e
 #
 
 POST        /awac/organization/accounts                                       @eu.factorx.awac.controllers.OrganizationController.retrieveAssociatedAccounts()
+POST        /awac/organization/accounts/save                                  @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
 
 

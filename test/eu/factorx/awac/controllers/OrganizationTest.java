@@ -36,6 +36,7 @@ import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,9 +59,11 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	ConversionService conversionService;
 
 	private final String ORGANISATION_NAME = "Factor-X";
+	private final String USER1_IDENTIFIER = "user1";
+	private final String USER2_IDENTIFIER = "user2";
 
   	@Test
-	public void _001_submitActionSuccess() {
+	public void _001_getAllAccounts() {
 
 	Organization org = new Organization(ORGANISATION_NAME);
 	SiteAddUsersDTO dto = createDTO(org);
@@ -96,8 +99,56 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	List<AccountDTO> accountList = resultDTO.getUsers();
 	assertEquals(accountList.size(),2);
 
-
   } // end of authenticateSuccess test
+
+	@Test
+	public void _002_saveAssociatedAccounts() {
+
+
+		Organization org = new Organization(ORGANISATION_NAME);
+		SiteAddUsersDTO dto = createDTO(org);
+
+		AccountDTO account1 = new AccountDTO();
+		account1.setIdentifier(USER1_IDENTIFIER);
+
+		AccountDTO account2 = new AccountDTO();
+		account2.setIdentifier(USER2_IDENTIFIER);
+
+		List<AccountDTO> associatedAccountList= new ArrayList<AccountDTO>();
+		associatedAccountList.add(account1);
+		associatedAccountList.add(account2);
+
+		dto.setSelectedAccounts(associatedAccountList);
+
+		// ConnectionFormDTO
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
+
+		//Json Body node
+		JsonNode node = Json.toJson(dto);
+
+		// Fake request
+		FakeRequest fr = new FakeRequest();
+		fr.withJsonBody(node);
+		fr.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
+
+		Result result = null;
+		try {
+			// Call controller action
+			result = callAction(
+					eu.factorx.awac.controllers.routes.ref.OrganizationController.saveAssociatedAccounts(),
+					fr
+			); // callAction
+		} catch (Exception e) {
+			Logger.info("User is not authorized");
+		}
+
+		// test results
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
+		//analyse result
+
+	} // end of test
+
 
 	// class to handle EmailInvitationDTO
 
