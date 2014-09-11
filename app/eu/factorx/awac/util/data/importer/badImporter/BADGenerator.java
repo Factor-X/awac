@@ -35,7 +35,7 @@ public class BADGenerator {
     private List<QuestionWithoutRepetition> questionWithoutRepetitionList = new ArrayList<>();
 
 
-    public void generateBAD(BAD bad, BADLog badLog) {
+    public void generateBAD(BAD bad, BADLog.LogLine logLine) {
 
         //create template
         BADTemplate badTemplate = new BADTemplate(TemplateName.BAD, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
@@ -43,7 +43,7 @@ public class BADGenerator {
         //add parameters
         //start to build the map of repetition to load question
         for (String question : bad.getListQuestions()) {
-            completHashMap(question, badLog, bad.getLine());
+            completHashMap(question, logLine, bad.getLine());
         }
 
         //TEMP print result
@@ -133,7 +133,7 @@ public class BADGenerator {
     }
 
 
-    private void completHashMap(String questionCode, BADLog badLog, int line) {
+    private void completHashMap(String questionCode, BADLog.LogLine logLine, int line) {
 
         //load the question
         Question question = questionService.findByCode(new QuestionCode(questionCode));
@@ -158,7 +158,7 @@ public class BADGenerator {
 
                     //try if the question has a repetition into his parents
                     if (haveRepetitionParent(question.getQuestionSet())) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "error : " + question.getQuestionSet().getCode().getKey() + " cannot be insert into the questionSet structure (root : " + repeatableElementRoot.getMainQuestionSetString() + ",lastChild : " + repeatableElementLastChild.getMainQuestionSetString() + ", question : " + questionCode + ")");
+                        logLine.addError("error : " + question.getQuestionSet().getCode().getKey() + " cannot be insert into the questionSet structure (root : " + repeatableElementRoot.getMainQuestionSetString() + ",lastChild : " + repeatableElementLastChild.getMainQuestionSetString() + ", question : " + questionCode + ")");
                     }
 
                     //add question to questionWithoutRepetitionList

@@ -3,6 +3,7 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
@@ -98,7 +99,7 @@ public class ResultController extends AbstractController {
 		}
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		resultExcelGeneratorService.generateExcelInStream(stream, scope.getSite().getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
+		resultExcelGeneratorService.generateExcelInStream(stream, ((Site)scope).getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
 		response().setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
 		return ok(new ByteArrayInputStream(stream.toByteArray()));
 	}
@@ -173,7 +174,7 @@ public class ResultController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getSvgDonutForScope(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
+	public Result getDonut(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Account currentUser = securedController.getCurrentUser();
@@ -200,7 +201,37 @@ public class ResultController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getWebForScope(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+	public Result getWeb(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+		Period period = periodService.findByCode(new PeriodCode(periodKey));
+		Scope scope = scopeService.findById(scopeId);
+		Account currentUser = securedController.getCurrentUser();
+		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
+
+		Table scopeTable = new Table();
+
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
+		nf.setMaximumFractionDigits(2);
+
+		System.out.println("== BEGIN WEB ==");
+		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+			double v = entry.getValue().get(1) + entry.getValue().get(2) + entry.getValue().get(3) + entry.getValue().get(4);
+			if (v > 0) {
+				System.out.println("== web == " + entry);
+				int row = scopeTable.getRowCount();
+				scopeTable.setCell(0, row, entry.getKey());
+				scopeTable.setCell(1, row, v);
+			}
+		}
+		System.out.println("== END WEB ==");
+
+		markNoCache();
+
+		return ok(toSvg(svgGenerator.getWeb(scopeTable)));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result getHistogram(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Account currentUser = securedController.getCurrentUser();
@@ -222,7 +253,7 @@ public class ResultController extends AbstractController {
 
 		markNoCache();
 
-		return ok(toSvg(svgGenerator.getWeb(scopeTable)));
+		return ok(toSvg(svgGenerator.getHistogram(scopeTable)));
 	}
 
 

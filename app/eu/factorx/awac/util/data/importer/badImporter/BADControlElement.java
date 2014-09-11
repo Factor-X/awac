@@ -23,7 +23,6 @@ import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
-import play.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -53,10 +52,10 @@ public class BADControlElement {
     private CodeLabelService codeLabelService;
 
 
-    BADLog badLog;
+    BADLog.LogLine logLine;
 
-    public void setBadLog(BADLog badLog) {
-        this.badLog = badLog;
+    public void setBadLog(BADLog.LogLine logLine) {
+        this.logLine = logLine;
     }
 
     /**
@@ -69,7 +68,7 @@ public class BADControlElement {
 
         String badKey = cellContent;
         if (badKey == null || badKey.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no badKey : " + cellContent);
+            logLine.addError("There is no badKey : " + cellContent);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -77,7 +76,7 @@ public class BADControlElement {
         }
 
         if (!controlList(BaseActivityDataCode.class, badKey)) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "This is not a badKey : " + cellContent);
+            logLine.addError("This is not a badKey : " + cellContent);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -96,7 +95,7 @@ public class BADControlElement {
     public void controlName(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no name: " + content);
+            logLine.addError("There is no name: " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -114,7 +113,7 @@ public class BADControlElement {
     public void controlRank(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.WARNING, line, "There rank is null");
+            logLine.addWarn("There rank is null");
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -123,7 +122,7 @@ public class BADControlElement {
         try {
             bad.setRank(new Double(Double.parseDouble(content)).intValue());
         } catch (NumberFormatException e) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "The rank is not null but it's not a valid number  : " + content);
+            logLine.addError("The rank is not null but it's not a valid number  : " + content);
         }
 
         //null => cannot be generated
@@ -141,20 +140,20 @@ public class BADControlElement {
             //control if the question is a text
             if (controlList(QuestionCode.class, content)) {
                 if (controlQuestionType(content, StringQuestion.class)) {
-                    badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a SpecificPurpose and it's a Stringquestion");
+                    logLine.addDebug("There is a SpecificPurpose and it's a Stringquestion");
 
                     bad.setSpecificPurpose("toString(question" + content + "Answer)");
                     bad.addQuestion(content);
 
                 } else {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "SpecificPurpose : it's a question but not a StringQuestion : SpecificPurpose will be null");
+                    logLine.addError("SpecificPurpose : it's a question but not a StringQuestion : SpecificPurpose will be null");
                 }
             } else {
-                badLog.addToLog(BADLog.LogType.WARNING, line, "SpecificPurpose is a string");
+                logLine.addWarn("SpecificPurpose is a string");
                 bad.setSpecificPurpose("\"" + content + "\"");
             }
         } else {
-            badLog.addToLog(BADLog.LogType.WARNING, line, "The SpecificPurpose is null");
+            logLine.addWarn("The SpecificPurpose is null");
         }
     }
 
@@ -164,7 +163,7 @@ public class BADControlElement {
     public void controlActivityCategory(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no activityCategory : " + content);
+            logLine.addError("There is no activityCategory : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -173,7 +172,7 @@ public class BADControlElement {
 
         //save all data into one object
         if (!controlList(ActivityCategoryCode.class, content)) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "This activityCategory was not found : " + content);
+            logLine.addError("This activityCategory was not found : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -189,7 +188,7 @@ public class BADControlElement {
     public void controlActivitySubCategory(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no activitySubCategory : " + content);
+            logLine.addError("There is no activitySubCategory : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -197,7 +196,7 @@ public class BADControlElement {
         }
         //test if the activitySubCategory is a code
         if (controlList(ActivitySubCategoryCode.class, content)) {
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activitySubCategory and it's an ActivitySubCategoryCode");
+            logLine.addDebug("There is a activitySubCategory and it's an ActivitySubCategoryCode");
 
             //add to bad
             bad.setActivitySubCategory("ActivitySubCategoryCode." + content);
@@ -209,10 +208,10 @@ public class BADControlElement {
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySubCategory)) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
             } else {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
             //add to bad
@@ -220,7 +219,7 @@ public class BADControlElement {
             bad.addQuestion(content);
 
         } else {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is a activitySubCategory but it's not an ActivitySubCategoryCode or an answer." + content);
+            logLine.addError("There is a activitySubCategory but it's not an ActivitySubCategoryCode or an answer." + content);
         }
 
 
@@ -233,7 +232,7 @@ public class BADControlElement {
     public void controlActivityType(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no activityType : " + content);
+            logLine.addError("There is no activityType : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -242,7 +241,7 @@ public class BADControlElement {
 
         //test if the activityType is a code
         if (controlList(ActivityTypeCode.class, content)) {
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activityType and it's an ActivitySubCategoryCode");
+            logLine.addDebug("There is a activityType and it's an ActivitySubCategoryCode");
 
             bad.setActivityType("ActivityTypeCode." + content);
 
@@ -253,10 +252,10 @@ public class BADControlElement {
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
             } else {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
             //add to bad
@@ -264,7 +263,7 @@ public class BADControlElement {
             bad.addQuestion(content);
 
         } else {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is a activityType but it's not an activityType or an answer." + content);
+            logLine.addError("There is a activityType but it's not an activityType or an answer." + content);
         }
     }
 
@@ -276,7 +275,7 @@ public class BADControlElement {
 
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no activitySource : " + content);
+            logLine.addError("There is no activitySource : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -285,7 +284,7 @@ public class BADControlElement {
 
         //test if the activitySubCategory is a code
         if (controlList(ActivitySourceCode.class, content)) {
-            badLog.addToLog(BADLog.LogType.DEBUG, line, "There is a activitySource and it's an ActivitySubCategoryCode");
+            logLine.addDebug("There is a activitySource and it's an ActivitySubCategoryCode");
 
             bad.setActivitySource("ActivitySourceCode." + content);
 
@@ -296,10 +295,10 @@ public class BADControlElement {
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
                 }
             } else {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
             }
 
             //add to bad
@@ -307,7 +306,7 @@ public class BADControlElement {
             bad.addQuestion(content);
 
         } else {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is a activitySource but it's not an activityType or an answer." + content);
+            logLine.addError("There is a activitySource but it's not an activityType or an answer." + content);
         }
     }
 
@@ -318,7 +317,7 @@ public class BADControlElement {
 
         boolean activityOwnerShipValid = false;
         if (content == null) {
-            badLog.addToLog(BADLog.LogType.WARNING, line, "ActivityOwnerShip is null");
+            logLine.addWarn("ActivityOwnerShip is null");
         } else {
 
             //try to convert to boolean
@@ -348,7 +347,7 @@ public class BADControlElement {
      */
     public void controlUnit(String content, int line, BAD bad) {
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no unit : " + content);
+            logLine.addError("There is no unit : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -356,7 +355,7 @@ public class BADControlElement {
         }
         //test if the activityType is a code
         if (!controlList(UnitCode.class, content)) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "This is not a unit code : " + content);
+            logLine.addError("This is not a unit code : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -374,7 +373,7 @@ public class BADControlElement {
     public void controlValue(String content, int line, BAD bad) {
 
         if (content == null || content.length() == 0) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "There is no value : " + content);
+            logLine.addError("There is no value : " + content);
 
             //null => cannot be generated
             bad.setCanBeGenerated(false);
@@ -407,7 +406,7 @@ public class BADControlElement {
         content= content.replaceAll("( | )", "");
 
         //take answer one by one
-        Pattern pattern = Pattern.compile("(\\{([^\\{\\}]*)\\})?([^;]+)(;|$)");
+        Pattern pattern = Pattern.compile("(\\(([^\\(\\)]*)\\))?([^;]+)(;|$)");
 
         Pattern patternRepetition = Pattern.compile("(A[A-Z]*[0-9]+):([0-9]+)(;|$)");
 
@@ -448,14 +447,14 @@ public class BADControlElement {
                                 unit = ((NumericQuestion)question).getUnitCategory().getMainUnit();
                             }
 
-                            badLog.addToLog(BADLog.LogType.INFO, line, "QuestionValue : cannot found a unit for the question "+question.getCode().getKey()+" : the default unit "+unit.getSymbol()+" will be used");
+                            logLine.addInfo("QuestionValue : cannot found a unit for the question "+question.getCode().getKey()+" : the default unit "+unit.getSymbol()+" will be used");
                         }
                         else {
                             //try to use the defined unit
                             unit = controlUnitCategory(((NumericQuestion) question), mNum.group(3), null, line, "questionValue");
 
                             if (unit == null) {
-                                badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : cannot found a unit for the question " + question.getCode().getKey());
+                                logLine.addError("QuestionValue : cannot found a unit for the question " + question.getCode().getKey());
                                 continue;
                             }
                         }
@@ -466,12 +465,12 @@ public class BADControlElement {
                         Double.parseDouble(mNum.group(1));
                         valueToAdd = mNum.group(1);
                     } catch (NumberFormatException e) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : Number expected but conversion failed");
+                        logLine.addError("QuestionValue : Number expected but conversion failed");
                         continue;
                     }
                 }
                 else{
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : value must be a numeric (optinaly with a unit) but not found : "+value);
+                    logLine.addError("QuestionValue : value must be a numeric (optinaly with a unit) but not found : "+value);
                     continue;
                 }
 
@@ -485,14 +484,14 @@ public class BADControlElement {
 
 
                 if (!controlListElement(((ValueSelectionQuestion) question).getCodeList(), value)) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : value must be a member of the list "+((ValueSelectionQuestion) question).getCodeList().name()+" but not found : "+value);
+                    logLine.addError("QuestionValue : value must be a member of the list "+((ValueSelectionQuestion) question).getCodeList().name()+" but not found : "+value);
                     continue;
                 }
                 valueToAdd = value;
             }
             else if(question instanceof BooleanQuestion){
                 if(controlBoolean(value)==null){
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : boolean expected but not found : "+value);
+                    logLine.addError("QuestionValue : boolean expected but not found : "+value);
                     continue;
                 }
                 valueToAdd = value;
@@ -518,7 +517,7 @@ public class BADControlElement {
             //control repetition
             if(repetitionMap.size() != questionSetsRepetable.size()){
                 //TODO boost the control
-                badLog.addToLog(BADLog.LogType.ERROR, line, "Wrong repetition map");
+                logLine.addError("Wrong repetition map");
                 continue;
             }
                 //add repetition map
@@ -547,7 +546,7 @@ public class BADControlElement {
         //convert , to .
         formula = formula.replaceAll(",", ".");
 
-        Double result = null;
+        Double result;
         try {
             ExpressionParser parser = new SpelExpressionParser();
             Expression expression = parser.parseExpression(formula);
@@ -615,7 +614,7 @@ public class BADControlElement {
         if (questionClass.isInstance(question)) {
             return true;
         }
-        badLog.addToLog(BADLog.LogType.DEBUG, 0, "class founded : " + question.getClass() + " , expected " + questionClass);
+        logLine.addDebug("class founded : " + question.getClass() + " , expected " + questionClass);
         return false;
     }
 
@@ -658,7 +657,7 @@ public class BADControlElement {
 
             // a) test question
             if (!controlList(QuestionCode.class, questionCodeKey)) {
-                badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode unknown : " + questionCodeKey);
+                logLine.addError("The " + type + " contains a questionCode unknown : " + questionCodeKey);
                 return questionCodeKey;
 
             } else {
@@ -700,7 +699,7 @@ public class BADControlElement {
 
                             //for valueSelectionQuestion => expected a code from the same list than the question
                             if (!controlListElement(((ValueSelectionQuestion) question).getCodeList(), comparisonMember)) {
-                                badLog.addToLog(BADLog.LogType.ERROR, line, type + " : comparison member (" + comparisonMember + ") is not an element of the list : " + ((ValueSelectionQuestion) question).getCodeList().name() + " for question " + questionCodeKey + "/ equation : " + content);
+                                logLine.addError(type + " : comparison member (" + comparisonMember + ") is not an element of the list : " + ((ValueSelectionQuestion) question).getCodeList().name() + " for question " + questionCodeKey + "/ equation : " + content);
                             } else {
 
 
@@ -718,7 +717,7 @@ public class BADControlElement {
                                 } else {
 
                                     //operator invalid : error !
-                                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the operator " + operator + " is not valid for the comparison " + matcher.group() + " because thr question is a codeList (== or != only accepted)");
+                                    logLine.addError(type + " : the operator " + operator + " is not valid for the comparison " + matcher.group() + " because thr question is a codeList (== or != only accepted)");
                                 }
                             }
 
@@ -732,20 +731,20 @@ public class BADControlElement {
                             } else if (comparisonMember.equals("0") || comparisonMember.equalsIgnoreCase("false") || comparisonMember.equalsIgnoreCase("no")) {
                                 questionValue = "toBoolean(question" + questionCodeKey + "Answer) == false";
                             } else {
-                                badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the comparison member (" + comparisonMember + ") is not compatible with the BooleanQuestion type for the question : " + questionCodeKey);
+                                logLine.addError(type + " : the comparison member (" + comparisonMember + ") is not compatible with the BooleanQuestion type for the question : " + questionCodeKey);
                             }
 
                         }
                         //other question type are not accepted
                         else {
-                            badLog.addToLog(BADLog.LogType.ERROR, line, type + " : the questionType " + question.getClass() + " of the question " + questionCodeKey + " is not currently compatible with condition");
+                            logLine.addError(type + " : the questionType " + question.getClass() + " of the question " + questionCodeKey + " is not currently compatible with condition");
                         }
                     } else {
                         //boolean ?
                         if (question instanceof BooleanQuestion) {
                             questionValue = "toBoolean(question" + questionCodeKey + "Answer)";
                         } else {
-                            badLog.addToLog(BADLog.LogType.ERROR, line, type + " : cannot found the other member of the comparison : " + content + " for question " + questionCodeKey);
+                            logLine.addError(type + " : cannot found the other member of the comparison : " + content + " for question " + questionCodeKey);
                         }
                     }
 
@@ -765,7 +764,7 @@ public class BADControlElement {
 
 
                 } else {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, type + " : " + question.getClass() + " aren't supported (question " + questionCodeKey + ")");
+                    logLine.addError(type + " : " + question.getClass() + " aren't supported (question " + questionCodeKey + ")");
                 }
             }
         }
@@ -778,7 +777,7 @@ public class BADControlElement {
         try {
             evaluateCondition(condition);
         } catch (Exception e) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " cannot be convert to condition: " + condition + " (" + content + ") =>" + e.getMessage());
+            logLine.addError("The " + type + " cannot be convert to condition: " + condition + " (" + content + ") =>" + e.getMessage());
         }
         return value;
     }
@@ -808,11 +807,7 @@ public class BADControlElement {
 
         Matcher matcher = pattern.matcher(content);
 
-        Logger.info("content : " + content);
-
         while (matcher.find()) {
-
-            Logger.info("catched : " + matcher.group());
 
             String questionCodeKey = matcher.group(1);
 
@@ -821,7 +816,7 @@ public class BADControlElement {
             if (!controlList(QuestionCode.class, questionCodeKey)) {
 
                 //if the questionCode aren't into the questionList, it's an error
-                badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode unknown : " + questionCodeKey);
+                logLine.addError("The " + type + " contains a questionCode unknown : " + questionCodeKey);
                 return questionCodeKey;
             } else {
 
@@ -846,7 +841,7 @@ public class BADControlElement {
 
                 } else {
                     //other question type are not accepted
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
+                    logLine.addError("The " + type + " contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
                 }
 
                 //d) replace code
@@ -861,8 +856,6 @@ public class BADControlElement {
 
                 }
 
-                Logger.info("VALUE : " + sb.toString());
-
                 // replace into equation
                 equation = equation.replaceAll(convertToRegex(matcher.group()), "1");
             }
@@ -870,15 +863,13 @@ public class BADControlElement {
 
         matcher.appendTail(sb);
 
-        Logger.info("FINAL : " + sb.toString());
-
         value = sb.toString();
 
         // 2) control equation with replace elements
         try {
             evaluateFormula(equation);
         } catch (Exception e) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " cannot be convert to equation: " + equation + " (" + content + ") =>" + e.getMessage());
+            logLine.addError("The " + type + " cannot be convert to equation: " + equation + " (" + content + ") =>" + e.getMessage());
         }
 
         //replace , by .  in number
@@ -921,21 +912,21 @@ public class BADControlElement {
                     //control equivalence between BAD unit.unitCat and question.unitCat
                     if (!question.getUnitCategory().equals(unitCategoryDefault)) {
                         //categories != => error !
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + question.getCode().getKey());
+                        logLine.addError("The " + type + " contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + question.getCode().getKey());
                     } else {
                         //ok => info
-                        badLog.addToLog(BADLog.LogType.INFO, line, "The " + type + " contains a questionCode without unit specified, but the unitCat is the same than the BAD");
+                        logLine.addInfo("The " + type + " contains a questionCode without unit specified, but the unitCat is the same than the BAD");
                     }
                 } else {
                     // if there is not unit expected or unitCategory default, this is an error
-                    badLog.addToLog(BADLog.LogType.INFO, line, "The " + type + " contains a questionCode without unit specified");
+                    logLine.addInfo("The " + type + " contains a questionCode without unit specified");
                 }
                 //there is a unit expected => control it
             } else {
 
                 //test unit expected
                 if (!controlList(UnitCode.class, unitExpected)) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " a questionCode with unit specified, but this unit was not found : " + unitExpected);
+                    logLine.addError("The " + type + " a questionCode with unit specified, but this unit was not found : " + unitExpected);
                 } else {
 
                     //load unit
@@ -943,7 +934,7 @@ public class BADControlElement {
 
                     //test unit
                     if (!question.getUnitCategory().equals(unit.getCategory())) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode, but the specified unit do not " +
+                        logLine.addError("The " + type + " contains a questionCode, but the specified unit do not " +
                                 "come from the unitCategory of the question : " + question.getCode().getKey() + ", unitCategory of the question : " + question.getUnitCategory() + ", unitCategory of the unit : " + unit.getCategory());
                     } else {
                         return unit;

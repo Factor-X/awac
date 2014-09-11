@@ -1,3 +1,22 @@
+#
+# Logging initialization
+#
+angular.module('app').run (loggerService) ->
+
+    loggerService.initialize()
+
+    $('body').keydown (evt) ->
+        console.log evt
+        if evt.which == 32 and evt.altKey and evt.ctrlKey
+            loggerElement = $('#logger')
+            state = parseInt(loggerElement.attr('data-state'))
+            loggerElement.attr('data-state', (state + 1) % 3)
+
+    log = loggerService.get('initializer')
+    log.info "Application is started"
+
+
+
 angular
 .module('app.controllers')
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService,$timeout) ->
@@ -40,9 +59,9 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope().validNavigation != undefined
+        if $scope.getMainScope?().validNavigation != undefined
             # ask a confirmation to quite the view
-            result = $scope.getMainScope().validNavigation()
+            result = $scope.getMainScope?().validNavigation?()
 
             if result.valid == false
                 return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE')
@@ -65,9 +84,9 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope().validNavigation != undefined && confirmed == false
+        if $scope.getMainScope?().validNavigation != undefined && confirmed == false
             # ask a confirmation to quite the view
-            result = $scope.getMainScope().validNavigation()
+            result = $scope.getMainScope?().validNavigation?()
 
             if result.valid == false
                 canBeContinue = false

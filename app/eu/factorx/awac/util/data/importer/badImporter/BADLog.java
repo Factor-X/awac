@@ -11,10 +11,17 @@ public class BADLog {
 
     private HashMap<Integer, LogLine> logLines = new HashMap<>();
 
+    public LogLine getLogLine(int line, LogCat  logCat){
+        if (!logLines.containsKey(line)) {
+            logLines.put(line, new LogLine(logCat));
+        }
+        return logLines.get(line);
+    }
+/*
     public void addToLog(LogType logType, int line, String message) {
 
-        if(!logLines.containsKey(line)){
-            logLines.put(line,new LogLine());
+        if (!logLines.containsKey(line)) {
+            logLines.put(line, new LogLine());
         }
 
         logLines.get(line).add(logType, message);
@@ -38,7 +45,7 @@ public class BADLog {
                 break;
         }
     }
-
+*/
     public HashMap<Integer, LogLine> getLogLines() {
         return logLines;
     }
@@ -47,15 +54,43 @@ public class BADLog {
         this.logLines = logLines;
     }
 
-    public static class LogLine{
+    public static class LogLine {
 
         private HashMap<LogType, List<String>> messages = new HashMap<>();
 
-        public void add(LogType logType, String message) {
-            if(!messages.containsKey(logType)){
-                messages.put(logType,new ArrayList<String>());
+        private LogCat logCat;
+
+        public LogLine(LogCat logCat) {
+            this.logCat = logCat;
+        }
+
+        public void addWarn(String message) {
+
+            add(LogType.WARNING, message);
+        }
+
+
+        public void addError(String message) {
+
+            add(LogType.ERROR, message);
+        }
+
+
+        public void addInfo(String message) {
+
+            add(LogType.INFO, message);
+        }
+
+        public void addDebug(String message) {
+
+            add(LogType.DEBUG, message);
+        }
+
+        private void add(LogType logType, String message) {
+            if (!messages.containsKey(logType)) {
+                messages.put(logType, new ArrayList<String>());
             }
-            if(logType != LogType.ID) {
+            if (logType != LogType.ID) {
                 message = (messages.get(logType).size() + 1) + ". " + message;
             }
 
@@ -86,6 +121,10 @@ public class BADLog {
     }
 
     public enum LogType {
-        ID,INFO, WARNING, ERROR, DEBUG;
+        ID, INFO, WARNING, ERROR, DEBUG;
+    }
+
+    public enum LogCat {
+        BAD,QUESTION;
     }
 }

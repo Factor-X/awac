@@ -17,7 +17,6 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
@@ -25,7 +24,6 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
@@ -679,17 +677,8 @@ public class AnswerController extends AbstractController {
 	}
 
 	private static void validateUserRightsForScope(Account currentUser, Scope scope) {
-		Organization scopeOrganization = null;
-		ScopeTypeCode scopeType = scope.getScopeType();
-		if (ScopeTypeCode.ORG.equals(scopeType)) {
-			scopeOrganization = scope.getOrganization();
-		} else if (ScopeTypeCode.SITE.equals(scopeType)) {
-			scopeOrganization = scope.getSite().getOrganization();
-		} else if (ScopeTypeCode.PRODUCT.equals(scopeType)) {
-			scopeOrganization = scope.getProduct().getOrganization();
-		}
-		if (!scopeOrganization.equals(currentUser.getOrganization())) {
-			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scopeOrganization + "'");
+		if (!scope.getOrganization().equals(currentUser.getOrganization())) {
+			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
 		}
 	}
 

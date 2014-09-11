@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import play.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -122,7 +121,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
     public void reader(Data data, BADLog badLog) {
 
-        badControlElement.setBadLog(badLog);
+
 
         Map<String, Answer> mapAnswer = new HashMap<>();
 
@@ -139,7 +138,9 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                     data.getData(ExcelEquivalenceColumn.C, line).equals("1.0") &&
                     data.getData(ExcelEquivalenceColumn.X, line) != null) {
 
-               Logger.warn("NEW QUESTION TO CHECK !!!!! " + line);
+                //create new logLine
+                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.QUESTION);
+                badControlElement.setBadLog(logLine);
 
                 String questionCode = data.getData(ExcelEquivalenceColumn.I, line);
 
@@ -147,7 +148,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 Question question = questionService.findByCode(new QuestionCode(questionCode));
 
                 if (question == null) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "Try to load the question " + questionCode + " but not found");
+                    logLine.addError("Try to load the question " + questionCode + " but not found");
                 } else {
 
                     //add value
@@ -160,10 +161,15 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
             if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
                     !data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
                     data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
+
+                //create logLine
+                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.BAD);
+                badControlElement.setBadLog(logLine);
+
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line) + " (" + data.getData(BAD_NAME_COL, line) + ")");
+                logLine.addError(data.getData(BAD_KEY_COL, line) + " (" + data.getData(BAD_NAME_COL, line) + ")");
 
 
                 //create the bad
@@ -216,12 +222,12 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                 //write
-                badGenerator.generateBAD(bad, badLog);
+                badGenerator.generateBAD(bad, logLine);
 
                 //generate test
                 BADTestGenerator badTestGenerator = (BADTestGenerator) ctx.getBean(BADTestGenerator.class);
 
-                badTestGenerator.generateBAD(bad, badLog, mapAnswer);
+                badTestGenerator.generateBAD(bad, logLine, mapAnswer);
                 //}
             }
         }

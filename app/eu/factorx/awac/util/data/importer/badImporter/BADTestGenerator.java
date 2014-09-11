@@ -30,7 +30,7 @@ public class BADTestGenerator {
     private CodeLabelService codeLabelService;
 
 
-    public void generateBAD(BAD bad, BADLog badLog, Map<String, Answer> mapAnswer) {
+    public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer) {
 
         //create template
         BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST, "BAD" + bad.getBaseActivityDataCode() + "Test.java");
@@ -39,7 +39,7 @@ public class BADTestGenerator {
         badTemplate.addParameter("questions",bad.getListQuestions());
 
         //insert bad
-        badTemplate.addParameter("bad",bad);
+        badTemplate.addParameter("bad", bad);
 
         //badTemplate.generate(TemplateName.BAD_TEST.getTargetPath());
     }

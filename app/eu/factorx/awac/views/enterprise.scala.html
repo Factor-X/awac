@@ -1,14 +1,32 @@
 @(startupDateIdentifier: String)
 
 <!doctype html>
-<html ng-app="app">
+<html id="app" ng-app="app">
     <head>
+
+        <!--[if lte IE 8]>
+        <script>
+            document.createElement('ng-include');
+            document.createElement('ng-pluralize');
+            document.createElement('ng-view');
+
+            // Optionally these for CSS
+            document.createElement('ng:include');
+            document.createElement('ng:pluralize');
+            document.createElement('ng:view');
+        </script>
+        <![endif]-->
+
         <title>AWAC</title>
         <meta name="app" content="enterprise"/>
+
 
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
         <!-- ------------------------------------------------------------------ -->
+
+        <!-- Log4Javascript -->
+        <script src='@routes.Assets.at("components/log4javascript/log4javascript.js")'></script>
 
         <!-- Angular dependencies local -->
         <script src='@routes.Assets.at("components/angular/angular.js")'></script>
@@ -61,7 +79,8 @@
 
         <!-- Messenger -->
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger.css")'>
-        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
+        <link rel="stylesheet" media="screen"
+              href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/messenger-theme.css")'>
 
         <!-- Main (hacks) -->
@@ -101,7 +120,7 @@
         </script>
     </head>
     <body ng-controller="MainCtrl">
-        
+
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>
@@ -116,6 +135,8 @@
         -->
 
         <mm-awac-enterprise-survey ng-model="o"></mm-awac-enterprise-survey>
+
+        <div id="logger" data-state="0"></div>
     </body>
 </html>
 

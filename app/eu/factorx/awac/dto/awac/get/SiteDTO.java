@@ -1,11 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.validation.annotations.Range;
 import eu.factorx.awac.dto.validation.annotations.Size;
-import eu.factorx.awac.dto.validation.annotations.Value;
-import eu.factorx.awac.models.code.type.PeriodCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,7 @@ public class SiteDTO extends DTO {
 	@Size(max = 255)
 	private String accountingTreatment;
 
-	@Value(min = 0, max = 100)
+	@Range(min = 0, max = 100)
 	private Double percentOwned;
 
 	private List<String> listPeriodAvailable;

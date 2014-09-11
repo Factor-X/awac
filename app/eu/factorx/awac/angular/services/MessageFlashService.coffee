@@ -1,7 +1,7 @@
 # simple download service
 angular
 .module('app.services')
-.service "messageFlash", (flash, translateTextFilter) ->
+.service "messageFlash", (translateTextFilter) ->
 
     #
     # display a success message
