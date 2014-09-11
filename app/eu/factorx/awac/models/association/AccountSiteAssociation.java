@@ -19,6 +19,7 @@ import play.data.validation.Constraints.Required;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 // import for JAXB annotations -- JAXB stack
 
@@ -72,7 +73,7 @@ public class AccountSiteAssociation extends AuditedAbstractEntity {
 	@Override
 	public String toString() {
 		return "AccountSiteAssociation{" +
-				"accountId=" + getAccount().getId() +
+				"accountList=" + getAccount().getIdentifier() +
 				", siteId=" + getSite().getId() +
 				'}';
 	}
