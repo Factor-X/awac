@@ -30,6 +30,7 @@
     "messenger": "*",
     "chartjs": ">=1.0.1-beta.4",
     "tinycolor": "~1.0.0",
-    "ng-table": "~0.3.3"
+    "ng-table": "~0.3.3",
+    "log4javascript": "~1.4.9"
   }
 }

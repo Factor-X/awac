@@ -1,3 +1,22 @@
+#
+# Logging initialization
+#
+angular.module('app').run (loggerService) ->
+
+    loggerService.initialize()
+
+    $('body').keydown (evt) ->
+        console.log evt
+        if evt.which == 32 and evt.altKey and evt.ctrlKey
+            loggerElement = $('#logger')
+            state = parseInt(loggerElement.attr('data-state'))
+            loggerElement.attr('data-state', (state + 1) % 3)
+
+    log = loggerService.get('initializer')
+    log.info "Application is started"
+
+
+
 angular
 .module('app.controllers')
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService,$timeout) ->
