@@ -22,6 +22,9 @@ cat ./CELDL-65-Indicator-Calculator-JoinTable.sql >> /tmp/migration/migration_sc
 # move A205 & A208 from tab 6 to tab 4 
 cat ./UpdateQuestionSetA205_A208.sql >> /tmp/migration/migration_script.sql
 
+# execute the script
+cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
+
 # reengineering of scope-related entities (set scope as parent class of organization, site & product)
 cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
 
