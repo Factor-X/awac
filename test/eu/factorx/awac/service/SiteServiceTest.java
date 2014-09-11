@@ -68,7 +68,6 @@ public class SiteServiceTest extends AbstractBaseModelTest {
 
 	@Test
 	public void _003_testCascadingDelete() {
-		scopeService.remove(scopeService.findBySite(site));
 		siteService.remove(site);
 
 		Site foundSite = siteService.findById(siteId);

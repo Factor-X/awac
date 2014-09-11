@@ -1,24 +1,11 @@
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
-import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
+import static org.junit.Assert.*;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
+
+import java.util.List;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,18 +13,24 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.Logger;
+
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static play.test.Helpers.*;
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
+import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
+import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.ScopeService;
+import eu.factorx.awac.service.SiteService;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

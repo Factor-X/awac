@@ -1419,7 +1419,7 @@ h1 {
     border-collapse: separate;
 }
 
-.site_table{
+.site_table {
     width: 100%;
 }
 
@@ -1623,14 +1623,13 @@ ul.messenger > li {
     font-weight: bold;
 }
 
-
-.indicators_table > tbody > tr > td.scope1{
+.indicators_table > tbody > tr > td.scope1 {
     border-left: dashed 2px #666;
 }
-.indicators_table > tbody > tr > td.out-of-scope{
+
+.indicators_table > tbody > tr > td.out-of-scope {
     border-right: dashed 2px #666;
 }
-
 
 .chart-legend {
     text-align: left;
@@ -1678,12 +1677,12 @@ ul.messenger > li {
     border-color: #000080;
 }
 
-.interface_menu li .selected{
-    background-color : #000080;
-    border-color:#000080;
+.interface_menu li .selected {
+    background-color: #000080;
+    border-color: #000080;
 }
 
-.admin-table-import-bad td{
+.admin-table-import-bad td {
     border-right: 1px solid #ddd;
 }
 
@@ -1775,7 +1774,6 @@ ul.messenger > li {
     border-right-color: #484;
 }
 
-
 .top-aligned {
     vertical-align: top;
 }
@@ -1783,7 +1781,6 @@ ul.messenger > li {
 .horizontally-padded {
     padding: 0em 1em;
 }
-
 
 .circled-number {
     display: inline-block;
@@ -1800,7 +1797,6 @@ ul.messenger > li {
     text-align: right;
 }
 
-
 .results_disclaimer_text {
     text-align: left;
     display: inline-block;
@@ -1813,7 +1809,6 @@ ul.messenger > li {
     background-position: bottom 4px right 4px;
     background-repeat: no-repeat;
 }
-
 
 .tab_web {
     background-image: url('/assets/images/schemas/schema_araignee.png');
@@ -1849,4 +1844,38 @@ ul.messenger > li {
     background-image: url('/assets/images/schemas/schema_barchart.png');
     background-position: bottom 4px right 4px;
     background-repeat: no-repeat;
+}
+
+#logger {
+    position: absolute;
+    display: none;
+    left: 1cm;
+    right: 1cm;
+    bottom: 1cm;
+    border: solid 0.25cm #333;
+    border-radius: 0.25cm;
+    box-shadow: 0 0 0 2px #ccc, 0 0 1cm black;
+    height: 30%;
+    z-index: 1000000000000;
+}
+
+#logger[data-state="0"] {
+    display: none;
+}
+
+#logger[data-state="1"] {
+    display: block;
+    left: 1cm;
+    right: 1cm;
+    bottom: 1cm;
+    height: 30%;
+}
+
+#logger[data-state="2"] {
+    display: block;
+    height: auto;
+    left: 1cm;
+    right: 1cm;
+    bottom: 1cm;
+    top: 1cm;
 }

@@ -1,15 +1,13 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.invitation.Invitation;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.InvitationService;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
+import eu.factorx.awac.models.invitation.Invitation;
+import eu.factorx.awac.service.InvitationService;
 
 @Repository
 public class InvitationServiceImpl extends AbstractJPAPersistenceServiceImpl<Invitation> implements InvitationService {

@@ -1,16 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
+import java.util.List;
+
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import java.util.List;
-import java.util.Set;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.service.AccountService;
 
 @Repository
 public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Account> implements AccountService {

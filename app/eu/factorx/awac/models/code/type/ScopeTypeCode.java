@@ -12,10 +12,15 @@ import javax.persistence.Embeddable;
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "scopetype"))})
 public class ScopeTypeCode extends Code {
 
-	public static final ScopeTypeCode ORG = new ScopeTypeCode("1");
-	public static final ScopeTypeCode SITE = new ScopeTypeCode("2");
-	public static final ScopeTypeCode PRODUCT = new ScopeTypeCode("3");
 	private static final long serialVersionUID = 1L;
+
+	public static final String ORG_KEY = "1";
+	public static final String SITE_KEY = "2";
+	public static final String PRODUCT_KEY = "3";
+
+	public static final ScopeTypeCode ORG = new ScopeTypeCode(ORG_KEY);
+	public static final ScopeTypeCode SITE = new ScopeTypeCode(SITE_KEY);
+	public static final ScopeTypeCode PRODUCT = new ScopeTypeCode(PRODUCT_KEY);
 
 	protected ScopeTypeCode() {
 		super(CodeList.SCOPE_TYPE);
