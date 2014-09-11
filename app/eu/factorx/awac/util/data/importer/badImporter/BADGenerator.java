@@ -115,7 +115,7 @@ public class BADGenerator {
         //TODO ...
 
 
-        badTemplate.generate();
+        badTemplate.generate(TemplateName.BAD.getTargetPath());
     }
 
     private void buildListRepetition(RepeatableElement repeatableElement, List<RepeatableElement> listRepeatableElements) {

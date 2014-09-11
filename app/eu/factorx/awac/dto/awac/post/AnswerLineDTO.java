@@ -32,6 +32,34 @@ public class AnswerLineDTO extends DTO {
 	public AnswerLineDTO() {
 	}
 
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser) {
+        this.questionKey = questionKey;
+        this.value = value;
+        this.lastUpdateUser = lastUpdateUser;
+    }
+
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId) {
+        this.questionKey = questionKey;
+        this.value = value;
+        this.lastUpdateUser = lastUpdateUser;
+        this.unitId = unitId;
+    }
+
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Map<String, Integer> mapRepetition) {
+        this.questionKey = questionKey;
+        this.value = value;
+        this.lastUpdateUser = lastUpdateUser;
+        this.mapRepetition = mapRepetition;
+    }
+
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId, Map<String, Integer> mapRepetition) {
+        this.questionKey = questionKey;
+        this.value = value;
+        this.lastUpdateUser = lastUpdateUser;
+        this.unitId = unitId;
+        this.mapRepetition = mapRepetition;
+    }
+
     public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId, Map<String, Integer> mapRepetition, String comment) {
         this.questionKey = questionKey;
         this.value = value;

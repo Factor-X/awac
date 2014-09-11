@@ -1,7 +1,8 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.service.QuestionService;
-import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
@@ -10,11 +11,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by florian on 29/08/14.
@@ -75,11 +76,11 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     private BADControlElement badControlElement;
 
     private ApplicationContext ctx = null;
+
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
         // Assign the ApplicationContext into a static method
         this.ctx = ctx;
     }
-
 
 
     public BADLog importBAD() {
@@ -110,7 +111,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         Data data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
 
         //2. read
-        reader(data,badLog);
+        reader(data, badLog);
 
         play.Logger.info("run badimporter end !");
 
@@ -119,9 +120,11 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
     //not null, ActivityType or answer(control list content) or more complex
 
-    public void reader(Data data,BADLog badLog) {
+    public void reader(Data data, BADLog badLog) {
 
         badControlElement.setBadLog(badLog);
+
+        Map<String, Answer> mapAnswer = new HashMap<>();
 
 
         for (int line = 1; line < data.getNbRows(); line++) {
@@ -131,6 +134,28 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 continue;
             }
 
+            //load question for response
+            if (data.getData(ExcelEquivalenceColumn.C, line) != null &&
+                    data.getData(ExcelEquivalenceColumn.C, line).equals("1.0") &&
+                    data.getData(ExcelEquivalenceColumn.X, line) != null) {
+
+               Logger.warn("NEW QUESTION TO CHECK !!!!! " + line);
+
+                String questionCode = data.getData(ExcelEquivalenceColumn.I, line);
+
+                //add question
+                Question question = questionService.findByCode(new QuestionCode(questionCode));
+
+                if (question == null) {
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "Try to load the question " + questionCode + " but not found");
+                } else {
+
+                    //add value
+                    mapAnswer.put(question.getCode().getKey(), badControlElement.controlAnswerValue(question, data.getData(ExcelEquivalenceColumn.X, line), badLog, line));
+
+                }
+            }
+
             //F is the reference column => not empty = it's a BAD !
             if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
                     !data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
@@ -138,7 +163,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // activity data founded
 
                 //print the line in DEBUG
-                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line)+" ("+data.getData(BAD_NAME_COL, line)+")");
+                badLog.addToLog(BADLog.LogType.ID, line, data.getData(BAD_KEY_COL, line) + " (" + data.getData(BAD_NAME_COL, line) + ")");
 
 
                 //create the bad
@@ -188,13 +213,18 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 //if (bad.isCanBeGenerated()) {
 
 
-
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
-                    //write
-                    badGenerator.generateBAD(bad,badLog);
+                //write
+                badGenerator.generateBAD(bad, badLog);
+
+                //generate test
+                BADTestGenerator badTestGenerator = (BADTestGenerator) ctx.getBean(BADTestGenerator.class);
+
+                badTestGenerator.generateBAD(bad, badLog, mapAnswer);
                 //}
             }
         }
     }
 }
+

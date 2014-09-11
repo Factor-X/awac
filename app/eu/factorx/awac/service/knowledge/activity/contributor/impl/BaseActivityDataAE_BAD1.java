@@ -11,10 +11,13 @@ import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import org.springframework.stereotype.Component;
+import play.Logger;
 
 /**
  * CHECK XM
  */
+@Component
 public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 
 	@Override
@@ -38,8 +41,11 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 		List<QuestionSetAnswer> questionSetAnswersA15 = questionSetAnswers.get(QuestionCode.A15);
 		//2.2 control if the list if different than null
 		if (questionSetAnswersA15 == null) {
+            Logger.info("JE NAI PAS A15");
 			return res;
 		}
+
+        Logger.info("??"+questionSetAnswersA15.size());
 
 		for (QuestionSetAnswer questionSetAnswer : questionSetAnswersA15) {
 
@@ -53,6 +59,7 @@ public class BaseActivityDataAE_BAD1 extends ActivityResultContributor {
 			//control them
 			if (questionA16Answer == null ||
 					questionA17Answer == null) {
+                Logger.info("JE NAI PAS A16 ou A17");
 				continue;
 			}
 

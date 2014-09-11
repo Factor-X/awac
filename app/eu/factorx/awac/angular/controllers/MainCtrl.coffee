@@ -253,21 +253,23 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     #GHO route 03/09/2014
     $rootScope.$on '$routeChangeStart', (event, current) ->
-        console.log("entering routeChangeStart")
+        ###
+		console.log("entering routeChangeStart")
         console.log("current path : " + $location.path())
         console.log("routeParams path : " + $routeParams.key)
         console.log("current:")
         console.log current
+		###
 
         $rootScope.key = $routeParams.key
         # Check if the user is logged in
 
         if not $rootScope.currentPerson and not current.$$route.anonymousAllowed
           #redirect to login page
-          console.log("redirect to login ")
+          #console.log("redirect to login ")
           $location.path('/login');
         else
-          console.log("default router processing")
+          #console.log("default router processing")
 
     #
     # Redirect user to login view if not logged in
@@ -296,7 +298,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     #
     $rootScope.hideHeader = () ->
-        console.log("hideHeader:" + $location.path().substring(0, 13))
         return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration")
 
 

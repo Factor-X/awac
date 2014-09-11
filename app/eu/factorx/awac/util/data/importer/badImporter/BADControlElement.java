@@ -5,6 +5,7 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.BooleanQuestion;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.StringQuestion;
@@ -25,6 +26,10 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -380,14 +385,149 @@ public class BADControlElement {
         bad.setValue(controlEquation(bad, content, line, "value"));
     }
 
-    /**
-     * TODO control equation
-     */
+
     public void controlCondition(String content, int line, BAD bad) {
         if (content != null && content.length() != 0) {
 
             bad.setCondition(controlCondition(bad, content, line, "Condition"));
         }
+    }
+
+
+    public Answer controlAnswerValue(Question question, String content, BADLog badLog, int line) {
+
+        //create answer
+        Answer answer = new Answer(question);
+
+        //control if the question needs repetition and witch
+        List<QuestionSet> questionSetsRepetable = new ArrayList<>();
+        getAllRepetitionQuestionSet(question.getQuestionSet(), questionSetsRepetable);
+
+        //remove space characters
+        content= content.replaceAll("( | )", "");
+
+        //take answer one by one
+        Pattern pattern = Pattern.compile("(\\{([^\\{\\}]*)\\})?([^;]+)(;|$)");
+
+        Pattern patternRepetition = Pattern.compile("(A[A-Z]*[0-9]+):([0-9]+)(;|$)");
+
+        Pattern patternNumeric = Pattern.compile("^([0-9.]+)(\\[([^\\[\\]]+?)\\])?");
+
+        Matcher m = pattern.matcher(content);
+
+        while (m.find()) {
+
+            String value = m.group(3);
+            Unit unit = null;
+            Object valueToAdd = null;
+
+
+            //control answer by question type
+            if (question instanceof NumericQuestion) {
+
+                //remove point
+                value=value.replace(",",".");
+
+                //detect unit
+                Matcher mNum = patternNumeric.matcher(value);
+
+                if(mNum.find()){
+
+                    //control unit
+                    if(((NumericQuestion)question).getUnitCategory()!=null){
+
+                        //if there is not unit defined
+                        if(mNum.group(3)==null){
+
+                            //... use the default unit of the question
+                            if(((NumericQuestion)question).getDefaultUnit()!=null){
+                                unit = ((NumericQuestion)question).getDefaultUnit();
+                            }
+                            //... or the main unit of the unit category
+                            else{
+                                unit = ((NumericQuestion)question).getUnitCategory().getMainUnit();
+                            }
+
+                            badLog.addToLog(BADLog.LogType.INFO, line, "QuestionValue : cannot found a unit for the question "+question.getCode().getKey()+" : the default unit "+unit.getSymbol()+" will be used");
+                        }
+                        else {
+                            //try to use the defined unit
+                            unit = controlUnitCategory(((NumericQuestion) question), mNum.group(3), null, line, "questionValue");
+
+                            if (unit == null) {
+                                badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : cannot found a unit for the question " + question.getCode().getKey());
+                                continue;
+                            }
+                        }
+                    }
+
+                    //convert the value (without the unit) into double
+                    try {
+                        Double.parseDouble(mNum.group(1));
+                        valueToAdd = mNum.group(1);
+                    } catch (NumberFormatException e) {
+                        badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : Number expected but conversion failed");
+                        continue;
+                    }
+                }
+                else{
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : value must be a numeric (optinaly with a unit) but not found : "+value);
+                    continue;
+                }
+
+            } else if (question instanceof ValueSelectionQuestion) {
+                //if it's a number, convert to integer
+                try {
+                    Double valueD = Double.parseDouble(value);
+                    value = valueD.intValue()+"";
+                } catch (NumberFormatException e) {
+                }
+
+
+                if (!controlListElement(((ValueSelectionQuestion) question).getCodeList(), value)) {
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : value must be a member of the list "+((ValueSelectionQuestion) question).getCodeList().name()+" but not found : "+value);
+                    continue;
+                }
+                valueToAdd = value;
+            }
+            else if(question instanceof BooleanQuestion){
+                if(controlBoolean(value)==null){
+                    badLog.addToLog(BADLog.LogType.ERROR, line, "QuestionValue : boolean expected but not found : "+value);
+                    continue;
+                }
+                valueToAdd = value;
+            }
+
+            //add value
+            //create a answer for each answer founded
+            AnswerLine answerLine = new AnswerLine(valueToAdd);
+
+            //control repetition
+
+            Map<String,Integer> repetitionMap = new HashMap<>();
+
+            //if the group(2) is null not, there is some repetition
+            if (m.group(2) != null) {
+
+                Matcher m2 = patternRepetition.matcher(m.group(2));
+                while (m2.find()) {
+                    repetitionMap.put(m2.group(1), Integer.parseInt(m2.group(2)));
+                }
+            }
+
+            //control repetition
+            if(repetitionMap.size() != questionSetsRepetable.size()){
+                //TODO boost the control
+                badLog.addToLog(BADLog.LogType.ERROR, line, "Wrong repetition map");
+                continue;
+            }
+                //add repetition map
+                answerLine.setMapRepetition(repetitionMap);
+
+            //add line to answer
+            answer.addAnswerLine(answerLine);
+        }
+        return answer;
     }
 
 
@@ -612,12 +752,12 @@ public class BADControlElement {
                     // e) replace
                     //replace comparison element
                     if (comparisonMember != null) {
-                        matcher.appendReplacement(sb,  questionValue);
+                        matcher.appendReplacement(sb, questionValue);
 
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
                     } else {
-                        matcher.appendReplacement(sb,  questionValue);
+                        matcher.appendReplacement(sb, questionValue);
 
                         //replace into condition
                         condition = condition.replaceAll(convertToRegex(matcher.group()), "true");
@@ -644,106 +784,6 @@ public class BADControlElement {
     }
 
     /**
-     * @param line
-     * @param questionCodeKey
-     * @param unitExpected
-     * @param unitCategoryExpected
-     * @return
-     */
-/*
-    private String controlCondition(int line, String questionCodeKey, String unitExpected, UnitCategory
-            unitCategoryExpected, String type) {
-
-        //test question
-        if (!controlList(QuestionCode.class, questionCodeKey)) {
-            badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode unknown : " + questionCodeKey);
-            return questionCodeKey;
-        } else {
-
-            //load question
-            Question question = questionService.findByCode(new QuestionCode(questionCodeKey));
-            UnitCategory unitCategoryQuestion = null;
-            Unit unit = null;
-
-            //question type => accpet DoubleQuestion, IntegerQuestion or PercentageQuestion
-            //get the unitCategory expected by the question
-
-            if (question instanceof DoubleQuestion) {
-                if (((DoubleQuestion) question).getUnitCategory() != null) {
-                    unitCategoryQuestion = ((DoubleQuestion) question).getUnitCategory();
-                }
-            } else if (question instanceof IntegerQuestion) {
-                if (((IntegerQuestion) question).getUnitCategory() != null) {
-                    unitCategoryQuestion = ((IntegerQuestion) question).getUnitCategory();
-                }
-            } else if (question instanceof PercentageQuestion) {
-                //no unit
-            } else {
-                //for equation : do  not accept an other type of question
-                if (equation) {
-                    badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode (" + questionCodeKey + ") but it's not q DoubleQuestion or IntegerQuestion or PercentageQuestion, but : " + question.getClass());
-                }
-            }
-
-            //test unit if the question expected a unitCategory
-            //the unitCategory must be the same ad that of the bad
-            if (unitCategoryQuestion != null) {
-                if (unitExpected == null || unitExpected.length() == 0) {
-
-                    //control equivalence between BAD unit.unitCat and question.unitCat
-                    if (!((DoubleQuestion) question).getUnitCategory().equals(unitCategoryExpected)) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode without unit specified and the unitCategory of the question doesn't correspond to the unitCategory of the BAD : " + questionCodeKey);
-                    } else {
-                        badLog.addToLog(BADLog.LogType.INFO, line, "The " + type + " contains a questionCode without unit specified, but the unitCat is the same than the BAD");
-                    }
-                } else {
-
-                    //test unit expected
-                    if (!controlList(UnitCode.class, unitExpected)) {
-                        badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " a questionCode with unit specified, but this unit was not found : " + unitExpected);
-                    } else {
-
-                        //load unit
-                        unit = unitService.findByCode(new UnitCode(unitExpected));
-
-
-                        //test unit
-                        if (!unitCategoryQuestion.equals(unit.getCategory())) {
-                            badLog.addToLog(BADLog.LogType.ERROR, line, "The " + type + " contains a questionCode, but the specified unit do not " +
-                                    "come from the unitCategory of the question : " + questionCodeKey + ", unitCategory of the question : " + unitCategoryQuestion + ", unitCategory of the unit : " + unit.getCategory());
-                        }
-                    }
-                }
-            }
-
-
-            //replace question code by a call to the expected value
-            if (question instanceof NumericQuestion) {
-                // parse the content to return a double
-                if (unitCategoryQuestion != null) {
-
-                    if (unit != null) {
-                        return "toDouble(question" + questionCodeKey + "Answer, getUnitByCode(UnitCode." + unit.getUnitCode().getKey() + "))";
-                    } else {
-                        return "toDouble(question" + questionCodeKey + "Answer, baseActivityDataUnit)";
-                    }
-                } else {
-                    return "toDouble(question" + questionCodeKey + "Answer)";
-                }
-            } else if (question instanceof BooleanQuestion) {
-                return "toBoolean(question" + questionCodeKey + "Answer)";
-            } else if (question instanceof ValueSelectionQuestion) {
-                return "getCode(question" + questionCodeKey + "Answer).getKey()";
-            } else {
-                //other type of question aren't supported
-                badLog.addToLog(BADLog.LogType.ERROR, line, type + " : " + question.getClass() + " aren't supported (question " + questionCodeKey + ")");
-                return questionCodeKey;
-            }
-        }
-    }
-*/
-
-    /**
      * control equation
      * all members must be convertible to double : questionType accepted are only NumericQuestion
      * Step :
@@ -768,11 +808,11 @@ public class BADControlElement {
 
         Matcher matcher = pattern.matcher(content);
 
-        Logger.info("content : "+content);
+        Logger.info("content : " + content);
 
         while (matcher.find()) {
 
-            Logger.info("catched : "+matcher.group());
+            Logger.info("catched : " + matcher.group());
 
             String questionCodeKey = matcher.group(1);
 
@@ -821,7 +861,7 @@ public class BADControlElement {
 
                 }
 
-                Logger.info("VALUE : "+sb.toString());
+                Logger.info("VALUE : " + sb.toString());
 
                 // replace into equation
                 equation = equation.replaceAll(convertToRegex(matcher.group()), "1");
@@ -830,7 +870,7 @@ public class BADControlElement {
 
         matcher.appendTail(sb);
 
-        Logger.info("FINAL : "+sb.toString());
+        Logger.info("FINAL : " + sb.toString());
 
         value = sb.toString();
 
@@ -848,7 +888,7 @@ public class BADControlElement {
         Matcher matcherPunt = patternPunt.matcher(content);
 
         while (matcherPunt.find()) {
-            value = value.replace(matcherPunt.group(),matcherPunt.group(1)+"."+matcherPunt.group(2));
+            value = value.replace(matcherPunt.group(), matcherPunt.group(1) + "." + matcherPunt.group(2));
         }
 
         //return value
@@ -912,5 +952,19 @@ public class BADControlElement {
             }
         }
         return null;
+    }
+
+
+    private void getAllRepetitionQuestionSet(QuestionSet questionSet, List<QuestionSet> questionSetsRepetable) {
+
+
+        if (questionSet.getRepetitionAllowed()) {
+            questionSetsRepetable.add(questionSet);
+        }
+
+        if (questionSet.getParent() != null) {
+            getAllRepetitionQuestionSet(questionSet.getParent(), questionSetsRepetable);
+        }
+
     }
 }
