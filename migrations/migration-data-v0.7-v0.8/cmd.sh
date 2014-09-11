@@ -20,7 +20,7 @@ cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 cat ./CELDL-65-Indicator-Calculator-JoinTable.sql >> /tmp/migration/migration_script.sql
 
 # move A205 & A208 from tab 6 to tab 4 
-cat ./UpdateQuestionSetA205&A208.sql >> /tmp/migration/migration_script.sql
+cat ./UpdateQuestionSetA205_A208.sql >> /tmp/migration/migration_script.sql
 
 # reengineering of scope-related entities (set scope as parent class of organization, site & product)
 cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
@@ -30,13 +30,12 @@ cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
 
 
 # -------------------------------------------------
-# KEEP THIS AT THE END OF THE FILE
+# KEEP THIS SECTION AT THE END OF THE FILE
 
 # execute the script
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
 
-
-# call the importers (KEEP THIS AT THE END OF THE FILE!)
+# call the importers
 cd ../../
 bash -c 'export TERM=dumb; sbt run < /dev/zero > /dev/null 2>/dev/null &'  
 cd -

@@ -91,14 +91,32 @@ BEGIN
 
   RAISE NOTICE 'delete ''organization_id'', ''site_id'', ''product_id'' and ''type'' columns on ''scope'' table';
 
-  ALTER TABLE scope DROP COLUMN organization_id, site_id, product_id;
+  ALTER TABLE scope
+  	DROP COLUMN organization_id,
+  	DROP COLUMN site_id,
+  	DROP COLUMN product_id,
+  	DROP COLUMN type;
 
 
   RAISE NOTICE 'delete technical segment columns on ''organization'', ''site'' & ''product'' tables';
 
-  ALTER TABLE organization DROP COLUMN creationdate, creationuser, lastupdatedate, lastupdateuser;
-  ALTER TABLE site DROP COLUMN creationdate, creationuser, lastupdatedate, lastupdateuser;
-  ALTER TABLE product DROP COLUMN creationdate, creationuser, lastupdatedate, lastupdateuser;
+  ALTER TABLE organization
+  	DROP COLUMN creationdate,
+  	DROP COLUMN creationuser,
+  	DROP COLUMN lastupdatedate,
+  	DROP COLUMN lastupdateuser;
 
+  ALTER TABLE site
+  	DROP COLUMN creationdate,
+  	DROP COLUMN creationuser,
+  	DROP COLUMN lastupdatedate,
+  	DROP COLUMN lastupdateuser;
 
+  ALTER TABLE product
+  	DROP COLUMN creationdate,
+  	DROP COLUMN creationuser,
+  	DROP COLUMN lastupdatedate,
+  	DROP COLUMN lastupdateuser;
+
+ 
 END $$;
