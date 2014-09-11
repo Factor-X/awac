@@ -137,18 +137,7 @@ public class Site extends Scope implements Comparable<Site>{
 
 	@Override
 	public String toString() {
-		return "Site{" +
-				"organization=" + organization +
-				", name='" + name + '\'' +
-				", naceCode='" + naceCode + '\'' +
-				", description='" + description + '\'' +
-				", organizationalStructure='" + organizationalStructure + '\'' +
-				", economicInterest='" + economicInterest + '\'' +
-				", operatingPolicy='" + operatingPolicy + '\'' +
-				", accountingTreatment='" + accountingTreatment + '\'' +
-				", percentOwned=" + percentOwned +
-				", listPeriodAvailable=" + listPeriodAvailable +
-				'}';
+		return "Site [id=" + id + ", name='" + name + "', organization=" + organization  + "]";
 	}
 
 	@Override
