@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 
 @Entity
@@ -13,7 +12,7 @@ import eu.factorx.awac.models.account.Account;
 @NamedQueries({
 		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
 })
-public class Organization extends AuditedAbstractEntity {
+public class Organization extends Scope {
 
 	/**
 	 * :identifier = ...
@@ -25,15 +24,15 @@ public class Organization extends AuditedAbstractEntity {
 	@Column(unique = true)
 	private String name;
 
+	private String naceCode;
+
+	private String description;
+
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Site> sites = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	List<Account> accounts = new ArrayList<>();
-
-	private String naceCode;
-
-	private String description;
 
 	protected Organization() {
 		super();
@@ -50,6 +49,22 @@ public class Organization extends AuditedAbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNaceCode() {
+		return naceCode;
+	}
+
+	public void setNaceCode(String naceCode) {
+		this.naceCode = naceCode;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public List<Site> getSites() {

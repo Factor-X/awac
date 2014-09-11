@@ -14,7 +14,7 @@ import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
 @Table(name = "factor")
 @NamedQueries({
 		@NamedQuery(name = Factor.FIND_BY_PARAMETERS, query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"),
-		@NamedQuery(name = Factor.REMOVE_ALL, query = "delete from Factor f where f.id != null")
+		@NamedQuery(name = Factor.REMOVE_ALL, query = "delete from Factor f where f.id is not null")
 })
 public class Factor extends AuditedAbstractEntity {
 

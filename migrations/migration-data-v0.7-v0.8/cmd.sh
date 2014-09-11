@@ -16,6 +16,9 @@ echo ";" >> /tmp/migration/migration_script.sql
 # create new 'awaccalculator' and 'mm_calculator_indicator' tables (in order to link indicators and calculators - JIRA CELDL-65)
 cat ./CELDL-65-Indicator-Calculator-JoinTable.sql >> /tmp/migration/migration_script.sql
 
+# create new 'awaccalculator' and 'mm_calculator_indicator' tables (in order to link indicators and calculators - JIRA CELDL-65)
+cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
+
 # execute the script
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
 

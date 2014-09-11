@@ -1,18 +1,19 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.service.ResultExcelGeneratorService;
-import eu.factorx.awac.util.Table;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-import jxl.write.*;
-import jxl.write.Number;
-import org.springframework.stereotype.Component;
-import play.Play;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.write.*;
+import jxl.write.Number;
+
+import org.springframework.stereotype.Component;
+
+import play.Play;
+import eu.factorx.awac.service.ResultExcelGeneratorService;
+import eu.factorx.awac.util.Table;
 
 @Component
 public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorService {

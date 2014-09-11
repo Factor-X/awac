@@ -6,7 +6,4 @@ public interface OrganizationService extends PersistenceService<Organization> {
 
 	public Organization findByName(String name);
 
-	public void remove(final Organization organization);
-
-	public Organization saveOrUpdate(final Organization entity);
 }

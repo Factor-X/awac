@@ -11,7 +11,7 @@ import eu.factorx.awac.models.code.type.*;
 		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS,
 				query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
 		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),
-		@NamedQuery(name = Indicator.REMOVE_ALL, query = "delete from Indicator i where i.id != null"),
+		@NamedQuery(name = Indicator.REMOVE_ALL, query = "delete from Indicator i where i.id is not null"),
 })
 public class Indicator extends AuditedAbstractEntity {
 
