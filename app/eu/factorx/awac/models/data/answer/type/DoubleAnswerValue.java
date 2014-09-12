@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.data.answer.type;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -9,6 +10,7 @@ import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
 
 @Entity
+@DiscriminatorValue("DOUBLE")
 public class DoubleAnswerValue extends NumericAnswerValue {
 
 	private static final long serialVersionUID = 1L;
