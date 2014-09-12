@@ -1,33 +1,75 @@
 div
     button.btn.btn-default(ng-click='import()') Import BAD
 
-    table.table(style="width: 200px;")
-        tr
-            td Total BAd imported
-            td {{total_bad}}
-        tr
-            td Bad with info
-            td {{total_info}}
-        tr
-            td Bad with warning
-            td {{total_warning}}
-        tr
-            td Bad with error
-            td {{total_error}}
+    tabset(style="margin-top:20px")
+        tab.tab-color-lightgreen
+            tab-heading(style="margin-left:25px")
+                span BAD (Erros :  {{total_bad_error}} )
+            div(style="border-top : 1px solid black")
+                .element_table
 
-    div(loading-container='tableParams.settings().$loading', class="width:100%")
-        table.table.admin-table-import-bad(ng-table='tableParams', class="width:100%")
-            tr(ng-repeat='logLine in $data')
-                td(data-title='\'Name\'', sortable='\'lineNb\'',style="width:12.5%") {{logLine.lineNb}}
-                td(data-title='\'Code\'', sortable='\'name\'',style="width:12.5%") {{logLine.name}}
-                td(data-title='\'Info\'', sortable='\'messagesInfoNb\'',style="width:25%")
-                    ul
-                        li(ng-repeat="message in logLine.messages['INFO']") {{message}}
+                    table.table(style="width: 200px;")
+                        tr
+                            td Total BAd imported
+                            td {{total_bad}}
+                        tr
+                            td Bad with info
+                            td {{total_bad_info}}
+                        tr
+                            td Bad with warning
+                            td {{total_bad_warning}}
+                        tr
+                            td Bad with error
+                            td {{total_bad_error}}
 
-                td(data-title='\'Warinig\'', sortable='\'messagesWarningNb\'',style="width:25%")
-                    ul
-                        li(ng-repeat="message in logLine.messages['WARNING']") {{message}}
+                    div(loading-container='tableParams.settings().$loading', class="width:100%")
+                        table.table.admin-table-import-bad(ng-table='tableParams', class="width:100%")
+                            tr(ng-repeat='logLine in $data')
+                                td(data-title='\'Line nb\'', sortable='\'lineNb\'',style="width:12.5%") {{logLine.lineNb}}
+                                td(data-title='\'Code\'', sortable='\'name\'',style="width:12.5%") {{logLine.name}}
+                                td(data-title='\'Info\'', sortable='\'messagesInfoNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['INFO']") {{message}}
 
-                td(data-title="'Error'", sortable='\'messagesErrorNb\'',style="width:25%")
-                    ul
-                        li(ng-repeat="message in logLine.messages['ERROR']") {{message}}
+                                td(data-title='\'Warinig\'', sortable='\'messagesWarningNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['WARNING']") {{message}}
+
+                                td(data-title="'Error'", sortable='\'messagesErrorNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['ERROR']") {{message}}
+
+        tab.tab-color-lightgreen
+            tab-heading(style="margin-left:25px")
+                span Questions (Erros :  {{total_question_error}} )
+            div(style="border-top : 1px solid black")
+                .element_table
+
+                    table.table(style="width: 200px;")
+                        tr
+                            td Total Question with data imported
+                            td {{total_question}}
+                        tr
+                            td question with info
+                            td {{total_question_info}}
+                        tr
+                            td question with warning
+                            td {{total_question_warning}}
+                        tr
+                            td question with error
+                            td {{total_question_error}}
+
+                    div(loading-container='tableParams2.settings().$loading', class="width:100%")
+                        table.table.admin-table-import-bad(ng-table='tableParams2', class="width:100%")
+                            tr(ng-repeat='logLine in $data')
+                                td(data-title='\'Line nb\'', sortable='\'lineNb\'',style="width:12.5%") {{logLine.lineNb}}
+                                td(data-title='\'Code\'', sortable='\'name\'',style="width:12.5%") {{logLine.name}}
+                                td(data-title='\'Info\'', sortable='\'messagesInfoNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['INFO']") {{message}}
+                                td(data-title='\'Warinig\'', sortable='\'messagesWarningNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['WARNING']") {{message}}
+                                td(data-title="'Error'", sortable='\'messagesErrorNb\'',style="width:25%")
+                                    ul
+                                        li(ng-repeat="message in logLine.messages['ERROR']") {{message}}

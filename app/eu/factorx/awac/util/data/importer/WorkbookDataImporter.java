@@ -73,18 +73,19 @@ public abstract class WorkbookDataImporter {
 
         Cell cell = sheet.getCell(column, row);
 
-        final String content;
+        String content;
 
         if (cell instanceof NumberCell) {
             content = ((NumberCell) cell).getValue() + "";
+            content = content.replace(",",".");
+            Pattern  pattern = Pattern.compile("^([0-9]+).[0]+$");
+            Matcher m = pattern.matcher(content);
+            if(m.find()){
+                content = m.group(1);
+            }
         } else {
             content = sheet.getCell(column, row).getContents();
         }
-
-        if (column == 18 && row == 340) {
-            Logger.error("---------------------------------------->" + content);
-        }
-
 
         if (content == null || content.length() == 0 || content == "null") {
             return null;

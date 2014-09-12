@@ -621,9 +621,9 @@ public class BADControlElement {
 
     private static String controlBoolean(String s) {
         if (s != null) {
-            if (s.equals("1") || s.equalsIgnoreCase("true") || s.equals("1.0") || s.equalsIgnoreCase("yes")) {
+            if (s.equals("1") || s.equalsIgnoreCase("true")  || s.equalsIgnoreCase("yes")) {
                 return "true";
-            } else if (s.equals("0") || s.equals("false") || s.equals("0.0") || s.equalsIgnoreCase("no")) {
+            } else if (s.equals("0") || s.equals("false") || s.equalsIgnoreCase("no")) {
                 return "false";
             }
         }

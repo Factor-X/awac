@@ -135,14 +135,14 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
             //load question for response
             if (data.getData(ExcelEquivalenceColumn.C, line) != null &&
-                    data.getData(ExcelEquivalenceColumn.C, line).equals("1.0") &&
+                    data.getData(ExcelEquivalenceColumn.C, line).equals("1") &&
                     data.getData(ExcelEquivalenceColumn.X, line) != null) {
 
-                //create new logLine
-                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.QUESTION);
-                badControlElement.setBadLog(logLine);
-
                 String questionCode = data.getData(ExcelEquivalenceColumn.I, line);
+
+                //create new logLine
+                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.QUESTION, questionCode);
+                badControlElement.setBadLog(logLine);
 
                 //add question
                 Question question = questionService.findByCode(new QuestionCode(questionCode));
@@ -163,14 +163,10 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                     data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
 
                 //create logLine
-                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.BAD);
+                BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.BAD, data.getData(ExcelEquivalenceColumn.B, line)+" - "+data.getData(ExcelEquivalenceColumn.C, line));
                 badControlElement.setBadLog(logLine);
 
                 // activity data founded
-
-                //print the line in DEBUG
-                logLine.addError(data.getData(BAD_KEY_COL, line) + " (" + data.getData(BAD_NAME_COL, line) + ")");
-
 
                 //create the bad
                 BAD bad = new BAD();

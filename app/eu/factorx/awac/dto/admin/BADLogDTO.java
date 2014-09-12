@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class BADLogDTO extends DTO {
 
-    List<LogLineDTO> logLines = new ArrayList<>();
+    private List<LogLineDTO> logLines = new ArrayList<>();
 
     public BADLogDTO() {
     }

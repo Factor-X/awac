@@ -61,9 +61,9 @@ public class ${bad.getActivityCategoryCode()}Test} {
      * need an id of a scope (site)
      * @param scopeId
      */
-    public void test(long scopeId){
+    public void test(long siteId){
 
-        Site site = siteService.findById(scopeId);
+        Site site = siteService.findById(siteId);
         Period period = periodService.findById(PERIOD_ID);
         Scope scope = scopeService.findBySite(site);
 
@@ -80,7 +80,7 @@ public class ${bad.getActivityCategoryCode()}Test} {
 
         //add answers
         #foreach($question in $questions)
-        answerLineDTOList.addAll(buildAnswer$question);
+        answerLineDTOList.addAll(buildAnswer$questionCode);
         #end
 
         questionAnswersDTO.setListAnswers(answerLineDTOList);
@@ -111,7 +111,7 @@ public class ${bad.getActivityCategoryCode()}Test} {
         // 3) control BAD
         //
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
-        List<BaseActivityData> bads = baseActivityDataAE_bad1.getBaseActivityData(questionSetAnswers);
+        List<BaseActivityData> bads = baseActivityData${bad.getActivityCategoryCode()}.getBaseActivityData(questionSetAnswers);
 
         //control size
         assertEquals("The number of bad generated is not correct. expected : $answers.size(), generated : "+bads.size(),$answers.size() ,bads.size());
@@ -125,19 +125,20 @@ public class ${bad.getActivityCategoryCode()}Test} {
     #foreach($question in $questions)
     /**
      * build the AnswerLineDTO
-     * question : $question
+     * question : $question.questionCode
      */
-    private List<AnswerLineDTO> buildAnswer$question{
+    private List<AnswerLineDTO> buildAnswer$question.questionCode{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         #foreach($repetition in $question.repetitions)
-        //repetition A15:1
-        Map<String, Integer> mapRepetition${foreach.count} = new HashMap<>();
-        #foreach ($entry in $repetition.entrySet())
-        mapRepetition${foreach.count}.put("$entry.key",$entry.value);
+         #foreach($answerLine in $question.answerLines)
+         #set($repetitionCount = $foreach.count)
+        //add repetition
+        Map<String, Integer> mapRepetition${repetitionCount} = new HashMap<>();
+        #foreach ($repetition in $answerLine.mapRepetition.entrySet())
+        mapRepetition${repetitionCount}.put("$repetition.key",$repetition.value);
         #end
-        list.add(new AnswerLineDTO("$question.code",$question.value, identifier, mapRepetition${foreach.count}));
+        list.add(new AnswerLineDTO("$question.questionCode",$answerLine.value, identifier, mapRepetition${repetitionCount}));
         #end
 
         return list;
