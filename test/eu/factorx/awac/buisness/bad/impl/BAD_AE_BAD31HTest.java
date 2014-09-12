@@ -15,7 +15,7 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD1;
+import eu.factorx.awac.service.knowledge.activity.contributor.impl.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,9 +32,11 @@ import static org.junit.Assert.assertTrue;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
-
+/*
+ * Test for bad AE_BAD31H
+*/
 @Component
-public class BAD1Test {
+public class BAD_AE_BAD31HTest{
 
     @Autowired
     private QuestionSetAnswerService questionSetAnswerService;
@@ -49,9 +51,9 @@ public class BAD1Test {
     private PeriodService periodService;
 
     @Autowired
-    private BaseActivityDataAE_BAD1 baseActivityDataAE_bad1;
+    private BaseActivityDataAE_BAD31H baseActivityDataAE_BAD31H;
 
-    private final static Long FORM_ID = 1L;
+    private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
     private String identifier = "user1";
     private String identifierPassword = "password";
@@ -59,13 +61,12 @@ public class BAD1Test {
     /**
      * run test
      * need an id of a scope (site)
-     * @param scopeId
+     * @param siteId
      */
-    public void test(long scopeId){
+    public void test(long siteId){
 
-        Site site = siteService.findById(scopeId);
+        Site site = siteService.findById(siteId);
         Period period = periodService.findById(PERIOD_ID);
-        Scope scope = scopeService.findBySite(site);
 
         //
         // 1) build data
@@ -73,20 +74,17 @@ public class BAD1Test {
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(scope.getId());
+        questionAnswersDTO.setScopeId(site.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-        answerLineDTOList.addAll(buildAnswerA3());
-        answerLineDTOList.addAll(buildAnswerA5());
-        answerLineDTOList.addAll(buildAnswerA9());
-        answerLineDTOList.addAll(buildAnswerA10());
-        answerLineDTOList.addAll(buildAnswerA12());
-        answerLineDTOList.addAll(buildAnswerA16());
-        answerLineDTOList.addAll(buildAnswerA17());
-
+                answerLineDTOList.addAll(buildAnswerA245());
+                answerLineDTOList.addAll(buildAnswerA254());
+                answerLineDTOList.addAll(buildAnswerA255());
+                answerLineDTOList.addAll(buildAnswerA263());
+        
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
         //
@@ -104,8 +102,8 @@ public class BAD1Test {
 
         // Call controller action
         Result result = callAction(
-                eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
-                saveFakeRequest
+            eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
+            saveFakeRequest
         );
 
         // control result
@@ -114,167 +112,125 @@ public class BAD1Test {
         //
         // 3) control BAD
         //
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
-        List<BaseActivityData> bads = baseActivityDataAE_bad1.getBaseActivityData(questionSetAnswers);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
+        List<BaseActivityData> bads = baseActivityDataAE_BAD31H.getBaseActivityData(questionSetAnswers);
 
         //control size
         assertEquals("The number of bad generated is not correct. expected : 2, generated : "+bads.size(),2 ,bads.size());
 
         //control content
-        controlBad1(bads.get(0));
-        controlBad2(bads.get(1));
+                controlBad1(bads.get((1 - 1)));
+                controlBad2(bads.get((2 - 1)));
+            }
 
-
-    }
-
-    /**
+        /**
      * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
+     * question : A245
      */
-    private List<AnswerLineDTO> buildAnswerA3(){
+    private List<AnswerLineDTO> buildAnswerA245(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-        list.add(new AnswerLineDTO("A3",2, identifier));
-
-        return list;
-    }
-
-    /**
-     * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
-     */
-    private List<AnswerLineDTO> buildAnswerA5(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-        list.add(new AnswerLineDTO("A5",1, identifier));
-
-        return list;
-    }
-
-    /**
-     * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
-     */
-    private List<AnswerLineDTO> buildAnswerA9(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-        list.add(new AnswerLineDTO("A9",400, identifier,13));
-
-        return list;
-    }
-
-
-    /**
-     * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
-     */
-    private List<AnswerLineDTO> buildAnswerA10(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-        list.add(new AnswerLineDTO("A10",200, identifier,13));
-
-        return list;
-    }
-
-    /**
-     * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
-     */
-    private List<AnswerLineDTO> buildAnswerA12(){
-
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-        list.add(new AnswerLineDTO("A12",24, identifier));
-
-        return list;
-    }
-
-
-    /**
-     * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
-     */
-    private List<AnswerLineDTO> buildAnswerA16(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-        //repetition A15:1
+                 //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-        mapRepetition1.put("A15",1);
-        list.add(new AnswerLineDTO("A16","AS_1", identifier, mapRepetition1));
-
-        //repetition A15:2
+                mapRepetition1.put("A244",1);
+                list.add(new AnswerLineDTO("A245","produitA", identifier, mapRepetition1 ));
+                //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
-        mapRepetition2.put("A15",2);
-        list.add(new AnswerLineDTO("A16","AS_22", identifier, mapRepetition2));
-
+                mapRepetition2.put("A244",2);
+                list.add(new AnswerLineDTO("A245","produitB", identifier, mapRepetition2 ));
+        
         return list;
     }
-
-    /**
+        /**
      * build the AnswerLineDTO
-     * Value : 2
-     * mapRepetition : {}
+     * question : A254
      */
-    private List<AnswerLineDTO> buildAnswerA17(){
+    private List<AnswerLineDTO> buildAnswerA254(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-        //repetition A15:1
+                 //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-        mapRepetition1.put("A15",1);
-        list.add(new AnswerLineDTO("A17",6.5, identifier, 53,mapRepetition1));
-
-        //repetition A15:2
+                mapRepetition1.put("A244",1);
+                list.add(new AnswerLineDTO("A254",800.0, identifier, mapRepetition1  , UnitCode.U5135.getKey()  ));
+                //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
-        mapRepetition2.put("A15",2);
-        list.add(new AnswerLineDTO("A17",456, identifier, 53,mapRepetition2));
-
+                mapRepetition2.put("A244",2);
+                list.add(new AnswerLineDTO("A254",300.0, identifier, mapRepetition2  , UnitCode.U5135.getKey()  ));
+        
         return list;
     }
+        /**
+     * build the AnswerLineDTO
+     * question : A255
+     */
+    private List<AnswerLineDTO> buildAnswerA255(){
 
-    /**
+        List<AnswerLineDTO> list = new ArrayList<>();
+
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("A244",1);
+                list.add(new AnswerLineDTO("A255",200.0, identifier, mapRepetition1  , UnitCode.U5106.getKey()  ));
+                //add repetition
+        Map<String, Integer> mapRepetition2 = new HashMap<>();
+                mapRepetition2.put("A244",2);
+                list.add(new AnswerLineDTO("A255",3000.0, identifier, mapRepetition2  , UnitCode.U5106.getKey()  ));
+        
+        return list;
+    }
+        /**
+     * build the AnswerLineDTO
+     * question : A263
+     */
+    private List<AnswerLineDTO> buildAnswerA263(){
+
+        List<AnswerLineDTO> list = new ArrayList<>();
+
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("A244",1);
+                list.add(new AnswerLineDTO("A263",0.05, identifier, mapRepetition1 ));
+                //add repetition
+        Map<String, Integer> mapRepetition2 = new HashMap<>();
+                mapRepetition2.put("A244",2);
+                list.add(new AnswerLineDTO("A263",0.1, identifier, mapRepetition2 ));
+        
+        return list;
+    }
+    
+        /**
      * control the content and the value of the bad
      * @param bad
      */
     private void controlBad1(BaseActivityData bad){
-
         //control global
         controlGlobalBad(bad);
 
         //control value
-        assertTrue("Value error : expected : 6.5, founded : "+bad.getValue(),bad.getValue().equals(6.5));
+        assertTrue("Value error : expected : 12000.0, founded : "+bad.getValue(),bad.getValue().equals(12000.0));
     }
-
-
+        /**
+     * control the content and the value of the bad
+     * @param bad
+     */
     private void controlBad2(BaseActivityData bad){
-
         //control global
         controlGlobalBad(bad);
 
         //control value
-        assertTrue("Value error : expected : 1641.6, founded : "+bad.getValue(),bad.getValue().equals(1641.6));
+        assertTrue("Value error : expected : 90000.0, founded : "+bad.getValue(),bad.getValue().equals(90000.0));
     }
-
+    
     /**
      * control all except value
      * @param bad
      */
     private void controlGlobalBad(BaseActivityData bad){
-
-        assertTrue("BaseActivityDataCode error. Expected : {}, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.AE_BAD1));
-        assertTrue("Rank error : Expected : {}, founded : "+bad.getRank(),bad.getRank().equals(1));
+        /*
+        assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_4, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_4));
+        assertTrue("Rank error : Expected : 2, founded : "+bad.getRank(),bad.getRank().equals(2));
         assertTrue("SpecificPurpose error : Expected : {}, founded : "+bad.getSpecificPurpose(),bad.getSpecificPurpose() == null);
         assertTrue("ActivityCategory error : Expected : {}, founded : "+bad.getActivityCategory(),bad.getActivityCategory().equals(ActivityCategoryCode.AC_1));
         assertTrue("ActivitySubCategory error : Expected : {}, founded : "+bad.getActivitySubCategory(),bad.getActivitySubCategory().equals(ActivitySubCategoryCode.ASC_1));
@@ -282,8 +238,6 @@ public class BAD1Test {
         assertTrue("ActivitySource error : Expected : {}, founded : "+bad.getActivitySource(),bad.getActivitySource().equals(new ActivitySourceCode("AS_1")));
         assertTrue("ActivityOwnership error : Expected : {}, founded : "+bad.getActivityOwnership(),bad.getActivityOwnership().equals(true));
         assertTrue("Unit error : Expected : {}, founded : "+bad.getUnit().getSymbol(),bad.getUnit().getUnitCode().equals(UnitCode.U5321));
-
+        */
     }
-
-
 }
