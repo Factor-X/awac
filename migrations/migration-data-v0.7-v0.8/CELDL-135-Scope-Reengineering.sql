@@ -118,5 +118,13 @@ BEGIN
   	DROP COLUMN lastupdatedate,
   	DROP COLUMN lastupdateuser;
 
- 
+
+  RAISE NOTICE 'drop default value of ''id'' column on ''organization'', ''site'' & ''product'' tables (and related sequences)';
+
+  ALTER TABLE organization ALTER COLUMN id DROP DEFAULT;
+  ALTER TABLE site ALTER COLUMN id DROP DEFAULT;
+  ALTER TABLE product ALTER COLUMN id DROP DEFAULT;
+
+  DROP SEQUENCE organization_id_seq, site_id_seq, product_id_seq;
+
 END $$;
