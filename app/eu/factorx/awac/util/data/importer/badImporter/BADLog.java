@@ -11,32 +11,11 @@ public class BADLog {
 
     private HashMap<Integer, LogLine> logLines = new HashMap<>();
 
-    public void addToLog(LogType logType, int line, String message) {
-
-        if(!logLines.containsKey(line)){
-            logLines.put(line,new LogLine());
+    public LogLine getLogLine(int line, LogCat  logCat,String id){
+        if (!logLines.containsKey(line)) {
+            logLines.put(line, new LogLine(logCat,id));
         }
-
-        logLines.get(line).add(logType, message);
-
-
-        switch (logType) {
-            case ID:
-                play.Logger.info("Line " + line + "----------------------------------------> This is a BAD " + message);
-                break;
-            case INFO:
-                play.Logger.info("Line " + line + "=>" + message);
-                break;
-            case ERROR:
-                play.Logger.error("Line " + line + "=>" + message);
-                break;
-            case WARNING:
-                play.Logger.warn("Line " + line + "=>" + message);
-                break;
-            case DEBUG:
-                play.Logger.debug("Line " + line + "=>" + message);
-                break;
-        }
+        return logLines.get(line);
     }
 
     public HashMap<Integer, LogLine> getLogLines() {
@@ -47,17 +26,54 @@ public class BADLog {
         this.logLines = logLines;
     }
 
-    public static class LogLine{
+    public static class LogLine {
 
         private HashMap<LogType, List<String>> messages = new HashMap<>();
 
-        public void add(LogType logType, String message) {
-            if(!messages.containsKey(logType)){
-                messages.put(logType,new ArrayList<String>());
+        private LogCat logCat;
+
+        private String id;
+
+        public LogLine(LogCat logCat, String id) {
+            this.logCat = logCat;
+            this.id = id;
+        }
+
+        public void addWarn(String message) {
+
+            add(LogType.WARNING, message);
+        }
+
+
+        public void addError(String message) {
+
+            add(LogType.ERROR, message);
+        }
+
+
+        public void addInfo(String message) {
+
+            add(LogType.INFO, message);
+        }
+
+        public void addDebug(String message) {
+
+            add(LogType.DEBUG, message);
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public LogCat getLogCat() {
+            return logCat;
+        }
+
+        private void add(LogType logType, String message) {
+            if (!messages.containsKey(logType)) {
+                messages.put(logType, new ArrayList<String>());
             }
-            if(logType != LogType.ID) {
                 message = (messages.get(logType).size() + 1) + ". " + message;
-            }
 
             messages.get(logType).add(message);
         }
@@ -86,6 +102,10 @@ public class BADLog {
     }
 
     public enum LogType {
-        ID,INFO, WARNING, ERROR, DEBUG;
+        INFO, WARNING, ERROR, DEBUG;
+    }
+
+    public enum LogCat {
+        BAD,QUESTION;
     }
 }

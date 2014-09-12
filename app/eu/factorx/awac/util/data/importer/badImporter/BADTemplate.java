@@ -14,10 +14,6 @@ import java.util.List;
 public class BADTemplate {
 
 
-    //private final static String ROOT = "tmp/BadResults/";
-    private final static String ROOT = "app/eu/factorx/awac/service/knowledge/activity/contributor/tps/";
-
-
     private final VelocityContext velocityContext;
     private final TemplateName templateName;
     private final String fileName;
@@ -50,14 +46,19 @@ public class BADTemplate {
         velocityContext.put(key, content);
     }
 
-    public void generate() {
+
+    public void addParameter(String key, Object object) {
+        velocityContext.put(key,object);
+    }
+
+    public void generate(String path) {
         org.apache.velocity.Template template = Velocity.getTemplate(templateName.getUrl());
 
         StringWriter writer = new StringWriter();
 
         template.merge(velocityContext, writer);
 
-        save(writer.toString(), ROOT, fileName, true);
+        save(writer.toString(), path, fileName, true);
     }
 
     public static void save(final String text, final String path, final String name, boolean erase) {
@@ -93,7 +94,7 @@ public class BADTemplate {
                 e.printStackTrace();
             }
         }
-            //Logger.info("file already exist and can't be erase");
 
     }
+
 }

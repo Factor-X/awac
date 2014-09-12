@@ -14,10 +14,20 @@ public class LogLineDTO extends DTO{
 
     private String name;
 
+    private String logCategory;
+
     //message by LogType
     private HashMap<String, List<String>> messages;
 
     public LogLineDTO() {
+    }
+
+    public String getLogCategory() {
+        return logCategory;
+    }
+
+    public void setLogCategory(String logCategory) {
+        this.logCategory = logCategory;
     }
 
     public HashMap<String, List<String>> getMessages() {

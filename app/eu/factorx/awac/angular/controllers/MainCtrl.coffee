@@ -2,9 +2,11 @@
 # Logging initialization
 #
 angular.module('app').run (loggerService) ->
+
     loggerService.initialize()
 
     $('body').keydown (evt) ->
+        console.log evt
         if evt.which == 32 and evt.altKey and evt.ctrlKey
             loggerElement = $('#logger')
             state = parseInt(loggerElement.attr('data-state'))
@@ -12,6 +14,7 @@ angular.module('app').run (loggerService) ->
 
     log = loggerService.get('initializer')
     log.info "Application is started"
+
 
 
 angular
@@ -90,12 +93,6 @@ angular
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
-
-    #after the nav, compute displayMenu
-
-    # used to recompute the displaying of the menu
-    #if !$scope.$$phase
-    #    $scope.$apply()
 
     $scope.$on '$routeChangeSuccess', (event, args) ->
         $timeout(->
@@ -261,16 +258,12 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.$watch 'language', (lang) ->
         translationService.initialize(lang)
         tmhDynamicLocale.set(lang.toLowerCase())
-    #TODO save the langauge changement
+        #TODO save the langauge changement
 
 
     #GHO route 03/09/2014
     $rootScope.$on '$routeChangeStart', (event, current) ->
 
-        console.log("entering routeChangeStart")
-        console.log("current path : " + $location.path())
-        console.log("routeParams path : " + $routeParams.key)
-        console.log("current:")
 
         $rootScope.key = $routeParams.key
         # Check if the user is logged in
@@ -281,7 +274,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             #
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                 if result.success
-                    $rootScope.loginSuccess result.data, true
+                    $rootScope.loginSuccess result.data, !$rootScope.isLogin()
                 else
                     if not current.$$route.anonymousAllowed
                         #redirect to login page
@@ -357,6 +350,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # refresh user data
     #
     $rootScope.refreshUserData = () ->
+
         downloadService.getJson '/awac/user/profile', (result) ->
             if result.success
                 $rootScope.currentPerson = result.data
