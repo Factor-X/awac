@@ -49,3 +49,25 @@ namespace :codelabels do
     end
 
 end
+
+
+namespace :db do
+
+    desc "Dump the database"
+    task :dump do |t, args|
+
+        options             = {}
+        options[:log_level] = 'DEBUG'
+
+        OptionParser.new(args) do |opts|
+            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
+                options[:log_level] = v.upcase
+            end
+        end.parse!
+
+        require_relative './db/dump/main.rb'
+        main(options)
+
+    end
+
+end
