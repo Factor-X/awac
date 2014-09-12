@@ -21,10 +21,12 @@ import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.SiteService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,6 +66,8 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	@Autowired
 	OrganizationService organisationService;
 
+	@Autowired
+	SiteService siteService;
 
 
 	private final String ORGANISATION_NAME = "Factor-X";
@@ -133,6 +137,8 @@ public class OrganizationTest extends AbstractBaseModelTest {
 
 		dto.setSelectedAccounts(associatedAccountList);
 
+		Site site = siteService.findById(org.getSites().get(0).getId());
+		dto.setSite(conversionService.convert(site,SiteDTO.class));
 
 		// ConnectionFormDTO
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
@@ -163,6 +169,12 @@ public class OrganizationTest extends AbstractBaseModelTest {
 
 	} // end of test
 
+	@Test
+	public void _003_cleanTestData() {
+
+		// remove account for test DB sanity
+
+	}
 
 	// class to handle EmailInvitationDTO
 
