@@ -31,9 +31,7 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		DateTime now = DateTime.now();
-		String creationUser = getCurrentUser();
-		this.technicalSegment = new TechnicalSegment(now, creationUser, now, creationUser);
+		this.technicalSegment = new TechnicalSegment(DateTime.now(), getCurrentUser());
 	}
 
 	@PreUpdate

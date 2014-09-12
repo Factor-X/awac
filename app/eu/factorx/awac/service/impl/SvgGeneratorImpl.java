@@ -46,11 +46,11 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		}
 
 
-		System.out.println("== Donut");
+//		System.out.println("== Donut");
 		for (int i = 0; i < data.getRowCount(); i++) {
 
 			Double cell = (Double) data.getCell(1, i);
-			System.out.println("-- cell:" + i + " == " + cell);
+//			System.out.println("-- cell:" + i + " == " + cell);
 
 			double percentage = 100.0 * cell / total;
 

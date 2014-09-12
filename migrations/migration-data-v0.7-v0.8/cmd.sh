@@ -25,6 +25,9 @@ cat ./UpdateQuestionSetA205_A208.sql >> /tmp/migration/migration_script.sql
 # reengineering of scope-related entities (set scope as parent class of organization, site & product)
 cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
 
+# reengineering of answer value-related entities (set single-table inheritance then drop unused tables)
+cat ./CELDL-135-AnswerValue-Reengineering.sql >> /tmp/migration/migration_script.sql
+
 
 
 
@@ -56,3 +59,4 @@ curl -L http://127.0.0.1:9000/awac/admin/indicators_factors/reset &&
 echo && 
 
 kill -9 $(netstat -a -p -n 2>/dev/null | egrep ':9000\b' | grep 'LISTEN' | awk '{ print $7 }' | cut -d/ -f1 )
+

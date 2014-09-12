@@ -22,12 +22,12 @@ public class TechnicalSegment {
 		super();
 	}
 
-	public TechnicalSegment(DateTime creationDate, String creationUser, DateTime lastUpdateDate, String lastUpdateUser) {
+	public TechnicalSegment(DateTime creationDate, String creationUser) {
 		super();
 		this.creationDate = creationDate;
 		this.creationUser = creationUser;
-		this.lastUpdateDate = lastUpdateDate;
-		this.lastUpdateUser = lastUpdateUser;
+		this.lastUpdateDate = creationDate;
+		this.lastUpdateUser = creationUser;
 	}
 
 	public DateTime getCreationDate() {

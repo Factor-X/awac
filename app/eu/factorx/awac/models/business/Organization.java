@@ -105,9 +105,6 @@ public class Organization extends Scope {
 
 	@Override
 	public String toString() {
-		return "Organization{" +
-				super.toString()+
-				"name='" + name + '\'' +
-				'}';
+		return "Organization [id=" + id + ", name=" + name + "]";
 	}
 }
