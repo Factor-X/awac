@@ -22,9 +22,11 @@ import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.SiteService;
 import org.junit.FixMethodOrder;
@@ -37,6 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import play.Configuration;
 import play.Logger;
+import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -46,8 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
@@ -57,7 +59,7 @@ import static play.test.Helpers.status;
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OrganizationTest extends AbstractBaseModelTest {
+public class OrganizationTest extends AbstractBaseControllerTest {
 
 
 	@Autowired
@@ -69,19 +71,23 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	@Autowired
 	SiteService siteService;
 
+	@Autowired
+	private AccountSiteAssociationService accountSiteAssociationService;
+
 
 	private final String ORGANISATION_NAME = "Factor-X";
 	private final String USER1_IDENTIFIER = "user1";
 	private final String USER2_IDENTIFIER = "user2";
-	private final String SITE = "P3";
+	private final String SITE_NAME = "P3";
 
 
 
   	@Test
 	public void _001_getAllAccounts() {
 
-	Organization org = new Organization(ORGANISATION_NAME);
-	SiteAddUsersDTO dto = createDTO(org);
+	Organization org = organisationService.findByName(ORGANISATION_NAME);
+	Site site = siteService.findById(1L);
+	SiteAddUsersDTO dto = createDTO(org,site);
 
 	// ConnectionFormDTO
 	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
@@ -98,11 +104,13 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	try {
 		// Call controller action
 		result = callAction(
-				eu.factorx.awac.controllers.routes.ref.OrganizationController.retrieveAssociatedAccounts(),
+				eu.factorx.awac.controllers.routes.ref.OrganizationController.loadAssociatedAccounts(),
 				fr
 		); // callAction
 	} catch (Exception e) {
-		Logger.info("User is not authorized");
+		Logger.info("Action exception occured");
+		e.printStackTrace();
+		assertTrue(false);
 	}
 
 	// test results
@@ -111,8 +119,14 @@ public class OrganizationTest extends AbstractBaseModelTest {
 	//analyse result
 	SiteAddUsersResultDTO resultDTO = getDTO(result, SiteAddUsersResultDTO.class);
 
-	List<AccountDTO> accountList = resultDTO.getUsers();
-	assertEquals(accountList.size(),2);
+	List<AccountDTO> organizationAccountList = resultDTO.getOrganizationUserList();
+	List<AccountDTO> siteAccountList = resultDTO.getSiteSelectedUserList();
+
+	assertEquals(2,organizationAccountList.size());
+	assertEquals(0,siteAccountList.size());
+
+
+
 
   } // end of authenticateSuccess test
 
@@ -122,7 +136,8 @@ public class OrganizationTest extends AbstractBaseModelTest {
 		List sites = new ArrayList<Site> ();
 
 		Organization org = organisationService.findByName(ORGANISATION_NAME);
-		SiteAddUsersDTO dto = createDTO(org);
+		Site site = siteService.findById(1L);
+		SiteAddUsersDTO dto = createDTO(org,site);
 
 		// add fake associated accounts
 		AccountDTO account1 = new AccountDTO();
@@ -136,9 +151,6 @@ public class OrganizationTest extends AbstractBaseModelTest {
 		associatedAccountList.add(account2);
 
 		dto.setSelectedAccounts(associatedAccountList);
-
-		Site site = siteService.findById(org.getSites().get(0).getId());
-		dto.setSite(conversionService.convert(site,SiteDTO.class));
 
 		// ConnectionFormDTO
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
@@ -159,7 +171,9 @@ public class OrganizationTest extends AbstractBaseModelTest {
 					fr
 			); // callAction
 		} catch (Exception e) {
-			Logger.info("User is not authorized");
+			Logger.info("Action exception occured...");
+			e.printStackTrace();
+			assertTrue(false);
 		}
 
 		// test results
@@ -167,22 +181,39 @@ public class OrganizationTest extends AbstractBaseModelTest {
 		assertEquals(200, status(result));
 		//analyse result
 
+		SiteAddUsersResultDTO resultDTO = getDTO(result, SiteAddUsersResultDTO.class);
+		List<AccountDTO> organizationAccountList = resultDTO.getOrganizationUserList();
+		List<AccountDTO> siteAccountList = resultDTO.getSiteSelectedUserList();
+
+		assertEquals(2,organizationAccountList.size());
+		assertEquals(2,siteAccountList.size());
+
 	} // end of test
 
 	@Test
 	public void _003_cleanTestData() {
 
-		// remove account for test DB sanity
+		Site site = siteService.findById(1L);
+		List<AccountSiteAssociation> listToRemove = accountSiteAssociationService.findBySite(site);
 
+		// remove account for test DB sanity
+		for (AccountSiteAssociation item : listToRemove) {
+			accountSiteAssociationService.remove(item);
+		}
+
+		List<AccountSiteAssociation> reload = accountSiteAssociationService.findBySite(site);
+		assertNull(reload);
 	}
 
 	// class to handle EmailInvitationDTO
 
-	private SiteAddUsersDTO createDTO(Organization org) {
+	private SiteAddUsersDTO createDTO(Organization org, Site site) {
 
 		SiteAddUsersDTO dto = new SiteAddUsersDTO();
 		OrganizationDTO orgDTO = conversionService.convert(org,OrganizationDTO.class);
+		SiteDTO siteDTO = conversionService.convert(site,SiteDTO.class);
 		dto.setOrganization(orgDTO);
+		dto.setSite(siteDTO);
 
 		return dto;
 	}
