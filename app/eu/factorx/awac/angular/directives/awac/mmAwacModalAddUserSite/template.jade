@@ -19,24 +19,25 @@
                                 td  Login
                                 td  Selected
                         tbody
-                            tr(ng-repeat="employee in employees")
-                                td  {{employee.person.firstName}} {{employee.person.lastName}}
-                                td  {{employee.identifier}}
+                            tr(ng-repeat="account in accounts")
+                                td  {{account.person.firstName}} {{account.person.lastName}}
+                                td  {{account.identifier}}
                                 td
                                     input(
                                         type='checkbox',
-                                        name='{{employee.identifier}}',
-                                        value='{{employee.identifier}}',
-                                        ng-checked='selection.indexOf(employee.identifier) > -1',
-                                        ng-click='toggleSelection(employee.identifier)')
+                                        name='{{account.identifier}}',
+                                        value='{{account.identifier}}',
+                                        ng-checked='selection.indexOf(account) > -1',
+                                        ng-click='toggleSelection(account)')
+
 
                     table.document-manager-table
                         thead
                             tr
                                 td  List
                         tbody
-                            tr(ng-repeat="identifier in selection")
-                                td {{identifier}}
+                            tr(ng-repeat="account in selection")
+                                td {{account.identifier}}
 
             .modal-footer
 
@@ -53,5 +54,4 @@
                     ng-bind-html="'SAVE_BUTTON' | translate")
 
                 img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
-
 
