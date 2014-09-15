@@ -1,5 +1,5 @@
-DROP TABLE invitation;
-DROP SEQUENCE "invitation_id_seq";
+DROP TABLE IF EXISTS invitation;
+DROP SEQUENCE IF EXISTS "invitation_id_seq";
 
 CREATE SEQUENCE "invitation_id_seq";
 

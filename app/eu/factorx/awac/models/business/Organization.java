@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.account.Account;
 
 @Entity
@@ -28,11 +31,15 @@ public class Organization extends Scope {
 
 	private String description;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Site> sites = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	List<Account> accounts = new ArrayList<>();
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OnDelete(action = OnDeleteAction.CASCADE) // -> hibernate-specific annotation to fix DDL generation problem
+	List<OrganizationEvent> events = new ArrayList<>();
 
 	protected Organization() {
 		super();
@@ -83,15 +90,27 @@ public class Organization extends Scope {
 		this.accounts = accounts;
 	}
 
+	public List<OrganizationEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<OrganizationEvent> events) {
+		this.events = events;
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Organization)) return false;
-		if (!super.equals(o)) return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof Organization))
+			return false;
+		if (!super.equals(o))
+			return false;
 
 		Organization that = (Organization) o;
 
-		if (!name.equals(that.name)) return false;
+		if (!name.equals(that.name))
+			return false;
 
 		return true;
 	}
@@ -105,6 +124,6 @@ public class Organization extends Scope {
 
 	@Override
 	public String toString() {
-		return "Organization [id=" + id + ", name=" + name + "]";
+		return "Organization [id=" + id + ", name='" + name + "]'";
 	}
 }

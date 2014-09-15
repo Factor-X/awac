@@ -28,7 +28,7 @@ cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
 # reengineering of answer value-related entities (set single-table inheritance then drop unused tables)
 cat ./CELDL-135-AnswerValue-Reengineering.sql >> /tmp/migration/migration_script.sql
 
-
+cat ./CELDL-149-OrganizationEvent.sql >> /tmp/migration/migration_script.sql
 
 
 
