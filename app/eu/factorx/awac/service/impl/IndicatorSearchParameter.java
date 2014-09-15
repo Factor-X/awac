@@ -24,7 +24,7 @@ public class IndicatorSearchParameter {
 	}
 
 	/**
-	 * Constructs an IndicatorSearchParameter to find (non-deleted) indicators of type {@link IndicatorTypeCode#CARBON} and scope {@link ScopeTypeCode#SITE}
+	 * Constructs an IndicatorSearchParameter to find (non-deleted) baseIndicators of type {@link IndicatorTypeCode#CARBON} and scope {@link ScopeTypeCode#SITE}
 	 * 
 	 * @param activityCategory
 	 * @param activitySubCategory
@@ -43,7 +43,7 @@ public class IndicatorSearchParameter {
 	}
 
 	/**
-	 * Constructs an IndicatorSearchParameter to find (non-deleted) indicators of type {@link IndicatorTypeCode#CARBON} and scope {@link ScopeTypeCode#SITE}
+	 * Constructs an IndicatorSearchParameter to find (non-deleted) baseIndicators of type {@link IndicatorTypeCode#CARBON} and scope {@link ScopeTypeCode#SITE}
 	 * 
 	 * @param baseActivityData
 	 */

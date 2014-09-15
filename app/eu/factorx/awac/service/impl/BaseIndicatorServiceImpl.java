@@ -18,15 +18,15 @@ import eu.factorx.awac.models.code.type.IndicatorTypeCode;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.knowledge.Indicator;
-import eu.factorx.awac.service.IndicatorService;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
+import eu.factorx.awac.service.BaseIndicatorService;
 
 @Component
-public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indicator> implements IndicatorService {
+public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<BaseIndicator> implements BaseIndicatorService {
 
 	@Override
-	public List<Indicator> findByParameters(IndicatorSearchParameter searchParameter) {
-		TypedQuery<Indicator> query = JPA.em().createNamedQuery(Indicator.FIND_BY_PARAMETERS, Indicator.class)
+	public List<BaseIndicator> findByParameters(IndicatorSearchParameter searchParameter) {
+		TypedQuery<BaseIndicator> query = JPA.em().createNamedQuery(BaseIndicator.FIND_BY_PARAMETERS, BaseIndicator.class)
 				.setParameter("type", searchParameter.getType())
 				.setParameter("scopeType", searchParameter.getScopeType())
 				.setParameter("activityCategory", searchParameter.getActivityCategory())
@@ -37,14 +37,16 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 	}
 
 	@Override
-	public List<Indicator> findAllCarbonIndicatorsForSites(InterfaceTypeCode interfaceTypeCode) {
+	public List<BaseIndicator> findAllCarbonIndicatorsForSites(InterfaceTypeCode interfaceTypeCode) {
 		Session session = JPA.em().unwrap(Session.class);
-		Criteria criteria = session.createCriteria(Indicator.class);
+		Criteria criteria = session.createCriteria(BaseIndicator.class);
+
+		
 		
 		DetachedCriteria dc = DetachedCriteria.forClass(AwacCalculator.class, "ac");
-		dc.createAlias("ac.indicators", "indicator");
+		dc.createAlias("ac.baseIndicators", "baseIndicator");
 		dc.add(Restrictions.eq("ac.interfaceTypeCode", interfaceTypeCode));
-		dc.setProjection(Projections.property("indicator.id"));
+		dc.setProjection(Projections.property("baseIndicator.id"));
 
 		criteria.add(Subqueries.propertyIn("id", dc));
 		criteria.add(Restrictions.eq("deleted", Boolean.FALSE));
@@ -53,23 +55,23 @@ public class IndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<Indi
 
 		criteria.setCacheable(true);
 		@SuppressWarnings("unchecked")
-		List<Indicator> result = criteria.list();
+		List<BaseIndicator> result = criteria.list();
 
-		Logger.info("Found {} indicators", result.size());
+		Logger.info("Found {} baseIndicators", result.size());
 		return result;
 	}
 
 	@Override
 	public List<String> findAllIndicatorNames() {
-		List<String> resultList = JPA.em().createNamedQuery(Indicator.FIND_ALL_INDICATOR_NAMES, String.class)
+		List<String> resultList = JPA.em().createNamedQuery(BaseIndicator.FIND_ALL_INDICATOR_NAMES, String.class)
 				.getResultList();
 		return resultList;
 	}
 
 	@Override
 	public void removeAll() {
-		int nbDeleted = JPA.em().createNamedQuery(Indicator.REMOVE_ALL).executeUpdate();
-		Logger.info("Deleted {} indicators", nbDeleted);
+		int nbDeleted = JPA.em().createNamedQuery(BaseIndicator.REMOVE_ALL).executeUpdate();
+		Logger.info("Deleted {} baseIndicators", nbDeleted);
 	}
 
 }

@@ -7,7 +7,7 @@ import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
-import eu.factorx.awac.models.reporting.Report;
+import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.NumberFormatWrapper;
 import eu.factorx.awac.util.Table;
@@ -40,7 +40,7 @@ public class ResultController extends AbstractController {
 	@Autowired
 	private ConversionService           conversionService;
 	@Autowired
-	private ReportService               reportService;
+	private ReportResultService         reportResultService;
 	@Autowired
 	private ResultExcelGeneratorService resultExcelGeneratorService;
 	@Autowired
@@ -56,7 +56,7 @@ public class ResultController extends AbstractController {
 	public Result getReport(String periodKey, Long scopeId) {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 		Logger.info("Built report on the basis of {} base activity results:", report.getActivityResults().size());
 		for (BaseActivityResult activityResult : report.getActivityResults()) {
 			Logger.info("\t{}", activityResult);
@@ -70,7 +70,7 @@ public class ResultController extends AbstractController {
 	public Result getReportAsXls(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 
 
 		Table allScopes = new Table();
@@ -109,7 +109,7 @@ public class ResultController extends AbstractController {
 	public Result getReportAsPdf(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
-		Report report = reportService.getReport(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
 
 		Table allScopes = new Table();
 		Table scope1 = new Table();
@@ -178,7 +178,7 @@ public class ResultController extends AbstractController {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Account currentUser = securedController.getCurrentUser();
-		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(currentUser.getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 
@@ -205,7 +205,7 @@ public class ResultController extends AbstractController {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Account currentUser = securedController.getCurrentUser();
-		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(currentUser.getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 
@@ -235,7 +235,7 @@ public class ResultController extends AbstractController {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Scope scope = scopeService.findById(scopeId);
 		Account currentUser = securedController.getCurrentUser();
-		Report report = reportService.getReport(currentUser.getInterfaceCode(), scope, period);
+		ReportResult report = reportResultService.getReportResult(currentUser.getInterfaceCode(), scope, period);
 
 		Table scopeTable = new Table();
 

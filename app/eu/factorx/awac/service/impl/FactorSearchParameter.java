@@ -3,7 +3,7 @@ package eu.factorx.awac.service.impl;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 
@@ -44,16 +44,16 @@ public class FactorSearchParameter {
 	}
 
 	/**
-	 * @param indicator
+	 * @param baseIndicator
 	 * @param baseActivityData
 	 */
-	public FactorSearchParameter(Indicator indicator, BaseActivityData baseActivityData) {
+	public FactorSearchParameter(BaseIndicator baseIndicator, BaseActivityData baseActivityData) {
 		super();
-		this.indicatorCategory = indicator.getIndicatorCategory();
+		this.indicatorCategory = baseIndicator.getIndicatorCategory();
 		this.activitySource = baseActivityData.getActivitySource();
 		this.activityType = baseActivityData.getActivityType();
 		this.unitIn = baseActivityData.getUnit();
-		this.unitOut = indicator.getUnit();
+		this.unitOut = baseIndicator.getUnit();
 	}
 
 	public IndicatorCategoryCode getIndicatorCategory() {

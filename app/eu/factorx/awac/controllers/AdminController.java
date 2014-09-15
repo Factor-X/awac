@@ -102,7 +102,7 @@ public class AdminController extends AbstractController {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
-		// import indicators and factors
+		// import baseIndicators and factors
 		awacDataImporter.run();
 
 		return (ok());

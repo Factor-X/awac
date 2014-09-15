@@ -16,7 +16,7 @@ import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.ActivityCategoryCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.service.impl.IndicatorSearchParameter;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
@@ -25,12 +25,12 @@ import eu.factorx.awac.service.impl.IndicatorSearchParameter;
 public class IndicatorServiceTest extends AbstractBaseModelTest {
 
 	@Autowired
-	private IndicatorService indicatorService;
+	private BaseIndicatorService indicatorService;
 
     @Test
     public void _001_findAll() {
 
-		List <Indicator> li = indicatorService.findAll();
+		List <BaseIndicator> li = indicatorService.findAll();
 
 		assertNotNull(li);
 		assertEquals(64,li.size());
@@ -54,12 +54,12 @@ public class IndicatorServiceTest extends AbstractBaseModelTest {
 				);
 
 
-		List <Indicator> li = indicatorService.findByParameters(searchParameter);
+		List <BaseIndicator> li = indicatorService.findByParameters(searchParameter);
 		assertNotNull(li);
 		assertEquals(col.size(),li.size());
 
-		for (Indicator indicator : li) {
-			assertTrue(col.contains(indicator.getName()));
+		for (BaseIndicator baseIndicator : li) {
+			assertTrue(col.contains(baseIndicator.getName()));
 		}
 	}
 

@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 
 @MappedSuperclass
-public class Report implements Serializable {
+public class ReportResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,28 +16,28 @@ public class Report implements Serializable {
 
 	private List<BaseActivityResult> activityResults;
 
-	protected Report() {
+	protected ReportResult() {
 		super();
 	}
 
-	public Report(List<BaseActivityResult> activityResults, List<String> indicatorNames) {
+	public ReportResult(List<BaseActivityResult> activityResults, List<String> indicatorNames) {
 		super();
 
 		this.activityResults = activityResults;
 
-		// group data by indicator name
+		// group data by baseIndicator name
 		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
 		for (String indicatorName : indicatorNames) {
 			dataByIndicator.put(indicatorName, new ArrayList<BaseActivityResult>());
 		}
 		for (BaseActivityResult baseActivityResult : activityResults) {
-			String indicatorName = baseActivityResult.getIndicator().getName();
+			String indicatorName = baseActivityResult.getBaseIndicator().getName();
 			dataByIndicator.get(indicatorName).add(baseActivityResult);
 		}
 
 		scopeValuesByIndicator = new HashMap<>();
 
-		// build a report line for each entry (=> adding values of each activity data linked to the indicator name.)
+		// build a report line for each entry (=> adding values of each activity data linked to the baseIndicator name.)
 		for (Map.Entry<String, List<BaseActivityResult>> indicatorData : dataByIndicator.entrySet()) {
 			String indicatorName = indicatorData.getKey();
 
@@ -48,7 +48,7 @@ public class Report implements Serializable {
 
 			for (BaseActivityResult baseActivityResult : indicatorData.getValue()) {
 				Double numericValue = baseActivityResult.getNumericValue();
-				IndicatorIsoScopeCode isoScope = baseActivityResult.getIndicator().getIsoScope();
+				IndicatorIsoScopeCode isoScope = baseActivityResult.getBaseIndicator().getIsoScope();
 
 				if (IndicatorIsoScopeCode.SCOPE1.equals(isoScope)) {
 					scope1 += numericValue;

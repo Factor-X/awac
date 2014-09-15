@@ -32,6 +32,7 @@
         <class>eu.factorx.awac.models.code.type.ActivitySubCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivityTypeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorCategoryCode</class>
+        <class>eu.factorx.awac.models.code.type.IndicatorCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorIsoScopeCode</class>
         <class>eu.factorx.awac.models.code.type.IndicatorTypeCode</class>
         <class>eu.factorx.awac.models.code.type.InterfaceTypeCode</class>
@@ -39,6 +40,7 @@
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
+        <class>eu.factorx.awac.models.code.type.ReportCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCode</class>
@@ -71,16 +73,19 @@
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
+        <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
+        <class>eu.factorx.awac.models.knowledge.Report</class>
+        <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
         <class>eu.factorx.awac.models.knowledge.UnitCategory</class>
         <class>eu.factorx.awac.models.knowledge.UnitConversionFormula</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityData</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
-        <class>eu.factorx.awac.models.reporting.Report</class>
+        <class>eu.factorx.awac.models.reporting.ReportResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -94,7 +99,7 @@
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />   
 
-            <property name="hibernate.hbm2ddl.auto" value="update"/>          
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>          
 
 			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
 			<property name="hibernate.cache.use_query_cache" value="true"/>

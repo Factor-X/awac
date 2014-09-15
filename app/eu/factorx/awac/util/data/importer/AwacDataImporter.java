@@ -18,16 +18,16 @@ import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
-import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.AwacCalculatorService;
 import eu.factorx.awac.service.FactorService;
-import eu.factorx.awac.service.IndicatorService;
+import eu.factorx.awac.service.BaseIndicatorService;
 
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_OLD.xls";
+	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
 
 	/**
 	 * <pre>
@@ -44,9 +44,9 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	 * 14: ActivityOwnership       (a {@link Boolean})
 	 * </pre>
 	 */
-	public static final String ENTERPRISE_INDICATORS_SHEET_NAME = "Indicators";
-	public static final String MUNICIPALITY_INDICATORS_SHEET_NAME = "Indicators-commune";
-	public static final String HOUSEHOLD_INDICATORS_SHEET_NAME = "indicators-menage";
+	public static final String ENTERPRISE_BASE_INDICATORS_SHEET_NAME = "BaseIndicators";
+	public static final String MUNICIPALITY_BASE_INDICATORS_SHEET_NAME = "BaseIndicators-commune";
+//	public static final String HOUSEHOLD_BASE_INDICATORS_SHEET_NAME = "baseIndicators-menage";
 
 	/**
 	 * <pre>
@@ -64,7 +64,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 	public static final String FACTORS_SHEET_NAME = "EFDB_V6";
 
 	@Autowired
-	private IndicatorService indicatorService;
+	private BaseIndicatorService indicatorService;
 
 	@Autowired
 	private FactorService factorService;
@@ -100,7 +100,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Map<String, Sheet> awacDataWbSheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
 
 		Logger.info("==== Importing Enterprise Indicators");
-		saveIndicators(awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME), InterfaceTypeCode.ENTERPRISE);
+		saveIndicators(awacDataWbSheets.get(ENTERPRISE_BASE_INDICATORS_SHEET_NAME), InterfaceTypeCode.ENTERPRISE);
 
 //		Logger.info("==== Importing Municipality Indicators");
 //		saveIndicators(awacDataWbSheets.get(MUNICIPALITY_INDICATORS_SHEET_NAME), InterfaceTypeCode.MUNICIPALITY);
@@ -114,7 +114,7 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 	private void saveIndicators(Sheet indicatorsSheet, InterfaceTypeCode interfaceTypeCode) {
 
-		List<Indicator> indicators = new ArrayList<>();
+		List<BaseIndicator> baseIndicators = new ArrayList<>();
 		Unit unit = allUnitKeys.get("U5331");
 		Integer deletedIndicators = 0;
 
@@ -125,19 +125,19 @@ public class AwacDataImporter extends WorkbookDataImporter {
 
 			String indicatorCategoryKey = getCellContent(indicatorsSheet, 5, i);
 			if (!allIndicatorCategoryKeys.contains(indicatorCategoryKey)) {
-				Logger.error("Cannot import indicator '{}': Unknown IndicatorCategory key '{}'!", key, indicatorCategoryKey);
+				Logger.error("Cannot import baseIndicator '{}': Unknown IndicatorCategory key '{}'!", key, indicatorCategoryKey);
 				continue;
 			}
 
 			String activityCategoryKey = getCellContent(indicatorsSheet, 8, i);
 			if (!allActivityCategoryKeys.contains(activityCategoryKey)) {
-				Logger.error("Cannot import indicator '{}': Unknown ActivityCategory key '{}'!", key, activityCategoryKey);
+				Logger.error("Cannot import baseIndicator '{}': Unknown ActivityCategory key '{}'!", key, activityCategoryKey);
 				continue;
 			}
 
 			String activitySubCategoryKey = getCellContent(indicatorsSheet, 10, i);
 			if (!allActivitySubCategoryKeys.contains(activitySubCategoryKey)) {
-				Logger.error("Cannot import indicator '{}': Unknown ActivitySubCategory key '{}'!", key, activitySubCategoryKey);
+				Logger.error("Cannot import baseIndicator '{}': Unknown ActivitySubCategory key '{}'!", key, activitySubCategoryKey);
 				continue;
 			}
 
@@ -159,21 +159,21 @@ public class AwacDataImporter extends WorkbookDataImporter {
 			ActivityCategoryCode activityCategory = new ActivityCategoryCode(activityCategoryKey);
 			ActivitySubCategoryCode activitySubCategory = new ActivitySubCategoryCode(activitySubCategoryKey);
 
-			Indicator indicator = new Indicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit,
+			BaseIndicator baseIndicator = new BaseIndicator(key, name, IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, isoScope, indicatorCategory, activityCategory, activitySubCategory, activityOwnership, unit,
 					deleted);
-			indicatorService.saveOrUpdate(indicator);
-			indicators.add(indicator);
+			indicatorService.saveOrUpdate(baseIndicator);
+			baseIndicators.add(baseIndicator);
 		}
 
-		// Update calculator-indicator links
+		// Update calculator-baseIndicator links
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
 		if (awacCalculator == null) {
 			awacCalculator = new AwacCalculator(InterfaceTypeCode.ENTERPRISE);
 		}
-		awacCalculator.setIndicators(indicators);
+		//awacCalculator.setBaseIndicators(baseIndicators);
 		awacCalculatorService.saveOrUpdate(awacCalculator);
 
-		Logger.info("====== Imported {} indicators (including {} marked as 'deleted', and therefore unusable)", indicators.size(), deletedIndicators);
+		Logger.info("====== Imported {} baseIndicators (including {} marked as 'deleted', and therefore unusable)", baseIndicators.size(), deletedIndicators);
 	}
 
 	private void saveFactors(Sheet factorsSheet) {
