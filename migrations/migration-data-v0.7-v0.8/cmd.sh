@@ -30,6 +30,8 @@ cat ./CELDL-135-AnswerValue-Reengineering.sql >> /tmp/migration/migration_script
 
 cat ./CELDL-149-OrganizationEvent.sql >> /tmp/migration/migration_script.sql
 
+# refresh some question / unit conversion
+cat ./refesh_some_question_default_unit.sql >> /tmp/migration/migration_script.sql
 
 
 

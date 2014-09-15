@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -113,6 +114,9 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         //
         // 3) control BAD
         //
+        //TODO temporary
+        JPA.em().clear();
+        JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
         List<BaseActivityData> bads = baseActivityData${bad.getBaseActivityDataCode()}.getBaseActivityData(questionSetAnswers);
 
@@ -126,7 +130,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
-            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            valueGenerated += String.valueOf(bad.getValue()) + ",";
             for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
                 if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);

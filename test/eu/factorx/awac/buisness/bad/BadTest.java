@@ -420,17 +420,17 @@ public class BadTest extends AbstractBaseModelTest {
     public void _005_badAE_BAD4() {
         bad_AE_BAD4Test.test(scopeId);
     }
-
+*/
     @Test
     public void _006_badAE_BAD5() {
         bad_AE_BAD5Test.test(scopeId);
     }
-
+/*
     @Test
     public void _007_badAE_BAD40() {
         bad_AE_BAD40Test.test(scopeId);
     }
-
+*/
     @Test
     public void _008_badAE_BAD6A() {
         bad_AE_BAD6ATest.test(scopeId);
@@ -440,7 +440,7 @@ public class BadTest extends AbstractBaseModelTest {
     public void _009_badAE_BAD6B() {
         bad_AE_BAD6BTest.test(scopeId);
     }
-
+/*
     @Test
     public void _0010_badAE_BAD7A() {
         bad_AE_BAD7ATest.test(scopeId);
@@ -620,7 +620,7 @@ public class BadTest extends AbstractBaseModelTest {
     public void _0045_badAE_BAD28() {
         bad_AE_BAD28Test.test(scopeId);
     }
-*/
+
     @Test
     public void _0046_badAE_BAD16A() {
         bad_AE_BAD16ATest.test(scopeId);
@@ -630,7 +630,7 @@ public class BadTest extends AbstractBaseModelTest {
     public void _0047_badAE_BAD16B() {
         bad_AE_BAD16BTest.test(scopeId);
     }
-/*
+
     @Test
     public void _0048_badAE_BAD16C() {
         bad_AE_BAD16CTest.test(scopeId);
@@ -785,12 +785,12 @@ public class BadTest extends AbstractBaseModelTest {
     public void _0078_badAE_BAD37C() {
         bad_AE_BAD37CTest.test(scopeId);
     }
-
+*/
     @Test
     public void _0079_badAE_BAD38A() {
         bad_AE_BAD38ATest.test(scopeId);
     }
-
+/*
     @Test
     public void _0080_badAE_BAD38B() {
         bad_AE_BAD38BTest.test(scopeId);

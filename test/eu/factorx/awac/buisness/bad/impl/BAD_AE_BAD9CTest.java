@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -111,6 +112,8 @@ public class BAD_AE_BAD9CTest{
         //
         // 3) control BAD
         //
+        JPA.em().clear();
+        JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
         List<BaseActivityData> bads = baseActivityDataAE_BAD9C.getBaseActivityData(questionSetAnswers);
 

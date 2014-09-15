@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -111,6 +112,8 @@ public class BAD_AE_BAD16BTest{
         //
         // 3) control BAD
         //
+        JPA.em().clear();
+        JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
         List<BaseActivityData> bads = baseActivityDataAE_BAD16B.getBaseActivityData(questionSetAnswers);
 
@@ -153,7 +156,7 @@ public class BAD_AE_BAD16BTest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A134",130000.0, identifier, mapRepetition1  , UnitCode.U5122.getKey()  ));
+                list.add(new AnswerLineDTO("A134",130000.0, identifier, mapRepetition1  , UnitCode.U5126.getKey()  ));
         
         return list;
     }
