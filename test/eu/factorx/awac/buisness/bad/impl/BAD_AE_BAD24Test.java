@@ -113,6 +113,7 @@ public class BAD_AE_BAD24Test{
         //
         // 3) control BAD
         //
+        //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
@@ -126,7 +127,7 @@ public class BAD_AE_BAD24Test{
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
-            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            valueGenerated += String.valueOf(bad.getValue()) + ",";
             for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
                 if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);

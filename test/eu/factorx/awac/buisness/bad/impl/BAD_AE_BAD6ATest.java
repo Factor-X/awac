@@ -114,6 +114,7 @@ public class BAD_AE_BAD6ATest{
         //
         // 3) control BAD
         //
+        //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
@@ -127,7 +128,7 @@ public class BAD_AE_BAD6ATest{
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
-            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            valueGenerated += String.valueOf(bad.getValue()) + ",";
             for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
                 if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);
@@ -172,7 +173,7 @@ public class BAD_AE_BAD6ATest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A49",5000.0, identifier, mapRepetition1  , UnitCode.U5145.getKey()  ));
+                list.add(new AnswerLineDTO("A49",5000.0, identifier, mapRepetition1  , UnitCode.U5147.getKey()  ));
         
         return list;
     }

@@ -84,6 +84,7 @@ public class BAD_AE_BAD29ATest{
 
         //add answers
                 answerLineDTOList.addAll(buildAnswerA232());
+                answerLineDTOList.addAll(buildAnswerA233());
                 answerLineDTOList.addAll(buildAnswerA234());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
@@ -113,6 +114,7 @@ public class BAD_AE_BAD29ATest{
         //
         // 3) control BAD
         //
+        //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
@@ -126,7 +128,7 @@ public class BAD_AE_BAD29ATest{
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
-            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            valueGenerated += String.valueOf(bad.getValue()) + ",";
             for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
                 if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);
@@ -167,6 +169,29 @@ public class BAD_AE_BAD29ATest{
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A231",3);
                 list.add(new AnswerLineDTO("A232","voiture", identifier, mapRepetition3 ));
+        
+        return list;
+    }
+        /**
+     * build the AnswerLineDTO
+     * question : A233
+     */
+    private List<AnswerLineDTO> buildAnswerA233(){
+
+        List<AnswerLineDTO> list = new ArrayList<>();
+
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("A231",1);
+                list.add(new AnswerLineDTO("A233","23", identifier, mapRepetition1 ));
+                //add repetition
+        Map<String, Integer> mapRepetition2 = new HashMap<>();
+                mapRepetition2.put("A231",2);
+                list.add(new AnswerLineDTO("A233","19", identifier, mapRepetition2 ));
+                //add repetition
+        Map<String, Integer> mapRepetition3 = new HashMap<>();
+                mapRepetition3.put("A231",3);
+                list.add(new AnswerLineDTO("A233","20", identifier, mapRepetition3 ));
         
         return list;
     }

@@ -115,6 +115,7 @@ public class BAD_AE_BAD38ATest{
         //
         // 3) control BAD
         //
+        //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
@@ -123,13 +124,13 @@ public class BAD_AE_BAD38ATest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(3.6, false);
-                mapResult.put(36.0, false);
+                mapResult.put(72.0, false);
+                mapResult.put(108.0, false);
         
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
-            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            valueGenerated += String.valueOf(bad.getValue()) + ",";
             for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
                 if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);

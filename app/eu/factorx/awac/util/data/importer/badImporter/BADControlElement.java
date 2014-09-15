@@ -149,7 +149,7 @@ public class BADControlElement {
                     logLine.addError("SpecificPurpose : it's a question but not a StringQuestion : SpecificPurpose will be null");
                 }
             } else {
-                logLine.addWarn("SpecificPurpose is a string");
+                logLine.addInfo("SpecificPurpose is a string");
                 bad.setSpecificPurpose("\"" + content + "\"");
             }
         } else {
@@ -182,8 +182,7 @@ public class BADControlElement {
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
     public void controlActivitySubCategory(String content, BAD bad) {
 
@@ -226,8 +225,7 @@ public class BADControlElement {
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
     public void controlActivityType(String content, BAD bad) {
 
@@ -252,10 +250,16 @@ public class BADControlElement {
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
-                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+
+                    HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                    if (codeConversionService.toActivityTypeCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                        logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                        return;
+                    }
                 }
             } else {
                 logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                return;
             }
 
             //add to bad
@@ -268,8 +272,7 @@ public class BADControlElement {
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
     public void controlActivitySource(String content, BAD bad) {
 
@@ -295,7 +298,12 @@ public class BADControlElement {
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
-                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+
+                    HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                    if (codeConversionService.toActivitySourceCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                        logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                        return;
+                    }
                 }
             } else {
                 logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
@@ -392,7 +400,12 @@ public class BADControlElement {
         }
     }
 
-
+    /**
+     * control the value of the question for the test
+     * @param question
+     * @param content
+     * @return
+     */
     public Answer controlAnswerValue(Question question, String content) {
 
         //create answer
@@ -534,6 +547,11 @@ public class BADControlElement {
         return answer;
     }
 
+    /**
+     * Control the value of the test for the bad
+     * @param content
+     * @param bad
+     */
     public void controlTestValue(String content, BAD bad) {
 
         //control test
