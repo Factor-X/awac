@@ -11,7 +11,11 @@
 
             .modal-body
                 .field_form
-                    textarea(class="question-comment-textarea",ng-model="comment",ng-disabled="getParams().canBeEdited === false", focus-me="true")
+                    textarea(class="question-comment-textarea",
+                             ng-model="comment",
+                             name="comment",
+                             ng-disabled="getParams().canBeEdited === false",
+                             focus-me="true")
             .modal-footer
 
                 button.button(type="button",

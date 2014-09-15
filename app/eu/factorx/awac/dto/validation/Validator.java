@@ -2,11 +2,8 @@ package eu.factorx.awac.dto.validation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.annotations.*;
-import eu.factorx.awac.util.FileUtil;
 import org.apache.commons.io.IOUtils;
-import play.Application;
 import play.Logger;
-import play.api.Play;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,11 +22,13 @@ public class Validator {
 		boolean validationFail = false;
 		String failureMessage = "";
 
-		for (Field field : object.getClass().getDeclaredFields()) {
+		Field[] declaredFields = object.getClass().getDeclaredFields();
+		for (Field field : declaredFields) {
 
-			// System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
+			System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
 
-			for (Annotation annotation : field.getAnnotations()) {
+			Annotation[] annotations = field.getDeclaredAnnotations();
+			for (Annotation annotation : annotations    ) {
 				if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {
 
 					Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
@@ -85,8 +84,8 @@ public class Validator {
 								failureMessage += ((Size) annotation).message();
 							} else if (annotation instanceof Pattern) {
 								failureMessage += ((Pattern) annotation).message();
-							} else if (annotation instanceof Value) {
-								failureMessage += ((Value) annotation).message();
+							} else if (annotation instanceof Range) {
+								failureMessage += ((Range) annotation).message();
 							} else {
 								failureMessage += field.getName() + " is not valid";
 							}

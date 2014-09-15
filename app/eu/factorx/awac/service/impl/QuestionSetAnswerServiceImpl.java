@@ -1,7 +1,11 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import eu.factorx.awac.models.code.type.QuestionCode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
@@ -83,6 +87,23 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		deleteEmptyQuestionSetAnswers(questionSetAnswers);
 	}
 
+
+    @Override
+    public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
+        List<QuestionSetAnswer> questionSetAnswers = this.findByScopeAndPeriod(scope, period);
+
+        Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+            QuestionCode code = questionSetAnswer.getQuestionSet().getCode();
+            if (!res.containsKey(code)) {
+                res.put(code, new ArrayList<QuestionSetAnswer>());
+            }
+            res.get(code).add(questionSetAnswer);
+        }
+
+        return res;
+    }
+
 	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
 		for (int i = questionSetAnswers.size() - 1; i >= 0; i--) { // thx to Florian for the tip!!
 			QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
@@ -105,5 +126,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 			}
 		}
 	}
+
+
 
 }

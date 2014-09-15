@@ -1,17 +1,9 @@
 package eu.factorx.awac.converter.admin;
 
-import eu.factorx.awac.converter.AccountToPersonDTOConverter;
-import eu.factorx.awac.converter.OrganizationToOrganizationDTOConverter;
-import eu.factorx.awac.converter.PeriodToPeriodDTOConverter;
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.admin.LogLineDTO;
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.util.data.importer.badImporter.BADLog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
-import play.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,20 +22,19 @@ public class BADLogToBADLogDTOConverter implements Converter<BADLog, BADLogDTO> 
 
         List<LogLineDTO> logLineDTOs = new ArrayList<>();
 
-        for( Map.Entry<Integer, BADLog.LogLine> logLine : badLog.getLogLines().entrySet()){
+        for (Map.Entry<Integer, BADLog.LogLine> logLine : badLog.getLogLines().entrySet()) {
 
             LogLineDTO logLineDTO = new LogLineDTO();
 
             HashMap<String, List<String>> map = new HashMap<>();
 
-            for(Map.Entry<BADLog.LogType, List<String>> entry :logLine.getValue().getMessages().entrySet()){
+            logLineDTO.setName(logLine.getValue().getId());
+            logLineDTO.setLogCategory(logLine.getValue().getLogCat().toString());
 
-                if(entry.getKey() == BADLog.LogType.ID){
-                    logLineDTO.setName(entry.getValue().get(0));
-                }
-                else {
-                    map.put(entry.getKey().toString(), entry.getValue());
-                }
+            for (Map.Entry<BADLog.LogType, List<String>> entry : logLine.getValue().getMessages().entrySet()) {
+
+
+                map.put(entry.getKey().toString(), entry.getValue());
             }
 
             logLineDTO.setLineNb(logLine.getKey());
@@ -55,7 +46,6 @@ public class BADLogToBADLogDTOConverter implements Converter<BADLog, BADLogDTO> 
 
 
         badLogDTO.setLogLines(logLineDTOs);
-
 
 
         return badLogDTO;

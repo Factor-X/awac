@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.account.Account;
 
 @Entity
@@ -13,7 +15,7 @@ import eu.factorx.awac.models.account.Account;
 @NamedQueries({
 		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
 })
-public class Organization extends AuditedAbstractEntity {
+public class Organization extends Scope {
 
 	/**
 	 * :identifier = ...
@@ -25,15 +27,19 @@ public class Organization extends AuditedAbstractEntity {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private List<Site> sites = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	List<Account> accounts = new ArrayList<>();
-
 	private String naceCode;
 
 	private String description;
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Site> sites = new ArrayList<>();
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	List<Account> accounts = new ArrayList<>();
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OnDelete(action = OnDeleteAction.CASCADE) // -> hibernate-specific annotation to fix DDL generation problem
+	List<OrganizationEvent> events = new ArrayList<>();
 
 	protected Organization() {
 		super();
@@ -52,6 +58,22 @@ public class Organization extends AuditedAbstractEntity {
 		this.name = name;
 	}
 
+	public String getNaceCode() {
+		return naceCode;
+	}
+
+	public void setNaceCode(String naceCode) {
+		this.naceCode = naceCode;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public List<Site> getSites() {
 		return sites;
 	}
@@ -68,15 +90,27 @@ public class Organization extends AuditedAbstractEntity {
 		this.accounts = accounts;
 	}
 
+	public List<OrganizationEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<OrganizationEvent> events) {
+		this.events = events;
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Organization)) return false;
-		if (!super.equals(o)) return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof Organization))
+			return false;
+		if (!super.equals(o))
+			return false;
 
 		Organization that = (Organization) o;
 
-		if (!name.equals(that.name)) return false;
+		if (!name.equals(that.name))
+			return false;
 
 		return true;
 	}
@@ -90,9 +124,6 @@ public class Organization extends AuditedAbstractEntity {
 
 	@Override
 	public String toString() {
-		return "Organization{" +
-				super.toString()+
-				"name='" + name + '\'' +
-				'}';
+		return "Organization [id=" + id + ", name='" + name + "]'";
 	}
 }

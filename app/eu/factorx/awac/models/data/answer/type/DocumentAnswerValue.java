@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.data.answer.type;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -9,6 +10,7 @@ import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.file.StoredFile;
 
 @Entity
+@DiscriminatorValue("DOCUMENT")
 public class DocumentAnswerValue extends AnswerValue {
 
 	private static final long serialVersionUID = 1L;
@@ -23,10 +25,6 @@ public class DocumentAnswerValue extends AnswerValue {
         super();
         this.questionAnswer = questionAnswer;
         this.storedFile = storedFile;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public StoredFile getStoredFile() {

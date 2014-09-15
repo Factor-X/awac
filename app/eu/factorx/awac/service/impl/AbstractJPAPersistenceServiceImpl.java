@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -48,6 +49,14 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	@Override
 	public void remove(E entity) {
 		JPA.em().remove(JPA.em().merge(entity));
+	}
+
+	@Override
+	public void remove(Iterable<E> entities) {
+		Iterator<E> iterator = entities.iterator();
+		while (iterator.hasNext()) {
+			remove(iterator.next());
+		}
 	}
 
 	@Override

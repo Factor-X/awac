@@ -27,7 +27,7 @@ import eu.factorx.awac.service.IndicatorService;
 @Component
 public class AwacDataImporter extends WorkbookDataImporter {
 
-	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
+	public static final String AWAC_DATA_WORKBOOK_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE_OLD.xls";
 
 	/**
 	 * <pre>
@@ -102,11 +102,11 @@ public class AwacDataImporter extends WorkbookDataImporter {
 		Logger.info("==== Importing Enterprise Indicators");
 		saveIndicators(awacDataWbSheets.get(ENTERPRISE_INDICATORS_SHEET_NAME), InterfaceTypeCode.ENTERPRISE);
 
-		Logger.info("==== Importing Municipality Indicators");
-		saveIndicators(awacDataWbSheets.get(MUNICIPALITY_INDICATORS_SHEET_NAME), InterfaceTypeCode.MUNICIPALITY);
-
-		Logger.info("==== Importing Household Indicators");
-		saveIndicators(awacDataWbSheets.get(HOUSEHOLD_INDICATORS_SHEET_NAME), InterfaceTypeCode.HOUSEHOLD);
+//		Logger.info("==== Importing Municipality Indicators");
+//		saveIndicators(awacDataWbSheets.get(MUNICIPALITY_INDICATORS_SHEET_NAME), InterfaceTypeCode.MUNICIPALITY);
+//
+//		Logger.info("==== Importing Household Indicators");
+//		saveIndicators(awacDataWbSheets.get(HOUSEHOLD_INDICATORS_SHEET_NAME), InterfaceTypeCode.HOUSEHOLD);
 
 		Logger.info("==== Importing Factors");
 		saveFactors(awacDataWbSheets.get(FACTORS_SHEET_NAME));

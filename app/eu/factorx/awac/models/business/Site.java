@@ -1,16 +1,15 @@
 package eu.factorx.awac.models.business;
 
-import javax.persistence.*;
-
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.knowledge.Period;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
+
+import eu.factorx.awac.models.knowledge.Period;
+
 @Entity
 @Table(name = "site")
-public class Site extends AuditedAbstractEntity implements Comparable<Site>{
+public class Site extends Scope implements Comparable<Site>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -138,18 +137,7 @@ public class Site extends AuditedAbstractEntity implements Comparable<Site>{
 
 	@Override
 	public String toString() {
-		return "Site{" +
-				"organization=" + organization +
-				", name='" + name + '\'' +
-				", naceCode='" + naceCode + '\'' +
-				", description='" + description + '\'' +
-				", organizationalStructure='" + organizationalStructure + '\'' +
-				", economicInterest='" + economicInterest + '\'' +
-				", operatingPolicy='" + operatingPolicy + '\'' +
-				", accountingTreatment='" + accountingTreatment + '\'' +
-				", percentOwned=" + percentOwned +
-				", listPeriodAvailable=" + listPeriodAvailable +
-				'}';
+		return "Site [id=" + id + ", name='" + name + "', organization=" + organization  + "]";
 	}
 
 	@Override

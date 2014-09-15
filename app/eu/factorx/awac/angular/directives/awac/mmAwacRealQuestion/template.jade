@@ -1,5 +1,6 @@
 input.oneelement(   type="text",
                     ng-model="getAnswer().value",
+                    name="{{ getQuestionCode() }}",
                     numbers-only="double",
                     style="text-align:right;",
                     ng-disabled="getDataToCompare()==true || getIsAggregation()===true")

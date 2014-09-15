@@ -14,34 +14,33 @@ angular
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.scope1Value
-            return total
+            total
             
         scope.getTotalScope2 = () ->
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.scope2Value
-            return total
+            total
 
         scope.getTotalScope3 = () ->
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.scope3Value
-            return total
+            total
 
         scope.getTotalOutOfScope = () ->
             total = 0;
             for rl in scope.ngModel.reportLines
                 total += rl.outOfScopeValue
-            return total
+            total
 
-        scope.getNumber: (rl) ->
+        scope.getNumber = (rl) ->
             result = null
             index = 0
             for l in scope.ngModel.reportLines
                 if l.scope1Value + l.scope2Value + l.scope3Value + l.outOfScopeValue > 0
                     index += 1
-                    if l == rl
+                    if l.indicatorName == rl.indicatorName
                         result = index
                         break
-            console.log result
             result

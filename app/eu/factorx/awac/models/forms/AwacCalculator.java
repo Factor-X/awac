@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.Cascade;
-
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
@@ -27,7 +25,6 @@ public class AwacCalculator extends AuditedAbstractEntity {
 	@JoinTable(name = "mm_calculator_indicator",
 			joinColumns = @JoinColumn(name = "calculator_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"))
-	@Cascade({org.hibernate.annotations.CascadeType.ALL})
 	private List<Indicator> indicators;
 
 	public AwacCalculator() {

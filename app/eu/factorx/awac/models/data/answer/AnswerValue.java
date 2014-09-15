@@ -9,13 +9,16 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 
 @Entity
 @Table(name = "answer_value")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "answertype")
 @Access(AccessType.PROPERTY)
 public abstract class AnswerValue extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	protected AnswerRawData rawData;
+
+	protected AnswerType answerType;
 
 	protected QuestionAnswer questionAnswer;
 
@@ -29,6 +32,16 @@ public abstract class AnswerValue extends AuditedAbstractEntity {
 	protected abstract AnswerRawData getRawData();
 
 	protected abstract void setRawData(AnswerRawData rawData);
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "answertype", insertable = false, updatable = false)
+	public AnswerType getAnswerType() {
+		return answerType;
+	}
+
+	public void setAnswerType(AnswerType answerType) {
+		this.answerType = answerType;
+	}
 
 	@ManyToOne(optional = false)
 	public QuestionAnswer getQuestionAnswer() {

@@ -1,9 +1,8 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.invitation.Invitation;
-
 import java.util.List;
+
+import eu.factorx.awac.models.invitation.Invitation;
 
 public interface InvitationService extends PersistenceService<Invitation> {
 

@@ -152,8 +152,11 @@ public class BAD {
                 ", activityType='" + activityType + '\'' +
                 ", activitySource='" + activitySource + '\'' +
                 ", activityOwnership='" + activityOwnership + '\'' +
-                ", unit='" + unit + '\'' +
+                ", unit=" + unit +
                 ", value='" + value + '\'' +
+                ", canBeGenerated=" + canBeGenerated +
+                ", listQuestion=" + listQuestion +
+                ", line=" + line +
                 '}';
     }
 

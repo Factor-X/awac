@@ -5,13 +5,12 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import play.Play;
 import play.mvc.Http.Context;
 import play.mvc.Http.Session;
-
-import java.util.logging.Logger;
 
 @MappedSuperclass
 public abstract class AuditedAbstractEntity extends AbstractEntity {
@@ -33,9 +32,11 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		DateTime now = DateTime.now();
-		String creationUser = getCurrentUser();
-		this.technicalSegment = new TechnicalSegment(now, creationUser, now, creationUser);
+		String currentUser = getCurrentUser();
+		if (StringUtils.isBlank(currentUser)) {
+			currentUser = "TECHNICAL";
+		}
+		this.technicalSegment = new TechnicalSegment(DateTime.now(), currentUser);
 	}
 
 	@PreUpdate

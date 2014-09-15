@@ -73,30 +73,28 @@ div.pdf-able
                 div(ng-show="current_tab == 1")
                     h2
                         span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
-
                     br
+                    center
+                        img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.histogramUrl }}")
+                    br
+                    mm-awac-result-table(ng-model="o")
 
                 div(ng-show="current_tab == 2")
                     h2
                         span(ng-bind-html="'IMPACTS_PARTITION' | translate")
-
                     br
-
                     h3
                         span(ng-bind-html="'SCOPE_1' | translate")
                     center
                         img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl1 }}")
-
                     h3
                         span(ng-bind-html="'SCOPE_2' | translate")
                     center
                         img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl2 }}")
-
                     h3
                         span(ng-bind-html="'SCOPE_3' | translate")
                     center
                         img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl3 }}")
-
                     br
 
                     mm-awac-result-table(ng-model="o")
@@ -105,18 +103,14 @@ div.pdf-able
                     h2
                         span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
                     br
-
                     center
                         img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.webUrl }}")
-
                     br
-
                     mm-awac-result-table(ng-model="o")
 
                 div(ng-show="current_tab == 4")
                     h2
                         span(ng-bind-html="'NUMBERS' | translate")
-
                     mm-awac-result-table(ng-model="o")
 
 
