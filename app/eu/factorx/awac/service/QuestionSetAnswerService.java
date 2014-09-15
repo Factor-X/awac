@@ -1,11 +1,13 @@
 package eu.factorx.awac.service;
 
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 
 import java.util.List;
+import java.util.Map;
 
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
@@ -44,5 +46,14 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 	List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId);
 
 	void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form);
+
+    /**
+     * return all questionSetAnswer order by questionCode
+     *
+     * @param scope
+     * @param period
+     * @return
+     */
+    public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period);
 
 }

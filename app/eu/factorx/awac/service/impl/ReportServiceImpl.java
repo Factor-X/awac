@@ -47,7 +47,7 @@ public class ReportServiceImpl implements ReportService {
 	public Report getReport(InterfaceTypeCode interfaceType, Scope scope, Period period) {
 
 		// find all question set answers (only "parents" => find where qsa.parent is null)
-		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = getAllQuestionSetAnswers(scope, period);
+		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
 
 		// find all activity data
 		List<BaseActivityData> allBADs = getActivityData(allQuestionSetAnswers);
@@ -94,6 +94,8 @@ public class ReportServiceImpl implements ReportService {
 
 		return new Report(activityResults, indicatorService.findAllIndicatorNames());
 	}
+
+
 
 	private static List<BaseActivityData> filterByIndicator(List<BaseActivityData> allBads, Indicator indicator) {
 		ActivityCategoryCode category = indicator.getActivityCategory();
@@ -171,21 +173,6 @@ public class ReportServiceImpl implements ReportService {
 				Logger.error("Error wile retrieving base activity data from BAD: " + contributor.getClass().getSimpleName(), e);
 			}
 		}
-		return res;
-	}
-
-	private Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
-		List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriod(scope, period);
-
-		Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();
-		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-			QuestionCode code = questionSetAnswer.getQuestionSet().getCode();
-			if (!res.containsKey(code)) {
-				res.put(code, new ArrayList<QuestionSetAnswer>());
-			}
-			res.get(code).add(questionSetAnswer);
-		}
-
 		return res;
 	}
 

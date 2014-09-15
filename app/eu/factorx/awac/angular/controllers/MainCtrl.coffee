@@ -19,9 +19,7 @@ angular.module('app').run (loggerService) ->
 
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService,$timeout) ->
-
-
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) ->
     $scope.displayMenu = true
 
     #
@@ -80,7 +78,7 @@ angular
     # confirmed : the modification of localisation was already confirmed by the user
     #
     $scope.nav = (loc, confirmed = false) ->
-        console.log "NAV : "+loc
+        console.log "NAV : " + loc
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
@@ -96,23 +94,17 @@ angular
         if canBeContinue
             $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
 
-            #after the nav, compute displayMenu
-            
-            # used to recompute the displaying of the menu
-            #if !$scope.$$phase
-            #    $scope.$apply()
-
     $scope.$on '$routeChangeSuccess', (event, args) ->
         $timeout(->
             $scope.computeDisplayMenu()
-        ,0)
+        , 0)
 
 
     $scope.computeDisplayMenu = ->
         if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
-            $scope.displayMenu= true
+            $scope.displayMenu = true
         else
-            $scope.displayMenu= false
+            $scope.displayMenu = false
 
 
     #
@@ -244,20 +236,19 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout,translationService,tmhDynamicLocale,$routeParams)->
-
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams)->
     $rootScope.languages = []
     $rootScope.languages[0] = {
-        value:'fr'
-        label:'Français'
+        value: 'fr'
+        label: 'Français'
     }
     $rootScope.languages[1] = {
-        value:'en'
-        label:'English'
+        value: 'en'
+        label: 'English'
     }
     $rootScope.languages[2] = {
-        value:'nl'
-        label:'Neederlands'
+        value: 'nl'
+        label: 'Neederlands'
     }
 
     translationService.initialize('fr')
@@ -272,21 +263,25 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     #GHO route 03/09/2014
     $rootScope.$on '$routeChangeStart', (event, current) ->
-        console.log("entering routeChangeStart")
-        console.log("current path : " + $location.path())
-        console.log("routeParams path : " + $routeParams.key)
-        console.log("current:")
-        console.log current
+
 
         $rootScope.key = $routeParams.key
         # Check if the user is logged in
 
-        if not $rootScope.currentPerson and not current.$$route.anonymousAllowed
-          #redirect to login page
-          console.log("redirect to login ")
-          $location.path('/login');
+        if not $rootScope.currentPerson
+            #
+            # test if the user is currently connected on the server
+            #
+            downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
+                if result.success
+                    $rootScope.loginSuccess result.data, !$rootScope.isLogin()
+                else
+                    if not current.$$route.anonymousAllowed
+                        #redirect to login page
+                        console.log "redirect to login "
+                        $location.path '/login'
         else
-          console.log("default router processing")
+            console.log("default router processing")
 
     #
     # Redirect user to login view if not logged in
@@ -299,7 +294,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # getRegisterKey
     #
     $rootScope.getRegisterKey = () ->
-      return $rootScope.key
+        return $rootScope.key
 
 
     #
@@ -323,7 +318,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # logout the current user
     #
     $rootScope.logout = () ->
-
         downloadService.postJson '/awac/logout', null, (result) ->
             if result.success
                 $rootScope.currentPerson = null
@@ -335,12 +329,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     # success after login => store some datas, display the path
     #
-    $rootScope.loginSuccess = (data) ->
+    $rootScope.loginSuccess = (data, skipRedirect) ->
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
         $rootScope.organization = data.organization
         $rootScope.users = data.organization.users
-        $rootScope.onFormPath(data.defaultPeriod,data.organization.sites[0].scope)
+        if not skipRedirect
+            $rootScope.onFormPath(data.defaultPeriod, data.organization.sites[0].scope)
 
     #
     # get user
@@ -365,11 +360,11 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     # test if the user is currently connected on the server
     #
-    downloadService.postJson '/awac/testAuthentication', {interfaceName:$rootScope.instanceName}, (result) ->
-        if result.success
-            $rootScope.loginSuccess result.data
-        else
-            # TODO ERROR HANDLING
+    # downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
+    #     if result.success
+    #         $rootScope.loginSuccess result.data
+    #     else
+    #         # TODO ERROR HANDLING
 
     #
     # Get notifications and show them every hour
@@ -382,7 +377,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
             else
                 # TODO ERROR HANDLING
-        # schedule a refresh
+                # schedule a refresh
         $timeout $rootScope.refreshNotifications, 3600 * 1000
 
     $rootScope.refreshNotifications()
