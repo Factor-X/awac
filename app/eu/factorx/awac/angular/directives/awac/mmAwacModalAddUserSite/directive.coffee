@@ -83,6 +83,7 @@ angular
           #empty arrays
           $scope.selection = []
           $scope.accounts = []
+          $scope.prepare = []
 
           #create DTO
           data =
@@ -92,32 +93,34 @@ angular
           downloadService.postJson '/awac/organization/site/associatedaccounts/load', data, (result) ->
             if result.success
 
-              for user in result.data.organizationUserList
-                console.log user
-                $scope.accounts.push(user)
-
-              for selected in result.data.siteSelectedUserList
-                console.log selected
-                $scope.selection.push(selected)
-
-
 #              for user in result.data.organizationUserList
 #                console.log user
-#                console.log result.data.siteSelectedUserList.length
-#                if result.data.siteSelectedUserList.length
-#                  for selected in result.data.siteSelectedUserList
-#                    index = selected.identifier.indexOf(user.identifier)
-#                    console.log index
-#                    if index == -1
-#                      $scope.accounts.push(user)
-#                    else
-#                      $scope.accounts.push(result.data.siteSelectedUserList[index])
-#                else
-#                  $scope.accounts.push(user)
+#                $scope.accounts.push(user)
 #
 #              for selected in result.data.siteSelectedUserList
 #                console.log selected
 #                $scope.selection.push(selected)
+
+
+              for user in result.data.organizationUserList
+                console.log user
+                console.log result.data.siteSelectedUserList.length
+                $scope.in = false
+                if result.data.siteSelectedUserList.length
+                  for selected in result.data.siteSelectedUserList
+                    if (user.identifier == selected.identifier)
+                      $scope.in = true
+                if $scope.in == false
+                  $scope.accounts.push(user)
+
+              for selected in result.data.siteSelectedUserList
+                console.log selected
+                $scope.selection.push(selected)
+                $scope.accounts.push(selected)
+
+#                $scope.selection.sort(a,b -> return a.identifier < b.identifier)
+#                $scope.accounts.sort(a,b -> return a.identifier < b.identifier)
+
 
             else
               messageFlash.displayError result.data.message
