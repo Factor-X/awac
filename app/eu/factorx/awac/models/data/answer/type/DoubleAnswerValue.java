@@ -1,17 +1,14 @@
 package eu.factorx.awac.models.data.answer.type;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.answer.AnswerRawData;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.knowledge.Unit;
-import play.db.jpa.JPA;
-
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Transient;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class DoubleAnswerValue extends NumericAnswerValue {
 
 	private static final long serialVersionUID = 1L;

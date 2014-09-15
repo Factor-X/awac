@@ -3,8 +3,6 @@ package eu.factorx.awac.service.impl;
 import java.util.List;
 
 import org.springframework.expression.ExpressionException;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -16,8 +14,6 @@ import eu.factorx.awac.service.UnitConversionService;
 @Component
 public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<UnitConversionFormula> implements
 		UnitConversionService {
-
-	private static ExpressionParser expressionParser = new SpelExpressionParser();
 
 	@Override
 	public UnitConversionFormula findByUnitAndYear(Unit unit, Integer year) {
@@ -78,10 +74,7 @@ public class UnitConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 	}
 
 	public Double evaluateExpression(String strExpression, Double variableValue) throws ExpressionException {
-		strExpression = strExpression.replaceAll(",", ".");
-		strExpression = strExpression.replaceAll(UnitConversionFormula.VARIABLE_NAME, String.valueOf(variableValue));
-
-		return expressionParser.parseExpression(strExpression).getValue(Double.class);
+		return MyrmexExpressionParser.toDouble(strExpression, variableValue);
 	}
 
 }

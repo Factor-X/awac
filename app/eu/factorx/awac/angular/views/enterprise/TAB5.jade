@@ -1,12 +1,12 @@
 // mm-awac-section("Déchets")
 // It lacks a proper fild code for "D2chets alone" -> TODO : insert into Excel file as an additional line
-mm-awac-section(title-code="A173_TITLE")
+mm-awac-section(title-code="A173")
 
     mm-awac-question(question-code="A174")
 
 .horizontal_separator
 
-mm-awac-section(title-code="A173_TITLE")
+mm-awac-section(title-code="A173")
     mm-awac-repetition-name(question-code="A175")
     mm-awac-repetition-question(question-set-code="A175", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A175')")
         mm-awac-question(question-code="A176",ng-repetition-map="itLevel1")
@@ -20,7 +20,7 @@ mm-awac-section(title-code="A173_TITLE")
 
 .horizontal_separator
 
-mm-awac-section(title-code="A180_TITLE")
+mm-awac-section(title-code="A180")
     mm-awac-sub-title(question-code="A181")
 
     mm-awac-sub-sub-title(question-code="A182")
@@ -48,7 +48,7 @@ mm-awac-section(title-code="A180_TITLE")
             tab.tab-color-lightgreen(active="getTab(1,1).active")
                 tab-heading
                     i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
-                    span(ng-bind-html="'A197_TITLE' | translate")
+                    span(ng-bind-html="'A197' | translate")
                 .sub_block.tab-color-lightgreen
                     .element_table
                         mm-awac-question(question-code="A195",ng-tab-set="1",ng-tab="1")
@@ -59,7 +59,7 @@ mm-awac-section(title-code="A180_TITLE")
             tab.tab-color-green(active="getTab(1,2).active")
                 tab-heading
                     i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
-                    span(ng-bind-html="'A201_TITLE' | translate")
+                    span(ng-bind-html="'A201' | translate")
                 .sub_block.tab-color-green
                     .element_table
                         mm-awac-question(question-code="A501",ng-tab-set="1",ng-tab="2")

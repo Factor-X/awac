@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import play.Logger;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 1139875066271860505L;

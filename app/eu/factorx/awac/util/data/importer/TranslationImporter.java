@@ -39,7 +39,9 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 		for (String workbookPath : new String[] {TRANSLATIONS_ENTERPRISES_PATH, TRANSLATIONS_MUNICIPALITY_PATH}) {
 			wbSheets = getWorkbookSheets(workbookPath);
-			importTranslations(wbSheets.get("SURVEY"), CodeList.TRANSLATIONS_SURVEY);
+			importTranslations(wbSheets.get("FORMS"), CodeList.TRANSLATIONS_SURVEY);
+			importTranslations(wbSheets.get("QUESTION_SETS"), CodeList.QUESTION);
+			importTranslations(wbSheets.get("QUESTIONS"), CodeList.QUESTION);
 		}
 
 	}
