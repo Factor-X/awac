@@ -38,7 +38,6 @@ angular
             result = null
             index = 0
             for l in scope.ngModel.reportLines
-                console.log l
                 if l.scope1Value + l.scope2Value + l.scope3Value + l.outOfScopeValue > 0
                     index += 1
                     if l.indicatorName == rl.indicatorName

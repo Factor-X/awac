@@ -6,7 +6,10 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.data.question.type.*;
+import eu.factorx.awac.models.data.question.type.BooleanQuestion;
+import eu.factorx.awac.models.data.question.type.NumericQuestion;
+import eu.factorx.awac.models.data.question.type.StringQuestion;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.CodeConversionService;
@@ -458,14 +461,8 @@ public class BADControlElement {
 
                     //convert the value (without the unit) into double
                     try {
-
-                        if (question instanceof IntegerQuestion) {
-                            Integer valueInteger = Integer.parseInt(mNum.group(1));
-                            valueToAdd = String.valueOf(valueInteger);
-                        } else {
-                            Double valueDouble = Double.parseDouble(mNum.group(1));
-                            valueToAdd = String.valueOf(valueDouble);
-                        }
+                        Double valueDouble = Double.parseDouble(mNum.group(1));
+                        valueToAdd = String.valueOf(valueDouble);
                     } catch (NumberFormatException e) {
                         logLine.addError("QuestionValue : Number expected but conversion failed");
                         continue;

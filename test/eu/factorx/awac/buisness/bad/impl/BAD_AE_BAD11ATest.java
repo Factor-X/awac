@@ -126,9 +126,9 @@ public class BAD_AE_BAD11ATest{
 
         for(BaseActivityData bad : bads){
             valueGenerated = String.valueOf(bad.getValue()) + ",";
-            for(Double value : mapResult.keySet()){
-                if(around(value,bad.getValue())){
-                    mapResult.put(bad.getValue(), true);
+            for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+                if(around(entry.getKey(),bad.getValue())){
+                    entry.setValue(true);
                 }
             }
         }
@@ -158,6 +158,14 @@ public class BAD_AE_BAD11ATest{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A78",1);
                 list.add(new AnswerLineDTO("A83","AS_5", identifier, mapRepetition1 ));
+                //add repetition
+        Map<String, Integer> mapRepetition2 = new HashMap<>();
+                mapRepetition2.put("A78",2);
+                list.add(new AnswerLineDTO("A83","AS_162", identifier, mapRepetition2 ));
+                //add repetition
+        Map<String, Integer> mapRepetition3 = new HashMap<>();
+                mapRepetition3.put("A78",3);
+                list.add(new AnswerLineDTO("A83","AS_163", identifier, mapRepetition3 ));
         
         return list;
     }

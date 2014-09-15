@@ -63,7 +63,7 @@ angular
                         if answerType == 'BOOLEAN'
                             directiveName = "boolean-question"
                         else if answerType == 'INTEGER'
-                            directiveName = "integer-question"
+                            directiveName = "real-question"
                         else if answerType == 'DOUBLE'
                             if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
                                 directiveName = "real-with-unit-question"

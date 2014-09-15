@@ -1847,11 +1847,14 @@ ul.messenger > li {
 }
 
 #logger {
+    box-sizing: border-box;
     position: absolute;
     display: none;
     left: 1cm;
     right: 1cm;
     bottom: 1cm;
+    background: #333;
+    text-align: right;
     border: solid 0.25cm #333;
     border-radius: 0.25cm;
     box-shadow: 0 0 0 2px #ccc, 0 0 1cm black;

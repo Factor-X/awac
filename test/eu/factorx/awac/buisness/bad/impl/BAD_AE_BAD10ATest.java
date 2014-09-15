@@ -127,9 +127,9 @@ public class BAD_AE_BAD10ATest{
 
         for(BaseActivityData bad : bads){
             valueGenerated = String.valueOf(bad.getValue()) + ",";
-            for(Double value : mapResult.keySet()){
-                if(around(value,bad.getValue())){
-                    mapResult.put(bad.getValue(), true);
+            for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+                if(around(entry.getKey(),bad.getValue())){
+                    entry.setValue(true);
                 }
             }
         }
@@ -204,15 +204,15 @@ public class BAD_AE_BAD10ATest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A67",1);
-                list.add(new AnswerLineDTO("A76",245000, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A76",245000.0, identifier, mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A67",2);
-                list.add(new AnswerLineDTO("A76",120000, identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A76",120000.0, identifier, mapRepetition2 ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A67",3);
-                list.add(new AnswerLineDTO("A76",75000, identifier, mapRepetition3 ));
+                list.add(new AnswerLineDTO("A76",75000.0, identifier, mapRepetition3 ));
         
         return list;
     }
@@ -227,7 +227,7 @@ public class BAD_AE_BAD10ATest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A67",1);
-                list.add(new AnswerLineDTO("A73",6, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A73",6.0, identifier, mapRepetition1 ));
         
         return list;
     }
