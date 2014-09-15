@@ -2,6 +2,7 @@ package eu.factorx.awac.controllers;
 
 import java.util.*;
 
+import eu.factorx.awac.models.code.type.UnitCode;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,9 +139,9 @@ public class AnswerController extends AbstractController {
 		validateUserRightsForScope(currentUser, scope);
 
 		// log posted data
-		Logger.info("POST '{}' DataCell:", form.getIdentifier());
+		//TODO Logger.info("POST '{}' DataCell:", form.getIdentifier());
 		for (AnswerLineDTO answerLine : answersDTO.getListAnswers()) {
-			Logger.info("\t" + answerLine);
+			//TODO Logger.info("\t" + answerLine);
 		}
 
 		// create, update or delete QuestionAnswers and QuestionSetAnswers
@@ -253,9 +254,9 @@ public class AnswerController extends AbstractController {
 		Map<Long, UnitCategoryDTO> res = new HashMap<>();
 		for (UnitCategory unitCategory : unitCategoryService.findAll()) {
 			UnitCategoryDTO unitCategoryDTO = new UnitCategoryDTO(unitCategory.getId());
-			unitCategoryDTO.setMainUnitId(unitCategory.getMainUnit().getId());
+			unitCategoryDTO.setMainUnitCode((unitCategory.getMainUnit().getUnitCode().getKey()));
 			for (Unit unit : unitCategory.getUnits()) {
-				unitCategoryDTO.addUnit(new UnitDTO(unit.getId(), unit.getSymbol()));
+				unitCategoryDTO.addUnit(new UnitDTO(unit.getUnitCode().getKey(), unit.getSymbol()));
 			}
 			res.put(unitCategoryDTO.getId(), unitCategoryDTO);
 		}
@@ -271,13 +272,13 @@ public class AnswerController extends AbstractController {
 		
 		Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswersList);
 
-		Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
+		//TODO Logger.info("saveAnswsersDTO() - (1) - Update or delete existing QuestionAnswers...");
 		updateOrDeleteQuestionAnswers(newAnswersInfos, questionAnswersMap);
 
-		Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
+        //TODO Logger.info("saveAnswsersDTO() - (2) - Save new QuestionAnswers...");
 		createQuestionAnswers(newAnswersInfos, currentUser, period, scope, questionSetAnswersMap);
 
-		Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
+        //TODO Logger.info("saveAnswsersDTO() - (3) - Find and delete empty QuestionSetAnswers...");
 		questionSetAnswerService.deleteEmptyQuestionSetAnswers(scope, period, form);
 	}
 
@@ -321,7 +322,7 @@ public class AnswerController extends AbstractController {
 		Object value = answerLineDTO.getValue();
 		QuestionSetAnswer questionSetAnswer = questionAnswer.getQuestionSetAnswer();
 		if ((value == null) || (StringUtils.trimToNull(value.toString()) == null)) {
-			Logger.info("DELETING {}", questionAnswer);
+            //TODO Logger.info("DELETING {}", questionAnswer);
 			questionSetAnswer.getQuestionAnswers().remove(questionAnswer);
 			questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 		} else {
@@ -330,7 +331,7 @@ public class AnswerController extends AbstractController {
 			if (!oldAnswerValues.equals(newAnswerValues)) {
 				questionAnswer.updateAnswerValues(newAnswerValues);
 				questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-				Logger.info("UPDATED {}", questionAnswer);
+                //TODO Logger.info("UPDATED {}", questionAnswer);
 			} else {
 				Logger.warn("Cannot update {} from answer line {}: values are identical!", questionAnswer, answerLineDTO);
 			}
@@ -366,7 +367,7 @@ public class AnswerController extends AbstractController {
 		questionSetAnswer.getQuestionAnswers().add(questionAnswer);
 		questionAnswerService.saveOrUpdate(questionAnswer);
 		questionSetAnswerService.saveOrUpdate(questionSetAnswer);
-		Logger.info("--> CREATED {}", questionAnswer);
+        //TODO Logger.info("--> CREATED {}", questionAnswer);
 	}
 
 	private QuestionSetAnswer findOrCreateQuestionSetAnswer(Period period, Scope scope, QuestionSet questionSet, AnswerLineDTO answerLineDTO, Map<Map<QuestionCode, Integer>, QuestionSetAnswer> existingQuestionSetAnswers) {
@@ -394,7 +395,7 @@ public class AnswerController extends AbstractController {
 		}
 		// add new QuestionSetAnswer to existingQuestionSetAnswers map
 		existingQuestionSetAnswers.put(repetitionMap, questionSetAnswer);
-		Logger.info("--> CREATED {}", questionSetAnswer);
+        //TODO Logger.info("--> CREATED {}", questionSetAnswer);
 		return questionSetAnswer;
 	}
 
@@ -603,23 +604,23 @@ public class AnswerController extends AbstractController {
 	}
 
 	private Unit getAndVerifyUnit(AnswerLineDTO answerLine, UnitCategory questionUnitCategory, String questionKey) {
-		Integer answerUnitId = answerLine.getUnitId();
+		String answerUnitCode = answerLine.getUnitCode();
 
 		// no unit category linked to the question => return null, or throw an Exception if client provided a unit
 		if (questionUnitCategory == null) {
-			if (answerUnitId != null) {
+			if (answerUnitCode != null) {
 				// TODO this event should not throw a RuntimeException => to improve
-				throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitId));
+				throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitCode));
 			} else {
 				return null;
 			}
 		}
 
 		// the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
-		if (answerUnitId == null) {
+		if (answerUnitCode == null) {
 			throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getName()));
 		}
-		Unit answerUnit = unitService.findById(answerUnitId.longValue());
+		Unit answerUnit = unitService.findByCode(new UnitCode(answerUnitCode));
 
 		// check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
 		UnitCategory answerUnitCategory = answerUnit.getCategory();

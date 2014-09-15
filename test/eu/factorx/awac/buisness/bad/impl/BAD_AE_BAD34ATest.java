@@ -38,6 +38,8 @@ import static play.test.Helpers.status;
 @Component
 public class BAD_AE_BAD34ATest{
 
+    private static final Double ERROR_MARGE = 0.0001;
+
     @Autowired
     private QuestionSetAnswerService questionSetAnswerService;
 
@@ -114,14 +116,36 @@ public class BAD_AE_BAD34ATest{
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
         List<BaseActivityData> bads = baseActivityDataAE_BAD34A.getBaseActivityData(questionSetAnswers);
 
-        //control size
-        assertEquals("The number of bad generated is not correct. expected : 3, generated : "+bads.size(),3 ,bads.size());
-
         //control content
-                controlBad1(bads.get((1 - 1)));
-                controlBad2(bads.get((2 - 1)));
-                controlBad3(bads.get((3 - 1)));
+        //map mapResult
+        Map<Double, Boolean> mapResult = new HashMap<>();
+                mapResult.put(3.6, false);
+                mapResult.put(1.8, false);
+                mapResult.put(5.4, false);
+        
+        String valueGenerated = "";
+
+        for(BaseActivityData bad : bads){
+            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            for(Double value : mapResult.keySet()){
+                if(around(value,bad.getValue())){
+                    mapResult.put(bad.getValue(), true);
+                }
             }
+        }
+
+        String valueNotFound = "";
+
+        for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+            if(entry.getValue().equals(false)){
+                valueNotFound+=String.valueOf(entry.getKey())+", ";
+            }
+        }
+
+        //create errorMessage
+        assertTrue("Value expected but not found : "+valueNotFound+". Value generated : "+valueGenerated,valueNotFound.length() == 0);
+
+    }
 
         /**
      * build the AnswerLineDTO
@@ -195,40 +219,7 @@ public class BAD_AE_BAD34ATest{
         return list;
     }
     
-        /**
-     * control the content and the value of the bad
-     * @param bad
-     */
-    private void controlBad1(BaseActivityData bad){
-        //control global
-        controlGlobalBad(bad);
 
-        //control value
-        assertTrue("Value error : expected : 3.6, founded : "+bad.getValue(),bad.getValue().equals(3.6));
-    }
-        /**
-     * control the content and the value of the bad
-     * @param bad
-     */
-    private void controlBad2(BaseActivityData bad){
-        //control global
-        controlGlobalBad(bad);
-
-        //control value
-        assertTrue("Value error : expected : 1.8, founded : "+bad.getValue(),bad.getValue().equals(1.8));
-    }
-        /**
-     * control the content and the value of the bad
-     * @param bad
-     */
-    private void controlBad3(BaseActivityData bad){
-        //control global
-        controlGlobalBad(bad);
-
-        //control value
-        assertTrue("Value error : expected : 5.4, founded : "+bad.getValue(),bad.getValue().equals(5.4));
-    }
-    
     /**
      * control all except value
      * @param bad
@@ -245,5 +236,12 @@ public class BAD_AE_BAD34ATest{
         assertTrue("ActivityOwnership error : Expected : {}, founded : "+bad.getActivityOwnership(),bad.getActivityOwnership().equals(true));
         assertTrue("Unit error : Expected : {}, founded : "+bad.getUnit().getSymbol(),bad.getUnit().getUnitCode().equals(UnitCode.U5321));
         */
+    }
+
+    private boolean around(Double value1,Double value2){
+        if(value1>=value2*(1-ERROR_MARGE) && value1 <= value2*(1+ERROR_MARGE)){
+            return true;
+        }
+       return false;
     }
 }

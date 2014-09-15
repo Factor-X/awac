@@ -50,7 +50,7 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
 
         //add default unit
         if(question instanceof NumericQuestion && ((NumericQuestion)question).getDefaultUnit()!=null){
-            defaultUnit = new UnitDTO(((NumericQuestion)question).getDefaultUnit().getId(), ((NumericQuestion)question).getDefaultUnit().getSymbol());
+            defaultUnit = new UnitDTO(((NumericQuestion)question).getDefaultUnit().getUnitCode().getKey(), ((NumericQuestion)question).getDefaultUnit().getSymbol());
         }
 
         return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue,defaultUnit);

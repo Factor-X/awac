@@ -38,6 +38,8 @@ import static play.test.Helpers.status;
 @Component
 public class BAD_AE_BAD38BTest{
 
+    private static final Double ERROR_MARGE = 0.0001;
+
     @Autowired
     private QuestionSetAnswerService questionSetAnswerService;
 
@@ -114,13 +116,35 @@ public class BAD_AE_BAD38BTest{
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
         List<BaseActivityData> bads = baseActivityDataAE_BAD38B.getBaseActivityData(questionSetAnswers);
 
-        //control size
-        assertEquals("The number of bad generated is not correct. expected : 2, generated : "+bads.size(),2 ,bads.size());
-
         //control content
-                controlBad1(bads.get((1 - 1)));
-                controlBad2(bads.get((2 - 1)));
+        //map mapResult
+        Map<Double, Boolean> mapResult = new HashMap<>();
+                mapResult.put(4500.0, false);
+                mapResult.put(8000.0, false);
+        
+        String valueGenerated = "";
+
+        for(BaseActivityData bad : bads){
+            valueGenerated = String.valueOf(bad.getValue()) + ",";
+            for(Double value : mapResult.keySet()){
+                if(around(value,bad.getValue())){
+                    mapResult.put(bad.getValue(), true);
+                }
             }
+        }
+
+        String valueNotFound = "";
+
+        for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+            if(entry.getValue().equals(false)){
+                valueNotFound+=String.valueOf(entry.getKey())+", ";
+            }
+        }
+
+        //create errorMessage
+        assertTrue("Value expected but not found : "+valueNotFound+". Value generated : "+valueGenerated,valueNotFound.length() == 0);
+
+    }
 
         /**
      * build the AnswerLineDTO
@@ -171,38 +195,16 @@ public class BAD_AE_BAD38BTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A322",1);
-                list.add(new AnswerLineDTO("A324",20.0, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A324",20, identifier, mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A322",2);
-                list.add(new AnswerLineDTO("A324",3.0, identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A324",3, identifier, mapRepetition2 ));
         
         return list;
     }
     
-        /**
-     * control the content and the value of the bad
-     * @param bad
-     */
-    private void controlBad1(BaseActivityData bad){
-        //control global
-        controlGlobalBad(bad);
 
-        //control value
-        assertTrue("Value error : expected : 4500.0, founded : "+bad.getValue(),bad.getValue().equals(4500.0));
-    }
-        /**
-     * control the content and the value of the bad
-     * @param bad
-     */
-    private void controlBad2(BaseActivityData bad){
-        //control global
-        controlGlobalBad(bad);
-
-        //control value
-        assertTrue("Value error : expected : 8000.0, founded : "+bad.getValue(),bad.getValue().equals(8000.0));
-    }
-    
     /**
      * control all except value
      * @param bad
@@ -219,5 +221,12 @@ public class BAD_AE_BAD38BTest{
         assertTrue("ActivityOwnership error : Expected : {}, founded : "+bad.getActivityOwnership(),bad.getActivityOwnership().equals(true));
         assertTrue("Unit error : Expected : {}, founded : "+bad.getUnit().getSymbol(),bad.getUnit().getUnitCode().equals(UnitCode.U5321));
         */
+    }
+
+    private boolean around(Double value1,Double value2){
+        if(value1>=value2*(1-ERROR_MARGE) && value1 <= value2*(1+ERROR_MARGE)){
+            return true;
+        }
+       return false;
     }
 }
