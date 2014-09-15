@@ -13,6 +13,9 @@ touch /tmp/migration/migration_script.sql
 # safety separator
 echo ";" >> /tmp/migration/migration_script.sql
 
+# create new multi site
+cat ./CELDL-51-Multi-Site.sql >> /tmp/migration/migration_script.sql
+
 # create new invitation table
 cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 
