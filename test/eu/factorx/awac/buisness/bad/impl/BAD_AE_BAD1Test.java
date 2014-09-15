@@ -119,7 +119,7 @@ public class BAD_AE_BAD1Test{
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
                 mapResult.put(6.5, false);
-                mapResult.put(1641.6, false);
+                mapResult.put(1.6416, false);
         
         String valueGenerated = "";
 

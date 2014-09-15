@@ -395,7 +395,7 @@ public class BadTest extends AbstractBaseModelTest {
         scopeId = resultDTO.getId();
 
     }
-
+/*
     @Test
     public void _001_badAE_BAD1() {
         bad_AE_BAD1Test.test(scopeId);
@@ -620,7 +620,7 @@ public class BadTest extends AbstractBaseModelTest {
     public void _0045_badAE_BAD28() {
         bad_AE_BAD28Test.test(scopeId);
     }
-
+*/
     @Test
     public void _0046_badAE_BAD16A() {
         bad_AE_BAD16ATest.test(scopeId);
@@ -630,7 +630,7 @@ public class BadTest extends AbstractBaseModelTest {
     public void _0047_badAE_BAD16B() {
         bad_AE_BAD16BTest.test(scopeId);
     }
-
+/*
     @Test
     public void _0048_badAE_BAD16C() {
         bad_AE_BAD16CTest.test(scopeId);
@@ -920,4 +920,5 @@ public class BadTest extends AbstractBaseModelTest {
     public void _00105_badAE_BAD35C() {
         bad_AE_BAD35CTest.test(scopeId);
     }
+    */
 }

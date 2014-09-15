@@ -1,0 +1,1 @@
+update doublequestion set defaultunit_id = 24 where id = 89 or id = 90 or id = 91;

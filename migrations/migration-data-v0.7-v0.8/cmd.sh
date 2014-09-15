@@ -32,6 +32,8 @@ cat ./CELDL-149-OrganizationEvent.sql >> /tmp/migration/migration_script.sql
 
 
 
+
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 

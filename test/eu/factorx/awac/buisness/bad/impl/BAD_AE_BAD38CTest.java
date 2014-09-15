@@ -120,8 +120,8 @@ public class BAD_AE_BAD38CTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(0.012, false);
-                mapResult.put(5.0E-4, false);
+                mapResult.put(0.036, false);
+                mapResult.put(0.01, false);
         
         String valueGenerated = "";
 
