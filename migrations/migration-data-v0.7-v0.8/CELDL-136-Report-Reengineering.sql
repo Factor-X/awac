@@ -16,6 +16,30 @@ DROP SEQUENCE IF EXISTS indicator_id_seq;
 DROP TABLE IF EXISTS report;
 DROP SEQUENCE IF EXISTS report_id_seq;
 
+DROP TABLE IF EXISTS awaccalculator;
+DROP SEQUENCE IF EXISTS awaccalculator_id_seq;
+
+
+-- Table: awaccalculator
+
+CREATE SEQUENCE "awaccalculator_id_seq";
+CREATE TABLE awaccalculator
+(
+  id bigint NOT NULL DEFAULT nextval('awaccalculator_id_seq'::regclass),
+  code character varying(255),
+  creationdate timestamp without time zone,
+  creationuser character varying(255),
+  lastupdatedate timestamp without time zone,
+  lastupdateuser character varying(255),
+  CONSTRAINT awaccalculator_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE awaccalculator
+  OWNER TO play;
+
+  
 
 -- Table: baseindicator
 
@@ -84,7 +108,11 @@ CREATE TABLE report
   creationuser character varying(255),
   lastupdatedate timestamp without time zone,
   lastupdateuser character varying(255),
-  CONSTRAINT report_pkey PRIMARY KEY (id)
+  awaccalculator_id bigint NOT NULL,
+  CONSTRAINT report_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_report_awaccalculator_id FOREIGN KEY (awaccalculator_id)
+    REFERENCES awaccalculator (id) MATCH SIMPLE
+    ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE
