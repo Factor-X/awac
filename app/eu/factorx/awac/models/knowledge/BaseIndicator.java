@@ -6,14 +6,14 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.*;
 
 @Entity
-@Table(name = "indicator")
+@Table(name = "baseindicator")
 @NamedQueries({
-		@NamedQuery(name = Indicator.FIND_BY_PARAMETERS,
-				query = "select i from Indicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
-		@NamedQuery(name = Indicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from Indicator i"),
-		@NamedQuery(name = Indicator.REMOVE_ALL, query = "delete from Indicator i where i.id is not null"),
+		@NamedQuery(name = BaseIndicator.FIND_BY_PARAMETERS,
+				query = "select i from BaseIndicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
+		@NamedQuery(name = BaseIndicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from BaseIndicator i"),
+		@NamedQuery(name = BaseIndicator.REMOVE_ALL, query = "delete from BaseIndicator i where i.id is not null"),
 })
-public class Indicator extends AuditedAbstractEntity {
+public class BaseIndicator extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,11 +25,11 @@ public class Indicator extends AuditedAbstractEntity {
 	 * @param activityOwnership: a {@link Boolean}
 	 * @param deleted: a {@link Boolean}
 	 */
-	public static final String FIND_BY_PARAMETERS = "Indicator.findByParameters";
+	public static final String FIND_BY_PARAMETERS = "BaseIndicator.findByParameters";
 
-	public static final String FIND_ALL_INDICATOR_NAMES = "Indicator.findAllIndicatorNames";
+	public static final String FIND_ALL_INDICATOR_NAMES = "BaseIndicator.findAllIndicatorNames";
 
-	public static final String REMOVE_ALL = "Indicator.removeAll";
+	public static final String REMOVE_ALL = "BaseIndicator.removeAll";
 
 	@Column(unique = true)
 	private String key;
@@ -63,11 +63,11 @@ public class Indicator extends AuditedAbstractEntity {
 
 	private Boolean deleted;
 
-	protected Indicator() {
+	protected BaseIndicator() {
 		super();
 	}
 
-	public Indicator(String key, String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
+	public BaseIndicator(String key, String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
 	                 IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
 	                 ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
 		super();
@@ -175,7 +175,7 @@ public class Indicator extends AuditedAbstractEntity {
 
 	@Override
 	public String toString() {
-		return "Indicator [key=" + key + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
+		return "BaseIndicator [key=" + key + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
 				+ ", indicatorCategory=" + indicatorCategory + ", activityCategory=" + activityCategory + ", activitySubCategory="
 				+ activitySubCategory + ", activityOwnership=" + activityOwnership + ", unit=" + unit + ", deleted=" + deleted + "]";
 	}
