@@ -43,7 +43,7 @@ ALTER TABLE mm_calculator_indicator OWNER TO play;
 
 --
 
-DROP TABLE IF EXISTS mm_calculator_indicator;
+DROP TABLE IF EXISTS codeconversion;
 DROP SEQUENCE IF EXISTS "codeconversion_id_seq";
 
 CREATE SEQUENCE codeconversion_id_seq;

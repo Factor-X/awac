@@ -65,7 +65,7 @@ public class Code implements Serializable, Comparable<Code> {
 		if (obj == this) {
 			return true;
 		}
-		if (obj.getClass() != getClass()) {
+		if (!(obj instanceof Code)) {
 			return false;
 		}
 		Code rhs = (Code) obj;

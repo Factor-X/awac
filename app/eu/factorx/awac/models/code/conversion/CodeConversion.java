@@ -12,10 +12,14 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = CodeConversion.FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION,
                 query = "select cc from CodeConversion cc where cc.codeList = :codeList and cc.codeKey = :codeKey and cc.conversionCriterion = :conversionCriterion"),
+        @NamedQuery(name = CodeConversion.REMOVE_ALL, query = "delete from CodeConversion cc where cc.id is not null"),
+
+
 })
 public class CodeConversion extends AuditedAbstractEntity {
 
     public final static String FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION = "CodeConversion.findByCodeListAndKeyAndCriterion";
+    public final static String REMOVE_ALL = "CodeConversion.removeAll";
 
     @Enumerated(EnumType.STRING)
     @Basic(optional = false)
@@ -65,6 +69,8 @@ public class CodeConversion extends AuditedAbstractEntity {
     public void setConversionCriterion(ConversionCriterion conversionCriterion) {
         this.conversionCriterion = conversionCriterion;
     }
+
+
 
     @Override
     public String toString() {

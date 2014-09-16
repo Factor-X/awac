@@ -2,6 +2,7 @@ package eu.factorx.awac.service;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.conversion.CodeConversion;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.conversion.ConversionCriterion;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
@@ -10,7 +11,8 @@ import eu.factorx.awac.models.code.type.ActivityTypeCode;
 
 import java.util.List;
 
-public interface CodeConversionService {
+
+public interface CodeConversionService extends PersistenceService<CodeConversion>{
 
     ActivitySourceCode toActivitySourceCode(Code code);
 
@@ -32,6 +34,8 @@ public interface CodeConversionService {
      */
     Boolean isSublistOf(CodeList subList, CodeList mainList);
 
-    public Code getConversionCode(CodeList codeList, Code code, ConversionCriterion conversionCriterion);
+    public Code getConversionCode(Code code, ConversionCriterion conversionCriterion);
+
+    public void removeAll();
 
 }

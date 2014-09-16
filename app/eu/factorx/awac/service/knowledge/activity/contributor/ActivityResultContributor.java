@@ -110,8 +110,8 @@ public abstract class ActivityResultContributor {
 		return answerValue.getValue();
 	}
 
-    protected <T extends CodeList> T convertCode(CodeList codeList, Code code, ConversionCriterion conversionCriterion, Class<T> expectedClass){
-        return expectedClass.cast(codeConversionService.getConversionCode(codeList,code,conversionCriterion));
+    protected <T extends CodeList> T convertCode(Code code, ConversionCriterion conversionCriterion, Class<T> expectedClass){
+        return expectedClass.cast(codeConversionService.getConversionCode(code,conversionCriterion));
     }
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {

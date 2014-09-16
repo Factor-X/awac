@@ -5,5 +5,5 @@ package eu.factorx.awac.models.code.conversion;
  */
 public enum ConversionCriterion {
 
-    RECYCLING
+    RECYCLAGE
 }
