@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.models.code.conversion.CodeConversion;
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
+import eu.factorx.awac.models.data.FormProgress;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -69,6 +73,33 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 		return codesEquivalences;
 	}
 
+    @Override
+    public Boolean isSublistOf(CodeList subList, CodeList mainList) {
+        if (sublists == null) {
+            findAllSublistsData();
+        }
+        List<CodeList> mainListSublists = sublists.get(mainList);
+        return (mainListSublists != null) && mainListSublists.contains(subList);
+    }
+
+    public Code getConversionCode(CodeList codeList, Code code, ConversionCriterion conversionCriterion){
+
+        List<CodeConversion> resultList = JPA.em().createNamedQuery(CodeConversion.FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION, CodeConversion.class)
+                .setParameter("codeList", codeList).setParameter("codeKey", code.getKey()).setParameter("conversionCriterion",conversionCriterion).getResultList();
+
+
+        if(resultList.size()==0){
+            return null;
+        }
+        else if(resultList.size()>1){
+            throw new RuntimeException("More than one equivalence found for given parameters ("+codeList+","+ code + ", " + conversionCriterion + ")");
+        }
+        String codeKey = resultList.get(0).getCodeKey();
+
+        //find the code
+        return new Code(codeList,codeKey);
+    }
+
 	private String getTargetCodeKey(Code code, CodeList targetCodeList) {
 		String targetCodeKey = null;
 		if (sublists == null) {
@@ -100,15 +131,6 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
 			return null;
 		}
 		return resultList.get(0);
-	}
-
-	@Override
-	public Boolean isSublistOf(CodeList subList, CodeList mainList) {
-		if (sublists == null) {
-			findAllSublistsData();
-		}
-		List<CodeList> mainListSublists = sublists.get(mainList);
-		return (mainListSublists != null) && mainListSublists.contains(subList);
 	}
 
 }
