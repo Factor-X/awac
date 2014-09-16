@@ -15,6 +15,7 @@ div
                 td(ng-bind-html="'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_PERCENT_OWNED' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
+                td(ng-bind-html="'SITE_MANAGER_ADD_USERS_BUTTON' | translateText")
                 td
                     select(ng-options='p.key as p.label for p in $root.periods', ng-model='assignPeriod[0]')
                 td
@@ -31,6 +32,9 @@ div
                 td {{site.percentOwned}} %
                 td
                     button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateSite(site)", class="edit_icon glyphicon glyphicon-pencil")
+
+                td
+                    button(type="button", title="{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}", ng-click="addUsers(site)", class="edit_icon glyphicon glyphicon-pencil")
 
                 td
                     input(  ng-hide="isLoading[0][site]=== true",
