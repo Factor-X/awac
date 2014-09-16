@@ -56,7 +56,7 @@ import static play.test.Helpers.status;
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OrganizationEventTest extends AbstractBaseControllerTest {
+public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseControllerTest {
 
 
 	@Autowired
@@ -85,8 +85,10 @@ public class OrganizationEventTest extends AbstractBaseControllerTest {
 	OrganizationEventDTO dto = createDTO(org,period);
 
 	// create event
+	em.getTransaction().begin();
 	OrganizationEvent createdEvent = createOrganizationEvent(org, period, "event1", "eventDescription");
 	Assert.assertNotNull("Failed to save a new OrganizationEvent", createdEvent);
+	em.getTransaction().commit();
 
 	// ConnectionFormDTO
 	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
@@ -125,10 +127,12 @@ public class OrganizationEventTest extends AbstractBaseControllerTest {
 
 	@Test
 	public void _002_DeleteAllEvents() {
+		em.getTransaction().begin();
 		Organization org = organisationService.findByName(ORGANISATION_NAME);
 		Period period = periodService.findByCode(PeriodCode.P2013);
 
 		organizationEventService.remove(organizationEventService.findByOrganizationAndPeriod(org,period));
+		em.getTransaction().commit();
 	}
 
 
