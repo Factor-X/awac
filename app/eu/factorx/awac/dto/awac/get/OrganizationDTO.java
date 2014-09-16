@@ -25,6 +25,7 @@ public class OrganizationDTO extends DTO {
 		this.id = id;
 	}
 
+
 	public String getName() {
 		return name;
 	}
@@ -47,5 +48,15 @@ public class OrganizationDTO extends DTO {
 
 	public void setUsers(List<PersonDTO> users) {
 		this.users = users;
+	}
+
+	@Override
+	public String toString() {
+		return "OrganizationDTO{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", sites=" + sites +
+				", users=" + users +
+				'}';
 	}
 }

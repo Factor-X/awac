@@ -1,0 +1,55 @@
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(ng-show="createNewSite === true",class="modal-title",id="myModalLabel", ng-bind-html="'SITE_MANAGER_ADD_USER_TITLE' | translate")
+            .modal-body
+
+                .field_form
+                    table.document-manager-table
+                        thead
+                            tr
+                                td(ng-bind-html="'SITE_MANAGER_ADD_NAME_LABEL' | translate")
+                                td(ng-bind-html="'SITE_MANAGER_ADD_LOGIN_LABEL' | translate")
+                                td(ng-bind-html="'SITE_MANAGER_ADD_SELECTED_LABEL' | translate")
+                        tbody
+                            tr(ng-repeat="account in accounts")
+                                td  {{account.person.firstName}} {{account.person.lastName}}
+                                td  {{account.identifier}}
+                                td
+                                    input(
+                                        type='checkbox',
+                                        name='{{account.identifier}}',
+                                        value='{{account.identifier}}',
+                                        ng-checked='selection.indexOf(account) > -1',
+                                        ng-click='toggleSelection(account)')
+
+
+                    table.document-manager-table
+                        thead
+                            tr
+                                td(ng-bind-html="'SITE_MANAGER_ADD_LIST_LABEL' | translate")
+                        tbody
+                            tr(ng-repeat="account in selection")
+                                td {{account.identifier}}
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save();",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SAVE_BUTTON' | translate")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

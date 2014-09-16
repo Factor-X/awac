@@ -1,4 +1,4 @@
-package eu.factorx.awac.service.knowledge.activity.contributor.tps;
+package eu.factorx.awac.service.knowledge.activity.contributor.impl;
 
 import java.util.ArrayList;
 import java.util.List;

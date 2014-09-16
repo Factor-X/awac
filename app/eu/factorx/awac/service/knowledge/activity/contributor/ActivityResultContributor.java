@@ -36,7 +36,7 @@ public abstract class ActivityResultContributor {
 	@Autowired
 	private CodeConversionService codeConversionService;
 
-	private Map<String, Unit> unitsByCodeKey = null;
+	private static Map<String, Unit> unitsByCodeKey = null;
 
 	public ActivityResultContributor() {
 		super();

@@ -25,8 +25,6 @@ public class Validator {
 		Field[] declaredFields = object.getClass().getDeclaredFields();
 		for (Field field : declaredFields) {
 
-			System.out.println("++ " + object.getClass().getName() + " :: " + field.getName());
-
 			Annotation[] annotations = field.getDeclaredAnnotations();
 			for (Annotation annotation : annotations    ) {
 				if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {

@@ -39,7 +39,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
 
 		Object rawAnswerValue = null;
-		Integer unitId = null;
+		String unitCode = null;
 		switch (answerType) {
 			case BOOLEAN:
 				Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
@@ -56,14 +56,14 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 				IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
 				rawAnswerValue = integerAnswerValue.getValue();
 				if (integerAnswerValue.getUnit() != null) {
-					unitId = integerAnswerValue.getUnit().getId().intValue();
+                    unitCode = integerAnswerValue.getUnit().getUnitCode().getKey();
 				}
 				break;
 			case DOUBLE:
 				DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
 				rawAnswerValue = doubleAnswerValue.getValue();
 				if (doubleAnswerValue.getUnit() != null) {
-					unitId = doubleAnswerValue.getUnit().getId().intValue();
+                    unitCode = doubleAnswerValue.getUnit().getUnitCode().getKey();
 				}
 				break;
             case PERCENTAGE:
@@ -100,7 +100,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 		AnswerLineDTO answerLine = new AnswerLineDTO();
 		answerLine.setValue(rawAnswerValue);
 		answerLine.setQuestionKey(question.getCode().getKey());
-		answerLine.setUnitId(unitId);
+		answerLine.setUnitCode(unitCode);
 		answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
 		answerLine.setLastUpdateUser(questionAnswer.getTechnicalSegment().getLastUpdateUser());
         answerLine.setComment(answerValue.getComment());
