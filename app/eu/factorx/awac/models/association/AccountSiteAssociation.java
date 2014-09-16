@@ -10,16 +10,11 @@
  */
 package eu.factorx.awac.models.association;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
-import play.data.validation.Constraints.Required;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
-import java.util.List;
 
 // import for JAXB annotations -- JAXB stack
 
