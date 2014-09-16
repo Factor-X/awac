@@ -36,14 +36,12 @@
     </bean>
 
 
+	<bean id="reportServiceContributions" class="eu.factorx.awac.util.spring.ContributionFactoryBean">
+		<property name="expectedType" value="eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor"></property>
+	</bean>
+
 	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceImpl">
-		<property name="activityResultContributors">
-            <set>
-                <!--
-                <bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39B" />
-                -->
- 			</set>
-        </property>				
+		<property name="activityResultContributors" ref="reportServiceContributions" />
 	</bean>
 
     <!-- 	<bean id="entityManagerFactory" class="org.hibernate.ejb.EntityManagerFactoryImpl"> -->

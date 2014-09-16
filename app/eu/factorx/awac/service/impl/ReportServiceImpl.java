@@ -39,7 +39,8 @@ public class ReportServiceImpl implements ReportService {
 	private FactorService factorService;
 
 	/**
-	 * No auto-wiring for this property: contributors have to be explicitly declared in components.xml
+	 * No auto-wiring for this property: all beans of type {@link ActivityResultContributor} (and found in ApplicationContext) are injected in this property.
+	 * See bean definition in components.xml.
 	 */
 	private Set<ActivityResultContributor> activityResultContributors;
 
@@ -192,6 +193,7 @@ public class ReportServiceImpl implements ReportService {
 
 	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
 		this.activityResultContributors = activityResultContributors;
+		Logger.info("ReportServiceImpl: Injected {} activityResultContributors", activityResultContributors.size());
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import play.Logger;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.AnswerValue;
@@ -36,7 +37,7 @@ public abstract class ActivityResultContributor {
 	@Autowired
 	private CodeConversionService codeConversionService;
 
-	private Map<String, Unit> unitsByCodeKey = null;
+	private static Map<String, Unit> unitsByCodeKey = null;
 
 	public ActivityResultContributor() {
 		super();
@@ -159,5 +160,6 @@ public abstract class ActivityResultContributor {
 		for (Unit unit : units) {
 			unitsByCodeKey.put(unit.getUnitCode().getKey(), unit);
 		}
+		Logger.info("findAllUnits: found {} units", units.size());
 	}
 }
