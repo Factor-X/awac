@@ -48,4 +48,6 @@ angular
         console.log data
         downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
 
-
+  link: (scope) ->
+    console.log("entering SiteManagerCtrl")
+#    scope.getAssociatedUsers()
