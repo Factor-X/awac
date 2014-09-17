@@ -1,7 +1,6 @@
-package eu.factorx.awac.buisness.bad;
+package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.buisness.bad.impl.*;
 import eu.factorx.awac.controllers.SecuredController;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;

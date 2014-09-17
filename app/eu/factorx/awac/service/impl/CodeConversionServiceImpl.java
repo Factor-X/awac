@@ -1,5 +1,6 @@
 package eu.factorx.awac.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import com.sun.corba.se.impl.encoding.CodeSetConversion;
 import eu.factorx.awac.models.code.conversion.CodeConversion;
 import eu.factorx.awac.models.code.conversion.ConversionCriterion;
 import eu.factorx.awac.models.data.FormProgress;
+import eu.factorx.awac.util.MyrmexException;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -85,7 +88,7 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
     }
 
     @Override
-    public Code getConversionCode(Code code, ConversionCriterion conversionCriterion){
+    public <T extends Code> T getConversionCode(T code, ConversionCriterion conversionCriterion){
 
         List<CodeConversion> resultList = JPA.em().createNamedQuery(CodeConversion.FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION, CodeConversion.class)
                 .setParameter("codeList", code.getCodeList()).setParameter("codeKey", code.getKey()).setParameter("conversionCriterion",conversionCriterion).getResultList();
@@ -100,7 +103,11 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
         String codeKey = resultList.get(0).getReferencedCodeKey();
 
         //find the code
-        return new Code(code.getCodeList(),codeKey);
+        try {
+            return (T) code.getClass().getConstructor(String.class).newInstance(codeKey);
+        } catch (Exception e) {
+            throw new MyrmexRuntimeException("cannot create the code "+ code.getClass().getName()+" with parameter "+code+", "+conversionCriterion);
+        }
     }
 
 

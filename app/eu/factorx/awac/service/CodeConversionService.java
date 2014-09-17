@@ -34,7 +34,7 @@ public interface CodeConversionService extends PersistenceService<CodeConversion
      */
     Boolean isSublistOf(CodeList subList, CodeList mainList);
 
-    public Code getConversionCode(Code code, ConversionCriterion conversionCriterion);
+    public <T extends Code> T getConversionCode(T code, ConversionCriterion conversionCriterion);
 
     public void removeAll();
 

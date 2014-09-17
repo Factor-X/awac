@@ -249,7 +249,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 //generate test
                 BADTestGenerator badTestGenerator = (BADTestGenerator) ctx.getBean(BADTestGenerator.class);
 
-                badTestGenerator.generateBAD(bad, logLine, mapAnswer,TemplateName.BAD_TEST);
+                badTestGenerator.generateBAD(bad, logLine, mapAnswer,templateName);
 
                 bads.add(bad);
             }
@@ -257,7 +257,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         
         //generate main test
         BADTestMainGenerator badTestMainGenerator = new BADTestMainGenerator();
-        badTestMainGenerator.generateBAD(bads);
+        badTestMainGenerator.generateBAD(bads, templateName);
     }
 }
 

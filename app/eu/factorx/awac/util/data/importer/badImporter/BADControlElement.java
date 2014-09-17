@@ -390,7 +390,7 @@ public class BADControlElement {
                     //test the criteron conversion
                     if (matcher.group(2) != null) {
                         //TODO control criterion
-                        value = "convertCode(" + value + ", ConversionCriterion." + matcher.group(3) + "," + ActivitySourceCode.class.getName() + ".class)";
+                        value = "convertCode(" + value + ", ConversionCriterion." + matcher.group(3) + ")";
                     }
 
                     //add to bad

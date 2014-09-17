@@ -1,8 +1,5 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import play.Logger;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +27,8 @@ public class BADTestGenerator {
 
     public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer, TemplateName templateName) {
 
-        if(bad.getTestValues().size()>0) {
+
+        if (bad.getTestValues().size() > 0) {
 
             //generate questionAndAnswer list
             List<QuestionAndAnswer> questionAndAnswerList = new ArrayList<>();
@@ -47,14 +42,16 @@ public class BADTestGenerator {
             }
 
 
-
             //create template
-            BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST, "BAD_" + bad.getBaseActivityDataCode() + "Test.java");
+            BADTemplate badTemplate = new BADTemplate(templateName.getTestTemplate(), "BAD_" + bad.getBaseActivityDataCode() + "Test.java");
 
             Logger.info("questionAndAnswerList for " + bad.getBaseActivityDataCode() + "->" + questionAndAnswerList.toString());
 
             //path
-            badTemplate.addParameter("PACKAGE", templateName.getPackageString());
+            badTemplate.addParameter("PACKAGE", templateName.getPackageTest());
+
+            //bad package
+            badTemplate.addParameter("BAD_PACKAGE", templateName.getPackageString());
 
             //inset questions
             badTemplate.addParameter("questions", questionAndAnswerList);
@@ -65,15 +62,14 @@ public class BADTestGenerator {
             //insert bad
             badTemplate.addParameter("bad", bad);
 
-            badTemplate.generate(templateName.getPath());
-        }
-        else{
+            badTemplate.generate(templateName.getTestPath());
+        } else {
             logLine.addWarn("The test cannot be generated because there is not correct value available");
         }
     }
 
 
-    public class QuestionAndAnswer{
+    public class QuestionAndAnswer {
 
         private String questionCode;
 

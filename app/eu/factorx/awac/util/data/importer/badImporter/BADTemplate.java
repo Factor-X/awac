@@ -15,13 +15,14 @@ public class BADTemplate {
 
 
     private final VelocityContext velocityContext;
-    private final TemplateName templateName;
+    //private final TemplateName templateName;
     private final String fileName;
+    private final String templatePath;
 
-    public BADTemplate(TemplateName template, String fileName) {
+    public BADTemplate(String templatePath, String fileName) {
         this.velocityContext = new VelocityContext();
         this.fileName = fileName;
-        this.templateName = template;
+        this.templatePath=templatePath;
     }
 
 
@@ -52,7 +53,7 @@ public class BADTemplate {
     }
 
     public void generate(String path) {
-        org.apache.velocity.Template template = Velocity.getTemplate(templateName.getUrl());
+        org.apache.velocity.Template template = Velocity.getTemplate(templatePath);
 
         StringWriter writer = new StringWriter();
 
