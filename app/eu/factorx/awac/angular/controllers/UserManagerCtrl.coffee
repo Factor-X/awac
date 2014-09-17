@@ -23,7 +23,7 @@ angular
 
             $scope.inviteUser = ->
                 modalService.show(modalService.INVITE_USER)
-        
+
             $scope.getMyself = ->
                 return $scope.$root.currentPerson
 

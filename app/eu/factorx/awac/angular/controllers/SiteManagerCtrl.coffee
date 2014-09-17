@@ -1,16 +1,14 @@
 angular
 .module('app.controllers')
-.controller "SiteManagerCtrl", ($scope, translationService, modalService, downloadService, messageFlash) ->
-    $scope.isLoading = [
-        {},
-        {}
-    ]
+.controller "SiteManagerCtrl", ($scope,translationService, modalService,downloadService,messageFlash) ->
+
+    $scope.isLoading = {}
     if $scope.$root.periods?
-        $scope.assignPeriod = [$scope.$root.periods[1].key, $scope.$root.periods[0].key]
-    $scope.isPeriodChecked = [
-        {},
-        {}
-    ]
+        $scope.assignPeriod = $scope.$root.periods[0].key
+    else
+        $scope.$watch '$root.periods', ->
+            $scope.assignPeriod = $scope.$root.periods[0].key
+    $scope.isPeriodChecked = {}
 
     # load my organization
     modalService.show(modalService.LOADING)
@@ -23,50 +21,79 @@ angular
             modalService.close(modalService.LOADING)
             $scope.organization = result.data
 
-    $scope.$watch '$scope.assignPeriod', ->
-        for site in $scope.organization.sites
-            $scope.isPeriodChecked[0][site.id] = $scope.periodAssignTo(0, site)
-            $scope.isPeriodChecked[1][site.id] = $scope.periodAssignTo(1, site)
+            $scope.events = []
 
-            console.log $scope.isPeriodChecked
+            data = {}
+            data.organization = $scope.organization
+            data.period = $scope.$root.periods[0]
+
+            console.log "DATA"
+            console.log data
+            downloadService.postJson 'awac/organization/events/load', data, (result) ->
+                $scope.events = result.data.organizationEventList
+                console.log "RESULT"
+                console.log result
+                console.log result.data.organizationEventList
 
 
-    $scope.toForm = ->
-        $scope.$parent.navToLastFormUsed()
+            $scope.$watch 'assignPeriod', ->
+                for site in $scope.organization.sites
+                    $scope.isPeriodChecked[site.id] = $scope.periodAssignTo(site)
 
-    $scope.getSiteList = () ->
-        return $scope.organization.sites
+                    console.log $scope.isPeriodChecked
 
-    $scope.editOrCreateSite = (site) ->
-        params = {}
-        if site?
-            params.site = site
-        params.organization = $scope.organization
-        modalService.show(modalService.EDIT_SITE, params)
 
-    $scope.addUsers = (site) ->
-        params = {}
-        if site?
-            params.site = site
-        params.organization = $scope.organization
-        modalService.show(modalService.ADD_USER_SITE, params)
+            $scope.toForm = ->
+                $scope.$parent.navToLastFormUsed()
 
-    $scope.periodAssignTo = (nbPeriod, site) ->
-        if site.listPeriodAvailable?
-            for period in site.listPeriodAvailable
-                if period == $scope.assignPeriod[nbPeriod]
-                    return true
-        return false
+            $scope.getSiteList = () ->
+                return $scope.organization.sites
 
-    $scope.assignPeriodToSite = (nbPeriod, site) ->
-        data = {}
-        data.periodKeyCode = $scope.assignPeriod[nbPeriod]
-        data.siteId = site.id
-        data.assign = !$scope.periodAssignTo(nbPeriod, site)
+            $scope.editOrCreateSite = (site) ->
+                params = {}
+                if site?
+                    params.site = site
+                params.organization = $scope.organization
+                modalService.show(modalService.EDIT_SITE, params)
 
-        console.log data
-        downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
+            $scope.addUsers = (site) ->
+                params = {}
+                if site?
+                    params.site = site
+                params.organization = $scope.organization
+                modalService.show(modalService.ADD_USER_SITE, params)
 
-    link: (scope) ->
-        console.log("entering SiteManagerCtrl")
-#    scope.getAssociatedUsers()
+            $scope.getEventList = () ->
+                return $scope.events
+
+            $scope.periodAssignTo = (site) ->
+                if site.listPeriodAvailable?
+                    for period in site.listPeriodAvailable
+                        if period == $scope.assignPeriod
+                            return true
+                return false
+
+            $scope.assignPeriodToSite = (site) ->
+                $scope.isLoading[site.id] = true
+                data = {}
+                data.periodKeyCode = $scope.assignPeriod
+                data.siteId = site.id
+                data.assign = !$scope.periodAssignTo(site)
+
+                console.log data
+                downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
+                    $scope.isLoading[site.id] = false
+                    if not result.success
+                        messageFlash.displayError 'Unable to load data...'
+                    else
+                        if !site.listPeriodAvailable?
+                            site.listPeriodAvailable = []
+                        site.listPeriodAvailable[site.listPeriodAvailable.length] = $scope.assignPeriod
+
+
+            $scope.editOrCreateEvent = (event) ->
+                params = {}
+                if event?
+                    params.event = event
+                modalService.show(modalService.EDIT_EVENT, params)
+        

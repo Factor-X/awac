@@ -1,0 +1,33 @@
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(ng-show="createNewEvent === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_SITE_TITLE_CREATE' | translate")
+                h4(ng-hide="createNewEvent === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_SITE_TITLE_EDIT' | translate")
+
+            .modal-body
+                .field_form
+                    mm-awac-modal-field-text(ng-info="fields.name")
+                    mm-awac-modal-field-text(ng-info="fields.description")
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save();",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SAVE_BUTTON' | translate")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+
+
