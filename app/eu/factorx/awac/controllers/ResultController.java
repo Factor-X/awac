@@ -10,7 +10,6 @@ import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -23,10 +22,8 @@ import eu.factorx.awac.dto.SvgContent;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.ReportResult;
@@ -64,15 +61,22 @@ public class ResultController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReport(String reportKey, String periodKey, List<Long> scopesIds) {
+	public Result getReport(String periodKey, List<Long> scopesIds) {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		List<Scope> scopes = new ArrayList<>();
 		for (Long scopeId : scopesIds) {
 			scopes.add(scopeService.findById(scopeId));
 		}
-		ReportResult report = getReportResult(reportKey, period, scopes);
-
-		return ok(conversionService.convert(report, ReportDTO.class));
+		Map<String, ReportResult> reportResults = getReportResults(period, scopes);
+		
+		HashMap<String, ReportDTO> reportDTOs = new HashMap<>();
+		for (String reportKey : reportResults.keySet()) {
+			reportDTOs.put(reportKey, conversionService.convert(reportResults.get(reportKey), ReportDTO.class));
+		}
+		
+		
+		
+		return resultsDTO;
 	}
 
 	@Transactional(readOnly = false)
@@ -135,7 +139,7 @@ public class ResultController extends AbstractController {
 		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
 			if (entry.getValue().get(0) > 0) {
 				int row = allScopes.getRowCount();
-				allScopes.sesvgGeneratortCell(0, row, entry.getKey());
+				allScopes.setCell(0, row, entry.getKey());
 
 				if (entry.getValue().get(1) > 0)
 					allScopes.setCell(1, row, entry.getValue().get(1));
@@ -198,14 +202,14 @@ public class ResultController extends AbstractController {
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
 		nf.setMaximumFractionDigits(2);
 
-//		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
-//			if (entry.getValue().get(scopeType) > 0) {
-//				int row = scopeTable.getRowCount();
-//				scopeTable.setCell(0, row, entry.getKey());
-//				scopeTable.setCell(1, row, entry.getValue().get(scopeType));
-//				scopeTable.setCell(2, row, nf.format(entry.getValue().get(scopeType)));
-//			}
-//		}
+		 for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+		 if (entry.getValue().get(scopeType) > 0) {
+		 int row = scopeTable.getRowCount();
+		 scopeTable.setCell(0, row, entry.getKey());
+		 scopeTable.setCell(1, row, entry.getValue().get(scopeType));
+		 scopeTable.setCell(2, row, nf.format(entry.getValue().get(scopeType)));
+		 }
+		 }
 
 		markNoCache();
 
@@ -272,42 +276,21 @@ public class ResultController extends AbstractController {
 		return ok(svg);
 	}
 
-	private ReportResult getReportResult(String reportKey, Period period, List<Scope> scopes) {
+	private Map<String, ReportResult> getReportResults(Period period, List<Scope> scopes) {
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
-		String cacheKey = getCacheKey(awacCalculator, period, scopes);
 
-		// try to get from cache
-		Map<String, ReportResult> cacheEntry = reportsCache.get(cacheKey);
-		if (cacheEntry != null && cacheEntry.containsKey(reportKey)) {
-			ReportResult reportResult = cacheEntry.get(reportKey);
-			Logger.info("Get report '{}' from cache", reportKey);
-			return reportResult;
-		}
-
-		// else, build reports...
 		List<ReportResult> allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		Logger.info("Built {} report(s):", allReportResults.size());
 		for (ReportResult reportResult : allReportResults) {
 			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getActivityResults().size());
 		}
 
-		// and put in cache
 		Map<String, ReportResult> allReportResultsMap = new HashMap<>();
 		for (ReportResult reportResult : allReportResults) {
 			allReportResultsMap.put(reportResult.getReport().getCode().getKey(), reportResult);
 		}
-		reportsCache.put(cacheKey, allReportResultsMap);
 
-		return allReportResultsMap.get(reportKey);
-	}
-
-	private static String getCacheKey(AwacCalculator awacCalculator, Period period, List<Scope> scopes) {
-		List<Long> scopesIds = new ArrayList<>();
-		for (Scope scope : scopes) {
-			scopesIds.add(scope.getId());
-		}
-		Collections.sort(scopesIds);
-		return awacCalculator.getId() + '/' + period.getId() + '/' + StringUtils.join(scopesIds, '-');
+		return allReportResultsMap;
 	}
 
 }
