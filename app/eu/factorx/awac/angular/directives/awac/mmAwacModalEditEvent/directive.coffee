@@ -93,6 +93,7 @@ angular
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             # add new event to the list
+                            $scope.getParams().events[$scope.getParams().events.length] = result.data
                             #$scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
 
                             #close window
