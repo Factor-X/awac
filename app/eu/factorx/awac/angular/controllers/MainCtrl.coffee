@@ -92,7 +92,7 @@ angular
                 params.loc = loc
                 modalService.show result.modalForConfirm, params
         if canBeContinue
-            $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId)
+            $location.path(loc + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId)
 
     $scope.$on '$routeChangeSuccess', (event, args) ->
         $timeout(->
@@ -119,8 +119,11 @@ angular
     # Periods
     #
     $scope.periodKey = null
-    $scope.$watch 'periodKey', () ->
-        $routeParams.period = $scope.periodKey
+    $scope.$watch '$root.periodSelectedKey', () ->
+
+        console.log "changement de la valeur de $root.periodSelectedKey : "+$scope.$root.periodSelectedKey
+
+        $routeParams.period = $scope.$root.periodSelectedKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -130,14 +133,18 @@ angular
             $location.path(p)
 
         #hide data to compare if the period is the same than the period to answer
-        if $scope.periodKey == $scope.periodToCompare
+        if $scope.$root.periodSelectedKey == $scope.periodToCompare
             $scope.periodToCompare = 'default'
 
         $scope.loadPeriodForComparison()
         $scope.loadFormProgress()
 
-    $scope.$watch 'scopeId', () ->
-        $routeParams.period = $scope.periodKey
+    $scope.$watch '$root.scopeSelectedId', () ->
+
+        console.log "changement de la valeur de root.scopeSelectedId : "+$scope.$root.scopeSelectedId
+
+
+        $routeParams.period = $scope.$root.periodSelectedKey
         if $route.current
             p = $route.current.$$route.originalPath
 
@@ -166,8 +173,10 @@ angular
     # Route Change
     #
     $scope.$on "$routeChangeSuccess", (event, current, previous) ->
-        $scope.periodKey = $routeParams.period
-        $scope.scopeId = parseInt($routeParams.scope)
+        if $routeParams.period?
+            $scope.$root.periodSelectedKey = $routeParams.period
+        if $routeParams.scope?
+            $scope.$root.scopeSelectedId = parseInt($routeParams.scope)
 
 
     $scope.getMainScope = ->
@@ -175,8 +184,8 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        url = '/awac/answer/getPeriodsForComparison/' + $scope.scopeId
-        if $scope.scopeId? and not isNaN($scope.scopeId)
+        if $scope.$root.periodToCompare? and not isNaN($scope.$root.periodToCompare)
+            url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.periodToCompare
 
             downloadService.getJson url, (result) ->
                 if result.success
@@ -184,10 +193,10 @@ angular
                         {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
                     ]
                     for period in result.data.periodDTOList
-                        if period.key != $scope.periodKey
+                        if period.key != $scope.$root.periodSelectedKey
                             $scope.periodsForComparison[$scope.periodsForComparison.length] = period
                 else
-                    # TODO ERROR HANDLING
+                    messageFlash.displayError data.message
 
 
     $scope.getProgress = (form)->
@@ -201,12 +210,13 @@ angular
     $scope.formProgress = null
 
     $scope.loadFormProgress = ->
-        if $scope.scopeId? && $scope.periodKey?
-            downloadService.getJson "/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId, (result) ->
+        console.log "$scope.loadFormProgress : "+$scope.$root.scopeSelectedId+" "+$scope.$root.periodSelectedKey
+        if $scope.$root.scopeSelectedId? && $scope.$root.periodSelectedKey?
+            downloadService.getJson "/awac/answer/formProgress/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
                 if result.success
                     $scope.formProgress = result.data.listFormProgress
                 else
-                    # TODO ERROR HANDLING
+                    messageFlash.displayError data.message
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
@@ -327,7 +337,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.currentPerson = null
                 $location.path('/login')
             else
-                # TODO ERROR HANDLING
+                messageFlash.displayError data.message
                 $location.path('/login')
 
     #
@@ -344,6 +354,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
         # try to load default scope / period
         #default scope
+        ###
         if data.defaultSiteId?
             for site in $rootScope.mySites
                 if site.id == data.defaultSiteId
@@ -355,10 +366,14 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                             for period in  site.listPeriodAvailable
                                 if period.key == data.defaultPeriod
                                     $rootScope.periodSelectedKey = data.defaultPeriod
+        ###
 
+        console.log "? : "+$rootScope.scopeSelectedId
         if !$rootScope.scopeSelectedId?
+            console.log "!1:"+$rootScope.mySites.length
             if $rootScope.mySites.length > 0
                 $rootScope.scopeSelectedId = $rootScope.mySites[0].id
+                console.log "!1 : "+$rootScope.scopeSelectedId
 
         if $rootScope.scopeSelectedId? &&  !$rootScope.periodSelectedKey?
             for site in $rootScope.mySites
@@ -371,7 +386,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
         if not skipRedirect
             if $rootScope.scopeSelectedId? &&  $rootScope.periodSelectedKey?
-                $rootScope.onFormPath(data.defaultPeriod, $rootScope.mySites[0].scope)
+                $rootScope.onFormPath($rootScope.periodSelectedKey,$rootScope.scopeSelectedId)
             else
                 $location.path("noScope")
 
@@ -424,7 +439,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 for n in result.data.notifications
                     messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
             else
-                # TODO ERROR HANDLING
+                messageFlash.displayError data.message
                 # schedule a refresh
         $timeout $rootScope.refreshNotifications, 3600 * 1000
 

@@ -44,7 +44,7 @@ div
             .big_separator
             .data_date_compare
                 div Comparaison avec
-                select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='periodToCompare')
+                select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
             .data_save
                 .last_save(ng-hide='lastSaveTime===null')
