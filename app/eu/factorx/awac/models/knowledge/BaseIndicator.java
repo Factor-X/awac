@@ -84,7 +84,7 @@ public class BaseIndicator extends AuditedAbstractEntity {
 		this.deleted = deleted;
 	}
 
-	
+
 	public String getKey() {
 		return key;
 	}

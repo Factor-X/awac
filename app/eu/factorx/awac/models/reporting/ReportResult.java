@@ -5,41 +5,55 @@ import java.util.*;
 
 import javax.persistence.MappedSuperclass;
 
+import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.Report;
 
 @MappedSuperclass
 public class ReportResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Map<String, List<Double>> scopeValuesByIndicator; // KEY => (allScopes, scope1, scope2, scope3, outOfScope)
-
-	private List<BaseActivityResult> activityResults;
+	private Report report;
+	
+	private Map<IndicatorCode, List<BaseActivityResult>> activityResults = new HashMap<>();
 
 	protected ReportResult() {
 		super();
 	}
 
-	public ReportResult(List<BaseActivityResult> activityResults, List<String> indicatorNames) {
-		super();
+	public ReportResult(Report report) {
+		this.report = report;
+	}
 
-		this.activityResults = activityResults;
+	public Report getReport() {
+		return report;
+	}
 
-		// group data by baseIndicator name
+	public Map<IndicatorCode, List<BaseActivityResult>> getActivityResults() {
+		return activityResults;
+	}
+
+	public Map<String, List<Double>> getScopeValuesByIndicator() {
+
+		// group data by baseIndicator code key
 		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
-		for (String indicatorName : indicatorNames) {
-			dataByIndicator.put(indicatorName, new ArrayList<BaseActivityResult>());
+		for (Indicator indicator : report.getIndicators()) {
+			String indicatorKey = indicator.getCode().getKey();
+			dataByIndicator.put(indicatorKey, new ArrayList<BaseActivityResult>());
 		}
-		for (BaseActivityResult baseActivityResult : activityResults) {
-			String indicatorName = baseActivityResult.getBaseIndicator().getName();
-			dataByIndicator.get(indicatorName).add(baseActivityResult);
+		for (IndicatorCode indicatorCode : activityResults.keySet()) {
+			List<BaseActivityResult> baseActivityResults = activityResults.get(indicatorCode);
+			dataByIndicator.get(indicatorCode.getKey()).addAll(baseActivityResults);
 		}
 
-		scopeValuesByIndicator = new HashMap<>();
+		// KEY => (allScopes, scope1, scope2, scope3, outOfScope)
+		Map<String, List<Double>> scopeValuesByIndicator = new HashMap<>();
 
 		// build a report line for each entry (=> adding values of each activity data linked to the baseIndicator name.)
 		for (Map.Entry<String, List<BaseActivityResult>> indicatorData : dataByIndicator.entrySet()) {
-			String indicatorName = indicatorData.getKey();
+			String indicatorKey = indicatorData.getKey();
 
 			double scope1 = 0.0;
 			double scope2 = 0.0;
@@ -63,15 +77,9 @@ public class ReportResult implements Serializable {
 
 			double allScopes = scope1 + scope2 + scope3 + outOfScope;
 
-			scopeValuesByIndicator.put(indicatorName, Arrays.asList(allScopes, scope1, scope2, scope3, outOfScope));
+			scopeValuesByIndicator.put(indicatorKey, Arrays.asList(allScopes, scope1, scope2, scope3, outOfScope));
 		}
-	}
-
-	public List<BaseActivityResult> getActivityResults() {
-		return activityResults;
-	}
-
-	public Map<String, List<Double>> getScopeValuesByIndicator() {
+		
 		return scopeValuesByIndicator;
 	}
 }

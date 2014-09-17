@@ -1,10 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.*;
@@ -16,9 +13,11 @@ import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ReportResultService;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import play.Logger;
 
 import java.util.*;
@@ -202,13 +201,46 @@ public class ReportResultServiceImpl implements ReportResultService {
 	@Override
 	public List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
 		List<ReportResult> reportResults = new ArrayList<>();
+		for (Report report : awacCalculator.getReports()) {
+			reportResults.add(new ReportResult(report));
+		}
 
 		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
 		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period);
 
-		// TODO CONSOLIDATE IN REPORTS ! :-)
-		
+		for (BaseActivityResult baseActivityResult : baseActivityResults) {
+			for (ReportResult reportResult : reportResults) {
+				addActivityResultIfSuitable(reportResult, baseActivityResult);
+			}
+		}
+
 		return reportResults;
+	}
+
+	private boolean addActivityResultIfSuitable(ReportResult reportResult, BaseActivityResult baseActivityResult) {
+		BaseIndicator baseIndicator = baseActivityResult.getBaseIndicator();
+		ScopeTypeCode scopeType = baseIndicator.getScopeType();
+
+		Report report = reportResult.getReport();
+		IndicatorIsoScopeCode reportScope = report.getRestrictedScope();
+
+		if ((reportScope != null) && (!reportScope.equals(scopeType))) {
+			return false;
+		}
+
+		boolean res = false;
+		List<Indicator> reportIndicators = report.getIndicators();
+		for (Indicator indicator : baseIndicator.getIndicators()) {
+			if (reportIndicators.contains(indicator)) {
+				IndicatorCode indicatorCode = indicator.getCode();
+				if (!reportResult.getActivityResults().containsKey(indicatorCode)) {
+					reportResult.getActivityResults().put(indicatorCode, new ArrayList<BaseActivityResult>());
+					res = reportResult.getActivityResults().get(indicatorCode).add(baseActivityResult);
+				}
+				break;
+			}
+		}
+		return res;
 	}
 
 	private List<BaseIndicator> getBaseIndicatorsForCalculator(AwacCalculator awacCalculator) {

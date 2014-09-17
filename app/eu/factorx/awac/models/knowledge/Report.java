@@ -9,8 +9,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.type.IndicatorCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.code.type.ReportCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 
 @Entity
@@ -20,15 +20,17 @@ public class Report extends AuditedAbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Column(unique = true)
-	private IndicatorCode code;
+	private ReportCode code;
 
 	@Embedded
-	private ScopeTypeCode restrictedScope;
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "retricted_scope"))})
+	private IndicatorIsoScopeCode restrictedScope;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private AwacCalculator awacCalculator;
 
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, orphanRemoval = true)
+	@OrderBy(ReportIndicator.PROPERTY_NAME_ORDER_INDEX)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	// -> hibernate-specific annotation to fix DDL generation problem
 	private List<ReportIndicator> reportIndicators;
@@ -40,25 +42,25 @@ public class Report extends AuditedAbstractEntity {
 	/**
 	 * @param code
 	 */
-	public Report(IndicatorCode code, ScopeTypeCode restrictedScope) {
+	public Report(ReportCode code, IndicatorIsoScopeCode restrictedScope) {
 		super();
 		this.code = code;
 		this.restrictedScope = restrictedScope;
 	}
 
-	public IndicatorCode getCode() {
+	public ReportCode getCode() {
 		return code;
 	}
 
-	public void setCode(IndicatorCode code) {
+	public void setCode(ReportCode code) {
 		this.code = code;
 	}
 
-	public ScopeTypeCode getRestrictedScope() {
+	public IndicatorIsoScopeCode getRestrictedScope() {
 		return restrictedScope;
 	}
 
-	public void setRestrictedScope(ScopeTypeCode restrictedScope) {
+	public void setRestrictedScope(IndicatorIsoScopeCode restrictedScope) {
 		this.restrictedScope = restrictedScope;
 	}
 

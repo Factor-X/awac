@@ -10,13 +10,14 @@ public class ReportIndicator extends AbstractEntity {
 
 	private static final long serialVersionUID = -446540676020436619L;
 
+	public static final String PROPERTY_NAME_ORDER_INDEX = "orderIndex";
+
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private Report report;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private Indicator indicator;
 
-	@OrderColumn
 	@Column(nullable = false)
 	private Integer orderIndex;
 

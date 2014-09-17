@@ -1,84 +1,95 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.awac.get.ReportDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.models.reporting.BaseActivityResult;
-import eu.factorx.awac.models.reporting.ReportResult;
-import eu.factorx.awac.service.*;
-import eu.factorx.awac.util.NumberFormatWrapper;
-import eu.factorx.awac.util.Table;
-import eu.factorx.awac.views.html.pdf.results;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.*;
+
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
+
+import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+
 import play.Logger;
 import play.api.templates.Html;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import eu.factorx.awac.dto.SvgContent;
+import eu.factorx.awac.dto.awac.get.ReportDTO;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.reporting.ReportResult;
+import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.NumberFormatWrapper;
+import eu.factorx.awac.util.Table;
+import eu.factorx.awac.views.html.pdf.results;
 
 @org.springframework.stereotype.Controller
 public class ResultController extends AbstractController {
 
+	private static final int CACHE_MAP_SIZE = 100;
 	@Autowired
-	private PeriodService               periodService;
+	private PeriodService periodService;
 	@Autowired
-	private ScopeService                scopeService;
+	private ScopeService scopeService;
 	@Autowired
-	private ConversionService           conversionService;
+	private ConversionService conversionService;
 	@Autowired
-	private ReportResultService         reportResultService;
+	private ReportResultService reportResultService;
 	@Autowired
 	private ResultExcelGeneratorService resultExcelGeneratorService;
 	@Autowired
-	private SecuredController           securedController;
+	private SecuredController securedController;
 	@Autowired
-	private PdfGenerator                pdfGenerator;
+	private PdfGenerator pdfGenerator;
 	@Autowired
-	private SvgGenerator                svgGenerator;
+	private SvgGenerator svgGenerator;
+	@Autowired
+	private AwacCalculatorService awacCalculatorService;
 
+	@SuppressWarnings("unchecked")
+	public static Map<String, Map<String, ReportResult>> reportsCache = (Map<String, Map<String, ReportResult>>)
+			Collections.synchronizedMap(new LRUMap(CACHE_MAP_SIZE));
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReport(String periodKey, Long scopeId) {
+	public Result getReport(String reportKey, String periodKey, List<Long> scopesIds) {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		Scope scope = scopeService.findById(scopeId);
-		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
-		Logger.info("Built report on the basis of {} base activity results:", report.getActivityResults().size());
-		for (BaseActivityResult activityResult : report.getActivityResults()) {
-			Logger.info("\t{}", activityResult);
+		List<Scope> scopes = new ArrayList<>();
+		for (Long scopeId : scopesIds) {
+			scopes.add(scopeService.findById(scopeId));
 		}
+		ReportResult report = getReportResult(reportKey, period, scopes);
+
 		return ok(conversionService.convert(report, ReportDTO.class));
 	}
 
-
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReportAsXls(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+	public Result getReportAsXls(String reportKey, String periodKey, List<Long> scopesIds) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		Scope scope = scopeService.findById(scopeId);
-		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
-
+		List<Scope> scopes = new ArrayList<>();
+		for (Long scopeId : scopesIds) {
+			scopes.add(scopeService.findById(scopeId));
+		}
+		ReportResult report = getReportResult(reportKey, period, scopes);
 
 		Table allScopes = new Table();
 		Table scope1 = new Table();
 		Table scope2 = new Table();
 		Table scope3 = new Table();
 		Table outOfScope = new Table();
-
 
 		int row = 0;
 		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
@@ -99,17 +110,21 @@ public class ResultController extends AbstractController {
 		}
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		resultExcelGeneratorService.generateExcelInStream(stream, ((Site)scope).getName(), period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
+		resultExcelGeneratorService.generateExcelInStream(stream, scopes, period.getLabel(), allScopes, scope1, scope2, scope3, outOfScope);
 		response().setHeader("Content-Disposition", "attachment; filename=\"export.xls\"");
-		return ok(new ByteArrayInputStream(stream.toByteArray()));
+		ByteArrayInputStream content = new ByteArrayInputStream(stream.toByteArray());
+		return ok(content);
 	}
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReportAsPdf(String periodKey, Long scopeId) throws IOException, WriteException, BiffException {
+	public Result getReportAsPdf(String reportKey, String periodKey, List<Long> scopesIds) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		Scope scope = scopeService.findById(scopeId);
-		ReportResult report = reportResultService.getReportResult(securedController.getCurrentUser().getInterfaceCode(), scope, period);
+		List<Scope> scopes = new ArrayList<>();
+		for (Long scopeId : scopesIds) {
+			scopes.add(scopeService.findById(scopeId));
+		}
+		ReportResult report = getReportResult(reportKey, period, scopes);
 
 		Table allScopes = new Table();
 		Table scope1 = new Table();
@@ -117,11 +132,10 @@ public class ResultController extends AbstractController {
 		Table scope3 = new Table();
 		Table outOfScope = new Table();
 
-
 		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
 			if (entry.getValue().get(0) > 0) {
 				int row = allScopes.getRowCount();
-				allScopes.setCell(0, row, entry.getKey());
+				allScopes.sesvgGeneratortCell(0, row, entry.getKey());
 
 				if (entry.getValue().get(1) > 0)
 					allScopes.setCell(1, row, entry.getValue().get(1));
@@ -164,39 +178,39 @@ public class ResultController extends AbstractController {
 
 		Html rendered = results.render(wrapper, allScopes, scope1, scope2, scope3, outOfScope);
 
-
 		pdfGenerator.setMemoryResource("mem://svg/donut/2013/2/1", svgGenerator.getDonut(scope1));
-
 
 		return pdfGenerator.ok(rendered);
 	}
 
-
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getDonut(String periodKey, Long scopeId, int scopeType) throws IOException, WriteException, BiffException {
+	public Result getDonut(String reportKey, String periodKey, List<Long> scopesIds) throws IOException, WriteException, BiffException {
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		Scope scope = scopeService.findById(scopeId);
-		Account currentUser = securedController.getCurrentUser();
-		ReportResult report = reportResultService.getReportResult(currentUser.getInterfaceCode(), scope, period);
-
+		List<Scope> scopes = new ArrayList<>();
+		for (Long scopeId : scopesIds) {
+			scopes.add(scopeService.findById(scopeId));
+		}
+		ReportResult report = getReportResult(reportKey, period, scopes);
+		IndicatorIsoScopeCode reportScope = report.getReport().getRestrictedScope();
 		Table scopeTable = new Table();
 
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
 		nf.setMaximumFractionDigits(2);
 
-		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
-			if (entry.getValue().get(scopeType) > 0) {
-				int row = scopeTable.getRowCount();
-				scopeTable.setCell(0, row, entry.getKey());
-				scopeTable.setCell(1, row, entry.getValue().get(scopeType));
-				scopeTable.setCell(2, row, nf.format(entry.getValue().get(scopeType)));
-			}
-		}
+//		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
+//			if (entry.getValue().get(scopeType) > 0) {
+//				int row = scopeTable.getRowCount();
+//				scopeTable.setCell(0, row, entry.getKey());
+//				scopeTable.setCell(1, row, entry.getValue().get(scopeType));
+//				scopeTable.setCell(2, row, nf.format(entry.getValue().get(scopeType)));
+//			}
+//		}
 
 		markNoCache();
 
-		return ok(toSvg(svgGenerator.getDonut(scopeTable)));
+		SvgContent svg = toSvg(svgGenerator.getDonut(scopeTable));
+		return ok(svg);
 	}
 
 	@Transactional(readOnly = false)
@@ -212,21 +226,22 @@ public class ResultController extends AbstractController {
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("FR"));
 		nf.setMaximumFractionDigits(2);
 
-//		System.out.println("== BEGIN WEB ==");
+		// System.out.println("== BEGIN WEB ==");
 		for (Map.Entry<String, List<Double>> entry : report.getScopeValuesByIndicator().entrySet()) {
 			double v = entry.getValue().get(1) + entry.getValue().get(2) + entry.getValue().get(3) + entry.getValue().get(4);
 			if (v > 0) {
-//				System.out.println("== web == " + entry);
+				// System.out.println("== web == " + entry);
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, entry.getKey());
 				scopeTable.setCell(1, row, v);
 			}
 		}
-//		System.out.println("== END WEB ==");
+		// System.out.println("== END WEB ==");
 
 		markNoCache();
 
-		return ok(toSvg(svgGenerator.getWeb(scopeTable)));
+		SvgContent svg = toSvg(svgGenerator.getWeb(scopeTable));
+		return ok(svg);
 	}
 
 	@Transactional(readOnly = false)
@@ -253,8 +268,46 @@ public class ResultController extends AbstractController {
 
 		markNoCache();
 
-		return ok(toSvg(svgGenerator.getHistogram(scopeTable)));
+		SvgContent svg = toSvg(svgGenerator.getHistogram(scopeTable));
+		return ok(svg);
 	}
 
+	private ReportResult getReportResult(String reportKey, Period period, List<Scope> scopes) {
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
+		String cacheKey = getCacheKey(awacCalculator, period, scopes);
+
+		// try to get from cache
+		Map<String, ReportResult> cacheEntry = reportsCache.get(cacheKey);
+		if (cacheEntry != null && cacheEntry.containsKey(reportKey)) {
+			ReportResult reportResult = cacheEntry.get(reportKey);
+			Logger.info("Get report '{}' from cache", reportKey);
+			return reportResult;
+		}
+
+		// else, build reports...
+		List<ReportResult> allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
+		Logger.info("Built {} report(s):", allReportResults.size());
+		for (ReportResult reportResult : allReportResults) {
+			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getActivityResults().size());
+		}
+
+		// and put in cache
+		Map<String, ReportResult> allReportResultsMap = new HashMap<>();
+		for (ReportResult reportResult : allReportResults) {
+			allReportResultsMap.put(reportResult.getReport().getCode().getKey(), reportResult);
+		}
+		reportsCache.put(cacheKey, allReportResultsMap);
+
+		return allReportResultsMap.get(reportKey);
+	}
+
+	private static String getCacheKey(AwacCalculator awacCalculator, Period period, List<Scope> scopes) {
+		List<Long> scopesIds = new ArrayList<>();
+		for (Scope scope : scopes) {
+			scopesIds.add(scope.getId());
+		}
+		Collections.sort(scopesIds);
+		return awacCalculator.getId() + '/' + period.getId() + '/' + StringUtils.join(scopesIds, '-');
+	}
 
 }
