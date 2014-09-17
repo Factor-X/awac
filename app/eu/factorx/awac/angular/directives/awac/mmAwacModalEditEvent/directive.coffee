@@ -52,15 +52,20 @@ angular
 
                 #create DTO
                 data = {}
+                data.organization = $scope.event.organization
+                data.period = $scope.event.period
+                data.id = $scope.event.id
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
                 $scope.isLoading = true
+
+                console.log data
 
                 if $scope.getParams().event?
 
                     #edit event
                     data.id = $scope.getParams().event.id
-                    downloadService.postJson '/awac/site/edit', data, (result) ->
+                    downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
                             #display success message
@@ -78,7 +83,10 @@ angular
                             $scope.isLoading = false
                 else
                     #create event
-                    downloadService.postJson '/awac/site/create', data, (result) ->
+                    data.organization = $scope.$root.organization
+                    data.period = $scope.$root.period
+                    data.id = 0
+                    downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
                             #display success message

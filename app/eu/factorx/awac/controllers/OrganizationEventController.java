@@ -122,9 +122,11 @@ public class OrganizationEventController extends AbstractController {
 			orgEvent = new OrganizationEvent(org,period,dto.getName(),dto.getDescription());
 		}
 
+		Logger.info("orgEvent content" + orgEvent.toString());
 		organizationEventService.saveOrUpdate(orgEvent);
 
 		// return event DTO
+		Logger.info("return...");
 		return ok(conversionService.convert(orgEvent, OrganizationEventDTO.class));
 	}
 
