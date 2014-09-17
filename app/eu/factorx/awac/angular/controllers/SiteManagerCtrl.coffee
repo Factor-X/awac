@@ -1,10 +1,25 @@
 angular
 .module('app.controllers')
-.controller "SiteManagerCtrl", ($scope,translationService, modalService,downloadService) ->
+.controller "SiteManagerCtrl", ($scope,translationService, modalService,downloadService, $rootScope) ->
 
     $scope.isLoading = [{},{}]
     $scope.assignPeriod = [$scope.$root.periods[1].key, $scope.$root.periods[0].key]
     $scope.isPeriodChecked = [{},{}]
+
+    $scope.events = []
+
+    data = {}
+    data.organization = $rootScope.organization
+    data.period = $scope.$root.periods[0]
+
+    console.log "DATA"
+    console.log data
+    downloadService.postJson 'awac/organization/events/load', data, (result) ->
+      $scope.events = result.data.organizationEventList
+      console.log "RESULT"
+      console.log result
+      console.log result.data.organizationEventList
+
 
     $scope.$watch '$scope.assignPeriod', ->
         for site in $scope.$root.organization.sites
@@ -32,6 +47,9 @@ angular
         params.site = site
       modalService.show(modalService.ADD_USER_SITE, params)
 
+    $scope.getEventList = () ->
+      return $scope.events
+
     $scope.periodAssignTo = (nbPeriod,site) ->
         if site.listPeriodAvailable?
             for period in site.listPeriodAvailable
@@ -48,6 +66,6 @@ angular
         console.log data
         downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
 
-  link: (scope) ->
-    console.log("entering SiteManagerCtrl")
+#  link: (scope) ->
+#    console.log("entering SiteManagerCtrl")
 #    scope.getAssociatedUsers()
