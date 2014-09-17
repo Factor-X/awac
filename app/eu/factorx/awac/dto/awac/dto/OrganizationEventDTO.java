@@ -10,6 +10,7 @@ import java.util.List;
 
 public class OrganizationEventDTO extends DTO {
 
+	private Long id;
 
 	private OrganizationDTO organization;
 
@@ -53,6 +54,14 @@ public class OrganizationEventDTO extends DTO {
 
 	public void setPeriod(PeriodDTO period) {
 		this.period = period;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override
