@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem 'i18n'
+gem 'logger'
+gem 'term-ansicolor'
+gem 'erubis'
+gem 'ripl'

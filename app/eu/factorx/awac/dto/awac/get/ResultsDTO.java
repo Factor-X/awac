@@ -1,61 +1,39 @@
 package eu.factorx.awac.dto.awac.get;
 
+import eu.factorx.awac.dto.DTO;
+
+import java.util.HashMap;
 import java.util.Map;
 
-public class ResultsDTO {
+public class ResultsDTO extends DTO {
 
 	private Map<String, ReportDTO> reportDTOs;
 
 	private Map<String, String> svgDonuts;
+	private Map<String, String> svgWebs;
+	private Map<String, String> svgHistograms;
 
-	private String svgWeb;
+	public ResultsDTO() {
+		reportDTOs = new HashMap<>();
 
-	private String svgHistogram;
-
-	/**
-	 * @param reportDTO
-	 * @param svgDonuts
-	 * @param svgWeb
-	 * @param svgHistogram
-	 */
-	public ResultsDTO(Map<String, ReportDTO> reportDTOs, Map<String, String> svgDonuts, String svgWeb, String svgHistogram) {
-		super();
-		this.reportDTOs = reportDTOs;
-		this.svgDonuts = svgDonuts;
-		this.svgWeb = svgWeb;
-		this.svgHistogram = svgHistogram;
+		svgDonuts = new HashMap<>();
+		svgWebs = new HashMap<>();
+		svgHistograms = new HashMap<>();
 	}
 
 	public Map<String, ReportDTO> getReportDTOs() {
 		return reportDTOs;
 	}
 
-	public void setReportDTOs(Map<String, ReportDTO> reportDTOs) {
-		this.reportDTOs = reportDTOs;
-	}
-
 	public Map<String, String> getSvgDonuts() {
 		return svgDonuts;
 	}
-
-	public void setSvgDonuts(Map<String, String> svgDonuts) {
-		this.svgDonuts = svgDonuts;
+	public Map<String, String> getSvgWebs() {
+		return svgWebs;
+	}
+	public Map<String, String> getSvgHistograms() {
+		return svgHistograms;
 	}
 
-	public String getSvgWeb() {
-		return svgWeb;
-	}
-
-	public void setSvgWeb(String svgWeb) {
-		this.svgWeb = svgWeb;
-	}
-
-	public String getSvgHistogram() {
-		return svgHistogram;
-	}
-
-	public void setSvgHistogram(String svgHistogram) {
-		this.svgHistogram = svgHistogram;
-	}
 
 }

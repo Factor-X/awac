@@ -295,9 +295,9 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				StringUtils.isBlank(orgScope)
 				) break;
 
-			Report report = new Report(new ReportCode(key), new ScopeTypeCode(orgScope.toUpperCase()));
+			Report report = new Report(new ReportCode(key), new IndicatorIsoScopeCode(orgScope.toUpperCase()));
 			if (StringUtils.isNotBlank(restrictedScope)) {
-				report.setRestrictedScope(new ScopeTypeCode(restrictedScope.toUpperCase()));
+				report.setRestrictedScope(new IndicatorIsoScopeCode(restrictedScope.toUpperCase()));
 			}
 
 			reports.add(report);
