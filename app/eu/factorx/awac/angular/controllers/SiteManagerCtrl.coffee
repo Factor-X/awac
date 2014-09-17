@@ -66,10 +66,10 @@ angular
         console.log data
         downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
 
-    $scope.editOrCreateEvent = (site) ->
+    $scope.editOrCreateEvent = (event) ->
       params = {}
-      if site?
-        params.site = site
+      if event?
+        params.event = event
       modalService.show(modalService.EDIT_EVENT, params)
 
 

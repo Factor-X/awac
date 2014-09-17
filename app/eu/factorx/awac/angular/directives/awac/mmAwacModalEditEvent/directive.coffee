@@ -12,19 +12,17 @@ angular
 
         $scope.createNewEvent = true
 
-        if $scope.getParams().site?
-            $scope.site =  angular.copy($scope.getParams().site)
-            $scope.createNewEvent =false
+        if $scope.getParams().event?
+            $scope.event =  angular.copy($scope.getParams().event)
+            $scope.createNewEvent = false
         else
-            $scope.site = {}
-            #create a default value for percentOwned
-            $scope.site.percentOwned = 100
+            $scope.event = {}
 
         $scope.fields = {
 
             name :{
                 fieldTitle: "NAME"
-                field:$scope.site.name
+                field:$scope.event.name
                 validationRegex: "^.{1,255}$"
                 validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
                 focus: ->
@@ -35,7 +33,7 @@ angular
                 fieldTitle: "DESCRIPTION"
                 validationRegex: "^.{0,65000}$"
                 validationMessage: "CONTROL_FIELD_DEFAULT_TEXT"
-                field:$scope.site.description
+                field:$scope.event.description
                 hideIsValidIcon: true
             }
         }
@@ -58,10 +56,10 @@ angular
                 data.description = $scope.fields.description.field
                 $scope.isLoading = true
 
-                if $scope.getParams().site?
+                if $scope.getParams().event?
 
-                    #edit site
-                    data.id = $scope.getParams().site.id
+                    #edit event
+                    data.id = $scope.getParams().event.id
                     downloadService.postJson '/awac/site/edit', data, (result) ->
                         if result.success
 
@@ -69,8 +67,8 @@ angular
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             #edit site
-                            $scope.getParams().site.name = $scope.fields.name.field
-                            $scope.getParams().site.description = $scope.fields.description.field
+                            $scope.getParams().event.name = $scope.fields.name.field
+                            $scope.getParams().event.description = $scope.fields.description.field
 
                             #close window
                             $scope.close()
@@ -79,15 +77,15 @@ angular
                             messageFlash.displayError result.data.message
                             $scope.isLoading = false
                 else
-                    #create site
+                    #create event
                     downloadService.postJson '/awac/site/create', data, (result) ->
                         if result.success
 
                             #display success message
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
-                            # add new site to the list
-                            $scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
+                            # add new event to the list
+                            #$scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
 
                             #close window
                             $scope.close()
