@@ -6,7 +6,6 @@ angular.module('app').run (loggerService) ->
     loggerService.initialize()
 
     $('body').keydown (evt) ->
-        console.log evt
         if evt.which == 32 and evt.altKey and evt.ctrlKey
             loggerElement = $('#logger')
             state = parseInt(loggerElement.attr('data-state'))
@@ -20,8 +19,9 @@ angular.module('app').run (loggerService) ->
 angular
 .module('app.controllers')
 .controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) ->
-    $scope.displayMenu = true
 
+    $scope.displayMenu = false
+    $scope.displayLittleMenu = false
     #
     # First loading
     #
@@ -103,6 +103,8 @@ angular
     $scope.computeDisplayMenu = ->
         if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
             $scope.displayMenu = true
+        else if $scope.getMainScope()? && $scope.getMainScope().displayLittleFormMenu? && $scope.getMainScope().displayLittleFormMenu == true
+            $scope.displayLittleMenu = true
         else
             $scope.displayMenu = false
 
@@ -230,6 +232,8 @@ angular
             if $scope.getMainScope()?
                 if $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
                     return 'content-with-menu'
+                else if $scope.getMainScope().displayLittleFormMenu? && $scope.getMainScope().displayLittleFormMenu == true
+                    return 'content-with-little-menu'
                 else
                     return 'content-without-menu'
         return ''
@@ -310,7 +314,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     #
     $rootScope.hideHeader = () ->
-        console.log("hideHeader:" + $location.path().substring(0, 13))
+        #console.log("hideHeader:" + $location.path().substring(0, 13))
         return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration")
 
 
@@ -330,17 +334,44 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # success after login => store some datas, display the path
     #
     $rootScope.loginSuccess = (data, skipRedirect) ->
+        console.log "connection date : "
+        console.log data
+
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
         $rootScope.organizationName = data.organizationName
         $rootScope.mySites = data.mySites
 
+        # try to load default scope / period
+        #default scope
+        if data.defaultSiteId?
+            for site in $rootScope.mySites
+                if site.id == data.defaultSiteId
+                    $rootScope.scopeSelectedId = data.defaultSiteId
 
+                    #control default period
+                    if data.defaultPeriod?
+                        if site.listPeriodAvailable? site.listPeriodAvailable.length >0
+                            for period in  site.listPeriodAvailable
+                                if period.key == data.defaultPeriod
+                                    $rootScope.periodSelectedKey = data.defaultPeriod
+
+        if !$rootScope.scopeSelectedId?
+            if $rootScope.mySites.length > 0
+                $rootScope.scopeSelectedId = $rootScope.mySites[0].id
+
+        if $rootScope.scopeSelectedId? &&  !$rootScope.periodSelectedKey?
+            for site in $rootScope.mySites
+                if site.id == $rootScope.scopeSelectedId
+                    if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
+                        $rootScope.periodSelectedKey = site.listPeriodAvailable[0].key
+
+        if $rootScope.scopeSelectedId?
+            $rootScope.computePeriod($rootScope.mySites[0].scope)
 
         if not skipRedirect
-            if $rootScope.mySites.length > 0
+            if $rootScope.scopeSelectedId? &&  $rootScope.periodSelectedKey?
                 $rootScope.onFormPath(data.defaultPeriod, $rootScope.mySites[0].scope)
-                $rootScope.computePeriod($rootScope.mySites[0].scope)
             else
                 $location.path("noScope")
 
@@ -349,7 +380,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.computePeriod = (scopeId) ->
         for site in $rootScope.mySites
             if site.scope == scopeId
-                $rootScope.periods = site.listPeriodAvailable
+                $rootScope.availablePeriods = site.listPeriodAvailable
+                console.log "$rootScope.availablePeriods"
+                console.log $rootScope.availablePeriods
 
 
     #

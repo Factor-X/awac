@@ -658,6 +658,19 @@ button.button.add {
     min-width: 1200px;
     padding-bottom: 150px;
 }
+.content-with-little-menu{
+    position: absolute;
+    bottom: 0;
+    top: 110px;
+    overflow: auto;
+    border: 5px solid #305b2e;
+    border-top-width: 15px;
+    left: 0;
+    right: 0;
+    min-width: 1200px;
+    padding-bottom: 150px;
+
+}
 
 .content-without-menu {
     position: absolute;

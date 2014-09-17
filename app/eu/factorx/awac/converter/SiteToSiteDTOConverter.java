@@ -15,6 +15,9 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 	@Autowired
 	private ScopeService scopeService;
 
+    @Autowired
+    private PeriodToPeriodDTOConverter periodToPeriodDTOConverter;
+
 	@Override
 	public SiteDTO convert(Site site) {
 
@@ -31,7 +34,7 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 
 		if (site.getListPeriodAvailable() != null) {
 			for (Period period : site.getListPeriodAvailable()) {
-				dto.addPeriodAvailable(period.getPeriodCode().getKey());
+				dto.addPeriodAvailable(periodToPeriodDTOConverter.convert(period));
 			}
 		}
 

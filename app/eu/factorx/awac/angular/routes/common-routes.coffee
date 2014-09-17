@@ -41,8 +41,12 @@ initializeCommonRoutes = () ->
         )
         .when('/noScope', {
                 templateUrl: '$/angular/views/no_scope.html'
-                controller: 'FormCtrl'
+                controller: 'NoScopeCtrl'
                 anonymousAllowed: true
+                resolve:{
+                    displayLittleFormMenu: () ->
+                        return true
+                }
             }
         )
         .otherwise({ redirectTo: '/login' })

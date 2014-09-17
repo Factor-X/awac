@@ -228,6 +228,8 @@ angular
             # initialOnly => return initials of the name, or complete name
             #
             scope.getUserName = (forDataToCompare, initialOnly)->
+                return "y"
+                ###
                 user = null
 
                 if forDataToCompare == true
@@ -245,6 +247,7 @@ angular
                 else
                     name = user.firstName + " " + user.lastName
                     return name
+                ###
 
             #
             # get the status class

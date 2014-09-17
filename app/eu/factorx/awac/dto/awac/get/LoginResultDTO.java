@@ -13,12 +13,22 @@ public class LoginResultDTO extends DTO {
 
 	private String organizationName;
 
+    private Long defaultSiteId;
+
     private List<SiteDTO> mySites;
+
     private List<PeriodDTO> availablePeriods;
 
     public LoginResultDTO() {
 	}
 
+    public Long getDefaultSiteId() {
+        return defaultSiteId;
+    }
+
+    public void setDefaultSiteId(Long defaultSiteId) {
+        this.defaultSiteId = defaultSiteId;
+    }
 
     public PersonDTO getPerson() {
         return person;
