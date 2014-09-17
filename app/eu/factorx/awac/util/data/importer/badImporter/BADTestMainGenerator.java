@@ -39,7 +39,7 @@ public class BADTestMainGenerator {
         //inset questions
         badTemplate.addParameter("bads", result);
 
-        badTemplate.generate(TemplateName.BAD_TEST_MAIN.getTargetPath());
+        badTemplate.generate(TemplateName.BAD_TEST_MAIN.getPath());
 
     }
 

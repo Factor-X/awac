@@ -7,6 +7,7 @@ import java.util.Map;
 
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.ConversionCriterion;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -110,8 +111,14 @@ public abstract class ActivityResultContributor {
 		return answerValue.getValue();
 	}
 
-    protected <T extends CodeList> T convertCode(Code code, ConversionCriterion conversionCriterion, Class<T> expectedClass){
-        return expectedClass.cast(codeConversionService.getConversionCode(code,conversionCriterion));
+    protected <T extends Code> T convertCode(Code code, ConversionCriterion conversionCriterion, Class<T> expectedClass){
+        Code result  = codeConversionService.getConversionCode(code, conversionCriterion);
+        try {
+            return expectedClass.cast(result);
+        }
+        catch(ClassCastException e){
+            throw new MyrmexRuntimeException("Cannot cast " + result + " to the expected codeList : " + expectedClass.getName());
+        }
     }
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {

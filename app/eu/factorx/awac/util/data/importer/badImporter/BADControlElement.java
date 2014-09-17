@@ -56,7 +56,7 @@ public class BADControlElement {
      * group 1 : the question code
      * group 2 (optional) : the conversion criterion
      */
-    private Pattern questionPattern = Pattern.compile("(A[A-Z]*[0-9]+)(\\[[A-Z_]\\])?");
+    private Pattern questionPattern = Pattern.compile("(A[A-Z]*[0-9]+)(\\[([A-Z_]+)\\])?");
 
 
     BADLog.LogLine logLine;
@@ -280,7 +280,13 @@ public class BADControlElement {
 
                     if (question instanceof ValueSelectionQuestion) {
                         if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
-                            logLine.addError("ActivityType is a ValueSelectionQuestion but this list is not a (sub)list of ActivityType");
+
+                            HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                            if (codeConversionService.toActivityTypeCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                                logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                                return;
+                            }
+
                         }
                     } else {
                         logLine.addError("ActivityType is a question but not a ValueSelectionQuestion");
@@ -368,7 +374,12 @@ public class BADControlElement {
 
                     if (question instanceof ValueSelectionQuestion) {
                         if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
-                            logLine.addError("ActivitySource is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySource");
+
+                            HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                            if (codeConversionService.toActivitySourceCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                                logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                                return;
+                            }
                         }
                     } else {
                         logLine.addError("ActivitySource is a question but not a ValueSelectionQuestion");
@@ -378,7 +389,8 @@ public class BADControlElement {
 
                     //test the criteron conversion
                     if (matcher.group(2) != null) {
-                        value = "convertCode(" + value + ", " + matcher.group(2) + "," + ActivitySourceCode.class.getName() + ")";
+                        //TODO control criterion
+                        value = "convertCode(" + value + ", ConversionCriterion." + matcher.group(3) + "," + ActivitySourceCode.class.getName() + ".class)";
                     }
 
                     //add to bad

@@ -31,7 +31,7 @@ public class BADTestGenerator {
     private CodeLabelService codeLabelService;
 
 
-    public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer) {
+    public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer, TemplateName templateName) {
 
         if(bad.getTestValues().size()>0) {
 
@@ -46,10 +46,15 @@ public class BADTestGenerator {
                 }
             }
 
+
+
             //create template
             BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST, "BAD_" + bad.getBaseActivityDataCode() + "Test.java");
 
             Logger.info("questionAndAnswerList for " + bad.getBaseActivityDataCode() + "->" + questionAndAnswerList.toString());
+
+            //path
+            badTemplate.addParameter("PACKAGE", templateName.getPackageString());
 
             //inset questions
             badTemplate.addParameter("questions", questionAndAnswerList);
@@ -60,7 +65,7 @@ public class BADTestGenerator {
             //insert bad
             badTemplate.addParameter("bad", bad);
 
-            badTemplate.generate(TemplateName.BAD_TEST.getTargetPath());
+            badTemplate.generate(templateName.getPath());
         }
         else{
             logLine.addWarn("The test cannot be generated because there is not correct value available");

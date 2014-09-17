@@ -1,4 +1,4 @@
-package eu.factorx.awac.buisness.bad.impl;
+package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;

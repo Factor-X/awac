@@ -35,10 +35,10 @@ public class BADGenerator {
     private List<QuestionWithoutRepetition> questionWithoutRepetitionList = new ArrayList<>();
 
 
-    public void generateBAD(BAD bad, BADLog.LogLine logLine) {
+    public void generateBAD(BAD bad, BADLog.LogLine logLine, TemplateName templateName) {
 
         //create template
-        BADTemplate badTemplate = new BADTemplate(TemplateName.BAD, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
+        BADTemplate badTemplate = new BADTemplate(templateName, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
 
         //add parameters
         //start to build the map of repetition to load question
@@ -60,6 +60,9 @@ public class BADGenerator {
         //baseActivityDate key and name
         badTemplate.addParameter("BAD-KEY", bad.getBaseActivityDataCode());
         badTemplate.addParameter("BAD-NAME", bad.getName());
+
+        //path
+    badTemplate.addParameter("PACKAGE", templateName.getPackageString());
 
         //current date
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyy hh:mm");
@@ -115,7 +118,7 @@ public class BADGenerator {
         //TODO ...
 
 
-        badTemplate.generate(TemplateName.BAD.getTargetPath());
+        badTemplate.generate(templateName.getPath());
     }
 
     private void buildListRepetition(RepeatableElement repeatableElement, List<RepeatableElement> listRepeatableElements) {
