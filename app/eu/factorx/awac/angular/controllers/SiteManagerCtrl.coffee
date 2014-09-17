@@ -40,8 +40,6 @@ angular
                 for site in $scope.organization.sites
                     $scope.isPeriodChecked[site.id] = $scope.periodAssignTo(site)
 
-                    console.log $scope.isPeriodChecked
-
 
             $scope.toForm = ->
                 $scope.$parent.navToLastFormUsed()
@@ -69,7 +67,7 @@ angular
             $scope.periodAssignTo = (site) ->
                 if site.listPeriodAvailable?
                     for period in site.listPeriodAvailable
-                        if period == $scope.assignPeriod
+                        if period.key == $scope.assignPeriod
                             return true
                 return false
 

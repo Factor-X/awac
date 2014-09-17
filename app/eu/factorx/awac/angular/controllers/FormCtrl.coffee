@@ -38,7 +38,7 @@ angular
     #
     # load the form and treat structure and data
     #
-    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
+    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
 
         if not result.success
             # TODO ERROR HANDLING
@@ -596,11 +596,13 @@ angular
         console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
         console.log listTotal
 
+
+
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.periodKey
-        formProgressDTO.scope = $scope.$parent.scopeId
+        formProgressDTO.period = $scope.$root.periodSelectedKey
+        formProgressDTO.scope = $scope.$root.scopeSelectedId
         formProgressDTO.percentage = percentage
 
         # refresh progress bar
