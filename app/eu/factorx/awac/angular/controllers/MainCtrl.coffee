@@ -332,10 +332,25 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.loginSuccess = (data, skipRedirect) ->
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
-        $rootScope.organization = data.organization
-        $rootScope.users = data.organization.users
+        $rootScope.organizationName = data.organizationName
+        $rootScope.mySites = data.mySites
+
+
+
         if not skipRedirect
-            $rootScope.onFormPath(data.defaultPeriod, data.organization.sites[0].scope)
+            if $rootScope.mySites.length > 0
+                $rootScope.onFormPath(data.defaultPeriod, $rootScope.mySites[0].scope)
+                $rootScope.computePeriod($rootScope.mySites[0].scope)
+            else
+                $location.path("noScope")
+
+
+
+    $rootScope.computePeriod = (scopeId) ->
+        for site in $rootScope.mySites
+            if site.scope == scopeId
+                $rootScope.periods = site.listPeriodAvailable
+
 
     #
     # get user

@@ -32,7 +32,7 @@ div
             .awac_logo
             div
                 .calculateur_type(ng-bind-html='\'TITLE_ENTERPRISE\' | translate')
-                .entreprise_name {{ $root.organization.name }}
+                .entreprise_name {{ $root.organizationName }}
         .data_menu(ng-show='displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
@@ -40,7 +40,7 @@ div
             .big_separator
             .data_date_compare
                 div Site sélectionné
-                select(ng-options='s.scope as s.name for s in $root.organization.sites', ng-model='scopeId')
+                select(ng-options='s.scope as s.name for s in $root.mySites', ng-model='scopeId')
             .big_separator
             .data_date_compare
                 div Comparaison avec

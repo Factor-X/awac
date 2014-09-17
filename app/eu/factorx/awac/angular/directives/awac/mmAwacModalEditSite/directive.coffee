@@ -145,7 +145,7 @@ angular
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             # add new site to the list
-                            $scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
+                            $scope.getParams().organization.sites[$scope.getParams().organization.sites.length] = result.data
 
                             #close window
                             $scope.close()

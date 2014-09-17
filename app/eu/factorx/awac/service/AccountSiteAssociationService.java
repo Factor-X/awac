@@ -11,4 +11,6 @@ public interface AccountSiteAssociationService extends PersistenceService<Accoun
 
 	public List<AccountSiteAssociation> findBySite(Site site);
 
+    public List<AccountSiteAssociation> findByAccount(Account account);
+
 }

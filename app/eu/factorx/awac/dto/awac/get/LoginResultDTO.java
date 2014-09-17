@@ -11,58 +11,62 @@ public class LoginResultDTO extends DTO {
 
 	private String defaultPeriod;
 
-	private List<PeriodDTO> availablePeriods;
-	private OrganizationDTO organization;
+	private String organizationName;
 
-	public LoginResultDTO() {
+    private List<SiteDTO> mySites;
+    private List<PeriodDTO> availablePeriods;
+
+    public LoginResultDTO() {
 	}
 
-	public LoginResultDTO(PersonDTO person, String defaultPeriod, List<PeriodDTO> availablePeriods, OrganizationDTO organization) {
-		this.person = person;
-		this.defaultPeriod = defaultPeriod;
-		this.availablePeriods = availablePeriods;
-		this.organization = organization;
-	}
 
-	public PersonDTO getPerson() {
-		return person;
-	}
+    public PersonDTO getPerson() {
+        return person;
+    }
 
-	public void setPerson(PersonDTO person) {
-		this.person = person;
-	}
+    public void setPerson(PersonDTO person) {
+        this.person = person;
+    }
 
-	public String getDefaultPeriod() {
-		return defaultPeriod;
-	}
+    public String getDefaultPeriod() {
+        return defaultPeriod;
+    }
 
-	public void setDefaultPeriod(String defaultPeriod) {
-		this.defaultPeriod = defaultPeriod;
-	}
+    public void setDefaultPeriod(String defaultPeriod) {
+        this.defaultPeriod = defaultPeriod;
+    }
 
-	public List<PeriodDTO> getAvailablePeriods() {
-		return availablePeriods;
-	}
+    public String getOrganizationName() {
+        return organizationName;
+    }
 
-	public void setAvailablePeriods(List<PeriodDTO> availablePeriods) {
-		this.availablePeriods = availablePeriods;
-	}
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
 
-	public OrganizationDTO getOrganization() {
-		return organization;
-	}
+    public List<SiteDTO> getMySites() {
+        return mySites;
+    }
 
-	public void setOrganization(OrganizationDTO organization) {
-		this.organization = organization;
-	}
+    public void setMySites(List<SiteDTO> mySites) {
+        this.mySites = mySites;
+    }
 
-	@Override
-	public String toString() {
-		return "LoginResultDTO{" +
-				"person=" + person +
-				", defaultPeriod='" + defaultPeriod + '\'' +
-				", availablePeriods=" + availablePeriods +
-				", organization=" + organization +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "LoginResultDTO{" +
+                "person=" + person +
+                ", defaultPeriod='" + defaultPeriod + '\'' +
+                ", organizationName='" + organizationName + '\'' +
+                ", mySites=" + mySites +
+                '}';
+    }
+
+    public void setAvailablePeriods(List<PeriodDTO> availablePeriods) {
+        this.availablePeriods = availablePeriods;
+    }
+
+    public List<PeriodDTO> getAvailablePeriods() {
+        return availablePeriods;
+    }
 }
