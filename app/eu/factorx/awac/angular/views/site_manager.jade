@@ -48,11 +48,13 @@ div
             tr.site_table_header
                 td(ng-bind-html="'NAME' | translateText")
                 td(ng-bind-html="'DESCRIPTION' | translateText")
+                td(ng-bind-html="'PERIOD' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
 
             tr(ng-repeat="event in getEventList()")
                 td {{event.name}}
                 td {{event.description}}
+                td {{event.period.label}}
                 td
                     button(type="button", title="{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}", ng-click="editOrCreateEvent(event)", class="edit_icon glyphicon glyphicon-pencil")
 
