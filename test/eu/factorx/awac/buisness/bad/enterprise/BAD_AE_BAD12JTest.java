@@ -19,8 +19,6 @@ import eu.factorx.awac.service.knowledge.activity.contributor.enterprise.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;

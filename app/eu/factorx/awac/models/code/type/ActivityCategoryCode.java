@@ -28,8 +28,10 @@ public class ActivityCategoryCode extends Code {
 	public static final ActivityCategoryCode AC_14 = new ActivityCategoryCode("AC_14");
 	public static final ActivityCategoryCode AC_15 = new ActivityCategoryCode("AC_15");
 	public static final ActivityCategoryCode AC_16 = new ActivityCategoryCode("AC_16");
-	public static final ActivityCategoryCode AC_17 = new ActivityCategoryCode("AC_17");
-	private static final long serialVersionUID = 1L;
+    public static final ActivityCategoryCode AC_17 = new ActivityCategoryCode("AC_17");
+    public static final ActivityCategoryCode AC_18 = new ActivityCategoryCode("AC_17");
+    public static final ActivityCategoryCode AC_19 = new ActivityCategoryCode("AC_17");
+    private static final long serialVersionUID = 1L;
 	protected ActivityCategoryCode() {
 		super(CodeList.ActivityCategory);
 	}
