@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
@@ -302,8 +303,8 @@ public class SiteTest extends AbstractBaseModelTest {
         assertNotNull("nothing period into site", resultDTO.getListPeriodAvailable());
 
         boolean founded = false;
-        for (String periodKey : resultDTO.getListPeriodAvailable()) {
-            if (periodKey.equals(PERIOD_CODE_KEY)) {
+        for (PeriodDTO period : resultDTO.getListPeriodAvailable()) {
+            if (period.getKey().equals(PERIOD_CODE_KEY)) {
                 founded = true;
                 break;
             }
@@ -366,8 +367,8 @@ public class SiteTest extends AbstractBaseModelTest {
         //analyse result
         SiteDTO resultDTO = getDTO(result, SiteDTO.class);
         if (resultDTO.getListPeriodAvailable() != null) {
-            for (String periodKey : resultDTO.getListPeriodAvailable()) {
-                assertFalse("period not founded into the site", periodKey.equals(PERIOD_CODE_KEY));
+            for (PeriodDTO period : resultDTO.getListPeriodAvailable()) {
+                assertFalse("period not founded into the site", period.getKey().equals(PERIOD_CODE_KEY));
             }
 
         }
