@@ -74,6 +74,8 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 
 
 	private final String ORGANISATION_NAME = "Factor-X";
+	private final String EVENT_NAME = "CTRL_TEST_EVENT_NAME";
+	private final String EVENT_DESCRIPTION = "CTRL_TEST_EVENT_DESCRIPTION";
 
 
 
@@ -126,7 +128,50 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
   } // end of authenticateSuccess test
 
 	@Test
-	public void _002_DeleteAllEvents() {
+	public void _002_saveEvent() {
+
+		Organization org = organisationService.findByName(ORGANISATION_NAME);
+		Period period = periodService.findByCode(PeriodCode.P2013);
+		OrganizationEventDTO dto = createDTO(org,period);
+		dto.setName(EVENT_NAME);
+		dto.setDescription(EVENT_DESCRIPTION);
+
+		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
+
+		//Json Body node
+		JsonNode node = Json.toJson(dto);
+
+		// Fake request
+		FakeRequest fr = new FakeRequest();
+		fr.withJsonBody(node);
+		fr.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
+
+		Result result = null;
+		try {
+			// Call controller action
+			result = callAction(
+					eu.factorx.awac.controllers.routes.ref.OrganizationEventController.saveEvent(),
+					fr
+			); // callAction
+		} catch (Exception e) {
+			Logger.info("Action exception occured");
+			e.printStackTrace();
+			assertTrue(false);
+		}
+
+		// test results
+		// expecting an HTTP 200 return code
+		assertEquals(200, status(result));
+		//analyse result
+		OrganizationEventDTO resultDTO = getDTO(result, OrganizationEventDTO.class);
+		assertNotNull(resultDTO);
+
+		assertEquals(EVENT_NAME, resultDTO.getName());
+
+	}
+
+	@Test
+	public void _003_DeleteAllEvents() {
 		em.getTransaction().begin();
 		Organization org = organisationService.findByName(ORGANISATION_NAME);
 		Period period = periodService.findByCode(PeriodCode.P2013);
@@ -152,4 +197,3 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	}
 
 }
-
