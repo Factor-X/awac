@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash ) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -52,15 +52,20 @@ angular
 
                 #create DTO
                 data = {}
+                data.organization = $scope.event.organization
+                data.period = $scope.event.period
+                data.id = $scope.event.id
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
                 $scope.isLoading = true
+
+                console.log data
 
                 if $scope.getParams().event?
 
                     #edit event
                     data.id = $scope.getParams().event.id
-                    downloadService.postJson '/awac/site/edit', data, (result) ->
+                    downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
                             #display success message
@@ -78,13 +83,17 @@ angular
                             $scope.isLoading = false
                 else
                     #create event
-                    downloadService.postJson '/awac/site/create', data, (result) ->
+                    data.organization = $scope.getParams().organization
+                    data.period = $scope.$root.periods[0]
+                    data.id = 0
+                    downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
                             #display success message
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             # add new event to the list
+                            $scope.getParams().events[$scope.getParams().events.length] = result.data
                             #$scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
 
                             #close window
