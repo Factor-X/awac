@@ -384,9 +384,11 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode AS_371 = new ActivitySourceCode("AS_371");
 	public static final ActivitySourceCode AS_372 = new ActivitySourceCode("AS_372");
 	private static final long serialVersionUID = 1L;
+
 	protected ActivitySourceCode() {
 		super(CodeList.ActivitySource);
 	}
+
 	public ActivitySourceCode(String key) {
 		this();
 		this.key = key;
