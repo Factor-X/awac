@@ -107,6 +107,7 @@ public class OrganizationEventController extends AbstractController {
 				Logger.info("OrgEvent is not null : " + dto.getId());
 				orgEvent.setName(dto.getName());
 				orgEvent.setDescription(dto.getDescription());
+				orgEvent.setPeriod(periodService.findByCode(new PeriodCode(dto.getPeriod().getKey())));
 
 			} else {
 				Logger.info("OrgEvent is null");

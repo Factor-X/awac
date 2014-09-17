@@ -11,8 +11,14 @@
 
             .modal-body
                 .field_form
+                    tr
+                        td(ng-bind-html="'DESCRIPTION' | translateText")
+                        td
+                            select(ng-options='p.key as p.label for p in $root.periods', ng-model='assignedPeriod')
+
                     mm-awac-modal-field-text(ng-info="fields.name")
                     mm-awac-modal-field-text(ng-info="fields.description")
+
 
             .modal-footer
 
