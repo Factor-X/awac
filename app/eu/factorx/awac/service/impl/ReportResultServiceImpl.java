@@ -1,10 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.*;
@@ -20,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import play.Logger;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -210,6 +208,12 @@ public class ReportResultServiceImpl implements ReportResultService {
 		
 		return reportResults;
 	}
+
+	@Override
+	public ReportResult getReportResult(InterfaceTypeCode interfaceCode, Scope scope, Period period) {
+		throw new NotImplementedException();
+	}
+
 
 	private List<BaseIndicator> getBaseIndicatorsForCalculator(AwacCalculator awacCalculator) {
 		Set<BaseIndicator> result = new HashSet<>();
