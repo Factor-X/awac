@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -196,7 +197,6 @@ public class ReportResultServiceImpl implements ReportResultService {
 	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
 		this.activityResultContributors = activityResultContributors;
 	}
-
 
 	@Override
 	public List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {

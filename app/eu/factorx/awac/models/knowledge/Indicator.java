@@ -1,17 +1,21 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.type.IndicatorCode;
+import java.util.List;
+
+import javax.persistence.*;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import java.util.List;
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.IndicatorCode;
 
 @Entity
 @Table(name = "indicator")
 @NamedQueries({
-	@NamedQuery(name = BaseIndicator.REMOVE_ALL, query = "delete from Indicator i where i.id is not null")
+	@NamedQuery(name = Indicator.REMOVE_ALL, query = "delete from Indicator i where i.id is not null")
 })
 public class Indicator extends AuditedAbstractEntity {
 

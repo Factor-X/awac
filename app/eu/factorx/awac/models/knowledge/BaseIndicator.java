@@ -1,5 +1,7 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
@@ -62,6 +64,9 @@ public class BaseIndicator extends AuditedAbstractEntity {
 	private Unit unit;
 
 	private Boolean deleted;
+
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
+	private List<Indicator> indicators;
 
 	protected BaseIndicator() {
 		super();
@@ -171,6 +176,14 @@ public class BaseIndicator extends AuditedAbstractEntity {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public List<Indicator> getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(List<Indicator> indicators) {
+		this.indicators = indicators;
 	}
 
 	@Override

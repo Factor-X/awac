@@ -29,6 +29,7 @@ public class Report extends AuditedAbstractEntity {
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private AwacCalculator awacCalculator;
 
+
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, orphanRemoval = true)
 	@OrderBy(ReportIndicator.PROPERTY_NAME_ORDER_INDEX)
 	@OnDelete(action = OnDeleteAction.CASCADE)
