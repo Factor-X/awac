@@ -97,14 +97,30 @@ public class OrganizationEventController extends AbstractController {
 		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
 		Logger.info("Save Event - Organization Name: " + dto.getOrganization().getName() +  " Period: " + dto.getPeriod());
 
-		// get organization
-		Organization org = organizationService.findByName(dto.getOrganization().getName());
+		OrganizationEvent orgEvent = null;
 
-		// get period
-		Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
-		//Period period = periodService.findByCode(PeriodCode.P2013);
+		if (dto.getId()!=0) {
+			Logger.info("Save Event - Update for : " + dto.getId());
+			// update
+			orgEvent = organizationEventService.findById(dto.getId());
+			if (orgEvent!=null) {
+				Logger.info("OrgEvent is not null : " + dto.getId());
+				orgEvent.setName(dto.getName());
+				orgEvent.setDescription(dto.getDescription());
 
-		OrganizationEvent orgEvent = new OrganizationEvent(org,period,dto.getName(),dto.getDescription());
+			} else {
+				Logger.info("OrgEvent is null");
+			}
+		} else {
+			// create
+			Logger.info("Save Event - Create");
+			// get organization
+			Organization org = organizationService.findByName(dto.getOrganization().getName());
+			// get period
+			Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
+
+			orgEvent = new OrganizationEvent(org,period,dto.getName(),dto.getDescription());
+		}
 
 		organizationEventService.saveOrUpdate(orgEvent);
 
