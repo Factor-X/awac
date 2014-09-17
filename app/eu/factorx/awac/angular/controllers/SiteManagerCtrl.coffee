@@ -66,6 +66,13 @@ angular
         console.log data
         downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
 
+    $scope.editOrCreateEvent = (site) ->
+      params = {}
+      if site?
+        params.site = site
+      modalService.show(modalService.EDIT_EVENT, params)
+
+
 #  link: (scope) ->
 #    console.log("entering SiteManagerCtrl")
 #    scope.getAssociatedUsers()
