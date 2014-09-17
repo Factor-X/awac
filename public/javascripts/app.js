@@ -216,23 +216,25 @@ if (document.querySelector("meta[name=app]") != null) {
 }
 angular.module('app').run(function($rootScope) {
   return $rootScope.instanceName = iName;
-});angular.module('app.services').service('loggerService', function() {
-  var svc;
-  svc = this;
-  svc.initialize = function() {
-    var layout, log;
-    log = log4javascript.getLogger('main');
-    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
-    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
-    svc.appender.setLayout(layout);
-    log.addAppender(svc.appender);
-    return log.info("Logger initialized");
+});angular.module('app.services').service("messageFlash", function(translateTextFilter) {
+  this.display = function(type, message, opts) {
+    var options;
+    options = {
+      message: translateTextFilter(message),
+      type: type,
+      hideAfter: 5,
+      showCloseButton: true
+    };
+    return Messenger().post(angular.extend(options, angular.copy(opts)));
   };
-  svc.get = function(name) {
-    var log;
-    log = log4javascript.getLogger(name);
-    log.addAppender(svc.appender);
-    return log;
+  this.displaySuccess = function(message, opts) {
+    return this.display('success', message, opts);
+  };
+  this.displayInfo = function(message, opts) {
+    return this.display('info', message, opts);
+  };
+  this.displayError = function(message, opts) {
+    return this.display('error', message, opts);
   };
   return;
 });angular.module('app.services').service("translationService", function($rootScope, downloadService) {
@@ -280,25 +282,101 @@ angular.module('app').run(function($rootScope) {
     return txt;
   };
   return;
-});angular.module('app.services').service("messageFlash", function(translateTextFilter) {
-  this.display = function(type, message, opts) {
-    var options;
-    options = {
-      message: translateTextFilter(message),
-      type: type,
-      hideAfter: 5,
-      showCloseButton: true
-    };
-    return Messenger().post(angular.extend(options, angular.copy(opts)));
+});angular.module('app.services').service("downloadService", function($http) {
+  this.downloadsInProgress = 0;
+  this.getDownloadsInProgress = function() {
+    return this.downloadsInProgress;
   };
-  this.displaySuccess = function(message, opts) {
-    return this.display('success', message, opts);
+  this.getJson = function(url, callback) {
+    var promise;
+    this.downloadsInProgress++;
+    promise = $http({
+      method: "GET",
+      url: url,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    promise.success(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback({
+        data: data,
+        status: status,
+        headers: headers,
+        config: config,
+        success: true
+      });
+      return;
+    });
+    promise.error(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback({
+        data: data,
+        status: status,
+        headers: headers,
+        config: config,
+        success: false
+      });
+      return;
+    });
+    return promise;
   };
-  this.displayInfo = function(message, opts) {
-    return this.display('info', message, opts);
+  this.postJson = function(url, data, callback) {
+    var promise;
+    if (data === null) {
+      data = {};
+    }
+    this.downloadsInProgress++;
+    promise = $http({
+      method: "POST",
+      url: url,
+      data: data,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    promise.success(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback({
+        data: data,
+        status: status,
+        headers: headers,
+        config: config,
+        success: true
+      });
+      return;
+    });
+    promise.error(function(data, status, headers, config) {
+      this.downloadsInProgress--;
+      callback({
+        data: data,
+        status: status,
+        headers: headers,
+        config: config,
+        success: false
+      });
+      return;
+    });
+    return promise;
   };
-  this.displayError = function(message, opts) {
-    return this.display('error', message, opts);
+  return;
+});angular.module('app.services').service('loggerService', function() {
+  var svc;
+  svc = this;
+  svc.initialize = function() {
+    var layout, log;
+    log = log4javascript.getLogger('main');
+    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
+    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
+    svc.appender.setLayout(layout);
+    log.addAppender(svc.appender);
+    return log.info("Logger initialized");
+  };
+  svc.get = function(name) {
+    var log;
+    log = log4javascript.getLogger(name);
+    log.addAppender(svc.appender);
+    return log;
   };
   return;
 });angular.module('app.services').service("directiveService", function($sce) {
@@ -382,84 +460,25 @@ angular.module('app').run(function($rootScope) {
     return $rootScope.$broadcast('SHOW_MODAL', args);
   };
   return;
-});angular.module('app.services').service("downloadService", function($http) {
-  this.downloadsInProgress = 0;
-  this.getDownloadsInProgress = function() {
-    return this.downloadsInProgress;
-  };
-  this.getJson = function(url, callback) {
-    var promise;
-    this.downloadsInProgress++;
-    promise = $http({
-      method: "GET",
-      url: url,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    promise.success(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback({
-        data: data,
-        status: status,
-        headers: headers,
-        config: config,
-        success: true
-      });
-      return;
-    });
-    promise.error(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback({
-        data: data,
-        status: status,
-        headers: headers,
-        config: config,
-        success: false
-      });
-      return;
-    });
-    return promise;
-  };
-  this.postJson = function(url, data, callback) {
-    var promise;
-    if (data === null) {
-      data = {};
+});angular.module('app.filters').filter("translate", function($sce, translationService) {
+  return function(input, count) {
+    var text;
+    text = translationService.get(input, count);
+    if (text != null) {
+      return $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
+    } else {
+      return $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
     }
-    this.downloadsInProgress++;
-    promise = $http({
-      method: "POST",
-      url: url,
-      data: data,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    promise.success(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback({
-        data: data,
-        status: status,
-        headers: headers,
-        config: config,
-        success: true
-      });
-      return;
-    });
-    promise.error(function(data, status, headers, config) {
-      this.downloadsInProgress--;
-      callback({
-        data: data,
-        status: status,
-        headers: headers,
-        config: config,
-        success: false
-      });
-      return;
-    });
-    return promise;
   };
-  return;
+});angular.module('app.filters').filter("translateText", function($sce, translationService) {
+  return function(input, count) {
+    var text;
+    text = translationService.get(input, count);
+    if (text != null) {
+      return text;
+    }
+    return input;
+  };
 });angular.module('app.filters').filter("numberToI18N", function($filter) {
   return function(input) {
     var original, rounded;
@@ -469,6 +488,20 @@ angular.module('app').run(function($rootScope) {
       return $filter("number")(rounded, 2);
     }
     return "";
+  };
+});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
+  return function(input) {
+    if (input != null) {
+      return parseFloat(input);
+    }
+  };
+});angular.module('app.filters').filter("nullToZero", function($sce, translationService) {
+  return function(input) {
+    if (input === void 0 || input === null) {
+      return 0;
+    } else {
+      return parseFloat(input);
+    }
   };
 });angular.module('app.filters').filter("numberToI18NOrLess", function($filter, translationService) {
   return function(input) {
@@ -484,41 +517,8 @@ angular.module('app').run(function($rootScope) {
     }
     return "";
   };
-});angular.module('app.filters').filter("nullToZero", function($sce, translationService) {
-  return function(input) {
-    if (input === void 0 || input === null) {
-      return 0;
-    } else {
-      return parseFloat(input);
-    }
-  };
-});angular.module('app.filters').filter("translateText", function($sce, translationService) {
-  return function(input, count) {
-    var text;
-    text = translationService.get(input, count);
-    if (text != null) {
-      return text;
-    }
-    return input;
-  };
-});angular.module('app.filters').filter("translate", function($sce, translationService) {
-  return function(input, count) {
-    var text;
-    text = translationService.get(input, count);
-    if (text != null) {
-      return $sce.trustAsHtml("<span class=\"translated-text\" data-code=\"" + input + "\">" + text + "</span>");
-    } else {
-      return $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
-    }
-  };
-});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
-  return function(input) {
-    if (input != null) {
-      return parseFloat(input);
-    }
-  };
 });
-angular.module('app.directives').directive('mmRangeValidator', function(){
+angular.module('app.directives').directive('mmNotNullValidator', function(){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -530,18 +530,16 @@ angular.module('app.directives').directive('mmRangeValidator', function(){
                 var o = {};
 
                 for(k in attrs) {
-                    if( k.substring(0, 'mmRangeValidator'.length) == 'mmRangeValidator' && k.length > 'mmRangeValidator'.length) {
-                        arg = k.substring('mmRangeValidator'.length);
+                    if( k.substring(0, 'mmNotNullValidator'.length) == 'mmNotNullValidator' && k.length > 'mmNotNullValidator'.length) {
+                        arg = k.substring('mmNotNullValidator'.length);
                         o[arg.toLowerCase()] = attrs[k];
                     }
                 }
 
                 ;
 
-                function validate(value, args) {
-    if(parseFloat(value)==null || parseFloat(value)==NaN)
-        return false;
-    return parseFloat(value)>=parseInt(args.min) && parseFloat(value)<=parseInt(args.max);
+                function validate(v) {
+    return v != null
 }
 
                 ;
@@ -549,10 +547,52 @@ angular.module('app.directives').directive('mmRangeValidator', function(){
                 var result = validate(viewValue, o);
 
                 if (result) {
-                  ctrl.$setValidity('range', true);
+                  ctrl.$setValidity('not-null', true);
                   return viewValue;
                 } else {
-                  ctrl.$setValidity('range', false);
+                  ctrl.$setValidity('not-null', false);
+                  return undefined;
+                }
+
+            });
+        }
+    };
+});
+            
+angular.module('app.directives').directive('mmPatternValidator', function(){
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            console.log(attrs);
+
+            ctrl.$parsers.unshift(function(viewValue) {
+
+                var o = {};
+
+                for(k in attrs) {
+                    if( k.substring(0, 'mmPatternValidator'.length) == 'mmPatternValidator' && k.length > 'mmPatternValidator'.length) {
+                        arg = k.substring('mmPatternValidator'.length);
+                        o[arg.toLowerCase()] = attrs[k];
+                    }
+                }
+
+                ;
+
+                function validate(value, args) {
+    var re = new RegExp(eval(args.regexp));
+    return re.test(value);
+}
+
+                ;
+
+                var result = validate(viewValue, o);
+
+                if (result) {
+                  ctrl.$setValidity('pattern', true);
+                  return viewValue;
+                } else {
+                  ctrl.$setValidity('pattern', false);
                   return undefined;
                 }
 
@@ -648,7 +688,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
     };
 });
             
-angular.module('app.directives').directive('mmPatternValidator', function(){
+angular.module('app.directives').directive('mmRangeValidator', function(){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -660,8 +700,8 @@ angular.module('app.directives').directive('mmPatternValidator', function(){
                 var o = {};
 
                 for(k in attrs) {
-                    if( k.substring(0, 'mmPatternValidator'.length) == 'mmPatternValidator' && k.length > 'mmPatternValidator'.length) {
-                        arg = k.substring('mmPatternValidator'.length);
+                    if( k.substring(0, 'mmRangeValidator'.length) == 'mmRangeValidator' && k.length > 'mmRangeValidator'.length) {
+                        arg = k.substring('mmRangeValidator'.length);
                         o[arg.toLowerCase()] = attrs[k];
                     }
                 }
@@ -669,8 +709,9 @@ angular.module('app.directives').directive('mmPatternValidator', function(){
                 ;
 
                 function validate(value, args) {
-    var re = new RegExp(eval(args.regexp));
-    return re.test(value);
+    if(parseFloat(value)==null || parseFloat(value)==NaN)
+        return false;
+    return parseFloat(value)>=parseInt(args.min) && parseFloat(value)<=parseInt(args.max);
 }
 
                 ;
@@ -678,51 +719,10 @@ angular.module('app.directives').directive('mmPatternValidator', function(){
                 var result = validate(viewValue, o);
 
                 if (result) {
-                  ctrl.$setValidity('pattern', true);
+                  ctrl.$setValidity('range', true);
                   return viewValue;
                 } else {
-                  ctrl.$setValidity('pattern', false);
-                  return undefined;
-                }
-
-            });
-        }
-    };
-});
-            
-angular.module('app.directives').directive('mmNotNullValidator', function(){
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl) {
-            console.log(attrs);
-
-            ctrl.$parsers.unshift(function(viewValue) {
-
-                var o = {};
-
-                for(k in attrs) {
-                    if( k.substring(0, 'mmNotNullValidator'.length) == 'mmNotNullValidator' && k.length > 'mmNotNullValidator'.length) {
-                        arg = k.substring('mmNotNullValidator'.length);
-                        o[arg.toLowerCase()] = attrs[k];
-                    }
-                }
-
-                ;
-
-                function validate(v) {
-    return v != null
-}
-
-                ;
-
-                var result = validate(viewValue, o);
-
-                if (result) {
-                  ctrl.$setValidity('not-null', true);
-                  return viewValue;
-                } else {
-                  ctrl.$setValidity('not-null', false);
+                  ctrl.$setValidity('range', false);
                   return undefined;
                 }
 
@@ -2855,6 +2855,14 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
       });
     }
   };
+});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
+  $scope.notifications = [];
+  return downloadService.getJson("admin/get_notifications", function(dto) {
+    if (dto != null) {
+      $scope.notifications = dto.notifications;
+    }
+    return;
+  });
 });angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) {
   $scope.loading = false;
   $scope.tabActive = [];
@@ -2975,29 +2983,237 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
   return $timeout(function() {
     return $scope.injectRegistrationDirective();
   }, 0);
-});angular.module('app.controllers').controller("ResultsCtrl", function($scope, $window, downloadService, displayFormMenu, modalService) {
-  $scope.displayFormMenu = displayFormMenu;
-  modalService.show(modalService.LOADING);
-  downloadService.getJson("/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, function(result) {
-    modalService.close(modalService.LOADING);
-    if (result.success) {
-      return $scope.o = result.data;
-    } else {
-      ;
+});angular.module('app.controllers').controller("UserDataCtrl", function($scope, downloadService, translationService, messageFlash, modalService, $timeout) {
+  $scope.isLoading = false;
+  $scope.identifierInfo = {
+    fieldTitle: "USER_IDENTIFIER",
+    disabled: true,
+    field: $scope.$root.currentPerson.identifier
+  };
+  $scope.passwordInfo = {
+    fieldTitle: "USER_PASSWORD",
+    fieldType: "password",
+    disabled: true,
+    field: "*****"
+  };
+  $scope.lastNameInfo = {
+    fieldTitle: "USER_LASTNAME",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
+    field: $scope.$root.currentPerson.lastName,
+    hideIsValidIcon: true,
+    isValid: true,
+    focus: function() {
+      return true;
     }
-  });
-  $scope.charts = {
-    histogramUrl: "/awac/result/getHistogram/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId,
-    webUrl: "/awac/result/getWeb/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId,
-    donutUrl1: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/1",
-    donutUrl2: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/2",
-    donutUrl3: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/3"
   };
-  $scope.current_tab = 1;
-  $scope.downloadAsXls = function() {
-    return $window.open('/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null);
+  $scope.firstNameInfo = {
+    fieldTitle: "USER_FIRSTNAME",
+    fieldType: "text",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
+    field: $scope.$root.currentPerson.firstName,
+    hideIsValidIcon: true,
+    isValid: true
   };
-  return $scope.downloadPdf = function() {};
+  $scope.emailInfo = {
+    fieldTitle: "USER_EMAIL",
+    disabled: true,
+    field: $scope.$root.currentPerson.email
+  };
+  $scope.allFieldValid = function() {
+    if ($scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.$root.refreshUserData();
+  $scope.send = function() {
+    var data;
+    if (!$scope.allFieldValid) {
+      return false;
+    }
+    $scope.isLoading = true;
+    data = {
+      identifier: $scope.identifierInfo.field,
+      lastName: $scope.lastNameInfo.field,
+      firstName: $scope.firstNameInfo.field,
+      email: $scope.emailInfo.field
+    };
+    downloadService.postJson('/awac/user/profile/save', data, function(result) {
+      if (result.success) {
+        messageFlash.displaySuccess("CHANGES_SAVED");
+        $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field;
+        $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field;
+        return $scope.isLoading = false;
+      } else {
+        messageFlash.displayError(result.data.message);
+        return $scope.isLoading = false;
+      }
+    });
+    return false;
+  };
+  $scope.setNewEmail = function(newEmail) {
+    $scope.emailInfo.field = newEmail;
+    return $scope.$root.currentPerson.email = newEmail;
+  };
+  $scope.changeEmail = function() {
+    return modalService.show(modalService.EMAIL_CHANGE, {
+      oldEmail: $scope.emailInfo.field,
+      cb: $scope.setNewEmail
+    });
+  };
+  $scope.changePassword = function() {
+    return modalService.show(modalService.PASSWORD_CHANGE, {});
+  };
+  return $scope.toForm = function() {
+    return $scope.$parent.navToLastFormUsed();
+  };
+});angular.module('app.controllers').controller("UserManagerCtrl", function($scope, translationService, modalService, downloadService, messageFlash) {
+  $scope.title = translationService.get('USER_MANAGER_TITLE');
+  $scope.isLoading = {};
+  $scope.isLoading['admin'] = {};
+  $scope.isLoading['isActive'] = {};
+  $scope.getUserList = function() {
+    return $scope.$root.users;
+  };
+  $scope.inviteUser = function() {
+    return modalService.show(modalService.INVITE_USER);
+  };
+  $scope.getMyself = function() {
+    return $scope.$root.currentPerson;
+  };
+  $scope.activeUser = function(user) {
+    var data;
+    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email) {
+      data = {};
+      data.identifier = user.identifier;
+      data.isActive = !user.isActive;
+      $scope.isLoading['isActive'][user.email] = true;
+      return downloadService.postJson("/awac/user/activeAccount", data, function(result) {
+        if (result.success) {
+          user.isActive = !user.isActive;
+          return $scope.isLoading['isActive'][user.email] = false;
+        } else {
+          $scope.isLoading['isActive'][user.email] = false;
+          return messageFlash.displayError(result.data.message);
+        }
+      });
+    }
+  };
+  $scope.isAdminUser = function(user) {
+    var data;
+    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email && user.isActive === true) {
+      data = {};
+      data.identifier = user.identifier;
+      data.isAdmin = !user.isAdmin;
+      $scope.isLoading['admin'][user.email] = true;
+      return downloadService.postJson("/awac/user/isAdminAccount", data, function(result) {
+        if (result.success) {
+          return $scope.isLoading['admin'][user.email] = false;
+        } else {
+          $scope.isLoading['admin'][user.email] = false;
+          return messageFlash.displayError(result.data.message);
+        }
+      });
+    }
+  };
+  return $scope.toForm = function() {
+    return $scope.$parent.navToLastFormUsed();
+  };
+});angular.module('app.controllers').controller("RegistrationCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) {
+  $scope.loading = false;
+  $scope.tabActive = [];
+  $scope.enterEvent = function() {
+    if ($scope.tabActive[0] === true) {
+      return $scope.send();
+    }
+  };
+  $scope.loginInfo = {
+    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
+    fieldType: "text",
+    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false,
+    focus: function() {
+      return $scope.tabActive[0];
+    }
+  };
+  $scope.passwordInfo = {
+    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
+    fieldType: "password",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false
+  };
+  $scope.lastNameInfo = {
+    fieldTitle: "USER_LASTNAME",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
+    hideIsValidIcon: true,
+    isValid: true,
+    focus: function() {
+      return true;
+    }
+  };
+  $scope.firstNameInfo = {
+    fieldTitle: "USER_FIRSTNAME",
+    fieldType: "text",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
+    hideIsValidIcon: true,
+    isValid: true
+  };
+  $scope.emailInfo = {
+    fieldTitle: "USER_EMAIL"
+  };
+  $scope.connectionFieldValid = function() {
+    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.send = function() {
+    $scope.isLoading = true;
+    downloadService.postJson('/awac/register', {
+      login: $scope.loginInfo.field,
+      password: $scope.passwordInfo.field,
+      lastName: $scope.lastNameInfo.field,
+      firstName: $scope.firstNameInfo.field,
+      interfaceName: $scope.$root.instanceName,
+      email: $scope.emailInfo.field,
+      key: $routeParams.key
+    }, function(result) {
+      if (result.success) {
+        messageFlash.displaySuccess("You are now registered. Please log-in.");
+        $scope.isLoading = false;
+        return $location.path('/login');
+      } else {
+        messageFlash.displaySuccess("Registered fails. Please try again.");
+        $scope.isLoading = false;
+        return messageFlash.displayError(result.data.message);
+      }
+    });
+    return false;
+  };
+  $scope.injectRegistrationDirective = function() {
+    var directive, directiveName;
+    if ($scope.$root != null) {
+      if ($scope.$root.instanceName === 'enterprise') {
+        directiveName = "mm-awac-registration-enterprise";
+      } else if ($scope.$root.instanceName === 'municipality') {
+        directiveName = "mm-awac-registration-municipality";
+      }
+      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
+      return $('.inject-registration-form').append(directive);
+    }
+  };
+  return $timeout(function() {
+    return $scope.injectRegistrationDirective();
+  }, 0);
 });angular.module('app').run(function(loggerService) {
   var log;
   loggerService.initialize();
@@ -3326,152 +3542,29 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
     return $timeout($rootScope.refreshNotifications, 3600 * 1000);
   };
   return $rootScope.refreshNotifications();
-});angular.module('app.controllers').controller("UserManagerCtrl", function($scope, translationService, modalService, downloadService, messageFlash) {
-  $scope.title = translationService.get('USER_MANAGER_TITLE');
-  $scope.isLoading = {};
-  $scope.isLoading['admin'] = {};
-  $scope.isLoading['isActive'] = {};
-  $scope.getUserList = function() {
-    return $scope.$root.users;
-  };
-  $scope.inviteUser = function() {
-    return modalService.show(modalService.INVITE_USER);
-  };
-  $scope.getMyself = function() {
-    return $scope.$root.currentPerson;
-  };
-  $scope.activeUser = function(user) {
-    var data;
-    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email) {
-      data = {};
-      data.identifier = user.identifier;
-      data.isActive = !user.isActive;
-      $scope.isLoading['isActive'][user.email] = true;
-      return downloadService.postJson("/awac/user/activeAccount", data, function(result) {
-        if (result.success) {
-          user.isActive = !user.isActive;
-          return $scope.isLoading['isActive'][user.email] = false;
-        } else {
-          $scope.isLoading['isActive'][user.email] = false;
-          return messageFlash.displayError(result.data.message);
-        }
-      });
+});angular.module('app.controllers').controller("ResultsCtrl", function($scope, $window, downloadService, displayFormMenu, modalService) {
+  $scope.displayFormMenu = displayFormMenu;
+  modalService.show(modalService.LOADING);
+  downloadService.getJson("/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, function(result) {
+    modalService.close(modalService.LOADING);
+    if (result.success) {
+      return $scope.o = result.data;
+    } else {
+      ;
     }
-  };
-  $scope.isAdminUser = function(user) {
-    var data;
-    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email && user.isActive === true) {
-      data = {};
-      data.identifier = user.identifier;
-      data.isAdmin = !user.isAdmin;
-      $scope.isLoading['admin'][user.email] = true;
-      return downloadService.postJson("/awac/user/isAdminAccount", data, function(result) {
-        if (result.success) {
-          return $scope.isLoading['admin'][user.email] = false;
-        } else {
-          $scope.isLoading['admin'][user.email] = false;
-          return messageFlash.displayError(result.data.message);
-        }
-      });
-    }
-  };
-  return $scope.toForm = function() {
-    return $scope.$parent.navToLastFormUsed();
-  };
-});angular.module('app.controllers').controller("UserDataCtrl", function($scope, downloadService, translationService, messageFlash, modalService, $timeout) {
-  $scope.isLoading = false;
-  $scope.identifierInfo = {
-    fieldTitle: "USER_IDENTIFIER",
-    disabled: true,
-    field: $scope.$root.currentPerson.identifier
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "USER_PASSWORD",
-    fieldType: "password",
-    disabled: true,
-    field: "*****"
-  };
-  $scope.lastNameInfo = {
-    fieldTitle: "USER_LASTNAME",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
-    field: $scope.$root.currentPerson.lastName,
-    hideIsValidIcon: true,
-    isValid: true,
-    focus: function() {
-      return true;
-    }
-  };
-  $scope.firstNameInfo = {
-    fieldTitle: "USER_FIRSTNAME",
-    fieldType: "text",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
-    field: $scope.$root.currentPerson.firstName,
-    hideIsValidIcon: true,
-    isValid: true
-  };
-  $scope.emailInfo = {
-    fieldTitle: "USER_EMAIL",
-    disabled: true,
-    field: $scope.$root.currentPerson.email
-  };
-  $scope.allFieldValid = function() {
-    if ($scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.$root.refreshUserData();
-  $scope.send = function() {
-    var data;
-    if (!$scope.allFieldValid) {
-      return false;
-    }
-    $scope.isLoading = true;
-    data = {
-      identifier: $scope.identifierInfo.field,
-      lastName: $scope.lastNameInfo.field,
-      firstName: $scope.firstNameInfo.field,
-      email: $scope.emailInfo.field
-    };
-    downloadService.postJson('/awac/user/profile/save', data, function(result) {
-      if (result.success) {
-        messageFlash.displaySuccess("CHANGES_SAVED");
-        $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field;
-        $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field;
-        return $scope.isLoading = false;
-      } else {
-        messageFlash.displayError(result.data.message);
-        return $scope.isLoading = false;
-      }
-    });
-    return false;
-  };
-  $scope.setNewEmail = function(newEmail) {
-    $scope.emailInfo.field = newEmail;
-    return $scope.$root.currentPerson.email = newEmail;
-  };
-  $scope.changeEmail = function() {
-    return modalService.show(modalService.EMAIL_CHANGE, {
-      oldEmail: $scope.emailInfo.field,
-      cb: $scope.setNewEmail
-    });
-  };
-  $scope.changePassword = function() {
-    return modalService.show(modalService.PASSWORD_CHANGE, {});
-  };
-  return $scope.toForm = function() {
-    return $scope.$parent.navToLastFormUsed();
-  };
-});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
-  $scope.notifications = [];
-  return downloadService.getJson("admin/get_notifications", function(dto) {
-    if (dto != null) {
-      $scope.notifications = dto.notifications;
-    }
-    return;
   });
+  $scope.charts = {
+    histogramUrl: "/awac/result/getHistogram/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId,
+    webUrl: "/awac/result/getWeb/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId,
+    donutUrl1: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/1",
+    donutUrl2: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/2",
+    donutUrl3: "/awac/result/getDonut/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/3"
+  };
+  $scope.current_tab = 1;
+  $scope.downloadAsXls = function() {
+    return $window.open('/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null);
+  };
+  return $scope.downloadPdf = function() {};
 });angular.module('app.controllers').controller("SiteManagerCtrl", function($scope, translationService, modalService, downloadService) {
   $scope.isLoading = [{}, {}];
   $scope.assignPeriod = [$scope.$root.periods[1].key, $scope.$root.periods[0].key];
@@ -3532,99 +3625,11 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
     console.log(data);
     return downloadService.postJson('awac/site/assignPeriodToSite', data, function(result) {});
   };
-});angular.module('app.controllers').controller("RegistrationCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) {
-  $scope.loading = false;
-  $scope.tabActive = [];
-  $scope.enterEvent = function() {
-    if ($scope.tabActive[0] === true) {
-      return $scope.send();
-    }
-  };
-  $scope.loginInfo = {
-    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
-    fieldType: "text",
-    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false,
-    focus: function() {
-      return $scope.tabActive[0];
-    }
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
-    fieldType: "password",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false
-  };
-  $scope.lastNameInfo = {
-    fieldTitle: "USER_LASTNAME",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
-    hideIsValidIcon: true,
-    isValid: true,
-    focus: function() {
-      return true;
-    }
-  };
-  $scope.firstNameInfo = {
-    fieldTitle: "USER_FIRSTNAME",
-    fieldType: "text",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
-    hideIsValidIcon: true,
-    isValid: true
-  };
-  $scope.emailInfo = {
-    fieldTitle: "USER_EMAIL"
-  };
-  $scope.connectionFieldValid = function() {
-    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.send = function() {
-    $scope.isLoading = true;
-    downloadService.postJson('/awac/register', {
-      login: $scope.loginInfo.field,
-      password: $scope.passwordInfo.field,
-      lastName: $scope.lastNameInfo.field,
-      firstName: $scope.firstNameInfo.field,
-      interfaceName: $scope.$root.instanceName,
-      email: $scope.emailInfo.field,
-      key: $routeParams.key
-    }, function(result) {
-      if (result.success) {
-        messageFlash.displaySuccess("You are now registered. Please log-in.");
-        $scope.isLoading = false;
-        return $location.path('/login');
-      } else {
-        messageFlash.displaySuccess("Registered fails. Please try again.");
-        $scope.isLoading = false;
-        return messageFlash.displayError(result.data.message);
-      }
-    });
-    return false;
-  };
-  $scope.injectRegistrationDirective = function() {
-    var directive, directiveName;
-    if ($scope.$root != null) {
-      if ($scope.$root.instanceName === 'enterprise') {
-        directiveName = "mm-awac-registration-enterprise";
-      } else if ($scope.$root.instanceName === 'municipality') {
-        directiveName = "mm-awac-registration-municipality";
-      }
-      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
-      return $('.inject-registration-form').append(directive);
-    }
-  };
-  return $timeout(function() {
-    return $scope.injectRegistrationDirective();
-  }, 0);
+});
+({
+  link: function(scope) {
+    return console.log("entering SiteManagerCtrl");
+  }
 });angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout, displayFormMenu) {
   $scope.formIdentifier = formIdentifier;
   $scope.displayFormMenu = displayFormMenu;
