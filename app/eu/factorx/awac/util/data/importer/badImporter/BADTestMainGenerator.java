@@ -23,7 +23,7 @@ public class BADTestMainGenerator {
     private CodeLabelService codeLabelService;
 
 
-    public void generateBAD(List<BAD> bads) {
+    public void generateBAD(List<BAD> bads, TemplateName templateName) {
 
         List<BAD> result = new ArrayList<>();
         for (BAD bad : bads) {
@@ -34,12 +34,15 @@ public class BADTestMainGenerator {
 
 
         //create template
-        BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST_MAIN, "BadTest.java");
+        BADTemplate badTemplate = new BADTemplate("public/template/badTestMain.vm", "BadTest.java");
 
         //inset questions
         badTemplate.addParameter("bads", result);
 
-        badTemplate.generate(TemplateName.BAD_TEST_MAIN.getPath());
+        //insert pakcage
+        badTemplate.addParameter("PACKAGE", templateName.getPackageTest());
+
+        badTemplate.generate(templateName.getTestPath());
 
     }
 

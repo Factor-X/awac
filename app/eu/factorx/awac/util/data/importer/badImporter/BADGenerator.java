@@ -38,7 +38,7 @@ public class BADGenerator {
     public void generateBAD(BAD bad, BADLog.LogLine logLine, TemplateName templateName) {
 
         //create template
-        BADTemplate badTemplate = new BADTemplate(templateName, "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
+        BADTemplate badTemplate = new BADTemplate(templateName.getTemplate(), "BaseActivityData" + bad.getBaseActivityDataCode() + ".java");
 
         //add parameters
         //start to build the map of repetition to load question

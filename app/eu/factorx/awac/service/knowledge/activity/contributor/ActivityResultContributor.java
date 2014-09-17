@@ -111,14 +111,8 @@ public abstract class ActivityResultContributor {
 		return answerValue.getValue();
 	}
 
-    protected <T extends Code> T convertCode(Code code, ConversionCriterion conversionCriterion, Class<T> expectedClass){
-        Code result  = codeConversionService.getConversionCode(code, conversionCriterion);
-        try {
-            return expectedClass.cast(result);
-        }
-        catch(ClassCastException e){
-            throw new MyrmexRuntimeException("Cannot cast " + result + " to the expected codeList : " + expectedClass.getName());
-        }
+    protected <T extends Code> T convertCode(T code, ConversionCriterion conversionCriterion){
+        return codeConversionService.getConversionCode(code, conversionCriterion);
     }
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
