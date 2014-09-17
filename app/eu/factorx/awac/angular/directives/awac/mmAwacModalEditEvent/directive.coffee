@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash ) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -83,8 +83,8 @@ angular
                             $scope.isLoading = false
                 else
                     #create event
-                    data.organization = $scope.$root.organization
-                    data.period = $scope.$root.period
+                    data.organization = $scope.getParams().organization
+                    data.period = $scope.$root.periods[0]
                     data.id = 0
                     downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success

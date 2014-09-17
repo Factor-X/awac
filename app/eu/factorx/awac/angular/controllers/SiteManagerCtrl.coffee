@@ -93,6 +93,7 @@ angular
 
             $scope.editOrCreateEvent = (event) ->
                 params = {}
+                params.organization = $scope.organization
                 if event?
                     params.event = event
                 modalService.show(modalService.EDIT_EVENT, params)
