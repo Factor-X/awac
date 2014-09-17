@@ -22,6 +22,7 @@ import eu.factorx.awac.models.business.Site;
 @Table(name = "account_site_association")
 @NamedQueries({
 		@NamedQuery(name = AccountSiteAssociation.FIND_BY_SITE, query = "select a from AccountSiteAssociation a where a.site.id = :site_id"),
+        @NamedQuery(name = AccountSiteAssociation.FIND_BY_ACCOUNT, query = "select a from AccountSiteAssociation a where a.account = :account"),
 })
 public class AccountSiteAssociation extends AuditedAbstractEntity {
 
@@ -29,6 +30,8 @@ public class AccountSiteAssociation extends AuditedAbstractEntity {
 	 * :identifier = ...
 	 */
 	public static final String FIND_BY_SITE = "AccountSiteAssociation.findBySite";
+    public static final String FIND_BY_ACCOUNT = "AccountSiteAssociation.findByAccount";
+
 	private static final long serialVersionUID = 1L;
 
 

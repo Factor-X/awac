@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalAddUserSite", (directiveService, downloadService, translationService, messageFlash, $rootScope) ->
+.directive "mmAwacModalAddUserSite", (directiveService, downloadService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -32,7 +32,7 @@ angular
 
               #create DTO
               data =
-                  organization: $rootScope.organization
+                  organization: $scope.getParams().organization
                   site: $scope.getParams().site
                   selectedAccounts: $scope.selection
 
@@ -87,7 +87,7 @@ angular
 
           #create DTO
           data =
-            organization: $rootScope.organization
+            organization: $scope.getParams().organization
             site: $scope.getParams().site
 
           downloadService.postJson '/awac/organization/site/associatedaccounts/load', data, (result) ->
