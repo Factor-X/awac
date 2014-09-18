@@ -368,7 +368,7 @@ angular
                 'value': value
                 'unitCode': defaultUnitCode
                 'mapRepetition': mapIteration
-                'lastUpdateUser': $scope.$root.currentPerson.identifier
+                'lastUpdateUser': $scope.$root.currentPerson?.identifier
                 'wasEdited': wasEdited
             }
 

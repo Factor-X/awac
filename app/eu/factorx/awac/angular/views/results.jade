@@ -29,40 +29,10 @@ div.pdf-able
                     .sites-panel-items
                         .sites-panel-item
                             table
-                                tr
-                                    td Namur
+                                tr(ng-repeat="site in mySites")
+                                    td {{ site.name }}
                                     td
-                                        input(type="checkbox")
-                        .sites-panel-item
-                            table
-                                tr
-                                    td Namur
-                                    td
-                                        input(type="checkbox")
-                        .sites-panel-item
-                            table
-                                tr
-                                    td Namur
-                                    td
-                                        input(type="checkbox")
-                        .sites-panel-item
-                            table
-                                tr
-                                    td Namur
-                                    td
-                                        input(type="checkbox")
-                        .sites-panel-item
-                            table
-                                tr
-                                    td Namur
-                                    td
-                                        input(type="checkbox")
-                        .sites-panel-item
-                            table
-                                tr
-                                    td Namur
-                                    td
-                                        input(type="checkbox")
+                                        input(type="checkbox", ng-model="site.$selected")
 
 
             td.top-aligned.horizontally-padded.wide
