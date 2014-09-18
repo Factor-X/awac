@@ -18,6 +18,7 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
+                <bean class="eu.factorx.awac.converter.AccountToAccountDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.AccountToPersonDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.ProductToProductDTOConverter"/>
                 <bean class="eu.factorx.awac.converter.SiteToSiteDTOConverter"/>
@@ -36,6 +37,7 @@
 	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceImpl">
 		<property name="activityResultContributors">
             <set>
+                <!--
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD1" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD2A" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD2B" />
@@ -125,10 +127,11 @@
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38B" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38C" />
 				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39A" />
+ 			-->
  			</set>
         </property>
 	</bean>
-
+<!--
 	<bean id="baseActivityDataForProducts" class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataForProducts">
 		<property name="baseActivityDataAE_BAD31A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31A" /></property>
 		<property name="baseActivityDataAE_BAD31B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31B" /></property>
@@ -160,7 +163,7 @@
 
 		<property name="baseActivityDataAE_BAD36"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD36" /></property>
 	</bean>
-
+-->
     <!--<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
         <!--<property name="persistenceUnitManager" ref="persistenceUnitManager" />-->
         <!--<property name="jpaVendorAdapter">-->

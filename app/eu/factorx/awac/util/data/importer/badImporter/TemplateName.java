@@ -5,9 +5,10 @@ package eu.factorx.awac.util.data.importer.badImporter;
  */
 public enum TemplateName {
 
-    //BAD("public/template/bad.vm", "app/eu/factorx/awac/service/knowledge/activity/contributor/tps/"),
-    BAD("public/template/bad.vm", "tmp/bad/"),
-    BAD_TEST("public/template/badTest.vm", "test/eu/factorx/awac/buisness/bad/impl/");
+    BAD("public/template/bad.vm", "app/eu/factorx/awac/service/knowledge/activity/contributor/impl/"),
+    //BAD("public/template/bad.vm", "tmp/bad/"),
+    BAD_TEST("public/template/badTest.vm", "test/eu/factorx/awac/buisness/bad/impl/"),
+    BAD_TEST_MAIN("public/template/badTestMain.vm", "test/eu/factorx/awac/buisness/bad/");
 
     private final String url;
     private final String targetPath;

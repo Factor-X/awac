@@ -76,7 +76,7 @@ angular
             percentOwned :{
                 fieldTitle: "SITE_MANAGER_PERCENT_OWNED"
                 validationFct:->
-                    if $scope.fields.percentOwned.field>=0 && $scope.fields.percentOwned.field<=1000
+                    if $scope.fields.percentOwned.field>=0 && $scope.fields.percentOwned.field<=100
                         return true
                     return false
                 validationMessage: "CONTROL_FIELD_DEFAULT_PERCENT_MAX_100"

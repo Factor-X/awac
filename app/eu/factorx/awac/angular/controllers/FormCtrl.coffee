@@ -174,17 +174,17 @@ angular
 
             downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
                 if result.success
-    
+
                     #refresh the progress bar
-    
+
                     listToRemove = []
-    
+
                     for key in Object.keys($scope.mapRepetition)
                         if key != '$$hashKey'
                             i=0
                             while i < $scope.mapRepetition[key].length
                                 repetition =  $scope.mapRepetition[key][i]
-    
+
                                 founded=false
                                 for answer in $scope.answerList
                                     if answer.value? &&  (!answer.isAggregation? || answer.isAggregation != true) && $scope.compareRepetitionMap(answer.mapRepetition,repetition)
@@ -197,25 +197,25 @@ angular
                                     listToRemove[it].iteration = {}
                                     listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key]
                                     j = angular.copy($scope.mapRepetition[key][i])
-    
+
                                     delete j[key]
                                     listToRemove[it].map = j
                                 i++
-    
+
                     for repetitionToRemove in listToRemove
                         $scope.removeIteration(repetitionToRemove.code,repetitionToRemove.iteration,repetitionToRemove.map)
-    
+
                     #
                     # normalize answer after save
                     #
                     i=$scope.answerList.length-1
                     while i>=0
                         answer = $scope.answerList[i]
-    
+
                         # test if the question was edited
                         if answer.wasEdited == true
                             answer.wasEdited = false
-    
+
                         if answer.toRemove == true
                             $scope.answerList.splice(i, 1)
                         i--
@@ -224,18 +224,18 @@ angular
                     # refresh the progressBar
                     #
                     $scope.saveFormProgress()
-    
+
                     #
                     # display success message and hide the loading modal
                     #
                     messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
                     modalService.close(modalService.LOADING)
-    
+
                     #nav
                     if argToNav != null
                         $scope.$root.$broadcast('NAV', argToNav)
                     return
-    
+
                 else
                     messageFlash.displayError translationService.get('ERROR_THROWN_ON_SAVE') + data.message
                     modalService.close(modalService.LOADING)
@@ -346,7 +346,7 @@ angular
         else
             #compute default value
             value = null
-            defaultUnitId = null
+            defaultUnitCode = null
             wasEdited = false
             if $scope.getQuestion(code) != null
                 question = $scope.getQuestion(code)
@@ -355,18 +355,18 @@ angular
                     value = question.defaultValue
                     wasEdited = true
 
-                #compute defaultUnitId
+                #compute defaultUnitCode
                 if question.unitCategoryId?
                     if question.defaultUnit?
-                        defaultUnitId = question.defaultUnit.id
+                        defaultUnitCode = question.defaultUnit.code
                     else
-                        defaultUnitId = $scope.getUnitCategories(code).mainUnitId
+                        defaultUnitCode = $scope.getUnitCategories(code).mainUnitCode
 
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey': code
                 'value': value
-                'unitId': defaultUnitId
+                'unitCode': defaultUnitCode
                 'mapRepetition': mapIteration
                 'lastUpdateUser': $scope.$root.currentPerson.identifier
                 'wasEdited': wasEdited

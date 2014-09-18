@@ -19,7 +19,7 @@ public class AnswerLineDTO extends DTO {
 
 	private String lastUpdateUser;
 
-	private Integer unitId;
+	private String unitCode;
 
 	/**
 	 * K: code of a parent {@link QuestionSet questionSet}<br>
@@ -38,11 +38,11 @@ public class AnswerLineDTO extends DTO {
         this.lastUpdateUser = lastUpdateUser;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId) {
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
-        this.unitId = unitId;
+        this.unitCode = unitCode;
     }
 
     public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Map<String, Integer> mapRepetition) {
@@ -52,19 +52,19 @@ public class AnswerLineDTO extends DTO {
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId, Map<String, Integer> mapRepetition) {
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Map<String, Integer> mapRepetition,String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
-        this.unitId = unitId;
+        this.unitCode = unitCode;
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Integer unitId, Map<String, Integer> mapRepetition, String comment) {
+    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, String unitCode, Map<String, Integer> mapRepetition, String comment) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
-        this.unitId = unitId;
+        this.unitCode = unitCode;
         this.mapRepetition = mapRepetition;
         this.comment = comment;
     }
@@ -93,12 +93,12 @@ public class AnswerLineDTO extends DTO {
         this.lastUpdateUser = lastUpdateUser;
     }
 
-    public Integer getUnitId() {
-        return unitId;
+    public String getUnitCode() {
+        return unitCode;
     }
 
-    public void setUnitId(Integer unitId) {
-        this.unitId = unitId;
+    public void setUnitCode(String unitCode) {
+        this.unitCode = unitCode;
     }
 
     public Map<String, Integer> getMapRepetition() {
@@ -140,14 +140,13 @@ public class AnswerLineDTO extends DTO {
 		return new HashCodeBuilder(7, 29).append(this.questionKey).append(this.mapRepetition).toHashCode();
 	}
 
-
     @Override
     public String toString() {
         return "AnswerLineDTO{" +
                 "questionKey='" + questionKey + '\'' +
                 ", value=" + value +
                 ", lastUpdateUser='" + lastUpdateUser + '\'' +
-                ", unitId=" + unitId +
+                ", unitCode='" + unitCode + '\'' +
                 ", mapRepetition=" + mapRepetition +
                 ", comment='" + comment + '\'' +
                 '}';

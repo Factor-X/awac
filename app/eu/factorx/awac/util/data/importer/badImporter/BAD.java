@@ -39,6 +39,7 @@ public class BAD {
 
     private List<String> listQuestion= new ArrayList<>();
     private int line;
+    private List<BadTestValue> testValues = new ArrayList<>();
 
     public BAD() {
     }
@@ -193,5 +194,18 @@ public class BAD {
 
     public void setLine(int line) {
         this.line = line;
+    }
+
+
+    public List<BadTestValue> getTestValues() {
+        return testValues;
+    }
+
+    public void setTestValues(List<BadTestValue> testValues) {
+        this.testValues = testValues;
+    }
+
+    public void addTestValue(BadTestValue testValue) {
+        this.testValues.add(testValue);
     }
 }

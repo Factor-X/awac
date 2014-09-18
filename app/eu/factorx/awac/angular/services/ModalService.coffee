@@ -12,6 +12,7 @@ angular
     @CONNECTION_PASSWORD_CHANGE = 'connection-password-change'
     @INVITE_USER = 'invite-user'
     @EDIT_SITE = 'edit-site'
+    @ADD_USER_SITE = 'add-user-site'
 
     @show = (modalName,params) ->
 
