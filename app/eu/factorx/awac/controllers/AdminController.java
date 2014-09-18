@@ -9,7 +9,7 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
-import eu.factorx.awac.util.data.importer.AwacDataImporter;
+import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
@@ -43,13 +43,15 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private CodeLabelImporter           codeLabelImporter;
 	@Autowired
-	private AwacDataImporter            awacDataImporter;
+	private FactorImporter            awacDataImporter;
 	@Autowired
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 	@Autowired
 	private BADImporter                 badImporter;
 	@Autowired
 	private IndicatorImporter           indicatorImporter;
+	@Autowired
+	private FactorImporter				factorImporter;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -96,7 +98,7 @@ public class AdminController extends AbstractController {
 			return unauthorized();
 		}
 		// import baseIndicators and factors
-		//awacDataImporter.run();
+		factorImporter.run();
 		indicatorImporter.run();
 
 		return (ok());

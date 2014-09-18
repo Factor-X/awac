@@ -5,11 +5,13 @@ import javax.persistence.*;
 import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
-@Table(name = "mm_report_indicator")
+@Table(name = "mm_report_indicator", uniqueConstraints = { @UniqueConstraint(columnNames = { "report_id", "indicator_id" }) })
 public class ReportIndicator extends AbstractEntity {
 
 	private static final long serialVersionUID = -446540676020436619L;
 
+	public static final String PROPERTY_NAME_REPORT = "report";
+	public static final String PROPERTY_NAME_INDICATOR = "indicator";
 	public static final String PROPERTY_NAME_ORDER_INDEX = "orderIndex";
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -61,4 +63,9 @@ public class ReportIndicator extends AbstractEntity {
 		this.orderIndex = orderIndex;
 	}
 
+	@Override
+	public String toString() {
+		return "ReportIndicator [id=" + id + ", report=" + report + ", indicator=" + indicator + ", orderIndex=" + orderIndex + "]";
+	}
+	
 }

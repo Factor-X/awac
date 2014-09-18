@@ -2,8 +2,6 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
@@ -25,24 +23,10 @@ import eu.factorx.awac.service.BaseIndicatorService;
 public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<BaseIndicator> implements BaseIndicatorService {
 
 	@Override
-	public List<BaseIndicator> findByParameters(IndicatorSearchParameter searchParameter) {
-		TypedQuery<BaseIndicator> query = JPA.em().createNamedQuery(BaseIndicator.FIND_BY_PARAMETERS, BaseIndicator.class)
-				.setParameter("type", searchParameter.getType())
-				.setParameter("scopeType", searchParameter.getScopeType())
-				.setParameter("activityCategory", searchParameter.getActivityCategory())
-				.setParameter("activitySubCategory", searchParameter.getActivitySubCategory())
-				.setParameter("activityOwnership", searchParameter.getActivityOwnership())
-				.setParameter("deleted", searchParameter.getDeleted());
-		return query.getResultList();
-	}
-
-	@Override
 	public List<BaseIndicator> findAllCarbonIndicatorsForSites(InterfaceTypeCode interfaceTypeCode) {
 		Session session = JPA.em().unwrap(Session.class);
 		Criteria criteria = session.createCriteria(BaseIndicator.class);
 
-		
-		
 		DetachedCriteria dc = DetachedCriteria.forClass(AwacCalculator.class, "ac");
 		dc.createAlias("ac.baseIndicators", "baseIndicator");
 		dc.add(Restrictions.eq("ac.interfaceTypeCode", interfaceTypeCode));
@@ -59,13 +43,6 @@ public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<
 
 		Logger.info("Found {} baseIndicators", result.size());
 		return result;
-	}
-
-	@Override
-	public List<String> findAllIndicatorNames() {
-		List<String> resultList = JPA.em().createNamedQuery(BaseIndicator.FIND_ALL_INDICATOR_NAMES, String.class)
-				.getResultList();
-		return resultList;
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class AwacMunicipalityInitialData {
     private CodeLabelImporter codeLabelImporter;
 
     @Autowired
-    private AwacDataImporter awacDataImporter;
+    private FactorImporter awacDataImporter;
 
     @Autowired
     private AccountImporter accountImporter;

@@ -10,15 +10,15 @@ import eu.factorx.awac.models.code.CodeList;
 
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "code"))})
-public class ReportCode extends Code {
+public class BaseIndicatorCode extends Code {
 
 	private static final long serialVersionUID = 1L;
 
-	protected ReportCode() {
-		super(CodeList.REPORT);
+	protected BaseIndicatorCode() {
+		super(CodeList.BASE_INDICATOR);
 	}
 
-	public ReportCode(String key) {
+	public BaseIndicatorCode(String key) {
 		this();
 		this.key = key;
 	}

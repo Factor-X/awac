@@ -37,15 +37,18 @@ public class ReportResult implements Serializable {
 
 	public Map<String, List<Double>> getScopeValuesByIndicator() {
 
-		// group data by baseIndicator code key
+		// group activity results by indicator
 		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
 		for (Indicator indicator : report.getIndicators()) {
-			String indicatorKey = indicator.getCode().getKey();
-			dataByIndicator.put(indicatorKey, new ArrayList<BaseActivityResult>());
-		}
-		for (IndicatorCode indicatorCode : activityResults.keySet()) {
-			List<BaseActivityResult> baseActivityResults = activityResults.get(indicatorCode);
-			dataByIndicator.get(indicatorCode.getKey()).addAll(baseActivityResults);
+			IndicatorCode indicatorCode = indicator.getCode();
+			List<BaseActivityResult> indicatorActivityResults;
+			if (activityResults.containsKey(indicatorCode)) {
+				indicatorActivityResults  = activityResults.get(indicatorCode);
+			} else {
+				indicatorActivityResults = new ArrayList<BaseActivityResult>();
+			}
+
+			dataByIndicator.put(indicatorCode.getKey(), indicatorActivityResults);
 		}
 
 		// KEY => (allScopes, scope1, scope2, scope3, outOfScope)

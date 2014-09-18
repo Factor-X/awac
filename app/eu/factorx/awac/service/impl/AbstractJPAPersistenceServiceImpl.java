@@ -40,7 +40,8 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	public E update(final E entity) {
 		if (entity instanceof AuditedAbstractEntity) {
 			// Forces update of technical segment, and then of the entity...
-			// Useful in cases where only children of entity are actually updated: in a business point of view, when we called this method, we may want that the technical segment of given entity was updated.
+			// Useful in cases where only children of entity are actually updated: in a business point of view, when we called this method, we may want that the technical segment
+			// of given entity was updated.
 			((AuditedAbstractEntity) entity).preUpdate();
 		}
 		return JPA.em().merge(entity);
@@ -60,6 +61,14 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	}
 
 	@Override
+	public void removeAll() {
+		List<E> allEntities = findAll();
+		for (E entity : allEntities) {
+			JPA.em().remove(entity);
+		}
+	}
+
+	@Override
 	public E findById(final Long id) {
 		return JPA.em().find(entityClass, id);
 	}
@@ -67,6 +76,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	@Override
 	public List<E> findAll() {
 		Criteria criteria = JPA.em().unwrap(Session.class).createCriteria(entityClass);
+
 		@SuppressWarnings("unchecked")
 		List<E> result = criteria.list();
 		return result;

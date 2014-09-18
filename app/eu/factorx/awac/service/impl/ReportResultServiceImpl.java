@@ -109,7 +109,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		return res;
 	}
 
-	private static List<BaseActivityData> filterByRank(String indicatorKey, List<BaseActivityData> indicatorBADs) {
+	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs) {
 		List<BaseActivityData> res = new ArrayList<>();
 		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
 		for (BaseActivityData baseActivityData : indicatorBADs) {
@@ -195,63 +195,44 @@ public class ReportResultServiceImpl implements ReportResultService {
 	@Override
 	public List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
 		List<ReportResult> reportResults = new ArrayList<>();
-		for (Report report : awacCalculator.getReports()) {
-			reportResults.add(new ReportResult(report));
-		}
 
 		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
 		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period);
 
-		for (BaseActivityResult baseActivityResult : baseActivityResults) {
-			for (ReportResult reportResult : reportResults) {
-				addActivityResultIfSuitable(reportResult, baseActivityResult);
-			}
+		for (Report report : awacCalculator.getReports()) {
+			reportResults.add(getReportResult(report, baseActivityResults));
 		}
 
 		return reportResults;
 	}
 
-	private boolean addActivityResultIfSuitable(ReportResult reportResult, BaseActivityResult baseActivityResult) {
-		BaseIndicator baseIndicator = baseActivityResult.getBaseIndicator();
-		ScopeTypeCode scopeType = baseIndicator.getScopeType();
+	private ReportResult getReportResult(Report report, List<BaseActivityResult> baseActivityResults) {
+		ReportResult reportResult = new ReportResult(report);
 
-		Report report = reportResult.getReport();
 		IndicatorIsoScopeCode reportScope = report.getRestrictedScope();
 
-		if ((reportScope != null) && (!reportScope.equals(scopeType))) {
-			return false;
-		}
+		for (Indicator indicator : report.getIndicators()) {
+			IndicatorCode indicatorCode = indicator.getCode();
+			ArrayList<BaseActivityResult> indicatorActivityResults = new ArrayList<BaseActivityResult>();
 
-		boolean res = false;
-		List<Indicator> reportIndicators = report.getIndicators();
-		for (Indicator indicator : baseIndicator.getIndicators()) {
-			if (reportIndicators.contains(indicator)) {
-				IndicatorCode indicatorCode = indicator.getCode();
-				if (!reportResult.getActivityResults().containsKey(indicatorCode)) {
-					reportResult.getActivityResults().put(indicatorCode, new ArrayList<BaseActivityResult>());
-					res = reportResult.getActivityResults().get(indicatorCode).add(baseActivityResult);
+			for (BaseIndicator baseIndicator : indicator.getBaseIndicators(reportScope)) {
+				for (BaseActivityResult baseActivityResult : baseActivityResults) {
+					if (baseIndicator.getCode().equals(baseActivityResult.getBaseIndicator().getCode())) {
+						indicatorActivityResults.add(baseActivityResult);
+					}
 				}
-				break;
 			}
+			reportResult.getActivityResults().put(indicatorCode, indicatorActivityResults);
 		}
-		return res;
+		return reportResult;
 	}
 
 	private List<BaseIndicator> getBaseIndicatorsForCalculator(AwacCalculator awacCalculator) {
 		Set<BaseIndicator> result = new HashSet<>();
-		// for each report ...
+		// for each report, add all base indicators (not yet present) in result
 		for (Report report : awacCalculator.getReports()) {
-			List<Indicator> indicators = report.getIndicators();
-			// for each indicator ...
-			for (Indicator indicator : indicators) {
-				List<BaseIndicator> baseIndicators = indicator.getBaseIndicators();
-				// get its baseIndicators ...
-				for (BaseIndicator baseIndicator : baseIndicators) {
-					// and add it to the results if not deleted
-					if (!baseIndicator.getDeleted()) {
-						result.add(baseIndicator);
-					}
-				}
+			for (BaseIndicator baseIndicator : report.getBaseIndicators()) {
+				result.add(baseIndicator);
 			}
 		}
 		return new ArrayList<>(result);
@@ -286,18 +267,18 @@ public class ReportResultServiceImpl implements ReportResultService {
 				continue;
 			}
 
-			Logger.info("BaseIndicator '{}': found {} BADs", baseIndicator.getKey(), indicatorBADs.size());
+			Logger.info("BaseIndicator '{}': found {} BADs", baseIndicator.getCode(), indicatorBADs.size());
 			for (BaseActivityData baseActivityData : indicatorBADs) {
 				matchingIndicatorBADs.add(baseActivityData.getKey());
 			}
 
-			indicatorBADs = filterByRank(baseIndicator.getKey(), indicatorBADs);
+			indicatorBADs = filterByRank(indicatorBADs);
 
 			for (BaseActivityData baseActivityData : indicatorBADs) {
 				FactorSearchParameter factorSearchParam = new FactorSearchParameter(baseIndicator, baseActivityData);
 				Factor factor = factorService.findByParameters(factorSearchParam);
 				if (factor == null) {
-					Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityData.getKey().getKey(), baseIndicator.getKey());
+					Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityData.getKey().getKey(), baseIndicator.getCode().getKey());
 				} else {
 					activityResults.add(new BaseActivityResult(baseIndicator, baseActivityData, factor));
 				}
