@@ -7,50 +7,61 @@ angular
     $scope.isLoading['admin'] = {}
     $scope.isLoading['isActive'] = {}
 
-    $scope.getUserList = ->
-        return $scope.$root.users
+    # load my organization
+    modalService.show(modalService.LOADING)
+    downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
+        console.log result
+        if not result.success
+            messageFlash.displayError 'Unable to load data...'
+            modalService.close(modalService.LOADING)
+        else
+            modalService.close(modalService.LOADING)
+            $scope.organization = result.data
 
-    $scope.inviteUser = ->
-        modalService.show(modalService.INVITE_USER)
+            $scope.getUserList = ->
+                return $scope.organization.users
 
-    $scope.getMyself = ->
-        return $scope.$root.currentPerson
+            $scope.inviteUser = ->
+                modalService.show(modalService.INVITE_USER)
 
-    $scope.activeUser = (user) ->
+            $scope.getMyself = ->
+                return $scope.$root.currentPerson
 
-        if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email
+            $scope.activeUser = (user) ->
 
-            data = {}
-            data.identifier = user.identifier
-            data.isActive = !user.isActive
+                if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email
 
-            $scope.isLoading['isActive'][user.email] = true
+                    data = {}
+                    data.identifier = user.identifier
+                    data.isActive = !user.isActive
 
-            downloadService.postJson "/awac/user/activeAccount", data, (result) ->
-                if result.success
-                    user.isActive = !user.isActive
-                    $scope.isLoading['isActive'][user.email] = false
-                else
-                    $scope.isLoading['isActive'][user.email] = false
-                    messageFlash.displayError result.data.message
+                    $scope.isLoading['isActive'][user.email] = true
+
+                    downloadService.postJson "/awac/user/activeAccount", data, (result) ->
+                        if result.success
+                            user.isActive = !user.isActive
+                            $scope.isLoading['isActive'][user.email] = false
+                        else
+                            $scope.isLoading['isActive'][user.email] = false
+                            messageFlash.displayError result.data.message
 
 
-    $scope.isAdminUser = (user) ->
+            $scope.isAdminUser = (user) ->
 
-        if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email && user.isActive == true
+                if $scope.getMyself().isAdmin == true && $scope.getMyself().email != user.email && user.isActive == true
 
-            data = {}
-            data.identifier = user.identifier
-            data.isAdmin = !user.isAdmin
+                    data = {}
+                    data.identifier = user.identifier
+                    data.isAdmin = !user.isAdmin
 
-            $scope.isLoading['admin'][user.email] = true
+                    $scope.isLoading['admin'][user.email] = true
 
-            downloadService.postJson "/awac/user/isAdminAccount", data, (result) ->
-                if result.success
-                    $scope.isLoading['admin'][user.email] = false
-                else
-                    $scope.isLoading['admin'][user.email] = false
-                    messageFlash.displayError result.data.message
+                    downloadService.postJson "/awac/user/isAdminAccount", data, (result) ->
+                        if result.success
+                            $scope.isLoading['admin'][user.email] = false
+                        else
+                            $scope.isLoading['admin'][user.email] = false
+                            messageFlash.displayError result.data.message
 
     $scope.toForm = ->
         $scope.$parent.navToLastFormUsed()

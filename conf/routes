@@ -74,6 +74,7 @@ GET         /assets/*file                                          controllers.A
 # Answer controller => used to save answer
 #
 GET         /awac/answer/getByForm/:form/:period/:scope            @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
+GET         /awac/answer/testDataAccess/:form/:period/:scope       @eu.factorx.awac.controllers.AnswerController.testFormAvailabilityByScopeAndForm(form: String, period: String, scope: Long)
 POST        /awac/answer/save                                      @eu.factorx.awac.controllers.AnswerController.save()
 GET         /awac/answer/getPeriodsForComparison/:scope            @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
 POST        /awac/answer/formProgress                              @eu.factorx.awac.controllers.AnswerController.setFormProgress()
@@ -127,9 +128,12 @@ GET         /awac/site/:siteId                                     @eu.factorx.a
 
 POST        /awac/organization/site/associatedaccounts/load        @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
 POST        /awac/organization/site/associatedaccounts/save        @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
+GET         /awac/organization/getMyOrganization                   @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
+
 
 #
 # organization event
 #
 
 POST        /awac/organization/events/load                         @eu.factorx.awac.controllers.OrganizationEventController.loadEvents()
+POST        /awac/organization/events/save                         @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()

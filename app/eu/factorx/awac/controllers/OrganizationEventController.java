@@ -60,15 +60,17 @@ public class OrganizationEventController extends AbstractController {
 		Organization org = organizationService.findByName(dto.getOrganization().getName());
 
 		// get organization
-		//Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
-		Period period = periodService.findByCode(PeriodCode.P2013);
+		Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
+		//Period period = periodService.findByCode(PeriodCode.P2013);
 
 		Logger.info ("Organization id : " + org.getId());
 		Logger.info ("Period id : " + period.getId());
 
 
 		// get events for organization and given period
-		List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
+		//List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
+		// get events for organization and all periods
+		List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(org);
 		Logger.info("organizationList.size():" + organizationList.size());
 
 		List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<OrganizationEventDTO>();
@@ -85,6 +87,50 @@ public class OrganizationEventController extends AbstractController {
 		return ok(resultDto);
 	}
 
+	/**
+	 * save event
+	 */
 
+	@Transactional
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+	public Result saveEvent () {
+
+		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
+		Logger.info("Save Event - Organization Name: " + dto.getOrganization().getName() +  " Period: " + dto.getPeriod());
+
+		OrganizationEvent orgEvent = null;
+
+		if (dto.getId()!=0) {
+			Logger.info("Save Event - Update for : " + dto.getId());
+			// update
+			orgEvent = organizationEventService.findById(dto.getId());
+			if (orgEvent!=null) {
+				Logger.info("OrgEvent is not null : " + dto.getId());
+				orgEvent.setName(dto.getName());
+				orgEvent.setDescription(dto.getDescription());
+				orgEvent.setPeriod(periodService.findByCode(new PeriodCode(dto.getPeriod().getKey())));
+
+			} else {
+				Logger.info("OrgEvent is null");
+			}
+		} else {
+			// create
+			Logger.info("Save Event - Create");
+			// get organization
+			Organization org = organizationService.findByName(dto.getOrganization().getName());
+			// get period
+			Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
+
+			orgEvent = new OrganizationEvent(org,period,dto.getName(),dto.getDescription());
+		}
+
+		Logger.info("orgEvent content" + orgEvent.toString());
+		organizationEventService.saveOrUpdate(orgEvent);
+
+		// return event DTO
+		Logger.info("return...");
+		return ok(conversionService.convert(orgEvent, OrganizationEventDTO.class));
+	}
 
 } // end of class

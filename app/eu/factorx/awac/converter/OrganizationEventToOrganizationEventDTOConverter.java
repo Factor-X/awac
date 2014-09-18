@@ -30,6 +30,9 @@ public class OrganizationEventToOrganizationEventDTOConverter implements Convert
 
 		dto.setOrganization(organizationDTOConverter.convert(orgEvent.getOrganization()));
 		dto.setPeriod(periodDTOConverter.convert(orgEvent.getPeriod()));
+		dto.setName(orgEvent.getName());
+		dto.setDescription(orgEvent.getDescription());
+		dto.setId(orgEvent.getId());
 
 		return dto;
 	}

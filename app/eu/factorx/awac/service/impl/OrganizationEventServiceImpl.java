@@ -32,4 +32,19 @@ public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceI
 		return result;
 	}
 
+	@Override
+	public List<OrganizationEvent> findByOrganization(Organization organization) {
+		Session session = JPA.em().unwrap(Session.class);
+
+		Criteria criteria = session.createCriteria(OrganizationEvent.class);
+		criteria.add(Restrictions.eq(OrganizationEvent.ORGANIZATION_PROPERTY_NAME, organization));
+		criteria.addOrder(Order.asc(OrganizationEvent.ID_PROPERTY_NAME));
+		criteria.setCacheable(true);
+
+		@SuppressWarnings("unchecked")
+		List<OrganizationEvent> result = criteria.list();
+		return result;
+	}
+
+
 }

@@ -158,11 +158,11 @@ public class BAD_AE_BAD5Test{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A42",1);
-                list.add(new AnswerLineDTO("A43","AS_81", identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A43","AS_81",  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A42",2);
-                list.add(new AnswerLineDTO("A43","AS_140", identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A43","AS_140",  mapRepetition2 ));
         
         return list;
     }
@@ -177,11 +177,11 @@ public class BAD_AE_BAD5Test{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A42",1);
-                list.add(new AnswerLineDTO("A44",2.3, identifier, mapRepetition1  , UnitCode.U5133.getKey()  ));
+                list.add(new AnswerLineDTO("A44",2.3,  mapRepetition1  , UnitCode.U5133.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A42",2);
-                list.add(new AnswerLineDTO("A44",0.05, identifier, mapRepetition2  , UnitCode.U5135.getKey()  ));
+                list.add(new AnswerLineDTO("A44",0.05,  mapRepetition2  , UnitCode.U5135.getKey()  ));
         
         return list;
     }

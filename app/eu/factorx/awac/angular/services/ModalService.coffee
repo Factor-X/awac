@@ -13,6 +13,7 @@ angular
     @INVITE_USER = 'invite-user'
     @EDIT_SITE = 'edit-site'
     @ADD_USER_SITE = 'add-user-site'
+    @EDIT_EVENT = 'edit-event'
 
     @show = (modalName,params) ->
 
