@@ -82,7 +82,7 @@ GET     /awac/answer/formProgress/:period/:scope           @eu.factorx.awac.cont
 #
 # ResultController => used to get report
 #
-POST    /awac/result/getReport                         @eu.factorx.awac.controllers.ResultController.getReport()                                                                                               
+POST    /awac/result/getReport                             @eu.factorx.awac.controllers.ResultController.getReport()                                                                                               
 
 #
 # Upload
@@ -111,16 +111,16 @@ GET     /awac/admin/badImporter                            @eu.factorx.awac.cont
 #
 # site
 #
-POST        /awac/site/edit                                                   @eu.factorx.awac.controllers.SiteController.edit()
-POST        /awac/site/create                                                 @eu.factorx.awac.controllers.SiteController.create()
-POST        /awac/site/assignPeriodToSite                                     @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()
-GET         /awac/site/:siteId                                                @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)
+POST    /awac/site/edit                                    @eu.factorx.awac.controllers.SiteController.edit()                                                                                                      
+POST    /awac/site/create                                  @eu.factorx.awac.controllers.SiteController.create()                                                                                                    
+POST    /awac/site/assignPeriodToSite                      @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()                                                                                        
+GET     /awac/site/:siteId                                 @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)                                                                                        
 
 #
 # organization
 #
 
-POST        /awac/organization/site/associatedaccounts/load                    @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
-POST        /awac/organization/site/associatedaccounts/save                   @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
+POST    /awac/organization/site/associatedaccounts/load    @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()                                                                            
+POST    /awac/organization/site/associatedaccounts/save    @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()                                                                            
 
 

@@ -85,7 +85,6 @@
         <class>eu.factorx.awac.models.knowledge.UnitConversionFormula</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityData</class>
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
-        <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
 

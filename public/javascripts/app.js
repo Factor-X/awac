@@ -216,51 +216,6 @@ if (document.querySelector("meta[name=app]") != null) {
 }
 angular.module('app').run(function($rootScope) {
   return $rootScope.instanceName = iName;
-});angular.module('app.services').service("translationService", function($rootScope, downloadService) {
-  var svc;
-  svc = this;
-  svc.elements = null;
-  svc.initialize = function(lang) {
-    return downloadService.getJson("/awac/translations/" + lang, function(result) {
-      if (result.success) {
-        svc.elements = result.data.lines;
-        return $rootScope.$broadcast("LOAD_FINISHED", {
-          type: "TRANSLATIONS",
-          success: true
-        });
-      } else {
-        svc.elements = [];
-        return $rootScope.$broadcast("LOAD_FINISHED", {
-          type: "TRANSLATIONS",
-          success: false
-        });
-      }
-    });
-  };
-  svc.get = function(code, count) {
-    var txt, v;
-    if (svc.elements == null) {
-      return "";
-    }
-    v = svc.elements[code];
-    if (!(v != null)) {
-      return null;
-    }
-    if (count != null) {
-      if ("" + count === "0") {
-        txt = v.zero || v.fallback;
-      } else if ("" + count === "1") {
-        txt = v.one || v.fallback;
-      } else {
-        txt = v.more || v.fallback;
-      }
-      txt = txt.replace(/\{0\}/g, count);
-    } else {
-      txt = v.fallback || '';
-    }
-    return txt;
-  };
-  return;
 });angular.module('app.services').service("modalService", function($rootScope) {
   this.LOADING = 'loading';
   this.DOCUMENT_MANAGER = 'DOCUMENT_MANAGER';
@@ -288,25 +243,6 @@ angular.module('app').run(function($rootScope) {
     args.target = modalName;
     $rootScope.displayModalBackground = false;
     return $rootScope.$broadcast('SHOW_MODAL', args);
-  };
-  return;
-});angular.module('app.services').service('loggerService', function() {
-  var svc;
-  svc = this;
-  svc.initialize = function() {
-    var layout, log;
-    log = log4javascript.getLogger('main');
-    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
-    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
-    svc.appender.setLayout(layout);
-    log.addAppender(svc.appender);
-    return log.info("Logger initialized");
-  };
-  svc.get = function(name) {
-    var log;
-    log = log4javascript.getLogger(name);
-    log.addAppender(svc.appender);
-    return log;
   };
   return;
 });angular.module('app.services').service("downloadService", function($http) {
@@ -387,6 +323,72 @@ angular.module('app').run(function($rootScope) {
     return promise;
   };
   return;
+});angular.module('app.services').service("translationService", function($rootScope, downloadService) {
+  var svc;
+  svc = this;
+  svc.elements = null;
+  svc.initialize = function(lang) {
+    return downloadService.getJson("/awac/translations/" + lang, function(result) {
+      if (result.success) {
+        svc.elements = result.data.lines;
+        return $rootScope.$broadcast("LOAD_FINISHED", {
+          type: "TRANSLATIONS",
+          success: true
+        });
+      } else {
+        svc.elements = [];
+        return $rootScope.$broadcast("LOAD_FINISHED", {
+          type: "TRANSLATIONS",
+          success: false
+        });
+      }
+    });
+  };
+  svc.get = function(code, count) {
+    var txt, v;
+    if (svc.elements == null) {
+      return "";
+    }
+    v = svc.elements[code];
+    if (!(v != null)) {
+      return null;
+    }
+    if (count != null) {
+      if ("" + count === "0") {
+        txt = v.zero || v.fallback;
+      } else if ("" + count === "1") {
+        txt = v.one || v.fallback;
+      } else {
+        txt = v.more || v.fallback;
+      }
+      txt = txt.replace(/\{0\}/g, count);
+    } else {
+      txt = v.fallback || '';
+    }
+    return txt;
+  };
+  return;
+});angular.module('app.services').service("messageFlash", function(translateTextFilter) {
+  this.display = function(type, message, opts) {
+    var options;
+    options = {
+      message: translateTextFilter(message),
+      type: type,
+      hideAfter: 5,
+      showCloseButton: true
+    };
+    return Messenger().post(angular.extend(options, angular.copy(opts)));
+  };
+  this.displaySuccess = function(message, opts) {
+    return this.display('success', message, opts);
+  };
+  this.displayInfo = function(message, opts) {
+    return this.display('info', message, opts);
+  };
+  this.displayError = function(message, opts) {
+    return this.display('error', message, opts);
+  };
+  return;
 });angular.module('app.services').service("directiveService", function($sce) {
   this.autoScope = function(s) {
     var k, res, v;
@@ -439,43 +441,25 @@ angular.module('app').run(function($rootScope) {
     };
   };
   return;
-});angular.module('app.services').service("messageFlash", function(translateTextFilter) {
-  this.display = function(type, message, opts) {
-    var options;
-    options = {
-      message: translateTextFilter(message),
-      type: type,
-      hideAfter: 5,
-      showCloseButton: true
-    };
-    return Messenger().post(angular.extend(options, angular.copy(opts)));
+});angular.module('app.services').service('loggerService', function() {
+  var svc;
+  svc = this;
+  svc.initialize = function() {
+    var layout, log;
+    log = log4javascript.getLogger('main');
+    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
+    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
+    svc.appender.setLayout(layout);
+    log.addAppender(svc.appender);
+    return log.info("Logger initialized");
   };
-  this.displaySuccess = function(message, opts) {
-    return this.display('success', message, opts);
-  };
-  this.displayInfo = function(message, opts) {
-    return this.display('info', message, opts);
-  };
-  this.displayError = function(message, opts) {
-    return this.display('error', message, opts);
+  svc.get = function(name) {
+    var log;
+    log = log4javascript.getLogger(name);
+    log.addAppender(svc.appender);
+    return log;
   };
   return;
-});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
-  return function(input) {
-    if (input != null) {
-      return parseFloat(input);
-    }
-  };
-});angular.module('app.filters').filter("numberToI18N", function($filter) {
-  return function(input) {
-    var original, rounded;
-    if (input != null) {
-      original = parseFloat(input);
-      rounded = Math.round(original * 100.0) / 100.0;
-      return $filter("number")(rounded, 2);
-    }
-    return "";
-  };
 });angular.module('app.filters').filter("numberToI18NOrLess", function($filter, translationService) {
   return function(input) {
     var original, rounded;
@@ -500,6 +484,12 @@ angular.module('app').run(function($rootScope) {
       return $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
     }
   };
+});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
+  return function(input) {
+    if (input != null) {
+      return parseFloat(input);
+    }
+  };
 });angular.module('app.filters').filter("translateText", function($sce, translationService) {
   return function(input, count) {
     var text;
@@ -517,8 +507,18 @@ angular.module('app').run(function($rootScope) {
       return parseFloat(input);
     }
   };
+});angular.module('app.filters').filter("numberToI18N", function($filter) {
+  return function(input) {
+    var original, rounded;
+    if (input != null) {
+      original = parseFloat(input);
+      rounded = Math.round(original * 100.0) / 100.0;
+      return $filter("number")(rounded, 2);
+    }
+    return "";
+  };
 });
-angular.module('app.directives').directive('mmNotNullValidator', function(){
+angular.module('app.directives').directive('mmRangeValidator', function(){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -530,16 +530,18 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
                 var o = {};
 
                 for(k in attrs) {
-                    if( k.substring(0, 'mmNotNullValidator'.length) == 'mmNotNullValidator' && k.length > 'mmNotNullValidator'.length) {
-                        arg = k.substring('mmNotNullValidator'.length);
+                    if( k.substring(0, 'mmRangeValidator'.length) == 'mmRangeValidator' && k.length > 'mmRangeValidator'.length) {
+                        arg = k.substring('mmRangeValidator'.length);
                         o[arg.toLowerCase()] = attrs[k];
                     }
                 }
 
                 ;
 
-                function validate(v) {
-    return v != null
+                function validate(value, args) {
+    if(parseFloat(value)==null || parseFloat(value)==NaN)
+        return false;
+    return parseFloat(value)>=parseInt(args.min) && parseFloat(value)<=parseInt(args.max);
 }
 
                 ;
@@ -547,10 +549,10 @@ angular.module('app.directives').directive('mmNotNullValidator', function(){
                 var result = validate(viewValue, o);
 
                 if (result) {
-                  ctrl.$setValidity('not-null', true);
+                  ctrl.$setValidity('range', true);
                   return viewValue;
                 } else {
-                  ctrl.$setValidity('not-null', false);
+                  ctrl.$setValidity('range', false);
                   return undefined;
                 }
 
@@ -600,7 +602,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
     };
 });
             
-angular.module('app.directives').directive('mmRangeValidator', function(){
+angular.module('app.directives').directive('mmNotNullValidator', function(){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -612,18 +614,16 @@ angular.module('app.directives').directive('mmRangeValidator', function(){
                 var o = {};
 
                 for(k in attrs) {
-                    if( k.substring(0, 'mmRangeValidator'.length) == 'mmRangeValidator' && k.length > 'mmRangeValidator'.length) {
-                        arg = k.substring('mmRangeValidator'.length);
+                    if( k.substring(0, 'mmNotNullValidator'.length) == 'mmNotNullValidator' && k.length > 'mmNotNullValidator'.length) {
+                        arg = k.substring('mmNotNullValidator'.length);
                         o[arg.toLowerCase()] = attrs[k];
                     }
                 }
 
                 ;
 
-                function validate(value, args) {
-    if(parseFloat(value)==null || parseFloat(value)==NaN)
-        return false;
-    return parseFloat(value)>=parseInt(args.min) && parseFloat(value)<=parseInt(args.max);
+                function validate(v) {
+    return v != null
 }
 
                 ;
@@ -631,10 +631,10 @@ angular.module('app.directives').directive('mmRangeValidator', function(){
                 var result = validate(viewValue, o);
 
                 if (result) {
-                  ctrl.$setValidity('range', true);
+                  ctrl.$setValidity('not-null', true);
                   return viewValue;
                 } else {
-                  ctrl.$setValidity('range', false);
+                  ctrl.$setValidity('not-null', false);
                   return undefined;
                 }
 
@@ -2855,58 +2855,542 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
       };
     }
   };
-});angular.module('app.controllers').controller("UserManagerCtrl", function($scope, translationService, modalService, downloadService, messageFlash) {
-  $scope.title = translationService.get('USER_MANAGER_TITLE');
-  $scope.isLoading = {};
-  $scope.isLoading['admin'] = {};
-  $scope.isLoading['isActive'] = {};
-  $scope.getUserList = function() {
-    return $scope.$root.users;
-  };
-  $scope.inviteUser = function() {
-    return modalService.show(modalService.INVITE_USER);
-  };
-  $scope.getMyself = function() {
-    return $scope.$root.currentPerson;
-  };
-  $scope.activeUser = function(user) {
-    var data;
-    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email) {
-      data = {};
-      data.identifier = user.identifier;
-      data.isActive = !user.isActive;
-      $scope.isLoading['isActive'][user.email] = true;
-      return downloadService.postJson("/awac/user/activeAccount", data, function(result) {
-        if (result.success) {
-          user.isActive = !user.isActive;
-          return $scope.isLoading['isActive'][user.email] = false;
-        } else {
-          $scope.isLoading['isActive'][user.email] = false;
-          return messageFlash.displayError(result.data.message);
-        }
-      });
+});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) {
+  $scope.loading = false;
+  $scope.tabActive = [];
+  $scope.$watch('tabActive[1]', function() {
+    if ($scope.tabActive[1] !== true) {
+      $scope.forgotEmailSuccessMessage = null;
+      return $scope.forgotPasswordInfo.field = "";
+    }
+  });
+  $scope.enterEvent = function() {
+    if ($scope.tabActive[0] === true) {
+      return $scope.send();
+    } else if ($scope.tabActive[1] === true) {
+      return $scope.sendForgotPassword();
     }
   };
-  $scope.isAdminUser = function(user) {
-    var data;
-    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email && user.isActive === true) {
-      data = {};
-      data.identifier = user.identifier;
-      data.isAdmin = !user.isAdmin;
-      $scope.isLoading['admin'][user.email] = true;
-      return downloadService.postJson("/awac/user/isAdminAccount", data, function(result) {
-        if (result.success) {
-          return $scope.isLoading['admin'][user.email] = false;
-        } else {
-          $scope.isLoading['admin'][user.email] = false;
-          return messageFlash.displayError(result.data.message);
-        }
-      });
+  $scope.loginInfo = {
+    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
+    fieldType: "text",
+    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false,
+    focus: function() {
+      return $scope.tabActive[0];
     }
   };
-  return $scope.toForm = function() {
+  $scope.passwordInfo = {
+    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
+    fieldType: "password",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false
+  };
+  $scope.forgotPasswordInfo = {
+    fieldTitle: "IDENTIFIENT_OR_EMAIL",
+    fieldType: "text",
+    validationRegex: "^\\S+$",
+    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false,
+    focus: function() {
+      return $scope.tabActive[1];
+    }
+  };
+  $scope.connectionFieldValid = function() {
+    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.forgotPasswordFieldValid = function() {
+    if ($scope.forgotPasswordInfo.isValid && $scope.forgotPasswordInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.send = function() {
+    $scope.isLoading = true;
+    downloadService.postJson('/awac/login', {
+      login: $scope.loginInfo.field,
+      password: $scope.passwordInfo.field,
+      interfaceName: $scope.$root.instanceName
+    }, function(result) {
+      var params;
+      if (result.success) {
+        $scope.$root.loginSuccess(result.data);
+        messageFlash.displaySuccess("You are now connected");
+        return $scope.isLoading = false;
+      } else {
+        $scope.isLoading = false;
+        if (result.data.__type === 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO') {
+          params = {
+            login: $scope.loginInfo.field,
+            password: $scope.passwordInfo.field
+          };
+          return modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params);
+        } else {
+          return messageFlash.displayError(result.data.message);
+        }
+      }
+    });
+    return false;
+  };
+  $scope.forgotEmailSuccessMessage = null;
+  $scope.sendForgotPassword = function() {
+    $scope.isLoading = true;
+    downloadService.postJson('/awac/forgotPassword', {
+      identifier: $scope.forgotPasswordInfo.field,
+      interfaceName: $scope.$root.instanceName
+    }, function(result) {
+      if (result.success) {
+        $scope.forgotEmailSuccessMessage = translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS');
+        $scope.isLoading = false;
+        return;
+      } else {
+        messageFlash.displayError(result.data.message);
+        $scope.isLoading = false;
+        return;
+      }
+    });
+    return false;
+  };
+  $scope.injectRegistrationDirective = function() {
+    var directive, directiveName;
+    if ($scope.$root != null) {
+      if ($scope.$root.instanceName === 'enterprise') {
+        directiveName = "mm-awac-registration-enterprise";
+      } else if ($scope.$root.instanceName === 'municipality') {
+        directiveName = "mm-awac-registration-municipality";
+      }
+      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
+      return $('.inject-registration-form').append(directive);
+    }
+  };
+  return $timeout(function() {
+    return $scope.injectRegistrationDirective();
+  }, 0);
+});angular.module('app.controllers').controller("SiteManagerCtrl", function($scope, translationService, modalService, downloadService) {
+  $scope.isLoading = [{}, {}];
+  $scope.assignPeriod = [$scope.$root.periods[1].key, $scope.$root.periods[0].key];
+  $scope.isPeriodChecked = [{}, {}];
+  $scope.$watch('$scope.assignPeriod', function() {
+    var site, _i, _len, _ref, _results;
+    _ref = $scope.$root.organization.sites;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      site = _ref[_i];
+      $scope.isPeriodChecked[0][site.id] = $scope.periodAssignTo(0, site);
+      $scope.isPeriodChecked[1][site.id] = $scope.periodAssignTo(1, site);
+      _results.push(console.log($scope.isPeriodChecked));
+    }
+    return _results;
+  });
+  $scope.toForm = function() {
     return $scope.$parent.navToLastFormUsed();
   };
+  $scope.getSiteList = function() {
+    return $scope.$root.organization.sites;
+  };
+  $scope.editOrCreateSite = function(site) {
+    var params;
+    params = {};
+    if (site != null) {
+      params.site = site;
+    }
+    return modalService.show(modalService.EDIT_SITE, params);
+  };
+  $scope.addUsers = function(site) {
+    var params;
+    params = {};
+    if (site != null) {
+      params.site = site;
+    }
+    return modalService.show(modalService.ADD_USER_SITE, params);
+  };
+  $scope.periodAssignTo = function(nbPeriod, site) {
+    var period, _i, _len, _ref;
+    if (site.listPeriodAvailable != null) {
+      _ref = site.listPeriodAvailable;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        period = _ref[_i];
+        if (period === $scope.assignPeriod[nbPeriod]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+  return $scope.assignPeriodToSite = function(nbPeriod, site) {
+    var data;
+    data = {};
+    data.periodKeyCode = $scope.assignPeriod[nbPeriod];
+    data.siteId = site.id;
+    data.assign = !$scope.periodAssignTo(nbPeriod, site);
+    console.log(data);
+    return downloadService.postJson('awac/site/assignPeriodToSite', data, function(result) {});
+  };
+});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
+  $scope.notifications = [];
+  return downloadService.getJson("admin/get_notifications", function(dto) {
+    if (dto != null) {
+      $scope.notifications = dto.notifications;
+    }
+    return;
+  });
+});angular.module('app.controllers').controller("ResultsCtrl", function($scope, $window, downloadService, displayFormMenu, modalService) {
+  $scope.displayFormMenu = displayFormMenu;
+  modalService.show(modalService.LOADING);
+  downloadService.postJson('/awac/result/getReport', {
+    periodKey: $scope.$parent.periodKey,
+    scopesIds: [$scope.$parent.scopeId]
+  }, function(result) {
+    modalService.close(modalService.LOADING);
+    if (result.success) {
+      return $scope.o = result.data;
+    } else {
+      ;
+    }
+  });
+  $scope.sites = $rootScope.mySites;
+  $scope.current_tab = 1;
+  $scope.downloadAsXls = function() {
+    return $window.open('/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null);
+  };
+  return $scope.downloadPdf = function() {};
+});angular.module('app').run(function(loggerService) {
+  var log;
+  loggerService.initialize();
+  $('body').keydown(function(evt) {
+    var loggerElement, state;
+    console.log(evt);
+    if (evt.which === 32 && evt.altKey && evt.ctrlKey) {
+      loggerElement = $('#logger');
+      state = parseInt(loggerElement.attr('data-state'));
+      return loggerElement.attr('data-state', (state + 1) % 3);
+    }
+  });
+  log = loggerService.get('initializer');
+  return log.info("Application is started");
+});
+angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) {
+  $scope.displayMenu = true;
+  $scope.isLoading = function() {
+    var k;
+    for (k in $scope.initialLoad) {
+      if (!$scope.initialLoad[k]) {
+        return true;
+      }
+    }
+    return false;
+  };
+  $scope.initialLoad = {
+    translations: false
+  };
+  $scope.$on("LOAD_FINISHED", function(event, args) {
+    if (args.type === "TRANSLATIONS") {
+      $scope.initialLoad.translations = args.success;
+    }
+    return;
+  });
+  $scope.isMenuCurrentlySelected = function(loc) {
+    if ($location.path().substring(0, loc.length) === loc) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  window.onbeforeunload = function(event) {
+    var canBeContinue, result, _base;
+    canBeContinue = true;
+    if ((typeof $scope.getMainScope === "function" ? $scope.getMainScope().validNavigation : void 0) !== void 0) {
+      result = typeof $scope.getMainScope === "function" ? typeof (_base = $scope.getMainScope()).validNavigation === "function" ? _base.validNavigation() : void 0 : void 0;
+      if (result.valid === false) {
+        return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE');
+      }
+    }
+  };
+  $scope.$on('NAV', function(event, args) {
+    return $scope.nav(args.loc, args.confirmed);
+  });
+  $scope.nav = function(loc, confirmed) {
+    var canBeContinue, params, result, _base;
+    if (confirmed == null) {
+      confirmed = false;
+    }
+    console.log("NAV : " + loc);
+    canBeContinue = true;
+    if ((typeof $scope.getMainScope === "function" ? $scope.getMainScope().validNavigation : void 0) !== void 0 && confirmed === false) {
+      result = typeof $scope.getMainScope === "function" ? typeof (_base = $scope.getMainScope()).validNavigation === "function" ? _base.validNavigation() : void 0 : void 0;
+      if (result.valid === false) {
+        canBeContinue = false;
+        params = {};
+        params.loc = loc;
+        modalService.show(result.modalForConfirm, params);
+      }
+    }
+    if (canBeContinue) {
+      return $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId);
+    }
+  };
+  $scope.$on('$routeChangeSuccess', function(event, args) {
+    return $timeout(function() {
+      return $scope.computeDisplayMenu();
+    }, 0);
+  });
+  $scope.computeDisplayMenu = function() {
+    if (($scope.getMainScope() != null) && ($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
+      return $scope.displayMenu = true;
+    } else {
+      return $scope.displayMenu = false;
+    }
+  };
+  $scope.navToLastFormUsed = function() {
+    return $scope.nav($scope.$root.getFormPath());
+  };
+  $scope.periodKey = null;
+  $scope.$watch('periodKey', function() {
+    var k, p, v;
+    $routeParams.period = $scope.periodKey;
+    if ($route.current) {
+      p = $route.current.$$route.originalPath;
+      for (k in $routeParams) {
+        v = $routeParams[k];
+        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
+      }
+      $location.path(p);
+    }
+    if ($scope.periodKey === $scope.periodToCompare) {
+      $scope.periodToCompare = 'default';
+    }
+    $scope.loadPeriodForComparison();
+    return $scope.loadFormProgress();
+  });
+  $scope.$watch('scopeId', function() {
+    var k, p, v;
+    $routeParams.period = $scope.periodKey;
+    if ($route.current) {
+      p = $route.current.$$route.originalPath;
+      for (k in $routeParams) {
+        v = $routeParams[k];
+        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
+      }
+      $location.path(p);
+    }
+    $scope.loadPeriodForComparison();
+    return $scope.loadFormProgress();
+  });
+  $scope.periodsForComparison = [
+    {
+      'key': 'default',
+      'label': translationService.get('NO_PERIOD_SELECTED')
+    }
+  ];
+  $scope.periodToCompare = 'default';
+  $scope.save = function() {
+    $scope.$broadcast('SAVE');
+    return $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME");
+  };
+  $scope.$on("$routeChangeSuccess", function(event, current, previous) {
+    $scope.periodKey = $routeParams.period;
+    return $scope.scopeId = parseInt($routeParams.scope);
+  });
+  $scope.getMainScope = function() {
+    var mainScope;
+    return mainScope = angular.element($('[ng-view]')[0]).scope();
+  };
+  $scope.loadPeriodForComparison = function() {
+    var url;
+    url = '/awac/answer/getPeriodsForComparison/' + $scope.scopeId;
+    if (($scope.scopeId != null) && !isNaN($scope.scopeId)) {
+      return downloadService.getJson(url, function(result) {
+        var period, _i, _len, _ref, _results;
+        if (result.success) {
+          $scope.periodsForComparison = [
+            {
+              'key': 'default',
+              'label': translationService.get('NO_PERIOD_SELECTED')
+            }
+          ];
+          _ref = result.data.periodDTOList;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            period = _ref[_i];
+            _results.push(period.key !== $scope.periodKey ? $scope.periodsForComparison[$scope.periodsForComparison.length] = period : void 0);
+          }
+          return _results;
+        } else {
+          ;
+        }
+      });
+    }
+  };
+  $scope.getProgress = function(form) {
+    var formProgress, _i, _len, _ref;
+    if ($scope.formProgress !== null) {
+      _ref = $scope.formProgress;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        formProgress = _ref[_i];
+        if (formProgress.form === form) {
+          return formProgress.percentage;
+        }
+      }
+    }
+    return 0;
+  };
+  $scope.formProgress = null;
+  $scope.loadFormProgress = function() {
+    if (($scope.scopeId != null) && ($scope.periodKey != null)) {
+      return downloadService.getJson("/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId, function(result) {
+        if (result.success) {
+          return $scope.formProgress = result.data.listFormProgress;
+        } else {
+          ;
+        }
+      });
+    }
+  };
+  $scope.$on("REFRESH_LAST_SAVE_TIME", function(event, args) {
+    var date, minuteToAdd;
+    if (args !== void 0) {
+      if (args.time === null) {
+        date = null;
+      } else {
+        date = new Date(args.time);
+        minuteToAdd = new Date().getTimezoneOffset();
+        date = new Date(date.getTime() - minuteToAdd * 60000);
+      }
+    } else {
+      date = new Date();
+    }
+    return $scope.lastSaveTime = date;
+  });
+  return $scope.getClassContent = function() {
+    if ($scope.$root.hideHeader() === false) {
+      if ($scope.getMainScope() != null) {
+        if (($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
+          return 'content-with-menu';
+        } else {
+          return 'content-without-menu';
+        }
+      }
+    }
+    return '';
+  };
+});
+angular.module('app').run(function($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams) {
+  $rootScope.languages = [];
+  $rootScope.languages[0] = {
+    value: 'fr',
+    label: 'Français'
+  };
+  $rootScope.languages[1] = {
+    value: 'en',
+    label: 'English'
+  };
+  $rootScope.languages[2] = {
+    value: 'nl',
+    label: 'Neederlands'
+  };
+  translationService.initialize('fr');
+  $rootScope.language = 'fr';
+  $rootScope.$watch('language', function(lang) {
+    translationService.initialize(lang);
+    return tmhDynamicLocale.set(lang.toLowerCase());
+  });
+  $rootScope.$on('$routeChangeStart', function(event, current) {
+    $rootScope.key = $routeParams.key;
+    if (!$rootScope.currentPerson) {
+      return downloadService.postJson('/awac/testAuthentication', {
+        interfaceName: $rootScope.instanceName
+      }, function(result) {
+        if (result.success) {
+          return $rootScope.loginSuccess(result.data, !$rootScope.isLogin());
+        } else {
+          if (!current.$$route.anonymousAllowed) {
+            console.log("redirect to login ");
+            return $location.path('/login');
+          }
+        }
+      });
+    } else {
+      return console.log("default router processing");
+    }
+  });
+  $rootScope.getRegisterKey = function() {
+    return $rootScope.key;
+  };
+  $rootScope.isLogin = function() {
+    return $location.path().substring(0, 6) === "/login";
+  };
+  $rootScope.hideHeader = function() {
+    console.log("hideHeader:" + $location.path().substring(0, 13));
+    return $location.path().substring(0, 6) === "/login" || $location.path().substring(0, 13) === "/registration";
+  };
+  $rootScope.logout = function() {
+    return downloadService.postJson('/awac/logout', null, function(result) {
+      if (result.success) {
+        $rootScope.currentPerson = null;
+        return $location.path('/login');
+      } else {
+        return $location.path('/login');
+      }
+    });
+  };
+  $rootScope.loginSuccess = function(data, skipRedirect) {
+    $rootScope.periods = data.availablePeriods;
+    $rootScope.currentPerson = data.person;
+    $rootScope.organization = data.organization;
+    $rootScope.users = data.organization.users;
+    if (!skipRedirect) {
+      return $rootScope.onFormPath(data.defaultPeriod, data.organization.sites[0].scope);
+    }
+  };
+  $rootScope.getUserByIdentifier = function(identifier) {
+    var user, _i, _len, _ref;
+    _ref = $rootScope.users;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      user = _ref[_i];
+      if (user.identifier === identifier) {
+        return user;
+      }
+    }
+    return null;
+  };
+  $rootScope.refreshUserData = function() {
+    return downloadService.getJson('/awac/user/profile', function(result) {
+      if (result.success) {
+        return $rootScope.currentPerson = result.data;
+      } else {
+        return messageFlash.displayError(result.data.message);
+      }
+    });
+  };
+  $rootScope.refreshNotifications = function() {
+    downloadService.getJson('/awac/notifications/get_notifications', function(result) {
+      var n, _i, _len, _ref, _results;
+      if (result.success) {
+        _ref = result.data.notifications;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          n = _ref[_i];
+          _results.push(messageFlash.display(n.kind.toLowerCase(), n.messageFr, {
+            hideAfter: 3600
+          }));
+        }
+        return _results;
+      } else {
+        ;
+      }
+    });
+    return $timeout($rootScope.refreshNotifications, 3600 * 1000);
+  };
+  return $rootScope.refreshNotifications();
 });angular.module('app.controllers').controller("RegistrationCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) {
   $scope.loading = false;
   $scope.tabActive = [];
@@ -3000,94 +3484,6 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
   return $timeout(function() {
     return $scope.injectRegistrationDirective();
   }, 0);
-});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
-  $scope.notifications = [];
-  return downloadService.getJson("admin/get_notifications", function(dto) {
-    if (dto != null) {
-      $scope.notifications = dto.notifications;
-    }
-    return;
-  });
-});angular.module('app.controllers').controller("SiteManagerCtrl", function($scope, translationService, modalService, downloadService) {
-  $scope.isLoading = [{}, {}];
-  $scope.assignPeriod = [$scope.$root.periods[1].key, $scope.$root.periods[0].key];
-  $scope.isPeriodChecked = [{}, {}];
-  $scope.$watch('$scope.assignPeriod', function() {
-    var site, _i, _len, _ref, _results;
-    _ref = $scope.$root.organization.sites;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      site = _ref[_i];
-      $scope.isPeriodChecked[0][site.id] = $scope.periodAssignTo(0, site);
-      $scope.isPeriodChecked[1][site.id] = $scope.periodAssignTo(1, site);
-      _results.push(console.log($scope.isPeriodChecked));
-    }
-    return _results;
-  });
-  $scope.toForm = function() {
-    return $scope.$parent.navToLastFormUsed();
-  };
-  $scope.getSiteList = function() {
-    return $scope.$root.organization.sites;
-  };
-  $scope.editOrCreateSite = function(site) {
-    var params;
-    params = {};
-    if (site != null) {
-      params.site = site;
-    }
-    return modalService.show(modalService.EDIT_SITE, params);
-  };
-  $scope.addUsers = function(site) {
-    var params;
-    params = {};
-    if (site != null) {
-      params.site = site;
-    }
-    return modalService.show(modalService.ADD_USER_SITE, params);
-  };
-  $scope.periodAssignTo = function(nbPeriod, site) {
-    var period, _i, _len, _ref;
-    if (site.listPeriodAvailable != null) {
-      _ref = site.listPeriodAvailable;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        period = _ref[_i];
-        if (period === $scope.assignPeriod[nbPeriod]) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-  return $scope.assignPeriodToSite = function(nbPeriod, site) {
-    var data;
-    data = {};
-    data.periodKeyCode = $scope.assignPeriod[nbPeriod];
-    data.siteId = site.id;
-    data.assign = !$scope.periodAssignTo(nbPeriod, site);
-    console.log(data);
-    return downloadService.postJson('awac/site/assignPeriodToSite', data, function(result) {});
-  };
-});angular.module('app.controllers').controller("ResultsCtrl", function($scope, $window, downloadService, displayFormMenu, modalService) {
-  $scope.displayFormMenu = displayFormMenu;
-  modalService.show(modalService.LOADING);
-  downloadService.postJson('/awac/result/getReport', {
-    periodKey: $scope.$parent.periodKey,
-    scopesIds: [$scope.$parent.scopeId]
-  }, function(result) {
-    modalService.close(modalService.LOADING);
-    if (result.success) {
-      return $scope.o = result.data;
-    } else {
-      ;
-    }
-  });
-  $scope.sites = $rootScope.mySites;
-  $scope.current_tab = 1;
-  $scope.downloadAsXls = function() {
-    return $window.open('/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null);
-  };
-  return $scope.downloadPdf = function() {};
 });angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout, displayFormMenu) {
   $scope.formIdentifier = formIdentifier;
   $scope.displayFormMenu = displayFormMenu;
@@ -3874,454 +4270,58 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
     }
     return false;
   };
-});angular.module('app').run(function(loggerService) {
-  var log;
-  loggerService.initialize();
-  $('body').keydown(function(evt) {
-    var loggerElement, state;
-    console.log(evt);
-    if (evt.which === 32 && evt.altKey && evt.ctrlKey) {
-      loggerElement = $('#logger');
-      state = parseInt(loggerElement.attr('data-state'));
-      return loggerElement.attr('data-state', (state + 1) % 3);
-    }
-  });
-  log = loggerService.get('initializer');
-  return log.info("Application is started");
-});
-angular.module('app.controllers').controller("MainCtrl", function($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) {
-  $scope.displayMenu = true;
-  $scope.isLoading = function() {
-    var k;
-    for (k in $scope.initialLoad) {
-      if (!$scope.initialLoad[k]) {
-        return true;
-      }
-    }
-    return false;
+});angular.module('app.controllers').controller("UserManagerCtrl", function($scope, translationService, modalService, downloadService, messageFlash) {
+  $scope.title = translationService.get('USER_MANAGER_TITLE');
+  $scope.isLoading = {};
+  $scope.isLoading['admin'] = {};
+  $scope.isLoading['isActive'] = {};
+  $scope.getUserList = function() {
+    return $scope.$root.users;
   };
-  $scope.initialLoad = {
-    translations: false
+  $scope.inviteUser = function() {
+    return modalService.show(modalService.INVITE_USER);
   };
-  $scope.$on("LOAD_FINISHED", function(event, args) {
-    if (args.type === "TRANSLATIONS") {
-      $scope.initialLoad.translations = args.success;
-    }
-    return;
-  });
-  $scope.isMenuCurrentlySelected = function(loc) {
-    if ($location.path().substring(0, loc.length) === loc) {
-      return true;
-    } else {
-      return false;
-    }
+  $scope.getMyself = function() {
+    return $scope.$root.currentPerson;
   };
-  window.onbeforeunload = function(event) {
-    var canBeContinue, result, _base;
-    canBeContinue = true;
-    if ((typeof $scope.getMainScope === "function" ? $scope.getMainScope().validNavigation : void 0) !== void 0) {
-      result = typeof $scope.getMainScope === "function" ? typeof (_base = $scope.getMainScope()).validNavigation === "function" ? _base.validNavigation() : void 0 : void 0;
-      if (result.valid === false) {
-        return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE');
-      }
-    }
-  };
-  $scope.$on('NAV', function(event, args) {
-    return $scope.nav(args.loc, args.confirmed);
-  });
-  $scope.nav = function(loc, confirmed) {
-    var canBeContinue, params, result, _base;
-    if (confirmed == null) {
-      confirmed = false;
-    }
-    console.log("NAV : " + loc);
-    canBeContinue = true;
-    if ((typeof $scope.getMainScope === "function" ? $scope.getMainScope().validNavigation : void 0) !== void 0 && confirmed === false) {
-      result = typeof $scope.getMainScope === "function" ? typeof (_base = $scope.getMainScope()).validNavigation === "function" ? _base.validNavigation() : void 0 : void 0;
-      if (result.valid === false) {
-        canBeContinue = false;
-        params = {};
-        params.loc = loc;
-        modalService.show(result.modalForConfirm, params);
-      }
-    }
-    if (canBeContinue) {
-      return $location.path(loc + "/" + $scope.periodKey + "/" + $scope.scopeId);
-    }
-  };
-  $scope.$on('$routeChangeSuccess', function(event, args) {
-    return $timeout(function() {
-      return $scope.computeDisplayMenu();
-    }, 0);
-  });
-  $scope.computeDisplayMenu = function() {
-    if (($scope.getMainScope() != null) && ($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
-      return $scope.displayMenu = true;
-    } else {
-      return $scope.displayMenu = false;
-    }
-  };
-  $scope.navToLastFormUsed = function() {
-    return $scope.nav($scope.$root.getFormPath());
-  };
-  $scope.periodKey = null;
-  $scope.$watch('periodKey', function() {
-    var k, p, v;
-    $routeParams.period = $scope.periodKey;
-    if ($route.current) {
-      p = $route.current.$$route.originalPath;
-      for (k in $routeParams) {
-        v = $routeParams[k];
-        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
-      }
-      $location.path(p);
-    }
-    if ($scope.periodKey === $scope.periodToCompare) {
-      $scope.periodToCompare = 'default';
-    }
-    $scope.loadPeriodForComparison();
-    return $scope.loadFormProgress();
-  });
-  $scope.$watch('scopeId', function() {
-    var k, p, v;
-    $routeParams.period = $scope.periodKey;
-    if ($route.current) {
-      p = $route.current.$$route.originalPath;
-      for (k in $routeParams) {
-        v = $routeParams[k];
-        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v);
-      }
-      $location.path(p);
-    }
-    $scope.loadPeriodForComparison();
-    return $scope.loadFormProgress();
-  });
-  $scope.periodsForComparison = [
-    {
-      'key': 'default',
-      'label': translationService.get('NO_PERIOD_SELECTED')
-    }
-  ];
-  $scope.periodToCompare = 'default';
-  $scope.save = function() {
-    $scope.$broadcast('SAVE');
-    return $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME");
-  };
-  $scope.$on("$routeChangeSuccess", function(event, current, previous) {
-    $scope.periodKey = $routeParams.period;
-    return $scope.scopeId = parseInt($routeParams.scope);
-  });
-  $scope.getMainScope = function() {
-    var mainScope;
-    return mainScope = angular.element($('[ng-view]')[0]).scope();
-  };
-  $scope.loadPeriodForComparison = function() {
-    var url;
-    url = '/awac/answer/getPeriodsForComparison/' + $scope.scopeId;
-    if (($scope.scopeId != null) && !isNaN($scope.scopeId)) {
-      return downloadService.getJson(url, function(result) {
-        var period, _i, _len, _ref, _results;
+  $scope.activeUser = function(user) {
+    var data;
+    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email) {
+      data = {};
+      data.identifier = user.identifier;
+      data.isActive = !user.isActive;
+      $scope.isLoading['isActive'][user.email] = true;
+      return downloadService.postJson("/awac/user/activeAccount", data, function(result) {
         if (result.success) {
-          $scope.periodsForComparison = [
-            {
-              'key': 'default',
-              'label': translationService.get('NO_PERIOD_SELECTED')
-            }
-          ];
-          _ref = result.data.periodDTOList;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            period = _ref[_i];
-            _results.push(period.key !== $scope.periodKey ? $scope.periodsForComparison[$scope.periodsForComparison.length] = period : void 0);
-          }
-          return _results;
+          user.isActive = !user.isActive;
+          return $scope.isLoading['isActive'][user.email] = false;
         } else {
-          ;
-        }
-      });
-    }
-  };
-  $scope.getProgress = function(form) {
-    var formProgress, _i, _len, _ref;
-    if ($scope.formProgress !== null) {
-      _ref = $scope.formProgress;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        formProgress = _ref[_i];
-        if (formProgress.form === form) {
-          return formProgress.percentage;
-        }
-      }
-    }
-    return 0;
-  };
-  $scope.formProgress = null;
-  $scope.loadFormProgress = function() {
-    if (($scope.scopeId != null) && ($scope.periodKey != null)) {
-      return downloadService.getJson("/awac/answer/formProgress/" + $scope.periodKey + "/" + $scope.scopeId, function(result) {
-        if (result.success) {
-          return $scope.formProgress = result.data.listFormProgress;
-        } else {
-          ;
-        }
-      });
-    }
-  };
-  $scope.$on("REFRESH_LAST_SAVE_TIME", function(event, args) {
-    var date, minuteToAdd;
-    if (args !== void 0) {
-      if (args.time === null) {
-        date = null;
-      } else {
-        date = new Date(args.time);
-        minuteToAdd = new Date().getTimezoneOffset();
-        date = new Date(date.getTime() - minuteToAdd * 60000);
-      }
-    } else {
-      date = new Date();
-    }
-    return $scope.lastSaveTime = date;
-  });
-  return $scope.getClassContent = function() {
-    if ($scope.$root.hideHeader() === false) {
-      if ($scope.getMainScope() != null) {
-        if (($scope.getMainScope().displayFormMenu != null) && $scope.getMainScope().displayFormMenu === true) {
-          return 'content-with-menu';
-        } else {
-          return 'content-without-menu';
-        }
-      }
-    }
-    return '';
-  };
-});
-angular.module('app').run(function($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams) {
-  $rootScope.languages = [];
-  $rootScope.languages[0] = {
-    value: 'fr',
-    label: 'Français'
-  };
-  $rootScope.languages[1] = {
-    value: 'en',
-    label: 'English'
-  };
-  $rootScope.languages[2] = {
-    value: 'nl',
-    label: 'Neederlands'
-  };
-  translationService.initialize('fr');
-  $rootScope.language = 'fr';
-  $rootScope.$watch('language', function(lang) {
-    translationService.initialize(lang);
-    return tmhDynamicLocale.set(lang.toLowerCase());
-  });
-  $rootScope.$on('$routeChangeStart', function(event, current) {
-    $rootScope.key = $routeParams.key;
-    if (!$rootScope.currentPerson) {
-      return downloadService.postJson('/awac/testAuthentication', {
-        interfaceName: $rootScope.instanceName
-      }, function(result) {
-        if (result.success) {
-          return $rootScope.loginSuccess(result.data, !$rootScope.isLogin());
-        } else {
-          if (!current.$$route.anonymousAllowed) {
-            console.log("redirect to login ");
-            return $location.path('/login');
-          }
-        }
-      });
-    } else {
-      return console.log("default router processing");
-    }
-  });
-  $rootScope.getRegisterKey = function() {
-    return $rootScope.key;
-  };
-  $rootScope.isLogin = function() {
-    return $location.path().substring(0, 6) === "/login";
-  };
-  $rootScope.hideHeader = function() {
-    console.log("hideHeader:" + $location.path().substring(0, 13));
-    return $location.path().substring(0, 6) === "/login" || $location.path().substring(0, 13) === "/registration";
-  };
-  $rootScope.logout = function() {
-    return downloadService.postJson('/awac/logout', null, function(result) {
-      if (result.success) {
-        $rootScope.currentPerson = null;
-        return $location.path('/login');
-      } else {
-        return $location.path('/login');
-      }
-    });
-  };
-  $rootScope.loginSuccess = function(data, skipRedirect) {
-    $rootScope.periods = data.availablePeriods;
-    $rootScope.currentPerson = data.person;
-    $rootScope.organization = data.organization;
-    $rootScope.users = data.organization.users;
-    if (!skipRedirect) {
-      return $rootScope.onFormPath(data.defaultPeriod, data.organization.sites[0].scope);
-    }
-  };
-  $rootScope.getUserByIdentifier = function(identifier) {
-    var user, _i, _len, _ref;
-    _ref = $rootScope.users;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      user = _ref[_i];
-      if (user.identifier === identifier) {
-        return user;
-      }
-    }
-    return null;
-  };
-  $rootScope.refreshUserData = function() {
-    return downloadService.getJson('/awac/user/profile', function(result) {
-      if (result.success) {
-        return $rootScope.currentPerson = result.data;
-      } else {
-        return messageFlash.displayError(result.data.message);
-      }
-    });
-  };
-  $rootScope.refreshNotifications = function() {
-    downloadService.getJson('/awac/notifications/get_notifications', function(result) {
-      var n, _i, _len, _ref, _results;
-      if (result.success) {
-        _ref = result.data.notifications;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          n = _ref[_i];
-          _results.push(messageFlash.display(n.kind.toLowerCase(), n.messageFr, {
-            hideAfter: 3600
-          }));
-        }
-        return _results;
-      } else {
-        ;
-      }
-    });
-    return $timeout($rootScope.refreshNotifications, 3600 * 1000);
-  };
-  return $rootScope.refreshNotifications();
-});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) {
-  $scope.loading = false;
-  $scope.tabActive = [];
-  $scope.$watch('tabActive[1]', function() {
-    if ($scope.tabActive[1] !== true) {
-      $scope.forgotEmailSuccessMessage = null;
-      return $scope.forgotPasswordInfo.field = "";
-    }
-  });
-  $scope.enterEvent = function() {
-    if ($scope.tabActive[0] === true) {
-      return $scope.send();
-    } else if ($scope.tabActive[1] === true) {
-      return $scope.sendForgotPassword();
-    }
-  };
-  $scope.loginInfo = {
-    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
-    fieldType: "text",
-    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false,
-    focus: function() {
-      return $scope.tabActive[0];
-    }
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
-    fieldType: "password",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false
-  };
-  $scope.forgotPasswordInfo = {
-    fieldTitle: "IDENTIFIENT_OR_EMAIL",
-    fieldType: "text",
-    validationRegex: "^\\S+$",
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false,
-    focus: function() {
-      return $scope.tabActive[1];
-    }
-  };
-  $scope.connectionFieldValid = function() {
-    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.forgotPasswordFieldValid = function() {
-    if ($scope.forgotPasswordInfo.isValid && $scope.forgotPasswordInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.send = function() {
-    $scope.isLoading = true;
-    downloadService.postJson('/awac/login', {
-      login: $scope.loginInfo.field,
-      password: $scope.passwordInfo.field,
-      interfaceName: $scope.$root.instanceName
-    }, function(result) {
-      var params;
-      if (result.success) {
-        $scope.$root.loginSuccess(result.data);
-        messageFlash.displaySuccess("You are now connected");
-        return $scope.isLoading = false;
-      } else {
-        $scope.isLoading = false;
-        if (result.data.__type === 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO') {
-          params = {
-            login: $scope.loginInfo.field,
-            password: $scope.passwordInfo.field
-          };
-          return modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params);
-        } else {
+          $scope.isLoading['isActive'][user.email] = false;
           return messageFlash.displayError(result.data.message);
         }
-      }
-    });
-    return false;
-  };
-  $scope.forgotEmailSuccessMessage = null;
-  $scope.sendForgotPassword = function() {
-    $scope.isLoading = true;
-    downloadService.postJson('/awac/forgotPassword', {
-      identifier: $scope.forgotPasswordInfo.field,
-      interfaceName: $scope.$root.instanceName
-    }, function(result) {
-      if (result.success) {
-        $scope.forgotEmailSuccessMessage = translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS');
-        $scope.isLoading = false;
-        return;
-      } else {
-        messageFlash.displayError(result.data.message);
-        $scope.isLoading = false;
-        return;
-      }
-    });
-    return false;
-  };
-  $scope.injectRegistrationDirective = function() {
-    var directive, directiveName;
-    if ($scope.$root != null) {
-      if ($scope.$root.instanceName === 'enterprise') {
-        directiveName = "mm-awac-registration-enterprise";
-      } else if ($scope.$root.instanceName === 'municipality') {
-        directiveName = "mm-awac-registration-municipality";
-      }
-      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
-      return $('.inject-registration-form').append(directive);
+      });
     }
   };
-  return $timeout(function() {
-    return $scope.injectRegistrationDirective();
-  }, 0);
+  $scope.isAdminUser = function(user) {
+    var data;
+    if ($scope.getMyself().isAdmin === true && $scope.getMyself().email !== user.email && user.isActive === true) {
+      data = {};
+      data.identifier = user.identifier;
+      data.isAdmin = !user.isAdmin;
+      $scope.isLoading['admin'][user.email] = true;
+      return downloadService.postJson("/awac/user/isAdminAccount", data, function(result) {
+        if (result.success) {
+          return $scope.isLoading['admin'][user.email] = false;
+        } else {
+          $scope.isLoading['admin'][user.email] = false;
+          return messageFlash.displayError(result.data.message);
+        }
+      });
+    }
+  };
+  return $scope.toForm = function() {
+    return $scope.$parent.navToLastFormUsed();
+  };
 });angular.module('app.controllers').controller("UserDataCtrl", function($scope, downloadService, translationService, messageFlash, modalService, $timeout) {
   $scope.isLoading = false;
   $scope.identifierInfo = {
