@@ -188,10 +188,6 @@ public class ReportResultServiceImpl implements ReportResultService {
 	// JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityDataCode.getKey(), indicatorKey, factorSearchParam.toString()));
 	// }
 
-	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
-		this.activityResultContributors = activityResultContributors;
-	}
-
 	@Override
 	public List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
 		List<ReportResult> reportResults = new ArrayList<>();
@@ -285,7 +281,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 			}
 		}
 
-		checkNotUsedBADs(allBADs, matchingIndicatorBADs);
+//		checkNotUsedBADs(allBADs, matchingIndicatorBADs);
 
 		return activityResults;
 	}
@@ -297,6 +293,10 @@ public class ReportResultServiceImpl implements ReportResultService {
 				Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, bad.getKey().getKey(), null);
 			}
 		}
+	}
+
+	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
+		this.activityResultContributors = activityResultContributors;
 	}
 
 }

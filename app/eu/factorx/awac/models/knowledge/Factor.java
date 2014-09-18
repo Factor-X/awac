@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
@@ -50,6 +53,7 @@ public class Factor extends AuditedAbstractEntity {
 	private String institution;
 
 	@OneToMany(mappedBy = "factor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private List<FactorValue> values = new ArrayList<>();
 
 	protected Factor() {

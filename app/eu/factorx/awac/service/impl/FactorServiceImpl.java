@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.service.FactorService;
 
 @Component
@@ -41,6 +42,12 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
 		}
 
 		return factor;
+	}
+
+	@Override
+	public void removeAll() {
+		JPA.em().createNamedQuery(FactorValue.REMOVE_ALL).executeUpdate();
+		JPA.em().createNamedQuery(Factor.REMOVE_ALL).executeUpdate();
 	}
 
 }

@@ -47,8 +47,7 @@ public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<
 
 	@Override
 	public void removeAll() {
-		int nbDeleted = JPA.em().createNamedQuery(BaseIndicator.REMOVE_ALL).executeUpdate();
-		Logger.info("Deleted {} baseIndicators", nbDeleted);
+		JPA.em().createNamedQuery(BaseIndicator.REMOVE_ALL).executeUpdate();
 	}
 
 }
