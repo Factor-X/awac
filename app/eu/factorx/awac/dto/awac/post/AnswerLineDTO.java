@@ -2,6 +2,7 @@ package eu.factorx.awac.dto.awac.post;
 
 import java.util.Map;
 
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -17,7 +18,7 @@ public class AnswerLineDTO extends DTO {
 	@NotNull
 	private Object value;
 
-	private String lastUpdateUser;
+	private PersonDTO lastUpdateUser;
 
 	private String unitCode;
 
@@ -32,27 +33,27 @@ public class AnswerLineDTO extends DTO {
 	public AnswerLineDTO() {
 	}
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser) {
+    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, String unitCode) {
+    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
         this.unitCode = unitCode;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Map<String, Integer> mapRepetition) {
+    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, Map<String, Integer> mapRepetition) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, Map<String, Integer> mapRepetition,String unitCode) {
+    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, Map<String, Integer> mapRepetition,String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
@@ -60,7 +61,7 @@ public class AnswerLineDTO extends DTO {
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, String lastUpdateUser, String unitCode, Map<String, Integer> mapRepetition, String comment) {
+    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, String unitCode, Map<String, Integer> mapRepetition, String comment) {
         this.questionKey = questionKey;
         this.value = value;
         this.lastUpdateUser = lastUpdateUser;
@@ -85,11 +86,11 @@ public class AnswerLineDTO extends DTO {
         this.value = value;
     }
 
-    public String getLastUpdateUser() {
+    public PersonDTO getLastUpdateUser() {
         return lastUpdateUser;
     }
 
-    public void setLastUpdateUser(String lastUpdateUser) {
+    public void setLastUpdateUser(PersonDTO lastUpdateUser) {
         this.lastUpdateUser = lastUpdateUser;
     }
 

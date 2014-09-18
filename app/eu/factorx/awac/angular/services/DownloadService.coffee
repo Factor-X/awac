@@ -1,13 +1,15 @@
 # simple download service
 angular
 .module('app.services')
-.service "downloadService", ($http) ->
+.service "downloadService", ($http, $q) ->
     @downloadsInProgress = 0
 
     @getDownloadsInProgress = ->
         @downloadsInProgress
 
     @getJson = (url, callback) ->
+        console.log "GET URL TO "+url
+        deferred = $q.defer()
         @downloadsInProgress++
         promise = $http(
             method: "GET"
@@ -17,27 +19,29 @@ angular
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--
-            callback
+            return deferred.resolve(callback(
                 data: data,
                 status: status,
                 headers: headers,
                 config: config,
                 success: true
-            return
+            ))
 
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
-            callback
+            return deferred.resolve(callback(
                 data: data,
                 status: status,
                 headers: headers,
                 config: config,
                 success: false
-            return
+            ))
 
-        promise
+        return deferred.promise
 
     @postJson = (url, data, callback) ->
+        console.log "POST URL TO "+url
+        deferred = $q.defer()
         if data == null
             data = {}
         @downloadsInProgress++
@@ -50,24 +54,24 @@ angular
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--
-            callback
+            return deferred.resolve(callback(
                 data: data,
                 status: status,
                 headers: headers,
                 config: config,
                 success: true
-            return
+            ))
 
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
-            callback
+            return deferred.resolve(callback(
                 data: data,
                 status: status,
                 headers: headers,
                 config: config,
                 success: false
-            return
+            ))
 
-        promise
+        return deferred.promise
 
     return

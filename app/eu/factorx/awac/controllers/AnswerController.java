@@ -5,8 +5,10 @@ import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
+import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -75,6 +77,22 @@ public class AnswerController extends AbstractController {
     private StoredFileService storedFileService;
     @Autowired
     private FormProgressService formProgressService;
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
+    @Autowired
+    private SiteService siteService;
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result testFormAvailabilityByScopeAndForm(String formIdentifier, String periodKey, Long scopeId) {
+
+        Form form = formService.findByIdentifier(formIdentifier);
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+        Site site = siteService.findById(scopeId);
+
+        return ok(new BooleanDTO(securedController.controlDataAccess(form,period, site)));
+    }
+
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
