@@ -12,19 +12,15 @@
 package eu.factorx.awac.service.impl;
 
 
-import eu.factorx.awac.service.VelocityGeneratorService;
-import jp.furyu.play.velocity.mvc.package$;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
-import play.Logger;
-import play.api.Play;
+
 import play.api.templates.Html;
 import play.libs.Scala;
 import play.mvc.Result;
 import play.mvc.Results;
-
-import java.util.Map;
-
-
+import eu.factorx.awac.service.VelocityGeneratorService;
 
 @Component
 public class VelocityGeneratorImpl implements VelocityGeneratorService {

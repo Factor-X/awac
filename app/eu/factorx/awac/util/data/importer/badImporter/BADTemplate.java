@@ -1,9 +1,5 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import play.Logger;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
