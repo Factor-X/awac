@@ -6,6 +6,7 @@ import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.generated.AwacMunicipalityInitialData;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
@@ -30,6 +31,7 @@ import java.util.List;
 public class AdminController extends AbstractController {
 
 
+<<<<<<< HEAD
 	@Autowired
 	private ConversionService           conversionService;
 	@Autowired
@@ -50,29 +52,56 @@ public class AdminController extends AbstractController {
 	private BADImporter                 badImporter;
 	@Autowired
 	private IndicatorImporter           indicatorImporter;
+=======
+    @Autowired
+    private ConversionService conversionService;
+    @Autowired
+    private NotificationService notificationService;
 
-	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
-	// @AuthenticatedAsSystemAdmin
-	public Result getAllNotifications() {
-		Account currentUser = securedController.getCurrentUser();
-		validateUserRights(currentUser);
-		List<Notification> all = notificationService.findAll();
-		List<NotificationDTO> dtos = new ArrayList<>();
-		for (Notification notification : all) {
-			dtos.add(conversionService.convert(notification, NotificationDTO.class));
-		}
-		return ok(new NotificationsDTO(dtos));
-	}
+    @Autowired
+    private CodeLabelService codeLabelService;
+    @Autowired
+    private FormService formService;
+
+    @Autowired
+    private TranslationImporter translationImporter;
+
+    @Autowired
+    private CodeLabelImporter codeLabelImporter;
+
+    @Autowired
+    private AwacDataImporter awacDataImporter;
+
+    @Autowired
+    private AwacMunicipalityInitialData awacMunicipalityInitialData;
+
+    @Autowired
+    private BADImporter badImporter;
+>>>>>>> origin/master
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    // @AuthenticatedAsSystemAdmin
+    public Result getAllNotifications() {
+        Account currentUser = securedController.getCurrentUser();
+        validateUserRights(currentUser);
+        List<Notification> all = notificationService.findAll();
+        List<NotificationDTO> dtos = new ArrayList<>();
+        for (Notification notification : all) {
+            dtos.add(conversionService.convert(notification, NotificationDTO.class));
+        }
+        return ok(new NotificationsDTO(dtos));
+    }
 
 
-	private void validateUserRights(Account currentUser) {
+    private void validateUserRights(Account currentUser) {
 //		if (!securedController.isSystemAdministrator()) {
 //			throw new RuntimeException("" +
 //				"You are not allowed to access admin section. " +
 //				"Your user login '" + currentUser.getIdentifier() + "' has been reported as potential hacker. " +
 //				"Any further attempt will result in an investigation.");
 //		}
+<<<<<<< HEAD
 	}
 
 	@Transactional(readOnly = false)
@@ -120,4 +149,56 @@ public class AdminController extends AbstractController {
 
 		return ok(conversionService.convert(badImporter.importBAD(), BADLogDTO.class));
 	}
+=======
+    }
+
+    @Transactional(readOnly = false)
+    public Result resetCodeLabels() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+        // reset code labels cache
+        codeLabelService.resetCache();
+        // import code labels
+        codeLabelImporter.run();
+        // import translations
+        translationImporter.run();
+
+        return (ok());
+    }
+
+    @Transactional(readOnly = false)
+    public Result resetIndicatorsAndFactors() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+        // import indicators and factors
+        awacDataImporter.run();
+
+        return (ok());
+    }
+
+    @Transactional(readOnly = false)
+    public Result createMunicipalitySurveyData() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+        if (formService.findByIdentifier("TAB_C1") != null) {
+            throw new RuntimeException("Municipality Survey DataCell has already been created");
+        }
+        awacMunicipalityInitialData.createSurvey(JPA.em().unwrap(Session.class));
+
+        return (ok());
+    }
+
+    @Transactional(readOnly = true)
+    public Result runBADImporter(String interfaceString) {
+
+        // InterfaceTypeCode.
+        InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(interfaceString);
+
+
+        return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
+    }
+>>>>>>> origin/master
 }

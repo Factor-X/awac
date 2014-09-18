@@ -5,24 +5,59 @@ package eu.factorx.awac.util.data.importer.badImporter;
  */
 public enum TemplateName {
 
-    BAD("public/template/bad.vm", "app/eu/factorx/awac/service/knowledge/activity/contributor/impl/"),
-    //BAD("public/template/bad.vm", "tmp/bad/"),
-    BAD_TEST("public/template/badTest.vm", "test/eu/factorx/awac/buisness/bad/impl/"),
-    BAD_TEST_MAIN("public/template/badTestMain.vm", "test/eu/factorx/awac/buisness/bad/");
+    BAD_ENTERPRISE( "public/template/bad.vm",
+                    "app/eu/factorx/awac/service/knowledge/activity/contributor/enterprise/",
+                    "eu.factorx.awac.service.knowledge.activity.contributor.enterprise",
+                    //test
+                    "public/template/badTest.vm",
+                    "test/eu/factorx/awac/buisness/bad/enterprise/",
+                    "eu.factorx.awac.buisness.bad.enterprise"),
 
-    private final String url;
-    private final String targetPath;
+    BAD_MUNICIPALITY(   "public/template/bad.vm",
+                        "app/eu/factorx/awac/service/knowledge/activity/contributor/municipality/",
+                        "eu.factorx.awac.service.knowledge.activity.contributor.municipality",
+                        //test
+                        "public/template/badTest.vm",
+                        "test/eu/factorx/awac/buisness/bad/municipality/",
+                        "eu.factorx.awac.buisness.bad.municipality");
 
-    TemplateName(String url, String targetPath) {
-        this.url = url;
-        this.targetPath = targetPath;
+    private final String template;
+    private final String path;
+    private final String packageString;
+    private final String testTemplate;
+    private final String testPath;
+    private final String packageTest;
+
+    TemplateName(String template, String path, String packageString, String testTemplate, String testPath, String packageTest) {
+        this.template = template;
+        this.path = path;
+        this.packageString = packageString;
+        this.testTemplate = testTemplate;
+        this.testPath = testPath;
+        this.packageTest = packageTest;
     }
 
-    public String getUrl() {
-        return url;
+    public String getTemplate() {
+        return template;
     }
 
-    public String getTargetPath() {
-        return targetPath;
+    public String getPath() {
+        return path;
+    }
+
+    public String getPackageString() {
+        return packageString;
+    }
+
+    public String getTestTemplate() {
+        return testTemplate;
+    }
+
+    public String getTestPath() {
+        return testPath;
+    }
+
+    public String getPackageTest() {
+        return packageTest;
     }
 }

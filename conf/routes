@@ -5,122 +5,150 @@
 #
 # Home page
 #
-GET     /                                                  @eu.factorx.awac.controllers.ApplicationController.index()                                                                                              
-GET     /enterprise                                        @eu.factorx.awac.controllers.ApplicationController.enterprise()                                                                                         
-GET     /municipality                                      @eu.factorx.awac.controllers.ApplicationController.municipality()                                                                                       
+GET         /                                                      @eu.factorx.awac.controllers.ApplicationController.index()
+GET         /enterprise                                            @eu.factorx.awac.controllers.ApplicationController.enterprise()
+GET         /municipality                                          @eu.factorx.awac.controllers.ApplicationController.municipality()
 
 #
 # Translations
 #
-GET     /awac/translations/:lang                           @eu.factorx.awac.controllers.TranslationController.fetch(lang:String)                                                                                   
+GET         /awac/translations/:lang                               @eu.factorx.awac.controllers.TranslationController.fetch(lang:String)
 
 #
 # Notifications
 #
-GET     /awac/notifications/get_notifications              @eu.factorx.awac.controllers.NotificationController.getNotifications()                                                                                  
+GET         /awac/notifications/get_notifications                  @eu.factorx.awac.controllers.NotificationController.getNotifications()
 
 #
 # Login rest api
 #
-POST    /awac/login                                        @eu.factorx.awac.controllers.AuthenticationController.authenticate()                                                                                    
-POST    /awac/logout                                       @eu.factorx.awac.controllers.AuthenticationController.logout()                                                                                          
-POST    /awac/testAuthentication                           @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()                                                                              
-POST    /awac/forgotPassword                               @eu.factorx.awac.controllers.AuthenticationController.forgotPassword()                                                                                  
+POST        /awac/login                                            @eu.factorx.awac.controllers.AuthenticationController.authenticate()
+POST        /awac/logout                                           @eu.factorx.awac.controllers.AuthenticationController.logout()
+POST        /awac/testAuthentication                               @eu.factorx.awac.controllers.AuthenticationController.testAuthentication()
+POST        /awac/forgotPassword                                   @eu.factorx.awac.controllers.AuthenticationController.forgotPassword()
 
 #
 # registration ctrl
 #
-POST    /enterprise/registration                           @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()                                                                            
-POST    /municipality/registration                         @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()                                                                          
+POST        /enterprise/registration                               @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
+POST        /municipality/registration                             @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 
 #
 # invitation ctrl
 #
-POST    /awac/invitation                                   @eu.factorx.awac.controllers.InvitationController.launchInvitation()                                                                                    
-POST    /awac/register                                     @eu.factorx.awac.controllers.InvitationController.registerInvitation()                                                                                  
+POST        /awac/invitation                                       @eu.factorx.awac.controllers.InvitationController.launchInvitation()
+POST        /awac/register                                         @eu.factorx.awac.controllers.InvitationController.registerInvitation()
 
 #
 # PDF controller
 #
 
-GET     /awac/pdf                                          eu.factorx.awac.controllers.PdfController.asPdf()                                                                                                       
-GET     /awac/svg                                          eu.factorx.awac.controllers.PdfController.withSvg()                                                                                                     
+GET         /awac/pdf                                              eu.factorx.awac.controllers.PdfController.asPdf()
+GET         /awac/svg                                              eu.factorx.awac.controllers.PdfController.withSvg()
 
 
 #
 # Velocity controller
 #
 
-GET     /awac/velocity                                     @eu.factorx.awac.controllers.VelocityController.velocity()                                                                                              
+GET         /awac/velocity                                         @eu.factorx.awac.controllers.VelocityController.velocity()
 
 
 #
 # Email Service
 #
-GET     /email/send                                        @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)                                                
-GET     /email/sendComplete                                @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
+GET         /email/send                                            @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET         /email/sendComplete                                    @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
 
 #
 # Javascript routing
 #
-GET     /assets/javascripts/routes                         @eu.factorx.awac.controllers.ApplicationController.javascriptRoutes()                                                                                   
+GET         /assets/javascripts/routes                             @eu.factorx.awac.controllers.ApplicationController.javascriptRoutes()
 
 #
 # Map static resources from the /public folder to the /assets URL path
 #
-GET     /assets/*file                                      controllers.Assets.at(path="/public", file)                                                                                                             
+GET         /assets/*file                                          controllers.Assets.at(path="/public", file)
 
 #
 # Answer controller => used to save answer
 #
-GET     /awac/answer/getByForm/:form/:period/:scope        @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)                                                      
-POST    /awac/answer/save                                  @eu.factorx.awac.controllers.AnswerController.save()                                                                                                    
-GET     /awac/answer/getPeriodsForComparison/:scope        @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)                                                                      
-POST    /awac/answer/formProgress                          @eu.factorx.awac.controllers.AnswerController.setFormProgress()                                                                                         
-GET     /awac/answer/formProgress/:period/:scope           @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)                                                              
+GET         /awac/answer/getByForm/:form/:period/:scope            @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
+POST        /awac/answer/save                                      @eu.factorx.awac.controllers.AnswerController.save()
+GET         /awac/answer/getPeriodsForComparison/:scope            @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
+POST        /awac/answer/formProgress                              @eu.factorx.awac.controllers.AnswerController.setFormProgress()
+GET         /awac/answer/formProgress/:period/:scope               @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)
 
 #
 # ResultController => used to get report
 #
+<<<<<<< HEAD
 POST    /awac/result/getReport                             @eu.factorx.awac.controllers.ResultController.getReport()                                                                                               
+=======
+GET         /awac/result/getReport/:period/:scope                  @eu.factorx.awac.controllers.ResultController.getReport(period: String, scope: Long)
+GET         /awac/result/getReportAsXls/:period/:scope             @eu.factorx.awac.controllers.ResultController.getReportAsXls(period: String, scope: Long)
+GET         /awac/result/getReportAsPdf/:period/:scope             @eu.factorx.awac.controllers.ResultController.getReportAsPdf(period: String, scope: Long)
+GET         /awac/result/getDonut/:period/:scope/:scopeType        @eu.factorx.awac.controllers.ResultController.getDonut(period: String, scope: Long, scopeType: Integer )
+GET         /awac/result/getWeb/:period/:scope                     @eu.factorx.awac.controllers.ResultController.getWeb(period: String, scope: Long)
+GET         /awac/result/getHistogram/:period/:scope               @eu.factorx.awac.controllers.ResultController.getHistogram(period: String, scope: Long)
+>>>>>>> origin/master
 
 #
 # Upload
 #
-POST    /awac/file/upload/                                 @eu.factorx.awac.controllers.FilesController.upload()                                                                                                   
-GET     /awac/file/download/:storedFileId                  @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)                                                                               
+POST        /awac/file/upload/                                     @eu.factorx.awac.controllers.FilesController.upload()
+GET         /awac/file/download/:storedFileId                      @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
 
 #
 # User profile
 #
-GET     /awac/user/profile                                 @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()                                                                                 
-POST    /awac/user/profile/save                            @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()                                                                                
-POST    /awac/user/email/save                              @eu.factorx.awac.controllers.UserProfileController.updateEmail()                                                                                        
-POST    /awac/user/password/save                           @eu.factorx.awac.controllers.UserProfileController.updatePassword()                                                                                     
-POST    /awac/user/isAdminAccount                          @eu.factorx.awac.controllers.UserProfileController.isAdminAccount()                                                                                     
-POST    /awac/user/activeAccount                           @eu.factorx.awac.controllers.UserProfileController.activeAccount()                                                                                      
+GET         /awac/user/profile                                     @eu.factorx.awac.controllers.UserProfileController.getUserProfileData()
+POST        /awac/user/profile/save                                @eu.factorx.awac.controllers.UserProfileController.saveUserProfileData()
+POST        /awac/user/email/save                                  @eu.factorx.awac.controllers.UserProfileController.updateEmail()
+POST        /awac/user/password/save                               @eu.factorx.awac.controllers.UserProfileController.updatePassword()
+POST        /awac/user/isAdminAccount                              @eu.factorx.awac.controllers.UserProfileController.isAdminAccount()
+POST        /awac/user/activeAccount                               @eu.factorx.awac.controllers.UserProfileController.activeAccount()
 
 #
 # Admin
 #
-GET     /awac/admin/codelabels/reset                       @eu.factorx.awac.controllers.AdminController.resetCodeLabels()                                                                                          
-GET     /awac/admin/indicators_factors/reset               @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()                                                                                
-GET     /awac/admin/municipality_survey/create             @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()                                                                             
-GET     /awac/admin/badImporter                            @eu.factorx.awac.controllers.AdminController.runBADImporter()                                                                                           
+GET         /awac/admin/codelabels/reset                           @eu.factorx.awac.controllers.AdminController.resetCodeLabels()
+GET         /awac/admin/indicators_factors/reset                   @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
+GET         /awac/admin/municipality_survey/create                 @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
+GET         /awac/admin/badImporter/:interfaceString               @eu.factorx.awac.controllers.AdminController.runBADImporter(interfaceString:String)
 
 #
 # site
 #
+<<<<<<< HEAD
 POST    /awac/site/edit                                    @eu.factorx.awac.controllers.SiteController.edit()                                                                                                      
 POST    /awac/site/create                                  @eu.factorx.awac.controllers.SiteController.create()                                                                                                    
 POST    /awac/site/assignPeriodToSite                      @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()                                                                                        
 GET     /awac/site/:siteId                                 @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)                                                                                        
+=======
+POST        /awac/site/edit                                        @eu.factorx.awac.controllers.SiteController.edit()
+POST        /awac/site/create                                      @eu.factorx.awac.controllers.SiteController.create()
+POST        /awac/site/assignPeriodToSite                          @eu.factorx.awac.controllers.SiteController.assignPeriodToSite()
+GET         /awac/site/:siteId                                     @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)
+>>>>>>> origin/master
 
 #
 # organization
 #
 
+<<<<<<< HEAD
 POST    /awac/organization/site/associatedaccounts/load    @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()                                                                            
 POST    /awac/organization/site/associatedaccounts/save    @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()                                                                            
+=======
+POST        /awac/organization/site/associatedaccounts/load        @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
+POST        /awac/organization/site/associatedaccounts/save        @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
+GET         /awac/organization/getMyOrganization                   @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
+>>>>>>> origin/master
 
 
+#
+# organization event
+#
+
+POST        /awac/organization/events/load                         @eu.factorx.awac.controllers.OrganizationEventController.loadEvents()
+POST        /awac/organization/events/save                         @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()

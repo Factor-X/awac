@@ -1,8 +1,11 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +31,8 @@ import java.util.Map;
 public class BADImporter extends WorkbookDataImporter implements ApplicationContextAware {
 
     private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
+    public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
+    public static final String MUNICIPALIT_METHOD = "commune-activityData";
 
     private final static boolean DEBUG = false;
 
@@ -87,35 +93,49 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     }
 
 
-    public BADLog importBAD() {
+    public BADLog importBAD(InterfaceTypeCode interfaceTypeCode) {
         BADLog badLog = new BADLog();
         try {
 
-            importDatas(badLog);
+            importDatas(badLog,interfaceTypeCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return badLog;
     }
 
-    public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
+
 
     @Override
     protected void importData() throws Exception {
         //useless
     }
 
-    protected void importDatas(BADLog badLog) throws Exception {
+    protected void importDatas(BADLog badLog,InterfaceTypeCode interfaceTypeCode) throws Exception {
 
         play.Logger.info("run badimporter....");
 
 
         ExcelReader excelReader = new ExcelReader();
 
-        Data data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
+        Data data =null;
+                TemplateName templateName=null;
+        if(interfaceTypeCode.equals(InterfaceTypeCode.ENTERPRISE)) {
+            data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
+            templateName = TemplateName.BAD_ENTERPRISE;
+            Logger.info("ENTERRPISEE !!");
+        }
+        else if(interfaceTypeCode.equals(InterfaceTypeCode.MUNICIPALITY)){
+            data = excelReader.readFile(FILE_PATH, MUNICIPALIT_METHOD);
+            templateName = TemplateName.BAD_MUNICIPALITY;
+            Logger.info("ENTERRPISEE !!");
+        }
+        else{
+            throw new MyrmexRuntimeException("Cannot found the interface");
+        }
 
         //2. read
-        reader(data, badLog);
+        reader(data, badLog,templateName);
 
         play.Logger.info("run badimporter end !");
 
@@ -124,7 +144,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
     //not null, ActivityType or answer(control list content) or more complex
 
-    public void reader(Data data, BADLog badLog) {
+    public void reader(Data data, BADLog badLog, TemplateName templateName) {
 
 
 
@@ -133,7 +153,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         List<BAD> bads = new ArrayList<>();
         
 
-        for (int line = 1; line < data.getNbRows(); line++) {
+        for (int line = 1; line < data.getNbRows()+1; line++) {
 
             //escape the first line : presentation
             if (line == 1) {
@@ -224,12 +244,12 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                 //write
-                badGenerator.generateBAD(bad, logLine);
+                badGenerator.generateBAD(bad, logLine,templateName);
 
                 //generate test
                 BADTestGenerator badTestGenerator = (BADTestGenerator) ctx.getBean(BADTestGenerator.class);
 
-                badTestGenerator.generateBAD(bad, logLine, mapAnswer);
+                badTestGenerator.generateBAD(bad, logLine, mapAnswer,templateName);
 
                 bads.add(bad);
             }
@@ -237,7 +257,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         
         //generate main test
         BADTestMainGenerator badTestMainGenerator = new BADTestMainGenerator();
-        badTestMainGenerator.generateBAD(bads);
+        badTestMainGenerator.generateBAD(bads, templateName);
     }
 }
 

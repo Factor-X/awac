@@ -13,7 +13,7 @@ angular
 		scope.total_warning= 0
 		scope.total_error= 0
 
-		url = "awac/admin/badImporter"
+		url = "awac/admin/badImporter/"+scope.$root.instanceName
 
 		scope.import = ->
 

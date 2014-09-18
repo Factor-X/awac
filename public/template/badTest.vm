@@ -1,4 +1,4 @@
-package eu.factorx.awac.buisness.bad.impl;
+package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
@@ -15,12 +15,10 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.impl.*;
+import $BAD_PACKAGE.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
