@@ -1,7 +1,5 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.List;
-
 import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
@@ -10,37 +8,20 @@ import eu.factorx.awac.models.code.type.*;
 @Entity
 @Table(name = "baseindicator")
 @NamedQueries({
-		@NamedQuery(name = BaseIndicator.FIND_BY_PARAMETERS,
-				query = "select i from BaseIndicator i where i.type = :type and i.scopeType = :scopeType and i.activityCategory = :activityCategory and i.activitySubCategory = :activitySubCategory and (i.activityOwnership is null or i.activityOwnership = :activityOwnership) and i.deleted = :deleted"),
-		@NamedQuery(name = BaseIndicator.FIND_ALL_INDICATOR_NAMES, query = "select distinct i.name from BaseIndicator i"),
 		@NamedQuery(name = BaseIndicator.REMOVE_ALL, query = "delete from BaseIndicator i where i.id is not null"),
 })
 public class BaseIndicator extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param type: an {@link IndicatorTypeCode}
-	 * @param scopeType: a {@link ScopeTypeCode}
-	 * @param activityCategory: an {@link ActivityCategoryCode}
-	 * @param activitySubCategory: an {@link ActivitySubCategoryCode}
-	 * @param activityOwnership: a {@link Boolean}
-	 * @param deleted: a {@link Boolean}
-	 */
-	public static final String FIND_BY_PARAMETERS = "BaseIndicator.findByParameters";
-
-	public static final String FIND_ALL_INDICATOR_NAMES = "BaseIndicator.findAllIndicatorNames";
-
 	public static final String REMOVE_ALL = "BaseIndicator.removeAll";
 
+	@Embedded
 	@Column(unique = true)
-	private String key;
-
-	// not unique !!
-	private String name;
+	private BaseIndicatorCode code;
 
 	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "type"))})
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
 	private IndicatorTypeCode type;
 
 	@Embedded
@@ -65,19 +46,15 @@ public class BaseIndicator extends AuditedAbstractEntity {
 
 	private Boolean deleted;
 
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
-	private List<Indicator> indicators;
-
 	protected BaseIndicator() {
 		super();
 	}
 
-	public BaseIndicator(String key, String name, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
-	                 IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
-	                 ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
+	public BaseIndicator(BaseIndicatorCode code, IndicatorTypeCode type, ScopeTypeCode scopeType, IndicatorIsoScopeCode isoScope,
+			IndicatorCategoryCode indicatorCategory, ActivityCategoryCode activityCategory,
+			ActivitySubCategoryCode activitySubCategory, Boolean activityOwnership, Unit unit, Boolean deleted) {
 		super();
-		this.key = key;
-		this.name = name;
+		this.code = code;
 		this.type = type;
 		this.scopeType = scopeType;
 		this.isoScope = isoScope;
@@ -89,21 +66,12 @@ public class BaseIndicator extends AuditedAbstractEntity {
 		this.deleted = deleted;
 	}
 
-
-	public String getKey() {
-		return key;
+	public BaseIndicatorCode getCode() {
+		return code;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setCode(BaseIndicatorCode code) {
+		this.code = code;
 	}
 
 	public IndicatorTypeCode getType() {
@@ -178,19 +146,9 @@ public class BaseIndicator extends AuditedAbstractEntity {
 		this.deleted = deleted;
 	}
 
-	public List<Indicator> getIndicators() {
-		return indicators;
-	}
-
-	public void setIndicators(List<Indicator> indicators) {
-		this.indicators = indicators;
-	}
-
 	@Override
 	public String toString() {
-		return "BaseIndicator [key=" + key + ", name=" + name + ", type=" + type + ", scopeType=" + scopeType + ", isoScope=" + isoScope
-				+ ", indicatorCategory=" + indicatorCategory + ", activityCategory=" + activityCategory + ", activitySubCategory="
-				+ activitySubCategory + ", activityOwnership=" + activityOwnership + ", unit=" + unit + ", deleted=" + deleted + "]";
+		return "BaseIndicator [id = " + id + ", code = " + code + "]";
 	}
 
 }

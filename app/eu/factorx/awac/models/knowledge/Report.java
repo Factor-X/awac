@@ -12,6 +12,7 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.code.type.ReportCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.reporting.ReportResult;
 
 @Entity
 @Table(name = "report")
@@ -23,17 +24,15 @@ public class Report extends AuditedAbstractEntity {
 	private ReportCode code;
 
 	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "retricted_scope"))})
+	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "retricted_scope")) })
 	private IndicatorIsoScopeCode restrictedScope;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private AwacCalculator awacCalculator;
 
-
-	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, orphanRemoval = true)
+	@OneToMany(mappedBy = ReportIndicator.PROPERTY_NAME_REPORT, fetch = FetchType.LAZY, cascade = { CascadeType.ALL }, orphanRemoval = true)
 	@OrderBy(ReportIndicator.PROPERTY_NAME_ORDER_INDEX)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	// -> hibernate-specific annotation to fix DDL generation problem
 	private List<ReportIndicator> reportIndicators;
 
 	public Report() {
@@ -41,12 +40,21 @@ public class Report extends AuditedAbstractEntity {
 	}
 
 	/**
-	 * @param code
+	 * Creates a new <code>Report</code> for given {@link AwacCalculator}.
+	 * 
+	 * @param reportCode
+	 *            The {@link ReportCode} identifying this report.
+	 * @param awacCalculator
+	 *            The {@link AwacCalculator} which this report belongs to.
+	 * @param restrictedScope
+	 *            An {@link IndicatorIsoScopeCode}, indicating if we have to filter the {@link BaseIndicator}s belong their {@link BaseIndicator#isoScope isoScope}. (If
+	 *            <code>restrictedScope</code> is null, all base indicators linked to this report can be added to the {@link ReportResult}.)
 	 */
-	public Report(ReportCode code, IndicatorIsoScopeCode restrictedScope) {
+	public Report(ReportCode reportCode, AwacCalculator awacCalculator, IndicatorIsoScopeCode restrictedScope) {
 		super();
-		this.code = code;
+		this.code = reportCode;
 		this.restrictedScope = restrictedScope;
+		this.awacCalculator = awacCalculator;
 	}
 
 	public ReportCode getCode() {
@@ -83,15 +91,38 @@ public class Report extends AuditedAbstractEntity {
 
 	public List<Indicator> getIndicators() {
 		List<Indicator> res = new ArrayList<>();
-		for (ReportIndicator reportIndicator : getReportIndicators()) {
+		for (ReportIndicator reportIndicator : this.getReportIndicators()) {
 			res.add(reportIndicator.getIndicator());
+		}
+		return res;
+	}
+
+	public List<BaseIndicator> getBaseIndicators() {
+		List<BaseIndicator> res = new ArrayList<>();
+		IndicatorIsoScopeCode restrictedScope = this.getRestrictedScope();
+		if (restrictedScope == null) {
+			for (Indicator indicator : this.getIndicators()) {
+				for (BaseIndicator baseIndicator : indicator.getBaseIndicators()) {
+					if (!baseIndicator.getDeleted()) {
+						res.add(baseIndicator);						
+					}
+				}
+			}
+		} else {
+			for (Indicator indicator : this.getIndicators()) {
+				for (BaseIndicator baseIndicator : indicator.getBaseIndicators()) {
+					if ((!baseIndicator.getDeleted()) && restrictedScope.equals(baseIndicator.getIsoScope())) {
+						res.add(baseIndicator);						
+					}
+				}
+			}
 		}
 		return res;
 	}
 
 	@Override
 	public String toString() {
-		return "Indicator [id=" + id + ", code=" + code + ", restrictedScope=" + restrictedScope + "]";
+		return "report [id=" + id + ", code=" + code + ", restrictedScope=" + restrictedScope + "]";
 	}
 
 }
