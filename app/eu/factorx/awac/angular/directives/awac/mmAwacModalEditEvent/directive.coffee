@@ -12,11 +12,18 @@ angular
 
         $scope.createNewEvent = true
 
+        $scope.assignedPeriodStruct = { key:"2013",label:"2013" }
+
         if $scope.getParams().event?
             $scope.event =  angular.copy($scope.getParams().event)
             $scope.createNewEvent = false
+            $scope.assignedPeriod = $scope.event.period.label
         else
             $scope.event = {}
+            if $scope.$root.periods?
+              $scope.assignedPeriod = $scope.$root.periods[0].label
+            else
+              $scope.assignedPeriod = $scope.assignedPeriodStruct.label
 
         $scope.fields = {
 
@@ -36,6 +43,7 @@ angular
                 field:$scope.event.description
                 hideIsValidIcon: true
             }
+
         }
 
         $scope.allFieldValid = () ->
@@ -50,13 +58,22 @@ angular
 
             if $scope.allFieldValid()
 
+                console.log "AssignedPeriod"
+                console.log $scope.assignedPeriod
+
                 #create DTO
                 data = {}
                 data.organization = $scope.event.organization
-                data.period = $scope.event.period
+                #data.period = $scope.event.period
+                data.period = $scope.$root.periods[0]
+                data.period.key = $scope.assignedPeriod
+                data.period.label = $scope.assignedPeriod
                 data.id = $scope.event.id
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
+                #data.period.key=$scope.assignedPeriod
+                #data.period.label=$scope.assignedPeriod
+
                 $scope.isLoading = true
 
                 console.log data
@@ -65,6 +82,7 @@ angular
 
                     #edit event
                     data.id = $scope.getParams().event.id
+
                     downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
@@ -74,6 +92,8 @@ angular
                             #edit site
                             $scope.getParams().event.name = $scope.fields.name.field
                             $scope.getParams().event.description = $scope.fields.description.field
+                            $scope.getParams().event.period.label = $scope.assignedPeriod
+                            $scope.getParams().event.period.key = $scope.assignedPeriod
 
                             #close window
                             $scope.close()
@@ -94,7 +114,6 @@ angular
 
                             # add new event to the list
                             $scope.getParams().events[$scope.getParams().events.length] = result.data
-                            #$scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
 
                             #close window
                             $scope.close()

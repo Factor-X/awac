@@ -78,7 +78,31 @@ public class OrganizationEventServiceTest extends AbstractBaseModelTest {
 	}
 
 	@Test
-	public void _003_testOnOrganizationDeleteCascade() throws Exception {
+	public void _003_testFindByOrganization() throws Exception {
+		Organization organization = createOrganization("testorg3");
+		Period p2006 = periodService.findByCode(PeriodCode.P2006);
+		Period p2007 = periodService.findByCode(PeriodCode.P2007);
+		Period p2008 = periodService.findByCode(PeriodCode.P2008);
+
+		List<OrganizationEvent> createdEvents = new ArrayList<>();
+		OrganizationEvent event1 = createOrganizationEvent(organization, p2006, "event1", "eventDescription");
+		createdEvents.add(event1);
+		OrganizationEvent event2 = createOrganizationEvent(organization, p2007, "event2", "event2Description");
+		createdEvents.add(event2);
+		OrganizationEvent event3 = createOrganizationEvent(organization, p2008, "event3", "event3Description");
+		createdEvents.add(event3);
+
+
+		Assert.assertEquals(createdEvents, organizationEventService.findByOrganization(organization));
+
+		// clean
+		organizationEventService.remove(createdEvents);
+		organizationService.remove(organization);
+	}
+
+
+	@Test
+	public void _004_testOnOrganizationDeleteCascade() throws Exception {
 		Organization organization = createOrganization("testorg3");
 		Long organizationId = organization.getId();
 		Period p2006 = periodService.findByCode(PeriodCode.P2006);

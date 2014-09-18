@@ -68,7 +68,9 @@ public class OrganizationEventController extends AbstractController {
 
 
 		// get events for organization and given period
-		List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
+		//List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
+		// get events for organization and all periods
+		List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(org);
 		Logger.info("organizationList.size():" + organizationList.size());
 
 		List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<OrganizationEventDTO>();
@@ -107,6 +109,7 @@ public class OrganizationEventController extends AbstractController {
 				Logger.info("OrgEvent is not null : " + dto.getId());
 				orgEvent.setName(dto.getName());
 				orgEvent.setDescription(dto.getDescription());
+				orgEvent.setPeriod(periodService.findByCode(new PeriodCode(dto.getPeriod().getKey())));
 
 			} else {
 				Logger.info("OrgEvent is null");
