@@ -1,29 +1,23 @@
 package eu.factorx.awac.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.sun.corba.se.impl.encoding.CodeSetConversion;
-import eu.factorx.awac.models.code.conversion.CodeConversion;
-import eu.factorx.awac.models.code.conversion.ConversionCriterion;
-import eu.factorx.awac.models.data.FormProgress;
-import eu.factorx.awac.util.MyrmexException;
-import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import play.Logger;
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.conversion.CodeConversion;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.service.CodeConversionService;
+import eu.factorx.awac.util.MyrmexRuntimeException;
+import org.springframework.stereotype.Component;
+import play.Logger;
+import play.db.jpa.JPA;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeConversion> implements CodeConversionService {

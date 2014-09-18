@@ -13,6 +13,7 @@ import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Controller;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@org.springframework.stereotype.Controller
+@Controller
 public class ResultController extends AbstractController {
 
 	@Autowired
