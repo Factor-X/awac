@@ -4,7 +4,7 @@ import eu.factorx.awac.dto.DTO;
 
 public class UnitDTO extends DTO {
 
-	private Long id;
+	private String code;
 
 	private String name;
 
@@ -12,21 +12,21 @@ public class UnitDTO extends DTO {
 		super();
 	}
 
-	public UnitDTO(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
 
-	public Long getId() {
-		return id;
-	}
+    public UnitDTO(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getName() {
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
 		return name;
 	}
 
@@ -34,9 +34,11 @@ public class UnitDTO extends DTO {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "UnitDTO [id=" + id + ", name=" + name + "]";
-	}
-
+    @Override
+    public String toString() {
+        return "UnitDTO{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -63,7 +63,7 @@ angular
                         if answerType == 'BOOLEAN'
                             directiveName = "boolean-question"
                         else if answerType == 'INTEGER'
-                            directiveName = "integer-question"
+                            directiveName = "real-question"
                         else if answerType == 'DOUBLE'
                             if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
                                 directiveName = "real-with-unit-question"
@@ -274,8 +274,8 @@ angular
             scope.copyDataToCompare = ->
                 if scope.getAnswer(true) != null
                     scope.getAnswer().value = scope.getAnswer(true).value
-                    if scope.getAnswer(true).unitId?
-                        scope.getAnswer().unitId = scope.getAnswer(true).unitId
+                    if scope.getAnswer(true).unitCode?
+                        scope.getAnswer().unitCode = scope.getAnswer(true).unitCode
                     if scope.getAnswer(true).comment?
                         scope.getAnswer().comment = scope.getAnswer(true).comment
                     scope.edited()

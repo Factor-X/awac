@@ -1,5 +1,7 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import eu.factorx.awac.models.knowledge.Unit;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,8 @@ public class AnswerLine {
     private Object value;
 
     private Map<String,Integer> mapRepetition = new HashMap<>();
+
+    private Unit unit;
 
     public AnswerLine(Object value) {
         this.value = value;
@@ -42,6 +46,15 @@ public class AnswerLine {
         return "AnswerLine{" +
                 "value=" + value +
                 ", mapRepetition=" + mapRepetition +
+                ", unit=" + unit +
                 '}';
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public Unit getUnit() {
+        return unit;
     }
 }

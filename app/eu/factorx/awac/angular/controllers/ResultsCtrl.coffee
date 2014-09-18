@@ -4,20 +4,14 @@ angular
     $scope.displayFormMenu = displayFormMenu
 
     modalService.show modalService.LOADING
-    downloadService.getJson "/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
+    downloadService.postJson '/awac/result/getReport', { periodKey: $scope.$parent.periodKey, scopesIds: [$scope.$parent.scopeId] }, (result) ->
         modalService.close modalService.LOADING
         if result.success
             $scope.o = result.data
         else
             # TODO ERROR HANDLING
 
-    $scope.charts =
-        histogramUrl: "/awac/result/getHistogram/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
-        webUrl:       "/awac/result/getWeb/"       + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
-        donutUrl1:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/1"
-        donutUrl2:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/2"
-        donutUrl3:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/3"
-
+    $scope.sites = $rootScope.mySites
 
     $scope.current_tab = 1;
 

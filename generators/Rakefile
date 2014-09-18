@@ -26,24 +26,6 @@ namespace :generate do
 
     end
 
-
-    desc "Generate a service in the application"
-    task :surveys do |t, args|
-
-        options             = {}
-        options[:log_level] = 'DEBUG'
-
-        OptionParser.new(args) do |opts|
-            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
-                options[:log_level] = v.upcase
-            end
-        end.parse!
-
-        require_relative './generate/service/main.rb'
-        main(options)
-
-    end
-
 end
 
 

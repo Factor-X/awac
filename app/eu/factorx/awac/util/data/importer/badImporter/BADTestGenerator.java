@@ -8,6 +8,7 @@ import eu.factorx.awac.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,29 +33,38 @@ public class BADTestGenerator {
 
     public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer) {
 
-        //generate questionAndAnswer list
-        List<QuestionAndAnswer> questionAndAnswerList = new ArrayList<>();
+        if(bad.getTestValues().size()>0) {
 
-        for(String questionCode : bad.getListQuestions()){
-            if(mapAnswer.get(questionCode)==null){
-             logLine.addError("Cannot found the answer for the required question "+questionCode);
+            //generate questionAndAnswer list
+            List<QuestionAndAnswer> questionAndAnswerList = new ArrayList<>();
+
+            for (String questionCode : bad.getListQuestions()) {
+                if (mapAnswer.get(questionCode) == null) {
+                    logLine.addError("Cannot found the answer for the required question " + questionCode);
+                } else {
+                    questionAndAnswerList.add(new QuestionAndAnswer(questionCode, mapAnswer.get(questionCode).getAnswerLines()));
+                }
             }
-            else {
-                questionAndAnswerList.add(new QuestionAndAnswer(questionCode, mapAnswer.get(questionCode).getAnswerLines()));
-            }
+
+            //create template
+            BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST, "BAD_" + bad.getBaseActivityDataCode() + "Test.java");
+
+            Logger.info("questionAndAnswerList for " + bad.getBaseActivityDataCode() + "->" + questionAndAnswerList.toString());
+
+            //inset questions
+            badTemplate.addParameter("questions", questionAndAnswerList);
+
+            //insert answer
+            badTemplate.addParameter("testValues", bad.getTestValues());
+
+            //insert bad
+            badTemplate.addParameter("bad", bad);
+
+            badTemplate.generate(TemplateName.BAD_TEST.getTargetPath());
         }
-
-
-        //create template
-        BADTemplate badTemplate = new BADTemplate(TemplateName.BAD_TEST, "BAD" + bad.getBaseActivityDataCode() + "Test.java");
-
-        //inset questions
-        badTemplate.addParameter("questions",bad.getListQuestions());
-
-        //insert bad
-        badTemplate.addParameter("bad", bad);
-
-        //badTemplate.generate(TemplateName.BAD_TEST.getTargetPath());
+        else{
+            logLine.addWarn("The test cannot be generated because there is not correct value available");
+        }
     }
 
 
@@ -83,6 +93,14 @@ public class BADTestGenerator {
 
         public void setAnswerLines(List<AnswerLine> answerLines) {
             this.answerLines = answerLines;
+        }
+
+        @Override
+        public String toString() {
+            return "QuestionAndAnswer{" +
+                    "questionCode='" + questionCode + '\'' +
+                    ", answerLines=" + answerLines +
+                    '}';
         }
     }
 

@@ -5,7 +5,7 @@ span.twoelement
             numbers-only="double",
             style="text-align:right;",
             ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
-    select( ng-options="p.id as p.name for p in getUnits()",
-            ng-model="getAnswer().unitId",
+    select( ng-options="p.code as p.name for p in getUnits()",
+            ng-model="getAnswer().unitCode",
             name="{{ getQuestionCode() }}_UNIT",
             ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
