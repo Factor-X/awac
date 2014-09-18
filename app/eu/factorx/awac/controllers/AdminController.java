@@ -45,6 +45,8 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private CodeLabelImporter           codeLabelImporter;
 	@Autowired
+	private FactorImporter           	factorImporter;
+	@Autowired
 	private IndicatorImporter           indicatorImporter;
 	@Autowired
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
@@ -66,14 +68,14 @@ public class AdminController extends AbstractController {
     }
 
 
-	private void validateUserRights(Account currentUser) {
+    private void validateUserRights(Account currentUser) {
 //		if (!securedController.isSystemAdministrator()) {
 //			throw new RuntimeException("" +
 //				"You are not allowed to access admin section. " +
 //				"Your user login '" + currentUser.getIdentifier() + "' has been reported as potential hacker. " +
 //				"Any further attempt will result in an investigation.");
 //		}
-	}
+    }
 
     @Transactional(readOnly = false)
     public Result resetCodeLabels() {
@@ -90,17 +92,17 @@ public class AdminController extends AbstractController {
         return (ok());
     }
 
-	@Transactional(readOnly = false)
-	public Result resetIndicatorsAndFactors() {
-		if (!Play.application().isDev()) {
-			return unauthorized();
-		}
-		// import indicators and factors
-		// awacDataImporter.run();
-		indicatorImporter.run();
+    @Transactional(readOnly = false)
+    public Result resetIndicatorsAndFactors() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+        // import indicators and factors
+        indicatorImporter.run();
+        factorImporter.run();
 
-		return (ok());
-	}
+        return (ok());
+    }
 
     @Transactional(readOnly = false)
     public Result createMunicipalitySurveyData() {
@@ -124,5 +126,4 @@ public class AdminController extends AbstractController {
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
     }
-
 }

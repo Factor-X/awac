@@ -5,39 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
-import eu.factorx.awac.models.Notification;
-import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
-import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
-import eu.factorx.awac.util.data.importer.*;
 
 @Component
 public class AwacMunicipalityInitialData {
-
-    @Autowired
-    private MyrmexUnitsImporter myrmexUnitsImporter;
-
-    @Autowired
-    private CodeLabelImporter codeLabelImporter;
-
-    @Autowired
-    private FactorImporter awacDataImporter;
-
-    @Autowired
-    private AccountImporter accountImporter;
-
-    @Autowired
-    private TranslationImporter translationImporter;
 
     @Autowired
     private UnitCategoryService unitCategoryService;
