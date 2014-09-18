@@ -155,7 +155,7 @@ public class BAD_AE_BAD12ATest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A95",120000.0, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A95",120000.0,  mapRepetition1 ));
         
         return list;
     }

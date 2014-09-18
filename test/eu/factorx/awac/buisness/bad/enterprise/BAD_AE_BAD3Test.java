@@ -159,11 +159,11 @@ public class BAD_AE_BAD3Test{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A25",1);
-                list.add(new AnswerLineDTO("A26","AS_29", identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A26","AS_29",  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A25",2);
-                list.add(new AnswerLineDTO("A26","AS_15", identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A26","AS_15",  mapRepetition2 ));
         
         return list;
     }
@@ -178,11 +178,11 @@ public class BAD_AE_BAD3Test{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A25",1);
-                list.add(new AnswerLineDTO("A28",2000.0, identifier, mapRepetition1  , UnitCode.U5337.getKey()  ));
+                list.add(new AnswerLineDTO("A28",2000.0,  mapRepetition1  , UnitCode.U5337.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A25",2);
-                list.add(new AnswerLineDTO("A28",4.5E9, identifier, mapRepetition2  , UnitCode.U5155.getKey()  ));
+                list.add(new AnswerLineDTO("A28",4.5E9,  mapRepetition2  , UnitCode.U5155.getKey()  ));
         
         return list;
     }
@@ -197,11 +197,11 @@ public class BAD_AE_BAD3Test{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A25",1);
-                list.add(new AnswerLineDTO("A27",0.8, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A27",0.8,  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A25",2);
-                list.add(new AnswerLineDTO("A27",0.93, identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A27",0.93,  mapRepetition2 ));
         
         return list;
     }

@@ -5,10 +5,9 @@ import eu.factorx.awac.controllers.SecuredController;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.code.type.UnitCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityData;
@@ -16,7 +15,8 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.municipality.BaseActivityDataAC_BAD12F;
+import eu.factorx.awac.service.knowledge.activity.contributor.municipality.*;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import play.db.jpa.JPA;
@@ -35,7 +35,7 @@ import static play.test.Helpers.status;
  * Test for bad AC_BAD12F
 */
 @Component
-public class BAD_AC_BAD12FTest {
+public class BAD_AC_BAD12FTest{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -62,10 +62,9 @@ public class BAD_AC_BAD12FTest {
     /**
      * run test
      * need an id of a scope (site)
-     *
      * @param siteId
      */
-    public void test(long siteId) {
+    public void test(long siteId){
 
         Site site = siteService.findById(siteId);
         Period period = periodService.findById(PERIOD_ID);
@@ -82,8 +81,8 @@ public class BAD_AC_BAD12FTest {
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-        answerLineDTOList.addAll(buildAnswerAC104());
-
+                answerLineDTOList.addAll(buildAnswerAC104());
+        
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
         //
@@ -97,12 +96,12 @@ public class BAD_AC_BAD12FTest {
 
         //connection
         ConnectionFormDTO cfDto = new ConnectionFormDTO(identifier, identifierPassword, InterfaceTypeCode.ENTERPRISE.getKey(), "");
-        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
+        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
 
         // Call controller action
         Result result = callAction(
-                eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
-                saveFakeRequest
+            eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
+            saveFakeRequest
         );
 
         // control result
@@ -120,14 +119,14 @@ public class BAD_AC_BAD12FTest {
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-        mapResult.put(22300.0, false);
-
+                mapResult.put(22300.0, false);
+        
         String valueGenerated = "";
 
-        for (BaseActivityData bad : bads) {
+        for(BaseActivityData bad : bads){
             valueGenerated += String.valueOf(bad.getValue()) + ",";
-            for (Map.Entry<Double, Boolean> entry : mapResult.entrySet()) {
-                if (around(entry.getKey(), bad.getValue())) {
+            for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+                if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);
                 }
             }
@@ -135,39 +134,38 @@ public class BAD_AC_BAD12FTest {
 
         String valueNotFound = "";
 
-        for (Map.Entry<Double, Boolean> entry : mapResult.entrySet()) {
-            if (entry.getValue().equals(false)) {
-                valueNotFound += String.valueOf(entry.getKey()) + ", ";
+        for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+            if(entry.getValue().equals(false)){
+                valueNotFound+=String.valueOf(entry.getKey())+", ";
             }
         }
 
         //create errorMessage
-        assertTrue("Value expected but not found : " + valueNotFound + ". Value generated : " + valueGenerated, valueNotFound.length() == 0);
+        assertTrue("Value expected but not found : "+valueNotFound+". Value generated : "+valueGenerated,valueNotFound.length() == 0);
 
     }
 
-    /**
+        /**
      * build the AnswerLineDTO
      * question : AC104
      */
-    private List<AnswerLineDTO> buildAnswerAC104() {
+    private List<AnswerLineDTO> buildAnswerAC104(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-        //add repetition
+                 //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-        list.add(new AnswerLineDTO("AC104", 22.3, identifier, mapRepetition1, UnitCode.U5325.getKey()));
-
+                list.add(new AnswerLineDTO("AC104",22.3,  mapRepetition1  , UnitCode.U5325.getKey()  ));
+        
         return list;
     }
-
+    
 
     /**
      * control all except value
-     *
      * @param bad
      */
-    private void controlGlobalBad(BaseActivityData bad) {
+    private void controlGlobalBad(BaseActivityData bad){
         /*
         assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_5, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_5));
         assertTrue("Rank error : Expected : 1, founded : "+bad.getRank(),bad.getRank().equals(1));
@@ -181,10 +179,10 @@ public class BAD_AC_BAD12FTest {
         */
     }
 
-    private boolean around(Double value1, Double value2) {
-        if (value1 >= value2 * (1 - ERROR_MARGE) && value1 <= value2 * (1 + ERROR_MARGE)) {
+    private boolean around(Double value1,Double value2){
+        if(value1>=value2*(1-ERROR_MARGE) && value1 <= value2*(1+ERROR_MARGE)){
             return true;
         }
-        return false;
+       return false;
     }
 }

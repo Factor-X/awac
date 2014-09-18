@@ -33,38 +33,34 @@ public class AnswerLineDTO extends DTO {
 	public AnswerLineDTO() {
 	}
 
-    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser) {
+    public AnswerLineDTO(String questionKey, Object value) {
         this.questionKey = questionKey;
         this.value = value;
-        this.lastUpdateUser = lastUpdateUser;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, String unitCode) {
+
+    public AnswerLineDTO(String questionKey, Object value, String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
-        this.lastUpdateUser = lastUpdateUser;
         this.unitCode = unitCode;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, Map<String, Integer> mapRepetition) {
+    public AnswerLineDTO(String questionKey, Object value, Map<String, Integer> mapRepetition) {
         this.questionKey = questionKey;
         this.value = value;
-        this.lastUpdateUser = lastUpdateUser;
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, Map<String, Integer> mapRepetition,String unitCode) {
+    public AnswerLineDTO(String questionKey, Object value, Map<String, Integer> mapRepetition,String unitCode) {
         this.questionKey = questionKey;
         this.value = value;
-        this.lastUpdateUser = lastUpdateUser;
         this.unitCode = unitCode;
         this.mapRepetition = mapRepetition;
     }
 
-    public AnswerLineDTO(String questionKey, Object value, PersonDTO lastUpdateUser, String unitCode, Map<String, Integer> mapRepetition, String comment) {
+    public AnswerLineDTO(String questionKey, Object value,  String unitCode, Map<String, Integer> mapRepetition, String comment) {
         this.questionKey = questionKey;
         this.value = value;
-        this.lastUpdateUser = lastUpdateUser;
         this.unitCode = unitCode;
         this.mapRepetition = mapRepetition;
         this.comment = comment;
