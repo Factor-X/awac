@@ -46,9 +46,9 @@ div
     .element
         table.site_table
             tr.site_table_header
-                td(ng-bind-html="'NAME' | translateText")
-                td(ng-bind-html="'DESCRIPTION' | translateText")
-                td(ng-bind-html="'PERIOD' | translateText")
+                td(ng-bind-html="'SITE_MANAGER_EVENT_NAME' | translateText")
+                td(ng-bind-html="'SITE_MANAGER_EVENT_DESCRIPTION' | translateText")
+                td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
 
             tr(ng-repeat="event in getEventList()")
