@@ -6,10 +6,10 @@ import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.generated.AwacMunicipalityInitialData;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
-import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
@@ -43,15 +43,11 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private CodeLabelImporter           codeLabelImporter;
 	@Autowired
-	private FactorImporter            awacDataImporter;
+	private IndicatorImporter           indicatorImporter;
 	@Autowired
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 	@Autowired
 	private BADImporter                 badImporter;
-	@Autowired
-	private IndicatorImporter           indicatorImporter;
-	@Autowired
-	private FactorImporter				factorImporter;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -97,8 +93,8 @@ public class AdminController extends AbstractController {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
-		// import baseIndicators and factors
-		factorImporter.run();
+		// import indicators and factors
+		// awacDataImporter.run();
 		indicatorImporter.run();
 
 		return (ok());
@@ -118,8 +114,12 @@ public class AdminController extends AbstractController {
 	}
 
 	@Transactional(readOnly = true)
-	public Result runBADImporter() {
+	public Result runBADImporter(String interfaceString) {
 
-		return ok(conversionService.convert(badImporter.importBAD(), BADLogDTO.class));
+		// InterfaceTypeCode.
+		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(interfaceString);
+
+
+		return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
 	}
 }
