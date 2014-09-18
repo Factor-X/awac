@@ -45,15 +45,11 @@ public class AdminController extends AbstractController {
 	@Autowired
 	private CodeLabelImporter           codeLabelImporter;
 	@Autowired
-	private FactorImporter            awacDataImporter;
+	private IndicatorImporter           indicatorImporter;
 	@Autowired
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 	@Autowired
 	private BADImporter                 badImporter;
-	@Autowired
-	private IndicatorImporter           indicatorImporter;
-	@Autowired
-	private FactorImporter				factorImporter;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -99,8 +95,8 @@ public class AdminController extends AbstractController {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
-		// import baseIndicators and factors
-		factorImporter.run();
+		// import indicators and factors
+		// awacDataImporter.run();
 		indicatorImporter.run();
 
 		return (ok());
@@ -128,4 +124,5 @@ public class AdminController extends AbstractController {
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
     }
+
 }
