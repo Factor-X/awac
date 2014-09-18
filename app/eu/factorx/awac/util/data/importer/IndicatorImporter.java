@@ -33,11 +33,11 @@ public class IndicatorImporter extends WorkbookDataImporter {
 	public static final String ENTERPRISE_REPORTS_REFERENCE = "Reports:A1";
 	public static final String ENTERPRISE_INDICATOR_REPORTS_REFERENCE = "Reports:F1";
 
-	public static final String MUNICIPALITY_BASE_INDICATORS_REFERENCE = "BaseIndicators:A1";
-	public static final String MUNICIPALITY_INDICATORS_REFERENCE = "Indicators:A1";
-	public static final String MUNICIPALITY_BASE_INDICATOR_INDICATORS_REFERENCE = "Indicators:F1";
-	public static final String MUNICIPALITY_REPORTS_REFERENCE = "Reports:A1";
-	public static final String MUNICIPALITY_INDICATOR_REPORTS_REFERENCE = "Reports:F1";
+	public static final String MUNICIPALITY_BASE_INDICATORS_REFERENCE = "BaseIndicators-commune:A1";
+	public static final String MUNICIPALITY_INDICATORS_REFERENCE = "Indicators-commune:A1";
+	public static final String MUNICIPALITY_BASE_INDICATOR_INDICATORS_REFERENCE = "Indicators-commune:F1";
+	public static final String MUNICIPALITY_REPORTS_REFERENCE = "Reports-commune:A1";
+	public static final String MUNICIPALITY_INDICATOR_REPORTS_REFERENCE = "Reports-commune:F1";
 
 	private Map<String, Sheet> sheets;
 	private Map<String, Unit> units;
@@ -88,16 +88,26 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		allActivitySubCategoryKeys = findAllCodeKeys(CodeList.ActivitySubCategory);
 
 		// ENTERPRISE DATA
+		
 		importData(InterfaceTypeCode.ENTERPRISE,
-				ENTERPRISE_BASE_INDICATORS_REFERENCE, ENTERPRISE_INDICATORS_REFERENCE, ENTERPRISE_BASE_INDICATOR_INDICATORS_REFERENCE, ENTERPRISE_REPORTS_REFERENCE);
+				ENTERPRISE_BASE_INDICATORS_REFERENCE,
+				ENTERPRISE_INDICATORS_REFERENCE,
+				ENTERPRISE_BASE_INDICATOR_INDICATORS_REFERENCE,
+				ENTERPRISE_REPORTS_REFERENCE,
+				ENTERPRISE_INDICATOR_REPORTS_REFERENCE);
 
 		// MUNICIPALITY DATA
 		importData(InterfaceTypeCode.MUNICIPALITY,
-				MUNICIPALITY_BASE_INDICATORS_REFERENCE, MUNICIPALITY_INDICATORS_REFERENCE, MUNICIPALITY_BASE_INDICATOR_INDICATORS_REFERENCE, MUNICIPALITY_REPORTS_REFERENCE);
+				MUNICIPALITY_BASE_INDICATORS_REFERENCE,
+				MUNICIPALITY_INDICATORS_REFERENCE,
+				MUNICIPALITY_BASE_INDICATOR_INDICATORS_REFERENCE,
+				MUNICIPALITY_REPORTS_REFERENCE,
+				MUNICIPALITY_INDICATOR_REPORTS_REFERENCE);
 	}
 
 	private void importData(InterfaceTypeCode interfaceTypeCode, String baseIndicatorsReference, String indicatorsReference, String baseIndicatorIndicatorsReference,
-			String reportsReference) {
+			String reportsReference, String indicatorReportsReference) {
+		// 1. Establish a list of all new BaseIndicators
 		List<BaseIndicator> baseIndicators = loadBaseIndicators(baseIndicatorsReference);
 
 		// 2. Establish a list of all new Indicators
@@ -114,17 +124,21 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		List<Report> reports = loadReports(reportsReference, enterpriseCalculator);
 
 		// 5. Establish a list of all new links between Indicators and Reports
-		List<ReportIndicator> reportIndicators = loadIndicatorReports(indicators, reports);
+		List<ReportIndicator> reportIndicators = loadIndicatorReports(indicatorReportsReference, indicators, reports);
 
 		// 6. Persist entities
 		// 6.1 base indicators
 		for (BaseIndicator baseIndicator : baseIndicators) {
 			baseIndicatorService.saveOrUpdate(baseIndicator);
 		}
+		Logger.info("Imported {} BaseIndicators for '{}' calculator", baseIndicators.size(), interfaceTypeCode.getKey());
+
 		// 6.2 indicators
 		for (Indicator indicator : indicators) {
 			indicatorService.saveOrUpdate(indicator);
 		}
+		Logger.info("Imported {} Indicators for '{}' calculator", indicators.size(), interfaceTypeCode.getKey());
+
 		// 6.3 BaseIndicator Indicators
 		for (Pair<BaseIndicator, Indicator> baseIndicatorIndicator : baseIndicatorIndicators) {
 			Indicator indicator = baseIndicatorIndicator.getRight();
@@ -132,14 +146,19 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			indicator.getBaseIndicators().add(baseIndicator);
 			indicatorService.saveOrUpdate(indicator);
 		}
+		Logger.info("Imported {} BaseIndicator-Indicator associations for '{}' calculator", baseIndicatorIndicators.size(), interfaceTypeCode.getKey());
+
 		// 6.4 reports
 		for (Report report : reports) {
 			reportService.saveOrUpdate(report);
 		}
+		Logger.info("Imported {} Reports for '{}' calculator", reports.size(), interfaceTypeCode.getKey());
+
 		// 6.5 IndicatorReports
 		for (ReportIndicator reportIndicator : reportIndicators) {
 			reportIndicatorService.saveOrUpdate(reportIndicator);
 		}
+		Logger.info("Imported {} Report-Indicator associations for '{}' calculator", reportIndicators.size(), interfaceTypeCode.getKey());
 
 		// 4. Verify that each baseIndicator has at least one Indicator, just checking
 		// TODO: verifyNoOrphans(...);
@@ -172,6 +191,10 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		for (int i = 1; i < sheet.getRows(); i++) {
 			// read
 			String key = getCellContent(sheet, firstColumn + KEY_INDEX, firstRow + i);
+			if (StringUtils.isBlank(key)) {				
+				break;
+			}
+
 //			String name = getCellContent(sheet, firstColumn + NAME_INDEX, firstRow + i);
 			String indicatorScope = getCellContent(sheet, firstColumn + INDICATORSCOPE_INDEX, firstRow + i);
 
@@ -206,10 +229,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				deletedIndicators++;
 			}
 
-			if (StringUtils.isBlank(key)) {				
-				break;
-			}
-
 			BaseIndicator baseIndicator = new BaseIndicator(new BaseIndicatorCode(key), IndicatorTypeCode.CARBON, ScopeTypeCode.SITE, new IndicatorIsoScopeCode(indicatorScope),
 					new IndicatorCategoryCode(indicatorCategoryKey), new ActivityCategoryCode(activityCategoryKey),
 					new ActivitySubCategoryCode(activitySubCategoryKey), activityOwnershipBoolean, unit, deleted);
@@ -217,10 +236,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			baseIndicators.add(baseIndicator);
 		}
 
-		Logger.info("== BASE INDICATORS");
-		for (BaseIndicator baseIndicator : baseIndicators) {
-			Logger.info(baseIndicator.toString());
-		}
 		return baseIndicators;
 	}
 
@@ -257,10 +272,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			indicators.add(indicator);
 		}
 
-		Logger.info("== INDICATORS");
-		for (Indicator indicator : indicators) {
-			Logger.info(indicator.toString());
-		}
 		return indicators;
 	}
 
@@ -291,10 +302,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			relations.add(Pair.of(baseIndicator, indicator));
 		}
 
-		Logger.info("== BASE INDICATORS - INDICATORS");
-		for (Pair<BaseIndicator, Indicator> baseIndicatorIndicator : relations) {
-			Logger.info(baseIndicatorIndicator.toString());
-		}
 		return relations;
 	}
 
@@ -328,15 +335,10 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			reports.add(report);
 		}
 
-		Logger.info("== REPORTS");
-		for (Report report : reports) {
-			Logger.info(report.toString());
-		}
 		return reports;
 	}
 
-	private List<ReportIndicator> loadIndicatorReports(List<Indicator> indicators, List<Report> reports) {
-		String reference = ENTERPRISE_INDICATOR_REPORTS_REFERENCE;
+	private List<ReportIndicator> loadIndicatorReports(String reference, List<Indicator> indicators, List<Report> reports) {
 		Sheet sheet = getSheet(reference);
 		Cell first = getReferenceCell(reference);
 		int firstColumn = first.getColumn();
@@ -368,10 +370,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			relations.add(reportIndicator);
 		}
 
-		Logger.info("== INDICATOR - REPORT");
-		for (ReportIndicator indicatorReport : relations) {
-			Logger.info(indicatorReport.toString());
-		}
 		return relations;
 	}
 
@@ -388,7 +386,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 	private BaseIndicator findBaseIndicatorByCode(List<BaseIndicator> baseIndicators, String baseIndicatorKey) {
 		for (BaseIndicator baseIndicator : baseIndicators) {
-			if (baseIndicator.getCode().getKey().equals(baseIndicatorKey)) {
+			if (StringUtils.equalsIgnoreCase(baseIndicator.getCode().getKey(), baseIndicatorKey)) {
 				return baseIndicator;
 			}
 		}
@@ -397,7 +395,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 	private Indicator findIndicatorByCode(List<Indicator> indicators, String indicatorCode) {
 		for (Indicator indicator : indicators) {
-			if (indicator.getCode().getKey().equals(indicatorCode)) {
+			if (StringUtils.equalsIgnoreCase(indicator.getCode().getKey(), indicatorCode)) {
 				return indicator;
 			}
 		}
@@ -406,7 +404,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 	private Report findReportByCode(List<Report> reports, String reportKey) {
 		for (Report report : reports) {
-			if (report.getCode().getKey().equals(reportKey)) {
+			if (StringUtils.equalsIgnoreCase(report.getCode().getKey(), reportKey)) {
 				return report;
 			}
 		}

@@ -64,7 +64,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 	public void removeAll() {
 		List<E> allEntities = findAll();
 		for (E entity : allEntities) {
-			JPA.em().remove(entity);
+			remove(entity);
 		}
 	}
 
