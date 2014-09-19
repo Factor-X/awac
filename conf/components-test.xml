@@ -11,9 +11,7 @@
             <!--base-package="eu.factorx.awac.models,eu.factorx.awac.service"/>-->
 
     <context:component-scan
-            base-package="eu.factorx.awac.common.actions,eu.factorx.awac, eu.factorx.awac.models, eu.factorx.awac.controllers, eu.factorx.awac.service, eu.factorx.awac.converter, eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email"/>
-
-    <context:annotation-config/>
+            base-package="eu.factorx.awac,eu.factorx.awac.controllers,eu.factorx.awac.generated,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email"/>
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
@@ -29,142 +27,24 @@
                 <bean class="eu.factorx.awac.converter.QuestionSetToQuestionSetDTOConverter" />
 				<bean class="eu.factorx.awac.converter.QuestionToQuestionDTOConverter" />
 				<bean class="eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter" />
+                <bean class="eu.factorx.awac.converter.FormProgressListToFormProgressListDTOConverter" />
+                <bean class="eu.factorx.awac.converter.FormProgressToFormProgressDTOConverter" />
+                <bean class="eu.factorx.awac.converter.NotificationToNotificationDTOConverter" />
                 <bean class="eu.factorx.awac.converter.OrganizationEventToOrganizationEventDTOConverter" />
+                <!-- admin -->
+                <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>
         </property>
     </bean>
 
-
-	<bean id="reportService" class="eu.factorx.awac.service.impl.ReportServiceImpl">
-		<property name="activityResultContributors">
-            <set>
-                <!--
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD1" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD2A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD2B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD3" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD4" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD5" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD40" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD6" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD7A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD7B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD7C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD8A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD8B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD8C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD9A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD9B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD9C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD10" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD11" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12D" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12E" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12F" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12G" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12H" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12I" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12J" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12K" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12L" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12M" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD12N" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD13" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD14" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD15" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD16A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD16B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD16C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD16D" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17D" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17E" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17F" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17G" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17H" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD17I" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD18A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD18B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD18C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD18D" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD19A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD19B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD19C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD20" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD21" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD22" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD23" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD24" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD25" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD26A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD26B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27D" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27E" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27F" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27G" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27H" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27I" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27J" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27K" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD27L" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD28" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD29A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD29B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD29C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD30" />
-				<ref bean="baseActivityDataForProducts" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD37A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD37B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD37C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38A" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38B" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD38C" />
-				<bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD39A" />
- 			-->
- 			</set>
-        </property>
+	<bean id="reportResultServiceContributions" class="eu.factorx.awac.util.spring.ContributionFactoryBean">
+		<property name="expectedType" value="eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor"></property>
 	</bean>
-<!--
-	<bean id="baseActivityDataForProducts" class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataForProducts">
-		<property name="baseActivityDataAE_BAD31A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31A" /></property>
-		<property name="baseActivityDataAE_BAD31B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31B" /></property>
-		<property name="baseActivityDataAE_BAD31C"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31C" /></property>
-		<property name="baseActivityDataAE_BAD31D"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31D" /></property>
-		<property name="baseActivityDataAE_BAD31E"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31E" /></property>
-		<property name="baseActivityDataAE_BAD31F"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31F" /></property>
-		<property name="baseActivityDataAE_BAD31G"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31G" /></property>
-		<property name="baseActivityDataAE_BAD31H"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31H" /></property>
-		<property name="baseActivityDataAE_BAD31I"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD31I" /></property>
 
-		<property name="baseActivityDataAE_BAD32A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD32A" /></property>
-		<property name="baseActivityDataAE_BAD32B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD32B" /></property>
-		<property name="baseActivityDataAE_BAD32C"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD32C" /></property>
-		<property name="baseActivityDataAE_BAD32D"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD32D" /></property>
-
-		<property name="baseActivityDataAE_BAD33A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD33A" /></property>
-		<property name="baseActivityDataAE_BAD33B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD33B" /></property>
-		<property name="baseActivityDataAE_BAD33C"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD33C" /></property>
-
-		<property name="baseActivityDataAE_BAD34A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD34A" /></property>
-		<property name="baseActivityDataAE_BAD34B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD34B" /></property>
-		<property name="baseActivityDataAE_BAD34C"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD34C" /></property>
-
-		<property name="baseActivityDataAE_BAD35A"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD35A" /></property>
-		<property name="baseActivityDataAE_BAD35B"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD35B" /></property>
-		<property name="baseActivityDataAE_BAD35C"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD35C" /></property>
-		<property name="baseActivityDataAE_BAD35D"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD35D" /></property>
-
-		<property name="baseActivityDataAE_BAD36"><bean class="eu.factorx.awac.service.knowledge.activity.contributor.impl.BaseActivityDataAE_BAD36" /></property>
+	<bean id="reportResultService" class="eu.factorx.awac.service.impl.ReportResultServiceImpl">
+		<property name="activityResultContributors" ref="reportResultServiceContributions" />
 	</bean>
--->
+
     <!--<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
         <!--<property name="persistenceUnitManager" ref="persistenceUnitManager" />-->
         <!--<property name="jpaVendorAdapter">-->
