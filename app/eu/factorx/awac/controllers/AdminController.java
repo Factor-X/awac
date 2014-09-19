@@ -1,5 +1,17 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Play;
+import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
@@ -10,50 +22,36 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
-import eu.factorx.awac.util.data.importer.AwacDataImporter;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
+import eu.factorx.awac.util.data.importer.FactorImporter;
+import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Play;
-import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class AdminController extends AbstractController {
 
 
-    @Autowired
-    private ConversionService conversionService;
-    @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
-    private CodeLabelService codeLabelService;
-    @Autowired
-    private FormService formService;
-
-    @Autowired
-    private TranslationImporter translationImporter;
-
-    @Autowired
-    private CodeLabelImporter codeLabelImporter;
-
-    @Autowired
-    private AwacDataImporter awacDataImporter;
-
-    @Autowired
-    private AwacMunicipalityInitialData awacMunicipalityInitialData;
-
-    @Autowired
-    private BADImporter badImporter;
+	@Autowired
+	private ConversionService           conversionService;
+	@Autowired
+	private NotificationService         notificationService;
+	@Autowired
+	private CodeLabelService            codeLabelService;
+	@Autowired
+	private FormService                 formService;
+	@Autowired
+	private TranslationImporter         translationImporter;
+	@Autowired
+	private CodeLabelImporter           codeLabelImporter;
+	@Autowired
+	private FactorImporter           	factorImporter;
+	@Autowired
+	private IndicatorImporter           indicatorImporter;
+	@Autowired
+	private AwacMunicipalityInitialData awacMunicipalityInitialData;
+	@Autowired
+	private BADImporter                 badImporter;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -100,7 +98,8 @@ public class AdminController extends AbstractController {
             return unauthorized();
         }
         // import indicators and factors
-        awacDataImporter.run();
+        indicatorImporter.run();
+        factorImporter.run();
 
         return (ok());
     }

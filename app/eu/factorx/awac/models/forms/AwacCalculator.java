@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.Report;
 
 @Entity
 @Table(name = "awaccalculator")
@@ -21,11 +24,9 @@ public class AwacCalculator extends AuditedAbstractEntity {
 	@Column(unique = true, nullable = false)
 	private InterfaceTypeCode interfaceTypeCode;
 
-	@ManyToMany(cascade={CascadeType.MERGE,CascadeType.REMOVE, CascadeType.DETACH})
-	@JoinTable(name = "mm_calculator_indicator",
-			joinColumns = @JoinColumn(name = "calculator_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"))
-	private List<Indicator> indicators;
+	@OneToMany(mappedBy = "awacCalculator", cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH })
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private List<Report> reports;
 
 	public AwacCalculator() {
 		super();
@@ -47,12 +48,12 @@ public class AwacCalculator extends AuditedAbstractEntity {
 		this.interfaceTypeCode = interfaceTypeCode;
 	}
 
-	public List<Indicator> getIndicators() {
-		return indicators;
+	public List<Report> getReports() {
+		return reports;
 	}
 
-	public void setIndicators(List<Indicator> indicators) {
-		this.indicators = indicators;
+	public void setReports(List<Report> reports) {
+		this.reports = reports;
 	}
 
 }

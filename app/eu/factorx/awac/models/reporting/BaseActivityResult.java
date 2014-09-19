@@ -1,7 +1,7 @@
 package eu.factorx.awac.models.reporting;
 
 import eu.factorx.awac.models.knowledge.Factor;
-import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
 
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -11,7 +11,7 @@ public class BaseActivityResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Indicator indicator;
+	private BaseIndicator baseIndicator;
 
 	private BaseActivityData activityData;
 
@@ -21,19 +21,19 @@ public class BaseActivityResult implements Serializable {
 		super();
 	}
 
-	public BaseActivityResult(Indicator indicator, BaseActivityData activityData, Factor factor) {
+	public BaseActivityResult(BaseIndicator baseIndicator, BaseActivityData activityData, Factor factor) {
 		super();
-		this.indicator = indicator;
+		this.baseIndicator = baseIndicator;
 		this.activityData = activityData;
 		this.factor = factor;
 	}
 
-	public Indicator getIndicator() {
-		return indicator;
+	public BaseIndicator getBaseIndicator() {
+		return baseIndicator;
 	}
 
-	public void setIndicator(Indicator indicator) {
-		this.indicator = indicator;
+	public void setBaseIndicator(BaseIndicator baseIndicator) {
+		this.baseIndicator = baseIndicator;
 	}
 
 	public BaseActivityData getActivityData() {
@@ -63,7 +63,7 @@ public class BaseActivityResult implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BaseActivityResult [indicator='" + indicator.getKey() + "' (scope " + indicator.getIsoScope().getKey() +  "), activityData='" + activityData.getKey().getKey() + "' (rank = " + activityData.getRank() + "), factor='" + factor.getKey() + "', value = " + getNumericValue() + "]";
+		return "BaseActivityResult [baseIndicator='" + baseIndicator.getCode().getKey() + "' (scope " + baseIndicator.getIsoScope().getKey() +  "), activityData='" + activityData.getKey().getKey() + "' (rank = " + activityData.getRank() + "), factor='" + factor.getKey() + "', value = " + getNumericValue() + "]";
 	}
 
 }

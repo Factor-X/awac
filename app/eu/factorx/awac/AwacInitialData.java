@@ -25,7 +25,10 @@ public class AwacInitialData {
 	private CodeLabelImporter codeLabelImporter;
 
 	@Autowired
-	private AwacDataImporter awacDataImporter;
+	private IndicatorImporter indicatorImporter;
+
+	@Autowired
+	private FactorImporter factorImporter;
 
 	@Autowired
 	private AccountImporter accountImporter;
@@ -57,7 +60,8 @@ public class AwacInitialData {
 		codeLabelImporter.run();
 
 		// IMPORT AWAC DATA
-		awacDataImporter.run();
+		indicatorImporter.run();
+		factorImporter.run();
 
 		// ACCOUNTS
 		accountImporter.run();

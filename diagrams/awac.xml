@@ -33,20 +33,9 @@
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.knowledge.Indicator</entity-name>
-		<entity-width>167</entity-width>
-		<entity-height>288</entity-height>
-		<entity-X-Coordinate>2052</entity-X-Coordinate>
-		<entity-Y-Coordinate>915</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
 		<entity-name>eu.factorx.awac.models.business.Site</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>108</entity-height>
+		<entity-height>268</entity-height>
 		<entity-X-Coordinate>1933</entity-X-Coordinate>
 		<entity-Y-Coordinate>218</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
@@ -156,7 +145,7 @@
 	<entity>
 		<entity-name>eu.factorx.awac.models.business.Organization</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>128</entity-height>
+		<entity-height>188</entity-height>
 		<entity-X-Coordinate>2064</entity-X-Coordinate>
 		<entity-Y-Coordinate>10</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
@@ -167,7 +156,7 @@
 	<entity>
 		<entity-name>eu.factorx.awac.models.account.Person</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>110</entity-height>
+		<entity-height>168</entity-height>
 		<entity-X-Coordinate>1313</entity-X-Coordinate>
 		<entity-Y-Coordinate>0</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
@@ -176,33 +165,11 @@
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.data.answer.AnswerRawData</entity-name>
+		<entity-name>eu.factorx.awac.models.reporting.BaseActivityData</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>150</entity-height>
-		<entity-X-Coordinate>1250</entity-X-Coordinate>
-		<entity-Y-Coordinate>787</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
-		<entity-name>eu.factorx.awac.models.business.Product</entity-name>
-		<entity-width>120</entity-width>
-		<entity-height>108</entity-height>
-		<entity-X-Coordinate>2172</entity-X-Coordinate>
-		<entity-Y-Coordinate>218</entity-Y-Coordinate>
-		<primary-collapsed>false</primary-collapsed>
-		<relation-collapsed>false</relation-collapsed>
-		<basic-collapsed>false</basic-collapsed>
-	</entity>
-
-	<entity>
-		<entity-name>eu.factorx.awac.models.knowledge.Factor</entity-name>
-		<entity-width>145</entity-width>
-		<entity-height>228</entity-height>
-		<entity-X-Coordinate>1858</entity-X-Coordinate>
-		<entity-Y-Coordinate>915</entity-Y-Coordinate>
+		<entity-height>288</entity-height>
+		<entity-X-Coordinate>2197</entity-X-Coordinate>
+		<entity-Y-Coordinate>614</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -220,33 +187,33 @@
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.reporting.BaseActivityData</entity-name>
-		<entity-width>120</entity-width>
-		<entity-height>268</entity-height>
-		<entity-X-Coordinate>2197</entity-X-Coordinate>
-		<entity-Y-Coordinate>614</entity-Y-Coordinate>
+		<entity-name>eu.factorx.awac.models.knowledge.Factor</entity-name>
+		<entity-width>145</entity-width>
+		<entity-height>228</entity-height>
+		<entity-X-Coordinate>1858</entity-X-Coordinate>
+		<entity-Y-Coordinate>915</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.data.question.type.DoubleQuestion</entity-name>
+		<entity-name>eu.factorx.awac.models.business.Product</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>32</entity-height>
-		<entity-X-Coordinate>670</entity-X-Coordinate>
-		<entity-Y-Coordinate>848</entity-Y-Coordinate>
+		<entity-height>108</entity-height>
+		<entity-X-Coordinate>2172</entity-X-Coordinate>
+		<entity-Y-Coordinate>218</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
 	</entity>
 
 	<entity>
-		<entity-name>eu.factorx.awac.models.data.answer.AnswerValue</entity-name>
+		<entity-name>eu.factorx.awac.models.data.answer.AnswerRawData</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>128</entity-height>
-		<entity-X-Coordinate>1067</entity-X-Coordinate>
-		<entity-Y-Coordinate>808</entity-Y-Coordinate>
+		<entity-height>150</entity-height>
+		<entity-X-Coordinate>1250</entity-X-Coordinate>
+		<entity-Y-Coordinate>787</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -258,6 +225,28 @@
 		<entity-height>228</entity-height>
 		<entity-X-Coordinate>1467</entity-X-Coordinate>
 		<entity-Y-Coordinate>10</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>eu.factorx.awac.models.data.answer.AnswerValue</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>148</entity-height>
+		<entity-X-Coordinate>1067</entity-X-Coordinate>
+		<entity-Y-Coordinate>808</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>eu.factorx.awac.models.data.question.type.DoubleQuestion</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>32</entity-height>
+		<entity-X-Coordinate>670</entity-X-Coordinate>
+		<entity-Y-Coordinate>848</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -288,7 +277,7 @@
 	<entity>
 		<entity-name>eu.factorx.awac.models.business.Scope</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>148</entity-height>
+		<entity-height>32</entity-height>
 		<entity-X-Coordinate>2064</entity-X-Coordinate>
 		<entity-Y-Coordinate>418</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>

@@ -48,6 +48,7 @@ public class TranslationController extends AbstractController {
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_ERROR_MESSAGES).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.QUESTION).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.INDICATOR).values());
 		return translations;
 	}
 
