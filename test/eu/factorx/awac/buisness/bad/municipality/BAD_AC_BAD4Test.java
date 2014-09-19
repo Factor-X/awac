@@ -122,7 +122,7 @@ public class BAD_AC_BAD4Test{
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
                 mapResult.put(0.0011, false);
-                mapResult.put(0.156, false);
+                mapResult.put(1.56E-4, false);
         
         String valueGenerated = "";
 
