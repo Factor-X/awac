@@ -18,11 +18,9 @@ public class SiteAddUsersResultDTO extends DTO {
 	}
 
 	public SiteAddUsersResultDTO(List<AccountDTO> organizationUserlist,List<AccountDTO> siteSelectedUserList) {
-		this.organizationUserList = new ArrayList<AccountDTO>();
-		this.siteSelectedUserList = new ArrayList<AccountDTO>();
 
-		this.organizationUserList.addAll(organizationUserlist);
-		this.siteSelectedUserList.addAll(siteSelectedUserList);
+		this.organizationUserList = organizationUserlist;
+		this.siteSelectedUserList = siteSelectedUserList;
 
 	}
 
@@ -41,6 +39,7 @@ public class SiteAddUsersResultDTO extends DTO {
 	public void setSiteSelectedUserList(List<AccountDTO> siteSelectedUserList) {
 		this.siteSelectedUserList = siteSelectedUserList;
 	}
+
 
 	@Override
 	public String toString() {

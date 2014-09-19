@@ -86,7 +86,9 @@ angular
                     else
                         if !site.listPeriodAvailable?
                             site.listPeriodAvailable = []
-                        site.listPeriodAvailable[site.listPeriodAvailable.length] = $scope.assignPeriod
+                        for period in $scope.$root.periods
+                            if period.id == $scope.assignPeriod
+                                site.listPeriodAvailable[site.listPeriodAvailable.length] = period
 
 
             $scope.editOrCreateEvent = (event) ->

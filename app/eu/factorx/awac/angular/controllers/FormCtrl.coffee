@@ -2,9 +2,6 @@ angular
 .module('app.controllers')
 .controller "FormCtrl", ($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
 
-    console.log "...............----------------------"
-    console.log this.resolve
-
     # test key and scope
 
     $scope.formIdentifier = formIdentifier
@@ -102,7 +99,8 @@ angular
 
             args.time = $scope.o.answersSave.lastUpdateDate
 
-            $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
+            if $scope.$root?
+                $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args)
 
 
             #build list of repetition for the mmAwacRepetition

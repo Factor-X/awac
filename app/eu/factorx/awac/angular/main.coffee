@@ -31,7 +31,7 @@ defaultResolve =
     testConnection : ($http,$rootScope,$location, downloadService) ->
 
         # if the current user is null...
-        if not $rootScope.currentUser
+        if not $rootScope.currentPerson
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
@@ -42,7 +42,7 @@ formResolve =
     # test if the user is currently connected
     testConnection : ($http,$rootScope,$location, downloadService,$route) ->
         # if the current user is null...
-        if not $rootScope.currentUser
+        if not $rootScope.currentPerson
 
             # send request to control connection
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
@@ -50,45 +50,55 @@ formResolve =
                 # if success, add information into rootScope
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
+                    if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+                        console.log "GO VERS NOSCOPE 1 !!!"
+                        $location.path "/noScope"
+                    ###
+                    $rootScope.toDefaultForm()
+
                     # control data access
                     url = '/awac/answer/testDataAccess/'+$route.current.params.form+'/'+$route.current.params.period+'/'+$route.current.params.scope
                     downloadService.getJson url, (result) ->
                         if result.data.value == false
                             console.log "GO VERS NOSCOPE !!!"
-                            $location.path '/noScope'
+                            $rootScope.toDefaultForm()
                             return true
                         else
-                            console.log "GO VERS OK !!! "
                             return false
+                    ###
+
                 # if no connected, send to /login route
                 else
                     $location.path '/login'
         else
+            if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+                console.log "GO VERS NOSCOPE 2 !!!"
+                $location.path '/noScope'
+            ###
             url = '/awac/answer/testDataAccess/'+$route.current.params.form+'/'+$route.current.params.period+'/'+$route.current.params.scope
             downloadService.getJson url, (result) ->
                 if result.data.value == false
                     console.log "GO VERS NOSCOPE !!!"
-                    $location.path '/noScope'
+                    $rootScope.toDefaultForm()
                     return true
                 else
-                    console.log "GO VERS OK !!! "
                     return false
+            ###
 
 resultResolve =
     testConnection : ($http,$rootScope,$location, downloadService,$route) ->
 
         # if the current user is null...
-        if not $rootScope.currentUser
+        if not $rootScope.currentPerson
 
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
 
                     # control data access
-                    url = 'awac/answer/testDataAccess/'+$rootScope.getFormPath()+'/'+$route.current.params.period+'/'+$route.current.params.scope
-                    downloadService.getJson url, (result) ->
-                        if result.data.value == false
-                            $location.path('/noScope')
+                    if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+                        console.log "GO VERS NOSCOPE 1 !!!"
+                        $location.path '/noScope'
                 else
                     $location.path '/login'
 

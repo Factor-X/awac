@@ -158,15 +158,6 @@ angular
         $scope.$broadcast 'SAVE'
         $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME")
 
-    #
-    # Route Change
-    #
-    $scope.$on "$routeChangeSuccess", (event, current, previous) ->
-        if $routeParams.period?
-            $scope.$root.periodSelectedKey = $routeParams.period
-        if $routeParams.scope?
-            $scope.$root.scopeSelectedId = parseInt($routeParams.scope)
-
 
     $scope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
@@ -302,6 +293,16 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 messageFlash.displayError result.data.message
                 $location.path('/login')
 
+
+    $rootScope.testForm = (period,scope) ->
+        if $rootScope.mySites?
+            for site in $rootScope.mySites
+                if site.id = scope
+                    for period in  site.listPeriodAvailable
+                        if period.key == period
+                            return true
+        $location.path "/noScope"
+        return false
     #
     # success after login => store some datas, display the path
     #
@@ -373,15 +374,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 messageFlash.displayError result.data.message
 
     #
-    # test if the user is currently connected on the server
-    #
-    # downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
-    #     if result.success
-    #         $rootScope.loginSuccess result.data
-    #     else
-    #         # TODO ERROR HANDLING
-
-    #
     # Get notifications and show them every hour
     #
     $rootScope.refreshNotifications = () ->
@@ -399,4 +391,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # Route Change
     #
     $rootScope.$on "$routeChangeSuccess", (event, current, previous) ->
+        if $routeParams.period?
+            $rootScope.periodSelectedKey = $routeParams.period
+        if $routeParams.scope?
+            $rootScope.scopeSelectedId = parseInt($routeParams.scope)
         console.log "change route : " + $location.path()

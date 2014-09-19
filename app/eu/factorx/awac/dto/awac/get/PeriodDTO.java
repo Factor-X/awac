@@ -9,10 +9,6 @@ public class PeriodDTO extends DTO {
 	public PeriodDTO() {
 	}
 
-	public PeriodDTO(String key, String label) {
-		this.key = key;
-		this.label = label;
-	}
 
 	public String getKey() {
 		return key;
