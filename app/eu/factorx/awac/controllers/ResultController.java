@@ -92,7 +92,7 @@ public class ResultController extends AbstractController {
 		List<ReportResult> allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		Logger.info("Built {} report(s):", allReportResults.size());
 		for (ReportResult reportResult : allReportResults) {
-			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getActivityResults().size());
+			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getReport().getCode().getKey(), reportResult.getActivityResults().size());
 		}
 
 		Map<String, ReportResult> allReportResultsMap = new HashMap<>();
