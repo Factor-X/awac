@@ -59,7 +59,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 	@Autowired
 	private AwacCalculatorService awacCalculatorService;
-	
+
 	@Autowired
 	private CodeLabelService codeLabelService;
 
@@ -70,14 +70,12 @@ public class IndicatorImporter extends WorkbookDataImporter {
 	@Override
 	protected void importData() throws Exception {
 
-		// delete indicators labels
-		codeLabelService.removeCodeLabelsByList(CodeList.INDICATOR);
-
-		// first delete all reports, indicators and base indicators
+		// first delete all reports, indicators, base indicators, and indicators labels
 		reportService.removeAll();
 		indicatorService.removeAll();
 		baseIndicatorService.removeAll();
-		
+		codeLabelService.removeCodeLabelsByList(CodeList.INDICATOR);
+
 		// sheets
 		this.sheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
 
@@ -127,11 +125,11 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		List<Pair<BaseIndicator, Indicator>> baseIndicatorIndicators = loadBaseIndicatorIndicators(baseIndicatorIndicatorsReference, baseIndicators, indicators);
 
 		// 4. Establish a list of all new Reports
-		AwacCalculator enterpriseCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
-		if (enterpriseCalculator == null) {
-			enterpriseCalculator = awacCalculatorService.saveOrUpdate(new AwacCalculator(interfaceTypeCode));
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
+		if (awacCalculator == null) {
+			awacCalculator = awacCalculatorService.saveOrUpdate(new AwacCalculator(interfaceTypeCode));
 		}
-		List<Report> reports = loadReports(reportsReference, enterpriseCalculator);
+		List<Report> reports = loadReports(reportsReference, awacCalculator);
 
 		// 5. Establish a list of all new links between Indicators and Reports
 		List<ReportIndicator> reportIndicators = loadIndicatorReports(indicatorReportsReference, indicators, reports);
@@ -171,7 +169,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		Logger.info("==== Imported {} Report-Indicator associations for '{}' calculator", reportIndicators.size(), interfaceTypeCode.getKey());
 
 		// 6.6 Indicator labels
-//		codeLabelsToAdd
 		for (CodeLabel codeLabel : codeLabelsToAdd) {
 			codeLabelService.saveOrUpdate(codeLabel);
 		}
@@ -208,7 +205,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		for (int i = 1; i < sheet.getRows(); i++) {
 			// read
 			String key = getCellContent(sheet, firstColumn + KEY_INDEX, firstRow + i);
-			if (StringUtils.isBlank(key)) {				
+			if (StringUtils.isBlank(key)) {
 				break;
 			}
 
@@ -306,15 +303,15 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		// read until end of table
 		for (int i = 1; i < sheet.getRows(); i++) {
 			// read
-			String indicatorCode = getCellContent(sheet, firstColumn + INDICATOR_KEY_INDEX, firstRow + i);
-			String baseIndicatorCode = getCellContent(sheet, firstColumn + BASE_INDICATOR_KEY_INDEX, firstRow + i);
+			String indicatorKey = getCellContent(sheet, firstColumn + INDICATOR_KEY_INDEX, firstRow + i);
+			String baseIndicatorKey = getCellContent(sheet, firstColumn + BASE_INDICATOR_KEY_INDEX, firstRow + i);
 
-			if (StringUtils.isBlank(indicatorCode) ||
-					StringUtils.isBlank(baseIndicatorCode))
+			if (StringUtils.isBlank(indicatorKey) || StringUtils.isBlank(baseIndicatorKey)) {
 				break;
+			}
 
-			BaseIndicator baseIndicator = findBaseIndicatorByCode(baseIndicators, baseIndicatorCode);
-			Indicator indicator = findIndicatorByCode(indicators, indicatorCode);
+			BaseIndicator baseIndicator = findBaseIndicatorByKey(baseIndicators, baseIndicatorKey);
+			Indicator indicator = findIndicatorByKey(indicators, indicatorKey);
 
 			relations.add(Pair.of(baseIndicator, indicator));
 		}
@@ -344,9 +341,9 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 			Report report;
 			if (StringUtils.isNotBlank(restrictedScope)) {
-				report  = new Report(new ReportCode(key), awacCalculator, new IndicatorIsoScopeCode(restrictedScope));
+				report = new Report(new ReportCode(key), awacCalculator, new IndicatorIsoScopeCode(restrictedScope));
 			} else {
-				report  = new Report(new ReportCode(key), awacCalculator, null);
+				report = new Report(new ReportCode(key), awacCalculator, null);
 			}
 
 			reports.add(report);
@@ -374,12 +371,10 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			String indicatorKey = getCellContent(sheet, firstColumn + INDICATOR_KEY_INDEX, firstRow + i);
 			String order = getCellContent(sheet, firstColumn + ORDER_INDEX, firstRow + i);
 
-			if (StringUtils.isBlank(reportKey) ||
-					StringUtils.isBlank(indicatorKey) ||
-					StringUtils.isBlank(order))
+			if (StringUtils.isBlank(reportKey))
 				break;
 
-			Indicator indicator = findIndicatorByCode(indicators, indicatorKey);
+			Indicator indicator = findIndicatorByKey(indicators, indicatorKey);
 			Report report = findReportByCode(reports, reportKey);
 
 			ReportIndicator reportIndicator = new ReportIndicator(report, indicator, Integer.valueOf(order));
@@ -401,22 +396,22 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		return sheets.get(reference.split(":")[0]).getCell(reference.split(":")[1]);
 	}
 
-	private BaseIndicator findBaseIndicatorByCode(List<BaseIndicator> baseIndicators, String baseIndicatorKey) {
+	private BaseIndicator findBaseIndicatorByKey(List<BaseIndicator> baseIndicators, String baseIndicatorKey) {
 		for (BaseIndicator baseIndicator : baseIndicators) {
 			if (StringUtils.equalsIgnoreCase(baseIndicator.getCode().getKey(), baseIndicatorKey)) {
 				return baseIndicator;
 			}
 		}
-		throw new IllegalArgumentException("Base indicator not found with key: " + baseIndicatorKey);
+		throw new IllegalArgumentException("BaseIndicator '{" + baseIndicatorKey + "}'  was not found!");
 	}
 
-	private Indicator findIndicatorByCode(List<Indicator> indicators, String indicatorCode) {
+	private Indicator findIndicatorByKey(List<Indicator> indicators, String indicatorKey) {
 		for (Indicator indicator : indicators) {
-			if (StringUtils.equalsIgnoreCase(indicator.getCode().getKey(), indicatorCode)) {
+			if (StringUtils.equalsIgnoreCase(indicator.getCode().getKey(), indicatorKey)) {
 				return indicator;
 			}
 		}
-		throw new IllegalArgumentException("Indicator not found with code: " + indicatorCode);
+		throw new IllegalArgumentException("Indicator '{" + indicatorKey + "}'  was not found!");
 	}
 
 	private Report findReportByCode(List<Report> reports, String reportKey) {
@@ -425,12 +420,11 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				return report;
 			}
 		}
-		throw new IllegalArgumentException("Report not found with code: " + reportKey);
+		throw new IllegalArgumentException("Report '" + reportKey + "'  was not found!");
 	}
 
 	private List<String> findAllCodeKeys(CodeList codeList) {
 		return JPA.em().createNamedQuery(CodeLabel.FIND_KEYS_BY_LIST, String.class).setParameter("codeList", codeList).getResultList();
 	}
-
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -99,20 +100,18 @@ public class Organization extends Scope {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
 			return true;
-		if (!(o instanceof Organization))
+		}
+		if (!(obj instanceof Organization)) {
 			return false;
-		if (!super.equals(o))
-			return false;
-
-		Organization that = (Organization) o;
-
-		if (!name.equals(that.name))
-			return false;
-
-		return true;
+		}
+		Organization rhs = (Organization) obj;
+		return new EqualsBuilder().append(this.name, rhs.name).isEquals();
 	}
 
 	@Override
@@ -124,6 +123,6 @@ public class Organization extends Scope {
 
 	@Override
 	public String toString() {
-		return "Organization [id=" + id + ", name='" + name + "]'";
+		return "Organization [id=" + id + ", name='" + name + "']";
 	}
 }

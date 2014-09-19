@@ -3,8 +3,6 @@ package eu.factorx.awac.models.code.type;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
-import java.util.HashMap;
-
 public class BaseActivityDataCode extends Code {
 
     /**

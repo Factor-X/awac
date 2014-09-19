@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import scala.Array;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
