@@ -160,11 +160,11 @@ public class BAD_AE_BAD37ATest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A311",1);
-                list.add(new AnswerLineDTO("A312","machines", identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A312","machines",  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A311",2);
-                list.add(new AnswerLineDTO("A312","locaux", identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A312","locaux",  mapRepetition2 ));
         
         return list;
     }
@@ -180,17 +180,17 @@ public class BAD_AE_BAD37ATest{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A311",1);
                 mapRepetition1.put("A313",1);
-                list.add(new AnswerLineDTO("A314","AS_5", identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A314","AS_5",  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A311",1);
                 mapRepetition2.put("A313",2);
-                list.add(new AnswerLineDTO("A314","AS_1", identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A314","AS_1",  mapRepetition2 ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A311",2);
                 mapRepetition3.put("A313",1);
-                list.add(new AnswerLineDTO("A314","AS_26", identifier, mapRepetition3 ));
+                list.add(new AnswerLineDTO("A314","AS_26",  mapRepetition3 ));
         
         return list;
     }
@@ -206,17 +206,17 @@ public class BAD_AE_BAD37ATest{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A311",1);
                 mapRepetition1.put("A313",1);
-                list.add(new AnswerLineDTO("A315",1000.0, identifier, mapRepetition1  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("A315",1000.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A311",1);
                 mapRepetition2.put("A313",2);
-                list.add(new AnswerLineDTO("A315",100.0, identifier, mapRepetition2  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("A315",100.0,  mapRepetition2  , UnitCode.U5156.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A311",2);
                 mapRepetition3.put("A313",1);
-                list.add(new AnswerLineDTO("A315",0.3, identifier, mapRepetition3  , UnitCode.U5321.getKey()  ));
+                list.add(new AnswerLineDTO("A315",0.3,  mapRepetition3  , UnitCode.U5321.getKey()  ));
         
         return list;
     }

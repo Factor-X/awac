@@ -159,17 +159,17 @@ public class BAD_AE_BAD33BTest{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A244",1);
                 mapRepetition1.put("A273",1);
-                list.add(new AnswerLineDTO("A278",2500.0, identifier, mapRepetition1  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("A278",2500.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A244",1);
                 mapRepetition2.put("A273",2);
-                list.add(new AnswerLineDTO("A278",4000.0, identifier, mapRepetition2  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("A278",4000.0,  mapRepetition2  , UnitCode.U5156.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A244",2);
                 mapRepetition3.put("A273",1);
-                list.add(new AnswerLineDTO("A278",600.0, identifier, mapRepetition3  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("A278",600.0,  mapRepetition3  , UnitCode.U5156.getKey()  ));
         
         return list;
     }
