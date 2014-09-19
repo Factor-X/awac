@@ -10,6 +10,8 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private String indicatorName;
 
+	private String color;
+
 	private Double scope1Value = Double.valueOf(0);
 
 	private Double scope2Value = Double.valueOf(0);
@@ -27,9 +29,10 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.indicatorName = indicatorName;
 	}
 
-	public ReportLineDTO(String indicatorName, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue) {
+	public ReportLineDTO(String indicatorName, String color, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue) {
 		super();
 		this.indicatorName = indicatorName;
+		this.color = color;
 		this.scope1Value = scope1Value;
 		this.scope2Value = scope2Value;
 		this.scope3Value = scope3Value;
@@ -92,4 +95,11 @@ public class ReportLineDTO extends DTO implements Serializable {
 		return (outOfScopeValue += value);
 	}
 
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 }

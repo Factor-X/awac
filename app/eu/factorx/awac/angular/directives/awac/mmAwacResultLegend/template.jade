@@ -1,0 +1,6 @@
+.chart-legend
+    div(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
+        span.circled-number(ng-show="getMode()=='numbers' && getNumber(rl) != null") {{ getNumber(line) }}
+        span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")
+        span(ng-bind-html="line.indicatorName | translate")
+

@@ -26,7 +26,6 @@ ng-virtual
         tbody
             tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.scope1Value + rl.scope2Value + rl.scope3Value + rl.outOfScopeValue > 0)")
                 td
-                    span.circled-number(ng-show="getNumber(rl) != null") {{ getNumber(rl) }}
                     span(ng-bind-html="rl.indicatorName")
                 td.align-right.scope1
                     span(ng-bind-html="rl.scope1Value | numberToI18NOrLess", ng-show="rl.scope1Value > 0")

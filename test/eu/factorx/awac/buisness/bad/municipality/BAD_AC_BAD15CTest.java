@@ -5,9 +5,9 @@ import eu.factorx.awac.controllers.SecuredController;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityData;
@@ -15,7 +15,8 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.municipality.BaseActivityDataAC_BAD15C;
+import eu.factorx.awac.service.knowledge.activity.contributor.municipality.*;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import play.db.jpa.JPA;
@@ -34,7 +35,7 @@ import static play.test.Helpers.status;
  * Test for bad AC_BAD15C
 */
 @Component
-public class BAD_AC_BAD15CTest {
+public class BAD_AC_BAD15CTest{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -61,10 +62,9 @@ public class BAD_AC_BAD15CTest {
     /**
      * run test
      * need an id of a scope (site)
-     *
      * @param siteId
      */
-    public void test(long siteId) {
+    public void test(long siteId){
 
         Site site = siteService.findById(siteId);
         Period period = periodService.findById(PERIOD_ID);
@@ -81,9 +81,9 @@ public class BAD_AC_BAD15CTest {
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-        answerLineDTOList.addAll(buildAnswerAC133());
-        answerLineDTOList.addAll(buildAnswerAC136());
-
+                answerLineDTOList.addAll(buildAnswerAC133());
+                answerLineDTOList.addAll(buildAnswerAC136());
+        
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
         //
@@ -97,12 +97,12 @@ public class BAD_AC_BAD15CTest {
 
         //connection
         ConnectionFormDTO cfDto = new ConnectionFormDTO(identifier, identifierPassword, InterfaceTypeCode.ENTERPRISE.getKey(), "");
-        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
+        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
 
         // Call controller action
         Result result = callAction(
-                eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
-                saveFakeRequest
+            eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
+            saveFakeRequest
         );
 
         // control result
@@ -120,14 +120,14 @@ public class BAD_AC_BAD15CTest {
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-        mapResult.put(17.0, false);
-
+                mapResult.put(17.0, false);
+        
         String valueGenerated = "";
 
-        for (BaseActivityData bad : bads) {
+        for(BaseActivityData bad : bads){
             valueGenerated += String.valueOf(bad.getValue()) + ",";
-            for (Map.Entry<Double, Boolean> entry : mapResult.entrySet()) {
-                if (around(entry.getKey(), bad.getValue())) {
+            for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+                if(around(entry.getKey(),bad.getValue())){
                     entry.setValue(true);
                 }
             }
@@ -135,64 +135,62 @@ public class BAD_AC_BAD15CTest {
 
         String valueNotFound = "";
 
-        for (Map.Entry<Double, Boolean> entry : mapResult.entrySet()) {
-            if (entry.getValue().equals(false)) {
-                valueNotFound += String.valueOf(entry.getKey()) + ", ";
+        for(Map.Entry<Double, Boolean> entry : mapResult.entrySet()){
+            if(entry.getValue().equals(false)){
+                valueNotFound+=String.valueOf(entry.getKey())+", ";
             }
         }
 
         //create errorMessage
-        assertTrue("Value expected but not found : " + valueNotFound + ". Value generated : " + valueGenerated, valueNotFound.length() == 0);
+        assertTrue("Value expected but not found : "+valueNotFound+". Value generated : "+valueGenerated,valueNotFound.length() == 0);
 
     }
 
-    /**
+        /**
      * build the AnswerLineDTO
      * question : AC133
      */
-    private List<AnswerLineDTO> buildAnswerAC133() {
+    private List<AnswerLineDTO> buildAnswerAC133(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-        //add repetition
+                 //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-        mapRepetition1.put("AC132", 1);
-        list.add(new AnswerLineDTO("AC133", "17", identifier, mapRepetition1));
-        //add repetition
+                mapRepetition1.put("AC132",1);
+                list.add(new AnswerLineDTO("AC133","17", identifier, mapRepetition1 ));
+                //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
-        mapRepetition2.put("AC132", 2);
-        list.add(new AnswerLineDTO("AC133", "22", identifier, mapRepetition2));
-        //add repetition
+                mapRepetition2.put("AC132",2);
+                list.add(new AnswerLineDTO("AC133","22", identifier, mapRepetition2 ));
+                //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
-        mapRepetition3.put("AC132", 3);
-        list.add(new AnswerLineDTO("AC133", "19", identifier, mapRepetition3));
-
+                mapRepetition3.put("AC132",3);
+                list.add(new AnswerLineDTO("AC133","19", identifier, mapRepetition3 ));
+        
         return list;
     }
-
-    /**
+        /**
      * build the AnswerLineDTO
      * question : AC136
      */
-    private List<AnswerLineDTO> buildAnswerAC136() {
+    private List<AnswerLineDTO> buildAnswerAC136(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-        //add repetition
+                 //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-        mapRepetition1.put("AC132", 3);
-        list.add(new AnswerLineDTO("AC136", 17.0, identifier, mapRepetition1));
-
+                mapRepetition1.put("AC132",3);
+                list.add(new AnswerLineDTO("AC136",17.0, identifier, mapRepetition1 ));
+        
         return list;
     }
-
+    
 
     /**
      * control all except value
-     *
      * @param bad
      */
-    private void controlGlobalBad(BaseActivityData bad) {
+    private void controlGlobalBad(BaseActivityData bad){
         /*
         assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_9, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_9));
         assertTrue("Rank error : Expected : 1, founded : "+bad.getRank(),bad.getRank().equals(1));
@@ -206,10 +204,10 @@ public class BAD_AC_BAD15CTest {
         */
     }
 
-    private boolean around(Double value1, Double value2) {
-        if (value1 >= value2 * (1 - ERROR_MARGE) && value1 <= value2 * (1 + ERROR_MARGE)) {
+    private boolean around(Double value1,Double value2){
+        if(value1>=value2*(1-ERROR_MARGE) && value1 <= value2*(1+ERROR_MARGE)){
             return true;
         }
-        return false;
+       return false;
     }
 }

@@ -46,9 +46,13 @@ div.pdf-able
                         span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
                     br
                     center
-                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_1 | trustAsHtml")
-                    br
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
+                        table
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_1 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_1")
 
                 div(ng-show="current_tab == 2")
                     h2
@@ -58,24 +62,36 @@ div.pdf-able
                     h3
                         span(ng-bind-html="'SCOPE_1' | translate")
                     center
-                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
-                    br
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_2")
+                        table
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
 
                     h3
                         span(ng-bind-html="'SCOPE_2' | translate")
                     center
-                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
-                    br
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_3")
+                        table
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
 
 
                     h3
                         span(ng-bind-html="'SCOPE_3' | translate")
                     center
-                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
-                    br
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_4")
+                        table
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
 
 
 
@@ -85,9 +101,13 @@ div.pdf-able
                         span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
                     br
                     center
-                        div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
-                    br
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
+                        table
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
 
                 div(ng-show="current_tab == 4")
                     h2
