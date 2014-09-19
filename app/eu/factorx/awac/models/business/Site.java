@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "site")
-public class Site extends Scope implements Comparable<Site>{
+public class Site extends Scope implements Comparable<Site> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -144,4 +146,20 @@ public class Site extends Scope implements Comparable<Site>{
 	public int compareTo(Site o) {
 		return this.getTechnicalSegment().getCreationDate().compareTo(o.getTechnicalSegment().getCreationDate());
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof Site)) {
+			return false;
+		}
+		Site rhs = (Site) obj;
+		return new EqualsBuilder().append(this.organization, rhs.organization).append(this.name, rhs.name).isEquals();
+	}
+
 }

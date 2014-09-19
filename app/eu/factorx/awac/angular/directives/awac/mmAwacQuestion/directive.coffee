@@ -145,7 +145,7 @@ angular
                         if scope.getAnswer().value.length == 0
                             scope.getAnswer().value = null
                     scope.getAnswer().wasEdited = true
-                    scope.getAnswer().lastUpdateUser = scope.$root.currentPerson.identifier
+                    scope.getAnswer().lastUpdateUser = scope.$root.currentPerson
 
 
             #
@@ -228,26 +228,24 @@ angular
             # initialOnly => return initials of the name, or complete name
             #
             scope.getUserName = (forDataToCompare, initialOnly)->
-                return "y"
-                ###
+
                 user = null
 
                 if forDataToCompare == true
                     if scope.displayOldDatas() && scope.getAnswer(true) != null
-                        user = scope.$root.getUserByIdentifier(scope.getAnswer(true).lastUpdateUser)
+                        user = scope.getAnswer(true).lastUpdateUser
                 else
                     if scope.getAnswer() != null
-                        user = scope.$root.getUserByIdentifier(scope.getAnswer().lastUpdateUser)
+                        user = scope.getAnswer().lastUpdateUser
 
                 if user == null
                     return ""
-                else if initialOnly
+                if initialOnly
                     initial = user.firstName.substring(0, 1) + user.lastName.substring(0, 1)
                     return initial
                 else
                     name = user.firstName + " " + user.lastName
                     return name
-                ###
 
             #
             # get the status class
@@ -327,10 +325,4 @@ angular
                 args.save = scope.saveComment
                 args.canBeEdited=canBeEdited
                 modalService.show(modalService.QUESTION_COMMENT, args)
-
-
-
-
-
-
 

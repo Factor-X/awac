@@ -49,7 +49,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 		fillTableWithResultData(reportResult, scopeTable, scopeTypeIndex);
 
-		return svgGenerator.getDonut(scopeTable);
+		return svgGenerator.getWeb(scopeTable);
 	}
 
 
@@ -61,7 +61,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 		fillTableWithResultData(reportResult, scopeTable, scopeTypeIndex);
 
-		return svgGenerator.getDonut(scopeTable);
+		return svgGenerator.getHistogram(scopeTable);
 	}
 
 	//

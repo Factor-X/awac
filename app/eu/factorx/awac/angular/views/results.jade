@@ -18,13 +18,14 @@ div.pdf-able
                     .sites-panel-title
                         span(ng-bind-html="'SITES_LIST' | translate")
 
-                    .sites-panel-all-items
-                        table
-                            tr
-                                td
-                                    span(ng-bind-html="'ALL_SITES_SELECTED' | translate")
-                                td
-                                    input(type="checkbox")
+                    //
+                        .sites-panel-all-items
+                            table
+                                tr
+                                    td
+                                        span(ng-bind-html="'ALL_SITES_SELECTED' | translate")
+                                    td
+                                        input(type="checkbox")
 
                     .sites-panel-items
                         .sites-panel-item
@@ -45,43 +46,53 @@ div.pdf-able
                         span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
                     br
                     center
-                        img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.histogramUrl }}")
+                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_1 | trustAsHtml")
                     br
-                    mm-awac-result-table(ng-model="o")
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
 
                 div(ng-show="current_tab == 2")
                     h2
                         span(ng-bind-html="'IMPACTS_PARTITION' | translate")
                     br
+
                     h3
                         span(ng-bind-html="'SCOPE_1' | translate")
                     center
-                        img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl1 }}")
+                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
+                    br
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_2")
+
                     h3
                         span(ng-bind-html="'SCOPE_2' | translate")
                     center
-                        img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl2 }}")
+                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
+                    br
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_3")
+
+
                     h3
                         span(ng-bind-html="'SCOPE_3' | translate")
                     center
-                        img(style="display:inline-block; max-width: 5cm;", ng-src="{{ charts.donutUrl3 }}")
+                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
                     br
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_4")
 
-                    mm-awac-result-table(ng-model="o")
+
+
 
                 div(ng-show="current_tab == 3")
                     h2
                         span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
                     br
                     center
-                        img(style="display:inline-block; max-width: 15cm;", ng-src="{{ charts.webUrl }}")
+                        div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
                     br
-                    mm-awac-result-table(ng-model="o")
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
 
                 div(ng-show="current_tab == 4")
                     h2
                         span(ng-bind-html="'NUMBERS' | translate")
-                    mm-awac-result-table(ng-model="o")
+                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
 
 
                 div(ng-show="current_tab == 5")

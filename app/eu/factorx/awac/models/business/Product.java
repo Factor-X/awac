@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 @Entity
 @Table(name = "product")
 public class Product extends Scope {
@@ -39,6 +41,26 @@ public class Product extends Scope {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof Product)) {
+			return false;
+		}
+		Product rhs = (Product) obj;
+		return new EqualsBuilder().append(this.organization, rhs.organization).append(this.name, rhs.name).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return "Site [id=" + id + ", name='" + name + "', organization=" + organization  + "]";
 	}
 
 }

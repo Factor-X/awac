@@ -73,16 +73,43 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 
 			if (percentage == 100.0) {
-				sb.append(String.format("<circle cx='%d' cy='%d' r='%d' fill='#%s'/>",
+				sb.append(String.format(
+					"<circle " +
+						"cx='%d' " +
+						"cy='%d' " +
+						"r='%d' " +
+						"fill='#%s' " +
+						"title='%s' " +
+						"data-indicator-name='%s' " +
+						"data-indicator-value='%s' " +
+						"class='donut-path' " +
+						"/>",
 					size / 2,
 					size / 2,
 					size / 2,
-					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount())
+					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
+					"" + data.getCell(0, i),
+					"" + data.getCell(0, i),
+					"" + data.getCell(1, i)
 				));
 			} else {
-				sb.append(String.format("<path d='%s' fill='#%s' stroke='white' stroke-width='5'></path>",
+				sb.append(String.format(
+					"<path " +
+						"d='%s' " +
+						"fill='#%s' " +
+						"title='%s' " +
+						"stroke='white' " +
+						"stroke-width='5' " +
+						"data-indicator-name='%s' " +
+						"data-indicator-value='%s' " +
+						"class='donut-path' " +
+						"></path>",
 					d,
-					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount())
+					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
+					"" + data.getCell(0, i),
+					"" + data.getCell(0, i),
+					"" + data.getCell(1, i)
+
 				));
 			}
 		}

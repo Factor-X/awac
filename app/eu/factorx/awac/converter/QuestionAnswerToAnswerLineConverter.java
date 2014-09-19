@@ -1,112 +1,122 @@
 package eu.factorx.awac.converter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.data.answer.AnswerType;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.type.BooleanAnswerValue;
-import eu.factorx.awac.models.data.answer.type.CodeAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DocumentAnswerValue;
-import eu.factorx.awac.models.data.answer.type.DoubleAnswerValue;
-import eu.factorx.awac.models.data.answer.type.EntityAnswerValue;
-import eu.factorx.awac.models.data.answer.type.IntegerAnswerValue;
-import eu.factorx.awac.models.data.answer.type.StringAnswerValue;
+import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAnswer, AnswerLineDTO> {
 
-	@Override
-	public AnswerLineDTO convert(QuestionAnswer questionAnswer) {
-		Question question = questionAnswer.getQuestion();
-		AnswerType answerType = question.getAnswerType();
+    @Autowired
+    private AccountService accountService;
 
-        if(questionAnswer.getAnswerValues().size()==0){
-            throw new RuntimeException("Error converter : "+questionAnswer);
+    @Autowired
+    private AccountToPersonDTOConverter accountToPersonDTOConverter;
+
+    @Override
+    public AnswerLineDTO convert(QuestionAnswer questionAnswer) {
+        Question question = questionAnswer.getQuestion();
+        AnswerType answerType = question.getAnswerType();
+
+        if (questionAnswer.getAnswerValues().size() == 0) {
+            throw new RuntimeException("Error converter : " + questionAnswer);
         }
 
-		AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+        AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
 
-		Object rawAnswerValue = null;
-		String unitCode = null;
-		switch (answerType) {
-			case BOOLEAN:
-				Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
-				if (booleanValue == Boolean.TRUE) {
-					rawAnswerValue = "1";
-				} else if (booleanValue == Boolean.FALSE) {
-					rawAnswerValue = "0";
-				}
-				break;
-			case STRING:
-				rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
-				break;
-			case INTEGER:
-				IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
-				rawAnswerValue = integerAnswerValue.getValue();
-				if (integerAnswerValue.getUnit() != null) {
+        Object rawAnswerValue = null;
+        String unitCode = null;
+        switch (answerType) {
+            case BOOLEAN:
+                Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+                if (booleanValue == Boolean.TRUE) {
+                    rawAnswerValue = "1";
+                } else if (booleanValue == Boolean.FALSE) {
+                    rawAnswerValue = "0";
+                }
+                break;
+            case STRING:
+                rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
+                break;
+            case INTEGER:
+                IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
+                rawAnswerValue = integerAnswerValue.getValue();
+                if (integerAnswerValue.getUnit() != null) {
                     unitCode = integerAnswerValue.getUnit().getUnitCode().getKey();
-				}
-				break;
-			case DOUBLE:
-				DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
-				rawAnswerValue = doubleAnswerValue.getValue();
-				if (doubleAnswerValue.getUnit() != null) {
+                }
+                break;
+            case DOUBLE:
+                DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
+                rawAnswerValue = doubleAnswerValue.getValue();
+                if (doubleAnswerValue.getUnit() != null) {
                     unitCode = doubleAnswerValue.getUnit().getUnitCode().getKey();
-				}
-				break;
+                }
+                break;
             case PERCENTAGE:
                 DoubleAnswerValue doubleAnswerValueForPercent = (DoubleAnswerValue) answerValue;
                 rawAnswerValue = doubleAnswerValueForPercent.getValue();
                 break;
-			case VALUE_SELECTION:
-				Code value = ((CodeAnswerValue) answerValue).getValue();
-				if (value != null)
-					rawAnswerValue = value.getKey();
-				else
-					rawAnswerValue = null;
-				break;
-			case ENTITY_SELECTION:
-				EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
-				rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
-						entityAnswerValue.getEntityId());
-				break;
+            case VALUE_SELECTION:
+                Code value = ((CodeAnswerValue) answerValue).getValue();
+                if (value != null)
+                    rawAnswerValue = value.getKey();
+                else
+                    rawAnswerValue = null;
+                break;
+            case ENTITY_SELECTION:
+                EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
+                rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
+                        entityAnswerValue.getEntityId());
+                break;
             case DOCUMENT:
 
-                for(AnswerValue answerValueEl : questionAnswer.getAnswerValues()){
+                for (AnswerValue answerValueEl : questionAnswer.getAnswerValues()) {
 
-                    if(rawAnswerValue==null){
-                        rawAnswerValue = new HashMap<Long,String>();
+                    if (rawAnswerValue == null) {
+                        rawAnswerValue = new HashMap<Long, String>();
                     }
 
                     DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValueEl;
                     StoredFile storedFile = documentAnswerValue.getStoredFile();
-                    ((HashMap<Long,String>)rawAnswerValue).put(storedFile.getId(),storedFile.getOriginalName());
+                    ((HashMap<Long, String>) rawAnswerValue).put(storedFile.getId(), storedFile.getOriginalName());
                 }
                 break;
-		}
+        }
 
-		AnswerLineDTO answerLine = new AnswerLineDTO();
-		answerLine.setValue(rawAnswerValue);
-		answerLine.setQuestionKey(question.getCode().getKey());
-		answerLine.setUnitCode(unitCode);
-		answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
-		answerLine.setLastUpdateUser(questionAnswer.getTechnicalSegment().getLastUpdateUser());
+        AnswerLineDTO answerLine = new AnswerLineDTO();
+        answerLine.setValue(rawAnswerValue);
+        answerLine.setQuestionKey(question.getCode().getKey());
+        answerLine.setUnitCode(unitCode);
+        answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
+
+        Account account = accountService.findByIdentifier(questionAnswer.getTechnicalSegment().getLastUpdateUser());
+
+        if (account != null) {
+            PersonDTO lastUpdatePerson = accountToPersonDTOConverter.convert(accountService.findByIdentifier(questionAnswer.getTechnicalSegment().getLastUpdateUser()));
+
+            answerLine.setLastUpdateUser(lastUpdatePerson);
+        }
         answerLine.setComment(answerValue.getComment());
 
-		return answerLine;
-	}
+        return answerLine;
+    }
 
     public static Map<String, Integer> buildRepetitionMap(QuestionSetAnswer questionSetAnswer) {
         Map<String, Integer> res = new HashMap<>();
