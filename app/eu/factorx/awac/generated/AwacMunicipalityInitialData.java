@@ -5,16 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.UnitCategoryService;
 import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.util.data.importer.*;
 
 @Component
 public class AwacMunicipalityInitialData {
@@ -441,12 +446,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC54
     // Eclairage public: consommation d'électricité verte
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC55
     // Eclairage public: consommation d'électricité grise
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC57
@@ -455,12 +460,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC58
     // Consommation d'électricité verte du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC59
     // Consommation d'électricité grise du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC61

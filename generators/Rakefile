@@ -9,14 +9,14 @@ ROOT = File.dirname(File.dirname(__FILE__))
 
 namespace :generate do
 
-    desc "Generate the surveys from the xls file"
+    desc 'Generate the surveys from the xls file'
     task :surveys do |t, args|
 
         options             = {}
         options[:log_level] = 'DEBUG'
 
         OptionParser.new(args) do |opts|
-            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
+            opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                 options[:log_level] = v.upcase
             end
         end.parse!
@@ -31,14 +31,14 @@ end
 
 namespace :codelabels do
 
-    desc "Import the codelabels"
+    desc 'Import the codelabels'
     task :import do |t, args|
 
         options             = {}
         options[:log_level] = 'DEBUG'
 
         OptionParser.new(args) do |opts|
-            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
+            opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                 options[:log_level] = v.upcase
             end
         end.parse!
@@ -51,16 +51,74 @@ namespace :codelabels do
 end
 
 
+namespace :indicators_factors do
+
+    desc 'Import the base indicators, indicators, reports and factors'
+    task :import do |t, args|
+
+        options             = {}
+        options[:log_level] = 'DEBUG'
+
+        OptionParser.new(args) do |opts|
+            opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                options[:log_level] = v.upcase
+            end
+        end.parse!
+
+        require_relative './indicators_factors/import/main.rb'
+        main(options)
+
+    end
+
+end
+
+
+namespace :bads do
+
+    namespace :import do
+
+        desc 'Import the BADs for enterprise'
+        task :enterprise do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'enterprise'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './bads/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the BADs for municipality'
+        task :municipality do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'municipality'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './bads/import/main.rb'
+            main(options)
+        end
+    end
+
+end
+
+
 namespace :db do
 
-    desc "Dump the database"
+    desc 'Dump the database'
     task :dump do |t, args|
 
         options             = {}
         options[:log_level] = 'DEBUG'
 
         OptionParser.new(args) do |opts|
-            opts.on("-l", "--log-level {level}", "Log level, " + options[:log_level] + " by default", String) do |v|
+            opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                 options[:log_level] = v.upcase
             end
         end.parse!

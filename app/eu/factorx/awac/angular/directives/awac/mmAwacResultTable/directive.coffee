@@ -38,14 +38,3 @@ angular
                 total += rl.outOfScopeValue
             total
 
-        scope.getNumber = (rl) ->
-            return undefined unless scope.ngModel
-            result = null
-            index = 0
-            for l in scope.ngModel.reportLines
-                if l.scope1Value + l.scope2Value + l.scope3Value + l.outOfScopeValue > 0
-                    index += 1
-                    if l.indicatorName == rl.indicatorName
-                        result = index
-                        break
-            result

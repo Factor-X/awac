@@ -79,10 +79,9 @@ public class SvgGeneratorImpl implements SvgGenerator {
 						"cy='%d' " +
 						"r='%d' " +
 						"fill='#%s' " +
-						"title='%s' " +
 						"data-indicator-name='%s' " +
 						"data-indicator-value='%s' " +
-						"class='donut-path' " +
+						"class='path' " +
 						"/>",
 					size / 2,
 					size / 2,
@@ -97,12 +96,11 @@ public class SvgGeneratorImpl implements SvgGenerator {
 					"<path " +
 						"d='%s' " +
 						"fill='#%s' " +
-						"title='%s' " +
 						"stroke='white' " +
 						"stroke-width='5' " +
 						"data-indicator-name='%s' " +
 						"data-indicator-value='%s' " +
-						"class='donut-path' " +
+						"class='path' " +
 						"></path>",
 					d,
 					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
@@ -220,12 +218,14 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		int series = data.getColumnCount() - 1;
 		double maximum = data.max(1, 0, data.getColumnCount() - 1, count - 1);
 		int size = 1000;
-		sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d'>\n",
+		sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d' viewBox='0 0 %d %d'>\n",
+			size,
+			size,
 			size,
 			size
 		));
 
-		double histoWidth = size * 0.75 / (count - 1);
+		double histoWidth = size * 0.75 / count;
 		double left = size * 0.125;
 		for (int i = 0; i < count; i++) {
 
@@ -233,7 +233,17 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 				String color = Colors.makeGoodColorForSerieElement(j, series);
 				Double cell = (Double) data.getCell(1, i);
-				sb.append(String.format("<rect x='%s' y='%s' width='%s' height='%s' fill='#%s' stroke='none' stroke-width='0' />\n",
+				sb.append(String.format(
+					"<rect " +
+						"x='%s' " +
+						"y='%s' " +
+						"width='%s' " +
+						"height='%s' " +
+						"fill='#%s' " +
+						"stroke='none' " +
+						"stroke-width='0' " +
+						"class='path' " +
+						"/>\n",
 					left + histoWidth * i + (1.0 * histoWidth * j / series),
 					size * 0.875 - cell * size * 0.75 / maximum,
 					histoWidth * (2.0 / 3) / series,

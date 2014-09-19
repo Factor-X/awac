@@ -89,6 +89,7 @@ public class PDF {
 		try {
 			Reader reader = new StringReader(string);
 			ITextRenderer renderer = new ITextRenderer();
+			Logger.info ("Play.current().path(): " + Play.current().path());
 			addFontDirectory(renderer.getFontResolver(), Play.current().path()
 				+ "/public/fonts");
 			MyUserAgent myUserAgent = new MyUserAgent(

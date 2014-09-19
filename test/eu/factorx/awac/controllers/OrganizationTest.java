@@ -202,7 +202,7 @@ public class OrganizationTest extends AbstractBaseControllerTest {
 		}
 
 		List<AccountSiteAssociation> reload = accountSiteAssociationService.findBySite(site);
-		assertNull(reload);
+		assertTrue(reload.isEmpty());
 	}
 
 	// class to handle EmailInvitationDTO
