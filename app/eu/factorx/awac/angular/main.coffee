@@ -54,13 +54,25 @@ formResolve =
                     url = '/awac/answer/testDataAccess/'+$route.current.params.form+'/'+$route.current.params.period+'/'+$route.current.params.scope
                     downloadService.getJson url, (result) ->
                         if result.data.value == false
-                            $location.path('/noScope')
+                            console.log "GO VERS NOSCOPE !!!"
+                            $location.path '/noScope'
                             return true
                         else
+                            console.log "GO VERS OK !!! "
                             return false
                 # if no connected, send to /login route
                 else
                     $location.path '/login'
+        else
+            url = '/awac/answer/testDataAccess/'+$route.current.params.form+'/'+$route.current.params.period+'/'+$route.current.params.scope
+            downloadService.getJson url, (result) ->
+                if result.data.value == false
+                    console.log "GO VERS NOSCOPE !!!"
+                    $location.path '/noScope'
+                    return true
+                else
+                    console.log "GO VERS OK !!! "
+                    return false
 
 resultResolve =
     testConnection : ($http,$rootScope,$location, downloadService,$route) ->

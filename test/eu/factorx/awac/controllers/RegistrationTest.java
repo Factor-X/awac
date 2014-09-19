@@ -6,6 +6,8 @@ import static play.test.Helpers.status;
 
 import java.util.List;
 
+import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.service.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +29,6 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,21 +54,24 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 	private static final String password = "testPassword";
 
 	@Autowired
-	OrganizationService organizationService;
+	private OrganizationService organizationService;
 
 	@Autowired
-	SiteService siteService;
+    private SiteService siteService;
 
 	@Autowired
-	ScopeService scopeService;
+    private ScopeService scopeService;
 
 	@Autowired
-	AccountService accountService;
+    private AccountService accountService;
+
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
 
 
-	/**
-	 * create a account + person + organization and scope + site and scope
-	 */
+    /**
+     * create a account + person + organization and scope + site and scope
+     */
 
 	// Test does not work
 	// TODO - check with Florian accurecy of test
@@ -96,7 +97,7 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 
 		//analyse result
 		// expecting an HTTP 200 return code
-		assertEquals(200, status(result));
+		assertEquals(printError(result),200, status(result));
 
 		//analyse result
 		LoginResultDTO resultDTO = getDTO(result, LoginResultDTO.class);
@@ -107,6 +108,18 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 		assertEquals(resultDTO.getPerson().getIdentifier(), identifier1);
 		//assertEquals(resultDTO.getOrganization().getName(),organizationName1);
 		//assertEquals(resultDTO.getOrganization().getSites().get(0).getName(), site);
+
+        //test if the account is liked with one site
+        Account account = accountService.findByIdentifier(identifier1);
+
+        assertNotNull("The account was not created", account);
+
+        List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
+
+        assertTrue(siteAssociationList.size()==0);
+
+        //control period for the site
+        assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()==1);
 
 
 	} // end of authenticateSuccess test
@@ -178,7 +191,7 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 	 * use the same email than test1. Excepted : use the person create for the test 1
 	 */
 	@Test
-	public void _004_registration() {
+	public void _004_registrationMunicipality() {
 
 		MunicipalityAccountCreationDTO dto = createMunicipalityDTO(email1,identifier2, municipalityName, firstName2);
 
@@ -199,20 +212,33 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 
 		//analyse result
 		// expecting an HTTP 401 return code
-		assertEquals(200, status(result));
+		assertEquals(printError(result),200, status(result));
 
 		LoginResultDTO loginResultDTO = getDTO(result, LoginResultDTO.class);
 
 		assertFalse(firstName2 == loginResultDTO.getPerson().getFirstName());
 
-	} // end of authenticateSuccess test
+        //test if the account is liked with one site
+        Account account = accountService.findByIdentifier(identifier2);
+
+        assertNotNull("The account was not created", account);
+
+        List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
+
+        assertTrue(siteAssociationList.size()==0);
+
+        //control period for the site
+        assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()>1);
+
+
+    } // end of authenticateSuccess test
 
 	@Test
 	public void _005_cleanTestData() {
 
 		// remove organization for test DB sanity
-		//cleanData(organizationName1,identifier1);
-		//cleanData(municipalityName,identifier2);
+		cleanData(organizationName1,identifier1);
+		cleanData(municipalityName,identifier2);
 	}
 
 
@@ -222,25 +248,22 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 		Organization organization = null;
 		List<Site> siteList=null;
 
-
 		account = accountService.findByIdentifier(identifier);
 		assertNotNull(account);
-		accountService.remove(account);
+        List<AccountSiteAssociation> associationList = accountSiteAssociationService.findByAccount(account);
+        accountSiteAssociationService.remove(associationList);
+        accountService.remove(account);
 
-		organization = organizationService.findByName(organisationName);
-		assertNotNull(organization);
+        organization = organizationService.findByName(organisationName);
+        assertNotNull(organization);
 
-		siteList=organization.getSites();
-		assertNotNull(siteList);
+        siteList=organization.getSites();
+        assertNotNull(siteList);
 
-		for (Site site : siteList) {
-			assertNotNull(site);
-			play.Logger.info("Site for orgrganisation:" + site.getName());
-			//Scope siteScope = scopeService.findBySite(site);
-			//scopeService.remove(scopeService.findBySite(site));
-			//scopeService.remove(scopeService.findByOrganization(organization))
-			siteService.remove(site);
-		}
+        for (Site site : siteList) {
+            assertNotNull(site);
+            siteService.remove(site);
+        }
 
 		organizationService.remove(organization);
 	}
