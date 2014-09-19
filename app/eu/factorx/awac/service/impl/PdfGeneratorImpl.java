@@ -48,7 +48,7 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 	public PdfGeneratorImpl() throws IOException, DocumentException {
 		renderer = new ITextRenderer();
-		//addFontDirectory(renderer.getFontResolver(), Play.current().path() + "/public/fonts");
+		addFontDirectory(renderer.getFontResolver(), Play.current().path() + "/public/fonts");
 		userAgent = new PdfGeneratorUserAgent(renderer.getOutputDevice());
 		userAgent.setSharedContext(renderer.getSharedContext());
 		renderer.getSharedContext().setUserAgentCallback(userAgent);
@@ -122,10 +122,26 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 	private void addFontDirectory(ITextFontResolver fontResolver,
 	                              String directory) throws DocumentException, IOException {
+		Logger.info("PDF - directory parameter:" + directory );
+
+		Logger.info("PDF - getting file list from currentPath()");
+		File fileList = Play.application(Play.current()).path();
+		for (File file : fileList.listFiles()) {
+			Logger.info("file :" + file.getAbsolutePath());
+		}
+
+
 		File dir = new File(directory);
-		for (File file : dir.listFiles()) {
-			fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,
-				BaseFont.EMBEDDED);
+		if (dir!=null) {
+			Logger.info("PDF - dir is not null");
+			for (File file : dir.listFiles()) {
+				Logger.info("file :" + file.getAbsolutePath());
+				fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,
+						BaseFont.EMBEDDED);
+			}
+		}
+		else {
+			Logger.info("PDF - dir is null");
 		}
 	}
 
