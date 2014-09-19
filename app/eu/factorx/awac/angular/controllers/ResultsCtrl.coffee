@@ -12,6 +12,7 @@ angular
         console.log "sites == "
         console.log sites
         if sites.length > 0
+            $scope.o = undefined
             modalService.show modalService.LOADING
             dto =
                 __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
