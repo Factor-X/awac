@@ -2,16 +2,16 @@ package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
-import eu.factorx.awac.models.reporting.Report;
+import eu.factorx.awac.models.reporting.ReportResult;
 import org.springframework.core.convert.converter.Converter;
 
 import java.util.List;
 import java.util.Map;
 
-public class ReportToReportDTOConverter implements Converter<Report, ReportDTO> {
+public class ReportToReportDTOConverter implements Converter<ReportResult, ReportDTO> {
 
 	@Override
-	public ReportDTO convert(Report report) {
+	public ReportDTO convert(ReportResult report) {
 		ReportDTO reportDTO = new ReportDTO();
 
 		Map<String, List<Double>> scopeValuesByIndicator = report.getScopeValuesByIndicator();

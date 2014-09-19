@@ -11,6 +11,8 @@ public interface PersistenceService<E> {
 	void remove(E entity);
 
 	void remove(Iterable<E> entities);
+	
+	void removeAll();
 
 	E findById(Long id);
 

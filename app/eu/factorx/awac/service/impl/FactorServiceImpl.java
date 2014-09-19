@@ -46,9 +46,8 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
 
 	@Override
 	public void removeAll() {
-		int nbDeleted = JPA.em().createNamedQuery(FactorValue.REMOVE_ALL).executeUpdate();
-		Logger.info("Deleted {} factor values", nbDeleted);
-		nbDeleted = JPA.em().createNamedQuery(Factor.REMOVE_ALL).executeUpdate();
-		Logger.info("Deleted {} factors", nbDeleted);
+		JPA.em().createNamedQuery(FactorValue.REMOVE_ALL).executeUpdate();
+		JPA.em().createNamedQuery(Factor.REMOVE_ALL).executeUpdate();
 	}
+
 }

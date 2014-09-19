@@ -2,32 +2,27 @@ package eu.factorx.awac.util.data.importer.badImporter;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import play.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by florian on 29/08/14.
- */
 public class BADTemplate {
 
 
-    private final VelocityContext velocityContext;
-    //private final TemplateName templateName;
-    private final String fileName;
-    private final String templatePath;
+	private final VelocityContext velocityContext;
+	//private final TemplateName templateName;
+	private final String          fileName;
+	private final String          templatePath;
 
-    public BADTemplate(String templatePath, String fileName) {
-        this.velocityContext = new VelocityContext();
-        this.fileName = fileName;
-        this.templatePath=templatePath;
-    }
+	public BADTemplate(String templatePath, String fileName) {
+		this.velocityContext = new VelocityContext();
+		this.fileName = fileName;
+		this.templatePath = templatePath;
+	}
 
 
-
-    public void addParameter(String key, List<?> content) {
+	public void addParameter(String key, List<?> content) {
         if (content == null) {
             velocityContext.put(key, new ArrayList<>());
         } else {

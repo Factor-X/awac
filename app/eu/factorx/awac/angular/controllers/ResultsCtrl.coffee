@@ -3,20 +3,30 @@ angular
 .controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService) ->
     $scope.displayFormMenu = displayFormMenu
 
-    modalService.show modalService.LOADING
-    downloadService.getJson "/awac/result/getReport/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
-        modalService.close modalService.LOADING
-        if result.success
-            $scope.o = result.data
-        else
-            # TODO ERROR HANDLING
+    $scope.$watch('$root.mySites|filter:{$selected:true}', (nv) ->
+        $scope.mySites = $scope.$root.mySites
+        console.log("mySites ==")
+        console.log($scope.mySites)
+    , true);
 
-    $scope.charts =
-        histogramUrl: "/awac/result/getHistogram/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
-        webUrl:       "/awac/result/getWeb/"       + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId
-        donutUrl1:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/1"
-        donutUrl2:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/2"
-        donutUrl3:    "/awac/result/getDonut/"     + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId + "/3"
+
+    $scope.$watch('mySites|filter:{$selected:true}', (sites) ->
+
+        modalService.show modalService.LOADING
+
+        dto =
+            __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
+            periodKey: $scope.$root.periodSelectedKey
+            scopesIds: sites.map((s) -> s.id)
+
+        downloadService.postJson '/awac/result/getReport', dto, (result) ->
+            console.log result
+            modalService.close modalService.LOADING
+            if result.success
+                $scope.o = result.data
+            else
+                # TODO ERROR HANDLING
+    , true);
 
 
     $scope.current_tab = 1;

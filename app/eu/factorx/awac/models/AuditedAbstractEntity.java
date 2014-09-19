@@ -43,8 +43,12 @@ public abstract class AuditedAbstractEntity extends AbstractEntity {
 	@Override
 	public void preUpdate() {
 		super.preUpdate();
-		this.technicalSegment.setLastUpdateDate(DateTime.now());
-		this.technicalSegment.setLastUpdateUser(getCurrentUser());
+		if (this.technicalSegment == null) {
+			prePersist();
+		} else {
+			this.technicalSegment.setLastUpdateDate(DateTime.now());
+			this.technicalSegment.setLastUpdateUser(getCurrentUser());
+		}
 	}
 
 	private static String getCurrentUser() {

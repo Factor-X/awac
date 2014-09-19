@@ -3,6 +3,7 @@ package eu.factorx.awac.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -12,6 +13,7 @@ import jxl.write.Number;
 import org.springframework.stereotype.Component;
 
 import play.Play;
+import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.service.ResultExcelGeneratorService;
 import eu.factorx.awac.util.Table;
 
@@ -19,7 +21,7 @@ import eu.factorx.awac.util.Table;
 public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorService {
 
 	@Override
-	public void generateExcelInStream(OutputStream stream, String site, String period, Table allScopes, Table scope1, Table scope2, Table scope3, Table outOfScope)
+	public void generateExcelInStream(OutputStream stream, List<Scope> scopes, String period, Table allScopes, Table scope1, Table scope2, Table scope3, Table outOfScope)
 		throws IOException, WriteException, BiffException {
 
 		Workbook template = Workbook.getWorkbook(new File(Play.application().path() + "/templates/results_template.xls"));
@@ -38,20 +40,20 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		writeSheet(sheetScope3, 0, 5, scope3);
 		writeSheet(sheetOutOfScope, 0, 5, outOfScope);
 
-		sheetAllScopes.addCell(new Label(0, 2, site));
-		sheetAllScopes.addCell(new Label(1, 2, period));
-
-		sheetScope1.addCell(new Label(0, 2, site));
-		sheetScope1.addCell(new Label(1, 2, period));
-
-		sheetScope2.addCell(new Label(0, 2, site));
-		sheetScope2.addCell(new Label(1, 2, period));
-
-		sheetScope3.addCell(new Label(0, 2, site));
-		sheetScope3.addCell(new Label(1, 2, period));
-
-		sheetOutOfScope.addCell(new Label(0, 2, site));
-		sheetOutOfScope.addCell(new Label(1, 2, period));
+//		sheetAllScopes.addCell(new Label(0, 2, site));
+//		sheetAllScopes.addCell(new Label(1, 2, period));
+//
+//		sheetScope1.addCell(new Label(0, 2, site));
+//		sheetScope1.addCell(new Label(1, 2, period));
+//
+//		sheetScope2.addCell(new Label(0, 2, site));
+//		sheetScope2.addCell(new Label(1, 2, period));
+//
+//		sheetScope3.addCell(new Label(0, 2, site));
+//		sheetScope3.addCell(new Label(1, 2, period));
+//
+//		sheetOutOfScope.addCell(new Label(0, 2, site));
+//		sheetOutOfScope.addCell(new Label(1, 2, period));
 
 		workbook.write();
 		workbook.close();

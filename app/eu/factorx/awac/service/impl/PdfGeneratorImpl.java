@@ -48,7 +48,7 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 	public PdfGeneratorImpl() throws IOException, DocumentException {
 		renderer = new ITextRenderer();
-		addFontDirectory(renderer.getFontResolver(), Play.current().path() + "/public/fonts");
+		//addFontDirectory(renderer.getFontResolver(), Play.current().path() + "/public/fonts");
 		userAgent = new PdfGeneratorUserAgent(renderer.getOutputDevice());
 		userAgent.setSharedContext(renderer.getSharedContext());
 		renderer.getSharedContext().setUserAgentCallback(userAgent);

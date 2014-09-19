@@ -37,6 +37,7 @@ cat ./CELDL-149-OrganizationEvent.sql >> /tmp/migration/migration_script.sql
 cat ./refesh_some_question_default_unit.sql >> /tmp/migration/migration_script.sql
 
 
+cat ./CELDL-136-Report-Reengineering.sql >> /tmp/migration/migration_script.sql
 
 
 # -------------------------------------------------
