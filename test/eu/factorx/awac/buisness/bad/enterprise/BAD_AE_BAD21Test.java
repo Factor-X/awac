@@ -156,7 +156,7 @@ public class BAD_AE_BAD21Test{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A183",12.0, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A183",12.0,  mapRepetition1 ));
         
         return list;
     }
@@ -170,7 +170,7 @@ public class BAD_AE_BAD21Test{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A184",200.0, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A184",200.0,  mapRepetition1 ));
         
         return list;
     }

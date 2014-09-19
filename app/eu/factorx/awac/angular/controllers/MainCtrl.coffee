@@ -2,7 +2,6 @@
 # Logging initialization
 #
 angular.module('app').run (loggerService) ->
-
     loggerService.initialize()
 
     $('body').keydown (evt) ->
@@ -15,11 +14,9 @@ angular.module('app').run (loggerService) ->
     log.info "Application is started"
 
 
-
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout) ->
-
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash) ->
     $scope.displayMenu = false
     $scope.displayLittleMenu = false
     #
@@ -57,7 +54,7 @@ angular
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope?().validNavigation != undefined
+        if $scope.getMainScope()? && $scope.getMainScope?().validNavigation != undefined
             # ask a confirmation to quite the view
             result = $scope.getMainScope?().validNavigation?()
 
@@ -70,7 +67,6 @@ angular
     #
     $scope.$on 'NAV', (event, args) ->
         $scope.nav(args.loc, args.confirmed)
-
 
     #
     # Tabs -- transition
@@ -103,10 +99,13 @@ angular
     $scope.computeDisplayMenu = ->
         if $scope.getMainScope()? && $scope.getMainScope().displayFormMenu? && $scope.getMainScope().displayFormMenu == true
             $scope.displayMenu = true
-        else if $scope.getMainScope()? && $scope.getMainScope().displayLittleFormMenu? && $scope.getMainScope().displayLittleFormMenu == true
-            $scope.displayLittleMenu = true
         else
             $scope.displayMenu = false
+
+        if $scope.getMainScope()? && $scope.getMainScope().displayLittleFormMenu? && $scope.getMainScope().displayLittleFormMenu == true
+            $scope.displayLittleMenu = true
+        else
+            $scope.displayLittleMenu = false
 
 
     #
@@ -119,42 +118,32 @@ angular
     # Periods
     #
     $scope.periodKey = null
-    $scope.$watch '$root.periodSelectedKey', () ->
 
-        console.log "changement de la valeur de $root.periodSelectedKey : "+$scope.$root.periodSelectedKey
+    $scope.$watchCollection '[$root.periodSelectedKey,$root.scopeSelectedId]', () ->
+        if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
-        $routeParams.period = $scope.$root.periodSelectedKey
-        if $route.current
-            p = $route.current.$$route.originalPath
+            $routeParams.period = $scope.$root.periodSelectedKey
+            $routeParams.scope = $scope.$root.scopeSelectedId
+            $routeParams.form = $route.current.params.form
 
-            for k,v of $routeParams
-                p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
+            if $route.current
+                p = $route.current.$$route.originalPath
 
-            $location.path(p)
+                if p == "/noScope"
+                    url = $scope.$root.getFormPath() + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId
+                    $location.path url
+                else
+                    for k,v of $routeParams
+                        p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
-        #hide data to compare if the period is the same than the period to answer
-        if $scope.$root.periodSelectedKey == $scope.periodToCompare
-            $scope.periodToCompare = 'default'
+                    $location.path(p)
 
-        $scope.loadPeriodForComparison()
-        $scope.loadFormProgress()
+            #hide data to compare if the period is the same than the period to answer
+            if $scope.$root.periodSelectedKey == $scope.periodToCompare
+                $scope.periodToCompare = 'default'
 
-    $scope.$watch '$root.scopeSelectedId', () ->
-
-        console.log "changement de la valeur de root.scopeSelectedId : "+$scope.$root.scopeSelectedId
-
-
-        $routeParams.period = $scope.$root.periodSelectedKey
-        if $route.current
-            p = $route.current.$$route.originalPath
-
-            for k,v of $routeParams
-                p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
-
-            $location.path(p)
-
-        $scope.loadPeriodForComparison()
-        $scope.loadFormProgress()
+            $scope.loadPeriodForComparison()
+            $scope.loadFormProgress()
 
     $scope.periodsForComparison = [
         {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
@@ -184,22 +173,23 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        if $scope.$root.periodToCompare? and not isNaN($scope.$root.periodToCompare)
-            url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.periodToCompare
+        url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
 
-            downloadService.getJson url, (result) ->
-                if result.success
-                    $scope.periodsForComparison = [
-                        {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
-                    ]
-                    for period in result.data.periodDTOList
-                        if period.key != $scope.$root.periodSelectedKey
-                            $scope.periodsForComparison[$scope.periodsForComparison.length] = period
-                else
-                    messageFlash.displayError data.message
+        downloadService.getJson url, (result) ->
+            if result.success
+                $scope.periodsForComparison = [
+                    {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
+                ]
+                for period in result.data.periodDTOList
+                    if period.key != $scope.$root.periodSelectedKey
+                        $scope.periodsForComparison[$scope.periodsForComparison.length] = period
+            else
+                messageFlash.displayError result.data.message
 
 
     $scope.getProgress = (form)->
+        #console.log "GET PROSGRS ; "
+        #console.log $scope.formProgress
         if $scope.formProgress != null
             for formProgress in $scope.formProgress
                 if formProgress.form == form
@@ -210,13 +200,15 @@ angular
     $scope.formProgress = null
 
     $scope.loadFormProgress = ->
-        console.log "$scope.loadFormProgress : "+$scope.$root.scopeSelectedId+" "+$scope.$root.periodSelectedKey
+        #console.log "$scope.loadFormProgress : "+$scope.$root.scopeSelectedId+" "+$scope.$root.periodSelectedKey
         if $scope.$root.scopeSelectedId? && $scope.$root.periodSelectedKey?
             downloadService.getJson "/awac/answer/formProgress/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
                 if result.success
+                    #console.log result.data
                     $scope.formProgress = result.data.listFormProgress
                 else
-                    messageFlash.displayError data.message
+                    #console.log "LOADFORMPROGRESS :  : CACA"
+                    messageFlash.displayError result.data.message
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
@@ -272,37 +264,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.$watch 'language', (lang) ->
         translationService.initialize(lang)
         tmhDynamicLocale.set(lang.toLowerCase())
-        #TODO save the langauge changement
-
-
-    #GHO route 03/09/2014
-    $rootScope.$on '$routeChangeStart', (event, current) ->
-
-
-        $rootScope.key = $routeParams.key
-        # Check if the user is logged in
-
-        if not $rootScope.currentPerson
-            #
-            # test if the user is currently connected on the server
-            #
-            downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
-                if result.success
-                    $rootScope.loginSuccess result.data, !$rootScope.isLogin()
-                else
-                    if not current.$$route.anonymousAllowed
-                        #redirect to login page
-                        console.log "redirect to login "
-                        $location.path '/login'
-        else
-            console.log("default router processing")
-
-    #
-    # Redirect user to login view if not logged in
-    #
-    #if not $rootScope.currentPerson
-    #    console.log("entering not current person")
-    #    $location.path('/login')
+    #TODO save the langauge changement
 
     #
     # getRegisterKey
@@ -337,24 +299,19 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.currentPerson = null
                 $location.path('/login')
             else
-                messageFlash.displayError data.message
+                messageFlash.displayError result.data.message
                 $location.path('/login')
 
     #
     # success after login => store some datas, display the path
     #
     $rootScope.loginSuccess = (data, skipRedirect) ->
-        console.log "connection date : "
-        console.log data
-
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
         $rootScope.organizationName = data.organizationName
         $rootScope.mySites = data.mySites
-
         # try to load default scope / period
         #default scope
-        ###
         if data.defaultSiteId?
             for site in $rootScope.mySites
                 if site.id == data.defaultSiteId
@@ -362,20 +319,16 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
                     #control default period
                     if data.defaultPeriod?
-                        if site.listPeriodAvailable? site.listPeriodAvailable.length >0
+                        if site.listPeriodAvailable? site.listPeriodAvailable.length > 0
                             for period in  site.listPeriodAvailable
                                 if period.key == data.defaultPeriod
                                     $rootScope.periodSelectedKey = data.defaultPeriod
-        ###
 
-        console.log "? : "+$rootScope.scopeSelectedId
         if !$rootScope.scopeSelectedId?
-            console.log "!1:"+$rootScope.mySites.length
             if $rootScope.mySites.length > 0
                 $rootScope.scopeSelectedId = $rootScope.mySites[0].id
-                console.log "!1 : "+$rootScope.scopeSelectedId
 
-        if $rootScope.scopeSelectedId? &&  !$rootScope.periodSelectedKey?
+        if $rootScope.scopeSelectedId? && !$rootScope.periodSelectedKey?
             for site in $rootScope.mySites
                 if site.id == $rootScope.scopeSelectedId
                     if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
@@ -385,19 +338,19 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.computePeriod($rootScope.mySites[0].scope)
 
         if not skipRedirect
-            if $rootScope.scopeSelectedId? &&  $rootScope.periodSelectedKey?
-                $rootScope.onFormPath($rootScope.periodSelectedKey,$rootScope.scopeSelectedId)
-            else
-                $location.path("noScope")
+            $rootScope.toDefaultForm()
 
+    $rootScope.toDefaultForm = () ->
+        if $rootScope.scopeSelectedId? && $rootScope.periodSelectedKey?
+            $rootScope.onFormPath($rootScope.periodSelectedKey, $rootScope.scopeSelectedId)
+        else
+            $location.path("noScope")
 
 
     $rootScope.computePeriod = (scopeId) ->
         for site in $rootScope.mySites
             if site.scope == scopeId
                 $rootScope.availablePeriods = site.listPeriodAvailable
-                console.log "$rootScope.availablePeriods"
-                console.log $rootScope.availablePeriods
 
 
     #
@@ -413,7 +366,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # refresh user data
     #
     $rootScope.refreshUserData = () ->
-
         downloadService.getJson '/awac/user/profile', (result) ->
             if result.success
                 $rootScope.currentPerson = result.data
@@ -438,9 +390,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             if result.success
                 for n in result.data.notifications
                     messageFlash.display(n.kind.toLowerCase(), n.messageFr, { hideAfter: 3600 })
-            else
-                messageFlash.displayError data.message
-                # schedule a refresh
+        # schedule a refresh
         $timeout $rootScope.refreshNotifications, 3600 * 1000
 
     $rootScope.refreshNotifications()
+
+    #
+    # Route Change
+    #
+    $rootScope.$on "$routeChangeSuccess", (event, current, previous) ->
+        console.log "change route : " + $location.path()

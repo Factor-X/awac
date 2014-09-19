@@ -159,11 +159,11 @@ public class BAD_AE_BAD17DTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A142",1);
-                list.add(new AnswerLineDTO("A145",12.0, identifier, mapRepetition1  , UnitCode.U5135.getKey()  ));
+                list.add(new AnswerLineDTO("A145",12.0,  mapRepetition1  , UnitCode.U5135.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A142",2);
-                list.add(new AnswerLineDTO("A145",1500.0, identifier, mapRepetition2  , UnitCode.U5133.getKey()  ));
+                list.add(new AnswerLineDTO("A145",1500.0,  mapRepetition2  , UnitCode.U5133.getKey()  ));
         
         return list;
     }
@@ -178,11 +178,11 @@ public class BAD_AE_BAD17DTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A142",1);
-                list.add(new AnswerLineDTO("A146",210.0, identifier, mapRepetition1  , UnitCode.U5106.getKey()  ));
+                list.add(new AnswerLineDTO("A146",210.0,  mapRepetition1  , UnitCode.U5106.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A142",2);
-                list.add(new AnswerLineDTO("A146",350.0, identifier, mapRepetition2  , UnitCode.U5106.getKey()  ));
+                list.add(new AnswerLineDTO("A146",350.0,  mapRepetition2  , UnitCode.U5106.getKey()  ));
         
         return list;
     }
@@ -197,11 +197,11 @@ public class BAD_AE_BAD17DTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A142",1);
-                list.add(new AnswerLineDTO("A150",0.2, identifier, mapRepetition1 ));
+                list.add(new AnswerLineDTO("A150",0.2,  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A142",2);
-                list.add(new AnswerLineDTO("A150",0.05, identifier, mapRepetition2 ));
+                list.add(new AnswerLineDTO("A150",0.05,  mapRepetition2 ));
         
         return list;
     }

@@ -165,7 +165,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         #foreach ($repetition in $answerLine.mapRepetition.entrySet())
         mapRepetition${repetitionCount}.put("$repetition.key",$repetition.value);
         #end
-        list.add(new AnswerLineDTO("$question.questionCode",$answerLine.value, identifier, mapRepetition${repetitionCount} #if( ${answerLine.unit} ) , UnitCode.${answerLine.unit.unitCode.key}.getKey()  #end));
+        list.add(new AnswerLineDTO("$question.questionCode",$answerLine.value,  mapRepetition${repetitionCount} #if( ${answerLine.unit} ) , UnitCode.${answerLine.unit.unitCode.key}.getKey()  #end));
         #end
 
         return list;
