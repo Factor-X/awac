@@ -1600,7 +1600,7 @@ public class AwacEnterpriseInitialData {
 
     // == A308
     // Proportion du déchet issu du produit, traité par la méthode précédemment renseignée
-    session.saveOrUpdate(new ValueSelectionQuestion( a303, 0, QuestionCode.A308, CodeList.POURCENTSIMPLIFIE ));
+    session.saveOrUpdate(new PercentageQuestion( a303, 0, QuestionCode.A308, null ));
 
 
 

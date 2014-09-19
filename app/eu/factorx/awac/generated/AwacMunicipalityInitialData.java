@@ -446,12 +446,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC54
     // Eclairage public: consommation d'électricité verte
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC55
     // Eclairage public: consommation d'électricité grise
-        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC57
@@ -460,12 +460,12 @@ public class AwacMunicipalityInitialData {
 
     // == AC58
     // Consommation d'électricité verte du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC59
     // Consommation d'électricité grise du coffret
-        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, energyUnits.getMainUnit() ));
+        session.saveOrUpdate(new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, getUnitBySymbol("kW.h") ));
 
 
     // == AC61
