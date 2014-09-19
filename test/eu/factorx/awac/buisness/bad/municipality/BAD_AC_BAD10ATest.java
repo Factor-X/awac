@@ -163,7 +163,7 @@ public class BAD_AC_BAD10ATest{
                 list.add(new AnswerLineDTO("AC86","essence",  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
-                mapRepetition2.put("AC85",1);
+                mapRepetition2.put("AC85",2);
                 list.add(new AnswerLineDTO("AC86","diesel",  mapRepetition2 ));
         
         return list;
