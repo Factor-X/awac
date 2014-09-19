@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +39,7 @@ public abstract class ActivityResultContributor {
 	@Autowired
 	private CodeConversionService codeConversionService;
 
-	private Map<String, Unit> unitsByCodeKey = null;
+	private static Map<String, Unit> unitsByCodeKey = null;
 
 	public ActivityResultContributor() {
 		super();
@@ -107,6 +110,10 @@ public abstract class ActivityResultContributor {
 		CodeAnswerValue answerValue = (CodeAnswerValue) questionAnswer.getAnswerValues().get(0);
 		return answerValue.getValue();
 	}
+
+    protected <T extends Code> T convertCode(T code, ConversionCriterion conversionCriterion){
+        return codeConversionService.getConversionCode(code, conversionCriterion);
+    }
 
 	protected Double convertNumericValue(Double value, Unit unitFrom, Unit toUnit) {
 		return unitConversionService.convert(value, unitFrom, toUnit, null);

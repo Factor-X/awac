@@ -1,8 +1,11 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
 import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 import eu.factorx.awac.util.data.importer.badImporter.Reader.Data;
@@ -12,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +31,8 @@ import java.util.Map;
 public class BADImporter extends WorkbookDataImporter implements ApplicationContextAware {
 
     private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
+    public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
+    public static final String MUNICIPALIT_METHOD = "commune-activityData";
 
     private final static boolean DEBUG = false;
 
@@ -66,6 +74,9 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     //value
     private final static int BAD_VALUE_COL = ExcelEquivalenceColumn.S;
 
+    //test value
+    private final static int TEST_VALUE_COL = ExcelEquivalenceColumn.X;
+
     //private
 
     @Autowired
@@ -82,35 +93,49 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     }
 
 
-    public BADLog importBAD() {
+    public BADLog importBAD(InterfaceTypeCode interfaceTypeCode) {
         BADLog badLog = new BADLog();
         try {
 
-            importDatas(badLog);
+            importDatas(badLog,interfaceTypeCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return badLog;
     }
 
-    public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
+
 
     @Override
     protected void importData() throws Exception {
         //useless
     }
 
-    protected void importDatas(BADLog badLog) throws Exception {
+    protected void importDatas(BADLog badLog,InterfaceTypeCode interfaceTypeCode) throws Exception {
 
         play.Logger.info("run badimporter....");
 
 
         ExcelReader excelReader = new ExcelReader();
 
-        Data data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
+        Data data =null;
+                TemplateName templateName=null;
+        if(interfaceTypeCode.equals(InterfaceTypeCode.ENTERPRISE)) {
+            data = excelReader.readFile(FILE_PATH, ENTERPRISE_METHOD);
+            templateName = TemplateName.BAD_ENTERPRISE;
+            Logger.info("ENTERRPISEE !!");
+        }
+        else if(interfaceTypeCode.equals(InterfaceTypeCode.MUNICIPALITY)){
+            data = excelReader.readFile(FILE_PATH, MUNICIPALIT_METHOD);
+            templateName = TemplateName.BAD_MUNICIPALITY;
+            Logger.info("ENTERRPISEE !!");
+        }
+        else{
+            throw new MyrmexRuntimeException("Cannot found the interface");
+        }
 
         //2. read
-        reader(data, badLog);
+        reader(data, badLog,templateName);
 
         play.Logger.info("run badimporter end !");
 
@@ -119,14 +144,16 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
     //not null, ActivityType or answer(control list content) or more complex
 
-    public void reader(Data data, BADLog badLog) {
+    public void reader(Data data, BADLog badLog, TemplateName templateName) {
 
 
 
         Map<String, Answer> mapAnswer = new HashMap<>();
 
+        List<BAD> bads = new ArrayList<>();
+        
 
-        for (int line = 1; line < data.getNbRows(); line++) {
+        for (int line = 1; line < data.getNbRows()+1; line++) {
 
             //escape the first line : presentation
             if (line == 1) {
@@ -136,7 +163,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
             //load question for response
             if (data.getData(ExcelEquivalenceColumn.C, line) != null &&
                     data.getData(ExcelEquivalenceColumn.C, line).equals("1") &&
-                    data.getData(ExcelEquivalenceColumn.X, line) != null) {
+                    data.getData(TEST_VALUE_COL, line) != null) {
 
                 String questionCode = data.getData(ExcelEquivalenceColumn.I, line);
 
@@ -152,7 +179,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 } else {
 
                     //add value
-                    mapAnswer.put(question.getCode().getKey(), badControlElement.controlAnswerValue(question, data.getData(ExcelEquivalenceColumn.X, line), badLog, line));
+                    mapAnswer.put(question.getCode().getKey(), badControlElement.controlAnswerValue(question, data.getData(ExcelEquivalenceColumn.X, line)));
 
                 }
             }
@@ -175,58 +202,62 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
 
                 // --- test badKey ---
-                badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line), line, bad);
+                badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line),  bad);
 
                 // ---- name ----
-                badControlElement.controlName(data.getData(BAD_NAME_COL, line), line, bad);
+                badControlElement.controlName(data.getData(BAD_NAME_COL, line),  bad);
 
                 // ---- control rank ---
-                badControlElement.controlRank(data.getData(BAD_RANK_COL, line), line, bad);
+                badControlElement.controlRank(data.getData(BAD_RANK_COL, line),  bad);
 
                 // ---- unit ---
-                badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line), line, bad);
+                badControlElement.controlUnit(data.getData(BAD_UNIT_COL, line),  bad);
 
                 // ---- specific purpose ----
-                badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line), line, bad);
+                badControlElement.controlSpecificPurpose(data.getData(BAD_SPECIFIC_PURPOSE_COL, line),  bad);
 
                 // ---- activityCategory ---
-                badControlElement.controlActivityCategory(data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line), line, bad);
+                badControlElement.controlActivityCategory(data.getData(BAD_ACTIVITY_CATEGORY_KEY_COL, line),  bad);
 
                 // --- activitySubCategory ---
-                badControlElement.controlActivitySubCategory(data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line), line, bad);
+                badControlElement.controlActivitySubCategory(data.getData(BAD_ACTIVITY_SUB_CATEGORY_KEY_COL, line),  bad);
 
                 // --- ActivityType ---
-                badControlElement.controlActivityType(data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line), line, bad);
+                badControlElement.controlActivityType(data.getData(BAD_ACTIVITY_TYPE_KEY_COL, line),  bad);
 
                 // --- ActivitySource ---
-                badControlElement.controlActivitySource(data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line), line, bad);
+                badControlElement.controlActivitySource(data.getData(BAD_ACTIVITY_SOURCE_KEY_COL, line),  bad);
 
                 // --- activityOwnerShip ---
-                badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line), line, bad);
+                badControlElement.controlActivityOwnerShip(data.getData(BAD_ACTIVITY_OWNERSHIP_COL, line),  bad);
 
                 // --- value ---
-                badControlElement.controlValue(data.getData(BAD_VALUE_COL, line), line, bad);
+                badControlElement.controlValue(data.getData(BAD_VALUE_COL, line),  bad);
 
                 // ----- condition ---
-                badControlElement.controlCondition(data.getData(BAD_CONDITION_COL, line), line, bad);
+                badControlElement.controlCondition(data.getData(BAD_CONDITION_COL, line),  bad);
 
-
-                //create BAD
-                //if (bad.isCanBeGenerated()) {
+                // -------- control test value --------
+                badControlElement.controlTestValue(data.getData(TEST_VALUE_COL, line), bad);
 
 
                 BADGenerator badGenerator = (BADGenerator) ctx.getBean(BADGenerator.class);
 
                 //write
-                badGenerator.generateBAD(bad, logLine);
+                badGenerator.generateBAD(bad, logLine,templateName);
 
                 //generate test
                 BADTestGenerator badTestGenerator = (BADTestGenerator) ctx.getBean(BADTestGenerator.class);
 
-                badTestGenerator.generateBAD(bad, logLine, mapAnswer);
-                //}
+                badTestGenerator.generateBAD(bad, logLine, mapAnswer,templateName);
+
+                bads.add(bad);
             }
         }
+        
+        //generate main test
+        BADTestMainGenerator badTestMainGenerator = new BADTestMainGenerator();
+        badTestMainGenerator.generateBAD(bads, templateName);
     }
 }
 

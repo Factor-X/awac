@@ -52,6 +52,13 @@ public class BADControlElement {
     private CodeLabelService codeLabelService;
 
 
+    /*
+     * group 1 : the question code
+     * group 2 (optional) : the conversion criterion
+     */
+    private Pattern questionPattern = Pattern.compile("(A[A-Z]*[0-9]+)(\\[([A-Z_]+)\\])?");
+
+
     BADLog.LogLine logLine;
 
     public void setBadLog(BADLog.LogLine logLine) {
@@ -64,7 +71,7 @@ public class BADControlElement {
      * => look into BaseActivityDataCode to found the code
      * return the content
      */
-    public void controlBADKey(String cellContent, int line, BAD bad) {
+    public void controlBADKey(String cellContent, BAD bad) {
 
         String badKey = cellContent;
         if (badKey == null || badKey.length() == 0) {
@@ -92,7 +99,7 @@ public class BADControlElement {
      * The name is only a string
      * cannot be null
      */
-    public void controlName(String content, int line, BAD bad) {
+    public void controlName(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addError("There is no name: " + content);
@@ -110,7 +117,7 @@ public class BADControlElement {
      * Rank cannot be null and can be a number
      * return null otherwise
      */
-    public void controlRank(String content, int line, BAD bad) {
+    public void controlRank(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addWarn("There rank is null");
@@ -133,7 +140,7 @@ public class BADControlElement {
     /**
      * Can be an answer or a string or can be null
      */
-    public void controlSpecificPurpose(String content, int line, BAD bad) {
+    public void controlSpecificPurpose(String content, BAD bad) {
         if (content != null && content.length() > 0) {
 
             //test if the specific purpose is a code
@@ -149,18 +156,18 @@ public class BADControlElement {
                     logLine.addError("SpecificPurpose : it's a question but not a StringQuestion : SpecificPurpose will be null");
                 }
             } else {
-                logLine.addWarn("SpecificPurpose is a string");
+                logLine.addInfo("SpecificPurpose is a string");
                 bad.setSpecificPurpose("\"" + content + "\"");
             }
         } else {
-            logLine.addWarn("The SpecificPurpose is null");
+            logLine.addInfo("The SpecificPurpose is null");
         }
     }
 
     /**
      * Cannot be nul, always a activityCategory
      */
-    public void controlActivityCategory(String content, int line, BAD bad) {
+    public void controlActivityCategory(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addError("There is no activityCategory : " + content);
@@ -182,10 +189,9 @@ public class BADControlElement {
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
-    public void controlActivitySubCategory(String content, int line, BAD bad) {
+    public void controlActivitySubCategory(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addError("There is no activitySubCategory : " + content);
@@ -201,35 +207,49 @@ public class BADControlElement {
             //add to bad
             bad.setActivitySubCategory("ActivitySubCategoryCode." + content);
 
-        } else if (controlList(QuestionCode.class, content)) {
-
-            //load the question
-            Question question = questionService.findByCode(new QuestionCode(content));
-
-            if (question instanceof ValueSelectionQuestion) {
-                if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySubCategory)) {
-                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
-                }
-            } else {
-                logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
-            }
-
-            //add to bad
-            bad.setActivitySubCategory("toActivitySubCategoryCode(question" + content + "Answer)");
-            bad.addQuestion(content);
-
         } else {
+
+            Matcher matcher = questionPattern.matcher(content);
+
+            if (matcher.find()) {
+
+
+                if (controlList(QuestionCode.class, matcher.group(1))) {
+
+                    //load the question
+                    Question question = questionService.findByCode(new QuestionCode(matcher.group(1)));
+
+                    if (question instanceof ValueSelectionQuestion) {
+                        if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySubCategory)) {
+                            logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+                        }
+                    } else {
+                        logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                    }
+
+                    String value = "toActivitySubCategoryCode(question" + matcher.group(1) + "Answer)";
+
+                    //test the criteron conversion
+                    if (matcher.group(2) != null) {
+                        value = "convertCode(" + value + ", " + matcher.group(2) + "," + ActivitySubCategoryCode.class.getName() + ")";
+                    }
+
+                    //add to bad
+                    bad.setActivitySubCategory(value);
+                    bad.addQuestion(matcher.group(1));
+                    return;
+                }
+
+            }
             logLine.addError("There is a activitySubCategory but it's not an ActivitySubCategoryCode or an answer." + content);
         }
-
-
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
-    public void controlActivityType(String content, int line, BAD bad) {
+
+    public void controlActivityType(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addError("There is no activityType : " + content);
@@ -245,17 +265,69 @@ public class BADControlElement {
 
             bad.setActivityType("ActivityTypeCode." + content);
 
-        } else if (controlList(QuestionCode.class, content)) {
+        }
+        else {
+
+            Matcher matcher = questionPattern.matcher(content);
+
+            if (matcher.find()) {
+
+
+                if (controlList(QuestionCode.class, matcher.group(1))) {
+
+                    //load the question
+                    Question question = questionService.findByCode(new QuestionCode(matcher.group(1)));
+
+                    if (question instanceof ValueSelectionQuestion) {
+                        if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
+
+                            HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                            if (codeConversionService.toActivityTypeCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                                logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                                return;
+                            }
+
+                        }
+                    } else {
+                        logLine.addError("ActivityType is a question but not a ValueSelectionQuestion");
+                    }
+
+                    String value = "toActivityTypeCode(question" + matcher.group(1) + "Answer)";
+
+                    //test the criteron conversion
+                    if (matcher.group(2) != null) {
+                        value = "convertCode(" + value + ", " + matcher.group(2) + "," + ActivityTypeCode.class.getName() + ")";
+                    }
+
+                    //add to bad
+                    bad.setActivityType(value);
+                    bad.addQuestion(matcher.group(1));
+                    return;
+                }
+
+            }
+            logLine.addError("There is a activityType but it's not an ActivityTypeCode or an answer." + content);
+        }
+
+        /* TODO remove
+
+        else if (controlList(QuestionCode.class, content)) {
 
             //load the question
             Question question = questionService.findByCode(new QuestionCode(content));
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivityType)) {
-                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+
+                    HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                    if (codeConversionService.toActivityTypeCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                        logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                        return;
+                    }
                 }
             } else {
                 logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
+                return;
             }
 
             //add to bad
@@ -265,13 +337,13 @@ public class BADControlElement {
         } else {
             logLine.addError("There is a activityType but it's not an activityType or an answer." + content);
         }
+        */
     }
 
     /**
-     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element or
-     * //TODO more complex
+     * Cannot be nul, can be  a activitySubCategory or a question using a list composed to  activitySubCategory element
      */
-    public void controlActivitySource(String content, int line, BAD bad) {
+    public void controlActivitySource(String content, BAD bad) {
 
 
         if (content == null || content.length() == 0) {
@@ -288,14 +360,63 @@ public class BADControlElement {
 
             bad.setActivitySource("ActivitySourceCode." + content);
 
-        } else if (controlList(QuestionCode.class, content)) {
+        } else {
+
+            Matcher matcher = questionPattern.matcher(content);
+
+            if (matcher.find()) {
+
+
+                if (controlList(QuestionCode.class, matcher.group(1))) {
+
+                    //load the question
+                    Question question = questionService.findByCode(new QuestionCode(matcher.group(1)));
+
+                    if (question instanceof ValueSelectionQuestion) {
+                        if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
+
+                            HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                            if (codeConversionService.toActivitySourceCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                                logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                                return;
+                            }
+                        }
+                    } else {
+                        logLine.addError("ActivitySource is a question but not a ValueSelectionQuestion");
+                    }
+
+                    String value = "toActivitySourceCode(question" + matcher.group(1) + "Answer)";
+
+                    //test the criteron conversion
+                    if (matcher.group(2) != null) {
+                        //TODO control criterion
+                        value = "convertCode(" + value + ", ConversionCriterion." + matcher.group(3) + ")";
+                    }
+
+                    //add to bad
+                    bad.setActivitySource(value);
+                    bad.addQuestion(matcher.group(1));
+                    return;
+                }
+
+            }
+            logLine.addError("There is a activitySource but it's not an ActivitySourceCode or an answer." + content);
+        }
+
+        /* TODO remove
+        else if (controlList(QuestionCode.class, content)) {
 
             //load the question
             Question question = questionService.findByCode(new QuestionCode(content));
 
             if (question instanceof ValueSelectionQuestion) {
                 if (!codeConversionService.isSublistOf(((ValueSelectionQuestion) question).getCodeList(), CodeList.ActivitySource)) {
-                    logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory");
+
+                    HashMap<String, CodeLabel> list = codeLabelService.findCodeLabelsByList(((ValueSelectionQuestion) question).getCodeList());
+                    if (codeConversionService.toActivitySourceCode(new Code(((ValueSelectionQuestion) question).getCodeList(), new ArrayList<CodeLabel>(list.values()).get(0).getKey())) == null) {
+                        logLine.addError("ActivitySubCategory is a ValueSelectionQuestion but this list is not a (sub)list of ActivitySubCategory or convertible");
+                        return;
+                    }
                 }
             } else {
                 logLine.addError("ActivitySubCategory is a question but not a ValueSelectionQuestion");
@@ -308,16 +429,17 @@ public class BADControlElement {
         } else {
             logLine.addError("There is a activitySource but it's not an activityType or an answer." + content);
         }
+        */
     }
 
     /**
      * can be null. Boolean expected or BooleanQuestion type
      */
-    public void controlActivityOwnerShip(String content, int line, BAD bad) {
+    public void controlActivityOwnerShip(String content, BAD bad) {
 
         boolean activityOwnerShipValid = false;
         if (content == null) {
-            logLine.addWarn("ActivityOwnerShip is null");
+            logLine.addInfo("ActivityOwnerShip is null");
         } else {
 
             //try to convert to boolean
@@ -336,7 +458,7 @@ public class BADControlElement {
 
                 }
             } else {
-                bad.setActivityOwnership(controlCondition(bad, content, line, "ActivityOwnership"));
+                bad.setActivityOwnership(controlCondition(bad, content, "ActivityOwnership"));
 
             }
         }
@@ -345,7 +467,7 @@ public class BADControlElement {
     /**
      * cannot be null. Except a unitCode
      */
-    public void controlUnit(String content, int line, BAD bad) {
+    public void controlUnit(String content, BAD bad) {
         if (content == null || content.length() == 0) {
             logLine.addError("There is no unit : " + content);
 
@@ -370,7 +492,7 @@ public class BADControlElement {
     /**
      * Cannot be null
      */
-    public void controlValue(String content, int line, BAD bad) {
+    public void controlValue(String content, BAD bad) {
 
         if (content == null || content.length() == 0) {
             logLine.addError("There is no value : " + content);
@@ -381,19 +503,25 @@ public class BADControlElement {
         }
 
         //control and create
-        bad.setValue(controlEquation(bad, content, line, "value"));
+        bad.setValue(controlEquation(bad, content, "value"));
     }
 
 
-    public void controlCondition(String content, int line, BAD bad) {
+    public void controlCondition(String content, BAD bad) {
         if (content != null && content.length() != 0) {
 
-            bad.setCondition(controlCondition(bad, content, line, "Condition"));
+            bad.setCondition(controlCondition(bad, content, "Condition"));
         }
     }
 
-
-    public Answer controlAnswerValue(Question question, String content, BADLog badLog, int line) {
+    /**
+     * control the value of the question for the test
+     *
+     * @param question
+     * @param content
+     * @return
+     */
+    public Answer controlAnswerValue(Question question, String content) {
 
         //create answer
         Answer answer = new Answer(question);
@@ -403,7 +531,7 @@ public class BADControlElement {
         getAllRepetitionQuestionSet(question.getQuestionSet(), questionSetsRepetable);
 
         //remove space characters
-        content= content.replaceAll("( | )", "");
+        content = content.replaceAll("( | )", "");
 
         //take answer one by one
         Pattern pattern = Pattern.compile("(\\(([^\\(\\)]*)\\))?([^;]+)(;|$)");
@@ -425,33 +553,32 @@ public class BADControlElement {
             if (question instanceof NumericQuestion) {
 
                 //remove point
-                value=value.replace(",",".");
+                value = value.replace(",", ".");
 
                 //detect unit
                 Matcher mNum = patternNumeric.matcher(value);
 
-                if(mNum.find()){
+                if (mNum.find()) {
 
                     //control unit
-                    if(((NumericQuestion)question).getUnitCategory()!=null){
+                    if (((NumericQuestion) question).getUnitCategory() != null) {
 
                         //if there is not unit defined
-                        if(mNum.group(3)==null){
+                        if (mNum.group(3) == null) {
 
                             //... use the default unit of the question
-                            if(((NumericQuestion)question).getDefaultUnit()!=null){
-                                unit = ((NumericQuestion)question).getDefaultUnit();
+                            if (((NumericQuestion) question).getDefaultUnit() != null) {
+                                unit = ((NumericQuestion) question).getDefaultUnit();
                             }
                             //... or the main unit of the unit category
-                            else{
-                                unit = ((NumericQuestion)question).getUnitCategory().getMainUnit();
+                            else {
+                                unit = ((NumericQuestion) question).getUnitCategory().getMainUnit();
                             }
 
-                            logLine.addInfo("QuestionValue : cannot found a unit for the question "+question.getCode().getKey()+" : the default unit "+unit.getSymbol()+" will be used");
-                        }
-                        else {
+                            logLine.addInfo("QuestionValue : cannot found a unit for the question " + question.getCode().getKey() + " : the default unit " + unit.getSymbol() + " will be used");
+                        } else {
                             //try to use the defined unit
-                            unit = controlUnitCategory(((NumericQuestion) question), mNum.group(3), null, line, "questionValue");
+                            unit = controlUnitCategory(((NumericQuestion) question), mNum.group(3), null, "questionValue");
 
                             if (unit == null) {
                                 logLine.addError("QuestionValue : cannot found a unit for the question " + question.getCode().getKey());
@@ -462,15 +589,14 @@ public class BADControlElement {
 
                     //convert the value (without the unit) into double
                     try {
-                        Double.parseDouble(mNum.group(1));
-                        valueToAdd = mNum.group(1);
+                        Double valueDouble = Double.parseDouble(mNum.group(1));
+                        valueToAdd = String.valueOf(valueDouble);
                     } catch (NumberFormatException e) {
                         logLine.addError("QuestionValue : Number expected but conversion failed");
                         continue;
                     }
-                }
-                else{
-                    logLine.addError("QuestionValue : value must be a numeric (optinaly with a unit) but not found : "+value);
+                } else {
+                    logLine.addError("QuestionValue : value must be a numeric (optinaly with a unit) but not found : " + value);
                     continue;
                 }
 
@@ -478,32 +604,39 @@ public class BADControlElement {
                 //if it's a number, convert to integer
                 try {
                     Double valueD = Double.parseDouble(value);
-                    value = valueD.intValue()+"";
+                    value = valueD.intValue() + "";
                 } catch (NumberFormatException e) {
                 }
 
 
                 if (!controlListElement(((ValueSelectionQuestion) question).getCodeList(), value)) {
-                    logLine.addError("QuestionValue : value must be a member of the list "+((ValueSelectionQuestion) question).getCodeList().name()+" but not found : "+value);
+                    logLine.addError("QuestionValue : value must be a member of the list " + ((ValueSelectionQuestion) question).getCodeList().name() + " but not found : " + value);
                     continue;
                 }
-                valueToAdd = value;
-            }
-            else if(question instanceof BooleanQuestion){
-                if(controlBoolean(value)==null){
-                    logLine.addError("QuestionValue : boolean expected but not found : "+value);
+                valueToAdd = "\"" + value + "\"";
+            } else if (question instanceof BooleanQuestion) {
+                if (controlBoolean(value) == null) {
+                    logLine.addError("QuestionValue : boolean expected but not found : " + value);
                     continue;
                 }
-                valueToAdd = value;
+                if (controlBoolean(value).equals("true")) {
+                    valueToAdd = "\"1\"";
+                } else {
+                    valueToAdd = "\"0\"";
+                }
+            } else {
+                valueToAdd = "\"" + value + "\"";
             }
 
             //add value
             //create a answer for each answer founded
             AnswerLine answerLine = new AnswerLine(valueToAdd);
+            if (unit != null) {
+                answerLine.setUnit(unit);
+            }
 
             //control repetition
-
-            Map<String,Integer> repetitionMap = new HashMap<>();
+            Map<String, Integer> repetitionMap = new HashMap<>();
 
             //if the group(2) is null not, there is some repetition
             if (m.group(2) != null) {
@@ -515,18 +648,87 @@ public class BADControlElement {
             }
 
             //control repetition
-            if(repetitionMap.size() != questionSetsRepetable.size()){
+            if (repetitionMap.size() != questionSetsRepetable.size()) {
                 //TODO boost the control
                 logLine.addError("Wrong repetition map");
                 continue;
             }
-                //add repetition map
-                answerLine.setMapRepetition(repetitionMap);
+            //add repetition map
+            answerLine.setMapRepetition(repetitionMap);
 
             //add line to answer
             answer.addAnswerLine(answerLine);
         }
         return answer;
+    }
+
+    /**
+     * Control the value of the test for the bad
+     *
+     * @param content
+     * @param bad
+     */
+    public void controlTestValue(String content, BAD bad) {
+
+        //control test
+        if (content == null || content.length() == 0) {
+            logLine.addWarn("There is not test");
+            return;
+        }
+
+        //remove space characters
+        content = content.replaceAll("( | )", "");
+
+        //take answer one by one
+        Pattern pattern = Pattern.compile("(\\(([^\\(\\)]*)\\))?([^;]+)(;|$)");
+
+        Pattern patternRepetition = Pattern.compile("(A[A-Z]*[0-9]+):([0-9]+)(;|$)");
+
+        Matcher m = pattern.matcher(content);
+
+        while (m.find()) {
+
+            //control value
+            String value = m.group(3).replace(",", ".");
+            Double valueDouble;
+            try {
+                valueDouble = Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                logLine.addError("TestValue : expected number but conversion failed : " + value);
+                continue;
+            }
+
+            //add value
+            //create a answer for each answer founded
+            BadTestValue badTestValue = new BadTestValue(valueDouble);
+
+
+            //control repetition
+            Map<String, Integer> repetitionMap = new HashMap<>();
+
+            //if the group(2) is null not, there is some repetition
+            if (m.group(2) != null) {
+
+                Matcher m2 = patternRepetition.matcher(m.group(2));
+                while (m2.find()) {
+                    repetitionMap.put(m2.group(1), Integer.parseInt(m2.group(2)));
+                }
+            }
+
+            //control repetition
+            /*
+            if (repetitionMap.size() != questionSetsRepetable.size()) {
+                //TODO boost the control
+                logLine.addError("Wrong repetition map");
+                continue;
+            }
+            */
+            //add repetition map
+            badTestValue.setMapRepetition(repetitionMap);
+
+            //add line to answer
+            bad.addTestValue(badTestValue);
+        }
     }
 
 
@@ -621,7 +823,7 @@ public class BADControlElement {
 
     private static String controlBoolean(String s) {
         if (s != null) {
-            if (s.equals("1") || s.equalsIgnoreCase("true")  || s.equalsIgnoreCase("yes")) {
+            if (s.equals("1") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("yes")) {
                 return "true";
             } else if (s.equals("0") || s.equals("false") || s.equalsIgnoreCase("no")) {
                 return "false";
@@ -630,7 +832,7 @@ public class BADControlElement {
         return null;
     }
 
-    private String controlCondition(BAD bad, String content, int line, String type) {
+    private String controlCondition(BAD bad, String content, String type) {
 
         String condition = content;
         String value = content;
@@ -672,7 +874,7 @@ public class BADControlElement {
 
                     // c) control unit if it's needed
                     if (question instanceof NumericQuestion) {
-                        controlUnitCategory(((NumericQuestion) question), matcher.group(3), bad.getUnit().getCategory(), line, type);
+                        controlUnitCategory(((NumericQuestion) question), matcher.group(3), bad.getUnit().getCategory(), type);
                     }
 
                     // d) control comparison member
@@ -794,7 +996,7 @@ public class BADControlElement {
      * d) replace code
      * 2) control equation with replace elements
      */
-    private String controlEquation(BAD bad, String content, int line, String type) {
+    private String controlEquation(BAD bad, String content, String type) {
 
         //create an equation test
         String equation = content;
@@ -836,7 +1038,7 @@ public class BADControlElement {
 
                     //c) control unit if it's needed
                     if (unitCategoryQuestion != null) {
-                        unit = controlUnitCategory(((NumericQuestion) question), matcher.group(3), bad.getUnit().getCategory(), line, type);
+                        unit = controlUnitCategory(((NumericQuestion) question), matcher.group(3), bad.getUnit().getCategory(), type);
                     }
 
                 } else {
@@ -892,13 +1094,12 @@ public class BADControlElement {
      * @param question            the question
      * @param unitExpected        the unit used to convert the answer of the question
      * @param unitCategoryDefault if the unitExpected if null, use the unitCategoryDefault to control equivalence
-     * @param line                the number of the line controlled
      * @param type                the field controlled
      * @return a unit if the equivalence is true and the equation need a unit to convert the answer. null if not
      * Complete also the log for error and / or info
      */
     private Unit controlUnitCategory(NumericQuestion question, String unitExpected, UnitCategory
-            unitCategoryDefault, int line, String type) {
+            unitCategoryDefault, String type) {
 
         //if the question doesn't have unitCategory, control useless
         if (question.getUnitCategory() != null) {

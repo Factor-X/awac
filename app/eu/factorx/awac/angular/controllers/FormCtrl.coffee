@@ -2,6 +2,11 @@ angular
 .module('app.controllers')
 .controller "FormCtrl", ($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout,displayFormMenu) ->
 
+    console.log "...............----------------------"
+    console.log this.resolve
+
+    # test key and scope
+
     $scope.formIdentifier = formIdentifier
     $scope.displayFormMenu=displayFormMenu
 
@@ -38,7 +43,7 @@ angular
     #
     # load the form and treat structure and data
     #
-    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, (result) ->
+    downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
 
         if not result.success
             # TODO ERROR HANDLING
@@ -174,17 +179,17 @@ angular
 
             downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
                 if result.success
-    
+
                     #refresh the progress bar
-    
+
                     listToRemove = []
-    
+
                     for key in Object.keys($scope.mapRepetition)
                         if key != '$$hashKey'
                             i=0
                             while i < $scope.mapRepetition[key].length
                                 repetition =  $scope.mapRepetition[key][i]
-    
+
                                 founded=false
                                 for answer in $scope.answerList
                                     if answer.value? &&  (!answer.isAggregation? || answer.isAggregation != true) && $scope.compareRepetitionMap(answer.mapRepetition,repetition)
@@ -197,25 +202,25 @@ angular
                                     listToRemove[it].iteration = {}
                                     listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key]
                                     j = angular.copy($scope.mapRepetition[key][i])
-    
+
                                     delete j[key]
                                     listToRemove[it].map = j
                                 i++
-    
+
                     for repetitionToRemove in listToRemove
                         $scope.removeIteration(repetitionToRemove.code,repetitionToRemove.iteration,repetitionToRemove.map)
-    
+
                     #
                     # normalize answer after save
                     #
                     i=$scope.answerList.length-1
                     while i>=0
                         answer = $scope.answerList[i]
-    
+
                         # test if the question was edited
                         if answer.wasEdited == true
                             answer.wasEdited = false
-    
+
                         if answer.toRemove == true
                             $scope.answerList.splice(i, 1)
                         i--
@@ -224,18 +229,18 @@ angular
                     # refresh the progressBar
                     #
                     $scope.saveFormProgress()
-    
+
                     #
                     # display success message and hide the loading modal
                     #
                     messageFlash.displaySuccess translationService.get('ANSWERS_SAVED')
                     modalService.close(modalService.LOADING)
-    
+
                     #nav
                     if argToNav != null
                         $scope.$root.$broadcast('NAV', argToNav)
                     return
-    
+
                 else
                     messageFlash.displayError translationService.get('ERROR_THROWN_ON_SAVE') + data.message
                     modalService.close(modalService.LOADING)
@@ -346,7 +351,7 @@ angular
         else
             #compute default value
             value = null
-            defaultUnitId = null
+            defaultUnitCode = null
             wasEdited = false
             if $scope.getQuestion(code) != null
                 question = $scope.getQuestion(code)
@@ -355,20 +360,20 @@ angular
                     value = question.defaultValue
                     wasEdited = true
 
-                #compute defaultUnitId
+                #compute defaultUnitCode
                 if question.unitCategoryId?
                     if question.defaultUnit?
-                        defaultUnitId = question.defaultUnit.id
+                        defaultUnitCode = question.defaultUnit.code
                     else
-                        defaultUnitId = $scope.getUnitCategories(code).mainUnitId
+                        defaultUnitCode = $scope.getUnitCategories(code).mainUnitCode
 
             #if the answer was not founded, create it
             answerLine = {
                 'questionKey': code
                 'value': value
-                'unitId': defaultUnitId
+                'unitCode': defaultUnitCode
                 'mapRepetition': mapIteration
-                'lastUpdateUser': $scope.$root.currentPerson.identifier
+                'lastUpdateUser': $scope.$root.currentPerson
                 'wasEdited': wasEdited
             }
 
@@ -529,9 +534,9 @@ angular
     # watch 'periodToCompare' variable and load the data to compare when the value is different than 'default'
     # the result is savec to $scope.dataToCompare
     #
-    $scope.$parent.$watch 'periodToCompare', () ->
-        if $scope.$parent != null && $scope.$parent.periodToCompare != 'default'
-            downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$parent.periodToCompare + "/" + $scope.$parent.scopeId, (result)->
+    $scope.$watch '$root.periodToCompare', () ->
+        if $scope.$parent != null && $scope.$root.periodToCompare != 'default'
+            downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, (result)->
                 if result.success
                     $scope.dataToCompare = result.data
                 else
@@ -596,20 +601,26 @@ angular
         console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
         console.log listTotal
 
+
+
         #build formProgressDTO
         formProgressDTO = {}
         formProgressDTO.form = $scope.formIdentifier
-        formProgressDTO.period = $scope.$parent.periodKey
-        formProgressDTO.scope = $scope.$parent.scopeId
+        formProgressDTO.period = $scope.$root.periodSelectedKey
+        formProgressDTO.scope = $scope.$root.scopeSelectedId
         formProgressDTO.percentage = percentage
 
         # refresh progress bar
         founded = false
-        for formProgress in $scope.$parent.formProgress
-            #console.log formProgress.form + "-" + $scope.formIdentifier
-            if formProgress.form == $scope.formIdentifier
-                founded = true
-                formProgress.percentage = percentage
+        if $scope.$parent.formProgress?
+            for formProgress in $scope.$parent.formProgress
+                #console.log formProgress.form + "-" + $scope.formIdentifier
+                if formProgress.form == $scope.formIdentifier
+                    founded = true
+                    formProgress.percentage = percentage
+        else
+            $scope.$parent.formProgress = []
+
         if founded == false
             $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO
 
@@ -658,35 +669,6 @@ angular
             tab = answer.tab
 
             ite=$scope.addTabSet(tabSet,tab,answer.mapRepetition)
-
-            # create the elements of the $scope.tabSet variable
-            ###
-            ite=null
-
-            if !$scope.tabSet[tabSet]?
-                $scope.tabSet[tabSet] = []
-                $scope.tabSet[tabSet][0] = {}
-                $scope.tabSet[tabSet][0].mapRepetition = answer.mapRepetition
-                ite = 0
-            else
-                i=0
-                while i < $scope.tabSet[tabSet].length
-                    if $scope.compareRepetitionMap(answer.mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)
-                        ite = i
-                        break
-                    i++
-                if ite == null
-                    ite = $scope.tabSet[tabSet].length
-                    $scope.tabSet[tabSet][ite] = {}
-                    $scope.tabSet[tabSet][ite].mapRepetition = answer.mapRepetition
-
-            if !$scope.tabSet[tabSet][ite][tab]?
-                $scope.tabSet[tabSet][ite][tab] = {}
-                $scope.tabSet[tabSet][ite][tab].active = (tab == 1 ? true:false)
-
-            if !$scope.tabSet[tabSet][ite][tab].listToCompute?
-                $scope.tabSet[tabSet][ite][tab].listToCompute = []
-            ###
 
             # test if an answer with the same questionKey / mapRepetition is already contains into the list of answer
             j = $scope.tabSet[tabSet][ite][tab].listToCompute.length

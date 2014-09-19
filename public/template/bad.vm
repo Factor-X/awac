@@ -1,9 +1,10 @@
-package eu.factorx.awac.service.knowledge.activity.contributor.tps;
+package $PACKAGE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;

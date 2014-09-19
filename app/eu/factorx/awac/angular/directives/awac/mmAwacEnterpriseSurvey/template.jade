@@ -1,6 +1,7 @@
 div
     div(ng-hide='$root.hideHeader()')
         .survey-header
+            // user block
             table.survey-header-option
                 tr
                     td
@@ -20,7 +21,7 @@ div
                         button.button.help(type='button', mm-not-implemented='mm-not-implemented') Assistance
                     td
                         //  site manager button
-                        button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',mm-not-implemented='mm-not-implemented')
+                        button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-click='nav(\'/site_manager\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}')
                         // user manager button
                         button.button.user_manage(type='button', ng-bind-html='\'USER_MANAGER_BUTTON\' | translate', ng-click='nav(\'/user_manager\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}')
                     td
@@ -32,19 +33,19 @@ div
             .awac_logo
             div
                 .calculateur_type(ng-bind-html='\'TITLE_ENTERPRISE\' | translate')
-                .entreprise_name {{ $root.organization.name }}
-        .data_menu(ng-show='displayMenu===true')
+                .entreprise_name {{ $root.organizationName }}
+        .data_menu(ng-show='displayLittleMenu===true || displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
-                select(ng-options='p.key as p.label for p in $root.periods', ng-model='periodKey')
+                select(ng-options='p.key as p.label for p in $root.availablePeriods', ng-model='$root.periodSelectedKey')
             .big_separator
             .data_date_compare
                 div Site sélectionné
-                select(ng-options='s.scope as s.name for s in $root.organization.sites', ng-model='scopeId')
+                select(ng-options='s.scope as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
             .big_separator
             .data_date_compare
                 div Comparaison avec
-                select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='periodToCompare')
+                select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
             .data_save
                 .last_save(ng-hide='lastSaveTime===null')
@@ -60,27 +61,27 @@ div
                     .site
                         button.button.verification(type='button', mm-not-implemented='mm-not-implemented') Vérification
                     .menu
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab2\') == true}', ng-click='nav(\'/enterprise-tab2\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='nav(\'/form/TAB2\')')
                             .tab-title(ng-bind-html='\'TAB2\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB2\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab3\')  == true}', ng-click='nav(\'/enterprise-tab3\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB3\')  == true}', ng-click='nav(\'/form/TAB3\')')
                             .tab-title(ng-bind-html='\'TAB3\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB3\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab4\') == true}', ng-click='nav(\'/enterprise-tab4\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB4\') == true}', ng-click='nav(\'/form/TAB4\')')
                             .tab-title(ng-bind-html='\'TAB4\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB4\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab5\') == true}', ng-click='nav(\'/enterprise-tab5\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB5\') == true}', ng-click='nav(\'/form/TAB5\')')
                             .tab-title(ng-bind-html='\'TAB5\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB5\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab6\') == true}', ng-click='nav(\'/enterprise-tab6\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB6\') == true}', ng-click='nav(\'/form/TAB6\')')
                             .tab-title(ng-bind-html='\'TAB6\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB6\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/enterprise-tab7\') == true}', ng-click='nav(\'/enterprise-tab7\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB7\') == true}', ng-click='nav(\'/form/TAB7\')')
                             .tab-title(ng-bind-html='\'TAB7\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB7\')')
                             .menu_arrow
@@ -89,5 +90,6 @@ div
                         .tab-title résultats
                     button.button(mm-not-implemented='mm-not-implemented')
                         .tab-title actions de réduction
+
     div(class="{{getClassContent()}}",ng-view)
     .footer

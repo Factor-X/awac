@@ -25,6 +25,7 @@
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
+        <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
@@ -82,7 +83,9 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
+
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
  		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
@@ -93,8 +96,7 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />   
-
-            <property name="hibernate.hbm2ddl.auto" value="update"/>          
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>          
 
 			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
 			<property name="hibernate.cache.use_query_cache" value="true"/>
@@ -135,6 +137,7 @@
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
         <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
+        <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
@@ -192,6 +195,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.Report</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
+        <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

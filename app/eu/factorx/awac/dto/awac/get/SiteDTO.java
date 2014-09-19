@@ -37,7 +37,7 @@ public class SiteDTO extends DTO {
 	@Range(min = 0, max = 100)
 	private Double percentOwned;
 
-	private List<String> listPeriodAvailable;
+	private List<PeriodDTO> listPeriodAvailable;
 
 	public SiteDTO() {
 	}
@@ -127,40 +127,40 @@ public class SiteDTO extends DTO {
 		this.percentOwned = percentOwned;
 	}
 
-	public List<String> getListPeriodAvailable() {
-		return listPeriodAvailable;
-	}
 
-	public void setListPeriodAvailable(List<String> listPeriodAvailable) {
-		this.listPeriodAvailable = listPeriodAvailable;
-	}
+    public List<PeriodDTO> getListPeriodAvailable() {
+        return listPeriodAvailable;
+    }
 
-	@Override
-	public String toString() {
-		return "SiteDTO{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", scope=" + scope +
-				", naceCode='" + naceCode + '\'' +
-				", description='" + description + '\'' +
-				", organizationalStructure='" + organizationalStructure + '\'' +
-				", economicInterest='" + economicInterest + '\'' +
-				", operatingPolicy='" + operatingPolicy + '\'' +
-				", accountingTreatment='" + accountingTreatment + '\'' +
-				", percentOwned=" + percentOwned +
-				", listPeriodAvailable=" + listPeriodAvailable +
-				'}';
-	}
+    public void setListPeriodAvailable(List<PeriodDTO> listPeriodAvailable) {
+        this.listPeriodAvailable = listPeriodAvailable;
+    }
 
+    @Override
+    public String toString() {
+        return "SiteDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", scope=" + scope +
+                ", naceCode='" + naceCode + '\'' +
+                ", description='" + description + '\'' +
+                ", organizationalStructure='" + organizationalStructure + '\'' +
+                ", economicInterest='" + economicInterest + '\'' +
+                ", operatingPolicy='" + operatingPolicy + '\'' +
+                ", accountingTreatment='" + accountingTreatment + '\'' +
+                ", percentOwned=" + percentOwned +
+                ", listPeriodAvailable=" + listPeriodAvailable +
+                '}';
+    }
 
-	/***********************
+    /***********************
 	 *  NOT AUTO_GENERATED !!
 	 *********************/
 
-	public void addPeriodAvailable(String periodAvailableCode){
+	public void addPeriodAvailable(PeriodDTO periodDTO){
 		if(this.listPeriodAvailable==null){
 			this.listPeriodAvailable = new ArrayList<>();
 		}
-		this.listPeriodAvailable.add(periodAvailableCode);
+		this.listPeriodAvailable.add(periodDTO);
 	}
 }

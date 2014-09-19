@@ -1,7 +1,7 @@
 #
 # Routes
 #
-initializeMunicipalityRoutes = () ->
+initializeMunicipalityRoutes = (defaultResolve) ->
 
     angular
     .module('app')

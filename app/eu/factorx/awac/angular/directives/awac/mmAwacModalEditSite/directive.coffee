@@ -76,7 +76,7 @@ angular
             percentOwned :{
                 fieldTitle: "SITE_MANAGER_PERCENT_OWNED"
                 validationFct:->
-                    if $scope.fields.percentOwned.field>=0 && $scope.fields.percentOwned.field<=1000
+                    if $scope.fields.percentOwned.field>=0 && $scope.fields.percentOwned.field<=100
                         return true
                     return false
                 validationMessage: "CONTROL_FIELD_DEFAULT_PERCENT_MAX_100"
@@ -145,7 +145,7 @@ angular
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             # add new site to the list
-                            $scope.$root.organization.sites[$scope.$root.organization.sites.length] = result.data
+                            $scope.getParams().organization.sites[$scope.getParams().organization.sites.length] = result.data
 
                             #close window
                             $scope.close()

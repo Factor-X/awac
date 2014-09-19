@@ -16,24 +16,24 @@ public class IntegerAnswerValue extends NumericAnswerValue {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private Integer value;
+	private Double value;
 
 	protected IntegerAnswerValue() {
 		super();
 	}
 
-	public IntegerAnswerValue(QuestionAnswer questionAnswer, Integer value, Unit unit) {
+	public IntegerAnswerValue(QuestionAnswer questionAnswer, Double value, Unit unit) {
 		super();
 		this.questionAnswer = questionAnswer;
 		this.value = value;
 		this.unit = unit;
 	}
 
-	public Integer getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -53,7 +53,7 @@ public class IntegerAnswerValue extends NumericAnswerValue {
 		if (unitId != null) {
 			this.unit = JPA.em().find(Unit.class, unitId);
 		}
-		this.value = rawData.getDoubleData().intValue();
+		this.value = rawData.getDoubleData();
 	}
 
 	@Override

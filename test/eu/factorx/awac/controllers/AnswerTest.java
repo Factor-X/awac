@@ -17,6 +17,7 @@ import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.PeriodCode;
@@ -62,7 +63,7 @@ public class AnswerTest extends AbstractBaseModelTest {
 	List<AnswerLineDTO> answerListDto = new ArrayList<AnswerLineDTO>();
 	AnswerLineDTO answerLineDto = new AnswerLineDTO();
 	answerLineDto.setComment("comment");
-	answerLineDto.setLastUpdateUser("user1");
+
 	//answerLineDto.setMapRepetition();
 	answerLineDto.setQuestionKey("A2");
 	//answerLineDto.setUnitId(1);

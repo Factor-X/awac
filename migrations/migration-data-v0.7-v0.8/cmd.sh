@@ -13,6 +13,9 @@ touch /tmp/migration/migration_script.sql
 # safety separator
 echo ";" >> /tmp/migration/migration_script.sql
 
+# create new multi site
+cat ./CELDL-51-Multi-Site.sql >> /tmp/migration/migration_script.sql
+
 # create new invitation table
 cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 
@@ -29,6 +32,10 @@ cat ./CELDL-135-Scope-Reengineering.sql >> /tmp/migration/migration_script.sql
 cat ./CELDL-135-AnswerValue-Reengineering.sql >> /tmp/migration/migration_script.sql
 
 cat ./CELDL-149-OrganizationEvent.sql >> /tmp/migration/migration_script.sql
+
+# refresh some question / unit conversion
+cat ./refesh_some_question_default_unit.sql >> /tmp/migration/migration_script.sql
+
 
 
 
