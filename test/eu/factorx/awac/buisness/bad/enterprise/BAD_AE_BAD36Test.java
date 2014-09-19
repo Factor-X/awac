@@ -214,17 +214,17 @@ public class BAD_AE_BAD36Test{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A244",1);
                 mapRepetition1.put("A303",1);
-                list.add(new AnswerLineDTO("A308","10",  mapRepetition1 ));
+                list.add(new AnswerLineDTO("A308",0.9,  mapRepetition1 ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("A244",1);
                 mapRepetition2.put("A303",2);
-                list.add(new AnswerLineDTO("A308","11",  mapRepetition2 ));
+                list.add(new AnswerLineDTO("A308",1.0,  mapRepetition2 ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("A244",2);
                 mapRepetition3.put("A303",1);
-                list.add(new AnswerLineDTO("A308","2",  mapRepetition3 ));
+                list.add(new AnswerLineDTO("A308",0.1,  mapRepetition3 ));
         
         return list;
     }

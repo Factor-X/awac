@@ -177,7 +177,7 @@ public class BAD_AC_BAD7ATest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AC56",1);
-                list.add(new AnswerLineDTO("AC59",3600.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
+                list.add(new AnswerLineDTO("AC59",3600.0,  mapRepetition1  , UnitCode.U5155.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("AC56",2);
