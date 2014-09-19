@@ -90,6 +90,15 @@ angular
                             if period.id == $scope.assignPeriod
                                 site.listPeriodAvailable[site.listPeriodAvailable.length] = period
 
+            #
+            # this function replace my site by organization site
+            #
+            $scope.refreshMySites = () ->
+                ###
+                mySites = []
+                for site in $scope.organization.sites
+                    if site.
+                ###
 
             $scope.editOrCreateEvent = (event) ->
                 params = {}
