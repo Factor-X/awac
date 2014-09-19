@@ -12,6 +12,7 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -57,6 +58,9 @@ public class InvitationController extends AbstractController {
 
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
+
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
 
 	private static String INVITATION_TITLE = "AWAC - invitation from ";
 	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
@@ -128,6 +132,13 @@ public class InvitationController extends AbstractController {
 
 		// create account
 		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+
+        // ONLY FOR municipality : assign the new user of the site
+        for(Site site : invitation.getOrganization().getSites()){
+            AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
+            accountSiteAssociationService.saveOrUpdate( accountSiteAssociation);
+        }
+
 		accountService.saveOrUpdate(account);
 
 		// delete invitation

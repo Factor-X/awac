@@ -9,9 +9,11 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
@@ -23,6 +25,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -43,6 +47,12 @@ public class RegistrationController  extends AbstractController {
 
 	@Autowired
 	private SiteService siteService;
+
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
+
+    @Autowired
+    private PeriodService periodService;
 
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
@@ -72,8 +82,19 @@ public class RegistrationController  extends AbstractController {
 
 		//create site
 		Site site = new Site(organization, dto.getFirstSiteName());
-		siteService.saveOrUpdate(site);
-		organization.getSites().add(site);
+
+        //add last year period
+        Period period = periodService.findLastYear();
+        List<Period> listAvailablePeriod= new ArrayList<>();
+        listAvailablePeriod.add(period);
+        site.setListPeriodAvailable(listAvailablePeriod);
+
+        siteService.saveOrUpdate(site);
+        organization.getSites().add(site);
+
+        //create link between account and site
+        AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
+        accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
@@ -110,10 +131,14 @@ public class RegistrationController  extends AbstractController {
 
 		//create site
 		Site site = new Site(organization, dto.getMunicipalityName());
+        //create link between site and period
+        site.setListPeriodAvailable(periodService.findAll());
 		siteService.saveOrUpdate(site);
 		organization.getSites().add(site);
 
-
+        //create link between account and site
+        AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
+        accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);

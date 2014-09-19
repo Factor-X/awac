@@ -4,9 +4,11 @@ import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
@@ -17,6 +19,9 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @org.springframework.stereotype.Controller
@@ -30,6 +35,9 @@ public class SiteController  extends AbstractController {
 
 	@Autowired
 	private PeriodService periodService;
+
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
 
 
 	@Transactional(readOnly = false)
@@ -90,7 +98,17 @@ public class SiteController  extends AbstractController {
 		site.setAccountingTreatment(dto.getAccountingTreatment());
 		site.setPercentOwned(dto.getPercentOwned());
 
-		siteService.saveOrUpdate(site);
+        //assign the last year
+        Period lastYear = periodService.findLastYear();
+        List<Period> periodList = new ArrayList<>();
+        periodList.add(lastYear);
+        site.setListPeriodAvailable(periodList);
+
+        siteService.saveOrUpdate(site);
+
+        //assign the creator to the site
+        AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site ,securedController.getCurrentUser());
+        accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
 		// return the new site because some new information are added, like id and scope
 		return ok(conversionService.convert(site,SiteDTO.class));

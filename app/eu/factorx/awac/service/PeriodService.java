@@ -7,4 +7,6 @@ public interface PeriodService extends PersistenceService<Period> {
 	
 	Period findByCode(PeriodCode periodCode);
 
+    Period findLastYear();
+
 }
