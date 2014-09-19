@@ -1,12 +1,9 @@
 package eu.factorx.awac.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
-
-import javax.validation.constraints.AssertFalse;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
