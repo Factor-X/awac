@@ -18,8 +18,10 @@ public class ReportToReportDTOConverter implements Converter<ReportResult, Repor
 		Map<String, List<Double>> scopeValuesByIndicator = report.getScopeValuesByIndicator();
 
 		int notNullValues = 0;
+		double total = 0;
 		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
 			if (entry.getValue().get(0) > 0) notNullValues++;
+			total += entry.getValue().get(0);
 		}
 
 		int currentNotNullValue = 0;
@@ -33,6 +35,7 @@ public class ReportToReportDTOConverter implements Converter<ReportResult, Repor
 				reportLineDTO.setColor("#" + Colors.makeGoodColorForSerieElement(currentNotNullValue, notNullValues));
 				currentNotNullValue++;
 			}
+			reportLineDTO.setPercentage(100 * entry.getValue().get(0) / total);
 			reportDTO.getReportLines().add(reportLineDTO);
 		}
 

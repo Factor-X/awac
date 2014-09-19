@@ -1,4 +1,4 @@
-div.pdf-able
+div.results.pdf-able
     h1
         span(ng-bind-html="'RESULTS' | translate")
 
@@ -38,98 +38,104 @@ div.pdf-able
 
             td.top-aligned.horizontally-padded.wide
 
-                div.results_disclaimer
-                    span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                div(ng-show="siteSelectionIsEmpty()")
 
-                div(ng-show="current_tab == 1")
-                    h2
-                        span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
+                    div Please choose at least one site
+
+                div(ng-hide="siteSelectionIsEmpty()")
+
+                    div.results_disclaimer
+                        span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+
+                    div(ng-show="current_tab == 1")
+                        h2
+                            span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
+                        br
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+
+                    div(ng-show="current_tab == 2")
+                        h2
+                            span(ng-bind-html="'IMPACTS_PARTITION' | translate")
+                        br
+
+                        h3
+                            span(ng-bind-html="'SCOPE_1' | translate")
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
+
+                        h3
+                            span(ng-bind-html="'SCOPE_2' | translate")
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
+
+
+                        h3
+                            span(ng-bind-html="'SCOPE_3' | translate")
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
+
+
+
+
+                    div(ng-show="current_tab == 3")
+                        h2
+                            span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
+                        br
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+
+                    div(ng-show="current_tab == 4")
+                        h2
+                            span(ng-bind-html="'NUMBERS' | translate")
+                        mm-awac-result-table(ng-model="o.reportDTOs.R_1")
+
+
+                    div(ng-show="current_tab == 5")
+                        h2
+                            span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+
+                    div(ng-show="current_tab == 6")
+                        h2
+                            span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+
+                    div(ng-show="current_tab == 7")
+                        h2
+                            span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
+
                     br
-                    center
-                        table
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_1 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_1")
-
-                div(ng-show="current_tab == 2")
-                    h2
-                        span(ng-bind-html="'IMPACTS_PARTITION' | translate")
                     br
-
-                    h3
-                        span(ng-bind-html="'SCOPE_1' | translate")
-                    center
-                        table
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
-
-                    h3
-                        span(ng-bind-html="'SCOPE_2' | translate")
-                    center
-                        table
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
-
-
-                    h3
-                        span(ng-bind-html="'SCOPE_3' | translate")
-                    center
-                        table
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
-
-
-
-
-                div(ng-show="current_tab == 3")
-                    h2
-                        span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
                     br
-                    center
-                        table
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
-
-                div(ng-show="current_tab == 4")
-                    h2
-                        span(ng-bind-html="'NUMBERS' | translate")
-                    mm-awac-result-table(ng-model="o.reportDTOs.R_1")
-
-
-                div(ng-show="current_tab == 5")
-                    h2
-                        span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
-
-                div(ng-show="current_tab == 6")
-                    h2
-                        span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
-
-                div(ng-show="current_tab == 7")
-                    h2
-                        span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
-
-                br
-                br
-                br
 
             td.top-aligned
                 .charts-panel-tabset

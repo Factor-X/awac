@@ -18,6 +18,8 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private Double scope3Value = Double.valueOf(0);
 
+	private Double percentage = Double.valueOf(0);
+
 	private Double outOfScopeValue = Double.valueOf(0);
 
 	public ReportLineDTO() {
@@ -29,7 +31,7 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.indicatorName = indicatorName;
 	}
 
-	public ReportLineDTO(String indicatorName, String color, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue) {
+	public ReportLineDTO(String indicatorName, String color, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue, Double percentage) {
 		super();
 		this.indicatorName = indicatorName;
 		this.color = color;
@@ -37,6 +39,7 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.scope2Value = scope2Value;
 		this.scope3Value = scope3Value;
 		this.outOfScopeValue = outOfScopeValue;
+		this.percentage = percentage;
 	}
 
 	public String getIndicatorName() {
@@ -101,5 +104,13 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public Double getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(Double percentage) {
+		this.percentage = percentage;
 	}
 }

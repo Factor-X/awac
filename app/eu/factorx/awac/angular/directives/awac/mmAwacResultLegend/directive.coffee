@@ -12,6 +12,7 @@ angular
 
         scope.getNumber = (rl) ->
             return undefined unless scope.ngModel
+            return undefined unless rl
             result = null
             index = 0
             for l in scope.ngModel.reportLines
