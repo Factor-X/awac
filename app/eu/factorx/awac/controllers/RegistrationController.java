@@ -113,6 +113,8 @@ public class RegistrationController  extends AbstractController {
 		siteService.saveOrUpdate(site);
 		organization.getSites().add(site);
 
+
+
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
