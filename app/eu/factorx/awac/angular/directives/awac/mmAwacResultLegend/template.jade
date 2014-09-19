@@ -1,0 +1,9 @@
+.chart-legend
+    div(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
+        span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
+        span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")
+        span &nbsp;
+        span(ng-bind-html="line.indicatorName | translate")
+        span &nbsp;
+        span ( {{ (line.scope1Value + line.scope2Value + line.scope3Value + line.outOfScopeValue) | numberToI18NOrLess }} tCO2e) ( {{ line.percentage | numberToI18NOrLess }} % )
+

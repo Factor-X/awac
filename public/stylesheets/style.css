@@ -1860,48 +1860,4 @@ ul.messenger > li {
     background-repeat: no-repeat;
 }
 
-#logger {
-    box-sizing: border-box;
-    position: absolute;
-    display: none;
-    left: 1cm;
-    right: 1cm;
-    bottom: 1cm;
-    background: #333;
-    text-align: right;
-    border: solid 0.25cm #333;
-    border-radius: 0.25cm;
-    box-shadow: 0 0 0 2px #ccc, 0 0 1cm black;
-    height: 30%;
-    z-index: 1000000000000;
-}
 
-#logger[data-state="0"] {
-    display: none;
-}
-
-#logger[data-state="1"] {
-    display: block;
-    left: 1cm;
-    right: 1cm;
-    bottom: 1cm;
-    height: 30%;
-}
-
-#logger[data-state="2"] {
-    display: block;
-    height: auto;
-    left: 1cm;
-    right: 1cm;
-    bottom: 1cm;
-    top: 1cm;
-}
-
-svg {
-    width: 100%;
-    height: 100%;
-}
-
-.donut-path:hover {
-    opacity: 0.75;
-}
