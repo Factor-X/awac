@@ -65,6 +65,10 @@ echo &&
 echo "http://127.0.0.1:9000/awac/admin/indicators_factors/reset ... " && 
 curl -L http://127.0.0.1:9000/awac/admin/indicators_factors/reset && 
 echo && 
+echo "http://127.0.0.1:9000/awac/admin/sites_associations/import ... " && 
+curl -L http://127.0.0.1:9000/awac/admin/sites_associations/import && 
+echo && 
+
 
 kill -9 $(netstat -a -p -n 2>/dev/null | egrep ':9000\b' | grep 'LISTEN' | awk '{ print $7 }' | cut -d/ -f1 )
 
