@@ -533,7 +533,7 @@ angular
     # the result is savec to $scope.dataToCompare
     #
     $scope.$watch '$root.periodToCompare', () ->
-        if $scope.$parent != null && $scope.$root.periodToCompare != 'default'
+        if $scope.$parent != null && $scope.$root.periodToCompare?
             downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, (result)->
                 if result.success
                     $scope.dataToCompare = result.data

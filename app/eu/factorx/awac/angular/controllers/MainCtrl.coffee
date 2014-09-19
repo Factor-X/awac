@@ -164,22 +164,23 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
+        if not $scope.$root.scopeSelectedId and !isNaN($scope.$root.scopeSelectedId)
+            url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
 
-        downloadService.getJson url, (result) ->
-            if result.success
-                $scope.periodsForComparison = [
-                    {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
-                ]
-                for period in result.data.periodDTOList
-                    if period.key != $scope.$root.periodSelectedKey
-                        $scope.periodsForComparison[$scope.periodsForComparison.length] = period
-            else
-                messageFlash.displayError result.data.message
+            downloadService.getJson url, (result) ->
+                if result.success
+                    $scope.periodsForComparison = [
+                        {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
+                    ]
+                    for period in result.data.periodDTOList
+                        if period.key != $scope.$root.periodSelectedKey
+                            $scope.periodsForComparison[$scope.periodsForComparison.length] = period
+                else
+                    messageFlash.displayError result.data.message
 
 
     $scope.getProgress = (form)->
-        #console.log "GET PROSGRS ; "
+        #.log "GET PROSGRS ; "
         #console.log $scope.formProgress
         if $scope.formProgress != null
             for formProgress in $scope.formProgress
@@ -192,7 +193,7 @@ angular
 
     $scope.loadFormProgress = ->
         #console.log "$scope.loadFormProgress : "+$scope.$root.scopeSelectedId+" "+$scope.$root.periodSelectedKey
-        if $scope.$root.scopeSelectedId? && $scope.$root.periodSelectedKey?
+        if $scope.$root.scopeSelectedId? and $scope.$root.periodSelectedKey?
             downloadService.getJson "/awac/answer/formProgress/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
                 if result.success
                     #console.log result.data
@@ -298,10 +299,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if $rootScope.mySites?
             for site in $rootScope.mySites
                 if site.id = scope
-                    for period in  site.listPeriodAvailable
-                        if period.key == period
+                    for periodToFind in  site.listPeriodAvailable
+                        if period+"" == periodToFind.key+""
                             return true
-        $location.path "/noScope"
         return false
     #
     # success after login => store some datas, display the path
@@ -342,7 +342,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
-        if $rootScope.scopeSelectedId? && $rootScope.periodSelectedKey?
+        if $rootScope.scopeSelectedId? and $rootScope.periodSelectedKey?
             $rootScope.onFormPath($rootScope.periodSelectedKey, $rootScope.scopeSelectedId)
         else
             $location.path("noScope")
