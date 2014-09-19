@@ -19,6 +19,9 @@ cat ./CELDL-51-Multi-Site.sql >> /tmp/migration/migration_script.sql
 # create new invitation table
 cat ./CELDL-101-InviteNewUsers.sql >> /tmp/migration/migration_script.sql
 
+# create new 'awaccalculator' and 'mm_calculator_indicator' tables (in order to link indicators and calculators - JIRA CELDL-65)
+cat ./CELDL-65-Indicator-Calculator-JoinTable.sql >> /tmp/migration/migration_script.sql
+
 # move A205 & A208 from tab 6 to tab 4 
 cat ./UpdateQuestionSetA205_A208.sql >> /tmp/migration/migration_script.sql
 
