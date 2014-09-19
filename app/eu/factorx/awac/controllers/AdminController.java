@@ -22,10 +22,7 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.FormService;
 import eu.factorx.awac.service.NotificationService;
-import eu.factorx.awac.util.data.importer.CodeLabelImporter;
-import eu.factorx.awac.util.data.importer.FactorImporter;
-import eu.factorx.awac.util.data.importer.IndicatorImporter;
-import eu.factorx.awac.util.data.importer.TranslationImporter;
+import eu.factorx.awac.util.data.importer.*;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
 
 @org.springframework.stereotype.Controller
@@ -52,6 +49,8 @@ public class AdminController extends AbstractController {
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 	@Autowired
 	private BADImporter                 badImporter;
+	@Autowired
+	private AccountSiteAssociationImporter accountSiteAssociationImporter;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -126,4 +125,16 @@ public class AdminController extends AbstractController {
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
     }
+
+    @Transactional(readOnly = false)
+    public Result runAccountSiteAssociationImporter() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+        // import associations account-site & site-periods
+        accountSiteAssociationImporter.run();
+
+        return (ok());
+    }
+
 }
