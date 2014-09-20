@@ -132,14 +132,13 @@ public class InvitationController extends AbstractController {
 
 		// create account
 		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+		account = accountService.saveOrUpdate(account);
 
         // ONLY FOR municipality : assign the new user of the site
         for(Site site : invitation.getOrganization().getSites()){
             AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
             accountSiteAssociationService.saveOrUpdate( accountSiteAssociation);
         }
-
-		accountService.saveOrUpdate(account);
 
 		// delete invitation
 		invitationService.remove(invitation);

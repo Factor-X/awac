@@ -15,13 +15,11 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.InvitationService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.PersonService;
+import eu.factorx.awac.service.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +67,12 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 	@Autowired
 	private PersonService personService;
+
+	@Autowired
+	private AccountSiteAssociationService accountSiteAssociationService;
+
+
+
 
 
 	@Test
@@ -220,6 +224,8 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		assertNotNull(accountList.get(0));
 		assertEquals(accountList.get(0).getIdentifier(),login);
 
+		List<AccountSiteAssociation> asa = accountSiteAssociationService.findByAccount(accountList.get(0));
+		accountSiteAssociationService.remove(asa);
 		accountService.remove(accountList.get(0));
 		personService.remove(accountList.get(0).getPerson());
 
