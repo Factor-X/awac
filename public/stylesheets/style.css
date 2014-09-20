@@ -1365,6 +1365,40 @@ h1 {
 }
 
 /*
+ * ASSOCIATED USER/SITE (MODAL)
+ */
+
+.associate-user-table {
+    width: 100%;
+}
+
+.associate-user-table thead td {
+    border: 2px solid #dbd9d2;
+    font-weight: bold;
+    text-align: center;
+}
+
+.associate-user-table td {
+    padding: 5px;
+    text-align: center;
+}
+
+.associate-user-table tbody td {
+    border: 1px solid #dbd9d2;
+}
+
+.associate-user-table tbody td:first-child {
+    width: 40%;
+}
+
+.associate-user-table tbody td:last-child {
+    width: 20%;
+    text-align: center;
+}
+
+
+
+/*
  * PROGRESS BAR FOR TABS
  */
 .tab-pg-bar {
