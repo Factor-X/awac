@@ -39,6 +39,10 @@ cat ./refesh_some_question_default_unit.sql >> /tmp/migration/migration_script.s
 
 cat ./CELDL-136-Report-Reengineering.sql >> /tmp/migration/migration_script.sql
 
+# add cascade delete on site and period
+
+cat ./CELDL-XXX-MM-Site-Period.sql >> /tmp/migration/migration_script.sql
+
 
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE

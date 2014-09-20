@@ -41,7 +41,7 @@ public class Site extends Scope implements Comparable<Site> {
 	@Column(name = "percent_owned",columnDefinition="double precision default '100.00'")
 	private Double percentOwned;
 
-	@ManyToMany
+	@ManyToMany (cascade = CascadeType.ALL)
 	@JoinTable(name = "mm_site_period",
 			joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "period_id", referencedColumnName = "id"))
