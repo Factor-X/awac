@@ -31,9 +31,11 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 	@Autowired
 	private ProductService productService;
 
-	@Test
+	//@Test
 	public void _001_findAll() {
 
+		// Regarding scope refactoring, Scope is now an abstract class cand an not be instantiated anymore as itself
+		// Test is obsolete.
 		List<Scope> sf = scopeService.findAll();
 
 		assertNotNull(sf);
