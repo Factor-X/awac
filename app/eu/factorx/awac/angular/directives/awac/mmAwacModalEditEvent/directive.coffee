@@ -63,6 +63,8 @@ angular
 #                console.log "AssignedPeriod"
 #                console.log $scope.assignedPeriod
 
+                console.log "version 0.9..."
+
                 #create DTO
                 data = {}
 
