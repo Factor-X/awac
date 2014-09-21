@@ -17,13 +17,15 @@ angular
         if $scope.getParams().event?
             $scope.event =  angular.copy($scope.getParams().event)
             $scope.createNewEvent = false
-            $scope.assignedPeriod = $scope.event.period.label
+            $scope.assignedPeriod = angular.copy($scope.event.period.label)
         else
             $scope.event = {}
+
             if $scope.$root.periods?
-              $scope.assignedPeriod = $scope.$root.periods[0].label
+              $scope.assignedPeriod = angular.copy($scope.$root.periods[0].label)
             else
-              $scope.assignedPeriod = $scope.assignedPeriodStruct.label
+              $scope.$watch '$root.periods', ->
+                $scope.assignedPeriod = angular.copy($scope.$root.periods[0].label)
 
         $scope.fields = {
 
@@ -58,25 +60,24 @@ angular
 
             if $scope.allFieldValid()
 
-                console.log "AssignedPeriod"
-                console.log $scope.assignedPeriod
+#                console.log "AssignedPeriod"
+#                console.log $scope.assignedPeriod
 
                 #create DTO
                 data = {}
+
+                data.period = angular.copy($scope.$root.periods[0])
+                data.period.key = angular.copy($scope.assignedPeriod)
+                data.period.label = angular.copy($scope.assignedPeriod)
+
                 data.organization = $scope.event.organization
-                #data.period = $scope.event.period
-                data.period = $scope.$root.periods[0]
-                data.period.key = $scope.assignedPeriod
-                data.period.label = $scope.assignedPeriod
                 data.id = $scope.event.id
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
-                #data.period.key=$scope.assignedPeriod
-                #data.period.label=$scope.assignedPeriod
 
                 $scope.isLoading = true
 
-                console.log data
+#                console.log data
 
                 if $scope.getParams().event?
 
@@ -104,7 +105,7 @@ angular
                 else
                     #create event
                     data.organization = $scope.getParams().organization
-                    data.period = $scope.$root.periods[0]
+#                    data.period = $scope.$root.periods[0]
                     data.id = 0
                     downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
