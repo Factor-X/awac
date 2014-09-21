@@ -91,7 +91,9 @@ public class InvitationController extends AbstractController {
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 
 		String title = INVITATION_TITLE +  dto.getOrganization().getName() + ".";
-		String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
+
+		String link = awacHostname+"/enterprise#/registration/" + key;
+		//String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
 
 		Map values = new HashMap<String,Object>();
 		values.put("title",title);
@@ -147,7 +149,9 @@ public class InvitationController extends AbstractController {
 		Map values = new HashMap<String,Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String title = "AWAC - registering confirmation.";
-		String link = "http://"+awacHostname+":9000/login";
+
+		//String link = "http://"+awacHostname+":9000/login";
+		String link = awacHostname+"/login";
 
 		values.put("title",title);
 		values.put("link",link);
