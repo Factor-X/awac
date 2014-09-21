@@ -25,7 +25,7 @@ import java.util.Map;
 @Component
 public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
-	private String ROOT = "app/eu/factorx/awac/vm/";
+	private String ROOT = "public/vm/";
 
 	public Result ok(String templateName, Map values) {
 
