@@ -85,10 +85,10 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		Logger.info("organization id : " + org.getId());
 
 		// InvitationDTO
-		EmailInvitationDTO dto = createDTO (invitationEmail,org);
+		EmailInvitationDTO dto = createDTO (invitationEmail,org.getName());
 
 		Logger.info("Guest email:" + dto.getInvitationEmail());
-		Logger.info("Host organization name: " + dto.getOrganization().getName());
+		Logger.info("Host organization name: " + dto.getOrganizationName());
 		// set scope to null to avoid json recusion
 		//dto.getOrganization().setSites(null);
 		//dto.getOrganization().setAccounts(null);
@@ -233,13 +233,11 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 	// class to handle EmailInvitationDTO
 
-	private EmailInvitationDTO createDTO(String email, Organization org) {
+	private EmailInvitationDTO createDTO(String email, String organizationName) {
 
 		EmailInvitationDTO dto = new EmailInvitationDTO();
 		dto.setInvitationEmail(email);
-
-		OrganizationDTO orgDTO = conversionService.convert(org,OrganizationDTO.class);
-		dto.setOrganization(orgDTO);
+		dto.setOrganizationName(organizationName);
 
 		return dto;
 	}

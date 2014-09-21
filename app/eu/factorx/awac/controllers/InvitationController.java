@@ -62,6 +62,10 @@ public class InvitationController extends AbstractController {
     @Autowired
     private AccountSiteAssociationService accountSiteAssociationService;
 
+	@Autowired
+	private OrganizationService organizationService;
+
+
 	private static String INVITATION_TITLE = "AWAC - invitation from ";
 	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
 
@@ -74,11 +78,14 @@ public class InvitationController extends AbstractController {
 
 		// get InvitationDTO from request
 		EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
-		Logger.info("Host Organization Invitation Name: " + dto.getOrganization().getName());
+		Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
 		Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
-		Organization org = new Organization (dto.getOrganization().getName());
-		org.setId(dto.getOrganization().getId());
+
+//		Organization org = new Organization (dto.getOrganization().getName());
+//		org.setId(dto.getOrganization().getId());
+
+		Organization org = organizationService.findByName(dto.getOrganizationName());
 
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
@@ -90,7 +97,7 @@ public class InvitationController extends AbstractController {
 
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 
-		String title = INVITATION_TITLE +  dto.getOrganization().getName() + ".";
+		String title = INVITATION_TITLE +  dto.getOrganizationName() + ".";
 
 		String link = awacHostname+"/enterprise#/registration/" + key;
 		//String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
