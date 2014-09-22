@@ -103,35 +103,35 @@ public class Global extends GlobalSettings {
 	}
 
 
-	@Override
-	public Action onRequest(Http.Request request, Method actionMethod) {
-		// Analytics analytics = AnalyticsUtil.start(request);
-		Action action;
-
-		// ENFORCE HTTPS on production
-		if (Play.isProd() && !isHttpsRequest(request)) {
-			action = new Action() {
-				@Override
-				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
-					return Promise.<SimpleResult>pure(Results.redirect("https://" + ctx.request().host() + ctx.request().uri()));
-				}
-			};
-		} else {
-			if (!Play.isDev() && !thread.isInitialized()) {
-				action = new Action() {
-					@Override
-					public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
-						return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
-					}
-				};
-			} else {
-				action = super.onRequest(request, actionMethod);
-			}
-		}
-
-		//AnalyticsUtil.end(analytics);
-		return action;
-	}
+//	@Override
+//	public Action onRequest(Http.Request request, Method actionMethod) {
+//		// Analytics analytics = AnalyticsUtil.start(request);
+//		Action action;
+//
+//		// ENFORCE HTTPS on production
+//		if (Play.isProd() && !isHttpsRequest(request)) {
+//			action = new Action() {
+//				@Override
+//				public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
+//					return Promise.<SimpleResult>pure(Results.redirect("https://" + ctx.request().host() + ctx.request().uri()));
+//				}
+//			};
+//		} else {
+//			if (!Play.isDev() && !thread.isInitialized()) {
+//				action = new Action() {
+//					@Override
+//					public Promise<SimpleResult> call(Http.Context ctx) throws Throwable {
+//						return Promise.<SimpleResult>pure(Results.ok("Application is starting... Please try again in a moment."));
+//					}
+//				};
+//			} else {
+//				action = super.onRequest(request, actionMethod);
+//			}
+//		}
+//
+//		//AnalyticsUtil.end(analytics);
+//		return action;
+//	}
 
 	// Spring beans instanciation
 	@Override

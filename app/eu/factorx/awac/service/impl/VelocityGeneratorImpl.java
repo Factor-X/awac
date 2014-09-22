@@ -30,7 +30,7 @@ import java.util.Map;
 public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
 	private String ROOT = "public/vm/";
-	private String ROOT_PROD = "app/public/vm";
+	private String ROOT_PROD = "/app/public/vm/";
 
 	public Result ok(String templateName, Map values) {
 
@@ -68,6 +68,7 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 		} else {
 			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
 			serverPath = serverPath.replace("jar:", "");
+			serverPath = serverPath.replace("!", "");
 		}
 
 		Logger.info("Play original server Path :" + serverPath);
