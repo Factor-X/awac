@@ -62,6 +62,10 @@ public class InvitationController extends AbstractController {
     @Autowired
     private AccountSiteAssociationService accountSiteAssociationService;
 
+	@Autowired
+	private OrganizationService organizationService;
+
+
 	private static String INVITATION_TITLE = "AWAC - invitation from ";
 	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
 
@@ -74,11 +78,16 @@ public class InvitationController extends AbstractController {
 
 		// get InvitationDTO from request
 		EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
-		Logger.info("Host Organization Invitation Name: " + dto.getOrganization().getName());
+		//Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
 		Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
-		Organization org = new Organization (dto.getOrganization().getName());
-		org.setId(dto.getOrganization().getId());
+		// get organization throught
+
+//		Organization org = new Organization (dto.getOrganization().getName());
+//		org.setId(dto.getOrganization().getId());
+
+		// get organization name through securedController
+		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
 
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
@@ -90,8 +99,10 @@ public class InvitationController extends AbstractController {
 
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 
-		String title = INVITATION_TITLE +  dto.getOrganization().getName() + ".";
-		String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
+		String title = INVITATION_TITLE +  org.getName() + ".";
+
+		String link = awacHostname+"/enterprise#/registration/" + key;
+		//String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
 
 		Map values = new HashMap<String,Object>();
 		values.put("title",title);
@@ -132,14 +143,13 @@ public class InvitationController extends AbstractController {
 
 		// create account
 		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+		account = accountService.saveOrUpdate(account);
 
         // ONLY FOR municipality : assign the new user of the site
         for(Site site : invitation.getOrganization().getSites()){
             AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
             accountSiteAssociationService.saveOrUpdate( accountSiteAssociation);
         }
-
-		accountService.saveOrUpdate(account);
 
 		// delete invitation
 		invitationService.remove(invitation);
@@ -148,7 +158,9 @@ public class InvitationController extends AbstractController {
 		Map values = new HashMap<String,Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String title = "AWAC - registering confirmation.";
-		String link = "http://"+awacHostname+":9000/login";
+
+		//String link = "http://"+awacHostname+":9000/login";
+		String link = awacHostname+"/login";
 
 		values.put("title",title);
 		values.put("link",link);

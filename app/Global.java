@@ -53,6 +53,8 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app) {
 
 		play.Logger.info("Starting AWAC");
+		// should be defined at compile/deploy time
+		play.Logger.info("version 0.9");
 		// force default language to FR - test purpose
 		play.Logger.info(Messages.get(new Lang(Lang.forCode("fr")), "main.welcome"));
 		//play.Logger.info(Lang.getLocale().getDisplayName());

@@ -32,7 +32,7 @@ public class ReportToReportDTOConverter implements Converter<ReportResult, Repor
 			reportLineDTO.setScope3Value(entry.getValue().get(3));
 			reportLineDTO.setOutOfScopeValue(entry.getValue().get(4));
 			if (entry.getValue().get(0) > 0) {
-				reportLineDTO.setColor("#" + Colors.makeGoodColorForSerieElement(currentNotNullValue, notNullValues));
+				reportLineDTO.setColor("#" + Colors.makeGoodColorForSerieElement(currentNotNullValue + 1, notNullValues));
 				currentNotNullValue++;
 			}
 			reportLineDTO.setPercentage(100 * entry.getValue().get(0) / total);

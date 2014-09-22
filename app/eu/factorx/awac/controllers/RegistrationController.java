@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-
+@Transactional(readOnly = false)
 @org.springframework.stereotype.Controller
 public class RegistrationController  extends AbstractController {
 
@@ -69,8 +69,10 @@ public class RegistrationController  extends AbstractController {
 		//create organization
 		organization = new Organization(dto.getOrganizationName());
 
+		play.Logger.info("create organization...");
 		organizationService.saveOrUpdate(organization);
 
+		play.Logger.info("create admin...");
 		//create administrator
 		Account account = null;
 		try {
@@ -81,6 +83,7 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create site
+		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
 
         //add last year period
@@ -89,10 +92,12 @@ public class RegistrationController  extends AbstractController {
         listAvailablePeriod.add(period);
         site.setListPeriodAvailable(listAvailablePeriod);
 
+		play.Logger.info("add periods...");
         siteService.saveOrUpdate(site);
         organization.getSites().add(site);
 
         //create link between account and site
+		play.Logger.info("create association...");
         AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
         accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
@@ -100,6 +105,7 @@ public class RegistrationController  extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		//create ConnectionFormDTO
+		play.Logger.info("create resultDTO...");
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);

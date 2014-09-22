@@ -28,7 +28,7 @@ public class OrganizationEventToOrganizationEventDTOConverter implements Convert
 	public OrganizationEventDTO convert(OrganizationEvent orgEvent) {
 		OrganizationEventDTO dto = new OrganizationEventDTO();
 
-		dto.setOrganization(organizationDTOConverter.convert(orgEvent.getOrganization()));
+		//dto.setOrganization(organizationDTOConverter.convert(orgEvent.getOrganization()));
 		dto.setPeriod(periodDTOConverter.convert(orgEvent.getPeriod()));
 		dto.setName(orgEvent.getName());
 		dto.setDescription(orgEvent.getDescription());

@@ -9,8 +9,8 @@
                 h4(class="modal-title",ng-bind-html="'SITE_MANAGER_ADD_USER_TITLE' | translate")
             .modal-body
 
-                div
-                    table.document-manager-table
+
+                    table.associate-user-table
                         thead
                             tr
                                 td(ng-bind-html="'SITE_MANAGER_ADD_NAME_LABEL' | translate")
@@ -29,7 +29,7 @@
                                         ng-click='toggleSelection(account)')
 
 
-                    table.document-manager-table
+                    table.associate-user-table
                         thead
                             tr
                                 td(ng-bind-html="'SITE_MANAGER_ADD_LIST_LABEL' | translate")

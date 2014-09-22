@@ -68,8 +68,10 @@ public abstract class AbstractNoDefaultTransactionBaseControllerTest implements 
 	}
 
 	public String printError(Result result){
-		ExceptionsDTO exceptionDTO = getDTO(result,ExceptionsDTO.class);
-		return "Exception : "+exceptionDTO.toString();
+		if (result instanceof ExceptionsDTO) {
+			ExceptionsDTO exceptionDTO = getDTO(result, ExceptionsDTO.class);
+			return "Exception : " + exceptionDTO.toString();
+		} else return "200";
 	}
 
 	public EntityManager getEntityManager () {

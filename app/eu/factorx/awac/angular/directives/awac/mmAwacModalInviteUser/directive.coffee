@@ -37,7 +37,8 @@ angular
 
             data =
                 invitationEmail: $scope.inviteEmailInfo.field
-                organization: $rootScope.organization
+                organizationName: $rootScope.organizationName
+                #organization: $rootScope.organization
 
             downloadService.postJson '/awac/invitation', data, (result) ->
                 if result.success

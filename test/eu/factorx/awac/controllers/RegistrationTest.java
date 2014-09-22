@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import play.Logger;
+import play.db.jpa.JPA;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -33,7 +35,7 @@ import eu.factorx.awac.models.business.Site;
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RegistrationTest extends AbstractBaseControllerTest {
+public class RegistrationTest extends AbstractNoDefaultTransactionBaseControllerTest {
 
 	private static final String email1 = "test1@test.test";
 	private static final String email2 = "test2@test.test";
@@ -97,9 +99,11 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 
 		//analyse result
 		// expecting an HTTP 200 return code
-		assertEquals(printError(result),200, status(result));
+		Logger.info("before assert");
+		assertEquals(printError(result), 200, status(result));
 
 		//analyse result
+		Logger.info("status result: " + status(result));
 		LoginResultDTO resultDTO = getDTO(result, LoginResultDTO.class);
 
 		assertEquals(resultDTO.getPerson().getEmail(), email1);
@@ -110,17 +114,22 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 		//assertEquals(resultDTO.getOrganization().getSites().get(0).getName(), site);
 
         //test if the account is liked with one site
+		Logger.info("test account service: " + result.toString());
         Account account = accountService.findByIdentifier(identifier1);
 
+		Logger.info("account created");
         assertNotNull("The account was not created", account);
 
+		Logger.info("findByAccount");
         List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
 
+		Logger.info("siteAssociationList:" + siteAssociationList.size());
         assertTrue(siteAssociationList.size()==1);
 
+		Logger.info("period:" + siteAssociationList.get(0).getSite().getListPeriodAvailable().size());
         //control period for the site
-        assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()==1);
-
+		if (siteAssociationList.size()>0)
+        	assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()==1);
 
 	} // end of authenticateSuccess test
 
@@ -225,7 +234,7 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 
         List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
 
-        assertTrue(siteAssociationList.size()==0);
+        assertTrue(siteAssociationList.size()==1);
 
         //control period for the site
         assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()>1);
@@ -248,24 +257,26 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 		Organization organization = null;
 		List<Site> siteList=null;
 
+		JPA.em().getTransaction().begin();
 		account = accountService.findByIdentifier(identifier);
 		assertNotNull(account);
         List<AccountSiteAssociation> associationList = accountSiteAssociationService.findByAccount(account);
         accountSiteAssociationService.remove(associationList);
-        accountService.remove(account);
+        //accountService.remove(account);
 
         organization = organizationService.findByName(organisationName);
         assertNotNull(organization);
 
-        siteList=organization.getSites();
-        assertNotNull(siteList);
-
-        for (Site site : siteList) {
-            assertNotNull(site);
-            siteService.remove(site);
-        }
+//        siteList=organization.getSites();
+//        assertNotNull(siteList);
+//
+//        for (Site site : siteList) {
+//            assertNotNull(site);
+//            siteService.remove(site);
+//        }
 
 		organizationService.remove(organization);
+		JPA.em().getTransaction().commit();
 	}
 
 	private EnterpriseAccountCreationDTO createDTO(String email,String identifier, String organizationName) {

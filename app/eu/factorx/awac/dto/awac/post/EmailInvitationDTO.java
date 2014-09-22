@@ -13,16 +13,33 @@ public class EmailInvitationDTO extends DTO {
 	@Pattern(regexp = Pattern.EMAIL)
 	private String invitationEmail;
 
-	private OrganizationDTO organization;
+	//private String organizationName;
+
+	//private OrganizationDTO organization;
 
 	public EmailInvitationDTO() {
 	}
 
-	public EmailInvitationDTO(String email, OrganizationDTO organization) {
+//	public EmailInvitationDTO(String email, String organizationName, OrganizationDTO organization) {
+//
+//		this.invitationEmail = email;
+//		this.organizationName = organizationName;
+//		//this.organization = organization;
+//	}
+
+	public EmailInvitationDTO(String email) {
 
 		this.invitationEmail = email;
-		this.organization = organization;
+//		this.organizationName = organizationName;
 	}
+
+//	public String getOrganizationName() {
+//		return organizationName;
+//	}
+//
+//	public void setOrganizationName(String organizationName) {
+//		this.organizationName = organizationName;
+//	}
 
 	public String getInvitationEmail() {
 		return invitationEmail;
@@ -31,17 +48,19 @@ public class EmailInvitationDTO extends DTO {
 		this.invitationEmail = email;
 	}
 
-	public OrganizationDTO getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(OrganizationDTO organization) {
-		this.organization = organization;
-	}
+//	public OrganizationDTO getOrganization() {
+//		return organization;
+//	}
+//
+//	public void setOrganization(OrganizationDTO organization) {
+//		this.organization = organization;
+//	}
 
 	@Override
 	public String toString() {
-		return "EmailInvitationDTO [email=" + invitationEmail + "organization=" + organization.toString() + "]";
+		return "EmailInvitationDTO{" +
+				"invitationEmail='" + invitationEmail + '\'' +
+				'}';
 	}
 
 }
