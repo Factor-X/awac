@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.validation.annotations.Range;
 import eu.factorx.awac.dto.validation.annotations.Size;
 
@@ -39,6 +40,8 @@ public class SiteDTO extends DTO {
 
 	private List<PeriodDTO> listPeriodAvailable;
 
+    private List<PersonDTO> listPersons;
+
 	public SiteDTO() {
 	}
 
@@ -47,7 +50,15 @@ public class SiteDTO extends DTO {
 		this.name = name;
 	}
 
-	public Long getId() {
+    public List<PersonDTO> getListPersons() {
+        return listPersons;
+    }
+
+    public void setListPersons(List<PersonDTO> listPersons) {
+        this.listPersons = listPersons;
+    }
+
+    public Long getId() {
 		return id;
 	}
 
@@ -163,4 +174,13 @@ public class SiteDTO extends DTO {
 		}
 		this.listPeriodAvailable.add(periodDTO);
 	}
+
+
+    public void addPerson(PersonDTO personDTO) {
+        if(this.listPersons==null){
+            this.listPersons= new ArrayList<>();
+        }
+        this.listPersons.add(personDTO);
+    }
+
 }

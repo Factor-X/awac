@@ -237,7 +237,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 		OrganizationEventDTO dto = new OrganizationEventDTO();
 		OrganizationDTO orgDTO = conversionService.convert(org,OrganizationDTO.class);
 		PeriodDTO periodDTO = conversionService.convert(period,PeriodDTO.class);
-		dto.setOrganization(orgDTO);
+		//dto.setOrganization(orgDTO);
 		dto.setPeriod(periodDTO);
 
 		return dto;

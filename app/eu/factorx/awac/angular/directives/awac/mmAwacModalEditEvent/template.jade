@@ -6,20 +6,13 @@
                 button.button(type="button",ng-click="close()")
                     span(aria-hidden="true") &times;
                     span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
-                h4(ng-show="createNewEvent === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_EVENT_TITLE_CREATE' | translate")
-                h4(ng-hide="createNewEvent === true",class="modal-title",id="myModalLabel", ng-bind-html="'EDIT_EVENT_TITLE_EDIT' | translate")
+                h4(ng-show="createNewEvent === true",class="modal-title", ng-bind-html="'EDIT_EVENT_TITLE_CREATE' | translate")
+                h4(ng-hide="createNewEvent === true",class="modal-title", ng-bind-html="'EDIT_EVENT_TITLE_EDIT' | translate")
 
             .modal-body
-                table.site_table
-                    tr
-                        td(ng-bind-html="'EDIT_EVENT_YEAR_LABEL' | translateText")
-                        td
-                            select(ng-options='p.key as p.label for p in $root.periods', ng-model='assignedPeriod')
-
                 .field_form
-
-                        mm-awac-modal-field-text(ng-info="fields.name")
-                        mm-awac-modal-field-text(ng-info="fields.description")
+                    mm-awac-modal-field-text(ng-info="fields.name")
+                    mm-awac-modal-field-text(ng-info="fields.description")
 
 
             .modal-footer

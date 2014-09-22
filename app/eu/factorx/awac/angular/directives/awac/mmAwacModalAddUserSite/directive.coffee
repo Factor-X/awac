@@ -39,7 +39,7 @@ angular
               downloadService.postJson '/awac/organization/site/associatedaccounts/save', data, (result) ->
                     if result.success
                         #display success message
-                        messageFlash.displaySuccess "CHANGES_SAVED"
+                        messageFlash.displaySuccess translationService.get 'CHANGES_SAVED'
                         #close window
                         $scope.close()
                     else

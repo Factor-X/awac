@@ -54,10 +54,12 @@ public class OrganizationEventController extends AbstractController {
 	public Result loadEvents() {
 
 		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
-		Logger.info("Load Events - Organization Name: " + dto.getOrganization().getName() +  " Period:" + dto.getPeriod());
+		Logger.info("Load Events for Period:" + dto.getPeriod());
 
 		// get organization
-		Organization org = organizationService.findByName(dto.getOrganization().getName());
+		// get organization name through securedController
+		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
+		//Organization org = organizationService.findByName(dto.getOrganization().getName());
 
 		// get organization
 		Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
@@ -97,7 +99,7 @@ public class OrganizationEventController extends AbstractController {
 	public Result saveEvent () {
 
 		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
-		Logger.info("Save Event - Organization Name: " + dto.getOrganization().getName() +  " Period: " + dto.getPeriod());
+		Logger.info("Save Event for Period: " + dto.getPeriod());
 
 		OrganizationEvent orgEvent = null;
 
@@ -118,7 +120,9 @@ public class OrganizationEventController extends AbstractController {
 			// create
 			Logger.info("Save Event - Create");
 			// get organization
-			Organization org = organizationService.findByName(dto.getOrganization().getName());
+			//Organization org = organizationService.findByName(dto.getOrganization().getName());
+			// get organization name through securedController
+			Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
 			// get period
 			Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
 

@@ -88,7 +88,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		EmailInvitationDTO dto = createDTO (invitationEmail,org.getName());
 
 		Logger.info("Guest email:" + dto.getInvitationEmail());
-		Logger.info("Host organization name: " + dto.getOrganizationName());
+		//Logger.info("Host organization name: " + dto.getOrganizationName());
 		// set scope to null to avoid json recusion
 		//dto.getOrganization().setSites(null);
 		//dto.getOrganization().setAccounts(null);
@@ -237,7 +237,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 		EmailInvitationDTO dto = new EmailInvitationDTO();
 		dto.setInvitationEmail(email);
-		dto.setOrganizationName(organizationName);
+		//dto.setOrganizationName(organizationName);
 
 		return dto;
 	}

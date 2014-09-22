@@ -74,7 +74,6 @@ GET     /assets/*file                                      controllers.Assets.at
 # Answer controller => used to save answer
 #
 GET         /awac/answer/getByForm/:form/:period/:scope            @eu.factorx.awac.controllers.AnswerController.getByForm(form: String, period: String, scope: Long)
-GET         /awac/answer/testDataAccess/:form/:period/:scope       @eu.factorx.awac.controllers.AnswerController.testFormAvailabilityByScopeAndForm(form: String, period: String, scope: Long)
 POST        /awac/answer/save                                      @eu.factorx.awac.controllers.AnswerController.save()
 GET         /awac/answer/getPeriodsForComparison/:scope            @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
 POST        /awac/answer/formProgress                              @eu.factorx.awac.controllers.AnswerController.setFormProgress()

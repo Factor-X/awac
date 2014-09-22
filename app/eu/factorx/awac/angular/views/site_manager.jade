@@ -2,10 +2,14 @@ div
     .menu_close(ng-click="toForm()")
     h1(ng-bind-html="'SITE_MANAGER_BUTTON' | translateText")
 
-    .element
+    div.site_manager
+
+        h4(ng-bind-html="'SITE_MANAGER_SITE_LIST_TITLE' | translateText")
+        .desc(ng-bind-html="'SITE_MANAGER_SITE_LIST_DESC' | translateText")
 
         table.site_table
             tr.site_table_header
+                td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
                 td(ng-bind-html="'NAME' | translateText")
                 td(ng-bind-html="'DESCRIPTION' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_NACE_CODE' | translateText")
@@ -14,12 +18,13 @@ div
                 td(ng-bind-html="'SITE_MANAGER_OPERATING_POLICY' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_PERCENT_OWNED' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_ADD_USERS_BUTTON' | translateText")
                 td
                     select(ng-options='p.key as p.label for p in $root.periods', ng-model='assignPeriod')
 
             tr(ng-repeat="site in getSiteList()")
+                td
+                    button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateSite(site)", class="edit_icon glyphicon glyphicon-pencil")
                 td {{site.name}}
                 td {{site.description}}
                 td {{site.naceCode}}
@@ -29,11 +34,7 @@ div
                 td {{site.accountingTreatment}}
                 td {{site.percentOwned}} %
                 td
-                    button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateSite(site)", class="edit_icon glyphicon glyphicon-pencil")
-
-                td
                     button(type="button", title="{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}", ng-click="addUsers(site)", class="edit_icon glyphicon glyphicon-pencil")
-
                 td
                     input(  ng-hide="isLoading[site.id]=== true",
                             type="checkbox",
@@ -43,7 +44,15 @@ div
 
         button.button.add(type="button", ng-click="editOrCreateSite()",ng-bind-html="'SITE_MANAGER_ADD_SITE_BUTTON' | translateText")
 
-    .element
+        br
+        br
+        h4(ng-bind-html="'SITE_MANAGER_EVENT_TITLE' | translateText")
+        .desc(ng-bind-html="'SITE_MANAGER_EVENT_DESC' | translateText")
+        br
+        div
+            span.select_period(ng-bind-html="'SITE_MANAGER_SELECT_PERIOD' | translateText")
+            select(ng-options='p.key as p.label for p in $root.periods', ng-model='selectedPeriodForEvent')
+
         table.site_table
             tr.site_table_header
                 td(ng-bind-html="'SITE_MANAGER_EVENT_NAME' | translateText")
@@ -51,7 +60,7 @@ div
                 td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
 
-            tr(ng-repeat="event in getEventList()")
+            tr(ng-repeat="event in getEventList()", ng-show="event.period.key == selectedPeriodForEvent")
                 td {{event.name}}
                 td {{event.description}}
                 td {{event.period.label}}

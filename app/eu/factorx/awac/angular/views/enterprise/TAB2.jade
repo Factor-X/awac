@@ -93,7 +93,7 @@ div
 
     mm-awac-block(ng-condition="getAnswer('A38').value == '1'")
         .element_content
-            .element_text Plusieurs méthodes différentes existent pour rapporter l’usage des systèmes froids. Elles vous sont présentées de la meilleure à la plus approximative. L’idéal est d’utiliser la meilleure possible en fonction des données dont vous disposez. Le système utilisera les données de la meilleure méthode entièrement complétée pour effectuer le calcul.
+            .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
             .method
                 tabset
                     tab.tab-color-lightgreen(active="getTab(1,1).active")

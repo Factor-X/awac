@@ -118,7 +118,7 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             #edit site
                             $scope.getParams().site.name = $scope.fields.name.field
@@ -129,6 +129,9 @@ angular
                             $scope.getParams().site.operatingPolicy = $scope.fields.opePolicy.field
                             $scope.getParams().site.accountingTreatment = $scope.fields.accountingTreatment.field
                             $scope.getParams().site.percentOwned = $scope.fields.percentOwned.field
+
+                            #refresh my site
+                            $scope.getParams().refreshMySites()
 
                             #close window
                             $scope.close()
@@ -142,10 +145,16 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             # add new site to the list
-                            $scope.getParams().organization.sites[$scope.getParams().organization.sites.length] = result.data
+                            $scope.getParams().organization.sites.push result.data
+
+                            # add to mySite
+                            $scope.$root.mySites.push result.data
+
+                            #refresh
+                            $scope.getParams().refreshMySites()
 
                             #close window
                             $scope.close()

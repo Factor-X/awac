@@ -79,22 +79,28 @@ public class SecuredController extends Security.Authenticator {
         return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
     }
 
-    public boolean controlDataAccess(Form form, Period period, Site site) {
+    public void controlDataAccess(Form form, Period period, Site site) {
 
         if (form == null) {
-            return false;
+            throw new RuntimeException("You doesn't have the required authorization for the form "+form.getIdentifier());
         }
 
-        return controlDataAccess(period, site);
+        controlDataAccess(period, site);
     }
 
-    private boolean controlDataAccess(Period period, Site site) {
+    public void controlDataAccess(Period period, Site site) {
 
         if (period == null || site == null) {
-            return false;
+            throw new RuntimeException("You doesn't have the required authorization for the site "+site.getName()+"/ period : "+period.getLabel());
         }
+
         //test scope
         boolean founded = false;
+
+        if(!site.getOrganization().equals(getCurrentUser().getOrganization())){
+            throw new RuntimeException("This is not your site");
+        }
+
         for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(this.getCurrentUser())) {
             if (accountSiteAssociation.getSite().getId().equals(site.getId())) {
                 Logger.info("scope founded !!");
@@ -103,7 +109,7 @@ public class SecuredController extends Security.Authenticator {
             }
         }
         if (!founded) {
-            return false;
+            throw new RuntimeException("You doesn't have the required authorization for the site "+site.getName());
         }
 
         //test period
@@ -115,10 +121,8 @@ public class SecuredController extends Security.Authenticator {
             }
         }
         if (!foundedPeriod) {
-            return false;
+            throw new RuntimeException("You doesn't have the required authorization for the period : "+period.getLabel());
         }
-
-        return true;
     }
 
 }

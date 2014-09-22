@@ -1,9 +1,9 @@
 div
     .menu_close(ng-click="toForm()")
-    h1 USER MANAGER
+    h1(ng-bind-html="'USER_MANAGER_TITLE' | translate")
 
     .element
-        button.button.add(type="button",ng-click="inviteUser()", ng-show="true") invite users
+        button.button.add(type="button",ng-click="inviteUser()", ng-show="true",ng-bind-html="'USER_MANAGER_INVIT_USER' | translate")
         table.user_table
             tr.user_table_header
                 td(ng-bind-html="'NAME' | translate")

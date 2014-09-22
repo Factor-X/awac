@@ -39,7 +39,7 @@ div.results.pdf-able
 
                 div(ng-show="siteSelectionIsEmpty()")
 
-                    div Please choose at least one site
+                    div(ng-bind-html="'SELECT_AT_LEAST_ONE_SITE' | translate")
 
                 div(ng-hide="siteSelectionIsEmpty()")
 

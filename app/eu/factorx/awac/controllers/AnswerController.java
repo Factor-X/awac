@@ -33,6 +33,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,23 +85,14 @@ public class AnswerController extends AbstractController {
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result testFormAvailabilityByScopeAndForm(String formIdentifier, String periodKey, Long scopeId) {
-
-        Form form = formService.findByIdentifier(formIdentifier);
-        Period period = periodService.findByCode(new PeriodCode(periodKey));
-        Site site = siteService.findById(scopeId);
-
-        return ok(new BooleanDTO(securedController.controlDataAccess(form,period, site)));
-    }
-
-
-    @Transactional(readOnly = true)
-    @Security.Authenticated(SecuredController.class)
     public Result getByForm(String formIdentifier, String periodKey, Long scopeId) {
 
         Form form = formService.findByIdentifier(formIdentifier);
         Period period = periodService.findByCode(new PeriodCode(periodKey));
         Scope scope = scopeService.findById(scopeId);
+
+        //test if the form is aviable for the scope / period
+        securedController.controlDataAccess(form,period,(Site)scope);
 
         // TODO The user language should be saved in a session attribute, and it should be possible to update it with a request parameter (change language request).
         // Without connection, the user language should be obtained from a cookie or from browser "accepted languages" request header.
@@ -145,6 +137,7 @@ public class AnswerController extends AbstractController {
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
     public Result save() {
+
         Account currentUser = securedController.getCurrentUser();
         QuestionAnswersDTO answersDTO = extractDTOFromRequest(QuestionAnswersDTO.class);
 
@@ -152,9 +145,9 @@ public class AnswerController extends AbstractController {
         Form form = formService.findById(answersDTO.getFormId());
         Period period = periodService.findById(answersDTO.getPeriodId());
         Scope scope = scopeService.findById(answersDTO.getScopeId());
-        if (form == null || period == null || scope == null) {
-            throw new RuntimeException("Invalid request parameters : " + answersDTO);
-        }
+
+        //test if the form is aviable for the scope / period
+        securedController.controlDataAccess(form,period,(Site)scope);
 
         // validate user organization
         validateUserRightsForScope(currentUser, scope);
@@ -180,12 +173,11 @@ public class AnswerController extends AbstractController {
         // 1. control the owner of the scope
         Scope scope = scopeService.findById(scopeId);
 
-        if (!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
-            throw new RuntimeException("This scope doesn't owned by your organization");
-        }
-
         // 2. load period
         Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        //test if the form is aviable for the scope / period
+        securedController.controlDataAccess(period,(Site)scope);
 
         // 3. load formProgress
         List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);

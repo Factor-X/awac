@@ -6,12 +6,14 @@
                 a(
                         class="btn btn-primary",
                         ng-class="{selected:$root.instanceName == 'enterprise'}",
-                        href="/enterprise") Entreprises
+                        href="/enterprise",
+                        ng-bind-html="'ENTERPRISE' | translate")
             li
                 a(
                         class="btn btn-primary",
                         ng-class="{selected:$root.instanceName == 'municipality'}",
-                        href="/municipality") Communes
+                        href="/municipality",
+                        ng-bind-html="'MUNICIPALITY' | translate")
 
     .loginFrame(ng-enter="enterEvent()")
         select(ng-options="l.value as l.label for l in $root.languages",ng-model="$root.language",style="float:right")

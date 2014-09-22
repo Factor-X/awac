@@ -12,8 +12,6 @@ public class OrganizationEventDTO extends DTO {
 
 	private Long id;
 
-	private OrganizationDTO organization;
-
 	private PeriodDTO period;
 
 	private String name;
@@ -22,14 +20,6 @@ public class OrganizationEventDTO extends DTO {
 
 
 	public OrganizationEventDTO() {
-	}
-
-	public OrganizationDTO getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(OrganizationDTO organization) {
-		this.organization = organization;
 	}
 
 	public String getName() {
@@ -66,7 +56,12 @@ public class OrganizationEventDTO extends DTO {
 
 	@Override
 	public String toString() {
-		return "OrganizationEventDTO [organization=" + organization.toString() + "] + [Period=" + period.toString() + "]";
+		return "OrganizationEventDTO{" +
+				"id=" + id +
+				", period=" + period +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				'}';
 	}
 
 }
