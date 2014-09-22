@@ -52,11 +52,16 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 			e.printStackTrace();
 		}
 
-		//InputStream in = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm");
-		//String serverPath = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm").toString();
 
-		//Logger.info("Play input stream :" + in);
-		//Logger.info("Play server Path :" + serverPath);
+		//Play.classloader(play.api.Play.current()).getResource("any_file");
+
+		Logger.info("Play before input stream...");
+		InputStream in = Play.classloader(play.api.Play.current()).getResourceAsStream("public/vm/launchInvitation.vm");
+		Logger.info("Play before serverPath...");
+		String serverPath = Play.classloader(play.api.Play.current()).getResourceAsStream("public/vm/launchInvitation.vm").toString();
+
+		Logger.info("Play input stream :" + in);
+		Logger.info("Play server Path :" + serverPath);
 
 
 		StringBuffer html = new StringBuffer();
