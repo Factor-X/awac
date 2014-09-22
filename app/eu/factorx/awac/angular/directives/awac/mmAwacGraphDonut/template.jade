@@ -4,5 +4,5 @@ table
             canvas.holder(width="400", height="200")
 
         td.chart-legend
-            b Legend
+            b(ng-bind-html="'GRAPH_LEGEND' | translate")
             div(ng-bind-html="legend")

@@ -206,12 +206,10 @@ angular
                     #console.log result.data
                     $scope.formProgress = result.data.listFormProgress
                 else
-                    #console.log "LOADFORMPROGRESS :  : CACA"
                     messageFlash.displayError result.data.message
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
-            #console.log "TIME : " + args.time
 
             if args.time == null
                 date = null
@@ -360,20 +358,12 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         $rootScope.computePeriod()
 
     $rootScope.computePeriod = (scopeId) ->
-        console.log $rootScope.mySites
-
         if !scopeId?
             scopeId = $rootScope.scopeSelectedId
-        console.log "scopeId:"+scopeId
         if scopeId?
             for site in $rootScope.mySites
                 if site.scope == scopeId
-                    console.log "1.DOUNDED !! : "
-                    console.dir angular.copy(site)
-                    console.log "2.DOUNDED !! : "
-                    console.dir angular.copy(site.listPeriodAvailable)
                     $rootScope.availablePeriods = site.listPeriodAvailable
-                    console.dir $rootScope.availablePeriods
 
             currentPeriodFounded=false
             for period in $rootScope.availablePeriods
@@ -428,4 +418,3 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.periodSelectedKey = $routeParams.period
         if $routeParams.scope?
             $rootScope.scopeSelectedId = parseInt($routeParams.scope)
-        console.log "change route : " + $location.path()

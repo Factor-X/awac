@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService, messageFlash) ->
+.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService, messageFlash,translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.$watch('$root.mySites|filter:{$selected:true}', (nv) ->
@@ -27,7 +27,7 @@ angular
                 if result.success
                     $scope.o = result.data
                 else
-                    messageFlash.displayError "Unable to load report"
+                    messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'
     , true);
 
 
@@ -39,6 +39,6 @@ angular
         return filtered.length == 0
 
     $scope.downloadAsXls = () ->
-        $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, "Downloading report file...", null
+        $window.open '/awac/result/getReportAsXls/' + $scope.$parent.periodKey + "/" + $scope.$parent.scopeId, translationService.get 'RESULT_DOWNLOAD_START', null
 
     $scope.downloadPdf = () ->

@@ -3,7 +3,7 @@
     .modal-dialog
         .modal-content
             .modal-header(style="text-align:center")
-                h4 Loading
+                h4(ng-bind-html="'LOADING' | translate")
 
             .modal-body(style="text-align:center")
                 img(src='/assets/images/loading_preorganization.gif')

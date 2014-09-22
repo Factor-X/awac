@@ -3205,7 +3205,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       var params;
       if (result.success) {
         $scope.$root.loginSuccess(result.data);
-        messageFlash.displaySuccess("You are now connected");
+        messageFlash.displaySuccess(translationService.get('CONNECTION_MESSAGE_SUCCESS'));
         return $scope.isLoading = false;
       } else {
         $scope.isLoading = false;

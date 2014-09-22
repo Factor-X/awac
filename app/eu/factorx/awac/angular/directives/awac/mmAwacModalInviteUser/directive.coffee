@@ -28,8 +28,6 @@ angular
         #send the request to the server
         $scope.save = () ->
 
-            console.log("entering save() of Invite users");
-
             if !$scope.allFieldValid()
                 return false
 
@@ -42,7 +40,7 @@ angular
 
             downloadService.postJson '/awac/invitation', data, (result) ->
                 if result.success
-                    messageFlash.displaySuccess "CHANGES_SAVED"
+                    messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     $scope.close()
 #                    if $scope.getParams().cb?
 #                        $scope.getParams().cb($scope.inviteEmailInfo.field)

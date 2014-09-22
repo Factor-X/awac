@@ -1,6 +1,6 @@
 span.twoelement
     span(style="text-align:center")
-        span(style="vertical-align:middle;margin-right : 15px;") oui
+        span(style="vertical-align:middle;margin-right : 15px;",ng-bind-html="'yes' | translate")
         input(  type="radio",
                 name="{{getQuestionCode()}}",
                 ng-model="getAnswer().value",
@@ -8,7 +8,7 @@ span.twoelement
                 style="width :20px !important;margin:0;vertical-align:middle;",
                 ng-disabled="getDataToCompare()===true || getIsAggregation()===true")
     span(style="text-align:center")
-        span(style="vertical-align:middle;margin-right : 15px;") non
+        span(style="vertical-align:middle;margin-right : 15px;",ng-bind-html="'no' | translate")
         input(  type="radio",
                 name="{{getQuestionCode()}}",
                 ng-model="getAnswer().value",

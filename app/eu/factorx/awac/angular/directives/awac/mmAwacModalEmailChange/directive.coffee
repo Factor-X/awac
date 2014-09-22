@@ -54,7 +54,7 @@ angular
 
             downloadService.postJson '/awac/user/email/save', data, (result) ->
                 if result.success
-                    messageFlash.displaySuccess "CHANGES_SAVED"
+                    messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     $scope.close()
                     if $scope.getParams().cb?
                         $scope.getParams().cb($scope.newEmailInfo.field)

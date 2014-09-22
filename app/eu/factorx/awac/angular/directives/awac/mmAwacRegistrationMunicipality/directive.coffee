@@ -84,7 +84,7 @@ angular
             downloadService.postJson '/municipality/registration', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
-                    messageFlash.displaySuccess "You are now connected"
+                    messageFlash.displaySuccess translationService.get "CONNECTION_MESSAGE_SUCCESS"
                     $scope.isLoading = false
                 else
                     #display the error message
