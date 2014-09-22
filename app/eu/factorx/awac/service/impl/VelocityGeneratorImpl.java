@@ -52,11 +52,11 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 			e.printStackTrace();
 		}
 
-		InputStream in = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm");
-		String serverPath = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm").toString();
+		//InputStream in = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm");
+		//String serverPath = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm").toString();
 
-		Logger.info("Play input stream :" + in);
-		Logger.info("Play server Path :" + serverPath);
+		//Logger.info("Play input stream :" + in);
+		//Logger.info("Play server Path :" + serverPath);
 
 
 		StringBuffer html = new StringBuffer();
