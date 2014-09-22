@@ -58,14 +58,15 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 		Logger.info("Play before input stream...");
 		InputStream in = Play.classloader(play.api.Play.current()).getResourceAsStream("public/vm/launchInvitation.vm");
 		Logger.info("Play before serverPath...");
-		String serverPath = Play.classloader(play.api.Play.current()).getResourceAsStream("public/vm/launchInvitation.vm").toString();
+		String serverPath = Play.classloader(play.api.Play.current()).getResource("public/vm/launchInvitation.vm").toString().replace("file:","");
 
 		Logger.info("Play input stream :" + in);
 		Logger.info("Play server Path :" + serverPath);
 
 
 		StringBuffer html = new StringBuffer();
-		html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
+		//html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
+		html.append(package$.MODULE$.VM(serverPath, Scala.asScala(values), "utf-8"));
 		//Logger.info("HTML generated:" + html.toString());
 		return (html.toString());
 	}
