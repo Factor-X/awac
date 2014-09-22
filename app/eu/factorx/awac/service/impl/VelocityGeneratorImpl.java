@@ -30,6 +30,7 @@ import java.util.Map;
 public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
 	private String ROOT = "public/vm/";
+	private String ROOT_PROD = "app/public/vm";
 
 	public Result ok(String templateName, Map values) {
 
@@ -79,7 +80,12 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
 		StringBuffer html = new StringBuffer();
 		//html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
-		html.append(package$.MODULE$.VM(serverPath, Scala.asScala(values), "utf-8"));
+		if (play.Play.isDev()) {
+			html.append(package$.MODULE$.VM(serverPath, Scala.asScala(values), "utf-8"));
+		} else {
+			html.append(package$.MODULE$.VM(ROOT_PROD + templateName , Scala.asScala(values), "utf-8"));
+		}
+
 		//Logger.info("HTML generated:" + html.toString());
 		return (html.toString());
 	}
