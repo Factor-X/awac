@@ -22,6 +22,7 @@ import play.libs.Scala;
 import play.mvc.Result;
 import play.mvc.Results;
 
+
 import java.io.InputStream;
 import java.util.Map;
 
@@ -58,7 +59,15 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 		Logger.info("Play before input stream...");
 		InputStream in = Play.classloader(play.api.Play.current()).getResourceAsStream(ROOT+templateName);
 		Logger.info("Play before serverPath...");
-		String serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT+templateName).toString().replace("file:","");
+
+		String serverPath = "";
+
+		if (play.Play.isDev()) {
+			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
+		} else {
+			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("jar:", "");
+		}
+
 		Logger.info("Play original server Path :" + serverPath);
 		//String serverPath = Play.classloader(play.api.Play.current()).getResource("public/vm/launchInvitation.vm").getPath();
 		serverPath = serverPath.replace(Play.current().path().getAbsolutePath(),"");
