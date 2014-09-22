@@ -15,11 +15,14 @@ package eu.factorx.awac.service.impl;
 import eu.factorx.awac.service.VelocityGeneratorService;
 import jp.furyu.play.velocity.mvc.package$;
 import org.springframework.stereotype.Component;
+import play.Logger;
+import play.api.Play;
 import play.api.templates.Html;
 import play.libs.Scala;
 import play.mvc.Result;
 import play.mvc.Results;
 
+import java.io.InputStream;
 import java.util.Map;
 
 @Component
@@ -34,6 +37,28 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 	}
 
 	public String generate(String templateName, Map values) {
+
+
+		String path = Play.current().path().getPath();
+		Logger.info("Play path :" + path);
+
+		String absolutePath = Play.current().path().getAbsolutePath();
+		Logger.info("Play absolute path :" + absolutePath);
+
+		try	{
+			String canonicalPath = Play.current().path().getCanonicalPath();
+			Logger.info("Play canocical path :" + canonicalPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		InputStream in = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm");
+		String serverPath = Play._currentApp().classloader().getResourceAsStream("vm/launchInvitation.vm").toString();
+
+		Logger.info("Play input stream :" + in);
+		Logger.info("Play server Path :" + serverPath);
+
+
 		StringBuffer html = new StringBuffer();
 		html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
 		//Logger.info("HTML generated:" + html.toString());
