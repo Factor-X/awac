@@ -9,7 +9,7 @@ initializeMunicipalityRoutes = (defaultResolve) ->
         $rootScope.onFormPath = (period,scope) ->
             $location.path($rootScope.getFormPath()+'/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
-            return '/municipality-tab1'
+            return '/form/TAB_C1'
 
 
 
@@ -18,59 +18,17 @@ initializeMunicipalityRoutes = (defaultResolve) ->
     .config ($routeProvider) ->
         $routeProvider
 
-        .when('/municipality-tab1/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB_C1.html'
+
+        .when('/form/:form/:period/:scope', {
+                templateUrl: ($routeParams) ->
+                    '$/angular/views/municipality/'+$routeParams.form+'.html'
                 controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB_C1'
+                resolve :angular.extend({
+                    formIdentifier: ($route) ->
+                        return $route.current.params.form
                     displayFormMenu: () ->
                         return true
-                }
-            }
-        )
-        .when('/municipality-tab2/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB_C2.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB_C2'
-                    displayFormMenu: () ->
-                        return true
-                }
-            }
-        )
-        .when('/municipality-tab3/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB_C3.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB_C3'
-                    displayFormMenu: () ->
-                        return true
-                }
-            }
-        )
-        .when('/municipality-tab4/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB_C4.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB_C4'
-                    displayFormMenu: () ->
-                        return true
-                }
-            }
-        )
-        .when('/municipality-tab5/:period/:scope', {
-                templateUrl: '$/angular/views/municipality/TAB_C5.html'
-                controller: 'FormCtrl'
-                resolve:{
-                    formIdentifier: () ->
-                        return 'TAB_C5'
-                    displayFormMenu: () ->
-                        return true
-                }
+                }, formResolve)
             }
         )
         .when('/results/:period/:scope', {
