@@ -28,6 +28,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import play.Configuration;
 import play.Logger;
+import play.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -81,10 +82,6 @@ public class InvitationController extends AbstractController {
 		//Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
 		Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
-		// get organization throught
-
-//		Organization org = new Organization (dto.getOrganization().getName());
-//		org.setId(dto.getOrganization().getId());
 
 		// get organization name through securedController
 		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
@@ -97,26 +94,29 @@ public class InvitationController extends AbstractController {
 		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,org);
 		invitationService.saveOrUpdate(invitation);
 
-		final String awacHostname = Configuration.root().getString("awac.hostname");
-
+		String awacHostname = Configuration.root().getString("awac.hostname");
 		String title = INVITATION_TITLE +  org.getName() + ".";
-
 		String link = awacHostname+"/enterprise#/registration/" + key;
-		//String link = "http://"+awacHostname+":9000/enterprise#/registration/" + key;
+
 
 		Map values = new HashMap<String,Object>();
 		values.put("title",title);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
-		//String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		String velocityContent="";
 
-		String content = link;
+		if (Play.isDev()) {
+			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		} else {
+			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+			// use simple link for now on
+			// uncomment next line this in case Heroku dont find velocity templates
+			// velocityContent = link;
+		}
 
 		// send email for invitation
-		// send mail
-		//EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,content);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
 		emailService.send(email);
 
 		//create InvitationResultDTO
@@ -138,7 +138,6 @@ public class InvitationController extends AbstractController {
 		if (invitation==null) {
 			return unauthorized(new ExceptionsDTO("This invitation is not longer valid. Please verify invitation with host organization or verify your account is already set up."));
 		}
-
 
 		// create person
 		Person person = new Person (dto.getLastName(),dto.getFirstName(),dto.getEmail());
@@ -162,18 +161,25 @@ public class InvitationController extends AbstractController {
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String title = "AWAC - registering confirmation.";
 
-		//String link = "http://"+awacHostname+":9000/login";
 		String link = awacHostname+"/login";
 
 		values.put("title",title);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
-		//String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
-		String content = link;
+
+		String velocityContent="";
+		if (Play.isDev()) {
+			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		} else {
+			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+			// use simple link for now on
+			// uncomment next line this in case Heroku dont find velocity templates
+			//velocityContent = link;
+		}
 
 		// send confirmation email
-		EmailMessage email = new EmailMessage(dto.getEmail(),title, content);
+		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);
 		emailService.send(email);
 
 
@@ -181,15 +187,6 @@ public class InvitationController extends AbstractController {
 		InvitationResultDTO resultDto = new InvitationResultDTO ();
 		return ok(resultDto);
 	}
-
-//	@Override
-//	private static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-//		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
-//		if (dto == null) {
-//			throw new RuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
-//		}
-//		return dto;
-//	}
 
 
 }
