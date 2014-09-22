@@ -1,4 +1,8 @@
 .chart-legend
+
+    div(ng-show="ngModel.reportLines.length == 0")
+        span(ng-bind-html="'RESULTS_LEGENDS_NODATA' | translate")
+
     div(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
         span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
         span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")

@@ -61,47 +61,51 @@ div.results.pdf-able
                             span(ng-bind-html="'IMPACTS_PARTITION' | translate")
                         br
 
-                        h3
-                            span(ng-bind-html="'SCOPE_1' | translate")
-                            span  : {{ totalScope1 }} tCO2e
-                        br
-                        center
-                            table
-                                tr
-                                    td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
-                                    td(style="width: 2em")
-                                    td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
-                        br
-                        br
-                        h3
-                            span(ng-bind-html="'SCOPE_2' | translate")
-                            span  : {{ totalScope2 }} tCO2e
-                        br
-                        center
-                            table
-                                tr
-                                    td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
-                                    td(style="width: 2em")
-                                    td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
+                        table
+                            tr
+                                td(colspan="3")
+                                    h3
+                                        span(ng-bind-html="'SCOPE_1' | translate")
+                                        span  : {{ totalScope1 }} tCO2e
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
 
-                        br
-                        br
-                        h3
-                            span(ng-bind-html="'SCOPE_3' | translate")
-                            span  : {{ totalScope3 }} tCO2e
-                        br
-                        center
-                            table
-                                tr
-                                    td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
-                                    td(style="width: 2em")
-                                    td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
+                            tr
+                                td(colspan="3")
+                                    h3
+                                        span(ng-bind-html="'SCOPE_2' | translate")
+                                        span  : {{ totalScope2 }} tCO2e
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
+
+                            tr
+                                td(colspan="3")
+                                    h3
+                                        span(ng-bind-html="'SCOPE_3' | translate")
+                                        span  : {{ totalScope3 }} tCO2e
+                            tr
+                                td
+                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
+                                td(style="width: 2em")
+                                td
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
+
+
+
+
+
+
+
+
+
                         br
                         br
 
@@ -138,7 +142,7 @@ div.results.pdf-able
 
                         p(ng-repeat="e in o.logEntries")
                             span(style="color: #33a", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
-                                span Il y a une activité de type
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART1' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biActivityCategory | translate")
                                 span &#32;/&#32;
@@ -148,34 +152,37 @@ div.results.pdf-able
                                 span &#32;/&#32;
                                 span(ng-bind-html="e.adActivitySource | translate")
                                 span &#32;
-                                span pour une valeur de
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART2' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.adValue | numberToI18N")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
-                                span qui a été multiplié par le facteur d'émission&#32;
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART3' | translate")
+                                span &#32;
                                 span(ng-bind-html="e.biIndicatorCategory | translate")
                                 span &#32;/&#32;
                                 span(ng-bind-html="e.adActivityType | translate")
                                 span &#32;/&#32;
                                 span(ng-bind-html="e.adActivitySource | translate")
                                 span &#32;
-                                span valant
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.fValue | numberToI18N")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitOut")
-                                span &#32;par&#32;
+                                span &#32;
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART5' | translate")
+                                span &#32;
                                 span(ng-bind-html="e.fUnitIn")
-                                span . Cela contribue au résultat à hauteur de
+                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART6' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.value | numberToI18N")
                                 span &#32;
                                 span(ng-bind-html="e.biUnit")
 
                             span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'")
-                                span Il y a une activité de type
+                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART1' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biActivityCategory | translate")
                                 span &#32;/&#32;
@@ -184,12 +191,14 @@ div.results.pdf-able
                                 span(ng-bind-html="e.adActivityType | translate")
                                 span &#32;/&#32;
                                 span(ng-bind-html="e.adActivitySource | translate")
-                                span  pour une valeur de
+                                span &#32;
+                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.adValue | numberToI18N")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
-                                span  pour laquelle aucun facteur de type
+                                span &#32;
+                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART3' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biIndicatorCategory | translate")
                                 span &#32;/&#32;
@@ -197,7 +206,7 @@ div.results.pdf-able
                                 span &#32;/&#32;
                                 span(ng-bind-html="e.adActivitySource | translate")
                                 span &#32;
-                                span n'a été trouvé.
+                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate")
 
                     div(ng-show="current_tab == 7")
                         h2
