@@ -40,84 +40,106 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 		double oldPercentage = 0.0;
 		double total = 0.0;
+		int rows = data.getRowCount();
 
-		for (int i = 0; i < data.getRowCount(); i++) {
-			total += (Double) data.getCell(1, i);
-		}
+		if (rows > 0) {
+			for (int i = 0; i < data.getRowCount(); i++) {
+				total += (Double) data.getCell(1, i);
+			}
 
 
 //		System.out.println("== Donut");
-		for (int i = 0; i < data.getRowCount(); i++) {
+			for (int i = 0; i < rows; i++) {
 
-			Double cell = (Double) data.getCell(1, i);
+				Double cell = (Double) data.getCell(1, i);
 //			System.out.println("-- cell:" + i + " == " + cell);
 
-			double percentage = 100.0 * cell / total;
+				double percentage = 100.0 * cell / total;
 
-			double unit = (Math.PI * 2) / 100;
-			double startangle = oldPercentage * unit;
-			double endangle = (oldPercentage + percentage) * unit - 0.001;
+				double unit = (Math.PI * 2) / 100;
+				double startangle = oldPercentage * unit;
+				double endangle = (oldPercentage + percentage) * unit - 0.001;
 
-			double x1 = (size / 2) + (size / 2) * Math.sin(startangle);
-			double y1 = (size / 2) - (size / 2) * Math.cos(startangle);
-			double x2 = (size / 2) + (size / 2) * Math.sin(endangle);
-			double y2 = (size / 2) - (size / 2) * Math.cos(endangle);
-			int big = 0;
-			if (endangle - startangle > Math.PI) {
-				big = 1;
+				double x1 = (size / 2) + (size / 2) * Math.sin(startangle);
+				double y1 = (size / 2) - (size / 2) * Math.cos(startangle);
+				double x2 = (size / 2) + (size / 2) * Math.sin(endangle);
+				double y2 = (size / 2) - (size / 2) * Math.cos(endangle);
+				int big = 0;
+				if (endangle - startangle > Math.PI) {
+					big = 1;
+				}
+				String d = "M " + (size / 2) + "," + (size / 2) + " L " + x1 + "," + y1 + " A " + (size / 2) + "," + (size / 2) + " 0 " +
+					big + " 1 " + x2 + "," + y2 + " Z";
+
+				oldPercentage += percentage;
+
+
+				if (percentage == 100.0) {
+					sb.append(String.format(
+						"<circle " +
+							"cx='%d' " +
+							"cy='%d' " +
+							"r='%d' " +
+							"fill='#%s' " +
+							"data-indicator-name='%s' " +
+							"data-indicator-value='%s' " +
+							"class='path' " +
+							"/>",
+						size / 2,
+						size / 2,
+						size / 2,
+						Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
+						"" + data.getCell(0, i),
+						"" + data.getCell(0, i),
+						"" + data.getCell(1, i)
+					));
+				} else {
+					sb.append(String.format(
+						"<path " +
+							"d='%s' " +
+							"fill='#%s' " +
+							"stroke='white' " +
+							"stroke-width='5' " +
+							"data-indicator-name='%s' " +
+							"data-indicator-value='%s' " +
+							"class='path' " +
+							"></path>",
+						d,
+						Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
+						"" + data.getCell(0, i),
+						"" + data.getCell(0, i),
+						"" + data.getCell(1, i)
+
+					));
+				}
 			}
-			String d = "M " + (size / 2) + "," + (size / 2) + " L " + x1 + "," + y1 + " A " + (size / 2) + "," + (size / 2) + " 0 " +
-				big + " 1 " + x2 + "," + y2 + " Z";
-
-			oldPercentage += percentage;
 
 
-			if (percentage == 100.0) {
-				sb.append(String.format(
-					"<circle " +
-						"cx='%d' " +
-						"cy='%d' " +
-						"r='%d' " +
-						"fill='#%s' " +
-						"data-indicator-name='%s' " +
-						"data-indicator-value='%s' " +
-						"class='path' " +
-						"/>",
-					size / 2,
-					size / 2,
-					size / 2,
-					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
-					"" + data.getCell(0, i),
-					"" + data.getCell(0, i),
-					"" + data.getCell(1, i)
-				));
-			} else {
-				sb.append(String.format(
-					"<path " +
-						"d='%s' " +
-						"fill='#%s' " +
-						"stroke='white' " +
-						"stroke-width='5' " +
-						"data-indicator-name='%s' " +
-						"data-indicator-value='%s' " +
-						"class='path' " +
-						"></path>",
-					d,
-					Colors.makeGoodColorForSerieElement(i + 1, data.getRowCount()),
-					"" + data.getCell(0, i),
-					"" + data.getCell(0, i),
-					"" + data.getCell(1, i)
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' fill='#ffffff'/>",
+				size / 2,
+				size / 2,
+				size / 4
+			));
 
-				));
-			}
+		} else {
+
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' stroke-dasharray='%d,%d' stroke-width='5' stroke='black' fill='none'/>",
+				size / 2,
+				size / 2,
+				size / 2 - 10,
+				size / 20,
+				size / 20
+			));
+
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' stroke-dasharray='%d,%d' stroke-width='5' stroke='black' fill='none'/>",
+				size / 2,
+				size / 2,
+				size / 4,
+				size / 20,
+				size / 20
+			));
+
 		}
-
-
-		sb.append(String.format("<circle cx='%d' cy='%d' r='%d' fill='#ffffff'/>",
-			size / 2,
-			size / 2,
-			size / 4
-		));
 
 		sb.append("</svg>\n");
 
@@ -160,12 +182,30 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			double startAngle = i * Math.PI * 2 / count;
 			double endAngle = (i + 1) * Math.PI * 2 / count;
 			double radius = size / 3;
+
 			for (double factor = 1.0; factor > 0; factor -= (1.0 / radiusSteps)) {
 				double x1 = size / 2 + Math.cos(refAngle + startAngle) * radius * factor;
 				double y1 = size / 2 - Math.sin(refAngle + startAngle) * radius * factor;
 				double x2 = size / 2 + Math.cos(refAngle + endAngle) * radius * factor;
 				double y2 = size / 2 - Math.sin(refAngle + endAngle) * radius * factor;
 				sb.append(String.format("<line x1='%s' y1='%s' x2='%s' y2='%s' stroke-linecap='round' stroke='#ccc' stroke-width='1' />", x1, y1, x2, y2));
+
+				/*
+				sb.append(String.format(
+					"<text " +
+						"x='%s' " +
+						"y='%s' " +
+						"text-anchor='middle' " +
+						"dominant-baseline='central' " +
+						"style='fill: #000; stroke: none; font-size: 12px'" +
+						">" +
+						"%s" +
+						"</text>",
+					x1,
+					y1,
+					i + 1
+				));
+				*/
 			}
 		}
 

@@ -68,7 +68,7 @@ angular
 
             downloadService.postJson '/awac/user/password/save', data, (result) ->
                 if result.success
-                    messageFlash.displaySuccess "CHANGES_SAVED"
+                    messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     $scope.close()
                 else
                     # TODO ERROR HANDLING

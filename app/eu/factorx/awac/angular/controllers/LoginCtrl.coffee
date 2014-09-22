@@ -67,7 +67,7 @@ angular
         downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
             if result.success
                 $scope.$root.loginSuccess(result.data)
-                messageFlash.displaySuccess "You are now connected"
+                messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                 $scope.isLoading = false
             else
                 $scope.isLoading = false
@@ -94,7 +94,7 @@ angular
         #send request
         downloadService.postJson '/awac/forgotPassword', { identifier: $scope.forgotPasswordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
             if result.success
-                $scope.forgotEmailSuccessMessage = translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS')
+                $scope.forgotEmailSuccessMessage = translationService.get 'LOGIN_FORGOT_PASSWORD_SUCCESS'
                 $scope.isLoading = false
                 return
             else

@@ -30,7 +30,7 @@ angular
 
                 myDoughnutChart = new Chart(ctx).Doughnut(data, {
                     tooltipTemplate: (o) ->
-                        f(100.0 * (o.endAngle - o.startAngle) / (Math.PI * 2)) + "% (" + f(o.value) + " tCO2e)"
+                        f(100.0 * (o.endAngle - o.startAngle) / (Math.PI * 2)) + "%&nbsp;(" + f(o.value) + "%&nbsp;tCO2e)"
                     animation: false
                     legendTemplate: "" +
                         "<% for (var i=0; i<segments.length; i++){%>" +

@@ -59,7 +59,7 @@ public class BaseActivityData implements Serializable {
 
 	/**
 	 * Deprecated! Use instead the constructor taking a 'alternativeGroup' parameter
-	 * @param keyalternativeGroup
+	 * @param key
 	 * @param activityCategory
 	 * @param activitySubCategory
 	 * @param activityType

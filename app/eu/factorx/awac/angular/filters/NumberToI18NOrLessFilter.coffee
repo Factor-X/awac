@@ -6,7 +6,10 @@ angular
             original = parseFloat(input)
             rounded = Math.round(original * 1000.0) / 1000.0
             if rounded < 0.001
-                return translationService.get('LESS_THAN_MINIMUM')
+                if original > 0
+                    return translationService.get('LESS_THAN_MINIMUM')
+                else
+                    return ''
             else
                 return $filter("number") rounded, 3
         return ""

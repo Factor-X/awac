@@ -118,7 +118,7 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             #edit site
                             $scope.getParams().site.name = $scope.fields.name.field
@@ -145,7 +145,7 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             # add new site to the list
                             $scope.getParams().organization.sites.push result.data

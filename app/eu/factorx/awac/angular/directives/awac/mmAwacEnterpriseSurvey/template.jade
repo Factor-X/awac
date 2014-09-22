@@ -8,17 +8,17 @@ div
                         div
                             select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
                     td
-                        div Gestion
+                        div(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
                     td
                         div(ng-show='$root.currentPerson!=null')
                             span(ng-bind-html='\'WELCOME\' | translate')
                             | ,
                             span.username {{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}
-                        div(ng-show='$root.currentPerson==null') Your are currently not connected
+
                 tr
                     td
-                        button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented') Confidentialité
-                        button.button.help(type='button', mm-not-implemented='mm-not-implemented') Assistance
+                        button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
+                        button.button.help(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate")
                     td
                         //  site manager button
                         button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-click='nav(\'/site_manager\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}')
@@ -40,11 +40,11 @@ div
                 select(ng-options='p.key as p.label for p in $root.availablePeriods', ng-model='$root.periodSelectedKey')
             .big_separator
             .data_date_compare
-                div Site sélectionné
+                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_SITE' | translate")
                 select(ng-options='s.scope as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
             .big_separator
             .data_date_compare
-                div Comparaison avec
+                div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
             .data_save
@@ -59,7 +59,7 @@ div
             .nav_entreprise
                 .site_menu
                     .site
-                        button.button.verification(type='button', mm-not-implemented='mm-not-implemented') Vérification
+                        button.button.verification(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
                     .menu
                         button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='nav(\'/form/TAB2\')')
                             .tab-title(ng-bind-html='\'TAB2\' | translate')
@@ -87,9 +87,9 @@ div
                             .menu_arrow
                 .last_menu
                     button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='nav(\'/results\')')
-                        .tab-title résultats
+                        .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
                     button.button(mm-not-implemented='mm-not-implemented')
-                        .tab-title actions de réduction
+                        .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")
 
     div(class="{{getClassContent()}}",ng-view)
     .footer

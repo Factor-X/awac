@@ -69,7 +69,7 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             #edit site
                             $scope.getParams().event.name = $scope.fields.name.field
@@ -88,7 +88,7 @@ angular
                         if result.success
 
                             #display success message
-                            messageFlash.displaySuccess "CHANGES_SAVED"
+                            messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             # add new event to the list
                             $scope.getParams().events[$scope.getParams().events.length] = result.data

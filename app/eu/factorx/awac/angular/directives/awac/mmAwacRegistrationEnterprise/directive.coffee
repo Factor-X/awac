@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash) ->
+.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash,translationService) ->
     restrict: "E"
     scope:{}
     templateUrl: "$/angular/templates/mm-awac-registration-enterprise.html"
@@ -91,7 +91,7 @@ angular
             downloadService.postJson '/enterprise/registration', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
-                    messageFlash.displaySuccess "You are now connected"
+                    messageFlash.displaySuccess translationService.get "CONNECTION_MESSAGE_SUCCESS"
                     $scope.isLoading = false
                 else
                     #display the error message

@@ -6,22 +6,22 @@ ng-virtual
                 div
                     span.wrapped
                         span(ng-bind-html="'SCOPE_1' | translate")
-                        span (tCO2e)
+                        span  (tCO2e)
             th.align-right.scope2
                 div
                     span.wrapped
                         span(ng-bind-html="'SCOPE_2' | translate")
-                        span (tCO2e)
+                        span  (tCO2e)
             th.align-right.scope3
                 div
                     span.wrapped
                         span(ng-bind-html="'SCOPE_3' | translate")
-                        span (tCO2e)
+                        span  (tCO2e)
             th.align-right.out-of-scope
                 div
                     span.wrapped
                         span(ng-bind-html="'OUT_OF_SCOPE' | translate")
-                        span (tCO2e)
+                        span  (tCO2e)
 
         tbody
             tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.scope1Value + rl.scope2Value + rl.scope3Value + rl.outOfScopeValue > 0)")

@@ -60,7 +60,7 @@ angular
             downloadService.postJson '/awac/login', data, (result) ->
                 if result.success
                     $scope.$root.loginSuccess(result.data)
-                    messageFlash.displaySuccess "You are now connected"
+                    messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                     $scope.isLoading = false
                     $scope.close()
                 else

@@ -49,6 +49,11 @@ public class TranslationController extends AbstractController {
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_ERROR_MESSAGES).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.QUESTION).values());
 		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.INDICATOR).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.ActivityCategory).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.ActivitySubCategory).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.ActivitySource).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.ActivityType).values());
+		translations.addAll(codeLabelService.findCodeLabelsByList(CodeList.IndicatorCategory).values());
 		return translations;
 	}
 
