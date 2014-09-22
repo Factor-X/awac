@@ -9,6 +9,7 @@ import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Report;
+import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
 
 @MappedSuperclass
 public class ReportResult implements Serializable {
@@ -18,6 +19,8 @@ public class ReportResult implements Serializable {
 	private Report report;
 	
 	private Map<IndicatorCode, List<BaseActivityResult>> activityResults = new HashMap<>();
+
+	private List<ReportLogEntry> logEntries = new ArrayList<>();
 
 	protected ReportResult() {
 		super();
@@ -84,5 +87,9 @@ public class ReportResult implements Serializable {
 		}
 		
 		return scopeValuesByIndicator;
+	}
+
+	public List<ReportLogEntry> getLogEntries() {
+		return logEntries;
 	}
 }

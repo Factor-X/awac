@@ -2,15 +2,6 @@ div.results.pdf-able
     h1
         span(ng-bind-html="'RESULTS' | translate")
 
-    br
-
-    div
-        span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
-        button
-            span(ng-bind-html="'XLS_EXPORT' | translate")
-        button
-            span(ng-bind-html="'PDF_EXPORT' | translate")
-
     table.wide
         tr
             td.top-aligned
@@ -38,14 +29,19 @@ div.results.pdf-able
 
             td.top-aligned.horizontally-padded.wide
 
+                div
+                    span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
+                    span.bold  {{ totalEmissions | numberToI18NOrLess }}
+                    span  tCO2e
+
+                br
+                br
+
                 div(ng-show="siteSelectionIsEmpty()")
 
                     div Please choose at least one site
 
                 div(ng-hide="siteSelectionIsEmpty()")
-
-                    div.results_disclaimer
-                        span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
 
                     div(ng-show="current_tab == 1")
                         h2
@@ -67,6 +63,8 @@ div.results.pdf-able
 
                         h3
                             span(ng-bind-html="'SCOPE_1' | translate")
+                            span  : {{ totalScope1 }} tCO2e
+                        br
                         center
                             table
                                 tr
@@ -75,9 +73,12 @@ div.results.pdf-able
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
-
+                        br
+                        br
                         h3
                             span(ng-bind-html="'SCOPE_2' | translate")
+                            span  : {{ totalScope2 }} tCO2e
+                        br
                         center
                             table
                                 tr
@@ -87,9 +88,12 @@ div.results.pdf-able
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
 
-
+                        br
+                        br
                         h3
                             span(ng-bind-html="'SCOPE_3' | translate")
+                            span  : {{ totalScope3 }} tCO2e
+                        br
                         center
                             table
                                 tr
@@ -98,6 +102,8 @@ div.results.pdf-able
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
+                        br
+                        br
 
 
 
@@ -128,16 +134,92 @@ div.results.pdf-able
                     div(ng-show="current_tab == 6")
                         h2
                             span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+                        br
+
+                        p(ng-repeat="e in o.logEntries")
+                            span(style="color: #33a", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
+                                span Il y a une activité de type
+                                span &#32;
+                                span(ng-bind-html="e.biActivityCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.biActivitySubCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivityType | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivitySource | translate")
+                                span &#32;
+                                span pour une valeur de
+                                span &#32;
+                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span &#32;
+                                span(ng-bind-html="e.adUnit")
+                                span &#32;
+                                span qui a été multiplié par le facteur d'émission&#32;
+                                span(ng-bind-html="e.biIndicatorCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivityType | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivitySource | translate")
+                                span &#32;
+                                span valant
+                                span &#32;
+                                span(ng-bind-html="e.fValue | numberToI18N")
+                                span &#32;
+                                span(ng-bind-html="e.fUnitOut")
+                                span &#32;par&#32;
+                                span(ng-bind-html="e.fUnitIn")
+                                span . Cela contribue au résultat à hauteur de
+                                span &#32;
+                                span(ng-bind-html="e.value | numberToI18N")
+                                span &#32;
+                                span(ng-bind-html="e.biUnit")
+
+                            span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'")
+                                span Il y a une activité de type
+                                span &#32;
+                                span(ng-bind-html="e.biActivityCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.biActivitySubCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivityType | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivitySource | translate")
+                                span  pour une valeur de
+                                span &#32;
+                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span &#32;
+                                span(ng-bind-html="e.adUnit")
+                                span  pour laquelle aucun facteur de type
+                                span &#32;
+                                span(ng-bind-html="e.biIndicatorCategory | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivityType | translate")
+                                span &#32;/&#32;
+                                span(ng-bind-html="e.adActivitySource | translate")
+                                span &#32;
+                                span n'a été trouvé.
 
                     div(ng-show="current_tab == 7")
                         h2
                             span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
 
                     br
+
+                    div.results_disclaimer
+                        span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                    br
                     br
                     br
 
             td.top-aligned
+                div.align-right
+                    button
+                        span(ng-bind-html="'XLS_EXPORT' | translate")
+                    button
+                        span(ng-bind-html="'PDF_EXPORT' | translate")
+
+                br
+
                 .charts-panel-tabset
                     .charts-panel-tab(ng-click="current_tab = 1", ng-class="{ active: current_tab == 1 }")
                         .charts-panel-tab-arrow
@@ -163,8 +245,9 @@ div.results.pdf-able
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_calculus(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
 
-                    .charts-panel-tab(ng-click="current_tab = 7", ng-class="{ active: current_tab == 7 }")
-                        .charts-panel-tab-arrow
-                        .charts-panel-tab-title.tab_fe(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
+                    //
+                        .charts-panel-tab(ng-click="current_tab = 7", ng-class="{ active: current_tab == 7 }")
+                            .charts-panel-tab-arrow
+                            .charts-panel-tab-title.tab_fe(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
 
 

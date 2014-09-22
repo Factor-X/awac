@@ -9,6 +9,6 @@ import eu.factorx.awac.models.reporting.ReportResult;
 
 public interface ReportResultService {
 
-	List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period);
+	eu.factorx.awac.service.impl.reporting.ReportResultCollection getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period);
 
 }

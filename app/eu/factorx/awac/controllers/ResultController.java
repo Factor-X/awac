@@ -1,6 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.ReportDTO;
+import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.GetReportParametersDTO;
 import eu.factorx.awac.models.business.Scope;
@@ -9,6 +10,8 @@ import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
+import eu.factorx.awac.service.impl.reporting.ReportResultCollection;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +64,8 @@ public class ResultController extends AbstractController {
 		}
 
 		// 4. Compute the ReportResult
-		Map<String, ReportResult> reportResults = buildReportResults(period, scopes);
+		List<ReportLogEntry> logEntries = new ArrayList<>();
+		Map<String, ReportResult> reportResults = buildReportResults(period, scopes, logEntries);
 
 		// 5. Populate the DTO
 		for (Map.Entry<String, ReportResult> reportEntry : reportResults.entrySet()) {
@@ -79,26 +83,38 @@ public class ResultController extends AbstractController {
 
 			// 5.4 Each ReportResult is rendered to a SVG string - WEB
 			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResult));
+
 		}
 
-		// 6. PUSH !!!
+		// 6. Add log entries
+		List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
+		for (ReportLogEntry logEntry : logEntries) {
+			ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
+			dtoLogEntries.add(reportLogEntryDTO);
+		}
+
+		// 7. PUSH !!!
 		return ok(resultsDTO);
 	}
 
 
-	private Map<String, ReportResult> buildReportResults(Period period, List<Scope> scopes) {
+	private Map<String, ReportResult> buildReportResults(Period period, List<Scope> scopes, List<ReportLogEntry> logEntries) {
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
 
-		List<ReportResult> allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
-		Logger.info("Built {} report(s):", allReportResults.size());
-		for (ReportResult reportResult : allReportResults) {
+		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
+		List<ReportResult> reportResults = allReportResults.getReportResults();
+		Logger.info("Built {} report(s):", reportResults.size());
+		for (ReportResult reportResult : reportResults) {
 			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getReport().getCode().getKey(), reportResult.getActivityResults().size());
 		}
 
 		Map<String, ReportResult> allReportResultsMap = new HashMap<>();
-		for (ReportResult reportResult : allReportResults) {
+		for (ReportResult reportResult : reportResults) {
 			allReportResultsMap.put(reportResult.getReport().getCode().getKey(), reportResult);
 		}
+
+		logEntries.clear();
+		logEntries.addAll(allReportResults.getLogEntries());
 
 		return allReportResultsMap;
 	}

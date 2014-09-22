@@ -5,5 +5,5 @@
         span &nbsp;
         span(ng-bind-html="line.indicatorName | translate")
         span &nbsp;
-        span ( {{ (line.scope1Value + line.scope2Value + line.scope3Value + line.outOfScopeValue) | numberToI18NOrLess }} tCO2e) ( {{ line.percentage | numberToI18NOrLess }} % )
+        span (&nbsp;{{ (line.scope1Value + line.scope2Value + line.scope3Value + line.outOfScopeValue) | numberToI18NOrLess }}&nbsp;tCO2e) (&nbsp;{{ line.percentage | numberToI18NOrLess }}&nbsp;%&nbsp;)
 
