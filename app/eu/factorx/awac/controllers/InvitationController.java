@@ -109,11 +109,14 @@ public class InvitationController extends AbstractController {
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
-		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		//String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+
+		String content = link;
 
 		// send email for invitation
 		// send mail
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
+		//EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,content);
 		emailService.send(email);
 
 		//create InvitationResultDTO
@@ -166,10 +169,11 @@ public class InvitationController extends AbstractController {
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
-		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		//String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		String content = link;
 
 		// send confirmation email
-		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);
+		EmailMessage email = new EmailMessage(dto.getEmail(),title, content);
 		emailService.send(email);
 
 
