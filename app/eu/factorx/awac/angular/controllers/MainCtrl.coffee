@@ -297,6 +297,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             if result.success
                 $rootScope.currentPerson = null
                 $location.path('/login')
+                $rootScope.periodSelectedKey=null
+                $rootScope.scopeSelectedId=null
             else
                 messageFlash.displayError result.data.message
                 $location.path('/login')

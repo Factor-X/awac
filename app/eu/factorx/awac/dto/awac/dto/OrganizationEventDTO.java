@@ -12,8 +12,6 @@ public class OrganizationEventDTO extends DTO {
 
 	private Long id;
 
-	//private OrganizationDTO organization;
-
 	private PeriodDTO period;
 
 	private String name;
@@ -23,14 +21,6 @@ public class OrganizationEventDTO extends DTO {
 
 	public OrganizationEventDTO() {
 	}
-
-//	public OrganizationDTO getOrganization() {
-//		return organization;
-//	}
-//
-//	public void setOrganization(OrganizationDTO organization) {
-//		this.organization = organization;
-//	}
 
 	public String getName() {
 		return name;

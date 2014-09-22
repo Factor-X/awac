@@ -9,6 +9,8 @@ angular
             $scope.assignPeriod = $scope.$root.periods[0].key
     $scope.isPeriodChecked = {}
 
+    $scope.selectedPeriodForEvent = $scope.$root.periods[0].key
+
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
@@ -111,6 +113,9 @@ angular
                 params = {}
                 params.organization = $scope.organization
                 params.events = $scope.events
+                for period in $scope.$root.periods
+                    if period.key == $scope.selectedPeriodForEvent
+                        params.period = period
                 if event?
                     params.event = event
                 modalService.show(modalService.EDIT_EVENT, params)
