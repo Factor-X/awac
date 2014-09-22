@@ -65,7 +65,8 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 		if (play.Play.isDev()) {
 			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
 		} else {
-			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("jar:", "");
+			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
+			serverPath = serverPath.replace("jar:", "");
 		}
 
 		Logger.info("Play original server Path :" + serverPath);
