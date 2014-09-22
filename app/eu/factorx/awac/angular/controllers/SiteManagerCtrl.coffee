@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
-.controller "SiteManagerCtrl", ($scope,translationService, modalService,downloadService,messageFlash) ->
-
+.controller "SiteManagerCtrl", ($scope, translationService, modalService, downloadService, messageFlash) ->
     $scope.isLoading = {}
     if $scope.$root.periods?
         $scope.assignPeriod = $scope.$root.periods[0].key
@@ -14,6 +13,7 @@ angular
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
         console.log result
+
         if not result.success
             messageFlash.displayError 'Unable to load data...'
             modalService.close(modalService.LOADING)
@@ -36,7 +36,10 @@ angular
                 console.log result.data.organizationEventList
 
 
-            $scope.$watch 'assignPeriod', ->
+            $scope.$watchCollection 'assignPeriod', ->
+                $scope.refreshPeriod()
+
+            $scope.refreshPeriod = ->
                 for site in $scope.organization.sites
                     $scope.isPeriodChecked[site.id] = $scope.periodAssignTo(site)
 
@@ -52,6 +55,10 @@ angular
                 if site?
                     params.site = site
                 params.organization = $scope.organization
+                params.refreshMySites = ->
+                    $scope.refreshMySites()
+                    $scope.refreshPeriod()
+
                 modalService.show(modalService.EDIT_SITE, params)
 
             $scope.addUsers = (site) ->
@@ -84,21 +91,21 @@ angular
                     if not result.success
                         messageFlash.displayError 'Unable to load data...'
                     else
-                        if !site.listPeriodAvailable?
-                            site.listPeriodAvailable = []
-                        for period in $scope.$root.periods
-                            if period.id == $scope.assignPeriod
-                                site.listPeriodAvailable[site.listPeriodAvailable.length] = period
+                        site.listPeriodAvailable = result.data.periodsList
+                        $scope.refreshMySites()
+
 
             #
             # this function replace my site by organization site
             #
             $scope.refreshMySites = () ->
-                ###
                 mySites = []
                 for site in $scope.organization.sites
-                    if site.
-                ###
+                    for person in site.listPersons
+                        if person.identifier == $scope.$root.currentPerson.identifier
+                            mySites.push site
+
+                $scope.$root.mySites = mySites
 
             $scope.editOrCreateEvent = (event) ->
                 params = {}

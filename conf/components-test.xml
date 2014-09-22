@@ -31,6 +31,7 @@
                 <bean class="eu.factorx.awac.converter.FormProgressToFormProgressDTOConverter" />
                 <bean class="eu.factorx.awac.converter.NotificationToNotificationDTOConverter" />
                 <bean class="eu.factorx.awac.converter.OrganizationEventToOrganizationEventDTOConverter" />
+                <bean class="eu.factorx.awac.converter.SiteToListPeriodsDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>

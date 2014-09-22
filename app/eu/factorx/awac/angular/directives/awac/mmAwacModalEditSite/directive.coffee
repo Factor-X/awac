@@ -130,6 +130,9 @@ angular
                             $scope.getParams().site.accountingTreatment = $scope.fields.accountingTreatment.field
                             $scope.getParams().site.percentOwned = $scope.fields.percentOwned.field
 
+                            #refresh my site
+                            $scope.getParams().refreshMySites()
+
                             #close window
                             $scope.close()
                         else
@@ -145,7 +148,13 @@ angular
                             messageFlash.displaySuccess "CHANGES_SAVED"
 
                             # add new site to the list
-                            $scope.getParams().organization.sites[$scope.getParams().organization.sites.length] = result.data
+                            $scope.getParams().organization.sites.push result.data
+
+                            # add to mySite
+                            $scope.$root.mySites.push result.data
+
+                            #refresh
+                            $scope.getParams().refreshMySites()
 
                             #close window
                             $scope.close()

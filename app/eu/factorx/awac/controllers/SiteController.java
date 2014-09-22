@@ -3,6 +3,7 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
+import eu.factorx.awac.dto.awac.post.ListPeriodsDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Site;
@@ -167,8 +168,9 @@ public class SiteController  extends AbstractController {
 		//save
 		siteService.saveOrUpdate(site);
 
+        ListPeriodsDTO listPeriodsDTO = conversionService.convert(site, ListPeriodsDTO.class);
 
-		return ok(new ReturnDTO());
+        return ok(listPeriodsDTO);
 	}
 
 	@Transactional(readOnly = false)

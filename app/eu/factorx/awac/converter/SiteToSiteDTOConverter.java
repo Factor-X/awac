@@ -1,47 +1,60 @@
 package eu.factorx.awac.converter;
 
+import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.AccountSiteAssociationService;
+import eu.factorx.awac.service.ScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-
-import eu.factorx.awac.dto.awac.get.SiteDTO;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.service.ScopeService;
 import play.Logger;
+
+import java.util.List;
 
 @Component
 public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 
-	@Autowired
-	private ScopeService scopeService;
-
     @Autowired
     private PeriodToPeriodDTOConverter periodToPeriodDTOConverter;
 
-	@Override
-	public SiteDTO convert(Site site) {
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
 
-		SiteDTO dto = new SiteDTO();
-		dto.setId(site.getId());
-		dto.setName(site.getName());
-		dto.setAccountingTreatment(site.getAccountingTreatment());
-		dto.setDescription(site.getDescription());
-		dto.setEconomicInterest(site.getEconomicInterest());
-		dto.setNaceCode(site.getNaceCode());
-		dto.setOperatingPolicy(site.getOperatingPolicy());
-		dto.setPercentOwned(site.getPercentOwned());
-		dto.setOrganizationalStructure(site.getOrganizationalStructure());
+    @Autowired
+    private AccountToPersonDTOConverter accountToPersonDTOConverter;
 
-		if (site.getListPeriodAvailable() != null) {
-			for (Period period : site.getListPeriodAvailable()) {
-				dto.addPeriodAvailable(periodToPeriodDTOConverter.convert(period));
-			}
-		}
+    @Override
+    public SiteDTO convert(Site site) {
+
+        SiteDTO dto = new SiteDTO();
+        dto.setId(site.getId());
+        dto.setName(site.getName());
+        dto.setAccountingTreatment(site.getAccountingTreatment());
+        dto.setDescription(site.getDescription());
+        dto.setEconomicInterest(site.getEconomicInterest());
+        dto.setNaceCode(site.getNaceCode());
+        dto.setOperatingPolicy(site.getOperatingPolicy());
+        dto.setPercentOwned(site.getPercentOwned());
+        dto.setOrganizationalStructure(site.getOrganizationalStructure());
+
+        if (site.getListPeriodAvailable() != null) {
+            for (Period period : site.getListPeriodAvailable()) {
+                dto.addPeriodAvailable(periodToPeriodDTOConverter.convert(period));
+            }
+        }
+
+        List<AccountSiteAssociation> associations = accountSiteAssociationService.findBySite(site);
+
+        for (AccountSiteAssociation accountSiteAssociation : associations) {
+            dto.addPerson(accountToPersonDTOConverter.convert(accountSiteAssociation.getAccount()));
+        }
+
 
         Logger.info(dto.toString());
 
-		dto.setScope(site.getId());
-		return dto;
-	}
+        dto.setScope(site.getId());
+        return dto;
+    }
 }

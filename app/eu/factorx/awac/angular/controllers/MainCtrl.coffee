@@ -138,17 +138,17 @@ angular
 
                     $location.path(p)
 
-            #hide data to compare if the period is the same than the period to answer
-            if $scope.$root.periodSelectedKey == $scope.periodToCompare
-                $scope.periodToCompare = 'default'
-
+            $scope.$root.computePeriod()
             $scope.loadPeriodForComparison()
             $scope.loadFormProgress()
+
+
 
     $scope.periodsForComparison = [
         {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
     ]
-    $scope.periodToCompare = 'default'
+
+    $scope.$root.periodToCompare = 'default'
 
 
     #
@@ -164,7 +164,7 @@ angular
 
 
     $scope.loadPeriodForComparison = ->
-        if not $scope.$root.scopeSelectedId and !isNaN($scope.$root.scopeSelectedId)
+        if $scope.$root.scopeSelectedId? and !isNaN($scope.$root.scopeSelectedId)
             url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
 
             downloadService.getJson url, (result) ->
@@ -172,9 +172,16 @@ angular
                     $scope.periodsForComparison = [
                         {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
                     ]
+                    currentComparisonFounded=false
                     for period in result.data.periodDTOList
                         if period.key != $scope.$root.periodSelectedKey
-                            $scope.periodsForComparison[$scope.periodsForComparison.length] = period
+                            $scope.periodsForComparison.push period
+                            if period.key == $scope.$root.periodToCompare
+                                currentComparisonFounded = true
+
+                    #hide data to compare if the period is the same than the period to answer
+                    if currentComparisonFounded == false || $scope.$root.periodSelectedKey == $scope.$root.periodToCompare
+                        $scope.$root.periodToCompare = 'default'
                 else
                     messageFlash.displayError result.data.message
 
@@ -347,11 +354,35 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         else
             $location.path("noScope")
 
+    $rootScope.$watch "mySites", ->
+        $rootScope.computePeriod()
 
     $rootScope.computePeriod = (scopeId) ->
-        for site in $rootScope.mySites
-            if site.scope == scopeId
-                $rootScope.availablePeriods = site.listPeriodAvailable
+        console.log $rootScope.mySites
+
+        if !scopeId?
+            scopeId = $rootScope.scopeSelectedId
+        console.log "scopeId:"+scopeId
+        if scopeId?
+            for site in $rootScope.mySites
+                if site.scope == scopeId
+                    console.log "1.DOUNDED !! : "
+                    console.dir angular.copy(site)
+                    console.log "2.DOUNDED !! : "
+                    console.dir angular.copy(site.listPeriodAvailable)
+                    $rootScope.availablePeriods = site.listPeriodAvailable
+                    console.dir $rootScope.availablePeriods
+
+            currentPeriodFounded=false
+            for period in $rootScope.availablePeriods
+                if period.key == $rootScope.periodSelectedKey
+                    currentPeriodFounded = true
+            if not currentPeriodFounded
+                if $rootScope.availablePeriods.length>0
+                    $rootScope.periodSelectedKey = $rootScope.availablePeriods[0].key
+                else
+                    $rootScope.availablePeriods = null
+                    $location.path("noScope")
 
 
     #

@@ -119,6 +119,9 @@ public class AdminController extends AbstractController {
 
     @Transactional(readOnly = true)
     public Result runBADImporter(String interfaceString) {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
 
         // InterfaceTypeCode.
         InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(interfaceString);

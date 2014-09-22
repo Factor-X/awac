@@ -116,7 +116,7 @@ public class RegistrationTest extends AbstractBaseControllerTest {
 
         List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
 
-        assertTrue(siteAssociationList.size()==0);
+        assertTrue(siteAssociationList.size()==1);
 
         //control period for the site
         assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()==1);
