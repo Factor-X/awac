@@ -32,6 +32,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -103,8 +104,7 @@ public class AnswerController extends AbstractController {
 
         //control if the form is locked or not
         if (!securedController.isUnlock(form.getAllQuestionSets().get(0), scope, period)) {
-            //TODO translate
-            throw new MyrmexRuntimeException("vous ne pouvez pas travailler sur ce formulaire car quelqu'un d'autres y travail déjà");
+            throw new MyrmexRuntimeException(BusinessErrorType.FORM_ALREADY_USED);
         }
         //lock
         securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);

@@ -8,13 +8,10 @@ angular
         for s in $scope.mySites
             if "" + s.id == "" + $scope.$root.scopeSelectedId
                 s.$selected = true
-        console.log '-----------'
     , true);
 
 
     $scope.$watch('mySites|filter:{$selected:true}', (sites) ->
-        console.log "sites == "
-        console.log sites
         if sites.length > 0
             $scope.o = undefined
             $scope.totalEmissions = undefined
@@ -34,6 +31,33 @@ angular
                 modalService.close modalService.LOADING
                 if result.success
                     $scope.o = result.data
+
+
+                    if $scope.$root.instanceName == 'municipality'
+                        $scope.o.reportDTOs.R_1 = $scope.o.reportDTOs.RCo_1
+                        $scope.o.reportDTOs.R_2 = $scope.o.reportDTOs.RCo_2
+                        $scope.o.reportDTOs.R_3 = $scope.o.reportDTOs.RCo_3
+                        $scope.o.reportDTOs.R_4 = $scope.o.reportDTOs.RCo_4
+                        $scope.o.reportDTOs.R_5 = $scope.o.reportDTOs.RCo_5
+
+                        $scope.o.svgDonuts.R_1 = $scope.o.svgDonuts.RCo_1
+                        $scope.o.svgDonuts.R_2 = $scope.o.svgDonuts.RCo_2
+                        $scope.o.svgDonuts.R_3 = $scope.o.svgDonuts.RCo_3
+                        $scope.o.svgDonuts.R_4 = $scope.o.svgDonuts.RCo_4
+                        $scope.o.svgDonuts.R_5 = $scope.o.svgDonuts.RCo_5
+
+                        $scope.o.svgWebs.R_1 = $scope.o.svgWebs.RCo_1
+                        $scope.o.svgWebs.R_2 = $scope.o.svgWebs.RCo_2
+                        $scope.o.svgWebs.R_3 = $scope.o.svgWebs.RCo_3
+                        $scope.o.svgWebs.R_4 = $scope.o.svgWebs.RCo_4
+                        $scope.o.svgWebs.R_5 = $scope.o.svgWebs.RCo_5
+
+                        $scope.o.svgHistograms.R_1 = $scope.o.svgHistograms.RCo_1
+                        $scope.o.svgHistograms.R_2 = $scope.o.svgHistograms.RCo_2
+                        $scope.o.svgHistograms.R_3 = $scope.o.svgHistograms.RCo_3
+                        $scope.o.svgHistograms.R_4 = $scope.o.svgHistograms.RCo_4
+                        $scope.o.svgHistograms.R_5 = $scope.o.svgHistograms.RCo_5
+
 
                     $scope.totalEmissions = 0;
                     $scope.totalScope1 = 0;

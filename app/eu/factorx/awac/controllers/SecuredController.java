@@ -22,6 +22,7 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -143,7 +144,7 @@ public class SecuredController extends Security.Authenticator {
     public void lockForm(QuestionSet questionSet, Scope scope, Period period) {
         cleanOlderLock();
         if (!isUnlock(questionSet, scope, period)) {
-            throw new MyrmexRuntimeException("This form is already used");
+            throw new MyrmexRuntimeException(BusinessErrorType.FORM_ALREADY_USED);
         }
         lockQuestionSetList.add(new LockQuestionSet(questionSet, scope, period, getCurrentUser()));
     }
