@@ -15,6 +15,9 @@ import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.*;
@@ -34,6 +37,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,6 +69,10 @@ public class InvitationController extends AbstractController {
 
 	@Autowired
 	private OrganizationService organizationService;
+
+	@Autowired
+	private CodeLabelService codeLabelService;
+
 
 
 	private static String INVITATION_TITLE = "AWAC - invitation from ";
@@ -98,8 +106,11 @@ public class InvitationController extends AbstractController {
 		String title = INVITATION_TITLE +  org.getName() + ".";
 		String link = awacHostname+"/enterprise#/registration/" + key;
 
+		// retrieve traductions
+		//HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
+		//Logger.info("traduction : " + traductions.get("EMAIL_TITLE").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage()));
 
-		Map values = new HashMap<String,Object>();
+		Map values = new HashMap<String, Object>();
 		values.put("title",title);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
