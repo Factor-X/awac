@@ -154,7 +154,7 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART2' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
@@ -168,7 +168,7 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.fValue | numberToI18N")
+                                span(ng-bind-html="e.fValue")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitOut")
                                 span &#32;
