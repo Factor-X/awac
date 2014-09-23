@@ -5,7 +5,7 @@ angular
         if input?
             original = parseFloat(input)
             if original <= 1
-                return $filter("number") original
+                return $filter("number") original,12
             else
                 rounded = Math.round(original * 1000.0) / 1000.0
                 return $filter("number") rounded, 3
