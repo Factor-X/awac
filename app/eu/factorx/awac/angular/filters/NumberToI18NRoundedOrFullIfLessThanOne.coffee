@@ -4,9 +4,8 @@ angular
     (input) ->
         if input?
             original = parseFloat(input)
-            if original <= 1
+            if original < 1
                 return $filter("number") original,12
             else
-                rounded = Math.round(original * 1000.0) / 1000.0
-                return $filter("number") rounded, 3
+                return $filter("number") original, 3
         return ""

@@ -30,7 +30,8 @@ div.results.pdf-able
             td.top-aligned.horizontally-padded.wide
 
                 div
-                    span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
+                    span(ng-bind-html="'ACCOMPANIMENT_WORD_ENTERPRISE' | translate", ng-show="$root.instanceName == 'enterprise'")
+                    span(ng-bind-html="'ACCOMPANIMENT_WORD_MUNICIPALITY' | translate", ng-show="$root.instanceName == 'municipality'")
                     span.bold  {{ totalEmissions | numberToI18N }}
                     span  tCO2e
 
@@ -158,6 +159,8 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
+                                br
+                                span &nbsp;&nbsp;&nbsp;&nbsp;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART3' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biIndicatorCategory | translate")
@@ -168,13 +171,15 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.fValue")
+                                span(ng-bind-html="e.fValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitOut")
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART5' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitIn")
+                                br
+                                span &nbsp;&nbsp;&nbsp;&nbsp;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART6' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.value | numberToI18N")
@@ -194,7 +199,7 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
