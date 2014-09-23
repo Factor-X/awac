@@ -1,6 +1,9 @@
 .chart-legend
 
-    div(ng-show="ngModel.reportLines.length == 0")
+    //
+        span {{ ngModel.reportLines }}
+
+    div(ng-show="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
         span(ng-bind-html="'RESULTS_LEGENDS_NODATA' | translate")
 
     div(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
@@ -9,5 +12,5 @@
         span &nbsp;
         span(ng-bind-html="line.indicatorName | translate")
         span &nbsp;
-        span (&nbsp;{{ (line.scope1Value + line.scope2Value + line.scope3Value + line.outOfScopeValue) | numberToI18NOrLess }}&nbsp;tCO2e) (&nbsp;{{ line.percentage | numberToI18NOrLess }}&nbsp;%&nbsp;)
+        span (&nbsp;{{ (line.scope1Value + line.scope2Value + line.scope3Value + line.outOfScopeValue) | numberToI18N }}&nbsp;tCO2e) (&nbsp;{{ line.percentage | numberToI18N }}&nbsp;%&nbsp;)
 

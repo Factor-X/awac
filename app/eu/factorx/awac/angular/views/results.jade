@@ -4,7 +4,7 @@ div.results.pdf-able
 
     table.wide
         tr
-            td.top-aligned
+            td.top-aligned(ng-hide="$root.instanceName == 'municipality'")
                 .sites-panel
                     .sites-panel-title
                         span(ng-bind-html="'SITES_LIST' | translate")
@@ -31,7 +31,7 @@ div.results.pdf-able
 
                 div
                     span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
-                    span.bold  {{ totalEmissions | numberToI18NOrLess }}
+                    span.bold  {{ totalEmissions | numberToI18N }}
                     span  tCO2e
 
                 br
@@ -66,7 +66,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_1' | translate")
-                                        span  : {{ totalScope1 }} tCO2e
+                                        span  : {{ totalScope1 | numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
@@ -78,7 +78,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_2' | translate")
-                                        span  : {{ totalScope2 }} tCO2e
+                                        span  : {{ totalScope2| numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
@@ -90,7 +90,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_3' | translate")
-                                        span  : {{ totalScope3 }} tCO2e
+                                        span  : {{ totalScope3| numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
@@ -141,7 +141,7 @@ div.results.pdf-able
                         br
 
                         p(ng-repeat="e in o.logEntries")
-                            span(style="color: #33a", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
+                            span(ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART1' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biActivityCategory | translate")

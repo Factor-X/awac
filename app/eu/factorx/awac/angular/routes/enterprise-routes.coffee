@@ -34,7 +34,7 @@ initializeEnterpriseRoutes = (defaultResolve) ->
         .when('/results/:period/:scope', {
                 templateUrl: '$/angular/views/results.html'
                 controller: 'ResultsCtrl'
-                resolve :angular.extend({
+                resolve: angular.extend({
                     displayFormMenu: () ->
                         return true
                 }, resultResolve)
