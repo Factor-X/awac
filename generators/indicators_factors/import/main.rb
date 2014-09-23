@@ -23,7 +23,7 @@ def main(options)
 
         url = "http://127.0.0.1:9000/awac/admin/indicators_factors/reset"
         logger.info "Calling #{url} ... "
-        open url
+        open url, :read_timeout => 3600
 
         logger.info 'Done'
     rescue Exception => e

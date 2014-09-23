@@ -57,7 +57,7 @@ public class AnswerTest extends AbstractBaseModelTest {
 	public void _001_saveActionSuccess() {
 
 	// ConnectionFormDTO
-	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","interfacename","");
+	ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password","enterprise","");
 
 	// LineAnswerDTO
 	List<AnswerLineDTO> answerListDto = new ArrayList<AnswerLineDTO>();

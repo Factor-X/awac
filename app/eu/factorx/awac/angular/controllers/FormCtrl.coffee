@@ -33,6 +33,7 @@ angular
     ###
 
     $scope.loading = true
+    $scope.errorMessage = null
 
     #display the loading modal
     modalService.show(modalService.LOADING)
@@ -44,7 +45,8 @@ angular
 
         if not result.success
             # TODO ERROR HANDLING
-            messageFlash.displayError 'Unable to load data...'
+            $scope.errorMessage = result.data.message
+            messageFlash.displayError(result.data.message)
             modalService.close(modalService.LOADING)
         else
 

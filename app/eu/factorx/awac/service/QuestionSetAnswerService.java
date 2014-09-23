@@ -11,24 +11,24 @@ import java.util.Map;
 
 public interface QuestionSetAnswerService extends PersistenceService<QuestionSetAnswer> {
 
-	List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter);
+    List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter);
 
-	/**
-	 * Gets all QuestionSetAnswers corresponding to given context (period and scope).
-	 *
-	 * @param scope
-	 * @param period
-	 */
-	List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period);
+    /**
+     * Gets all QuestionSetAnswers corresponding to given context (period and scope).
+     *
+     * @param scope
+     * @param period
+     */
+    List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period);
 
-	/**
-	 * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (period and scope) and for given form.
-	 *
-	 * @param scope
-	 * @param period
-	 * @param form
-	 */
-	List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form);
+    /**
+     * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (period and scope) and for given form.
+     *
+     * @param scope
+     * @param period
+     * @param form
+     */
+    List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form);
 
     /**
      * Gets all 'ancestor' QuestionSetAnswers (where parent is null) corresponding to given context (scope) and for given form.
@@ -36,16 +36,17 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
      * @param scope
      * @param form
      */
-    List<QuestionSetAnswer> findByScopeAndForm(Scope scope,Form form);
+    List<QuestionSetAnswer> findByScopeAndForm(Scope scope, Form form);
 
-	/***
-	 * Find all distinct periods for which data related to given scope were saved
-	 * @param scopeId
-	 * @return a list of {@link Period}
-	 */
-	List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId);
+    /**
+     * Find all distinct periods for which data related to given scope were saved
+     *
+     * @param scopeId
+     * @return a list of {@link Period}
+     */
+    List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId);
 
-	void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form);
+    void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form);
 
     /**
      * return all questionSetAnswer order by questionCode
@@ -56,4 +57,5 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
      */
     public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period);
 
+    public List<QuestionSetAnswer> findByScope(Scope scope);
 }

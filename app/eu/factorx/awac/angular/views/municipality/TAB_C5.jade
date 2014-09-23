@@ -1,36 +1,38 @@
 div
-    //achat bien et service
-    mm-awac-section(title-code="AC130")
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        //achat bien et service
+        mm-awac-section(title-code="AC130")
 
-        mm-awac-question(question-code="AC131")
+            mm-awac-question(question-code="AC131")
 
-        mm-awac-repetition-name(question-code="AC132")
-        mm-awac-repetition-question(question-set-code="AC132", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC132')")
+            mm-awac-repetition-name(question-code="AC132")
+            mm-awac-repetition-question(question-set-code="AC132", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC132')")
 
-            mm-awac-question(question-code="AC133", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC134",ng-repetition-map="itLevel1", ng-condition="(getAnswer('AC133',itLevel1).value | stringToFloat) < 18   || getAnswer('AC133',itLevel1).value == '23'")
-            mm-awac-question(question-code="AC135",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'")
-            mm-awac-question(question-code="AC136",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'")
+                mm-awac-question(question-code="AC133", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC134",ng-repetition-map="itLevel1", ng-condition="(getAnswer('AC133',itLevel1).value | stringToFloat) < 18   || getAnswer('AC133',itLevel1).value == '23'")
+                mm-awac-question(question-code="AC135",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'")
+                mm-awac-question(question-code="AC136",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'")
 
-        button.button.add-repetition-button(ng-click="addIteration('AC132')", type="button")
-            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-            span(ng-bind-html="'AC132_LOOPDESC' | translate")
+            button.button.add-repetition-button(ng-click="addIteration('AC132')", type="button")
+                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                span(ng-bind-html="'AC132_LOOPDESC' | translate")
 
-    .horizontal_separator
+        .horizontal_separator
 
-    // investissement AC137
-    mm-awac-section(title-code="AC137")
+        // investissement AC137
+        mm-awac-section(title-code="AC137")
 
-        mm-awac-question(question-code="AC138")
+            mm-awac-question(question-code="AC138")
 
-        mm-awac-repetition-name(question-code="AC139")
-        mm-awac-repetition-question(question-set-code="AC139", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC139')")
+            mm-awac-repetition-name(question-code="AC139")
+            mm-awac-repetition-question(question-set-code="AC139", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC139')")
 
-            mm-awac-question(question-code="AC140", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC141", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC142", ng-repetition-map="itLevel1")
-            mm-awac-question(question-code="AC143", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC140", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC141", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC142", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC143", ng-repetition-map="itLevel1")
 
-        button.button.add-repetition-button(ng-click="addIteration('AC139')", type="button")
-            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-            span(ng-bind-html="'AC139_LOOPDESC' | translate")
+            button.button.add-repetition-button(ng-click="addIteration('AC139')", type="button")
+                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                span(ng-bind-html="'AC139_LOOPDESC' | translate")

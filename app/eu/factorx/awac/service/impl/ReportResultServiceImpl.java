@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.forms.AwacCalculator;
@@ -183,6 +184,13 @@ public class ReportResultServiceImpl implements ReportResultService {
 		// find all question set answers (only "parents" => find where qsa.parent is null)
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
 
+
+		Site site = null;
+
+		if (scope instanceof  Site) {
+			site = (Site) scope;
+		}
+
 		// find all activity data
 		List<BaseActivityData> allBADs = getActivityData(allQuestionSetAnswers);
 		Logger.info("Built {} BADs for scope: {} and period: {}", allBADs.size(), scope, period.getLabel());
@@ -211,7 +219,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 				if (factor == null) {
 					reportNoSuitableFactorError(baseActivityData, baseIndicator, factorSearchParam, logEntries);
 				} else {
-					BaseActivityResult bar = new BaseActivityResult(baseIndicator, baseActivityData, factor);
+					BaseActivityResult bar = new BaseActivityResult(baseIndicator, baseActivityData, factor, site);
 					activityResults.add(bar);
 					reportContribution(bar, logEntries);
 				}

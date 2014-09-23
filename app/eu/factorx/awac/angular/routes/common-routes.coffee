@@ -6,10 +6,7 @@ initializeCommonRoutes = (defaultResolve) ->
     .module('app')
     .config ($routeProvider) ->
 
-
-
         $routeProvider
-
         .when('/login', {
                 templateUrl: '$/angular/views/login.html'
                 controller: 'LoginCtrl'

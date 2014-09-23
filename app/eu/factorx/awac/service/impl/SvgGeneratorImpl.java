@@ -166,6 +166,11 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		int count = data.getRowCount();
 		double maximum = data.max(1, 0, data.getColumnCount() - 1, data.getRowCount() - 1);
 
+		double l = Math.log10(maximum);
+		double lDown = Math.floor(l);
+		double c = Math.ceil(maximum / Math.pow(10, lDown));
+		double cap = c * Math.pow(10, lDown);
+
 		// rays
 		for (int i = 0; i < count; i++) {
 			double angle = i * Math.PI * 2 / count;
@@ -177,11 +182,12 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			sb.append(String.format("<line x1='%s' y1='%s' x2='%s' y2='%s' stroke-linecap='round' stroke='#888' stroke-width='1' />", x1, y1, x2, y2));
 		}
 
+		double radius = size / 3;
+
 		// circles
 		for (int i = 0; i < count; i++) {
 			double startAngle = i * Math.PI * 2 / count;
 			double endAngle = (i + 1) * Math.PI * 2 / count;
-			double radius = size / 3;
 
 			for (double factor = 1.0; factor > 0; factor -= (1.0 / radiusSteps)) {
 				double x1 = size / 2 + Math.cos(refAngle + startAngle) * radius * factor;
@@ -190,28 +196,13 @@ public class SvgGeneratorImpl implements SvgGenerator {
 				double y2 = size / 2 - Math.sin(refAngle + endAngle) * radius * factor;
 				sb.append(String.format("<line x1='%s' y1='%s' x2='%s' y2='%s' stroke-linecap='round' stroke='#ccc' stroke-width='1' />", x1, y1, x2, y2));
 
-				/*
-				sb.append(String.format(
-					"<text " +
-						"x='%s' " +
-						"y='%s' " +
-						"text-anchor='middle' " +
-						"dominant-baseline='central' " +
-						"style='fill: #000; stroke: none; font-size: 12px'" +
-						">" +
-						"%s" +
-						"</text>",
-					x1,
-					y1,
-					i + 1
-				));
-				*/
 			}
 		}
 
+
+
 		// numbers
 		for (int i = 0; i < count; i++) {
-			double radius = size / 3;
 			double angle = i * Math.PI * 2 / count;
 			double x = size / 2 + Math.cos(refAngle + angle) * (radius + 25);
 			double y = size / 2 - Math.sin(refAngle + angle) * (radius + 25);
@@ -226,11 +217,10 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 			for (int i = 0; i < count; i++) {
 				double angle = i * Math.PI * 2 / count;
-				double radius = size / 3;
 				double cellLeft = (double) data.getCell(1 + s, i);
 				double factorLeft = cellLeft / maximum;
-				double x = size / 2 + Math.cos(refAngle + angle) * radius * factorLeft;
-				double y = size / 2 - Math.sin(refAngle + angle) * radius * factorLeft;
+				double x = size / 2 + Math.cos(refAngle + angle) * radius * factorLeft * maximum / cap;
+				double y = size / 2 - Math.sin(refAngle + angle) * radius * factorLeft * maximum / cap;
 				seriePoints.add(new Vector2D(x, y));
 			}
 
@@ -242,6 +232,28 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			sb.append(String.format("<path d='%s' stroke='#333' fill='none'                     stroke-width='2' transform='translate(1,1)' />", path));
 			sb.append(String.format("<path d='%s' stroke='#%s'  fill='#%s'  fill-opacity='0.25' stroke-width='2'                            />", path, color, color));
 
+		}
+
+		double startAngle = 0;
+
+		for (double factor = 1.0; factor > 0; factor -= (1.0 / radiusSteps)) {
+			double x1 = size / 2 + Math.cos(refAngle + startAngle) * radius * factor;
+			double y1 = size / 2 - Math.sin(refAngle + startAngle) * radius * factor;
+
+			sb.append(String.format(
+				"<text " +
+					"x='%s' " +
+					"y='%s' " +
+					"text-anchor='end' " +
+					"dominant-baseline='central' " +
+					"style='fill: #000; stroke: none; font-size: 12px'" +
+					">" +
+					"%s" +
+					"</text>",
+				x1 - 10,
+				y1,
+				Math.round(cap * factor) + " tCO2e"
+			));
 		}
 
 		sb.append("</svg>\n");
@@ -258,6 +270,16 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		int series = data.getColumnCount() - 1;
 		double maximum = data.max(1, 0, data.getColumnCount() - 1, count - 1);
 		int size = 1000;
+
+
+
+		double l = Math.log10(maximum);
+		double lDown = Math.floor(l);
+		double c = Math.ceil(maximum / Math.pow(10, lDown));
+		double cap = c * Math.pow(10, lDown);
+
+
+
 		sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d' viewBox='0 0 %d %d'>\n",
 			size,
 			size,
@@ -265,8 +287,8 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			size
 		));
 
-		double histoWidth = size * 0.75 / count;
-		double left = size * 0.125;
+		double histoWidth = size * 0.625 / count;
+		double left = size * 0.25;
 		for (int i = 0; i < count; i++) {
 
 			for (int j = 0; j < series; j++) {
@@ -285,9 +307,9 @@ public class SvgGeneratorImpl implements SvgGenerator {
 						"class='path' " +
 						"/>\n",
 					left + histoWidth * i + (1.0 * histoWidth * j / series),
-					size * 0.875 - cell * size * 0.75 / maximum,
+					size * 0.875 - cell * size * 0.75 / cap,
 					histoWidth * (2.0 / 3) / series,
-					cell * size * 0.75 / maximum,
+					cell * size * 0.75 / cap,
 					color
 				));
 
@@ -298,11 +320,101 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		// numbers
 		for (int i = 0; i < count; i++) {
 			double x = left + histoWidth * i + histoWidth / 3.0;
-			double y = size * 0.875 + 20;
-			sb.append(String.format("<circle cx='%s' cy='%s' r='15' fill='none' stroke='#000' stroke-width='1' />", x, y));
-			sb.append(String.format("<text x='%s' y='%s' text-anchor='middle' dominant-baseline='central' style='fill: #000; stroke: none; font-size: 12px'>%s</text>", x, y, i + 1));
+			double y = size * 0.875 + 50;
+			sb.append(String.format(
+				"<circle " +
+					"cx='%s' " +
+					"cy='%s' " +
+					"r='24' " +
+					"fill='none' " +
+					"stroke='#000' " +
+					"stroke-width='1' " +
+					"/>",
+				x,
+				y
+			));
+			sb.append(String.format(
+				"<text " +
+					"x='%s' " +
+					"y='%s' " +
+					"text-anchor='middle' " +
+					"dominant-baseline='central' " +
+					"style='fill: #000; stroke: none; font-size: 24px'" +
+					">" +
+					"%s" +
+					"</text>",
+				x,
+				y,
+				i + 1
+			));
 		}
 
+		sb.append(String.format(
+			"<line " +
+				"x1='%s' " +
+				"y1='%s' " +
+				"x2='%s' " +
+				"y2='%s' " +
+				"stroke-linecap='round' " +
+				"stroke='#ccc' " +
+				"stroke-width='3' " +
+				"/>",
+			0,
+			size * 0.875,
+			size,
+			size * 0.875
+		));
+
+		sb.append(String.format(
+			"<line " +
+				"x1='%s' " +
+				"y1='%s' " +
+				"x2='%s' " +
+				"y2='%s' " +
+				"stroke-linecap='round' " +
+				"stroke='#ccc' " +
+				"stroke-width='3' " +
+				"/>",
+			left,
+			0,
+			left,
+			size
+		));
+
+		for (double factor = 1.0; factor > 0; factor -= 0.25) {
+			double t = size * 0.875 - size * factor * 0.75;
+			sb.append(String.format(
+				"<line " +
+					"x1='%s' " +
+					"y1='%s' " +
+					"x2='%s' " +
+					"y2='%s' " +
+					"stroke-linecap='round' " +
+					"stroke='#ccc' " +
+					"stroke-width='3' " +
+					"/>",
+				left - size * 0.025,
+				t,
+				left,
+				t
+			));
+
+
+			sb.append(String.format(
+				"<text " +
+					"x='%s' " +
+					"y='%s' " +
+					"text-anchor='end' " +
+					"dominant-baseline='central' " +
+					"style='fill: #000; stroke: none; font-size: 24px'" +
+					">" +
+					"%s" +
+					"</text>",
+				left - size * 0.05,
+				t,
+				Math.round(cap * factor) + " tCO2e"
+			));
+		}
 
 		sb.append("</svg>\n");
 

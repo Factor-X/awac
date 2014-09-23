@@ -4,7 +4,7 @@ div.results.pdf-able
 
     table.wide
         tr
-            td.top-aligned
+            td.top-aligned(ng-hide="$root.instanceName == 'municipality'")
                 .sites-panel
                     .sites-panel-title
                         span(ng-bind-html="'SITES_LIST' | translate")
@@ -30,8 +30,9 @@ div.results.pdf-able
             td.top-aligned.horizontally-padded.wide
 
                 div
-                    span(ng-bind-html="'ACCOMPANIMENT_WORD' | translate")
-                    span.bold  {{ totalEmissions | numberToI18NOrLess }}
+                    span(ng-bind-html="'ACCOMPANIMENT_WORD_ENTERPRISE' | translate", ng-show="$root.instanceName == 'enterprise'")
+                    span(ng-bind-html="'ACCOMPANIMENT_WORD_MUNICIPALITY' | translate", ng-show="$root.instanceName == 'municipality'")
+                    span.bold  {{ totalEmissions | numberToI18N }}
                     span  tCO2e
 
                 br
@@ -66,7 +67,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_1' | translate")
-                                        span  : {{ totalScope1 }} tCO2e
+                                        span  : {{ totalScope1 | numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
@@ -78,7 +79,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_2' | translate")
-                                        span  : {{ totalScope2 }} tCO2e
+                                        span  : {{ totalScope2| numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
@@ -90,7 +91,7 @@ div.results.pdf-able
                                 td(colspan="3")
                                     h3
                                         span(ng-bind-html="'SCOPE_3' | translate")
-                                        span  : {{ totalScope3 }} tCO2e
+                                        span  : {{ totalScope3| numberToI18N }} tCO2e
                             tr
                                 td
                                     div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
@@ -141,7 +142,7 @@ div.results.pdf-able
                         br
 
                         p(ng-repeat="e in o.logEntries")
-                            span(style="color: #33a", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
+                            span(ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART1' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biActivityCategory | translate")
@@ -154,10 +155,12 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART2' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
+                                br
+                                span &nbsp;&nbsp;&nbsp;&nbsp;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART3' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.biIndicatorCategory | translate")
@@ -168,13 +171,15 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.fValue | numberToI18N")
+                                span(ng-bind-html="e.fValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitOut")
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART5' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.fUnitIn")
+                                br
+                                span &nbsp;&nbsp;&nbsp;&nbsp;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART6' | translate")
                                 span &#32;
                                 span(ng-bind-html="e.value | numberToI18N")
@@ -194,7 +199,7 @@ div.results.pdf-able
                                 span &#32;
                                 span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate")
                                 span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18N")
+                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
                                 span &#32;
                                 span(ng-bind-html="e.adUnit")
                                 span &#32;
@@ -212,6 +217,20 @@ div.results.pdf-able
                         h2
                             span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
 
+                    div(ng-show="current_tab == 8")
+                        h2
+                            span(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
+                        br
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
+
+
                     br
 
                     div.results_disclaimer
@@ -222,9 +241,9 @@ div.results.pdf-able
 
             td.top-aligned
                 div.align-right
-                    button
+                    button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'XLS_EXPORT' | translate")
-                    button
+                    button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'PDF_EXPORT' | translate")
 
                 br
@@ -246,13 +265,17 @@ div.results.pdf-able
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_numbers(ng-bind-html="'NUMBERS' | translate")
 
-                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }")
+                    .charts-panel-tab(ng-click="", ng-class="{ active: current_tab == 5 }", mm-not-implemented)
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_constant_factors(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
 
                     .charts-panel-tab(ng-click="current_tab = 6", ng-class="{ active: current_tab == 6 }")
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_calculus(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+
+                    .charts-panel-tab(ng-show="$root.instanceName == 'municipality'", ng-click="current_tab = 8", ng-class="{ active: current_tab == 8 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title.tab_convention(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
 
                     //
                         .charts-panel-tab(ng-click="current_tab = 7", ng-class="{ active: current_tab == 7 }")
