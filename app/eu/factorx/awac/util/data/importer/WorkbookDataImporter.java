@@ -2,7 +2,11 @@ package eu.factorx.awac.util.data.importer;
 
 import jxl.*;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Cache;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import play.Logger;
+import play.db.jpa.JPA;
 
 import java.io.File;
 import java.text.Normalizer;
@@ -27,11 +31,36 @@ public abstract class WorkbookDataImporter {
 			long endTime = System.currentTimeMillis() - startTime;
 			Logger.info(className + " - GC ...");
 			System.gc();
+
+			Logger.info(className + " - Clear Hibernate cache ...");
+
+			JPA.em().flush();
+			JPA.em().clear();
+
+			Session session = JPA.em().unwrap(Session.class);
+			clearHibernateCache(session);
+
 			Logger.info(className + " - END OF IMPORT (took " + endTime + " msec)");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	private void clearHibernateCache(Session session) {
+
+		if (session != null) {
+			session.clear(); // internal cache clear
+		}
+
+		SessionFactory sf = session.getSessionFactory();
+
+		Cache cache = sf.getCache();
+		cache.evictCollectionRegions();
+		cache.evictDefaultQueryRegion();
+		cache.evictEntityRegions();
+		cache.evictQueryRegions();
+		cache.evictNaturalIdRegions();
 	}
 
 	protected abstract void importData() throws Exception;
