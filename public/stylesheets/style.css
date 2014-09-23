@@ -1893,6 +1893,12 @@ ul.messenger > li {
     background-repeat: no-repeat;
 }
 
+.tab_convention {
+    background-image: url('/assets/images/schemas/schema_barchart.png');
+    background-position: bottom 4px right 4px;
+    background-repeat: no-repeat;
+}
+
 .no-scope-message {
     text-align: center;
     padding: 25px;

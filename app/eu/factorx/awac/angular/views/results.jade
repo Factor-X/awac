@@ -212,6 +212,20 @@ div.results.pdf-able
                         h2
                             span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
 
+                    div(ng-show="current_tab == 8")
+                        h2
+                            span(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
+                        br
+                        center
+                            table
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
+
+
                     br
 
                     div.results_disclaimer
@@ -222,9 +236,9 @@ div.results.pdf-able
 
             td.top-aligned
                 div.align-right
-                    button
+                    button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'XLS_EXPORT' | translate")
-                    button
+                    button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'PDF_EXPORT' | translate")
 
                 br
@@ -246,13 +260,17 @@ div.results.pdf-able
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_numbers(ng-bind-html="'NUMBERS' | translate")
 
-                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }")
+                    .charts-panel-tab(ng-click="", ng-class="{ active: current_tab == 5 }", mm-not-implemented)
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_constant_factors(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
 
                     .charts-panel-tab(ng-click="current_tab = 6", ng-class="{ active: current_tab == 6 }")
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_calculus(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+
+                    .charts-panel-tab(ng-show="$root.instanceName == 'municipality'", ng-click="current_tab = 8", ng-class="{ active: current_tab == 8 }")
+                        .charts-panel-tab-arrow
+                        .charts-panel-tab-title.tab_convention(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
 
                     //
                         .charts-panel-tab(ng-click="current_tab = 7", ng-class="{ active: current_tab == 7 }")

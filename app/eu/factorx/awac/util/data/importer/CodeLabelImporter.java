@@ -78,6 +78,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
         Logger.info("==== Importing Code Labels");
         for (String sheetName : codesWbSheets.keySet()) {
             CodeList codeList = getCodeListBySheetName(sheetName);
+	        Logger.debug("CodeList: " + codeList);
             if (importedCodeLists.contains(codeList)) {
                 Logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>> CodeList '{}' has already been imported", codeList);
                 continue;
