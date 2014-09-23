@@ -1,12 +1,5 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import play.Logger;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -19,7 +12,14 @@ import eu.factorx.awac.service.BaseIndicatorService;
 import eu.factorx.awac.service.FactorService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ReportResultService;
+import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import play.Logger;
+
+import java.util.*;
 
 @Component
 public class ReportResultServiceImpl implements ReportResultService {
@@ -42,58 +42,6 @@ public class ReportResultServiceImpl implements ReportResultService {
 	 */
 	private Set<ActivityResultContributor> activityResultContributors;
 
-	// @Override
-	// public ReportResult getReportResult(InterfaceTypeCode interfaceType, Scope scope, Period period) {
-	//
-	// // find all question set answers (only "parents" => find where qsa.parent is null)
-	// Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
-	//
-	// // find all activity data
-	// List<BaseActivityData> allBADs = getActivityData(allQuestionSetAnswers);
-	// Logger.info("Built {} BADs for scope: {} and period: {}", allBADs.size(), scope, period.getLabel());
-	// Set<BaseActivityDataCode> matchingIndicatorBADs = new HashSet<>();
-	//
-	// // find all carbon baseIndicators for sites
-	// List<BaseIndicator> baseIndicators = baseIndicatorService.findAllCarbonIndicatorsForSites(interfaceType);
-	//
-	// // calculate activity results
-	// List<BaseActivityResult> activityResults = new ArrayList<>();
-	//
-	// for (BaseIndicator baseIndicator : baseIndicators) {
-	//
-	// List<BaseActivityData> indicatorBADs = filterByIndicator(allBADs, baseIndicator);
-	// if (indicatorBADs.isEmpty()) {
-	// continue;
-	// }
-	//
-	// Logger.info("BaseIndicator '{}': found {} BADs", baseIndicator.getKey(), indicatorBADs.size());
-	// for (BaseActivityData baseActivityData : indicatorBADs) {
-	// matchingIndicatorBADs.add(baseActivityData.getKey());
-	// }
-	//
-	// indicatorBADs = filterByRank(baseIndicator.getKey(), indicatorBADs);
-	//
-	// for (BaseActivityData baseActivityData : indicatorBADs) {
-	// FactorSearchParameter factorSearchParam = new FactorSearchParameter(baseIndicator, baseActivityData);
-	// Factor factor = factorService.findByParameters(factorSearchParam);
-	// if (factor == null) {
-	// saveNoSuitableFactorError(baseActivityData, baseIndicator, factorSearchParam);
-	// } else {
-	// activityResults.add(new BaseActivityResult(baseIndicator, baseActivityData, factor));
-	// }
-	// }
-	// }
-	//
-	// // check not used BADs
-	// for (BaseActivityData bad : allBADs) {
-	// if (!matchingIndicatorBADs.contains(bad.getKey())) {
-	// saveNoSuitableIndicatorError(interfaceType, bad);
-	// }
-	// }
-	//
-	// return new ReportResult(activityResults, baseIndicatorService.findAllIndicatorNames());
-	// }
-
 	private static List<BaseActivityData> filterByIndicator(List<BaseActivityData> allBads, BaseIndicator baseIndicator) {
 		ActivityCategoryCode category = baseIndicator.getActivityCategory();
 		ActivitySubCategoryCode subCategory = baseIndicator.getActivitySubCategory();
@@ -102,14 +50,14 @@ public class ReportResultServiceImpl implements ReportResultService {
 		List<BaseActivityData> res = new ArrayList<>();
 		for (BaseActivityData bad : allBads) {
 			if (category.equals(bad.getActivityCategory()) && subCategory.equals(bad.getActivitySubCategory())
-					&& ((ownership == null) || ownership.equals(bad.getActivityOwnership()))) {
+				&& ((ownership == null) || ownership.equals(bad.getActivityOwnership()))) {
 				res.add(bad);
 			}
 		}
 		return res;
 	}
 
-	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs) {
+	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs, List<ReportLogEntry> logEntries) {
 		List<BaseActivityData> res = new ArrayList<>();
 		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
 		for (BaseActivityData baseActivityData : indicatorBADs) {
@@ -122,13 +70,13 @@ public class ReportResultServiceImpl implements ReportResultService {
 				if (rank == minRank) {
 					res.add(baseActivityData);
 				} else {
-					Logger.info("--> Excluding BAD '{}' with rank = {} (lowest rank for alternative group '{}' = {})", baseActivityData.getKey().getKey(), rank, alternativeGroup,
-							minRank);
+					reportLowerRankInGroup(baseActivityData, alternativeGroup, rank, minRank, logEntries);
 				}
 			}
 		}
 		return res;
 	}
+
 
 	private static Map<String, Integer> getMinRankByAlternativeGroup(List<BaseActivityData> indicatorBADs) {
 		Map<String, Integer> minRankByAlternativeGroup = new HashMap<>();
@@ -174,35 +122,22 @@ public class ReportResultServiceImpl implements ReportResultService {
 		return res;
 	}
 
-	// private void saveNoSuitableIndicatorError(InterfaceTypeCode interfaceType, BaseActivityData bad) {
-	// BaseActivityDataCode baseActivityDataCode = bad.getKey();
-	// IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(interfaceType, bad);
-	// Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorSearchParam);
-	// JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_INDICATOR, baseActivityDataCode.getKey(), null, indicatorSearchParam.toString()));
-	// }
-	//
-	// private void saveNoSuitableFactorError(BaseActivityData bad, BaseIndicator baseIndicator, FactorSearchParameter factorSearchParam) {
-	// BaseActivityDataCode baseActivityDataCode = bad.getKey();
-	// String indicatorKey = baseIndicator.getKey();
-	// Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorKey, factorSearchParam);
-	// JPA.em().persist(new ReportBusinessException(ErrorType.NO_SUITABLE_FACTOR, baseActivityDataCode.getKey(), indicatorKey, factorSearchParam.toString()));
-	// }
-
 	@Override
-	public List<ReportResult> getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
+	public ReportResultCollection getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
 		List<ReportResult> reportResults = new ArrayList<>();
+		List<ReportLogEntry> logEntries = new ArrayList<>();
 
 		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
-		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period);
+		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
 
 		for (Report report : awacCalculator.getReports()) {
-			reportResults.add(getReportResult(report, baseActivityResults));
+			reportResults.add(getReportResult(report, baseActivityResults, logEntries));
 		}
 
-		return reportResults;
+		return new ReportResultCollection(reportResults, logEntries);
 	}
 
-	private ReportResult getReportResult(Report report, List<BaseActivityResult> baseActivityResults) {
+	private ReportResult getReportResult(Report report, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries) {
 		ReportResult reportResult = new ReportResult(report);
 
 		IndicatorIsoScopeCode reportScope = report.getRestrictedScope();
@@ -234,16 +169,16 @@ public class ReportResultServiceImpl implements ReportResultService {
 		return new ArrayList<>(result);
 	}
 
-	private List<BaseActivityResult> computeBaseActivityResults(List<BaseIndicator> baseIndicators, List<Scope> scopes, Period period) {
+	private List<BaseActivityResult> computeBaseActivityResults(List<BaseIndicator> baseIndicators, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries) {
 		List<BaseActivityResult> results = new ArrayList<>();
 		for (Scope scope : scopes) {
-			List<BaseActivityResult> scopeBaseActivityResults = getReportResultForSingleScope(baseIndicators, scope, period);
+			List<BaseActivityResult> scopeBaseActivityResults = getReportResultForSingleScope(baseIndicators, scope, period, logEntries);
 			results.addAll(scopeBaseActivityResults);
 		}
 		return results;
 	}
 
-	private List<BaseActivityResult> getReportResultForSingleScope(List<BaseIndicator> baseIndicators, Scope scope, Period period) {
+	private List<BaseActivityResult> getReportResultForSingleScope(List<BaseIndicator> baseIndicators, Scope scope, Period period, List<ReportLogEntry> logEntries) {
 
 		// find all question set answers (only "parents" => find where qsa.parent is null)
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
@@ -268,35 +203,61 @@ public class ReportResultServiceImpl implements ReportResultService {
 				matchingIndicatorBADs.add(baseActivityData.getKey());
 			}
 
-			indicatorBADs = filterByRank(indicatorBADs);
+			indicatorBADs = filterByRank(indicatorBADs, logEntries);
 
 			for (BaseActivityData baseActivityData : indicatorBADs) {
 				FactorSearchParameter factorSearchParam = new FactorSearchParameter(baseIndicator, baseActivityData);
 				Factor factor = factorService.findByParameters(factorSearchParam);
 				if (factor == null) {
-					Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityData.getKey().getKey(), baseIndicator.getCode().getKey());
+					reportNoSuitableFactorError(baseActivityData, baseIndicator, factorSearchParam, logEntries);
 				} else {
-					activityResults.add(new BaseActivityResult(baseIndicator, baseActivityData, factor));
+					BaseActivityResult bar = new BaseActivityResult(baseIndicator, baseActivityData, factor);
+					activityResults.add(bar);
+					reportContribution(bar, logEntries);
 				}
 			}
 		}
 
-//		checkNotUsedBADs(allBADs, matchingIndicatorBADs);
+		checkNotUsedBADs(allBADs, matchingIndicatorBADs, logEntries);
 
 		return activityResults;
 	}
 
-	private void checkNotUsedBADs(List<BaseActivityData> allBADs, Set<BaseActivityDataCode> matchingIndicatorBADs) {
+	private void checkNotUsedBADs(List<BaseActivityData> allBADs, Set<BaseActivityDataCode> matchingIndicatorBADs, List<ReportLogEntry> logEntries) {
 		for (BaseActivityData bad : allBADs) {
 			if (!matchingIndicatorBADs.contains(bad.getKey())) {
-				// TODO FIX THIS MESSAGE WITH AN INDICATOR
-				Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, bad.getKey().getKey(), null);
+				reportNoSuitableIndicatorError(InterfaceTypeCode.ENTERPRISE, bad, logEntries);
 			}
 		}
 	}
 
 	public void setActivityResultContributors(Set<ActivityResultContributor> activityResultContributors) {
 		this.activityResultContributors = activityResultContributors;
+	}
+
+
+	private void reportNoSuitableIndicatorError(InterfaceTypeCode interfaceType, BaseActivityData bad, List<ReportLogEntry> logEntries) {
+		BaseActivityDataCode baseActivityDataCode = bad.getKey();
+		IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(interfaceType, bad);
+		Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorSearchParam);
+		logEntries.add(new NoSuitableIndicator(baseActivityDataCode.getKey(), indicatorSearchParam));
+	}
+
+	private void reportNoSuitableFactorError(BaseActivityData bad, BaseIndicator baseIndicator, FactorSearchParameter factorSearchParam, List<ReportLogEntry> logEntries) {
+		BaseActivityDataCode baseActivityDataCode = bad.getKey();
+		String baseIndicatorKey = baseIndicator.getCode().getKey();
+		Logger.error(NO_SUITABLE_FACTOR_ERROR_MSG, baseActivityDataCode.getKey(), baseIndicatorKey, factorSearchParam);
+		logEntries.add(new NoSuitableFactor(baseIndicator, bad));
+	}
+
+	private static void reportLowerRankInGroup(BaseActivityData baseActivityData, String alternativeGroup, Integer rank, Integer minRank, List<ReportLogEntry> logEntries) {
+		Logger.info("--> Excluding BAD '{}' with rank = {} (lowest rank for alternative group '{}' = {})", baseActivityData.getKey().getKey(), rank, alternativeGroup,
+			minRank);
+		logEntries.add(new LowerRankInGroup(baseActivityData.getKey().getKey(), rank, alternativeGroup, minRank));
+	}
+
+	private void reportContribution(BaseActivityResult bar, List<ReportLogEntry> logEntries) {
+		logEntries.add(new Contribution(bar));
 	}
 
 }

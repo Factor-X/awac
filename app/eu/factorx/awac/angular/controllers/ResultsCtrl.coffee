@@ -3,8 +3,12 @@ angular
 .controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService, messageFlash,translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
-    $scope.$watch('$root.mySites|filter:{$selected:true}', (nv) ->
+    $scope.$root.$watch('mySites', (nv) ->
         $scope.mySites = $scope.$root.mySites
+        for s in $scope.mySites
+            if "" + s.id == "" + $scope.$root.scopeSelectedId
+                s.$selected = true
+        console.log '-----------'
     , true);
 
 
@@ -13,6 +17,10 @@ angular
         console.log sites
         if sites.length > 0
             $scope.o = undefined
+            $scope.totalEmissions = undefined
+            $scope.totalScope1 = undefined;
+            $scope.totalScope2 = undefined;
+            $scope.totalScope3 = undefined;
             modalService.show modalService.LOADING
             dto =
                 __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
@@ -26,6 +34,21 @@ angular
                 modalService.close modalService.LOADING
                 if result.success
                     $scope.o = result.data
+
+                    $scope.totalEmissions = 0;
+                    $scope.totalScope1 = 0;
+                    $scope.totalScope2 = 0;
+                    $scope.totalScope3 = 0;
+                    for line in $scope.o.reportDTOs.R_1.reportLines
+                        $scope.totalScope1 += line.scope1Value
+                        $scope.totalScope2 += line.scope2Value
+                        $scope.totalScope3 += line.scope3Value
+
+                        $scope.totalEmissions += line.scope1Value
+                        $scope.totalEmissions += line.scope2Value
+                        $scope.totalEmissions += line.scope3Value
+                        $scope.totalEmissions += line.outOfScopeValue
+
                 else
                     messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'
     , true);
