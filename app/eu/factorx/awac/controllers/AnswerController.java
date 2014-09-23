@@ -148,11 +148,22 @@ public class AnswerController extends AbstractController {
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
+
+        Site site = siteService.findById(scopeId);
+
         List<PeriodDTO> periodDTOs = new ArrayList<>();
         List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
         for (Period period : periods) {
-            periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+
+            //restrict by period by site
+            for (Period periodToTest : site.getListPeriodAvailable()) {
+                if (periodToTest.equals(period)) {
+                    periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+                    break;
+                }
+            }
         }
+        
         return ok(new ListPeriodsDTO(periodDTOs));
     }
 

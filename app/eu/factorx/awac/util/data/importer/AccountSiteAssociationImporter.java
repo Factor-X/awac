@@ -6,14 +6,14 @@ import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import play.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class AccountSiteAssociationImporter {
@@ -46,7 +46,7 @@ public class AccountSiteAssociationImporter {
             List<Period> periodList = new ArrayList<>();
 
             if (accounts.get(0).getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
-                periodList.add(periodService.findByCode(PeriodCode.P2013));
+                periodList.addAll(getDistinctPeriodsBySite(site));
             } else {
                 periodList.addAll(periodService.findAll());
             }
@@ -54,37 +54,25 @@ public class AccountSiteAssociationImporter {
 
             siteService.saveOrUpdate(site);
         }
-
-
-
-        /*
-
-
-
-
-
-        Map<Site, Set<Period>> periodsBySites = getDistinctPeriodsBySite(questionSetAnswerService.findAll());
-        for (Entry<Site, Set<Period>> entry : periodsBySites.entrySet()) {
-            Site site = entry.getKey();
-            List<Period> listPeriodAvailable = new ArrayList<>(entry.getValue());
-            site.setListPeriodAvailable(listPeriodAvailable);
-            siteService.saveOrUpdate(site);
-            Logger.info("Linked site " + site + " to period(s): " + StringUtils.join(listPeriodAvailable, ','));
-        }
-        */
     }
-/*
-    private Map<Site, Set<Period>> getDistinctPeriodsBySite(List<QuestionSetAnswer> qsa) {
-        Map<Site, Set<Period>> res = new HashMap<>();
-        for (QuestionSetAnswer questionSetAnswer : qsa) {
-            Site site = (Site) questionSetAnswer.getScope();
-            Period period = questionSetAnswer.getPeriod();
-            if (!res.containsKey(site)) {
-                res.put(site, new HashSet<Period>());
+
+    private List<Period> getDistinctPeriodsBySite(Site site) {
+
+        List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScope(site);
+
+        List<Period> list = new ArrayList<>();
+
+        //add 2013
+        list.add(periodService.findByCode(PeriodCode.P2013));
+
+        for(QuestionSetAnswer qsa : questionSetAnswerList){
+            if(!list.contains(qsa.getPeriod())) {
+                list.add(qsa.getPeriod());
             }
-            res.get(site).add(period);
         }
-        return res;
+
+
+        return list;
     }
-    */
+
 }

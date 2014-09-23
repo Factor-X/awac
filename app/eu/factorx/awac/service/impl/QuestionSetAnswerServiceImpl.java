@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -102,6 +103,11 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
         }
 
         return res;
+    }
+
+    @Override
+    public List<QuestionSetAnswer> findByScope(Scope scope){
+        return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope));
     }
 
 	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {

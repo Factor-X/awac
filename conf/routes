@@ -122,7 +122,6 @@ GET         /awac/site/:siteId                                     @eu.factorx.a
 #
 # organization
 #
-
 POST        /awac/organization/site/associatedaccounts/load        @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
 POST        /awac/organization/site/associatedaccounts/save        @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
 GET         /awac/organization/getMyOrganization                   @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
@@ -131,6 +130,5 @@ GET         /awac/organization/getMyOrganization                   @eu.factorx.a
 #
 # organization event
 #
-
 POST        /awac/organization/events/load                         @eu.factorx.awac.controllers.OrganizationEventController.loadEvents()
 POST        /awac/organization/events/save                         @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()
