@@ -5,7 +5,6 @@ import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
-import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
@@ -92,19 +91,24 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(scopeId);
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form,period,(Site)scope);
+        securedController.controlDataAccess(form, period, (Site) scope);
 
         // TODO The user language should be saved in a session attribute, and it should be possible to update it with a request parameter (change language request).
         // Without connection, the user language should be obtained from a cookie or from browser "accepted languages" request header.
         LanguageCode lang = LanguageCode.ENGLISH;
 
-        if (form == null || period == null || scope == null) {
-            throw new RuntimeException("Invalid request parameters : form = " + form + "; period = " + period + "; scope = " + scope);
-        }
-
         Map<Long, UnitCategoryDTO> unitCategoryDTOs = getAllUnitCategories();
 
         Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(form.getAllQuestionSets(), lang);
+
+        //control if the form is locked or not
+        if (!securedController.isUnlock(form.getAllQuestionSets().get(0), scope, period)) {
+            //TODO translate
+            throw new MyrmexRuntimeException("vous ne pouvez pas travailler sur ce formulaire car quelqu'un d'autres y travail déjà");
+        }
+        //lock
+        securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);
+
 
         List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
 
@@ -121,6 +125,24 @@ public class AnswerController extends AbstractController {
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, period.getId(), getMaxLastUpdateDate(questionAnswers), answerLineDTOs);
 
         return ok(new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO));
+    }
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result unlockForm(String formIdentifier, String periodKey, Long scopeId) {
+
+        Form form = formService.findByIdentifier(formIdentifier);
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+        Scope scope = scopeService.findById(scopeId);
+
+        //test if the form is aviable for the scope / period
+        securedController.controlDataAccess(form, period, (Site) scope);
+
+        //unlock
+        securedController.unlockForm(form.getAllQuestionSets().get(0), scope, period);
+
+        return ok(new ResultsDTO());
+
     }
 
     @Transactional(readOnly = true)
@@ -147,7 +169,7 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(answersDTO.getScopeId());
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form,period,(Site)scope);
+        securedController.controlDataAccess(form, period, (Site) scope);
 
         // validate user organization
         validateUserRightsForScope(currentUser, scope);
@@ -163,6 +185,9 @@ public class AnswerController extends AbstractController {
         // create, update or delete QuestionAnswers and QuestionSetAnswers
         saveAnswsersDTO(currentUser, form, period, scope, answersDTO.getListAnswers());
 
+        //refresh lock
+        securedController.refreshLock(form.getAllQuestionSets().get(0), scope, period);
+
         return ok(new SaveAnswersResultDTO());
     }
 
@@ -177,7 +202,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(periodKey));
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(period,(Site)scope);
+        securedController.controlDataAccess(period, (Site) scope);
 
         // 3. load formProgress
         List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
@@ -223,6 +248,10 @@ public class AnswerController extends AbstractController {
 
         return ok();
     }
+
+    /* ***********
+    PRIVATE
+    *************** */
 
     private List<AnswerLineDTO> toAnswerLineDTOs(List<QuestionAnswer> allQuestionAnswers) {
         List<AnswerLineDTO> answerLineDTOs = new ArrayList<>();

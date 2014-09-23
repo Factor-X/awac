@@ -88,6 +88,10 @@ angular
                 params.loc = loc
                 modalService.show result.modalForConfirm, params
         if canBeContinue
+            # if this is a form, unlock it
+            if $scope.getMainScope?().formIdentifier?
+                downloadService.getJson "/awac/answer/unlockForm/"+$scope.getMainScope().formIdentifier+ "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result)->
+                    console.log '??'
             $location.path(loc + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId)
 
     $scope.$on '$routeChangeSuccess', (event, args) ->

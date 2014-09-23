@@ -78,6 +78,8 @@ POST        /awac/answer/save                                      @eu.factorx.a
 GET         /awac/answer/getPeriodsForComparison/:scope            @eu.factorx.awac.controllers.AnswerController.getPeriodsForComparison(scope: Long)
 POST        /awac/answer/formProgress                              @eu.factorx.awac.controllers.AnswerController.setFormProgress()
 GET         /awac/answer/formProgress/:period/:scope               @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)
+GET         /awac/answer/unlockForm/:form/:period/:scope           @eu.factorx.awac.controllers.AnswerController.unlockForm(form: String, period: String, scope :Long)
+
 
 #
 # ResultController => used to get report

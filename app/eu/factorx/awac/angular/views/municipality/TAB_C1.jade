@@ -1,15 +1,18 @@
-mm-awac-section(title-code="AC1")
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AC1")
 
-    mm-awac-sub-title(question-code="AC2")
+            mm-awac-sub-title(question-code="AC2")
 
-    mm-awac-question(question-code="AC3")
+            mm-awac-question(question-code="AC3")
 
-    mm-awac-question(question-code="AC4")
+            mm-awac-question(question-code="AC4")
 
-    mm-awac-question(question-code="AC5")
+            mm-awac-question(question-code="AC5")
 
-    mm-awac-question(question-code="AC6")
+            mm-awac-question(question-code="AC6")
 
-    mm-awac-question(question-code="AC7")
+            mm-awac-question(question-code="AC7")
 
-    mm-awac-question(question-code="AC8")
+            mm-awac-question(question-code="AC8")
