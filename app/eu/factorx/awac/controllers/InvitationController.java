@@ -104,16 +104,7 @@ public class InvitationController extends AbstractController {
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
-		String velocityContent="";
-
-		if (Play.isDev()) {
-			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
-		} else {
-			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
-			// use simple link for now on
-			// uncomment next line this in case Heroku dont find velocity templates
-			// velocityContent = link;
-		}
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
 		// send email for invitation
 		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
@@ -127,11 +118,11 @@ public class InvitationController extends AbstractController {
 	@Transactional (readOnly = false)
 	public Result registerInvitation () {
 
-		Logger.info("request body:" + request().body().asJson());
+		//Logger.info("request body:" + request().body().asJson());
 		// get InvitationDTO from request
 		RegisterInvitationDTO dto = extractDTOFromRequest(RegisterInvitationDTO.class);
 		Logger.info("Registering Invitation : " + dto.getEmail());
-		Logger.info("dump: " + dto.toString());
+		//Logger.info("dump: " + dto.toString());
 
 		// check if invitation exist
 		Invitation invitation=invitationService.findByGenkey(dto.getKey());
@@ -168,15 +159,7 @@ public class InvitationController extends AbstractController {
 		values.put("hostname",awacHostname);
 
 
-		String velocityContent="";
-		if (Play.isDev()) {
-			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
-		} else {
-			velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
-			// use simple link for now on
-			// uncomment next line this in case Heroku dont find velocity templates
-			//velocityContent = link;
-		}
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
 		// send confirmation email
 		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);

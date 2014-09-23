@@ -33,6 +33,7 @@ import java.util.Map;
 @Component
 public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
+	//TODO set a application.conf variable
 	private String ROOT = "public/vm/";
 	private String ROOT_PROD = "/app/public/vm/";
 
@@ -53,37 +54,7 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 			e.printStackTrace();
 		}
 
-		Logger.info("Velocity Template Content : " + velocityTemplate);
-
-//		String serverPath = "";
-//
-//		if (play.Play.isDev()) {
-//			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
-//		} else {
-//			serverPath = Play.classloader(play.api.Play.current()).getResource(ROOT + templateName).toString().replace("file:", "");
-//			serverPath = serverPath.replace("jar:", "");
-//			serverPath = serverPath.replace("!", "");
-//		}
-//
-//		Logger.info("Play original server Path :" + serverPath);
-//		//String serverPath = Play.classloader(play.api.Play.current()).getResource("public/vm/launchInvitation.vm").getPath();
-//		serverPath = serverPath.replace(Play.current().path().getAbsolutePath(),"");
-//
-//		Logger.info("Play input stream :" + in);
-//		Logger.info("Play replaced server Path :" + serverPath);
-
-
-//		Logger.info("velocity return: " + velocityRender(theString,values));
-
-//		StringBuffer html = new StringBuffer();
-//		//html.append(package$.MODULE$.VM(ROOT + templateName, Scala.asScala(values), "utf-8"));
-//		if (play.Play.isDev()) {
-//			html.append(package$.MODULE$.VM(serverPath, Scala.asScala(values), "utf-8"));
-//		} else {
-//			html.append(package$.MODULE$.VM(ROOT_PROD + templateName , Scala.asScala(values), "utf-8"));
-//		}
-
-		//Logger.info("HTML generated:" + html.toString());
+		//Logger.info("Velocity Template Content : " + velocityTemplate);
 
 		return (velocityRender(velocityTemplate,values));
 	}
@@ -117,7 +88,6 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		OutputStreamWriter html = new OutputStreamWriter(output);
-		//OutputStream html = new OutputStream(output);
 
 		StringWriter result = new StringWriter();
 		try {
@@ -131,7 +101,7 @@ public class VelocityGeneratorImpl implements VelocityGeneratorService {
 			e.printStackTrace();
 		}
 
-		Logger.info("Render result:" + result.toString());
+		//Logger.info("Render result:" + result.toString());
 		return (result.toString());
 
 	}
