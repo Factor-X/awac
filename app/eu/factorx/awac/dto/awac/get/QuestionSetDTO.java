@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 
 import java.util.List;
 
@@ -9,6 +10,10 @@ public class QuestionSetDTO extends DTO {
 	private String code;
 
 	private Boolean repetitionAllowed;
+
+    private PersonDTO datalocker;
+
+    private PersonDTO dataValidator;
 
 	private List<QuestionSetDTO> children;
 
@@ -24,7 +29,23 @@ public class QuestionSetDTO extends DTO {
 		this.questions = questions;
 	}
 
-	public String getCode() {
+    public PersonDTO getDatalocker() {
+        return datalocker;
+    }
+
+    public void setDatalocker(PersonDTO datalocker) {
+        this.datalocker = datalocker;
+    }
+
+    public PersonDTO getDataValidator() {
+        return dataValidator;
+    }
+
+    public void setDataValidator(PersonDTO dataValidator) {
+        this.dataValidator = dataValidator;
+    }
+
+    public String getCode() {
 		return code;
 	}
 

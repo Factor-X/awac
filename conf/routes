@@ -79,6 +79,8 @@ GET         /awac/answer/getPeriodsForComparison/:scope            @eu.factorx.a
 POST        /awac/answer/formProgress                              @eu.factorx.awac.controllers.AnswerController.setFormProgress()
 GET         /awac/answer/formProgress/:period/:scope               @eu.factorx.awac.controllers.AnswerController.getFormProgress(period: String, scope :Long)
 GET         /awac/answer/unlockForm/:form/:period/:scope           @eu.factorx.awac.controllers.AnswerController.unlockForm(form: String, period: String, scope :Long)
+POST         /awac/answer/lockQuestionSet                          @eu.factorx.awac.controllers.AnswerController.lockQuestionSet()
+POST         /awac/answer/validateQuestionSet                      @eu.factorx.awac.controllers.AnswerController.validateQuestionSet()
 
 
 #

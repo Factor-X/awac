@@ -4,7 +4,9 @@ import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
+import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
@@ -82,6 +84,8 @@ public class AnswerController extends AbstractController {
     private AccountSiteAssociationService accountSiteAssociationService;
     @Autowired
     private SiteService siteService;
+    @Autowired
+    private QuestionSetService questionSetService;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -110,7 +114,18 @@ public class AnswerController extends AbstractController {
         securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);
 
 
-        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets());
+        //lock / validate / vertification : load all questionSetAnswer from basic questionSet
+        HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers = new HashMap<>();
+
+        for (QuestionSet questionSet : form.getAllQuestionSets()) {
+            List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
+
+            if (questionSetAnswerList.size() == 1) {
+                questionSetAnswers.put(questionSet.getCode(), questionSetAnswerList.get(0));
+            }
+        }
+
+        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers);
 
         List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
         List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
@@ -125,6 +140,71 @@ public class AnswerController extends AbstractController {
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO(form.getId(), scopeId, period.getId(), getMaxLastUpdateDate(questionAnswers), answerLineDTOs);
 
         return ok(new FormDTO(unitCategoryDTOs, codeListDTOs, questionSetDTOs, questionAnswersDTO));
+    }
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result lockQuestionSet() {
+
+        LockQuestionSetDTO lockQuestionSetDTO = this.extractDTOFromRequest(LockQuestionSetDTO.class);
+
+        //load questionSet
+        QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(lockQuestionSetDTO.getQuestionSetKey()));
+
+        if (questionSet == null || questionSet.getParent() != null) {
+            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+        }
+
+        //load scope
+        Scope scope = scopeService.findById(lockQuestionSetDTO.getScopeId());
+
+        //load period
+        Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
+
+        //control authorization
+        securedController.controlDataAccess(period, (Site) scope);
+
+        //load questionSetAnswer
+        List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
+
+        //it can be only one questionSetAnswer because the questionSet doesn't have any parent
+        if (questionSetAnswerList.size() > 1) {
+            throw new MyrmexRuntimeException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
+        }
+
+        //recover the questionSetAnswer
+        QuestionSetAnswer questionSetAnswer;
+
+        if (questionSetAnswerList.size() == 0) {
+            questionSetAnswer = new QuestionSetAnswer();
+            questionSetAnswer.setQuestionSet(questionSet);
+            questionSetAnswer.setScope(scope);
+            questionSetAnswer.setPeriod(period);
+        } else {
+            questionSetAnswer = questionSetAnswerList.get(0);
+        }
+
+        //recover / control the auditInfo
+        if (questionSetAnswer.getAuditInfo().getDataLocker() != null ){
+            if(!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
+                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+            }
+            if(questionSetAnswer.getAuditInfo().getDataValidator()!=null){
+                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already validate");
+            }
+        }
+
+        //update
+        if (lockQuestionSetDTO.getLock()) {
+            questionSetAnswer.getAuditInfo().setDataLocker(securedController.getCurrentUser());
+        } else {
+            questionSetAnswer.getAuditInfo().setDataLocker(null);
+        }
+
+        //save
+        questionSetAnswerService.saveOrUpdate(questionSetAnswer);
+
+        return ok(new ResultsDTO());
     }
 
     @Transactional(readOnly = true)
@@ -145,6 +225,66 @@ public class AnswerController extends AbstractController {
 
     }
 
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result validateQuestionSet() {
+
+        LockQuestionSetDTO lockQuestionSetDTO = this.extractDTOFromRequest(LockQuestionSetDTO.class);
+
+        //load questionSet
+        QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(lockQuestionSetDTO.getQuestionSetKey()));
+
+        if (questionSet == null || questionSet.getParent() != null) {
+            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+        }
+
+        //load scope
+        Scope scope = scopeService.findById(lockQuestionSetDTO.getScopeId());
+
+        //load period
+        Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
+
+        //control authorization
+        securedController.controlDataAccess(period, (Site) scope);
+
+        //load questionSetAnswer
+        List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
+
+        //it can be only one questionSetAnswer because the questionSet doesn't have any parent
+        if (questionSetAnswerList.size() > 1) {
+            throw new MyrmexRuntimeException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
+        }
+
+        //recover the questionSetAnswer
+        QuestionSetAnswer questionSetAnswer;
+
+        if (questionSetAnswerList.size() == 0) {
+            questionSetAnswer = new QuestionSetAnswer();
+            questionSetAnswer.setQuestionSet(questionSet);
+            questionSetAnswer.setScope(scope);
+            questionSetAnswer.setPeriod(period);
+        } else {
+            questionSetAnswer = questionSetAnswerList.get(0);
+        }
+
+        //recover / control the auditInfo
+        if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
+            throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+        }
+
+        //update
+        if (lockQuestionSetDTO.getLock()) {
+            questionSetAnswer.getAuditInfo().setDataValidator(securedController.getCurrentUser());
+        } else {
+            questionSetAnswer.getAuditInfo().setDataValidator(null);
+        }
+
+        //save
+        questionSetAnswerService.saveOrUpdate(questionSetAnswer);
+
+        return ok(new ResultsDTO());
+    }
+
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
@@ -163,7 +303,7 @@ public class AnswerController extends AbstractController {
                 }
             }
         }
-        
+
         return ok(new ListPeriodsDTO(periodDTOs));
     }
 
@@ -272,10 +412,27 @@ public class AnswerController extends AbstractController {
         return answerLineDTOs;
     }
 
-    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets) {
+    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets, HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers) {
         List<QuestionSetDTO> questionSetDTOs = new ArrayList<>();
         for (QuestionSet questionSet : questionSets) {
-            questionSetDTOs.add(conversionService.convert(questionSet, QuestionSetDTO.class));
+
+            QuestionSetDTO questionSetDTO = conversionService.convert(questionSet, QuestionSetDTO.class);
+
+            //complete DTO
+            if (questionSetAnswers.containsKey(questionSet.getCode())) {
+                //add locker
+                QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(questionSet.getCode());
+                if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
+                    questionSetDTO.setDatalocker(conversionService.convert(questionSetAnswer.getAuditInfo().getDataLocker(), PersonDTO.class));
+                }
+                //add validator
+                if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+                    questionSetDTO.setDataValidator(conversionService.convert(questionSetAnswer.getAuditInfo().getDataValidator(), PersonDTO.class));
+                }
+            }
+
+            questionSetDTOs.add(questionSetDTO);
+
         }
         return questionSetDTOs;
     }
@@ -323,6 +480,18 @@ public class AnswerController extends AbstractController {
         // get current form data
         List<QuestionSetAnswer> questionSetAnswersList = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(false).appendForm(form).appendPeriod(period)
                 .appendScope(scope));
+
+        //control locker
+        for(QuestionSetAnswer  questionSetAnswer  : questionSetAnswersList){
+            if(questionSetAnswer.getAuditInfo().getDataLocker()!=null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())){
+                throw new MyrmexRuntimeException("This questionSet "+questionSetAnswer.getQuestionSet().getCode()+" is loked by "+questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
+            }
+            if(questionSetAnswer.getAuditInfo().getDataValidator()!=null){
+                throw new MyrmexRuntimeException("This questionSet "+questionSetAnswer.getQuestionSet().getCode()+" is validate");
+            }
+        }
+
+
         Map<Map<QuestionCode, Integer>, QuestionSetAnswer> questionSetAnswersMap = byRepetitionMap(questionSetAnswersList);
 
         Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswersList);
@@ -425,7 +594,7 @@ public class AnswerController extends AbstractController {
         QuestionSetAnswer questionSetAnswer = findOrCreateQuestionSetAnswer(period, scope, questionSet, answerLineDTO, existingQuestionSetAnswers);
 
         // create and save QuestionAnswer
-        QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, null, questionSetAnswer, question);
+        QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, questionSetAnswer, question);
         List<AnswerValue> answerValues = getAnswerValues(answerLineDTO, questionAnswer);
         if (answerValues == null) {
             return;

@@ -13,11 +13,16 @@ import eu.factorx.awac.models.code.type.QuestionCode;
 
 @Entity
 @Table(name = "question_set")
+@NamedQueries({
+        @NamedQuery(name = QuestionSet.FIND_BY_CODE, query = "select q from QuestionSet q where q.code = :code"),
+})
+
 public class QuestionSet extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
+    public static final String FIND_BY_CODE = "questionSet.findByCode";
 
-	@Enumerated
+    @Enumerated
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	private QuestionCode code;
 

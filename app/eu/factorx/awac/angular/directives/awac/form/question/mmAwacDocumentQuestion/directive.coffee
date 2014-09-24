@@ -4,13 +4,15 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngDataToCompare: '='
-        ngDisabled: '='
         ngIsAggregation:'='
     templateUrl: "$/angular/templates/mm-awac-document-question.html"
     replace: true
     compile: () ->
         pre: (scope) ->
             directiveService.autoScopeImpl scope
+
+            scope.getDisabled = ->
+                return scope.$parent.isDisabled()
 
             #
             # get the question code :
