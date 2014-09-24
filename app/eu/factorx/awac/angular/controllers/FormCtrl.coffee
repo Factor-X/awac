@@ -23,6 +23,7 @@ angular
     #this variable contains all answer, new and old
     $scope.answerList = []
     $scope.mapRepetition = {}
+    $scope.mapQuestionSet = {}
     ###
     illustration of the structures
     $scope.mapRepetition['A15'] = [{'A15':1},
@@ -31,6 +32,12 @@ angular
     $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
                                    {'A16':2,'A15':1}]
     ###
+
+    ###
+    list of the questionSet key locked with locker like personDTO
+    ###
+    $scope.datalocker = {}
+    $scope.dataValidator = {}
 
     $scope.loading = true
     $scope.errorMessage = null
@@ -50,6 +57,7 @@ angular
             modalService.close(modalService.LOADING)
         else
 
+            console.log "loading form result : "
             console.log result.data
 
             $scope.o = angular.copy(result.data)
@@ -64,7 +72,20 @@ angular
             #
             # compute mapRepetition
             #
-            $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = []) ->
+            $scope.loopRepetition = (questionSetDTO, listQuestionSetRepetition = [], parent) ->
+
+                if questionSetDTO.datalocker?
+                    $scope.datalocker[questionSetDTO.code] = questionSetDTO.datalocker
+                if questionSetDTO.dataValidator?
+                    $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator
+
+
+                questionSetElement = {
+                    questionSetDTO: questionSetDTO
+                    parent:parent
+                }
+                $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement
+
                 if questionSetDTO.repetitionAllowed == true
 
                     listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code
@@ -79,7 +100,7 @@ angular
 
                 if questionSetDTO.children
                     for child in questionSetDTO.children
-                        $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition))
+                        $scope.loopRepetition(child, angular.copy(listQuestionSetRepetition),questionSetElement)
 
             #
             # add default value to answer and unit
@@ -162,16 +183,22 @@ angular
                 # add the answer of the listAnswerToSave
                 listAnswerToSave[listAnswerToSave.length] = answer
 
-        console.log "listAnswerToSave"
-        console.log listAnswerToSave
+        #eject locked or validate question
+        finalList = []
+        for answer in listAnswerToSave
+            if not $scope.isQuestionLocked(answer) && not $scope.isQuestionValidate(answer)
+                finalList.push answer
 
-        if listAnswerToSave.length == 0
+        console.log "listAnswerToSave"
+        console.log finalList
+
+        if finalList.length == 0
             messageFlash.displayInfo translationService.get('ALL_ANSWERS_ALREADY_SAVED')
 
             modalService.close(modalService.LOADING)
         else
             #and replace the list
-            $scope.o.answersSave.listAnswers = listAnswerToSave
+            $scope.o.answersSave.listAnswers = finalList
 
 
             downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
@@ -702,7 +729,6 @@ angular
     #
     $scope.computeTab = (tabSet, tab, mapRepetition)->
 
-
         # by default, the tab is not finish
         isFinish = false
 
@@ -786,4 +812,80 @@ angular
                 return false
         return false
 
+
+    #
+    #
+    #
+    $scope.getQuestionSetLocker = (code) ->
+        if $scope.datalocker[code]?
+            return $scope.datalocker[code]
+        return null
+
+    #
+    #
+    #
+    $scope.getQuestionSetValidator = (code) ->
+        if $scope.dataValidator[code]?
+            return $scope.dataValidator[code]
+        return null
+
+    #
+    #
+    #
+    $scope.isQuestionLocked = (code) ->
+        for key in Object.keys($scope.mapQuestionSet)
+            if key != '$$hashKey'
+                questionSet = $scope.mapQuestionSet[key]
+                if questionSet.questionSetDTO.questions?
+                    for question in questionSet.questionSetDTO.questions
+                        if question.code == code
+                            result = $scope.foundBasicParent($scope.mapQuestionSet[key])
+                            if result.datalocker? && result.datalocker.identifier != $scope.$root.currentPerson.identifier
+                                return true
+                            return false
+
+    $scope.isQuestionValidate = (code) ->
+        for key in Object.keys($scope.mapQuestionSet)
+            if key != '$$hashKey'
+                questionSet = $scope.mapQuestionSet[key]
+                if questionSet.questionSetDTO.questions?
+                    for question in questionSet.questionSetDTO.questions
+                        if question.code == code
+                            result = $scope.foundBasicParent($scope.mapQuestionSet[key])
+                            if result.dataValidator?
+                                return true
+                            return false
+
+    #
+    #
+    #
+    $scope.lockQuestionSet = (code, lock) ->
+
+        if lock == true
+            if not $scope.datalocker[code]?
+                $scope.datalocker[code] = $scope.$root.currentPerson
+            $scope.mapQuestionSet[code].questionSetDTO.datalocker = $scope.$root.currentPerson
+        else
+            if $scope.datalocker[code]?
+                delete $scope.datalocker[code]
+            $scope.mapQuestionSet[code].questionSetDTO.datalocker = null
+
+    #
+    #
+    #
+    $scope.validateQuestionSet = (code, lock) ->
+
+        if lock == true
+            if not $scope.dataValidator[code]?
+                $scope.dataValidator[code] = $scope.$root.currentPerson
+            $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson
+        else
+            if $scope.dataValidator[code]?
+                delete $scope.dataValidator[code]
+            $scope.mapQuestionSet[code].questionSetDTO.dataValidator = null
+
+    $scope.foundBasicParent = (questionSet)->
+        if !questionSet.parent?
+            return questionSet.questionSetDTO
+        return $scope.foundBasicParent(questionSet.parent)
 

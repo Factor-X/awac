@@ -2,4 +2,4 @@ select.oneelement(  ng-options="p.key as p.label for p in getOptions()",
                     ng-model="getAnswer().value",
                     name="{{ getQuestionCode() }}",
                     style="text-align:right;",
-                    ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
+                    ng-disabled="getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true")

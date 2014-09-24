@@ -771,28 +771,44 @@ h1 {
     width: 41px;
 }
 
-.block_status .lock_status {
-    background: url('../images/status/lock.png') center center no-repeat #acd595;
+.block_status .lock_status.lock_open {
+    background: url('../images/status/lock_open.png') center center no-repeat #e6dccc;
+    cursor: pointer;
 }
 
-.block_status .lock_status.disable_status {
-    background: url('../images/status/lock_disabled.png') center center no-repeat #e6dccc;
+.block_status .lock_status.lock_open_disabled{
+    background: url('../images/status/lock_open.png') center center no-repeat #e6dccc;
 }
 
-.block_status .answered_status {
-    background: url('../images/status/answered.png') center center no-repeat #acd595;
+.block_status .lock_status.lock_open:hover {
+/*    background: url('../images/status/lock_close.png') center center no-repeat #e6dccc; */
 }
 
-.block_status .answered_status.disable_status {
-    background: url('../images/status/answered_disabled.png') center center no-repeat #e6dccc;
+
+.block_status .lock_status.lock_close {
+    background: url('../images/status/lock_close.png') center center no-repeat #acd595;
 }
 
-.block_status .validate_status {
-    background: url('../images/status/valid.png') center center no-repeat #acd595;
+.block_status .lock_status.lock_close_by_myself {
+    background: url('../images/status/lock_unlock.png') center center no-repeat #acd595;
+    cursor: pointer;
+}
+.block_status .lock_status.lock_close_by_myself:hover {
+/*    background: url('../images/status/lock_open.png') center center no-repeat #acd595; */
 }
 
-.block_status .validate_status.disable_status {
-    background: url('../images/status/valid_disabled.png') center center no-repeat #e6dccc;
+.block_status .validate_status.validate_no_valid {
+    background: url('../images/status/validate_not.png') center center no-repeat #e6dccc;
+    cursor: pointer;
+}
+
+.block_status .validate_status.validate_by_myself {
+    background: url('../images/status/validate_invalidate.png') center center no-repeat #acd595;
+    cursor: pointer;
+}
+
+.block_status .validate_status.validated {
+    background: url('../images/status/validate_validated.png') center center no-repeat #acd595;
 }
 
 .element_content {

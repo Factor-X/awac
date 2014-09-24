@@ -3,6 +3,7 @@ package eu.factorx.awac.service;
 import java.io.Serializable;
 
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 
@@ -18,7 +19,9 @@ public class QuestionSetAnswerSearchParameter implements Serializable {
 
 	private Boolean withChildren;
 
-	public QuestionSetAnswerSearchParameter(Boolean withChildren) {
+    private QuestionSet questionSet;
+
+    public QuestionSetAnswerSearchParameter(Boolean withChildren) {
 		super();
 		this.withChildren = withChildren;
 	}
@@ -35,7 +38,11 @@ public class QuestionSetAnswerSearchParameter implements Serializable {
 		return period;
 	}
 
-	public Boolean getWithChildren() {
+    public QuestionSet getQuestionSet() {
+        return questionSet;
+    }
+
+    public Boolean getWithChildren() {
 		return withChildren;
 	}
 
@@ -53,5 +60,11 @@ public class QuestionSetAnswerSearchParameter implements Serializable {
 		this.period = period;
 		return this;
 	}
+
+    public QuestionSetAnswerSearchParameter appendQuestionSet(QuestionSet questionSet) {
+        this.questionSet = questionSet;
+        return this;
+    }
+
 
 }

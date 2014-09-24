@@ -78,7 +78,12 @@ angular
                         else if answerType == 'DOCUMENT'
                             directiveName = "document-question"
 
-                        directive = $compile("<mm-awac-" + directiveName + " ng-data-to-compare=\"" + toCompare + "\" ng-is-aggregation=\"" + isAggregation + "\"></mm-awac-" + directiveName + ">")(scope)
+                        # add params
+                        params = " "
+                        params+= " ng-data-to-compare=\"" + toCompare + "\""
+                        params+= " ng-is-aggregation=\"" + isAggregation + "\""
+
+                        directive = $compile("<mm-awac-" + directiveName + params + " ></mm-awac-" + directiveName + ">")(scope)
 
                         if dataToCompare == true
                             $('.inject-data-to-compare:first', element).append(directive)
@@ -325,4 +330,9 @@ angular
                 args.save = scope.saveComment
                 args.canBeEdited=canBeEdited
                 modalService.show(modalService.QUESTION_COMMENT, args)
+
+            scope.isDisabled = () ->
+                if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode())
+                    return true
+                return false
 

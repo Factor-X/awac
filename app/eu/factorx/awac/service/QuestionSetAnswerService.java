@@ -3,6 +3,7 @@ package eu.factorx.awac.service;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 
@@ -58,4 +59,6 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
     public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period);
 
     public List<QuestionSetAnswer> findByScope(Scope scope);
+
+public     List<QuestionSetAnswer> findByScopeAndPeriodAndQuestionSet(Scope scope, Period period, QuestionSet questionSet);
 }

@@ -4,6 +4,7 @@ import eu.factorx.awac.dto.awac.get.QuestionDTO;
 import eu.factorx.awac.dto.awac.get.QuestionSetDTO;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.service.QuestionSetAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionS
 
 	@Autowired
 	private QuestionToQuestionDTOConverter questionToQuestionDTOConverter;
+    @Autowired
+    private QuestionSetAnswerService questionSetAnswerService;
 
 	@Override
 	public QuestionSetDTO convert(QuestionSet questionSet) {
@@ -29,6 +32,7 @@ public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionS
 		for (QuestionSet childQuestionSet : questionSet.getChildren()) {
 			children.add(convert(childQuestionSet));
 		}
+
 		return new QuestionSetDTO(code, repetitionAllowed, children, questions);
 	}
 

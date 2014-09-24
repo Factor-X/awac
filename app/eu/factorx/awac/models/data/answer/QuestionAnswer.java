@@ -28,9 +28,6 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 	@ManyToOne(optional = false)
 	private Account dataOwner;
 
-	@Embedded
-	private AuditInfo auditInfo;
-
 	@ManyToOne(optional = false)
 	private QuestionSetAnswer questionSetAnswer;
 
@@ -46,10 +43,9 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 		super();
 	}
 
-	public QuestionAnswer(Account dataOwner, AuditInfo auditInfo, QuestionSetAnswer questionSetAnswer, Question question) {
+	public QuestionAnswer(Account dataOwner, QuestionSetAnswer questionSetAnswer, Question question) {
 		super();
 		this.dataOwner = dataOwner;
-		this.auditInfo = auditInfo;
 		this.questionSetAnswer = questionSetAnswer;
 		this.question = question;
 		this.answerValues = new ArrayList<>();
@@ -61,14 +57,6 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 
 	public void setDataOwner(Account dataOwner) {
 		this.dataOwner = dataOwner;
-	}
-
-	public AuditInfo getAuditInfo() {
-		return auditInfo;
-	}
-
-	public void setAuditInfo(AuditInfo auditInfo) {
-		this.auditInfo = auditInfo;
 	}
 
 	public QuestionSetAnswer getQuestionSetAnswer() {

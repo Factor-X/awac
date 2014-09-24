@@ -4,5 +4,5 @@ span.twoelement
             numbers-only="percent",
             name="{{ getQuestionCode() }}",
             style="text-align:right;",
-            ng-disabled="getDataToCompare()==true || getIsAggregation()===true")
+            ng-disabled="getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true")
     span(style="margin-left:5px") %

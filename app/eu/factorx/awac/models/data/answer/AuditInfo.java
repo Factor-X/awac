@@ -2,6 +2,7 @@ package eu.factorx.awac.models.data.answer;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
@@ -21,7 +22,8 @@ public class AuditInfo implements Serializable {
 	@ManyToOne
 	protected Account dataVerifier;
 
-	protected Integer verificationStatus;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+	protected Boolean  verificationAsked = false;
 
 	public Account getDataValidator() {
 		return dataValidator;
@@ -47,12 +49,22 @@ public class AuditInfo implements Serializable {
 		this.dataVerifier = dataVerifier;
 	}
 
-	public Integer getVerificationStatus() {
-		return verificationStatus;
-	}
 
-	public void setVerificationStatus(Integer verificationStatus) {
-		this.verificationStatus = verificationStatus;
-	}
+    public Boolean getVerificationAsked() {
+        return verificationAsked;
+    }
 
+    public void setVerificationAsked(Boolean verificationAsked) {
+        this.verificationAsked = verificationAsked;
+    }
+
+    @Override
+    public String toString() {
+        return "AuditInfo{" +
+                "dataValidator=" + dataValidator +
+                ", dataLocker=" + dataLocker +
+                ", dataVerifier=" + dataVerifier +
+                ", verificationAsked=" + verificationAsked +
+                '}';
+    }
 }
