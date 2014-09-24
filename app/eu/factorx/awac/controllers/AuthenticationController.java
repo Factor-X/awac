@@ -21,9 +21,13 @@ import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.PersonService;
+import eu.factorx.awac.service.VelocityGeneratorService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.email.messages.EmailMessage;
@@ -31,10 +35,14 @@ import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import play.Configuration;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends AbstractController {
@@ -50,6 +58,12 @@ public class AuthenticationController extends AbstractController {
 
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private CodeLabelService codeLabelService;
+
+	@Autowired
+	private VelocityGeneratorService velocityGeneratorService;
 
 	@Transactional(readOnly = true)
 	public Result testAuthentication() {
@@ -158,15 +172,22 @@ public class AuthenticationController extends AbstractController {
 		//generate password
 		String password = KeyGenerator.generateRandomPassword(10);
 
-		//generate email
-		/* TODO waiting email refactoring
-		EmailMessage emailMessage = new EmailMessage(account.getPerson().getEmail(),
-				"New password", "blabla your new password : " + password,
-				account.getInterfaceCode(),
-				account.getPerson().getDefaultLanguage());
 
-		emailService.send(emailMessage);
-		*/
+		// retrieve traductions
+		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		String title = traductions.get("RESET_PASSWORD_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+
+		Map values = new HashMap<String, Object>();
+		values.put("title",title);
+		values.put("password",password);
+
+
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+
+		// send email for invitation
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(),title,velocityContent);
+		emailService.send(email);
+
 		//save new password
 		account.setPassword(password);
 		account.setNeedChangePassword(true);
