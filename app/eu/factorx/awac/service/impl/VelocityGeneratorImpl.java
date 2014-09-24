@@ -13,7 +13,6 @@ package eu.factorx.awac.service.impl;
 
 
 import eu.factorx.awac.service.VelocityGeneratorService;
-import jp.furyu.play.velocity.mvc.package$;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;

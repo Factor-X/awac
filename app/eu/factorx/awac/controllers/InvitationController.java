@@ -1,29 +1,43 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
+import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.InvitationResultDTO;
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
+import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
+import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
+import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
 import play.Configuration;
 import play.Logger;
+import play.Play;
 import play.db.jpa.Transactional;
+import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,135 +46,141 @@ import java.util.Map;
 public class InvitationController extends AbstractController {
 
 
-    @Autowired
-    private EmailService emailService;
+	@Autowired
+	private EmailService emailService;
 
-    @Autowired
-    private InvitationService invitationService;
+	@Autowired
+	private InvitationService invitationService;
 
-    @Autowired
-    private AccountService accountService;
+	@Autowired
+	private AccountService accountService;
 
-    @Autowired
-    private PersonService personService;
+	@Autowired
+	private PersonService personService;
 
-    @Autowired
-    private ConversionService conversionService;
+	@Autowired
+	private ConversionService conversionService;
 
-    @Autowired
-    private VelocityGeneratorService velocityGeneratorService;
+	@Autowired
+	private VelocityGeneratorService velocityGeneratorService;
 
     @Autowired
     private AccountSiteAssociationService accountSiteAssociationService;
 
-    @Autowired
-    private OrganizationService organizationService;
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Autowired
+	private CodeLabelService codeLabelService;
 
 
-    private static String INVITATION_TITLE = "AWAC - invitation from ";
-    private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
+
+	private static String INVITATION_TITLE = "AWAC - invitation from ";
+	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
 
 
-    @Transactional
-    @Security.Authenticated(SecuredController.class)
-    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
-    public Result launchInvitation() {
 
-        // get InvitationDTO from request
-        EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
-        //Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
-        Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
+	@Transactional
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+	public Result launchInvitation () {
 
-
-        // get organization name through securedController
-        Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
-
-        // compute key
-        String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
-        Logger.info("Email Invitation generated key : " + key);
-
-        // store key and user
-        Invitation invitation = new Invitation(dto.getInvitationEmail(), key, org);
-        invitationService.saveOrUpdate(invitation);
-
-        String awacHostname = Configuration.root().getString("awac.hostname");
-        String title = INVITATION_TITLE + org.getName() + ".";
-        String link = awacHostname + "/enterprise#/registration/" + key;
+		// get InvitationDTO from request
+		EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
+		//Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
+		Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
 
-        Map values = new HashMap<String, Object>();
-        values.put("title", title);
-        values.put("link", link);
-        values.put("hostname", awacHostname);
+		// get organization name through securedController
+		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
 
-        String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
+		// compute key
+		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
+		Logger.info("Email Invitation generated key : " + key);
 
-        // send email for invitation
-        EmailMessage email = new EmailMessage(dto.getInvitationEmail(), title, velocityContent);
-        emailService.send(email);
+		// store key and user
+		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,org);
+		invitationService.saveOrUpdate(invitation);
 
-        //create InvitationResultDTO
-        InvitationResultDTO resultDto = new InvitationResultDTO();
-        return ok(resultDto);
-    }
+		String awacHostname = Configuration.root().getString("awac.hostname");
+		String title = INVITATION_TITLE +  org.getName() + ".";
+		String link = awacHostname+"/enterprise#/registration/" + key;
 
-    @Transactional(readOnly = false)
-    public Result registerInvitation() {
+		// retrieve traductions
+		//HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
+		//Logger.info("traduction : " + traductions.get("EMAIL_TITLE").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage()));
 
-        //Logger.info("request body:" + request().body().asJson());
-        // get InvitationDTO from request
-        RegisterInvitationDTO dto = extractDTOFromRequest(RegisterInvitationDTO.class);
-        Logger.info("Registering Invitation : " + dto.getEmail());
-        //Logger.info("dump: " + dto.toString());
+		Map values = new HashMap<String, Object>();
+		values.put("title",title);
+		values.put("link",link);
+		values.put("hostname",awacHostname);
 
-        // check if invitation exist
-        Invitation invitation = invitationService.findByGenkey(dto.getKey());
-        if (invitation == null) {
-            return unauthorized(new ExceptionsDTO("This invitation is not longer valid. Please verify invitation with host organization or verify your account is already set up."));
-        }
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
-        // create person
-        Person person = new Person(dto.getLastName(), dto.getFirstName(), dto.getEmail());
-        personService.saveOrUpdate(person);
+		// send email for invitation
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
+		emailService.send(email);
 
-        // create account
-        Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
-        account = accountService.saveOrUpdate(account);
+		//create InvitationResultDTO
+		InvitationResultDTO resultDto = new InvitationResultDTO ();
+		return ok(resultDto);
+	}
+
+	@Transactional (readOnly = false)
+	public Result registerInvitation () {
+
+		//Logger.info("request body:" + request().body().asJson());
+		// get InvitationDTO from request
+		RegisterInvitationDTO dto = extractDTOFromRequest(RegisterInvitationDTO.class);
+		Logger.info("Registering Invitation : " + dto.getEmail());
+		//Logger.info("dump: " + dto.toString());
+
+		// check if invitation exist
+		Invitation invitation=invitationService.findByGenkey(dto.getKey());
+		if (invitation==null) {
+			return unauthorized(new ExceptionsDTO("This invitation is not longer valid. Please verify invitation with host organization or verify your account is already set up."));
+		}
+
+		// create person
+		Person person = new Person (dto.getLastName(),dto.getFirstName(),dto.getEmail());
+		personService.saveOrUpdate(person);
+
+		// create account
+		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+		account = accountService.saveOrUpdate(account);
 
         // ONLY FOR municipality : assign the new user of the site
-        if (account.getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
-            for (Site site : invitation.getOrganization().getSites()) {
-                AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
-                accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
-            }
+        for(Site site : invitation.getOrganization().getSites()){
+            AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
+            accountSiteAssociationService.saveOrUpdate( accountSiteAssociation);
         }
 
-        // delete invitation
-        invitationService.remove(invitation);
+		// delete invitation
+		invitationService.remove(invitation);
 
-        // prepare email
-        Map values = new HashMap<String, Object>();
-        final String awacHostname = Configuration.root().getString("awac.hostname");
-        String title = "AWAC - registering confirmation.";
+		// prepare email
+		Map values = new HashMap<String,Object>();
+		final String awacHostname = Configuration.root().getString("awac.hostname");
+		String title = "AWAC - registering confirmation.";
 
-        String link = awacHostname + "/login";
+		String link = awacHostname+"/login";
 
-        values.put("title", title);
-        values.put("link", link);
-        values.put("hostname", awacHostname);
-
-
-        String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
-
-        // send confirmation email
-        EmailMessage email = new EmailMessage(dto.getEmail(), title, velocityContent);
-        emailService.send(email);
+		values.put("title",title);
+		values.put("link",link);
+		values.put("hostname",awacHostname);
 
 
-        //create InvitationResultDTO
-        InvitationResultDTO resultDto = new InvitationResultDTO();
-        return ok(resultDto);
-    }
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+
+		// send confirmation email
+		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);
+		emailService.send(email);
+
+
+		//create InvitationResultDTO
+		InvitationResultDTO resultDto = new InvitationResultDTO ();
+		return ok(resultDto);
+	}
 
 
 }
