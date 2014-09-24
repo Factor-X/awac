@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${title}</title>
+    <title>${subject}</title>
 </head>
 <body>
-    #set ($url = "${hostname}/assets/images/awac_logo.png")
+
 <table width="700" border="0" cellspacing="0">
     <tr>
         <td>Header Area</td>
-        <td>
-            <img src="${url}"/>
-        </td>
-        <td>${title}</td>
     </tr>
     <tr>
+        <td>Your account has been created.</td>
         <td>Please follow this link to login ${link}</td>
     </tr>
     <tr>
         <td>Footer Area</td>
-        <td>
-            <img src="$hostname/assets/images/awac_logo.png"/>
-        </td>
-        <td>${title}</td>
     </tr>
 </table>
 </body>

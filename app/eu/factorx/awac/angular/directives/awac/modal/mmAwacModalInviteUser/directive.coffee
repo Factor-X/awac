@@ -40,7 +40,7 @@ angular
 
             downloadService.postJson '/awac/invitation', data, (result) ->
                 if result.success
-                    messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                    messageFlash.displaySuccess translationService.get "INVITATION_EMAIL_SENT"
                     $scope.close()
 #                    if $scope.getParams().cb?
 #                        $scope.getParams().cb($scope.inviteEmailInfo.field)
