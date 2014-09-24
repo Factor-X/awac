@@ -74,12 +74,6 @@ public class InvitationController extends AbstractController {
 	private CodeLabelService codeLabelService;
 
 
-
-	private static String INVITATION_TITLE = "AWAC - invitation from ";
-	private static String INVITATION_LINK = "http://localhost:9000/enterprise#/registration/";
-
-
-
 	@Transactional
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
@@ -103,22 +97,23 @@ public class InvitationController extends AbstractController {
 		invitationService.saveOrUpdate(invitation);
 
 		String awacHostname = Configuration.root().getString("awac.hostname");
-		String title = INVITATION_TITLE +  org.getName() + ".";
-		String link = awacHostname+"/enterprise#/registration/" + key;
+		String awacRegistrationUrl = Configuration.root().getString("awac.registrationfragment");
+
+		String link = awacHostname+awacRegistrationUrl+key;
 
 		// retrieve traductions
-		//HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
-		//Logger.info("traduction : " + traductions.get("EMAIL_TITLE").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage()));
+		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		String subject = traductions.get("INVITATION_EMAIL_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
 		Map values = new HashMap<String, Object>();
-		values.put("title",title);
+		values.put("subject",subject);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
 		// send email for invitation
-		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),title,velocityContent);
+		EmailMessage email = new EmailMessage(dto.getInvitationEmail(),subject,velocityContent);
 		emailService.send(email);
 
 		//create InvitationResultDTO
@@ -158,14 +153,19 @@ public class InvitationController extends AbstractController {
 		// delete invitation
 		invitationService.remove(invitation);
 
+		// retrieve traductions
+		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+
+
 		// prepare email
 		Map values = new HashMap<String,Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
-		String title = "AWAC - registering confirmation.";
+		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
 
-		String link = awacHostname+"/login";
+		String link = awacHostname+awacLoginUrlFragment;
 
-		values.put("title",title);
+		values.put("subject",subject);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
 
@@ -173,7 +173,7 @@ public class InvitationController extends AbstractController {
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
 		// send confirmation email
-		EmailMessage email = new EmailMessage(dto.getEmail(),title, velocityContent);
+		EmailMessage email = new EmailMessage(dto.getEmail(),subject, velocityContent);
 		emailService.send(email);
 
 
