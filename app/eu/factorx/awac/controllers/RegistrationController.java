@@ -12,21 +12,28 @@ import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import eu.factorx.awac.util.email.messages.EmailMessage;
+import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import play.Configuration;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Transactional(readOnly = false)
@@ -53,6 +60,16 @@ public class RegistrationController  extends AbstractController {
 
     @Autowired
     private PeriodService periodService;
+
+	@Autowired
+	private EmailService emailService;
+
+	@Autowired
+	private CodeLabelService codeLabelService;
+
+	@Autowired
+	private VelocityGeneratorService velocityGeneratorService;
+
 
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
@@ -104,6 +121,9 @@ public class RegistrationController  extends AbstractController {
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
+		// email submission
+		handleEmailSubmission(account);
+
 		//create ConnectionFormDTO
 		play.Logger.info("create resultDTO...");
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -149,11 +169,42 @@ public class RegistrationController  extends AbstractController {
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
+		// email submission
+		handleEmailSubmission(account);
+
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);
 	}
+
+	private void handleEmailSubmission (Account account) {
+
+		// email purpose
+		// retrieve traductions
+		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+
+		// prepare email
+		Map values = new HashMap<String, Object>();
+		final String awacHostname = Configuration.root().getString("awac.hostname");
+		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
+
+		String link = awacHostname + awacLoginUrlFragment;
+
+		values.put("subject", subject);
+		values.put("link", link);
+		values.put("hostname", awacHostname);
+		values.put("identifier", account.getIdentifier());
+
+
+		String velocityContent = velocityGeneratorService.generate("registerInvitation.vm", values);
+
+		// send confirmation email
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), subject, velocityContent);
+		emailService.send(email);
+	}
+
 
 	private Account createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
 
