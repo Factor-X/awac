@@ -4,6 +4,7 @@ angular
     restrict: "E"
     scope:  directiveService.autoScope
         ngDataToCompare: '='
+        ngDisabled: '='
         ngIsAggregation:'='
     templateUrl: "$/angular/templates/mm-awac-real-with-unit-question.html"
     replace: true
