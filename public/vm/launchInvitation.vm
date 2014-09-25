@@ -4,17 +4,8 @@
         <title>${subject}</title>
     </head>
     <body>
-        <table width="700" border="0" cellspacing="0">
-            <tr>
-                <td>Header Area</td>
-            </tr>
-            <tr>
-                <td>You have been invited.</td>
-                <td>Please follow this link to register ${link}</td>
-            </tr>
-            <tr>
-                <td>Footer Area</td>
-            </tr>
-        </table>
+    	${organization} vous invite à rejoindre son compte sur le calculateur en ligne de l'AWAC.<br>
+    	Pour répondre à cette invitation, cliquez simplement sur ce lien: ${link}<br><br>
+    	Le gestionnaire du calculateur AWAC
     </body>
 </html>

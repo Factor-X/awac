@@ -109,6 +109,7 @@ public class InvitationController extends AbstractController {
 		values.put("subject",subject);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
+		values.put("organization",org.getName());
 
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
@@ -168,6 +169,7 @@ public class InvitationController extends AbstractController {
 		values.put("subject",subject);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
+		values.put("identifier",account.getIdentifier());
 
 
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
