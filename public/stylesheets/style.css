@@ -1671,46 +1671,6 @@ ul.messenger > li {
     border-bottom: solid 2px #666;
 }
 
-.indicators_table {
-    width: 100%;
-}
-
-.indicators_table > thead > tr > th {
-    white-space: nowrap;
-    padding: 0.5em 1em;
-    border-bottom: solid #666 2px;
-
-}
-
-.indicators_table > tbody > tr > td {
-    padding: 0.5em 1em;
-    border-bottom: dotted #666 1px;
-}
-
-.indicators_table > tbody > tr > td {
-    border-left: dotted #666 1px;
-    border-right: dotted #666 1px;
-}
-
-.indicators_table > tbody > tr:hover {
-    background: #d7edd5;
-}
-
-.indicators_table > tfoot > tr > td {
-    white-space: nowrap;
-    padding: 0.5em 1em;
-    border-top: solid #666 2px;
-    font-weight: bold;
-}
-
-.indicators_table > tbody > tr > td.scope1 {
-    border-left: dashed 2px #666;
-}
-
-.indicators_table > tbody > tr > td.out-of-scope {
-    border-right: dashed 2px #666;
-}
-
 .chart-legend {
     text-align: left;
     vertical-align: top;

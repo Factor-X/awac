@@ -138,6 +138,48 @@ public class ReportResultServiceImpl implements ReportResultService {
 		return new ReportResultCollection(reportResults, logEntries);
 	}
 
+	@Override
+	public ReportResultCollectionAggregation aggregate(ReportResultCollection reportResultCollection) {
+		ReportResultCollectionAggregation result = new ReportResultCollectionAggregation();
+
+		for (ReportResult reportResult : reportResultCollection.getReportResults()) {
+			result.getReportResultAggregations().add(aggregate(reportResult));
+		}
+
+		return result;
+	}
+
+	@Override
+	public ReportResultAggregation aggregate(ReportResult reportResult) {
+		ReportResultAggregation aggregationForResult = new ReportResultAggregation();
+
+		Map<String, List<Double>> scopeValuesByIndicator = reportResult.getScopeValuesByIndicator();
+
+		aggregationForResult.setReportRestrictedScope(reportResult.getReport().getRestrictedScope());
+
+		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
+			ReportResultIndicatorAggregation indicator = new ReportResultIndicatorAggregation(entry.getKey());
+			indicator.setTotalValue(entry.getValue().get(0));
+			indicator.setScope1Value(entry.getValue().get(1));
+			indicator.setScope2Value(entry.getValue().get(2));
+			indicator.setScope3Value(entry.getValue().get(3));
+			indicator.setOutOfScopeValue(entry.getValue().get(4));
+			aggregationForResult.getReportResultIndicatorAggregationList().add(indicator);
+		}
+
+		return aggregationForResult;
+	}
+
+	@Override
+	public MergedReportResultCollectionAggregation mergeAsComparision(ReportResultCollectionAggregation a1, ReportResultCollectionAggregation a2) {
+		MergedReportResultCollectionAggregation mergedReportResultCollectionAggregation = new MergedReportResultCollectionAggregation();
+
+
+
+
+		return mergedReportResultCollectionAggregation;
+	}
+
 	private ReportResult getReportResult(Report report, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries) {
 		ReportResult reportResult = new ReportResult(report);
 
@@ -187,7 +229,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 		Site site = null;
 
-		if (scope instanceof  Site) {
+		if (scope instanceof Site) {
 			site = (Site) scope;
 		}
 
