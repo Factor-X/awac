@@ -186,7 +186,7 @@ angular
         #eject locked or validate question
         finalList = []
         for answer in listAnswerToSave
-            if not $scope.isQuestionLocked(answer) && not $scope.isQuestionValidate(answer)
+            if not $scope.isQuestionLocked(answer.questionKey) && not $scope.isQuestionValidate(answer.questionKey)
                 finalList.push answer
 
         console.log "listAnswerToSave"
