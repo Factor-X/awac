@@ -776,14 +776,13 @@ h1 {
     cursor: pointer;
 }
 
-.block_status .lock_status.lock_open_disabled{
+.block_status .lock_status.lock_open_disabled {
     background: url('../images/status/lock_open.png') center center no-repeat #e6dccc;
 }
 
 .block_status .lock_status.lock_open:hover {
-/*    background: url('../images/status/lock_close.png') center center no-repeat #e6dccc; */
+    /*    background: url('../images/status/lock_close.png') center center no-repeat #e6dccc; */
 }
-
 
 .block_status .lock_status.lock_close {
     background: url('../images/status/lock_close.png') center center no-repeat #acd595;
@@ -793,8 +792,9 @@ h1 {
     background: url('../images/status/lock_unlock.png') center center no-repeat #acd595;
     cursor: pointer;
 }
+
 .block_status .lock_status.lock_close_by_myself:hover {
-/*    background: url('../images/status/lock_open.png') center center no-repeat #acd595; */
+    /*    background: url('../images/status/lock_open.png') center center no-repeat #acd595; */
 }
 
 .block_status .validate_status.validate_no_valid {
@@ -811,7 +811,7 @@ h1 {
     background: url('../images/status/validate_validated.png') center center no-repeat #acd595;
 }
 
-.block_status > div > div{
+.block_status > div > div {
     display: none;
     position: absolute;
     background-color: #eeeeee;
@@ -824,7 +824,7 @@ h1 {
 }
 
 .block_status > div:hover > div,
-.block_status > div > div:hover{
+.block_status > div > div:hover {
     display: block;
 }
 
@@ -882,6 +882,10 @@ h1 {
 
 .question_field {
     padding: 3px 0px 3px 35px;
+}
+
+.question_field .optional{
+    font-style: italic;
 }
 
 .question_field > div {
@@ -1428,8 +1432,6 @@ h1 {
     width: 20%;
     text-align: center;
 }
-
-
 
 /*
  * PROGRESS BAR FOR TABS

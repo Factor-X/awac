@@ -4,7 +4,7 @@ div
         //achat bien et service
         mm-awac-section(title-code="AC130")
 
-            mm-awac-question(question-code="AC131")
+            mm-awac-question(question-code="AC131",ng-optional="true")
 
             mm-awac-repetition-name(question-code="AC132")
             mm-awac-repetition-question(question-set-code="AC132", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC132')")
@@ -23,7 +23,7 @@ div
         // investissement AC137
         mm-awac-section(title-code="AC137")
 
-            mm-awac-question(question-code="AC138")
+            mm-awac-question(question-code="AC138",ng-optional="true")
 
             mm-awac-repetition-name(question-code="AC139")
             mm-awac-repetition-question(question-set-code="AC139", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC139')")

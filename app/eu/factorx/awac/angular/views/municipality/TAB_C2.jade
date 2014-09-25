@@ -18,7 +18,7 @@ div
                 mm-awac-question(question-code="AC19", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC20", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC21", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC22", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
+                mm-awac-question(question-code="AC22", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'",ng-optional="true")
                 mm-awac-question(question-code="AC23", ng-repetition-map="itLevel1")
 
                 // AC24
@@ -58,7 +58,7 @@ div
 
                 // AC37
                 mm-awac-sub-title(question-code="AC37", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC38", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC38", ng-repetition-map="itLevel1",ng-optional="true")
 
                 mm-awac-repetition-name(question-code="AC39")
                 mm-awac-repetition-question(question-set-code="AC39", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC39', itLevel1)", ng-repetition-map="itLevel1")
@@ -73,7 +73,7 @@ div
                 // AC42
                 mm-awac-block(ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
                     mm-awac-sub-title(question-code="AC42", ng-repetition-map="itLevel1")
-                    mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1")
+                    mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1",ng-optional="true")
 
                     mm-awac-repetition-name(question-code="AC44")
                     mm-awac-repetition-question(question-set-code="AC44", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC44', itLevel1)", ng-repetition-map="itLevel1")
@@ -98,7 +98,7 @@ div
 
         // éclairage public AS52
         mm-awac-section(title-code="AC52")
-            mm-awac-question(question-code="AC53")
+            mm-awac-question(question-code="AC53",ng-optional="true")
             mm-awac-question(question-code="AC54")
             mm-awac-question(question-code="AC55")
 

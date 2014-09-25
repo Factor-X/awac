@@ -15,6 +15,8 @@ angular
         ngTabSet:'='
     #
         ngTab:'='
+    # optional : true or false (default : false)
+        ngOptional: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
     compile: () ->
@@ -112,9 +114,9 @@ angular
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
                     if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value = scope.getAggregation()
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).isAggregation = true
-                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab())
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional()).value = scope.getAggregation()
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional()).isAggregation = true
+                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional())
 
             #
             # return the list of unit for the question
@@ -259,9 +261,6 @@ angular
                 if scope.getAggregation()?
                     return
 
-                #there is no status for document
-                if scope.getQuestion() != null && scope.getQuestion().answerType == 'DOCUMENT'
-                    return ""
 
                 answer = scope.getAnswer()
 
@@ -270,6 +269,9 @@ angular
                         return 'answer_temp'
                     return 'answer'
                 else
+                    # for optional, do not display status when there is not answer
+                    if scope.getQuestion() != null && scope.getOptional() == true
+                        return ""
                     if answer.wasEdited != undefined && answer.wasEdited == true
                         return 'pending_temp'
                     return 'pending'
@@ -304,6 +306,8 @@ angular
                     return 'glyphicon-cog'
                 if scope.getQuestion()? && scope.getQuestion().answerType == 'DOCUMENT'
                     return 'glyphicon-file'
+                if scope.getOptional() == true
+                    return 'glyphicon-paperclip'
                 return 'glyphicon-share-alt'
 
 

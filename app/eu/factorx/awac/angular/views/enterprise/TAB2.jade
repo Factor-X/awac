@@ -29,7 +29,7 @@ div
 
         mm-awac-section(title-code="A13")
 
-            mm-awac-question(question-code="A14")
+            mm-awac-question(question-code="A14",ng-optional="true")
 
             mm-awac-repetition-name(question-code="A15")
             mm-awac-repetition-question(question-set-code="A15", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
@@ -46,7 +46,7 @@ div
 
         mm-awac-section(title-code="A20")
 
-            mm-awac-question(question-code="A21")
+            mm-awac-question(question-code="A21",ng-optional="true")
 
             mm-awac-sub-sub-title(question-code="A22")
 
@@ -70,7 +70,7 @@ div
 
             mm-awac-question(question-code="A32")
 
-            mm-awac-question(question-code="A33", ng-condition="getAnswer('A32').value == '1'")
+            mm-awac-question(question-code="A33", ng-condition="getAnswer('A32').value == '1'",ng-optional="true")
 
             mm-awac-block(ng-condition="getAnswer('A32').value == '1'")
 
@@ -91,7 +91,7 @@ div
 
             mm-awac-question(question-code="A38")
 
-            mm-awac-question(question-code="A39", ng-condition="getAnswer('A38').value == '1'")
+            mm-awac-question(question-code="A39", ng-condition="getAnswer('A38').value == '1'",ng-optional="true")
 
         mm-awac-block(ng-condition="getAnswer('A38').value == '1'")
             .element_content

@@ -2,7 +2,7 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="A205")
-            mm-awac-question(question-code="A206")
+            mm-awac-question(question-code="A206",ng-optional="true")
             mm-awac-sub-title(question-code="A208")
             mm-awac-repetition-name(question-code="A209")
             mm-awac-repetition-question(question-set-code="A209", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A209')")
@@ -36,7 +36,7 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A128")
-            mm-awac-question(question-code="A129")
+            mm-awac-question(question-code="A129",ng-optional="true")
 
         .horizontal_separator
 
