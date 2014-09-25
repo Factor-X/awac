@@ -7,6 +7,7 @@ import java.util.List;
 public class GetReportParametersDTO extends DTO {
 
 	private String     periodKey;
+	private String     comparedPeriodKey;
 	private List<Long> scopesIds;
 
 	public GetReportParametersDTO() {
@@ -26,5 +27,13 @@ public class GetReportParametersDTO extends DTO {
 
 	public void setScopesIds(List<Long> scopesIds) {
 		this.scopesIds = scopesIds;
+	}
+
+	public String getComparedPeriodKey() {
+		return comparedPeriodKey;
+	}
+
+	public void setComparedPeriodKey(String comparedPeriodKey) {
+		this.comparedPeriodKey = comparedPeriodKey;
 	}
 }
