@@ -69,10 +69,8 @@ angular
 
                 downloadService.postJson '/awac/answer/validateQuestionSet',data, (result) ->
                     if result.success
-                        console.log "sucess"
                         scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
                     else
-                        console.log "error"
                         messageFlash.displayError(result.data.message)
 
 

@@ -6,6 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
@@ -152,7 +153,7 @@ public class AnswerController extends AbstractController {
         QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(lockQuestionSetDTO.getQuestionSetKey()));
 
         if (questionSet == null || questionSet.getParent() != null) {
-            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+            return unauthorized(new ExceptionsDTO("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey()));
         }
 
         //load scope
@@ -169,7 +170,7 @@ public class AnswerController extends AbstractController {
 
         //it can be only one questionSetAnswer because the questionSet doesn't have any parent
         if (questionSetAnswerList.size() > 1) {
-            throw new MyrmexRuntimeException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
+            return unauthorized(new ExceptionsDTO("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey()));
         }
 
         //recover the questionSetAnswer
@@ -187,10 +188,10 @@ public class AnswerController extends AbstractController {
         //recover / control the auditInfo
         if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+                return unauthorized(new ExceptionsDTO("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker()));
             }
             if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already validate");
+                return unauthorized(new ExceptionsDTO("This questionSetAnswer " + questionSetAnswer + " is already validate"));
             }
         }
 

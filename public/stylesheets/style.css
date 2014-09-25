@@ -811,6 +811,23 @@ h1 {
     background: url('../images/status/validate_validated.png') center center no-repeat #acd595;
 }
 
+.block_status > div > div{
+    display: none;
+    position: absolute;
+    background-color: #eeeeee;
+    padding: 2px 4px;
+    border: 1px solid #909090;
+    margin-top: 15px;
+    margin-left: 40px;
+    z-index: 10;
+    max-width: 175px;
+}
+
+.block_status > div:hover > div,
+.block_status > div > div:hover{
+    display: block;
+}
+
 .element_content {
     margin: 10px 0 0 73px;
 }
