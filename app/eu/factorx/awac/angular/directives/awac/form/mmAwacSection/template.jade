@@ -6,7 +6,9 @@ ng-virtual
         .element_sidebar
             .block_status
                 .lock_status(ng-click="lock()", ng-class="getLockClass()")
+                    div(ng-show="getLocker() != null") {{getLocker().firstName}} {{getLocker().lastName}}
                 .validate_status(ng-click="valide()", ng-class="getValidateClass()")
+                    div(ng-show="getValidator() != null") {{getValidator().firstName}} {{getValidator().lastName}}
                 .validate_status(mm-not-implemented)
         .element_content
             div(ng-class="getMode()", ng-transclude)

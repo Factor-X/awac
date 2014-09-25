@@ -185,11 +185,11 @@ public class AnswerController extends AbstractController {
         }
 
         //recover / control the auditInfo
-        if (questionSetAnswer.getAuditInfo().getDataLocker() != null ){
-            if(!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
+        if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
+            if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
                 throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
             }
-            if(questionSetAnswer.getAuditInfo().getDataValidator()!=null){
+            if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
                 throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already validate");
             }
         }
@@ -268,8 +268,10 @@ public class AnswerController extends AbstractController {
         }
 
         //recover / control the auditInfo
-        if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
-            throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+        if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
+            if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
+                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+            }
         }
 
         //update
@@ -482,12 +484,12 @@ public class AnswerController extends AbstractController {
                 .appendScope(scope));
 
         //control locker
-        for(QuestionSetAnswer  questionSetAnswer  : questionSetAnswersList){
-            if(questionSetAnswer.getAuditInfo().getDataLocker()!=null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())){
-                throw new MyrmexRuntimeException("This questionSet "+questionSetAnswer.getQuestionSet().getCode()+" is loked by "+questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
+        for (QuestionSetAnswer questionSetAnswer : questionSetAnswersList) {
+            if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
+                throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
             }
-            if(questionSetAnswer.getAuditInfo().getDataValidator()!=null){
-                throw new MyrmexRuntimeException("This questionSet "+questionSetAnswer.getQuestionSet().getCode()+" is validate");
+            if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+                throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
             }
         }
 

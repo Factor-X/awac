@@ -103,9 +103,10 @@ angular
             $scope.refreshMySites = () ->
                 mySites = []
                 for site in $scope.organization.sites
-                    for person in site.listPersons
-                        if person.identifier == $scope.$root.currentPerson.identifier
-                            mySites.push site
+                    if site.listPersons?
+                        for person in site.listPersons
+                            if person.identifier == $scope.$root.currentPerson.identifier
+                                mySites.push site
 
                 $scope.$root.mySites = mySites
 
