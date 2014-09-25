@@ -111,7 +111,6 @@ GET         /awac/admin/codelabels/reset                           @eu.factorx.a
 GET         /awac/admin/indicators_factors/reset                   @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
 GET         /awac/admin/municipality_survey/create                 @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET         /awac/admin/badImporter/:interfaceString               @eu.factorx.awac.controllers.AdminController.runBADImporter(interfaceString:String)
-GET         /awac/admin/sites_associations/import 				   @eu.factorx.awac.controllers.AdminController.runAccountSiteAssociationImporter()
 
 #
 # site

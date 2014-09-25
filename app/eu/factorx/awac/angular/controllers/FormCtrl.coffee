@@ -407,7 +407,7 @@ angular
                 answerLine.tab= tab
 
             # add optional for all
-            answerLine.optional:optional
+            answerLine.optional = optional
 
             $scope.createTabWatcher answerLine
 
@@ -606,7 +606,7 @@ angular
 
                         # clean the value
                         total++
-                        listTotal[listTotal.length] = answer
+                        listTotal.push answer
 
                         #test if the data is valid
                         if answer.value != null
@@ -619,14 +619,27 @@ angular
                     if tabSet.master?
                         for answer in $scope.answerList
                             if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == parseFloat(tabSet.master)
-                                total++
-                                answered++
+
+                                if answer.optional != true && answer.isAggregation != true
+                                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                                        total++
+                                        listTotal.push answer
+
+                                        #test if the data is valid
+                                        if answer.value != null
+                                            answered++
                     else
                         for answer in $scope.answerList
                             if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == 1
-                                total++
-                                if answer.value!=null
-                                    answered++
+
+                                if answer.optional != true && answer.isAggregation != true
+                                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                                        total++
+                                        listTotal.push answer
+
+                                        #test if the data is valid
+                                        if answer.value != null
+                                            answered++
         if answered == 0
             percentage = 0
         else
@@ -668,11 +681,13 @@ angular
 
     $scope.addTabSet = (tabSet,tab, mapRepetition) ->
         ite=null
+        wasCreated = false
         if !$scope.tabSet[tabSet]?
             $scope.tabSet[tabSet] = []
             $scope.tabSet[tabSet][0] = {}
             $scope.tabSet[tabSet][0].mapRepetition = mapRepetition
             ite = 0
+            wasCreated = true
         else
             i=0
             while i < $scope.tabSet[tabSet].length
@@ -688,9 +703,11 @@ angular
         if !$scope.tabSet[tabSet][ite][tab]?
             $scope.tabSet[tabSet][ite][tab] = {}
             $scope.tabSet[tabSet][ite][tab].active = (tab == 1 ? true:false)
+            wasCreated = true
 
         if !$scope.tabSet[tabSet][ite][tab].listToCompute?
             $scope.tabSet[tabSet][ite][tab].listToCompute = []
+
         return ite
     #
     # create a watcher for an answer : all new answer or loaded answer use this function
@@ -733,8 +750,10 @@ angular
     #
     $scope.computeTab = (tabSet, tab, mapRepetition)->
 
+        console.log '$scope.computeTab : '+tabSet+" "+tab+" "+mapRepetition
+
         # by default, the tab is not finish
-        isFinish = false
+        isFinish = true
 
         #find the good iteration
         i=0
@@ -754,11 +773,12 @@ angular
                 if answer.value == null
                     isFinish = false
                     break
-                else
-                    # if the value is not null, isFinish = true => broke is an other answer have value == null
-                    isFinish = true
+
+        console.log "finish?"+isFinish+"/"+$scope.tabSet[tabSet][ite][tab].isFinish
 
         if isFinish != $scope.tabSet[tabSet][ite][tab].isFinish
+
+            console.log "... 1"
 
             # compute the new master
             $scope.tabSet[tabSet][ite][tab].isFinish=isFinish
@@ -768,6 +788,8 @@ angular
                     $scope.tabSet[tabSet][ite].master = tab
 
             else if $scope.tabSet[tabSet][ite].master == tab
+
+                console.log "... 2"
 
                 delete $scope.tabSet[tabSet][ite].master
 
