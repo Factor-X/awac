@@ -80,10 +80,10 @@ angular
                     $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator
 
 
-                questionSetElement = {
+                questionSetElement =
                     questionSetDTO: questionSetDTO
                     parent:parent
-                }
+
                 $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement
 
                 if questionSetDTO.repetitionAllowed == true

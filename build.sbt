@@ -1,4 +1,3 @@
-import sbt.ExclusionRule
 
 name := "awac"
 

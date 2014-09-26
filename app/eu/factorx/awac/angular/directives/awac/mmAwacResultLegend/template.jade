@@ -6,11 +6,32 @@
     div(ng-show="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
         span(ng-bind-html="'RESULTS_LEGENDS_NODATA' | translate")
 
-    div(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
-        span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
-        span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")
-        span &nbsp;
-        span(ng-bind-html="line.indicatorName | translate")
-        span &nbsp;
-        span (&nbsp;{{ (line.leftScope1Value + line.leftScope2Value + line.leftScope3Value + line.leftOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e) (&nbsp;{{ line.leftPercentage | numberToI18N }}&nbsp;%&nbsp;)
+    table(ng-hide="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
+        thead(ng-show="ngModel.rightPeriod != null")
+            tr
+                th
+                th
+                th(colspan="2")
+                    span.period-header(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}") {{ngModel.leftPeriod}}
+                th(colspan="2")
+                    span.period-header(style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}") {{ngModel.rightPeriod}}
+        tbody
+            tr(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
+                td
+                    span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
+                    span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")
+
+                td
+                    span(ng-bind-html="line.indicatorName | translate")
+
+                td.align-right.data-cell(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}")
+                    span {{ (line.leftScope1Value + line.leftScope2Value + line.leftScope3Value + line.leftOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
+                td.align-right.data-cell.opacity-50(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}")
+                    span {{ line.leftPercentage | numberToI18N }}&nbsp;%&nbsp;
+
+                td.align-right.data-cell(ng-show="ngModel.rightPeriod != null", style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}")
+                    span {{ (line.rightScope1Value + line.rightScope2Value + line.rightScope3Value + line.rightOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
+                td.align-right.data-cell.opacity-50(ng-show="ngModel.rightPeriod != null", style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}")
+                    span {{ line.rightPercentage | numberToI18N }}&nbsp;%&nbsp;
+
 

@@ -17,6 +17,9 @@ public class ReportResultAggregationToReportDTOConverter implements Converter<Re
 	public ReportDTO convert(ReportResultAggregation reportResultAggregation) {
 		ReportDTO reportDTO = new ReportDTO();
 
+		reportDTO.setLeftPeriod(reportResultAggregation.getPeriod().getLabel());
+		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(1,1));
+
 		int notNullValues = 0;
 		double total = 0;
 		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {

@@ -38,3 +38,31 @@ angular
                 total += rl.leftOutOfScopeValue
             total
 
+        scope.getRightTotalScope1 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope1Value
+            total
+
+        scope.getRightTotalScope2 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope2Value
+            total
+
+        scope.getRightTotalScope3 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope3Value
+            total
+
+        scope.getRightTotalOutOfScope = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightOutOfScopeValue
+            total
+

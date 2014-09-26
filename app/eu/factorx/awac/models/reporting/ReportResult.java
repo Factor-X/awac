@@ -8,6 +8,7 @@ import javax.persistence.MappedSuperclass;
 import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Report;
 import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
 
@@ -17,10 +18,11 @@ public class ReportResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Report report;
-	
+
 	private Map<IndicatorCode, List<BaseActivityResult>> activityResults = new HashMap<>();
 
 	private List<ReportLogEntry> logEntries = new ArrayList<>();
+	private Period period;
 
 	protected ReportResult() {
 		super();
@@ -91,5 +93,13 @@ public class ReportResult implements Serializable {
 
 	public List<ReportLogEntry> getLogEntries() {
 		return logEntries;
+	}
+
+	public Period getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Period period) {
+		this.period = period;
 	}
 }

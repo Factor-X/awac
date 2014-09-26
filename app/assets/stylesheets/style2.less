@@ -1,4 +1,29 @@
 //
+// UTIL
+//
+
+// opacity
+.opacity-100 {
+    opacity: 1.0;
+}
+
+.opacity-75 {
+    opacity: 0.75;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.opacity-25 {
+    opacity: 0.25;
+}
+
+.opacity-0 {
+    opacity: 0.0;
+}
+
+//
 // MENU
 //
 /*
@@ -27,48 +52,6 @@
 //
 // INDICATORS TABLE
 //
-
-.indicators_table {
-    width: 100%;
-    & > thead {
-        & > tr {
-            & > th {
-                white-space: nowrap;
-                padding: 0.5em 1em;
-                border-bottom: solid #666 2px;
-            }
-        }
-    }
-    & > tbody {
-        & > tr {
-            & > td {
-                padding: 0.5em 1em;
-                border-bottom: dotted #666 1px;
-                border-left: dotted #666 1px;
-                border-right: dotted #666 1px;
-            }
-            & > td.scope1 {
-                border-left: dotted 2px #666;
-            }
-            & > td.out-of-scope {
-                border-right: dotted 2px #666;
-            }
-        }
-        & > tr:hover {
-            background: #d7edd5;
-        }
-    }
-    & > tfoot {
-        & > tr {
-            & > td {
-                white-space: nowrap;
-                padding: 0.5em 1em;
-                border-top: solid #666 2px;
-                font-weight: bold;
-            }
-        }
-    }
-}
 
 //
 // LOGGER
@@ -148,6 +131,99 @@ svg {
             }
         }
     }
+
+    .indicators_table {
+        width: 100%;
+        & > thead {
+            & > tr {
+                &:last-child {
+                    & > th {
+                        padding: 0.5em 1em;
+                    }
+                    border-bottom: solid #666 2px;
+
+                    & > th.scope1 {
+                        border-left: dotted 2px #666;
+                    }
+                    & > th.out-of-scope {
+                        border-right: dotted 2px #666;
+                    }
+                }
+            }
+        }
+        & > tbody {
+            & > tr {
+
+                & > td {
+                    padding: 0.5em 1em;
+                    border-bottom: dotted #666 1px;
+                    border-left: dotted #666 1px;
+                    border-right: dotted #666 1px;
+                }
+                & > td.scope1 {
+                    border-left: dotted 2px #666;
+                }
+                & > td.out-of-scope {
+                    border-right: dotted 2px #666;
+                }
+            }
+            & > tr:hover {
+                background: #d7edd5;
+            }
+        }
+        & > tfoot {
+            & > tr {
+                & > td {
+                    white-space: nowrap;
+                    font-weight: bold;
+                }
+            }
+            & > tr:first-child {
+                & > td {
+                    padding: 0.5em 1em;
+                    border-top: solid #666 2px;
+                }
+                & > td.scope1 {
+                    border-left: dotted 2px #666;
+                }
+                & > td.out-of-scope {
+                    border-right: dotted 2px #666;
+                }
+
+            }
+
+        }
+
+        .period-header {
+            display: block;
+            text-align: center;
+            padding: 0.25em;
+            margin: 0 2px;
+            border-bottom: solid 2px black;
+        }
+
+        .period-footer {
+            display: block;
+            text-align: center;
+            padding: 0.25em;
+            margin: 0 2px;
+            border-top: solid 2px black;
+        }
+    }
+
+    .chart-legend {
+        .period-header {
+            display: block;
+            text-align: center;
+            padding: 0.25em;
+            margin: 0 2px;
+            border-bottom: solid 2px black;
+        }
+
+        .data-cell {
+            padding: 0.25em;
+        }
+    }
 }
 
 //
@@ -171,7 +247,7 @@ svg {
 //
 // FORM
 //
-.form-error-message{
+.form-error-message {
     text-align: center;
     padding: 25px;
     margin-top: 50px;

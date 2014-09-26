@@ -88,7 +88,7 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResultAggregation));
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
 			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResultAggregation));
@@ -114,7 +114,7 @@ public class ResultController extends AbstractController {
 		// 1. Compute the ReportResult
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
-		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, period);
+		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
 
 		List<ReportLogEntry> logEntries = new ArrayList<>();
 		logEntries.addAll(allReportResultsLeft.getLogEntries());
@@ -133,15 +133,15 @@ public class ResultController extends AbstractController {
 			// 2.2. Each ReportResult is converted to a ResultDTO
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
 
+			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(mergedReportResultAggregation));
+			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(mergedReportResultAggregation));
 
-			// // 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			// resultsDTO.getSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResult));
-//
-			// // 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			// resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResult));
-//
-			// // 2.5. Each ReportResult is rendered to a SVG string - WEB
-			// resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResult));
+			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
+			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(mergedReportResultAggregation));
+
+			// 2.5. Each ReportResult is rendered to a SVG string - WEB
+			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(mergedReportResultAggregation));
 
 		}
 
