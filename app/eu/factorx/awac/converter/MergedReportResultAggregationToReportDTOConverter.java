@@ -6,14 +6,23 @@ import eu.factorx.awac.service.impl.reporting.MergedReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.MergedReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Colors;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class MergedReportResultAggregationToReportDTOConverter implements Converter<MergedReportResultAggregation, ReportDTO> {
 
 	@Override
 	public ReportDTO convert(MergedReportResultAggregation mergedReportResultAggregation) {
 		ReportDTO reportDTO = new ReportDTO();
+
+		reportDTO.setLeftPeriod(mergedReportResultAggregation.getLeftPeriod().getLabel());
+		reportDTO.setRightPeriod(mergedReportResultAggregation.getRightPeriod().getLabel());
+
+		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(1, 2));
+		reportDTO.setRightColor("#" + Colors.makeGoodColorForSerieElement(2, 2));
+
 		List<MergedReportResultIndicatorAggregation> list = mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList();
 
 		double leftTotal = 0;
@@ -25,7 +34,14 @@ public class MergedReportResultAggregationToReportDTOConverter implements Conver
 			rightTotal += mergedReportResultIndicatorAggregation.getRightTotalValue();
 		}
 
-		int index = 0;
+		int nNotNull = 0;
+		for (MergedReportResultIndicatorAggregation reportResultIndicatorAggregation : list) {
+			if (reportResultIndicatorAggregation.getLeftTotalValue() + reportResultIndicatorAggregation.getRightTotalValue() > 0) {
+				nNotNull++;
+			}
+		}
+
+		int currentNotNull = 0;
 		for (MergedReportResultIndicatorAggregation reportResultIndicatorAggregation : list) {
 			ReportLineDTO reportLineDTO = new ReportLineDTO(reportResultIndicatorAggregation.getIndicator());
 
@@ -47,8 +63,8 @@ public class MergedReportResultAggregationToReportDTOConverter implements Conver
 
 			// color
 			if (leftTotalValue + rightTotalValue > 0) {
-				reportLineDTO.setColor("#" + Colors.makeGoodColorForSerieElement(index + 1, list.size()));
-				index++;
+				currentNotNull++;
+				reportLineDTO.setColor("#" + Colors.makeGoodColorForSerieElement(currentNotNull , nNotNull));
 			}
 
 			// percentage

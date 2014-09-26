@@ -132,7 +132,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
 
 		for (Report report : awacCalculator.getReports()) {
-			reportResults.add(getReportResult(report, baseActivityResults, logEntries));
+			reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
 		}
 
 		return new ReportResultCollection(reportResults, logEntries);
@@ -155,6 +155,8 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 		Map<String, List<Double>> scopeValuesByIndicator = reportResult.getScopeValuesByIndicator();
 
+		aggregationForResult.setReportCode(reportResult.getReport().getCode().getKey());
+		aggregationForResult.setPeriod(reportResult.getPeriod());
 		aggregationForResult.setReportRestrictedScope(reportResult.getReport().getRestrictedScope());
 
 		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
@@ -174,15 +176,120 @@ public class ReportResultServiceImpl implements ReportResultService {
 	public MergedReportResultCollectionAggregation mergeAsComparision(ReportResultCollectionAggregation a1, ReportResultCollectionAggregation a2) {
 		MergedReportResultCollectionAggregation mergedReportResultCollectionAggregation = new MergedReportResultCollectionAggregation();
 
+		// Establish a list of all reports
+		Set<String> reports = new HashSet<>();
+		Map<String, ReportResultAggregation> a1ReportsMap = new HashMap<>();
+		Map<String, ReportResultAggregation> a2ReportsMap = new HashMap<>();
+		for (ReportResultAggregation reportResultAggregation : a1.getReportResultAggregations()) {
+			reports.add(reportResultAggregation.getReportCode());
+			a1ReportsMap.put(reportResultAggregation.getReportCode(), reportResultAggregation);
+		}
+		for (ReportResultAggregation reportResultAggregation : a2.getReportResultAggregations()) {
+			reports.add(reportResultAggregation.getReportCode());
+			a2ReportsMap.put(reportResultAggregation.getReportCode(), reportResultAggregation);
+		}
 
+		// Iterate over them
+		for (String report : reports) {
 
+			ReportResultAggregation r1 = a1ReportsMap.get(report);
+			ReportResultAggregation r2 = a2ReportsMap.get(report);
+
+			if (r1 != null && r2 != null) {
+				mergedReportResultCollectionAggregation.getMergedReportResultAggregations().add(merge(r1, r2));
+			}
+
+			if (r1 != null && r2 == null) {
+				mergedReportResultCollectionAggregation.getMergedReportResultAggregations().add(convert(r1));
+			}
+
+			if (r1 == null && r2 != null) {
+				mergedReportResultCollectionAggregation.getMergedReportResultAggregations().add(convert(r2));
+			}
+
+		}
 
 		return mergedReportResultCollectionAggregation;
 	}
 
-	private ReportResult getReportResult(Report report, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries) {
-		ReportResult reportResult = new ReportResult(report);
+	private MergedReportResultAggregation merge(ReportResultAggregation r1, ReportResultAggregation r2) {
+		MergedReportResultAggregation result = new MergedReportResultAggregation();
 
+		result.setReportCode(r1.getReportCode());
+		result.setReportRestrictedScope(r1.getReportRestrictedScope());
+
+		result.setLeftPeriod(r1.getPeriod());
+		result.setRightPeriod(r2.getPeriod());
+
+		// Create a list of indicators
+		Set<String> indicators = new HashSet<>();
+		Map<String, ReportResultIndicatorAggregation> r1IndicatorsMap = new HashMap<>();
+		Map<String, ReportResultIndicatorAggregation> r2IndicatorsMap = new HashMap<>();
+		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : r1.getReportResultIndicatorAggregationList()) {
+			indicators.add(reportResultIndicatorAggregation.getIndicator());
+			r1IndicatorsMap.put(reportResultIndicatorAggregation.getIndicator(), reportResultIndicatorAggregation);
+		}
+		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : r2.getReportResultIndicatorAggregationList()) {
+			indicators.add(reportResultIndicatorAggregation.getIndicator());
+			r2IndicatorsMap.put(reportResultIndicatorAggregation.getIndicator(), reportResultIndicatorAggregation);
+		}
+
+		// For each indicator, create a MergedReportResultIndicatorAggregation
+		for (String indicator : indicators) {
+			MergedReportResultIndicatorAggregation indicatorAggregation = new MergedReportResultIndicatorAggregation();
+
+			indicatorAggregation.setIndicator(indicator);
+
+			ReportResultIndicatorAggregation left = r1IndicatorsMap.get(indicator);
+			if (left != null) {
+				indicatorAggregation.setLeftTotalValue(left.getTotalValue());
+				indicatorAggregation.setLeftScope1Value(left.getScope1Value());
+				indicatorAggregation.setLeftScope2Value(left.getScope2Value());
+				indicatorAggregation.setLeftScope3Value(left.getScope3Value());
+				indicatorAggregation.setLeftOutOfScopeValue(left.getOutOfScopeValue());
+			}
+
+			ReportResultIndicatorAggregation right = r2IndicatorsMap.get(indicator);
+			if (right != null) {
+				indicatorAggregation.setRightTotalValue(right.getTotalValue());
+				indicatorAggregation.setRightScope1Value(right.getScope1Value());
+				indicatorAggregation.setRightScope2Value(right.getScope2Value());
+				indicatorAggregation.setRightScope3Value(right.getScope3Value());
+				indicatorAggregation.setRightOutOfScopeValue(right.getOutOfScopeValue());
+			}
+
+			result.getMergedReportResultIndicatorAggregationList().add(indicatorAggregation);
+		}
+
+		return result;
+	}
+
+	private MergedReportResultAggregation convert(ReportResultAggregation r1) {
+		MergedReportResultAggregation result = new MergedReportResultAggregation();
+
+		result.setReportCode(r1.getReportCode());
+		result.setReportRestrictedScope(r1.getReportRestrictedScope());
+		result.setLeftPeriod(r1.getPeriod());
+		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : r1.getReportResultIndicatorAggregationList()) {
+			MergedReportResultIndicatorAggregation indicatorAggregation = new MergedReportResultIndicatorAggregation();
+
+			indicatorAggregation.setIndicator(reportResultIndicatorAggregation.getIndicator());
+
+			indicatorAggregation.setLeftTotalValue(reportResultIndicatorAggregation.getTotalValue());
+			indicatorAggregation.setLeftScope1Value(reportResultIndicatorAggregation.getScope1Value());
+			indicatorAggregation.setLeftScope2Value(reportResultIndicatorAggregation.getScope1Value());
+			indicatorAggregation.setLeftScope3Value(reportResultIndicatorAggregation.getScope1Value());
+			indicatorAggregation.setLeftOutOfScopeValue(reportResultIndicatorAggregation.getOutOfScopeValue());
+
+			result.getMergedReportResultIndicatorAggregationList().add(indicatorAggregation);
+		}
+
+		return result;
+	}
+
+	private ReportResult getReportResult(Report report, Period period, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries) {
+		ReportResult reportResult = new ReportResult(report);
+		reportResult.setPeriod(period);
 		IndicatorIsoScopeCode reportScope = report.getRestrictedScope();
 
 		for (Indicator indicator : report.getIndicators()) {

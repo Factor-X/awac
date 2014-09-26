@@ -80,10 +80,10 @@ angular
                     $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator
 
 
-                questionSetElement = {
+                questionSetElement =
                     questionSetDTO: questionSetDTO
                     parent:parent
-                }
+
                 $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement
 
                 if questionSetDTO.repetitionAllowed == true
@@ -407,7 +407,7 @@ angular
                 answerLine.tab= tab
 
             # add optional for all
-            answerLine.optional:optional
+            answerLine.optional = optional
 
             $scope.createTabWatcher answerLine
 
