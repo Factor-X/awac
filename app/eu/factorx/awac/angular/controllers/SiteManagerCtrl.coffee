@@ -47,7 +47,7 @@ angular
 
 
             $scope.toForm = ->
-                $scope.$parent.navToLastFormUsed()
+                $scope.$root.navToLastFormUsed()
 
             $scope.getSiteList = () ->
                 return $scope.organization.sites

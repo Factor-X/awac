@@ -61,38 +61,6 @@ angular
             if result.valid == false
                 return translationService.get('MODAL_CONFIRMATION_EXIT_FORM_MESSAGE')
 
-    #
-    # use the nav from an event
-    # use the args.loc to specify the target loc
-    #
-    $scope.$on 'NAV', (event, args) ->
-        $scope.nav(args.loc, args.confirmed)
-
-    #
-    # Tabs -- transition
-    # loc : the localisation targeted
-    # confirmed : the modification of localisation was already confirmed by the user
-    #
-    $scope.nav = (loc, confirmed = false) ->
-        console.log "NAV : " + loc
-        canBeContinue = true
-
-        # test if the main current scope have a validNavigation function and if this function return a false
-        if $scope.getMainScope?().validNavigation != undefined && confirmed == false
-            # ask a confirmation to quite the view
-            result = $scope.getMainScope?().validNavigation?()
-
-            if result.valid == false
-                canBeContinue = false
-                params = {}
-                params.loc = loc
-                modalService.show result.modalForConfirm, params
-        if canBeContinue
-            # if this is a form, unlock it
-            if $scope.getMainScope?().formIdentifier?
-                downloadService.getJson "/awac/answer/unlockForm/"+$scope.getMainScope().formIdentifier+ "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result)->
-                    console.log '??'
-            $location.path(loc + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId)
 
     $scope.$on '$routeChangeSuccess', (event, args) ->
         $timeout(->
@@ -112,11 +80,6 @@ angular
             $scope.displayLittleMenu = false
 
 
-    #
-    # nav to the last nav used
-    #
-    $scope.navToLastFormUsed = ->
-        $scope.nav($scope.$root.getFormPath())
 
     #
     # Periods
@@ -142,7 +105,7 @@ angular
 
                     $location.path(p)
 
-            $scope.$root.computePeriod()
+            $scope.$root.computeAvailablePeriod()
             $scope.loadPeriodForComparison()
             $scope.loadFormProgress()
 
@@ -243,7 +206,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams,modalService)->
     $rootScope.languages = []
     $rootScope.languages[0] = {
         value: 'fr'
@@ -310,31 +273,41 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if $rootScope.mySites?
             for site in $rootScope.mySites
                 if site.id = scope
-                    for periodToFind in  site.listPeriodAvailable
-                        if period+"" == periodToFind.key+""
-                            return true
+                    if $rootScope.instanceName == 'enterprise'
+                        for periodToFind in  site.listPeriodAvailable
+                            if period+"" == periodToFind.key+""
+                                return true
+                    else
+                        for periodToFind in  $rootScope.periods
+                            if period+"" == periodToFind.key+""
+                                return true
         return false
     #
     # success after login => store some datas, display the path
     #
     $rootScope.loginSuccess = (data, skipRedirect) ->
+
+        console.log "DATA connection : "
+        console.log angular.copy data
+
         $rootScope.periods = data.availablePeriods
         $rootScope.currentPerson = data.person
         $rootScope.organizationName = data.organizationName
-        $rootScope.mySites = data.mySites
+        $rootScope.mySites = data.myScopes
         # try to load default scope / period
         #default scope
-        if data.defaultSiteId?
-            for site in $rootScope.mySites
-                if site.id == data.defaultSiteId
-                    $rootScope.scopeSelectedId = data.defaultSiteId
 
-                    #control default period
-                    if data.defaultPeriod?
-                        if site.listPeriodAvailable? site.listPeriodAvailable.length > 0
-                            for period in  site.listPeriodAvailable
-                                if period.key == data.defaultPeriod
-                                    $rootScope.periodSelectedKey = data.defaultPeriod
+
+
+
+        if data.defaultSiteId? && data.defaultPeriod?
+            if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
+                $rootScope.scopeSelectedId =data.defaultSiteId
+                $rootScope.periodSelectedKey =data.defaultPeriod
+        else if data.defaultSiteId?
+            for scope in $rootScope.mySites
+                if scope.id == data.defaultSiteId
+                    $rootScope.scopeSelectedId =data.defaultSiteId
 
         if !$rootScope.scopeSelectedId?
             if $rootScope.mySites.length > 0
@@ -343,11 +316,14 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if $rootScope.scopeSelectedId? && !$rootScope.periodSelectedKey?
             for site in $rootScope.mySites
                 if site.id == $rootScope.scopeSelectedId
-                    if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
-                        $rootScope.periodSelectedKey = site.listPeriodAvailable[0].key
+                    if $rootScope.instanceName == 'enterprise'
+                        if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
+                            $rootScope.periodSelectedKey = site.listPeriodAvailable[0].key
+                    else if $rootScope.instanceName == 'municipality'
+                        $rootScope.periodSelectedKey = $rootScope.periods[0].key
 
         if $rootScope.scopeSelectedId?
-            $rootScope.computePeriod($rootScope.mySites[0].scope)
+            $rootScope.computeAvailablePeriod($rootScope.mySites[0].scope)
 
         if not skipRedirect
             $rootScope.toDefaultForm()
@@ -359,26 +335,33 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $location.path("noScope")
 
     $rootScope.$watch "mySites", ->
-        $rootScope.computePeriod()
+        $rootScope.computeAvailablePeriod()
 
-    $rootScope.computePeriod = (scopeId) ->
-        if !scopeId?
-            scopeId = $rootScope.scopeSelectedId
-        if scopeId?
-            for site in $rootScope.mySites
-                if site.scope == scopeId
-                    $rootScope.availablePeriods = site.listPeriodAvailable
+    $rootScope.computeAvailablePeriod = (scopeId) ->
 
-            currentPeriodFounded=false
-            for period in $rootScope.availablePeriods
-                if period.key == $rootScope.periodSelectedKey
-                    currentPeriodFounded = true
-            if not currentPeriodFounded
-                if $rootScope.availablePeriods.length>0
-                    $rootScope.periodSelectedKey = $rootScope.availablePeriods[0].key
+        console.log "$rootScope.instanceName:"+$rootScope.instanceName
+
+        if $rootScope.instanceName == 'enterprise'
+            if !scopeId?
+                scopeId = $rootScope.scopeSelectedId
+            if scopeId?
+                for site in $rootScope.mySites
+                    if site.scope == scopeId
+                        $rootScope.availablePeriods = site.listPeriodAvailable
+
+                currentPeriodFounded=false
+                if $rootScope.availablePeriods?
+                    for period in $rootScope.availablePeriods
+                        if period.key == $rootScope.periodSelectedKey
+                            currentPeriodFounded = true
+                    if not currentPeriodFounded
+                        if $rootScope.availablePeriods.length>0
+                            $rootScope.periodSelectedKey = $rootScope.availablePeriods[0].key
                 else
                     $rootScope.availablePeriods = null
                     $location.path("noScope")
+        else if $rootScope.instanceName == 'municipality'
+            $rootScope.availablePeriods = $rootScope.periods
 
 
     #
@@ -422,3 +405,40 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.periodSelectedKey = $routeParams.period
         if $routeParams.scope?
             $rootScope.scopeSelectedId = parseInt($routeParams.scope)
+
+
+    #
+    # nav to the last nav used
+    #
+    $rootScope.navToLastFormUsed = ->
+        $rootScope.nav($rootScope.getFormPath())
+
+    #
+    # Tabs -- transition
+    # loc : the localisation targeted
+    # confirmed : the modification of localisation was already confirmed by the user
+    #
+    $rootScope.nav = (loc, confirmed = false) ->
+        console.log "NAV : " + loc
+        canBeContinue = true
+
+        # test if the main current scope have a validNavigation function and if this function return a false
+        if $rootScope.getMainScope?().validNavigation != undefined && confirmed == false
+            # ask a confirmation to quite the view
+            result = $rootScope.getMainScope?().validNavigation?()
+
+            if result.valid == false
+                canBeContinue = false
+                params = {}
+                params.loc = loc
+                modalService.show result.modalForConfirm, params
+        if canBeContinue
+            # if this is a form, unlock it
+            if $rootScope.getMainScope?().formIdentifier?
+                downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
+                    console.log '??'
+            $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
+
+    $rootScope.getMainScope = ->
+        return mainScope = angular.element($('[ng-view]')[0]).scope()
+

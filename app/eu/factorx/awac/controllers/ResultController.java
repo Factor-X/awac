@@ -73,7 +73,7 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
 
@@ -112,7 +112,7 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
 		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, period);
 

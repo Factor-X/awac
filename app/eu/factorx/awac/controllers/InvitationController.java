@@ -2,8 +2,8 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.InvitationResultDTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
+import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
@@ -86,14 +86,14 @@ public class InvitationController extends AbstractController {
 
 
 		// get organization name through securedController
-		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
+		//Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
 
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
 		Logger.info("Email Invitation generated key : " + key);
 
 		// store key and user
-		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,org);
+		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,securedController.getCurrentUser().getOrganization()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                );
 		invitationService.saveOrUpdate(invitation);
 
 		String awacHostname = Configuration.root().getString("awac.hostname");
@@ -109,7 +109,7 @@ public class InvitationController extends AbstractController {
 		values.put("subject",subject);
 		values.put("link",link);
 		values.put("hostname",awacHostname);
-		values.put("organization",org.getName());
+		values.put("organization",securedController.getCurrentUser().getOrganization().getName());
 
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
@@ -118,8 +118,8 @@ public class InvitationController extends AbstractController {
 		emailService.send(email);
 
 		//create InvitationResultDTO
-		InvitationResultDTO resultDto = new InvitationResultDTO ();
-		return ok(resultDto);
+
+		return ok(new ResultsDTO());
 	}
 
 	@Transactional (readOnly = false)
@@ -128,7 +128,7 @@ public class InvitationController extends AbstractController {
 		//Logger.info("request body:" + request().body().asJson());
 		// get InvitationDTO from request
 		RegisterInvitationDTO dto = extractDTOFromRequest(RegisterInvitationDTO.class);
-		Logger.info("Registering Invitation : " + dto.getEmail());
+		Logger.info("Registering Invitation : " + dto.getPerson().getEmail());
 		//Logger.info("dump: " + dto.toString());
 
 		// check if invitation exist
@@ -138,11 +138,11 @@ public class InvitationController extends AbstractController {
 		}
 
 		// create person
-		Person person = new Person (dto.getLastName(),dto.getFirstName(),dto.getEmail());
+		Person person = new Person (dto.getPerson().getLastName(),dto.getPerson().getFirstName(),dto.getPerson().getEmail());
 		personService.saveOrUpdate(person);
 
 		// create account
-		Account account = new Account(invitation.getOrganization(), person, dto.getLogin(), dto.getPassword(), new InterfaceTypeCode(dto.getInterfaceName()));
+		Account account = new Account(invitation.getOrganization(), person, dto.getPerson().getIdentifier(), dto.getPassword(), invitation.getOrganization().getInterfaceCode());
 		account = accountService.saveOrUpdate(account);
 
         // ONLY FOR municipality : assign the new user of the site
@@ -175,13 +175,12 @@ public class InvitationController extends AbstractController {
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
 
 		// send confirmation email
-		EmailMessage email = new EmailMessage(dto.getEmail(),subject, velocityContent);
+		EmailMessage email = new EmailMessage(dto.getPerson().getEmail(),subject, velocityContent);
 		emailService.send(email);
 
 
 		//create InvitationResultDTO
-		InvitationResultDTO resultDto = new InvitationResultDTO ();
-		return ok(resultDto);
+		return ok(new ResultsDTO());
 	}
 
 

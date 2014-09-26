@@ -21,12 +21,22 @@ div
                         button.button.help(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate")
                     td
                         //  site manager button
-                        button.button.user_manage(type='button', ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate', ng-click='nav(\'/site_manager\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}')
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/site_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
                         // user manager button
-                        button.button.user_manage(type='button', ng-bind-html='\'USER_MANAGER_BUTTON\' | translate', ng-click='nav(\'/user_manager\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}')
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/user_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
                     td
                         //  user data button
-                        button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
+                        button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
                         // logout button
                         button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
             .wallonie_logo
@@ -61,32 +71,32 @@ div
                     .site
                         button.button.verification(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
                     .menu
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='nav(\'/form/TAB2\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='$root.nav(\'/form/TAB2\')')
                             .tab-title(ng-bind-html='\'TAB2\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB2\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB3\')  == true}', ng-click='nav(\'/form/TAB3\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB3\')  == true}', ng-click='$root.nav(\'/form/TAB3\')')
                             .tab-title(ng-bind-html='\'TAB3\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB3\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB4\') == true}', ng-click='nav(\'/form/TAB4\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB4\') == true}', ng-click='$root.nav(\'/form/TAB4\')')
                             .tab-title(ng-bind-html='\'TAB4\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB4\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB5\') == true}', ng-click='nav(\'/form/TAB5\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB5\') == true}', ng-click='$root.nav(\'/form/TAB5\')')
                             .tab-title(ng-bind-html='\'TAB5\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB5\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB6\') == true}', ng-click='nav(\'/form/TAB6\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB6\') == true}', ng-click='$root.nav(\'/form/TAB6\')')
                             .tab-title(ng-bind-html='\'TAB6\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB6\')')
                             .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB7\') == true}', ng-click='nav(\'/form/TAB7\')')
+                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB7\') == true}', ng-click='$root.nav(\'/form/TAB7\')')
                             .tab-title(ng-bind-html='\'TAB7\' | translate')
                             mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB7\')')
                             .menu_arrow
                 .last_menu
-                    button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='nav(\'/results\')')
+                    button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='$root.nav(\'/results\')')
                         .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
                     button.button(mm-not-implemented='mm-not-implemented')
                         .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")

@@ -17,7 +17,6 @@ initializeCommonRoutes = (defaultResolve) ->
                         if $rootScope.currentUser
                             $location.path '/noScope'
                         else
-                            console.log "je suis le test connection"
                             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                                 if result.success
                                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()

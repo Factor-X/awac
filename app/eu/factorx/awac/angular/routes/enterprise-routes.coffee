@@ -9,7 +9,6 @@ initializeEnterpriseRoutes = (defaultResolve) ->
     .module('app')
     .run ($rootScope, $location) ->
         $rootScope.onFormPath = (period,scope) ->
-            console.log "je suisune mmmm et je te donne une route de mmm"
             $location.path($rootScope.getFormPath()+'/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
             return '/form/TAB2'

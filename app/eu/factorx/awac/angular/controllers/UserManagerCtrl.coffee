@@ -64,4 +64,4 @@ angular
                             messageFlash.displayError result.data.message
 
     $scope.toForm = ->
-        $scope.$parent.navToLastFormUsed()
+        $scope.$root.navToLastFormUsed()

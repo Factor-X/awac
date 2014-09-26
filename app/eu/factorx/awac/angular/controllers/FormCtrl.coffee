@@ -263,7 +263,7 @@ angular
 
                     #nav
                     if argToNav != null
-                        $scope.$root.$broadcast('NAV', argToNav)
+                        $scope.$root.nav(argToNav.loc, argToNav.confirmed)
                     return
 
                 else
@@ -750,10 +750,8 @@ angular
     #
     $scope.computeTab = (tabSet, tab, mapRepetition)->
 
-        console.log '$scope.computeTab : '+tabSet+" "+tab+" "+mapRepetition
-
         # by default, the tab is not finish
-        isFinish = true
+        isFinish = false
 
         #find the good iteration
         i=0
@@ -774,11 +772,7 @@ angular
                     isFinish = false
                     break
 
-        console.log "finish?"+isFinish+"/"+$scope.tabSet[tabSet][ite][tab].isFinish
-
         if isFinish != $scope.tabSet[tabSet][ite][tab].isFinish
-
-            console.log "... 1"
 
             # compute the new master
             $scope.tabSet[tabSet][ite][tab].isFinish=isFinish
@@ -788,8 +782,6 @@ angular
                     $scope.tabSet[tabSet][ite].master = tab
 
             else if $scope.tabSet[tabSet][ite].master == tab
-
-                console.log "... 2"
 
                 delete $scope.tabSet[tabSet][ite].master
 

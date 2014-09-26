@@ -14,10 +14,7 @@ import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.LanguageCode;
-import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.code.type.UnitCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
@@ -82,10 +79,6 @@ public class AnswerController extends AbstractController {
     @Autowired
     private FormProgressService formProgressService;
     @Autowired
-    private AccountSiteAssociationService accountSiteAssociationService;
-    @Autowired
-    private SiteService siteService;
-    @Autowired
     private QuestionSetService questionSetService;
 
     @Transactional(readOnly = true)
@@ -97,7 +90,7 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(scopeId);
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form, period, (Site) scope);
+        securedController.controlDataAccess(form, period, scope);
 
         // TODO The user language should be saved in a session attribute, and it should be possible to update it with a request parameter (change language request).
         // Without connection, the user language should be obtained from a cookie or from browser "accepted languages" request header.
@@ -163,7 +156,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
 
         //control authorization
-        securedController.controlDataAccess(period, (Site) scope);
+        securedController.controlDataAccess(period,  scope);
 
         //load questionSetAnswer
         List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
@@ -217,7 +210,7 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(scopeId);
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form, period, (Site) scope);
+        securedController.controlDataAccess(form, period,  scope);
 
         //unlock
         securedController.unlockForm(form.getAllQuestionSets().get(0), scope, period);
@@ -246,7 +239,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
 
         //control authorization
-        securedController.controlDataAccess(period, (Site) scope);
+        securedController.controlDataAccess(period,  scope);
 
         //load questionSetAnswer
         List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
@@ -269,9 +262,9 @@ public class AnswerController extends AbstractController {
         }
 
         //recover / control the auditInfo
-        if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
-            if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker());
+        if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+            if (!questionSetAnswer.getAuditInfo().getDataValidator().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
+                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataValidator());
             }
         }
 
@@ -292,18 +285,24 @@ public class AnswerController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
 
-        Site site = siteService.findById(scopeId);
+        Scope scope = scopeService.findById(scopeId);
 
         List<PeriodDTO> periodDTOs = new ArrayList<>();
         List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
         for (Period period : periods) {
 
-            //restrict by period by site
-            for (Period periodToTest : site.getListPeriodAvailable()) {
-                if (periodToTest.equals(period)) {
-                    periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
-                    break;
+            //for enterprise : restriction by site
+            if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+                //restrict by period by site
+                for (Period periodToTest : ((Site)scope).getListPeriodAvailable()) {
+                    if (periodToTest.equals(period)) {
+                        periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+                        break;
+                    }
                 }
+            }
+            else{
+                periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
             }
         }
 
@@ -323,7 +322,7 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(answersDTO.getScopeId());
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form, period, (Site) scope);
+        securedController.controlDataAccess(form, period, scope);
 
         // validate user organization
         validateUserRightsForScope(currentUser, scope);
@@ -356,7 +355,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(periodKey));
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(period, (Site) scope);
+        securedController.controlDataAccess(period, scope);
 
         // 3. load formProgress
         List<FormProgress> formProgressList = formProgressService.findByPeriodAndByScope(period, scope);
@@ -485,12 +484,15 @@ public class AnswerController extends AbstractController {
                 .appendScope(scope));
 
         //control locker
-        for (QuestionSetAnswer questionSetAnswer : questionSetAnswersList) {
+        for(int i=questionSetAnswersList.size() - 1;i>=0;i--){
+            QuestionSetAnswer questionSetAnswer = questionSetAnswersList.get(i);
             if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
-                throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
+                 questionSetAnswersList.remove(i);
+                //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
             }
             if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
+                questionSetAnswersList.remove(i);
+                //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
             }
         }
 

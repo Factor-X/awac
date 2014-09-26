@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "UserDataCtrl", ($scope, downloadService, translationService, messageFlash, modalService, $timeout) ->
+.controller "UserDataCtrl", ($scope, downloadService, translationService, messageFlash, modalService) ->
 
     $scope.isLoading = false
 
@@ -84,4 +84,4 @@ angular
         modalService.show(modalService.PASSWORD_CHANGE, {})
 
     $scope.toForm = ->
-        $scope.$parent.navToLastFormUsed()
+        $scope.$root.navToLastFormUsed()
