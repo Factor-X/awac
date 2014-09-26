@@ -6,6 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
 import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
+import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
@@ -27,6 +28,7 @@ import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -80,6 +82,18 @@ public class AnswerController extends AbstractController {
     private FormProgressService formProgressService;
     @Autowired
     private QuestionSetService questionSetService;
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result testClosing(String periodKey, Long scopeId){
+/*
+        AwacCalculator awacCalculator;
+        awacCalculator.get
+*/
+
+    return ok(new BooleanDTO(true));
+    }
+
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)

@@ -22,7 +22,10 @@ cat ./CELDL-190-transfert-interface-to-organization.sql >> /tmp/migration/migrat
 
 # transfert data and progressbar from site to organization for municipality organization
 # drop sites
-cat ./CELDL-185-replace scope municipality by organization.sql >> /tmp/migration/migration_script.sql
+cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration/migration_script.sql
+
+# link between form and calculator
+cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
 
 # -------------------------------------------------
