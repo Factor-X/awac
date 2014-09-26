@@ -176,40 +176,110 @@ public class AwacMunicipalityInitialData {
     QuestionSet ac62 = new QuestionSet(QuestionCode.AC62, false, ac60);
     session.saveOrUpdate(ac62);
 
-    // == AC64
-    // Déplacements en véhicule routier
-    QuestionSet ac64 = new QuestionSet(QuestionCode.AC64, false, ac62);
-    session.saveOrUpdate(ac64);
+    // == AC400
+    // Véhicules communaux ou détenus par la commune
+    QuestionSet ac400 = new QuestionSet(QuestionCode.AC400, false, ac62);
+    session.saveOrUpdate(ac400);
 
-    // == AC65
-    // Méthode de calcul par les consommations (recommandée)
-    QuestionSet ac65 = new QuestionSet(QuestionCode.AC65, false, ac64);
-    session.saveOrUpdate(ac65);
+    // == AC401
+    // Méthode au choix
+    QuestionSet ac401 = new QuestionSet(QuestionCode.AC401, false, ac400);
+    session.saveOrUpdate(ac401);
 
-    // == AC66
-    // Veuillez entrer ici tous les véhicules
-    QuestionSet ac66 = new QuestionSet(QuestionCode.AC66, true, ac65);
-    session.saveOrUpdate(ac66);
+    // == AC402
+    // Calcul par les consommations
+    QuestionSet ac402 = new QuestionSet(QuestionCode.AC402, false, ac401);
+    session.saveOrUpdate(ac402);
 
-    // == AC72
-    // Méthode de calcul par le kilométrage (méthode alternative)
-    QuestionSet ac72 = new QuestionSet(QuestionCode.AC72, false, ac64);
-    session.saveOrUpdate(ac72);
+    // == AC406
+    // Calcul par les kilomètres
+    QuestionSet ac406 = new QuestionSet(QuestionCode.AC406, false, ac401);
+    session.saveOrUpdate(ac406);
 
-    // == AC73
-    // Veuillez entrer ici tous les (groupes de) véhicules
-    QuestionSet ac73 = new QuestionSet(QuestionCode.AC73, true, ac72);
-    session.saveOrUpdate(ac73);
+    // == AC407
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac407 = new QuestionSet(QuestionCode.AC407, true, ac406);
+    session.saveOrUpdate(ac407);
 
-    // == AC84
-    // Méthode de calcul par les dépenses (méthode alternative)
-    QuestionSet ac84 = new QuestionSet(QuestionCode.AC84, false, ac64);
-    session.saveOrUpdate(ac84);
+    // == AC412
+    // Calcul par euros dépensés
+    QuestionSet ac412 = new QuestionSet(QuestionCode.AC412, false, ac401);
+    session.saveOrUpdate(ac412);
 
-    // == AC85
-    // Veuillez entrer ici les dépenses en carburant
-    QuestionSet ac85 = new QuestionSet(QuestionCode.AC85, true, ac84);
-    session.saveOrUpdate(ac85);
+    // == AC413
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac413 = new QuestionSet(QuestionCode.AC413, true, ac412);
+    session.saveOrUpdate(ac413);
+
+    // == AC500
+    // Autres véhicules pour déplacements domicile-travail des employés
+    QuestionSet ac500 = new QuestionSet(QuestionCode.AC500, false, ac62);
+    session.saveOrUpdate(ac500);
+
+    // == AC501
+    // Méthode au choix
+    QuestionSet ac501 = new QuestionSet(QuestionCode.AC501, false, ac500);
+    session.saveOrUpdate(ac501);
+
+    // == AC502
+    // Calcul par les consommations
+    QuestionSet ac502 = new QuestionSet(QuestionCode.AC502, false, ac501);
+    session.saveOrUpdate(ac502);
+
+    // == AC506
+    // Calcul par les kilomètres
+    QuestionSet ac506 = new QuestionSet(QuestionCode.AC506, false, ac501);
+    session.saveOrUpdate(ac506);
+
+    // == AC507
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac507 = new QuestionSet(QuestionCode.AC507, true, ac506);
+    session.saveOrUpdate(ac507);
+
+    // == AC512
+    // Calcul par euros dépensés
+    QuestionSet ac512 = new QuestionSet(QuestionCode.AC512, false, ac501);
+    session.saveOrUpdate(ac512);
+
+    // == AC513
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac513 = new QuestionSet(QuestionCode.AC513, true, ac512);
+    session.saveOrUpdate(ac513);
+
+    // == AC600
+    // Autres véhicules pour déplacements divers (véhicules loués, visiteurs, sous-traitants…)
+    QuestionSet ac600 = new QuestionSet(QuestionCode.AC600, false, ac62);
+    session.saveOrUpdate(ac600);
+
+    // == AC601
+    // Méthode au choix
+    QuestionSet ac601 = new QuestionSet(QuestionCode.AC601, false, ac600);
+    session.saveOrUpdate(ac601);
+
+    // == AC602
+    // Calcul par les consommations
+    QuestionSet ac602 = new QuestionSet(QuestionCode.AC602, false, ac601);
+    session.saveOrUpdate(ac602);
+
+    // == AC606
+    // Calcul par les kilomètres
+    QuestionSet ac606 = new QuestionSet(QuestionCode.AC606, false, ac601);
+    session.saveOrUpdate(ac606);
+
+    // == AC607
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac607 = new QuestionSet(QuestionCode.AC607, true, ac606);
+    session.saveOrUpdate(ac607);
+
+    // == AC612
+    // Calcul par euros dépensés
+    QuestionSet ac612 = new QuestionSet(QuestionCode.AC612, false, ac601);
+    session.saveOrUpdate(ac612);
+
+    // == AC613
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet ac613 = new QuestionSet(QuestionCode.AC613, true, ac612);
+    session.saveOrUpdate(ac613);
 
     // == AC92
     // Déplacement via les transports publics
@@ -281,10 +351,6 @@ public class AwacMunicipalityInitialData {
     // == AC3
     // Année de référence du calcul
     session.saveOrUpdate(new IntegerQuestion( ac2, 0, QuestionCode.AC3, null, null ));
-
-    // == AC4
-    // Souhaitez-vous que le bilan soit conforme à la convention des maires?
-    session.saveOrUpdate(new BooleanQuestion( ac2, 0, QuestionCode.AC4, null ));
 
     // == AC5
     // Nombre d'employés en début d'année de bilan
@@ -472,97 +538,152 @@ public class AwacMunicipalityInitialData {
     // Fournir ici les documents éventuels justifiant les données suivantes
     session.saveOrUpdate(new DocumentQuestion( ac60, 0, QuestionCode.AC61));
 
-    // == AC63
-    // Quelle est la part des déplacement communaux sur le territoire communal ?
-    session.saveOrUpdate(new PercentageQuestion( ac62, 0, QuestionCode.AC63, null ));
+    // == AC403
+    // Consommation d'essence
+        session.saveOrUpdate(new DoubleQuestion( ac402, 0, QuestionCode.AC403, volumeUnits, null, volumeUnits.getMainUnit() ));
 
-    // == AC67
-    // Nom du (groupe de) véhicule
-    session.saveOrUpdate(new StringQuestion( ac66, 0, QuestionCode.AC67, null ));
 
-    // == AC68
-    // Véhicule communal ou autre?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac66, 0, QuestionCode.AC68, CodeList.POSSESSIONVEHICULECOMMUNAL ));
+    // == AC404
+    // Consommation de diesel
+        session.saveOrUpdate(new DoubleQuestion( ac402, 0, QuestionCode.AC404, volumeUnits, null, volumeUnits.getMainUnit() ));
 
-    // == AC69
-    // Motif de déplacement
-    session.saveOrUpdate(new ValueSelectionQuestion( ac66, 0, QuestionCode.AC69, CodeList.MOTIFDEPLACEMENT ));
 
-    // == AC70
+    // == AC405
+    // Consommation de gaz de pétrole liquéfié (GPL)
+        session.saveOrUpdate(new DoubleQuestion( ac402, 0, QuestionCode.AC405, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == AC408
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac407, 0, QuestionCode.AC408, null ));
+
+    // == AC409
     // Quel type de carburant utilise-t-il ?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac66, 0, QuestionCode.AC70, CodeList.CARBURANT ));
+    session.saveOrUpdate(new ValueSelectionQuestion( ac407, 0, QuestionCode.AC409, CodeList.CARBURANT ));
 
-    // == AC71
-    // Quelle est la quantité totale de carburant consommée par an ?
-        session.saveOrUpdate(new DoubleQuestion( ac66, 0, QuestionCode.AC71, volumeUnits, null, getUnitBySymbol("l") ));
+    // == AC410
+    // Consommation moyenne (L/100km)
+    session.saveOrUpdate(new IntegerQuestion( ac407, 0, QuestionCode.AC410, null, null ));
 
+    // == AC411
+    // Quelle est le nombre de kilomètres parcourus par an?
+    session.saveOrUpdate(new IntegerQuestion( ac407, 0, QuestionCode.AC411, null, null ));
 
-    // == AC74
-    // Nom du (groupe de) véhicule
-    session.saveOrUpdate(new StringQuestion( ac73, 0, QuestionCode.AC74, null ));
+    // == AC414
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac413, 0, QuestionCode.AC414, null ));
 
-    // == AC75
-    // Véhicule communal ou autre?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac73, 0, QuestionCode.AC75, CodeList.POSSESSIONVEHICULECOMMUNAL ));
-
-    // == AC76
-    // Motif de déplacement
-    session.saveOrUpdate(new ValueSelectionQuestion( ac73, 0, QuestionCode.AC76, CodeList.MOTIFDEPLACEMENT ));
-
-    // == AC77
+    // == AC415
     // Quel type de carburant utilise-t-il ?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac73, 0, QuestionCode.AC77, CodeList.CARBURANT ));
+    session.saveOrUpdate(new ValueSelectionQuestion( ac413, 0, QuestionCode.AC415, CodeList.CARBURANT ));
 
-    // == AC78
-    // De quel type de véhicule s'agit-il?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac73, 0, QuestionCode.AC78, CodeList.TYPEVEHICULECOMMUNE ));
-
-    // == AC79
-    // Consommation moyenne (L/100km)
-    session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC79, null, 7 ));
-
-    // == AC80
-    // Consommation moyenne (L/100km)
-    session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC80, null, 12 ));
-
-    // == AC81
-    // Consommation moyenne (L/100km)
-    session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC81, null, 6 ));
-
-    // == AC82
-    // Consommation moyenne (L/100km)
-    session.saveOrUpdate(new IntegerQuestion( ac73, 0, QuestionCode.AC82, null, 10 ));
-
-    // == AC83
-    // Quelle est la distance parcourue par an?
-        session.saveOrUpdate(new DoubleQuestion( ac73, 0, QuestionCode.AC83, lengthUnits, null, getUnitBySymbol("km") ));
+    // == AC416
+    // Prix moyen du litre de ce carburant
+        session.saveOrUpdate(new DoubleQuestion( ac413, 0, QuestionCode.AC416, moneyUnits, null, getUnitBySymbol("EUR") ));
 
 
-    // == AC86
-    // Dépense
-    session.saveOrUpdate(new StringQuestion( ac85, 0, QuestionCode.AC86, null ));
-
-    // == AC87
-    // De quel type de carburant s'agit-il ?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac85, 0, QuestionCode.AC87, CodeList.CARBURANT ));
-
-    // == AC88
+    // == AC417
     // Quel est le montant annuel de dépenses en carburant?
-        session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC88, moneyUnits, null, getUnitBySymbol("EUR") ));
+        session.saveOrUpdate(new DoubleQuestion( ac413, 0, QuestionCode.AC417, moneyUnits, null, getUnitBySymbol("EUR") ));
 
 
-    // == AC89
-    // Prix unitaire de carburant
-        session.saveOrUpdate(new DoubleQuestion( ac85, 0, QuestionCode.AC89, moneyUnits, 1.3, getUnitBySymbol("EUR") ));
+    // == AC503
+    // Consommation d'essence
+        session.saveOrUpdate(new DoubleQuestion( ac502, 0, QuestionCode.AC503, volumeUnits, null, volumeUnits.getMainUnit() ));
 
 
-    // == AC90
-    // Dépenses pour des véhicules communaux ou autres?
-    session.saveOrUpdate(new ValueSelectionQuestion( ac85, 0, QuestionCode.AC90, CodeList.POSSESSIONVEHICULECOMMUNAL ));
+    // == AC504
+    // Consommation de diesel
+        session.saveOrUpdate(new DoubleQuestion( ac502, 0, QuestionCode.AC504, volumeUnits, null, volumeUnits.getMainUnit() ));
 
-    // == AC91
-    // Motif de déplacement
-    session.saveOrUpdate(new ValueSelectionQuestion( ac85, 0, QuestionCode.AC91, CodeList.MOTIFDEPLACEMENT ));
+
+    // == AC505
+    // Consommation de gaz de pétrole liquéfié (GPL)
+        session.saveOrUpdate(new DoubleQuestion( ac502, 0, QuestionCode.AC505, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == AC508
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac507, 0, QuestionCode.AC508, null ));
+
+    // == AC509
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( ac507, 0, QuestionCode.AC509, CodeList.CARBURANT ));
+
+    // == AC510
+    // Consommation moyenne (L/100km)
+    session.saveOrUpdate(new IntegerQuestion( ac507, 0, QuestionCode.AC510, null, null ));
+
+    // == AC511
+    // Quelle est le nombre de kilomètres parcourus par an?
+    session.saveOrUpdate(new IntegerQuestion( ac507, 0, QuestionCode.AC511, null, null ));
+
+    // == AC514
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac513, 0, QuestionCode.AC514, null ));
+
+    // == AC515
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( ac513, 0, QuestionCode.AC515, CodeList.CARBURANT ));
+
+    // == AC516
+    // Prix moyen du litre de ce carburant
+        session.saveOrUpdate(new DoubleQuestion( ac513, 0, QuestionCode.AC516, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == AC517
+    // Quel est le montant annuel de dépenses en carburant?
+        session.saveOrUpdate(new DoubleQuestion( ac513, 0, QuestionCode.AC517, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == AC603
+    // Consommation d'essence
+        session.saveOrUpdate(new DoubleQuestion( ac602, 0, QuestionCode.AC603, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == AC604
+    // Consommation de diesel
+        session.saveOrUpdate(new DoubleQuestion( ac602, 0, QuestionCode.AC604, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == AC605
+    // Consommation de gaz de pétrole liquéfié (GPL)
+        session.saveOrUpdate(new DoubleQuestion( ac602, 0, QuestionCode.AC605, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == AC608
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac607, 0, QuestionCode.AC608, null ));
+
+    // == AC609
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( ac607, 0, QuestionCode.AC609, CodeList.CARBURANT ));
+
+    // == AC610
+    // Consommation moyenne (L/100km)
+    session.saveOrUpdate(new IntegerQuestion( ac607, 0, QuestionCode.AC610, null, null ));
+
+    // == AC611
+    // Quelle est le nombre de kilomètres parcourus par an?
+    session.saveOrUpdate(new IntegerQuestion( ac607, 0, QuestionCode.AC611, null, null ));
+
+    // == AC614
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( ac613, 0, QuestionCode.AC614, null ));
+
+    // == AC615
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( ac613, 0, QuestionCode.AC615, CodeList.CARBURANT ));
+
+    // == AC616
+    // Prix moyen du litre de ce carburant
+        session.saveOrUpdate(new DoubleQuestion( ac613, 0, QuestionCode.AC616, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == AC617
+    // Quel est le montant annuel de dépenses en carburant?
+        session.saveOrUpdate(new DoubleQuestion( ac613, 0, QuestionCode.AC617, moneyUnits, null, getUnitBySymbol("EUR") ));
+
 
     // == AC94
     // Bus TEC (en km.passagers)

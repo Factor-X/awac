@@ -98,7 +98,7 @@ public class AwacEnterpriseInitialData {
         session.saveOrUpdate(form2);
 
     // == A15
-    // Combustion de combustible par les sources statiques des sites de l'entreprise
+    // Combustion de combustible par les sources statiques des sites de l'entreprise (mesurés en unités d'énergie)
     QuestionSet a15 = new QuestionSet(QuestionCode.A15, true, a13);
     session.saveOrUpdate(a15);
 
@@ -170,9 +170,14 @@ public class AwacEnterpriseInitialData {
         form3.getQuestionSets().add(a50);
         session.saveOrUpdate(form3);
 
+    // == A52
+    // Transport routier
+    QuestionSet a52 = new QuestionSet(QuestionCode.A52, false, a50);
+    session.saveOrUpdate(a52);
+
     // == A400
     // Véhicules de société ou détenus par l'entreprise
-    QuestionSet a400 = new QuestionSet(QuestionCode.A400, false, a50);
+    QuestionSet a400 = new QuestionSet(QuestionCode.A400, false, a52);
     session.saveOrUpdate(a400);
 
     // == A401
@@ -204,6 +209,76 @@ public class AwacEnterpriseInitialData {
     // Créez autant de catégories de véhicules que souhaité
     QuestionSet a413 = new QuestionSet(QuestionCode.A413, true, a412);
     session.saveOrUpdate(a413);
+
+    // == A518
+    // Autres véhicules pour déplacements domicile-travail des employés
+    QuestionSet a518 = new QuestionSet(QuestionCode.A518, false, a52);
+    session.saveOrUpdate(a518);
+
+    // == A519
+    // Méthode au choix
+    QuestionSet a519 = new QuestionSet(QuestionCode.A519, false, a518);
+    session.saveOrUpdate(a519);
+
+    // == A502
+    // Calcul par les consommations
+    QuestionSet a502 = new QuestionSet(QuestionCode.A502, false, a519);
+    session.saveOrUpdate(a502);
+
+    // == A506
+    // Calcul par les kilomètres
+    QuestionSet a506 = new QuestionSet(QuestionCode.A506, false, a519);
+    session.saveOrUpdate(a506);
+
+    // == A507
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet a507 = new QuestionSet(QuestionCode.A507, true, a506);
+    session.saveOrUpdate(a507);
+
+    // == A512
+    // Calcul par euros dépensés
+    QuestionSet a512 = new QuestionSet(QuestionCode.A512, false, a519);
+    session.saveOrUpdate(a512);
+
+    // == A513
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet a513 = new QuestionSet(QuestionCode.A513, true, a512);
+    session.saveOrUpdate(a513);
+
+    // == A600
+    // Autres véhicules pour déplacements divers (véhicules loués, visiteurs, consultants, sous-traitants…)
+    QuestionSet a600 = new QuestionSet(QuestionCode.A600, false, a52);
+    session.saveOrUpdate(a600);
+
+    // == A601
+    // Méthode au choix
+    QuestionSet a601 = new QuestionSet(QuestionCode.A601, false, a600);
+    session.saveOrUpdate(a601);
+
+    // == A602
+    // Calcul par les consommations
+    QuestionSet a602 = new QuestionSet(QuestionCode.A602, false, a601);
+    session.saveOrUpdate(a602);
+
+    // == A606
+    // Calcul par les kilomètres
+    QuestionSet a606 = new QuestionSet(QuestionCode.A606, false, a601);
+    session.saveOrUpdate(a606);
+
+    // == A607
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet a607 = new QuestionSet(QuestionCode.A607, true, a606);
+    session.saveOrUpdate(a607);
+
+    // == A612
+    // Calcul par euros dépensés
+    QuestionSet a612 = new QuestionSet(QuestionCode.A612, false, a601);
+    session.saveOrUpdate(a612);
+
+    // == A613
+    // Créez autant de catégories de véhicules que souhaité
+    QuestionSet a613 = new QuestionSet(QuestionCode.A613, true, a612);
+    session.saveOrUpdate(a613);
 
     // == A93
     // Transport en commun
@@ -749,6 +824,104 @@ public class AwacEnterpriseInitialData {
     // == A417
     // Quel est le montant annuel de dépenses en carburant?
         session.saveOrUpdate(new DoubleQuestion( a413, 0, QuestionCode.A417, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == A503
+    // Consommation d'essence
+        session.saveOrUpdate(new DoubleQuestion( a502, 0, QuestionCode.A503, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A504
+    // Consommation de diesel
+        session.saveOrUpdate(new DoubleQuestion( a502, 0, QuestionCode.A504, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A505
+    // Consommation de gaz de pétrole liquéfié (GPL)
+        session.saveOrUpdate(new DoubleQuestion( a502, 0, QuestionCode.A505, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A508
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( a507, 0, QuestionCode.A508, null ));
+
+    // == A509
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( a507, 0, QuestionCode.A509, CodeList.CARBURANT ));
+
+    // == A510
+    // Consommation moyenne (L/100km)
+    session.saveOrUpdate(new IntegerQuestion( a507, 0, QuestionCode.A510, null, null ));
+
+    // == A511
+    // Quelle est le nombre de kilomètres parcourus par an?
+    session.saveOrUpdate(new IntegerQuestion( a507, 0, QuestionCode.A511, null, null ));
+
+    // == A514
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( a513, 0, QuestionCode.A514, null ));
+
+    // == A515
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( a513, 0, QuestionCode.A515, CodeList.CARBURANT ));
+
+    // == A516
+    // Prix moyen du litre de ce carburant
+        session.saveOrUpdate(new DoubleQuestion( a513, 0, QuestionCode.A516, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == A517
+    // Quel est le montant annuel de dépenses en carburant?
+        session.saveOrUpdate(new DoubleQuestion( a513, 0, QuestionCode.A517, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == A603
+    // Consommation d'essence
+        session.saveOrUpdate(new DoubleQuestion( a602, 0, QuestionCode.A603, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A604
+    // Consommation de diesel
+        session.saveOrUpdate(new DoubleQuestion( a602, 0, QuestionCode.A604, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A605
+    // Consommation de gaz de pétrole liquéfié (GPL)
+        session.saveOrUpdate(new DoubleQuestion( a602, 0, QuestionCode.A605, volumeUnits, null, volumeUnits.getMainUnit() ));
+
+
+    // == A608
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( a607, 0, QuestionCode.A608, null ));
+
+    // == A609
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( a607, 0, QuestionCode.A609, CodeList.CARBURANT ));
+
+    // == A610
+    // Consommation moyenne (L/100km)
+    session.saveOrUpdate(new IntegerQuestion( a607, 0, QuestionCode.A610, null, null ));
+
+    // == A611
+    // Quelle est le nombre de kilomètres parcourus par an?
+    session.saveOrUpdate(new IntegerQuestion( a607, 0, QuestionCode.A611, null, null ));
+
+    // == A614
+    // Catégorie de véhicule
+    session.saveOrUpdate(new StringQuestion( a613, 0, QuestionCode.A614, null ));
+
+    // == A615
+    // Quel type de carburant utilise-t-il ?
+    session.saveOrUpdate(new ValueSelectionQuestion( a613, 0, QuestionCode.A615, CodeList.CARBURANT ));
+
+    // == A616
+    // Prix moyen du litre de ce carburant
+        session.saveOrUpdate(new DoubleQuestion( a613, 0, QuestionCode.A616, moneyUnits, null, getUnitBySymbol("EUR") ));
+
+
+    // == A617
+    // Quel est le montant annuel de dépenses en carburant?
+        session.saveOrUpdate(new DoubleQuestion( a613, 0, QuestionCode.A617, moneyUnits, null, getUnitBySymbol("EUR") ));
 
 
     // == A95
