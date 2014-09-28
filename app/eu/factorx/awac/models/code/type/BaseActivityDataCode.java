@@ -190,12 +190,7 @@ public class BaseActivityDataCode extends Code {
     public static final BaseActivityDataCode AC_BAD2B = new BaseActivityDataCode("AC_BAD2B");
     public static final BaseActivityDataCode AC_BAD3 = new BaseActivityDataCode("AC_BAD3");
     public static final BaseActivityDataCode AC_BAD4 = new BaseActivityDataCode("AC_BAD4");
-    public static final BaseActivityDataCode AC_BAD5A = new BaseActivityDataCode("AC_BAD5A");
-    public static final BaseActivityDataCode AC_BAD5B = new BaseActivityDataCode("AC_BAD5B");
-    public static final BaseActivityDataCode AC_BAD5C = new BaseActivityDataCode("AC_BAD5C");
-    public static final BaseActivityDataCode AC_BAD5D = new BaseActivityDataCode("AC_BAD5D");
-    public static final BaseActivityDataCode AC_BAD5E = new BaseActivityDataCode("AC_BAD5E");
-    public static final BaseActivityDataCode AC_BAD5F = new BaseActivityDataCode("AC_BAD5F");
+    public static final BaseActivityDataCode AC_BAD5 = new BaseActivityDataCode("AC_BAD5");
     public static final BaseActivityDataCode AC_BAD6A = new BaseActivityDataCode("AC_BAD6A");
     public static final BaseActivityDataCode AC_BAD6B = new BaseActivityDataCode("AC_BAD6B");
     public static final BaseActivityDataCode AC_BAD7A = new BaseActivityDataCode("AC_BAD7A");

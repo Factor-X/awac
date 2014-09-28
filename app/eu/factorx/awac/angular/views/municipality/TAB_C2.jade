@@ -91,20 +91,15 @@ div
                     mm-awac-sub-title(question-code="AC42", ng-repetition-map="itLevel1")
                     mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1")
 
-                    mm-awac-repetition-name(question-code="AC44")
-                    mm-awac-repetition-question(question-set-code="AC44", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC44', itLevel1)", ng-repetition-map="itLevel1")
+                    mm-awac-repetition-name(question-code="AC5000")
+                    mm-awac-repetition-question(question-set-code="AC5000", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC5000', itLevel1)", ng-repetition-map="itLevel1")
 
-                        mm-awac-question(question-code="AC45", ng-repetition-map="itLevel2")
-                        mm-awac-question(question-code="AC46", ng-repetition-map="itLevel2")
-                        mm-awac-question(question-code="AC47", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value != 'AS_186' || getAnswer('AC45',itLevel2).value != 'AS183'")
-                        mm-awac-question(question-code="AC48", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value != 'AS_186'")
-                        mm-awac-question(question-code="AC49", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183'")
-                        mm-awac-question(question-code="AC50", ng-repetition-map="itLevel2",ng-condition="getAnswer('AC45',itLevel2).value == 'AS_183'")
-                        mm-awac-question(question-code="AC51", ng-repetition-map="itLevel2")
+                        mm-awac-question(question-code="AC5001", ng-repetition-map="itLevel2")
+                        mm-awac-question(question-code="AC5002", ng-repetition-map="itLevel2")
 
-                    button.button.add-repetition-button(ng-click="addIteration('AC44',itLevel1)", type="button")
+                    button.button.add-repetition-button(ng-click="addIteration('AC5000',itLevel1)", type="button")
                         span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                        span(ng-bind-html="'AC44_LOOPDESC' | translate")
+                        span(ng-bind-html="'AC5000_LOOPDESC' | translate")
 
             button.button.add-repetition-button(ng-click="addIteration('AC10')", type="button")
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
