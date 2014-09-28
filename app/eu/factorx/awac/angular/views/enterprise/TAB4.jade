@@ -63,6 +63,7 @@ div
                             i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
                             span(ng-bind-html="'A141' | translate")
                         .sub_block.tab-color-lightgreen
+                            .element_text(ng-bind-html="'DETAIL_UPSTREAM_KM' | translate")
                             .element_table
                                 mm-awac-repetition-name(question-code="A142")
                                 mm-awac-repetition-question(question-set-code="A142", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A142')")

@@ -9,6 +9,8 @@ public class BaseActivityDataCode extends Code {
      * BAD enterprise
      */
 	public static final BaseActivityDataCode AE_BAD1 = new BaseActivityDataCode("AE_BAD1");
+    public static final BaseActivityDataCode AE_BAD50 = new BaseActivityDataCode("AE_BAD50");
+    public static final BaseActivityDataCode AE_BAD51 = new BaseActivityDataCode("AE_BAD51");
 	public static final BaseActivityDataCode AE_BAD2A = new BaseActivityDataCode("AE_BAD2A");
 	public static final BaseActivityDataCode AE_BAD2B = new BaseActivityDataCode("AE_BAD2B");
 	public static final BaseActivityDataCode AE_BAD3 = new BaseActivityDataCode("AE_BAD3");
@@ -232,11 +234,8 @@ public class BaseActivityDataCode extends Code {
     public static final BaseActivityDataCode AC_BAD23C = new BaseActivityDataCode("AC_BAD23C");
     public static final BaseActivityDataCode AC_BAD24 = new BaseActivityDataCode("AC_BAD24");
     public static final BaseActivityDataCode AC_BAD25 = new BaseActivityDataCode("AC_BAD25");
-
-
-
-
-
+    public static final BaseActivityDataCode AC_BAD26 = new BaseActivityDataCode("AC_BAD26");
+    public static final BaseActivityDataCode AC_BAD27 = new BaseActivityDataCode("AC_BAD27");
 
 
     private static final long serialVersionUID = 1L;
