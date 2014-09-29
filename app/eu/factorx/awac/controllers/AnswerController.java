@@ -1,12 +1,10 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
-import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
-import eu.factorx.awac.dto.awac.post.FormProgressDTO;
-import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
-import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
-import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
+import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
+import eu.factorx.awac.dto.awac.post.*;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
@@ -29,6 +27,7 @@ import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.forms.AwacCalculatorClosed;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -82,16 +81,68 @@ public class AnswerController extends AbstractController {
     private FormProgressService formProgressService;
     @Autowired
     private QuestionSetService questionSetService;
+    @Autowired
+    private AwacCalculatorService awacCalculatorService;
+    @Autowired
+    private AwacCalculatorClosedService awacCalculatorClosedService;
+    @Autowired
+    private AccountService accountService;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result testClosing(String periodKey, Long scopeId){
-/*
-        AwacCalculator awacCalculator;
-        awacCalculator.get
-*/
+    public Result testClosing(String periodKey, Long scopeId) {
 
-    return ok(new BooleanDTO(true));
+        FormsClosingDTO formsClosingDTO = new FormsClosingDTO();
+        formsClosingDTO.setCloseable(testCloseable(periodKey, scopeId));
+
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        Scope scope = scopeService.findById(scopeId);
+
+        securedController.controlDataAccess(period, scope);
+
+        AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+
+        formsClosingDTO.setClosed(awacCalculatorClosedService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope) != null);
+
+        return ok(formsClosingDTO);
+    }
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result closeForm() {
+
+        FormsCloseDTO formsCloseDTO =  this.extractDTOFromRequest(FormsCloseDTO.class);
+
+        //control password
+        if (!accountService.controlPassword(formsCloseDTO.getPassword(), securedController.getCurrentUser())) {
+            //use the same message for both login and password error
+            return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+        }
+
+        Period period = periodService.findByCode(new PeriodCode(formsCloseDTO.getPeriodKey()));
+
+        Scope scope = scopeService.findById(formsCloseDTO.getScopeId());
+
+        securedController.controlDataAccess(period, scope);
+
+        AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+
+        AwacCalculatorClosed awacCalculatorClosed = awacCalculatorClosedService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
+
+        if (!formsCloseDTO.getClose() && awacCalculatorClosed != null) {
+            awacCalculatorClosedService.remove(awacCalculatorClosed);
+        } else if (formsCloseDTO.getClose() && awacCalculatorClosed == null) {
+
+            awacCalculatorClosed = new AwacCalculatorClosed();
+            awacCalculatorClosed.setAwacCalculator(awacCalculator);
+            awacCalculatorClosed.setPeriod(period);
+            awacCalculatorClosed.setScope(scope);
+
+            awacCalculatorClosedService.saveOrUpdate(awacCalculatorClosed);
+        }
+        return ok(new ResultsDTO());
     }
 
 
@@ -170,7 +221,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
 
         //control authorization
-        securedController.controlDataAccess(period,  scope);
+        securedController.controlDataAccess(period, scope);
 
         //load questionSetAnswer
         List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
@@ -224,7 +275,7 @@ public class AnswerController extends AbstractController {
         Scope scope = scopeService.findById(scopeId);
 
         //test if the form is aviable for the scope / period
-        securedController.controlDataAccess(form, period,  scope);
+        securedController.controlDataAccess(form, period, scope);
 
         //unlock
         securedController.unlockForm(form.getAllQuestionSets().get(0), scope, period);
@@ -253,7 +304,7 @@ public class AnswerController extends AbstractController {
         Period period = periodService.findByCode(new PeriodCode(lockQuestionSetDTO.getPeriodCode()));
 
         //control authorization
-        securedController.controlDataAccess(period,  scope);
+        securedController.controlDataAccess(period, scope);
 
         //load questionSetAnswer
         List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
@@ -306,16 +357,15 @@ public class AnswerController extends AbstractController {
         for (Period period : periods) {
 
             //for enterprise : restriction by site
-            if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+            if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
                 //restrict by period by site
-                for (Period periodToTest : ((Site)scope).getListPeriodAvailable()) {
+                for (Period periodToTest : ((Site) scope).getListPeriodAvailable()) {
                     if (periodToTest.equals(period)) {
                         periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
                         break;
                     }
                 }
-            }
-            else{
+            } else {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
             }
         }
@@ -498,10 +548,10 @@ public class AnswerController extends AbstractController {
                 .appendScope(scope));
 
         //control locker
-        for(int i=questionSetAnswersList.size() - 1;i>=0;i--){
+        for (int i = questionSetAnswersList.size() - 1; i >= 0; i--) {
             QuestionSetAnswer questionSetAnswer = questionSetAnswersList.get(i);
             if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
-                 questionSetAnswersList.remove(i);
+                questionSetAnswersList.remove(i);
                 //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
             }
             if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
@@ -943,6 +993,30 @@ public class AnswerController extends AbstractController {
         if (!scope.getOrganization().equals(currentUser.getOrganization())) {
             throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
         }
+    }
+
+
+    private boolean testCloseable(String periodKey, Long scopeId) {
+        Scope scope = scopeService.findById(scopeId);
+
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        securedController.controlDataAccess(period, scope);
+
+        List<Form> forms = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode()).getForms();
+
+        for (Form form : forms) {
+            for (QuestionSet questionSet : form.getAllQuestionSets()) {
+                if (questionSet.getParent() == null) {
+                    List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
+
+                    if (questionSetAnswers.size() != 1 || questionSetAnswers.get(0).getAuditInfo().getDataValidator() == null) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

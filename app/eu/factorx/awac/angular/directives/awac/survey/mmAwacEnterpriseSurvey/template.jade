@@ -57,7 +57,25 @@ div
                 div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
+            div
+                button.button.verification(type='button',
+                    ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
+                    ng-click="isDisabled || $root.closeForms()",
+                    ng-bind-html='\'UNCLOSING_FORM\' | translate',
+                    ng-show="$root.closedForms")
+                button.button.verification(type='button',
+                    ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
+                    ng-click="isDisabled || $root.closeForms()",
+                    ng-bind-html='\'CLOSING_FORM\' | translate',
+                    ng-hide="$root.closedForms")
+                button.button.verification(
+                    type='button',
+                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
+                    mm-not-implemented='mm-not-implemented',
+                    ng-disabled="$root.closedForms !== true")
+            .big_separator
             .data_save
+                div
                 .last_save(ng-hide='lastSaveTime===null')
                     span(ng-bind-html='\'LAST_SAVE\' | translate')
                     br
@@ -68,8 +86,6 @@ div
         .nav_tabs(ng-show='displayMenu===true')
             .nav_entreprise
                 .site_menu
-                    .site
-                        button.button.verification(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
                     .menu
                         button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='$root.nav(\'/form/TAB2\')')
                             .tab-title(ng-bind-html='\'TAB2\' | translate')

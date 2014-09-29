@@ -10,7 +10,7 @@ angular
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
-        console.log result
+
         if not result.success
             messageFlash.displayError translationService.get 'UNABLE_LOAD_DATA'
             modalService.close(modalService.LOADING)

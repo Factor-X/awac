@@ -81,6 +81,8 @@ GET         /awac/answer/formProgress/:period/:scope               @eu.factorx.a
 GET         /awac/answer/unlockForm/:form/:period/:scope           @eu.factorx.awac.controllers.AnswerController.unlockForm(form: String, period: String, scope :Long)
 POST         /awac/answer/lockQuestionSet                          @eu.factorx.awac.controllers.AnswerController.lockQuestionSet()
 POST         /awac/answer/validateQuestionSet                      @eu.factorx.awac.controllers.AnswerController.validateQuestionSet()
+GET         /awac/answer/testClosing/:periodKey/:scopeId           @eu.factorx.awac.controllers.AnswerController.testClosing(periodKey: String, scopeId :Long)
+POST         /awac/answer/closeForm/                               @eu.factorx.awac.controllers.AnswerController.closeForm()
 
 
 #

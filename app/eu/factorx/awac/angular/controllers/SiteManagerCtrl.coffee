@@ -14,7 +14,6 @@ angular
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
-        console.log result
 
         if not result.success
             messageFlash.displayError translationService.get 'UNABLE_LOAD_DATA'
@@ -29,14 +28,8 @@ angular
             data.organization = $scope.organization
             data.period = $scope.$root.periods[0]
 
-            console.log "DATA"
-            console.log data
             downloadService.postJson 'awac/organization/events/load', data, (result) ->
                 $scope.events = result.data.organizationEventList
-                console.log "RESULT"
-                console.log result
-                console.log result.data.organizationEventList
-
 
             $scope.$watchCollection 'assignPeriod', ->
                 $scope.refreshPeriod()
@@ -87,7 +80,6 @@ angular
                 data.siteId = site.id
                 data.assign = !$scope.periodAssignTo(site)
 
-                console.log data
                 downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
                     $scope.isLoading[site.id] = false
                     if not result.success

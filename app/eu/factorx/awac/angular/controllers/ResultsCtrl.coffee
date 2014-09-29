@@ -46,7 +46,7 @@ angular
 
 
             downloadService.postJson '/awac/result/getReport', dto, (result) ->
-                console.log result
+
                 modalService.close modalService.LOADING
                 if result.success
                     $scope.o = result.data

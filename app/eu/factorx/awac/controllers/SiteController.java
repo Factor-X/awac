@@ -43,7 +43,7 @@ public class SiteController  extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result edit(){
 
 		SiteDTO dto = extractDTOFromRequest(SiteDTO.class);
@@ -82,7 +82,7 @@ public class SiteController  extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result create(){
 
 		SiteDTO dto = extractDTOFromRequest(SiteDTO.class);
@@ -117,7 +117,7 @@ public class SiteController  extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result assignPeriodToSite(){
 
 		AssignPeriodToSiteDTO dto = extractDTOFromRequest(AssignPeriodToSiteDTO.class);

@@ -86,7 +86,15 @@ angular
     #
     $scope.periodKey = null
 
-    $scope.$watchCollection '[$root.periodSelectedKey,$root.scopeSelectedId]', () ->
+    $scope.$watch '$root.scopeSelectedId', (o,n) ->
+        if o != n
+            $scope.computeScopeAndPeriod()
+
+    $scope.$watch '$root.periodSelectedKey', (o,n,s) ->
+        if o != n
+            $scope.computeScopeAndPeriod()
+
+    $scope.computeScopeAndPeriod = ->
         if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
             $routeParams.period = $scope.$root.periodSelectedKey
@@ -103,11 +111,12 @@ angular
                     for k,v of $routeParams
                         p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
-                    $location.path(p)
+                    $scope.$root.nav(p)
 
             $scope.$root.computeAvailablePeriod()
             $scope.loadPeriodForComparison()
             $scope.loadFormProgress()
+            $scope.$root.testCloseable()
 
 
 
@@ -260,13 +269,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.logout = () ->
         downloadService.postJson '/awac/logout', null, (result) ->
             if result.success
+                $rootScope.nav('/login')
                 $rootScope.currentPerson = null
-                $location.path('/login')
                 $rootScope.periodSelectedKey=null
                 $rootScope.scopeSelectedId=null
             else
                 messageFlash.displayError result.data.message
-                $location.path('/login')
+                $rootScope.nav('/login')
 
 
     $rootScope.testForm = (period,scope) ->
@@ -338,8 +347,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         $rootScope.computeAvailablePeriod()
 
     $rootScope.computeAvailablePeriod = (scopeId) ->
-
-        console.log "$rootScope.instanceName:"+$rootScope.instanceName
 
         if $rootScope.instanceName == 'enterprise'
             if !scopeId?
@@ -424,6 +431,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
         # test if the main current scope have a validNavigation function and if this function return a false
         if $rootScope.getMainScope?().validNavigation != undefined && confirmed == false
+
             # ask a confirmation to quite the view
             result = $rootScope.getMainScope?().validNavigation?()
 
@@ -436,9 +444,29 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             # if this is a form, unlock it
             if $rootScope.getMainScope?().formIdentifier?
                 downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
-                    console.log '??'
+
             $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
 
     $rootScope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
+
+    $rootScope.closeableForms = false
+    $rootScope.closedForms =false
+
+    $rootScope.testCloseable = ->
+        if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
+            downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
+                if result.success
+                    $rootScope.closeableForms = result.data.closeable
+                    $rootScope.closedForms =result.data.closed
+                else
+                    messageFlash.displayError result.data.message
+
+    $rootScope.closeForms = ->
+        if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
+            modalService.show(modalService.CONFIRM_CLOSING)
+
+
+
+
 
