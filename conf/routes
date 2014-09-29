@@ -96,6 +96,7 @@ POST    /awac/result/getReport                             @eu.factorx.awac.cont
 POST        /awac/file/upload/                                     @eu.factorx.awac.controllers.FilesController.upload()
 GET         /awac/file/download/:storedFileId                      @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
 
+
 #
 # User profile
 #

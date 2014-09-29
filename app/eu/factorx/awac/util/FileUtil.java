@@ -58,4 +58,15 @@ public class FileUtil {
         }
     }
 
+    public static void removeFile(String storedName){
+        if (S3Plugin.amazonS3 == null) {
+            Logger.error("Could not save because amazonS3 was null");
+            throw new RuntimeException("Could not save");
+        } else {
+            DeleteObjectRequest getObjectRequest = new DeleteObjectRequest(S3Plugin.s3Bucket, storedName);
+
+            S3Plugin.amazonS3.deleteObject(getObjectRequest);
+        }
+    }
+
 }

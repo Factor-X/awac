@@ -87,6 +87,8 @@ public class AnswerController extends AbstractController {
     private AwacCalculatorClosedService awacCalculatorClosedService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private FilesController filesController;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)

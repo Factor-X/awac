@@ -87,6 +87,7 @@ input.ng-invalid {
     max-width: 150px;
     margin-top: -15px;
     margin-left: 20px;
+    z-index:5;
 }
 
 .field_form .error_message:hover > div:last-child {

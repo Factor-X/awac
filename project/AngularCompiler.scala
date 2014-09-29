@@ -75,7 +75,7 @@ class AngularCompiler {
 
             if (tempFile.exists() && tempFile.lastModified >= f.lastModified) {
                 // nothing to do, tempfile is up-to-date
-                println("[UP-TO-DATE] " + f.path)
+                // println("[UP-TO-DATE] " + f.path)
             } else {
                 println("[BUILDING] " + f.path)
 

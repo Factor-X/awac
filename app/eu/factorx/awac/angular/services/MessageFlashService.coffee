@@ -10,7 +10,7 @@ angular
         options =
             message: translateTextFilter(message)
             type: type
-            hideAfter: 50000
+            hideAfter: 5
             showCloseButton: true
 
         Messenger().post angular.extend(options, angular.copy(opts))
