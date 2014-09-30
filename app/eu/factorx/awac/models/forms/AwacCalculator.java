@@ -28,6 +28,10 @@ public class AwacCalculator extends AuditedAbstractEntity {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Report> reports;
 
+    @OneToMany(mappedBy = "awacCalculator", cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH })
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Form> forms;
+
 	public AwacCalculator() {
 		super();
 	}
@@ -40,7 +44,15 @@ public class AwacCalculator extends AuditedAbstractEntity {
 		this.interfaceTypeCode = interfaceTypeCode;
 	}
 
-	public InterfaceTypeCode getInterfaceTypeCode() {
+    public List<Form> getForms() {
+        return forms;
+    }
+
+    public void setForms(List<Form> forms) {
+        this.forms = forms;
+    }
+
+    public InterfaceTypeCode getInterfaceTypeCode() {
 		return interfaceTypeCode;
 	}
 

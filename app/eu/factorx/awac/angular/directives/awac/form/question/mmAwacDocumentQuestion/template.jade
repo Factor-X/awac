@@ -1,14 +1,14 @@
 .oneelement.document-question-block.document-question
-    span(ng-hide="getDataToCompare()==true|| getIsAggregation()===true") Upload new documents
-    div(class="document-question-progress-bar",ng-show="inDownload")
+    div(ng-hide="getDataToCompare()==true|| getIsAggregation()===true",ng-bind-html="'QUESTION_FILE_UPLOAD' | translate")
+    div(class="document-question-progress-bar",ng-show="inDownload=== true && percent != 100")
         div(ng-style="style")
             spa
-    .document-question-progress-percentage(ng-show="inDownload") {{percent}} %
+    .document-question-progress-percentage(ng-show="inDownload=== true && percent != 100") {{percent}} %
+    div(ng-show="inDownload=== true && percent == 100",ng-bind-html="'QUESTION_FILE_TREATEMENT' | translate")
     input(
-        ng-hide="inDownload",
         name="{{ getQuestionCode() }}",
         type='file',
         ng-file-select='onFileSelect($files)',
-        ng-hide="getDataToCompare()==true|| getIsAggregation()===true")
-    div(ng-show="getFileNumber()>0") {{getFileNumber()}} document had already uploaded
-    button.button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()") consult this documents
+        ng-hide="getDataToCompare()==true|| getIsAggregation()===true || inDownload === true || getDisabled() === true")
+    div(ng-show="getFileNumber()>0") {{getFileNumber()}} {{'QUESTION_FILE_COUNT_ALREADY_UPLOAD' | translate}}
+    button.button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()",ng-bind-html="'QUESTION_FILE_CONSULT' | translate")

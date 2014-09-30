@@ -71,6 +71,7 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
@@ -99,7 +100,7 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
 			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
 			<property name="hibernate.cache.use_query_cache" value="true"/>
@@ -189,6 +190,7 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>

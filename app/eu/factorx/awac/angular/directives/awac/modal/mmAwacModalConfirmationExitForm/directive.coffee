@@ -12,11 +12,7 @@ angular
             modalService.close modalService.CONFIRMATION_EXIT_FORM
 
         $scope.continue = ->
-
-            arg={}
-            arg.loc = $scope.ngParams.loc
-            arg.confirmed = true
-            $scope.$root.$broadcast('NAV', arg)
+            $scope.$root.nav($scope.ngParams.loc, true)
             $scope.close()
 
         $scope.save= ->

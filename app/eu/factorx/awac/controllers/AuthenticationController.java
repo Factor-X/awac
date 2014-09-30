@@ -74,7 +74,7 @@ public class AuthenticationController extends AbstractController {
 
 			Account account = securedController.getCurrentUser();
 
-			if (account.getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
+			if (account.getOrganization().getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
 				return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
 			}
 
@@ -111,10 +111,10 @@ public class AuthenticationController extends AbstractController {
 		//control interface
 		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
 
-		if (interfaceTypeCode == null || !interfaceTypeCode.equals(account.getInterfaceCode())) {
+		if (interfaceTypeCode == null || !interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
 			//use the same message for both login and password error
 			//TODO translate
-			return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getInterfaceCode().getKey() + ". Please switch calculator and retry."));
+			return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
 		}
 
 		//control acitf

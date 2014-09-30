@@ -19,7 +19,7 @@ angular
 
         scope.lock = ->
 
-            if (not scope.isLocked() or scope.isLockedByMyself()  or  scope.$root.currentPerson.isAdmin) and not scope.isValidate()
+            if (not scope.isLocked() or scope.isLockedByMyself()  or  scope.$root.currentPerson.isAdmin) and not scope.isValidate()  and scope.$root.closedForms == false
 
                 data = {}
                 data.questionSetKey = scope.getTitleCode()
@@ -49,7 +49,7 @@ angular
 
         scope.getLockClass = ->
             if scope.isLocked()
-                if (scope.isLockedByMyself()  || scope.$root.currentPerson.isAdmin) && scope.isValidate() == false
+                if (scope.isLockedByMyself()  || scope.$root.currentPerson.isAdmin) and  scope.isValidate() == false  and scope.$root.closedForms == false
                     return 'lock_close_by_myself'
                 return 'lock_close'
             else if scope.isValidate()
@@ -59,7 +59,7 @@ angular
 
         scope.valide = ->
 
-            if not scope.isValidate() or scope.isValidateByMyself() or  scope.$root.currentPerson.isAdmin
+            if (not scope.isValidate() or scope.isValidateByMyself() or  scope.$root.currentPerson.isAdmin)  and scope.$root.closedForms == false
 
                 data = {}
                 data.questionSetKey = scope.getTitleCode()
@@ -70,6 +70,7 @@ angular
                 downloadService.postJson '/awac/answer/validateQuestionSet',data, (result) ->
                     if result.success
                         scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
+                        scope.$root.testCloseable()
                     else
                         messageFlash.displayError(result.data.message)
 
@@ -91,7 +92,7 @@ angular
 
         scope.getValidateClass = ->
             if scope.isValidate()
-                if scope.isValidateByMyself() || scope.$root.currentPerson.isAdmin
+                if (scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin) and scope.$root.closedForms == false
                     return 'validate_by_myself'
                 return 'validated'
             else

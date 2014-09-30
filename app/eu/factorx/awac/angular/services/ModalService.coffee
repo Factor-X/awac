@@ -14,6 +14,7 @@ angular
     @EDIT_SITE = 'edit-site'
     @ADD_USER_SITE = 'add-user-site'
     @EDIT_EVENT = 'edit-event'
+    @CONFIRM_CLOSING='confirm-closing'
 
     @show = (modalName,params) ->
 

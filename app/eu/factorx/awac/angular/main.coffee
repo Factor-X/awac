@@ -51,7 +51,6 @@ formResolve =
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
                     if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
-                        console.log "GO VERS NOSCOPE 1 !!!"
                         $location.path "/noScope"
 
                 # if no connected, send to /login route
@@ -59,7 +58,6 @@ formResolve =
                     $location.path '/login'
         else
             if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
-                console.log "GO VERS NOSCOPE 2 !!!"
                 $location.path '/noScope'
 
 resultResolve =
@@ -74,7 +72,6 @@ resultResolve =
 
                     # control data access
                     if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
-                        console.log "GO VERS NOSCOPE 1 !!!"
                         $location.path '/noScope'
                 else
                     $location.path '/login'

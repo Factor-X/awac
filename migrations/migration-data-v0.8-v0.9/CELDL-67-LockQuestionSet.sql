@@ -21,3 +21,21 @@ alter table questionsetanswer add  CONSTRAINT fk_q1o2l7t9cegqlj6eh3gr8quqp FOREI
       REFERENCES account (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
+
+
+-- detach question_set from parent
+select * from question_set where code = 'A93' or code = 'A113' or code = 'A163' or code  = 'A180' or code  = 'A130' or code  = 'A175';
+
+update question_set set parent_id = null where code = 'A52' or code = 'A93' or code = 'A113' or code = 'A163' or code = 'A180' or code  = 'A130' or code  = 'A175';
+
+-- link this questionset to the form
+insert into mm_form_questionset (form_id,questionset_id) values (3,16),(3,25),(3,28),(4,33),(4,40),(5,46),(5,45);
+
+-- and same for questionsetanswer
+update questionsetanswer set parent_id = null from question_set where questionsetanswer.questionset_id = question_set.id and
+(question_set.code = 'A52' or question_set.code = 'A93' or question_set.code = 'A113' or question_set.code = 'A163' or question_set.code = 'A180'  or question_set.code = 'A130' or question_set.code = 'A175');
+
+
+
+
+

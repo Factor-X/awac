@@ -2,7 +2,7 @@ span.twoelement
     span(style="text-align:center")
         span(style="vertical-align:middle;margin-right : 15px;",ng-bind-html="'YES' | translate")
         input(  type="radio",
-                name="{{getQuestionCode()}}",
+                name="{{radioName}}",
                 ng-model="getAnswer().value",
                 value="1",
                 style="width :20px !important;margin:0;vertical-align:middle;",
@@ -10,7 +10,7 @@ span.twoelement
     span(style="text-align:center")
         span(style="vertical-align:middle;margin-right : 15px;",ng-bind-html="'NO' | translate")
         input(  type="radio",
-                name="{{getQuestionCode()}}",
+                name="{{radioName}}",
                 ng-model="getAnswer().value",
                 value="0",
                 style="width :20px !important;margin:0;vertical-align:middle;",

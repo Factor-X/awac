@@ -16,6 +16,7 @@ import eu.factorx.awac.models.account.SystemAdministrator;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.Form;
@@ -86,48 +87,52 @@ public class SecuredController extends Security.Authenticator {
         return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
     }
 
-    public void controlDataAccess(Form form, Period period, Site site) {
+    public void controlDataAccess(Form form, Period period, Scope scope) {
 
         if (form == null) {
             throw new RuntimeException("You doesn't have the required authorization for the form " + form.getIdentifier());
         }
 
-        controlDataAccess(period, site);
+        controlDataAccess(period, scope);
     }
 
-    public void controlDataAccess(Period period, Site site) {
+    public void controlDataAccess(Period period, Scope scope) {
 
-        if (period == null || site == null) {
-            throw new RuntimeException("You doesn't have the required authorization for the site " + site.getName() + "/ period : " + period.getLabel());
+        if (period == null || scope == null) {
+            throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName() + "/ period : " + period.getLabel());
         }
 
         //test scope
-        boolean founded = false;
 
-        if (!site.getOrganization().equals(getCurrentUser().getOrganization())) {
-            throw new RuntimeException("This is not your site");
+        if (!scope.getOrganization().equals(getCurrentUser().getOrganization())) {
+            throw new RuntimeException("This is not your scope");
         }
 
-        for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(this.getCurrentUser())) {
-            if (accountSiteAssociation.getSite().getId().equals(site.getId())) {
-                founded = true;
-                break;
+        //for organization, test association between user and site, and site and period
+        if(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+            boolean founded = false;
+            for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(this.getCurrentUser())) {
+                if (accountSiteAssociation.getSite().getId().equals(scope.getId())) {
+                    founded = true;
+                    break;
+                }
+            }
+            if (!founded) {
+                throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName());
+            }
+
+            //test period
+            boolean foundedPeriod = false;
+            for (Period periodToFind : ((Site)scope).getListPeriodAvailable()) {
+                if (periodToFind.equals(period)) {
+                    foundedPeriod = true;
+                }
+            }
+            if (!foundedPeriod) {
+                throw new RuntimeException("You doesn't have the required authorization for the period : " + period.getLabel());
             }
         }
-        if (!founded) {
-            throw new RuntimeException("You doesn't have the required authorization for the site " + site.getName());
-        }
 
-        //test period
-        boolean foundedPeriod = false;
-        for (Period periodToFind : site.getListPeriodAvailable()) {
-            if (periodToFind.equals(period)) {
-                foundedPeriod = true;
-            }
-        }
-        if (!foundedPeriod) {
-            throw new RuntimeException("You doesn't have the required authorization for the period : " + period.getLabel());
-        }
     }
 
     public boolean isUnlock(QuestionSet questionSet, Scope scope, Period period) {

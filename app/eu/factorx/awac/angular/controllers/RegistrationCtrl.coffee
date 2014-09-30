@@ -1,98 +1,109 @@
 angular
 .module('app.controllers')
-.controller "RegistrationCtrl", ($scope,downloadService, $location, messageFlash, $compile,$timeout,modalService,translationService,$routeParams) ->
+.controller "RegistrationCtrl", ($scope, downloadService, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) ->
 
 
-  $scope.loading = false
+    #logout the lasted user
+    downloadService.postJson '/awac/logout', null, (result) ->
 
-  $scope.tabActive = []
+    $scope.loading = false
 
-  $scope.enterEvent = ->
+    $scope.tabActive = []
 
-    if $scope.tabActive[0] == true
-      $scope.send()
+    $scope.enterEvent = ->
+        if $scope.tabActive[0] == true
+            $scope.send()
 
-  $scope.loginInfo =
-    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
-    fieldType: "text"
-    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER"
-    validationRegex: "^\\S{5,20}$"
-    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
-    field: ""
-    isValid: false
-    focus: ->
-      return $scope.tabActive[0]
+    $scope.fields = {
+        loginInfo:
+            fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
+            fieldType: "text"
+            placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER"
+            validationRegex: "^\\S{5,20}$"
+            validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
+            field: ""
+            isValid: false
+            focus: ->
+                return true
 
-  $scope.passwordInfo =
-    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
-    fieldType: "password"
-    validationRegex: "^\\S{5,20}$"
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
-    field: ""
-    isValid: false
+        passwordInfo:
+            fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
+            fieldType: "password"
+            validationRegex: "^\\S{5,20}$"
+            validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
+            field: ""
+            isValid: false
 
-  $scope.lastNameInfo =
-    fieldTitle: "USER_LASTNAME"
-    validationRegex: "^.{1,255}$"
-    validationMessage: "USER_LASTNAME_WRONG_LENGTH"
-    #field: $scope.$root.currentPerson.lastName
-    hideIsValidIcon: true
-    isValid: true
-    focus: ->
-      return true
+        lastNameInfo:
+            fieldTitle: "USER_LASTNAME"
+            validationRegex: "^.{1,255}$"
+            validationMessage: "USER_LASTNAME_WRONG_LENGTH"
+            isValid: true
 
-  $scope.firstNameInfo =
-    fieldTitle: "USER_FIRSTNAME"
-    fieldType: "text"
-    validationRegex: "^.{1,255}$"
-    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
-    #field: $scope.$root.currentPerson.firstName
-    hideIsValidIcon: true
-    isValid: true
+        firstNameInfo:
+            fieldTitle: "USER_FIRSTNAME"
+            fieldType: "text"
+            validationRegex: "^.{1,255}$"
+            validationMessage: "USER_FIRSTNAME_WRONG_LENGTH"
+            isValid: true
 
-  $scope.emailInfo =
-    fieldTitle: "USER_EMAIL"
-    #disabled: true
-    #field: $scope.$root.currentPerson.email
+        emailInfo:
+            fieldTitle: "USER_EMAIL"
+            validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+            validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
+    }
 
+    $scope.connectionFieldValid = () ->
+        for key in Object.keys($scope.fields)
+            if key != '$$hashKey'
+                field = $scope.fields[key]
+                if not field.isValid || field.isValid == false
+                    return false
+        return true
 
-  $scope.connectionFieldValid = () ->
-    if $scope.loginInfo.isValid && $scope.passwordInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid
-      return true
-    return false
+    #send the request to the server
+    $scope.send = () ->
 
-  #send the request to the server
-  $scope.send = () ->
+        #active loading mode
+        $scope.isLoading = true
 
-    #active loading mode
-    $scope.isLoading = true
+        personDTO =
+            identifier: $scope.fields.loginInfo.field
+            lastName: $scope.fields.lastNameInfo.field
+            firstName: $scope.fields.firstNameInfo.field
+            email: $scope.fields.emailInfo.field
 
-    #send request
-    downloadService.postJson '/awac/register', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, lastName: $scope.lastNameInfo.field, firstName: $scope.firstNameInfo.field, interfaceName: $scope.$root.instanceName, email: $scope.emailInfo.field, key:  $routeParams.key }, (result) ->
-      if result.success
+        data =
+            person: personDTO
+            password: $scope.fields.passwordInfo.field
+            key: $routeParams.key
+
+        #send request
+        downloadService.postJson '/awac/register', data, (result) ->
+            if result.success
 #        $scope.$root.loginSuccess(result.data)
-        messageFlash.displaySuccess translationService.get 'REGISTRATION_SUCCESS'
-        $scope.isLoading = false
-        $location.path('/login')
-      else
-        messageFlash.displaySuccess translationService.get 'REGISTRATION_FAILED'
-        $scope.isLoading = false
-         #display the error message
-        messageFlash.displayError result.data.message
-    #disactive loading mode
+                messageFlash.displaySuccess translationService.get 'REGISTRATION_SUCCESS'
+                $scope.isLoading = false
+                $scope.$root.nav('/login')
+            else
+                messageFlash.displaySuccess translationService.get 'REGISTRATION_FAILED'
+                $scope.isLoading = false
+                #display the error message
+                messageFlash.displayError result.data.message
+        #disactive loading mode
 
-    return false
+        return false
 
-  $scope.injectRegistrationDirective = ->
-    if $scope.$root?
-      if $scope.$root.instanceName == 'enterprise'
-        directiveName = "mm-awac-registration-enterprise"
-      else if $scope.$root.instanceName == 'municipality'
-        directiveName = "mm-awac-registration-municipality"
+    $scope.injectRegistrationDirective = ->
+        if $scope.$root?
+            if $scope.$root.instanceName == 'enterprise'
+                directiveName = "mm-awac-registration-enterprise"
+            else if $scope.$root.instanceName == 'municipality'
+                directiveName = "mm-awac-registration-municipality"
 
-      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope)
-      $('.inject-registration-form').append(directive)
+            directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope)
+            $('.inject-registration-form').append(directive)
 
-  $timeout(->
-    $scope.injectRegistrationDirective()
-  , 0)
+    $timeout(->
+        $scope.injectRegistrationDirective()
+    , 0)

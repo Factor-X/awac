@@ -310,7 +310,7 @@ select {
 }
 
 .nav_entreprise {
-    height: 128px;
+    height: 106px;
     width: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box; /* Firefox, other Gecko */
@@ -348,6 +348,13 @@ select {
     color: white !important;
 }
 
+
+.last_menu > * {
+    min-width: 49%;
+    width: 49%;
+    position: relative;
+}
+
 .menu > *:hover,
 .last_menu > *:hover {
     background-color: #0988b5;
@@ -355,6 +362,7 @@ select {
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
+
 
 .menu > * {
     position: relative;
@@ -414,13 +422,6 @@ select {
     background-color: #9d9b91;
     border-spacing: 5px;
     display: table !important;
-}
-
-.last_menu > * {
-    min-width: 49%;
-    width: 49%;
-    height: 118px;
-    position: relative;
 }
 
 .menu_jauge {
@@ -607,7 +608,6 @@ button.button.site_manage {
 }
 
 button.button.verification {
-    float: right;
     background-color: #35b34b;
     color: white;
 }
@@ -649,7 +649,7 @@ button.button.add {
 .content-with-menu {
     position: absolute;
     bottom: 0;
-    top: 238px;
+    top: 216px;
     overflow: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
@@ -1617,6 +1617,10 @@ h1 {
 
 ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
+}
+
+.messenger{
+    z-index : 12000 !important;
 }
 
 ul.messenger-theme-flat .messenger-message.alert-success,

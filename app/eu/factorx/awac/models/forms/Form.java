@@ -28,6 +28,9 @@ public class Form extends AuditedAbstractEntity {
 			inverseJoinColumns = @JoinColumn(name = "questionset_id", referencedColumnName = "id"))
 	private List<QuestionSet> questionSets = new ArrayList<>();
 
+    @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
+    private AwacCalculator awacCalculator;
+
 	public Form() {
 	}
 
@@ -36,7 +39,15 @@ public class Form extends AuditedAbstractEntity {
 		this.identifier = identifier;
 	}
 
-	public String getIdentifier() {
+    public AwacCalculator getAwacCalculator() {
+        return awacCalculator;
+    }
+
+    public void setAwacCalculator(AwacCalculator awacCalculator) {
+        this.awacCalculator = awacCalculator;
+    }
+
+    public String getIdentifier() {
 		return identifier;
 	}
 
@@ -72,4 +83,14 @@ public class Form extends AuditedAbstractEntity {
 		}
 		return result;
 	}
+
+    @Override
+    public String toString() {
+        return "Form{" +
+                "identifier='" + identifier + '\'' +
+                ", progress=" + progress +
+                ", questionSets=" + questionSets +
+                ", awacCalculator=" + awacCalculator +
+                '}';
+    }
 }

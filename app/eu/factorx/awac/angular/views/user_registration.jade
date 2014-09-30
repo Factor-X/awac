@@ -10,11 +10,11 @@
                     span(ng-bind-html="'USER_REGISTRATION' | translate")
                 div
                     div(class="field_form")
-                        mm-awac-modal-field-text(ng-info="loginInfo")
-                        mm-awac-modal-field-text(ng-info="passwordInfo")
-                        mm-awac-modal-field-text(ng-info="lastNameInfo")
-                        mm-awac-modal-field-text(ng-info="firstNameInfo")
-                        mm-awac-modal-field-text(ng-info="emailInfo")
+                        mm-awac-modal-field-text(ng-info="fields.loginInfo")
+                        mm-awac-modal-field-text(ng-info="fields.passwordInfo")
+                        mm-awac-modal-field-text(ng-info="fields.lastNameInfo")
+                        mm-awac-modal-field-text(ng-info="fields.firstNameInfo")
+                        mm-awac-modal-field-text(ng-info="fields.emailInfo")
 
 
                     div(ng-hide="isLoading === true")
