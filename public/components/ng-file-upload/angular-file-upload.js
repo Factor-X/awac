@@ -1,7 +1,7 @@
 /**!
  * AngularJS file upload/drop directive with http post and progress
  * @author  Danial  <danial.farid@gmail.com>
- * @version 1.6.6
+ * @version 1.6.8
  */
 (function() {
 
@@ -148,7 +148,7 @@ angularFileUpload.directive('ngFileSelect', [ '$parse', '$timeout', function($pa
 			for (var i = 0; i < elem[0].attributes.length; i++) {
 				fileElem.attr(elem[0].attributes[i].name, elem[0].attributes[i].value);
 			}
-			if (elem.attr("data-multiple")) fileElem.attr("multiple", "true");
+			if (attr["multiple"]) fileElem.attr("multiple", "true");
 			fileElem.css("top", 0).css("bottom", 0).css("left", 0).css("right", 0).css("width", "100%").
 					css("opacity", 0).css("position", "absolute").css('filter', 'alpha(opacity=0)');
 			elem.append(fileElem);
@@ -216,8 +216,7 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 				$timeout.cancel(leaveTimeout);
 				if (!elem[0].__drag_over_class_) {
 					if (attr['ngFileDragOverClass'] && attr['ngFileDragOverClass'].search(/\) *$/) > -1) {
-						dragOverClassFn = $parse(attr['ngFileDragOverClass']);
-						var dragOverClass = dragOverClassFn(scope, {
+						var dragOverClass = $parse(attr['ngFileDragOverClass'])(scope, {
 							$event : evt
 						});					
 						elem[0].__drag_over_class_ = dragOverClass; 

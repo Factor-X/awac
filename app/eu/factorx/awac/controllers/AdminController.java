@@ -49,8 +49,6 @@ public class AdminController extends AbstractController {
 	private AwacMunicipalityInitialData awacMunicipalityInitialData;
 	@Autowired
 	private BADImporter                 badImporter;
-	@Autowired
-	private AccountSiteAssociationImporter accountSiteAssociationImporter;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -127,17 +125,6 @@ public class AdminController extends AbstractController {
 
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
-    }
-
-    @Transactional(readOnly = false)
-    public Result runAccountSiteAssociationImporter() {
-        if (!Play.application().isDev()) {
-            return unauthorized();
-        }
-        // import associations account-site & site-periods
-        accountSiteAssociationImporter.run();
-
-        return (ok());
     }
 
 }

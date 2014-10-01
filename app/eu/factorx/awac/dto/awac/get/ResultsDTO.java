@@ -9,16 +9,17 @@ import java.util.Map;
 
 public class ResultsDTO extends DTO {
 
-	private Map<String, ReportDTO> reportDTOs;
-
-	private Map<String, String>     svgDonuts;
-	private Map<String, String>     svgWebs;
-	private Map<String, String>     svgHistograms;
-	private List<ReportLogEntryDTO> logEntries;
+	private final Map<String, ReportDTO>  reportDTOs;
+	private final Map<String, String>     leftSvgDonuts;
+	private final Map<String, String>     rightSvgDonuts;
+	private final Map<String, String>     svgWebs;
+	private final Map<String, String>     svgHistograms;
+	private final List<ReportLogEntryDTO> logEntries;
 
 	public ResultsDTO() {
 		reportDTOs = new HashMap<>();
-		svgDonuts = new HashMap<>();
+		leftSvgDonuts = new HashMap<>();
+		rightSvgDonuts = new HashMap<>();
 		svgWebs = new HashMap<>();
 		svgHistograms = new HashMap<>();
 		logEntries = new ArrayList<ReportLogEntryDTO>();
@@ -28,8 +29,12 @@ public class ResultsDTO extends DTO {
 		return reportDTOs;
 	}
 
-	public Map<String, String> getSvgDonuts() {
-		return svgDonuts;
+	public Map<String, String> getLeftSvgDonuts() {
+		return leftSvgDonuts;
+	}
+
+	public Map<String, String> getRightSvgDonuts() {
+		return rightSvgDonuts;
 	}
 
 	public Map<String, String> getSvgWebs() {
@@ -43,4 +48,5 @@ public class ResultsDTO extends DTO {
 	public List<ReportLogEntryDTO> getLogEntries() {
 		return logEntries;
 	}
+
 }

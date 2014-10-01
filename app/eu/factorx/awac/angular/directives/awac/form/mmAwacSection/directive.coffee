@@ -19,13 +19,13 @@ angular
 
         scope.lock = ->
 
-            if (not scope.isLocked() or scope.isLockedByMyself()) and not scope.isValidate()
+            if (not scope.isLocked() or scope.isLockedByMyself()  or  scope.$root.currentPerson.isAdmin) and not scope.isValidate()  and scope.$root.closedForms == false
 
                 data = {}
                 data.questionSetKey = scope.getTitleCode()
                 data.periodCode = scope.$root.periodSelectedKey
                 data.scopeId = scope.$root.scopeSelectedId
-                data.lock = if scope.isLockedByMyself() then false else true
+                data.lock = if scope.isLocked() then false else true
 
                 downloadService.postJson '/awac/answer/lockQuestionSet',data, (result) ->
                     if result.success
@@ -44,9 +44,12 @@ angular
                 return true
             return false
 
+        scope.getLocker = ->
+            return scope.$parent.getQuestionSetLocker(scope.getTitleCode())
+
         scope.getLockClass = ->
             if scope.isLocked()
-                if scope.isLockedByMyself() && scope.isValidate() == false
+                if (scope.isLockedByMyself()  || scope.$root.currentPerson.isAdmin) and  scope.isValidate() == false  and scope.$root.closedForms == false
                     return 'lock_close_by_myself'
                 return 'lock_close'
             else if scope.isValidate()
@@ -56,17 +59,18 @@ angular
 
         scope.valide = ->
 
-            if not scope.isValidate() or scope.isValidateByMyself()
+            if (not scope.isValidate() or scope.isValidateByMyself() or  scope.$root.currentPerson.isAdmin)  and scope.$root.closedForms == false
 
                 data = {}
                 data.questionSetKey = scope.getTitleCode()
                 data.periodCode = scope.$root.periodSelectedKey
                 data.scopeId = scope.$root.scopeSelectedId
-                data.lock = if scope.isValidateByMyself() then false else true
+                data.lock = if scope.isValidate() then false else true
 
                 downloadService.postJson '/awac/answer/validateQuestionSet',data, (result) ->
                     if result.success
                         scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
+                        scope.$root.testCloseable()
                     else
                         messageFlash.displayError(result.data.message)
 
@@ -82,10 +86,13 @@ angular
                 return true
             return false
 
+        scope.getValidator = ->
+            return scope.$parent.getQuestionSetValidator(scope.getTitleCode())
+
 
         scope.getValidateClass = ->
             if scope.isValidate()
-                if scope.isValidateByMyself()
+                if (scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin) and scope.$root.closedForms == false
                     return 'validate_by_myself'
                 return 'validated'
             else

@@ -8,7 +8,7 @@ import eu.factorx.awac.dto.validation.annotations.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SiteDTO extends DTO {
+public class SiteDTO extends ScopeDTO {
 
 	private Long id;
 
@@ -137,6 +137,7 @@ public class SiteDTO extends DTO {
 	public void setPercentOwned(Double percentOwned) {
 		this.percentOwned = percentOwned;
 	}
+
 
 
     public List<PeriodDTO> getListPeriodAvailable() {

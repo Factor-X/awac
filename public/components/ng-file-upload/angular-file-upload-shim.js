@@ -1,7 +1,7 @@
 /**!
  * AngularJS file upload shim for HTML5 FormData
  * @author  Danial  <danial.farid@gmail.com>
- * @version 1.6.6
+ * @version 1.6.8
  */
 (function() {
 
@@ -36,7 +36,7 @@ if (window.XMLHttpRequest) {
 			}
 		});
 	} else {
-		function initializeUploadListener(xhr) {
+		var initializeUploadListener = function(xhr) {
 			if (!xhr.__listeners) {
 				if (!xhr.upload) xhr.upload = {};
 				xhr.__listeners = [];
@@ -64,19 +64,19 @@ if (window.XMLHttpRequest) {
 
 		patchXHR("getResponseHeader", function(orig) {
 			return function(h) {
-				return this.__fileApiXHR ? this.__fileApiXHR.getResponseHeader(h) : orig.apply(this, [h]);
+				return this.__fileApiXHR && this.__fileApiXHR.getResponseHeader ? this.__fileApiXHR.getResponseHeader(h) : (orig == null ? null : orig.apply(this, [h]));
 			};
 		});
 
 		patchXHR("getAllResponseHeaders", function(orig) {
 			return function() {
-				return this.__fileApiXHR ? this.__fileApiXHR.abort() : (orig == null ? null : orig.apply(this));
+				return this.__fileApiXHR && this.__fileApiXHR.getAllResponseHeaders ? this.__fileApiXHR.getAllResponseHeaders() : (orig == null ? null : orig.apply(this));
 			}
 		});
 
 		patchXHR("abort", function(orig) {
 			return function() {
-				return this.__fileApiXHR ? this.__fileApiXHR.abort() : (orig == null ? null : orig.apply(this));
+				return this.__fileApiXHR && this.__fileApiXHR.abort ? this.__fileApiXHR.abort() : (orig == null ? null : orig.apply(this));
 			}
 		});
 
@@ -104,19 +104,23 @@ if (window.XMLHttpRequest) {
 					var formData = arguments[0];
 					var config = {
 						url: xhr.__url,
+						jsonp: false, //removes the callback form param
+						cache: true, //removes the ?fileapiXXX in the url
 						complete: function(err, fileApiXHR) {
+							xhr.__completed = true;
 							if (!err && xhr.__listeners['load']) 
 								xhr.__listeners['load']({type: 'load', loaded: xhr.__loaded, total: xhr.__total, target: xhr, lengthComputable: true});
 							if (!err && xhr.__listeners['loadend']) 
 								xhr.__listeners['loadend']({type: 'loadend', loaded: xhr.__loaded, total: xhr.__total, target: xhr, lengthComputable: true});
 							if (err === 'abort' && xhr.__listeners['abort']) 
 								xhr.__listeners['abort']({type: 'abort', loaded: xhr.__loaded, total: xhr.__total, target: xhr, lengthComputable: true});
-							if (fileApiXHR.status !== undefined) Object.defineProperty(xhr, 'status', {get: function() {return fileApiXHR.status}});
+							if (fileApiXHR.status !== undefined) Object.defineProperty(xhr, 'status', {get: function() {return (fileApiXHR.status == 0 && err && err !== 'abort') ? 500 : fileApiXHR.status}});
 							if (fileApiXHR.statusText !== undefined) Object.defineProperty(xhr, 'statusText', {get: function() {return fileApiXHR.statusText}});
 							Object.defineProperty(xhr, 'readyState', {get: function() {return 4}});
 							if (fileApiXHR.response !== undefined) Object.defineProperty(xhr, 'response', {get: function() {return fileApiXHR.response}});
-							Object.defineProperty(xhr, 'responseText', {get: function() {return fileApiXHR.responseText}});
-							Object.defineProperty(xhr, 'response', {get: function() {return fileApiXHR.responseText}});
+							var resp = fileApiXHR.responseText || (err && fileApiXHR.status == 0 && err !== 'abort' && err);
+							Object.defineProperty(xhr, 'responseText', {get: function() {return resp}});
+							Object.defineProperty(xhr, 'response', {get: function() {return resp}});
 							xhr.__fileApiXHR = fileApiXHR;
 							if (xhr.onreadystatechange) xhr.onreadystatechange();
 						},
@@ -125,6 +129,16 @@ if (window.XMLHttpRequest) {
 							xhr.__listeners['progress'] && xhr.__listeners['progress'](e);
 							xhr.__total = e.total;
 							xhr.__loaded = e.loaded;
+							if (e.total === e.loaded) {
+								// fix flash issue that doesn't call complete if there is no response text from the server  
+								var _this = this
+								setTimeout(function() {
+									if (!xhr.__completed) {
+										xhr.getAllResponseHeaders = function(){};
+										_this.complete(null, {status: 204, statusText: 'No Content'});
+									}
+								}, 500);
+							}
 						},
 						headers: xhr.__requestHeaders
 					}
@@ -160,17 +174,19 @@ if (!window.FormData || (window.FileAPI && FileAPI.forceLoad)) {
 			throw 'Adode Flash Player need to be installed. To check ahead use "FileAPI.hasFlash"';
 		}
 		var el = angular.element(elem);
-		if (!el.hasClass('js-fileapi-wrapper') && (elem.getAttribute('ng-file-select') != null || elem.getAttribute('data-ng-file-select') != null)) {
-			if (FileAPI.wrapInsideDiv) {
-				var wrap = document.createElement('div');
-				wrap.innerHTML = '<div class="js-fileapi-wrapper" style="position:relative; overflow:hidden"></div>';
-				wrap = wrap.firstChild;
-				var parent = elem.parentNode;
-				parent.insertBefore(wrap, elem);
-				parent.removeChild(elem);
-				wrap.appendChild(elem);
-			} else {
-				el.addClass('js-fileapi-wrapper');
+		if (!el.attr('disabled')) {
+			if (!el.hasClass('js-fileapi-wrapper') && (elem.getAttribute('ng-file-select') != null || elem.getAttribute('data-ng-file-select') != null)) {
+				if (FileAPI.wrapInsideDiv) {
+					var wrap = document.createElement('div');
+					wrap.innerHTML = '<div class="js-fileapi-wrapper" style="position:relative; overflow:hidden"></div>';
+					wrap = wrap.firstChild;
+					var parent = elem.parentNode;
+					parent.insertBefore(wrap, elem);
+					parent.removeChild(elem);
+					wrap.appendChild(elem);
+				} else {
+					el.addClass('js-fileapi-wrapper');
+				}
 			}
 		}
 	};
@@ -279,6 +295,13 @@ if (!window.FormData || (window.FileAPI && FileAPI.forceLoad)) {
 			FileAPI.hasFlash = hasFlash();
 		}
 	})();
+	FileAPI.disableFileInput = function(elem, disable) {
+		if (disable) {
+			elem.removeClass('js-fileapi-wrapper')
+		} else {
+			elem.addClass('js-fileapi-wrapper');
+		}
+	}
 }
 
 
@@ -303,7 +326,7 @@ if (!window.FileReader) {
 		};
 		this.onabort = this.onerror = this.onload = this.onloadstart = this.onloadend = this.onprogress = null;
 
-		function constructEvent(type, evt) {
+		var constructEvent = function(type, evt) {
 			var e = {type: type, target: _this, loaded: evt.loaded, total: evt.total, error: evt.error};
 			if (evt.result != null) e.target.result = evt.result;
 			return e;

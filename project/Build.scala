@@ -1,7 +1,6 @@
 import play.Project._
 import sbt.Keys._
-import sbt._
-import sbt.ExclusionRule
+import sbt.{ExclusionRule, _}
 
 
 object ApplicationBuild extends Build {
@@ -54,40 +53,38 @@ object ApplicationBuild extends Build {
             ExclusionRule(organization = "com.sun.jdmk"),
             ExclusionRule(organization = "com.sun.jmx"),
             ExclusionRule(organization = "javax.jms")),
-        "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" excludeAll (
-          ExclusionRule(organization = "org.apache.xalan"),
-          ExclusionRule(organization = "org.apache.xerces"),
-          ExclusionRule(organization = "org.xhtmlrenderer")
-          ),
+        "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" excludeAll(
+            ExclusionRule(organization = "org.apache.xalan"),
+            ExclusionRule(organization = "org.apache.xerces"),
+            ExclusionRule(organization = "org.xhtmlrenderer")
+            ),
         "org.jfree" % "jfreechart" % "1.0.19",
-        "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll (
-          ExclusionRule(organization = "org.hibernate")
-          ),
+        "org.jadira.usertype" % "usertype.core" % "3.2.0.GA" excludeAll ExclusionRule(organization = "org.hibernate"),
         "xalan" % "xalan" % "2.7.1",
         "xalan" % "xalan" % "2.7.1" % "test",
         "org.apache.xmlgraphics" % "batik-rasterizer" % "1.7" excludeAll(
-          ExclusionRule(organization = "org.apache.xalan"),
-          ExclusionRule(organization = "org.apache.xerces"),
-          ExclusionRule(organization = "org.xhtmlrenderer")
-          ),
+            ExclusionRule(organization = "org.apache.xalan"),
+            ExclusionRule(organization = "org.apache.xerces"),
+            ExclusionRule(organization = "org.xhtmlrenderer")
+            ),
         "org.apache.xmlgraphics" % "batik-codec" % "1.7"
     )
 
 
-  lazy val angularCompileTask = TaskKey[Unit]("angular-compile", "Compile angular app")
+    lazy val angularCompileTask = TaskKey[Unit]("angular-compile", "Compile angular app")
     val angularCompileSettings = angularCompileTask := {
         new AngularCompileTask().execute()
     }
 
     val main = play.Project(appName, appVersion, appDependencies)
-        .settings (
-            resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
-            resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
-        )
+        .settings(
+        resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
+        resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+    )
         .settings(
             angularCompileSettings, resources in Compile <<= (resources in Compile).dependsOn(angularCompileTask)
         )
-   // Add your own project settings here
+    // Add your own project settings here
 
     javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
 

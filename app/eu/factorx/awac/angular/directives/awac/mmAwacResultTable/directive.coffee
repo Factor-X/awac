@@ -10,31 +10,59 @@ angular
     link: (scope, element) ->
         directiveService.autoScopeImpl scope
 
-        scope.getTotalScope1 = () ->
+        scope.getLeftTotalScope1 = () ->
             return undefined unless scope.ngModel
             total = 0;
             for rl in scope.ngModel.reportLines
-                total += rl.scope1Value
-            total
-            
-        scope.getTotalScope2 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.scope2Value
+                total += rl.leftScope1Value
             total
 
-        scope.getTotalScope3 = () ->
+        scope.getLeftTotalScope2 = () ->
             return undefined unless scope.ngModel
             total = 0;
             for rl in scope.ngModel.reportLines
-                total += rl.scope3Value
+                total += rl.leftScope2Value
             total
 
-        scope.getTotalOutOfScope = () ->
+        scope.getLeftTotalScope3 = () ->
             return undefined unless scope.ngModel
             total = 0;
             for rl in scope.ngModel.reportLines
-                total += rl.outOfScopeValue
+                total += rl.leftScope3Value
+            total
+
+        scope.getLeftTotalOutOfScope = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.leftOutOfScopeValue
+            total
+
+        scope.getRightTotalScope1 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope1Value
+            total
+
+        scope.getRightTotalScope2 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope2Value
+            total
+
+        scope.getRightTotalScope3 = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightScope3Value
+            total
+
+        scope.getRightTotalOutOfScope = () ->
+            return undefined unless scope.ngModel
+            total = 0;
+            for rl in scope.ngModel.reportLines
+                total += rl.rightOutOfScopeValue
             total
 

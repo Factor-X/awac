@@ -54,6 +54,9 @@ angular
                     "color": ((scope.percent > 50) ? "white": "black")
                 }
 
+            scope.getDisabled = ->
+                return scope.$parent.isDisabled()
+
             #
             # open the modal document manager :
             # this modal display already uploaded files and
@@ -62,7 +65,10 @@ angular
             scope.openDocumentManager = ->
                 if scope.getAnswer()!=null
                     args = {}
-                    args['listDocuments'] = scope.getAnswer().value
+                    args.listDocuments = scope.getAnswer().value
+                    args.readyOnly = scope.getDataToCompare()==true || scope.getIsAggregation()==true || scope.getDisabled() == true
+                    args.wasEdited = ->
+                        scope.$parent.edited()
                     modalService.show(modalService.DOCUMENT_MANAGER,args)
 
             #
@@ -87,7 +93,7 @@ angular
                 while i < $files.length
                     file = $files[i]
                     scope.upload = $upload.upload(
-                        url: "file/upload/"
+                        url: "/awac/file/upload/"
                         data:
                             myObj: scope.myModelObj
 
@@ -100,7 +106,7 @@ angular
                         # file is uploaded successfully
                         scope.percent = 0
                         scope.inDownload = false
-                        fileName = "??"
+                        fileName = data.name
                         messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
                         #console.log data
 
@@ -109,8 +115,7 @@ angular
                             scope.getAnswer().value = {}
                         scope.getAnswer().value[data.id] =  data.name
 
-                        #console.log "AnswerValue : "
-                        #console.log scope.getAnswer()
+                        scope.$parent.edited()
 
                         return
                     ).error((data, status, headers, config) ->

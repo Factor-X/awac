@@ -32,4 +32,7 @@ public abstract class Scope extends AuditedAbstractEntity {
 		return null;
 	}
 
+    public abstract String getName();
+
+    public abstract void setName(String name);
 }

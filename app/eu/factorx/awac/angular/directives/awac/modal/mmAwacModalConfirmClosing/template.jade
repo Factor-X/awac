@@ -1,0 +1,33 @@
+// Modal
+.modal(ng-enter="valid()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(class="modal-title",ng-bind-html="'UNCLOSING_FORM' | translate",ng-show="$root.closedForms")
+                h4(class="modal-title",ng-bind-html="'CLOSING_FORM' | translate",ng-hide="$root.closedForms")
+            .modal-body
+                p(ng-bind-html="'MODAL_CONFIRM_UNCLOSING_DESC'| translate", ng-show="$root.closedForms")
+                p(ng-bind-html="'MODAL_CONFIRM_CLOSING_DESC'| translate", ng-hide="$root.closedForms")
+
+                .field_form
+                    mm-awac-modal-field-text(ng-info="passwordInfo")
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="valid();",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SUBMIT' | translate")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

@@ -81,6 +81,8 @@ GET         /awac/answer/formProgress/:period/:scope               @eu.factorx.a
 GET         /awac/answer/unlockForm/:form/:period/:scope           @eu.factorx.awac.controllers.AnswerController.unlockForm(form: String, period: String, scope :Long)
 POST         /awac/answer/lockQuestionSet                          @eu.factorx.awac.controllers.AnswerController.lockQuestionSet()
 POST         /awac/answer/validateQuestionSet                      @eu.factorx.awac.controllers.AnswerController.validateQuestionSet()
+GET         /awac/answer/testClosing/:periodKey/:scopeId           @eu.factorx.awac.controllers.AnswerController.testClosing(periodKey: String, scopeId :Long)
+POST         /awac/answer/closeForm/                               @eu.factorx.awac.controllers.AnswerController.closeForm()
 
 
 #
@@ -93,6 +95,7 @@ POST    /awac/result/getReport                             @eu.factorx.awac.cont
 #
 POST        /awac/file/upload/                                     @eu.factorx.awac.controllers.FilesController.upload()
 GET         /awac/file/download/:storedFileId                      @eu.factorx.awac.controllers.FilesController.download(storedFileId: Long)
+
 
 #
 # User profile
@@ -111,7 +114,6 @@ GET         /awac/admin/codelabels/reset                           @eu.factorx.a
 GET         /awac/admin/indicators_factors/reset                   @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
 GET         /awac/admin/municipality_survey/create                 @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET         /awac/admin/badImporter/:interfaceString               @eu.factorx.awac.controllers.AdminController.runBADImporter(interfaceString:String)
-GET         /awac/admin/sites_associations/import 				   @eu.factorx.awac.controllers.AdminController.runAccountSiteAssociationImporter()
 
 #
 # site

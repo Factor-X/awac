@@ -16,6 +16,18 @@ echo ";" >> /tmp/migration/migration_script.sql
 # create new multi site
 cat ./CELDL-67-LockQuestionSet.sql >> /tmp/migration/migration_script.sql
 
+
+# transfert-interface-to-organization
+cat ./CELDL-190-transfert-interface-to-organization.sql >> /tmp/migration/migration_script.sql
+
+# transfert data and progressbar from site to organization for municipality organization
+# drop sites
+cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration/migration_script.sql
+
+# link between form and calculator
+cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
+
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 
@@ -23,9 +35,6 @@ cat ./CELDL-67-LockQuestionSet.sql >> /tmp/migration/migration_script.sql
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
 
 # call the importers
-cd ../../
-bash -c 'export TERM=dumb; sbt run < /dev/zero > /dev/null 2>/dev/null &'  
-cd -
 
 echo -n "check port 9000."
 while true; do
@@ -40,11 +49,7 @@ curl -L http://127.0.0.1:9000/awac/admin/codelabels/reset &&
 echo && 
 echo "http://127.0.0.1:9000/awac/admin/indicators_factors/reset ... " && 
 curl -L http://127.0.0.1:9000/awac/admin/indicators_factors/reset && 
-echo && 
-echo "http://127.0.0.1:9000/awac/admin/sites_associations/import ... " && 
-curl -L http://127.0.0.1:9000/awac/admin/sites_associations/import && 
-echo && 
+echo
 
 
-kill -9 $(netstat -a -p -n 2>/dev/null | egrep ':9000\b' | grep 'LISTEN' | awk '{ print $7 }' | cut -d/ -f1 )
 

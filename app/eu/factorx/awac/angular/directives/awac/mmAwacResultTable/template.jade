@@ -1,54 +1,108 @@
 ng-virtual
     table.indicators_table
         thead
-            th(width="100%")
-            th.align-right.scope1
-                div
-                    span.wrapped
-                        span(ng-bind-html="'SCOPE_1' | translate")
-                        span  (tCO2e)
-            th.align-right.scope2
-                div
-                    span.wrapped
-                        span(ng-bind-html="'SCOPE_2' | translate")
-                        span  (tCO2e)
-            th.align-right.scope3
-                div
-                    span.wrapped
-                        span(ng-bind-html="'SCOPE_3' | translate")
-                        span  (tCO2e)
-            th.align-right.out-of-scope
-                div
-                    span.wrapped
-                        span(ng-bind-html="'OUT_OF_SCOPE' | translate")
-                        span  (tCO2e)
+            tr
+                th(width="100%")
+                th(colspan="4")
+                    span.period-header(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}") {{ngModel.leftPeriod}}
+                th(colspan="4", ng-show="ngModel.rightPeriod!=null")
+                    span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
+
+            tr
+                th(width="100%")
+
+                th.align-right.scope1(style="color: {{ ngModel.leftColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_1' | translate")
+                            span  (tCO2e)
+                th.align-right.scope2(style="color: {{ ngModel.leftColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_2' | translate")
+                            span  (tCO2e)
+                th.align-right.scope3(style="color: {{ ngModel.leftColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_3' | translate")
+                            span  (tCO2e)
+                th.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'OUT_OF_SCOPE' | translate")
+                            span  (tCO2e)
+
+                th.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_1' | translate")
+                            span  (tCO2e)
+                th.align-right.scope2(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_2' | translate")
+                            span  (tCO2e)
+                th.align-right.scope3(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'SCOPE_3' | translate")
+                            span  (tCO2e)
+                th.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    div
+                        span.wrapped
+                            span(ng-bind-html="'OUT_OF_SCOPE' | translate")
+                            span  (tCO2e)
+
 
         tbody
-            tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.scope1Value + rl.scope2Value + rl.scope3Value + rl.outOfScopeValue > 0)")
+            tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
                 td
                     span(ng-bind-html="rl.indicatorName | translate")
-                td.align-right.scope1
-                    span(ng-bind-html="rl.scope1Value | numberToI18NOrLess", ng-show="rl.scope1Value > 0")
-                td.align-right.scope2
-                    span(ng-bind-html="rl.scope2Value | numberToI18NOrLess", ng-show="rl.scope2Value > 0")
-                td.align-right.scope3
-                    span(ng-bind-html="rl.scope3Value | numberToI18NOrLess", ng-show="rl.scope3Value > 0")
-                td.align-right.out-of-scope
-                    span(ng-bind-html="rl.outOfScopeValue | numberToI18NOrLess", ng-show="rl.outOfScopeValue > 0")
+
+                td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="rl.leftScope1Value | numberToI18NOrLess", ng-show="rl.leftScope1Value > 0")
+                td.align-right.scope2(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="rl.leftScope2Value | numberToI18NOrLess", ng-show="rl.leftScope2Value > 0")
+                td.align-right.scope3(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="rl.leftScope3Value | numberToI18NOrLess", ng-show="rl.leftScope3Value > 0")
+                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="rl.leftOutOfScopeValue | numberToI18NOrLess", ng-show="rl.leftOutOfScopeValue > 0")
+
+                td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="rl.rightScope1Value | numberToI18NOrLess", ng-show="rl.rightScope1Value > 0")
+                td.align-right.scope2(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="rl.rightScope2Value | numberToI18NOrLess", ng-show="rl.rightScope2Value > 0")
+                td.align-right.scope3(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="rl.rightScope3Value | numberToI18NOrLess", ng-show="rl.rightScope3Value > 0")
+                td.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="rl.rightOutOfScopeValue | numberToI18NOrLess", ng-show="rl.rightOutOfScopeValue > 0")
+
         tfoot
             tr
                 td
-                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
-                    span {{ (totalScope1 + totalScope2 + totalScope3 + totalOutOfScope) | numberToI18NOrLess }}
-                    span (tCO2e)
-                td.align-right.scope1
-                    span(ng-bind-html="getTotalScope1() | numberToI18NOrLess")
-                td.align-right.scope2
-                    span(ng-bind-html="getTotalScope2() | numberToI18NOrLess")
-                td.align-right.scope3
-                    span(ng-bind-html="getTotalScope3() | numberToI18NOrLess")
-                td.align-right.out-of-scope
-                    span(ng-bind-html="getTotalOutOfScope() | numberToI18NOrLess")
+                td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="getLeftTotalScope1() | numberToI18NOrLess")
+                td.align-right.scope2(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="getLeftTotalScope2() | numberToI18NOrLess")
+                td.align-right.scope3(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="getLeftTotalScope3() | numberToI18NOrLess")
+                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="getLeftTotalOutOfScope() | numberToI18NOrLess")
+
+                td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="getRightTotalScope1() | numberToI18NOrLess")
+                td.align-right.scope2(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="getRightTotalScope2() | numberToI18NOrLess")
+                td.align-right.scope3(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="getRightTotalScope3() | numberToI18NOrLess")
+                td.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="getRightTotalOutOfScope() | numberToI18NOrLess")
+            tr
+                td
+                td.align-right.scope1(colspan="4", style="color: {{ ngModel.leftColor }}")
+                    span.period-footer(style="color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}")
+                td.align-right.scope1(colspan="4", ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
 
     div
         input(type="checkbox", ng-model="showAll")

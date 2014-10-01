@@ -35,75 +35,79 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
         Question question = questionAnswer.getQuestion();
         AnswerType answerType = question.getAnswerType();
 
-        if (questionAnswer.getAnswerValues().size() == 0) {
-            throw new RuntimeException("Error converter : " + questionAnswer);
-        }
-
-        AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
-
-        Object rawAnswerValue = null;
-        String unitCode = null;
-        switch (answerType) {
-            case BOOLEAN:
-                Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
-                if (booleanValue == Boolean.TRUE) {
-                    rawAnswerValue = "1";
-                } else if (booleanValue == Boolean.FALSE) {
-                    rawAnswerValue = "0";
-                }
-                break;
-            case STRING:
-                rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
-                break;
-            case INTEGER:
-                IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
-                rawAnswerValue = integerAnswerValue.getValue();
-                if (integerAnswerValue.getUnit() != null) {
-                    unitCode = integerAnswerValue.getUnit().getUnitCode().getKey();
-                }
-                break;
-            case DOUBLE:
-                DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
-                rawAnswerValue = doubleAnswerValue.getValue();
-                if (doubleAnswerValue.getUnit() != null) {
-                    unitCode = doubleAnswerValue.getUnit().getUnitCode().getKey();
-                }
-                break;
-            case PERCENTAGE:
-                DoubleAnswerValue doubleAnswerValueForPercent = (DoubleAnswerValue) answerValue;
-                rawAnswerValue = doubleAnswerValueForPercent.getValue();
-                break;
-            case VALUE_SELECTION:
-                Code value = ((CodeAnswerValue) answerValue).getValue();
-                if (value != null)
-                    rawAnswerValue = value.getKey();
-                else
-                    rawAnswerValue = null;
-                break;
-            case ENTITY_SELECTION:
-                EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
-                rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
-                        entityAnswerValue.getEntityId());
-                break;
-            case DOCUMENT:
-
-                for (AnswerValue answerValueEl : questionAnswer.getAnswerValues()) {
-
-                    if (rawAnswerValue == null) {
-                        rawAnswerValue = new HashMap<Long, String>();
-                    }
-
-                    DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValueEl;
-                    StoredFile storedFile = documentAnswerValue.getStoredFile();
-                    ((HashMap<Long, String>) rawAnswerValue).put(storedFile.getId(), storedFile.getOriginalName());
-                }
-                break;
-        }
 
         AnswerLineDTO answerLine = new AnswerLineDTO();
-        answerLine.setValue(rawAnswerValue);
+
+        if (questionAnswer.getAnswerValues().size() != 0) {
+
+            AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
+
+
+            Object rawAnswerValue = null;
+            String unitCode = null;
+            switch (answerType) {
+                case BOOLEAN:
+                    Boolean booleanValue = ((BooleanAnswerValue) answerValue).getValue();
+                    if (booleanValue == Boolean.TRUE) {
+                        rawAnswerValue = "1";
+                    } else if (booleanValue == Boolean.FALSE) {
+                        rawAnswerValue = "0";
+                    }
+                    break;
+                case STRING:
+                    rawAnswerValue = ((StringAnswerValue) answerValue).getValue();
+                    break;
+                case INTEGER:
+                    IntegerAnswerValue integerAnswerValue = (IntegerAnswerValue) answerValue;
+                    rawAnswerValue = integerAnswerValue.getValue();
+                    if (integerAnswerValue.getUnit() != null) {
+                        unitCode = integerAnswerValue.getUnit().getUnitCode().getKey();
+                    }
+                    break;
+                case DOUBLE:
+                    DoubleAnswerValue doubleAnswerValue = (DoubleAnswerValue) answerValue;
+                    rawAnswerValue = doubleAnswerValue.getValue();
+                    if (doubleAnswerValue.getUnit() != null) {
+                        unitCode = doubleAnswerValue.getUnit().getUnitCode().getKey();
+                    }
+                    break;
+                case PERCENTAGE:
+                    DoubleAnswerValue doubleAnswerValueForPercent = (DoubleAnswerValue) answerValue;
+                    rawAnswerValue = doubleAnswerValueForPercent.getValue();
+                    break;
+                case VALUE_SELECTION:
+                    Code value = ((CodeAnswerValue) answerValue).getValue();
+                    if (value != null)
+                        rawAnswerValue = value.getKey();
+                    else
+                        rawAnswerValue = null;
+                    break;
+                case ENTITY_SELECTION:
+                    EntityAnswerValue entityAnswerValue = (EntityAnswerValue) answerValue;
+                    rawAnswerValue = new KeyValuePairDTO<String, Long>(entityAnswerValue.getEntityName(),
+                            entityAnswerValue.getEntityId());
+                    break;
+                case DOCUMENT:
+
+                    for (AnswerValue answerValueEl : questionAnswer.getAnswerValues()) {
+
+                        if (rawAnswerValue == null) {
+                            rawAnswerValue = new HashMap<Long, String>();
+                        }
+
+                        DocumentAnswerValue documentAnswerValue = (DocumentAnswerValue) answerValueEl;
+                        StoredFile storedFile = documentAnswerValue.getStoredFile();
+                        ((HashMap<Long, String>) rawAnswerValue).put(storedFile.getId(), storedFile.getOriginalName());
+                    }
+                    break;
+            }
+
+            answerLine.setValue(rawAnswerValue);
+            answerLine.setUnitCode(unitCode);
+            answerLine.setComment(answerValue.getComment());
+        }
+
         answerLine.setQuestionKey(question.getCode().getKey());
-        answerLine.setUnitCode(unitCode);
         answerLine.setMapRepetition(buildRepetitionMap(questionAnswer.getQuestionSetAnswer()));
 
         Account account = accountService.findByIdentifier(questionAnswer.getTechnicalSegment().getLastUpdateUser());
@@ -113,7 +117,6 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 
             answerLine.setLastUpdateUser(lastUpdatePerson);
         }
-        answerLine.setComment(answerValue.getComment());
 
         return answerLine;
     }

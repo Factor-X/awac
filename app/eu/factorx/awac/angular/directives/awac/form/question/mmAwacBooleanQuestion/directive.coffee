@@ -10,6 +10,9 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
+
+        scope.radioName=  "name_"+(Math.floor(Math.random() * 10000))
+
         scope.getDisabled = ->
             return scope.$parent.isDisabled()
 

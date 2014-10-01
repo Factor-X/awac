@@ -310,7 +310,7 @@ select {
 }
 
 .nav_entreprise {
-    height: 128px;
+    height: 106px;
     width: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box; /* Firefox, other Gecko */
@@ -348,6 +348,13 @@ select {
     color: white !important;
 }
 
+
+.last_menu > * {
+    min-width: 49%;
+    width: 49%;
+    position: relative;
+}
+
 .menu > *:hover,
 .last_menu > *:hover {
     background-color: #0988b5;
@@ -355,6 +362,7 @@ select {
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
+
 
 .menu > * {
     position: relative;
@@ -414,13 +422,6 @@ select {
     background-color: #9d9b91;
     border-spacing: 5px;
     display: table !important;
-}
-
-.last_menu > * {
-    min-width: 49%;
-    width: 49%;
-    height: 118px;
-    position: relative;
 }
 
 .menu_jauge {
@@ -531,6 +532,11 @@ select {
     margin: 10% auto auto;
 }
 
+
+
+
+
+
 .question-comment-textarea {
     width: 530px;
     height: 189px;
@@ -607,7 +613,6 @@ button.button.site_manage {
 }
 
 button.button.verification {
-    float: right;
     background-color: #35b34b;
     color: white;
 }
@@ -649,7 +654,7 @@ button.button.add {
 .content-with-menu {
     position: absolute;
     bottom: 0;
-    top: 238px;
+    top: 216px;
     overflow: auto;
     border: 5px solid #305b2e;
     border-top-width: 15px;
@@ -776,14 +781,13 @@ h1 {
     cursor: pointer;
 }
 
-.block_status .lock_status.lock_open_disabled{
+.block_status .lock_status.lock_open_disabled {
     background: url('../images/status/lock_open.png') center center no-repeat #e6dccc;
 }
 
 .block_status .lock_status.lock_open:hover {
-/*    background: url('../images/status/lock_close.png') center center no-repeat #e6dccc; */
+    /*    background: url('../images/status/lock_close.png') center center no-repeat #e6dccc; */
 }
-
 
 .block_status .lock_status.lock_close {
     background: url('../images/status/lock_close.png') center center no-repeat #acd595;
@@ -793,8 +797,9 @@ h1 {
     background: url('../images/status/lock_unlock.png') center center no-repeat #acd595;
     cursor: pointer;
 }
+
 .block_status .lock_status.lock_close_by_myself:hover {
-/*    background: url('../images/status/lock_open.png') center center no-repeat #acd595; */
+    /*    background: url('../images/status/lock_open.png') center center no-repeat #acd595; */
 }
 
 .block_status .validate_status.validate_no_valid {
@@ -809,6 +814,23 @@ h1 {
 
 .block_status .validate_status.validated {
     background: url('../images/status/validate_validated.png') center center no-repeat #acd595;
+}
+
+.block_status > div > div {
+    display: none;
+    position: absolute;
+    background-color: #eeeeee;
+    padding: 2px 4px;
+    border: 1px solid #909090;
+    margin-top: 15px;
+    margin-left: 40px;
+    z-index: 10;
+    max-width: 175px;
+}
+
+.block_status > div:hover > div,
+.block_status > div > div:hover {
+    display: block;
 }
 
 .element_content {
@@ -865,6 +887,10 @@ h1 {
 
 .question_field {
     padding: 3px 0px 3px 35px;
+}
+
+.question_field .optional{
+    font-style: italic;
 }
 
 .question_field > div {
@@ -1412,8 +1438,6 @@ h1 {
     text-align: center;
 }
 
-
-
 /*
  * PROGRESS BAR FOR TABS
  */
@@ -1600,6 +1624,10 @@ ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
 }
 
+.messenger{
+    z-index : 12000 !important;
+}
+
 ul.messenger-theme-flat .messenger-message.alert-success,
 ul.messenger-theme-flat .messenger-message.alert-error,
 ul.messenger-theme-flat .messenger-message.alert-info {
@@ -1652,46 +1680,6 @@ ul.messenger > li {
 .result_table h2 {
     font-size: 1.5em;
     border-bottom: solid 2px #666;
-}
-
-.indicators_table {
-    width: 100%;
-}
-
-.indicators_table > thead > tr > th {
-    white-space: nowrap;
-    padding: 0.5em 1em;
-    border-bottom: solid #666 2px;
-
-}
-
-.indicators_table > tbody > tr > td {
-    padding: 0.5em 1em;
-    border-bottom: dotted #666 1px;
-}
-
-.indicators_table > tbody > tr > td {
-    border-left: dotted #666 1px;
-    border-right: dotted #666 1px;
-}
-
-.indicators_table > tbody > tr:hover {
-    background: #d7edd5;
-}
-
-.indicators_table > tfoot > tr > td {
-    white-space: nowrap;
-    padding: 0.5em 1em;
-    border-top: solid #666 2px;
-    font-weight: bold;
-}
-
-.indicators_table > tbody > tr > td.scope1 {
-    border-left: dashed 2px #666;
-}
-
-.indicators_table > tbody > tr > td.out-of-scope {
-    border-right: dashed 2px #666;
 }
 
 .chart-legend {

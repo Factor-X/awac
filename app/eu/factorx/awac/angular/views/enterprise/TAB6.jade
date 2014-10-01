@@ -3,7 +3,7 @@ div
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="A229")
 
-            mm-awac-question(question-code="A230")
+            mm-awac-question(question-code="A230",ng-optional="true")
 
             mm-awac-repetition-name(question-code="A231")
             mm-awac-repetition-question(question-set-code="A231", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A231')")
@@ -32,7 +32,7 @@ div
 
         mm-awac-section(title-code="A309")
 
-            mm-awac-question(question-code="A310")
+            mm-awac-question(question-code="A310",ng-optional="true")
 
             mm-awac-repetition-name(question-code="A311")
             mm-awac-repetition-question(question-set-code="A311", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A311')")
@@ -77,7 +77,7 @@ div
 
         mm-awac-section(title-code="A320")
 
-            mm-awac-question(question-code="A321")
+            mm-awac-question(question-code="A321",ng-optional="true")
 
             mm-awac-repetition-name(question-code="A322")
             mm-awac-repetition-question(question-set-code="A322", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A322')")
@@ -123,7 +123,7 @@ div
 
         mm-awac-section(title-code="A332")
 
-            mm-awac-question(question-code="A333")
+            mm-awac-question(question-code="A333",ng-optional="true")
 
             mm-awac-repetition-name(question-code="A334")
             mm-awac-repetition-question(question-set-code="A334", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('A334')")

@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, $window, downloadService, displayFormMenu, modalService, messageFlash,translationService) ->
+.controller "ResultsCtrl", ($scope, $window, $filter, downloadService, displayFormMenu, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.$root.$watch('mySites', (nv) ->
@@ -10,15 +10,30 @@ angular
                 s.$selected = true
     , true);
 
+    $scope.$watch '$root.periodToCompare', () ->
+        $scope.reload()
 
-    $scope.$watch('mySites|filter:{$selected:true}', (sites) ->
+    $scope.$watch 'mySites', () ->
+        $scope.reload()
+
+    $scope.reload = () ->
+        sites = $scope.mySites.filter((e) ->
+            return e.$selected
+        )
+
         if sites.length > 0
+
             $scope.o = undefined
-            $scope.totalEmissions = undefined
-            $scope.totalScope1 = undefined;
-            $scope.totalScope2 = undefined;
-            $scope.totalScope3 = undefined;
+            $scope.leftTotalEmissions = undefined
+            $scope.leftTotalScope1 = undefined
+            $scope.leftTotalScope2 = undefined
+            $scope.leftTotalScope3 = undefined
+            $scope.rightTotalEmissions = undefined
+            $scope.rightTotalScope1 = undefined
+            $scope.rightTotalScope2 = undefined
+            $scope.rightTotalScope3 = undefined
             modalService.show modalService.LOADING
+
             dto =
                 __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
                 periodKey: $scope.$root.periodSelectedKey
@@ -26,8 +41,12 @@ angular
                     s.id
                 )
 
+            if $scope.$root.periodToCompare != 'default'
+                dto.comparedPeriodKey = $scope.$root.periodToCompare
+
+
             downloadService.postJson '/awac/result/getReport', dto, (result) ->
-                console.log result
+
                 modalService.close modalService.LOADING
                 if result.success
                     $scope.o = result.data
@@ -40,11 +59,17 @@ angular
                         $scope.o.reportDTOs.R_4 = $scope.o.reportDTOs.RCo_4
                         $scope.o.reportDTOs.R_5 = $scope.o.reportDTOs.RCo_5
 
-                        $scope.o.svgDonuts.R_1 = $scope.o.svgDonuts.RCo_1
-                        $scope.o.svgDonuts.R_2 = $scope.o.svgDonuts.RCo_2
-                        $scope.o.svgDonuts.R_3 = $scope.o.svgDonuts.RCo_3
-                        $scope.o.svgDonuts.R_4 = $scope.o.svgDonuts.RCo_4
-                        $scope.o.svgDonuts.R_5 = $scope.o.svgDonuts.RCo_5
+                        $scope.o.leftSvgDonuts.R_1 = $scope.o.leftSvgDonuts.RCo_1
+                        $scope.o.leftSvgDonuts.R_2 = $scope.o.leftSvgDonuts.RCo_2
+                        $scope.o.leftSvgDonuts.R_3 = $scope.o.leftSvgDonuts.RCo_3
+                        $scope.o.leftSvgDonuts.R_4 = $scope.o.leftSvgDonuts.RCo_4
+                        $scope.o.leftSvgDonuts.R_5 = $scope.o.leftSvgDonuts.RCo_5
+
+                        $scope.o.rightSvgDonuts.R_1 = $scope.o.rightSvgDonuts.RCo_1
+                        $scope.o.rightSvgDonuts.R_2 = $scope.o.rightSvgDonuts.RCo_2
+                        $scope.o.rightSvgDonuts.R_3 = $scope.o.rightSvgDonuts.RCo_3
+                        $scope.o.rightSvgDonuts.R_4 = $scope.o.rightSvgDonuts.RCo_4
+                        $scope.o.rightSvgDonuts.R_5 = $scope.o.rightSvgDonuts.RCo_5
 
                         $scope.o.svgWebs.R_1 = $scope.o.svgWebs.RCo_1
                         $scope.o.svgWebs.R_2 = $scope.o.svgWebs.RCo_2
@@ -59,23 +84,35 @@ angular
                         $scope.o.svgHistograms.R_5 = $scope.o.svgHistograms.RCo_5
 
 
-                    $scope.totalEmissions = 0;
-                    $scope.totalScope1 = 0;
-                    $scope.totalScope2 = 0;
-                    $scope.totalScope3 = 0;
-                    for line in $scope.o.reportDTOs.R_1.reportLines
-                        $scope.totalScope1 += line.scope1Value
-                        $scope.totalScope2 += line.scope2Value
-                        $scope.totalScope3 += line.scope3Value
+                    $scope.leftTotalEmissions = 0;
+                    $scope.leftTotalScope1 = 0;
+                    $scope.leftTotalScope2 = 0;
+                    $scope.leftTotalScope3 = 0;
+                    $scope.rightTotalEmissions = 0;
+                    $scope.rightTotalScope1 = 0;
+                    $scope.rightTotalScope2 = 0;
+                    $scope.rightTotalScope3 = 0;
 
-                        $scope.totalEmissions += line.scope1Value
-                        $scope.totalEmissions += line.scope2Value
-                        $scope.totalEmissions += line.scope3Value
-                        $scope.totalEmissions += line.outOfScopeValue
+                    for line in $scope.o.reportDTOs.R_1.reportLines
+                        $scope.leftTotalScope1 += line.leftScope1Value
+                        $scope.leftTotalScope2 += line.leftScope2Value
+                        $scope.leftTotalScope3 += line.leftScope3Value
+                        $scope.rightTotalScope1 += line.rightScope1Value
+                        $scope.rightTotalScope2 += line.rightScope2Value
+                        $scope.rightTotalScope3 += line.rightScope3Value
+
+                        $scope.leftTotalEmissions += line.leftScope1Value
+                        $scope.leftTotalEmissions += line.leftScope2Value
+                        $scope.leftTotalEmissions += line.leftScope3Value
+                        $scope.leftTotalEmissions += line.leftOutOfScopeValue
+                        $scope.rightTotalEmissions += line.rightScope1Value
+                        $scope.rightTotalEmissions += line.rightScope2Value
+                        $scope.rightTotalEmissions += line.rightScope3Value
+                        $scope.rightTotalEmissions += line.rightOutOfScopeValue
 
                 else
                     messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'
-    , true);
+
 
 
     $scope.current_tab = 1;

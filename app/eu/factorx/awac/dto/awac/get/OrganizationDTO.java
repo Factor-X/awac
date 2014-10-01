@@ -6,7 +6,7 @@ import java.util.List;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 
-public class OrganizationDTO extends DTO {
+public class OrganizationDTO extends ScopeDTO {
 	private Long id;
 	private String name;
 	private List<SiteDTO> sites;

@@ -15,7 +15,7 @@ public class LoginResultDTO extends DTO {
 
     private Long defaultSiteId;
 
-    private List<SiteDTO> mySites;
+    private List<ScopeDTO> myScopes;
 
     private List<PeriodDTO> availablePeriods;
 
@@ -54,12 +54,12 @@ public class LoginResultDTO extends DTO {
         this.organizationName = organizationName;
     }
 
-    public List<SiteDTO> getMySites() {
-        return mySites;
+    public List<ScopeDTO> getMyScopes() {
+        return myScopes;
     }
 
-    public void setMySites(List<SiteDTO> mySites) {
-        this.mySites = mySites;
+    public void setMyScopes(List<ScopeDTO> myScopes) {
+        this.myScopes = myScopes;
     }
 
     @Override
@@ -68,7 +68,9 @@ public class LoginResultDTO extends DTO {
                 "person=" + person +
                 ", defaultPeriod='" + defaultPeriod + '\'' +
                 ", organizationName='" + organizationName + '\'' +
-                ", mySites=" + mySites +
+                ", defaultSiteId=" + defaultSiteId +
+                ", myScopes=" + myScopes +
+                ", availablePeriods=" + availablePeriods +
                 '}';
     }
 

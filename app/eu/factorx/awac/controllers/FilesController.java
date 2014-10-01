@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.service.StoredFileService;
@@ -63,7 +64,7 @@ public class FilesController extends AbstractController {
             storedFileService.saveOrUpdate(storedFile);
 
             //save the file
-            //TODO FileUtil.save(file, storageKey);
+            FileUtil.save(file, storageKey);
 
             //complete the result
             filesUploadedDTO = new FilesUploadedDTO(storedFile.getId(),storedFile.getOriginalName());
@@ -87,21 +88,53 @@ public class FilesController extends AbstractController {
             throw new RuntimeException("File "+storedFileId+" was not found");
         }
 
+        //control
+        if(!storedFile.getAccount().getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+            throw new RuntimeException("File "+storedFileId+" doesn't come from our organization");
+        }
+
         //create an inputStream
         InputStream inputStream = FileUtil.getFileInputStream(storedFile.getStoredName());
 
         //launch the download
-
-/*
-        response().setHeader(	"Content-Length",
-                "23000");
-*/
         response().setContentType("application/octet-stream");
         response().setHeader("Content-disposition","attachment; filename="+storedFile.getOriginalName());
 
-        Status ok = ok(inputStream);
+        return ok(inputStream);
+    }
 
-        return ok;
+
+    /*
+      download a file by is storedFileId
+     */
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result remove() {
+        /*
+        this.extractDTOFromRequest(ValueDTO)
+
+        //get the storedFile
+        StoredFile storedFile = storedFileService.findById(storedFileId);
+
+        if(storedFile==null){
+            throw new RuntimeException("File "+storedFileId+" was not found");
+        }
+
+
+        //control
+        if(!storedFile.getAccount().getOrganization().equals(securedController.getCurrentUser().getOrganization())){
+            throw new RuntimeException("File "+storedFileId+" doesn't come from our organization");
+        }
+
+
+        //delete from the cloud
+        FileUtil.removeFile(storedFile.getStoredName());
+
+        //delete from the model
+        storedFileService.remove(storedFile);
+
+        */
+        return ok(new ResultsDTO());
     }
 
 }

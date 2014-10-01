@@ -12,15 +12,17 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private String color;
 
-	private Double scope1Value = Double.valueOf(0);
+	private Double leftScope1Value = Double.valueOf(0);
+	private Double leftScope2Value = Double.valueOf(0);
+	private Double leftScope3Value = Double.valueOf(0);
+	private Double leftPercentage = Double.valueOf(0);
+	private Double leftOutOfScopeValue = Double.valueOf(0);
 
-	private Double scope2Value = Double.valueOf(0);
-
-	private Double scope3Value = Double.valueOf(0);
-
-	private Double percentage = Double.valueOf(0);
-
-	private Double outOfScopeValue = Double.valueOf(0);
+	private Double rightScope1Value = Double.valueOf(0);
+	private Double rightScope2Value = Double.valueOf(0);
+	private Double rightScope3Value = Double.valueOf(0);
+	private Double rightPercentage = Double.valueOf(0);
+	private Double rightOutOfScopeValue = Double.valueOf(0);
 
 	public ReportLineDTO() {
 		super();
@@ -31,15 +33,8 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.indicatorName = indicatorName;
 	}
 
-	public ReportLineDTO(String indicatorName, String color, Double scope1Value, Double scope2Value, Double scope3Value, Double outOfScopeValue, Double percentage) {
-		super();
-		this.indicatorName = indicatorName;
-		this.color = color;
-		this.scope1Value = scope1Value;
-		this.scope2Value = scope2Value;
-		this.scope3Value = scope3Value;
-		this.outOfScopeValue = outOfScopeValue;
-		this.percentage = percentage;
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
 	public String getIndicatorName() {
@@ -50,54 +45,6 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.indicatorName = indicatorName;
 	}
 
-	public Double getScope1Value() {
-		return scope1Value;
-	}
-
-	public void setScope1Value(Double scope1Value) {
-		this.scope1Value = scope1Value;
-	}
-
-	public Double getScope2Value() {
-		return scope2Value;
-	}
-
-	public void setScope2Value(Double scope2Value) {
-		this.scope2Value = scope2Value;
-	}
-
-	public Double getScope3Value() {
-		return scope3Value;
-	}
-
-	public void setScope3Value(Double scope3Value) {
-		this.scope3Value = scope3Value;
-	}
-
-	public Double getOutOfScopeValue() {
-		return outOfScopeValue;
-	}
-
-	public void setOutOfScopeValue(Double outOfScopeValue) {
-		this.outOfScopeValue = outOfScopeValue;
-	}
-
-	public Double addScope1Value(Double value) {
-		return (scope1Value += value);
-	}
-
-	public Double addScope2Value(Double value) {
-		return (scope2Value += value);
-	}
-
-	public Double addScope3Value(Double value) {
-		return (scope3Value += value);
-	}
-
-	public Double addOutOfScopeValue(Double value) {
-		return (outOfScopeValue += value);
-	}
-
 	public String getColor() {
 		return color;
 	}
@@ -106,11 +53,83 @@ public class ReportLineDTO extends DTO implements Serializable {
 		this.color = color;
 	}
 
-	public Double getPercentage() {
-		return percentage;
+	public Double getLeftScope1Value() {
+		return leftScope1Value;
 	}
 
-	public void setPercentage(Double percentage) {
-		this.percentage = percentage;
+	public void setLeftScope1Value(Double leftScope1Value) {
+		this.leftScope1Value = leftScope1Value;
+	}
+
+	public Double getLeftScope2Value() {
+		return leftScope2Value;
+	}
+
+	public void setLeftScope2Value(Double leftScope2Value) {
+		this.leftScope2Value = leftScope2Value;
+	}
+
+	public Double getLeftScope3Value() {
+		return leftScope3Value;
+	}
+
+	public void setLeftScope3Value(Double leftScope3Value) {
+		this.leftScope3Value = leftScope3Value;
+	}
+
+	public Double getLeftPercentage() {
+		return leftPercentage;
+	}
+
+	public void setLeftPercentage(Double leftPercentage) {
+		this.leftPercentage = leftPercentage;
+	}
+
+	public Double getLeftOutOfScopeValue() {
+		return leftOutOfScopeValue;
+	}
+
+	public void setLeftOutOfScopeValue(Double leftOutOfScopeValue) {
+		this.leftOutOfScopeValue = leftOutOfScopeValue;
+	}
+
+	public Double getRightScope1Value() {
+		return rightScope1Value;
+	}
+
+	public void setRightScope1Value(Double rightScope1Value) {
+		this.rightScope1Value = rightScope1Value;
+	}
+
+	public Double getRightScope2Value() {
+		return rightScope2Value;
+	}
+
+	public void setRightScope2Value(Double rightScope2Value) {
+		this.rightScope2Value = rightScope2Value;
+	}
+
+	public Double getRightScope3Value() {
+		return rightScope3Value;
+	}
+
+	public void setRightScope3Value(Double rightScope3Value) {
+		this.rightScope3Value = rightScope3Value;
+	}
+
+	public Double getRightPercentage() {
+		return rightPercentage;
+	}
+
+	public void setRightPercentage(Double rightPercentage) {
+		this.rightPercentage = rightPercentage;
+	}
+
+	public Double getRightOutOfScopeValue() {
+		return rightOutOfScopeValue;
+	}
+
+	public void setRightOutOfScopeValue(Double rightOutOfScopeValue) {
+		this.rightOutOfScopeValue = rightOutOfScopeValue;
 	}
 }

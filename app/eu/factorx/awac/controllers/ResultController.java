@@ -10,23 +10,19 @@ import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
-import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
-import eu.factorx.awac.service.impl.reporting.ReportResultCollection;
+import eu.factorx.awac.service.impl.reporting.*;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
-import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ResultController extends AbstractController {
@@ -54,69 +50,111 @@ public class ResultController extends AbstractController {
 		// 1. Get the parameters from POST request
 		GetReportParametersDTO dto = extractDTOFromRequest(GetReportParametersDTO.class);
 
-		// 2. Fetch the period
-		Period period = periodService.findByCode(new PeriodCode(dto.getPeriodKey()));
-
-		// 3. Fetch the scopes
+		// 2. Fetch the scopes
 		List<Scope> scopes = new ArrayList<>();
 		for (Long scopeId : dto.getScopesIds()) {
 			scopes.add(scopeService.findById(scopeId));
 		}
 
-		// 4. Compute the ReportResult
-		List<ReportLogEntry> logEntries = new ArrayList<>();
-		Map<String, ReportResult> reportResults = buildReportResults(period, scopes, logEntries);
+		// 3. Return simple or compared
+		String periodKey = dto.getPeriodKey();
+		String comparedPeriodKey = dto.getComparedPeriodKey();
+		if (comparedPeriodKey == null) {
+			Period period = periodService.findByCode(new PeriodCode(periodKey));
+			return getSimpleReport(period, scopes);
+		} else {
+			Period period = periodService.findByCode(new PeriodCode(periodKey));
+			Period comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
+			return getComparedReport(period, comparedPeriod, scopes);
+		}
+	}
 
-		// 5. Populate the DTO
-		for (Map.Entry<String, ReportResult> reportEntry : reportResults.entrySet()) {
-			String reportKey = reportEntry.getKey();
-			ReportResult reportResult = reportEntry.getValue();
+	public Result getSimpleReport(Period period, List<Scope> scopes) throws BiffException, IOException, WriteException {
+		ResultsDTO resultsDTO = new ResultsDTO();
 
-			// 5.1 Each ReportResult is converted to a ResultDTO
-			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResult, ReportDTO.class));
+		// 1. Compute the ReportResult
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
+		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
 
-			// 5.2 Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResult));
+		// 2. Populate the DTO
+		for (ReportResult reportResult : allReportResults.getReportResults()) {
+			String reportKey = reportResult.getReport().getCode().getKey();
 
-			// 5.3 Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResult));
+			// 2.1. Aggregate report
+			ReportResultAggregation reportResultAggregation = reportResultService.aggregate(reportResult);
 
-			// 5.4 Each ReportResult is rendered to a SVG string - WEB
-			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResult));
+			// 2.2. Each ReportResult is converted to a ResultDTO
+			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
 
+			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResultAggregation));
+
+			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
+			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResultAggregation));
+
+			// 2.5. Each ReportResult is rendered to a SVG string - WEB
+			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResultAggregation));
 		}
 
-		// 6. Add log entries
+		// 3. Add log entries
 		List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
 		for (ReportLogEntry logEntry : logEntries) {
 			ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
 			dtoLogEntries.add(reportLogEntryDTO);
 		}
 
-		// 7. PUSH !!!
+		// 4. PUSH !!!
 		return ok(resultsDTO);
 	}
 
+	public Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {
+		ResultsDTO resultsDTO = new ResultsDTO();
 
-	private Map<String, ReportResult> buildReportResults(Period period, List<Scope> scopes, List<ReportLogEntry> logEntries) {
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getInterfaceCode());
+		// 1. Compute the ReportResult
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
+		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
 
-		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
-		List<ReportResult> reportResults = allReportResults.getReportResults();
-		Logger.info("Built {} report(s):", reportResults.size());
-		for (ReportResult reportResult : reportResults) {
-			Logger.info("\t- Report '{}' ({} activity results)", reportResult.getReport().getCode().getKey(), reportResult.getActivityResults().size());
+		List<ReportLogEntry> logEntries = new ArrayList<>();
+		logEntries.addAll(allReportResultsLeft.getLogEntries());
+		logEntries.addAll(allReportResultsRight.getLogEntries());
+
+
+		MergedReportResultCollectionAggregation mergedReportResultCollectionAggregation = reportResultService.mergeAsComparision(
+			reportResultService.aggregate(allReportResultsLeft),
+			reportResultService.aggregate(allReportResultsRight)
+		);
+
+		// 2. Populate the DTO
+		for (MergedReportResultAggregation mergedReportResultAggregation : mergedReportResultCollectionAggregation.getMergedReportResultAggregations()) {
+			String reportKey = mergedReportResultAggregation.getReportCode();
+
+			// 2.2. Each ReportResult is converted to a ResultDTO
+			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
+
+			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(mergedReportResultAggregation));
+			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(mergedReportResultAggregation));
+
+			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
+			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(mergedReportResultAggregation));
+
+			// 2.5. Each ReportResult is rendered to a SVG string - WEB
+			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(mergedReportResultAggregation));
+
 		}
 
-		Map<String, ReportResult> allReportResultsMap = new HashMap<>();
-		for (ReportResult reportResult : reportResults) {
-			allReportResultsMap.put(reportResult.getReport().getCode().getKey(), reportResult);
+		// 3. Add log entries
+		List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
+		for (ReportLogEntry logEntry : logEntries) {
+			ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
+			dtoLogEntries.add(reportLogEntryDTO);
 		}
 
-		logEntries.clear();
-		logEntries.addAll(allReportResults.getLogEntries());
-
-		return allReportResultsMap;
+		// 4. PUSH !!!
+		return ok(resultsDTO);
 	}
+
 
 }

@@ -1,0 +1,1 @@
+alter table account_site_association add CONSTRAINT uk_fwmwi44u55bo4rvwsv0cln011 UNIQUE (site_id,account_id);

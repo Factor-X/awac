@@ -71,6 +71,7 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
@@ -189,6 +190,7 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
         <class>eu.factorx.awac.models.forms.Form</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>

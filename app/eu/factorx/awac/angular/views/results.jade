@@ -29,215 +29,228 @@ div.results.pdf-able
 
             td.top-aligned.horizontally-padded.wide
 
-                div
-                    span(ng-bind-html="'ACCOMPANIMENT_WORD_ENTERPRISE' | translate", ng-show="$root.instanceName == 'enterprise'")
-                    span(ng-bind-html="'ACCOMPANIMENT_WORD_MUNICIPALITY' | translate", ng-show="$root.instanceName == 'municipality'")
-                    span.bold  {{ totalEmissions | numberToI18N }}
-                    span  tCO2e
+                div(ng-show="o != null && o != undefined")
 
-                br
-                br
+                    div(ng-show="o.reportDTOs.R_1.rightPeriod == null")
+                        span(ng-bind-html="'ACCOMPANIMENT_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N)]", ng-show="$root.instanceName == 'enterprise'")
+                        span(ng-bind-html="'ACCOMPANIMENT_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N)]", ng-show="$root.instanceName == 'municipality'")
 
-                div(ng-show="siteSelectionIsEmpty()")
+                    div(ng-hide="o.reportDTOs.R_1.rightPeriod == null")
+                        span(ng-bind-html="'ACCOMPANIMENT_COMPARISION_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]", ng-show="$root.instanceName == 'enterprise'")
+                        span(ng-bind-html="'ACCOMPANIMENT_COMPARISION_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]", ng-show="$root.instanceName == 'municipality'")
 
-                    div(ng-bind-html="'SELECT_AT_LEAST_ONE_SITE' | translate")
+                    br
+                    br
 
-                div(ng-hide="siteSelectionIsEmpty()")
+                    div(ng-show="siteSelectionIsEmpty()")
 
-                    div(ng-show="current_tab == 1")
-                        h2
-                            span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
-                        br
-                        center
+                        div(ng-bind-html="'SELECT_AT_LEAST_ONE_SITE' | translate")
+
+                    div(ng-hide="siteSelectionIsEmpty()")
+
+                        div(ng-show="current_tab == 1")
+                            h2
+                                span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
+                            br
+                            center
+                                table
+                                    tr
+                                        td
+                                            div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
+                                        td(style="width: 2em")
+                                        td
+                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+
+                        div(ng-show="current_tab == 2")
+                            h2
+                                span(ng-bind-html="'IMPACTS_PARTITION' | translate")
+                            br
+
                             table
                                 tr
-                                    td
-                                        div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
-                                    td(style="width: 2em")
-                                    td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
-
-                    div(ng-show="current_tab == 2")
-                        h2
-                            span(ng-bind-html="'IMPACTS_PARTITION' | translate")
-                        br
-
-                        table
-                            tr
-                                td(colspan="3")
-                                    h3
-                                        span(ng-bind-html="'SCOPE_1' | translate")
-                                        span  : {{ totalScope1 | numberToI18N }} tCO2e
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_2 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
-
-                            tr
-                                td(colspan="3")
-                                    h3
-                                        span(ng-bind-html="'SCOPE_2' | translate")
-                                        span  : {{ totalScope2| numberToI18N }} tCO2e
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_3 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
-
-                            tr
-                                td(colspan="3")
-                                    h3
-                                        span(ng-bind-html="'SCOPE_3' | translate")
-                                        span  : {{ totalScope3| numberToI18N }} tCO2e
-                            tr
-                                td
-                                    div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.svgDonuts.R_4 | trustAsHtml")
-                                td(style="width: 2em")
-                                td
-                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
-
-
-
-
-
-
-
-
-
-                        br
-                        br
-
-
-
-
-                    div(ng-show="current_tab == 3")
-                        h2
-                            span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
-                        br
-                        center
-                            table
+                                    td(colspan="3")
+                                        h3
+                                            span(ng-bind-html="'SCOPE_1' | translate")
+                                            span  : {{ totalScope1 | numberToI18N }} tCO2e
                                 tr
                                     td
-                                        div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_2 | trustAsHtml")
+                                        span &nbsp;
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_2 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
 
-                    div(ng-show="current_tab == 4")
-                        h2
-                            span(ng-bind-html="'NUMBERS' | translate")
-                        mm-awac-result-table(ng-model="o.reportDTOs.R_1")
-
-
-                    div(ng-show="current_tab == 5")
-                        h2
-                            span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
-
-                    div(ng-show="current_tab == 6")
-                        h2
-                            span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
-                        br
-
-                        p(ng-repeat="e in o.logEntries")
-                            span(ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART1' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.biActivityCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.biActivitySubCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivityType | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivitySource | translate")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART2' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
-                                span &#32;
-                                span(ng-bind-html="e.adUnit")
-                                span &#32;
-                                br
-                                span &nbsp;&nbsp;&nbsp;&nbsp;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART3' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.biIndicatorCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivityType | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivitySource | translate")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.fValue | numberToI18NRoundedOrFullIfLessThanOne")
-                                span &#32;
-                                span(ng-bind-html="e.fUnitOut")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART5' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.fUnitIn")
-                                br
-                                span &nbsp;&nbsp;&nbsp;&nbsp;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART6' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.value | numberToI18N")
-                                span &#32;
-                                span(ng-bind-html="e.biUnit")
-
-                            span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'")
-                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART1' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.biActivityCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.biActivitySubCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivityType | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivitySource | translate")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
-                                span &#32;
-                                span(ng-bind-html="e.adUnit")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART3' | translate")
-                                span &#32;
-                                span(ng-bind-html="e.biIndicatorCategory | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivityType | translate")
-                                span &#32;/&#32;
-                                span(ng-bind-html="e.adActivitySource | translate")
-                                span &#32;
-                                span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate")
-
-                    div(ng-show="current_tab == 7")
-                        h2
-                            span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
-
-                    div(ng-show="current_tab == 8")
-                        h2
-                            span(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
-                        br
-                        center
-                            table
+                                tr
+                                    td(colspan="3")
+                                        h3
+                                            span(ng-bind-html="'SCOPE_2' | translate")
+                                            span  : {{ totalScope2| numberToI18N }} tCO2e
                                 tr
                                     td
-                                        div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_3 | trustAsHtml")
+                                        span &nbsp;
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_3 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
+
+                                tr
+                                    td(colspan="3")
+                                        h3
+                                            span(ng-bind-html="'SCOPE_3' | translate")
+                                            span  : {{ totalScope3| numberToI18N }} tCO2e
+                                tr
+                                    td
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_4 | trustAsHtml")
+                                        span &nbsp;
+                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_4 | trustAsHtml")
+                                    td(style="width: 2em")
+                                    td
+                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
 
 
-                    br
 
-                    div.results_disclaimer
-                        span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
-                    br
-                    br
-                    br
+
+
+
+
+
+
+                            br
+                            br
+
+
+
+
+                        div(ng-show="current_tab == 3")
+                            h2
+                                span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
+                            br
+                            center
+                                table
+                                    tr
+                                        td
+                                            div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
+                                        td(style="width: 2em")
+                                        td
+                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+
+                        div(ng-show="current_tab == 4")
+                            h2
+                                span(ng-bind-html="'NUMBERS' | translate")
+                            mm-awac-result-table(ng-model="o.reportDTOs.R_1")
+
+
+                        div(ng-show="current_tab == 5")
+                            h2
+                                span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+
+                        div(ng-show="current_tab == 6")
+                            h2
+                                span(ng-bind-html="'CALCULUS_EXPLANATION' | translate")
+                            br
+
+                            p(ng-show="o.reportDTOs.R_1.rightPeriod != null")
+                                span(ng-bind-html="'RESULTS_EXPLANATION_ONLY_AVAILABLE_FOR_SINGLE_PERIOD' | translate")
+
+                            p(ng-hide="o.reportDTOs.R_1.rightPeriod != null", ng-repeat="e in o.logEntries")
+                                span(ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART1' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.biActivityCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.biActivitySubCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
+                                    span &#32;
+                                    span(ng-bind-html="e.adUnit")
+                                    span &#32;
+                                    br
+                                    span &nbsp;&nbsp;&nbsp;&nbsp;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART3' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.biIndicatorCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART4' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.fValue | numberToI18NRoundedOrFullIfLessThanOne")
+                                    span &#32;
+                                    span(ng-bind-html="e.fUnitOut")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART5' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.fUnitIn")
+                                    br
+                                    span &nbsp;&nbsp;&nbsp;&nbsp;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_CONTRIB_PART6' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.value | numberToI18N")
+                                    span &#32;
+                                    span(ng-bind-html="e.biUnit")
+
+                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART1' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.biActivityCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.biActivitySubCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.adValue | numberToI18NRoundedOrFullIfLessThanOne")
+                                    span &#32;
+                                    span(ng-bind-html="e.adUnit")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART3' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.biIndicatorCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.adActivitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate")
+
+                        div(ng-show="current_tab == 7")
+                            h2
+                                span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
+
+                        div(ng-show="current_tab == 8")
+                            h2
+                                span(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
+                            br
+                            center
+                                table
+                                    tr
+                                        td
+                                            div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
+                                        td(style="width: 2em")
+                                        td
+                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
+
+
+                        br
+
+                        div.results_disclaimer
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                        br
+                        br
+                        br
 
             td.top-aligned
                 div.align-right

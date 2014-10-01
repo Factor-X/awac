@@ -9,17 +9,17 @@ div
 
                 mm-awac-question(question-code="AC11", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC12", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC13", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC12',itLevel1).value == '8'")
-                mm-awac-question(question-code="AC14", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC15", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC16", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC17", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC18", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC13", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC12',itLevel1).value == '8'",ng-optional="true")
+                mm-awac-question(question-code="AC14", ng-repetition-map="itLevel1",ng-optional="true")
+                mm-awac-question(question-code="AC15", ng-repetition-map="itLevel1",ng-optional="true")
+                mm-awac-question(question-code="AC16", ng-repetition-map="itLevel1",ng-optional="true")
+                mm-awac-question(question-code="AC17", ng-repetition-map="itLevel1",ng-optional="true")
+                mm-awac-question(question-code="AC18", ng-repetition-map="itLevel1",ng-optional="true")
                 mm-awac-question(question-code="AC19", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC20", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC21", ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="AC22", ng-repetition-map="itLevel1", ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
-                mm-awac-question(question-code="AC23", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC23", ng-repetition-map="itLevel1",ng-optional="true")
 
                 // AC24
                 mm-awac-sub-title(question-code="AC24")
@@ -74,7 +74,7 @@ div
 
                 // AC37
                 mm-awac-sub-title(question-code="AC37", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC38", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC38", ng-repetition-map="itLevel1",ng-optional="true")
 
                 mm-awac-repetition-name(question-code="AC39")
                 mm-awac-repetition-question(question-set-code="AC39", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC39', itLevel1)", ng-repetition-map="itLevel1")
@@ -89,7 +89,7 @@ div
                 // AC42
                 mm-awac-block(ng-condition="getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'")
                     mm-awac-sub-title(question-code="AC42", ng-repetition-map="itLevel1")
-                    mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1")
+                    mm-awac-question(question-code="AC43", ng-repetition-map="itLevel1",ng-optional="true")
 
                     mm-awac-repetition-name(question-code="AC5000")
                     mm-awac-repetition-question(question-set-code="AC5000", ng-iteration="itLevel2", ng-repeat="itLevel2 in getRepetitionMapByQuestionSet('AC5000', itLevel1)", ng-repetition-map="itLevel1")
@@ -109,7 +109,7 @@ div
 
         // éclairage public AS52
         mm-awac-section(title-code="AC52")
-            mm-awac-question(question-code="AC53")
+            mm-awac-question(question-code="AC53",ng-optional="true")
             mm-awac-question(question-code="AC54")
             mm-awac-question(question-code="AC55")
 

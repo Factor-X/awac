@@ -80,10 +80,10 @@ angular
                     $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator
 
 
-                questionSetElement = {
+                questionSetElement =
                     questionSetDTO: questionSetDTO
                     parent:parent
-                }
+
                 $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement
 
                 if questionSetDTO.repetitionAllowed == true
@@ -185,6 +185,7 @@ angular
 
         #eject locked or validate question
         finalList = []
+
         for answer in listAnswerToSave
             if not $scope.isQuestionLocked(answer.questionKey) && not $scope.isQuestionValidate(answer.questionKey)
                 finalList.push answer
@@ -262,7 +263,7 @@ angular
 
                     #nav
                     if argToNav != null
-                        $scope.$root.$broadcast('NAV', argToNav)
+                        $scope.$root.nav(argToNav.loc, argToNav.confirmed)
                     return
 
                 else
@@ -358,7 +359,7 @@ angular
     # get the answer by code and mapIteration
     # if there is not answer for this case, create it
     #
-    $scope.getAnswerOrCreate = (code, mapIteration , tabSet=null, tab = null) ->
+    $scope.getAnswerOrCreate = (code, mapIteration , tabSet=null, tab = null, optional = false) ->
         if code == null || code == undefined
             console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
             return null
@@ -404,6 +405,9 @@ angular
             if tabSet?
                 answerLine.tabSet = tabSet
                 answerLine.tab= tab
+
+            # add optional for all
+            answerLine.optional = optional
 
             $scope.createTabWatcher answerLine
 
@@ -559,17 +563,14 @@ angular
     # the result is savec to $scope.dataToCompare
     #
     $scope.$watch '$root.periodToCompare', () ->
-        console.log '$root.periodToCompare : '+$scope.$root.periodToCompare
         if $scope.$parent != null && $scope.$root.periodToCompare? && $scope.$root.periodToCompare != 'default'
             downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, (result)->
                 if result.success
-                    console.log result.data
                     if not result.data.answersSave.listAnswers or result.data.answersSave.listAnswers.length == 0
                         $scope.dataToCompare = null
                     else
                         $scope.dataToCompare = result.data
                 else
-                    console.log 'data to compare ERROR'
                     # TODO ERROR HANDLING !!!!!
                     $scope.dataToCompare = null
         else
@@ -595,14 +596,14 @@ angular
 
             if !answer.tabSet?
 
-                # document questions are optional : do not count them into total
-                if $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT' && answer.isAggregation != true
+                # remove optional or aggregation
+                if answer.optional != true && answer.isAggregation != true
 
                     if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
 
                         # clean the value
                         total++
-                        listTotal[listTotal.length] = answer
+                        listTotal.push answer
 
                         #test if the data is valid
                         if answer.value != null
@@ -615,14 +616,27 @@ angular
                     if tabSet.master?
                         for answer in $scope.answerList
                             if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == parseFloat(tabSet.master)
-                                total++
-                                answered++
+
+                                if answer.optional != true && answer.isAggregation != true
+                                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                                        total++
+                                        listTotal.push answer
+
+                                        #test if the data is valid
+                                        if answer.value != null
+                                            answered++
                     else
                         for answer in $scope.answerList
                             if answer.tabSet? && parseFloat(answer.tabSet) == parseFloat(key) && parseFloat(answer.tab) == 1
-                                total++
-                                if answer.value!=null
-                                    answered++
+
+                                if answer.optional != true && answer.isAggregation != true
+                                    if answer.hasValidCondition == undefined || answer.hasValidCondition == null || answer.hasValidCondition == true
+                                        total++
+                                        listTotal.push answer
+
+                                        #test if the data is valid
+                                        if answer.value != null
+                                            answered++
         if answered == 0
             percentage = 0
         else
@@ -664,11 +678,13 @@ angular
 
     $scope.addTabSet = (tabSet,tab, mapRepetition) ->
         ite=null
+        wasCreated = false
         if !$scope.tabSet[tabSet]?
             $scope.tabSet[tabSet] = []
             $scope.tabSet[tabSet][0] = {}
             $scope.tabSet[tabSet][0].mapRepetition = mapRepetition
             ite = 0
+            wasCreated = true
         else
             i=0
             while i < $scope.tabSet[tabSet].length
@@ -684,9 +700,11 @@ angular
         if !$scope.tabSet[tabSet][ite][tab]?
             $scope.tabSet[tabSet][ite][tab] = {}
             $scope.tabSet[tabSet][ite][tab].active = (tab == 1 ? true:false)
+            wasCreated = true
 
         if !$scope.tabSet[tabSet][ite][tab].listToCompute?
             $scope.tabSet[tabSet][ite][tab].listToCompute = []
+
         return ite
     #
     # create a watcher for an answer : all new answer or loaded answer use this function
@@ -743,16 +761,13 @@ angular
         # browse the list of answer include into this tab
         for answer in $scope.tabSet[tabSet][ite][tab].listToCompute
             #
-            # question 'DOCUMENT' (optional), aggregation or with false condition are not take in this case
+            # optional, aggregation or with false condition are not take in this case
             #
-            if !answer.hasValidCondition? || answer.hasValidCondition == true && $scope.getQuestion(answer.questionKey).answerType != 'DOCUMENT' && answer.isAggregation != true
+            if !answer.hasValidCondition? || answer.hasValidCondition == true && answer.optional != true && answer.isAggregation != true
                 # if one of this answer are a value == null, the tab is not finish => break
                 if answer.value == null
                     isFinish = false
                     break
-                else
-                    # if the value is not null, isFinish = true => broke is an other answer have value == null
-                    isFinish = true
 
         if isFinish != $scope.tabSet[tabSet][ite][tab].isFinish
 

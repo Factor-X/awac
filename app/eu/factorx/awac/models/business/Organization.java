@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -42,7 +43,11 @@ public class Organization extends Scope {
 	@OnDelete(action = OnDeleteAction.CASCADE) // -> hibernate-specific annotation to fix DDL generation problem
 	List<OrganizationEvent> events = new ArrayList<>();
 
-	protected Organization() {
+    @Embedded
+    @AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "interface_code")) })
+    private InterfaceTypeCode interfaceCode;
+
+    protected Organization() {
 		super();
 	}
 
@@ -51,7 +56,15 @@ public class Organization extends Scope {
 		this.name = name;
 	}
 
-	public String getName() {
+    public InterfaceTypeCode getInterfaceCode() {
+        return interfaceCode;
+    }
+
+    public void setInterfaceCode(InterfaceTypeCode interfaceCode) {
+        this.interfaceCode = interfaceCode;
+    }
+
+    public String getName() {
 		return name;
 	}
 
