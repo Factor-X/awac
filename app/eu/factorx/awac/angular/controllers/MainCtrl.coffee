@@ -215,7 +215,7 @@ angular
 
 
 #rootScope
-angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams,modalService)->
+angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams, $route, modalService)->
     $rootScope.languages = []
     $rootScope.languages[0] = {
         value: 'fr'
@@ -468,5 +468,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
 
 
-
+    $rootScope.showHelp = () ->
+        if $route.current.locals.helpPage?
+            modalService.show(modalService.HELP, {template: $route.current.locals.helpPage})
 

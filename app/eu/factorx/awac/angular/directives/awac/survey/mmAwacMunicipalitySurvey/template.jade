@@ -18,7 +18,11 @@ div
                 tr
                     td
                         button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
-                        button.button.help(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate")
+                        button.button.help(
+                            type='button',
+                            ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
+                            ng-click="$root.showHelp()"
+                        )
                     td
                         //  user manager button
                         button.button.user_manage(

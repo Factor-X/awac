@@ -10,13 +10,10 @@ initializeMunicipalityRoutes = (defaultResolve) ->
         $rootScope.getFormPath = ()->
             return '/form/TAB_C1'
 
-
     angular
     .module('app')
     .config ($routeProvider) ->
         $routeProvider
-
-
         .when('/form/:form/:period/:scope', {
                 templateUrl: ($routeParams) ->
                     '$/angular/views/municipality/' + $routeParams.form + '.html'
@@ -26,7 +23,10 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                         return $route.current.params.form
                     displayFormMenu: () ->
                         return true
+                    helpPage: () ->
+                        return 'help_form'
                 }, formResolve)
+
             }
         )
         .when('/results/:period/:scope', {
@@ -35,7 +35,20 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                 resolve: angular.extend({
                     displayFormMenu: () ->
                         return true
-                }, resultResolve)
+                    helpPage: () ->
+                        return 'help_results'
+                }, defaultResolve)
+            }
+        )
+        .when('/actions/:period/:scope', {
+                templateUrl: '$/angular/views/actions.html'
+                controller: 'ActionsCtrl'
+                resolve: angular.extend({
+                    displayFormMenu: () ->
+                        return true
+                    helpPage: () ->
+                        return 'help_actions'
+                }, defaultResolve)
             }
         )
         .otherwise({ redirectTo: '/login' })

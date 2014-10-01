@@ -2,7 +2,6 @@
 angular
 .module('app.services')
 .service "modalService", ($rootScope) ->
-
     @LOADING = 'loading'
     @DOCUMENT_MANAGER = 'DOCUMENT_MANAGER'
     @CONFIRMATION_EXIT_FORM = 'confirmation-exit-form'
@@ -14,10 +13,10 @@ angular
     @EDIT_SITE = 'edit-site'
     @ADD_USER_SITE = 'add-user-site'
     @EDIT_EVENT = 'edit-event'
-    @CONFIRM_CLOSING='confirm-closing'
+    @CONFIRM_CLOSING = 'confirm-closing'
+    @HELP = 'help'
 
-    @show = (modalName,params) ->
-
+    @show = (modalName, params) ->
         args = []
         args.show = true
         args.params = params
@@ -26,7 +25,6 @@ angular
         $rootScope.$broadcast('SHOW_MODAL', args)
 
     @close = (modalName) ->
-
         args = []
         args.show = false
         args.target = modalName
