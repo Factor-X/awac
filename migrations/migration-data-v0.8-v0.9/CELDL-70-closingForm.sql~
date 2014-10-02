@@ -25,7 +25,7 @@ CREATE SEQUENCE awaccalculatorclosed_id_seq;
 
 CREATE TABLE awaccalculatorclosed
 (
-  id bigserial  NOT NULL DEFAULT nextval('awaccalculatorclosed_id_seq'::regclass),
+  id bigserial  NOT NULL DEFAULT nextval('awaccalculator_id_seq'::regclass),
   creationdate timestamp without time zone,
   creationuser character varying(255),
   lastupdatedate timestamp without time zone,

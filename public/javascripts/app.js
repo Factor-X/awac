@@ -211,99 +211,56 @@ if (document.querySelector("meta[name=app]") != null) {
 }
 angular.module('app').run(function($rootScope) {
   return $rootScope.instanceName = iName;
-});angular.module('app.services').service("modalService", function($rootScope) {
-  this.LOADING = 'loading';
-  this.DOCUMENT_MANAGER = 'DOCUMENT_MANAGER';
-  this.CONFIRMATION_EXIT_FORM = 'confirmation-exit-form';
-  this.QUESTION_COMMENT = 'question-comment';
-  this.EMAIL_CHANGE = 'email-change';
-  this.PASSWORD_CHANGE = 'password-change';
-  this.CONNECTION_PASSWORD_CHANGE = 'connection-password-change';
-  this.INVITE_USER = 'invite-user';
-  this.EDIT_SITE = 'edit-site';
-  this.ADD_USER_SITE = 'add-user-site';
-  this.EDIT_EVENT = 'edit-event';
-  this.CONFIRM_CLOSING = 'confirm-closing';
-  this.show = function(modalName, params) {
-    var args;
-    args = [];
-    args.show = true;
-    args.params = params;
-    args.target = modalName;
-    $rootScope.displayModalBackground = true;
-    return $rootScope.$broadcast('SHOW_MODAL', args);
-  };
-  this.close = function(modalName) {
-    var args;
-    args = [];
-    args.show = false;
-    args.target = modalName;
-    $rootScope.displayModalBackground = false;
-    return $rootScope.$broadcast('SHOW_MODAL', args);
-  };
-  return;
-});angular.module('app.services').service('loggerService', function() {
-  var svc;
-  svc = this;
-  svc.initialize = function() {
-    var layout, log;
-    log = log4javascript.getLogger('main');
-    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
-    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
-    svc.appender.setLayout(layout);
-    log.addAppender(svc.appender);
-    return log.info("Logger initialized");
-  };
-  svc.get = function(name) {
-    var log;
-    log = log4javascript.getLogger(name);
-    log.addAppender(svc.appender);
-    return log;
-  };
-  return;
-});angular.module('app.services').service("translationService", function($rootScope, downloadService) {
-  var svc;
-  svc = this;
-  svc.elements = null;
-  svc.initialize = function(lang) {
-    return downloadService.getJson("/awac/translations/" + lang, function(result) {
-      if (result.success) {
-        svc.elements = result.data.lines;
-        return $rootScope.$broadcast("LOAD_FINISHED", {
-          type: "TRANSLATIONS",
-          success: true
-        });
-      } else {
-        svc.elements = [];
-        return $rootScope.$broadcast("LOAD_FINISHED", {
-          type: "TRANSLATIONS",
-          success: false
-        });
+});angular.module('app.services').service("directiveService", function($sce) {
+  this.autoScope = function(s) {
+    var k, res, v;
+    res = {};
+    for (k in s) {
+      v = s[k];
+      res[k] = v;
+      if (k.slice(0, 2) === 'ng' && v === '=') {
+        res[k[2].toLowerCase() + k.slice(3)] = '@';
       }
-    });
+    }
+    return res;
   };
-  svc.get = function(code, count) {
-    var txt, v;
-    if (svc.elements == null) {
-      return "";
-    }
-    v = svc.elements[code];
-    if (!(v != null)) {
-      return null;
-    }
-    if (count != null) {
-      if ("" + count === "0") {
-        txt = v.zero || v.fallback;
-      } else if ("" + count === "1") {
-        txt = v.one || v.fallback;
-      } else {
-        txt = v.more || v.fallback;
+  this.autoScopeImpl = function(s, name) {
+    var fget, key, val;
+    s.$$NAME = name;
+    for (key in s) {
+      val = s[key];
+      if (key.slice(0, 2) === 'ng') {
+        fget = function(scope, k) {
+          return function() {
+            var v;
+            v = 0;
+            if (scope[k] === void 0 || scope[k] === null || scope[k] === '') {
+              v = scope[k[2].toLowerCase() + k.slice(3)];
+            } else {
+              v = scope[k];
+            }
+            if (scope['decorate' + k.slice(2)]) {
+              return scope['decorate' + k.slice(2)](v);
+            } else {
+              return v;
+            }
+          };
+        };
+        s['get' + key.slice(2)] = fget(s, key);
       }
-      txt = txt.replace(/\{0\}/g, count);
-    } else {
-      txt = v.fallback || '';
     }
-    return txt;
+    s.isTrue = function(v) {
+      return v === true || v === 'true' || v === 'y';
+    };
+    s.isFalse = function(v) {
+      return v === false || v === 'false' || v === 'n';
+    };
+    s.isNull = function(v) {
+      return v === null;
+    };
+    return s.html = function(v) {
+      return $sce.trustAsHtml(v);
+    };
   };
   return;
 });angular.module('app.services').service("downloadService", function($http, $q) {
@@ -384,6 +341,70 @@ angular.module('app').run(function($rootScope) {
     return deferred.promise;
   };
   return;
+});angular.module('app.services').service('loggerService', function() {
+  var svc;
+  svc = this;
+  svc.initialize = function() {
+    var layout, log;
+    log = log4javascript.getLogger('main');
+    svc.appender = new log4javascript.InPageAppender('logger', true, false, true, '100%', '100%');
+    layout = new log4javascript.PatternLayout("%d [%-5p] %15c - %m");
+    svc.appender.setLayout(layout);
+    log.addAppender(svc.appender);
+    return log.info("Logger initialized");
+  };
+  svc.get = function(name) {
+    var log;
+    log = log4javascript.getLogger(name);
+    log.addAppender(svc.appender);
+    return log;
+  };
+  return;
+});angular.module('app.services').service("translationService", function($rootScope, downloadService) {
+  var svc;
+  svc = this;
+  svc.elements = null;
+  svc.initialize = function(lang) {
+    return downloadService.getJson("/awac/translations/" + lang, function(result) {
+      if (result.success) {
+        svc.elements = result.data.lines;
+        return $rootScope.$broadcast("LOAD_FINISHED", {
+          type: "TRANSLATIONS",
+          success: true
+        });
+      } else {
+        svc.elements = [];
+        return $rootScope.$broadcast("LOAD_FINISHED", {
+          type: "TRANSLATIONS",
+          success: false
+        });
+      }
+    });
+  };
+  svc.get = function(code, count) {
+    var txt, v;
+    if (svc.elements == null) {
+      return "";
+    }
+    v = svc.elements[code];
+    if (!(v != null)) {
+      return null;
+    }
+    if (count != null) {
+      if ("" + count === "0") {
+        txt = v.zero || v.fallback;
+      } else if ("" + count === "1") {
+        txt = v.one || v.fallback;
+      } else {
+        txt = v.more || v.fallback;
+      }
+      txt = txt.replace(/\{0\}/g, count);
+    } else {
+      txt = v.fallback || '';
+    }
+    return txt;
+  };
+  return;
 });angular.module('app.services').service("messageFlash", function(translateTextFilter) {
   this.display = function(type, message, opts) {
     var options;
@@ -405,80 +426,37 @@ angular.module('app').run(function($rootScope) {
     return this.display('error', message, opts);
   };
   return;
-});angular.module('app.services').service("directiveService", function($sce) {
-  this.autoScope = function(s) {
-    var k, res, v;
-    res = {};
-    for (k in s) {
-      v = s[k];
-      res[k] = v;
-      if (k.slice(0, 2) === 'ng' && v === '=') {
-        res[k[2].toLowerCase() + k.slice(3)] = '@';
-      }
-    }
-    return res;
+});angular.module('app.services').service("modalService", function($rootScope) {
+  this.LOADING = 'loading';
+  this.DOCUMENT_MANAGER = 'DOCUMENT_MANAGER';
+  this.CONFIRMATION_EXIT_FORM = 'confirmation-exit-form';
+  this.QUESTION_COMMENT = 'question-comment';
+  this.EMAIL_CHANGE = 'email-change';
+  this.PASSWORD_CHANGE = 'password-change';
+  this.CONNECTION_PASSWORD_CHANGE = 'connection-password-change';
+  this.INVITE_USER = 'invite-user';
+  this.EDIT_SITE = 'edit-site';
+  this.ADD_USER_SITE = 'add-user-site';
+  this.EDIT_EVENT = 'edit-event';
+  this.CONFIRM_CLOSING = 'confirm-closing';
+  this.show = function(modalName, params) {
+    var args;
+    args = [];
+    args.show = true;
+    args.params = params;
+    args.target = modalName;
+    $rootScope.displayModalBackground = true;
+    return $rootScope.$broadcast('SHOW_MODAL', args);
   };
-  this.autoScopeImpl = function(s, name) {
-    var fget, key, val;
-    s.$$NAME = name;
-    for (key in s) {
-      val = s[key];
-      if (key.slice(0, 2) === 'ng') {
-        fget = function(scope, k) {
-          return function() {
-            var v;
-            v = 0;
-            if (scope[k] === void 0 || scope[k] === null || scope[k] === '') {
-              v = scope[k[2].toLowerCase() + k.slice(3)];
-            } else {
-              v = scope[k];
-            }
-            if (scope['decorate' + k.slice(2)]) {
-              return scope['decorate' + k.slice(2)](v);
-            } else {
-              return v;
-            }
-          };
-        };
-        s['get' + key.slice(2)] = fget(s, key);
-      }
-    }
-    s.isTrue = function(v) {
-      return v === true || v === 'true' || v === 'y';
-    };
-    s.isFalse = function(v) {
-      return v === false || v === 'false' || v === 'n';
-    };
-    s.isNull = function(v) {
-      return v === null;
-    };
-    return s.html = function(v) {
-      return $sce.trustAsHtml(v);
-    };
+  this.close = function(modalName) {
+    var args;
+    args = [];
+    args.show = false;
+    args.target = modalName;
+    $rootScope.displayModalBackground = false;
+    return $rootScope.$broadcast('SHOW_MODAL', args);
   };
   return;
-});angular.module('app.filters').filter("numberToI18NOrLess", function($filter, translationService) {
-  return function(input) {
-    var original, rounded;
-    if (input != null) {
-      original = parseFloat(input);
-      rounded = Math.round(original * 1000.0) / 1000.0;
-      if (rounded < 0.001) {
-        if (original > 0) {
-          return translationService.get('LESS_THAN_MINIMUM');
-        } else {
-          return '';
-        }
-      } else {
-        return $filter("number")(rounded, 3);
-      }
-    }
-    return "";
-  };
-});angular.module('app.filters').filter("trustAsHtml", function($sce) {
-  return function(input) {
-    return $sce.trustAsHtml(input);
-  };
 });angular.module('app.filters').filter("translateWithVars", function($sce, translationService) {
   return function(input, vars) {
     var k, text, v;
@@ -492,25 +470,6 @@ angular.module('app').run(function($rootScope) {
     } else {
       return $sce.trustAsHtml("<span class=\"translated-text translation-missing\" data-code=\"" + input + "\">[" + input + "]</span>");
     }
-  };
-});angular.module('app.filters').filter("numberToI18N", function($filter) {
-  return function(input) {
-    var original, rounded;
-    if (input != null) {
-      original = parseFloat(input);
-      rounded = Math.round(original * 100.0) / 100.0;
-      return $filter("number")(rounded, 2);
-    }
-    return "";
-  };
-});angular.module('app.filters').filter("translateText", function($sce, translationService) {
-  return function(input, count) {
-    var text;
-    text = translationService.get(input, count);
-    if (text != null) {
-      return text;
-    }
-    return input;
   };
 });angular.module('app.filters').filter("numberToI18NRoundedOrFullIfLessThanOne", function($filter) {
   return function(input) {
@@ -529,11 +488,9 @@ angular.module('app').run(function($rootScope) {
     }
     return "";
   };
-});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
+});angular.module('app.filters').filter("trustAsHtml", function($sce) {
   return function(input) {
-    if (input != null) {
-      return parseFloat(input);
-    }
+    return $sce.trustAsHtml(input);
   };
 });angular.module('app.filters').filter("translate", function($sce, translationService) {
   return function(input, count) {
@@ -553,49 +510,50 @@ angular.module('app').run(function($rootScope) {
       return parseFloat(input);
     }
   };
-});
-angular.module('app.directives').directive('mmPatternValidator', function(){
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl) {
-            console.log(attrs);
-
-            ctrl.$parsers.unshift(function(viewValue) {
-
-                var o = {};
-
-                for(k in attrs) {
-                    if( k.substring(0, 'mmPatternValidator'.length) == 'mmPatternValidator' && k.length > 'mmPatternValidator'.length) {
-                        arg = k.substring('mmPatternValidator'.length);
-                        o[arg.toLowerCase()] = attrs[k];
-                    }
-                }
-
-                ;
-
-                function validate(value, args) {
-    var re = new RegExp(eval(args.regexp));
-    return re.test(value);
-}
-
-                ;
-
-                var result = validate(viewValue, o);
-
-                if (result) {
-                  ctrl.$setValidity('pattern', true);
-                  return viewValue;
-                } else {
-                  ctrl.$setValidity('pattern', false);
-                  return undefined;
-                }
-
-            });
+});angular.module('app.filters').filter("numberToI18N", function($filter) {
+  return function(input) {
+    var original, rounded;
+    if (input != null) {
+      original = parseFloat(input);
+      rounded = Math.round(original * 100.0) / 100.0;
+      return $filter("number")(rounded, 2);
+    }
+    return "";
+  };
+});angular.module('app.filters').filter("numberToI18NOrLess", function($filter, translationService) {
+  return function(input) {
+    var original, rounded;
+    if (input != null) {
+      original = parseFloat(input);
+      rounded = Math.round(original * 1000.0) / 1000.0;
+      if (rounded < 0.001) {
+        if (original > 0) {
+          return translationService.get('LESS_THAN_MINIMUM');
+        } else {
+          return '';
         }
-    };
+      } else {
+        return $filter("number")(rounded, 3);
+      }
+    }
+    return "";
+  };
+});angular.module('app.filters').filter("stringToFloat", function($sce, translationService) {
+  return function(input) {
+    if (input != null) {
+      return parseFloat(input);
+    }
+  };
+});angular.module('app.filters').filter("translateText", function($sce, translationService) {
+  return function(input, count) {
+    var text;
+    text = translationService.get(input, count);
+    if (text != null) {
+      return text;
+    }
+    return input;
+  };
 });
-            
 angular.module('app.directives').directive('mmSizeValidator', function(){
     return {
         restrict: 'A',
@@ -634,6 +592,48 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
                   return viewValue;
                 } else {
                   ctrl.$setValidity('size', false);
+                  return undefined;
+                }
+
+            });
+        }
+    };
+});
+            
+angular.module('app.directives').directive('mmPatternValidator', function(){
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            console.log(attrs);
+
+            ctrl.$parsers.unshift(function(viewValue) {
+
+                var o = {};
+
+                for(k in attrs) {
+                    if( k.substring(0, 'mmPatternValidator'.length) == 'mmPatternValidator' && k.length > 'mmPatternValidator'.length) {
+                        arg = k.substring('mmPatternValidator'.length);
+                        o[arg.toLowerCase()] = attrs[k];
+                    }
+                }
+
+                ;
+
+                function validate(value, args) {
+    var re = new RegExp(eval(args.regexp));
+    return re.test(value);
+}
+
+                ;
+
+                var result = validate(viewValue, o);
+
+                if (result) {
+                  ctrl.$setValidity('pattern', true);
+                  return viewValue;
+                } else {
+                  ctrl.$setValidity('pattern', false);
                   return undefined;
                 }
 
@@ -782,16 +782,19 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       };
       $scope.identifierInfo = {
         fieldTitle: "USER_IDENTIFIER",
+        inputName: 'identifier',
         validationRegex: "[a-zA-Z0-9-]{5,20}",
         validationMessage: "IDENTIFIER_CHECK_WRONG"
       };
       $scope.lastNameInfo = {
         fieldTitle: "USER_LASTNAME",
+        inputName: 'lastName',
         validationRegex: "^.{1,255}$",
         validationMessage: "USER_LASTNAME_WRONG_LENGTH"
       };
       $scope.firstNameInfo = {
         fieldTitle: "USER_FIRSTNAME",
+        inputName: 'firstName',
         fieldType: "text",
         validationRegex: "^.{1,255}$",
         validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
@@ -801,17 +804,20 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       };
       $scope.emailInfo = {
         fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
+        inputName: 'email',
         validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
         validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
       };
       $scope.passwordInfo = {
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
+        inputName: 'password',
         fieldType: "password",
         validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$",
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
       };
       $scope.passwordConfirmInfo = {
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE",
+        inputName: 'password',
         fieldType: "password",
         validationFct: $scope.validatePasswordConfirmField,
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
@@ -1689,11 +1695,20 @@ angular.module('app.directives').directive('mmNullValidator', function(){
             args.canBeEdited = canBeEdited;
             return modalService.show(modalService.QUESTION_COMMENT, args);
           };
-          return scope.isDisabled = function() {
+          scope.isDisabled = function() {
             if (scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode())) {
               return true;
             }
             return false;
+          };
+          return scope.getUserClass = function() {
+            if (scope.getAnswer() !== null && (scope.$parent.getValidatorByQuestionCode(scope.getQuestionCode()) != null)) {
+              if (scope.$parent.getValidatorByQuestionCode(scope.getQuestionCode()).identifier === scope.getAnswer().lastUpdateUser.identifier) {
+                return 'user_icon_red';
+              }
+              return 'user_icon_green';
+            }
+            return '';
           };
         }
       };
@@ -1952,7 +1967,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
     replace: true,
     link: function(scope) {
       directiveService.autoScopeImpl(scope);
-      scope.radioName = "name_" + (Math.floor(Math.random() * 10000));
+      scope.radioName = "name_" + (Math.floor(Math.random() * 1000000));
       scope.getDisabled = function() {
         return scope.$parent.isDisabled();
       };
@@ -2096,6 +2111,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         return false;
       };
       $scope.newPasswordInfo = {
+        inputName: 'password',
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
         fieldType: "password",
         placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER",
@@ -2108,6 +2124,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         }
       };
       $scope.newPasswordConfirmInfo = {
+        inputName: 'password',
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE",
         fieldType: "password",
         placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_PLACEHOLDER",
@@ -2174,6 +2191,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         return false;
       };
       $scope.oldPasswordInfo = {
+        inputName: 'password',
         fieldTitle: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_TITLE",
         fieldType: "password",
         placeholder: "PASSWORD_CHANGE_FORM_OLD_PASSWORD_FIELD_PLACEHOLDER",
@@ -2186,6 +2204,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         }
       };
       $scope.newPasswordInfo = {
+        inputName: 'password',
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
         fieldType: "password",
         placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER",
@@ -2195,6 +2214,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         field: ""
       };
       $scope.newPasswordConfirmInfo = {
+        inputName: 'password',
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE",
         fieldType: "password",
         placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_PLACEHOLDER",
@@ -2328,6 +2348,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       $scope.passwordInfo = {
         field: "",
         fieldType: "password",
+        inputName: 'password',
         fieldTitle: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_TITLE",
         placeholder: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_PLACEHOLDER",
         validationRegex: "^\\S{5,20}$",
@@ -2338,11 +2359,13 @@ angular.module('app.directives').directive('mmNullValidator', function(){
         }
       };
       $scope.oldEmailInfo = {
+        inputName: 'email',
         field: $scope.getParams().oldEmail,
         fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE",
         disabled: true
       };
       $scope.newEmailInfo = {
+        inputName: 'email',
         field: "",
         fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
         placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER",
@@ -2593,6 +2616,7 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       directiveService.autoScopeImpl($scope);
       $scope.inviteEmailInfo = {
         field: "",
+        inputName: 'email',
         fieldTitle: "USER_INVITATION_EMAIL_FIELD_TITLE",
         placeholder: "USER_INVITATION_EMAIL_FIELD_PLACEHOLDER",
         validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
@@ -2958,16 +2982,19 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       };
       $scope.identifierInfo = {
         fieldTitle: "USER_IDENTIFIER",
+        inputName: 'identifier',
         validationRegex: "[a-zA-Z0-9-]{5,20}",
         validationMessage: "IDENTIFIER_CHECK_WRONG"
       };
       $scope.lastNameInfo = {
         fieldTitle: "USER_LASTNAME",
+        inputName: 'lastName',
         validationRegex: "^.{1,255}$",
         validationMessage: "USER_LASTNAME_WRONG_LENGTH"
       };
       $scope.firstNameInfo = {
         fieldTitle: "USER_FIRSTNAME",
+        inputName: 'firstName',
         fieldType: "text",
         validationRegex: "^.{1,255}$",
         validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
@@ -2977,17 +3004,20 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       };
       $scope.emailInfo = {
         fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
+        inputName: 'email',
         validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
         validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
       };
       $scope.passwordInfo = {
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
+        inputName: 'password',
         fieldType: "password",
         validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$",
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
       };
       $scope.passwordConfirmInfo = {
         fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE",
+        inputName: 'password',
         fieldType: "password",
         validationFct: $scope.validatePasswordConfirmField,
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
@@ -3151,8 +3181,1191 @@ angular.module('app.directives').directive('mmNullValidator', function(){
       });
     }
   };
+});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
+  $scope.notifications = [];
+  return downloadService.getJson("admin/get_notifications", function(dto) {
+    if (dto != null) {
+      $scope.notifications = dto.notifications;
+    }
+    return;
+  });
+});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) {
+  $scope.loading = false;
+  $scope.tabActive = [];
+  $scope.$watch('tabActive[1]', function() {
+    if ($scope.tabActive[1] !== true) {
+      $scope.forgotEmailSuccessMessage = null;
+      return $scope.forgotPasswordInfo.field = "";
+    }
+  });
+  $scope.enterEvent = function() {
+    if ($scope.tabActive[0] === true) {
+      return $scope.send();
+    } else if ($scope.tabActive[1] === true) {
+      return $scope.sendForgotPassword();
+    }
+  };
+  $scope.loginInfo = {
+    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
+    id: 'loginForm',
+    inputName: 'identifier',
+    fieldType: "text",
+    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false,
+    focus: function() {
+      return $scope.tabActive[0];
+    }
+  };
+  $scope.passwordInfo = {
+    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
+    inputName: 'password',
+    fieldType: "password",
+    validationRegex: "^\\S{5,20}$",
+    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false
+  };
+  $scope.forgotPasswordInfo = {
+    fieldTitle: "IDENTIFIENT_OR_EMAIL",
+    inputName: 'password',
+    fieldType: "text",
+    validationRegex: "^\\S+$",
+    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+    field: "",
+    isValid: false,
+    focus: function() {
+      return $scope.tabActive[1];
+    }
+  };
+  $scope.connectionFieldValid = function() {
+    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.forgotPasswordFieldValid = function() {
+    if ($scope.forgotPasswordInfo.isValid && $scope.forgotPasswordInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.send = function() {
+    $scope.isLoading = true;
+    downloadService.postJson('/awac/login', {
+      login: $scope.loginInfo.field,
+      password: $scope.passwordInfo.field,
+      interfaceName: $scope.$root.instanceName
+    }, function(result) {
+      var params;
+      if (result.success) {
+        /*
+        $("#loginForm").submit (e) ->
+            e.preventDefault()
+            return
+        $("#loginForm").submit()
+        */
+        $scope.$root.loginSuccess(result.data);
+        messageFlash.displaySuccess(translationService.get('CONNECTION_MESSAGE_SUCCESS'));
+        return $scope.isLoading = false;
+      } else {
+        $scope.isLoading = false;
+        if (result.data.__type === 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO') {
+          params = {
+            login: $scope.loginInfo.field,
+            password: $scope.passwordInfo.field
+          };
+          return modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params);
+        } else {
+          return messageFlash.displayError(result.data.message);
+        }
+      }
+    });
+    return false;
+  };
+  $scope.forgotEmailSuccessMessage = null;
+  $scope.sendForgotPassword = function() {
+    $scope.isLoading = true;
+    downloadService.postJson('/awac/forgotPassword', {
+      identifier: $scope.forgotPasswordInfo.field,
+      interfaceName: $scope.$root.instanceName
+    }, function(result) {
+      if (result.success) {
+        $scope.forgotEmailSuccessMessage = translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS');
+        $scope.isLoading = false;
+        return;
+      } else {
+        messageFlash.displayError(result.data.message);
+        $scope.isLoading = false;
+        return;
+      }
+    });
+    return false;
+  };
+  $scope.injectRegistrationDirective = function() {
+    var directive, directiveName;
+    if ($scope.$root != null) {
+      if ($scope.$root.instanceName === 'enterprise') {
+        directiveName = "mm-awac-registration-enterprise";
+      } else if ($scope.$root.instanceName === 'municipality') {
+        directiveName = "mm-awac-registration-municipality";
+      }
+      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
+      return $('.inject-registration-form').append(directive);
+    }
+  };
+  return $timeout(function() {
+    return $scope.injectRegistrationDirective();
+  }, 0);
+});angular.module('app.controllers').controller("UserDataCtrl", function($scope, downloadService, translationService, messageFlash, modalService) {
+  $scope.isLoading = false;
+  $scope.identifierInfo = {
+    fieldTitle: "USER_IDENTIFIER",
+    disabled: true,
+    field: $scope.$root.currentPerson.identifier
+  };
+  $scope.passwordInfo = {
+    fieldTitle: "USER_PASSWORD",
+    fieldType: "password",
+    disabled: true,
+    field: "*****"
+  };
+  $scope.lastNameInfo = {
+    fieldTitle: "USER_LASTNAME",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
+    field: $scope.$root.currentPerson.lastName,
+    hideIsValidIcon: true,
+    isValid: true,
+    focus: function() {
+      return true;
+    }
+  };
+  $scope.firstNameInfo = {
+    fieldTitle: "USER_FIRSTNAME",
+    fieldType: "text",
+    validationRegex: "^.{1,255}$",
+    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
+    field: $scope.$root.currentPerson.firstName,
+    hideIsValidIcon: true,
+    isValid: true
+  };
+  $scope.emailInfo = {
+    fieldTitle: "USER_EMAIL",
+    disabled: true,
+    field: $scope.$root.currentPerson.email
+  };
+  $scope.allFieldValid = function() {
+    if ($scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid) {
+      return true;
+    }
+    return false;
+  };
+  $scope.$root.refreshUserData();
+  $scope.send = function() {
+    var data;
+    if (!$scope.allFieldValid) {
+      return false;
+    }
+    $scope.isLoading = true;
+    data = {
+      identifier: $scope.identifierInfo.field,
+      lastName: $scope.lastNameInfo.field,
+      firstName: $scope.firstNameInfo.field,
+      email: $scope.emailInfo.field
+    };
+    downloadService.postJson('/awac/user/profile/save', data, function(result) {
+      if (result.success) {
+        messageFlash.displaySuccess("CHANGES_SAVED");
+        $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field;
+        $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field;
+        return $scope.isLoading = false;
+      } else {
+        messageFlash.displayError(result.data.message);
+        return $scope.isLoading = false;
+      }
+    });
+    return false;
+  };
+  $scope.setNewEmail = function(newEmail) {
+    $scope.emailInfo.field = newEmail;
+    return $scope.$root.currentPerson.email = newEmail;
+  };
+  $scope.changeEmail = function() {
+    return modalService.show(modalService.EMAIL_CHANGE, {
+      oldEmail: $scope.emailInfo.field,
+      cb: $scope.setNewEmail
+    });
+  };
+  $scope.changePassword = function() {
+    return modalService.show(modalService.PASSWORD_CHANGE, {});
+  };
+  return $scope.toForm = function() {
+    return $scope.$root.navToLastFormUsed();
+  };
 });angular.module('app.controllers').controller("NoScopeCtrl", function($scope, displayLittleFormMenu) {
   return $scope.displayLittleFormMenu = displayLittleFormMenu;
+});angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout, displayFormMenu) {
+  $scope.formIdentifier = formIdentifier;
+  $scope.displayFormMenu = displayFormMenu;
+  $scope.tabSet = {};
+  $scope.dataToCompare = null;
+  $scope.answerList = [];
+  $scope.mapRepetition = {};
+  $scope.mapQuestionSet = {};
+  /*
+  illustration of the structures
+  $scope.mapRepetition['A15'] = [{'A15':1},
+                                  {'A15':2}]
+
+  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
+                                 {'A16':2,'A15':1}]
+  */
+  /*
+  list of the questionSet key locked with locker like personDTO
+  */
+  $scope.datalocker = {};
+  $scope.dataValidator = {};
+  $scope.loading = true;
+  $scope.errorMessage = null;
+  modalService.show(modalService.LOADING);
+  downloadService.getJson("/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, function(result) {
+    var answerSave, args, qSet, questionSetDTO, _i, _j, _len, _len2, _ref, _ref2;
+    if (!result.success) {
+      $scope.errorMessage = result.data.message;
+      messageFlash.displayError(result.data.message);
+      return modalService.close(modalService.LOADING);
+    } else {
+      console.log("loading form result : ");
+      console.log(result.data);
+      $scope.o = angular.copy(result.data);
+      if ($scope.o.answersSave !== null && $scope.o.answersSave !== void 0) {
+        answerSave = $scope.o.answersSave;
+        $scope.answerList = answerSave.listAnswers;
+      }
+      $scope.loopRepetition = function(questionSetDTO, listQuestionSetRepetition, parent) {
+        var answer, child, questionSetElement, _i, _j, _len, _len2, _ref, _ref2, _results;
+        if (listQuestionSetRepetition == null) {
+          listQuestionSetRepetition = [];
+        }
+        if (questionSetDTO.datalocker != null) {
+          $scope.datalocker[questionSetDTO.code] = questionSetDTO.datalocker;
+        }
+        if (questionSetDTO.dataValidator != null) {
+          $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator;
+        }
+        questionSetElement = {
+          questionSetDTO: questionSetDTO,
+          parent: parent
+        };
+        $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement;
+        if (questionSetDTO.repetitionAllowed === true) {
+          listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code;
+          _ref = $scope.answerList;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            answer = _ref[_i];
+            if (answer.mapRepetition !== null && answer.mapRepetition !== void 0) {
+              if (answer.mapRepetition[questionSetDTO.code] !== null && answer.mapRepetition[questionSetDTO.code] !== void 0 && answer.mapRepetition[questionSetDTO.code] !== 0) {
+                $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition, listQuestionSetRepetition);
+              }
+            }
+          }
+        }
+        if (questionSetDTO.children) {
+          _ref2 = questionSetDTO.children;
+          _results = [];
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            child = _ref2[_j];
+            _results.push($scope.loopRepetition(child, angular.copy(listQuestionSetRepetition), questionSetElement));
+          }
+          return _results;
+        }
+      };
+      $scope.addDefaultValue = function(questionSetDTO) {
+        var answer, child, question, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
+        _ref = questionSetDTO.questions;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          question = _ref[_i];
+          if (question.defaultValue !== void 0 && question.defaultValue !== null) {
+            _ref2 = $scope.answerList;
+            for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+              answer = _ref2[_j];
+              if (answer.questionKey === question.code && answer.value === null) {
+                answer.value = question.defaultValue;
+              }
+            }
+          }
+        }
+        _ref3 = questionSetDTO.children;
+        _results = [];
+        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
+          child = _ref3[_k];
+          _results.push($scope.addDefaultValue(child));
+        }
+        return _results;
+      };
+      args = {};
+      args.time = $scope.o.answersSave.lastUpdateDate;
+      if ($scope.$root != null) {
+        $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args);
+      }
+      _ref = $scope.o.questionSets;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        qSet = _ref[_i];
+        $scope.loopRepetition(qSet);
+      }
+      console.log("$scope.mapRepetition");
+      console.log($scope.mapRepetition);
+      _ref2 = $scope.o.questionSets;
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        questionSetDTO = _ref2[_j];
+        $scope.addDefaultValue(questionSetDTO);
+      }
+      $timeout(function() {
+        var answer, _i, _len, _ref;
+        _ref = $scope.answerList;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          answer = _ref[_i];
+          $scope.createTabWatcher(answer);
+        }
+        return $timeout(function() {
+          var answer, _i, _len, _ref;
+          modalService.close(modalService.LOADING);
+          $scope.loading = false;
+          _ref = $scope.answerList;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            answer = _ref[_i];
+            if (answer.hasValidCondition === false && answer.value !== null) {
+              answer.value = null;
+            }
+          }
+          return $scope.$root.$broadcast('FORM_LOADING_FINISH');
+        }, 0);
+      }, 0);
+      return;
+    }
+  });
+  $scope.$on('SAVE_AND_NAV', function(event, args) {
+    return $scope.save(args);
+  });
+  $scope.$on('SAVE', function() {
+    return $scope.save();
+  });
+  $scope.save = function(argToNav) {
+    var answer, finalList, listAnswerToSave, _i, _j, _len, _len2, _ref;
+    if (argToNav == null) {
+      argToNav = null;
+    }
+    modalService.show(modalService.LOADING);
+    listAnswerToSave = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
+        if (answer.hasValidCondition !== void 0 && answer.hasValidCondition === false) {
+          answer.value = null;
+        }
+        listAnswerToSave[listAnswerToSave.length] = answer;
+      }
+    }
+    finalList = [];
+    for (_j = 0, _len2 = listAnswerToSave.length; _j < _len2; _j++) {
+      answer = listAnswerToSave[_j];
+      if (!$scope.isQuestionLocked(answer.questionKey) && !$scope.isQuestionValidate(answer.questionKey)) {
+        finalList.push(answer);
+      }
+    }
+    console.log("listAnswerToSave");
+    console.log(finalList);
+    if (finalList.length === 0) {
+      messageFlash.displayInfo(translationService.get('ALL_ANSWERS_ALREADY_SAVED'));
+      return modalService.close(modalService.LOADING);
+    } else {
+      $scope.o.answersSave.listAnswers = finalList;
+      return downloadService.postJson('/awac/answer/save', $scope.o.answersSave, function(result) {
+        var answer, founded, i, it, j, key, listToRemove, repetition, repetitionToRemove, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
+        if (result.success) {
+          listToRemove = [];
+          _ref = Object.keys($scope.mapRepetition);
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            key = _ref[_i];
+            if (key !== '$$hashKey') {
+              i = 0;
+              while (i < $scope.mapRepetition[key].length) {
+                repetition = $scope.mapRepetition[key][i];
+                founded = false;
+                _ref2 = $scope.answerList;
+                for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+                  answer = _ref2[_j];
+                  if ((answer.value != null) && (!(answer.isAggregation != null) || answer.isAggregation !== true) && $scope.compareRepetitionMap(answer.mapRepetition, repetition)) {
+                    founded = true;
+                    break;
+                  }
+                }
+                if (founded === false) {
+                  it = listToRemove.length;
+                  listToRemove[it] = {};
+                  listToRemove[it].code = key;
+                  listToRemove[it].iteration = {};
+                  listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key];
+                  j = angular.copy($scope.mapRepetition[key][i]);
+                  delete j[key];
+                  listToRemove[it].map = j;
+                }
+                i++;
+              }
+            }
+          }
+          for (_k = 0, _len3 = listToRemove.length; _k < _len3; _k++) {
+            repetitionToRemove = listToRemove[_k];
+            $scope.removeIteration(repetitionToRemove.code, repetitionToRemove.iteration, repetitionToRemove.map);
+          }
+          i = $scope.answerList.length - 1;
+          while (i >= 0) {
+            answer = $scope.answerList[i];
+            if (answer.wasEdited === true) {
+              answer.wasEdited = false;
+            }
+            if (answer.toRemove === true) {
+              $scope.answerList.splice(i, 1);
+            }
+            i--;
+          }
+          $scope.saveFormProgress();
+          messageFlash.displaySuccess(translationService.get('ANSWERS_SAVED'));
+          modalService.close(modalService.LOADING);
+          if (argToNav !== null) {
+            $scope.$root.nav(argToNav.loc, argToNav.confirmed);
+          }
+          return;
+        } else {
+          messageFlash.displayError(translationService.get('ERROR_THROWN_ON_SAVE') + data.message);
+          modalService.close(modalService.LOADING);
+          return;
+        }
+      });
+    }
+  };
+  $scope.getUnitCategories = function(code) {
+    var question;
+    if ($scope.getQuestion(code) === null) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    if (question === null || question === void 0) {
+      console.log("ERROR : this question was not found : " + code);
+      return null;
+    }
+    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
+      console.log("ERROR : there is no unitCategoryId for this question : " + code);
+      return null;
+    }
+    return $scope.o.unitCategories[question.unitCategoryId];
+  };
+  $scope.getCodeList = function(code) {
+    var question;
+    if ($scope.loading) {
+      return null;
+    }
+    question = $scope.getQuestion(code);
+    return $scope.o.codeLists[question.codeListName];
+  };
+  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
+    var listRepetition, repetition, _i, _len, _ref;
+    listRepetition = [];
+    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
+          listRepetition[listRepetition.length] = repetition;
+        }
+      }
+    }
+    return listRepetition;
+  };
+  $scope.getQuestion = function(code, listQuestionSets) {
+    var q, qSet, result, _i, _j, _len, _len2, _ref;
+    if (listQuestionSets == null) {
+      listQuestionSets = null;
+    }
+    if (listQuestionSets === null) {
+      if ($scope.o === null || $scope.o === void 0 || $scope.o.questionSets === null) {
+        return null;
+      }
+      listQuestionSets = $scope.o.questionSets;
+    }
+    if (listQuestionSets) {
+      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
+        qSet = listQuestionSets[_i];
+        if (qSet.questions) {
+          _ref = qSet.questions;
+          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+            q = _ref[_j];
+            if (q.code === code) {
+              return q;
+            }
+          }
+        }
+        if (qSet.children) {
+          result = $scope.getQuestion(code, qSet.children);
+          if (result) {
+            return result;
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getAnswerToCompare = function(code, mapIteration) {
+    var answer, _i, _len, _ref;
+    if ($scope.dataToCompare !== null) {
+      _ref = $scope.dataToCompare.answersSave.listAnswers;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        answer = _ref[_i];
+        if (answer.questionKey === code) {
+          if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+            return answer;
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getAnswerOrCreate = function(code, mapIteration, tabSet, tab, optional) {
+    var answerLine, defaultUnitCode, question, result, value, wasEdited;
+    if (tabSet == null) {
+      tabSet = null;
+    }
+    if (tab == null) {
+      tab = null;
+    }
+    if (optional == null) {
+      optional = false;
+    }
+    if (code === null || code === void 0) {
+      console.log("ERROR !! getAnswerOrCreate : code is null or undefined");
+      return null;
+    }
+    result = $scope.getAnswer(code, mapIteration);
+    if (result) {
+      if (result.toRemove != null) {
+        result.toRemove = false;
+      }
+      if ((tabSet != null) && !(result.tabSet != null)) {
+        result.tabSet = tabSet;
+        result.tab = tab;
+      }
+      result.optional = optional;
+      return result;
+    } else {
+      value = null;
+      defaultUnitCode = null;
+      wasEdited = false;
+      if ($scope.getQuestion(code) !== null) {
+        question = $scope.getQuestion(code);
+        if (question.defaultValue !== null) {
+          value = question.defaultValue;
+          wasEdited = true;
+        }
+        if (question.unitCategoryId != null) {
+          if (question.defaultUnit != null) {
+            defaultUnitCode = question.defaultUnit.code;
+          } else {
+            defaultUnitCode = $scope.getUnitCategories(code).mainUnitCode;
+          }
+        }
+      }
+      answerLine = {
+        'questionKey': code,
+        'value': value,
+        'unitCode': defaultUnitCode,
+        'mapRepetition': mapIteration,
+        'lastUpdateUser': $scope.$root.currentPerson,
+        'wasEdited': wasEdited
+      };
+      if (tabSet != null) {
+        answerLine.tabSet = tabSet;
+        answerLine.tab = tab;
+      }
+      answerLine.optional = optional;
+      $scope.createTabWatcher(answerLine);
+      $scope.answerList[$scope.answerList.length] = answerLine;
+      return answerLine;
+    }
+  };
+  $scope.getAnswer = function(code, mapIteration) {
+    var answer, _i, _len, _ref;
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code) {
+        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+          return answer;
+        }
+      }
+    }
+    return null;
+  };
+  $scope.getListAnswer = function(code, mapIteration) {
+    var answer, listAnswer, _i, _len, _ref;
+    listAnswer = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
+        listAnswer[listAnswer.length] = answer;
+      }
+    }
+    return listAnswer;
+  };
+  $scope.addIteration = function(code, mapRepetition) {
+    var max, repetition, repetitionToAdd, _i, _len, _ref;
+    max = 0;
+    repetitionToAdd = {};
+    if (mapRepetition != null) {
+      repetitionToAdd = angular.copy(mapRepetition);
+    }
+    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
+      repetitionToAdd[code] = max + 1;
+      $scope.mapRepetition[code] = [];
+      return $scope.mapRepetition[code][0] = repetitionToAdd;
+    } else {
+      _ref = $scope.mapRepetition[code];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        repetition = _ref[_i];
+        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
+          max = repetition[code];
+        }
+      }
+      repetitionToAdd[code] = max + 1;
+      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
+    }
+  };
+  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
+    var iteration, key, len, question, _i, _len, _ref, _results;
+    len = $scope.answerList.length;
+    while (len--) {
+      question = $scope.answerList[len];
+      if ((question.mapRepetition != null) && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
+        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
+          $scope.answerList[len].toRemove = true;
+          if ($scope.answerList[len].value !== null) {
+            $scope.answerList[len].value = null;
+            $scope.answerList[len].wasEdited = true;
+          }
+        }
+      }
+    }
+    _ref = Object.keys($scope.mapRepetition);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      _results.push((function() {
+        var _results;
+        if (key !== '$$hashKey') {
+          len = $scope.mapRepetition[key].length;
+          _results = [];
+          while (len--) {
+            iteration = $scope.mapRepetition[key][len];
+            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
+          }
+          return _results;
+        }
+      })());
+    }
+    return _results;
+  };
+  $scope.compareRepetitionMap = function(mapContainer, mapContained) {
+    var key, value, _i, _len, _ref;
+    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
+      return true;
+    }
+    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
+      return false;
+    }
+    _ref = Object.keys(mapContained);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        value = mapContained[key];
+        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+  $scope.addMapRepetition = function(questionSetCode, mapRepetitionSource, listQuestionSetRepetition) {
+    var founded, key, mapRepetitionToAdd, questionCode, repetition, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
+    mapRepetitionToAdd = {};
+    _ref = Object.keys(mapRepetitionSource);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        for (_j = 0, _len2 = listQuestionSetRepetition.length; _j < _len2; _j++) {
+          questionCode = listQuestionSetRepetition[_j];
+          if (questionCode === key) {
+            mapRepetitionToAdd[key] = mapRepetitionSource[key];
+          }
+        }
+      }
+    }
+    if ($scope.mapRepetition[questionSetCode]) {
+      founded = false;
+      _ref2 = $scope.mapRepetition[questionSetCode];
+      for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
+        repetition = _ref2[_k];
+        if ($scope.compareRepetitionMap(repetition, mapRepetitionToAdd)) {
+          founded = true;
+        }
+      }
+      if (founded === false) {
+        return $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd);
+      }
+    } else {
+      $scope.mapRepetition[questionSetCode] = [];
+      return $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd);
+    }
+  };
+  $scope.validNavigation = function() {
+    var answer, result, _i, _len, _ref;
+    result = {};
+    result.modalForConfirm = modalService.CONFIRMATION_EXIT_FORM;
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
+        result.valid = false;
+        break;
+      }
+    }
+    return result;
+  };
+  $scope.$watch('$root.periodToCompare', function() {
+    if ($scope.$parent !== null && ($scope.$root.periodToCompare != null) && $scope.$root.periodToCompare !== 'default') {
+      return downloadService.getJson('/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, function(result) {
+        if (result.success) {
+          if (!result.data.answersSave.listAnswers || result.data.answersSave.listAnswers.length === 0) {
+            return $scope.dataToCompare = null;
+          } else {
+            return $scope.dataToCompare = result.data;
+          }
+        } else {
+          return $scope.dataToCompare = null;
+        }
+      });
+    } else {
+      return $scope.dataToCompare = null;
+    }
+  });
+  $scope.saveFormProgress = function() {
+    var answer, answered, formProgress, formProgressDTO, founded, key, listTotal, percentage, tabSet, total, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5, _ref6;
+    percentage = 0;
+    total = 0;
+    answered = 0;
+    listTotal = [];
+    _ref = $scope.answerList;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (!(answer.tabSet != null)) {
+        if (answer.optional !== true && answer.isAggregation !== true) {
+          if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
+            total++;
+            listTotal.push(answer);
+            if (answer.value !== null) {
+              answered++;
+            }
+          }
+        }
+      }
+    }
+    _ref2 = Object.keys($scope.tabSet);
+    for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+      key = _ref2[_j];
+      if (key !== '$$hashKey') {
+        _ref3 = $scope.tabSet[key];
+        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
+          tabSet = _ref3[_k];
+          if (tabSet.master != null) {
+            _ref4 = $scope.answerList;
+            for (_l = 0, _len4 = _ref4.length; _l < _len4; _l++) {
+              answer = _ref4[_l];
+              if ((answer.tabSet != null) && parseFloat(answer.tabSet) === parseFloat(key) && parseFloat(answer.tab) === parseFloat(tabSet.master)) {
+                if (answer.optional !== true && answer.isAggregation !== true) {
+                  if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
+                    total++;
+                    listTotal.push(answer);
+                    if (answer.value !== null) {
+                      answered++;
+                    }
+                  }
+                }
+              }
+            }
+          } else {
+            _ref5 = $scope.answerList;
+            for (_m = 0, _len5 = _ref5.length; _m < _len5; _m++) {
+              answer = _ref5[_m];
+              if ((answer.tabSet != null) && parseFloat(answer.tabSet) === parseFloat(key) && parseFloat(answer.tab) === 1) {
+                if (answer.optional !== true && answer.isAggregation !== true) {
+                  if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
+                    total++;
+                    listTotal.push(answer);
+                    if (answer.value !== null) {
+                      answered++;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    if (answered === 0) {
+      percentage = 0;
+    } else {
+      percentage = answered / total * 100;
+      percentage = Math.floor(percentage);
+    }
+    console.log("PROGRESS : " + answered + "/" + total + "=" + percentage);
+    console.log(listTotal);
+    formProgressDTO = {};
+    formProgressDTO.form = $scope.formIdentifier;
+    formProgressDTO.period = $scope.$root.periodSelectedKey;
+    formProgressDTO.scope = $scope.$root.scopeSelectedId;
+    formProgressDTO.percentage = percentage;
+    founded = false;
+    if ($scope.$parent.formProgress != null) {
+      _ref6 = $scope.$parent.formProgress;
+      for (_n = 0, _len6 = _ref6.length; _n < _len6; _n++) {
+        formProgress = _ref6[_n];
+        if (formProgress.form === $scope.formIdentifier) {
+          founded = true;
+          formProgress.percentage = percentage;
+        }
+      }
+    } else {
+      $scope.$parent.formProgress = [];
+    }
+    if (founded === false) {
+      $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO;
+    }
+    return downloadService.postJson('/awac/answer/formProgress', formProgressDTO, function(result) {
+      if (result.success) {
+        return;
+      } else {
+        ;
+      }
+    });
+  };
+  $scope.addTabSet = function(tabSet, tab, mapRepetition) {
+    var i, ite, wasCreated, _ref;
+    ite = null;
+    wasCreated = false;
+    if (!($scope.tabSet[tabSet] != null)) {
+      $scope.tabSet[tabSet] = [];
+      $scope.tabSet[tabSet][0] = {};
+      $scope.tabSet[tabSet][0].mapRepetition = mapRepetition;
+      ite = 0;
+      wasCreated = true;
+    } else {
+      i = 0;
+      while (i < $scope.tabSet[tabSet].length) {
+        if ($scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)) {
+          ite = i;
+          break;
+        }
+        i++;
+      }
+      if (ite === null) {
+        ite = $scope.tabSet[tabSet].length;
+        $scope.tabSet[tabSet][ite] = {};
+        $scope.tabSet[tabSet][ite].mapRepetition = mapRepetition;
+      }
+    }
+    if (!($scope.tabSet[tabSet][ite][tab] != null)) {
+      $scope.tabSet[tabSet][ite][tab] = {};
+      $scope.tabSet[tabSet][ite][tab].active = (_ref = tab === 1) != null ? _ref : {
+        "true": false
+      };
+      wasCreated = true;
+    }
+    if (!($scope.tabSet[tabSet][ite][tab].listToCompute != null)) {
+      $scope.tabSet[tabSet][ite][tab].listToCompute = [];
+    }
+    return ite;
+  };
+  $scope.getStatusClassForTab = function(tabSet, tab, mapRepetition) {
+    var allWasSave, answer, atLeastOneQuestion, i, isFinish, ite, _i, _len, _ref;
+    isFinish = true;
+    i = 0;
+    while (i < $scope.tabSet[tabSet].length) {
+      if ($scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)) {
+        ite = i;
+        break;
+      }
+      i++;
+    }
+    allWasSave = true;
+    atLeastOneQuestion = false;
+    _ref = $scope.tabSet[tabSet][ite][tab].listToCompute;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (!(answer.hasValidCondition != null) || answer.hasValidCondition === true && answer.optional !== true && answer.isAggregation !== true) {
+        atLeastOneQuestion = true;
+        if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
+          allWasSave = false;
+        }
+        if (answer.value === null) {
+          isFinish = false;
+        }
+      }
+    }
+    if (isFinish === true && atLeastOneQuestion === false) {
+      isFinish === false;
+    }
+    if (isFinish === true) {
+      if (allWasSave === false) {
+        return 'answer_temp';
+      }
+      return 'answer';
+    } else {
+      if (allWasSave === false) {
+        return 'pending_temp';
+      }
+      return 'pending';
+    }
+  };
+  $scope.createTabWatcher = function(answer) {
+    var answerToTest, i, ite, j, tab, tabSet;
+    if (answer.tabSet != null) {
+      tabSet = answer.tabSet;
+      tab = answer.tab;
+      ite = $scope.addTabSet(tabSet, tab, answer.mapRepetition);
+      j = $scope.tabSet[tabSet][ite][tab].listToCompute.length;
+      j--;
+      while (j >= 0) {
+        answerToTest = $scope.tabSet[tabSet][ite][tab].listToCompute[j];
+        if (answerToTest.questionKey === answer.questionKey && $scope.compareRepetitionMap(answer.mapRepetition, answerToTest.mapRepetition)) {
+          $scope.tabSet[tabSet][ite][tab].listToCompute.splice(j, 1);
+        }
+        j--;
+      }
+      i = $scope.tabSet[tabSet][ite][tab].listToCompute.length;
+      $scope.tabSet[tabSet][ite][tab].listToCompute[i] = answer;
+      $scope.$watch('tabSet[' + tabSet + '][' + ite + '][' + tab + '].listToCompute[' + i + '].value', function() {
+        return $scope.computeTab(tabSet, tab, answer.mapRepetition);
+      });
+      if ($scope.loading === false) {
+        $scope.computeTab(tabSet, tab, answer.mapRepetition);
+      }
+      if (answer.value === null) {
+        return $scope.tabSet[tabSet][ite][tab].isFinish = false;
+      }
+    }
+  };
+  $scope.computeTab = function(tabSet, tab, mapRepetition) {
+    var answer, i, isFinish, ite, key, value, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
+    isFinish = false;
+    i = 0;
+    while (i < $scope.tabSet[tabSet].length) {
+      if ($scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)) {
+        ite = i;
+        break;
+      }
+      i++;
+    }
+    _ref = $scope.tabSet[tabSet][ite][tab].listToCompute;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
+      if (!(answer.hasValidCondition != null) || answer.hasValidCondition === true && answer.optional !== true && answer.isAggregation !== true) {
+        if (answer.value === null) {
+          isFinish = false;
+          break;
+        } else {
+          isFinish = true;
+        }
+      }
+    }
+    if (isFinish !== $scope.tabSet[tabSet][ite][tab].isFinish) {
+      $scope.tabSet[tabSet][ite][tab].isFinish = isFinish;
+      if (isFinish === true) {
+        if (!($scope.tabSet[tabSet][ite].master != null) || $scope.tabSet[tabSet][ite].master > tab) {
+          $scope.tabSet[tabSet][ite].master = tab;
+        }
+      } else if ($scope.tabSet[tabSet][ite].master === tab) {
+        delete $scope.tabSet[tabSet][ite].master;
+        _ref2 = Object.keys($scope.tabSet[tabSet][ite]);
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          key = _ref2[_j];
+          if (key !== '$$hashKey' && key !== 'master' && key !== 'active' && key !== 'mapRepetition') {
+            value = $scope.tabSet[tabSet][ite][key];
+            if (value.isFinish === true) {
+              if (!($scope.tabSet[tabSet][ite].master != null) || parseFloat($scope.tabSet[tabSet][ite].master) > parseFloat(key)) {
+                $scope.tabSet[tabSet][ite].master = parseFloat(key);
+              }
+            }
+          }
+        }
+      }
+      if ($scope.loading === true && ($scope.tabSet[tabSet][ite].master != null)) {
+        _ref3 = Object.keys($scope.tabSet[tabSet][ite]);
+        _results = [];
+        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
+          key = _ref3[_k];
+          _results.push(key !== '$$hashKey' && key !== 'master' && key !== 'active' && key !== 'mapRepetition' ? parseFloat(key) === parseFloat($scope.tabSet[tabSet][ite].master) ? $scope.tabSet[tabSet][ite][key].active = true : $scope.tabSet[tabSet][ite][key].active = false : void 0);
+        }
+        return _results;
+      }
+    }
+  };
+  $scope.getTab = function(tabSet, tab, mapRepetition) {
+    var tabSetToTest, _i, _len, _ref, _ref2;
+    if (mapRepetition == null) {
+      mapRepetition = null;
+    }
+    if ($scope.loading === true || !($scope.tabSet[tabSet] != null)) {
+      $scope.addTabSet(tabSet, tab, mapRepetition);
+    }
+    _ref = $scope.tabSet[tabSet];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      tabSetToTest = _ref[_i];
+      if ($scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)) {
+        if (!(tabSetToTest[tab] != null)) {
+          tabSetToTest[tab] = {};
+          tabSetToTest[tab].active = (_ref2 = parseFloat(tab) === 1) != null ? _ref2 : {
+            "true": false
+          };
+          return tabSetToTest[tab];
+        }
+        return tabSetToTest[tab];
+      }
+    }
+    return null;
+  };
+  $scope.tabIsMaster = function(tabSet, tab, mapRepetition) {
+    var tabSetToTest, _i, _len, _ref;
+    if (mapRepetition == null) {
+      mapRepetition = null;
+    }
+    if ($scope.loading === true || !($scope.tabSet[tabSet] != null)) {
+      return false;
+    }
+    _ref = $scope.tabSet[tabSet];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      tabSetToTest = _ref[_i];
+      if ($scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)) {
+        if (tabSetToTest.master === parseFloat(tab)) {
+          return true;
+        }
+        return false;
+      }
+    }
+    return false;
+  };
+  $scope.getQuestionSetLocker = function(code) {
+    if ($scope.datalocker[code] != null) {
+      return $scope.datalocker[code];
+    }
+    return null;
+  };
+  $scope.getQuestionSetValidator = function(code) {
+    if ($scope.dataValidator[code] != null) {
+      return $scope.dataValidator[code];
+    }
+    return null;
+  };
+  $scope.isQuestionLocked = function(code) {
+    var key, question, questionSet, result, _i, _j, _len, _len2, _ref, _ref2, _results;
+    _ref = Object.keys($scope.mapQuestionSet);
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        questionSet = $scope.mapQuestionSet[key];
+        if (questionSet.questionSetDTO.questions != null) {
+          _ref2 = questionSet.questionSetDTO.questions;
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            question = _ref2[_j];
+            if (question.code === code) {
+              result = $scope.foundBasicParent($scope.mapQuestionSet[key]);
+              if ((result.datalocker != null) && result.datalocker.identifier !== $scope.$root.currentPerson.identifier) {
+                return true;
+              }
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return _results;
+  };
+  $scope.isQuestionValidate = function(code) {
+    if ($scope.getValidatorByQuestionCode(code) != null) {
+      return true;
+    }
+    return false;
+  };
+  $scope.getValidatorByQuestionCode = function(code) {
+    var key, question, questionSet, result, _i, _j, _len, _len2, _ref, _ref2;
+    _ref = Object.keys($scope.mapQuestionSet);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        questionSet = $scope.mapQuestionSet[key];
+        if (questionSet.questionSetDTO.questions != null) {
+          _ref2 = questionSet.questionSetDTO.questions;
+          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+            question = _ref2[_j];
+            if (question.code === code) {
+              result = $scope.foundBasicParent($scope.mapQuestionSet[key]);
+              if (result.dataValidator != null) {
+                return result.dataValidator;
+              }
+              return null;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  };
+  $scope.lockQuestionSet = function(code, lock) {
+    if (lock === true) {
+      if (!($scope.datalocker[code] != null)) {
+        $scope.datalocker[code] = $scope.$root.currentPerson;
+      }
+      return $scope.mapQuestionSet[code].questionSetDTO.datalocker = $scope.$root.currentPerson;
+    } else {
+      if ($scope.datalocker[code] != null) {
+        delete $scope.datalocker[code];
+      }
+      return $scope.mapQuestionSet[code].questionSetDTO.datalocker = null;
+    }
+  };
+  $scope.validateQuestionSet = function(code, lock) {
+    if (lock === true) {
+      if (!($scope.dataValidator[code] != null)) {
+        $scope.dataValidator[code] = $scope.$root.currentPerson;
+      }
+      return $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson;
+    } else {
+      if ($scope.dataValidator[code] != null) {
+        delete $scope.dataValidator[code];
+      }
+      return $scope.mapQuestionSet[code].questionSetDTO.dataValidator = null;
+    }
+  };
+  return $scope.foundBasicParent = function(questionSet) {
+    if (!(questionSet.parent != null)) {
+      return questionSet.questionSetDTO;
+    }
+    return $scope.foundBasicParent(questionSet.parent);
+  };
 });angular.module('app').run(function(loggerService) {
   var log;
   loggerService.initialize();
@@ -3623,1146 +4836,6 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       return modalService.show(modalService.CONFIRM_CLOSING);
     }
   };
-});angular.module('app.controllers').controller("LoginCtrl", function($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) {
-  $scope.loading = false;
-  $scope.tabActive = [];
-  $scope.$watch('tabActive[1]', function() {
-    if ($scope.tabActive[1] !== true) {
-      $scope.forgotEmailSuccessMessage = null;
-      return $scope.forgotPasswordInfo.field = "";
-    }
-  });
-  $scope.enterEvent = function() {
-    if ($scope.tabActive[0] === true) {
-      return $scope.send();
-    } else if ($scope.tabActive[1] === true) {
-      return $scope.sendForgotPassword();
-    }
-  };
-  $scope.loginInfo = {
-    fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
-    fieldType: "text",
-    placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false,
-    focus: function() {
-      return $scope.tabActive[0];
-    }
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
-    fieldType: "password",
-    validationRegex: "^\\S{5,20}$",
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false
-  };
-  $scope.forgotPasswordInfo = {
-    fieldTitle: "IDENTIFIENT_OR_EMAIL",
-    fieldType: "text",
-    validationRegex: "^\\S+$",
-    validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-    field: "",
-    isValid: false,
-    focus: function() {
-      return $scope.tabActive[1];
-    }
-  };
-  $scope.connectionFieldValid = function() {
-    if ($scope.loginInfo.isValid && $scope.passwordInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.forgotPasswordFieldValid = function() {
-    if ($scope.forgotPasswordInfo.isValid && $scope.forgotPasswordInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.send = function() {
-    $scope.isLoading = true;
-    downloadService.postJson('/awac/login', {
-      login: $scope.loginInfo.field,
-      password: $scope.passwordInfo.field,
-      interfaceName: $scope.$root.instanceName
-    }, function(result) {
-      var params;
-      if (result.success) {
-        $scope.$root.loginSuccess(result.data);
-        messageFlash.displaySuccess(translationService.get('CONNECTION_MESSAGE_SUCCESS'));
-        return $scope.isLoading = false;
-      } else {
-        $scope.isLoading = false;
-        if (result.data.__type === 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO') {
-          params = {
-            login: $scope.loginInfo.field,
-            password: $scope.passwordInfo.field
-          };
-          return modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params);
-        } else {
-          return messageFlash.displayError(result.data.message);
-        }
-      }
-    });
-    return false;
-  };
-  $scope.forgotEmailSuccessMessage = null;
-  $scope.sendForgotPassword = function() {
-    $scope.isLoading = true;
-    downloadService.postJson('/awac/forgotPassword', {
-      identifier: $scope.forgotPasswordInfo.field,
-      interfaceName: $scope.$root.instanceName
-    }, function(result) {
-      if (result.success) {
-        $scope.forgotEmailSuccessMessage = translationService.get('LOGIN_FORGOT_PASSWORD_SUCCESS');
-        $scope.isLoading = false;
-        return;
-      } else {
-        messageFlash.displayError(result.data.message);
-        $scope.isLoading = false;
-        return;
-      }
-    });
-    return false;
-  };
-  $scope.injectRegistrationDirective = function() {
-    var directive, directiveName;
-    if ($scope.$root != null) {
-      if ($scope.$root.instanceName === 'enterprise') {
-        directiveName = "mm-awac-registration-enterprise";
-      } else if ($scope.$root.instanceName === 'municipality') {
-        directiveName = "mm-awac-registration-municipality";
-      }
-      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
-      return $('.inject-registration-form').append(directive);
-    }
-  };
-  return $timeout(function() {
-    return $scope.injectRegistrationDirective();
-  }, 0);
-});angular.module('app.controllers').controller("AdminCtrl", function($scope, downloadService) {
-  $scope.notifications = [];
-  return downloadService.getJson("admin/get_notifications", function(dto) {
-    if (dto != null) {
-      $scope.notifications = dto.notifications;
-    }
-    return;
-  });
-});angular.module('app.controllers').controller("RegistrationCtrl", function($scope, downloadService, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) {
-  downloadService.postJson('/awac/logout', null, function(result) {});
-  $scope.loading = false;
-  $scope.tabActive = [];
-  $scope.enterEvent = function() {
-    if ($scope.tabActive[0] === true) {
-      return $scope.send();
-    }
-  };
-  $scope.fields = {
-    loginInfo: {
-      fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
-      fieldType: "text",
-      placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
-      validationRegex: "^\\S{5,20}$",
-      validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
-      field: "",
-      isValid: false,
-      focus: function() {
-        return true;
-      }
-    },
-    passwordInfo: {
-      fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
-      fieldType: "password",
-      validationRegex: "^\\S{5,20}$",
-      validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
-      field: "",
-      isValid: false
-    },
-    lastNameInfo: {
-      fieldTitle: "USER_LASTNAME",
-      validationRegex: "^.{1,255}$",
-      validationMessage: "USER_LASTNAME_WRONG_LENGTH",
-      isValid: true
-    },
-    firstNameInfo: {
-      fieldTitle: "USER_FIRSTNAME",
-      fieldType: "text",
-      validationRegex: "^.{1,255}$",
-      validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
-      isValid: true
-    },
-    emailInfo: {
-      fieldTitle: "USER_EMAIL",
-      validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-      validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
-    }
-  };
-  $scope.connectionFieldValid = function() {
-    var field, key, _i, _len, _ref;
-    _ref = Object.keys($scope.fields);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        field = $scope.fields[key];
-        if (!field.isValid || field.isValid === false) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-  $scope.send = function() {
-    var data, personDTO;
-    $scope.isLoading = true;
-    personDTO = {
-      identifier: $scope.fields.loginInfo.field,
-      lastName: $scope.fields.lastNameInfo.field,
-      firstName: $scope.fields.firstNameInfo.field,
-      email: $scope.fields.emailInfo.field
-    };
-    data = {
-      person: personDTO,
-      password: $scope.fields.passwordInfo.field,
-      key: $routeParams.key
-    };
-    downloadService.postJson('/awac/register', data, function(result) {
-      if (result.success) {
-        messageFlash.displaySuccess(translationService.get('REGISTRATION_SUCCESS'));
-        $scope.isLoading = false;
-        return $scope.$root.nav('/login');
-      } else {
-        messageFlash.displaySuccess(translationService.get('REGISTRATION_FAILED'));
-        $scope.isLoading = false;
-        return messageFlash.displayError(result.data.message);
-      }
-    });
-    return false;
-  };
-  $scope.injectRegistrationDirective = function() {
-    var directive, directiveName;
-    if ($scope.$root != null) {
-      if ($scope.$root.instanceName === 'enterprise') {
-        directiveName = "mm-awac-registration-enterprise";
-      } else if ($scope.$root.instanceName === 'municipality') {
-        directiveName = "mm-awac-registration-municipality";
-      }
-      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
-      return $('.inject-registration-form').append(directive);
-    }
-  };
-  return $timeout(function() {
-    return $scope.injectRegistrationDirective();
-  }, 0);
-});angular.module('app.controllers').controller("FormCtrl", function($scope, downloadService, messageFlash, translationService, modalService, formIdentifier, $timeout, displayFormMenu) {
-  $scope.formIdentifier = formIdentifier;
-  $scope.displayFormMenu = displayFormMenu;
-  $scope.tabSet = {};
-  $scope.dataToCompare = null;
-  $scope.answerList = [];
-  $scope.mapRepetition = {};
-  $scope.mapQuestionSet = {};
-  /*
-  illustration of the structures
-  $scope.mapRepetition['A15'] = [{'A15':1},
-                                  {'A15':2}]
-
-  $scope.mapRepetition['A16'] = [{'A16':1,'A15':1},
-                                 {'A16':2,'A15':1}]
-  */
-  /*
-  list of the questionSet key locked with locker like personDTO
-  */
-  $scope.datalocker = {};
-  $scope.dataValidator = {};
-  $scope.loading = true;
-  $scope.errorMessage = null;
-  modalService.show(modalService.LOADING);
-  downloadService.getJson("/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, function(result) {
-    var answerSave, args, qSet, questionSetDTO, _i, _j, _len, _len2, _ref, _ref2;
-    if (!result.success) {
-      $scope.errorMessage = result.data.message;
-      messageFlash.displayError(result.data.message);
-      return modalService.close(modalService.LOADING);
-    } else {
-      console.log("loading form result : ");
-      console.log(result.data);
-      $scope.o = angular.copy(result.data);
-      if ($scope.o.answersSave !== null && $scope.o.answersSave !== void 0) {
-        answerSave = $scope.o.answersSave;
-        $scope.answerList = answerSave.listAnswers;
-      }
-      $scope.loopRepetition = function(questionSetDTO, listQuestionSetRepetition, parent) {
-        var answer, child, questionSetElement, _i, _j, _len, _len2, _ref, _ref2, _results;
-        if (listQuestionSetRepetition == null) {
-          listQuestionSetRepetition = [];
-        }
-        if (questionSetDTO.datalocker != null) {
-          $scope.datalocker[questionSetDTO.code] = questionSetDTO.datalocker;
-        }
-        if (questionSetDTO.dataValidator != null) {
-          $scope.dataValidator[questionSetDTO.code] = questionSetDTO.dataValidator;
-        }
-        questionSetElement = {
-          questionSetDTO: questionSetDTO,
-          parent: parent
-        };
-        $scope.mapQuestionSet[questionSetDTO.code] = questionSetElement;
-        if (questionSetDTO.repetitionAllowed === true) {
-          listQuestionSetRepetition[listQuestionSetRepetition.length] = questionSetDTO.code;
-          _ref = $scope.answerList;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            answer = _ref[_i];
-            if (answer.mapRepetition !== null && answer.mapRepetition !== void 0) {
-              if (answer.mapRepetition[questionSetDTO.code] !== null && answer.mapRepetition[questionSetDTO.code] !== void 0 && answer.mapRepetition[questionSetDTO.code] !== 0) {
-                $scope.addMapRepetition(questionSetDTO.code, answer.mapRepetition, listQuestionSetRepetition);
-              }
-            }
-          }
-        }
-        if (questionSetDTO.children) {
-          _ref2 = questionSetDTO.children;
-          _results = [];
-          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-            child = _ref2[_j];
-            _results.push($scope.loopRepetition(child, angular.copy(listQuestionSetRepetition), questionSetElement));
-          }
-          return _results;
-        }
-      };
-      $scope.addDefaultValue = function(questionSetDTO) {
-        var answer, child, question, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
-        _ref = questionSetDTO.questions;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          question = _ref[_i];
-          if (question.defaultValue !== void 0 && question.defaultValue !== null) {
-            _ref2 = $scope.answerList;
-            for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-              answer = _ref2[_j];
-              if (answer.questionKey === question.code && answer.value === null) {
-                answer.value = question.defaultValue;
-              }
-            }
-          }
-        }
-        _ref3 = questionSetDTO.children;
-        _results = [];
-        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
-          child = _ref3[_k];
-          _results.push($scope.addDefaultValue(child));
-        }
-        return _results;
-      };
-      args = {};
-      args.time = $scope.o.answersSave.lastUpdateDate;
-      if ($scope.$root != null) {
-        $scope.$root.$broadcast("REFRESH_LAST_SAVE_TIME", args);
-      }
-      _ref = $scope.o.questionSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        qSet = _ref[_i];
-        $scope.loopRepetition(qSet);
-      }
-      console.log("$scope.mapRepetition");
-      console.log($scope.mapRepetition);
-      _ref2 = $scope.o.questionSets;
-      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-        questionSetDTO = _ref2[_j];
-        $scope.addDefaultValue(questionSetDTO);
-      }
-      $timeout(function() {
-        var answer, _i, _len, _ref;
-        _ref = $scope.answerList;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          answer = _ref[_i];
-          $scope.createTabWatcher(answer);
-        }
-        return $timeout(function() {
-          var answer, _i, _len, _ref;
-          modalService.close(modalService.LOADING);
-          $scope.loading = false;
-          _ref = $scope.answerList;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            answer = _ref[_i];
-            if (answer.hasValidCondition === false && answer.value !== null) {
-              answer.value = null;
-            }
-          }
-          return $scope.$root.$broadcast('FORM_LOADING_FINISH');
-        }, 0);
-      }, 0);
-      return;
-    }
-  });
-  $scope.$on('SAVE_AND_NAV', function(event, args) {
-    return $scope.save(args);
-  });
-  $scope.$on('SAVE', function() {
-    return $scope.save();
-  });
-  $scope.save = function(argToNav) {
-    var answer, finalList, listAnswerToSave, _i, _j, _len, _len2, _ref;
-    if (argToNav == null) {
-      argToNav = null;
-    }
-    modalService.show(modalService.LOADING);
-    listAnswerToSave = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
-        if (answer.hasValidCondition !== void 0 && answer.hasValidCondition === false) {
-          answer.value = null;
-        }
-        listAnswerToSave[listAnswerToSave.length] = answer;
-      }
-    }
-    finalList = [];
-    for (_j = 0, _len2 = listAnswerToSave.length; _j < _len2; _j++) {
-      answer = listAnswerToSave[_j];
-      if (!$scope.isQuestionLocked(answer.questionKey) && !$scope.isQuestionValidate(answer.questionKey)) {
-        finalList.push(answer);
-      }
-    }
-    console.log("listAnswerToSave");
-    console.log(finalList);
-    if (finalList.length === 0) {
-      messageFlash.displayInfo(translationService.get('ALL_ANSWERS_ALREADY_SAVED'));
-      return modalService.close(modalService.LOADING);
-    } else {
-      $scope.o.answersSave.listAnswers = finalList;
-      return downloadService.postJson('/awac/answer/save', $scope.o.answersSave, function(result) {
-        var answer, founded, i, it, j, key, listToRemove, repetition, repetitionToRemove, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
-        if (result.success) {
-          listToRemove = [];
-          _ref = Object.keys($scope.mapRepetition);
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            key = _ref[_i];
-            if (key !== '$$hashKey') {
-              i = 0;
-              while (i < $scope.mapRepetition[key].length) {
-                repetition = $scope.mapRepetition[key][i];
-                founded = false;
-                _ref2 = $scope.answerList;
-                for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-                  answer = _ref2[_j];
-                  if ((answer.value != null) && (!(answer.isAggregation != null) || answer.isAggregation !== true) && $scope.compareRepetitionMap(answer.mapRepetition, repetition)) {
-                    founded = true;
-                    break;
-                  }
-                }
-                if (founded === false) {
-                  it = listToRemove.length;
-                  listToRemove[it] = {};
-                  listToRemove[it].code = key;
-                  listToRemove[it].iteration = {};
-                  listToRemove[it].iteration[key] = $scope.mapRepetition[key][i][key];
-                  j = angular.copy($scope.mapRepetition[key][i]);
-                  delete j[key];
-                  listToRemove[it].map = j;
-                }
-                i++;
-              }
-            }
-          }
-          for (_k = 0, _len3 = listToRemove.length; _k < _len3; _k++) {
-            repetitionToRemove = listToRemove[_k];
-            $scope.removeIteration(repetitionToRemove.code, repetitionToRemove.iteration, repetitionToRemove.map);
-          }
-          i = $scope.answerList.length - 1;
-          while (i >= 0) {
-            answer = $scope.answerList[i];
-            if (answer.wasEdited === true) {
-              answer.wasEdited = false;
-            }
-            if (answer.toRemove === true) {
-              $scope.answerList.splice(i, 1);
-            }
-            i--;
-          }
-          $scope.saveFormProgress();
-          messageFlash.displaySuccess(translationService.get('ANSWERS_SAVED'));
-          modalService.close(modalService.LOADING);
-          if (argToNav !== null) {
-            $scope.$root.nav(argToNav.loc, argToNav.confirmed);
-          }
-          return;
-        } else {
-          messageFlash.displayError(translationService.get('ERROR_THROWN_ON_SAVE') + data.message);
-          modalService.close(modalService.LOADING);
-          return;
-        }
-      });
-    }
-  };
-  $scope.getUnitCategories = function(code) {
-    var question;
-    if ($scope.getQuestion(code) === null) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    if (question === null || question === void 0) {
-      console.log("ERROR : this question was not found : " + code);
-      return null;
-    }
-    if (question.unitCategoryId === null || question.unitCategoryId === void 0) {
-      console.log("ERROR : there is no unitCategoryId for this question : " + code);
-      return null;
-    }
-    return $scope.o.unitCategories[question.unitCategoryId];
-  };
-  $scope.getCodeList = function(code) {
-    var question;
-    if ($scope.loading) {
-      return null;
-    }
-    question = $scope.getQuestion(code);
-    return $scope.o.codeLists[question.codeListName];
-  };
-  $scope.getRepetitionMapByQuestionSet = function(code, mapRepetition) {
-    var listRepetition, repetition, _i, _len, _ref;
-    listRepetition = [];
-    if ($scope.mapRepetition[code] !== null && $scope.mapRepetition[code] !== void 0) {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if (mapRepetition === null || mapRepetition === void 0 || $scope.compareRepetitionMap(repetition, mapRepetition)) {
-          listRepetition[listRepetition.length] = repetition;
-        }
-      }
-    }
-    return listRepetition;
-  };
-  $scope.getQuestion = function(code, listQuestionSets) {
-    var q, qSet, result, _i, _j, _len, _len2, _ref;
-    if (listQuestionSets == null) {
-      listQuestionSets = null;
-    }
-    if (listQuestionSets === null) {
-      if ($scope.o === null || $scope.o === void 0 || $scope.o.questionSets === null) {
-        return null;
-      }
-      listQuestionSets = $scope.o.questionSets;
-    }
-    if (listQuestionSets) {
-      for (_i = 0, _len = listQuestionSets.length; _i < _len; _i++) {
-        qSet = listQuestionSets[_i];
-        if (qSet.questions) {
-          _ref = qSet.questions;
-          for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
-            q = _ref[_j];
-            if (q.code === code) {
-              return q;
-            }
-          }
-        }
-        if (qSet.children) {
-          result = $scope.getQuestion(code, qSet.children);
-          if (result) {
-            return result;
-          }
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getAnswerToCompare = function(code, mapIteration) {
-    var answer, _i, _len, _ref;
-    if ($scope.dataToCompare !== null) {
-      _ref = $scope.dataToCompare.answersSave.listAnswers;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        answer = _ref[_i];
-        if (answer.questionKey === code) {
-          if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-            return answer;
-          }
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getAnswerOrCreate = function(code, mapIteration, tabSet, tab, optional) {
-    var answerLine, defaultUnitCode, question, result, value, wasEdited;
-    if (tabSet == null) {
-      tabSet = null;
-    }
-    if (tab == null) {
-      tab = null;
-    }
-    if (optional == null) {
-      optional = false;
-    }
-    if (code === null || code === void 0) {
-      console.log("ERROR !! getAnswerOrCreate : code is null or undefined");
-      return null;
-    }
-    result = $scope.getAnswer(code, mapIteration);
-    if (result) {
-      if (result.toRemove != null) {
-        result.toRemove = false;
-      }
-      if ((tabSet != null) && !(result.tabSet != null)) {
-        result.tabSet = tabSet;
-        result.tab = tab;
-      }
-      return result;
-    } else {
-      value = null;
-      defaultUnitCode = null;
-      wasEdited = false;
-      if ($scope.getQuestion(code) !== null) {
-        question = $scope.getQuestion(code);
-        if (question.defaultValue !== null) {
-          value = question.defaultValue;
-          wasEdited = true;
-        }
-        if (question.unitCategoryId != null) {
-          if (question.defaultUnit != null) {
-            defaultUnitCode = question.defaultUnit.code;
-          } else {
-            defaultUnitCode = $scope.getUnitCategories(code).mainUnitCode;
-          }
-        }
-      }
-      answerLine = {
-        'questionKey': code,
-        'value': value,
-        'unitCode': defaultUnitCode,
-        'mapRepetition': mapIteration,
-        'lastUpdateUser': $scope.$root.currentPerson,
-        'wasEdited': wasEdited
-      };
-      if (tabSet != null) {
-        answerLine.tabSet = tabSet;
-        answerLine.tab = tab;
-      }
-      answerLine.optional = optional;
-      $scope.createTabWatcher(answerLine);
-      $scope.answerList[$scope.answerList.length] = answerLine;
-      return answerLine;
-    }
-  };
-  $scope.getAnswer = function(code, mapIteration) {
-    var answer, _i, _len, _ref;
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code) {
-        if ($scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-          return answer;
-        }
-      }
-    }
-    return null;
-  };
-  $scope.getListAnswer = function(code, mapIteration) {
-    var answer, listAnswer, _i, _len, _ref;
-    listAnswer = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.questionKey === code && $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)) {
-        listAnswer[listAnswer.length] = answer;
-      }
-    }
-    return listAnswer;
-  };
-  $scope.addIteration = function(code, mapRepetition) {
-    var max, repetition, repetitionToAdd, _i, _len, _ref;
-    max = 0;
-    repetitionToAdd = {};
-    if (mapRepetition != null) {
-      repetitionToAdd = angular.copy(mapRepetition);
-    }
-    if ($scope.mapRepetition[code] === null || $scope.mapRepetition[code] === void 0) {
-      repetitionToAdd[code] = max + 1;
-      $scope.mapRepetition[code] = [];
-      return $scope.mapRepetition[code][0] = repetitionToAdd;
-    } else {
-      _ref = $scope.mapRepetition[code];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        repetition = _ref[_i];
-        if ($scope.compareRepetitionMap(repetition, mapRepetition) && repetition[code] > max) {
-          max = repetition[code];
-        }
-      }
-      repetitionToAdd[code] = max + 1;
-      return $scope.mapRepetition[code][$scope.mapRepetition[code].length] = repetitionToAdd;
-    }
-  };
-  $scope.removeIteration = function(questionSetCode, iterationToDelete, mapRepetition) {
-    var iteration, key, len, question, _i, _len, _ref, _results;
-    len = $scope.answerList.length;
-    while (len--) {
-      question = $scope.answerList[len];
-      if ((question.mapRepetition != null) && $scope.compareRepetitionMap(question.mapRepetition, mapRepetition)) {
-        if (question.mapRepetition[questionSetCode] && question.mapRepetition[questionSetCode] === iterationToDelete[questionSetCode]) {
-          $scope.answerList[len].toRemove = true;
-          if ($scope.answerList[len].value !== null) {
-            $scope.answerList[len].value = null;
-            $scope.answerList[len].wasEdited = true;
-          }
-        }
-      }
-    }
-    _ref = Object.keys($scope.mapRepetition);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      _results.push((function() {
-        var _results;
-        if (key !== '$$hashKey') {
-          len = $scope.mapRepetition[key].length;
-          _results = [];
-          while (len--) {
-            iteration = $scope.mapRepetition[key][len];
-            _results.push($scope.compareRepetitionMap(iteration, mapRepetition) && iteration[questionSetCode] && iteration[questionSetCode] === iterationToDelete[questionSetCode] ? $scope.mapRepetition[key].splice(len, 1) : void 0);
-          }
-          return _results;
-        }
-      })());
-    }
-    return _results;
-  };
-  $scope.compareRepetitionMap = function(mapContainer, mapContained) {
-    var key, value, _i, _len, _ref;
-    if (mapContained === null || mapContained === void 0 || mapContained.length === 0) {
-      return true;
-    }
-    if (mapContainer === null || mapContainer === void 0 || mapContainer.length === 0) {
-      return false;
-    }
-    _ref = Object.keys(mapContained);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        value = mapContained[key];
-        if (mapContainer[key] === null || mapContainer[key] === void 0 || mapContainer[key] !== value) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-  $scope.addMapRepetition = function(questionSetCode, mapRepetitionSource, listQuestionSetRepetition) {
-    var founded, key, mapRepetitionToAdd, questionCode, repetition, _i, _j, _k, _len, _len2, _len3, _ref, _ref2;
-    mapRepetitionToAdd = {};
-    _ref = Object.keys(mapRepetitionSource);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        for (_j = 0, _len2 = listQuestionSetRepetition.length; _j < _len2; _j++) {
-          questionCode = listQuestionSetRepetition[_j];
-          if (questionCode === key) {
-            mapRepetitionToAdd[key] = mapRepetitionSource[key];
-          }
-        }
-      }
-    }
-    if ($scope.mapRepetition[questionSetCode]) {
-      founded = false;
-      _ref2 = $scope.mapRepetition[questionSetCode];
-      for (_k = 0, _len3 = _ref2.length; _k < _len3; _k++) {
-        repetition = _ref2[_k];
-        if ($scope.compareRepetitionMap(repetition, mapRepetitionToAdd)) {
-          founded = true;
-        }
-      }
-      if (founded === false) {
-        return $scope.mapRepetition[questionSetCode][$scope.mapRepetition[questionSetCode].length] = angular.copy(mapRepetitionToAdd);
-      }
-    } else {
-      $scope.mapRepetition[questionSetCode] = [];
-      return $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd);
-    }
-  };
-  $scope.validNavigation = function() {
-    var answer, result, _i, _len, _ref;
-    result = {};
-    result.modalForConfirm = modalService.CONFIRMATION_EXIT_FORM;
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (answer.wasEdited !== void 0 && answer.wasEdited === true) {
-        result.valid = false;
-        break;
-      }
-    }
-    return result;
-  };
-  $scope.$watch('$root.periodToCompare', function() {
-    if ($scope.$parent !== null && ($scope.$root.periodToCompare != null) && $scope.$root.periodToCompare !== 'default') {
-      return downloadService.getJson('/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, function(result) {
-        if (result.success) {
-          if (!result.data.answersSave.listAnswers || result.data.answersSave.listAnswers.length === 0) {
-            return $scope.dataToCompare = null;
-          } else {
-            return $scope.dataToCompare = result.data;
-          }
-        } else {
-          return $scope.dataToCompare = null;
-        }
-      });
-    } else {
-      return $scope.dataToCompare = null;
-    }
-  });
-  $scope.saveFormProgress = function() {
-    var answer, answered, formProgress, formProgressDTO, founded, key, listTotal, percentage, tabSet, total, _i, _j, _k, _l, _len, _len2, _len3, _len4, _len5, _len6, _m, _n, _ref, _ref2, _ref3, _ref4, _ref5, _ref6;
-    percentage = 0;
-    total = 0;
-    answered = 0;
-    listTotal = [];
-    _ref = $scope.answerList;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (!(answer.tabSet != null)) {
-        if (answer.optional !== true && answer.isAggregation !== true) {
-          if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
-            total++;
-            listTotal.push(answer);
-            if (answer.value !== null) {
-              answered++;
-            }
-          }
-        }
-      }
-    }
-    _ref2 = Object.keys($scope.tabSet);
-    for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-      key = _ref2[_j];
-      if (key !== '$$hashKey') {
-        _ref3 = $scope.tabSet[key];
-        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
-          tabSet = _ref3[_k];
-          if (tabSet.master != null) {
-            _ref4 = $scope.answerList;
-            for (_l = 0, _len4 = _ref4.length; _l < _len4; _l++) {
-              answer = _ref4[_l];
-              if ((answer.tabSet != null) && parseFloat(answer.tabSet) === parseFloat(key) && parseFloat(answer.tab) === parseFloat(tabSet.master)) {
-                if (answer.optional !== true && answer.isAggregation !== true) {
-                  if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
-                    total++;
-                    listTotal.push(answer);
-                    if (answer.value !== null) {
-                      answered++;
-                    }
-                  }
-                }
-              }
-            }
-          } else {
-            _ref5 = $scope.answerList;
-            for (_m = 0, _len5 = _ref5.length; _m < _len5; _m++) {
-              answer = _ref5[_m];
-              if ((answer.tabSet != null) && parseFloat(answer.tabSet) === parseFloat(key) && parseFloat(answer.tab) === 1) {
-                if (answer.optional !== true && answer.isAggregation !== true) {
-                  if (answer.hasValidCondition === void 0 || answer.hasValidCondition === null || answer.hasValidCondition === true) {
-                    total++;
-                    listTotal.push(answer);
-                    if (answer.value !== null) {
-                      answered++;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    if (answered === 0) {
-      percentage = 0;
-    } else {
-      percentage = answered / total * 100;
-      percentage = Math.floor(percentage);
-    }
-    console.log("PROGRESS : " + answered + "/" + total + "=" + percentage);
-    console.log(listTotal);
-    formProgressDTO = {};
-    formProgressDTO.form = $scope.formIdentifier;
-    formProgressDTO.period = $scope.$root.periodSelectedKey;
-    formProgressDTO.scope = $scope.$root.scopeSelectedId;
-    formProgressDTO.percentage = percentage;
-    founded = false;
-    if ($scope.$parent.formProgress != null) {
-      _ref6 = $scope.$parent.formProgress;
-      for (_n = 0, _len6 = _ref6.length; _n < _len6; _n++) {
-        formProgress = _ref6[_n];
-        if (formProgress.form === $scope.formIdentifier) {
-          founded = true;
-          formProgress.percentage = percentage;
-        }
-      }
-    } else {
-      $scope.$parent.formProgress = [];
-    }
-    if (founded === false) {
-      $scope.$parent.formProgress[$scope.$parent.formProgress.length] = formProgressDTO;
-    }
-    return downloadService.postJson('/awac/answer/formProgress', formProgressDTO, function(result) {
-      if (result.success) {
-        return;
-      } else {
-        ;
-      }
-    });
-  };
-  $scope.addTabSet = function(tabSet, tab, mapRepetition) {
-    var i, ite, wasCreated, _ref;
-    ite = null;
-    wasCreated = false;
-    if (!($scope.tabSet[tabSet] != null)) {
-      $scope.tabSet[tabSet] = [];
-      $scope.tabSet[tabSet][0] = {};
-      $scope.tabSet[tabSet][0].mapRepetition = mapRepetition;
-      ite = 0;
-      wasCreated = true;
-    } else {
-      i = 0;
-      while (i < $scope.tabSet[tabSet].length) {
-        if ($scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)) {
-          ite = i;
-          break;
-        }
-        i++;
-      }
-      if (ite === null) {
-        ite = $scope.tabSet[tabSet].length;
-        $scope.tabSet[tabSet][ite] = {};
-        $scope.tabSet[tabSet][ite].mapRepetition = mapRepetition;
-      }
-    }
-    if (!($scope.tabSet[tabSet][ite][tab] != null)) {
-      $scope.tabSet[tabSet][ite][tab] = {};
-      $scope.tabSet[tabSet][ite][tab].active = (_ref = tab === 1) != null ? _ref : {
-        "true": false
-      };
-      wasCreated = true;
-    }
-    if (!($scope.tabSet[tabSet][ite][tab].listToCompute != null)) {
-      $scope.tabSet[tabSet][ite][tab].listToCompute = [];
-    }
-    return ite;
-  };
-  $scope.createTabWatcher = function(answer) {
-    var answerToTest, i, ite, j, tab, tabSet;
-    if (answer.tabSet != null) {
-      tabSet = answer.tabSet;
-      tab = answer.tab;
-      ite = $scope.addTabSet(tabSet, tab, answer.mapRepetition);
-      j = $scope.tabSet[tabSet][ite][tab].listToCompute.length;
-      j--;
-      while (j >= 0) {
-        answerToTest = $scope.tabSet[tabSet][ite][tab].listToCompute[j];
-        if (answerToTest.questionKey === answer.questionKey && $scope.compareRepetitionMap(answer.mapRepetition, answerToTest.mapRepetition)) {
-          $scope.tabSet[tabSet][ite][tab].listToCompute.splice(j, 1);
-        }
-        j--;
-      }
-      i = $scope.tabSet[tabSet][ite][tab].listToCompute.length;
-      $scope.tabSet[tabSet][ite][tab].listToCompute[i] = answer;
-      $scope.$watch('tabSet[' + tabSet + '][' + ite + '][' + tab + '].listToCompute[' + i + '].value', function() {
-        return $scope.computeTab(tabSet, tab, answer.mapRepetition);
-      });
-      if (answer.value === null) {
-        return $scope.tabSet[tabSet][ite][tab].isFinish = false;
-      }
-    }
-  };
-  $scope.computeTab = function(tabSet, tab, mapRepetition) {
-    var answer, i, isFinish, ite, key, value, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3, _results;
-    isFinish = false;
-    i = 0;
-    while (i < $scope.tabSet[tabSet].length) {
-      if ($scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)) {
-        ite = i;
-        break;
-      }
-      i++;
-    }
-    _ref = $scope.tabSet[tabSet][ite][tab].listToCompute;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
-      if (!(answer.hasValidCondition != null) || answer.hasValidCondition === true && answer.optional !== true && answer.isAggregation !== true) {
-        if (answer.value === null) {
-          isFinish = false;
-          break;
-        }
-      }
-    }
-    if (isFinish !== $scope.tabSet[tabSet][ite][tab].isFinish) {
-      $scope.tabSet[tabSet][ite][tab].isFinish = isFinish;
-      if (isFinish === true) {
-        if (!($scope.tabSet[tabSet][ite].master != null) || $scope.tabSet[tabSet][ite].master > tab) {
-          $scope.tabSet[tabSet][ite].master = tab;
-        }
-      } else if ($scope.tabSet[tabSet][ite].master === tab) {
-        delete $scope.tabSet[tabSet][ite].master;
-        _ref2 = Object.keys($scope.tabSet[tabSet][ite]);
-        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-          key = _ref2[_j];
-          if (key !== '$$hashKey' && key !== 'master' && key !== 'active' && key !== 'mapRepetition') {
-            value = $scope.tabSet[tabSet][ite][key];
-            if (value.isFinish === true) {
-              if (!($scope.tabSet[tabSet][ite].master != null) || parseFloat($scope.tabSet[tabSet][ite].master) > parseFloat(key)) {
-                $scope.tabSet[tabSet][ite].master = parseFloat(key);
-              }
-            }
-          }
-        }
-      }
-      if ($scope.loading === true && ($scope.tabSet[tabSet][ite].master != null)) {
-        _ref3 = Object.keys($scope.tabSet[tabSet][ite]);
-        _results = [];
-        for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
-          key = _ref3[_k];
-          _results.push(key !== '$$hashKey' && key !== 'master' && key !== 'active' && key !== 'mapRepetition' ? parseFloat(key) === parseFloat($scope.tabSet[tabSet][ite].master) ? $scope.tabSet[tabSet][ite][key].active = true : $scope.tabSet[tabSet][ite][key].active = false : void 0);
-        }
-        return _results;
-      }
-    }
-  };
-  $scope.getTab = function(tabSet, tab, mapRepetition) {
-    var tabSetToTest, _i, _len, _ref, _ref2;
-    if (mapRepetition == null) {
-      mapRepetition = null;
-    }
-    if ($scope.loading === true || !($scope.tabSet[tabSet] != null)) {
-      $scope.addTabSet(tabSet, tab, mapRepetition);
-    }
-    _ref = $scope.tabSet[tabSet];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      tabSetToTest = _ref[_i];
-      if ($scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)) {
-        if (!(tabSetToTest[tab] != null)) {
-          tabSetToTest[tab] = {};
-          tabSetToTest[tab].active = (_ref2 = parseFloat(tab) === 1) != null ? _ref2 : {
-            "true": false
-          };
-          return tabSetToTest[tab];
-        }
-        return tabSetToTest[tab];
-      }
-    }
-    return null;
-  };
-  $scope.tabIsMaster = function(tabSet, tab, mapRepetition) {
-    var tabSetToTest, _i, _len, _ref;
-    if (mapRepetition == null) {
-      mapRepetition = null;
-    }
-    if ($scope.loading === true || !($scope.tabSet[tabSet] != null)) {
-      return false;
-    }
-    _ref = $scope.tabSet[tabSet];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      tabSetToTest = _ref[_i];
-      if ($scope.compareRepetitionMap(mapRepetition, tabSetToTest.mapRepetition)) {
-        if (tabSetToTest.master === parseFloat(tab)) {
-          return true;
-        }
-        return false;
-      }
-    }
-    return false;
-  };
-  $scope.getQuestionSetLocker = function(code) {
-    if ($scope.datalocker[code] != null) {
-      return $scope.datalocker[code];
-    }
-    return null;
-  };
-  $scope.getQuestionSetValidator = function(code) {
-    if ($scope.dataValidator[code] != null) {
-      return $scope.dataValidator[code];
-    }
-    return null;
-  };
-  $scope.isQuestionLocked = function(code) {
-    var key, question, questionSet, result, _i, _j, _len, _len2, _ref, _ref2, _results;
-    _ref = Object.keys($scope.mapQuestionSet);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        questionSet = $scope.mapQuestionSet[key];
-        if (questionSet.questionSetDTO.questions != null) {
-          _ref2 = questionSet.questionSetDTO.questions;
-          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-            question = _ref2[_j];
-            if (question.code === code) {
-              result = $scope.foundBasicParent($scope.mapQuestionSet[key]);
-              if ((result.datalocker != null) && result.datalocker.identifier !== $scope.$root.currentPerson.identifier) {
-                return true;
-              }
-              return false;
-            }
-          }
-        }
-      }
-    }
-    return _results;
-  };
-  $scope.isQuestionValidate = function(code) {
-    var key, question, questionSet, result, _i, _j, _len, _len2, _ref, _ref2, _results;
-    _ref = Object.keys($scope.mapQuestionSet);
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key !== '$$hashKey') {
-        questionSet = $scope.mapQuestionSet[key];
-        if (questionSet.questionSetDTO.questions != null) {
-          _ref2 = questionSet.questionSetDTO.questions;
-          for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-            question = _ref2[_j];
-            if (question.code === code) {
-              result = $scope.foundBasicParent($scope.mapQuestionSet[key]);
-              if (result.dataValidator != null) {
-                return true;
-              }
-              return false;
-            }
-          }
-        }
-      }
-    }
-    return _results;
-  };
-  $scope.lockQuestionSet = function(code, lock) {
-    if (lock === true) {
-      if (!($scope.datalocker[code] != null)) {
-        $scope.datalocker[code] = $scope.$root.currentPerson;
-      }
-      return $scope.mapQuestionSet[code].questionSetDTO.datalocker = $scope.$root.currentPerson;
-    } else {
-      if ($scope.datalocker[code] != null) {
-        delete $scope.datalocker[code];
-      }
-      return $scope.mapQuestionSet[code].questionSetDTO.datalocker = null;
-    }
-  };
-  $scope.validateQuestionSet = function(code, lock) {
-    if (lock === true) {
-      if (!($scope.dataValidator[code] != null)) {
-        $scope.dataValidator[code] = $scope.$root.currentPerson;
-      }
-      return $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson;
-    } else {
-      if ($scope.dataValidator[code] != null) {
-        delete $scope.dataValidator[code];
-      }
-      return $scope.mapQuestionSet[code].questionSetDTO.dataValidator = null;
-    }
-  };
-  return $scope.foundBasicParent = function(questionSet) {
-    if (!(questionSet.parent != null)) {
-      return questionSet.questionSetDTO;
-    }
-    return $scope.foundBasicParent(questionSet.parent);
-  };
 });angular.module('app.controllers').controller("ResultsCtrl", function($scope, $window, $filter, downloadService, displayFormMenu, modalService, messageFlash, translationService) {
   $scope.displayFormMenu = displayFormMenu;
   $scope.$root.$watch('mySites', function(nv) {
@@ -5023,6 +5096,111 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       };
     }
   });
+});angular.module('app.controllers').controller("RegistrationCtrl", function($scope, downloadService, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) {
+  downloadService.postJson('/awac/logout', null, function(result) {});
+  $scope.loading = false;
+  $scope.tabActive = [];
+  $scope.enterEvent = function() {
+    if ($scope.tabActive[0] === true) {
+      return $scope.send();
+    }
+  };
+  $scope.fields = {
+    loginInfo: {
+      fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE",
+      fieldType: "text",
+      placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER",
+      validationRegex: "^\\S{5,20}$",
+      validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH",
+      field: "",
+      isValid: false,
+      focus: function() {
+        return true;
+      }
+    },
+    passwordInfo: {
+      fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE",
+      fieldType: "password",
+      validationRegex: "^\\S{5,20}$",
+      validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH",
+      field: "",
+      isValid: false
+    },
+    lastNameInfo: {
+      fieldTitle: "USER_LASTNAME",
+      validationRegex: "^.{1,255}$",
+      validationMessage: "USER_LASTNAME_WRONG_LENGTH",
+      isValid: true
+    },
+    firstNameInfo: {
+      fieldTitle: "USER_FIRSTNAME",
+      fieldType: "text",
+      validationRegex: "^.{1,255}$",
+      validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
+      isValid: true
+    },
+    emailInfo: {
+      fieldTitle: "USER_EMAIL",
+      validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+      validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
+    }
+  };
+  $scope.connectionFieldValid = function() {
+    var field, key, _i, _len, _ref;
+    _ref = Object.keys($scope.fields);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      key = _ref[_i];
+      if (key !== '$$hashKey') {
+        field = $scope.fields[key];
+        if (!field.isValid || field.isValid === false) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+  $scope.send = function() {
+    var data, personDTO;
+    $scope.isLoading = true;
+    personDTO = {
+      identifier: $scope.fields.loginInfo.field,
+      lastName: $scope.fields.lastNameInfo.field,
+      firstName: $scope.fields.firstNameInfo.field,
+      email: $scope.fields.emailInfo.field
+    };
+    data = {
+      person: personDTO,
+      password: $scope.fields.passwordInfo.field,
+      key: $routeParams.key
+    };
+    downloadService.postJson('/awac/register', data, function(result) {
+      if (result.success) {
+        messageFlash.displaySuccess(translationService.get('REGISTRATION_SUCCESS'));
+        $scope.isLoading = false;
+        return $scope.$root.nav('/login');
+      } else {
+        messageFlash.displaySuccess(translationService.get('REGISTRATION_FAILED'));
+        $scope.isLoading = false;
+        return messageFlash.displayError(result.data.message);
+      }
+    });
+    return false;
+  };
+  $scope.injectRegistrationDirective = function() {
+    var directive, directiveName;
+    if ($scope.$root != null) {
+      if ($scope.$root.instanceName === 'enterprise') {
+        directiveName = "mm-awac-registration-enterprise";
+      } else if ($scope.$root.instanceName === 'municipality') {
+        directiveName = "mm-awac-registration-municipality";
+      }
+      directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope);
+      return $('.inject-registration-form').append(directive);
+    }
+  };
+  return $timeout(function() {
+    return $scope.injectRegistrationDirective();
+  }, 0);
 });angular.module('app.controllers').controller("UserManagerCtrl", function($scope, translationService, modalService, downloadService, messageFlash) {
   $scope.title = translationService.get('USER_MANAGER_TITLE');
   $scope.isLoading = {};
@@ -5085,90 +5263,4 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
   return $scope.toForm = function() {
     return $scope.$root.navToLastFormUsed();
   };
-});angular.module('app.controllers').controller("UserDataCtrl", function($scope, downloadService, translationService, messageFlash, modalService) {
-  $scope.isLoading = false;
-  $scope.identifierInfo = {
-    fieldTitle: "USER_IDENTIFIER",
-    disabled: true,
-    field: $scope.$root.currentPerson.identifier
-  };
-  $scope.passwordInfo = {
-    fieldTitle: "USER_PASSWORD",
-    fieldType: "password",
-    disabled: true,
-    field: "*****"
-  };
-  $scope.lastNameInfo = {
-    fieldTitle: "USER_LASTNAME",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_LASTNAME_WRONG_LENGTH",
-    field: $scope.$root.currentPerson.lastName,
-    hideIsValidIcon: true,
-    isValid: true,
-    focus: function() {
-      return true;
-    }
-  };
-  $scope.firstNameInfo = {
-    fieldTitle: "USER_FIRSTNAME",
-    fieldType: "text",
-    validationRegex: "^.{1,255}$",
-    validationMessage: "USER_FIRSTNAME_WRONG_LENGTH",
-    field: $scope.$root.currentPerson.firstName,
-    hideIsValidIcon: true,
-    isValid: true
-  };
-  $scope.emailInfo = {
-    fieldTitle: "USER_EMAIL",
-    disabled: true,
-    field: $scope.$root.currentPerson.email
-  };
-  $scope.allFieldValid = function() {
-    if ($scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid) {
-      return true;
-    }
-    return false;
-  };
-  $scope.$root.refreshUserData();
-  $scope.send = function() {
-    var data;
-    if (!$scope.allFieldValid) {
-      return false;
-    }
-    $scope.isLoading = true;
-    data = {
-      identifier: $scope.identifierInfo.field,
-      lastName: $scope.lastNameInfo.field,
-      firstName: $scope.firstNameInfo.field,
-      email: $scope.emailInfo.field
-    };
-    downloadService.postJson('/awac/user/profile/save', data, function(result) {
-      if (result.success) {
-        messageFlash.displaySuccess("CHANGES_SAVED");
-        $scope.$root.currentPerson.lastName = $scope.lastNameInfo.field;
-        $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field;
-        return $scope.isLoading = false;
-      } else {
-        messageFlash.displayError(result.data.message);
-        return $scope.isLoading = false;
-      }
-    });
-    return false;
-  };
-  $scope.setNewEmail = function(newEmail) {
-    $scope.emailInfo.field = newEmail;
-    return $scope.$root.currentPerson.email = newEmail;
-  };
-  $scope.changeEmail = function() {
-    return modalService.show(modalService.EMAIL_CHANGE, {
-      oldEmail: $scope.emailInfo.field,
-      cb: $scope.setNewEmail
-    });
-  };
-  $scope.changePassword = function() {
-    return modalService.show(modalService.PASSWORD_CHANGE, {});
-  };
-  return $scope.toForm = function() {
-    return $scope.$root.navToLastFormUsed();
-  };
-});angular.module('app.directives').run(function($templateCache) {$templateCache.put('$/angular/views/admin.html', "<div><h1>Admin</h1><tabset style=\"margin-top:20px\"><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span ng-bind-html=\"'BAD Importer'\"></span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><mm-awac-admin-bad-importer></mm-awac-admin-bad-importer></div></div></tab><tab class=\"tab-color-lightgreen\"><tab-heading><span ng-bind-html=\"'Other .... '\"></span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><div>something</div></div></div></tab></tabset></div>");$templateCache.put('$/angular/views/login.html', "<div class=\"loginBackground\"><div class=\"router-bar\"><div class=\"awac_logo\"></div><ul class=\"interface_menu\"><li><a ng-class=\"{selected:$root.instanceName == 'enterprise'}\" ng-bind-html=\"'ENTERPRISE' | translate\" class=\"btn btn-primary\" href=\"/enterprise\"></a></li><li><a ng-class=\"{selected:$root.instanceName == 'municipality'}\" ng-bind-html=\"'MUNICIPALITY' | translate\" class=\"btn btn-primary\" href=\"/municipality\"></a></li></ul></div><div class=\"loginFrame\" ng-enter=\"enterEvent()\"><select style=\"float:right\" ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select><tabset><tab class=\"tab-color-lightgreen\" active=\"tabActive[0]\"><tab-heading><span ng-bind-html=\"'LOGIN_CONNECTION' | translate\"></span></tab-heading><div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"loginInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!connectionFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'LOGIN_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></tab><tab class=\"tab-color-lightgreen\" active=\"tabActive[1]\" ng-show=\"true\"><tab-heading><span ng-bind-html=\"'LOGIN_FORGOT_PASSWORD' | translate\"></span></tab-heading><div><div class=\"forgot_password_success_message\" ng-show=\"forgotEmailSuccessMessage!=null\">{{forgotEmailSuccessMessage}}</div><div ng-hide=\"forgotEmailSuccessMessage!=null\"><div ng-bind-html=\"'LOGIN_FORGOT_PASSWORD_DESC' | translate\"></div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"forgotPasswordInfo\"></mm-awac-modal-field-text></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!forgotPasswordFieldValid()\" ng-click=\"sendForgotPassword()\" ng-bind-html=\"'SUBMIT' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></div></tab><tab class=\"tab-color-lightgreen\" active=\"tabActive[2]\"><tab-heading><span ng-bind-html=\"'LOGIN_REGISTRATION' | translate\"></span></tab-heading><div class=\"inject-registration-form\"></div></tab></tabset></div></div>");$templateCache.put('$/angular/views/site_manager.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'SITE_MANAGER_BUTTON' | translateText\"></h1><div class=\"site_manager\"><h4 ng-bind-html=\"'SITE_MANAGER_SITE_LIST_TITLE' | translateText\"></h4><div class=\"desc\" ng-bind-html=\"'SITE_MANAGER_SITE_LIST_DESC' | translateText\"></div><table class=\"site_table\"><tr class=\"site_table_header\"><td ng-bind-html=\"'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText\"></td><td ng-bind-html=\"'NAME' | translateText\"></td><td ng-bind-html=\"'DESCRIPTION' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_NACE_CODE' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ECONOMIC_INTEREST' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_OPERATING_POLICY' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_PERCENT_OWNED' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_USERS_BUTTON' | translateText\"></td><td><select ng-options=\"p.key as p.label for p in $root.periods\" ng-model=\"assignPeriod\"></select></td></tr><tr ng-repeat=\"site in getSiteList()\"><td><button title=\"{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}\" ng-click=\"editOrCreateSite(site)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td><td>{{site.name}}</td><td>{{site.description}}</td><td>{{site.naceCode}}</td><td>{{site.organizationalStructure}}</td><td>{{site.economicInterest}}</td><td>{{site.operatingPolicy}}</td><td>{{site.accountingTreatment}}</td><td>{{site.percentOwned}} %</td><td><button title=\"{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}\" ng-click=\"addUsers(site)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td><td><input ng-click=\"assignPeriodToSite(site)\" ng-model=\"isPeriodChecked[site.id]\" type=\"checkbox\" ng-hide=\"isLoading[site.id]=== true\"><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading[site.id]=== true\"></td></tr></table><button class=\"button add\" ng-click=\"editOrCreateSite()\" ng-bind-html=\"'SITE_MANAGER_ADD_SITE_BUTTON' | translateText\" type=\"button\"></button><br><br><h4 ng-bind-html=\"'SITE_MANAGER_EVENT_TITLE' | translateText\"></h4><div class=\"desc\" ng-bind-html=\"'SITE_MANAGER_EVENT_DESC' | translateText\"></div><br><div><span class=\"select_period\" ng-bind-html=\"'SITE_MANAGER_SELECT_PERIOD' | translateText\"></span><select ng-options=\"p.key as p.label for p in $root.periods\" ng-model=\"selectedPeriodForEvent\"></select></div><table class=\"site_table\"><tr class=\"site_table_header\"><td ng-bind-html=\"'SITE_MANAGER_EVENT_NAME' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EVENT_DESCRIPTION' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EVENT_PERIOD' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText\"></td></tr><tr ng-show=\"event.period.key == selectedPeriodForEvent\" ng-repeat=\"event in getEventList()\"><td>{{event.name}}</td><td>{{event.description}}</td><td>{{event.period.label}}</td><td><button title=\"{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}\" ng-click=\"editOrCreateEvent(event)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td></tr></table><button class=\"button add\" ng-click=\"editOrCreateEvent()\" ng-bind-html=\"'SITE_MANAGER_ADD_EVENT_BUTTON' | translateText\" type=\"button\"></button></div></div>");$templateCache.put('$/angular/views/user_manager.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'USER_MANAGER_TITLE' | translate\"></h1><div class=\"element\"><button class=\"button add\" ng-click=\"inviteUser()\" ng-bind-html=\"'USER_MANAGER_INVIT_USER' | translate\" type=\"button\" ng-show=\"true\"></button><table class=\"user_table\"><tr class=\"user_table_header\"><td ng-bind-html=\"'NAME' | translate\"></td><td ng-bind-html=\"'USER_MANAGER_ADMINISTRATOR' | translate\"></td><td ng-bind-html=\"'USER_MANAGER_ACTIF' | translate\"></td></tr><tr ng-class=\"{user_deleted : user.isActive === false}\" ng-repeat=\"user in getUserList()\"><td>{{user.firstName}} {{user.lastName}} ({{user.email}})</td><td><input ng-disabled=\"getMyself().isAdmin === false || getMyself().email === user.email || user.isActive == false\" ng-click=\"isAdminUser(user)\" ng-model=\"user.isAdmin\" type=\"checkbox\" ng-hide=\"isLoading['admin'][user.email]=== true\"><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading['admin'][user.email] === true\"></td><td ng-class=\"{is_admin : getMyself().isAdmin === true &amp;&amp; getMyself().email !== user.email}\"><div class=\"button_delete\" ng-click=\"activeUser(user)\" ng-hide=\"isLoading['isActive'][user.email]=== true\"></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading['isActive'][user.email] === true\"></td></tr></table></div></div>");$templateCache.put('$/angular/views/enterprise/TAB5.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--mm-awac-section(\"Déchets\")--><!--It lacks a proper fild code for \"D2chets alone\" -> TODO : insert into Excel file as an additional line--><mm-awac-section title-code=\"A173\"><mm-awac-question question-code=\"A174\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A175\"><mm-awac-repetition-name question-code=\"A175\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A175\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A175')\"><mm-awac-question question-code=\"A176\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A177\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A178\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A179\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A175')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A175_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A180\"><mm-awac-sub-title question-code=\"A181\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"A182\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A183\"></mm-awac-question><mm-awac-question question-code=\"A184\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A185\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A186\"></mm-awac-question><mm-awac-question question-code=\"A187\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A188\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A189\"></mm-awac-question><mm-awac-question question-code=\"A190\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A191\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A192\"></mm-awac-question><mm-awac-question question-code=\"A193\"></mm-awac-question><mm-awac-sub-title question-code=\"A194\"></mm-awac-sub-title><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><span ng-bind-html=\"'A197' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A195\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A198\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A199\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A200\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><span ng-bind-html=\"'A201' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A501\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A202\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A203\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A204\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB2.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A1\"><mm-awac-question question-code=\"A2\"></mm-awac-question><mm-awac-question question-code=\"A3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '1'\" question-code=\"A4\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '2' || getAnswer('A3').value == '3'\" question-code=\"A5\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '4'\" question-code=\"A6\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '4'\" question-code=\"A7\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A7').value == '1'\" question-code=\"A8\"></mm-awac-question><mm-awac-question question-code=\"A9\"></mm-awac-question><mm-awac-question question-code=\"A10\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value != '4'\" question-code=\"A11\"></mm-awac-question><mm-awac-question question-code=\"A12\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A13\"><mm-awac-question question-code=\"A14\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A15\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A15\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A15')\"><mm-awac-question question-code=\"A16\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A17\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A15')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A15_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A20\"><mm-awac-question question-code=\"A21\" ng-optional=\"true\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A22\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A23\"></mm-awac-question><mm-awac-question question-code=\"A24\"></mm-awac-question><mm-awac-repetition-name question-code=\"A25\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A25\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A25')\"><mm-awac-question question-code=\"A26\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A27\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A28\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A25')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A25_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A31\"><mm-awac-question question-code=\"A32\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A32').value == '1'\" question-code=\"A33\" ng-optional=\"true\"></mm-awac-question><mm-awac-block ng-condition=\"getAnswer('A32').value == '1'\"><mm-awac-repetition-name question-code=\"A34\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A34\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A34')\"><mm-awac-question question-code=\"A35\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A36\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A34')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A34_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A37\"><mm-awac-question question-code=\"A38\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A38').value == '1'\" question-code=\"A39\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><mm-awac-block ng-condition=\"getAnswer('A38').value == '1'\"><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><span ng-bind-html=\"'A41' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A42\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A42\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A42')\"><mm-awac-question question-code=\"A43\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A44\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A42')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A42_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><span ng-bind-html=\"'A45' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A46\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\" ng-show=\"getAnswer('A5').value == '1' || getAnswer('A5').value == '2'\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><span ng-bind-html=\"'A47' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><mm-awac-block class=\"element_table\" ng-condition=\"getAnswer('A5').value == '1' || getAnswer('A5').value == '2'\"><mm-awac-question question-code=\"A48\" ng-tab-set=\"1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A49\" ng-tab-set=\"1\" ng-tab=\"3\"></mm-awac-question></mm-awac-block></div></tab></tabset></div></div></mm-awac-block></div></div>");$templateCache.put('$/angular/views/enterprise/TAB4.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A205\"><mm-awac-question question-code=\"A206\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A208\"><mm-awac-repetition-name question-code=\"A209\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A209\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A209')\"><mm-awac-question question-code=\"A210\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A211\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_61'\" question-code=\"A212\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_62'\" question-code=\"A213\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_63'\" question-code=\"A214\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_64'\" question-code=\"A215\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_65'\" question-code=\"A216\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_66'\" question-code=\"A217\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_67'\" question-code=\"A218\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_68'\" question-code=\"A219\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_61' || getAnswer('A211',itLevel1).value == 'AT_62' || getAnswer('A211',itLevel1).value == 'AT_63' || getAnswer('A211',itLevel1).value == 'AT_64'\" question-code=\"A220\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value != 'AT_68'\" question-code=\"A221\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_68'\" question-code=\"A222\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A209')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A209_LOOPDESC' | translate\"></span></button><mm-awac-sub-title question-code=\"A223\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"A224\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A224\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A224')\"><mm-awac-question question-code=\"A225\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A226\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A227\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A228\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A224')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A224_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A128\"><mm-awac-question question-code=\"A129\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A130\"><mm-awac-sub-title question-code=\"A131\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"A132\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A133\"></mm-awac-question><mm-awac-question question-code=\"A134\"></mm-awac-question><mm-awac-question question-code=\"A135\"></mm-awac-question><mm-awac-question question-code=\"A136\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A136').value == '1'\" question-code=\"A137\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A136').value == '1'\" question-code=\"A138\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A138').value == '1'\" question-code=\"A139\"></mm-awac-question><mm-awac-question ng-aggregation=\"0.484\" ng-condition=\"getAnswer('A138').value == '0'\" question-code=\"A500\"></mm-awac-question><mm-awac-sub-title question-code=\"A140\"></mm-awac-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><span ng-bind-html=\"'A141' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A142\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A142\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A142')\"><mm-awac-question question-code=\"A143\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A145\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A146\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A147\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A148\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A149\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A150\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A151\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A152\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A153\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A154\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A155\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-aggregation=\"(getAnswer('A147',itLevel1).value | nullToZero)+( getAnswer('A148',itLevel1).value | nullToZero)+(getAnswer('A149',itLevel1).value | nullToZero)+(getAnswer('A150',itLevel1).value| nullToZero)+(getAnswer('A151',itLevel1).value| nullToZero)+(getAnswer('A152',itLevel1).value| nullToZero)+(getAnswer('A153',itLevel1).value| nullToZero)+(getAnswer('A154',itLevel1).value| nullToZero)+(getAnswer('A155',itLevel1).value| nullToZero)\" question-code=\"A156\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A142')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A142_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><span ng-bind-html=\"'A157' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A158\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A159\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A159').value == '3'\" question-code=\"A160\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A159').value == '2'\" question-code=\"A161\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"200\" ng-condition=\"getAnswer('A159').value == '1'\" question-code=\"A162\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A163\"><mm-awac-repetition-name question-code=\"A164\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A164\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A164')\"><mm-awac-question question-code=\"A165\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A166\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A166\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A166',itLevel1)\"><mm-awac-question question-code=\"A167\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A168\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A166',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A166_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A169\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A170\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A170\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A170',itLevel1)\"><mm-awac-question question-code=\"A171\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A172\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A170',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A170_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A164')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A164_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB6.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A229\"><mm-awac-question question-code=\"A230\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A231\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A231\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A231')\"><mm-awac-question question-code=\"A232\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A233\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"(getAnswer('A233',itLevel1).value | stringToFloat) &lt; 18   || getAnswer('A233',itLevel1).value == '23'\" question-code=\"A234\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A233',itLevel1).value == '20' || getAnswer('A233',itLevel1).value == '21'|| getAnswer('A233',itLevel1).value == '22'\" question-code=\"A235\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A233',itLevel1).value == '18' || getAnswer('A233',itLevel1).value == '19'\" question-code=\"A236\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A231')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A231_LOOPDESC' | translate\"></span></button><mm-awac-sub-sub-title question-code=\"A237\"></mm-awac-sub-sub-title><mm-awac-repetition-name question-code=\"A238\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A238\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A238')\"><mm-awac-question question-code=\"A239\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A240\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A241\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A242\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A238')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A238_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A309\"><mm-awac-question question-code=\"A310\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A311\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A311\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A311')\"><mm-awac-question question-code=\"A312\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A313\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A313\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A313',itLevel1)\"><mm-awac-question question-code=\"A314\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A315\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A313',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A313_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A316\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A317\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A317\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A317',itLevel1)\"><mm-awac-question question-code=\"A318\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A319\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A317',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A317_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A311')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A311_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A320\"><mm-awac-question question-code=\"A321\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A322\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A322\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A322')\"><mm-awac-question question-code=\"A323\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A324\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A325\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A325\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A325',itLevel1)\"><mm-awac-question question-code=\"A326\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A327\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A325',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A325_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A328\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A329\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A329\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A329',itLevel1)\"><mm-awac-question question-code=\"A330\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A331\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A329',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A329_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A322')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A322_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A332\"><mm-awac-question question-code=\"A333\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A334\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A334\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A334')\"><mm-awac-question question-code=\"A335\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A336\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A337\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A338\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A334')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A334_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB3.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A50\"><mm-awac-question question-code=\"A51\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A52\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><span ng-bind-html=\"'A53' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-sub-title question-code=\"A54\"></mm-awac-sub-title><mm-awac-question question-code=\"A55\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A56\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A57\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-sub-title question-code=\"A58\"></mm-awac-sub-title><mm-awac-question question-code=\"A59\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A60\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A61\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-sub-title question-code=\"A62\"></mm-awac-sub-title><mm-awac-question question-code=\"A63\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A64\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A65\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><span ng-bind-html=\"'A66' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A67\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A67\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A67')\"><mm-awac-question question-code=\"A68\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A69\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A69',itLevel1).value == '0'\" question-code=\"A70\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A71\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A72\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '1'\" question-code=\"A73\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '2'|| getAnswer('A72',itLevel1).value == '3'|| getAnswer('A72',itLevel1).value == '4'|| getAnswer('A72',itLevel1).value == '5'\" question-code=\"A74\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '6' || getAnswer('A72',itLevel1).value == '7'\" question-code=\"A75\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A76\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A67')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A67_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><span ng-bind-html=\"'A77' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A78\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A78\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A78')\"><mm-awac-question question-code=\"A79\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A80\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A80',itLevel1).value == '0'\" question-code=\"A81\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A83\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A88\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_5'\" question-code=\"A89\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_162'\" question-code=\"A90\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_6' || getAnswer('A83',itLevel1).value == 'AS_7'\" question-code=\"A91\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_163'\" question-code=\"A92\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A78')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A78_LOOPDESC' | translate\"></span></button></div></div></tab></tabset></div></div></div><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A93\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(2,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(2,1)\"></i><span ng-bind-html=\"'A94' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A95\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A96\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A97\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A98\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A99\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A100\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A101\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A102\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A103\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A104\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A105\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A106\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A107\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A108\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(2,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(2,2)\"></i><span ng-bind-html=\"'A109' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A110\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A111\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A112\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></div></div><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A113\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(3,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(3,1)\"></i><span ng-bind-html=\"'A114' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A115\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A115\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A115')\"><mm-awac-question question-code=\"A116\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A117\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A118\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A119\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A120\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A115')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A115_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(3,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(3,2)\"></i><span ng-bind-html=\"'A121' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A122\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A123\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A123',itLevel1).value == '0'\" question-code=\"A124\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A124',itLevel1).value == '1'\" question-code=\"A125\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A124',itLevel1).value == '0'\" question-code=\"A126\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A123',itLevel1).value == '1'\" question-code=\"A127\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></div></div></div></div>");$templateCache.put('$/angular/views/enterprise/TAB7.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A243\"><mm-awac-repetition-name question-code=\"A244\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" ng-question-set-code=\"'A244'\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A244')\"><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A245'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A246'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A247'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A248'\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A248',itLevel1).value == '2'\" ng-repetition-map=\"itLevel1\" ng-question-code=\"'A249'\"></mm-awac-question><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Transport--><mm-awac-sub-title question-code=\"A250\"></mm-awac-sub-title><mm-awac-question question-code=\"A251\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A252\"></mm-awac-sub-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1,itLevel1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1,itLevel1)\"></i><span ng-bind-html=\"'A253' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A254\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A255\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A256\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A257\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A258\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A259\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A260\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A261\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A262\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A263\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A264\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-aggregation=\"(getAnswer('A256',itLevel1).value | nullToZero)+( getAnswer('A257',itLevel1).value | nullToZero)+(getAnswer('A258',itLevel1).value | nullToZero)+(getAnswer('A259',itLevel1).value| nullToZero)+(getAnswer('A260',itLevel1).value| nullToZero)+(getAnswer('A261',itLevel1).value| nullToZero)+(getAnswer('A262',itLevel1).value| nullToZero)+(getAnswer('A263',itLevel1).value| nullToZero)+(getAnswer('A264',itLevel1).value| nullToZero)\" question-code=\"A265\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2,itLevel1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2,itLevel1)\"></i><span ng-bind-html=\"'A266' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A267\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A268\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A268',itLevel1).value == '3'\" question-code=\"A269\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A268',itLevel1).value == '2'\" question-code=\"A270\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"200\" ng-condition=\"getAnswer('A268',itLevel1).value == '1'\" question-code=\"A271\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Distribution--><mm-awac-sub-title question-code=\"A272\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"A273\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" ng-question-set-code=\"'A273'\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A273',itLevel1)\"><mm-awac-question question-code=\"A274\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-repetition-name question-code=\"A275\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel3\" question-set-code=\"A275\" ng-repetition-map=\"itLevel2\" ng-repeat=\"itLevel3 in getRepetitionMapByQuestionSet('A275',itLevel2)\"><mm-awac-question question-code=\"A276\" ng-repetition-map=\"itLevel3\"></mm-awac-question><mm-awac-question question-code=\"A277\" ng-repetition-map=\"itLevel3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A275',itLevel2)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A275_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A278\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-repetition-name question-code=\"A279\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel3\" question-set-code=\"A279\" ng-repetition-map=\"itLevel2\" ng-repeat=\"itLevel3 in getRepetitionMapByQuestionSet('A279',itLevel2)\"><mm-awac-question question-code=\"A280\" ng-repetition-map=\"itLevel3\"></mm-awac-question><mm-awac-question question-code=\"A281\" ng-repetition-map=\"itLevel3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A279',itLevel2)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A279_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A273',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A273_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A249',itLevel1).value == '1'\"><!--Traitement--><mm-awac-sub-title question-code=\"A282\"></mm-awac-sub-title><mm-awac-question question-code=\"A283\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A284\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A284\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A284',itLevel1)\"><mm-awac-question question-code=\"A285\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A286\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A284',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A284_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A287\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A288\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A288\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A288',itLevel1)\"><mm-awac-question question-code=\"A289\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A290\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A288',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A288_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Utilisation--><mm-awac-sub-title question-code=\"A291\"></mm-awac-sub-title><mm-awac-question question-code=\"A292\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A293\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A294\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A295\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A296\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A297\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A297\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A297',itLevel1)\"><mm-awac-question question-code=\"A298\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A299\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A297',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A297_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Fin de vie--><mm-awac-sub-title question-code=\"A300\"></mm-awac-sub-title><mm-awac-question question-code=\"A301\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A302\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A303\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A303\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A303',itLevel1)\"><mm-awac-question question-code=\"A304\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A305\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A306\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A307\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A308\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A303',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A303_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A244')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A244_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/results.html', "<div class=\"results pdf-able\"><h1><span ng-bind-html=\"'RESULTS' | translate\"></span></h1><table class=\"wide\"><tr><td class=\"top-aligned\" ng-hide=\"$root.instanceName == 'municipality'\"><div class=\"sites-panel\"><div class=\"sites-panel-title\"><span ng-bind-html=\"'SITES_LIST' | translate\"></span></div><!--<div class=\"sites-panel-all-items\"><table><tr><td><span ng-bind-html=\"'ALL_SITES_SELECTED' | translate\"></span></td><td><input type=\"checkbox\"></td></tr></table></div>--><div class=\"sites-panel-items\"><div class=\"sites-panel-item\"><table><tr ng-repeat=\"site in mySites\"><td>{{ site.name }}</td><td><input ng-model=\"site.$selected\" type=\"checkbox\"></td></tr></table></div></div></div></td><td class=\"top-aligned horizontally-padded wide\"><div ng-show=\"o != null &amp;&amp; o != undefined\"><div ng-show=\"o.reportDTOs.R_1.rightPeriod == null\"><span ng-bind-html=\"'ACCOMPANIMENT_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N)]\" ng-show=\"$root.instanceName == 'enterprise'\"></span><span ng-bind-html=\"'ACCOMPANIMENT_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N)]\" ng-show=\"$root.instanceName == 'municipality'\"></span></div><div ng-hide=\"o.reportDTOs.R_1.rightPeriod == null\"><span ng-bind-html=\"'ACCOMPANIMENT_COMPARISION_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]\" ng-show=\"$root.instanceName == 'enterprise'\"></span><span ng-bind-html=\"'ACCOMPANIMENT_COMPARISION_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]\" ng-show=\"$root.instanceName == 'municipality'\"></span></div><br><br><div ng-show=\"siteSelectionIsEmpty()\"><div ng-bind-html=\"'SELECT_AT_LEAST_ONE_SITE' | translate\"></div></div><div ng-hide=\"siteSelectionIsEmpty()\"><div ng-show=\"current_tab == 1\"><h2><span ng-bind-html=\"'VALUES_BY_CATEGORY' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 10cm; max-height: 10cm;\" ng-bind-html=\"o.svgHistograms.R_1 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_1\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><div ng-show=\"current_tab == 2\"><h2><span ng-bind-html=\"'IMPACTS_PARTITION' | translate\"></span></h2><br><table><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> : {{ totalScope1 | numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_2 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_2 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_2\"></mm-awac-result-legend></td></tr><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> : {{ totalScope2| numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_3 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_3 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_3\"></mm-awac-result-legend></td></tr><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> : {{ totalScope3| numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_4 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_4 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_4\"></mm-awac-result-legend></td></tr></table><br><br></div><div ng-show=\"current_tab == 3\"><h2><span ng-bind-html=\"'KIVIAT_DIAGRAM' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 15cm; max-height: 15cm;\" ng-bind-html=\"o.svgWebs.R_1 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_1\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><div ng-show=\"current_tab == 4\"><h2><span ng-bind-html=\"'NUMBERS' | translate\"></span></h2><mm-awac-result-table ng-model=\"o.reportDTOs.R_1\"></mm-awac-result-table></div><div ng-show=\"current_tab == 5\"><h2><span ng-bind-html=\"'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate\"></span></h2></div><div ng-show=\"current_tab == 6\"><h2><span ng-bind-html=\"'CALCULUS_EXPLANATION' | translate\"></span></h2><br><p ng-show=\"o.reportDTOs.R_1.rightPeriod != null\"><span ng-bind-html=\"'RESULTS_EXPLANATION_ONLY_AVAILABLE_FOR_SINGLE_PERIOD' | translate\"></span></p><p ng-repeat=\"e in o.logEntries\" ng-hide=\"o.reportDTOs.R_1.rightPeriod != null\"><span ng-show=\"e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'\"><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART1' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biActivityCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.biActivitySubCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART2' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.adValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.adUnit\"></span><span>&#32;</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART3' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biIndicatorCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART4' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.fValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.fUnitOut\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART5' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.fUnitIn\"></span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART6' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.value | numberToI18N\"></span><span>&#32;</span><span ng-bind-html=\"e.biUnit\"></span></span><span style=\"color: #a33\" ng-show=\"e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'\"><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART1' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biActivityCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.biActivitySubCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.adValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.adUnit\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART3' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biIndicatorCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate\"></span></span></p></div><div ng-show=\"current_tab == 7\"><h2><span ng-bind-html=\"'USED_EMISSION_FACTORS' | translate\"></span></h2></div><div ng-show=\"current_tab == 8\"><h2><span ng-bind-html=\"'CONVENTION_OF_MAYORS' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 10cm; max-height: 10cm;\" ng-bind-html=\"o.svgHistograms.R_5 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_5\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><br><div class=\"results_disclaimer\"><span class=\"results_disclaimer_text\" ng-bind-html=\"'RESULTS_DISCLAIMER' | translate\"></span></div><br><br><br></div></div></td><td class=\"top-aligned\"><div class=\"align-right\"><button class=\"button\" mm-not-implemented type=\"button\"><span ng-bind-html=\"'XLS_EXPORT' | translate\"></span></button><button class=\"button\" mm-not-implemented type=\"button\"><span ng-bind-html=\"'PDF_EXPORT' | translate\"></span></button></div><br><div class=\"charts-panel-tabset\"><div class=\"charts-panel-tab\" ng-click=\"current_tab = 1\" ng-class=\"{ active: current_tab == 1 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_bars\" ng-bind-html=\"'VALUES_BY_CATEGORY' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 2\" ng-class=\"{ active: current_tab == 2 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_donut\" ng-bind-html=\"'IMPACTS_PARTITION' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 3\" ng-class=\"{ active: current_tab == 3 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_web\" ng-bind-html=\"'KIVIAT_DIAGRAM' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 4\" ng-class=\"{ active: current_tab == 4 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_numbers\" ng-bind-html=\"'NUMBERS' | translate\"></div></div><div class=\"charts-panel-tab\" mm-not-implemented ng-click=\"\" ng-class=\"{ active: current_tab == 5 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_constant_factors\" ng-bind-html=\"'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 6\" ng-class=\"{ active: current_tab == 6 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_calculus\" ng-bind-html=\"'CALCULUS_EXPLANATION' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 8\" ng-class=\"{ active: current_tab == 8 }\" ng-show=\"$root.instanceName == 'municipality'\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_convention\" ng-bind-html=\"'CONVENTION_OF_MAYORS' | translate\"></div></div><!--<div class=\"charts-panel-tab\" ng-click=\"current_tab = 7\" ng-class=\"{ active: current_tab == 7 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_fe\" ng-bind-html=\"'USED_EMISSION_FACTORS' | translate\"></div></div>--></div></td></tr></table></div>");$templateCache.put('$/angular/views/no_scope.html', "<div><h1 ng-bind-html=\"'NO_SCOPE_TITLE' | translate\"></h1><div class=\"no-scope-message\" ng-bind-html=\"'NO_SCOPE_MESSAGE' | translate\"></div></div>");$templateCache.put('$/angular/views/change_password.html', "<div class=\"loginBackground\"><div class=\"loginFrame\" ng-enter=\"send()\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"oldPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordInfo_confirm\"></mm-awac-modal-field-text></div><p style=\"background-color:#ff0000;color:#ffffff;padding:15px\" ng-show=\"errorMessage.length &gt; 0\">{{errorMessage}}</p><button ng-click=\"send()\" ng-bind-html=\"'CHANGE_PASSWORD_BUTTON' | translate\" class=\"btn btn-primary\" type=\"button\"></button></div></div>");$templateCache.put('$/angular/views/user_registration.html', "<div class=\"loginBackground\"><div class=\"router-bar\"><div class=\"awac_logo\"></div></div><div class=\"registrationFrame\" ng-enter=\"enterEvent()\"><select style=\"float:right\" ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select><tabset><tab class=\"tab-color-lightgreen\" active=\"tabActive[0]\"><tab-heading><span ng-bind-html=\"'USER_REGISTRATION' | translate\"></span></tab-heading><div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.loginInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.emailInfo\"></mm-awac-modal-field-text></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!connectionFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'USER_REGISTER_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></tab></tabset></div></div>");$templateCache.put('$/angular/views/user_data.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'USER_DATA_BUTTON' | translate\"></h1><style>.edit_icon {\n    width: 22px;\n    height: 22px;\n    top: -1px;\n}</style><div class=\"user_data\"><div style=\"display:table\" class=\"field_form\"><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"><button title=\"{{'UPDATE_PASSWORD_BUTTON' | translateText}}\" ng-click=\"changePassword()\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"><button title=\"{{'UPDATE_EMAIL_BUTTON' | translateText}}\" ng-click=\"changeEmail()\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></mm-awac-modal-field-text><br><div style=\"display:table-row\"><div style=\"display:table-cell\"></div><div style=\"display:table-cell\"></div><div style=\"display:table-cell\"><div style=\"text-align: right\" ng-hide=\"isLoading\"><button ng-disabled=\"!allFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" class=\"btn btn-primary\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C2.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"AC9\"><!--main loop--><mm-awac-repetition-name question-code=\"AC10\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC10\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC10')\"><mm-awac-question question-code=\"AC11\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC12\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC12',itLevel1).value == '8'\" question-code=\"AC13\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC14\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC15\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC16\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC17\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC18\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC19\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC20\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC21\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\" question-code=\"AC22\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC23\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><!--AC24--><mm-awac-sub-title question-code=\"AC24\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC25\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC25\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC25', itLevel1)\"><mm-awac-question question-code=\"AC26\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC27\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC25',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC25_LOOPDESC' | translate\"></span></button><!--AC28--><mm-awac-sub-title question-code=\"AC28\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"AC29\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"AC30\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC31\" ng-repetition-map=\"itLevel1\"></mm-awac-question><!--AC32--><mm-awac-block ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\"><mm-awac-sub-title question-code=\"AC32\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC33\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC33\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC33', itLevel1)\"><mm-awac-question question-code=\"AC34\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC35\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC36\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC33',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC33_LOOPDESC' | translate\"></span></button></mm-awac-block><!--AC37--><mm-awac-sub-title question-code=\"AC37\" ng-repetition-map=\"itLevel1\"></mm-awac-sub-title><mm-awac-question question-code=\"AC38\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC39\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC39\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC39', itLevel1)\"><mm-awac-question question-code=\"AC40\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC41\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC39',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC39_LOOPDESC' | translate\"></span></button><!--AC42--><mm-awac-block ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\"><mm-awac-sub-title question-code=\"AC42\" ng-repetition-map=\"itLevel1\"></mm-awac-sub-title><mm-awac-question question-code=\"AC43\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC44\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC44\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC44', itLevel1)\"><mm-awac-question question-code=\"AC45\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC46\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value != 'AS_186' || getAnswer('AC45',itLevel2).value != 'AS183'\" question-code=\"AC47\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value != 'AS_186'\" question-code=\"AC48\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value == 'AS_183'\" question-code=\"AC49\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value == 'AS_183'\" question-code=\"AC50\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC51\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC44',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC44_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC10')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC10_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><!--éclairage public AS52--><mm-awac-section title-code=\"AC52\"><mm-awac-question question-code=\"AC53\" ng-optional=\"true\"></mm-awac-question><mm-awac-question question-code=\"AC54\"></mm-awac-question><mm-awac-question question-code=\"AC55\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC56\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC56\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC56')\"><mm-awac-question question-code=\"AC57\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC58\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC59\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC56')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC56_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C4.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--achat bien et service--><mm-awac-section title-code=\"AC114\"><mm-awac-question question-code=\"AC115\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC116\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC116\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC116')\"><mm-awac-question question-code=\"AC117\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC118\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61'\" question-code=\"AC119\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_62'\" question-code=\"AC120\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_63'\" question-code=\"AC121\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_64'\" question-code=\"AC122\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_65'\" question-code=\"AC123\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_66'\" question-code=\"AC124\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_67'\" question-code=\"AC125\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_68'\" question-code=\"AC126\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61' || getAnswer('AC118',itLevel1).value == 'AT_62' || getAnswer('AC118',itLevel1).value == 'AT_63' || getAnswer('AC118',itLevel1).value == 'AT_64'\" question-code=\"AC127\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61' || getAnswer('AC118',itLevel1).value == 'AT_62' || getAnswer('AC118',itLevel1).value == 'AT_63' || getAnswer('AC118',itLevel1).value == 'AT_64' || getAnswer('AC118',itLevel1).value == 'AT_65' || getAnswer('AC118',itLevel1).value == 'AT_66' || getAnswer('AC118',itLevel1).value == 'AT_67'\" question-code=\"AC128\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_68'\" question-code=\"AC129\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC116')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC116_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C3.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--mobilite AC60--><mm-awac-section title-code=\"AC60\"><mm-awac-question question-code=\"AC61\" ng-optional=\"true\"></mm-awac-question><!--transport routier AC62--><mm-awac-sub-title question-code=\"AC62\"></mm-awac-sub-title><mm-awac-question question-code=\"AC63\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"AC64\"></mm-awac-sub-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><span ng-bind-html=\"'AC65' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><!--véhicule AC66--><mm-awac-repetition-name question-code=\"AC66\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC66\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC66')\" ng-tab=\"1\"><mm-awac-question question-code=\"AC67\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC68\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC68',itLevel1).value == '2'\" question-code=\"AC69\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC70\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC71\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC66')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC66_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><span ng-bind-html=\"'AC72' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><!--kilomètrage AC 73--><mm-awac-repetition-name question-code=\"AC73\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC73\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC73')\" ng-tab=\"2\"><mm-awac-question question-code=\"AC74\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC75\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC75',itLevel1).value == '2'\" question-code=\"AC76\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC77\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC78\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '1' || getAnswer('AC78',itLevel1).value == '2' \" question-code=\"AC79\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '5' || getAnswer('AC78',itLevel1).value == '8'|| getAnswer('AC78',itLevel1).value == '9' \" question-code=\"AC80\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '6' || getAnswer('AC78',itLevel1).value == '7' \" question-code=\"AC81\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '3' || getAnswer('AC78',itLevel1).value == '4' \" question-code=\"AC82\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC83\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC73')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC73_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><span ng-bind-html=\"'AC84' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><div class=\"element_table\"><!--dépense AC 85--><mm-awac-repetition-name question-code=\"AC85\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC85\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC85')\" ng-tab=\"3\"><mm-awac-question question-code=\"AC86\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC87\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC88\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC89\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC90\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC90',itLevel1).value == '2'\" question-code=\"AC91\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC85')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC85_LOOPDESC' | translate\"></span></button></div></div></tab></tabset></div></div><!--transport public AC92--><mm-awac-sub-title question-code=\"AC92\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"AC93\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"AC94\"></mm-awac-question><mm-awac-question question-code=\"AC95\"></mm-awac-question><mm-awac-question question-code=\"AC96\"></mm-awac-question><mm-awac-question question-code=\"AC97\"></mm-awac-question><!--déplacements professionels AC98--><mm-awac-sub-title question-code=\"AC98\"></mm-awac-sub-title><mm-awac-question question-code=\"AC99\"></mm-awac-question><mm-awac-question question-code=\"AC100\"></mm-awac-question><mm-awac-question question-code=\"AC101\"></mm-awac-question><mm-awac-question question-code=\"AC102\"></mm-awac-question><mm-awac-question question-code=\"AC103\"></mm-awac-question><mm-awac-question question-code=\"AC104\"></mm-awac-question><mm-awac-question question-code=\"AC105\"></mm-awac-question><!--déplacement avion AC106--><mm-awac-sub-title question-code=\"AC106\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC107\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC107\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC107')\"><mm-awac-question question-code=\"AC108\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC109\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC110\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC111\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC112\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC113\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC107')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC107_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C1.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"AC1\"><mm-awac-sub-title question-code=\"AC2\"></mm-awac-sub-title><mm-awac-question question-code=\"AC3\"></mm-awac-question><mm-awac-question question-code=\"AC4\"></mm-awac-question><mm-awac-question question-code=\"AC5\"></mm-awac-question><mm-awac-question question-code=\"AC6\"></mm-awac-question><mm-awac-question question-code=\"AC7\"></mm-awac-question><mm-awac-question question-code=\"AC8\"></mm-awac-question></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C5.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--achat bien et service--><mm-awac-section title-code=\"AC130\"><mm-awac-question question-code=\"AC131\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC132\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC132\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC132')\"><mm-awac-question question-code=\"AC133\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"(getAnswer('AC133',itLevel1).value | stringToFloat) &lt; 18   || getAnswer('AC133',itLevel1).value == '23'\" question-code=\"AC134\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'\" question-code=\"AC135\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'\" question-code=\"AC136\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC132')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC132_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><!--investissement AC137--><mm-awac-section title-code=\"AC137\"><mm-awac-question question-code=\"AC138\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC139\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC139\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC139')\"><mm-awac-question question-code=\"AC140\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC141\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC142\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC143\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC139')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC139_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/templates/mm-awac-registration-enterprise.html', "<div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordConfirmInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"organizationNameInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"firstSiteNameInfo\"></mm-awac-modal-field-text><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-disabled=\"!registrationFieldValid()\" ng-click=\"registration()\" ng-bind-html=\"'REGISTRATION_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div>");$templateCache.put('$/angular/templates/mm-awac-graph-donut.html', "<table><tr><td><canvas class=\"holder\" height=\"200\" width=\"400\"></canvas></td><td class=\"chart-legend\"><b ng-bind-html=\"'GRAPH_LEGEND' | translate\"></b><div ng-bind-html=\"legend\"></div></td></tr></table>");$templateCache.put('$/angular/templates/mm-awac-result-table.html', "<ng-virtual><table class=\"indicators_table\"><thead><tr><th width=\"100%\"></th><th colspan=\"4\"><span class=\"period-header\" style=\"color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}\">{{ngModel.leftPeriod}}</span></th><th colspan=\"4\" ng-show=\"ngModel.rightPeriod!=null\"><span class=\"period-header\" style=\"color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}\">{{ngModel.rightPeriod}}</span></th></tr><tr><th width=\"100%\"></th><th class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'OUT_OF_SCOPE' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'OUT_OF_SCOPE' | translate\"></span><span> (tCO2e)</span></span></div></th></tr></thead><tbody><tr ng-show=\"showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue &gt; 0)\" ng-repeat=\"rl in ngModel.reportLines\"><td><span ng-bind-html=\"rl.indicatorName | translate\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope1Value | numberToI18NOrLess\" ng-show=\"rl.leftScope1Value &gt; 0\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope2Value | numberToI18NOrLess\" ng-show=\"rl.leftScope2Value &gt; 0\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope3Value | numberToI18NOrLess\" ng-show=\"rl.leftScope3Value &gt; 0\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftOutOfScopeValue | numberToI18NOrLess\" ng-show=\"rl.leftOutOfScopeValue &gt; 0\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope1Value | numberToI18NOrLess\" ng-show=\"rl.rightScope1Value &gt; 0\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope2Value | numberToI18NOrLess\" ng-show=\"rl.rightScope2Value &gt; 0\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope3Value | numberToI18NOrLess\" ng-show=\"rl.rightScope3Value &gt; 0\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightOutOfScopeValue | numberToI18NOrLess\" ng-show=\"rl.rightOutOfScopeValue &gt; 0\"></span></td></tr></tbody><tfoot><tr><td></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope1() | numberToI18NOrLess\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope2() | numberToI18NOrLess\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope3() | numberToI18NOrLess\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalOutOfScope() | numberToI18NOrLess\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope1() | numberToI18NOrLess\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope2() | numberToI18NOrLess\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope3() | numberToI18NOrLess\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalOutOfScope() | numberToI18NOrLess\"></span></td></tr><tr><td></td><td class=\"align-right scope1\" colspan=\"4\" style=\"color: {{ ngModel.leftColor }}\"><span class=\"period-footer\" style=\"color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}\"></span></td><td class=\"align-right scope1\" colspan=\"4\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span class=\"period-footer\" style=\"color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}\"></span></td></tr></tfoot></table><div><input ng-model=\"showAll\" type=\"checkbox\"><label><span ng-bind-html=\"'SHOW_ALL_INDICATORS' | translate\"></span></label></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-result-legend.html', "<div class=\"chart-legend\"><!--<span>{{ ngModel.reportLines }}</span>--><div ng-show=\"(ngModel.reportLines | filter:{color: '!!'}).length == 0\"><span ng-bind-html=\"'RESULTS_LEGENDS_NODATA' | translate\"></span></div><table ng-hide=\"(ngModel.reportLines | filter:{color: '!!'}).length == 0\"><thead ng-show=\"ngModel.rightPeriod != null\"><tr><th></th><th></th><th colspan=\"2\"><span class=\"period-header\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\">{{ngModel.leftPeriod}}</span></th><th colspan=\"2\"><span class=\"period-header\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\">{{ngModel.rightPeriod}}</span></th></tr></thead><tbody><tr ng-repeat=\"line in ngModel.reportLines | filter:{color: '!!'}\"><td><span class=\"circled-number\" ng-show=\"getMode()=='numbers' &amp;&amp; getNumber(line) != null\">{{ getNumber(line) }}</span><span class=\"chart-legend-bullet-color\" style=\"background: {{ line.color }}\" ng-hide=\"getMode()=='numbers'\"></span></td><td><span ng-bind-html=\"line.indicatorName | translate\"></span></td><td class=\"align-right data-cell\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\"><span>{{ (line.leftScope1Value + line.leftScope2Value + line.leftScope3Value + line.leftOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e</span></td><td class=\"align-right data-cell opacity-50\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\"><span>{{ line.leftPercentage | numberToI18N }}&nbsp;%&nbsp;</span></td><td class=\"align-right data-cell\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\" ng-show=\"ngModel.rightPeriod != null\"><span>{{ (line.rightScope1Value + line.rightScope2Value + line.rightScope3Value + line.rightOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e</span></td><td class=\"align-right data-cell opacity-50\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\" ng-show=\"ngModel.rightPeriod != null\"><span>{{ line.rightPercentage | numberToI18N }}&nbsp;%&nbsp;</span></td></tr></tbody></table></div>");$templateCache.put('$/angular/templates/mm-awac-tab-progress-bar.html', "<div class=\"tab-pg-bar\"><div class=\"tab-pg-text\"><span ng-bind-html=\"'FILLED_BY' | translate\"></span><span>&nbsp;</span><span>{{ pg }}%</span></div><div class=\"tab-pg-background tab-pb-{{color}}-bg\"><div style=\"width: {{ pg }}%\" class=\"tab-pg-indicator tab-pb-{{color}}-fg\"></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-enterprise-survey.html', "<div><div ng-hide=\"$root.hideHeader()\"><div class=\"survey-header\"><!--user block--><table class=\"survey-header-option\"><tr><td><div><select ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select></div></td><td><div ng-bind-html=\"'SURVEY_INTERFACE_MANAGEMENT' | translate\"></div></td><td><div ng-show=\"$root.currentPerson!=null\"><span ng-bind-html=\"'WELCOME' | translate\"></span>,<span class=\"username\">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span></div></td></tr><tr><td><button class=\"button confidentiality\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_CONFIDENTIALITY' | translate\" type=\"button\"></button><button class=\"button help\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_ASSISTANCE' | translate\" type=\"button\"></button></td><td><!--site manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/site_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/site_manager') == true}\" ng-bind-html=\"'SITE_MANAGER_BUTTON' | translate\" type=\"button\"></button><!--user manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/user_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_manager') == true}\" ng-bind-html=\"'USER_MANAGER_BUTTON' | translate\" type=\"button\"></button></td><td><!--user data button--><button class=\"button user_manage\" ng-click=\"$root.nav('/user_data')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_data') == true}\" ng-bind-html=\"'USER_DATA_BUTTON' | translate\" type=\"button\"></button><!--logout button--><button class=\"button user_manage\" ng-click=\"$root.logout();\" ng-bind-html=\"'LOGOUT_BUTTON' | translate\" type=\"button\" ng-show=\"$root.currentPerson!=null\"></button></td></tr></table><div class=\"wallonie_logo\"></div><div class=\"awac_logo\"></div><div><div class=\"calculateur_type\" ng-bind-html=\"'TITLE_ENTERPRISE' | translate\"></div><div class=\"entreprise_name\">{{ $root.organizationName }}</div></div></div><div class=\"data_menu\" ng-show=\"displayLittleMenu===true || displayMenu===true\"><div class=\"data_date\"><div ng-bind-html=\"'PERIOD_DATA' | translate\"></div><select ng-options=\"p.key as p.label for p in $root.availablePeriods\" ng-model=\"$root.periodSelectedKey\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_SELECTED_SITE' | translate\"></div><select ng-options=\"s.scope as s.name for s in $root.mySites\" ng-model=\"$root.scopeSelectedId\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_COMPARE_TO' | translate\"></div><select ng-options=\"p.key as p.label for p in periodsForComparison\" ng-model=\"$root.periodToCompare\"></select></div><div class=\"big_separator\"></div><div><button class=\"button verification\" ng-disabled=\"$root.closeableForms !== true || $root.currentPerson.isAdmin !== true\" ng-click=\"isDisabled || $root.closeForms()\" ng-bind-html=\"'UNCLOSING_FORM' | translate\" type=\"button\" ng-show=\"$root.closedForms\"></button><button class=\"button verification\" ng-disabled=\"$root.closeableForms !== true || $root.currentPerson.isAdmin !== true\" ng-click=\"isDisabled || $root.closeForms()\" ng-bind-html=\"'CLOSING_FORM' | translate\" type=\"button\" ng-hide=\"$root.closedForms\"></button><button class=\"button verification\" ng-disabled=\"$root.closedForms !== true\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_VERIFICATION' | translate\" type=\"button\"></button></div><div class=\"big_separator\"></div><div class=\"data_save\"><div></div><div class=\"last_save\" ng-hide=\"lastSaveTime===null\"><span ng-bind-html=\"'LAST_SAVE' | translate\"></span><br>{{lastSaveTime | date: 'medium' }}</div><div class=\"small_separator\"></div><div class=\"save_button\"><button class=\"button save\" ng-click=\"save()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div></div></div><div class=\"nav_tabs\" ng-show=\"displayMenu===true\"><div class=\"nav_entreprise\"><div class=\"site_menu\"><div class=\"menu\"><button class=\"button\" ng-click=\"$root.nav('/form/TAB2')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB2') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB2' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB2')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB3')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB3')  == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB3' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB3')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB4')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB4') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB4' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB4')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB5')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB5') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB5' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB5')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB6')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB6') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB6' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB6')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB7')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB7') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB7' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB7')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button></div></div><div class=\"last_menu\"><button class=\"button\" ng-click=\"$root.nav('/results')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/results') == true}\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_RESULT' | translate\"></div></button><button class=\"button\" mm-not-implemented=\"mm-not-implemented\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_REDUCTION' | translate\"></div></button></div></div></div></div><div class=\"{{getClassContent()}}\" ng-view></div><div class=\"footer\"></div></div>");$templateCache.put('$/angular/templates/mm-awac-municipality-survey.html', "<div><div ng-hide=\"$root.hideHeader()\"><div class=\"survey-header\"><!--user block--><table class=\"survey-header-option\"><tr><td><div><select ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select></div></td><td><div ng-bind-html=\"'SURVEY_INTERFACE_MANAGEMENT' | translate\"></div></td><td><div ng-show=\"$root.currentPerson!=null\"><span ng-bind-html=\"'WELCOME' | translate\"></span>,<span class=\"username\">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span></div><div ng-show=\"$root.currentPerson==null\">Your are currently not connected</div></td></tr><tr><td><button class=\"button confidentiality\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_CONFIDENTIALITY' | translate\" type=\"button\"></button><button class=\"button help\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_ASSISTANCE' | translate\" type=\"button\"></button></td><td><!--user manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/user_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_manager') == true}\" ng-bind-html=\"'USER_MANAGER_BUTTON' | translate\" type=\"button\"></button></td><td><!--user data button--><button class=\"button user_manage\" ng-click=\"$root.nav('/user_data')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_data') == true}\" ng-bind-html=\"'USER_DATA_BUTTON' | translate\" type=\"button\"></button><!--logout button--><button class=\"button user_manage\" ng-click=\"$root.logout();\" ng-bind-html=\"'LOGOUT_BUTTON' | translate\" type=\"button\" ng-show=\"$root.currentPerson!=null\"></button></td></tr></table><div class=\"wallonie_logo\"></div><div class=\"awac_logo\"></div><div><div class=\"calculateur_type\" ng-bind-html=\"'TITLE_MUNICIPALITY' | translate\"></div><div class=\"entreprise_name\">{{ $root.organizationName }}</div></div></div><div class=\"data_menu\" ng-show=\"displayLittleMenu===true || displayMenu===true\"><div class=\"data_date\"><div ng-bind-html=\"'PERIOD_DATA' | translate\"></div><select ng-options=\"p.key as p.label for p in $root.availablePeriods\" ng-model=\"$root.periodSelectedKey\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_COMPARE_TO' | translate\"></div><select ng-options=\"p.key as p.label for p in periodsForComparison\" ng-model=\"$root.periodToCompare\"></select></div><div class=\"big_separator\"></div><div class=\"data_save\"><div class=\"last_save\" ng-hide=\"lastSaveTime===null\"><span ng-bind-html=\"'LAST_SAVE' | translate\"></span><br>{{lastSaveTime | date: 'medium' }}</div><div class=\"small_separator\"></div><div class=\"save_button\"><button class=\"button save\" ng-click=\"save()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div></div></div><div class=\"nav_tabs\" ng-show=\"displayMenu===true\"><div class=\"nav_entreprise\"><div class=\"site_menu\"><div class=\"site\"><button class=\"button verification\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_VERIFICATION' | translate\" type=\"button\"></button></div><div class=\"menu\"><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C1')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C1') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C1' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C1')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C2')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C2') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C2' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C2')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C3')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C3')  == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C3' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C3')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C4')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C4') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C4' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C4')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C5')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C5') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C5' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C5')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button></div></div><div class=\"last_menu\"><button class=\"button\" ng-click=\"$root.nav('/results')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/results') == true}\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_RESULT' | translate\"></div></button><button class=\"button\" mm-not-implemented=\"mm-not-implemented\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_REDUCTION' | translate\"></div></button></div></div></div></div><div class=\"{{getClassContent()}}\" ng-view></div><div class=\"footer\"></div></div>");$templateCache.put('$/angular/templates/mm-awac-sub-sub-title.html', "<div><div class=\"sub_sub_title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-repetition-name.html', "<div><div class=\"repetition-title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span class=\"glyphicon glyphicon-record\"></span><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-sub-title.html', "<div><div class=\"sub_title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-section.html', "<ng-virtual><div class=\"element\"><div class=\"element_header\"><div class=\"title\" ng-bind-html=\"getTitleCode() | translate\"></div><div class=\"title_arrow\"></div></div><div class=\"element_sidebar\"><div class=\"block_status\"><div class=\"lock_status\" ng-click=\"lock()\" ng-class=\"getLockClass()\"><div ng-show=\"getLocker() != null\">Lock by {{getLocker().firstName}} {{getLocker().lastName}}</div></div><div class=\"validate_status\" ng-click=\"valide()\" ng-class=\"getValidateClass()\"><div ng-show=\"getValidator() != null\">Validate by {{getValidator().firstName}} {{getValidator().lastName}}</div></div><div class=\"validate_status\" mm-not-implemented></div></div></div><div class=\"element_content\"><div ng-transclude ng-class=\"getMode()\"></div></div></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-question.html', "<div ng-class=\"{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}\" class=\"question_field\"><div><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-class=\"getIcon()\" class=\"glyphicon\"></span><span ng-click=\"logQuestionCode()\" ng-class=\"{optional : getOptional() === true}\" ng-bind-html=\"getQuestionCode() | translate\"></span></div><div><div class=\"status\" ng-class=\"getStatusClass()\"></div><div class=\"error_message\" ng-show=\"errorMessage.length&gt;0\"><div>{{errorMessage}}</div><img src=\"/assets/images/question_field_error_message_icon_arrow.png\"></div><span class=\"inject-data\"></span><button class=\"button edit_comment_icon glyphicon glyphicon-pencil\" ng-click=\"editComment()\" name=\"{{ getQuestionCode() }}_COMMENT\" ng-class=\"{edit_comment_icon_selected:getAnswer().comment !=null}\" ng-hide=\"getAggregation()!=null\"></button><div class=\"user_icon\" ng-hide=\"getAggregation()!=null || getAnswer().value == null\">{{getUserName(false,true)}}<div><span>{{getUserName(false,false)}}</span><img src=\"/assets/images/user_icon_arrow.png\"></div></div></div><div ng-show=\"displayOldDatas() === true &amp;&amp; getAnswer(true) != null\"><button class=\"button\" title=\"Copier la valeur\" ng-click=\"copyDataToCompare()\"><<</button><span class=\"inject-data-to-compare\"></span><button class=\"button edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected\" ng-click=\"editComment(false)\" name=\"OLD_{{ getQuestionCode() }}_COMMENT\" ng-hide=\"getAggregation()!=null || getAnswer(true).comment ==null\"></button><div class=\"edit_comment_icon\" ng-hide=\"getAnswer(true).comment !=null\"></div><div class=\"user_icon\">{{getUserName(true,true)}}<div><div>{{getUserName(true,false)}}</div><img src=\"/assets/images/user_icon_arrow.png\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-block.html', "<ng-virtual><div ng-transclude ng-class=\"{true:'condition-false', false:''}[getCondition() === false]\"></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-string-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-document-question.html', "<div class=\"oneelement document-question-block document-question\"><div ng-bind-html=\"'QUESTION_FILE_UPLOAD' | translate\" ng-hide=\"getDataToCompare()==true|| getIsAggregation()===true\"></div><div class=\"document-question-progress-bar\" ng-show=\"inDownload=== true &amp;&amp; percent != 100\"><div ng-style=\"style\"><spa></spa></div></div><div class=\"document-question-progress-percentage\" ng-show=\"inDownload=== true &amp;&amp; percent != 100\">{{percent}} %</div><div ng-bind-html=\"'QUESTION_FILE_TREATEMENT' | translate\" ng-show=\"inDownload=== true &amp;&amp; percent == 100\"></div><input name=\"{{ getQuestionCode() }}\" ng-file-select=\"onFileSelect($files)\" type=\"file\" ng-hide=\"getDataToCompare()==true|| getIsAggregation()===true || inDownload === true || getDisabled() === true\"><div ng-show=\"getFileNumber()&gt;0\">{{getFileNumber()}} {{'QUESTION_FILE_COUNT_ALREADY_UPLOAD' | translate}}</div><button class=\"button\" ng-click=\"openDocumentManager()\" ng-bind-html=\"'QUESTION_FILE_CONSULT' | translate\" type=\"button\" ng-show=\"getFileNumber()&gt;0\"></button></div>");$templateCache.put('$/angular/templates/mm-awac-percentage-question.html', "<span class=\"twoelement\"><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"percent\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\"><span style=\"margin-left:5px\">%</span></span>");$templateCache.put('$/angular/templates/mm-awac-select-question.html', "<select class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" name=\"{{ getQuestionCode() }}\" ng-options=\"p.key as p.label for p in getOptions()\" ng-model=\"getAnswer().value\"></select>");$templateCache.put('$/angular/templates/mm-awac-integer-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"integer\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-boolean-question.html', "<span class=\"twoelement\"><span style=\"text-align:center\"><span style=\"vertical-align:middle;margin-right : 15px;\" ng-bind-html=\"'YES' | translate\"></span><input ng-disabled=\"getDataToCompare()===true || getIsAggregation()===true || getDisabled() === true\" style=\"width :20px !important;margin:0;vertical-align:middle;\" name=\"{{radioName}}\" value=\"1\" ng-model=\"getAnswer().value\" type=\"radio\"></span><span style=\"text-align:center\"><span style=\"vertical-align:middle;margin-right : 15px;\" ng-bind-html=\"'NO' | translate\"></span><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true|| getDisabled() === true\" style=\"width :20px !important;margin:0;vertical-align:middle;\" name=\"{{radioName}}\" value=\"0\" ng-model=\"getAnswer().value\" type=\"radio\"></span></span>");$templateCache.put('$/angular/templates/mm-awac-real-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"double\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-repetition-question.html', "<div ng-class=\"{true:'condition-false', false:''}[getCondition() === false]\"><div class=\"repetition-question\"><div class=\"repetition-question-title\" style=\"display : inline-block; margin-right : 20px\" ng-bind-html=\"getQuestionSetCode() + '_LOOPDESC' | translate\"></div><button class=\"button remove-button\" ng-click=\"removeAnwser()\" ng-bind-html=\"'DELETE' | translate\" type=\"button\"></button><div class=\"repetition-question-container\"><ng-virtual ng-transclude class=\"element_stack\"></ng-virtual></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-real-with-unit-question.html', "<span class=\"twoelement\"><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"double\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\"><select ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" name=\"{{ getQuestionCode() }}_UNIT\" ng-options=\"p.code as p.name for p in getUnits()\" ng-model=\"getAnswer().unitCode\"></select></span>");$templateCache.put('$/angular/templates/mm-awac-modal-connection-password-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'PASSWORD_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div ng-bind-html=\"'CONNECTION_PASSWORD_CHANGE_FORM_DESC' | translate\"></div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordConfirmInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-password-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'PASSWORD_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"oldPasswordInfo\"></mm-awac-modal-field-text><br><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordConfirmInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-question-comment.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'MODAL_QUESTION_COMMENT_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><textarea ng-disabled=\"getParams().canBeEdited === false\" focus-me=\"true\" name=\"comment\" ng-model=\"comment\" class=\"question-comment-textarea\"></textarea></div></div><div class=\"modal-footer\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\" ng-hide=\"getParams().canBeEdited === false\"></button></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-confirm-closing.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"valid()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'UNCLOSING_FORM' | translate\" class=\"modal-title\" ng-show=\"$root.closedForms\"></h4><h4 ng-bind-html=\"'CLOSING_FORM' | translate\" class=\"modal-title\" ng-hide=\"$root.closedForms\"></h4></div><div class=\"modal-body\"><p ng-bind-html=\"'MODAL_CONFIRM_UNCLOSING_DESC'| translate\" ng-show=\"$root.closedForms\"></p><p ng-bind-html=\"'MODAL_CONFIRM_CLOSING_DESC'| translate\" ng-hide=\"$root.closedForms\"></p><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"valid();\" ng-bind-html=\"'SUBMIT' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-email-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'EMAIL_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><br><mm-awac-modal-field-text ng-info=\"oldEmailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newEmailInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-edit-site.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'EDIT_SITE_TITLE_CREATE' | translate\" class=\"modal-title\" ng-show=\"createNewSite === true\"></h4><h4 id=\"myModalLabel\" ng-bind-html=\"'EDIT_SITE_TITLE_EDIT' | translate\" class=\"modal-title\" ng-hide=\"createNewSite === true\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.name\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.description\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.nace\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.orgStructure\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.ecoInterest\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.opePolicy\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.accountingTreatment\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.percentOwned\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-field-text.html', "<tr><td ng-click=\"logField()\" ng-bind-html=\"getInfo().fieldTitle | translate\"></td><td><input ng-disabled=\"getInfo().disabled\" placeholder=\"{{getInfo().placeholder | translateText}}\" focus-me=\"getInfo().focus()\" name=\"{{ getInfo().fieldTitle }}\" ng-model=\"getInfo().field\" type=\"{{fieldType}}\"></td><td><div ng-if=\"isValidationDefined\"><img src=\"/assets/images/field_valid.png\" ng-if=\"!hideIsValidIcon\" ng-show=\"getInfo().isValid\"><div class=\"error_message\" ng-hide=\"getInfo().isValid\"><img src=\"/assets/images/field_invalid.png\"><div ng-bind-html=\"getInfo().validationMessage | translate\"></div></div></div><div ng-transclude></div></td></tr>");$templateCache.put('$/angular/templates/mm-awac-modal-invite-user.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'USER_INVITATION_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"inviteEmailInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-document-manager.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><table class=\"document-manager-table\"><thead><tr><td ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_DOC_NAME' | translate\"></td><td ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_ACTION' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"(key,value) in listDocuments\"><td>{{value}}</td><td><button class=\"button\" ng-click=\"download(key)\" ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_DOWNLOAD' | translate\" type=\"button\">)</button><button class=\"button\" ng-click=\"removeDoc(key)\" ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_REMOVE' | translate\" type=\"button\" ng-hide=\"getParams().readyOnly === true\">)</button></td></tr></tbody></table></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-edit-event.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'EDIT_EVENT_TITLE_CREATE' | translate\" class=\"modal-title\" ng-show=\"createNewEvent === true\"></h4><h4 ng-bind-html=\"'EDIT_EVENT_TITLE_EDIT' | translate\" class=\"modal-title\" ng-hide=\"createNewEvent === true\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.name\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.description\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-add-user-site.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'SITE_MANAGER_ADD_USER_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><table class=\"associate-user-table\"><thead><tr><td ng-bind-html=\"'SITE_MANAGER_ADD_NAME_LABEL' | translate\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_LOGIN_LABEL' | translate\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_SELECTED_LABEL' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"account in accounts\"><td> {{account.person.firstName}} {{account.person.lastName}}</td><td> {{account.identifier}}</td><td><input ng-click=\"toggleSelection(account)\" name=\"{{account.identifier}}\" value=\"{{account.identifier}}\" type=\"checkbox\" ng-checked=\"selection.indexOf(account) &gt; -1\"></td></tr></tbody></table><table class=\"associate-user-table\"><thead><tr><td ng-bind-html=\"'SITE_MANAGER_ADD_LIST_LABEL' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"account in selection\"><td>{{account.identifier}}</td></tr></tbody></table></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-loading.html', "<!--Modal--><div class=\"modal\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\" style=\"text-align:center\"><h4 ng-bind-html=\"'LOADING' | translate\"></h4></div><div class=\"modal-body\" style=\"text-align:center\"><img src=\"/assets/images/loading_preorganization.gif\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-confirmation-exit-form.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;<span</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_MESSAGE' | translate\"></div></div><div class=\"modal-footer\"><button class=\"button\" ng-click=\"continue();\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_CONTINUE' | translate\" type=\"button\"></button><button class=\"button\" ng-click=\"save()\" focus-me=\"true\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_SAVE' | translate\" type=\"button\"></button><button class=\"button\" ng-click=\"close()\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_CANCEL' | translate\" type=\"button\"></button></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-manager.html', "<div></div>");$templateCache.put('$/angular/templates/mm-awac-registration-municipality.html', "<div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordConfirmInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"municipalityNameInfo\"></mm-awac-modal-field-text><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-disabled=\"!registrationFieldValid()\" ng-click=\"registration()\" ng-bind-html=\"'REGISTRATION_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div>");$templateCache.put('$/angular/templates/mm-awac-admin-bad-importer.html', "<div><button class=\"btn btn-default\" ng-click=\"import()\">Import BAD</button><tabset style=\"margin-top:20px\"><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span>BAD (Erros :  {{total_bad_error}} )</span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><table class=\"table\" style=\"width: 200px;\"><tr><td>Total BAd imported</td><td>{{total_bad}}</td></tr><tr><td>Bad with info</td><td>{{total_bad_info}}</td></tr><tr><td>Bad with warning</td><td>{{total_bad_warning}}</td></tr><tr><td>Bad with error</td><td>{{total_bad_error}}</td></tr></table><div class=\"width:100%\" loading-container=\"tableParams.settings().$loading\"><table class=\"table admin-table-import-bad width:100%\" ng-table=\"tableParams\"><tr ng-repeat=\"logLine in $data\"><td style=\"width:12.5%\" sortable=\"'lineNb'\" data-title=\"'Line nb'\">{{logLine.lineNb}}</td><td style=\"width:12.5%\" sortable=\"'name'\" data-title=\"'Code'\">{{logLine.name}}</td><td style=\"width:25%\" sortable=\"'messagesInfoNb'\" data-title=\"'Info'\"><ul><li ng-repeat=\"message in logLine.messages['INFO']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesWarningNb'\" data-title=\"'Warinig'\"><ul><li ng-repeat=\"message in logLine.messages['WARNING']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesErrorNb'\" data-title=\"'Error'\"><ul><li ng-repeat=\"message in logLine.messages['ERROR']\">{{message}}</li></ul></td></tr></table></div></div></div></tab><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span>Questions (Erros :  {{total_question_error}} )</span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><table class=\"table\" style=\"width: 200px;\"><tr><td>Total Question with data imported</td><td>{{total_question}}</td></tr><tr><td>question with info</td><td>{{total_question_info}}</td></tr><tr><td>question with warning</td><td>{{total_question_warning}}</td></tr><tr><td>question with error</td><td>{{total_question_error}}</td></tr></table><div class=\"width:100%\" loading-container=\"tableParams2.settings().$loading\"><table class=\"table admin-table-import-bad width:100%\" ng-table=\"tableParams2\"><tr ng-repeat=\"logLine in $data\"><td style=\"width:12.5%\" sortable=\"'lineNb'\" data-title=\"'Line nb'\">{{logLine.lineNb}}</td><td style=\"width:12.5%\" sortable=\"'name'\" data-title=\"'Code'\">{{logLine.name}}</td><td style=\"width:25%\" sortable=\"'messagesInfoNb'\" data-title=\"'Info'\"><ul><li ng-repeat=\"message in logLine.messages['INFO']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesWarningNb'\" data-title=\"'Warinig'\"><ul><li ng-repeat=\"message in logLine.messages['WARNING']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesErrorNb'\" data-title=\"'Error'\"><ul><li ng-repeat=\"message in logLine.messages['ERROR']\">{{message}}</li></ul></td></tr></table></div></div></div></tab></tabset></div>");});
+});angular.module('app.directives').run(function($templateCache) {$templateCache.put('$/angular/views/admin.html', "<div><h1>Admin</h1><tabset style=\"margin-top:20px\"><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span ng-bind-html=\"'BAD Importer'\"></span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><mm-awac-admin-bad-importer></mm-awac-admin-bad-importer></div></div></tab><tab class=\"tab-color-lightgreen\"><tab-heading><span ng-bind-html=\"'Other .... '\"></span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><div>something</div></div></div></tab></tabset></div>");$templateCache.put('$/angular/views/login.html', "<div class=\"loginBackground\"><div class=\"router-bar\"><div class=\"awac_logo\"></div><ul class=\"interface_menu\"><li><a ng-class=\"{selected:$root.instanceName == 'enterprise'}\" ng-bind-html=\"'ENTERPRISE' | translate\" class=\"btn btn-primary\" href=\"/enterprise\"></a></li><li><a ng-class=\"{selected:$root.instanceName == 'municipality'}\" ng-bind-html=\"'MUNICIPALITY' | translate\" class=\"btn btn-primary\" href=\"/municipality\"></a></li></ul></div><div class=\"loginFrame\" ng-enter=\"enterEvent()\"><select style=\"float:right\" ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select><tabset><tab class=\"tab-color-lightgreen\" active=\"tabActive[0]\"><tab-heading><span ng-bind-html=\"'LOGIN_CONNECTION' | translate\"></span></tab-heading><div><div class=\"field_form\"><form id=\"loginForm\" action=\"\" method=\"post\"><mm-awac-modal-field-text ng-info=\"loginInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text></form></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!connectionFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'LOGIN_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></tab><tab class=\"tab-color-lightgreen\" active=\"tabActive[1]\" ng-show=\"true\"><tab-heading><span ng-bind-html=\"'LOGIN_FORGOT_PASSWORD' | translate\"></span></tab-heading><div><div class=\"forgot_password_success_message\" ng-show=\"forgotEmailSuccessMessage!=null\">{{forgotEmailSuccessMessage}}</div><div ng-hide=\"forgotEmailSuccessMessage!=null\"><div ng-bind-html=\"'LOGIN_FORGOT_PASSWORD_DESC' | translate\"></div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"forgotPasswordInfo\"></mm-awac-modal-field-text></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!forgotPasswordFieldValid()\" ng-click=\"sendForgotPassword()\" ng-bind-html=\"'SUBMIT' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></div></tab><tab class=\"tab-color-lightgreen\" active=\"tabActive[2]\"><tab-heading><span ng-bind-html=\"'LOGIN_REGISTRATION' | translate\"></span></tab-heading><div class=\"inject-registration-form\"></div></tab></tabset></div></div>");$templateCache.put('$/angular/views/site_manager.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'SITE_MANAGER_BUTTON' | translateText\"></h1><div class=\"site_manager\"><h4 ng-bind-html=\"'SITE_MANAGER_SITE_LIST_TITLE' | translateText\"></h4><div class=\"desc\" ng-bind-html=\"'SITE_MANAGER_SITE_LIST_DESC' | translateText\"></div><table class=\"site_table\"><tr class=\"site_table_header\"><td ng-bind-html=\"'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText\"></td><td ng-bind-html=\"'NAME' | translateText\"></td><td ng-bind-html=\"'DESCRIPTION' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_NACE_CODE' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ECONOMIC_INTEREST' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_OPERATING_POLICY' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_PERCENT_OWNED' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_USERS_BUTTON' | translateText\"></td><td><select ng-options=\"p.key as p.label for p in $root.periods\" ng-model=\"assignPeriod\"></select></td></tr><tr ng-repeat=\"site in getSiteList()\"><td><button title=\"{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}\" ng-click=\"editOrCreateSite(site)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td><td>{{site.name}}</td><td>{{site.description}}</td><td>{{site.naceCode}}</td><td>{{site.organizationalStructure}}</td><td>{{site.economicInterest}}</td><td>{{site.operatingPolicy}}</td><td>{{site.accountingTreatment}}</td><td>{{site.percentOwned}} %</td><td><button title=\"{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}\" ng-click=\"addUsers(site)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td><td><input ng-click=\"assignPeriodToSite(site)\" ng-model=\"isPeriodChecked[site.id]\" type=\"checkbox\" ng-hide=\"isLoading[site.id]=== true\"><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading[site.id]=== true\"></td></tr></table><button class=\"button add\" ng-click=\"editOrCreateSite()\" ng-bind-html=\"'SITE_MANAGER_ADD_SITE_BUTTON' | translateText\" type=\"button\"></button><br><br><h4 ng-bind-html=\"'SITE_MANAGER_EVENT_TITLE' | translateText\"></h4><div class=\"desc\" ng-bind-html=\"'SITE_MANAGER_EVENT_DESC' | translateText\"></div><br><div><span class=\"select_period\" ng-bind-html=\"'SITE_MANAGER_SELECT_PERIOD' | translateText\"></span><select ng-options=\"p.key as p.label for p in $root.periods\" ng-model=\"selectedPeriodForEvent\"></select></div><table class=\"site_table\"><tr class=\"site_table_header\"><td ng-bind-html=\"'SITE_MANAGER_EVENT_NAME' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EVENT_DESCRIPTION' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EVENT_PERIOD' | translateText\"></td><td ng-bind-html=\"'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText\"></td></tr><tr ng-show=\"event.period.key == selectedPeriodForEvent\" ng-repeat=\"event in getEventList()\"><td>{{event.name}}</td><td>{{event.description}}</td><td>{{event.period.label}}</td><td><button title=\"{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}\" ng-click=\"editOrCreateEvent(event)\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></td></tr></table><button class=\"button add\" ng-click=\"editOrCreateEvent()\" ng-bind-html=\"'SITE_MANAGER_ADD_EVENT_BUTTON' | translateText\" type=\"button\"></button></div></div>");$templateCache.put('$/angular/views/user_manager.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'USER_MANAGER_TITLE' | translate\"></h1><div class=\"element\"><button class=\"button add\" ng-click=\"inviteUser()\" ng-bind-html=\"'USER_MANAGER_INVIT_USER' | translate\" type=\"button\" ng-show=\"true\"></button><table class=\"user_table\"><tr class=\"user_table_header\"><td ng-bind-html=\"'NAME' | translate\"></td><td ng-bind-html=\"'USER_MANAGER_ADMINISTRATOR' | translate\"></td><td ng-bind-html=\"'USER_MANAGER_ACTIF' | translate\"></td></tr><tr ng-class=\"{user_deleted : user.isActive === false}\" ng-repeat=\"user in getUserList()\"><td>{{user.firstName}} {{user.lastName}} ({{user.email}})</td><td><input ng-disabled=\"getMyself().isAdmin === false || getMyself().email === user.email || user.isActive == false\" ng-click=\"isAdminUser(user)\" ng-model=\"user.isAdmin\" type=\"checkbox\" ng-hide=\"isLoading['admin'][user.email]=== true\"><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading['admin'][user.email] === true\"></td><td ng-class=\"{is_admin : getMyself().isAdmin === true &amp;&amp; getMyself().email !== user.email}\"><div class=\"button_delete\" ng-click=\"activeUser(user)\" ng-hide=\"isLoading['isActive'][user.email]=== true\"></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading['isActive'][user.email] === true\"></td></tr></table></div></div>");$templateCache.put('$/angular/views/enterprise/TAB5.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--mm-awac-section(\"Déchets\")--><!--It lacks a proper fild code for \"D2chets alone\" -> TODO : insert into Excel file as an additional line--><mm-awac-section title-code=\"A173\"><mm-awac-question question-code=\"A174\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A175\"><mm-awac-repetition-name question-code=\"A175\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A175\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A175')\"><mm-awac-question question-code=\"A176\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A177\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A178\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A179\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A175')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A175_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A180\"><mm-awac-sub-title question-code=\"A181\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"A182\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A183\"></mm-awac-question><mm-awac-question question-code=\"A184\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A185\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A186\"></mm-awac-question><mm-awac-question question-code=\"A187\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A188\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A189\"></mm-awac-question><mm-awac-question question-code=\"A190\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A191\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A192\"></mm-awac-question><mm-awac-question question-code=\"A193\"></mm-awac-question><mm-awac-sub-title question-code=\"A194\"></mm-awac-sub-title><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><div class=\"status {{getStatusClassForTab(1,1)}}\"></div><span ng-bind-html=\"'A197' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A195\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A198\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A199\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A200\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><div class=\"status {{getStatusClassForTab(1,2)}}\"></div><span ng-bind-html=\"'A201' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A501\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A202\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A203\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A204\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB2.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A1\"><mm-awac-question question-code=\"A2\"></mm-awac-question><mm-awac-question question-code=\"A3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '1'\" question-code=\"A4\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '2' || getAnswer('A3').value == '3'\" question-code=\"A5\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '4'\" question-code=\"A6\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value == '4'\" question-code=\"A7\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A7').value == '1'\" question-code=\"A8\"></mm-awac-question><mm-awac-question question-code=\"A9\"></mm-awac-question><mm-awac-question question-code=\"A10\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A3').value != '4'\" question-code=\"A11\"></mm-awac-question><mm-awac-question question-code=\"A12\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A13\"><mm-awac-question question-code=\"A14\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A15\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A15\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A15')\"><mm-awac-question question-code=\"A16\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A17\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A15')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A15_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A20\"><mm-awac-question question-code=\"A21\" ng-optional=\"true\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A22\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A23\"></mm-awac-question><mm-awac-question question-code=\"A24\"></mm-awac-question><mm-awac-repetition-name question-code=\"A25\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A25\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A25')\"><mm-awac-question question-code=\"A26\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A27\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A28\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A25')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A25_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A31\"><mm-awac-question question-code=\"A32\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A32').value == '1'\" question-code=\"A33\" ng-optional=\"true\"></mm-awac-question><mm-awac-block ng-condition=\"getAnswer('A32').value == '1'\"><mm-awac-repetition-name question-code=\"A34\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A34\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A34')\"><mm-awac-question question-code=\"A35\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A36\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A34')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A34_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A37\"><mm-awac-question question-code=\"A38\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A38').value == '1'\" question-code=\"A39\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><mm-awac-block ng-condition=\"getAnswer('A38').value == '1'\"><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><div class=\"status {{getStatusClassForTab(1,1)}}\"></div><span ng-bind-html=\"'A41' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A42\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A42\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A42')\"><mm-awac-question question-code=\"A43\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A44\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A42')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A42_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><div class=\"status {{getStatusClassForTab(1,2)}}\"></div><span ng-bind-html=\"'A45' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A46\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\" ng-show=\"getAnswer('A5').value == '1' || getAnswer('A5').value == '2'\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><div class=\"status {{getStatusClassForTab(1,3)}}\"></div><span ng-bind-html=\"'A47' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><mm-awac-block class=\"element_table\" ng-condition=\"getAnswer('A5').value == '1' || getAnswer('A5').value == '2'\"><mm-awac-question question-code=\"A48\" ng-tab-set=\"1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A49\" ng-tab-set=\"1\" ng-tab=\"3\"></mm-awac-question></mm-awac-block></div></tab></tabset></div></div></mm-awac-block></div></div>");$templateCache.put('$/angular/views/enterprise/TAB4.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A205\"><mm-awac-question question-code=\"A206\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A208\"><mm-awac-repetition-name question-code=\"A209\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A209\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A209')\"><mm-awac-question question-code=\"A210\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A211\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_61'\" question-code=\"A212\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_62'\" question-code=\"A213\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_63'\" question-code=\"A214\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_64'\" question-code=\"A215\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_65'\" question-code=\"A216\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_66'\" question-code=\"A217\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_67'\" question-code=\"A218\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_68'\" question-code=\"A219\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_61' || getAnswer('A211',itLevel1).value == 'AT_62' || getAnswer('A211',itLevel1).value == 'AT_63' || getAnswer('A211',itLevel1).value == 'AT_64'\" question-code=\"A220\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value != 'AT_68'\" question-code=\"A221\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A211',itLevel1).value == 'AT_68'\" question-code=\"A222\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A209')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A209_LOOPDESC' | translate\"></span></button><mm-awac-sub-title question-code=\"A223\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"A224\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A224\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A224')\"><mm-awac-question question-code=\"A225\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A226\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A227\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A228\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A224')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A224_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A128\"><mm-awac-question question-code=\"A129\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A130\"><mm-awac-sub-title question-code=\"A131\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"A132\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"A133\"></mm-awac-question><mm-awac-question question-code=\"A134\"></mm-awac-question><mm-awac-question question-code=\"A135\"></mm-awac-question><mm-awac-question question-code=\"A136\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A136').value == '1'\" question-code=\"A137\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A136').value == '1'\" question-code=\"A138\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A138').value == '1'\" question-code=\"A139\"></mm-awac-question><mm-awac-question ng-aggregation=\"0.484\" ng-condition=\"getAnswer('A138').value == '0'\" question-code=\"A500\"></mm-awac-question><mm-awac-sub-title question-code=\"A140\"></mm-awac-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><div class=\"status {{getStatusClassForTab(1,1)}}\"></div><span ng-bind-html=\"'A141' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A142\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A142\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A142')\"><mm-awac-question question-code=\"A143\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A145\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A146\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A147\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A148\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A149\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A150\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A151\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A152\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A153\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A154\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A155\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-aggregation=\"(getAnswer('A147',itLevel1).value | nullToZero)+( getAnswer('A148',itLevel1).value | nullToZero)+(getAnswer('A149',itLevel1).value | nullToZero)+(getAnswer('A150',itLevel1).value| nullToZero)+(getAnswer('A151',itLevel1).value| nullToZero)+(getAnswer('A152',itLevel1).value| nullToZero)+(getAnswer('A153',itLevel1).value| nullToZero)+(getAnswer('A154',itLevel1).value| nullToZero)+(getAnswer('A155',itLevel1).value| nullToZero)\" question-code=\"A156\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A142')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A142_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><div class=\"status {{getStatusClassForTab(1,2)}}\"></div><span ng-bind-html=\"'A157' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A158\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A159\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A159').value == '3'\" question-code=\"A160\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A159').value == '2'\" question-code=\"A161\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"200\" ng-condition=\"getAnswer('A159').value == '1'\" question-code=\"A162\" ng-tab-set=\"1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A163\"><mm-awac-repetition-name question-code=\"A164\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A164\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A164')\"><mm-awac-question question-code=\"A165\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A166\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A166\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A166',itLevel1)\"><mm-awac-question question-code=\"A167\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A168\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A166',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A166_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A169\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A170\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A170\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A170',itLevel1)\"><mm-awac-question question-code=\"A171\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A172\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A170',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A170_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A164')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A164_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB6.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A229\"><mm-awac-question question-code=\"A230\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A231\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A231\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A231')\"><mm-awac-question question-code=\"A232\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A233\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"(getAnswer('A233',itLevel1).value | stringToFloat) &lt; 18   || getAnswer('A233',itLevel1).value == '23'\" question-code=\"A234\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A233',itLevel1).value == '20' || getAnswer('A233',itLevel1).value == '21'|| getAnswer('A233',itLevel1).value == '22'\" question-code=\"A235\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A233',itLevel1).value == '18' || getAnswer('A233',itLevel1).value == '19'\" question-code=\"A236\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A231')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A231_LOOPDESC' | translate\"></span></button><mm-awac-sub-sub-title question-code=\"A237\"></mm-awac-sub-sub-title><mm-awac-repetition-name question-code=\"A238\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A238\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A238')\"><mm-awac-question question-code=\"A239\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A240\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A241\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A242\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A238')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A238_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A309\"><mm-awac-question question-code=\"A310\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A311\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A311\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A311')\"><mm-awac-question question-code=\"A312\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A313\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A313\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A313',itLevel1)\"><mm-awac-question question-code=\"A314\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A315\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A313',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A313_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A316\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A317\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A317\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A317',itLevel1)\"><mm-awac-question question-code=\"A318\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A319\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A317',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A317_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A311')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A311_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A320\"><mm-awac-question question-code=\"A321\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A322\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A322\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A322')\"><mm-awac-question question-code=\"A323\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A324\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A325\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A325\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A325',itLevel1)\"><mm-awac-question question-code=\"A326\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A327\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A325',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A325_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A328\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A329\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A329\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A329',itLevel1)\"><mm-awac-question question-code=\"A330\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A331\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A329',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A329_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A322')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A322_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A332\"><mm-awac-question question-code=\"A333\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"A334\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A334\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A334')\"><mm-awac-question question-code=\"A335\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A336\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A337\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A338\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A334')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A334_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/enterprise/TAB3.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A50\"><mm-awac-question question-code=\"A51\" ng-optional=\"true\"></mm-awac-question></mm-awac-section><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A52\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><div class=\"status {{getStatusClassForTab(1,1)}}\"></div><span ng-bind-html=\"'A53' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-sub-title question-code=\"A54\"></mm-awac-sub-title><mm-awac-question question-code=\"A55\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A56\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A57\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-sub-title question-code=\"A58\"></mm-awac-sub-title><mm-awac-question question-code=\"A59\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A60\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A61\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-sub-title question-code=\"A62\"></mm-awac-sub-title><mm-awac-question question-code=\"A63\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A64\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A65\" ng-tab-set=\"1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><div class=\"status {{getStatusClassForTab(1,2)}}\"></div><span ng-bind-html=\"'A66' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A67\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A67\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A67')\"><mm-awac-question question-code=\"A68\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A69\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A69',itLevel1).value == '0'\" question-code=\"A70\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A71\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A72\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '1'\" question-code=\"A73\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '2'|| getAnswer('A72',itLevel1).value == '3'|| getAnswer('A72',itLevel1).value == '4'|| getAnswer('A72',itLevel1).value == '5'\" question-code=\"A74\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A72',itLevel1).value == '6' || getAnswer('A72',itLevel1).value == '7'\" question-code=\"A75\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A76\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A67')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A67_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><div class=\"status {{getStatusClassForTab(1,3)}}\"></div><span ng-bind-html=\"'A77' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A78\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A78\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A78')\"><mm-awac-question question-code=\"A79\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A80\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A80',itLevel1).value == '0'\" question-code=\"A81\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A83\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"A88\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_5'\" question-code=\"A89\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_162'\" question-code=\"A90\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_6' || getAnswer('A83',itLevel1).value == 'AS_7'\" question-code=\"A91\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A83',itLevel1).value == 'AS_163'\" question-code=\"A92\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A78')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A78_LOOPDESC' | translate\"></span></button></div></div></tab></tabset></div></div></div><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A93\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(2,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(2,1)\"></i><div class=\"status {{getStatusClassForTab(2,1)}}\"></div><span ng-bind-html=\"'A94' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A95\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A96\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A97\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A98\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A99\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A100\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A101\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A102\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A103\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A104\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A105\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A106\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A107\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A108\" ng-tab-set=\"2\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(2,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(2,2)\"></i><div class=\"status {{getStatusClassForTab(2,2)}}\"></div><span ng-bind-html=\"'A109' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A110\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A111\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A112\" ng-tab-set=\"2\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></div></div><div class=\"horizontal_separator\"></div><mm-awac-section title-code=\"A113\"></mm-awac-section><div><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(3,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(3,1)\"></i><div class=\"status {{getStatusClassForTab(3,1)}}\"></div><span ng-bind-html=\"'A114' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-repetition-name question-code=\"A115\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"A115\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A115')\"><mm-awac-question question-code=\"A116\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A117\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A118\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A119\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A120\" ng-tab-set=\"3\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A115')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A115_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(3,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(3,2)\"></i><div class=\"status {{getStatusClassForTab(3,2)}}\"></div><span ng-bind-html=\"'A121' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A122\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A123\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A123',itLevel1).value == '0'\" question-code=\"A124\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A124',itLevel1).value == '1'\" question-code=\"A125\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A124',itLevel1).value == '0'\" question-code=\"A126\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A123',itLevel1).value == '1'\" question-code=\"A127\" ng-tab-set=\"3\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></div></div></div></div>");$templateCache.put('$/angular/views/enterprise/TAB7.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"A243\"><mm-awac-repetition-name question-code=\"A244\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" ng-question-set-code=\"'A244'\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('A244')\"><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A245'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A246'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A247'\"></mm-awac-question><mm-awac-question ng-repetition-map=\"itLevel1\" ng-question-code=\"'A248'\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('A248',itLevel1).value == '2'\" ng-repetition-map=\"itLevel1\" ng-question-code=\"'A249'\"></mm-awac-question><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Transport--><mm-awac-sub-title question-code=\"A250\"></mm-awac-sub-title><mm-awac-question question-code=\"A251\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"A252\"></mm-awac-sub-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1,itLevel1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1,itLevel1)\"></i><div class=\"status {{getStatusClassForTab(1,1,itLevel1)}}\"></div><span ng-bind-html=\"'A253' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><mm-awac-question question-code=\"A254\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A255\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A256\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A257\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A258\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A259\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A260\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A261\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A262\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A263\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"A264\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-aggregation=\"(getAnswer('A256',itLevel1).value | nullToZero)+( getAnswer('A257',itLevel1).value | nullToZero)+(getAnswer('A258',itLevel1).value | nullToZero)+(getAnswer('A259',itLevel1).value| nullToZero)+(getAnswer('A260',itLevel1).value| nullToZero)+(getAnswer('A261',itLevel1).value| nullToZero)+(getAnswer('A262',itLevel1).value| nullToZero)+(getAnswer('A263',itLevel1).value| nullToZero)+(getAnswer('A264',itLevel1).value| nullToZero)\" question-code=\"A265\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2,itLevel1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2,itLevel1)\"></i><div class=\"status {{getStatusClassForTab(1,2,itLevel1)}}\"></div><span ng-bind-html=\"'A266' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><mm-awac-question question-code=\"A267\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"A268\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"5000\" ng-condition=\"getAnswer('A268',itLevel1).value == '3'\" question-code=\"A269\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"2500\" ng-condition=\"getAnswer('A268',itLevel1).value == '2'\" question-code=\"A270\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-aggregation=\"200\" ng-condition=\"getAnswer('A268',itLevel1).value == '1'\" question-code=\"A271\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></div></div></tab></tabset></div></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Distribution--><mm-awac-sub-title question-code=\"A272\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"A273\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" ng-question-set-code=\"'A273'\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A273',itLevel1)\"><mm-awac-question question-code=\"A274\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-repetition-name question-code=\"A275\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel3\" question-set-code=\"A275\" ng-repetition-map=\"itLevel2\" ng-repeat=\"itLevel3 in getRepetitionMapByQuestionSet('A275',itLevel2)\"><mm-awac-question question-code=\"A276\" ng-repetition-map=\"itLevel3\"></mm-awac-question><mm-awac-question question-code=\"A277\" ng-repetition-map=\"itLevel3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A275',itLevel2)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A275_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A278\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-repetition-name question-code=\"A279\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel3\" question-set-code=\"A279\" ng-repetition-map=\"itLevel2\" ng-repeat=\"itLevel3 in getRepetitionMapByQuestionSet('A279',itLevel2)\"><mm-awac-question question-code=\"A280\" ng-repetition-map=\"itLevel3\"></mm-awac-question><mm-awac-question question-code=\"A281\" ng-repetition-map=\"itLevel3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A279',itLevel2)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A279_LOOPDESC' | translate\"></span></button></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A273',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A273_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A249',itLevel1).value == '1'\"><!--Traitement--><mm-awac-sub-title question-code=\"A282\"></mm-awac-sub-title><mm-awac-question question-code=\"A283\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A284\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A284\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A284',itLevel1)\"><mm-awac-question question-code=\"A285\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A286\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A284',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A284_LOOPDESC' | translate\"></span></button><mm-awac-question question-code=\"A287\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A288\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A288\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A288',itLevel1)\"><mm-awac-question question-code=\"A289\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A290\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A288',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A288_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Utilisation--><mm-awac-sub-title question-code=\"A291\"></mm-awac-sub-title><mm-awac-question question-code=\"A292\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A293\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A294\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A295\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A296\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A297\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A297\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A297',itLevel1)\"><mm-awac-question question-code=\"A298\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A299\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A297',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A297_LOOPDESC' | translate\"></span></button></mm-awac-block><mm-awac-block ng-condition=\"getAnswer('A248',itLevel1).value == '1' || getAnswer('A249',itLevel1).value == '1'\"><!--Fin de vie--><mm-awac-sub-title question-code=\"A300\"></mm-awac-sub-title><mm-awac-question question-code=\"A301\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"A302\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"A303\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"A303\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('A303',itLevel1)\"><mm-awac-question question-code=\"A304\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A305\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A306\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A307\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"A308\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A303',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A303_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('A244')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'A244_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/results.html', "<div class=\"results pdf-able\"><h1><span ng-bind-html=\"'RESULTS' | translate\"></span></h1><table class=\"wide\"><tr><td class=\"top-aligned\" ng-hide=\"$root.instanceName == 'municipality'\"><div class=\"sites-panel\"><div class=\"sites-panel-title\"><span ng-bind-html=\"'SITES_LIST' | translate\"></span></div><!--<div class=\"sites-panel-all-items\"><table><tr><td><span ng-bind-html=\"'ALL_SITES_SELECTED' | translate\"></span></td><td><input type=\"checkbox\"></td></tr></table></div>--><div class=\"sites-panel-items\"><div class=\"sites-panel-item\"><table><tr ng-repeat=\"site in mySites\"><td>{{ site.name }}</td><td><input ng-model=\"site.$selected\" type=\"checkbox\"></td></tr></table></div></div></div></td><td class=\"top-aligned horizontally-padded wide\"><div ng-show=\"o != null &amp;&amp; o != undefined\"><div ng-show=\"o.reportDTOs.R_1.rightPeriod == null\"><span ng-bind-html=\"'ACCOMPANIMENT_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N)]\" ng-show=\"$root.instanceName == 'enterprise'\"></span><span ng-bind-html=\"'ACCOMPANIMENT_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N)]\" ng-show=\"$root.instanceName == 'municipality'\"></span></div><div ng-hide=\"o.reportDTOs.R_1.rightPeriod == null\"><span ng-bind-html=\"'ACCOMPANIMENT_COMPARISION_WORD_ENTERPRISE' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]\" ng-show=\"$root.instanceName == 'enterprise'\"></span><span ng-bind-html=\"'ACCOMPANIMENT_COMPARISION_WORD_MUNICIPALITY' | translateWithVars:[(leftTotalEmissions | numberToI18N),o.reportDTOs.R_1.leftPeriod,(rightTotalEmissions | numberToI18N),o.reportDTOs.R_1.rightPeriod]\" ng-show=\"$root.instanceName == 'municipality'\"></span></div><br><br><div ng-show=\"siteSelectionIsEmpty()\"><div ng-bind-html=\"'SELECT_AT_LEAST_ONE_SITE' | translate\"></div></div><div ng-hide=\"siteSelectionIsEmpty()\"><div ng-show=\"current_tab == 1\"><h2><span ng-bind-html=\"'VALUES_BY_CATEGORY' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 10cm; max-height: 10cm;\" ng-bind-html=\"o.svgHistograms.R_1 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_1\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><div ng-show=\"current_tab == 2\"><h2><span ng-bind-html=\"'IMPACTS_PARTITION' | translate\"></span></h2><br><table><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> : {{ totalScope1 | numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_2 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_2 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_2\"></mm-awac-result-legend></td></tr><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> : {{ totalScope2| numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_3 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_3 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_3\"></mm-awac-result-legend></td></tr><tr><td colspan=\"3\"><h3><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> : {{ totalScope3| numberToI18N }} tCO2e</span></h3></td></tr><tr><td><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.leftSvgDonuts.R_4 | trustAsHtml\"></div><span>&nbsp;</span><div style=\"display:inline-block; max-width: 5cm; max-height: 5cm;\" ng-bind-html=\"o.rightSvgDonuts.R_4 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_4\"></mm-awac-result-legend></td></tr></table><br><br></div><div ng-show=\"current_tab == 3\"><h2><span ng-bind-html=\"'KIVIAT_DIAGRAM' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 15cm; max-height: 15cm;\" ng-bind-html=\"o.svgWebs.R_1 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_1\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><div ng-show=\"current_tab == 4\"><h2><span ng-bind-html=\"'NUMBERS' | translate\"></span></h2><mm-awac-result-table ng-model=\"o.reportDTOs.R_1\"></mm-awac-result-table></div><div ng-show=\"current_tab == 5\"><h2><span ng-bind-html=\"'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate\"></span></h2></div><div ng-show=\"current_tab == 6\"><h2><span ng-bind-html=\"'CALCULUS_EXPLANATION' | translate\"></span></h2><br><p ng-show=\"o.reportDTOs.R_1.rightPeriod != null\"><span ng-bind-html=\"'RESULTS_EXPLANATION_ONLY_AVAILABLE_FOR_SINGLE_PERIOD' | translate\"></span></p><p ng-repeat=\"e in o.logEntries\" ng-hide=\"o.reportDTOs.R_1.rightPeriod != null\"><span ng-show=\"e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO'\"><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART1' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biActivityCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.biActivitySubCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART2' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.adValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.adUnit\"></span><span>&#32;</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART3' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biIndicatorCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART4' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.fValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.fUnitOut\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART5' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.fUnitIn\"></span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_CONTRIB_PART6' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.value | numberToI18N\"></span><span>&#32;</span><span ng-bind-html=\"e.biUnit\"></span></span><span style=\"color: #a33\" ng-show=\"e.__type == 'eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO'\"><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART1' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biActivityCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.biActivitySubCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART2' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.adValue | numberToI18NRoundedOrFullIfLessThanOne\"></span><span>&#32;</span><span ng-bind-html=\"e.adUnit\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART3' | translate\"></span><span>&#32;</span><span ng-bind-html=\"e.biIndicatorCategory | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivityType | translate\"></span><span>&#32;/&#32;</span><span ng-bind-html=\"e.adActivitySource | translate\"></span><span>&#32;</span><span ng-bind-html=\"'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate\"></span></span></p></div><div ng-show=\"current_tab == 7\"><h2><span ng-bind-html=\"'USED_EMISSION_FACTORS' | translate\"></span></h2></div><div ng-show=\"current_tab == 8\"><h2><span ng-bind-html=\"'CONVENTION_OF_MAYORS' | translate\"></span></h2><br><center><table><tr><td><div style=\"display:inline-block; max-width: 10cm; max-height: 10cm;\" ng-bind-html=\"o.svgHistograms.R_5 | trustAsHtml\"></div></td><td style=\"width: 2em\"></td><td><mm-awac-result-legend ng-model=\"o.reportDTOs.R_5\" mode=\"numbers\"></mm-awac-result-legend></td></tr></table></center></div><br><div class=\"results_disclaimer\"><span class=\"results_disclaimer_text\" ng-bind-html=\"'RESULTS_DISCLAIMER' | translate\"></span></div><br><br><br></div></div></td><td class=\"top-aligned\"><div class=\"align-right\"><button class=\"button\" mm-not-implemented type=\"button\"><span ng-bind-html=\"'XLS_EXPORT' | translate\"></span></button><button class=\"button\" mm-not-implemented type=\"button\"><span ng-bind-html=\"'PDF_EXPORT' | translate\"></span></button></div><br><div class=\"charts-panel-tabset\"><div class=\"charts-panel-tab\" ng-click=\"current_tab = 1\" ng-class=\"{ active: current_tab == 1 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_bars\" ng-bind-html=\"'VALUES_BY_CATEGORY' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 2\" ng-class=\"{ active: current_tab == 2 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_donut\" ng-bind-html=\"'IMPACTS_PARTITION' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 3\" ng-class=\"{ active: current_tab == 3 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_web\" ng-bind-html=\"'KIVIAT_DIAGRAM' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 4\" ng-class=\"{ active: current_tab == 4 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_numbers\" ng-bind-html=\"'NUMBERS' | translate\"></div></div><div class=\"charts-panel-tab\" mm-not-implemented ng-click=\"\" ng-class=\"{ active: current_tab == 5 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_constant_factors\" ng-bind-html=\"'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 6\" ng-class=\"{ active: current_tab == 6 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_calculus\" ng-bind-html=\"'CALCULUS_EXPLANATION' | translate\"></div></div><div class=\"charts-panel-tab\" ng-click=\"current_tab = 8\" ng-class=\"{ active: current_tab == 8 }\" ng-show=\"$root.instanceName == 'municipality'\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_convention\" ng-bind-html=\"'CONVENTION_OF_MAYORS' | translate\"></div></div><!--<div class=\"charts-panel-tab\" ng-click=\"current_tab = 7\" ng-class=\"{ active: current_tab == 7 }\"><div class=\"charts-panel-tab-arrow\"></div><div class=\"charts-panel-tab-title tab_fe\" ng-bind-html=\"'USED_EMISSION_FACTORS' | translate\"></div></div>--></div></td></tr></table></div>");$templateCache.put('$/angular/views/no_scope.html', "<div><h1 ng-bind-html=\"'NO_SCOPE_TITLE' | translate\"></h1><div class=\"no-scope-message\" ng-bind-html=\"'NO_SCOPE_MESSAGE' | translate\"></div></div>");$templateCache.put('$/angular/views/change_password.html', "<div class=\"loginBackground\"><div class=\"loginFrame\" ng-enter=\"send()\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"oldPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordInfo_confirm\"></mm-awac-modal-field-text></div><p style=\"background-color:#ff0000;color:#ffffff;padding:15px\" ng-show=\"errorMessage.length &gt; 0\">{{errorMessage}}</p><button ng-click=\"send()\" ng-bind-html=\"'CHANGE_PASSWORD_BUTTON' | translate\" class=\"btn btn-primary\" type=\"button\"></button></div></div>");$templateCache.put('$/angular/views/user_registration.html', "<div class=\"loginBackground\"><div class=\"router-bar\"><div class=\"awac_logo\"></div></div><div class=\"registrationFrame\" ng-enter=\"enterEvent()\"><select style=\"float:right\" ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select><tabset><tab class=\"tab-color-lightgreen\" active=\"tabActive[0]\"><tab-heading><span ng-bind-html=\"'USER_REGISTRATION' | translate\"></span></tab-heading><div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.loginInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.emailInfo\"></mm-awac-modal-field-text></div><div ng-hide=\"isLoading === true\"><button class=\"button btn btn-primary\" ng-disabled=\"!connectionFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'USER_REGISTER_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading === true\"></div></tab></tabset></div></div>");$templateCache.put('$/angular/views/user_data.html', "<div><div class=\"menu_close\" ng-click=\"toForm()\"></div><h1 ng-bind-html=\"'USER_DATA_BUTTON' | translate\"></h1><style>.edit_icon {\n    width: 22px;\n    height: 22px;\n    top: -1px;\n}</style><div class=\"user_data\"><div style=\"display:table\" class=\"field_form\"><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"><button title=\"{{'UPDATE_PASSWORD_BUTTON' | translateText}}\" ng-click=\"changePassword()\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"><button title=\"{{'UPDATE_EMAIL_BUTTON' | translateText}}\" ng-click=\"changeEmail()\" class=\"edit_icon glyphicon glyphicon-pencil\" type=\"button\"></button></mm-awac-modal-field-text><br><div style=\"display:table-row\"><div style=\"display:table-cell\"></div><div style=\"display:table-cell\"></div><div style=\"display:table-cell\"><div style=\"text-align: right\" ng-hide=\"isLoading\"><button ng-disabled=\"!allFieldValid()\" ng-click=\"send()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" class=\"btn btn-primary\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C2.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"AC9\"><!--main loop--><mm-awac-repetition-name question-code=\"AC10\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC10\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC10')\"><mm-awac-question question-code=\"AC11\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC12\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC12',itLevel1).value == '8'\" question-code=\"AC13\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC14\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC15\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC16\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC17\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC18\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC19\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC20\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC21\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\" question-code=\"AC22\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC23\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><!--AC24--><mm-awac-sub-title question-code=\"AC24\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC25\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC25\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC25', itLevel1)\"><mm-awac-question question-code=\"AC26\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC27\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC25',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC25_LOOPDESC' | translate\"></span></button><!--AC28--><mm-awac-sub-title question-code=\"AC28\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"AC29\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"AC30\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC31\" ng-repetition-map=\"itLevel1\"></mm-awac-question><!--AC32--><mm-awac-block ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\"><mm-awac-sub-title question-code=\"AC32\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC33\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC33\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC33', itLevel1)\"><mm-awac-question question-code=\"AC34\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC35\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC36\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC33',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC33_LOOPDESC' | translate\"></span></button></mm-awac-block><!--AC37--><mm-awac-sub-title question-code=\"AC37\" ng-repetition-map=\"itLevel1\"></mm-awac-sub-title><mm-awac-question question-code=\"AC38\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC39\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC39\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC39', itLevel1)\"><mm-awac-question question-code=\"AC40\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC41\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC39',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC39_LOOPDESC' | translate\"></span></button><!--AC42--><mm-awac-block ng-condition=\"getAnswer('AC19',itLevel1).value == '1' || getAnswer('AC19',itLevel1).value == '3'\"><mm-awac-sub-title question-code=\"AC42\" ng-repetition-map=\"itLevel1\"></mm-awac-sub-title><mm-awac-question question-code=\"AC43\" ng-optional=\"true\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC44\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel2\" question-set-code=\"AC44\" ng-repetition-map=\"itLevel1\" ng-repeat=\"itLevel2 in getRepetitionMapByQuestionSet('AC44', itLevel1)\"><mm-awac-question question-code=\"AC45\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC46\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value != 'AS_186' || getAnswer('AC45',itLevel2).value != 'AS183'\" question-code=\"AC47\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value != 'AS_186'\" question-code=\"AC48\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value == 'AS_183'\" question-code=\"AC49\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC45',itLevel2).value == 'AS_183'\" question-code=\"AC50\" ng-repetition-map=\"itLevel2\"></mm-awac-question><mm-awac-question question-code=\"AC51\" ng-repetition-map=\"itLevel2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC44',itLevel1)\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC44_LOOPDESC' | translate\"></span></button></mm-awac-block></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC10')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC10_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><!--éclairage public AS52--><mm-awac-section title-code=\"AC52\"><mm-awac-question question-code=\"AC53\" ng-optional=\"true\"></mm-awac-question><mm-awac-question question-code=\"AC54\"></mm-awac-question><mm-awac-question question-code=\"AC55\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC56\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC56\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC56')\"><mm-awac-question question-code=\"AC57\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC58\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC59\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC56')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC56_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C4.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--achat bien et service--><mm-awac-section title-code=\"AC114\"><mm-awac-question question-code=\"AC115\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC116\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC116\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC116')\"><mm-awac-question question-code=\"AC117\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC118\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61'\" question-code=\"AC119\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_62'\" question-code=\"AC120\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_63'\" question-code=\"AC121\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_64'\" question-code=\"AC122\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_65'\" question-code=\"AC123\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_66'\" question-code=\"AC124\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_67'\" question-code=\"AC125\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_68'\" question-code=\"AC126\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61' || getAnswer('AC118',itLevel1).value == 'AT_62' || getAnswer('AC118',itLevel1).value == 'AT_63' || getAnswer('AC118',itLevel1).value == 'AT_64'\" question-code=\"AC127\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_61' || getAnswer('AC118',itLevel1).value == 'AT_62' || getAnswer('AC118',itLevel1).value == 'AT_63' || getAnswer('AC118',itLevel1).value == 'AT_64' || getAnswer('AC118',itLevel1).value == 'AT_65' || getAnswer('AC118',itLevel1).value == 'AT_66' || getAnswer('AC118',itLevel1).value == 'AT_67'\" question-code=\"AC128\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC118',itLevel1).value == 'AT_68'\" question-code=\"AC129\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC116')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC116_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C3.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--mobilite AC60--><mm-awac-section title-code=\"AC60\"><mm-awac-question question-code=\"AC61\" ng-optional=\"true\"></mm-awac-question><!--transport routier AC62--><mm-awac-sub-title question-code=\"AC62\"></mm-awac-sub-title><mm-awac-question question-code=\"AC63\"></mm-awac-question><mm-awac-sub-sub-title question-code=\"AC64\"></mm-awac-sub-sub-title><div class=\"element_content\"><div class=\"element_text\" ng-bind-html=\"'FORM_MULTI_METHOD' | translate\"></div><div class=\"method\"><tabset><tab class=\"tab-color-lightgreen\" active=\"getTab(1,1).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,1)\"></i><div class=\"status {{getStatusClassForTab(1,1)}}\"></div><span ng-bind-html=\"'AC65' | translate\"></span></tab-heading><div class=\"sub_block tab-color-lightgreen\"><div class=\"element_table\"><!--véhicule AC66--><mm-awac-repetition-name question-code=\"AC66\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC66\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC66')\" ng-tab=\"1\"><mm-awac-question question-code=\"AC67\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC68\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC68',itLevel1).value == '2'\" question-code=\"AC69\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC70\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question><mm-awac-question question-code=\"AC71\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC66')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC66_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-green\" active=\"getTab(1,2).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,2)\"></i><div class=\"status {{getStatusClassForTab(1,2)}}\"></div><span ng-bind-html=\"'AC72' | translate\"></span></tab-heading><div class=\"sub_block tab-color-green\"><div class=\"element_table\"><!--kilomètrage AC 73--><mm-awac-repetition-name question-code=\"AC73\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC73\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC73')\" ng-tab=\"2\"><mm-awac-question question-code=\"AC74\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC75\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC75',itLevel1).value == '2'\" question-code=\"AC76\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC77\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC78\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '1' || getAnswer('AC78',itLevel1).value == '2' \" question-code=\"AC79\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '5' || getAnswer('AC78',itLevel1).value == '8'|| getAnswer('AC78',itLevel1).value == '9' \" question-code=\"AC80\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '6' || getAnswer('AC78',itLevel1).value == '7' \" question-code=\"AC81\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC78',itLevel1).value == '3' || getAnswer('AC78',itLevel1).value == '4' \" question-code=\"AC82\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question><mm-awac-question question-code=\"AC83\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"2\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC73')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC73_LOOPDESC' | translate\"></span></button></div></div></tab><tab class=\"tab-color-yellow\" active=\"getTab(1,3).active\"><tab-heading><i class=\"glyphicon glyphicon-bell\" ng-show=\"tabIsMaster(1,3)\"></i><div class=\"status {{getStatusClassForTab(1,3)}}\"></div><span ng-bind-html=\"'AC84' | translate\"></span></tab-heading><div class=\"sub_block tab-color-yellow\"><div class=\"element_table\"><!--dépense AC 85--><mm-awac-repetition-name question-code=\"AC85\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC85\" ng-tab-set=\"1\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC85')\" ng-tab=\"3\"><mm-awac-question question-code=\"AC86\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC87\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC88\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC89\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question question-code=\"AC90\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC90',itLevel1).value == '2'\" question-code=\"AC91\" ng-tab-set=\"1\" ng-repetition-map=\"itLevel1\" ng-tab=\"3\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC85')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC85_LOOPDESC' | translate\"></span></button></div></div></tab></tabset></div></div><!--transport public AC92--><mm-awac-sub-title question-code=\"AC92\"></mm-awac-sub-title><mm-awac-sub-sub-title question-code=\"AC93\"></mm-awac-sub-sub-title><mm-awac-question question-code=\"AC94\"></mm-awac-question><mm-awac-question question-code=\"AC95\"></mm-awac-question><mm-awac-question question-code=\"AC96\"></mm-awac-question><mm-awac-question question-code=\"AC97\"></mm-awac-question><!--déplacements professionels AC98--><mm-awac-sub-title question-code=\"AC98\"></mm-awac-sub-title><mm-awac-question question-code=\"AC99\"></mm-awac-question><mm-awac-question question-code=\"AC100\"></mm-awac-question><mm-awac-question question-code=\"AC101\"></mm-awac-question><mm-awac-question question-code=\"AC102\"></mm-awac-question><mm-awac-question question-code=\"AC103\"></mm-awac-question><mm-awac-question question-code=\"AC104\"></mm-awac-question><mm-awac-question question-code=\"AC105\"></mm-awac-question><!--déplacement avion AC106--><mm-awac-sub-title question-code=\"AC106\"></mm-awac-sub-title><mm-awac-repetition-name question-code=\"AC107\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC107\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC107')\"><mm-awac-question question-code=\"AC108\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC109\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC110\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC111\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC112\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC113\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC107')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC107_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C1.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><mm-awac-section title-code=\"AC1\"><mm-awac-sub-title question-code=\"AC2\"></mm-awac-sub-title><mm-awac-question question-code=\"AC3\"></mm-awac-question><mm-awac-question question-code=\"AC4\"></mm-awac-question><mm-awac-question question-code=\"AC5\"></mm-awac-question><mm-awac-question question-code=\"AC6\"></mm-awac-question><mm-awac-question question-code=\"AC7\"></mm-awac-question><mm-awac-question question-code=\"AC8\"></mm-awac-question></mm-awac-section></div></div>");$templateCache.put('$/angular/views/municipality/TAB_C5.html', "<div><div class=\"form-error-message\" ng-show=\"errorMessage != null\">{{errorMessage}}</div><div ng-show=\"loading===false &amp;&amp; errorMessage === null\"><!--achat bien et service--><mm-awac-section title-code=\"AC130\"><mm-awac-question question-code=\"AC131\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC132\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC132\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC132')\"><mm-awac-question question-code=\"AC133\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"(getAnswer('AC133',itLevel1).value | stringToFloat) &lt; 18   || getAnswer('AC133',itLevel1).value == '23'\" question-code=\"AC134\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'\" question-code=\"AC135\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question ng-condition=\"getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'\" question-code=\"AC136\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC132')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC132_LOOPDESC' | translate\"></span></button></mm-awac-section><div class=\"horizontal_separator\"></div><!--investissement AC137--><mm-awac-section title-code=\"AC137\"><mm-awac-question question-code=\"AC138\" ng-optional=\"true\"></mm-awac-question><mm-awac-repetition-name question-code=\"AC139\"></mm-awac-repetition-name><mm-awac-repetition-question ng-iteration=\"itLevel1\" question-set-code=\"AC139\" ng-repeat=\"itLevel1 in getRepetitionMapByQuestionSet('AC139')\"><mm-awac-question question-code=\"AC140\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC141\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC142\" ng-repetition-map=\"itLevel1\"></mm-awac-question><mm-awac-question question-code=\"AC143\" ng-repetition-map=\"itLevel1\"></mm-awac-question></mm-awac-repetition-question><button class=\"button add-repetition-button\" ng-click=\"addIteration('AC139')\" type=\"button\"><span style=\"margin-right : 5px\" ng-bind-html=\"'ADD_NEW_ITERATION' | translate\"></span><span ng-bind-html=\"'AC139_LOOPDESC' | translate\"></span></button></mm-awac-section></div></div>");$templateCache.put('$/angular/templates/mm-awac-registration-enterprise.html', "<div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordConfirmInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"organizationNameInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"firstSiteNameInfo\"></mm-awac-modal-field-text><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-disabled=\"!registrationFieldValid()\" ng-click=\"registration()\" ng-bind-html=\"'REGISTRATION_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div>");$templateCache.put('$/angular/templates/mm-awac-graph-donut.html', "<table><tr><td><canvas class=\"holder\" height=\"200\" width=\"400\"></canvas></td><td class=\"chart-legend\"><b ng-bind-html=\"'GRAPH_LEGEND' | translate\"></b><div ng-bind-html=\"legend\"></div></td></tr></table>");$templateCache.put('$/angular/templates/mm-awac-result-table.html', "<ng-virtual><table class=\"indicators_table\"><thead><tr><th width=\"100%\"></th><th colspan=\"4\"><span class=\"period-header\" style=\"color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}\">{{ngModel.leftPeriod}}</span></th><th colspan=\"4\" ng-show=\"ngModel.rightPeriod!=null\"><span class=\"period-header\" style=\"color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}\">{{ngModel.rightPeriod}}</span></th></tr><tr><th width=\"100%\"></th><th class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><div><span class=\"wrapped\"><span ng-bind-html=\"'OUT_OF_SCOPE' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_1' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_2' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'SCOPE_3' | translate\"></span><span> (tCO2e)</span></span></div></th><th class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><div><span class=\"wrapped\"><span ng-bind-html=\"'OUT_OF_SCOPE' | translate\"></span><span> (tCO2e)</span></span></div></th></tr></thead><tbody><tr ng-show=\"showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue &gt; 0)\" ng-repeat=\"rl in ngModel.reportLines\"><td><span ng-bind-html=\"rl.indicatorName | translate\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope1Value | numberToI18NOrLess\" ng-show=\"rl.leftScope1Value &gt; 0\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope2Value | numberToI18NOrLess\" ng-show=\"rl.leftScope2Value &gt; 0\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftScope3Value | numberToI18NOrLess\" ng-show=\"rl.leftScope3Value &gt; 0\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"rl.leftOutOfScopeValue | numberToI18NOrLess\" ng-show=\"rl.leftOutOfScopeValue &gt; 0\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope1Value | numberToI18NOrLess\" ng-show=\"rl.rightScope1Value &gt; 0\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope2Value | numberToI18NOrLess\" ng-show=\"rl.rightScope2Value &gt; 0\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightScope3Value | numberToI18NOrLess\" ng-show=\"rl.rightScope3Value &gt; 0\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"rl.rightOutOfScopeValue | numberToI18NOrLess\" ng-show=\"rl.rightOutOfScopeValue &gt; 0\"></span></td></tr></tbody><tfoot><tr><td></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope1() | numberToI18NOrLess\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope2() | numberToI18NOrLess\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalScope3() | numberToI18NOrLess\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.leftColor }}\"><span ng-bind-html=\"getLeftTotalOutOfScope() | numberToI18NOrLess\"></span></td><td class=\"align-right scope1\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope1() | numberToI18NOrLess\"></span></td><td class=\"align-right scope2\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope2() | numberToI18NOrLess\"></span></td><td class=\"align-right scope3\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalScope3() | numberToI18NOrLess\"></span></td><td class=\"align-right out-of-scope\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span ng-bind-html=\"getRightTotalOutOfScope() | numberToI18NOrLess\"></span></td></tr><tr><td></td><td class=\"align-right scope1\" colspan=\"4\" style=\"color: {{ ngModel.leftColor }}\"><span class=\"period-footer\" style=\"color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}\"></span></td><td class=\"align-right scope1\" colspan=\"4\" style=\"color: {{ ngModel.rightColor }}\" ng-show=\"ngModel.rightPeriod!=null\"><span class=\"period-footer\" style=\"color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}\"></span></td></tr></tfoot></table><div><input ng-model=\"showAll\" type=\"checkbox\"><label><span ng-bind-html=\"'SHOW_ALL_INDICATORS' | translate\"></span></label></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-result-legend.html', "<div class=\"chart-legend\"><!--<span>{{ ngModel.reportLines }}</span>--><div ng-show=\"(ngModel.reportLines | filter:{color: '!!'}).length == 0\"><span ng-bind-html=\"'RESULTS_LEGENDS_NODATA' | translate\"></span></div><table ng-hide=\"(ngModel.reportLines | filter:{color: '!!'}).length == 0\"><thead ng-show=\"ngModel.rightPeriod != null\"><tr><th></th><th></th><th colspan=\"2\"><span class=\"period-header\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\">{{ngModel.leftPeriod}}</span></th><th colspan=\"2\"><span class=\"period-header\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\">{{ngModel.rightPeriod}}</span></th></tr></thead><tbody><tr ng-repeat=\"line in ngModel.reportLines | filter:{color: '!!'}\"><td><span class=\"circled-number\" ng-show=\"getMode()=='numbers' &amp;&amp; getNumber(line) != null\">{{ getNumber(line) }}</span><span class=\"chart-legend-bullet-color\" style=\"background: {{ line.color }}\" ng-hide=\"getMode()=='numbers'\"></span></td><td><span ng-bind-html=\"line.indicatorName | translate\"></span></td><td class=\"align-right data-cell\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\"><span>{{ (line.leftScope1Value + line.leftScope2Value + line.leftScope3Value + line.leftOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e</span></td><td class=\"align-right data-cell opacity-50\" style=\"color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}\"><span>{{ line.leftPercentage | numberToI18N }}&nbsp;%&nbsp;</span></td><td class=\"align-right data-cell\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\" ng-show=\"ngModel.rightPeriod != null\"><span>{{ (line.rightScope1Value + line.rightScope2Value + line.rightScope3Value + line.rightOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e</span></td><td class=\"align-right data-cell opacity-50\" style=\"color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}\" ng-show=\"ngModel.rightPeriod != null\"><span>{{ line.rightPercentage | numberToI18N }}&nbsp;%&nbsp;</span></td></tr></tbody></table></div>");$templateCache.put('$/angular/templates/mm-awac-tab-progress-bar.html', "<div class=\"tab-pg-bar\"><div class=\"tab-pg-text\"><span ng-bind-html=\"'FILLED_BY' | translate\"></span><span>&nbsp;</span><span>{{ pg }}%</span></div><div class=\"tab-pg-background tab-pb-{{color}}-bg\"><div style=\"width: {{ pg }}%\" class=\"tab-pg-indicator tab-pb-{{color}}-fg\"></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-enterprise-survey.html', "<div><div ng-hide=\"$root.hideHeader()\"><div class=\"survey-header\"><!--user block--><table class=\"survey-header-option\"><tr><td><div><select ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select></div></td><td><div ng-bind-html=\"'SURVEY_INTERFACE_MANAGEMENT' | translate\"></div></td><td><div ng-show=\"$root.currentPerson!=null\"><span ng-bind-html=\"'WELCOME' | translate\"></span>,<span class=\"username\">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span></div></td></tr><tr><td><button class=\"button confidentiality\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_CONFIDENTIALITY' | translate\" type=\"button\"></button><button class=\"button help\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_ASSISTANCE' | translate\" type=\"button\"></button></td><td><!--site manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/site_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/site_manager') == true}\" ng-bind-html=\"'SITE_MANAGER_BUTTON' | translate\" type=\"button\"></button><!--user manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/user_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_manager') == true}\" ng-bind-html=\"'USER_MANAGER_BUTTON' | translate\" type=\"button\"></button></td><td><!--user data button--><button class=\"button user_manage\" ng-click=\"$root.nav('/user_data')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_data') == true}\" ng-bind-html=\"'USER_DATA_BUTTON' | translate\" type=\"button\"></button><!--logout button--><button class=\"button user_manage\" ng-click=\"$root.logout();\" ng-bind-html=\"'LOGOUT_BUTTON' | translate\" type=\"button\" ng-show=\"$root.currentPerson!=null\"></button></td></tr></table><div class=\"wallonie_logo\"></div><div class=\"awac_logo\"></div><div><div class=\"calculateur_type\" ng-bind-html=\"'TITLE_ENTERPRISE' | translate\"></div><div class=\"entreprise_name\">{{ $root.organizationName }}</div></div></div><div class=\"data_menu\" ng-show=\"displayLittleMenu===true || displayMenu===true\"><div class=\"data_date\"><div ng-bind-html=\"'PERIOD_DATA' | translate\"></div><select ng-options=\"p.key as p.label for p in $root.availablePeriods\" ng-model=\"$root.periodSelectedKey\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_SELECTED_SITE' | translate\"></div><select ng-options=\"s.scope as s.name for s in $root.mySites\" ng-model=\"$root.scopeSelectedId\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_COMPARE_TO' | translate\"></div><select ng-options=\"p.key as p.label for p in periodsForComparison\" ng-model=\"$root.periodToCompare\"></select></div><div class=\"big_separator\"></div><div><button class=\"button verification\" ng-disabled=\"$root.closeableForms !== true || $root.currentPerson.isAdmin !== true\" ng-click=\"isDisabled || $root.closeForms()\" ng-bind-html=\"'UNCLOSING_FORM' | translate\" type=\"button\" ng-show=\"$root.closedForms\"></button><button class=\"button verification\" ng-disabled=\"$root.closeableForms !== true || $root.currentPerson.isAdmin !== true\" ng-click=\"isDisabled || $root.closeForms()\" ng-bind-html=\"'CLOSING_FORM' | translate\" type=\"button\" ng-hide=\"$root.closedForms\"></button><button class=\"button verification\" ng-disabled=\"$root.closedForms !== true\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_VERIFICATION' | translate\" type=\"button\"></button></div><div class=\"big_separator\"></div><div class=\"data_save\"><div></div><div class=\"last_save\" ng-hide=\"lastSaveTime===null\"><span ng-bind-html=\"'LAST_SAVE' | translate\"></span><br>{{lastSaveTime | date: 'medium' }}</div><div class=\"small_separator\"></div><div class=\"save_button\"><button class=\"button save\" ng-click=\"save()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div></div></div><div class=\"nav_tabs\" ng-show=\"displayMenu===true\"><div class=\"nav_entreprise\"><div class=\"site_menu\"><div class=\"menu\"><button class=\"button\" ng-click=\"$root.nav('/form/TAB2')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB2') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB2' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB2')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB3')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB3')  == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB3' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB3')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB4')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB4') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB4' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB4')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB5')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB5') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB5' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB5')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB6')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB6') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB6' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB6')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB7')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB7') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB7' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB7')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button></div></div><div class=\"last_menu\"><button class=\"button\" ng-click=\"$root.nav('/results')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/results') == true}\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_RESULT' | translate\"></div></button><button class=\"button\" mm-not-implemented=\"mm-not-implemented\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_REDUCTION' | translate\"></div></button></div></div></div></div><div class=\"{{getClassContent()}}\" ng-view></div><div class=\"footer\"></div></div>");$templateCache.put('$/angular/templates/mm-awac-municipality-survey.html', "<div><div ng-hide=\"$root.hideHeader()\"><div class=\"survey-header\"><!--user block--><table class=\"survey-header-option\"><tr><td><div><select ng-options=\"l.value as l.label for l in $root.languages\" ng-model=\"$root.language\"></select></div></td><td><div ng-bind-html=\"'SURVEY_INTERFACE_MANAGEMENT' | translate\"></div></td><td><div ng-show=\"$root.currentPerson!=null\"><span ng-bind-html=\"'WELCOME' | translate\"></span>,<span class=\"username\">{{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}</span></div><div ng-show=\"$root.currentPerson==null\">Your are currently not connected</div></td></tr><tr><td><button class=\"button confidentiality\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_CONFIDENTIALITY' | translate\" type=\"button\"></button><button class=\"button help\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_ASSISTANCE' | translate\" type=\"button\"></button></td><td><!--user manager button--><button class=\"button user_manage\" ng-disabled=\"$root.currentPerson.isAdmin === false\" ng-click=\"isDisabled || $root.nav('/user_manager')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_manager') == true}\" ng-bind-html=\"'USER_MANAGER_BUTTON' | translate\" type=\"button\"></button></td><td><!--user data button--><button class=\"button user_manage\" ng-click=\"$root.nav('/user_data')\" ng-class=\"{'selected': isMenuCurrentlySelected('/user_data') == true}\" ng-bind-html=\"'USER_DATA_BUTTON' | translate\" type=\"button\"></button><!--logout button--><button class=\"button user_manage\" ng-click=\"$root.logout();\" ng-bind-html=\"'LOGOUT_BUTTON' | translate\" type=\"button\" ng-show=\"$root.currentPerson!=null\"></button></td></tr></table><div class=\"wallonie_logo\"></div><div class=\"awac_logo\"></div><div><div class=\"calculateur_type\" ng-bind-html=\"'TITLE_MUNICIPALITY' | translate\"></div><div class=\"entreprise_name\">{{ $root.organizationName }}</div></div></div><div class=\"data_menu\" ng-show=\"displayLittleMenu===true || displayMenu===true\"><div class=\"data_date\"><div ng-bind-html=\"'PERIOD_DATA' | translate\"></div><select ng-options=\"p.key as p.label for p in $root.availablePeriods\" ng-model=\"$root.periodSelectedKey\"></select></div><div class=\"big_separator\"></div><div class=\"data_date_compare\"><div ng-bind-html=\"'SURVEY_INTERFACE_COMPARE_TO' | translate\"></div><select ng-options=\"p.key as p.label for p in periodsForComparison\" ng-model=\"$root.periodToCompare\"></select></div><div class=\"big_separator\"></div><div class=\"data_save\"><div class=\"last_save\" ng-hide=\"lastSaveTime===null\"><span ng-bind-html=\"'LAST_SAVE' | translate\"></span><br>{{lastSaveTime | date: 'medium' }}</div><div class=\"small_separator\"></div><div class=\"save_button\"><button class=\"button save\" ng-click=\"save()\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div></div></div><div class=\"nav_tabs\" ng-show=\"displayMenu===true\"><div class=\"nav_entreprise\"><div class=\"site_menu\"><div class=\"site\"><button class=\"button verification\" mm-not-implemented=\"mm-not-implemented\" ng-bind-html=\"'SURVEY_INTERFACE_VERIFICATION' | translate\" type=\"button\"></button></div><div class=\"menu\"><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C1')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C1') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C1' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C1')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C2')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C2') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C2' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C2')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C3')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C3')  == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C3' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C3')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C4')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C4') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C4' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C4')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button><button class=\"button\" ng-click=\"$root.nav('/form/TAB_C5')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/form/TAB_C5') == true}\"><div class=\"tab-title\" ng-bind-html=\"'TAB_C5' | translate\"></div><mm-awac-tab-progress-bar ng-value=\"getProgress('TAB_C5')\"></mm-awac-tab-progress-bar><div class=\"menu_arrow\"></div></button></div></div><div class=\"last_menu\"><button class=\"button\" ng-click=\"$root.nav('/results')\" ng-class=\"{'menu_current': isMenuCurrentlySelected('/results') == true}\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_RESULT' | translate\"></div></button><button class=\"button\" mm-not-implemented=\"mm-not-implemented\"><div class=\"tab-title\" ng-bind-html=\"'SURVEY_INTERFACE_REDUCTION' | translate\"></div></button></div></div></div></div><div class=\"{{getClassContent()}}\" ng-view></div><div class=\"footer\"></div></div>");$templateCache.put('$/angular/templates/mm-awac-sub-sub-title.html', "<div><div class=\"sub_sub_title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-repetition-name.html', "<div><div class=\"repetition-title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span class=\"glyphicon glyphicon-record\"></span><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-sub-title.html', "<div><div class=\"sub_title\"><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-bind-html=\"getQuestionCode() | translate\"></span><ng-virtual ng-transclude></ng-virtual></div></div>");$templateCache.put('$/angular/templates/mm-awac-section.html', "<ng-virtual><div class=\"element\"><div class=\"element_header\"><div class=\"title\" ng-bind-html=\"getTitleCode() | translate\"></div><div class=\"title_arrow\"></div></div><div class=\"element_sidebar\"><div class=\"block_status\"><div class=\"lock_status\" ng-click=\"lock()\" ng-class=\"getLockClass()\"><div ng-show=\"getLocker() != null\">Lock by {{getLocker().firstName}} {{getLocker().lastName}}</div></div><div class=\"validate_status\" ng-click=\"valide()\" ng-class=\"getValidateClass()\"><div ng-show=\"getValidator() != null\">Validate by {{getValidator().firstName}} {{getValidator().lastName}}</div></div><div class=\"validate_status\" mm-not-implemented></div></div></div><div class=\"element_content\"><div ng-transclude ng-class=\"getMode()\"></div></div></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-question.html', "<div ng-class=\"{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}\" class=\"question_field\"><div><div class=\"question_info\" ng-show=\"hasDescription()\"><div class=\"question_info_popup\" ng-bind-html=\"getQuestionCode() + '_DESC' | translate\"></div></div><span ng-class=\"getIcon()\" class=\"glyphicon\"></span><span ng-click=\"logQuestionCode()\" ng-class=\"{optional : getOptional() === true}\" ng-bind-html=\"getQuestionCode() | translate\"></span></div><div><div class=\"status\" ng-class=\"getStatusClass()\"></div><div class=\"error_message\" ng-show=\"errorMessage.length&gt;0\"><div>{{errorMessage}}</div><img src=\"/assets/images/question_field_error_message_icon_arrow.png\"></div><span class=\"inject-data\"></span><button class=\"button edit_comment_icon glyphicon glyphicon-pencil\" ng-click=\"editComment()\" name=\"{{ getQuestionCode() }}_COMMENT\" ng-class=\"{edit_comment_icon_selected:getAnswer().comment !=null}\" ng-hide=\"getAggregation()!=null\"></button><div class=\"user_icon {{getUserClass()}}\" ng-hide=\"getAggregation()!=null || getAnswer().value == null\">{{getUserName(false,true)}}<div><span>{{getUserName(false,false)}}</span><img src=\"/assets/images/user_icon_arrow.png\"></div></div></div><div ng-show=\"displayOldDatas() === true &amp;&amp; getAnswer(true) != null\"><button class=\"button\" title=\"Copier la valeur\" ng-click=\"copyDataToCompare()\"><<</button><span class=\"inject-data-to-compare\"></span><button class=\"button edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected\" ng-click=\"editComment(false)\" name=\"OLD_{{ getQuestionCode() }}_COMMENT\" ng-hide=\"getAggregation()!=null || getAnswer(true).comment ==null\"></button><div class=\"edit_comment_icon\" ng-hide=\"getAnswer(true).comment !=null\"></div><div class=\"user_icon\">{{getUserName(true,true)}}<div><div>{{getUserName(true,false)}}</div><img src=\"/assets/images/user_icon_arrow.png\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-block.html', "<ng-virtual><div ng-transclude ng-class=\"{true:'condition-false', false:''}[getCondition() === false]\"></div></ng-virtual>");$templateCache.put('$/angular/templates/mm-awac-string-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-document-question.html', "<div class=\"oneelement document-question-block document-question\"><div ng-bind-html=\"'QUESTION_FILE_UPLOAD' | translate\" ng-hide=\"getDataToCompare()==true|| getIsAggregation()===true\"></div><div class=\"document-question-progress-bar\" ng-show=\"inDownload=== true &amp;&amp; percent != 100\"><div ng-style=\"style\"><spa></spa></div></div><div class=\"document-question-progress-percentage\" ng-show=\"inDownload=== true &amp;&amp; percent != 100\">{{percent}} %</div><div ng-bind-html=\"'QUESTION_FILE_TREATEMENT' | translate\" ng-show=\"inDownload=== true &amp;&amp; percent == 100\"></div><input name=\"{{ getQuestionCode() }}\" ng-file-select=\"onFileSelect($files)\" type=\"file\" ng-hide=\"getDataToCompare()==true|| getIsAggregation()===true || inDownload === true || getDisabled() === true\"><div ng-show=\"getFileNumber()&gt;0\">{{getFileNumber()}} {{'QUESTION_FILE_COUNT_ALREADY_UPLOAD' | translate}}</div><button class=\"button\" ng-click=\"openDocumentManager()\" ng-bind-html=\"'QUESTION_FILE_CONSULT' | translate\" type=\"button\" ng-show=\"getFileNumber()&gt;0\"></button></div>");$templateCache.put('$/angular/templates/mm-awac-percentage-question.html', "<span class=\"twoelement\"><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"percent\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\"><span style=\"margin-left:5px\">%</span></span>");$templateCache.put('$/angular/templates/mm-awac-select-question.html', "<select class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" name=\"{{ getQuestionCode() }}\" ng-options=\"p.key as p.label for p in getOptions()\" ng-model=\"getAnswer().value\"></select>");$templateCache.put('$/angular/templates/mm-awac-integer-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"integer\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-boolean-question.html', "<span class=\"twoelement\"><span style=\"text-align:center\"><span style=\"vertical-align:middle;margin-right : 15px;\" ng-bind-html=\"'YES' | translate\"></span><input ng-disabled=\"getDataToCompare()===true || getIsAggregation()===true || getDisabled() === true\" style=\"width :20px !important;margin:0;vertical-align:middle;\" name=\"{{radioName}}\" value=\"1\" ng-model=\"getAnswer().value\" type=\"radio\"></span><span style=\"text-align:center\"><span style=\"vertical-align:middle;margin-right : 15px;\" ng-bind-html=\"'NO' | translate\"></span><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true|| getDisabled() === true\" style=\"width :20px !important;margin:0;vertical-align:middle;\" name=\"{{radioName}}\" value=\"0\" ng-model=\"getAnswer().value\" type=\"radio\"></span></span>");$templateCache.put('$/angular/templates/mm-awac-real-question.html', "<input class=\"oneelement\" ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"double\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\">");$templateCache.put('$/angular/templates/mm-awac-repetition-question.html', "<div ng-class=\"{true:'condition-false', false:''}[getCondition() === false]\"><div class=\"repetition-question\"><div class=\"repetition-question-title\" style=\"display : inline-block; margin-right : 20px\" ng-bind-html=\"getQuestionSetCode() + '_LOOPDESC' | translate\"></div><button class=\"button remove-button\" ng-click=\"removeAnwser()\" ng-bind-html=\"'DELETE' | translate\" type=\"button\"></button><div class=\"repetition-question-container\"><ng-virtual ng-transclude class=\"element_stack\"></ng-virtual></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-real-with-unit-question.html', "<span class=\"twoelement\"><input ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" style=\"text-align:right;\" numbers-only=\"double\" name=\"{{ getQuestionCode() }}\" ng-model=\"getAnswer().value\" type=\"text\"><select ng-disabled=\"getDataToCompare()==true || getIsAggregation()===true || getDisabled() === true\" name=\"{{ getQuestionCode() }}_UNIT\" ng-options=\"p.code as p.name for p in getUnits()\" ng-model=\"getAnswer().unitCode\"></select></span>");$templateCache.put('$/angular/templates/mm-awac-modal-connection-password-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'PASSWORD_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div ng-bind-html=\"'CONNECTION_PASSWORD_CHANGE_FORM_DESC' | translate\"></div><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordConfirmInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-password-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'PASSWORD_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"oldPasswordInfo\"></mm-awac-modal-field-text><br><mm-awac-modal-field-text ng-info=\"newPasswordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newPasswordConfirmInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-question-comment.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'MODAL_QUESTION_COMMENT_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><textarea ng-disabled=\"getParams().canBeEdited === false\" focus-me=\"true\" name=\"comment\" ng-model=\"comment\" class=\"question-comment-textarea\"></textarea></div></div><div class=\"modal-footer\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\" ng-hide=\"getParams().canBeEdited === false\"></button></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-confirm-closing.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"valid()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'UNCLOSING_FORM' | translate\" class=\"modal-title\" ng-show=\"$root.closedForms\"></h4><h4 ng-bind-html=\"'CLOSING_FORM' | translate\" class=\"modal-title\" ng-hide=\"$root.closedForms\"></h4></div><div class=\"modal-body\"><p ng-bind-html=\"'MODAL_CONFIRM_UNCLOSING_DESC'| translate\" ng-show=\"$root.closedForms\"></p><p ng-bind-html=\"'MODAL_CONFIRM_CLOSING_DESC'| translate\" ng-hide=\"$root.closedForms\"></p><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"valid();\" ng-bind-html=\"'SUBMIT' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-email-change.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'EMAIL_CHANGE_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><br><mm-awac-modal-field-text ng-info=\"oldEmailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"newEmailInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-edit-site.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'EDIT_SITE_TITLE_CREATE' | translate\" class=\"modal-title\" ng-show=\"createNewSite === true\"></h4><h4 id=\"myModalLabel\" ng-bind-html=\"'EDIT_SITE_TITLE_EDIT' | translate\" class=\"modal-title\" ng-hide=\"createNewSite === true\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.name\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.description\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.nace\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.orgStructure\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.ecoInterest\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.opePolicy\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.accountingTreatment\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.percentOwned\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-field-text.html', "<tr><td ng-click=\"logField()\" ng-bind-html=\"getInfo().fieldTitle | translate\"></td><td><input ng-disabled=\"getInfo().disabled\" placeholder=\"{{getInfo().placeholder | translateText}}\" focus-me=\"getInfo().focus()\" name=\"{{ getInfo().inputName }}\" ng-model=\"getInfo().field\" type=\"{{fieldType}}\"></td><td><div ng-if=\"isValidationDefined\"><img src=\"/assets/images/field_valid.png\" ng-if=\"!hideIsValidIcon\" ng-show=\"getInfo().isValid\"><div class=\"error_message\" ng-hide=\"getInfo().isValid\"><img src=\"/assets/images/field_invalid.png\"><div ng-bind-html=\"getInfo().validationMessage | translate\"></div></div></div><div ng-transclude></div></td></tr>");$templateCache.put('$/angular/templates/mm-awac-modal-invite-user.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 id=\"myModalLabel\" ng-bind-html=\"'USER_INVITATION_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"inviteEmailInfo\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-document-manager.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><table class=\"document-manager-table\"><thead><tr><td ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_DOC_NAME' | translate\"></td><td ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_ACTION' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"(key,value) in listDocuments\"><td>{{value}}</td><td><button class=\"button\" ng-click=\"download(key)\" ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_DOWNLOAD' | translate\" type=\"button\">)</button><button class=\"button\" ng-click=\"removeDoc(key)\" ng-bind-html=\"'MODAL_DOCUMENT_MANAGER_REMOVE' | translate\" type=\"button\" ng-hide=\"getParams().readyOnly === true\">)</button></td></tr></tbody></table></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-edit-event.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'EDIT_EVENT_TITLE_CREATE' | translate\" class=\"modal-title\" ng-show=\"createNewEvent === true\"></h4><h4 ng-bind-html=\"'EDIT_EVENT_TITLE_EDIT' | translate\" class=\"modal-title\" ng-hide=\"createNewEvent === true\"></h4></div><div class=\"modal-body\"><div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"fields.name\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"fields.description\"></mm-awac-modal-field-text></div></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-add-user-site.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'SITE_MANAGER_ADD_USER_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><table class=\"associate-user-table\"><thead><tr><td ng-bind-html=\"'SITE_MANAGER_ADD_NAME_LABEL' | translate\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_LOGIN_LABEL' | translate\"></td><td ng-bind-html=\"'SITE_MANAGER_ADD_SELECTED_LABEL' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"account in accounts\"><td> {{account.person.firstName}} {{account.person.lastName}}</td><td> {{account.identifier}}</td><td><input ng-click=\"toggleSelection(account)\" name=\"{{account.identifier}}\" value=\"{{account.identifier}}\" type=\"checkbox\" ng-checked=\"selection.indexOf(account) &gt; -1\"></td></tr></tbody></table><table class=\"associate-user-table\"><thead><tr><td ng-bind-html=\"'SITE_MANAGER_ADD_LIST_LABEL' | translate\"></td></tr></thead><tbody><tr ng-repeat=\"account in selection\"><td>{{account.identifier}}</td></tr></tbody></table></div><div class=\"modal-footer\"><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-click=\"close();\" ng-bind-html=\"'CANCEL_BUTTON' | translate\" type=\"button\"></button><button class=\"button btn btn-primary\" ng-disabled=\"!allFieldValid()\" ng-click=\"save();\" ng-bind-html=\"'SAVE_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-loading.html', "<!--Modal--><div class=\"modal\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\" style=\"text-align:center\"><h4 ng-bind-html=\"'LOADING' | translate\"></h4></div><div class=\"modal-body\" style=\"text-align:center\"><img src=\"/assets/images/loading_preorganization.gif\"></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-confirmation-exit-form.html', "<!--Modal--><div class=\"modal\" ng-escape=\"close()\" ng-enter=\"save()\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-header\"><button class=\"button\" ng-click=\"close()\" type=\"button\"><span aria-hidden=\"true\">&times;<span</span><span ng-bind-html=\"'CLOSE_BUTTON' | translate\" class=\"sr-only\"></span></button><h4 ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_TITLE' | translate\" class=\"modal-title\"></h4></div><div class=\"modal-body\"><div class=\"field_form\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_MESSAGE' | translate\"></div></div><div class=\"modal-footer\"><button class=\"button\" ng-click=\"continue();\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_CONTINUE' | translate\" type=\"button\"></button><button class=\"button\" ng-click=\"save()\" focus-me=\"true\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_SAVE' | translate\" type=\"button\"></button><button class=\"button\" ng-click=\"close()\" ng-bind-html=\"'MODAL_CONFIRMATION_EXIT_FORM_CANCEL' | translate\" type=\"button\"></button></div></div></div></div>");$templateCache.put('$/angular/templates/mm-awac-modal-manager.html', "<div></div>");$templateCache.put('$/angular/templates/mm-awac-registration-municipality.html', "<div class=\"field_form\"><mm-awac-modal-field-text ng-info=\"firstNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"lastNameInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"emailInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"identifierInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordInfo\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"passwordConfirmInfo\" class=\"field_form_separator\"></mm-awac-modal-field-text><mm-awac-modal-field-text ng-info=\"municipalityNameInfo\"></mm-awac-modal-field-text><div ng-hide=\"isLoading\"><button class=\"button btn btn-primary\" ng-disabled=\"!registrationFieldValid()\" ng-click=\"registration()\" ng-bind-html=\"'REGISTRATION_BUTTON' | translate\" type=\"button\"></button></div><img src=\"/assets/images/modal-loading.gif\" ng-show=\"isLoading\"></div>");$templateCache.put('$/angular/templates/mm-awac-admin-bad-importer.html', "<div><button class=\"btn btn-default\" ng-click=\"import()\">Import BAD</button><tabset style=\"margin-top:20px\"><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span>BAD (Erros :  {{total_bad_error}} )</span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><table class=\"table\" style=\"width: 200px;\"><tr><td>Total BAd imported</td><td>{{total_bad}}</td></tr><tr><td>Bad with info</td><td>{{total_bad_info}}</td></tr><tr><td>Bad with warning</td><td>{{total_bad_warning}}</td></tr><tr><td>Bad with error</td><td>{{total_bad_error}}</td></tr></table><div class=\"width:100%\" loading-container=\"tableParams.settings().$loading\"><table class=\"table admin-table-import-bad width:100%\" ng-table=\"tableParams\"><tr ng-repeat=\"logLine in $data\"><td style=\"width:12.5%\" sortable=\"'lineNb'\" data-title=\"'Line nb'\">{{logLine.lineNb}}</td><td style=\"width:12.5%\" sortable=\"'name'\" data-title=\"'Code'\">{{logLine.name}}</td><td style=\"width:25%\" sortable=\"'messagesInfoNb'\" data-title=\"'Info'\"><ul><li ng-repeat=\"message in logLine.messages['INFO']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesWarningNb'\" data-title=\"'Warinig'\"><ul><li ng-repeat=\"message in logLine.messages['WARNING']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesErrorNb'\" data-title=\"'Error'\"><ul><li ng-repeat=\"message in logLine.messages['ERROR']\">{{message}}</li></ul></td></tr></table></div></div></div></tab><tab class=\"tab-color-lightgreen\"><tab-heading style=\"margin-left:25px\"><span>Questions (Erros :  {{total_question_error}} )</span></tab-heading><div style=\"border-top : 1px solid black\"><div class=\"element_table\"><table class=\"table\" style=\"width: 200px;\"><tr><td>Total Question with data imported</td><td>{{total_question}}</td></tr><tr><td>question with info</td><td>{{total_question_info}}</td></tr><tr><td>question with warning</td><td>{{total_question_warning}}</td></tr><tr><td>question with error</td><td>{{total_question_error}}</td></tr></table><div class=\"width:100%\" loading-container=\"tableParams2.settings().$loading\"><table class=\"table admin-table-import-bad width:100%\" ng-table=\"tableParams2\"><tr ng-repeat=\"logLine in $data\"><td style=\"width:12.5%\" sortable=\"'lineNb'\" data-title=\"'Line nb'\">{{logLine.lineNb}}</td><td style=\"width:12.5%\" sortable=\"'name'\" data-title=\"'Code'\">{{logLine.name}}</td><td style=\"width:25%\" sortable=\"'messagesInfoNb'\" data-title=\"'Info'\"><ul><li ng-repeat=\"message in logLine.messages['INFO']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesWarningNb'\" data-title=\"'Warinig'\"><ul><li ng-repeat=\"message in logLine.messages['WARNING']\">{{message}}</li></ul></td><td style=\"width:25%\" sortable=\"'messagesErrorNb'\" data-title=\"'Error'\"><ul><li ng-repeat=\"message in logLine.messages['ERROR']\">{{message}}</li></ul></td></tr></table></div></div></div></tab></tabset></div>");});

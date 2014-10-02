@@ -13,6 +13,7 @@ angular
 
         $scope.inviteEmailInfo =
             field: ""
+            inputName:'email'
             fieldTitle: "USER_INVITATION_EMAIL_FIELD_TITLE"
             placeholder: "USER_INVITATION_EMAIL_FIELD_PLACEHOLDER"
             validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"

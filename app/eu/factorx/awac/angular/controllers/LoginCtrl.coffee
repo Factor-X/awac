@@ -1,8 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope,downloadService, $location, messageFlash, $compile,$timeout,modalService,translationService) ->
-
-
+.controller "LoginCtrl", ($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) ->
     $scope.loading = false
 
     $scope.tabActive = []
@@ -20,6 +18,8 @@ angular
 
     $scope.loginInfo =
         fieldTitle: "LOGIN_FORM_LOGIN_FIELD_TITLE"
+        id: 'loginForm'
+        inputName: 'identifier'
         fieldType: "text"
         placeholder: "LOGIN_FORM_LOGIN_FIELD_PLACEHOLDER"
         validationRegex: "^\\S{5,20}$"
@@ -31,6 +31,7 @@ angular
 
     $scope.passwordInfo =
         fieldTitle: "LOGIN_FORM_PASSWORD_FIELD_TITLE"
+        inputName: 'password'
         fieldType: "password"
         validationRegex: "^\\S{5,20}$"
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
@@ -39,14 +40,15 @@ angular
 
     $scope.forgotPasswordInfo =
         fieldTitle: "IDENTIFIENT_OR_EMAIL"
+        inputName: 'password'
         fieldType: "text"
         validationRegex: "^\\S+$"
         validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
-        focus:  ->
+        focus: ->
             return $scope.tabActive[1]
-        
+
     $scope.connectionFieldValid = () ->
         if $scope.loginInfo.isValid && $scope.passwordInfo.isValid
             return true
@@ -66,6 +68,14 @@ angular
         #send request
         downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
             if result.success
+
+                ###
+                $("#loginForm").submit (e) ->
+                    e.preventDefault()
+                    return
+                $("#loginForm").submit()
+                ###
+    
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                 $scope.isLoading = false
@@ -74,13 +84,13 @@ angular
                 if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
                     # must change password
                     params =
-                        login : $scope.loginInfo.field
-                        password : $scope.passwordInfo.field
+                        login: $scope.loginInfo.field
+                        password: $scope.passwordInfo.field
                     modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
                 else
                     #display the error message
                     messageFlash.displayError result.data.message
-                    #disactive loading mode
+        #disactive loading mode
 
         return false
 

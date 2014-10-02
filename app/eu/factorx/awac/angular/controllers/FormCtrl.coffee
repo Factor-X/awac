@@ -372,6 +372,8 @@ angular
             if tabSet? && !result.tabSet?
                 result.tabSet = tabSet
                 result.tab= tab
+
+            result.optional = optional
             return result
         else
             #compute default value
@@ -537,6 +539,7 @@ angular
             $scope.mapRepetition[questionSetCode] = []
             $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
+            
     #
     # this function return an object with the modal service wanted (CONFIRMATION_EXIT_FORM)
     # and a valid parameter that is true is none answer was gave by the user.
@@ -706,6 +709,48 @@ angular
             $scope.tabSet[tabSet][ite][tab].listToCompute = []
 
         return ite
+
+
+    $scope.getStatusClassForTab = (tabSet,tab, mapRepetition) ->
+
+        # by default, the tab is not finish
+        isFinish = true
+
+        #find the good iteration
+        i=0
+        while i < $scope.tabSet[tabSet].length
+            if $scope.compareRepetitionMap(mapRepetition, $scope.tabSet[tabSet][i].mapRepetition)
+                ite = i
+                break
+            i++
+
+        allWasSave = true
+        atLeastOneQuestion = false
+
+        # browse the list of answer include into this tab
+        for answer in $scope.tabSet[tabSet][ite][tab].listToCompute
+            #
+            # optional, aggregation or with false condition are not take in this case
+            #
+            if !answer.hasValidCondition? || answer.hasValidCondition == true && answer.optional != true && answer.isAggregation != true
+                atLeastOneQuestion=true
+                if answer.wasEdited != undefined && answer.wasEdited == true
+                    allWasSave = false
+                # if one of this answer are a value == null, the tab is not finish => break
+                if answer.value == null
+                    isFinish = false
+        if isFinish == true && atLeastOneQuestion == false
+            isFinish == false
+
+        if isFinish == true
+            if allWasSave == false
+                return 'answer_temp'
+            return 'answer'
+        else
+            if allWasSave == false
+                return 'pending_temp'
+            return 'pending'
+
     #
     # create a watcher for an answer : all new answer or loaded answer use this function
     #
@@ -738,6 +783,9 @@ angular
             $scope.$watch 'tabSet[' + tabSet + ']['+ite+'][' + tab + '].listToCompute[' + i + '].value', ->
                 $scope.computeTab(tabSet, tab,answer.mapRepetition)
 
+            if $scope.loading == false
+                $scope.computeTab(tabSet, tab,answer.mapRepetition)
+
             # refresh isFinish if it's needed
             if answer.value == null
                 $scope.tabSet[tabSet][ite][tab].isFinish =false
@@ -768,6 +816,9 @@ angular
                 if answer.value == null
                     isFinish = false
                     break
+                else
+                    # if the value is not null, isFinish = true => broke is an other answer have value == null
+                    isFinish = true
 
         if isFinish != $scope.tabSet[tabSet][ite][tab].isFinish
 
@@ -860,6 +911,11 @@ angular
                             return false
 
     $scope.isQuestionValidate = (code) ->
+        if $scope.getValidatorByQuestionCode(code)?
+            return true
+        return false
+
+    $scope.getValidatorByQuestionCode = (code) ->
         for key in Object.keys($scope.mapQuestionSet)
             if key != '$$hashKey'
                 questionSet = $scope.mapQuestionSet[key]
@@ -868,8 +924,10 @@ angular
                         if question.code == code
                             result = $scope.foundBasicParent($scope.mapQuestionSet[key])
                             if result.dataValidator?
-                                return true
-                            return false
+                                return result.dataValidator
+                            return null
+        return null
+
 
     #
     #
