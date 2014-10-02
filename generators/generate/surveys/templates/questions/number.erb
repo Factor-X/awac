@@ -3,7 +3,7 @@ if (<%= accronym.downcase %> == null) {
     <%= accronym.downcase %> = new IntegerQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, null, <%= default %>);
     JPA.em().persist(<%= accronym.downcase %>);
 } else {
-    <%= accronym.downcase %>.setDefaultValue(<%= default %>);
+    <%= accronym.downcase %>.setDefaultValue(Double.valueOf(<%= default %>));
     if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
         <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
         JPA.em().persist(<%= parent %>);
