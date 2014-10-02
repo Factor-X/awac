@@ -1,7 +1,11 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
+import eu.factorx.awac.models.code.type.IndicatorTypeCode;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.knowledge.BaseIndicator;
+import eu.factorx.awac.service.BaseIndicatorService;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
@@ -9,21 +13,34 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Component;
-
 import play.Logger;
 import play.db.jpa.JPA;
-import eu.factorx.awac.models.code.type.IndicatorTypeCode;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.knowledge.BaseIndicator;
-import eu.factorx.awac.service.BaseIndicatorService;
+
+import javax.persistence.Query;
+import java.util.List;
 
 @Component
 public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<BaseIndicator> implements BaseIndicatorService {
 
 	@Override
 	public List<BaseIndicator> findAllCarbonIndicatorsForSites(InterfaceTypeCode interfaceTypeCode) {
+
+
+		Query query = JPA.em().createQuery("" +
+			" select bi " +
+			" from BaseIndicator bi " +
+			" where bi.id in :ids " +
+			" and bi.deleted = false " +
+			" and bi.type = :biType" +
+			" and bi.scopeType = :scopeType");
+
+
+		query.setParameter("biType", IndicatorTypeCode.CARBON);
+		query.setParameter("scopeType", ScopeTypeCode.SITE);
+
+
+
+
 		Session session = JPA.em().unwrap(Session.class);
 		Criteria criteria = session.createCriteria(BaseIndicator.class);
 

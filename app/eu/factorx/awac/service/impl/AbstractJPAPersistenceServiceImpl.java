@@ -5,9 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import play.db.jpa.JPA;
@@ -32,7 +29,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 		if ((entity.getId() != null) && (entity instanceof AuditedAbstractEntity)) {
 			((AuditedAbstractEntity) entity).preUpdate();
 		}
-		JPA.em().unwrap(Session.class).saveOrUpdate(entity);
+		JPA.em().persist(entity);
 		return entity;
 	}
 
@@ -75,11 +72,7 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 
 	@Override
 	public List<E> findAll() {
-		Criteria criteria = JPA.em().unwrap(Session.class).createCriteria(entityClass);
-
-		@SuppressWarnings("unchecked")
-		List<E> result = criteria.list();
-		return result;
+		return (List<E>) JPA.em().createQuery(String.format("select e from %s e", entityClass.getName())).getResultList();
 	}
 
 	@Override
