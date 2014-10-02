@@ -5,14 +5,13 @@ initializeCommonRoutes = (defaultResolve) ->
     angular
     .module('app')
     .config ($routeProvider) ->
-
         $routeProvider
         .when('/login', {
                 templateUrl: '$/angular/views/login.html'
                 controller: 'LoginCtrl'
                 anonymousAllowed: true
                 resolve:
-                    testConnection : ($http,$rootScope,$location, downloadService) ->
+                    testConnection: ($http, $rootScope, $location, downloadService) ->
                         # if the current user is null...
                         if $rootScope.currentUser
                             $location.path '/noScope'
@@ -29,25 +28,36 @@ initializeCommonRoutes = (defaultResolve) ->
         .when('/admin', {
                 templateUrl: '$/angular/views/admin.html'
                 controller: 'AdminCtrl'
-                resolve : defaultResolve
+                resolve: defaultResolve
             }
         )
         .when('/user_data/:period/:scope', {
                 templateUrl: '$/angular/views/user_data.html'
                 controller: 'UserDataCtrl'
-                resolve : defaultResolve
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_user_data'
+                }, defaultResolve)
             }
         )
         .when('/user_manager/:period/:scope', {
                 templateUrl: '$/angular/views/user_manager.html'
                 controller: 'UserManagerCtrl'
-                resolve : defaultResolve
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_user_manager'
+                }, defaultResolve)
+
             }
         )
         .when('/site_manager/:period/:scope', {
                 templateUrl: '$/angular/views/site_manager.html'
                 controller: 'SiteManagerCtrl'
-                resolve : defaultResolve
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_site_manager'
+                }, defaultResolve)
+
             }
         )
         .when('/registration/:key', {
@@ -60,7 +70,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 templateUrl: '$/angular/views/no_scope.html'
                 controller: 'NoScopeCtrl'
                 anonymousAllowed: true
-                resolve :angular.extend({
+                resolve: angular.extend({
                     displayLittleFormMenu: () ->
                         return true
                     displayFormMenu: () ->

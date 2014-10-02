@@ -562,7 +562,6 @@ public class AnswerController extends AbstractController {
             }
         }
 
-
         Map<Map<QuestionCode, Integer>, QuestionSetAnswer> questionSetAnswersMap = byRepetitionMap(questionSetAnswersList);
 
         Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswersList);

@@ -1,0 +1,16 @@
+// Modal
+.modal-fullscreen
+    .modal-fullscreen-header
+        button.button(type="button",ng-click="close()")
+            span(aria-hidden="true") &times;
+            span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+
+    .modal-fullscreen-body
+
+        div(ng-include="url")
+
+    .modal-fullscreen-footer
+
+
+
+
