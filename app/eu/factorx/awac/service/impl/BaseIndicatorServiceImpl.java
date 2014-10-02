@@ -29,10 +29,11 @@ public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<
 		Query query = JPA.em().createQuery("" +
 			" select bi " +
 			" from BaseIndicator bi " +
-			" where bi.id in :ids " +
+			" where bi.id " +
 			" and bi.deleted = false " +
 			" and bi.type = :biType" +
-			" and bi.scopeType = :scopeType");
+			" and bi.scopeType = :scopeType" +
+			" and bi.ca");
 
 
 		query.setParameter("biType", IndicatorTypeCode.CARBON);
