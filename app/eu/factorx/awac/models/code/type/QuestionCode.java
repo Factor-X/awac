@@ -13,7 +13,7 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-09-26 08:25:42 +0200 */
+/* Generated the 2014-10-02 12:10:15 +0200 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -144,11 +144,6 @@ public static final QuestionCode A171 = new QuestionCode("A171");
 public static final QuestionCode A172 = new QuestionCode("A172");
 public static final QuestionCode A173 = new QuestionCode("A173");
 public static final QuestionCode A174 = new QuestionCode("A174");
-public static final QuestionCode A175 = new QuestionCode("A175");
-public static final QuestionCode A176 = new QuestionCode("A176");
-public static final QuestionCode A177 = new QuestionCode("A177");
-public static final QuestionCode A178 = new QuestionCode("A178");
-public static final QuestionCode A179 = new QuestionCode("A179");
 public static final QuestionCode A180 = new QuestionCode("A180");
 public static final QuestionCode A181 = new QuestionCode("A181");
 public static final QuestionCode A182 = new QuestionCode("A182");
@@ -271,12 +266,6 @@ public static final QuestionCode A299 = new QuestionCode("A299");
 public static final QuestionCode A300 = new QuestionCode("A300");
 public static final QuestionCode A301 = new QuestionCode("A301");
 public static final QuestionCode A302 = new QuestionCode("A302");
-public static final QuestionCode A303 = new QuestionCode("A303");
-public static final QuestionCode A304 = new QuestionCode("A304");
-public static final QuestionCode A305 = new QuestionCode("A305");
-public static final QuestionCode A306 = new QuestionCode("A306");
-public static final QuestionCode A307 = new QuestionCode("A307");
-public static final QuestionCode A308 = new QuestionCode("A308");
 public static final QuestionCode A309 = new QuestionCode("A309");
 public static final QuestionCode A310 = new QuestionCode("A310");
 public static final QuestionCode A311 = new QuestionCode("A311");
@@ -363,13 +352,59 @@ public static final QuestionCode A614 = new QuestionCode("A614");
 public static final QuestionCode A615 = new QuestionCode("A615");
 public static final QuestionCode A616 = new QuestionCode("A616");
 public static final QuestionCode A617 = new QuestionCode("A617");
+public static final QuestionCode A1000 = new QuestionCode("A1000");
+public static final QuestionCode A1001 = new QuestionCode("A1001");
+public static final QuestionCode A1002 = new QuestionCode("A1002");
+public static final QuestionCode A1003 = new QuestionCode("A1003");
+public static final QuestionCode A1004 = new QuestionCode("A1004");
+public static final QuestionCode A1005 = new QuestionCode("A1005");
+public static final QuestionCode A1006 = new QuestionCode("A1006");
+public static final QuestionCode A1007 = new QuestionCode("A1007");
+public static final QuestionCode A1008 = new QuestionCode("A1008");
+public static final QuestionCode A1009 = new QuestionCode("A1009");
+public static final QuestionCode A1010 = new QuestionCode("A1010");
+public static final QuestionCode A1011 = new QuestionCode("A1011");
+public static final QuestionCode A1012 = new QuestionCode("A1012");
+public static final QuestionCode A1013 = new QuestionCode("A1013");
+public static final QuestionCode A1014 = new QuestionCode("A1014");
+public static final QuestionCode A1015 = new QuestionCode("A1015");
+public static final QuestionCode A1016 = new QuestionCode("A1016");
+public static final QuestionCode A1017 = new QuestionCode("A1017");
+public static final QuestionCode A1018 = new QuestionCode("A1018");
+public static final QuestionCode A1019 = new QuestionCode("A1019");
+public static final QuestionCode A1020 = new QuestionCode("A1020");
+public static final QuestionCode A1021 = new QuestionCode("A1021");
+public static final QuestionCode A1022 = new QuestionCode("A1022");
+public static final QuestionCode A1023 = new QuestionCode("A1023");
+public static final QuestionCode A1024 = new QuestionCode("A1024");
+public static final QuestionCode A1025 = new QuestionCode("A1025");
+public static final QuestionCode A1026 = new QuestionCode("A1026");
+public static final QuestionCode A1027 = new QuestionCode("A1027");
+public static final QuestionCode A1028 = new QuestionCode("A1028");
+public static final QuestionCode A1029 = new QuestionCode("A1029");
+public static final QuestionCode A1030 = new QuestionCode("A1030");
+public static final QuestionCode A1031 = new QuestionCode("A1031");
+public static final QuestionCode A1032 = new QuestionCode("A1032");
+public static final QuestionCode A1033 = new QuestionCode("A1033");
+public static final QuestionCode A1034 = new QuestionCode("A1034");
+public static final QuestionCode A1035 = new QuestionCode("A1035");
+public static final QuestionCode A4999 = new QuestionCode("A4999");
+public static final QuestionCode A5000 = new QuestionCode("A5000");
+public static final QuestionCode A5001 = new QuestionCode("A5001");
+public static final QuestionCode A5002 = new QuestionCode("A5002");
+public static final QuestionCode A5003 = new QuestionCode("A5003");
+public static final QuestionCode A5010 = new QuestionCode("A5010");
+public static final QuestionCode A5011 = new QuestionCode("A5011");
+public static final QuestionCode A5012 = new QuestionCode("A5012");
+public static final QuestionCode A5013 = new QuestionCode("A5013");
+public static final QuestionCode A5014 = new QuestionCode("A5014");
 
 /* END GENERATED QUESTION_CODES ENTERPRISE */
 
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-09-26 08:25:45 +0200 */
+/* Generated the 2014-10-02 12:10:17 +0200 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
@@ -413,14 +448,6 @@ public static final QuestionCode AC40 = new QuestionCode("AC40");
 public static final QuestionCode AC41 = new QuestionCode("AC41");
 public static final QuestionCode AC42 = new QuestionCode("AC42");
 public static final QuestionCode AC43 = new QuestionCode("AC43");
-public static final QuestionCode AC44 = new QuestionCode("AC44");
-public static final QuestionCode AC45 = new QuestionCode("AC45");
-public static final QuestionCode AC46 = new QuestionCode("AC46");
-public static final QuestionCode AC47 = new QuestionCode("AC47");
-public static final QuestionCode AC48 = new QuestionCode("AC48");
-public static final QuestionCode AC49 = new QuestionCode("AC49");
-public static final QuestionCode AC50 = new QuestionCode("AC50");
-public static final QuestionCode AC51 = new QuestionCode("AC51");
 public static final QuestionCode AC52 = new QuestionCode("AC52");
 public static final QuestionCode AC53 = new QuestionCode("AC53");
 public static final QuestionCode AC54 = new QuestionCode("AC54");
@@ -538,6 +565,15 @@ public static final QuestionCode AC614 = new QuestionCode("AC614");
 public static final QuestionCode AC615 = new QuestionCode("AC615");
 public static final QuestionCode AC616 = new QuestionCode("AC616");
 public static final QuestionCode AC617 = new QuestionCode("AC617");
+public static final QuestionCode AC900 = new QuestionCode("AC900");
+public static final QuestionCode AC901 = new QuestionCode("AC901");
+public static final QuestionCode AC902 = new QuestionCode("AC902");
+public static final QuestionCode AC903 = new QuestionCode("AC903");
+public static final QuestionCode AC904 = new QuestionCode("AC904");
+public static final QuestionCode AC905 = new QuestionCode("AC905");
+public static final QuestionCode AC5000 = new QuestionCode("AC5000");
+public static final QuestionCode AC5001 = new QuestionCode("AC5001");
+public static final QuestionCode AC5002 = new QuestionCode("AC5002");
 
 /* END GENERATED QUESTION_CODES MUNICIPALITY */
 

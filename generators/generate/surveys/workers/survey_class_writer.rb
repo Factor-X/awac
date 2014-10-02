@@ -15,14 +15,12 @@ require_relative '../models/bad.rb'
 require_relative 'survey_class_writer_bindings.rb'
 
 
-
 # == CODE =================================================================== #
-
 
 
 class SurveyClassWriter
 
-    def self.execute(name, forms, question_sets, questions)
+    def self.execute(name, question_regex, forms, question_sets, questions)
 
         @logger = Log.new(Code.for_static_class(self))
 
@@ -33,10 +31,11 @@ class SurveyClassWriter
         outfile = "#{ROOT}/app/eu/factorx/awac/generated/Awac#{name}InitialData.java"
         begin
             result = eruby.evaluate(SurveyClassWriterBindings.new(filename, {
-                :name          => name,
-                :forms         => forms,
-                :question_sets => question_sets,
-                :questions     => questions
+                :name           => name,
+                :question_regex => question_regex,
+                :forms          => forms,
+                :question_sets  => question_sets,
+                :questions      => questions
             }))
 
             File.open(outfile, 'w') do |f|

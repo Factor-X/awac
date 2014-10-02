@@ -21,11 +21,11 @@ update form set awaccalculator_id = 2 where form.id = 12;
 
 alter table form alter column awaccalculator_id set not null;
 
-CREATE SEQUENCE awaccalculatorclosed_id_seq;
+CREATE SEQUENCE "awaccalculatorclosed_id_seq";
 
 CREATE TABLE awaccalculatorclosed
 (
-  id bigserial  NOT NULL DEFAULT nextval('awaccalculator_id_seq'::regclass),
+  id bigint NOT NULL DEFAULT nextval('awaccalculatorclosed_id_seq'::regclass),
   creationdate timestamp without time zone,
   creationuser character varying(255),
   lastupdatedate timestamp without time zone,
@@ -48,6 +48,7 @@ CREATE TABLE awaccalculatorclosed
 WITH (
   OIDS=FALSE
 );
+
 ALTER TABLE awaccalculatorclosed
   OWNER TO play;
 

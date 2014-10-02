@@ -1,1 +1,1 @@
-session.saveOrUpdate(new IntegerQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, null, <%= default %> ));
+JPA.em().persist(new IntegerQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, null, <%= default %> ));

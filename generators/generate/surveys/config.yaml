@@ -1,10 +1,12 @@
 log_level : INFO
 files :
 -
-  name  : Enterprise
-  xls   : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
-  sheet : site entreprise-activityData
+  name           : Enterprise
+  xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet          : site entreprise-activityData
+  question_regex : A[0-9]+
 -
-  name  : Municipality
-  xls   : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
-  sheet : commune-activityData
+  name           : Municipality
+  xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet          : commune-activityData
+  question_regex : AC[0-9]+
