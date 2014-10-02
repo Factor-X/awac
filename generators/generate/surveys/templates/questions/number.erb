@@ -1,1 +1,18 @@
-JPA.em().persist(new IntegerQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, null, <%= default %> ));
+IntegerQuestion <%= accronym.downcase %> = (IntegerQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+if (<%= accronym.downcase %> == null) {
+    <%= accronym.downcase %> = new IntegerQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, null, <%= default %>);
+    JPA.em().persist(<%= accronym.downcase %>);
+} else {
+    <%= accronym.downcase %>.setDefaultValue(<%= default %>);
+    if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    if (<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && !<%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().add(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    <%= accronym.downcase %>.setOrderIndex(0);
+    <%= accronym.downcase %>.setUnitCategory(null);
+    JPA.em().persist(<%= accronym.downcase %>);
+}

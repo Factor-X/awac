@@ -1084,7 +1084,25 @@ public class AwacEnterpriseInitialData {
     // == A2
     // Année de référence pour comparaison du présent bilan GES
 
-    JPA.em().persist(new IntegerQuestion( a1, 0, QuestionCode.A2, null, null ));
+    IntegerQuestion a2 = (IntegerQuestion) questionService.findByCode(QuestionCode.A2);
+if (a2 == null) {
+    a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null, null);
+    JPA.em().persist(a2);
+} else {
+    a2.setDefaultValue(null);
+    if (!a2.getQuestionSet().equals(a1) && a1.getQuestions().contains(a2)) {
+        a1.getQuestions().remove(a2);
+        JPA.em().persist(a1);
+    }
+    if (a2.getQuestionSet().equals(a1) && !a1.getQuestions().contains(a2)) {
+        a1.getQuestions().add(a2);
+        JPA.em().persist(a1);
+    }
+    a2.setOrderIndex(0);
+    a2.setUnitCategory(null);
+    JPA.em().persist(a2);
+}
+
 
     // == A3
     // A quel secteur principal appartient votre site?
@@ -1297,7 +1315,25 @@ if (a11 == null) {
     // == A12
     // Quel est le nombre d'employés sur l'année du bilan?
 
-    JPA.em().persist(new IntegerQuestion( a1, 0, QuestionCode.A12, null, null ));
+    IntegerQuestion a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
+if (a12 == null) {
+    a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null, null);
+    JPA.em().persist(a12);
+} else {
+    a12.setDefaultValue(null);
+    if (!a12.getQuestionSet().equals(a1) && a1.getQuestions().contains(a12)) {
+        a1.getQuestions().remove(a12);
+        JPA.em().persist(a1);
+    }
+    if (a12.getQuestionSet().equals(a1) && !a1.getQuestions().contains(a12)) {
+        a1.getQuestions().add(a12);
+        JPA.em().persist(a1);
+    }
+    a12.setOrderIndex(0);
+    a12.setUnitCategory(null);
+    JPA.em().persist(a12);
+}
+
 
     // == A14
     // Pièces documentaires liées aux consommations de combustible
@@ -2022,12 +2058,48 @@ if (a409 == null) {
     // == A410
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( a407, 0, QuestionCode.A410, null, null ));
+    IntegerQuestion a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
+if (a410 == null) {
+    a410 = new IntegerQuestion(a407, 0, QuestionCode.A410, null, null);
+    JPA.em().persist(a410);
+} else {
+    a410.setDefaultValue(null);
+    if (!a410.getQuestionSet().equals(a407) && a407.getQuestions().contains(a410)) {
+        a407.getQuestions().remove(a410);
+        JPA.em().persist(a407);
+    }
+    if (a410.getQuestionSet().equals(a407) && !a407.getQuestions().contains(a410)) {
+        a407.getQuestions().add(a410);
+        JPA.em().persist(a407);
+    }
+    a410.setOrderIndex(0);
+    a410.setUnitCategory(null);
+    JPA.em().persist(a410);
+}
+
 
     // == A411
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( a407, 0, QuestionCode.A411, null, null ));
+    IntegerQuestion a411 = (IntegerQuestion) questionService.findByCode(QuestionCode.A411);
+if (a411 == null) {
+    a411 = new IntegerQuestion(a407, 0, QuestionCode.A411, null, null);
+    JPA.em().persist(a411);
+} else {
+    a411.setDefaultValue(null);
+    if (!a411.getQuestionSet().equals(a407) && a407.getQuestions().contains(a411)) {
+        a407.getQuestions().remove(a411);
+        JPA.em().persist(a407);
+    }
+    if (a411.getQuestionSet().equals(a407) && !a407.getQuestions().contains(a411)) {
+        a407.getQuestions().add(a411);
+        JPA.em().persist(a407);
+    }
+    a411.setOrderIndex(0);
+    a411.setUnitCategory(null);
+    JPA.em().persist(a411);
+}
+
 
     // == A414
     // Catégorie de véhicule
@@ -2255,12 +2327,48 @@ if (a509 == null) {
     // == A510
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( a507, 0, QuestionCode.A510, null, null ));
+    IntegerQuestion a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
+if (a510 == null) {
+    a510 = new IntegerQuestion(a507, 0, QuestionCode.A510, null, null);
+    JPA.em().persist(a510);
+} else {
+    a510.setDefaultValue(null);
+    if (!a510.getQuestionSet().equals(a507) && a507.getQuestions().contains(a510)) {
+        a507.getQuestions().remove(a510);
+        JPA.em().persist(a507);
+    }
+    if (a510.getQuestionSet().equals(a507) && !a507.getQuestions().contains(a510)) {
+        a507.getQuestions().add(a510);
+        JPA.em().persist(a507);
+    }
+    a510.setOrderIndex(0);
+    a510.setUnitCategory(null);
+    JPA.em().persist(a510);
+}
+
 
     // == A511
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( a507, 0, QuestionCode.A511, null, null ));
+    IntegerQuestion a511 = (IntegerQuestion) questionService.findByCode(QuestionCode.A511);
+if (a511 == null) {
+    a511 = new IntegerQuestion(a507, 0, QuestionCode.A511, null, null);
+    JPA.em().persist(a511);
+} else {
+    a511.setDefaultValue(null);
+    if (!a511.getQuestionSet().equals(a507) && a507.getQuestions().contains(a511)) {
+        a507.getQuestions().remove(a511);
+        JPA.em().persist(a507);
+    }
+    if (a511.getQuestionSet().equals(a507) && !a507.getQuestions().contains(a511)) {
+        a507.getQuestions().add(a511);
+        JPA.em().persist(a507);
+    }
+    a511.setOrderIndex(0);
+    a511.setUnitCategory(null);
+    JPA.em().persist(a511);
+}
+
 
     // == A514
     // Catégorie de véhicule
@@ -2488,12 +2596,48 @@ if (a609 == null) {
     // == A610
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( a607, 0, QuestionCode.A610, null, null ));
+    IntegerQuestion a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
+if (a610 == null) {
+    a610 = new IntegerQuestion(a607, 0, QuestionCode.A610, null, null);
+    JPA.em().persist(a610);
+} else {
+    a610.setDefaultValue(null);
+    if (!a610.getQuestionSet().equals(a607) && a607.getQuestions().contains(a610)) {
+        a607.getQuestions().remove(a610);
+        JPA.em().persist(a607);
+    }
+    if (a610.getQuestionSet().equals(a607) && !a607.getQuestions().contains(a610)) {
+        a607.getQuestions().add(a610);
+        JPA.em().persist(a607);
+    }
+    a610.setOrderIndex(0);
+    a610.setUnitCategory(null);
+    JPA.em().persist(a610);
+}
+
 
     // == A611
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( a607, 0, QuestionCode.A611, null, null ));
+    IntegerQuestion a611 = (IntegerQuestion) questionService.findByCode(QuestionCode.A611);
+if (a611 == null) {
+    a611 = new IntegerQuestion(a607, 0, QuestionCode.A611, null, null);
+    JPA.em().persist(a611);
+} else {
+    a611.setDefaultValue(null);
+    if (!a611.getQuestionSet().equals(a607) && a607.getQuestions().contains(a611)) {
+        a607.getQuestions().remove(a611);
+        JPA.em().persist(a607);
+    }
+    if (a611.getQuestionSet().equals(a607) && !a607.getQuestions().contains(a611)) {
+        a607.getQuestions().add(a611);
+        JPA.em().persist(a607);
+    }
+    a611.setOrderIndex(0);
+    a611.setUnitCategory(null);
+    JPA.em().persist(a611);
+}
+
 
     // == A614
     // Catégorie de véhicule
@@ -2596,62 +2740,278 @@ if (a617 == null) {
     // == A95
     // Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A95, null, null ));
+    IntegerQuestion a95 = (IntegerQuestion) questionService.findByCode(QuestionCode.A95);
+if (a95 == null) {
+    a95 = new IntegerQuestion(a94, 0, QuestionCode.A95, null, null);
+    JPA.em().persist(a95);
+} else {
+    a95.setDefaultValue(null);
+    if (!a95.getQuestionSet().equals(a94) && a94.getQuestions().contains(a95)) {
+        a94.getQuestions().remove(a95);
+        JPA.em().persist(a94);
+    }
+    if (a95.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a95)) {
+        a94.getQuestions().add(a95);
+        JPA.em().persist(a94);
+    }
+    a95.setOrderIndex(0);
+    a95.setUnitCategory(null);
+    JPA.em().persist(a95);
+}
+
 
     // == A96
     // Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A96, null, null ));
+    IntegerQuestion a96 = (IntegerQuestion) questionService.findByCode(QuestionCode.A96);
+if (a96 == null) {
+    a96 = new IntegerQuestion(a94, 0, QuestionCode.A96, null, null);
+    JPA.em().persist(a96);
+} else {
+    a96.setDefaultValue(null);
+    if (!a96.getQuestionSet().equals(a94) && a94.getQuestions().contains(a96)) {
+        a94.getQuestions().remove(a96);
+        JPA.em().persist(a94);
+    }
+    if (a96.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a96)) {
+        a94.getQuestions().add(a96);
+        JPA.em().persist(a94);
+    }
+    a96.setOrderIndex(0);
+    a96.setUnitCategory(null);
+    JPA.em().persist(a96);
+}
+
 
     // == A97
     // Métro pour déplacement domicile-travail des employés (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A97, null, null ));
+    IntegerQuestion a97 = (IntegerQuestion) questionService.findByCode(QuestionCode.A97);
+if (a97 == null) {
+    a97 = new IntegerQuestion(a94, 0, QuestionCode.A97, null, null);
+    JPA.em().persist(a97);
+} else {
+    a97.setDefaultValue(null);
+    if (!a97.getQuestionSet().equals(a94) && a94.getQuestions().contains(a97)) {
+        a94.getQuestions().remove(a97);
+        JPA.em().persist(a94);
+    }
+    if (a97.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a97)) {
+        a94.getQuestions().add(a97);
+        JPA.em().persist(a94);
+    }
+    a97.setOrderIndex(0);
+    a97.setUnitCategory(null);
+    JPA.em().persist(a97);
+}
+
 
     // == A98
     // Métro pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A98, null, null ));
+    IntegerQuestion a98 = (IntegerQuestion) questionService.findByCode(QuestionCode.A98);
+if (a98 == null) {
+    a98 = new IntegerQuestion(a94, 0, QuestionCode.A98, null, null);
+    JPA.em().persist(a98);
+} else {
+    a98.setDefaultValue(null);
+    if (!a98.getQuestionSet().equals(a94) && a94.getQuestions().contains(a98)) {
+        a94.getQuestions().remove(a98);
+        JPA.em().persist(a94);
+    }
+    if (a98.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a98)) {
+        a94.getQuestions().add(a98);
+        JPA.em().persist(a94);
+    }
+    a98.setOrderIndex(0);
+    a98.setUnitCategory(null);
+    JPA.em().persist(a98);
+}
+
 
     // == A99
     // Train national SNCB pour déplacement domicile-travail des employés (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A99, null, null ));
+    IntegerQuestion a99 = (IntegerQuestion) questionService.findByCode(QuestionCode.A99);
+if (a99 == null) {
+    a99 = new IntegerQuestion(a94, 0, QuestionCode.A99, null, null);
+    JPA.em().persist(a99);
+} else {
+    a99.setDefaultValue(null);
+    if (!a99.getQuestionSet().equals(a94) && a94.getQuestions().contains(a99)) {
+        a94.getQuestions().remove(a99);
+        JPA.em().persist(a94);
+    }
+    if (a99.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a99)) {
+        a94.getQuestions().add(a99);
+        JPA.em().persist(a94);
+    }
+    a99.setOrderIndex(0);
+    a99.setUnitCategory(null);
+    JPA.em().persist(a99);
+}
+
 
     // == A100
     // Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A100, null, null ));
+    IntegerQuestion a100 = (IntegerQuestion) questionService.findByCode(QuestionCode.A100);
+if (a100 == null) {
+    a100 = new IntegerQuestion(a94, 0, QuestionCode.A100, null, null);
+    JPA.em().persist(a100);
+} else {
+    a100.setDefaultValue(null);
+    if (!a100.getQuestionSet().equals(a94) && a94.getQuestions().contains(a100)) {
+        a94.getQuestions().remove(a100);
+        JPA.em().persist(a94);
+    }
+    if (a100.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a100)) {
+        a94.getQuestions().add(a100);
+        JPA.em().persist(a94);
+    }
+    a100.setOrderIndex(0);
+    a100.setUnitCategory(null);
+    JPA.em().persist(a100);
+}
+
 
     // == A101
     // Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A101, null, null ));
+    IntegerQuestion a101 = (IntegerQuestion) questionService.findByCode(QuestionCode.A101);
+if (a101 == null) {
+    a101 = new IntegerQuestion(a94, 0, QuestionCode.A101, null, null);
+    JPA.em().persist(a101);
+} else {
+    a101.setDefaultValue(null);
+    if (!a101.getQuestionSet().equals(a94) && a94.getQuestions().contains(a101)) {
+        a94.getQuestions().remove(a101);
+        JPA.em().persist(a94);
+    }
+    if (a101.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a101)) {
+        a94.getQuestions().add(a101);
+        JPA.em().persist(a94);
+    }
+    a101.setOrderIndex(0);
+    a101.setUnitCategory(null);
+    JPA.em().persist(a101);
+}
+
 
     // == A102
     // Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A102, null, null ));
+    IntegerQuestion a102 = (IntegerQuestion) questionService.findByCode(QuestionCode.A102);
+if (a102 == null) {
+    a102 = new IntegerQuestion(a94, 0, QuestionCode.A102, null, null);
+    JPA.em().persist(a102);
+} else {
+    a102.setDefaultValue(null);
+    if (!a102.getQuestionSet().equals(a94) && a94.getQuestions().contains(a102)) {
+        a94.getQuestions().remove(a102);
+        JPA.em().persist(a94);
+    }
+    if (a102.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a102)) {
+        a94.getQuestions().add(a102);
+        JPA.em().persist(a94);
+    }
+    a102.setOrderIndex(0);
+    a102.setUnitCategory(null);
+    JPA.em().persist(a102);
+}
+
 
     // == A103
     // Tram pour déplacement domicile-travail des employés (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A103, null, null ));
+    IntegerQuestion a103 = (IntegerQuestion) questionService.findByCode(QuestionCode.A103);
+if (a103 == null) {
+    a103 = new IntegerQuestion(a94, 0, QuestionCode.A103, null, null);
+    JPA.em().persist(a103);
+} else {
+    a103.setDefaultValue(null);
+    if (!a103.getQuestionSet().equals(a94) && a94.getQuestions().contains(a103)) {
+        a94.getQuestions().remove(a103);
+        JPA.em().persist(a94);
+    }
+    if (a103.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a103)) {
+        a94.getQuestions().add(a103);
+        JPA.em().persist(a94);
+    }
+    a103.setOrderIndex(0);
+    a103.setUnitCategory(null);
+    JPA.em().persist(a103);
+}
+
 
     // == A104
     // Tram pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A104, null, null ));
+    IntegerQuestion a104 = (IntegerQuestion) questionService.findByCode(QuestionCode.A104);
+if (a104 == null) {
+    a104 = new IntegerQuestion(a94, 0, QuestionCode.A104, null, null);
+    JPA.em().persist(a104);
+} else {
+    a104.setDefaultValue(null);
+    if (!a104.getQuestionSet().equals(a94) && a94.getQuestions().contains(a104)) {
+        a94.getQuestions().remove(a104);
+        JPA.em().persist(a94);
+    }
+    if (a104.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a104)) {
+        a94.getQuestions().add(a104);
+        JPA.em().persist(a94);
+    }
+    a104.setOrderIndex(0);
+    a104.setUnitCategory(null);
+    JPA.em().persist(a104);
+}
+
 
     // == A105
     // Taxi pour déplacement domicile-travail des employés (en véhicules.km)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A105, null, null ));
+    IntegerQuestion a105 = (IntegerQuestion) questionService.findByCode(QuestionCode.A105);
+if (a105 == null) {
+    a105 = new IntegerQuestion(a94, 0, QuestionCode.A105, null, null);
+    JPA.em().persist(a105);
+} else {
+    a105.setDefaultValue(null);
+    if (!a105.getQuestionSet().equals(a94) && a94.getQuestions().contains(a105)) {
+        a94.getQuestions().remove(a105);
+        JPA.em().persist(a94);
+    }
+    if (a105.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a105)) {
+        a94.getQuestions().add(a105);
+        JPA.em().persist(a94);
+    }
+    a105.setOrderIndex(0);
+    a105.setUnitCategory(null);
+    JPA.em().persist(a105);
+}
+
 
     // == A106
     // Taxi pour déplacements professionnels & des visiteurs (en véhicules.km)
 
-    JPA.em().persist(new IntegerQuestion( a94, 0, QuestionCode.A106, null, null ));
+    IntegerQuestion a106 = (IntegerQuestion) questionService.findByCode(QuestionCode.A106);
+if (a106 == null) {
+    a106 = new IntegerQuestion(a94, 0, QuestionCode.A106, null, null);
+    JPA.em().persist(a106);
+} else {
+    a106.setDefaultValue(null);
+    if (!a106.getQuestionSet().equals(a94) && a94.getQuestions().contains(a106)) {
+        a94.getQuestions().remove(a106);
+        JPA.em().persist(a94);
+    }
+    if (a106.getQuestionSet().equals(a94) && !a94.getQuestions().contains(a106)) {
+        a94.getQuestions().add(a106);
+        JPA.em().persist(a94);
+    }
+    a106.setOrderIndex(0);
+    a106.setUnitCategory(null);
+    JPA.em().persist(a106);
+}
+
 
     // == A107
     // Taxi pour déplacement domicile-travail des employés (en valeur)
@@ -2842,7 +3202,25 @@ if (a118 == null) {
     // == A119
     // Nombre de vols/an
 
-    JPA.em().persist(new IntegerQuestion( a115, 0, QuestionCode.A119, null, null ));
+    IntegerQuestion a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
+if (a119 == null) {
+    a119 = new IntegerQuestion(a115, 0, QuestionCode.A119, null, null);
+    JPA.em().persist(a119);
+} else {
+    a119.setDefaultValue(null);
+    if (!a119.getQuestionSet().equals(a115) && a115.getQuestions().contains(a119)) {
+        a115.getQuestions().remove(a119);
+        JPA.em().persist(a115);
+    }
+    if (a119.getQuestionSet().equals(a115) && !a115.getQuestions().contains(a119)) {
+        a115.getQuestions().add(a119);
+        JPA.em().persist(a115);
+    }
+    a119.setOrderIndex(0);
+    a119.setUnitCategory(null);
+    JPA.em().persist(a119);
+}
+
 
     // == A120
     // Distance moyenne A/R (km)
@@ -3360,7 +3738,25 @@ if (a225 == null) {
     // == A226
     // Quantité
 
-    JPA.em().persist(new IntegerQuestion( a224, 0, QuestionCode.A226, null, null ));
+    IntegerQuestion a226 = (IntegerQuestion) questionService.findByCode(QuestionCode.A226);
+if (a226 == null) {
+    a226 = new IntegerQuestion(a224, 0, QuestionCode.A226, null, null);
+    JPA.em().persist(a226);
+} else {
+    a226.setDefaultValue(null);
+    if (!a226.getQuestionSet().equals(a224) && a224.getQuestions().contains(a226)) {
+        a224.getQuestions().remove(a226);
+        JPA.em().persist(a224);
+    }
+    if (a226.getQuestionSet().equals(a224) && !a224.getQuestions().contains(a226)) {
+        a224.getQuestions().add(a226);
+        JPA.em().persist(a224);
+    }
+    a226.setOrderIndex(0);
+    a226.setUnitCategory(null);
+    JPA.em().persist(a226);
+}
+
 
     // == A227
     // Unité dans laquelle s'exprime cette quantité
@@ -3387,7 +3783,25 @@ if (a227 == null) {
     // == A228
     // Facteur d'émission en tCO2e par unité ci-dessus
 
-    JPA.em().persist(new IntegerQuestion( a224, 0, QuestionCode.A228, null, null ));
+    IntegerQuestion a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
+if (a228 == null) {
+    a228 = new IntegerQuestion(a224, 0, QuestionCode.A228, null, null);
+    JPA.em().persist(a228);
+} else {
+    a228.setDefaultValue(null);
+    if (!a228.getQuestionSet().equals(a224) && a224.getQuestions().contains(a228)) {
+        a224.getQuestions().remove(a228);
+        JPA.em().persist(a224);
+    }
+    if (a228.getQuestionSet().equals(a224) && !a224.getQuestions().contains(a228)) {
+        a224.getQuestions().add(a228);
+        JPA.em().persist(a224);
+    }
+    a228.setOrderIndex(0);
+    a228.setUnitCategory(null);
+    JPA.em().persist(a228);
+}
+
 
     // == A129
     // Pièces documentaires liées au transport et stockage amont
@@ -4377,42 +4791,186 @@ if (a5003 == null) {
     // == A183
     // Nombre d'ouvriers
 
-    JPA.em().persist(new IntegerQuestion( a182, 0, QuestionCode.A183, null, null ));
+    IntegerQuestion a183 = (IntegerQuestion) questionService.findByCode(QuestionCode.A183);
+if (a183 == null) {
+    a183 = new IntegerQuestion(a182, 0, QuestionCode.A183, null, null);
+    JPA.em().persist(a183);
+} else {
+    a183.setDefaultValue(null);
+    if (!a183.getQuestionSet().equals(a182) && a182.getQuestions().contains(a183)) {
+        a182.getQuestions().remove(a183);
+        JPA.em().persist(a182);
+    }
+    if (a183.getQuestionSet().equals(a182) && !a182.getQuestions().contains(a183)) {
+        a182.getQuestions().add(a183);
+        JPA.em().persist(a182);
+    }
+    a183.setOrderIndex(0);
+    a183.setUnitCategory(null);
+    JPA.em().persist(a183);
+}
+
 
     // == A184
     // Nombre de jours de travail/an
 
-    JPA.em().persist(new IntegerQuestion( a182, 0, QuestionCode.A184, null, 220 ));
+    IntegerQuestion a184 = (IntegerQuestion) questionService.findByCode(QuestionCode.A184);
+if (a184 == null) {
+    a184 = new IntegerQuestion(a182, 0, QuestionCode.A184, null, 220);
+    JPA.em().persist(a184);
+} else {
+    a184.setDefaultValue(220);
+    if (!a184.getQuestionSet().equals(a182) && a182.getQuestions().contains(a184)) {
+        a182.getQuestions().remove(a184);
+        JPA.em().persist(a182);
+    }
+    if (a184.getQuestionSet().equals(a182) && !a182.getQuestions().contains(a184)) {
+        a182.getQuestions().add(a184);
+        JPA.em().persist(a182);
+    }
+    a184.setOrderIndex(0);
+    a184.setUnitCategory(null);
+    JPA.em().persist(a184);
+}
+
 
     // == A186
     // Nombre d'employés
 
-    JPA.em().persist(new IntegerQuestion( a185, 0, QuestionCode.A186, null, null ));
+    IntegerQuestion a186 = (IntegerQuestion) questionService.findByCode(QuestionCode.A186);
+if (a186 == null) {
+    a186 = new IntegerQuestion(a185, 0, QuestionCode.A186, null, null);
+    JPA.em().persist(a186);
+} else {
+    a186.setDefaultValue(null);
+    if (!a186.getQuestionSet().equals(a185) && a185.getQuestions().contains(a186)) {
+        a185.getQuestions().remove(a186);
+        JPA.em().persist(a185);
+    }
+    if (a186.getQuestionSet().equals(a185) && !a185.getQuestions().contains(a186)) {
+        a185.getQuestions().add(a186);
+        JPA.em().persist(a185);
+    }
+    a186.setOrderIndex(0);
+    a186.setUnitCategory(null);
+    JPA.em().persist(a186);
+}
+
 
     // == A187
     // Nombre de jours de travail/an
 
-    JPA.em().persist(new IntegerQuestion( a185, 0, QuestionCode.A187, null, 220 ));
+    IntegerQuestion a187 = (IntegerQuestion) questionService.findByCode(QuestionCode.A187);
+if (a187 == null) {
+    a187 = new IntegerQuestion(a185, 0, QuestionCode.A187, null, 220);
+    JPA.em().persist(a187);
+} else {
+    a187.setDefaultValue(220);
+    if (!a187.getQuestionSet().equals(a185) && a185.getQuestions().contains(a187)) {
+        a185.getQuestions().remove(a187);
+        JPA.em().persist(a185);
+    }
+    if (a187.getQuestionSet().equals(a185) && !a185.getQuestions().contains(a187)) {
+        a185.getQuestions().add(a187);
+        JPA.em().persist(a185);
+    }
+    a187.setOrderIndex(0);
+    a187.setUnitCategory(null);
+    JPA.em().persist(a187);
+}
+
 
     // == A189
     // Nombre de lits
 
-    JPA.em().persist(new IntegerQuestion( a188, 0, QuestionCode.A189, null, null ));
+    IntegerQuestion a189 = (IntegerQuestion) questionService.findByCode(QuestionCode.A189);
+if (a189 == null) {
+    a189 = new IntegerQuestion(a188, 0, QuestionCode.A189, null, null);
+    JPA.em().persist(a189);
+} else {
+    a189.setDefaultValue(null);
+    if (!a189.getQuestionSet().equals(a188) && a188.getQuestions().contains(a189)) {
+        a188.getQuestions().remove(a189);
+        JPA.em().persist(a188);
+    }
+    if (a189.getQuestionSet().equals(a188) && !a188.getQuestions().contains(a189)) {
+        a188.getQuestions().add(a189);
+        JPA.em().persist(a188);
+    }
+    a189.setOrderIndex(0);
+    a189.setUnitCategory(null);
+    JPA.em().persist(a189);
+}
+
 
     // == A190
     // Nombre de jours d'ouverture/an
 
-    JPA.em().persist(new IntegerQuestion( a188, 0, QuestionCode.A190, null, 365 ));
+    IntegerQuestion a190 = (IntegerQuestion) questionService.findByCode(QuestionCode.A190);
+if (a190 == null) {
+    a190 = new IntegerQuestion(a188, 0, QuestionCode.A190, null, 365);
+    JPA.em().persist(a190);
+} else {
+    a190.setDefaultValue(365);
+    if (!a190.getQuestionSet().equals(a188) && a188.getQuestions().contains(a190)) {
+        a188.getQuestions().remove(a190);
+        JPA.em().persist(a188);
+    }
+    if (a190.getQuestionSet().equals(a188) && !a188.getQuestions().contains(a190)) {
+        a188.getQuestions().add(a190);
+        JPA.em().persist(a188);
+    }
+    a190.setOrderIndex(0);
+    a190.setUnitCategory(null);
+    JPA.em().persist(a190);
+}
+
 
     // == A192
     // Nombre de couverts/jour
 
-    JPA.em().persist(new IntegerQuestion( a191, 0, QuestionCode.A192, null, null ));
+    IntegerQuestion a192 = (IntegerQuestion) questionService.findByCode(QuestionCode.A192);
+if (a192 == null) {
+    a192 = new IntegerQuestion(a191, 0, QuestionCode.A192, null, null);
+    JPA.em().persist(a192);
+} else {
+    a192.setDefaultValue(null);
+    if (!a192.getQuestionSet().equals(a191) && a191.getQuestions().contains(a192)) {
+        a191.getQuestions().remove(a192);
+        JPA.em().persist(a191);
+    }
+    if (a192.getQuestionSet().equals(a191) && !a191.getQuestions().contains(a192)) {
+        a191.getQuestions().add(a192);
+        JPA.em().persist(a191);
+    }
+    a192.setOrderIndex(0);
+    a192.setUnitCategory(null);
+    JPA.em().persist(a192);
+}
+
 
     // == A193
     // Nombre de jours d'ouverture/an
 
-    JPA.em().persist(new IntegerQuestion( a191, 0, QuestionCode.A193, null, 220 ));
+    IntegerQuestion a193 = (IntegerQuestion) questionService.findByCode(QuestionCode.A193);
+if (a193 == null) {
+    a193 = new IntegerQuestion(a191, 0, QuestionCode.A193, null, 220);
+    JPA.em().persist(a193);
+} else {
+    a193.setDefaultValue(220);
+    if (!a193.getQuestionSet().equals(a191) && a191.getQuestions().contains(a193)) {
+        a191.getQuestions().remove(a193);
+        JPA.em().persist(a191);
+    }
+    if (a193.getQuestionSet().equals(a191) && !a191.getQuestions().contains(a193)) {
+        a191.getQuestions().add(a193);
+        JPA.em().persist(a191);
+    }
+    a193.setOrderIndex(0);
+    a193.setUnitCategory(null);
+    JPA.em().persist(a193);
+}
+
 
     // == A195
     // Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
@@ -4727,7 +5285,25 @@ if (a235 == null) {
     // == A236
     // Quantité
 
-    JPA.em().persist(new IntegerQuestion( a231, 0, QuestionCode.A236, null, null ));
+    IntegerQuestion a236 = (IntegerQuestion) questionService.findByCode(QuestionCode.A236);
+if (a236 == null) {
+    a236 = new IntegerQuestion(a231, 0, QuestionCode.A236, null, null);
+    JPA.em().persist(a236);
+} else {
+    a236.setDefaultValue(null);
+    if (!a236.getQuestionSet().equals(a231) && a231.getQuestions().contains(a236)) {
+        a231.getQuestions().remove(a236);
+        JPA.em().persist(a231);
+    }
+    if (a236.getQuestionSet().equals(a231) && !a231.getQuestions().contains(a236)) {
+        a231.getQuestions().add(a236);
+        JPA.em().persist(a231);
+    }
+    a236.setOrderIndex(0);
+    a236.setUnitCategory(null);
+    JPA.em().persist(a236);
+}
+
 
     // == A239
     // Poste d'infrastructure
@@ -4754,7 +5330,25 @@ if (a239 == null) {
     // == A240
     // Quantité
 
-    JPA.em().persist(new IntegerQuestion( a238, 0, QuestionCode.A240, null, null ));
+    IntegerQuestion a240 = (IntegerQuestion) questionService.findByCode(QuestionCode.A240);
+if (a240 == null) {
+    a240 = new IntegerQuestion(a238, 0, QuestionCode.A240, null, null);
+    JPA.em().persist(a240);
+} else {
+    a240.setDefaultValue(null);
+    if (!a240.getQuestionSet().equals(a238) && a238.getQuestions().contains(a240)) {
+        a238.getQuestions().remove(a240);
+        JPA.em().persist(a238);
+    }
+    if (a240.getQuestionSet().equals(a238) && !a238.getQuestions().contains(a240)) {
+        a238.getQuestions().add(a240);
+        JPA.em().persist(a238);
+    }
+    a240.setOrderIndex(0);
+    a240.setUnitCategory(null);
+    JPA.em().persist(a240);
+}
+
 
     // == A241
     // Unité dans laquelle s'exprime cette quantité
@@ -4781,7 +5375,25 @@ if (a241 == null) {
     // == A242
     // Facteur d'émission en tCO2e par unité ci-dessus
 
-    JPA.em().persist(new IntegerQuestion( a238, 0, QuestionCode.A242, null, null ));
+    IntegerQuestion a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
+if (a242 == null) {
+    a242 = new IntegerQuestion(a238, 0, QuestionCode.A242, null, null);
+    JPA.em().persist(a242);
+} else {
+    a242.setDefaultValue(null);
+    if (!a242.getQuestionSet().equals(a238) && a238.getQuestions().contains(a242)) {
+        a238.getQuestions().remove(a242);
+        JPA.em().persist(a238);
+    }
+    if (a242.getQuestionSet().equals(a238) && !a238.getQuestions().contains(a242)) {
+        a238.getQuestions().add(a242);
+        JPA.em().persist(a238);
+    }
+    a242.setOrderIndex(0);
+    a242.setUnitCategory(null);
+    JPA.em().persist(a242);
+}
+
 
     // == A310
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -5095,7 +5707,25 @@ if (a323 == null) {
     // == A324
     // Nombre de franchisés
 
-    JPA.em().persist(new IntegerQuestion( a322, 0, QuestionCode.A324, null, null ));
+    IntegerQuestion a324 = (IntegerQuestion) questionService.findByCode(QuestionCode.A324);
+if (a324 == null) {
+    a324 = new IntegerQuestion(a322, 0, QuestionCode.A324, null, null);
+    JPA.em().persist(a324);
+} else {
+    a324.setDefaultValue(null);
+    if (!a324.getQuestionSet().equals(a322) && a322.getQuestions().contains(a324)) {
+        a322.getQuestions().remove(a324);
+        JPA.em().persist(a322);
+    }
+    if (a324.getQuestionSet().equals(a322) && !a322.getQuestions().contains(a324)) {
+        a322.getQuestions().add(a324);
+        JPA.em().persist(a322);
+    }
+    a324.setOrderIndex(0);
+    a324.setUnitCategory(null);
+    JPA.em().persist(a324);
+}
+
 
     // == A326
     // Combustible utilisé
@@ -5388,12 +6018,48 @@ if (a336 == null) {
     // == A337
     // Emissions directes totales (tCO2e)
 
-    JPA.em().persist(new IntegerQuestion( a334, 0, QuestionCode.A337, null, null ));
+    IntegerQuestion a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
+if (a337 == null) {
+    a337 = new IntegerQuestion(a334, 0, QuestionCode.A337, null, null);
+    JPA.em().persist(a337);
+} else {
+    a337.setDefaultValue(null);
+    if (!a337.getQuestionSet().equals(a334) && a334.getQuestions().contains(a337)) {
+        a334.getQuestions().remove(a337);
+        JPA.em().persist(a334);
+    }
+    if (a337.getQuestionSet().equals(a334) && !a334.getQuestions().contains(a337)) {
+        a334.getQuestions().add(a337);
+        JPA.em().persist(a334);
+    }
+    a337.setOrderIndex(0);
+    a337.setUnitCategory(null);
+    JPA.em().persist(a337);
+}
+
 
     // == A338
     // Emissions indirectes totales (tCO2e)
 
-    JPA.em().persist(new IntegerQuestion( a334, 0, QuestionCode.A338, null, null ));
+    IntegerQuestion a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
+if (a338 == null) {
+    a338 = new IntegerQuestion(a334, 0, QuestionCode.A338, null, null);
+    JPA.em().persist(a338);
+} else {
+    a338.setDefaultValue(null);
+    if (!a338.getQuestionSet().equals(a334) && a334.getQuestions().contains(a338)) {
+        a334.getQuestions().remove(a338);
+        JPA.em().persist(a334);
+    }
+    if (a338.getQuestionSet().equals(a334) && !a334.getQuestions().contains(a338)) {
+        a334.getQuestions().add(a338);
+        JPA.em().persist(a334);
+    }
+    a338.setOrderIndex(0);
+    a338.setUnitCategory(null);
+    JPA.em().persist(a338);
+}
+
 
     // == A245
     // Nom du produit ou groupe de produits
@@ -5420,7 +6086,25 @@ if (a245 == null) {
     // == A246
     // Quantité vendue de ce produit
 
-    JPA.em().persist(new IntegerQuestion( a244, 0, QuestionCode.A246, null, null ));
+    IntegerQuestion a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
+if (a246 == null) {
+    a246 = new IntegerQuestion(a244, 0, QuestionCode.A246, null, null);
+    JPA.em().persist(a246);
+} else {
+    a246.setDefaultValue(null);
+    if (!a246.getQuestionSet().equals(a244) && a244.getQuestions().contains(a246)) {
+        a244.getQuestions().remove(a246);
+        JPA.em().persist(a244);
+    }
+    if (a246.getQuestionSet().equals(a244) && !a244.getQuestions().contains(a246)) {
+        a244.getQuestions().add(a246);
+        JPA.em().persist(a244);
+    }
+    a246.setOrderIndex(0);
+    a246.setUnitCategory(null);
+    JPA.em().persist(a246);
+}
+
 
     // == A247
     // Unité dans laquelle s'exprime cette quantité
@@ -6426,7 +7110,25 @@ if (a292 == null) {
     // == A293
     // Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie
 
-    JPA.em().persist(new IntegerQuestion( a291, 0, QuestionCode.A293, null, null ));
+    IntegerQuestion a293 = (IntegerQuestion) questionService.findByCode(QuestionCode.A293);
+if (a293 == null) {
+    a293 = new IntegerQuestion(a291, 0, QuestionCode.A293, null, null);
+    JPA.em().persist(a293);
+} else {
+    a293.setDefaultValue(null);
+    if (!a293.getQuestionSet().equals(a291) && a291.getQuestions().contains(a293)) {
+        a291.getQuestions().remove(a293);
+        JPA.em().persist(a291);
+    }
+    if (a293.getQuestionSet().equals(a291) && !a291.getQuestions().contains(a293)) {
+        a291.getQuestions().add(a293);
+        JPA.em().persist(a291);
+    }
+    a293.setOrderIndex(0);
+    a293.setUnitCategory(null);
+    JPA.em().persist(a293);
+}
+
 
     // == A294
     // Consommation de diesel par utilisation de produit

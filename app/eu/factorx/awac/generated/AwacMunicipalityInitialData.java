@@ -594,22 +594,94 @@ public class AwacMunicipalityInitialData {
     // == AC3
     // Année de référence du calcul
 
-    JPA.em().persist(new IntegerQuestion( ac2, 0, QuestionCode.AC3, null, null ));
+    IntegerQuestion ac3 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC3);
+if (ac3 == null) {
+    ac3 = new IntegerQuestion(ac2, 0, QuestionCode.AC3, null, null);
+    JPA.em().persist(ac3);
+} else {
+    ac3.setDefaultValue(null);
+    if (!ac3.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac3)) {
+        ac2.getQuestions().remove(ac3);
+        JPA.em().persist(ac2);
+    }
+    if (ac3.getQuestionSet().equals(ac2) && !ac2.getQuestions().contains(ac3)) {
+        ac2.getQuestions().add(ac3);
+        JPA.em().persist(ac2);
+    }
+    ac3.setOrderIndex(0);
+    ac3.setUnitCategory(null);
+    JPA.em().persist(ac3);
+}
+
 
     // == AC5
     // Nombre d'employés en début d'année de bilan
 
-    JPA.em().persist(new IntegerQuestion( ac2, 0, QuestionCode.AC5, null, null ));
+    IntegerQuestion ac5 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC5);
+if (ac5 == null) {
+    ac5 = new IntegerQuestion(ac2, 0, QuestionCode.AC5, null, null);
+    JPA.em().persist(ac5);
+} else {
+    ac5.setDefaultValue(null);
+    if (!ac5.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac5)) {
+        ac2.getQuestions().remove(ac5);
+        JPA.em().persist(ac2);
+    }
+    if (ac5.getQuestionSet().equals(ac2) && !ac2.getQuestions().contains(ac5)) {
+        ac2.getQuestions().add(ac5);
+        JPA.em().persist(ac2);
+    }
+    ac5.setOrderIndex(0);
+    ac5.setUnitCategory(null);
+    JPA.em().persist(ac5);
+}
+
 
     // == AC6
     // Nombre d'habitants dans la commune en début d'année de bilan
 
-    JPA.em().persist(new IntegerQuestion( ac2, 0, QuestionCode.AC6, null, null ));
+    IntegerQuestion ac6 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC6);
+if (ac6 == null) {
+    ac6 = new IntegerQuestion(ac2, 0, QuestionCode.AC6, null, null);
+    JPA.em().persist(ac6);
+} else {
+    ac6.setDefaultValue(null);
+    if (!ac6.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac6)) {
+        ac2.getQuestions().remove(ac6);
+        JPA.em().persist(ac2);
+    }
+    if (ac6.getQuestionSet().equals(ac2) && !ac2.getQuestions().contains(ac6)) {
+        ac2.getQuestions().add(ac6);
+        JPA.em().persist(ac2);
+    }
+    ac6.setOrderIndex(0);
+    ac6.setUnitCategory(null);
+    JPA.em().persist(ac6);
+}
+
 
     // == AC7
     // Nombre total de bâtiments communaux pris en compte dans le bilan
 
-    JPA.em().persist(new IntegerQuestion( ac2, 0, QuestionCode.AC7, null, null ));
+    IntegerQuestion ac7 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC7);
+if (ac7 == null) {
+    ac7 = new IntegerQuestion(ac2, 0, QuestionCode.AC7, null, null);
+    JPA.em().persist(ac7);
+} else {
+    ac7.setDefaultValue(null);
+    if (!ac7.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac7)) {
+        ac2.getQuestions().remove(ac7);
+        JPA.em().persist(ac2);
+    }
+    if (ac7.getQuestionSet().equals(ac2) && !ac2.getQuestions().contains(ac7)) {
+        ac2.getQuestions().add(ac7);
+        JPA.em().persist(ac2);
+    }
+    ac7.setOrderIndex(0);
+    ac7.setUnitCategory(null);
+    JPA.em().persist(ac7);
+}
+
 
     // == AC8
     // Superficie du territoire
@@ -1645,12 +1717,48 @@ if (ac409 == null) {
     // == AC410
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( ac407, 0, QuestionCode.AC410, null, null ));
+    IntegerQuestion ac410 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC410);
+if (ac410 == null) {
+    ac410 = new IntegerQuestion(ac407, 0, QuestionCode.AC410, null, null);
+    JPA.em().persist(ac410);
+} else {
+    ac410.setDefaultValue(null);
+    if (!ac410.getQuestionSet().equals(ac407) && ac407.getQuestions().contains(ac410)) {
+        ac407.getQuestions().remove(ac410);
+        JPA.em().persist(ac407);
+    }
+    if (ac410.getQuestionSet().equals(ac407) && !ac407.getQuestions().contains(ac410)) {
+        ac407.getQuestions().add(ac410);
+        JPA.em().persist(ac407);
+    }
+    ac410.setOrderIndex(0);
+    ac410.setUnitCategory(null);
+    JPA.em().persist(ac410);
+}
+
 
     // == AC411
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( ac407, 0, QuestionCode.AC411, null, null ));
+    IntegerQuestion ac411 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC411);
+if (ac411 == null) {
+    ac411 = new IntegerQuestion(ac407, 0, QuestionCode.AC411, null, null);
+    JPA.em().persist(ac411);
+} else {
+    ac411.setDefaultValue(null);
+    if (!ac411.getQuestionSet().equals(ac407) && ac407.getQuestions().contains(ac411)) {
+        ac407.getQuestions().remove(ac411);
+        JPA.em().persist(ac407);
+    }
+    if (ac411.getQuestionSet().equals(ac407) && !ac407.getQuestions().contains(ac411)) {
+        ac407.getQuestions().add(ac411);
+        JPA.em().persist(ac407);
+    }
+    ac411.setOrderIndex(0);
+    ac411.setUnitCategory(null);
+    JPA.em().persist(ac411);
+}
+
 
     // == AC414
     // Catégorie de véhicule
@@ -1878,12 +1986,48 @@ if (ac509 == null) {
     // == AC510
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( ac507, 0, QuestionCode.AC510, null, null ));
+    IntegerQuestion ac510 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC510);
+if (ac510 == null) {
+    ac510 = new IntegerQuestion(ac507, 0, QuestionCode.AC510, null, null);
+    JPA.em().persist(ac510);
+} else {
+    ac510.setDefaultValue(null);
+    if (!ac510.getQuestionSet().equals(ac507) && ac507.getQuestions().contains(ac510)) {
+        ac507.getQuestions().remove(ac510);
+        JPA.em().persist(ac507);
+    }
+    if (ac510.getQuestionSet().equals(ac507) && !ac507.getQuestions().contains(ac510)) {
+        ac507.getQuestions().add(ac510);
+        JPA.em().persist(ac507);
+    }
+    ac510.setOrderIndex(0);
+    ac510.setUnitCategory(null);
+    JPA.em().persist(ac510);
+}
+
 
     // == AC511
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( ac507, 0, QuestionCode.AC511, null, null ));
+    IntegerQuestion ac511 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC511);
+if (ac511 == null) {
+    ac511 = new IntegerQuestion(ac507, 0, QuestionCode.AC511, null, null);
+    JPA.em().persist(ac511);
+} else {
+    ac511.setDefaultValue(null);
+    if (!ac511.getQuestionSet().equals(ac507) && ac507.getQuestions().contains(ac511)) {
+        ac507.getQuestions().remove(ac511);
+        JPA.em().persist(ac507);
+    }
+    if (ac511.getQuestionSet().equals(ac507) && !ac507.getQuestions().contains(ac511)) {
+        ac507.getQuestions().add(ac511);
+        JPA.em().persist(ac507);
+    }
+    ac511.setOrderIndex(0);
+    ac511.setUnitCategory(null);
+    JPA.em().persist(ac511);
+}
+
 
     // == AC514
     // Catégorie de véhicule
@@ -2111,12 +2255,48 @@ if (ac609 == null) {
     // == AC610
     // Consommation moyenne (L/100km)
 
-    JPA.em().persist(new IntegerQuestion( ac607, 0, QuestionCode.AC610, null, null ));
+    IntegerQuestion ac610 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC610);
+if (ac610 == null) {
+    ac610 = new IntegerQuestion(ac607, 0, QuestionCode.AC610, null, null);
+    JPA.em().persist(ac610);
+} else {
+    ac610.setDefaultValue(null);
+    if (!ac610.getQuestionSet().equals(ac607) && ac607.getQuestions().contains(ac610)) {
+        ac607.getQuestions().remove(ac610);
+        JPA.em().persist(ac607);
+    }
+    if (ac610.getQuestionSet().equals(ac607) && !ac607.getQuestions().contains(ac610)) {
+        ac607.getQuestions().add(ac610);
+        JPA.em().persist(ac607);
+    }
+    ac610.setOrderIndex(0);
+    ac610.setUnitCategory(null);
+    JPA.em().persist(ac610);
+}
+
 
     // == AC611
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    JPA.em().persist(new IntegerQuestion( ac607, 0, QuestionCode.AC611, null, null ));
+    IntegerQuestion ac611 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC611);
+if (ac611 == null) {
+    ac611 = new IntegerQuestion(ac607, 0, QuestionCode.AC611, null, null);
+    JPA.em().persist(ac611);
+} else {
+    ac611.setDefaultValue(null);
+    if (!ac611.getQuestionSet().equals(ac607) && ac607.getQuestions().contains(ac611)) {
+        ac607.getQuestions().remove(ac611);
+        JPA.em().persist(ac607);
+    }
+    if (ac611.getQuestionSet().equals(ac607) && !ac607.getQuestions().contains(ac611)) {
+        ac607.getQuestions().add(ac611);
+        JPA.em().persist(ac607);
+    }
+    ac611.setOrderIndex(0);
+    ac611.setUnitCategory(null);
+    JPA.em().persist(ac611);
+}
+
 
     // == AC614
     // Catégorie de véhicule
@@ -2219,47 +2399,209 @@ if (ac617 == null) {
     // == AC94
     // Bus TEC (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac93, 0, QuestionCode.AC94, null, null ));
+    IntegerQuestion ac94 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC94);
+if (ac94 == null) {
+    ac94 = new IntegerQuestion(ac93, 0, QuestionCode.AC94, null, null);
+    JPA.em().persist(ac94);
+} else {
+    ac94.setDefaultValue(null);
+    if (!ac94.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac94)) {
+        ac93.getQuestions().remove(ac94);
+        JPA.em().persist(ac93);
+    }
+    if (ac94.getQuestionSet().equals(ac93) && !ac93.getQuestions().contains(ac94)) {
+        ac93.getQuestions().add(ac94);
+        JPA.em().persist(ac93);
+    }
+    ac94.setOrderIndex(0);
+    ac94.setUnitCategory(null);
+    JPA.em().persist(ac94);
+}
+
 
     // == AC95
     // Métro (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac93, 0, QuestionCode.AC95, null, null ));
+    IntegerQuestion ac95 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC95);
+if (ac95 == null) {
+    ac95 = new IntegerQuestion(ac93, 0, QuestionCode.AC95, null, null);
+    JPA.em().persist(ac95);
+} else {
+    ac95.setDefaultValue(null);
+    if (!ac95.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac95)) {
+        ac93.getQuestions().remove(ac95);
+        JPA.em().persist(ac93);
+    }
+    if (ac95.getQuestionSet().equals(ac93) && !ac93.getQuestions().contains(ac95)) {
+        ac93.getQuestions().add(ac95);
+        JPA.em().persist(ac93);
+    }
+    ac95.setOrderIndex(0);
+    ac95.setUnitCategory(null);
+    JPA.em().persist(ac95);
+}
+
 
     // == AC96
     // Train national SNCB (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac93, 0, QuestionCode.AC96, null, null ));
+    IntegerQuestion ac96 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC96);
+if (ac96 == null) {
+    ac96 = new IntegerQuestion(ac93, 0, QuestionCode.AC96, null, null);
+    JPA.em().persist(ac96);
+} else {
+    ac96.setDefaultValue(null);
+    if (!ac96.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac96)) {
+        ac93.getQuestions().remove(ac96);
+        JPA.em().persist(ac93);
+    }
+    if (ac96.getQuestionSet().equals(ac93) && !ac93.getQuestions().contains(ac96)) {
+        ac93.getQuestions().add(ac96);
+        JPA.em().persist(ac93);
+    }
+    ac96.setOrderIndex(0);
+    ac96.setUnitCategory(null);
+    JPA.em().persist(ac96);
+}
+
 
     // == AC97
     // Tram  (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac93, 0, QuestionCode.AC97, null, null ));
+    IntegerQuestion ac97 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC97);
+if (ac97 == null) {
+    ac97 = new IntegerQuestion(ac93, 0, QuestionCode.AC97, null, null);
+    JPA.em().persist(ac97);
+} else {
+    ac97.setDefaultValue(null);
+    if (!ac97.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac97)) {
+        ac93.getQuestions().remove(ac97);
+        JPA.em().persist(ac93);
+    }
+    if (ac97.getQuestionSet().equals(ac93) && !ac93.getQuestions().contains(ac97)) {
+        ac93.getQuestions().add(ac97);
+        JPA.em().persist(ac93);
+    }
+    ac97.setOrderIndex(0);
+    ac97.setUnitCategory(null);
+    JPA.em().persist(ac97);
+}
+
 
     // == AC99
     // Bus TEC (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC99, null, null ));
+    IntegerQuestion ac99 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC99);
+if (ac99 == null) {
+    ac99 = new IntegerQuestion(ac98, 0, QuestionCode.AC99, null, null);
+    JPA.em().persist(ac99);
+} else {
+    ac99.setDefaultValue(null);
+    if (!ac99.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac99)) {
+        ac98.getQuestions().remove(ac99);
+        JPA.em().persist(ac98);
+    }
+    if (ac99.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac99)) {
+        ac98.getQuestions().add(ac99);
+        JPA.em().persist(ac98);
+    }
+    ac99.setOrderIndex(0);
+    ac99.setUnitCategory(null);
+    JPA.em().persist(ac99);
+}
+
 
     // == AC100
     // Métro (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC100, null, null ));
+    IntegerQuestion ac100 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC100);
+if (ac100 == null) {
+    ac100 = new IntegerQuestion(ac98, 0, QuestionCode.AC100, null, null);
+    JPA.em().persist(ac100);
+} else {
+    ac100.setDefaultValue(null);
+    if (!ac100.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac100)) {
+        ac98.getQuestions().remove(ac100);
+        JPA.em().persist(ac98);
+    }
+    if (ac100.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac100)) {
+        ac98.getQuestions().add(ac100);
+        JPA.em().persist(ac98);
+    }
+    ac100.setOrderIndex(0);
+    ac100.setUnitCategory(null);
+    JPA.em().persist(ac100);
+}
+
 
     // == AC101
     // Train national SNCB (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC101, null, null ));
+    IntegerQuestion ac101 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC101);
+if (ac101 == null) {
+    ac101 = new IntegerQuestion(ac98, 0, QuestionCode.AC101, null, null);
+    JPA.em().persist(ac101);
+} else {
+    ac101.setDefaultValue(null);
+    if (!ac101.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac101)) {
+        ac98.getQuestions().remove(ac101);
+        JPA.em().persist(ac98);
+    }
+    if (ac101.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac101)) {
+        ac98.getQuestions().add(ac101);
+        JPA.em().persist(ac98);
+    }
+    ac101.setOrderIndex(0);
+    ac101.setUnitCategory(null);
+    JPA.em().persist(ac101);
+}
+
 
     // == AC102
     // Tram (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC102, null, null ));
+    IntegerQuestion ac102 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC102);
+if (ac102 == null) {
+    ac102 = new IntegerQuestion(ac98, 0, QuestionCode.AC102, null, null);
+    JPA.em().persist(ac102);
+} else {
+    ac102.setDefaultValue(null);
+    if (!ac102.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac102)) {
+        ac98.getQuestions().remove(ac102);
+        JPA.em().persist(ac98);
+    }
+    if (ac102.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac102)) {
+        ac98.getQuestions().add(ac102);
+        JPA.em().persist(ac98);
+    }
+    ac102.setOrderIndex(0);
+    ac102.setUnitCategory(null);
+    JPA.em().persist(ac102);
+}
+
 
     // == AC103
     // Taxi (en véhicule.km)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC103, null, null ));
+    IntegerQuestion ac103 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC103);
+if (ac103 == null) {
+    ac103 = new IntegerQuestion(ac98, 0, QuestionCode.AC103, null, null);
+    JPA.em().persist(ac103);
+} else {
+    ac103.setDefaultValue(null);
+    if (!ac103.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac103)) {
+        ac98.getQuestions().remove(ac103);
+        JPA.em().persist(ac98);
+    }
+    if (ac103.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac103)) {
+        ac98.getQuestions().add(ac103);
+        JPA.em().persist(ac98);
+    }
+    ac103.setOrderIndex(0);
+    ac103.setUnitCategory(null);
+    JPA.em().persist(ac103);
+}
+
 
     // == AC104
     // Taxi (en montant dépensé)
@@ -2291,7 +2633,25 @@ if (ac104 == null) {
     // == AC105
     // TGV (en km.passagers)
 
-    JPA.em().persist(new IntegerQuestion( ac98, 0, QuestionCode.AC105, null, null ));
+    IntegerQuestion ac105 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC105);
+if (ac105 == null) {
+    ac105 = new IntegerQuestion(ac98, 0, QuestionCode.AC105, null, null);
+    JPA.em().persist(ac105);
+} else {
+    ac105.setDefaultValue(null);
+    if (!ac105.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac105)) {
+        ac98.getQuestions().remove(ac105);
+        JPA.em().persist(ac98);
+    }
+    if (ac105.getQuestionSet().equals(ac98) && !ac98.getQuestions().contains(ac105)) {
+        ac98.getQuestions().add(ac105);
+        JPA.em().persist(ac98);
+    }
+    ac105.setOrderIndex(0);
+    ac105.setUnitCategory(null);
+    JPA.em().persist(ac105);
+}
+
 
     // == AC108
     // Catégorie de vol
@@ -2362,7 +2722,25 @@ if (ac110 == null) {
     // == AC111
     // Nombre de vols/an
 
-    JPA.em().persist(new IntegerQuestion( ac107, 0, QuestionCode.AC111, null, null ));
+    IntegerQuestion ac111 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC111);
+if (ac111 == null) {
+    ac111 = new IntegerQuestion(ac107, 0, QuestionCode.AC111, null, null);
+    JPA.em().persist(ac111);
+} else {
+    ac111.setDefaultValue(null);
+    if (!ac111.getQuestionSet().equals(ac107) && ac107.getQuestions().contains(ac111)) {
+        ac107.getQuestions().remove(ac111);
+        JPA.em().persist(ac107);
+    }
+    if (ac111.getQuestionSet().equals(ac107) && !ac107.getQuestions().contains(ac111)) {
+        ac107.getQuestions().add(ac111);
+        JPA.em().persist(ac107);
+    }
+    ac111.setOrderIndex(0);
+    ac111.setUnitCategory(null);
+    JPA.em().persist(ac111);
+}
+
 
     // == AC112
     // Distance moyenne A/R (km)
@@ -2830,7 +3208,25 @@ if (ac135 == null) {
     // == AC136
     // Nombre d'unités achetées
 
-    JPA.em().persist(new IntegerQuestion( ac132, 0, QuestionCode.AC136, null, null ));
+    IntegerQuestion ac136 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC136);
+if (ac136 == null) {
+    ac136 = new IntegerQuestion(ac132, 0, QuestionCode.AC136, null, null);
+    JPA.em().persist(ac136);
+} else {
+    ac136.setDefaultValue(null);
+    if (!ac136.getQuestionSet().equals(ac132) && ac132.getQuestions().contains(ac136)) {
+        ac132.getQuestions().remove(ac136);
+        JPA.em().persist(ac132);
+    }
+    if (ac136.getQuestionSet().equals(ac132) && !ac132.getQuestions().contains(ac136)) {
+        ac132.getQuestions().add(ac136);
+        JPA.em().persist(ac132);
+    }
+    ac136.setOrderIndex(0);
+    ac136.setUnitCategory(null);
+    JPA.em().persist(ac136);
+}
+
 
     // == AC138
     // Fournir ici les documents éventuels justifiant les données suivantes
@@ -2900,12 +3296,48 @@ if (ac141 == null) {
     // == AC142
     // Emissions directes totales du projet (tCO²e)
 
-    JPA.em().persist(new IntegerQuestion( ac139, 0, QuestionCode.AC142, null, null ));
+    IntegerQuestion ac142 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC142);
+if (ac142 == null) {
+    ac142 = new IntegerQuestion(ac139, 0, QuestionCode.AC142, null, null);
+    JPA.em().persist(ac142);
+} else {
+    ac142.setDefaultValue(null);
+    if (!ac142.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac142)) {
+        ac139.getQuestions().remove(ac142);
+        JPA.em().persist(ac139);
+    }
+    if (ac142.getQuestionSet().equals(ac139) && !ac139.getQuestions().contains(ac142)) {
+        ac139.getQuestions().add(ac142);
+        JPA.em().persist(ac139);
+    }
+    ac142.setOrderIndex(0);
+    ac142.setUnitCategory(null);
+    JPA.em().persist(ac142);
+}
+
 
     // == AC143
     // Emissions indirectes totales du projet (tCO²e)
 
-    JPA.em().persist(new IntegerQuestion( ac139, 0, QuestionCode.AC143, null, null ));
+    IntegerQuestion ac143 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC143);
+if (ac143 == null) {
+    ac143 = new IntegerQuestion(ac139, 0, QuestionCode.AC143, null, null);
+    JPA.em().persist(ac143);
+} else {
+    ac143.setDefaultValue(null);
+    if (!ac143.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac143)) {
+        ac139.getQuestions().remove(ac143);
+        JPA.em().persist(ac139);
+    }
+    if (ac143.getQuestionSet().equals(ac139) && !ac139.getQuestions().contains(ac143)) {
+        ac139.getQuestions().add(ac143);
+        JPA.em().persist(ac139);
+    }
+    ac143.setOrderIndex(0);
+    ac143.setUnitCategory(null);
+    JPA.em().persist(ac143);
+}
+
 
 
 
