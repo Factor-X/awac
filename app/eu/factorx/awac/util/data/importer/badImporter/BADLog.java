@@ -1,5 +1,7 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
+import play.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ public class BADLog {
     private HashMap<Integer, LogLine> logLines = new HashMap<>();
 
     public LogLine getLogLine(int line, LogCat  logCat,String id){
+        //Logger.info("LOG : line : "+line);
         if (!logLines.containsKey(line)) {
             logLines.put(line, new LogLine(logCat,id));
         }
@@ -40,19 +43,19 @@ public class BADLog {
         }
 
         public void addWarn(String message) {
-
+            //Logger.warn(message);
             add(LogType.WARNING, message);
         }
 
 
         public void addError(String message) {
-
+            //Logger.error(message);
             add(LogType.ERROR, message);
         }
 
 
         public void addInfo(String message) {
-
+            //Logger.info(message);
             add(LogType.INFO, message);
         }
 
