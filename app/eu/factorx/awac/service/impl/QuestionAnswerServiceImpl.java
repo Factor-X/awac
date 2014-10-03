@@ -25,18 +25,18 @@ public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl
 
 		parts.add("select e from QuestionAnswer e where 1 = 1");
 		if (searchParameter.getForm() != null) {
-			parts.add("and e.questionSet in :questionSets");
+			parts.add("and e.questionSetAnswer.questionSet in :questionSets");
 			parameters.put("questionSets", searchParameter.getForm().getAllQuestionSets());
 		}
 		if (searchParameter.getScope() != null) {
-			parts.add("and e.scope = :scope");
+			parts.add("and e.questionSetAnswer.scope = :scope");
 			parameters.put("scope", searchParameter.getScope());
 		}
 		if (searchParameter.getPeriod() != null) {
-			parts.add("and e.period = :period");
+			parts.add("and e.questionSetAnswer.period = :period");
 			parameters.put("period", searchParameter.getPeriod());
 		}
-		parts.add("order by e.repetitionIndex");
+		parts.add("order by e.questionSetAnswer.repetitionIndex");
 
 		TypedQuery<QuestionAnswer> query = JPAUtils.build(parts, parameters, QuestionAnswer.class);
 		return query.getResultList();
