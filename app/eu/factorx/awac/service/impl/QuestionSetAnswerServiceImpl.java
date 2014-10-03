@@ -157,6 +157,11 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope));
 	}
 
+    @Override
+    public List<QuestionSetAnswer> findByCodes(List<QuestionCode> codes) {
+        List<QuestionSetAnswer> resultList = JPA.em().createNamedQuery(QuestionSetAnswer.FIND_BY_CODES, QuestionSetAnswer.class).setParameter("codes", codes).getResultList();
+        return resultList;
+    }
 
 	/**
 	 * ***
