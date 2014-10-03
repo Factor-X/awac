@@ -42,6 +42,22 @@ div
                 span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
                 span(ng-bind-html="'A15_LOOPDESC' | translate")
 
+            mm-awac-repetition-name(question-code="A1000")
+            mm-awac-repetition-question(question-set-code="A1000", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A1000')")
+                mm-awac-question(question-code="A1001",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="A1002",ng-repetition-map="itLevel1")
+            button.button.add-repetition-button(ng-click="addIteration('A1000')", type="button")
+                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                span(ng-bind-html="'A1000_LOOPDESC' | translate")
+
+            mm-awac-repetition-name(question-code="A1003")
+            mm-awac-repetition-question(question-set-code="A1003", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A1003')")
+                mm-awac-question(question-code="A1004",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="A1005",ng-repetition-map="itLevel1")
+            button.button.add-repetition-button(ng-click="addIteration('A1003')", type="button")
+                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                span(ng-bind-html="'A1003_LOOPDESC' | translate")
+
         .horizontal_separator
 
         mm-awac-section(title-code="A20")

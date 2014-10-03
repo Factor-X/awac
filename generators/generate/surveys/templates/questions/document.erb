@@ -1,1 +1,16 @@
-session.saveOrUpdate(new DocumentQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>));
+DocumentQuestion <%= accronym.downcase %> = (DocumentQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+if (<%= accronym.downcase %> == null) {
+    <%= accronym.downcase %> = new DocumentQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>);
+    JPA.em().persist(<%= accronym.downcase %>);
+} else {
+    if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    if (<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && !<%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().add(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    <%= accronym.downcase %>.setOrderIndex(0);
+    JPA.em().persist(<%= accronym.downcase %>);
+}

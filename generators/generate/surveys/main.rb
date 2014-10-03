@@ -57,7 +57,7 @@ def main(options)
 
             # Write the result
             logger.sub_section 'Java class code generation'
-            SurveyClassWriter.execute file['name'], scanner.forms, scanner.question_sets, scanner.questions
+            SurveyClassWriter.execute file['name'], file['question_regex'], scanner.forms, scanner.question_sets, scanner.questions
 
             # Write the question codes
             logger.sub_section 'Question codes injection'

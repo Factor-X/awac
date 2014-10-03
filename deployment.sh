@@ -142,7 +142,7 @@ load_values
 
 
 
-if [[ "$1" != "--step4" ]]; then
+if [[ "$1" == "" ]]; then
 
     title "1. Perform a backup"
 
@@ -300,6 +300,32 @@ fi
 
 
 
+if [[ "$1" == "--restore-last" || "$1" == "--rl" ]]; then
+    title "1. Restoring last dump"
+
+    dump_file=`(ls -t ./migrations/*.sql | head -1) || echo ''`
+
+    if [[ "$dump_file" == "" ]]; then
+        error "No dump found in ./migrations/. Exiting."
+        exit
+    fi
+
+    info "Last dump is $dump_file"
+
+    export PGPASSWORD='play'
+
+    info -n "Dropping schema ... "
+    (
+        echo "DROP SCHEMA public CASCADE; CREATE SCHEMA public;" | psql -h localhost -U play -d awac -p 5432 -w -q
+    ) && success "done" || handle_error
+
+    info "Restoring dump ... "
+    (
+        psql -h localhost -U play -d awac -p 5432 -w -q < $dump_file > /dev/null
+    ) && success "done" || handle_error
+
+    exit
+fi
 
 
 
