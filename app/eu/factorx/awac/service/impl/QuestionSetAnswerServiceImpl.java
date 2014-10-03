@@ -8,17 +8,12 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.QuestionSetAnswerSearchParameter;
 import eu.factorx.awac.service.QuestionSetAnswerService;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import eu.factorx.awac.util.JPAUtils;
 import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,23 +23,49 @@ import java.util.Map;
 public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionSetAnswer> implements QuestionSetAnswerService {
 
 	@Override
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter) {
 
-/*
-		Query query = JPA.em().createQuery("" +
-				"select qsa " +
-				"from QuestionSetAnswer qsa " +
-				"where true " +
-				"and qsa.scope = :scope " +
-				"and qsa.questionSet = :questionSet " +
-				"and qsa.period = :period " +
-				"and qsa.parent is null " +
-				"order by qsa.repetitionIndex"
-		);
-*/
+		List<String> parts = new ArrayList<>();
+		Map<String, Object> parameters = new HashMap<>();
 
+		parts.add("select e from QuestionSetAnswer e where 1 = 1");
 
+		if (searchParameter.getForm() != null) {
+			Form form = searchParameter.getForm();
+			if (searchParameter.getWithChildren()) {
+				parts.add("and e.questionSet in :questionSets");
+				parameters.put("questionSets", form.getAllQuestionSets());
+			} else {
+				parts.add("and e.questionSet in :questionSets");
+				parameters.put("questionSets", form.getQuestionSets());
+			}
+		}
+
+		if (searchParameter.getScope() != null) {
+			parts.add("and e.scope = :scope");
+			parameters.put("scope", searchParameter.getScope());
+		}
+
+		if (searchParameter.getQuestionSet() != null) {
+			parts.add("and e.questionSet = :questionSet");
+			parameters.put("questionSet", searchParameter.getQuestionSet());
+		}
+
+		if (searchParameter.getPeriod() != null) {
+			parts.add("and e.period = :period");
+			parameters.put("period", searchParameter.getPeriod());
+		}
+
+		if (!searchParameter.getWithChildren()) {
+			parts.add("and e.parent = null");
+		}
+
+		parts.add("order by e.repetitionIndex");
+
+		TypedQuery<QuestionSetAnswer> query = JPAUtils.build(parts, parameters, QuestionSetAnswer.class);
+		return query.getResultList();
+
+		/*
 		Session session = JPA.em().unwrap(Session.class);
 		Criteria criteria = session.createCriteria(QuestionSetAnswer.class);
 
@@ -78,6 +99,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		@SuppressWarnings("unchecked")
 		List<QuestionSetAnswer> result = criteria.list();
 		return result;
+		*/
 	}
 
 	@Override
