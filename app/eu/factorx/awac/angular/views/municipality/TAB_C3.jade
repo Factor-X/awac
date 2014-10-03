@@ -8,142 +8,152 @@ div
 
             // transport routier AC62
             mm-awac-sub-title(question-code="AC62")
+            mm-awac-sub-sub-title(question-code="AC400")
+            div
+                .element_content
+                    .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
+                    .method
+                        tabset
+                            tab.tab-color-lightgreen(active="getTab(1,1).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
+                                    .status(class="{{getStatusClassForTab(1,1)}}")
+                                    span(ng-bind-html="'AC402' | translate")
+                                .sub_block.tab-color-lightgreen
+                                    .element_table
+                                        mm-awac-question(question-code="AC403",ng-tab-set="1",ng-tab="1")
+                                        mm-awac-question(question-code="AC404",ng-tab-set="1",ng-tab="1")
+                                        mm-awac-question(question-code="AC405",ng-tab-set="1",ng-tab="1")
+                            tab.tab-color-green(active="getTab(1,2).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
+                                    .status(class="{{getStatusClassForTab(1,2)}}")
+                                    span(ng-bind-html="'AC406' | translate")
+                                .sub_block.tab-color-green
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC407")
+                                        mm-awac-repetition-question(question-set-code="AC407", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC407')")
+                                            mm-awac-question(question-code="AC408",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
+                                            mm-awac-question(question-code="AC409",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
+                                            mm-awac-question(question-code="AC410",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
+                                            mm-awac-question(question-code="AC411",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
+                                            button.button.add-repetition-button(ng-click="addIteration('AC407')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC407_LOOPDESC' | translate")
+                            tab.tab-color-yellow(active="getTab(1,3).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,3)")
+                                    .status(class="{{getStatusClassForTab(1,3)}}")
+                                    span(ng-bind-html="'AC412' | translate")
+                                .sub_block.tab-color-yellow
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC413")
+                                        mm-awac-repetition-question(question-set-code="AC413", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC413')")
+                                            mm-awac-question(question-code="AC414",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
+                                            mm-awac-question(question-code="AC415",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
+                                            mm-awac-question(question-code="AC416",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
+                                            mm-awac-question(question-code="AC417",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
+                                            button.button.add-repetition-button(ng-click="addIteration('AC413')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC413_LOOPDESC' | translate")
 
-            mm-awac-sub-title(question-code="AC400")
-                div
-                    .element_content
-                        .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
-                        .method
-                            tabset
-                                tab.tab-color-lightgreen(active="getTab(1,1).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
-                                        span(ng-bind-html="'AC402' | translate")
-                                    .sub_block.tab-color-lightgreen
-                                        .element_table
-                                            mm-awac-question(question-code="AC403",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC404",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC405",ng-tab-set="1",ng-tab="1")
-                                tab.tab-color-green(active="getTab(1,2).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
-                                        span(ng-bind-html="'AC406' | translate")
-                                    .sub_block.tab-color-green
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC407")
-                                            mm-awac-repetition-question(question-set-code="AC407", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC407')")
-                                                mm-awac-question(question-code="AC408",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC409",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC410",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC411",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                button.button.add-repetition-button(ng-click="addIteration('AC407')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC407_LOOPDESC' | translate")
-                                    tab.tab-color-yellow(active="getTab(1,3).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,3)")
-                                        span(ng-bind-html="'AC412' | translate")
-                                    .sub_block.tab-color-yellow
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC413")
-                                            mm-awac-repetition-question(question-set-code="AC413", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC413')")
-                                                mm-awac-question(question-code="AC414",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC415",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC416",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC417",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                button.button.add-repetition-button(ng-click="addIteration('AC413')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC413_LOOPDESC' | translate")
-                mm-awac-sub-title(question-code="AC500")
-                div
-                    .element_content
-                        .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
-                        .method
-                            tabset
-                                tab.tab-color-lightgreen(active="getTab(1,1).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
-                                        span(ng-bind-html="'AC502' | translate")
-                                    .sub_block.tab-color-lightgreen
-                                        .element_table
-                                            mm-awac-question(question-code="AC503",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC504",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC505",ng-tab-set="1",ng-tab="1")
-                                tab.tab-color-green(active="getTab(1,2).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
-                                        span(ng-bind-html="'AC506' | translate")
-                                    .sub_block.tab-color-green
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC507")
-                                            mm-awac-repetition-question(question-set-code="AC507", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC507')")
-                                                mm-awac-question(question-code="AC508",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC509",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC510",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC511",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                            button.button.add-repetition-button(ng-click="addIteration('AC507')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC507_LOOPDESC' | translate")
-                                tab.tab-color-yellow(active="getTab(1,3).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,3)")
-                                        span(ng-bind-html="'AC512' | translate")
-                                    .sub_block.tab-color-yellow
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC513")
-                                            mm-awac-repetition-question(question-set-code="AC513", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC513')")
-                                                mm-awac-question(question-code="AC514",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC515",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC516",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC517",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                            button.button.add-repetition-button(ng-click="addIteration('AC513')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC513_LOOPDESC' | translate")
-                mm-awac-sub-title(question-code="AC600")
-                div
-                    .element_content
-                        .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
-                        .method
-                            tabset
-                                tab.tab-color-lightgreen(active="getTab(1,1).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
-                                        span(ng-bind-html="'AC602' | translate")
-                                    .sub_block.tab-color-lightgreen
-                                        .element_table
-                                            mm-awac-question(question-code="AC603",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC604",ng-tab-set="1",ng-tab="1")
-                                            mm-awac-question(question-code="AC605",ng-tab-set="1",ng-tab="1")
-                                tab.tab-color-green(active="getTab(1,2).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
-                                        span(ng-bind-html="'AC606' | translate")
-                                    .sub_block.tab-color-green
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC607")
-                                            mm-awac-repetition-question(question-set-code="AC607", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC607')")
-                                                mm-awac-question(question-code="AC608",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC609",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC610",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                                mm-awac-question(question-code="AC611",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="2")
-                                            button.button.add-repetition-button(ng-click="addIteration('AC607')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC607_LOOPDESC' | translate")
-                                tab.tab-color-yellow(active="getTab(1,3).active")
-                                    tab-heading
-                                        i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,3)")
-                                        span(ng-bind-html="'AC612' | translate")
-                                    .sub_block.tab-color-yellow
-                                        .element_table
-                                            mm-awac-repetition-name(question-code="AC613")
-                                            mm-awac-repetition-question(question-set-code="AC613", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC613')")
-                                                mm-awac-question(question-code="AC614",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC615",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC616",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                                mm-awac-question(question-code="AC617",ng-repetition-map="itLevel1",ng-tab-set="1",ng-tab="3")
-                                            button.button.add-repetition-button(ng-click="addIteration('AC613')", type="button")
-                                                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                                                span(ng-bind-html="'AC613_LOOPDESC' | translate")
+            mm-awac-sub-sub-title(question-code="AC500")
+            div
+                .element_content
+                    .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
+                    .method
+                        tabset
+                            tab.tab-color-lightgreen(active="getTab(2,1).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(2,1)")
+                                    .status(class="{{getStatusClassForTab(2,1)}}")
+                                    span(ng-bind-html="'AC502' | translate")
+                                .sub_block.tab-color-lightgreen
+                                    .element_table
+                                        mm-awac-question(question-code="AC503",ng-tab-set="2",ng-tab="1")
+                                        mm-awac-question(question-code="AC504",ng-tab-set="2",ng-tab="1")
+                                        mm-awac-question(question-code="AC505",ng-tab-set="2",ng-tab="1")
+                            tab.tab-color-green(active="getTab(2,2).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(2,2)")
+                                    .status(class="{{getStatusClassForTab(2,2)}}")
+                                    span(ng-bind-html="'AC506' | translate")
+                                .sub_block.tab-color-green
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC507")
+                                        mm-awac-repetition-question(question-set-code="AC507", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC507')")
+                                            mm-awac-question(question-code="AC508",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="2")
+                                            mm-awac-question(question-code="AC509",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="2")
+                                            mm-awac-question(question-code="AC510",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="2")
+                                            mm-awac-question(question-code="AC511",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="2")
+                                        button.button.add-repetition-button(ng-click="addIteration('AC507')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC507_LOOPDESC' | translate")
+                            tab.tab-color-yellow(active="getTab(2,3).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(2,3)")
+                                    .status(class="{{getStatusClassForTab(2,3)}}")
+                                    span(ng-bind-html="'AC512' | translate")
+                                .sub_block.tab-color-yellow
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC513")
+                                        mm-awac-repetition-question(question-set-code="AC513", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC513')")
+                                            mm-awac-question(question-code="AC514",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="3")
+                                            mm-awac-question(question-code="AC515",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="3")
+                                            mm-awac-question(question-code="AC516",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="3")
+                                            mm-awac-question(question-code="AC517",ng-repetition-map="itLevel1",ng-tab-set="2",ng-tab="3")
+                                        button.button.add-repetition-button(ng-click="addIteration('AC513')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC513_LOOPDESC' | translate")
+
+            mm-awac-sub-sub-title(question-code="AC600")
+            div
+                .element_content
+                    .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
+                    .method
+                        tabset
+                            tab.tab-color-lightgreen(active="getTab(3,1).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(3,1)")
+                                    .status(class="{{getStatusClassForTab(3,1)}}")
+                                    span(ng-bind-html="'AC602' | translate")
+                                .sub_block.tab-color-lightgreen
+                                    .element_table
+                                        mm-awac-question(question-code="AC603",ng-tab-set="3",ng-tab="1")
+                                        mm-awac-question(question-code="AC604",ng-tab-set="3",ng-tab="1")
+                                        mm-awac-question(question-code="AC605",ng-tab-set="3",ng-tab="1")
+                            tab.tab-color-green(active="getTab(3,2).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(3,2)")
+                                    .status(class="{{getStatusClassForTab(3,2)}}")
+                                    span(ng-bind-html="'AC606' | translate")
+                                .sub_block.tab-color-green
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC607")
+                                        mm-awac-repetition-question(question-set-code="AC607", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC607')")
+                                            mm-awac-question(question-code="AC608",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="2")
+                                            mm-awac-question(question-code="AC609",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="2")
+                                            mm-awac-question(question-code="AC610",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="2")
+                                            mm-awac-question(question-code="AC611",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="2")
+                                        button.button.add-repetition-button(ng-click="addIteration('AC607')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC607_LOOPDESC' | translate")
+                            tab.tab-color-yellow(active="getTab(3,3).active")
+                                tab-heading
+                                    i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(3,3)")
+                                    .status(class="{{getStatusClassForTab(3,3)}}")
+                                    span(ng-bind-html="'AC612' | translate")
+                                .sub_block.tab-color-yellow
+                                    .element_table
+                                        mm-awac-repetition-name(question-code="AC613")
+                                        mm-awac-repetition-question(question-set-code="AC613", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC613')")
+                                            mm-awac-question(question-code="AC614",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="3")
+                                            mm-awac-question(question-code="AC615",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="3")
+                                            mm-awac-question(question-code="AC616",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="3")
+                                            mm-awac-question(question-code="AC617",ng-repetition-map="itLevel1",ng-tab-set="3",ng-tab="3")
+                                        button.button.add-repetition-button(ng-click="addIteration('AC613')", type="button")
+                                            span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+                                            span(ng-bind-html="'AC613_LOOPDESC' | translate")
 
 
             //transport public AC92
