@@ -14,7 +14,7 @@ public class BADLog {
     private HashMap<Integer, LogLine> logLines = new HashMap<>();
 
     public LogLine getLogLine(int line, LogCat  logCat,String id){
-        Logger.info("LOG : line : "+line);
+        //Logger.info("LOG : line : "+line);
         if (!logLines.containsKey(line)) {
             logLines.put(line, new LogLine(logCat,id));
         }
@@ -43,19 +43,19 @@ public class BADLog {
         }
 
         public void addWarn(String message) {
-            Logger.warn(message);
+            //Logger.warn(message);
             add(LogType.WARNING, message);
         }
 
 
         public void addError(String message) {
-            Logger.error(message);
+            //Logger.error(message);
             add(LogType.ERROR, message);
         }
 
 
         public void addInfo(String message) {
-            Logger.info(message);
+            //Logger.info(message);
             add(LogType.INFO, message);
         }
 
