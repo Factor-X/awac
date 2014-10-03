@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,127 +27,142 @@ import java.util.Map;
 @Component
 public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionSetAnswer> implements QuestionSetAnswerService {
 
-    @Override
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    public List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter) {
-        Session session = JPA.em().unwrap(Session.class);
-        Criteria criteria = session.createCriteria(QuestionSetAnswer.class);
+	@Override
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public List<QuestionSetAnswer> findByParameters(QuestionSetAnswerSearchParameter searchParameter) {
 
-        if (searchParameter.getForm() != null) {
-            Form form = searchParameter.getForm();
-            if (searchParameter.getWithChildren()) {
-                criteria.add(Restrictions.in("questionSet", form.getAllQuestionSets()));
-            } else {
-                criteria.add(Restrictions.in("questionSet", form.getQuestionSets()));
-            }
-        }
-
-        if (searchParameter.getScope() != null) {
-            criteria.add(Restrictions.eq("scope", searchParameter.getScope()));
-        }
-
-        if (searchParameter.getQuestionSet() != null) {
-            criteria.add(Restrictions.eq("questionSet", searchParameter.getQuestionSet()));
-        }
-
-        if (searchParameter.getPeriod() != null) {
-            criteria.add(Restrictions.eq("period", searchParameter.getPeriod()));
-        }
-
-        if (!searchParameter.getWithChildren()) {
-            criteria.add(Restrictions.isNull("parent"));
-        }
-        criteria.addOrder(Order.asc("repetitionIndex"));
-
-        criteria.setCacheable(true);
-        @SuppressWarnings("unchecked")
-        List<QuestionSetAnswer> result = criteria.list();
-        return result;
-    }
-
-    @Override
-    public List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period) {
-        return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope).appendPeriod(period));
-    }
-
-    @Override
-    public List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form) {
-        return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
-    }
+/*
+		Query query = JPA.em().createQuery("" +
+				"select qsa " +
+				"from QuestionSetAnswer qsa " +
+				"where true " +
+				"and qsa.scope = :scope " +
+				"and qsa.questionSet = :questionSet " +
+				"and qsa.period = :period " +
+				"and qsa.parent is null " +
+				"order by qsa.repetitionIndex"
+		);
+*/
 
 
-    @Override
-    public List<QuestionSetAnswer> findByScopeAndPeriodAndQuestionSet(Scope scope, Period period, QuestionSet questionSet) {
-        return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendQuestionSet(questionSet));
-    }
+		Session session = JPA.em().unwrap(Session.class);
+		Criteria criteria = session.createCriteria(QuestionSetAnswer.class);
 
-    @Override
-    public List<QuestionSetAnswer> findByScopeAndForm(Scope scope, Form form) {
-        return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendForm(form));
-    }
+		if (searchParameter.getForm() != null) {
+			Form form = searchParameter.getForm();
+			if (searchParameter.getWithChildren()) {
+				criteria.add(Restrictions.in("questionSet", form.getAllQuestionSets()));
+			} else {
+				criteria.add(Restrictions.in("questionSet", form.getQuestionSets()));
+			}
+		}
 
-    @Override
-    public List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId) {
-        List<Period> resultList = JPA.em().createNamedQuery(QuestionSetAnswer.FIND_DISTINCT_PERIODS, Period.class).setParameter("scopeId", scopeId).getResultList();
-        return resultList;
-    }
+		if (searchParameter.getScope() != null) {
+			criteria.add(Restrictions.eq("scope", searchParameter.getScope()));
+		}
 
-    @Override
-    public void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form) {
-        List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
-        deleteEmptyQuestionSetAnswers(questionSetAnswers);
-    }
+		if (searchParameter.getQuestionSet() != null) {
+			criteria.add(Restrictions.eq("questionSet", searchParameter.getQuestionSet()));
+		}
+
+		if (searchParameter.getPeriod() != null) {
+			criteria.add(Restrictions.eq("period", searchParameter.getPeriod()));
+		}
+
+		if (!searchParameter.getWithChildren()) {
+			criteria.add(Restrictions.isNull("parent"));
+		}
+		criteria.addOrder(Order.asc("repetitionIndex"));
+
+		criteria.setCacheable(true);
+		@SuppressWarnings("unchecked")
+		List<QuestionSetAnswer> result = criteria.list();
+		return result;
+	}
+
+	@Override
+	public List<QuestionSetAnswer> findByScopeAndPeriod(Scope scope, Period period) {
+		return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope).appendPeriod(period));
+	}
+
+	@Override
+	public List<QuestionSetAnswer> findByScopeAndPeriodAndForm(Scope scope, Period period, Form form) {
+		return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
+	}
 
 
-    @Override
-    public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
-        List<QuestionSetAnswer> questionSetAnswers = this.findByScopeAndPeriod(scope, period);
+	@Override
+	public List<QuestionSetAnswer> findByScopeAndPeriodAndQuestionSet(Scope scope, Period period, QuestionSet questionSet) {
+		return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendQuestionSet(questionSet));
+	}
 
-        Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();
-        for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
-            QuestionCode code = questionSetAnswer.getQuestionSet().getCode();
-            if (!res.containsKey(code)) {
-                res.put(code, new ArrayList<QuestionSetAnswer>());
-            }
-            res.get(code).add(questionSetAnswer);
-        }
+	@Override
+	public List<QuestionSetAnswer> findByScopeAndForm(Scope scope, Form form) {
+		return findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendForm(form));
+	}
 
-        return res;
-    }
+	@Override
+	public List<Period> getAllQuestionSetAnswersPeriodsByScope(Long scopeId) {
+		List<Period> resultList = JPA.em().createNamedQuery(QuestionSetAnswer.FIND_DISTINCT_PERIODS, Period.class).setParameter("scopeId", scopeId).getResultList();
+		return resultList;
+	}
 
-    @Override
-    public List<QuestionSetAnswer> findByScope(Scope scope) {
-        return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope));
-    }
+	@Override
+	public void deleteEmptyQuestionSetAnswers(Scope scope, Period period, Form form) {
+		List<QuestionSetAnswer> questionSetAnswers = findByParameters(new QuestionSetAnswerSearchParameter(false).appendScope(scope).appendPeriod(period).appendForm(form));
+		deleteEmptyQuestionSetAnswers(questionSetAnswers);
+	}
 
 
-    /**
-     * ***
-     * PRIVATE
-     * ******
-     */
-    private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
-        for (int i = questionSetAnswers.size() - 1; i >= 0; i--) { // thx to Florian for the tip!!
-            QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
+	@Override
+	public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
+		List<QuestionSetAnswer> questionSetAnswers = this.findByScopeAndPeriod(scope, period);
 
-            // first delete empty children (if any)
-            if (!questionSetAnswer.getChildren().isEmpty()) {
-                deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
-            }
+		Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();
+		for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+			QuestionCode code = questionSetAnswer.getQuestionSet().getCode();
+			if (!res.containsKey(code)) {
+				res.put(code, new ArrayList<QuestionSetAnswer>());
+			}
+			res.get(code).add(questionSetAnswer);
+		}
 
-            if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
-                Logger.info("--> DELETING (empty) {}", questionSetAnswer);
-                QuestionSetAnswer parent = questionSetAnswer.getParent();
-                if (parent == null) {
-                    remove(questionSetAnswer);
-                } else {
-                    // in case of there is a parent, we have to update it (by removing the link with child; children are automatically deleted due to 'orphanRemoval' attribute value)
-                    parent.getChildren().remove(questionSetAnswer);
-                    update(parent);
-                }
-            }
-        }
-    }
+		return res;
+	}
+
+	@Override
+	public List<QuestionSetAnswer> findByScope(Scope scope) {
+		return findByParameters(new QuestionSetAnswerSearchParameter(true).appendScope(scope));
+	}
+
+
+	/**
+	 * ***
+	 * PRIVATE
+	 * ******
+	 */
+	private void deleteEmptyQuestionSetAnswers(List<QuestionSetAnswer> questionSetAnswers) {
+		for (int i = questionSetAnswers.size() - 1; i >= 0; i--) { // thx to Florian for the tip!!
+			QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(i);
+
+			// first delete empty children (if any)
+			if (!questionSetAnswer.getChildren().isEmpty()) {
+				deleteEmptyQuestionSetAnswers(questionSetAnswer.getChildren());
+			}
+
+			if (questionSetAnswer.getChildren().isEmpty() && questionSetAnswer.getQuestionAnswers().isEmpty()) {
+				Logger.info("--> DELETING (empty) {}", questionSetAnswer);
+				QuestionSetAnswer parent = questionSetAnswer.getParent();
+				if (parent == null) {
+					remove(questionSetAnswer);
+				} else {
+					// in case of there is a parent, we have to update it (by removing the link with child; children are automatically deleted due to 'orphanRemoval' attribute value)
+					parent.getChildren().remove(questionSetAnswer);
+					update(parent);
+				}
+			}
+		}
+	}
 
 
 }

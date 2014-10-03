@@ -1602,9 +1602,6 @@ public class AwacEnterpriseInitialData {
     // Proportion du déchet issu du produit, traité par la méthode précédemment renseignée
     session.saveOrUpdate(new PercentageQuestion( a303, 0, QuestionCode.A308, null ));
 
-		IntegerQuestion q=null;
-	    q.setDefaultValue(Double.valueOf(12));
-
 
         Logger.info("===> CREATE AWAC Enterprise INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
     }

@@ -1,24 +1,34 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.OrganizationEvent;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.OrganizationEventService;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+
+import javax.persistence.Query;
+import java.util.List;
 
 @Component
 public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceImpl<OrganizationEvent> implements OrganizationEventService {
 
 	@Override
 	public List<OrganizationEvent> findByOrganizationAndPeriod(Organization organization, Period period) {
+
+
+		Query query = JPA.em().createQuery("" +
+			"select oe " +
+			"from OrganizationEvent oe " +
+			"where oe.organization = :org " +
+			"and oe.period = :period " +
+			"order by oe.id");
+		query.setParameter("org", organization);
+		query.setParameter("period", period);
+
+		return (List<OrganizationEvent>) query.getResultList();
+
+		/*
 		Session session = JPA.em().unwrap(Session.class);
 
 		Criteria criteria = session.createCriteria(OrganizationEvent.class);
@@ -30,10 +40,23 @@ public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceI
 		@SuppressWarnings("unchecked")
 		List<OrganizationEvent> result = criteria.list();
 		return result;
+		*/
 	}
 
 	@Override
 	public List<OrganizationEvent> findByOrganization(Organization organization) {
+
+
+		Query query = JPA.em().createQuery("" +
+			"select oe " +
+			"from OrganizationEvent oe " +
+			"where oe.organization = :org " +
+			"order by oe.id");
+		query.setParameter("org", organization);
+
+		return (List<OrganizationEvent>) query.getResultList();
+
+/*
 		Session session = JPA.em().unwrap(Session.class);
 
 		Criteria criteria = session.createCriteria(OrganizationEvent.class);
@@ -43,7 +66,9 @@ public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceI
 
 		@SuppressWarnings("unchecked")
 		List<OrganizationEvent> result = criteria.list();
+
 		return result;
+		*/
 	}
 
 
