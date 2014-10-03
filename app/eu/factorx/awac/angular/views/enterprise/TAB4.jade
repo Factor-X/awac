@@ -64,6 +64,7 @@ div
                     tab.tab-color-lightgreen(active="getTab(1,1).active")
                         tab-heading
                             i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,1)")
+                            .status(class="{{getStatusClassForTab(1,1)}}")
                             span(ng-bind-html="'A141' | translate")
                         .sub_block.tab-color-lightgreen
                             .element_table
@@ -94,6 +95,7 @@ div
                     tab.tab-color-green(active="getTab(1,2).active")
                         tab-heading
                             i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(1,2)")
+                            .status(class="{{getStatusClassForTab(1,2)}}")
                             span(ng-bind-html="'A157' | translate")
                         .sub_block.tab-color-green
                             .element_table

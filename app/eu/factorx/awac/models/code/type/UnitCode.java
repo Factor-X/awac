@@ -17,60 +17,75 @@ public class UnitCode extends Code {
 	 * ceci est u litre
 	 */
 	public static final UnitCode U5101 = new UnitCode("U5101");
+    /*
 	public static final UnitCode U5102 = new UnitCode("U5102");
 	public static final UnitCode U5103 = new UnitCode("U5103");
 	public static final UnitCode U5104 = new UnitCode("U5104");
 	public static final UnitCode U5105 = new UnitCode("U5105");
+	*/
 	public static final UnitCode U5106 = new UnitCode("U5106");
+    /*
 	public static final UnitCode U5108 = new UnitCode("U5108");
 	public static final UnitCode U5109 = new UnitCode("U5109");
 	public static final UnitCode U5111 = new UnitCode("U5111");
 	public static final UnitCode U5112 = new UnitCode("U5112");
 	public static final UnitCode U5113 = new UnitCode("U5113");
 	public static final UnitCode U5114 = new UnitCode("U5114");
+	*/
 	public static final UnitCode U5115 = new UnitCode("U5115");
 	public static final UnitCode U5116 = new UnitCode("U5116");
 	public static final UnitCode U5117 = new UnitCode("U5117");
 	public static final UnitCode U5118 = new UnitCode("U5118");
+    /*
 	public static final UnitCode U5119 = new UnitCode("U5119");
 	public static final UnitCode U5120 = new UnitCode("U5120");
 	public static final UnitCode U5121 = new UnitCode("U5121");
+	*/
 	public static final UnitCode U5122 = new UnitCode("U5122");
+    /*
 	public static final UnitCode U5123 = new UnitCode("U5123");
 	public static final UnitCode U5124 = new UnitCode("U5124");
 	public static final UnitCode U5125 = new UnitCode("U5125");
+	*/
 	public static final UnitCode U5126 = new UnitCode("U5126");
+    /*
 	public static final UnitCode U5127 = new UnitCode("U5127");
 	public static final UnitCode U5128 = new UnitCode("U5128");
 	public static final UnitCode U5129 = new UnitCode("U5129");
 	public static final UnitCode U5130 = new UnitCode("U5130");
 	public static final UnitCode U5131 = new UnitCode("U5131");
 	public static final UnitCode U5132 = new UnitCode("U5132");
+	*/
 	public static final UnitCode U5133 = new UnitCode("U5133");
-	public static final UnitCode U5134 = new UnitCode("U5134");
+	//public static final UnitCode U5134 = new UnitCode("U5134");
 	public static final UnitCode U5135 = new UnitCode("U5135");
+    /*
 	public static final UnitCode U5136 = new UnitCode("U5136");
 	public static final UnitCode U5137 = new UnitCode("U5137");
 	public static final UnitCode U5138 = new UnitCode("U5138");
+	*/
 	public static final UnitCode U5140 = new UnitCode("U5140");
 	public static final UnitCode U5141 = new UnitCode("U5141");
 	public static final UnitCode U5142 = new UnitCode("U5142");
+    /*
 	public static final UnitCode U5143 = new UnitCode("U5143");
 	public static final UnitCode U5144 = new UnitCode("U5144");
+	*/
 	public static final UnitCode U5145 = new UnitCode("U5145");
 	public static final UnitCode U5146 = new UnitCode("U5146");
 	public static final UnitCode U5147 = new UnitCode("U5147");
 	public static final UnitCode U5148 = new UnitCode("U5148");
-	public static final UnitCode U5149 = new UnitCode("U5149");
+
+	//public static final UnitCode U5149 = new UnitCode("U5149");
 	public static final UnitCode U5150 = new UnitCode("U5150");
 	public static final UnitCode U5151 = new UnitCode("U5151");
-	public static final UnitCode U5152 = new UnitCode("U5152");
+	//public static final UnitCode U5152 = new UnitCode("U5152");
 	public static final UnitCode U5153 = new UnitCode("U5153");
-	public static final UnitCode U5154 = new UnitCode("U5154");
+	//public static final UnitCode U5154 = new UnitCode("U5154");
 	public static final UnitCode U5155 = new UnitCode("U5155");
 	public static final UnitCode U5156 = new UnitCode("U5156");
-	public static final UnitCode U5157 = new UnitCode("U5157");
-	public static final UnitCode U5158 = new UnitCode("U5158");
+	//public static final UnitCode U5157 = new UnitCode("U5157");
+	//public static final UnitCode U5158 = new UnitCode("U5158");
 	public static final UnitCode U5159 = new UnitCode("U5159");
 	public static final UnitCode U5160 = new UnitCode("U5160");
 	public static final UnitCode U5161 = new UnitCode("U5161");
@@ -78,6 +93,7 @@ public class UnitCode extends Code {
 	public static final UnitCode U5163 = new UnitCode("U5163");
 	public static final UnitCode U5169 = new UnitCode("U5169");
 	public static final UnitCode U5170 = new UnitCode("U5170");
+    /*
 	public static final UnitCode U5171 = new UnitCode("U5171");
 	public static final UnitCode U5172 = new UnitCode("U5172");
 	public static final UnitCode U5173 = new UnitCode("U5173");
@@ -133,8 +149,10 @@ public class UnitCode extends Code {
 	public static final UnitCode U5223 = new UnitCode("U5223");
 	public static final UnitCode U5224 = new UnitCode("U5224");
 	public static final UnitCode U5225 = new UnitCode("U5225");
+	*/
 	public static final UnitCode U5226 = new UnitCode("U5226");
-	public static final UnitCode U5227 = new UnitCode("U5227");
+	/*
+    public static final UnitCode U5227 = new UnitCode("U5227");
 	public static final UnitCode U5228 = new UnitCode("U5228");
 	public static final UnitCode U5229 = new UnitCode("U5229");
 	public static final UnitCode U5230 = new UnitCode("U5230");
@@ -228,11 +246,12 @@ public class UnitCode extends Code {
 	public static final UnitCode U5318 = new UnitCode("U5318");
 	public static final UnitCode U5319 = new UnitCode("U5319");
 	public static final UnitCode U5320 = new UnitCode("U5320");
+	*/
 	public static final UnitCode U5168 = new UnitCode("U5168");
 	public static final UnitCode U5321 = new UnitCode("U5321");
 	public static final UnitCode U5324 = new UnitCode("U5324");
 	public static final UnitCode U5325 = new UnitCode("U5325");
-	public static final UnitCode U5326 = new UnitCode("U5326");
+
 	public static final UnitCode U5327 = new UnitCode("U5327");
 	public static final UnitCode U5328 = new UnitCode("U5328");
 	public static final UnitCode U5329 = new UnitCode("U5329");

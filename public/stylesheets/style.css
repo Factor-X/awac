@@ -261,7 +261,7 @@ select {
 .data_date_compare select {
     margin-left: 10px;
     padding: 2px;
-    min-width: 154px;
+    min-width: 104px;
     background-color: #9d9b91;
     color: white;
     font-style: italic;
@@ -269,10 +269,10 @@ select {
 
 .big_separator {
     background-color: #61605b;
-    width: 10px;
-    height: 40px;
+    width: 5px;
+    height: 100%;
     padding: 0;
-    margin: 0 20px;
+    margin: 0 10px;
 }
 
 .data_save {
@@ -1121,6 +1121,14 @@ h1 {
 .user_icon:hover > div,
 .user_icon > div:hover {
     display: block;
+}
+
+.user_icon_red{
+    background-color: #b02828;
+}
+
+.user_icon_green{
+    background-color: #098d38;
 }
 
 .document-question {

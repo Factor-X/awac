@@ -23,8 +23,9 @@
                     span(ng-bind-html="'LOGIN_CONNECTION' | translate")
                 div
                     div(class="field_form")
-                        mm-awac-modal-field-text(ng-info="loginInfo")
-                        mm-awac-modal-field-text(ng-info="passwordInfo")
+                        form(id="loginForm",action='',method='post')
+                            mm-awac-modal-field-text(ng-info="loginInfo")
+                            mm-awac-modal-field-text(ng-info="passwordInfo")
 
 
                     div(ng-hide="isLoading === true")

@@ -12,9 +12,9 @@ angular
     # an aggregation : if the attribu is not empty, the question cannot be edited
         ngAggregation: '='
     #
-        ngTabSet:'='
+        ngTabSet: '='
     #
-        ngTab:'='
+        ngTab: '='
     # optional : true or false (default : false)
         ngOptional: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
@@ -82,8 +82,8 @@ angular
 
                         # add params
                         params = " "
-                        params+= " ng-data-to-compare=\"" + toCompare + "\""
-                        params+= " ng-is-aggregation=\"" + isAggregation + "\""
+                        params += " ng-data-to-compare=\"" + toCompare + "\""
+                        params += " ng-is-aggregation=\"" + isAggregation + "\""
 
                         directive = $compile("<mm-awac-" + directiveName + params + " ></mm-awac-" + directiveName + ">")(scope)
 
@@ -113,10 +113,10 @@ angular
                 if forDataToCompare
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
                 else
-                    if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional()).value = scope.getAggregation()
-                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional()).isAggregation = true
-                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(), scope.getTabSet(), scope.getTab(), scope.getOptional())
+                    if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getTabSet(), scope.getTab(), scope.getOptional()).value = scope.getAggregation()
+                        scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getTabSet(), scope.getTab(), scope.getOptional()).isAggregation = true
+                    return scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getTabSet(), scope.getTab(), scope.getOptional())
 
             #
             # return the list of unit for the question
@@ -235,7 +235,6 @@ angular
             # initialOnly => return initials of the name, or complete name
             #
             scope.getUserName = (forDataToCompare, initialOnly)->
-
                 user = null
 
                 if forDataToCompare == true
@@ -301,7 +300,7 @@ angular
             #
             scope.errorMessage = ""
 
-            scope.getIcon =->
+            scope.getIcon = ->
                 if scope.ngAggregation?
                     return 'glyphicon-cog'
                 if scope.getQuestion()? && scope.getQuestion().answerType == 'DOCUMENT'
@@ -328,15 +327,26 @@ angular
                 scope.getAnswer().comment = comment
                 scope.getAnswer().wasEdited = true
 
-            scope.editComment = (canBeEdited=true) ->
+            scope.editComment = (canBeEdited = true) ->
                 args = {}
                 args.comment = scope.getAnswer().comment
                 args.save = scope.saveComment
-                args.canBeEdited=canBeEdited
+                args.canBeEdited = canBeEdited
                 modalService.show(modalService.QUESTION_COMMENT, args)
 
             scope.isDisabled = () ->
                 if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode())
                     return true
                 return false
+
+
+            #
+            #
+            #
+            scope.getUserClass = ->
+                if scope.getAnswer() != null && scope.$parent.getValidatorByQuestionCode(scope.getQuestionCode())?
+                    if  scope.$parent.getValidatorByQuestionCode(scope.getQuestionCode()).identifier == scope.getAnswer().lastUpdateUser.identifier
+                        return 'user_icon_red'
+                    return 'user_icon_green'
+                return ''
 

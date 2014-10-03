@@ -11,7 +11,7 @@ angular
         directiveService.autoScopeImpl scope
 
 
-        scope.radioName=  "name_"+(Math.floor(Math.random() * 10000))
+        scope.radioName=  "name_"+(Math.floor(Math.random() * 1000000))
 
         scope.getDisabled = ->
             return scope.$parent.isDisabled()

@@ -19,6 +19,7 @@ angular
             return false
 
         $scope.newPasswordInfo =
+            inputName:'password'
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER"
@@ -30,6 +31,7 @@ angular
                 return true
 
         $scope.newPasswordConfirmInfo =
+            inputName:'password'
             fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_TITLE"
             fieldType: "password"
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_PLACEHOLDER"

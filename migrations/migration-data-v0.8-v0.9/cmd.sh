@@ -28,6 +28,7 @@ cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration
 cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
 
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 

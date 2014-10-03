@@ -14,6 +14,7 @@ angular
         $scope.passwordInfo =
             field: ""
             fieldType: "password"
+            inputName:'password'
             fieldTitle: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_TITLE"
             placeholder: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_PLACEHOLDER"
             validationRegex: "^\\S{5,20}$"
@@ -23,11 +24,13 @@ angular
                 return true
 
         $scope.oldEmailInfo =
+            inputName:'email'
             field: $scope.getParams().oldEmail
             fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE"
             disabled: true
 
         $scope.newEmailInfo =
+            inputName:'email'
             field: ""
             fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
             placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
