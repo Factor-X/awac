@@ -82,7 +82,7 @@ public class BAD_AE_BAD37ETest{
 
         //add answers
                 answerLineDTOList.addAll(buildAnswerA312());
-                answerLineDTOList.addAll(buildAnswerA1014());
+                answerLineDTOList.addAll(buildAnswerA1016());
                 answerLineDTOList.addAll(buildAnswerA1017());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
@@ -168,17 +168,17 @@ public class BAD_AE_BAD37ETest{
     }
         /**
      * build the AnswerLineDTO
-     * question : A1014
+     * question : A1016
      */
-    private List<AnswerLineDTO> buildAnswerA1014(){
+    private List<AnswerLineDTO> buildAnswerA1016(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A311",1);
-                mapRepetition1.put("A1012",1);
-                list.add(new AnswerLineDTO("A1014",1000.0,  mapRepetition1  , UnitCode.U5122.getKey()  ));
+                mapRepetition1.put("A1015",1);
+                list.add(new AnswerLineDTO("A1016","AS_5",  mapRepetition1 ));
         
         return list;
     }

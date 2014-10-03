@@ -174,7 +174,12 @@ public class BAD_AE_BAD19ETest{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("A1009",1);
+                mapRepetition1.put("A164",1);
+                list.add(new AnswerLineDTO("A1010","AS_15",  mapRepetition1 ));
+        
         return list;
     }
         /**

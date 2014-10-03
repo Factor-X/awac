@@ -178,7 +178,7 @@ public class BAD_AE_BAD34DTest{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("A244",1);
                 mapRepetition1.put("A1030",1);
-                list.add(new AnswerLineDTO("A1031","AS_35",  mapRepetition1 ));
+                list.add(new AnswerLineDTO("A1031","AS_36",  mapRepetition1 ));
         
         return list;
     }

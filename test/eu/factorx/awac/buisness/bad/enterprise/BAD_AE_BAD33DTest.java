@@ -154,7 +154,13 @@ public class BAD_AE_BAD33DTest{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("A244",1);
+                mapRepetition1.put("A273",1);
+                mapRepetition1.put("A1024",1);
+                list.add(new AnswerLineDTO("A1025","AS_36",  mapRepetition1 ));
+        
         return list;
     }
         /**
