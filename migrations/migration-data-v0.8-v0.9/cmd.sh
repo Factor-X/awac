@@ -24,9 +24,6 @@ cat ./CELDL-190-transfert-interface-to-organization.sql >> /tmp/migration/migrat
 # drop sites
 cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration/migration_script.sql
 
-# inject new questionSets into forms
-cat ./CELDL-204-changements-metiers.sql >> /tmp/migration/migration_script.sql
-
 # link between form and calculator
 cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
