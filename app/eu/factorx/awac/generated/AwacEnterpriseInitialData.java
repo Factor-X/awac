@@ -1412,16 +1412,16 @@ if (a17 == null) {
 
     ValueSelectionQuestion a1001 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1001);
 if (a1001 == null) {
-    a1001 = new ValueSelectionQuestion(a15, 0, QuestionCode.A1001, CodeList.COMBUSTIBLEVOLUME);
+    a1001 = new ValueSelectionQuestion(a1000, 0, QuestionCode.A1001, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1001);
 } else {
-    if (!a1001.getQuestionSet().equals(a15) && a15.getQuestions().contains(a1001)) {
-        a15.getQuestions().remove(a1001);
-        JPA.em().persist(a15);
+    if (!a1001.getQuestionSet().equals(a1000) && a1000.getQuestions().contains(a1001)) {
+        a1000.getQuestions().remove(a1001);
+        JPA.em().persist(a1000);
     }
-    if (a1001.getQuestionSet().equals(a15) && !a15.getQuestions().contains(a1001)) {
-        a15.getQuestions().add(a1001);
-        JPA.em().persist(a15);
+    if (a1001.getQuestionSet().equals(a1000) && !a1000.getQuestions().contains(a1001)) {
+        a1000.getQuestions().add(a1001);
+        JPA.em().persist(a1000);
     }
     a1001.setOrderIndex(0);
     a1001.setCodeList(CodeList.COMBUSTIBLEVOLUME);
@@ -1435,17 +1435,17 @@ if (a1001 == null) {
     
 DoubleQuestion a1002 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1002);
 if (a1002 == null) {
-    a1002 = new DoubleQuestion( a15, 0, QuestionCode.A1002, volumeUnits, null, volumeUnits.getMainUnit() );
+    a1002 = new DoubleQuestion( a1000, 0, QuestionCode.A1002, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(a1002);
 } else {
     a1002.setDefaultValue(null);
-    if (!a1002.getQuestionSet().equals(a15) && a15.getQuestions().contains(a1002)) {
-        a15.getQuestions().remove(a1002);
-        JPA.em().persist(a15);
+    if (!a1002.getQuestionSet().equals(a1000) && a1000.getQuestions().contains(a1002)) {
+        a1000.getQuestions().remove(a1002);
+        JPA.em().persist(a1000);
     }
-    if (a1002.getQuestionSet().equals(a15) && !a15.getQuestions().contains(a1002)) {
-        a15.getQuestions().add(a1002);
-        JPA.em().persist(a15);
+    if (a1002.getQuestionSet().equals(a1000) && !a1000.getQuestions().contains(a1002)) {
+        a1000.getQuestions().add(a1002);
+        JPA.em().persist(a1000);
     }
     a1002.setUnitCategory(volumeUnits);
     a1002.setOrderIndex(0);
@@ -1461,16 +1461,16 @@ if (a1002 == null) {
 
     ValueSelectionQuestion a1004 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1004);
 if (a1004 == null) {
-    a1004 = new ValueSelectionQuestion(a15, 0, QuestionCode.A1004, CodeList.COMBUSTIBLEPOIDS);
+    a1004 = new ValueSelectionQuestion(a1003, 0, QuestionCode.A1004, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1004);
 } else {
-    if (!a1004.getQuestionSet().equals(a15) && a15.getQuestions().contains(a1004)) {
-        a15.getQuestions().remove(a1004);
-        JPA.em().persist(a15);
+    if (!a1004.getQuestionSet().equals(a1003) && a1003.getQuestions().contains(a1004)) {
+        a1003.getQuestions().remove(a1004);
+        JPA.em().persist(a1003);
     }
-    if (a1004.getQuestionSet().equals(a15) && !a15.getQuestions().contains(a1004)) {
-        a15.getQuestions().add(a1004);
-        JPA.em().persist(a15);
+    if (a1004.getQuestionSet().equals(a1003) && !a1003.getQuestions().contains(a1004)) {
+        a1003.getQuestions().add(a1004);
+        JPA.em().persist(a1003);
     }
     a1004.setOrderIndex(0);
     a1004.setCodeList(CodeList.COMBUSTIBLEPOIDS);
@@ -1484,17 +1484,17 @@ if (a1004 == null) {
     
 DoubleQuestion a1005 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1005);
 if (a1005 == null) {
-    a1005 = new DoubleQuestion( a15, 0, QuestionCode.A1005, massUnits, null, massUnits.getMainUnit() );
+    a1005 = new DoubleQuestion( a1003, 0, QuestionCode.A1005, massUnits, null, massUnits.getMainUnit() );
     JPA.em().persist(a1005);
 } else {
     a1005.setDefaultValue(null);
-    if (!a1005.getQuestionSet().equals(a15) && a15.getQuestions().contains(a1005)) {
-        a15.getQuestions().remove(a1005);
-        JPA.em().persist(a15);
+    if (!a1005.getQuestionSet().equals(a1003) && a1003.getQuestions().contains(a1005)) {
+        a1003.getQuestions().remove(a1005);
+        JPA.em().persist(a1003);
     }
-    if (a1005.getQuestionSet().equals(a15) && !a15.getQuestions().contains(a1005)) {
-        a15.getQuestions().add(a1005);
-        JPA.em().persist(a15);
+    if (a1005.getQuestionSet().equals(a1003) && !a1003.getQuestions().contains(a1005)) {
+        a1003.getQuestions().add(a1005);
+        JPA.em().persist(a1003);
     }
     a1005.setUnitCategory(massUnits);
     a1005.setOrderIndex(0);
@@ -7438,6 +7438,8 @@ if (a5014 == null) {
     a5014.setOrderIndex(0);
     JPA.em().persist(a5014);
 }
+
+
 
 
         Logger.info("===> CREATE AWAC Enterprise INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
