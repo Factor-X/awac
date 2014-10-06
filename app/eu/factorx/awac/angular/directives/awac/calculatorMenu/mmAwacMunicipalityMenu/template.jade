@@ -1,0 +1,29 @@
+.nav_tabs(ng-show='displayMenu===true')
+    .nav_entreprise
+        .site_menu
+            .menu
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C1\') == true}', ng-click='$root.nav(\'/form/TAB_C1\')')
+                    .tab-title(ng-bind-html='\'TAB_C1\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C1\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C2\') == true}', ng-click='$root.nav(\'/form/TAB_C2\')')
+                    .tab-title(ng-bind-html='\'TAB_C2\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C2\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C3\')  == true}', ng-click='$root.nav(\'/form/TAB_C3\')')
+                    .tab-title(ng-bind-html='\'TAB_C3\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C3\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C4\') == true}', ng-click='$root.nav(\'/form/TAB_C4\')')
+                    .tab-title(ng-bind-html='\'TAB_C4\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C4\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C5\') == true}', ng-click='$root.nav(\'/form/TAB_C5\')')
+                    .tab-title(ng-bind-html='\'TAB_C5\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C5\')')
+                    .menu_arrow
+        .last_menu
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='$root.nav(\'/results\')')
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
+            button.button(mm-not-implemented='mm-not-implemented')
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")

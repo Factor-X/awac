@@ -31,7 +31,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 resolve: defaultResolve
             }
         )
-        .when('/user_data/:period/:scope', {
+        .when('/user_data', {
                 templateUrl: '$/angular/views/user_data.html'
                 controller: 'UserDataCtrl'
                 resolve: angular.extend({
@@ -40,7 +40,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
-        .when('/user_manager/:period/:scope', {
+        .when('/user_manager', {
                 templateUrl: '$/angular/views/user_manager.html'
                 controller: 'UserManagerCtrl'
                 resolve: angular.extend({
@@ -50,7 +50,7 @@ initializeCommonRoutes = (defaultResolve) ->
 
             }
         )
-        .when('/site_manager/:period/:scope', {
+        .when('/site_manager', {
                 templateUrl: '$/angular/views/site_manager.html'
                 controller: 'SiteManagerCtrl'
                 resolve: angular.extend({
@@ -73,8 +73,6 @@ initializeCommonRoutes = (defaultResolve) ->
                 resolve: angular.extend({
                     displayLittleFormMenu: () ->
                         return true
-                    displayFormMenu: () ->
-                        return false
                 }, defaultResolve)
             }
         )

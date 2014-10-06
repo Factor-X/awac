@@ -1716,6 +1716,7 @@ ul.messenger > li {
     height: 40px;
     list-style-type: none;
     margin-left: 50px;
+    margin-right: 50px;
 }
 
 .interface_menu li {

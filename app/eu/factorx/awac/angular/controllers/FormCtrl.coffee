@@ -568,11 +568,14 @@ angular
     $scope.$watch '$root.periodToCompare', () ->
         if $scope.$parent != null && $scope.$root.periodToCompare? && $scope.$root.periodToCompare != 'default'
             downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, (result)->
+                console.log result
                 if result.success
+                    ###
                     if not result.data.answersSave.listAnswers or result.data.answersSave.listAnswers.length == 0
                         $scope.dataToCompare = null
                     else
-                        $scope.dataToCompare = result.data
+                    ###
+                    $scope.dataToCompare = result.data
                 else
                     # TODO ERROR HANDLING !!!!!
                     $scope.dataToCompare = null

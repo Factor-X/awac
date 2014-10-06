@@ -26,7 +26,7 @@ public class SystemAdministrator extends Account {
 		super();
 	}
 
-	public SystemAdministrator(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
-		super(organization, person, identifier, password, interfaceCode);
+	public SystemAdministrator(Organization organization, Person person, String identifier, String password) {
+		super(organization, person, identifier, password);
 	}
 }

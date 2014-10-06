@@ -16,9 +16,11 @@ angular.module('app').run (loggerService) ->
 
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash,$compile,$element) ->
+
     $scope.displayMenu = false
     $scope.displayLittleMenu = false
+
     #
     # First loading
     #
@@ -29,6 +31,14 @@ angular
 
     $scope.initialLoad =
         translations: false
+
+    #
+    # inject the menu
+    #
+    if $scope.$root.instanceName == "municipality" || $scope.$root.instanceName == "enterprise"
+        directive = $compile("<mm-awac-" + $scope.$root.instanceName + "-menu></mm-awac-" + $scope.$root.instanceName + "_menu>")($scope)
+        p=$('.inject-menu:first',$element)
+        $(directive).insertAfter p
 
     #
     # Initialize
@@ -105,8 +115,8 @@ angular
                 p = $route.current.$$route.originalPath
 
                 if p == "/noScope"
-                    url = $scope.$root.getFormPath() + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId
-                    $location.path url
+                    url = $scope.$root.getDefaultRoute()
+                    $scope.root.nav url
                 else
                     for k,v of $routeParams
                         p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
@@ -338,10 +348,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
+        $rootScope.nav $rootScope.getDefaultRoute()
+        ###
         if $rootScope.scopeSelectedId? and $rootScope.periodSelectedKey?
             $rootScope.onFormPath($rootScope.periodSelectedKey, $rootScope.scopeSelectedId)
         else
             $location.path("noScope")
+        ###
 
     $rootScope.$watch "mySites", ->
         $rootScope.computeAvailablePeriod()
@@ -418,7 +431,10 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # nav to the last nav used
     #
     $rootScope.navToLastFormUsed = ->
-        $rootScope.nav($rootScope.getFormPath())
+        if $rootScope.getFormPath?
+            $rootScope.nav($rootScope.getFormPath())
+        else
+            $rootScope.nav($rootScope.getDefaultRoute())
 
     #
     # Tabs -- transition
@@ -426,11 +442,11 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # confirmed : the modification of localisation was already confirmed by the user
     #
     $rootScope.nav = (loc, confirmed = false) ->
-        console.log "NAV : " + loc
+        #console.log "NAV : " + loc
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
-        if $rootScope.getMainScope?().validNavigation != undefined && confirmed == false
+        if $rootScope.getMainScope()? && $rootScope.getMainScope().validNavigation != undefined && confirmed == false
 
             # ask a confirmation to quite the view
             result = $rootScope.getMainScope?().validNavigation?()
@@ -442,10 +458,18 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             # if this is a form, unlock it
-            if $rootScope.getMainScope?().formIdentifier?
+            if $rootScope.getMainScope()?.formIdentifier?
                 downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
 
-            $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
+            routeWithScopeAndPeriod = ['/form','/results','/actions']
+            for route in routeWithScopeAndPeriod
+                if loc.substring(0, route.length) == route
+                    $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
+                    return
+
+            $location.path(loc)
+
+            return
 
     $rootScope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()

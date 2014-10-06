@@ -51,10 +51,11 @@ public class Organization extends Scope {
 		super();
 	}
 
-	public Organization(String name) {
-		super();
-		this.name = name;
-	}
+
+    public Organization(String name, InterfaceTypeCode interfaceCode) {
+        this.name = name;
+        this.interfaceCode = interfaceCode;
+    }
 
     public InterfaceTypeCode getInterfaceCode() {
         return interfaceCode;
@@ -134,8 +135,13 @@ public class Organization extends Scope {
 		return result;
 	}
 
-	@Override
-	public String toString() {
-		return "Organization [id=" + id + ", name='" + name + "']";
-	}
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "name='" + name + '\'' +
+                ", naceCode='" + naceCode + '\'' +
+                ", description='" + description + '\'' +
+                ", interfaceCode=" + interfaceCode +
+                '}';
+    }
 }

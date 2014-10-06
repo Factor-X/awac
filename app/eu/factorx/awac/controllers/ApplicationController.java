@@ -20,17 +20,19 @@ import play.mvc.Result;
 @org.springframework.stereotype.Controller
 public class ApplicationController extends AbstractController {
 
-	@Transactional
+
+    @Transactional
 	public Result index() {
 		return ok(eu.factorx.awac.views.html.index.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
 	}
 
-	public Result enterprise() {
-		return ok(eu.factorx.awac.views.html.enterprise.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
-	}
 
-	public Result municipality() {
-		return ok(eu.factorx.awac.views.html.municipality.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
+    public Result verification() {
+        return ok(eu.factorx.awac.views.html.verification.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
+    }
+
+	public Result calculator(String appName) {
+		return ok(eu.factorx.awac.views.html.calculator.render(GlobalVariables.STARTUP_DATE_IDENTIFIER,appName));
 	}
 
 	public Result javascriptRoutes() {

@@ -67,14 +67,14 @@ public class Account extends AuditedAbstractEntity {
 	public Account() {
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password, InterfaceTypeCode interfaceCode) {
+	public Account(Organization organization, Person person, String identifier, String password) {
 		this.organization = organization;
 		this.person = person;
 		this.identifier = identifier;
 		this.password = password;
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, InterfaceTypeCode interfaceCode, Boolean isAdmin) {
+	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, Boolean isAdmin) {
 		this.organization = organization;
 		this.person = person;
 		this.identifier = identifier;

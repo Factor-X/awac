@@ -64,7 +64,7 @@ public class AccountToLoginResultDTOConverter implements Converter<Account, Logi
             Logger.info("---------------------------------------- sites : "+sites);
 
 
-            //site for enterprise
+            //site for calculator
             for (AccountSiteAssociation accountSiteAssociation : sites) {
                 scopeDTOs.add(siteToSiteDTOConverter.convert(accountSiteAssociation.getSite()));
             }

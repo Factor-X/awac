@@ -9,6 +9,8 @@ initializeEnterpriseRoutes = (defaultResolve) ->
             $location.path($rootScope.getFormPath() + '/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
             return '/form/TAB2'
+        $rootScope.getDefaultRoute = ()->
+            return $rootScope.getFormPath()
 
     angular
     .module('app')

@@ -20,7 +20,6 @@ import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -34,11 +33,8 @@ import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
-import play.Configuration;
 import play.Logger;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.util.HashMap;
@@ -111,9 +107,13 @@ public class AuthenticationController extends AbstractController {
 		//control interface
 		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
 
-		if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
+		if (interfaceTypeCode == null) {
+			return unauthorized(new ExceptionsDTO(account.getOrganization().getInterfaceCode().getKey() + " is not a valid interface"));
+		} else if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
 			//use the same message for both login and password error
 			//TODO translate
+			Logger.info(interfaceTypeCode + "");
+			Logger.info(account.getOrganization() + "");
 			return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
 		}
 
@@ -174,18 +174,18 @@ public class AuthenticationController extends AbstractController {
 
 
 		// retrieve traductions
-		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String title = traductions.get("RESET_PASSWORD_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
 		Map values = new HashMap<String, Object>();
-		values.put("title",title);
-		values.put("password",password);
+		values.put("title", title);
+		values.put("password", password);
 
 
-		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(),values);
+		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
 
 		// send email for invitation
-		EmailMessage email = new EmailMessage(account.getPerson().getEmail(),title,velocityContent);
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), title, velocityContent);
 		emailService.send(email);
 
 		//save new password

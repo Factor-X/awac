@@ -247,7 +247,7 @@ public class LoginTest extends AbstractBaseModelTest {
 
 		ExceptionsDTO loginResult = Json.fromJson(jsonResponse, ExceptionsDTO.class);
 		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getMessage(), "This account is not for municipality but for enterprise. Please switch calculator and retry.");
+		assertEquals(loginResult.getMessage(), "This account is not for municipality but for calculator. Please switch calculator and retry.");
 	} // end of authenticateSuccess test
 
 

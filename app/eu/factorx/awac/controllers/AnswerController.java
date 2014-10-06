@@ -358,7 +358,7 @@ public class AnswerController extends AbstractController {
         List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
         for (Period period : periods) {
 
-            //for enterprise : restriction by site
+            //for calculator : restriction by site
             if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
                 //restrict by period by site
                 for (Period periodToTest : ((Site) scope).getListPeriodAvailable()) {

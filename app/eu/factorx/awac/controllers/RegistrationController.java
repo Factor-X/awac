@@ -84,7 +84,7 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create organization
-		organization = new Organization(dto.getOrganizationName());
+		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE);
 
 		play.Logger.info("create organization...");
 		organizationService.saveOrUpdate(organization);
@@ -93,7 +93,7 @@ public class RegistrationController  extends AbstractController {
 		//create administrator
 		Account account = null;
 		try {
-			account = createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.ENTERPRISE,organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
 		} catch (MyrmexException e) {
 			play.Logger.info("Myrmex exception:" + e.getToClientMessage());
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
@@ -144,13 +144,13 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create organization
-		organization = new Organization(dto.getMunicipalityName());
+		organization = new Organization(dto.getMunicipalityName(), InterfaceTypeCode.MUNICIPALITY);
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
 		Account account = null;
 		try {
-			account = createAdministrator(dto.getPerson(), dto.getPassword(),InterfaceTypeCode.MUNICIPALITY,organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
 		} catch (MyrmexException e) {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
@@ -206,7 +206,7 @@ public class RegistrationController  extends AbstractController {
 	}
 
 
-	private Account createAdministrator(PersonDTO personDTO, String password, InterfaceTypeCode interfaceCode, Organization organization) throws MyrmexException{
+	private Account createAdministrator(PersonDTO personDTO, String password, Organization organization) throws MyrmexException{
 
 		//control identifier
 		Account account = accountService.findByIdentifier(personDTO.getIdentifier());
@@ -225,7 +225,7 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create account
-		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password, interfaceCode);
+		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password);
 		administrator.setIsAdmin(true);
 
 		//save account
