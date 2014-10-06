@@ -77,11 +77,11 @@ namespace :bads do
 
     namespace :import do
 
-        desc 'Import the BADs for enterprise'
+        desc 'Import the BADs for calculator'
         task :enterprise do |t, args|
             options             = {}
             options[:log_level] = 'DEBUG'
-            options[:calculator] = 'enterprise'
+            options[:calculator] = 'calculator'
             OptionParser.new(args) do |opts|
                 opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                     options[:log_level] = v.upcase

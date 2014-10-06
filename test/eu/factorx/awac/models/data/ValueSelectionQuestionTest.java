@@ -26,7 +26,7 @@ public class ValueSelectionQuestionTest extends AbstractBaseModelTest {
 
 	private static final Map<QuestionCode, CodeList> KNOWN_VALUE_SELECTION_QUESTIONS = new HashMap<QuestionCode, CodeList>();
 
-	// the (51) 'multiple choice' questions of enterprise survey (dump of DB awac-accept on 2014-08-27 ; git tag v0.4)
+	// the (51) 'multiple choice' questions of calculator survey (dump of DB awac-accept on 2014-08-27 ; git tag v0.4)
 	static {
 		KNOWN_VALUE_SELECTION_QUESTIONS.put(QuestionCode.A3, CodeList.SECTEURPRINCIPAL);
 		KNOWN_VALUE_SELECTION_QUESTIONS.put(QuestionCode.A4, CodeList.SECTEURPRIMAIRE);

@@ -6,7 +6,7 @@ import eu.factorx.awac.models.code.CodeList;
 public class BaseActivityDataCode extends Code {
 
     /**
-     * BAD enterprise
+     * BAD calculator
      */
 	public static final BaseActivityDataCode AE_BAD1 = new BaseActivityDataCode("AE_BAD1");
     public static final BaseActivityDataCode AE_BAD50 = new BaseActivityDataCode("AE_BAD50");

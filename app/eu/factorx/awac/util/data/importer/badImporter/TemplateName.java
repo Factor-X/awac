@@ -6,12 +6,12 @@ package eu.factorx.awac.util.data.importer.badImporter;
 public enum TemplateName {
 
     BAD_ENTERPRISE( "public/template/bad.vm",
-                    "app/eu/factorx/awac/service/knowledge/activity/contributor/enterprise/",
-                    "eu.factorx.awac.service.knowledge.activity.contributor.enterprise",
+                    "app/eu/factorx/awac/service/knowledge/activity/contributor/calculator/",
+                    "eu.factorx.awac.service.knowledge.activity.contributor.calculator",
                     //test
                     "public/template/badTest.vm",
-                    "test/eu/factorx/awac/buisness/bad/enterprise/",
-                    "eu.factorx.awac.buisness.bad.enterprise"),
+                    "test/eu/factorx/awac/buisness/bad/calculator/",
+                    "eu.factorx.awac.buisness.bad.calculator"),
 
     BAD_MUNICIPALITY(   "public/template/bad.vm",
                         "app/eu/factorx/awac/service/knowledge/activity/contributor/municipality/",
