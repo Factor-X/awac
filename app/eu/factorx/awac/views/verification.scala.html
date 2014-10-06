@@ -1,7 +1,7 @@
 @(startupDateIdentifier: String)
 
 <!doctype html>
-<html xmlns:ng="http://angularjs.org" id="app" ng-app="app" >
+<html id="app" ng-app="app">
     <head>
 
         <!--[if lte IE 8]>
@@ -18,7 +18,8 @@
         <![endif]-->
 
         <title>AWAC</title>
-        <meta name="app" content="municipality"/>
+        <meta name="app" content="verification"/>
+
 
         <!-- ------------------------------------------------------------------ -->
         <!-- JAVASCRIPTS                                                        -->
@@ -64,7 +65,6 @@
 
         <!-- web app -->
         <script src='@routes.Assets.at("javascripts/app.js")?@startupDateIdentifier'></script>
-        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/municipality.css")'>
 
         <!-- ng-table -->
         <script src='@routes.Assets.at("components/ng-table/ng-table.min.js")'></script>
@@ -78,7 +78,8 @@
 
         <!-- Messenger -->
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger.css")'>
-        <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
+        <link rel="stylesheet" media="screen"
+              href='@routes.Assets.at("components/messenger/build/css/messenger-theme-flat.css")'>
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/messenger-theme.css")'>
 
         <!-- Main (hacks) -->
@@ -87,11 +88,12 @@
         <!-- Style -->
         <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style.css")'>
         <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/style2.css")'>
+        <link type="text/css" rel="stylesheet" href='@routes.Assets.at("stylesheets/verification.css")'>
 
         <!-- ng-table -->
         <link rel="stylesheet" media="screen" href='@routes.Assets.at("components/ng-table/ng-table.min.css")'>
 
-        <!-- Messenger and Developer's helper for translations -->
+        <!-- Messenger andDeveloper's helper for translations -->
         <script>
             Messenger.options = {
                 extraClasses: 'messenger-fixed messenger-on-top',
@@ -116,21 +118,26 @@
                 })
             });
         </script>
-
     </head>
     <body>
-        
+
         <!-- background for modal -->
         <div class="modal-background" ng-show="$root.displayModalBackground">
         </div>
 
         <!-- list modal -->
         <mm-awac-modal-manager></mm-awac-modal-manager>
+        <!--
+        <mm-awac-modal-login></mm-awac-modal-login>
+        <mm-awac-modal-loading></mm-awac-modal-loading>
+        <mm-awac-modal-confirmation-exit-form></mm-awac-modal-confirmation-exit-form>
+        <mm-awac-modal-document-manager></mm-awac-modal-document-manager>
+        -->
 
-
-        <mm-awac-municipality-survey ng-model="o"></mm-awac-municipality-survey>
+        <mm-awac-verification-survey ng-model="o"></mm-awac-verification-survey>
 
         <div id="logger" data-state="0">
+        </div>
     </body>
 </html>
 

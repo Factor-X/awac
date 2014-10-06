@@ -84,6 +84,8 @@ if document.querySelector("meta[name=app]")?
         initializeMunicipalityRoutes(defaultResolve)
     if iName == "enterprise"
         initializeEnterpriseRoutes(defaultResolve)
+    if iName == "verification"
+      initializeVerificationRoutes(defaultResolve)
 
 angular
 .module('app')

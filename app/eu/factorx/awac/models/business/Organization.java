@@ -134,8 +134,13 @@ public class Organization extends Scope {
 		return result;
 	}
 
-	@Override
-	public String toString() {
-		return "Organization [id=" + id + ", name='" + name + "']";
-	}
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "name='" + name + '\'' +
+                ", naceCode='" + naceCode + '\'' +
+                ", description='" + description + '\'' +
+                ", interfaceCode=" + interfaceCode +
+                '}';
+    }
 }

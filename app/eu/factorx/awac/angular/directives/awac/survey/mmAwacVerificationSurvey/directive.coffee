@@ -1,10 +1,10 @@
 angular
 .module('app.directives')
-.directive "mmAwacMunicipalitySurvey", (directiveService) ->
+.directive "mmAwacVerificationSurvey", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngModel: '='
-    templateUrl: "$/angular/templates/mm-awac-municipality-survey.html"
+    templateUrl: "$/angular/templates/mm-awac-verification-survey.html"
     transclude: true
     replace: true
     controller: 'MainCtrl'

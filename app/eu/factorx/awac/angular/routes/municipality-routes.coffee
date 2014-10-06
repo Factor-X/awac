@@ -9,6 +9,8 @@ initializeMunicipalityRoutes = (defaultResolve) ->
             $location.path($rootScope.getFormPath() + '/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
             return '/form/TAB_C1'
+        $rootScope.getDefaultRoute = ()->
+            return $rootScope.getFormPath()
 
     angular
     .module('app')

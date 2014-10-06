@@ -1,0 +1,55 @@
+div
+    div(ng-hide='$root.hideHeader()')
+        .survey-header
+            // user block
+            table.survey-header-option
+                tr
+                    td
+                        div
+                            select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
+                    td
+                        div(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
+                    td
+                        div(ng-show='$root.currentPerson!=null')
+                            span(ng-bind-html='\'WELCOME\' | translate')
+                            | ,
+                            span.username {{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}
+
+                tr
+                    td
+                        button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
+                        button.button.help(
+                            type='button',
+
+                            ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
+                            ng-click="$root.showHelp()"
+                        )
+                    td
+                        // user manager button
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/user_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
+                    td
+                        //  user data button
+                        button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
+                        // logout button
+                        button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
+            .wallonie_logo
+            .awac_logo
+            div
+                .calculateur_type(ng-bind-html='\'TITLE_VERIFICATION\' | translate')
+                .entreprise_name {{ $root.organizationName }}
+        .verification-menu-background
+            div.verification-menu
+                button.button(type="button",ng-click='$root.nav(\'/manage\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/manage\') == true}') Gérer
+                button.button(type="button",ng-click='$root.nav(\'/verification\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/verification\') == true}') Vérifier
+                button.button(type="button",ng-click='$root.nav(\'/submit\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/submit\') == true}') Soumettre
+                button.button(type="button",ng-click='$root.nav(\'/archive\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/archive\') == true}') Archiver
+
+
+
+    div(class="{{getClassContent()}}",ng-view)
+    .footer

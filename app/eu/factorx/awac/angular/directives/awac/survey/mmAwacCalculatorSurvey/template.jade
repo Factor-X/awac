@@ -24,7 +24,15 @@ div
                             ng-click="$root.showHelp()"
                         )
                     td
-                        //  user manager button
+                        //  site manager button
+                        button.button.user_manage(
+                            ng-show="$root.instanceName == 'enterprise'"
+                            type='button',
+                            ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/site_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        // user manager button
                         button.button.user_manage(
                             type='button',
                             ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
@@ -32,19 +40,24 @@ div
                             ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
                             ng-disabled='$root.currentPerson.isAdmin === false')
                     td
-                        // user data button
+                        //  user data button
                         button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
-                        //  logout button
+                        // logout button
                         button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
             .wallonie_logo
             .awac_logo
             div
-                .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate')
+                .calculateur_type(ng-bind-html='\'TITLE_ENTERPRISE\' | translate', ng-show="$root.instanceName == 'enterprise'")
+                .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate', ng-show="$root.instanceName == 'municipality'")
                 .entreprise_name {{ $root.organizationName }}
         .data_menu(ng-show='displayLittleMenu===true || displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
                 select(ng-options='p.key as p.label for p in $root.availablePeriods', ng-model='$root.periodSelectedKey')
+            .big_separator(ng-show="$root.instanceName == 'enterprise'")
+            .data_date_compare(ng-show="$root.instanceName == 'enterprise'")
+                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_SITE' | translate")
+                select(ng-options='s.scope as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
             .big_separator
             .data_date_compare
                 div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
@@ -61,7 +74,7 @@ div
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
                     ng-hide="$root.closedForms")
-                    button.button.verification(
+                button.button.verification(
                     type='button',
                     ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
                     mm-not-implemented='mm-not-implemented',
@@ -75,37 +88,8 @@ div
                 .small_separator
                 .save_button
                     button.button.save(type='button', ng-click='save()', ng-bind-html='\'SAVE_BUTTON\' | translate')
-        .nav_tabs(ng-show='displayMenu===true')
-            .nav_entreprise
-                .site_menu
-                    .site
-                        button.button.verification(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
-                    .menu
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C1\') == true}', ng-click='$root.nav(\'/form/TAB_C1\')')
-                            .tab-title(ng-bind-html='\'TAB_C1\' | translate')
-                            mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C1\')')
-                            .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C2\') == true}', ng-click='$root.nav(\'/form/TAB_C2\')')
-                            .tab-title(ng-bind-html='\'TAB_C2\' | translate')
-                            mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C2\')')
-                            .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C3\')  == true}', ng-click='$root.nav(\'/form/TAB_C3\')')
-                            .tab-title(ng-bind-html='\'TAB_C3\' | translate')
-                            mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C3\')')
-                            .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C4\') == true}', ng-click='$root.nav(\'/form/TAB_C4\')')
-                            .tab-title(ng-bind-html='\'TAB_C4\' | translate')
-                            mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C4\')')
-                            .menu_arrow
-                        button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C5\') == true}', ng-click='$root.nav(\'/form/TAB_C5\')')
-                            .tab-title(ng-bind-html='\'TAB_C5\' | translate')
-                            mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_C5\')')
-                            .menu_arrow
-                .last_menu
-                    button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='$root.nav(\'/results\')')
-                        .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
-                    button.button(mm-not-implemented='mm-not-implemented')
-                        .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")
+
+        .inject-menu
 
     div(class="{{getClassContent()}}",ng-view)
     .footer
