@@ -3,7 +3,7 @@
 1. Restore **awac-accept** DB in local
 
     ```sh
-    $ ./deployment
+    $ ./deployment.sh
     ```
     
 2. Execute SQL's through **cmd.sh**
