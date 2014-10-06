@@ -1,6 +1,9 @@
 package eu.factorx.awac.generated;
 
-import org.hibernate.Session;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,15 +14,17 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
+import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.UnitCategoryService;
-import eu.factorx.awac.service.UnitService;
 import eu.factorx.awac.util.data.importer.*;
+import play.db.jpa.JPA;
+
+import java.util.*;
 
 @Component
 public class Awac<%= name %>InitialData {
@@ -30,8 +35,89 @@ public class Awac<%= name %>InitialData {
     @Autowired
     private UnitService unitService;
 
-    public void createSurvey(Session session) {
+    @Autowired
+    private FormService formService;
+
+    @Autowired
+    private QuestionSetService questionSetService;
+
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
+    private QuestionAnswerService questionAnswerService;
+
+	@Autowired
+    private QuestionSetAnswerService questionSetAnswerService;
+
+	private void deleteQuestion(Question question, int indent) {
+		System.out.println(StringUtils.repeat(' ', indent * 4) + "Deleting question " + question.getCode().getKey());
+
+		List<QuestionAnswer> questionAnswers = questionAnswerService.findByCodes(Arrays.asList(question.getCode()));
+		for (QuestionAnswer questionAnswer : questionAnswers) {
+			System.out.println(StringUtils.repeat(' ', indent * 4) + "    deleting QuestionAnswer #" + questionAnswer.getId());
+			JPA.em().remove(questionAnswer);
+		}
+
+		System.out.println(StringUtils.repeat(' ', indent * 4) + "    finally deleting question " + question.getCode().getKey());
+		QuestionSet questionSet = question.getQuestionSet();
+		questionSet.getQuestions().remove(question);
+		JPA.em().persist(questionSet);
+        JPA.em().remove(question);
+	}
+
+	private void deleteQuestionSet(QuestionSet qs, int indent) {
+		QuestionSet secured = questionSetService.findByCode(qs.getCode());
+		if (secured != null) {
+
+			System.out.println(StringUtils.repeat(' ', indent * 4) + "Deleting QuestionSet " + secured.getCode().getKey());
+
+
+			for (Question question : new ArrayList<>(secured.getQuestions())) {
+				deleteQuestion(question, indent + 1);
+			}
+
+			for (QuestionSet questionSet : new ArrayList<>(secured.getChildren())) {
+				deleteQuestionSet(questionSet, indent + 1);
+			}
+
+			List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByCodes(Arrays.asList(secured.getCode()));
+			for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+				System.out.println(StringUtils.repeat(' ', indent * 4) + "    deleting QuestionSetAnswer #" + questionSetAnswer.getId());
+                JPA.em().remove(questionSetAnswer);
+			}
+
+			if (secured.getParent() == null) {
+				for (Form form : formService.findAll()) {
+					List<QuestionSet> questionSets = form.getQuestionSets();
+					for (QuestionSet questionSet : new ArrayList<>(questionSets)) {
+						if (questionSet.getCode().equals(secured.getCode())) {
+							System.out.println(StringUtils.repeat(' ', indent * 4) + "    removing from form " + form.getIdentifier());
+							questionSets.remove(questionSet);
+						}
+					}
+					JPA.em().persist(form);
+				}
+			}
+
+			System.out.println(StringUtils.repeat(' ', indent * 4) + "    finally deleting QuestionSet " + secured.getCode().getKey());
+
+			QuestionSet questionSet = secured.getParent();
+			if (questionSet != null) {
+				questionSet.getChildren().remove(secured);
+				JPA.em().persist(questionSet);
+			}
+
+            JPA.em().remove(secured);
+		} else {
+			System.out.println(StringUtils.repeat(' ', indent * 4) + "Already deleted question_set " + qs.getCode().getKey());
+		}
+	}
+
+    public void createOrUpdateSurvey() {
+
         Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- START");
+
         long startTime = System.currentTimeMillis();
 
         UnitCategory energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
@@ -43,27 +129,59 @@ public class Awac<%= name %>InitialData {
         UnitCategory moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
         UnitCategory timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
-<%= partial(
-            :template => 'forms',
-            :locals   => {
-                    :forms => forms
-            }
-    ) %>
+
+        // delete old questions
+		{
+			List<Question> allQuestions = questionService.findAll();
+            List<String> codes = Arrays.asList(<%= questions.collect {|q| '"' + q.accronym + '"'}.join(', ') %>);
+
+			for (Question q : new ArrayList<>(allQuestions)) {
+				if (codes.contains(q.getCode().getKey()) || !q.getCode().getKey().matches("<%= question_regex %>")) {
+					allQuestions.remove(q);
+				}
+			}
+			for (Question q : allQuestions) {
+				deleteQuestion(q, 0);
+			}
+		}
+
+
+		// delete old question_sets
+		{
+			List<QuestionSet> allQuestionSets = questionSetService.findAll();
+            List<String> codes = Arrays.asList(<%= question_sets.collect {|qs| '"' + qs.accronym + '"'}.join(', ') %>);
+
+			for (QuestionSet qs : new ArrayList<>(allQuestionSets)) {
+				if (codes.contains(qs.getCode().getKey()) || !qs.getCode().getKey().matches("<%= question_regex %>")) {
+					allQuestionSets.remove(qs);
+				}
+			}
+			for (QuestionSet qs : allQuestionSets) {
+				deleteQuestionSet(qs, 0);
+			}
+		}
+
 
 <%= partial(
-            :template => 'question_sets',
-            :locals   => {
-                    :question_sets => question_sets
-            }
-    ) %>
+        :template => 'forms',
+        :locals   => {
+                :forms => forms
+        }
+) %>
 
 <%= partial(
-            :template => 'questions',
-            :locals   => {
-                    :questions => questions
-            }
-    ) %>
+        :template => 'question_sets',
+        :locals   => {
+                :question_sets => question_sets
+        }
+) %>
 
+<%= partial(
+        :template => 'questions',
+        :locals   => {
+                :questions => questions
+        }
+) %>
 
         Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
     }

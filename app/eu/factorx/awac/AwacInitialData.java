@@ -77,8 +77,8 @@ public class AwacInitialData {
 		}
 
 		// SURVEYS
-		awacEnterpriseInitialData.createSurvey(session);
-		awacMunicipalityInitialData.createSurvey(session);
+		awacEnterpriseInitialData.createOrUpdateSurvey();
+		awacMunicipalityInitialData.createOrUpdateSurvey();
 
 		// NOTIFICATION
 		Notification notification = new Notification();

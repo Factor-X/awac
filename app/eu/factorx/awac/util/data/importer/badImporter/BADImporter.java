@@ -186,7 +186,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
             //F is the reference column => not empty = it's a BAD !
             if (data.getData(ExcelEquivalenceColumn.B, line) != null &&
-                    !data.getData(ExcelEquivalenceColumn.B, line).equals("BAD-KEY") &&
+                    !data.getData(ExcelEquivalenceColumn.B, line).contains("BAD-KEY") &&
                     data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
 
                 //create logLine

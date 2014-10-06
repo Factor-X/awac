@@ -25,7 +25,7 @@ CREATE SEQUENCE "awaccalculatorclosed_id_seq";
 
 CREATE TABLE awaccalculatorclosed
 (
-  id bigint  NOT NULL DEFAULT nextval('awaccalculatorclosed_id_seq'::regclass),
+  id bigint NOT NULL DEFAULT nextval('awaccalculatorclosed_id_seq'::regclass),
   creationdate timestamp without time zone,
   creationuser character varying(255),
   lastupdatedate timestamp without time zone,
@@ -48,6 +48,7 @@ CREATE TABLE awaccalculatorclosed
 WITH (
   OIDS=FALSE
 );
+
 ALTER TABLE awaccalculatorclosed
   OWNER TO play;
 

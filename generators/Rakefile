@@ -129,3 +129,40 @@ namespace :db do
     end
 
 end
+
+
+
+namespace :surveys do
+
+    namespace :import do
+
+        desc 'Import the survey for enterprise'
+        task :enterprise do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'enterprise'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './surveys/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the survey for municipality'
+        task :municipality do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'municipality'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './surveys/import/main.rb'
+            main(options)
+        end
+    end
+
+end
