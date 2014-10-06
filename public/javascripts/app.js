@@ -63,9 +63,6 @@ initializeCommonRoutes = function(defaultResolve) {
       resolve: angular.extend({
         displayLittleFormMenu: function() {
           return true;
-        },
-        displayFormMenu: function() {
-          return false;
         }
       }, defaultResolve)
     }).otherwise({
@@ -4945,12 +4942,14 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
   $scope.$watch('$root.periodToCompare', function() {
     if ($scope.$parent !== null && ($scope.$root.periodToCompare != null) && $scope.$root.periodToCompare !== 'default') {
       return downloadService.getJson('/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, function(result) {
+        console.log(result);
         if (result.success) {
-          if (!result.data.answersSave.listAnswers || result.data.answersSave.listAnswers.length === 0) {
-            return $scope.dataToCompare = null;
-          } else {
-            return $scope.dataToCompare = result.data;
-          }
+          /*
+          if not result.data.answersSave.listAnswers or result.data.answersSave.listAnswers.length == 0
+              $scope.dataToCompare = null
+          else
+          */
+          return $scope.dataToCompare = result.data;
         } else {
           return $scope.dataToCompare = null;
         }

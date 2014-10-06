@@ -51,10 +51,11 @@ public class Organization extends Scope {
 		super();
 	}
 
-	public Organization(String name) {
-		super();
-		this.name = name;
-	}
+
+    public Organization(String name, InterfaceTypeCode interfaceCode) {
+        this.name = name;
+        this.interfaceCode = interfaceCode;
+    }
 
     public InterfaceTypeCode getInterfaceCode() {
         return interfaceCode;

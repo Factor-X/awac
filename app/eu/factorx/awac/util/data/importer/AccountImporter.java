@@ -59,7 +59,7 @@ public class AccountImporter extends WorkbookDataImporter {
 			try {
 				organizationEntity = (Organization) JPA.em().createQuery("select o from Organization o where o.name = :name").setParameter("name", org).getSingleResult();
 			} catch (NoResultException ex) {
-				organizationEntity = new Organization(org);
+				organizationEntity = new Organization(org, InterfaceTypeCode.ENTERPRISE);
 				organizationService.saveOrUpdate(organizationEntity);
 				Logger.info("Created organization " + org);
 			}
@@ -114,7 +114,7 @@ public class AccountImporter extends WorkbookDataImporter {
 
 				personService.saveOrUpdate(person);
 
-				accountEntity = new Account(organizationEntity, person, login, password, InterfaceTypeCode.ENTERPRISE);
+				accountEntity = new Account(organizationEntity, person, login, password);
 				accountService.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}

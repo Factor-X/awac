@@ -73,8 +73,6 @@ initializeCommonRoutes = (defaultResolve) ->
                 resolve: angular.extend({
                     displayLittleFormMenu: () ->
                         return true
-                    displayFormMenu: () ->
-                        return false
                 }, defaultResolve)
             }
         )
