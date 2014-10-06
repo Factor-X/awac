@@ -480,6 +480,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.testCloseable = ->
         if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
             downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
+                console.log result
                 if result.success
                     $rootScope.closeableForms = result.data.closeable
                     $rootScope.closedForms =result.data.closed

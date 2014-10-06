@@ -539,7 +539,7 @@ angular
             $scope.mapRepetition[questionSetCode] = []
             $scope.mapRepetition[questionSetCode][0] = angular.copy(mapRepetitionToAdd)
 
-            
+
     #
     # this function return an object with the modal service wanted (CONFIRMATION_EXIT_FORM)
     # and a valid parameter that is true is none answer was gave by the user.
@@ -954,7 +954,11 @@ angular
         if lock == true
             if not $scope.dataValidator[code]?
                 $scope.dataValidator[code] = $scope.$root.currentPerson
-            $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson
+            if $scope.mapQuestionSet[code]?
+                $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson
+            else
+                console.log "not found "+code+" into $scope.mapQuestionSet : "
+                console.log $scope.mapQuestionSet
         else
             if $scope.dataValidator[code]?
                 delete $scope.dataValidator[code]
