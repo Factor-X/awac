@@ -1,8 +1,6 @@
 .nav_tabs(ng-show='displayMenu===true')
     .nav_entreprise
         .site_menu
-            .site
-                button.button.verification(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
             .menu
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_C1\') == true}', ng-click='$root.nav(\'/form/TAB_C1\')')
                     .tab-title(ng-bind-html='\'TAB_C1\' | translate')

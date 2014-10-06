@@ -442,7 +442,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # confirmed : the modification of localisation was already confirmed by the user
     #
     $rootScope.nav = (loc, confirmed = false) ->
-        console.log "NAV : " + loc
+        #console.log "NAV : " + loc
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
