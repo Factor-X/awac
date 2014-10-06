@@ -24,6 +24,9 @@ cat ./CELDL-190-transfert-interface-to-organization.sql >> /tmp/migration/migrat
 # drop sites
 cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration/migration_script.sql
 
+# inject new questionSets into forms
+cat ./CELDL-204-changements-metiers.sql >> /tmp/migration/migration_script.sql
+
 # link between form and calculator
 cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
@@ -34,23 +37,4 @@ cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
 # execute the script
 cat /tmp/migration/migration_script.sql | psql -h localhost -U play -d awac -W
-
-# call the importers
-
-echo -n "check port 9000."
-while true; do
-	echo -n '.'
-	netstat -lnt | egrep ':9000\b' > /dev/null && echo "found :-)" && break
-	sleep 1
-done
-echo ''
-	
-echo "http://127.0.0.1:9000/awac/admin/codelabels/reset ... " && 
-curl -L http://127.0.0.1:9000/awac/admin/codelabels/reset &&
-echo && 
-echo "http://127.0.0.1:9000/awac/admin/indicators_factors/reset ... " && 
-curl -L http://127.0.0.1:9000/awac/admin/indicators_factors/reset && 
-echo
-
-
 
