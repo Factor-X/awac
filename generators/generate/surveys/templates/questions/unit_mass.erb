@@ -1,5 +1,30 @@
-<% if unit_default == nil %>
-    session.saveOrUpdate(new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, massUnits, <%= default %>, massUnits.getMainUnit() ));
-<% else %>
-    session.saveOrUpdate(new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, massUnits, <%= default %>, getUnitBySymbol("<%= unit_default %>") ));
-<% end %>
+<%
+   unitCategory = "massUnits"
+   if unit_default == nil
+       unit = unitCategory + '.getMainUnit()'
+   else
+       unit = "getUnitBySymbol(\"#{unit_default}\")"
+   end
+%>
+
+DoubleQuestion <%= accronym.downcase %> = (DoubleQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+if (<%= accronym.downcase %> == null) {
+    <%= accronym.downcase %> = new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, <%= unitCategory %>, <%= default %>, <%= unit %> );
+    JPA.em().persist(<%= accronym.downcase %>);
+} else {
+    <%= accronym.downcase %>.setDefaultValue(<%= default %>);
+    if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    if (<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && !<%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
+        <%= parent %>.getQuestions().add(<%= accronym.downcase %>);
+        JPA.em().persist(<%= parent %>);
+    }
+    <%= accronym.downcase %>.setUnitCategory(<%= unitCategory %>);
+    <%= accronym.downcase %>.setOrderIndex(0);
+    <%= accronym.downcase %>.setDefaultUnit(<%= unit %>);
+    JPA.em().persist(<%= accronym.downcase %>);
+}
+
+

@@ -116,6 +116,14 @@
      		<property name="jadira.usertype.autoRegisterUserTypes" value="true" />
 			<property name="jadira.usertype.javaZone" value="UTC" />
 			<property name="jadira.usertype.databaseZone" value="UTC" />
+
+
+
+
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/awac"/>
+            <property name="javax.persistence.jdbc.user" value="play"/>
+            <property name="javax.persistence.jdbc.password" value="play"/>
      		   
         </properties>
         
