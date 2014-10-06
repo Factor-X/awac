@@ -137,7 +137,9 @@ public class SecuredController extends Security.Authenticator {
 
     public boolean isUnlock(QuestionSet questionSet, Scope scope, Period period) {
         cleanOlderLock();
-        for (LockQuestionSet lockQuestionSet : lockQuestionSetList) {
+
+        for (int i = lockQuestionSetList.size() - 1; i >= 0; i--) {
+            LockQuestionSet lockQuestionSet = lockQuestionSetList.get(i);
 
             if (lockQuestionSet.isLocked(questionSet, scope, period, getCurrentUser())) {
                 return false;
