@@ -18,7 +18,9 @@ import javax.persistence.*;
 })
 public class CodeConversion extends AuditedAbstractEntity {
 
-    public final static String FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION = "CodeConversion.findByCodeListAndKeyAndCriterion";
+	private static final long serialVersionUID = 1L;
+
+	public final static String FIND_BY_CODE_LIST_AND_KEY_AND_CRITERION = "CodeConversion.findByCodeListAndKeyAndCriterion";
     public final static String REMOVE_ALL = "CodeConversion.removeAll";
 
     @Enumerated(EnumType.STRING)

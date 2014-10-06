@@ -109,7 +109,6 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				MUNICIPALITY_REPORTS_REFERENCE,
 				MUNICIPALITY_INDICATOR_REPORTS_REFERENCE);
 
-		codeLabelService.resetCache();
 	}
 
 	private void importData(InterfaceTypeCode interfaceTypeCode, String baseIndicatorsReference, String indicatorsReference, String baseIndicatorIndicatorsReference,

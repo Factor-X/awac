@@ -1,5 +1,11 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodeConversion;
@@ -10,76 +16,46 @@ import eu.factorx.awac.models.code.type.ActivitySubCategoryCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.service.CodeConversionService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeConversion> implements CodeConversionService {
 
-	private Map<CodeList, List<CodeList>> sublists = null;
-
 	@Override
 	public ActivitySourceCode toActivitySourceCode(Code code) {
-		String activitySourceCodeKey = getTargetCodeKey(code, CodeList.ActivitySource);
-		if (activitySourceCodeKey == null) {
+		CodesEquivalence codesEquivalence = findByCodeAndTargetCodeList(code, CodeList.ActivitySource);
+		if (codesEquivalence == null) {
 			throw new RuntimeException("Unable to convert " + code + " to an ActivitySourceCode!");
 		}
-		return new ActivitySourceCode(activitySourceCodeKey);
+		return new ActivitySourceCode(codesEquivalence.getReferencedCodeKey());
 	}
 
 	@Override
 	public ActivityTypeCode toActivityTypeCode(Code code) {
-		String activityTypeCodeKey = getTargetCodeKey(code, CodeList.ActivityType);
-		if (activityTypeCodeKey == null) {
+		CodesEquivalence codesEquivalence = findByCodeAndTargetCodeList(code, CodeList.ActivityType);
+		if (codesEquivalence == null) {
 			throw new RuntimeException("Unable to convert " + code + " to an ActivityTypeCode!");
 		}
-		return new ActivityTypeCode(activityTypeCodeKey);
+		return new ActivityTypeCode(codesEquivalence.getReferencedCodeKey());
 	}
 
 	@Override
 	public ActivitySubCategoryCode toActivitySubCategoryCode(Code code) {
-		String activitySubCategoryCodeKey = getTargetCodeKey(code, CodeList.ActivitySubCategory);
-		if (activitySubCategoryCodeKey == null) {
+		CodesEquivalence codesEquivalence = findByCodeAndTargetCodeList(code, CodeList.ActivitySubCategory);
+		if (codesEquivalence == null) {
 			throw new RuntimeException("Unable to convert " + code + " to an ActivitySubCategoryCode!");
 		}
-		return new ActivitySubCategoryCode(activitySubCategoryCodeKey);
+		return new ActivitySubCategoryCode(codesEquivalence.getReferencedCodeKey());
 	}
 
 	@Override
-	public List<CodesEquivalence> findAllSublistsData() {
-		List<CodesEquivalence> codesEquivalences = JPA.em()
-				.createNamedQuery(CodesEquivalence.FIND_ALL_SUBLISTS_DATA, CodesEquivalence.class).getResultList();
-		if (sublists == null) {
-			sublists = new HashMap<CodeList, List<CodeList>>();
-			for (CodesEquivalence codesEquivalence : codesEquivalences) {
-				CodeList codeList = codesEquivalence.getCodeList();
-				CodeList referencedCodeList = codesEquivalence.getReferencedCodeList();
-				if (!sublists.containsKey(referencedCodeList)) {
-					ArrayList<CodeList> referencedCodeListSublists = new ArrayList<CodeList>();
-					referencedCodeListSublists.add(codeList);
-					sublists.put(referencedCodeList, referencedCodeListSublists);
-				} else if (!sublists.get(referencedCodeList).contains(codeList)) {
-					sublists.get(referencedCodeList).add(codeList);
-				}
-			}
-		}
-		return codesEquivalences;
+	public Boolean isSublistOf(CodeList subList, CodeList mainList) {
+		Long nbCodesEquivalences = JPA.em()
+			.createNamedQuery(CodesEquivalence.COUNT_SUBLIST_EQUIVALENCES, Long.class)
+			.setParameter(CodesEquivalence.CODE_LIST_PROPERTY_NAME, subList)
+			.setParameter(CodesEquivalence.REFERENCED_CODE_LIST_PROPERTY_NAME, mainList)
+			.getSingleResult();
+		return (nbCodesEquivalences > 0);
 	}
-
-    @Override
-    public Boolean isSublistOf(CodeList subList, CodeList mainList) {
-        if (sublists == null) {
-            findAllSublistsData();
-        }
-        List<CodeList> mainListSublists = sublists.get(mainList);
-        return (mainListSublists != null) && mainListSublists.contains(subList);
-    }
 
     @Override
     public <T extends Code> T getConversionCode(T code, ConversionCriterion conversionCriterion){
@@ -104,37 +80,18 @@ public class CodeConversionServiceImpl extends AbstractJPAPersistenceServiceImpl
         }
     }
 
-
-    @Override
-    public void removeAll() {
-        int nbDeleted = JPA.em().createNamedQuery(CodeConversion.REMOVE_ALL).executeUpdate();
-        Logger.info("Deleted {} code conversion", nbDeleted);
-    }
-
-	private String getTargetCodeKey(Code code, CodeList targetCodeList) {
-		String targetCodeKey = null;
-		if (sublists == null) {
-			findAllSublistsData();
-		}
-		if (sublists.containsKey(targetCodeList) && sublists.get(targetCodeList).contains(code.getCodeList())) {
-			// if codeList is a sublist of targetCodeList, targetCodeKey = codeKey => no need to search equivalence
-			targetCodeKey = code.getKey();
-		} else {
-			CodesEquivalence codesEquivalence = findByCodeAndTargetCodeList(code, targetCodeList);
-			if (codesEquivalence != null) {
-				targetCodeKey = codesEquivalence.getReferencedCodeKey();
-			}
-		}
-		return targetCodeKey;
+	@Override
+	public void removeAll() {
+		int nbDeleted = JPA.em().createNamedQuery(CodeConversion.REMOVE_ALL).executeUpdate();
+		Logger.info("Deleted {} CodeConversion entities", nbDeleted);
 	}
 
 	private CodesEquivalence findByCodeAndTargetCodeList(Code code, CodeList targetCodeList) {
-
 		List<CodesEquivalence> resultList = JPA.em()
 				.createNamedQuery(CodesEquivalence.FIND_BY_CODE_AND_TARGET_CODELIST, CodesEquivalence.class)
-				.setParameter("codeList", code.getCodeList())
-				.setParameter("codeKey", code.getKey())
-				.setParameter("targetCodeList", targetCodeList)
+				.setParameter(CodesEquivalence.CODE_LIST_PROPERTY_NAME, code.getCodeList())
+				.setParameter(CodesEquivalence.CODE_KEY_PROPERTY_NAME, code.getKey())
+				.setParameter(CodesEquivalence.REFERENCED_CODE_LIST_PROPERTY_NAME, targetCodeList)
 				.getResultList();
 
 		if (resultList.size() > 1) {

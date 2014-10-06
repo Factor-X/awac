@@ -1,6 +1,15 @@
 package eu.factorx.awac.util.data.importer;
 
-import eu.factorx.awac.models.code.Code;
+import java.util.*;
+
+import jxl.Sheet;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodeConversion;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
@@ -9,14 +18,6 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.CodeConversionService;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.CodesEquivalenceService;
-import jxl.Sheet;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import play.Logger;
-
-import java.util.*;
 
 @Component
 public class CodeLabelImporter extends WorkbookDataImporter {
@@ -52,6 +53,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
     protected void importData() throws Exception {
         codeLabelService.removeAll();
         codesEquivalenceService.removeAll();
+        codeConversionService.removeAll();
 
         Logger.info("== Importing Common Code DataCell (from {})", CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
         Map<String, Sheet> commonWbSheets = getWorkbookSheets(CODES_TO_IMPORT_COMMON_WORKBOOK_PATH);
@@ -208,9 +210,6 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
     private void importCodeConversion(Sheet codeConversionSheet) {
 
-        //remove all existing codeConversion
-        codeConversionService.removeAll();
-
         // searching for foreigns key(s) columns (format: CodeListName + FOREIGN_KEY_SUFFIX)
         for (int rowIndex = 0; rowIndex < codeConversionSheet.getRows(); rowIndex++) {
 
@@ -229,23 +228,6 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
                     if (codeList == null) {
                         Logger.error("unknwon codeList : " + codeListString);
-                        continue;
-                    }
-
-                    //load code
-                    Code codeFrom = new Code(codeList, codeKeyFrom);
-
-                    if (codeFrom == null) {
-                        Logger.error("unknwon code : " + codeKeyFrom);
-                        continue;
-                    }
-
-
-                    Code codeTo = new Code(codeList, codeKeyTo);
-
-
-                    if (codeTo == null) {
-                        Logger.error("unknwon code : " + codeKeyTo);
                         continue;
                     }
 
