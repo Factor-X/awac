@@ -16,6 +16,7 @@ import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
@@ -95,13 +96,14 @@ public class AuthenticationController extends AbstractController {
 		//control account
 		if (account == null) {
 			//use the same message for both login and password error
-			return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+			// "The couple login / password was not found"
+			return unauthorized(new TranslatedExceptionDTO("LOGIN_PASSWORD_PAIR_NOT_FOUND"));
 		}
 
 		//test password
 		if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
 			//use the same message for both login and password error
-			return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+			return unauthorized(new TranslatedExceptionDTO("LOGIN_PASSWORD_PAIR_NOT_FOUND"));
 		}
 
 		//control interface
@@ -111,16 +113,16 @@ public class AuthenticationController extends AbstractController {
 			return unauthorized(new ExceptionsDTO(account.getOrganization().getInterfaceCode().getKey() + " is not a valid interface"));
 		} else if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
 			//use the same message for both login and password error
-			//TODO translate
 			Logger.info(interfaceTypeCode + "");
 			Logger.info(account.getOrganization() + "");
-			return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
+			// return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
+			return unauthorized(new TranslatedExceptionDTO("WRONG_INTERFACE_FOR_USER", interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
 		}
 
 		//control acitf
 		if (!account.getActive()) {
-			//TODO translate
-			return unauthorized(new ExceptionsDTO("Votre compte est actuellement suspendue. Contactez votre administrateur."));
+			// "Votre compte est actuellement suspendue. Contactez votre administrateur."
+			return unauthorized(new TranslatedExceptionDTO("SUSPENDED_ACCOUNT"));
 		}
 
 		//control change password
