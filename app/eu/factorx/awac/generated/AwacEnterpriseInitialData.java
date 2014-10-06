@@ -175,35 +175,35 @@ public class AwacEnterpriseInitialData {
     }
     // == TAB3
     // MOBILITE
-    Form form3 = formService.findByIdentifier("TAB2");
+    Form form3 = formService.findByIdentifier("TAB3");
     if (form3 == null) {
         form3 = new Form("TAB3");
         JPA.em().persist(form3);
     }
     // == TAB4
     // ACHATS, TRANSPORT ET DISTRIBUTION AMONT
-    Form form4 = formService.findByIdentifier("TAB2");
+    Form form4 = formService.findByIdentifier("TAB4");
     if (form4 == null) {
         form4 = new Form("TAB4");
         JPA.em().persist(form4);
     }
     // == TAB5
     // DECHETS
-    Form form5 = formService.findByIdentifier("TAB2");
+    Form form5 = formService.findByIdentifier("TAB5");
     if (form5 == null) {
         form5 = new Form("TAB5");
         JPA.em().persist(form5);
     }
     // == TAB6
     // BIENS D'EQUIPEMENT, ACTIFS LOUES EN AVAL, FRANCHISES, EMISSIONS FINANCEES
-    Form form6 = formService.findByIdentifier("TAB2");
+    Form form6 = formService.findByIdentifier("TAB6");
     if (form6 == null) {
         form6 = new Form("TAB6");
         JPA.em().persist(form6);
     }
     // == TAB7
     // PRODUITS VENDUS
-    Form form7 = formService.findByIdentifier("TAB2");
+    Form form7 = formService.findByIdentifier("TAB7");
     if (form7 == null) {
         form7 = new Form("TAB7");
         JPA.em().persist(form7);

@@ -5,7 +5,7 @@
 <% for f in forms %>
     // == <%= f.code %>
     // <%= f.name %>
-    Form form<%= f.number %> = formService.findByIdentifier("TAB2");
+    Form form<%= f.number %> = formService.findByIdentifier("<%= f.code %>");
     if (form<%= f.number %> == null) {
         form<%= f.number %> = new Form("<%= f.code %>");
         JPA.em().persist(form<%= f.number %>);

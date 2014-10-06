@@ -168,35 +168,35 @@ public class AwacMunicipalityInitialData {
 
     // == TAB_C1
     // DONNEES GENERALES
-    Form form1 = formService.findByIdentifier("TAB2");
+    Form form1 = formService.findByIdentifier("TAB_C1");
     if (form1 == null) {
         form1 = new Form("TAB_C1");
         JPA.em().persist(form1);
     }
     // == TAB_C2
     // ENERGIE, FROID ET DECHETS
-    Form form2 = formService.findByIdentifier("TAB2");
+    Form form2 = formService.findByIdentifier("TAB_C2");
     if (form2 == null) {
         form2 = new Form("TAB_C2");
         JPA.em().persist(form2);
     }
     // == TAB_C3
     // MOBILITE
-    Form form3 = formService.findByIdentifier("TAB2");
+    Form form3 = formService.findByIdentifier("TAB_C3");
     if (form3 == null) {
         form3 = new Form("TAB_C3");
         JPA.em().persist(form3);
     }
     // == TAB_C4
     // ACHATS DE BIENS ET SERVICES
-    Form form4 = formService.findByIdentifier("TAB2");
+    Form form4 = formService.findByIdentifier("TAB_C4");
     if (form4 == null) {
         form4 = new Form("TAB_C4");
         JPA.em().persist(form4);
     }
     // == TAB_C5
     // INFRASTRUCTURES ET INVESTISSEMENTS
-    Form form5 = formService.findByIdentifier("TAB2");
+    Form form5 = formService.findByIdentifier("TAB_C5");
     if (form5 == null) {
         form5 = new Form("TAB_C5");
         JPA.em().persist(form5);
