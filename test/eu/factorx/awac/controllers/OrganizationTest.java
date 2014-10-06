@@ -16,7 +16,6 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.dto.SiteAddUsersDTO;
 import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.awac.get.InvitationResultDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;

@@ -20,9 +20,9 @@ public class AccountSteps {
 	public void I_have_created_new_account() throws Throwable {
 		// Express the Regexp above with the code you wish you had
 
-		Organization org = new Organization("testing");
+		Organization org = new Organization("testing", InterfaceTypeCode.ENTERPRISE);
 		Person person = new Person("gaston", "hollands", "gaston.hollands@factorx.eu");
-		Account ac = new Account(org, person, "gho", "passwd", InterfaceTypeCode.ENTERPRISE);
+		Account ac = new Account(org, person, "gho", "passwd");
 		ac.setActive(false);
 
 		GlobalHooks.em.getTransaction().begin();

@@ -13,7 +13,6 @@ angular
     # tabSet[number of the tabSet][].mapRepetition
     # tabSet[number of the tabSet][][number of the set].master
     #
-    #
     $scope.tabSet = {}
 
     # declare the dataToCompare variable. This variable is used to display data to compare
@@ -905,13 +904,14 @@ angular
         for key in Object.keys($scope.mapQuestionSet)
             if key != '$$hashKey'
                 questionSet = $scope.mapQuestionSet[key]
+                if questionSet.questionSetDTO.code
+                    result = $scope.foundBasicParent(questionSet)
+                    return result.datalocker? && result.datalocker.identifier != $scope.$root.currentPerson.identifier
                 if questionSet.questionSetDTO.questions?
                     for question in questionSet.questionSetDTO.questions
                         if question.code == code
-                            result = $scope.foundBasicParent($scope.mapQuestionSet[key])
-                            if result.datalocker? && result.datalocker.identifier != $scope.$root.currentPerson.identifier
-                                return true
-                            return false
+                            result = $scope.foundBasicParent(questionSet)
+                            return result.datalocker? && result.datalocker.identifier != $scope.$root.currentPerson.identifier
 
     $scope.isQuestionValidate = (code) ->
         if $scope.getValidatorByQuestionCode(code)?
@@ -922,13 +922,12 @@ angular
         for key in Object.keys($scope.mapQuestionSet)
             if key != '$$hashKey'
                 questionSet = $scope.mapQuestionSet[key]
+                if questionSet.questionSetDTO.code == code
+                    return $scope.foundBasicParent(questionSet).dataValidator
                 if questionSet.questionSetDTO.questions?
                     for question in questionSet.questionSetDTO.questions
                         if question.code == code
-                            result = $scope.foundBasicParent($scope.mapQuestionSet[key])
-                            if result.dataValidator?
-                                return result.dataValidator
-                            return null
+                            return  $scope.foundBasicParent(questionSet).dataValidator
         return null
 
 

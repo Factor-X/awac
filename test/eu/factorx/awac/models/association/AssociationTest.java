@@ -31,10 +31,10 @@ public class AssociationTest extends AbstractBaseModelTest {
     @Test
     public void _001_createAssociation() {
 
-		Organization org = new Organization(ORGANIZATION_NAME);
+		Organization org = new Organization(ORGANIZATION_NAME, InterfaceTypeCode.ENTERPRISE);
 
 		Person person = new Person (LASTNAME,"hollands","gaston.hollands@factorx.eu");
-		Account ac = new Account(org,person,IDENTIFIER1,"passwd", InterfaceTypeCode.ENTERPRISE);
+		Account ac = new Account(org,person,IDENTIFIER1,"passwd");
 		ac.setActive(false);
 
 		em.persist(org);

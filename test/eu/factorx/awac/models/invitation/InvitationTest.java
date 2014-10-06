@@ -2,6 +2,7 @@ package eu.factorx.awac.models.invitation;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class InvitationTest extends AbstractBaseModelTest {
     @Test
     public void _001_createInvitation() {
 
-		Organization org = new Organization("gaston");
+		Organization org = new Organization("gaston", InterfaceTypeCode.ENTERPRISE);
 		Invitation invitation = new Invitation (INVITATION_EMAIL,INVITATION_GENKEY,org);
 
 

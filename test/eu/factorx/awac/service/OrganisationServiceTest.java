@@ -31,7 +31,7 @@ public class OrganisationServiceTest extends AbstractBaseModelTest {
     @Test
     public void _001_createOrganization() {
 
-		Organization org = new Organization(ORGANIZATION_NAME);
+		Organization org = new Organization(ORGANIZATION_NAME, InterfaceTypeCode.ENTERPRISE);
 		organizationService.saveOrUpdate(org);
 
 		//em.persist(org);

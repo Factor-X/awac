@@ -11,11 +11,12 @@ div(class="question_field",
             div {{errorMessage}}
             img(src='/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
-        button.button( ng-click="editComment()",
+        button.button( ng-click="editComment(!isDisabled())",
                        name="{{ getQuestionCode() }}_COMMENT",
                        class="edit_comment_icon glyphicon glyphicon-pencil",
-                       ng-hide="getAggregation()!=null",
+                       ng-hide="getAggregation()!=null || isDisabled() && getAnswer().comment == null",
                        ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
+        div.edit_comment_icon(ng-show="getAggregation()!=null || isDisabled() && getAnswer().comment == null")
         .user_icon(ng-hide="getAggregation()!=null || getAnswer().value == null", class="{{getUserClass()}}") {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}

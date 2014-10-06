@@ -89,6 +89,14 @@ angular
         scope.getValidator = ->
             return scope.$parent.getQuestionSetValidator(scope.getTitleCode())
 
+        scope.getValidatorName = ->
+            if scope.getValidator()?
+                scope.getValidator()
+                return scope.getValidator().firstName+" "+scope.getValidator().lastName
+
+        scope.getLockerName = ->
+            if scope.getLocker()?
+               return scope.getLocker().firstName+" "+scope.getLocker().lastName
 
         scope.getValidateClass = ->
             if scope.isValidate()

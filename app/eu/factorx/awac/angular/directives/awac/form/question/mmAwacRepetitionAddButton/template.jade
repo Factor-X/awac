@@ -1,0 +1,3 @@
+button.button.add-repetition-button(ng-click="addIteration()", type="button",ng-hide="isQuestionLocked() === true")
+    span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
+    span(ng-bind-html="getQuestionSetCode() + '_LOOPDESC' | translate")
