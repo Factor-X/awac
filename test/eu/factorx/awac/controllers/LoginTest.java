@@ -12,8 +12,10 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -245,9 +247,10 @@ public class LoginTest extends AbstractBaseModelTest {
 		JsonNode jsonResponse = Json.parse(content);
 		//Logger.info("jsonNode: " + jsonResponse.toString());
 
-		ExceptionsDTO loginResult = Json.fromJson(jsonResponse, ExceptionsDTO.class);
-		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getMessage(), "This account is not for municipality but for calculator. Please switch calculator and retry.");
+
+		TranslatedExceptionDTO loginResult = Json.fromJson(jsonResponse, TranslatedExceptionDTO.class);
+		// verify login code result.
+		assertEquals(loginResult.getCode(), TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name());
 	} // end of authenticateSuccess test
 
 

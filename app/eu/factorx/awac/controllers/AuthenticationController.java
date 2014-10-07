@@ -11,6 +11,7 @@
 
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
@@ -97,13 +98,13 @@ public class AuthenticationController extends AbstractController {
 		if (account == null) {
 			//use the same message for both login and password error
 			// "The couple login / password was not found"
-			return unauthorized(new TranslatedExceptionDTO("LOGIN_PASSWORD_PAIR_NOT_FOUND"));
+			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
 		}
 
 		//test password
 		if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
 			//use the same message for both login and password error
-			return unauthorized(new TranslatedExceptionDTO("LOGIN_PASSWORD_PAIR_NOT_FOUND"));
+			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
 		}
 
 		//control interface
@@ -116,13 +117,13 @@ public class AuthenticationController extends AbstractController {
 			Logger.info(interfaceTypeCode + "");
 			Logger.info(account.getOrganization() + "");
 			// return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
-			return unauthorized(new TranslatedExceptionDTO("WRONG_INTERFACE_FOR_USER", interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
+			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name(), interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
 		}
 
 		//control acitf
 		if (!account.getActive()) {
 			// "Votre compte est actuellement suspendue. Contactez votre administrateur."
-			return unauthorized(new TranslatedExceptionDTO("SUSPENDED_ACCOUNT"));
+			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.SUSPENDED_ACCOUNT.name()));
 		}
 
 		//control change password
