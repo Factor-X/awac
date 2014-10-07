@@ -76,9 +76,6 @@ public class SiteTest extends AbstractBaseModelTest {
         dto.setNaceCode(SITE_NACE);
 
         dto.setOrganizationalStructure(SITE_ORG_STRUCUTRE);
-        dto.setEconomicInterest(SITE_ECO_INTEREST);
-        dto.setOperatingPolicy(SITE_OPE_POLICY);
-        dto.setAccountingTreatment(SITE_ACCOUNTING);
         dto.setPercentOwned(SITE_PERCENTAGE_OWNED_WRONG);
 
         //Json node
@@ -143,9 +140,6 @@ public class SiteTest extends AbstractBaseModelTest {
         assertEquals(resultDTO.getNaceCode(), SITE_NACE);
 
         assertEquals(resultDTO.getOrganizationalStructure(), SITE_ORG_STRUCUTRE);
-        assertEquals(resultDTO.getEconomicInterest(), SITE_ECO_INTEREST);
-        assertEquals(resultDTO.getOperatingPolicy(), SITE_OPE_POLICY);
-        assertEquals(resultDTO.getAccountingTreatment(), SITE_ACCOUNTING);
         assertEquals(resultDTO.getPercentOwned(), SITE_PERCENTAGE_OWNED);
 
         //save id
@@ -173,9 +167,6 @@ public class SiteTest extends AbstractBaseModelTest {
         dto.setNaceCode(SITE_NACE2);
 
         dto.setOrganizationalStructure(SITE_ORG_STRUCUTRE2);
-        dto.setEconomicInterest(SITE_ECO_INTEREST2);
-        dto.setOperatingPolicy(SITE_OPE_POLICY2);
-        dto.setAccountingTreatment(SITE_ACCOUNTING2);
         dto.setPercentOwned(SITE_PERCENTAGE_OWNED2);
 
         //Json node
@@ -207,9 +198,6 @@ public class SiteTest extends AbstractBaseModelTest {
         assertEquals(resultDTO.getNaceCode(), SITE_NACE2);
 
         assertEquals(resultDTO.getOrganizationalStructure(), SITE_ORG_STRUCUTRE2);
-        assertEquals(resultDTO.getEconomicInterest(), SITE_ECO_INTEREST2);
-        assertEquals(resultDTO.getOperatingPolicy(), SITE_OPE_POLICY2);
-        assertEquals(resultDTO.getAccountingTreatment(), SITE_ACCOUNTING2);
         assertEquals(resultDTO.getPercentOwned(), SITE_PERCENTAGE_OWNED2);
     }
 
@@ -244,9 +232,6 @@ public class SiteTest extends AbstractBaseModelTest {
         assertEquals(resultDTO.getNaceCode(), SITE_NACE2);
 
         assertEquals(resultDTO.getOrganizationalStructure(), SITE_ORG_STRUCUTRE2);
-        assertEquals(resultDTO.getEconomicInterest(), SITE_ECO_INTEREST2);
-        assertEquals(resultDTO.getOperatingPolicy(), SITE_OPE_POLICY2);
-        assertEquals(resultDTO.getAccountingTreatment(), SITE_ACCOUNTING2);
         assertEquals(resultDTO.getPercentOwned(), SITE_PERCENTAGE_OWNED2);
     }
 

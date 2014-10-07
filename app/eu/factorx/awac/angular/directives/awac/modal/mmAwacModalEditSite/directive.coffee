@@ -2,16 +2,20 @@ angular
 .module('app.directives')
 .directive "mmAwacModalEditSite", (directiveService, downloadService, translationService, messageFlash) ->
     restrict: "E"
-
     scope: directiveService.autoScope
         ngParams: '='
     templateUrl: "$/angular/templates/mm-awac-modal-edit-site.html"
 
-    $scope.organizationStructureList =
-
-
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
+
+        $scope.organizationStructureList = [
+            'société anonyme'
+            'filiale'
+            'succursale'
+            'joint venture'
+            'autre'
+        ]
 
         $scope.createNewSite = true
 

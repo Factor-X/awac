@@ -309,7 +309,7 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 		personDTO.setIdentifier(identifier);
 
 		dto.setPerson(personDTO);
-		dto.setMunicipalityName(municipalityName);
+		dto.setOrganizationName(municipalityName);
 		dto.setPassword(password);
 
 		return dto;

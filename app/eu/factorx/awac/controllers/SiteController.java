@@ -69,9 +69,6 @@ public class SiteController  extends AbstractController {
 		site.setDescription(dto.getDescription());
 
 		site.setOrganizationalStructure(dto.getOrganizationalStructure());
-		site.setEconomicInterest(dto.getEconomicInterest());
-		site.setOperatingPolicy(dto.getOperatingPolicy());
-		site.setAccountingTreatment(dto.getAccountingTreatment());
 		site.setPercentOwned(dto.getPercentOwned());
 
 		siteService.saveOrUpdate(site);
@@ -94,9 +91,6 @@ public class SiteController  extends AbstractController {
 		site.setDescription(dto.getDescription());
 
 		site.setOrganizationalStructure(dto.getOrganizationalStructure());
-		site.setEconomicInterest(dto.getEconomicInterest());
-		site.setOperatingPolicy(dto.getOperatingPolicy());
-		site.setAccountingTreatment(dto.getAccountingTreatment());
 		site.setPercentOwned(dto.getPercentOwned());
 
         //assign the last year

@@ -119,7 +119,7 @@ public class BAD_AE_BAD44BTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(23100.0, false);
+                mapResult.put(23000.0, false);
         
         String valueGenerated = "";
 

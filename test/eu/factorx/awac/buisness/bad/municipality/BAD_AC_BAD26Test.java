@@ -121,7 +121,7 @@ public class BAD_AC_BAD26Test{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(0.003, false);
+                mapResult.put(3000.0, false);
         
         String valueGenerated = "";
 
@@ -194,7 +194,7 @@ public class BAD_AC_BAD26Test{
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AC10",1);
                 mapRepetition1.put("AC900",1);
-                list.add(new AnswerLineDTO("AC902",3000.0,  mapRepetition1  , UnitCode.U5122.getKey()  ));
+                list.add(new AnswerLineDTO("AC902",3.0,  mapRepetition1  , UnitCode.U5122.getKey()  ));
         
         return list;
     }
