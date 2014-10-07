@@ -83,7 +83,9 @@ public class ReportResult implements Serializable {
 				}
 			}
 
-			double allScopes = scope1 + scope2 + scope3 + outOfScope;
+			// GP: outOfScope does not increment the total anymore [CELDL-226]
+			// double allScopes = scope1 + scope2 + scope3 + outOfScope;
+			double allScopes = scope1 + scope2 + scope3;
 
 			scopeValuesByIndicator.put(indicatorKey, Arrays.asList(allScopes, scope1, scope2, scope3, outOfScope));
 		}
