@@ -53,7 +53,6 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
-        .otherwise({ redirectTo: '/login' })
 
         return
 

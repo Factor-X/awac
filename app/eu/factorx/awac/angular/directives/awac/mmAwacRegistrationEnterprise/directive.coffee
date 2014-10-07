@@ -7,12 +7,9 @@ angular
     replace:true
     controller: ($scope) ->
 
-
-
         $scope.validatePasswordConfirmField = () ->
-            if ($scope.passwordInfo.field == $scope.passwordConfirmInfo.field)
+            if ($scope.passwordInfo.isValid? == true > 0 && $scope.passwordInfo.field == $scope.passwordConfirmInfo.field)
                 return true
-            $scope.passwordConfirmInfo.validationMessage = "PASSWORD_VALIDATION_WRONG_CONFIRMATION"
             return false
 
         $scope.identifierInfo =

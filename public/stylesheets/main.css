@@ -48,7 +48,7 @@ input.ng-invalid {
     display: block;
 }
 
-/* field_form */
+/* field_form
 .field_form {
     display: table;
     margin: 20px;
@@ -97,7 +97,7 @@ input.ng-invalid {
 .field_form_separator{
     border-bottom: 1px solid #737373;
 }
-
+*/
 /*
 .alert {
     z-index : 1000;
@@ -137,14 +137,6 @@ input.ng-invalid {
     margin: auto;
     margin-top: 20px;
     padding-bottom: 35px;
-}
-
-.loginFrame .field_form {
-    width: 100%;
-}
-
-.loginFrame .field_form input {
-    width: 100%;
 }
 
 .loginFrame button {

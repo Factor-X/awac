@@ -107,19 +107,23 @@ angular
     $scope.computeScopeAndPeriod = ->
         if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
-            $routeParams.period = $scope.$root.periodSelectedKey
-            $routeParams.scope = $scope.$root.scopeSelectedId
             $routeParams.form = $route.current.params.form
 
             if $route.current
                 p = $route.current.$$route.originalPath
 
+                console.log p
+
                 if p == "/noScope"
                     url = $scope.$root.getDefaultRoute()
                     $scope.root.nav url
                 else
+                    p=p.replace(new RegExp("\\/:period\\b", 'g'), '')
+                    p=p.replace(new RegExp("\\/:scope\\b", 'g'), '')
                     for k,v of $routeParams
                         p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
+
+                    console.log p
 
                     $scope.$root.nav(p)
 
@@ -279,12 +283,14 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.logout = () ->
         downloadService.postJson '/awac/logout', null, (result) ->
             if result.success
+                console.log 'logout !! '
                 $rootScope.nav('/login')
                 $rootScope.currentPerson = null
                 $rootScope.periodSelectedKey=null
                 $rootScope.scopeSelectedId=null
             else
                 messageFlash.displayError result.data.message
+                console.log 'logout !! 2'
                 $rootScope.nav('/login')
 
 
@@ -442,7 +448,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # confirmed : the modification of localisation was already confirmed by the user
     #
     $rootScope.nav = (loc, confirmed = false) ->
-        #console.log "NAV : " + loc
+        console.log "NAV : " + loc
         canBeContinue = true
 
         # test if the main current scope have a validNavigation function and if this function return a false
@@ -464,9 +470,10 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             routeWithScopeAndPeriod = ['/form','/results','/actions']
             for route in routeWithScopeAndPeriod
                 if loc.substring(0, route.length) == route
+                    console.log "nav to => "+loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId
                     $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
                     return
-
+            console.log "nav to => "+loc
             $location.path(loc)
 
             return

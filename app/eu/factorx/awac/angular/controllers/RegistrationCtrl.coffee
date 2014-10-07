@@ -84,6 +84,7 @@ angular
 #        $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'REGISTRATION_SUCCESS'
                 $scope.isLoading = false
+                console.log 'registration'
                 $scope.$root.nav('/login')
             else
                 messageFlash.displaySuccess translationService.get 'REGISTRATION_FAILED'

@@ -32,10 +32,12 @@ defaultResolve =
 
         # if the current user is null...
         if not $rootScope.currentPerson
+            console.log 'test authentication because not curennt person : defaultResolve'
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
                 else
+                    console.log 'to login  : defaultResolve'
                     $location.path '/login'
 
 formResolve =
@@ -45,6 +47,8 @@ formResolve =
         if not $rootScope.currentPerson
 
             # send request to control connection
+            console.log 'test authentication because not curennt person : formResolve'
+
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
 
                 # if success, add information into rootScope
@@ -55,6 +59,7 @@ formResolve =
 
                 # if no connected, send to /login route
                 else
+                    console.log 'to login  : formResolve'
                     $location.path '/login'
         else
             if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
@@ -65,7 +70,7 @@ resultResolve =
 
         # if the current user is null...
         if not $rootScope.currentPerson
-
+            console.log 'test authentication because not curennt person defaultResolve : resultResolve'
             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
@@ -74,10 +79,10 @@ resultResolve =
                     if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
                         $location.path '/noScope'
                 else
+                    console.log 'to login  : resultResolve'
                     $location.path '/login'
 
 
-initializeCommonRoutes(defaultResolve)
 if document.querySelector("meta[name=app]")?
     iName = document.querySelector("meta[name=app]").getAttribute("content")
     if iName == "municipality"
@@ -86,6 +91,8 @@ if document.querySelector("meta[name=app]")?
         initializeEnterpriseRoutes(defaultResolve)
     if iName == "verification"
       initializeVerificationRoutes(defaultResolve)
+
+initializeCommonRoutes(defaultResolve)
 
 angular
 .module('app')
