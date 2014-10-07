@@ -40,6 +40,7 @@ public class BAD {
     private List<String> listQuestion= new ArrayList<>();
     private int line;
     private List<BadTestValue> testValues = new ArrayList<>();
+    private String alternativeGroup;
 
     public BAD() {
     }
@@ -207,5 +208,13 @@ public class BAD {
 
     public void addTestValue(BadTestValue testValue) {
         this.testValues.add(testValue);
+    }
+
+    public void setAlternativeGroup(String alternativeGroup) {
+        this.alternativeGroup = alternativeGroup;
+    }
+
+    public String getAlternativeGroup() {
+        return alternativeGroup;
     }
 }

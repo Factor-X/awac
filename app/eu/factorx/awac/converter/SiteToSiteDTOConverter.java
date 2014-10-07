@@ -31,11 +31,8 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
         SiteDTO dto = new SiteDTO();
         dto.setId(site.getId());
         dto.setName(site.getName());
-        dto.setAccountingTreatment(site.getAccountingTreatment());
         dto.setDescription(site.getDescription());
-        dto.setEconomicInterest(site.getEconomicInterest());
         dto.setNaceCode(site.getNaceCode());
-        dto.setOperatingPolicy(site.getOperatingPolicy());
         dto.setPercentOwned(site.getPercentOwned());
         dto.setOrganizationalStructure(site.getOrganizationalStructure());
 

@@ -3,22 +3,25 @@ angular
 .controller "ResultsCtrl", ($scope, $window, $filter, downloadService, displayFormMenu, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
-    $scope.$root.$watch('mySites', (nv) ->
-        $scope.mySites = $scope.$root.mySites
+    $scope.$root.$watch 'mySites', (nv) ->
+        console.log 'watch $root.mySites'
+        $scope.mySites = angular.copy $scope.$root.mySites
         for s in $scope.mySites
             if "" + s.id == "" + $scope.$root.scopeSelectedId
-                s.$selected = true
-    , true);
+                s.selected = true
+    , true
 
     $scope.$watch '$root.periodToCompare', () ->
         $scope.reload()
 
     $scope.$watch 'mySites', () ->
+        console.log 'watch mySites'
         $scope.reload()
+    , true
 
     $scope.reload = () ->
         sites = $scope.mySites.filter((e) ->
-            return e.$selected
+            return e.selected
         )
 
         if sites.length > 0
@@ -119,7 +122,7 @@ angular
 
     $scope.siteSelectionIsEmpty = () ->
         filtered = $scope.mySites.filter (s) ->
-            return s.$selected
+            return s.selected
         return filtered.length == 0
 
     $scope.downloadAsXls = () ->

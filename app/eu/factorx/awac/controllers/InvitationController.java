@@ -1,43 +1,29 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
-import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.*;
-import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
-import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Component;
 import play.Configuration;
 import play.Logger;
-import play.Play;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

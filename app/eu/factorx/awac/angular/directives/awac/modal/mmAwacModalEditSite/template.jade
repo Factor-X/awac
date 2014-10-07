@@ -15,10 +15,10 @@
                     mm-awac-modal-field-text(ng-info="fields.description")
                     mm-awac-modal-field-text(ng-info="fields.nace")
                     mm-awac-modal-field-text(ng-info="fields.percentOwned")
-                    mm-awac-modal-field-text(ng-info="fields.orgStructure")
-                    mm-awac-modal-field-text(ng-info="fields.ecoInterest")
-                    mm-awac-modal-field-text(ng-info="fields.opePolicy")
-                    mm-awac-modal-field-text(ng-info="fields.accountingTreatment")
+                    div.field_row
+                        div(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translate")
+                        div
+                            select(ng-options='p as p for p in organizationStructureList', ng-model='fields.organizationStructure')
 
             .modal-footer
 

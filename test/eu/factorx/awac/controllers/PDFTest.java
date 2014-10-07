@@ -1,21 +1,11 @@
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 

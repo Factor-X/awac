@@ -93,6 +93,9 @@ public class BADGenerator {
         //activity ownership
         badTemplate.addParameter("ACTIVITY-OWNERSHIP", bad.getActivityOwnership());
 
+        //add alternative group
+        badTemplate.addParameter("ALTERNATIVE_GROUP", bad.getAlternativeGroup());
+
         //value
         badTemplate.addParameter("VALUE", bad.getValue());
 

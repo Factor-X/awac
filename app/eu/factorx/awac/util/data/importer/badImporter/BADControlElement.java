@@ -731,6 +731,17 @@ public class BADControlElement {
         }
     }
 
+    /**
+     * can be null or string
+     * @param data
+     * @param bad
+     */
+    public void controlAlternativeGroup(String data, BAD bad) {
+        if(data != null){
+            bad.setAlternativeGroup(data);
+        }
+    }
+
 
     /* ********************************
     ***************** PRIVATE ***********
