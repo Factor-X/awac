@@ -14,9 +14,6 @@ div
                 td(ng-bind-html="'DESCRIPTION' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_NACE_CODE' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_ECONOMIC_INTEREST' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_OPERATING_POLICY' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_ACCOUNTING_TREATMENT' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_PERCENT_OWNED' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_ADD_USERS_BUTTON' | translateText")
                 td
@@ -29,9 +26,6 @@ div
                 td {{site.description}}
                 td {{site.naceCode}}
                 td {{site.organizationalStructure}}
-                td {{site.economicInterest}}
-                td {{site.operatingPolicy}}
-                td {{site.accountingTreatment}}
                 td {{site.percentOwned}} %
                 td
                     button(type="button", title="{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}", ng-click="addUsers(site)", class="edit_icon glyphicon glyphicon-pencil")
@@ -44,28 +38,3 @@ div
 
         button.button.add(type="button", ng-click="editOrCreateSite()",ng-bind-html="'SITE_MANAGER_ADD_SITE_BUTTON' | translateText")
 
-        br
-        br
-        h4(ng-bind-html="'SITE_MANAGER_EVENT_TITLE' | translateText")
-        .desc(ng-bind-html="'SITE_MANAGER_EVENT_DESC' | translateText")
-        br
-        div
-            span.select_period(ng-bind-html="'SITE_MANAGER_SELECT_PERIOD' | translateText")
-            select(ng-options='p.key as p.label for p in $root.periods', ng-model='selectedPeriodForEvent')
-
-        table.site_table
-            tr.site_table_header
-                td(ng-bind-html="'SITE_MANAGER_EVENT_NAME' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EVENT_DESCRIPTION' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
-
-            tr(ng-repeat="event in getEventList()", ng-show="event.period.key == selectedPeriodForEvent")
-                td {{event.name}}
-                td {{event.description}}
-                td {{event.period.label}}
-                td
-                    button(type="button", title="{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}", ng-click="editOrCreateEvent(event)", class="edit_icon glyphicon glyphicon-pencil")
-
-
-        button.button.add(type="button", ng-click="editOrCreateEvent()",ng-bind-html="'SITE_MANAGER_ADD_EVENT_BUTTON' | translateText")

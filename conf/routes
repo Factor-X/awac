@@ -31,8 +31,10 @@ POST        /awac/forgotPassword                                   @eu.factorx.a
 #
 # registration ctrl
 #
-POST        /enterprise/registration                               @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
-POST        /municipality/registration                             @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
+POST        /awac/registration/enterprise                          @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
+POST        /awac/registration/municipality                        @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
+POST        /awac/registration/validator                           @eu.factorx.awac.controllers.RegistrationController.verificationRegistration()
+
 
 #
 # invitation ctrl
@@ -131,6 +133,7 @@ GET         /awac/site/:siteId                                     @eu.factorx.a
 POST        /awac/organization/site/associatedaccounts/load        @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
 POST        /awac/organization/site/associatedaccounts/save        @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
 GET         /awac/organization/getMyOrganization                   @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
+POST        /awac/organization/update                              @eu.factorx.awac.controllers.OrganizationController.updateOrganization()
 
 
 #
@@ -142,4 +145,4 @@ POST        /awac/organization/events/save                         @eu.factorx.a
 #
 # verification
 #
-GET /awac/verification/requests @eu.factorx.awac.controllers.VerificationController.getRequests()
+GET         /awac/verification/requests                            @eu.factorx.awac.controllers.VerificationController.getRequests()

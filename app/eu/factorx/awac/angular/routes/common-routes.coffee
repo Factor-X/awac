@@ -41,6 +41,16 @@ initializeCommonRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
+        .when('/organization_manager', {
+                templateUrl: '$/angular/views/organization_manager.html'
+                controller: 'OrganizationManagerCtrl'
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_organization_manager'
+                }, defaultResolve)
+
+            }
+        )
         .when('/user_manager', {
                 templateUrl: '$/angular/views/user_manager.html'
                 controller: 'UserManagerCtrl'
