@@ -133,6 +133,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 		RegisterInvitationDTO dto = new RegisterInvitationDTO();
         dto.setPassword(password);
+		dto.setPerson(personDTO);
         dto.setKey(invitationList.get(0).getGenkey());
 
 		//Json node
@@ -186,6 +187,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
         RegisterInvitationDTO dto = new RegisterInvitationDTO();
         dto.setPassword(password);
+		dto.setPerson(personDTO);
         dto.setKey(key);
 
 		//Json node
