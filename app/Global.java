@@ -11,7 +11,10 @@
 
 import eu.factorx.awac.InitializationThread;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import org.joda.time.DateTime;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,7 @@ import play.Logger;
 import play.Play;
 import play.i18n.Lang;
 import play.i18n.Messages;
+import play.libs.Akka;
 import play.libs.F;
 import play.libs.F.Promise;
 import play.mvc.Action;
@@ -31,15 +35,16 @@ import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
+import scala.concurrent.duration.Duration;
 
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 // Spring imports
 
 public class Global extends GlobalSettings {
-
 
 
 	private static InitializationThread thread;
@@ -66,7 +71,7 @@ public class Global extends GlobalSettings {
 		// INTERNAL SPRING SERVICES
 		// ========================================
 
-		String configLocation = Play.application().configuration().getString("spring.context.location");
+		final String configLocation = Play.application().configuration().getString("spring.context.location");
 		applicationContext = new ClassPathXmlApplicationContext(configLocation);
 		play.Logger.info("Spring Startup @" + new Date(applicationContext.getStartupDate()));
 
@@ -77,6 +82,33 @@ public class Global extends GlobalSettings {
 //			// read spring configuration and instanciate context
 //			ctx = new ClassPathXmlApplicationContext("components.xml");
 //		}
+
+
+		final String awacHostname = System.getenv().get("AwacHostname");
+		if (awacHostname != null) {
+
+			Akka.system().scheduler().schedule(
+				Duration.create(10, TimeUnit.SECONDS),
+				Duration.create(1, TimeUnit.MINUTES),
+				new Runnable() {
+					public void run() {
+						try {
+							play.Logger.info("Getting " + awacHostname + " for keep-alive ...");
+							HttpClient httpClient = new DefaultHttpClient();
+							HttpGet httpGet = new HttpGet(awacHostname);
+							HttpResponse response = httpClient.execute(httpGet);
+							play.Logger.info("Got " + awacHostname + " for keep-alive.");
+						} catch (Exception e) {
+							play.Logger.info("Getting " + awacHostname + " for keep-alive ended with an exception", e);
+						}
+					}
+				},
+				Akka.system().dispatchers().defaultGlobalDispatcher()
+			);
+			play.Logger.info("Akka keep-alive now runs.");
+		}else{
+			play.Logger.info("Akka keep-alive won't run because the environment variable 'AwacHostname' does not exist.");
+		}
 
 
 		try {
