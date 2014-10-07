@@ -115,7 +115,6 @@
             border-right-color: #484;
         }
 
-
         .tab_donut {
             background-image: url('/assets/images/schemas/schema_pieChart.png');
             background-position: bottom 4px right 4px;
@@ -246,6 +245,8 @@
     }
 
     .chart-legend {
+        vertical-align: top;
+
         .period-header {
             display: block;
             text-align: center;
@@ -256,6 +257,15 @@
 
         .data-cell {
             padding: 0.25em;
+        }
+
+        .chart-legend-bullet-color {
+            vertical-align: middle;
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border-radius: 2px;
+            margin-right: 0.5em;
         }
     }
 }
