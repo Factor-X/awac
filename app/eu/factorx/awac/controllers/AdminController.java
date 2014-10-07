@@ -85,8 +85,6 @@ public class AdminController extends AbstractController {
 		if (!Play.application().isDev()) {
 			return unauthorized();
 		}
-		// reset code labels cache
-		codeLabelService.resetCache();
 		// import code labels
 		codeLabelImporter.run();
 		// import translations

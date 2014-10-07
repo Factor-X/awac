@@ -43,8 +43,6 @@
         ```sh
         $ rake indicators_factors:import
         ```    
-        
-    - Restart activator
     
     - Surveys
     
@@ -55,50 +53,4 @@
            
     - Restart activator
             
-    - CodeLabels
-        
-        ```sh
-        $ rake codelabels:import
-        ```
-        
-    - Indicators / Factors
-    
-        ```sh
-        $ rake indicators_factors:import
-        ```
-            
-    - Restart activator
-        
-    - BADS
-    
-        ```sh
-        $ rake bads:import:enterprise
-        $ rake bads:import:municipality
-        ```       
-    
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   

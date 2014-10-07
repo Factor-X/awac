@@ -55,20 +55,20 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 	@Test
     public void _001_createAccountSiteAssociation() {
 
-		Organization org = new Organization ("testing");
+		Organization org = new Organization ("testing", InterfaceTypeCode.ENTERPRISE);
 		organizationService.saveOrUpdate(org);
 
 		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
 		personService.saveOrUpdate(person);
 
-		Account ac = new Account(org,person,"gho","passwd", InterfaceTypeCode.ENTERPRISE);
+		Account ac = new Account(org,person,"gho","passwd");
 		ac.setActive(false);
 		accountService.saveOrUpdate(ac);
 
 		Person person2 = new Person ("gaston2","hollands2","gaston2.hollands@factorx.eu");
 		personService.saveOrUpdate(person2);
 
-		Account ac2 = new Account(org,person2,"gho2","passwd2", InterfaceTypeCode.ENTERPRISE);
+		Account ac2 = new Account(org,person2,"gho2","passwd2");
 		ac2.setActive(false);
 		accountService.saveOrUpdate(ac2);
 

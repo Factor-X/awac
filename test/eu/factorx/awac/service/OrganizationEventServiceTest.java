@@ -3,6 +3,7 @@ package eu.factorx.awac.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -121,7 +122,7 @@ public class OrganizationEventServiceTest extends AbstractBaseModelTest {
 	}
 
 	private Organization createOrganization(String name) {
-		return organizationService.saveOrUpdate(new Organization(name + "_" + System.currentTimeMillis()));
+		return organizationService.saveOrUpdate(new Organization(name + "_" + System.currentTimeMillis(), InterfaceTypeCode.ENTERPRISE));
 	}
 
 	private OrganizationEvent createOrganizationEvent(Organization organization, Period period, String name, String description) {

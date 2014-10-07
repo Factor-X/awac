@@ -18,6 +18,11 @@ angular
         if scope.getTabSet()?
             scope.$parent.addTabSet(scope.getTabSet(), scope.getTab(),scope.getRepetitionMap())
 
+        scope.isQuestionLocked = ->
+            if scope.$parent.getQuestionSetLocker(scope.getQuestionSetCode())? || scope.$parent.getValidatorByQuestionCode(scope.getQuestionSetCode())?
+                return true
+            return false
+
         scope.getQuestionSet = () ->
             return scope.$parent.getQuestionSet(scope.getQuestionSetCode())
 

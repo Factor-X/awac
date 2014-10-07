@@ -1070,6 +1070,7 @@ h1 {
     height: 20px;
     display: inline-block;
     margin: 0 5px;
+    vertical-align: top;
 }
 
 .edit_comment_icon_selected {
@@ -1137,8 +1138,7 @@ h1 {
 }
 
 .document-question-block {
-    width: calc(100% - 72px);
-    display: inline-block;
+    height: 62px;>
 }
 
 .document-question-block > div {

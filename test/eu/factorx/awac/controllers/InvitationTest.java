@@ -2,10 +2,10 @@ package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.InvitationResultDTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
+import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
@@ -121,7 +121,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		assertEquals(200, status(result));
 
 		//analyse result
-		InvitationResultDTO resultDTO = getDTO(result, InvitationResultDTO.class);
+		ResultsDTO resultDTO = getDTO(result, ResultsDTO.class);
 
 	} // end of authenticateSuccess test
 
@@ -134,7 +134,15 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		// get back in invitation from test 001 in order to get generated key
 		List<Invitation> invitationList = invitationService.findByEmail(invitationEmail);
 		// InvitationDTO
-		RegisterInvitationDTO dto = new RegisterInvitationDTO(login,password,lastName,firstName,interfaceName,invitationEmail,invitationList.get(0).getGenkey());
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setFirstName(firstName);
+        personDTO.setLastName(lastName);
+        personDTO.setEmail(invitationEmail);
+        personDTO.setIdentifier(login);
+
+		RegisterInvitationDTO dto = new RegisterInvitationDTO();
+        dto.setPassword(password);
+        dto.setKey(invitationList.get(0).getGenkey());
 
 		//Json node
 		JsonNode node = Json.toJson(dto);
@@ -167,7 +175,7 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		assertNotNull(accountList.get(0));
 		assertEquals(accountList.get(0).getIdentifier(),login);
 		//analyse result
-		InvitationResultDTO resultDTO = getDTO(result, InvitationResultDTO.class);
+        ResultsDTO resultDTO = getDTO(result, ResultsDTO.class);
 
 	} // end of authenticateSuccess test
 
@@ -179,7 +187,15 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 		// InvitationDTO
 		// specify unknow key
-		RegisterInvitationDTO dto = new RegisterInvitationDTO(login,password,lastName,firstName,interfaceName,invitationEmail,key);
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setFirstName(firstName);
+        personDTO.setLastName(lastName);
+        personDTO.setEmail(invitationEmail);
+        personDTO.setIdentifier(login);
+
+        RegisterInvitationDTO dto = new RegisterInvitationDTO();
+        dto.setPassword(password);
+        dto.setKey(key);
 
 		//Json node
 		JsonNode node = Json.toJson(dto);

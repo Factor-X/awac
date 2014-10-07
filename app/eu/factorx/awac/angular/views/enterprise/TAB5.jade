@@ -15,9 +15,8 @@ div
                 mm-awac-question(question-code="A5001",ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="A5002",ng-repetition-map="itLevel1")
                 mm-awac-question(question-code="A5003",ng-repetition-map="itLevel1")
-            button.button.add-repetition-button(ng-click="addIteration('A5000')", type="button")
-                span(ng-bind-html="'ADD_NEW_ITERATION' | translate",style="margin-right : 5px")
-                span(ng-bind-html="'A5000_LOOPDESC' | translate")
+
+            mm-awac-repetition-add-button(question-set-code="A5000")
 
         .horizontal_separator
 

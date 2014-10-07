@@ -2,6 +2,7 @@ package eu.factorx.awac.service;
 
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class SiteServiceTest extends AbstractBaseModelTest {
 		period1 = periodService.findByCode(PeriodCode.P2005);
 		period2 = periodService.findByCode(PeriodCode.P2006);
 		Assert.assertNotEquals("assertNotEquals(period1, period2)", period1, period2);
-		org = organizationService.saveOrUpdate(new Organization("anOrg"));
+		org = organizationService.saveOrUpdate(new Organization("anOrg", InterfaceTypeCode.ENTERPRISE));
 		site = new Site(org, "aSite");
 		site.getListPeriodAvailable().add(period1);
 		site = siteService.saveOrUpdate(site);

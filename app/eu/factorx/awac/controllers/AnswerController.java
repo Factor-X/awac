@@ -1012,6 +1012,7 @@ public class AnswerController extends AbstractController {
                     List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
 
                     if (questionSetAnswers.size() != 1 || questionSetAnswers.get(0).getAuditInfo().getDataValidator() == null) {
+                        Logger.info("cannot be closed because "+questionSet+" is not close");
                         return false;
                     }
                 }

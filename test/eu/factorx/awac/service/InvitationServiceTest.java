@@ -38,7 +38,7 @@ public class InvitationServiceTest extends AbstractBaseModelTest {
 	@Test
     public void _001_createInvitation() {
 
-		Organization org = new Organization ("gaston");
+		Organization org = new Organization ("gaston", InterfaceTypeCode.ENTERPRISE);
 		organizationService.saveOrUpdate(org);
 
 		Invitation invitation = new Invitation (InvitationTest.INVITATION_EMAIL,InvitationTest.INVITATION_GENKEY,org);

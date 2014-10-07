@@ -1,6 +1,7 @@
 package eu.factorx.awac.models.business;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -18,7 +19,7 @@ public class SiteTest extends AbstractBaseModelTest {
     @Test
     public void _001_createSite() {
 
-		Organization org = new Organization(ORGANISATION);
+		Organization org = new Organization(ORGANISATION, InterfaceTypeCode.ENTERPRISE);
 		em.persist(org);
         em.persist(new Site(org,SITE));
     } // end of test method

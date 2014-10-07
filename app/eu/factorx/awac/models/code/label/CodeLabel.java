@@ -15,7 +15,7 @@ import eu.factorx.awac.models.code.type.LanguageCode;
 @Table(name = "code_label", uniqueConstraints = { @UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST,
 		CodeLabel.COLUMN_NAME_KEY }) })
 @NamedQueries({
-		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList"),
+		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
 		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl"),
 		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList"),
@@ -32,6 +32,8 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 	public static final String FIND_ALL = "CodeLabel.findAll";
 	public static final String REMOVE_BY_LIST = "CodeLabel.removeByList";
 	public static final String REMOVE_ALL = "CodeLabel.removeAll";
+
+	public static final String CODE_LIST_PROPERTY_NAME = "codeList";
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = COLUMN_NAME_CODELIST, nullable = false)

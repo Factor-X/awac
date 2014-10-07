@@ -45,7 +45,7 @@ public class PdfGeneratorServiceTest extends AbstractBaseModelTest {
 			table.setCell(0,i, "Line #" + (i+1));
 			table.setCell(1,i, Math.random() * 10 );
 		}
-		String donut = svgGenerator.getDonut(table);
+		String donut = svgGenerator.getDonut(table,"2013");
 
 		pdfGenerator.setMemoryResource("mem://svg/donut", donut);
 

@@ -1,6 +1,8 @@
 package eu.factorx.awac.service;
 
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.util.Table;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -23,6 +25,9 @@ public class SvgGeneratorServiceTest extends AbstractBaseModelTest {
 	@Autowired
 	private SvgGenerator svgGenerator;
 
+    @Autowired
+    private PeriodService periodService;
+
 	@Test
 	public void _001_donut() {
 
@@ -35,7 +40,7 @@ public class SvgGeneratorServiceTest extends AbstractBaseModelTest {
 			table.setCell(1,i, Math.random() * 10 );
 		}
 
-		String donut = svgGenerator.getDonut(table);
+        String donut = svgGenerator.getDonut(table,"2013");
 
 		System.out.println(donut);
 
