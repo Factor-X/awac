@@ -52,6 +52,7 @@ public abstract class AnswerValue extends AuditedAbstractEntity {
 		this.questionAnswer = param;
 	}
 
+	@Column(length = 1000)
     public String getComment() {
         return comment;
     }

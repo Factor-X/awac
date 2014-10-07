@@ -13,9 +13,10 @@ initializeCommonRoutes = (defaultResolve) ->
                 resolve:
                     testConnection: ($http, $rootScope, $location, downloadService) ->
                         # if the current user is null...
-                        if $rootScope.currentUser
-                            $location.path '/noScope'
+                        if $rootScope.currentPerson?
+                            $rootScope.toDefaultForm()
                         else
+                            console.log "testAuthentication to initializeCommonRoutes "
                             downloadService.postJson '/awac/testAuthentication', {interfaceName: $rootScope.instanceName}, (result) ->
                                 if result.success
                                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()

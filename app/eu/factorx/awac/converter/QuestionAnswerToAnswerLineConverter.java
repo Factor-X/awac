@@ -42,7 +42,6 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
 
             AnswerValue answerValue = questionAnswer.getAnswerValues().get(0);
 
-
             Object rawAnswerValue = null;
             String unitCode = null;
             switch (answerType) {

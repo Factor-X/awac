@@ -1,30 +1,82 @@
+@media screen {
 
-//
-// FULL-SCREEN MODAL
-//
-.modal-fullscreen {
-    position: absolute;
-    z-index: 1000000;
-    left: 1cm;
-    top: 1cm;
-    bottom: 1cm;
-    right: 1cm;
-    border: 5px solid #A4A298;
-    padding: 10px 10px 35px;
-    background-color: #CFCDC0;
-    overflow: hidden;
+    //
+    // FULL-SCREEN MODAL
+    //
+    .modal-fullscreen {
+        position: absolute;
+        z-index: 1000000;
+        left: 1cm;
+        top: 1cm;
+        bottom: 1cm;
+        right: 1cm;
+        border: 5px solid #A4A298;
+        padding: 10px 10px 35px;
+        background-color: #CFCDC0;
+        overflow: hidden;
 
-    .modal-fullscreen-header {
-        text-align: right;
+        .modal-fullscreen-header {
+            text-align: right;
+        }
+
+        .modal-fullscreen-body {
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .modal-fullscreen-footer {
+
+        }
+
     }
 
-    .modal-fullscreen-body {
-        overflow-y: auto;
-        height: 100%;
+    //
+    // field_form
+    //
+    .field_form {
+        margin: 20px;
+        width: ~"calc(100% - 40px)";
+
+        .field_row {
+            min-height: 30px;
+            vertical-align: middle;
+            padding-top: 3px;
+            & > div {
+                display: inline-block;
+                vertical-align: top;
+            }
+            & > div:first-child {
+                width: ~"calc(40% - 20px)";
+            }
+
+            & > div:nth-child(2) {
+                width: ~"calc(60% - 20px)";
+            }
+
+            & > div:nth-child(2) > * {
+                width: 100%;
+            }
+
+            & > div:nth-child(3) {
+                padding-left: 20px;
+            }
+        }
+        .error_message > div:last-child {
+            display: none;
+            position: absolute;
+            background-color: orangered;
+            border: 1px solid #ff0000;
+            color: #ffffff;
+            padding: 5px;
+            min-width: 100px;
+            max-width: 150px;
+            margin-top: -15px;
+            margin-left: 20px;
+        }
+        .error_message:hover > div:last-child {
+            display: block;
+        }
+
     }
-
-    .modal-fullscreen-footer {
-
-    }
-
 }
+

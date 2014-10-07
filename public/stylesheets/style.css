@@ -1691,19 +1691,7 @@ ul.messenger > li {
     border-bottom: solid 2px #666;
 }
 
-.chart-legend {
-    text-align: left;
-    vertical-align: top;
-}
 
-.chart-legend-bullet-color {
-    vertical-align: middle;
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border-radius: 2px;
-    margin-right: 0.5em;
-}
 
 .forgot_password_success_message {
     text-align: center;

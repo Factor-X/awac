@@ -13,11 +13,13 @@ div
         div(class="field_form", style="display:table")
             mm-awac-modal-field-text(ng-info="identifierInfo")
             mm-awac-modal-field-text(ng-info="passwordInfo")
-                button(type="button", title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}", ng-click="changePassword()", class="edit_icon glyphicon glyphicon-pencil")
+                div(style="width:10px")
+                    button(type="button", title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}", ng-click="changePassword()", class="edit_icon glyphicon glyphicon-pencil")
             mm-awac-modal-field-text(ng-info="lastNameInfo")
             mm-awac-modal-field-text(ng-info="firstNameInfo")
             mm-awac-modal-field-text(ng-info="emailInfo")
-                button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
+                div(style="width:10px")
+                    button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
 
             br
             div(style="display:table-row")

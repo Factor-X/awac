@@ -55,6 +55,5 @@ initializeEnterpriseRoutes = (defaultResolve) ->
 
             }
         )
-        .otherwise({ redirectTo: '/login' })
 
         return

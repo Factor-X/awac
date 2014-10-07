@@ -238,7 +238,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			// bg-series
 			String path = computePathData(seriePoints, true);
 
-			String color = Colors.makeGoodColorForSerieElement(s + 1, data.getColumnCount() - 1);
+			String color = Colors.makeGoodColorForSerieElement(s, data.getColumnCount()-1);
 
 			sb.append(String.format("<path d='%s' stroke='#333' fill='none'                     stroke-width='2' transform='translate(1,1)' />", path));
 			sb.append(String.format("<path d='%s' stroke='#%s'  fill='#%s'  fill-opacity='0.25' stroke-width='2'                            />", path, color, color));
@@ -280,7 +280,9 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		int count = data.getRowCount();
 		int series = data.getColumnCount() - 1;
 		double maximum = data.max(1, 0, data.getColumnCount() - 1, count - 1);
-		int size = 1000;
+
+		int sizex = 200 + count * 200;
+		int sizey = 1000;
 
 
 		double l = Math.log10(maximum);
@@ -290,14 +292,14 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
 
 		sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d' viewBox='0 0 %d %d'>\n",
-			size,
-			size,
-			size,
-			size
+			sizex,
+			sizey,
+			sizex,
+			sizey
 		));
 
-		double histoWidth = size * 0.625 / count;
-		double left = size * 0.25;
+		double histoWidth = 200;
+		double left = 200;
 		for (int i = 0; i < count; i++) {
 
 			for (int j = 0; j < series; j++) {
@@ -316,9 +318,9 @@ public class SvgGeneratorImpl implements SvgGenerator {
 						"class='path' " +
 						"/>\n",
 					left + histoWidth * i + (1.0 * histoWidth * 0.8 * j / series) + histoWidth * 0.1,
-					size * 0.875 - cell * size * 0.75 / cap,
+					sizey * 0.875 - cell * sizey * 0.75 / cap,
 					histoWidth * 0.8 / series,
-					cell * size * 0.75 / cap,
+					cell * sizey * 0.75 / cap,
 					color
 				));
 
@@ -329,7 +331,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		// numbers
 		for (int i = 0; i < count; i++) {
 			double x = left + histoWidth * i + histoWidth / 2.0;
-			double y = size * 0.875 + 50;
+			double y = sizey * 0.875 + 50;
 			sb.append(String.format(
 				"<circle " +
 					"cx='%s' " +
@@ -348,7 +350,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 					"y='%s' " +
 					"text-anchor='middle' " +
 					"dominant-baseline='central' " +
-					"style='fill: #000; stroke: none; font-size: 24px'" +
+					"style='fill: #000; stroke: none; font-size: 32px'" +
 					">" +
 					"%s" +
 					"</text>",
@@ -369,9 +371,9 @@ public class SvgGeneratorImpl implements SvgGenerator {
 				"stroke-width='3' " +
 				"/>",
 			0,
-			size * 0.875,
-			size,
-			size * 0.875
+			sizey * 0.875,
+			sizex,
+			sizey * 0.875
 		));
 
 		sb.append(String.format(
@@ -387,11 +389,11 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			left,
 			0,
 			left,
-			size
+			sizey
 		));
 
 		for (double factor = 1.0; factor > 0; factor -= 0.25) {
-			double t = size * 0.875 - size * factor * 0.75;
+			double t = sizey * 0.875 - sizey * factor * 0.75;
 			sb.append(String.format(
 				"<line " +
 					"x1='%s' " +
@@ -402,7 +404,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 					"stroke='#ccc' " +
 					"stroke-width='3' " +
 					"/>",
-				left - size * 0.025,
+				left - 20,
 				t,
 				left,
 				t
@@ -415,11 +417,11 @@ public class SvgGeneratorImpl implements SvgGenerator {
 					"y='%s' " +
 					"text-anchor='end' " +
 					"dominant-baseline='central' " +
-					"style='fill: #000; stroke: none; font-size: 24px'" +
+					"style='fill: #000; stroke: none; font-size: 32px'" +
 					">" +
 					"%s" +
 					"</text>",
-				left - size * 0.05,
+				left - 30,
 				t,
 				Math.round(cap * factor) + " tCO2e"
 			));

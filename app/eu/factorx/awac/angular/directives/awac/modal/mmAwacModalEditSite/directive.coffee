@@ -20,6 +20,11 @@ angular
             #create a default value for percentOwned
             $scope.site.percentOwned = 100
 
+        $scope.displayOptions = ->
+            result = $scope.field.percentOwned.field == 100
+            console.log result
+            return result
+
         $scope.fields = {
 
             name :{
@@ -51,6 +56,7 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
                 field:$scope.site.organizationalStructure
                 hideIsValidIcon: true
+                hidden: $scope.displayOptions
             }
             ecoInterest :{
                 fieldTitle: "SITE_MANAGER_ECONOMIC_INTEREST"
@@ -58,6 +64,7 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
                 field:$scope.site.economicInterest
                 hideIsValidIcon: true
+                hidden: $scope.displayOptions
             }
             opePolicy :{
                 fieldTitle: "SITE_MANAGER_OPERATING_POLICY"
@@ -65,6 +72,7 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
                 field:$scope.site.operatingPolicy
                 hideIsValidIcon: true
+                hidden: $scope.displayOptions
             }
             accountingTreatment :{
                 fieldTitle: "SITE_MANAGER_ACCOUNTING_TREATMENT"
@@ -72,16 +80,17 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
                 field:$scope.site.accountingTreatment
                 hideIsValidIcon: true
+                hidden: $scope.displayOptions
             }
             percentOwned :{
                 fieldTitle: "SITE_MANAGER_PERCENT_OWNED"
                 validationFct:->
-                    if $scope.fields.percentOwned.field>=0 && $scope.fields.percentOwned.field<=100
+                    if $scope.fields.percentOwned.field>0 && $scope.fields.percentOwned.field<=100
                         return true
                     return false
                 validationMessage: "CONTROL_FIELD_DEFAULT_PERCENT_MAX_100"
                 field:$scope.site.percentOwned
-                fieldType : 'double'
+                numbersOnly: 'double'
             }
         }
 

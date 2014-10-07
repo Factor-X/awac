@@ -12,12 +12,8 @@ angular
         directiveService.autoScopeImpl $scope
 
         $scope.validatePasswordConfirmField = () ->
-            if $scope.newPasswordConfirmInfo.field.match("^\\S{5,20}$")
-                if ($scope.newPasswordInfo.field == $scope.newPasswordConfirmInfo.field)
-                    return true
-                $scope.newPasswordConfirmInfo.validationMessage = "PASSWORD_VALIDATION_WRONG_CONFIRMATION"
-            else
-                $scope.newPasswordConfirmInfo.validationMessage = "PASSWORD_VALIDATION_WRONG_LENGTH"
+            if ($scope.newPasswordInfo.isValid? == true > 0 && $scope.newPasswordInfo.field == $scope.newPasswordConfirmInfo.field)
+                return true
             return false
 
         $scope.oldPasswordInfo =
@@ -28,7 +24,6 @@ angular
             validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
             field: ""
-            hideIsValidIcon: true
             focus: ->
                 return true
 
@@ -39,7 +34,6 @@ angular
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_PLACEHOLDER"
             validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
-            hideIsValidIcon: true
             field: ""
 
         $scope.newPasswordConfirmInfo =
@@ -49,7 +43,6 @@ angular
             placeholder: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_CONFIRM_FIELD_PLACEHOLDER"
             validationFct: $scope.validatePasswordConfirmField
             validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
-            hideIsValidIcon: true
             field: ""
 
         $scope.allFieldValid = () ->
