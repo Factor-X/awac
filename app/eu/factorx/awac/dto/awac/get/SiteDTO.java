@@ -26,15 +26,6 @@ public class SiteDTO extends ScopeDTO {
 	@Size(max = 255)
 	private String organizationalStructure;
 
-	@Size(max = 255)
-	private String economicInterest;
-
-	@Size(max = 255)
-	private String operatingPolicy;
-
-	@Size(max = 255)
-	private String accountingTreatment;
-
 	@Range(min = 0, max = 100)
 	private Double percentOwned;
 
@@ -106,30 +97,6 @@ public class SiteDTO extends ScopeDTO {
 		this.organizationalStructure = organizationalStructure;
 	}
 
-	public String getEconomicInterest() {
-		return economicInterest;
-	}
-
-	public void setEconomicInterest(String economicInterest) {
-		this.economicInterest = economicInterest;
-	}
-
-	public String getOperatingPolicy() {
-		return operatingPolicy;
-	}
-
-	public void setOperatingPolicy(String operatingPolicy) {
-		this.operatingPolicy = operatingPolicy;
-	}
-
-	public String getAccountingTreatment() {
-		return accountingTreatment;
-	}
-
-	public void setAccountingTreatment(String accountingTreatment) {
-		this.accountingTreatment = accountingTreatment;
-	}
-
 	public Double getPercentOwned() {
 		return percentOwned;
 	}
@@ -157,9 +124,6 @@ public class SiteDTO extends ScopeDTO {
                 ", naceCode='" + naceCode + '\'' +
                 ", description='" + description + '\'' +
                 ", organizationalStructure='" + organizationalStructure + '\'' +
-                ", economicInterest='" + economicInterest + '\'' +
-                ", operatingPolicy='" + operatingPolicy + '\'' +
-                ", accountingTreatment='" + accountingTreatment + '\'' +
                 ", percentOwned=" + percentOwned +
                 ", listPeriodAvailable=" + listPeriodAvailable +
                 '}';

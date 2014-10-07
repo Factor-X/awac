@@ -6,6 +6,7 @@ import static play.test.Helpers.status;
 
 import java.util.List;
 
+import eu.factorx.awac.dto.awac.post.RegistrationDTO;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.service.*;
 import org.junit.FixMethodOrder;
@@ -24,9 +25,7 @@ import play.test.FakeRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
@@ -203,7 +202,7 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 	@Test
 	public void _004_registrationMunicipality() {
 
-		MunicipalityAccountCreationDTO dto = createMunicipalityDTO(email1,identifier2, municipalityName, firstName2);
+		RegistrationDTO dto = createMunicipalityDTO(email1,identifier2, municipalityName, firstName2);
 
 		//Json node
 		JsonNode node = Json.toJson(dto);
@@ -299,9 +298,9 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 	}
 
 
-	private MunicipalityAccountCreationDTO  createMunicipalityDTO(String email,String identifier, String municipalityName, String firstName) {
+	private RegistrationDTO createMunicipalityDTO(String email,String identifier, String municipalityName, String firstName) {
 
-		MunicipalityAccountCreationDTO dto = new MunicipalityAccountCreationDTO();
+		RegistrationDTO dto = new RegistrationDTO();
 		PersonDTO personDTO = new PersonDTO();
 
 		personDTO.setEmail(email);

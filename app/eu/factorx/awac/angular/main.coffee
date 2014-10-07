@@ -87,9 +87,9 @@ if document.querySelector("meta[name=app]")?
     iName = document.querySelector("meta[name=app]").getAttribute("content")
     if iName == "municipality"
         initializeMunicipalityRoutes(defaultResolve)
-    if iName == "enterprise"
+    else if iName == "enterprise"
         initializeEnterpriseRoutes(defaultResolve)
-    if iName == "verification"
+    else if iName == "verification"
       initializeVerificationRoutes(defaultResolve)
 
 initializeCommonRoutes(defaultResolve)

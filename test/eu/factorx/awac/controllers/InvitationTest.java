@@ -1,19 +1,12 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
@@ -33,9 +26,7 @@ import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;

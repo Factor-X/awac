@@ -7,6 +7,9 @@ angular
         ngParams: '='
     templateUrl: "$/angular/templates/mm-awac-modal-edit-site.html"
 
+    $scope.organizationStructureList =
+
+
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
 
@@ -19,11 +22,6 @@ angular
             $scope.site = {}
             #create a default value for percentOwned
             $scope.site.percentOwned = 100
-
-        $scope.displayOptions = ->
-            result = $scope.field.percentOwned.field == 100
-            console.log result
-            return result
 
         $scope.fields = {
 
@@ -49,38 +47,6 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
                 field:$scope.site.naceCode
                 hideIsValidIcon: true
-            }
-            orgStructure :{
-                fieldTitle: "SITE_MANAGER_ORGANIZATIONAL_STRUCTURE"
-                validationRegex: "^.{0,255}$"
-                validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
-                field:$scope.site.organizationalStructure
-                hideIsValidIcon: true
-                hidden: $scope.displayOptions
-            }
-            ecoInterest :{
-                fieldTitle: "SITE_MANAGER_ECONOMIC_INTEREST"
-                validationRegex: "^.{0,255}$"
-                validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
-                field:$scope.site.economicInterest
-                hideIsValidIcon: true
-                hidden: $scope.displayOptions
-            }
-            opePolicy :{
-                fieldTitle: "SITE_MANAGER_OPERATING_POLICY"
-                validationRegex: "^.{0,255}$"
-                validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
-                field:$scope.site.operatingPolicy
-                hideIsValidIcon: true
-                hidden: $scope.displayOptions
-            }
-            accountingTreatment :{
-                fieldTitle: "SITE_MANAGER_ACCOUNTING_TREATMENT"
-                validationRegex: "^.{0,255}$"
-                validationMessage: "CONTROL_FIELD_DEFAULT_STRING"
-                field:$scope.site.accountingTreatment
-                hideIsValidIcon: true
-                hidden: $scope.displayOptions
             }
             percentOwned :{
                 fieldTitle: "SITE_MANAGER_PERCENT_OWNED"
@@ -111,10 +77,7 @@ angular
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
                 data.naceCode = $scope.fields.nace.field
-                data.organizationalStructure = $scope.fields.orgStructure.field
-                data.economicInterest = $scope.fields.ecoInterest.field
-                data.operatingPolicy = $scope.fields.opePolicy.field
-                data.accountingTreatment = $scope.fields.accountingTreatment.field
+                data.organizationalStructure = $scope.fields.organizationStructure
                 data.percentOwned = $scope.fields.percentOwned.field
 
                 $scope.isLoading = true
@@ -133,10 +96,7 @@ angular
                             $scope.getParams().site.name = $scope.fields.name.field
                             $scope.getParams().site.description = $scope.fields.description.field
                             $scope.getParams().site.naceCode = $scope.fields.nace.field
-                            $scope.getParams().site.organizationalStructure = $scope.fields.orgStructure.field
-                            $scope.getParams().site.economicInterest = $scope.fields.ecoInterest.field
-                            $scope.getParams().site.operatingPolicy = $scope.fields.opePolicy.field
-                            $scope.getParams().site.accountingTreatment = $scope.fields.accountingTreatment.field
+                            $scope.getParams().site.organizationalStructure = $scope.fields.organizationStructure
                             $scope.getParams().site.percentOwned = $scope.fields.percentOwned.field
 
                             #refresh my site

@@ -41,6 +41,9 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     //only string => ref to a BaseActivityDataKey
     private final static int BAD_KEY_COL = ExcelEquivalenceColumn.B;
 
+    //only string => ref to a BaseActivityDataKey
+    private final static int BAD_ALTERNATIVE_GROUP_COL = ExcelEquivalenceColumn.D;
+
     //only string
     private final static int BAD_NAME_COL = ExcelEquivalenceColumn.C;
 
@@ -203,6 +206,9 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
 
                 // --- test badKey ---
                 badControlElement.controlBADKey(data.getData(BAD_KEY_COL, line),  bad);
+
+                // --- alternative group --
+                badControlElement.controlAlternativeGroup(data.getData(BAD_ALTERNATIVE_GROUP_COL,line),bad);
 
                 // ---- name ----
                 badControlElement.controlName(data.getData(BAD_NAME_COL, line),  bad);

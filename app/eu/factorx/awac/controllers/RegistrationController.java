@@ -1,10 +1,8 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.MunicipalityAccountCreationDTO;
-import eu.factorx.awac.dto.awac.shared.ReturnDTO;
+import eu.factorx.awac.dto.awac.post.RegistrationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
@@ -19,22 +17,18 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
-import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Configuration;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Transactional(readOnly = false)
 @org.springframework.stereotype.Controller
@@ -70,8 +64,42 @@ public class RegistrationController  extends AbstractController {
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
 
+    public Result verificationRegistration() {
 
-	@Transactional(readOnly = false)
+        RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
+
+        // control organization name
+        Organization organization = organizationService.findByName(dto.getOrganizationName());
+        if(organization!=null){
+            return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
+        }
+
+        //create organization
+        organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
+        organizationService.saveOrUpdate(organization);
+
+        //create administrator
+        Account account = null;
+        try {
+            account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
+        } catch (MyrmexException e) {
+            return notFound(new ExceptionsDTO(e.getToClientMessage()));
+        }
+
+        //if the login and the password are ok, refresh the session
+        securedController.storeIdentifier(account);
+
+        // email submission
+        handleEmailSubmission(account);
+
+        //create ConnectionFormDTO
+        LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+        return ok(resultDto);
+    }
+
+
+    @Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
 
 		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
@@ -135,16 +163,16 @@ public class RegistrationController  extends AbstractController {
 	@Transactional(readOnly = false)
 	public Result municipalityRegistration() {
 
-		MunicipalityAccountCreationDTO dto = extractDTOFromRequest(MunicipalityAccountCreationDTO.class);
+		RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
 
 		// control organization name
-		Organization organization = organizationService.findByName(dto.getMunicipalityName());
+		Organization organization = organizationService.findByName(dto.getOrganizationName());
 		if(organization!=null){
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
 		}
 
 		//create organization
-		organization = new Organization(dto.getMunicipalityName(), InterfaceTypeCode.MUNICIPALITY);
+		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY);
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
@@ -154,17 +182,6 @@ public class RegistrationController  extends AbstractController {
 		} catch (MyrmexException e) {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
-
-		//create site
-		Site site = new Site(organization, dto.getMunicipalityName());
-        //create link between site and period
-        site.setListPeriodAvailable(periodService.findAll());
-		siteService.saveOrUpdate(site);
-		organization.getSites().add(site);
-
-        //create link between account and site
-        AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
-        accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);

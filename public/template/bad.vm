@@ -108,6 +108,9 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
             BaseActivityData baseActivityData = new BaseActivityData();
 
             baseActivityData.setKey(BaseActivityDataCode.$BAD-KEY);
+            #if($ALTERNATIVE_GROUP)
+                baseActivityData.setAlternativeGroup("$ALTERNATIVE_GROUP");
+            #end
             baseActivityData.setRank($RANK);
             baseActivityData.setSpecificPurpose($SPECIFIC-PURPOSE);
             baseActivityData.setActivityCategory($ACTIVITY-CATEGORY);

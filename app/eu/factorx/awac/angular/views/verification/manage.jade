@@ -1,1 +1,8 @@
 div
+    div.my-share-table(loading-container='tableParams.settings().$loading')
+        table.admin-table-import-bad(ng-table='tableParams')
+            tr(ng-repeat='request in $data')
+                td(data-title="'request.from'")
+                    | {{request.from}}
+                td(data-title="'Type of ...?'", sortable="'request.type'")
+                    | {{request.type}}
