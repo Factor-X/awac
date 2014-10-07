@@ -20,8 +20,8 @@ public class MergedReportResultAggregationToReportDTOConverter implements Conver
 		reportDTO.setLeftPeriod(mergedReportResultAggregation.getLeftPeriod().getLabel());
 		reportDTO.setRightPeriod(mergedReportResultAggregation.getRightPeriod().getLabel());
 
-		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(1, 2));
-		reportDTO.setRightColor("#" + Colors.makeGoodColorForSerieElement(2, 2));
+		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(0, 2));
+		reportDTO.setRightColor("#" + Colors.makeGoodColorForSerieElement(1, 2));
 
 		List<MergedReportResultIndicatorAggregation> list = mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList();
 

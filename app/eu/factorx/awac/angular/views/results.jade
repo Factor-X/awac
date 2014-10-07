@@ -52,14 +52,15 @@ div.results.pdf-able
                             h2
                                 span(ng-bind-html="'VALUES_BY_CATEGORY' | translate")
                             br
+
                             center
-                                table
-                                    tr
-                                        td
-                                            div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
-                                        td(style="width: 2em")
-                                        td
-                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+                                div(style="height: 10cm", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
+
+                            br
+
+                            center
+                                div
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
 
                         div(ng-show="current_tab == 2")
                             h2
@@ -128,13 +129,12 @@ div.results.pdf-able
                                 span(ng-bind-html="'KIVIAT_DIAGRAM' | translate")
                             br
                             center
-                                table
-                                    tr
-                                        td
-                                            div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
-                                        td(style="width: 2em")
-                                        td
-                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+                                div(style="display:inline-block; max-width: 15cm; max-height: 15cm;", ng-bind-html="o.svgWebs.R_1 | trustAsHtml")
+
+                            br
+
+                            center
+                                mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
 
                         div(ng-show="current_tab == 4")
                             h2
