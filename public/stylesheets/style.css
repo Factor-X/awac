@@ -1751,89 +1751,7 @@ ul.messenger > li {
     list-style-type: none;
 }
 
-/*
- * sites-panel
- */
-.sites-panel {
-    width: 300px;
-}
 
-.sites-panel-title {
-    background: #333;
-    color: #eee;
-    font-weight: bold;
-    margin-bottom: 4px;
-    width: 100%;
-    padding: 0.25em 0.5em;
-}
-
-.sites-panel-items {
-    width: 100%;
-}
-
-.sites-panel-item, .sites-panel-all-items {
-    background: #ccc;
-    padding: 0.25em 0.5em;
-    margin-bottom: 4px;
-    width: 100%;
-}
-
-.sites-panel-item > table {
-    width: 100%;
-}
-
-.sites-panel-item > table td:first-child {
-    width: 100%;
-}
-
-/*
- * charts-panel
- */
-.charts-panel-tabset {
-    white-space: nowrap;
-}
-
-.charts-panel-tab {
-    margin-bottom: 4px;
-}
-
-.charts-panel-tab-title {
-    display: inline-block;
-    background: #333;
-    color: #eee;
-    font-weight: bold;
-    padding: 0.5em 0em;
-    margin: 0;
-    width: 300px;
-    height: 7em;
-    vertical-align: middle;
-}
-
-.charts-panel-tab-arrow {
-    display: inline-block;
-    width: 3.5em;
-    height: 7em;
-    border-top: 3.5em solid transparent;
-    border-bottom: 3.5em solid transparent;
-    border-right: 3.5em solid #333;
-    vertical-align: middle;
-}
-
-.charts-panel-tab.active .charts-panel-tab-title {
-    background-color: #363;
-}
-
-.charts-panel-tab.active .charts-panel-tab-arrow {
-    border-right-color: #363;
-}
-
-.charts-panel-tab:hover .charts-panel-tab-title {
-    background-color: #484;
-}
-
-.charts-panel-tab:hover .charts-panel-tab-arrow {
-    border-right-color: #484;
-}
 
 .top-aligned {
     vertical-align: top;
@@ -1865,53 +1783,6 @@ ul.messenger > li {
     border: solid 1px #333;
 }
 
-.tab_donut {
-    background-image: url('/assets/images/schemas/schema_pieChart.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_web {
-    background-image: url('/assets/images/schemas/schema_araignee.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_numbers {
-    background-image: url('/assets/images/schemas/schema_chiffres.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_constant_factors {
-    background-image: url('/assets/images/schemas/schema_facteursConstants.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_fe {
-    background-image: url('/assets/images/schemas/schema_FE.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_calculus {
-    background-image: url('/assets/images/schemas/schema_calcul.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_bars {
-    background-image: url('/assets/images/schemas/schema_barchart.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
-
-.tab_convention {
-    background-image: url('/assets/images/schemas/schema_barchart.png');
-    background-position: bottom 4px right 4px;
-    background-repeat: no-repeat;
-}
 
 .no-scope-message {
     text-align: center;

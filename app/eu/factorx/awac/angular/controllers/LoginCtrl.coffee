@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "LoginCtrl", ($scope, downloadService, $location, messageFlash, $compile, $timeout, modalService, translationService) ->
+.controller "LoginCtrl", ($scope, downloadService, $location, $filter, messageFlash, $compile, $timeout, modalService, translationService) ->
     $scope.loading = false
 
     $scope.tabActive = []
@@ -87,6 +87,11 @@ angular
                         login: $scope.loginInfo.field
                         password: $scope.passwordInfo.field
                     modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
+
+                else if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO'
+                    translateWithVars = $filter('translateWithVars')
+                    messageFlash.displayError translateWithVars(result.data.code, result.data.parameters)
+
                 else
                     #display the error message
                     messageFlash.displayError result.data.message
