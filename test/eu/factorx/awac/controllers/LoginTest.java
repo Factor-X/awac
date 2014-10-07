@@ -89,7 +89,7 @@ public class LoginTest extends AbstractBaseModelTest {
 		//Logger.info("lastname:" + loginResult.getPerson().getLastName());
 
 		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getPerson().getLastName(), "Dupont");
+		assertEquals(loginResult.getPerson().getFirstName(), "Dupont");
 
 	} // end of authenticateSuccess test
 
@@ -126,10 +126,10 @@ public class LoginTest extends AbstractBaseModelTest {
 		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
 
 		// should return a ExceptionDTO
-		ExceptionsDTO loginResult = getDTO(result, ExceptionsDTO.class);
+		TranslatedExceptionDTO loginResult = getDTO(result, TranslatedExceptionDTO.class);
 
 		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getMessage(), "The couple login / password was not found");
+		assertEquals(loginResult.getCode(), TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name());
 	} // end of authenticateSuccess test
 
 	@Test
