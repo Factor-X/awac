@@ -24,8 +24,7 @@ div.results.pdf-able
                                 tr(ng-repeat="site in mySites")
                                     td {{ site.name }}
                                     td
-                                        input(type="checkbox", ng-model="site.$selected")
-
+                                        input(type="checkbox", ng-model="site.selected")
 
             td.top-aligned.horizontally-padded.wide
 
