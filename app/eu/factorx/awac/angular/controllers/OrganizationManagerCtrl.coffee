@@ -12,8 +12,8 @@ angular
     $scope.selectedPeriodForEvent = $scope.$root.periods[0].key
 
     $scope.allFieldValid = () ->
-        return $scope.nameInfo?.isValid && ($scope.nameInfo.field != $scope.organization.name) &&
-            $scope.statisticsAllowed? && ($scope.statisticsAllowed != $scope.organization.statisticsAllowed)
+        return $scope.nameInfo.isValid && (($scope.nameInfo.field != $scope.organization.name) ||
+            ($scope.statisticsAllowed != $scope.organization.statisticsAllowed))
 
     $scope.nameInfo =
         fieldTitle: "ORGANIZATION_NAME"
@@ -24,6 +24,8 @@ angular
         isValid: true
         focus: ->
             return true
+
+    $scope.statisticsAllowed = false
 
     # load my organization
     modalService.show(modalService.LOADING)
@@ -65,24 +67,20 @@ angular
 
             #send data
             $scope.saveOrganization = () ->
-                console.log("save organization")
                 if !$scope.allFieldValid
                     return false
-
-                $scope.isLoading = true
 
                 data =
                 	name: $scope.nameInfo.field
                 	statisticsAllowed: $scope.statisticsAllowed
 
+                $scope.isLoading = true
                 downloadService.postJson '/awac/organization/update', data, (result) ->
+                    $scope.isLoading = false
                     if result.success
                         messageFlash.displaySuccess "CHANGES_SAVED"
                         $scope.$root.organizationName = $scope.nameInfo.field
-                        $scope.isLoading = false
                     else
                         messageFlash.displayError result.data.message
-                        $scope.isLoading = false
-
                     return false
         

@@ -6,13 +6,14 @@ div
 
         br
         h4(ng-bind-html="'ORGANIZATION_MANAGER_PROPERTIES_TITLE' | translateText")
-        br
+
         div(class="field_form", style="display:table; width: 400px;")
             mm-awac-modal-field-text(ng-info="nameInfo")
+            br
             div.field_row
                 div(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
-                div
-                    input(type="checkbox", ng-model="statisticsAllowed")
+                div(style="text-align: left;")
+                    input(type="checkbox", ng-model="statisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
             
 
         div(ng-hide="isLoading")
