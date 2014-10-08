@@ -21,7 +21,8 @@ div
                         button.button.help(
                             type='button',
                             ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                            ng-click="$root.showHelp()"
+                            ng-click="return false; $root.showHelp()",
+                            mm-not-implemented='mm-not-implemented'
                         )
                     td
                         //  organization manager button
@@ -75,12 +76,14 @@ div
                     ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'UNCLOSING_FORM\' | translate',
-                    ng-show="$root.closedForms")
+                    ng-show="$root.closedForms",
+                    mm-not-implemented='mm-not-implemented')
                 button.button.verification(type='button',
                     ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
-                    ng-hide="$root.closedForms")
+                    ng-hide="$root.closedForms",
+                    mm-not-implemented='mm-not-implemented')
                 button.button.verification(
                     type='button',
                     ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
