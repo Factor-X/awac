@@ -8,9 +8,11 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.KeyGenerator;
@@ -72,7 +74,15 @@ public class InvitationController extends AbstractController {
 
 
 		// get organization name through securedController
-		//Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
+		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
+
+		Logger.info("lauchInvitation->interfaceTypeCode:"+org.getInterfaceCode());
+		String awacInterfaceTypeFragment;
+		if (org.getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+		}
 
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
@@ -85,7 +95,7 @@ public class InvitationController extends AbstractController {
 		String awacHostname = Configuration.root().getString("awac.hostname");
 		String awacRegistrationUrl = Configuration.root().getString("awac.registrationfragment");
 
-		String link = awacHostname+awacRegistrationUrl+key;
+		String link = awacHostname+awacInterfaceTypeFragment+awacRegistrationUrl+key;
 
 		// retrieve traductions
 		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
@@ -144,13 +154,22 @@ public class InvitationController extends AbstractController {
 		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
+		Logger.info("registerInvitation->interfaceTypeCode:"+invitation.getOrganization().getInterfaceCode());
+		String awacInterfaceTypeFragment;
+		if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+		}
+
+		//http://warriorbeast:9000/calculator#/enterprise#/registration/mOOvr8HkfufNXX5DvBkYd8nb8f
 
 		// prepare email
 		Map values = new HashMap<String,Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
 
-		String link = awacHostname+awacLoginUrlFragment;
+		String link = awacHostname+awacInterfaceTypeFragment+awacLoginUrlFragment;
 
 		values.put("subject",subject);
 		values.put("link",link);
