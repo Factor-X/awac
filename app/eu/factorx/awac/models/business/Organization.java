@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -47,6 +48,9 @@ public class Organization extends Scope {
     @AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "interface_code")) })
     private InterfaceTypeCode interfaceCode;
 
+	@Column(nullable = false, name = "statistics_allowed")
+    private Boolean statisticsAllowed = Boolean.TRUE;
+
     protected Organization() {
 		super();
 	}
@@ -55,6 +59,12 @@ public class Organization extends Scope {
     public Organization(String name, InterfaceTypeCode interfaceCode) {
         this.name = name;
         this.interfaceCode = interfaceCode;
+    }
+
+    public Organization(String name, InterfaceTypeCode interfaceCode, Boolean statisticsAllowed) {
+        this.name = name;
+        this.interfaceCode = interfaceCode;
+        this.statisticsAllowed = statisticsAllowed;
     }
 
     public InterfaceTypeCode getInterfaceCode() {
@@ -87,6 +97,14 @@ public class Organization extends Scope {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Boolean getStatisticsAllowed() {
+		return statisticsAllowed;
+	}
+
+	public void setStatisticsAllowed(Boolean statisticsAllowed) {
+		this.statisticsAllowed = statisticsAllowed;
 	}
 
 	public List<Site> getSites() {

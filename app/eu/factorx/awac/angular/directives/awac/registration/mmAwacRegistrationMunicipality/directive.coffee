@@ -59,6 +59,7 @@ angular
             validationRegex: "^.{1,255}$"
             validationMessage: "MUNICIPALITY_NAME_WRONG_LENGTH"
 
+        $scope.organizationStatisticsAllowed = true
 
 
         $scope.registrationFieldValid = () ->
@@ -80,6 +81,7 @@ angular
             data.person.lastName = $scope.lastNameInfo.field
             data.password = $scope.passwordInfo.field
             data.organizationName = $scope.municipalityNameInfo.field
+            data.organizationStatisticsAllowed = $scope.organizationStatisticsAllowed
             data.person.defaultLanguage = $scope.$root.language
 
 
