@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.Validator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import play.Logger;
 import play.mvc.Content;
 
 import java.io.IOException;
+import java.io.StringWriter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DTO implements Content {
@@ -66,7 +68,7 @@ public class DTO implements Content {
 			Logger.info("Validating DTO: " + this);
 			Validator.validate(this);
 		} catch (Exception e) {
-			throw new MyrmexRuntimeException("Validation failed for DTO: " + e.getMessage());
+			throw new MyrmexRuntimeException("Validation failed for DTO: " + e.getMessage() + "\n" + ExceptionUtils.getStackTrace(e));
 		}
 	}
 
