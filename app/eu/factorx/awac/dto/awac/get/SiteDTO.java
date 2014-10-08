@@ -2,6 +2,7 @@ package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Range;
 import eu.factorx.awac.dto.validation.annotations.Size;
 
@@ -24,6 +25,7 @@ public class SiteDTO extends ScopeDTO {
 	private String description;
 
 	@Size(max = 255)
+    @NotNull
 	private String organizationalStructure;
 
 	@Range(min = 0, max = 100)

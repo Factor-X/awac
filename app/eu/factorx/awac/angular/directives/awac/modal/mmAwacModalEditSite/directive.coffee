@@ -10,18 +10,21 @@ angular
         directiveService.autoScopeImpl $scope
 
         $scope.organizationStructureList = [
-            'société anonyme'
-            'filiale'
-            'succursale'
-            'joint venture'
-            'autre'
+            'ORGANIZATION_STRUCTURE_1'
+            'ORGANIZATION_STRUCTURE_2'
+            'ORGANIZATION_STRUCTURE_3'
+            'ORGANIZATION_STRUCTURE_4'
+            'ORGANIZATION_STRUCTURE_5'
         ]
+
+        $scope.organizationStructure = $scope.organizationStructureList[0]
 
         $scope.createNewSite = true
 
         if $scope.getParams().site?
             $scope.site =  angular.copy($scope.getParams().site)
             $scope.createNewSite =false
+            $scope.organizationStructure = $scope.site.organizationalStructure
         else
             $scope.site = {}
             #create a default value for percentOwned
@@ -40,6 +43,7 @@ angular
 
             description :{
                 fieldTitle: "DESCRIPTION"
+                fieldType:'textarea'
                 validationRegex: "^.{0,65000}$"
                 validationMessage: "CONTROL_FIELD_DEFAULT_TEXT"
                 field:$scope.site.description
@@ -61,6 +65,7 @@ angular
                 validationMessage: "CONTROL_FIELD_DEFAULT_PERCENT_MAX_100"
                 field:$scope.site.percentOwned
                 numbersOnly: 'double'
+                description:'SITE_MANAGER_PERCENT_OWNED_DESC'
             }
         }
 
@@ -81,7 +86,7 @@ angular
                 data.name = $scope.fields.name.field
                 data.description = $scope.fields.description.field
                 data.naceCode = $scope.fields.nace.field
-                data.organizationalStructure = $scope.fields.organizationStructure
+                data.organizationalStructure = $scope.organizationStructure
                 data.percentOwned = $scope.fields.percentOwned.field
 
                 $scope.isLoading = true
@@ -100,7 +105,7 @@ angular
                             $scope.getParams().site.name = $scope.fields.name.field
                             $scope.getParams().site.description = $scope.fields.description.field
                             $scope.getParams().site.naceCode = $scope.fields.nace.field
-                            $scope.getParams().site.organizationalStructure = $scope.fields.organizationStructure
+                            $scope.getParams().site.organizationalStructure = $scope.organizationStructure
                             $scope.getParams().site.percentOwned = $scope.fields.percentOwned.field
 
                             #refresh my site

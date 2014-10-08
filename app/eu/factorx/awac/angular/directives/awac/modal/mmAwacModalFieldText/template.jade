@@ -1,10 +1,27 @@
 .field_row(ng-hide="getInfo().hidden === true")
-    div(ng-click="logField()",ng-bind-html='getInfo().fieldTitle | translate')
+    div(ng-click="logField()")
+        .question_info(ng-show="getInfo().description != null")
+            .question_info_popup(ng-bind-html="getInfo().description | translate")
+        span(ng-bind-html='getInfo().fieldTitle | translate')
     div
         .field_error_message_flash(ng-show="errorMessage.length>0")
             div(ng-bind-html='errorMessage | translate')
             img(src='/assets/images/question_field_error_message_icon_arrow.png')
-        input(  type='{{fieldType}}',
+
+        input(
+            ng-hide="fieldType === 'textarea'",
+            type='{{fieldType}}',
+            ng-disabled='getInfo().disabled',
+            ng-model='getInfo().field',
+            numbers-only="{{getInfo().numbersOnly}}",
+            ng-class="{input_number: getInfo().numbersOnly === 'integer' || getInfo().numbersOnly === 'double'}"
+            placeholder='{{getInfo().placeholder | translateText}}',
+            name='{{getInfo().inputName}}',
+            focus-me="getInfo().focus()")
+
+        textarea(
+            ng-show="fieldType === 'textarea'",
+            type='{{fieldType}}',
             ng-disabled='getInfo().disabled',
             ng-model='getInfo().field',
             numbers-only="{{getInfo().numbersOnly}}",

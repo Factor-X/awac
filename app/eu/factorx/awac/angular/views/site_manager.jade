@@ -25,7 +25,7 @@ div
                 td {{site.name}}
                 td {{site.description}}
                 td {{site.naceCode}}
-                td {{site.organizationalStructure}}
+                td {{site.organizationalStructure | translateText }}
                 td {{site.percentOwned}} %
                 td
                     button(type="button", title="{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}", ng-click="addUsers(site)", class="edit_icon glyphicon glyphicon-pencil")

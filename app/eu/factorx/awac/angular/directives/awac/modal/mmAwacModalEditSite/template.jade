@@ -18,7 +18,7 @@
                     div.field_row
                         div(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translate")
                         div
-                            select(ng-options='p as p for p in organizationStructureList', ng-model='fields.organizationStructure')
+                            select(ng-options='p  as ( p | translateText ) for p  in organizationStructureList ', ng-model='organizationStructure')
 
             .modal-footer
 

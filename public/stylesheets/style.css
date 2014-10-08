@@ -104,7 +104,7 @@ body {
     overflow: auto !important;
 }
 
-input, select {
+input, select, textarea {
     background: #efeee8;
     border: 1px solid #61605b;
     padding: 2px 2px 1px;

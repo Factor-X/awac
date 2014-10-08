@@ -33,6 +33,7 @@ angular
                 validationRegex: "^.{0,65000}$"
                 validationMessage: "CONTROL_FIELD_DEFAULT_TEXT"
                 field:$scope.event.description
+                fieldType:'textarea'
                 hideIsValidIcon: true
             }
 

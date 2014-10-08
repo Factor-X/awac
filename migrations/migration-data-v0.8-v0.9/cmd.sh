@@ -27,6 +27,9 @@ cat ./CELDL-185-replace-scope-municipality-by-organization.sql >> /tmp/migration
 # link between form and calculator
 cat ./CELDL-70-closingForm.sql >> /tmp/migration/migration_script.sql
 
+# set default value for organizationel_structure for all site
+cat ./TAE-64-creation-site.sql >> /tmp/migration/migration_script.sql
+
 
 
 # -------------------------------------------------

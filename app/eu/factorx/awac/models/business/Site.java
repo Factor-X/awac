@@ -26,7 +26,7 @@ public class Site extends Scope implements Comparable<Site> {
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(name = "organizational_structure")
+	@Column(name = "organizational_structure", nullable = false)
 	private String organizationalStructure;
 
 	@Column(name = "economic_interest")
