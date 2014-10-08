@@ -15,6 +15,7 @@ angular
     @EDIT_EVENT = 'edit-event'
     @CONFIRM_CLOSING = 'confirm-closing'
     @HELP = 'help'
+    @EDIT_OR_CREATE_REDUCTION_ACTION = 'edit-or-create-reduction-action'
 
     @show = (modalName, params) ->
         args = []

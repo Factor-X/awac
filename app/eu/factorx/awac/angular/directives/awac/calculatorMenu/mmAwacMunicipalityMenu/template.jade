@@ -25,5 +25,5 @@
         .last_menu
             button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='$root.nav(\'/results\')')
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
-            button.button(mm-not-implemented='mm-not-implemented')
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}', ng-click='$root.nav(\'/actions\')')
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")

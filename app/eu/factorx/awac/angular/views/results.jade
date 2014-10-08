@@ -225,6 +225,35 @@ div.results.pdf-able
                                     span &#32;
                                     span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate")
 
+                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.LowerRankInGroupDTO'")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART1' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.key | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.key | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART3' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.key | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART4' | translate")
+
+                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.NoSuitableIndicatorDTO'")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART1' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.key | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.activityCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activitySubCategory | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART3' | translate")
+
+
                         div(ng-show="current_tab == 7")
                             h2
                                 span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")

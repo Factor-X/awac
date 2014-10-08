@@ -1,0 +1,69 @@
+div.actions
+    h1
+        span(ng-bind-html="'REDUCTION_ACTIONS' | translate")
+
+    br
+
+    table.actions-table
+
+        thead
+            tr
+                th Détails
+                th Actions
+                th Type
+                th Périmètre
+                th Réalisation
+
+        tbody
+
+            tr(ng-repeat-start="a in actions", ng-class="{selected: a.opened}")
+                td.details
+                    mm-plus-minus-toggle-button(ng-model="a.opened")
+                td.title
+                    span.text {{a.title}}
+                td.type
+                    span.icon.fa.fa-flag
+                    span &nbsp;
+                    span.text {{a.type.text}}
+                td.scope
+                    span.icon.fa.fa-flag
+                    span &nbsp;
+                    span.text {{a.scope.text}}
+                td.realization {{a.realization.period}}
+
+            tr(ng-repeat-end, ng-show="a.opened").details
+                td(colspan="5")
+
+
+                    table
+                        tr
+                            td Plus d'informations
+                            td
+                                a(href="#", target="blank") http://www.site.com
+                        tr
+                            td Diminution de
+                            td
+                                .box.align-right 9000
+                                .box Litres
+                        tr
+                            td Gain escompté
+                            td
+                                .box.align-right 10
+                                .box tonnes de CO2e
+                        tr
+                            td Gain financier
+                            td
+                                .box.align-right 14000
+                                .box euros
+
+    br
+
+    button.button(type="button", ng-click="create()")
+        span.fa.fa-plus-circle
+        span &nbsp;
+        span Ajouter une section
+
+    button.button(type="button")
+        span.fa.fa-file-excel-o
+        span &nbsp;
+        span Exporter au format XLS

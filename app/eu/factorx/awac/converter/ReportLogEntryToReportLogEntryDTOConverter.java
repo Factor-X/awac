@@ -1,15 +1,11 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.awac.get.ReportLogContributionEntryDTO;
-import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
-import eu.factorx.awac.dto.awac.get.ReportLogNoSuitableFactorEntryDTO;
+import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
-import eu.factorx.awac.service.impl.reporting.Contribution;
-import eu.factorx.awac.service.impl.reporting.NoSuitableFactor;
-import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
+import eu.factorx.awac.service.impl.reporting.*;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -58,8 +54,28 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
 
 		}
 
-		return null;
+		if (entry instanceof LowerRankInGroup) {
+			LowerRankInGroup lrig = (LowerRankInGroup) entry;
 
+			return new LowerRankInGroupDTO(
+				lrig.getKey(),
+				lrig.getAlternativeGroup(),
+				lrig.getMinRank(),
+				lrig.getRank()
+			);
+		}
+
+		if(entry instanceof NoSuitableIndicator){
+			NoSuitableIndicator nsi = (NoSuitableIndicator) entry;
+
+			return new NoSuitableIndicatorDTO(
+				nsi.getKey(),
+				nsi.getIndicatorSearchParam().getActivityCategory().getKey(),
+				nsi.getIndicatorSearchParam().getActivitySubCategory().getKey()
+			);
+		}
+
+		return null;
 	}
 
 }
