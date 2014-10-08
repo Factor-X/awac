@@ -3,12 +3,12 @@ package eu.factorx.awac.dto.awac.get;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 
 public class OrganizationDTO extends ScopeDTO {
 	private Long id;
 	private String name;
+	private Boolean statisticsAllowed;
 	private List<SiteDTO> sites;
 	private List<PersonDTO> users;
 
@@ -32,6 +32,14 @@ public class OrganizationDTO extends ScopeDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Boolean getStatisticsAllowed() {
+		return statisticsAllowed;
+	}
+
+	public void setStatisticsAllowed(Boolean statisticsAllowed) {
+		this.statisticsAllowed = statisticsAllowed;
 	}
 
 	public List<SiteDTO> getSites() {

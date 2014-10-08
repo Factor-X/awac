@@ -17,15 +17,18 @@ public class EnterpriseAccountCreationDTO extends DTO{
 	@Size(min = 1, max = 255)
 	private String organizationName;
 
+	private Boolean organizationStatisticsAllowed;
+
 	private String firstSiteName;
 
 	public EnterpriseAccountCreationDTO() {
 	}
 
-	public EnterpriseAccountCreationDTO(PersonDTO person, String password, String organizationName, String firstSiteName) {
+	public EnterpriseAccountCreationDTO(PersonDTO person, String password, String organizationName, Boolean organizationStatisticsAllowed, String firstSiteName) {
 		this.person = person;
 		this.password = password;
 		this.organizationName = organizationName;
+		this.organizationStatisticsAllowed = organizationStatisticsAllowed;
 		this.firstSiteName = firstSiteName;
 	}
 
@@ -51,6 +54,14 @@ public class EnterpriseAccountCreationDTO extends DTO{
 
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
+	}
+
+	public Boolean getOrganizationStatisticsAllowed() {
+		return organizationStatisticsAllowed;
+	}
+
+	public void setOrganizationStatisticsAllowed(Boolean organizationStatisticsAllowed) {
+		this.organizationStatisticsAllowed = organizationStatisticsAllowed;
 	}
 
 	public String getFirstSiteName() {

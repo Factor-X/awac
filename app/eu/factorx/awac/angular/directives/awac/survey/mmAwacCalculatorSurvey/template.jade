@@ -24,6 +24,13 @@ div
                             ng-click="$root.showHelp()"
                         )
                     td
+                        //  organization manager button
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/organization_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
                         //  site manager button
                         button.button.user_manage(
                             ng-show="$root.instanceName == 'enterprise'"

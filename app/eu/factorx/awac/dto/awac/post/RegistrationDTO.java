@@ -17,13 +17,16 @@ public class RegistrationDTO extends DTO{
 	@Size(min = 1, max = 255)
 	private String organizationName;
 
+	private Boolean organizationStatisticsAllowed;
+
 	public RegistrationDTO() {
 	}
 
-	public RegistrationDTO(PersonDTO person, String password, String organizationName) {
+	public RegistrationDTO(PersonDTO person, String password, String organizationName, Boolean organizationStatisticsAllowed) {
 		this.person = person;
 		this.password = password;
 		this.organizationName = organizationName;
+		this.organizationStatisticsAllowed = organizationStatisticsAllowed;
 	}
 
 	public PersonDTO getPerson() {
@@ -50,7 +53,15 @@ public class RegistrationDTO extends DTO{
         this.organizationName = organizationName;
     }
 
-    @Override
+    public Boolean getOrganizationStatisticsAllowed() {
+		return organizationStatisticsAllowed;
+	}
+
+	public void setOrganizationStatisticsAllowed(Boolean organizationStatisticsAllowed) {
+		this.organizationStatisticsAllowed = organizationStatisticsAllowed;
+	}
+
+	@Override
 	public String toString() {
 		return "MunicipalityAccountCreationDTO{" +
 				"person=" + person +

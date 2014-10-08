@@ -133,6 +133,7 @@ GET         /awac/site/:siteId                                     @eu.factorx.a
 POST        /awac/organization/site/associatedaccounts/load        @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
 POST        /awac/organization/site/associatedaccounts/save        @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
 GET         /awac/organization/getMyOrganization                   @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
+POST        /awac/organization/update                              @eu.factorx.awac.controllers.OrganizationController.updateOrganization()
 
 
 #

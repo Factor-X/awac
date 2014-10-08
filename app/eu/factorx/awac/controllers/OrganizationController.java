@@ -6,6 +6,7 @@ import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
@@ -14,8 +15,10 @@ import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.SiteService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -103,6 +106,17 @@ public class OrganizationController extends AbstractController {
         return ok(conversionService.convert(securedController.getCurrentUser().getOrganization(), OrganizationDTO.class));
     }
 
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result updateOrganization() {
+    	OrganizationDTO organizationDTO = extractDTOFromRequest(OrganizationDTO.class);
+    	Organization organization = securedController.getCurrentUser().getOrganization();
+    	organization.setName(organizationDTO.getName());
+    	organization.setStatisticsAllowed(organizationDTO.getStatisticsAllowed());
+		return ok(new ReturnDTO());
+    }
+	
     /**
      * *********** Private methods ************************
      */
