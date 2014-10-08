@@ -59,6 +59,8 @@ angular
             validationRegex: "^.{1,255}$"
             validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
 
+        $scope.organizationStatisticsAllowed = true
+
         $scope.firstSiteNameInfo =
             fieldTitle: "MAIN_SITE_NAME"
             fieldType: "text"
@@ -86,6 +88,7 @@ angular
             data.person.lastName = $scope.lastNameInfo.field
             data.password = $scope.passwordInfo.field
             data.organizationName = $scope.organizationNameInfo.field
+            data.organizationStatisticsAllowed = $scope.organizationStatisticsAllowed
             data.firstSiteName = $scope.firstSiteNameInfo.field
             data.person.defaultLanguage = $scope.$root.language
 

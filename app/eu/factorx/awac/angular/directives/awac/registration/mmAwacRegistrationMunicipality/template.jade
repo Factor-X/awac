@@ -5,7 +5,12 @@ div(class="field_form")
     mm-awac-modal-field-text(ng-info="identifierInfo")
     mm-awac-modal-field-text(ng-info="passwordInfo")
     mm-awac-modal-field-text(ng-info="passwordConfirmInfo").field_form_separator
-    mm-awac-modal-field-text(ng-info="municipalityNameInfo")
+    mm-awac-modal-field-text(ng-info="municipalityNameInfo").field_form_separator
+    br
+    div.field_row.field_form_separator
+        div(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
+        div(style="text-align: left;")
+            input(type="checkbox", ng-model="organizationStatisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
 
     div(ng-hide="isLoading")
         button.button(

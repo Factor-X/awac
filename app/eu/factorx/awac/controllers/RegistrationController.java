@@ -112,7 +112,7 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create organization
-		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE);
+		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE, dto.getOrganizationStatisticsAllowed());
 
 		play.Logger.info("create organization...");
 		organizationService.saveOrUpdate(organization);
@@ -172,7 +172,7 @@ public class RegistrationController  extends AbstractController {
 		}
 
 		//create organization
-		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY);
+		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY, dto.getOrganizationStatisticsAllowed());
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
