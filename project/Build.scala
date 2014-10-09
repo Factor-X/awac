@@ -83,6 +83,7 @@ object ApplicationBuild extends Build {
             libraryDependencies ++= appDependencies,
             resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
             resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
+            // Remove generation of documentation, quick hack to gain speed on heroku.
             doc in Compile <<= target.map(_ / "none")
         )
         .settings(

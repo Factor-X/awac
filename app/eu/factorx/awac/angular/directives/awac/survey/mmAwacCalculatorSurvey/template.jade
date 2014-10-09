@@ -60,9 +60,19 @@ div
                             ng-disabled='$root.currentPerson.isAdmin === false')
                     td
                         //  user data button
-                        button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'USER_DATA_BUTTON\' | translate',
+                            ng-click='$root.nav(\'/user_data\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}'
+                            )
                         // logout button
-                        button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
+                        button.button.user_manage(
+                            ng-show='$root.currentPerson!=null',
+                            type='button',
+                            ng-click='$root.logout();',
+                            ng-bind-html='\'LOGOUT_BUTTON\' | translate'
+                            )
         .data_menu(ng-show='displayLittleMenu===true || displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')

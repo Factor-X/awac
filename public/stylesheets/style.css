@@ -151,7 +151,7 @@ select {
 }
 
 .survey-header-option td {
-    border-right: 1px solid #61605b;
+    /* border-right: 1px solid #61605b; */
 }
 
 .survey-header-option select {
