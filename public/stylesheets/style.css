@@ -128,7 +128,8 @@ select {
 }
 
 .survey-header-option {
-    float: right;
+    width: 100%;
+    white-space: nowrap;
 }
 
 .survey-header-option tr:first-child {
@@ -183,6 +184,10 @@ select {
 .calculateur_type {
     padding-top: 5px;
     font-size: 12px;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .entreprise_name {
@@ -1680,6 +1685,10 @@ ul.messenger > li {
 
 .align-right {
     text-align: right;
+}
+
+.align-left {
+    text-align: left;
 }
 
 .result_table {

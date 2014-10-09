@@ -3,9 +3,11 @@ package eu.factorx.awac.dto.validation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.annotations.*;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import play.Logger;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -57,7 +59,17 @@ public class Validator {
 						// create a script engine manager
 						ScriptEngineManager factory = new ScriptEngineManager();
 						// create a JavaScript engine
-						ScriptEngine engine = factory.getEngineByName("JavaScript");
+
+						Logger.info("EngineFactories : " );
+						for (ScriptEngineFactory engineFactory : factory.getEngineFactories()) {
+							String name = engineFactory.getEngineName();
+							String version = engineFactory.getEngineVersion();
+							String extensions = StringUtils.join(engineFactory.getExtensions(), ", ");
+							Logger.info("EngineFactory[ name = " + name + ", version = " + version + ", extensions = " + extensions + " ]");
+						}
+
+
+						ScriptEngine engine = factory.getEngineByExtension("js");
 						// evaluate JavaScript code from String
 						String name = annotation.annotationType().getSimpleName();
 						//String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
