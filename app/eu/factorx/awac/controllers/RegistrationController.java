@@ -22,6 +22,7 @@ import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Configuration;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Transactional(readOnly = false)
 @org.springframework.stereotype.Controller
-public class RegistrationController  extends AbstractController {
+public class RegistrationController extends AbstractController {
 
 	@Autowired
 	private PersonService personService;
@@ -49,11 +50,11 @@ public class RegistrationController  extends AbstractController {
 	@Autowired
 	private SiteService siteService;
 
-    @Autowired
-    private AccountSiteAssociationService accountSiteAssociationService;
+	@Autowired
+	private AccountSiteAssociationService accountSiteAssociationService;
 
-    @Autowired
-    private PeriodService periodService;
+	@Autowired
+	private PeriodService periodService;
 
 	@Autowired
 	private EmailService emailService;
@@ -64,101 +65,100 @@ public class RegistrationController  extends AbstractController {
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
 
-    public Result verificationRegistration() {
+	public Result verificationRegistration() {
 
-        RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
+		RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
 
-        // control organization name
-        Organization organization = organizationService.findByName(dto.getOrganizationName());
-        if(organization!=null){
-            return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
-        }
+		// control organization name
+		Organization organization = organizationService.findByName(dto.getOrganizationName());
+		if (organization != null) {
+			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
+		}
 
-        //create organization
-        organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
-        organizationService.saveOrUpdate(organization);
+		// create organization
+		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
+		organizationService.saveOrUpdate(organization);
 
-        //create administrator
-        Account account = null;
-        try {
-            account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
-        } catch (MyrmexException e) {
-            return notFound(new ExceptionsDTO(e.getToClientMessage()));
-        }
+		// create administrator
+		Account account = null;
+		try {
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
+		} catch (MyrmexException e) {
+			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+		}
 
-        //if the login and the password are ok, refresh the session
-        securedController.storeIdentifier(account);
+		// if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account);
 
-        // email submission
-        handleEmailSubmission(account);
+		// email submission
+		handleEmailSubmission(account, InterfaceTypeCode.VERIFICATION);
 
-        //create ConnectionFormDTO
-        LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+		// create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
-        return ok(resultDto);
-    }
+		return ok(resultDto);
+	}
 
-
-    @Transactional(readOnly = false)
+	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
 
 		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
 
 		// control organization name
 		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if(organization!=null){
+		if (organization != null) {
 			play.Logger.info("Myrmex exception: Organization already exists...");
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
 		}
 
-		//create organization
+		// create organization
 		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE, dto.getOrganizationStatisticsAllowed());
 
 		play.Logger.info("create organization...");
 		organizationService.saveOrUpdate(organization);
 
 		play.Logger.info("create admin...");
-		//create administrator
+		// create administrator
 		Account account = null;
 		try {
-			account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
 		} catch (MyrmexException e) {
 			play.Logger.info("Myrmex exception:" + e.getToClientMessage());
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
-		//create site
+		// create site
 		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
+        site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 
-        //add last year period
-        Period period = periodService.findLastYear();
-        List<Period> listAvailablePeriod= new ArrayList<>();
-        listAvailablePeriod.add(period);
-        site.setListPeriodAvailable(listAvailablePeriod);
+		// add last year period
+		Period period = periodService.findLastYear();
+		List<Period> listAvailablePeriod = new ArrayList<>();
+		listAvailablePeriod.add(period);
+		site.setListPeriodAvailable(listAvailablePeriod);
 
 		play.Logger.info("add periods...");
-        siteService.saveOrUpdate(site);
-        organization.getSites().add(site);
+		siteService.saveOrUpdate(site);
+		organization.getSites().add(site);
 
-        //create link between account and site
+		// create link between account and site
 		play.Logger.info("create association...");
-        AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,account);
-        accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
+		AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
+		accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
-		//if the login and the password are ok, refresh the session
+		// if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account, InterfaceTypeCode.ENTERPRISE);
 
-		//create ConnectionFormDTO
+		// create ConnectionFormDTO
 		play.Logger.info("create resultDTO...");
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);
 	}
-
 
 	@Transactional(readOnly = false)
 	public Result municipalityRegistration() {
@@ -167,53 +167,63 @@ public class RegistrationController  extends AbstractController {
 
 		// control organization name
 		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if(organization!=null){
+		if (organization != null) {
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
 		}
 
-		//create organization
+		// create organization
 		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY, dto.getOrganizationStatisticsAllowed());
 		organizationService.saveOrUpdate(organization);
 
-		//create administrator
+		// create administrator
 		Account account = null;
 		try {
-			account = createAdministrator(dto.getPerson(), dto.getPassword(),organization);
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
 		} catch (MyrmexException e) {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
-		//if the login and the password are ok, refresh the session
+		// if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account, InterfaceTypeCode.MUNICIPALITY);
 
-		//create ConnectionFormDTO
+		// create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);
 	}
 
-	private void handleEmailSubmission (Account account) {
+	private void handleEmailSubmission(Account account, InterfaceTypeCode interfaceType) {
 
 		// email purpose
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
+		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
+		String awacInterfaceTypeFragment;
+		if (interfaceType.getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
+		} else {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
+		}
+
 		// prepare email
 		Map values = new HashMap<String, Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
 
-		String link = awacHostname + awacLoginUrlFragment;
+		String link = awacHostname + awacInterfaceTypeFragment + awacLoginUrlFragment;
+		// String link = awacHostname + awacLoginUrlFragment;
 
 		values.put("subject", subject);
 		values.put("link", link);
 		values.put("hostname", awacHostname);
 		values.put("identifier", account.getIdentifier());
-
 
 		String velocityContent = velocityGeneratorService.generate("registerInvitation.vm", values);
 
@@ -222,35 +232,31 @@ public class RegistrationController  extends AbstractController {
 		emailService.send(email);
 	}
 
+	private Account createAdministrator(PersonDTO personDTO, String password, Organization organization) throws MyrmexException {
 
-	private Account createAdministrator(PersonDTO personDTO, String password, Organization organization) throws MyrmexException{
-
-		//control identifier
+		// control identifier
 		Account account = accountService.findByIdentifier(personDTO.getIdentifier());
-		if(account!=null){
+		if (account != null) {
 			throw new MyrmexException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
 		}
 
-
-		//control email
+		// control email
 		Person person = personService.getByEmail(personDTO.getEmail());
 
 		// if person doesn't already exist, create it
-		if(person ==null){
+		if (person == null) {
 			person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
 			personService.saveOrUpdate(person);
 		}
 
-		//create account
-		Account administrator = new Account(organization,person,personDTO.getIdentifier(), password);
+		// create account
+		Account administrator = new Account(organization, person, personDTO.getIdentifier(), password);
 		administrator.setIsAdmin(true);
 
-		//save account
+		// save account
 		accountService.saveOrUpdate(administrator);
 
 		return administrator;
 	}
-
-
 
 }
