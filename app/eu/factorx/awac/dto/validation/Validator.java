@@ -3,12 +3,10 @@ package eu.factorx.awac.dto.validation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.validation.annotations.*;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import play.Logger;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -57,62 +55,63 @@ public class Validator {
 					} else if (annotation.annotationType().equals(Optional.class)) {
 					} else {
 						// create a script engine manager
-						ScriptEngineManager factory = new ScriptEngineManager();
-						// create a JavaScript engine
 
-						Logger.info("EngineFactories : " );
-						for (ScriptEngineFactory engineFactory : factory.getEngineFactories()) {
-							String name = engineFactory.getEngineName();
-							String version = engineFactory.getEngineVersion();
-							String extensions = StringUtils.join(engineFactory.getExtensions(), ", ");
-							Logger.info("EngineFactory[ name = " + name + ", version = " + version + ", extensions = " + extensions + " ]");
-						}
+						Context cx = Context.enter();
 
 
-						ScriptEngine engine = factory.getEngineByExtension("js");
-						// evaluate JavaScript code from String
-						String name = annotation.annotationType().getSimpleName();
-						//String javascript = FileUtil.getContents("app/" + annotation.annotationType().getPackage().getName().replaceAll("\\.", "/") + "/../scripts/" + name + ".js");
-						//String javascript = FileUtil.getContents("public/javascripts/scripts/"+ name + ".js");
+						try {
+							// Initialize the standard objects (Object, Function, etc.). This must be done before scripts can be
+							// executed. The null parameter tells initStandardObjects
+							// to create and return a scope object that we use
+							// in later calls.
+							Scriptable scope = cx.initStandardObjects();
 
-						InputStream is = play.Play.application().resourceAsStream("public/javascripts/scripts/" + name + ".js");
-						String javascript = IOUtils.toString(is, "UTF-8");
+							// Build the script
+							// evaluate JavaScript code from String
+							String name = annotation.annotationType().getSimpleName();
+							InputStream is = play.Play.application().resourceAsStream("public/javascripts/scripts/" + name + ".js");
+							String javascript = IOUtils.toString(is, "UTF-8");
 
-						engine.eval(javascript);
+							// Execute the script
+							cx.evaluateString(scope, javascript, name + ".js", 1, null);
 
-						Map<String, Object> parameters = new HashMap<>();
-
-						for (Method method : annotation.annotationType().getDeclaredMethods()) {
-							parameters.put(method.getName(), method.invoke(annotation));
-						}
-
-						ObjectMapper mapper = new ObjectMapper();
-
-						engine.eval("VALUE = " + mapper.writeValueAsString(value) + ";");
-						engine.eval("ARGS = " + mapper.writeValueAsString(parameters) + ";");
-
-						Boolean result = (Boolean) engine.eval("validate(VALUE, ARGS)");
-						if (!result) {
-							validationFail = true;
-
-							//create the error message
-							failureMessage += "\n- ";
-
-							//recover the error message
-							if (annotation instanceof NotNull) {
-								failureMessage += ((NotNull) annotation).message();
-							} else if (annotation instanceof Null) {
-								failureMessage += ((Null) annotation).message();
-							} else if (annotation instanceof NotNull) {
-								failureMessage += ((Size) annotation).message();
-							} else if (annotation instanceof Pattern) {
-								failureMessage += ((Pattern) annotation).message();
-							} else if (annotation instanceof Range) {
-								failureMessage += ((Range) annotation).message();
-							} else {
-								failureMessage += field.getName() + " is not valid";
+							Map<String, Object> parameters = new HashMap<>();
+							for (Method method : annotation.annotationType().getDeclaredMethods()) {
+								parameters.put(method.getName(), method.invoke(annotation));
 							}
 
+							ObjectMapper mapper = new ObjectMapper();
+							cx.evaluateString(scope, "VALUE = " + mapper.writeValueAsString(value) + ";", name + ".js", 1, null);
+							cx.evaluateString(scope, "ARGS = " + mapper.writeValueAsString(parameters) + ";", name + ".js", 1, null);
+
+							Boolean result = (Boolean) cx.evaluateString(scope, "validate(VALUE, ARGS)", name + ".js", 1, null);
+							if (!result) {
+								validationFail = true;
+
+								//create the error message
+								failureMessage += "\n- ";
+
+								//recover the error message
+								if (annotation instanceof NotNull) {
+									failureMessage += ((NotNull) annotation).message();
+								} else if (annotation instanceof Null) {
+									failureMessage += ((Null) annotation).message();
+								} else if (annotation instanceof NotNull) {
+									failureMessage += ((Size) annotation).message();
+								} else if (annotation instanceof Pattern) {
+									failureMessage += ((Pattern) annotation).message();
+								} else if (annotation instanceof Range) {
+									failureMessage += ((Range) annotation).message();
+								} else {
+									failureMessage += field.getName() + " is not valid";
+								}
+
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							Context.exit();
 						}
 					}
 				}
