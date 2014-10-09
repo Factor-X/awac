@@ -206,10 +206,13 @@ public class RegistrationController  extends AbstractController {
 
 		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
 		String awacInterfaceTypeFragment;
+
 		if (interfaceType.getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
 			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
 		} else {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
 		}
 
 		// prepare email
