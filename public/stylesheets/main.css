@@ -154,13 +154,6 @@ input.ng-invalid {
     padding-bottom: 35px;
 }
 
-.registrationFrame .field_form {
-    width: 100%;
-}
-
-.registrationFrame .field_form input {
-    width: 100%;
-}
 
 .registrationFrame button {
     float: right;
