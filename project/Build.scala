@@ -76,11 +76,13 @@ object ApplicationBuild extends Build {
         new AngularCompileTask().execute()
     }
 
-    val main = play.Project(appName, appVersion, appDependencies)
+    val main = sbt.Project(id = appName, base = file("."))
         .settings(
-        resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
-        resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
-    )
+            version := appVersion,
+            libraryDependencies ++= appDependencies,
+            resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
+            resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+        )
         .settings(
             angularCompileSettings, resources in Compile <<= (resources in Compile).dependsOn(angularCompileTask)
         )

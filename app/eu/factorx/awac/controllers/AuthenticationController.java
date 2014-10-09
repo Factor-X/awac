@@ -11,6 +11,15 @@
 
 package eu.factorx.awac.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
 import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
@@ -33,14 +42,6 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends AbstractController {
@@ -84,7 +85,7 @@ public class AuthenticationController extends AbstractController {
 	// authenticate action cf routes
 	@Transactional(readOnly = false)
 	public Result authenticate() {
-
+		Logger.info("authenticate - JSON: " + request().body().asJson());
 		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
 		if (connectionFormDTO == null) {
