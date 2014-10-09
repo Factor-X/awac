@@ -22,6 +22,7 @@ import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Configuration;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 
@@ -90,7 +91,7 @@ public class RegistrationController  extends AbstractController {
         securedController.storeIdentifier(account);
 
         // email submission
-        handleEmailSubmission(account);
+        handleEmailSubmission(account,InterfaceTypeCode.VERIFICATION);
 
         //create ConnectionFormDTO
         LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -130,7 +131,7 @@ public class RegistrationController  extends AbstractController {
 		//create site
 		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
-
+		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
         //add last year period
         Period period = periodService.findLastYear();
         List<Period> listAvailablePeriod= new ArrayList<>();
@@ -150,7 +151,7 @@ public class RegistrationController  extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account,InterfaceTypeCode.ENTERPRISE);
 
 		//create ConnectionFormDTO
 		play.Logger.info("create resultDTO...");
@@ -187,7 +188,7 @@ public class RegistrationController  extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account,InterfaceTypeCode.MUNICIPALITY);
 
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -195,19 +196,28 @@ public class RegistrationController  extends AbstractController {
 		return ok(resultDto);
 	}
 
-	private void handleEmailSubmission (Account account) {
+	private void handleEmailSubmission (Account account,InterfaceTypeCode interfaceType) {
 
 		// email purpose
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
+		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
+		String awacInterfaceTypeFragment;
+		if (interfaceType.getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+		}
+
 		// prepare email
 		Map values = new HashMap<String, Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
 
-		String link = awacHostname + awacLoginUrlFragment;
+		String link = awacHostname+awacInterfaceTypeFragment+awacLoginUrlFragment;
+		//String link = awacHostname + awacLoginUrlFragment;
 
 		values.put("subject", subject);
 		values.put("link", link);
