@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Scope;
@@ -14,21 +14,17 @@ import eu.factorx.awac.models.data.file.StoredFile;
 
 @Entity
 @Table(name = "reducingaction", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { ReducingAction.TOPIC_COLUMN_NAME, ReducingAction.NAME_COLUMN_NAME, ReducingAction.SCOPE_COLUMN_NAME })
+		@UniqueConstraint(columnNames = { ReducingAction.TITLE_COLUMN_NAME, ReducingAction.SCOPE_COLUMN_NAME })
 })
 public class ReducingAction extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 7989687565472744555L;
 
-	public static final String TOPIC_COLUMN_NAME = "topic";
-	public static final String NAME_COLUMN_NAME = "name";
+	public static final String TITLE_COLUMN_NAME = "title";
 	public static final String SCOPE_COLUMN_NAME = "scope_id";
 
-	@Column(name = TOPIC_COLUMN_NAME, nullable = false)
-	private String topic;
-
-	@Column(name = NAME_COLUMN_NAME, nullable = false)
-	private String name;
+	@Column(name = TITLE_COLUMN_NAME, nullable = false)
+	private String title;
 
 	@ManyToOne
 	@JoinColumn(name = SCOPE_COLUMN_NAME, nullable = false)
@@ -56,7 +52,7 @@ public class ReducingAction extends AuditedAbstractEntity {
 
 	private Integer expectedPaybackTime;
 
-	private DateTime dueDate;
+	private LocalDate dueDate;
 
 	private String responsiblePerson;
 
@@ -74,33 +70,23 @@ public class ReducingAction extends AuditedAbstractEntity {
 	}
 
 	/**
-	 * @param topic
-	 * @param name
+	 * @param title
 	 * @param scope
 	 * @param type
 	 */
-	public ReducingAction(String topic, String name, Scope scope, ReducingActionType type) {
+	public ReducingAction(String title, Scope scope, ReducingActionType type) {
 		super();
-		this.topic = topic;
-		this.name = name;
+		this.title = title;
 		this.scope = scope;
 		this.type = type;
 	}
 
-	public String getTopic() {
-		return topic;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTopic(String topic) {
-		this.topic = topic;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
 	public Scope getScope() {
@@ -175,11 +161,11 @@ public class ReducingAction extends AuditedAbstractEntity {
 		this.expectedPaybackTime = expectedPaybackTime;
 	}
 
-	public DateTime getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(DateTime dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 

@@ -14,23 +14,22 @@ CREATE TABLE reducingaction
   lastupdateuser character varying(255),
   comment character varying(1000),
   completionyear integer,
-  duedate timestamp without time zone,
+  duedate date,
   expectedpaybacktime integer,
   financialbenefit double precision,
   ghgbenefit double precision,
   investment double precision,
-  name character varying(255) NOT NULL,
+  title character varying(255) NOT NULL,
   physicalmeasure character varying(255),
   responsibleperson character varying(255),
   status character varying(255),
-  topic character varying(255) NOT NULL,
   type character varying(255),
   scope_id bigint NOT NULL,
   CONSTRAINT reducingaction_pkey PRIMARY KEY (id),
   CONSTRAINT fk_reducingaction_scope_id FOREIGN KEY (scope_id)
       REFERENCES scope (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT uk_reducingaction_logical_pkey UNIQUE (topic, name, scope_id)
+  CONSTRAINT uk_reducingaction_logical_pkey UNIQUE (title, scope_id)
 )
 WITH (
   OIDS=FALSE
