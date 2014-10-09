@@ -131,7 +131,8 @@ public class RegistrationController  extends AbstractController {
 		//create site
 		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
-		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
+        site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
+
         //add last year period
         Period period = periodService.findLastYear();
         List<Period> listAvailablePeriod= new ArrayList<>();
