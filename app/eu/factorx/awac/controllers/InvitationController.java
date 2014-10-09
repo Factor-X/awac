@@ -80,10 +80,11 @@ public class InvitationController extends AbstractController {
 		String awacInterfaceTypeFragment;
 		if (org.getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
 			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else if (org.getInterfaceCode().getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
 		} else {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
 		}
-
 		// compute key
 		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
 		Logger.info("Email Invitation generated key : " + key);
@@ -158,10 +159,11 @@ public class InvitationController extends AbstractController {
 		String awacInterfaceTypeFragment;
 		if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
 			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
 		} else {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
 		}
-
 		//http://warriorbeast:9000/calculator#/enterprise#/registration/mOOvr8HkfufNXX5DvBkYd8nb8f
 
 		// prepare email

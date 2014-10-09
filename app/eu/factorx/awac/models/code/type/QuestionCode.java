@@ -13,7 +13,11 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
+<<<<<<< HEAD
 /* Generated the 2014-10-09 14:36:02 +0200 */
+=======
+/* Generated the 2014-10-08 14:08:37 +0200 */
+>>>>>>> 7224c629f4a1208d35602f2564bcb64dbf2cd4a4
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -404,7 +408,11 @@ public static final QuestionCode A5014 = new QuestionCode("A5014");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
+<<<<<<< HEAD
 /* Generated the 2014-10-09 14:36:04 +0200 */
+=======
+/* Generated the 2014-10-08 14:08:41 +0200 */
+>>>>>>> 7224c629f4a1208d35602f2564bcb64dbf2cd4a4
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
