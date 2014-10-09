@@ -81,7 +81,8 @@ object ApplicationBuild extends Build {
             version := appVersion,
             libraryDependencies ++= appDependencies,
             resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
-            resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+            resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
+            doc in Compile <<= target.map(_ / "none")
         )
         .settings(
             angularCompileSettings, resources in Compile <<= (resources in Compile).dependsOn(angularCompileTask)

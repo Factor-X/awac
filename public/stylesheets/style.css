@@ -353,7 +353,6 @@ select {
     color: white !important;
 }
 
-
 .last_menu > * {
     min-width: 49%;
     width: 49%;
@@ -367,7 +366,6 @@ select {
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
-
 
 .menu > * {
     position: relative;
@@ -536,11 +534,6 @@ select {
     background-color: #CFCDC0;
     margin: 10% auto auto;
 }
-
-
-
-
-
 
 .question-comment-textarea {
     width: 530px;
@@ -895,7 +888,7 @@ h1 {
     padding: 3px 0px 3px 35px;
 }
 
-.question_field .optional{
+.question_field .optional {
     font-style: italic;
 }
 
@@ -1130,11 +1123,11 @@ h1 {
     display: block;
 }
 
-.user_icon_red{
+.user_icon_red {
     background-color: #b02828;
 }
 
-.user_icon_green{
+.user_icon_green {
     background-color: #098d38;
 }
 
@@ -1143,7 +1136,8 @@ h1 {
 }
 
 .document-question-block {
-    height: 62px;>
+    height: 62px;
+>
 }
 
 .document-question-block > div {
@@ -1638,8 +1632,8 @@ ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
 }
 
-.messenger{
-    z-index : 12000 !important;
+.messenger {
+    z-index: 12000 !important;
 }
 
 ul.messenger-theme-flat .messenger-message.alert-success,
@@ -1700,8 +1694,6 @@ ul.messenger > li {
     border-bottom: solid 2px #666;
 }
 
-
-
 .forgot_password_success_message {
     text-align: center;
     margin: 15px;
@@ -1748,8 +1740,6 @@ ul.messenger > li {
     list-style-type: none;
 }
 
-
-
 .top-aligned {
     vertical-align: top;
 }
@@ -1779,7 +1769,6 @@ ul.messenger > li {
     padding: 0.5em;
     border: solid 1px #333;
 }
-
 
 .no-scope-message {
     text-align: center;
