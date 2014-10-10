@@ -19,66 +19,7 @@
 [ 1. Font ]
 -------------------------------------------------------
 */
-/*
-@font-face {
-    font-family: 'robotolight';
-    src: url('font/Roboto-Light-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Light-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Light-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Light-webfont.svg#robotolight') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
 
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotolight';
-        src: url('font/Roboto-Light-webfont.svg#robotolight') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotoregular';
-    src: url('font/Roboto-Regular-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Regular-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Regular-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotoregular';
-        src: url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotomedium';
-    src: url('font/Roboto-Medium-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Medium-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Medium-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Medium-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Medium-webfont.svg#robotomedium') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotomedium';
-        src: url('font/Roboto-medium-webfont.svg#robotomedium') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotobold';
-    src: url('font/Roboto-Bold-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Bold-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Bold-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Bold-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotobold';
-        src: url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');
-    }
-}*/
 
 /*-----------------------------------------------------
 [ 2. Structure ]
