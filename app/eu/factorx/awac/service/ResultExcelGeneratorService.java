@@ -1,16 +1,20 @@
 package eu.factorx.awac.service;
 
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.util.Table;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.LanguageCode;
+import eu.factorx.awac.models.knowledge.Period;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 public interface ResultExcelGeneratorService {
 
-	void generateExcelInStream(OutputStream stream, List<Scope> scopes, String period, Table allScopes, Table scope1, Table scope2, Table scope3, Table outOfScope)
+	byte[] generateExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode)
+		throws IOException, WriteException, BiffException;
+
+	byte[] generateComparedExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode)
 		throws IOException, WriteException, BiffException;
 }

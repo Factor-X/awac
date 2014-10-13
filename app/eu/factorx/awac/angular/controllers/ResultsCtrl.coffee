@@ -19,6 +19,34 @@ angular
         $scope.reload()
     , true
 
+    $scope.exportXls = () ->
+        sites = $scope.mySites.filter((e) ->
+            return e.selected
+        )
+
+        dto =
+            __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
+            periodKey: $scope.$root.periodSelectedKey
+            scopesIds: sites.map((s) ->
+                s.id
+            )
+
+        if $scope.$root.periodToCompare != 'default'
+            dto.comparedPeriodKey = $scope.$root.periodToCompare
+
+        downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
+            window.R = result
+
+            byteCharacters = atob(result.data)
+            byteNumbers = new Array(byteCharacters.length)
+            for i in [0...byteCharacters.length]
+                byteNumbers[i] = byteCharacters.charCodeAt(i)
+            byteArray = new Uint8Array(byteNumbers)
+            blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
+            filename = "export.xls"
+
+            saveAs(blob,filename)
+
     $scope.reload = () ->
         sites = $scope.mySites.filter((e) ->
             return e.selected
@@ -107,11 +135,12 @@ angular
                         $scope.leftTotalEmissions += line.leftScope1Value
                         $scope.leftTotalEmissions += line.leftScope2Value
                         $scope.leftTotalEmissions += line.leftScope3Value
-                        $scope.leftTotalEmissions += line.leftOutOfScopeValue
+                        # $scope.leftTotalEmissions += line.leftOutOfScopeValue
+
                         $scope.rightTotalEmissions += line.rightScope1Value
                         $scope.rightTotalEmissions += line.rightScope2Value
                         $scope.rightTotalEmissions += line.rightScope3Value
-                        $scope.rightTotalEmissions += line.rightOutOfScopeValue
+                        # $scope.rightTotalEmissions += line.rightOutOfScopeValue
 
                 else
                     messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'

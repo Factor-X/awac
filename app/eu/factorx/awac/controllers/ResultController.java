@@ -5,6 +5,8 @@ import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.GetReportParametersDTO;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
@@ -13,6 +15,7 @@ import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
@@ -28,19 +31,24 @@ import java.util.List;
 public class ResultController extends AbstractController {
 
 	@Autowired
-	private PeriodService             periodService;
+	private PeriodService               periodService;
 	@Autowired
-	private ScopeService              scopeService;
+	private ScopeService                scopeService;
 	@Autowired
-	private ConversionService         conversionService;
+	private ConversionService           conversionService;
 	@Autowired
-	private ReportResultService       reportResultService;
+	private ReportResultService         reportResultService;
 	@Autowired
-	private SecuredController         securedController;
+	private SecuredController           securedController;
 	@Autowired
-	private AwacCalculatorService     awacCalculatorService;
+	private AwacCalculatorService       awacCalculatorService;
 	@Autowired
-	private ResultSvgGeneratorService resultSvgGeneratorService;
+	private ResultSvgGeneratorService   resultSvgGeneratorService;
+	@Autowired
+	private CodeLabelService            codeLabelService;
+	@Autowired
+	private ResultExcelGeneratorService resultExcelGeneratorService;
+
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
@@ -106,6 +114,55 @@ public class ResultController extends AbstractController {
 
 		// 4. PUSH !!!
 		return ok(resultsDTO);
+	}
+
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result getReportAsXls() throws BiffException, IOException, WriteException {
+		GetReportParametersDTO dto = extractDTOFromRequest(GetReportParametersDTO.class);
+		String periodKey = dto.getPeriodKey();
+		String comparedPeriodKey = dto.getComparedPeriodKey();
+
+		// 2. Fetch the scopes
+		List<Scope> scopes = new ArrayList<>();
+		for (Long scopeId : dto.getScopesIds()) {
+			scopes.add(scopeService.findById(scopeId));
+		}
+
+		if (comparedPeriodKey == null) {
+			Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+			//launch the download
+			response().setContentType("application/octet-stream");
+			response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+
+
+			return getSimpleReportAsXls(period, scopes);
+		} else {
+			Period period = periodService.findByCode(new PeriodCode(periodKey));
+			Period comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
+
+			//launch the download
+			response().setContentType("application/octet-stream");
+			response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+
+			return getComparedReportAsXls(period, comparedPeriod, scopes);
+		}
+	}
+
+	public Result getSimpleReportAsXls(Period period, List<Scope> scopes) throws IOException, WriteException, BiffException {
+		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
+		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
+		return ok(new Base64().encode(content));
+	}
+
+	public Result getComparedReportAsXls(Period period, Period comparedPeriod, List<Scope> scopes) throws IOException, WriteException, BiffException {
+		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
+		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
+		return ok(new Base64().encode(content));
 	}
 
 	public Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {

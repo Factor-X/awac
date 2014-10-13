@@ -92,6 +92,7 @@ POST        /awac/answer/closeForm/                                @eu.factorx.a
 # ResultController => used to get report
 #
 POST        /awac/result/getReport                                 @eu.factorx.awac.controllers.ResultController.getReport()
+POST        /awac/result/getReportAsXls                            @eu.factorx.awac.controllers.ResultController.getReportAsXls()
 
 #
 # Upload

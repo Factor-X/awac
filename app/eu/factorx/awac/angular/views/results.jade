@@ -109,19 +109,8 @@ div.results.pdf-able
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
 
-
-
-
-
-
-
-
-
                             br
                             br
-
-
-
 
                         div(ng-show="current_tab == 3")
                             h2
@@ -293,7 +282,7 @@ div.results.pdf-able
 
             td.top-aligned
                 div.align-right
-                    button.button(type="button", mm-not-implemented)
+                    button.button(type="button", ng-click="exportXls()")
                         span(ng-bind-html="'XLS_EXPORT' | translate")
                     button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'PDF_EXPORT' | translate")
