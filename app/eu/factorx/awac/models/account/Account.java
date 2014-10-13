@@ -13,6 +13,7 @@ package eu.factorx.awac.models.account;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
+import eu.factorx.awac.models.forms.VerificationRequest;
 import play.data.validation.Constraints.Required;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+
+import java.util.List;
 
 // import for JAXB annotations -- JAXB stack
 
@@ -64,6 +67,12 @@ public class Account extends AuditedAbstractEntity {
 	@Column(nullable = false, name = "is_admin")
 	private Boolean isAdmin = false;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "mm_verifierrequest_account",
+            joinColumns  = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns= @JoinColumn(name = "verifier_id", referencedColumnName = "id"))
+    private List<VerificationRequest> verificationRequestList;
+
 	public Account() {
 	}
 
@@ -84,7 +93,15 @@ public class Account extends AuditedAbstractEntity {
 		this.isAdmin = isAdmin;
 	}
 
-	public Organization getOrganization() {
+    public List<VerificationRequest> getVerificationRequestList() {
+        return verificationRequestList;
+    }
+
+    public void setVerificationRequestList(List<VerificationRequest> verificationRequestList) {
+        this.verificationRequestList = verificationRequestList;
+    }
+
+    public Organization getOrganization() {
 		return organization;
 	}
 

@@ -71,8 +71,10 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
-        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorInstance</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequest</class>
+        <class>eu.factorx.awac.models.email.EmailVerificationContent</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
@@ -88,6 +90,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
+        <class>eu.factorx.awac.models.data.answer.Verification</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -198,8 +201,10 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
-        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorInstance</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequest</class>
+        <class>eu.factorx.awac.models.email.EmailVerificationContent</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
@@ -215,6 +220,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
+        <class>eu.factorx.awac.models.data.answer.Verification</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

@@ -2,11 +2,14 @@ package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.service.AwacCalculatorService;
 import org.springframework.stereotype.Component;
+import play.Logger;
 import play.db.jpa.JPA;
 
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Component
 public class AwacCalculatorServiceImpl extends AbstractJPAPersistenceServiceImpl<AwacCalculator> implements AwacCalculatorService {
@@ -14,20 +17,18 @@ public class AwacCalculatorServiceImpl extends AbstractJPAPersistenceServiceImpl
 	@Override
 	public AwacCalculator findByCode(InterfaceTypeCode interfaceTypeCode) {
 
-		TypedQuery<AwacCalculator> query = JPA.em().createQuery("" +
-				"select e " +
-				"from AwacCalculator e " +
-				"where e.interfaceTypeCode = :code",
-			AwacCalculator.class);
-		query.setParameter("code", interfaceTypeCode);
-		return query.getSingleResult();
+        List<AwacCalculator> resultList = JPA.em().createNamedQuery(AwacCalculator.FIND_BY_CODE, AwacCalculator.class)
+                .setParameter("interfaceTypeCode", interfaceTypeCode).getResultList();
 
-		/*
-		Session session = JPA.em().unwrap(Session.class);
-		Criteria criteria = session.createCriteria(AwacCalculator.class);
-		criteria.add(Restrictions.eq(AwacCalculator.INTERFACE_TYPE_CODE_PROPERTY, interfaceTypeCode));
-		return (AwacCalculator) criteria.uniqueResult();
-		*/
+        if (resultList.size() > 1) {
+            String errorMsg = "More than one account with interfaceTypeCode = '" + interfaceTypeCode + "'";
+            Logger.error(errorMsg);
+            throw new RuntimeException(errorMsg);
+        }
+        if (resultList.size() == 0) {
+            return null;
+        }
+        return resultList.get(0);
 	}
 
 }

@@ -71,6 +71,11 @@ div
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
             div
+                button.button.verification(
+                    type='button',
+                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
+                    ng-click="isDisabled || requestVerification()"
+                    ng-disabled="$root.closedForms !== true")
                 button.button.verification(type='button',
                     ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
@@ -81,11 +86,6 @@ div
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
                     ng-hide="$root.closedForms")
-                button.button.verification(
-                    type='button',
-                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
-                    mm-not-implemented='mm-not-implemented',
-                    ng-disabled="$root.closedForms !== true")
             .big_separator
             .data_save
                 .last_save(ng-hide='lastSaveTime===null')

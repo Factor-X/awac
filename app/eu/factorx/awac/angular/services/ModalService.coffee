@@ -16,6 +16,10 @@ angular
     @CONFIRM_CLOSING = 'confirm-closing'
     @HELP = 'help'
     @EDIT_OR_CREATE_REDUCTION_ACTION = 'edit-or-create-reduction-action'
+    @REQUEST_VERIFICATION = 'request_verification'
+    @VERIFICATION_ASSIGN = 'verification_assign'
+    @VERIFICATION_REJECT = 'verification_reject'
+    @VERIFICATION_REJECT='verification_reject'
 
     @show = (modalName, params) ->
         args = []

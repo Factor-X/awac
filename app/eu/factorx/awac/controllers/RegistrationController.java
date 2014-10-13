@@ -5,6 +5,7 @@ import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegistrationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.verification.post.VerificationRegistrationDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
@@ -13,6 +14,9 @@ import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.VerificationRequestStatus;
+import eu.factorx.awac.models.forms.AwacCalculatorInstance;
+import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
@@ -61,17 +65,32 @@ public class RegistrationController  extends AbstractController {
 	@Autowired
 	private CodeLabelService codeLabelService;
 
+    @Autowired
+    private AwacCalculatorInstanceService awacCalculatorInstanceService;
+
+    @Autowired
+    private VerificationRequestService verificationRequestService;
+
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
 
+    @Autowired
+    private VerificationController verificationController;
+
     public Result verificationRegistration() {
 
-        RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
+        VerificationRegistrationDTO dto = extractDTOFromRequest(VerificationRegistrationDTO.class);
 
         // control organization name
         Organization organization = organizationService.findByName(dto.getOrganizationName());
         if(organization!=null){
             return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
+        }
+
+        //control key
+        VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
+        if(verificationRequest==null|| verificationRequest.getOrganizationVerifier()!=null){
+            return notFound(new ExceptionsDTO("the validation request must be canceled by the customer"));
         }
 
         //create organization
@@ -91,6 +110,9 @@ public class RegistrationController  extends AbstractController {
 
         // email submission
         handleEmailSubmission(account);
+
+        //link the key
+        verificationController.addRequestByKey(dto.getKey());
 
         //create ConnectionFormDTO
         LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);

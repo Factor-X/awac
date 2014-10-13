@@ -12,4 +12,6 @@ public interface OrganizationEventService extends PersistenceService<Organizatio
 
 	public List<OrganizationEvent> findByOrganization(Organization organization);
 
+    public OrganizationEvent findByOrganizationAndPeriodAndName(Organization organization,Period period,String name);
+
 }

@@ -18,6 +18,8 @@ public @interface Pattern {
 
 	public static final String IDENTIFIER = "/[a-zA-Z0-9-]{5,20}/";
 
+    public static final String PHONE_NUMBER = "/.{5-12}/";
+
 	public String regexp() default "/.*/";
 
 	String message() default "The field doesn't have the expected structure";

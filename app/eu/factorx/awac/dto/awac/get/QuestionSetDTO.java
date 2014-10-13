@@ -15,6 +15,8 @@ public class QuestionSetDTO extends DTO {
 
     private PersonDTO dataValidator;
 
+    private VerificationDTO verification;
+
 	private List<QuestionSetDTO> children;
 
 	private List<QuestionDTO> questions;
@@ -28,6 +30,14 @@ public class QuestionSetDTO extends DTO {
 		this.children = children;
 		this.questions = questions;
 	}
+
+    public VerificationDTO getVerification() {
+        return verification;
+    }
+
+    public void setVerification(VerificationDTO verification) {
+        this.verification = verification;
+    }
 
     public PersonDTO getDatalocker() {
         return datalocker;

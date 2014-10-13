@@ -1,8 +1,8 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersDTO;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
+import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
+import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;

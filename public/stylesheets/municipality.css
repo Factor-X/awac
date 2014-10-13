@@ -1,6 +1,0 @@
-
-.menu > * {
-    min-width: calc((100% / 5.0) - 6px);
-    width: calc((100% / 5.0) - 6px);
-    max-width: calc((100% / 5.0) - 6px);
-}

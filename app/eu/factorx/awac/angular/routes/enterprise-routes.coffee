@@ -21,10 +21,6 @@ initializeEnterpriseRoutes = (defaultResolve) ->
                     '$/angular/views/enterprise/' + $routeParams.form + '.html'
                 controller: 'FormCtrl'
                 resolve: angular.extend({
-                    formIdentifier: ($route) ->
-                        return $route.current.params.form
-                    displayFormMenu: () ->
-                        return true
                     helpPage: () ->
                         return 'help_form'
                 }, formResolve)

@@ -9,13 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "verificationstatus")) })
+@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "verification_status")) })
 public class VerificationStatus extends Code{
 
     private static final long serialVersionUID = 1L;
 
-    public static final VerificationStatus VALID = new VerificationStatus("valid");
-    public static final VerificationStatus UNVALID = new VerificationStatus("unvalid");
+    public static final VerificationStatus APPROVED = new VerificationStatus("approved");
+    public static final VerificationStatus REJECTED = new VerificationStatus("rejected");
 
 
     public VerificationStatus() {

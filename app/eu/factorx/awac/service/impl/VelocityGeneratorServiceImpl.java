@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Component
-public class VelocityGeneratorImpl implements VelocityGeneratorService {
+public class VelocityGeneratorServiceImpl implements VelocityGeneratorService {
 
 	//TODO set a application.conf variable
 	private String ROOT = "public/vm/";

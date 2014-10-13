@@ -6,17 +6,18 @@ import eu.factorx.awac.models.knowledge.Period;
 
 import javax.persistence.*;
 
-/**
- * Created by florian on 26/09/14.
- */
+
 @Entity
 @Table(uniqueConstraints =@UniqueConstraint(columnNames = {"awaccalculator_id", "period_id", "scope_id"}))
 @NamedQueries({
-        @NamedQuery(name = AwacCalculatorClosed.FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorClosed p where p.awacCalculator = :calculator and p.period = :period and p.scope=:scope" ),
-})
-public class AwacCalculatorClosed extends AuditedAbstractEntity{
+        @NamedQuery(name = AwacCalculatorInstance.FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.awacCalculator = :calculator and p.period = :period and p.scope=:scope" ),
+        @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope=:scope" ),
 
-    public static final String FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE = "AwacCalculatorClosed_FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE";
+})
+public class AwacCalculatorInstance extends AuditedAbstractEntity{
+
+    public static final String FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE";
+    public static final String FIND_BY_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_SCOPE";
 
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
     private AwacCalculator awacCalculator;
@@ -27,8 +28,31 @@ public class AwacCalculatorClosed extends AuditedAbstractEntity{
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
     private Scope scope;
 
-    public AwacCalculatorClosed() {
+    @Column(columnDefinition = "boolean not null default false", nullable = false)
+    private Boolean closed = false;
+
+    @OneToOne(mappedBy="awacCalculatorInstance")
+    private VerificationRequest verificationRequest;
+
+    public AwacCalculatorInstance() {
     }
+
+    public VerificationRequest getVerificationRequest() {
+        return verificationRequest;
+    }
+
+    public void setVerificationRequest(VerificationRequest verificationRequest) {
+        this.verificationRequest = verificationRequest;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
 
     public AwacCalculator getAwacCalculator() {
         return awacCalculator;
