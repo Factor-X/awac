@@ -1,12 +1,12 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEditOrCreateReductionAction", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalCreateReductionAction", (directiveService, downloadService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope
         ngParams: '='
 
-    templateUrl: "$/angular/templates/mm-awac-modal-edit-or-create-reduction-action.html"
+    templateUrl: "$/angular/templates/mm-awac-modal-create-reduction-action.html"
 
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope

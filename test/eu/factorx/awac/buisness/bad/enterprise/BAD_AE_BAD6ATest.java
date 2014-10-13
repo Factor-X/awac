@@ -121,7 +121,7 @@ public class BAD_AE_BAD6ATest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(0.5, false);
+                mapResult.put(1.0, false);
         
         String valueGenerated = "";
 

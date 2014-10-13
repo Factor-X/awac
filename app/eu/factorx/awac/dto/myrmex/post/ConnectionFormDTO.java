@@ -2,11 +2,9 @@ package eu.factorx.awac.dto.myrmex.post;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
+import eu.factorx.awac.dto.validation.annotations.Optional;
 import eu.factorx.awac.dto.validation.annotations.Pattern;
 
-/**
- * Created by florian on 4/07/14.
- */
 public class ConnectionFormDTO extends DTO {
 
 	@NotNull
@@ -19,8 +17,9 @@ public class ConnectionFormDTO extends DTO {
 
 	private String interfaceName;
 
+	@Optional()
 	@Pattern(regexp = Pattern.PASSWORD_OPTIONAL, message = "Password between 5 and 20 letters")
-	private String newPassword = null;
+	private String newPassword;
 
 	protected ConnectionFormDTO() {
 	}
