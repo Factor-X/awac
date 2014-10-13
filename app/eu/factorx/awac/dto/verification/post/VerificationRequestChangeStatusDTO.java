@@ -1,0 +1,62 @@
+package eu.factorx.awac.dto.verification.post;
+
+import eu.factorx.awac.dto.DTO;
+
+import java.util.List;
+
+/**
+ * Created by florian on 9/10/14.
+ */
+public class VerificationRequestChangeStatusDTO extends DTO {
+
+    private Long scopeId;
+
+    private String periodKey;
+
+    private String newStatus;
+    private List<String> verifierIdentifier;
+
+    public VerificationRequestChangeStatusDTO() {
+    }
+
+    public Long getScopeId() {
+        return scopeId;
+    }
+
+    public void setScopeId(Long scopeId) {
+        this.scopeId = scopeId;
+    }
+
+    public String getPeriodKey() {
+        return periodKey;
+    }
+
+    public void setPeriodKey(String periodKey) {
+        this.periodKey = periodKey;
+    }
+
+    public String getNewStatus() {
+        return newStatus;
+    }
+
+    public void setNewStatus(String newStatus) {
+        this.newStatus = newStatus;
+    }
+
+    public List<String> getVerifierIdentifier() {
+        return verifierIdentifier;
+    }
+
+    public void setVerifierIdentifier(List<String> verifierIdentifier) {
+        this.verifierIdentifier = verifierIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "VerificationRequestChangeStatusDTO{" +
+                "scopeId=" + scopeId +
+                ", periodKey='" + periodKey + '\'' +
+                ", newStatus='" + newStatus + '\'' +
+                '}';
+    }
+}

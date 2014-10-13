@@ -227,6 +227,15 @@ angular
                     return 'content-without-menu'
         return ''
 
+    $scope.requestVerification = ->
+        modalService.show 'REQUEST_VERIFICATION'
+
+    #
+    # used by menu
+    #
+    $scope.navTo = (target) ->
+        $scope.$root.nav(target)
+
 
 #rootScope
 angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams, $route, modalService)->
@@ -274,7 +283,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     $rootScope.hideHeader = () ->
         #console.log("hideHeader:" + $location.path().substring(0, 13))
-        return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration")
+        return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration"  || $location.path().substring(0, 26) == "/verification_registration")
 
 
     #
@@ -485,13 +494,14 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.closedForms =false
 
     $rootScope.testCloseable = ->
-        if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
-            downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
-                if result.success
-                    $rootScope.closeableForms = result.data.closeable
-                    $rootScope.closedForms =result.data.closed
-                else
-                    messageFlash.displayError result.data.message
+        if $rootScope.instanceName != 'verification'
+            if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
+                downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
+                    if result.success
+                        $rootScope.closeableForms = result.data.closeable
+                        $rootScope.closedForms =result.data.closed
+                    else
+                        messageFlash.displayError result.data.message
 
     $rootScope.closeForms = ->
         if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?

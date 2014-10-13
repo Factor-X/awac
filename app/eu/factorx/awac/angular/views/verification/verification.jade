@@ -1,1 +1,24 @@
-div
+.verification
+    .menu-verification
+        .list-request
+            table.admin-table-import-bad.table(ng-table='tableParams')
+                tr(ng-repeat='request in $data',
+                    ng-click="$parent.selectRequest(request)",
+                    ng-class="{'selected': $parent.selectedRequest.id == request.id}")
+                    td(data-title="'ORGANIZATION' | translateText")
+                        | {{request.organizationCustomer.name}}
+                    td(data-title="'CALCULATOR_TYPE'| translateText", sortable="'request.type'")
+                        | {{request.organizationCustomer.interfaceName}}
+                    td(data-title="'SITE_PRODUCT'| translateText", sortable="'request.scope.name'")
+                        | {{request.scope.name}}
+                    td(data-title="'SITE_MANAGER_EVENT_PERIOD'| translateText", sortable="'request.period.label'")
+                        | {{request.period.label}}
+                    td(data-title="'CONTACT'| translateText", sortable="'request.contact.lastName'")
+                        | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}}
+                    td(data-title="'COMMENT'| translateText")
+                        | {{request.comment}}
+                    td(data-title="'STATUS'| translateText", sortable="'request.type'")
+                        | {{request.status | translateText}}
+
+    .injectFormMenu
+    .injectForm

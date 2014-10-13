@@ -1,4 +1,4 @@
-package eu.factorx.awac.dto.awac.dto;
+package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;

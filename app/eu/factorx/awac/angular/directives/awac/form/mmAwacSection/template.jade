@@ -3,12 +3,18 @@ ng-virtual
         .element_header
             .title(ng-bind-html="getTitleCode() | translate")
             .title_arrow
-        .element_sidebar
+        .element_sidebar(ng-hide="$root.instanceName  === 'verification'")
             .block_status
                 .lock_status(ng-click="lock()", ng-class="getLockClass()")
                     div(ng-show="getLocker() != null", ng-bind-html="'LOCK_BY' | translateWithVars: [getLockerName()] ")
                 .validate_status(ng-click="valide()", ng-class="getValidateClass()")
                     div(ng-show="getValidator() != null", ng-bind-html="'VALIDATE_BY' | translateWithVars: [getValidatorName()] ")
                 .validate_status(mm-not-implemented)
+        .element_sidebar(ng-show="$root.instanceName  === 'verification'")
+            .block_status
+                .verification_status_approval(ng-click="verification(true)", ng-class="getVerificationClass(true)")
+                    div(ng-show="getVerifier() != null", ng-bind-html="'VERIFIED_BY' | translateWithVars: [getVerifierName()] ")
+                .verification_status_reject(ng-click="verification(false)", ng-class="getVerificationClass(false)")
+                    div(ng-show="getVerifier() != null", ng-bind-html="'VERIFIED_BY' | translateWithVars: [getVerifierName()] ")
         .element_content
             div(ng-class="getMode()", ng-transclude)

@@ -72,7 +72,7 @@
 
 
 
-            tab.tab-color-lightgreen(active="tabActive[2]")
+            tab.tab-color-lightgreen(active="tabActive[2]", ng-show="$root.instanceName != 'verification'")
                 tab-heading
                     span(ng-bind-html="'LOGIN_REGISTRATION' | translate")
                 div.inject-registration-form
