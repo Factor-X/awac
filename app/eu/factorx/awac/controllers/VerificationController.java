@@ -18,6 +18,7 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.Verification;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.email.EmailVerificationContent;
 import eu.factorx.awac.models.forms.AwacCalculator;
@@ -77,6 +78,8 @@ public class VerificationController extends AbstractController {
     private QuestionSetService questionSetService;
     @Autowired
     private QuestionSetAnswerService quesstionSetAnswerService;
+    @Autowired
+    private StoredFileService storedFileService;
 
 
     @Transactional(readOnly = false)
@@ -302,12 +305,34 @@ public class VerificationController extends AbstractController {
 
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
-        }else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
+        } else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
                 !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             //the request is canceled !!
             verificationRequestService.remove(calculatorInstance.getVerificationRequest());
             //TODO send email
             //TODO archive ?
+        } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
+                oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+                answerController.testCloseableValidation(period.getPeriodCode().getKey(), scope.getId()).isFinalized() &&
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
+                oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+                answerController.testCloseableValidation(period.getPeriodCode().getKey(), scope.getId()).isFinalized() &&
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+
+            //control file
+            StoredFile storedFile = storedFileService.findById(dto.getVerificationFinalizationFileId());
+            if (storedFile == null || !storedFile.getAccount().equals(securedController.getCurrentUser())) {
+                return notFound(new ExceptionsDTO("the verification document was not found"));
+            }
+
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            calculatorInstance.getVerificationRequest().setVerificationResultDocument(storedFile);
+
+            //TODO send email
         }
         //TODO
         else {
@@ -346,7 +371,9 @@ public class VerificationController extends AbstractController {
 
         //load by account
         for (VerificationRequest request : securedController.getCurrentUser().getVerificationRequestList()) {
-            list.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+            if (request.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFICATION)) {
+                list.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+            }
         }
 
         return ok(list);
@@ -354,11 +381,11 @@ public class VerificationController extends AbstractController {
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
-    public Result verify(){
+    public Result verify() {
         VerifyDTO dto = this.extractDTOFromRequest(VerifyDTO.class);
 
         //control interface
-        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+        if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
@@ -368,29 +395,29 @@ public class VerificationController extends AbstractController {
         QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(dto.getQuestionSetKey()));
         VerificationStatus verificationStatus = new VerificationStatus(dto.getVerification().getStatus());
 
-        if(scope ==null || period==null || verificationStatus == null || questionSet == null){
+        if (scope == null || period == null || verificationStatus == null || questionSet == null) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
-        List<QuestionSetAnswer> questionSetAnswerList = quesstionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope,period,questionSet);
+        List<QuestionSetAnswer> questionSetAnswerList = quesstionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
 
-        if(questionSetAnswerList.size()!=1){
+        if (questionSetAnswerList.size() != 1) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
         //control verifier
-        VerificationRequest verificationRequest = verificationRequestService.findByVerifierAndScopeAndPeriod(securedController.getCurrentUser(), scope,period);
+        VerificationRequest verificationRequest = verificationRequestService.findByVerifierAndScopeAndPeriod(securedController.getCurrentUser(), scope, period);
 
-        if(verificationRequest == null){
+        if (verificationRequest == null) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
         //try to load
-        Verification  verification = verificationService.findByVerificationRequestAndQuestionSet(verificationRequest, questionSet);
+        Verification verification = verificationService.findByVerificationRequestAndQuestionSet(verificationRequest, questionSet);
 
         //edit
-        if(verification==null){
-            verification=new Verification();
+        if (verification == null) {
+            verification = new Verification();
 
             verification.setQuestionSetAnswer(questionSetAnswerList.get(0));
             verification.setVerificationRequest(verificationRequest);
@@ -398,8 +425,7 @@ public class VerificationController extends AbstractController {
             verification.setComment(dto.getVerification().getComment());
             verification.setVerificationStatus(verificationStatus);
             verification.setVerifier(securedController.getCurrentUser());
-        }
-        else{
+        } else {
             verification.setComment(dto.getVerification().getComment());
             verification.setVerificationStatus(verificationStatus);
             verification.setVerifier(securedController.getCurrentUser());
@@ -408,7 +434,7 @@ public class VerificationController extends AbstractController {
 
 
         //return
-        return ok(conversionService.convert(verification,VerificationDTO.class));
+        return ok(conversionService.convert(verification, VerificationDTO.class));
     }
 
 

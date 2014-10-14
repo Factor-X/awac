@@ -113,10 +113,10 @@ angular
                     status: 'approved'
 
             if valid
-
                 downloadService.postJson '/awac/verification/verify', data, (result) ->
                     if result.success
                         scope.$parent.verifyQuestionSet(scope.getTitleCode(), result.data)
+                        scope.$emit 'TEST_CLOSING_VALIDATION'
                     else
                         messageFlash.displayError(scope.getTitleCode(),result.data.message)
             else

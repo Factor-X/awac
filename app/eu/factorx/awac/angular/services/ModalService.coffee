@@ -21,6 +21,8 @@ angular
     @VERIFICATION_ASSIGN = 'verification_assign'
     @VERIFICATION_REJECT = 'verification_reject'
     @VERIFICATION_REJECT='verification_reject'
+    @CONSULT_EVENT='consult-event'
+    @VERIFICATION_FINALIZATION = 'verification-finalization'
 
     @show = (modalName, params) ->
         args = []

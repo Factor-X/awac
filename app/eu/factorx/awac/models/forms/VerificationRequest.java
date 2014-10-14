@@ -4,6 +4,7 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.VerificationRequestStatus;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.email.EmailVerificationContent;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = VerificationRequest.FIND_BY_KEY, query = "select p from VerificationRequest p where p.key = :verificationRequestKey" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier" ),
-        @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
+        @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
 })
 public class VerificationRequest extends AuditedAbstractEntity {
@@ -26,8 +27,8 @@ public class VerificationRequest extends AuditedAbstractEntity {
     private static final long serialVersionUID = 1L;
     public static final String FIND_BY_KEY = "VerificationRequest_FIND_BY_KEY";
     public static final String FIND_BY_ORGANIZATION_VERIFIER = "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER";
-    public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD = "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD";
-    public static final String FIND_BY_SCOPE_AND_PERIOD = "VerificationRequest_FIND_BY_SCOPE_AND_PERIOD";;
+    public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE= "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE";
+    public static final String FIND_BY_SCOPE_AND_PERIOD = "VerificationRequest_FIND_BY_SCOPE_AND_PERIOD";
 
     @OneToOne(optional = false)
     private AwacCalculatorInstance  awacCalculatorInstance;
@@ -54,6 +55,9 @@ public class VerificationRequest extends AuditedAbstractEntity {
             })
     private List<Account> verifierList;
 
+    @ManyToOne
+    private StoredFile verificationResultDocument;
+
 
     public VerificationRequest() {
     }
@@ -72,6 +76,14 @@ public class VerificationRequest extends AuditedAbstractEntity {
 
     public void setVerificationRequestStatus(VerificationRequestStatus verificationRequestStatus) {
         this.verificationRequestStatus = verificationRequestStatus;
+    }
+
+    public StoredFile getVerificationResultDocument() {
+        return verificationResultDocument;
+    }
+
+    public void setVerificationResultDocument(StoredFile verificationResultDocument) {
+        this.verificationResultDocument = verificationResultDocument;
     }
 
     public Account getContact() {

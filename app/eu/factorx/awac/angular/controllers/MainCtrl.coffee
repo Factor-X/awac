@@ -152,7 +152,6 @@ angular
     $scope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
 
-
     $scope.loadPeriodForComparison = ->
         if $scope.$root.scopeSelectedId? and !isNaN($scope.$root.scopeSelectedId)
             url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId

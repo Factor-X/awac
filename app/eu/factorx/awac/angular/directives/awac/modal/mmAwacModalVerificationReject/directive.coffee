@@ -30,6 +30,7 @@ angular
             downloadService.postJson '/awac/verification/verify', data, (result) ->
                 if result.success
                     $scope.getParams().refreshVerificationStatus(result.data)
+                    $scope.$root.$broadcast 'TEST_CLOSING_VALIDATION'
                     $scope.close()
                 else
                     messageFlash.displayError(result.data.message)

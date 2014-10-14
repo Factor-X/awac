@@ -19,5 +19,7 @@ public interface VerificationRequestService extends PersistenceService<Verificat
 
     public VerificationRequest findByVerifierAndScopeAndPeriod(Account verifier, Scope scope, Period period);
 
-    public VerificationRequest findByOrganizationVerifierAndScopeAndPeriod(Organization organization, Scope scope, Period period);
+    public VerificationRequest findByOrganizationVerifierAndScope(Organization organizationVerifier, Scope scope);
+
+    public List<VerificationRequest> findByOrganizationCustomerAndOrganizationVerifier(Organization organizationCustomer, Organization organizationVerifier);
 }

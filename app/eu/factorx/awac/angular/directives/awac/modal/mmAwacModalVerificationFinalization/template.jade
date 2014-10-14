@@ -1,0 +1,43 @@
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(class="modal-title",ng-bind-html="'VERIFICATION_REQUEST_ASSIGN' | translate")
+            .modal-body
+                .desc(ng-show="getParams().verificationSuccess == true",
+                ng-bind-html="'FINALIZATION_VALID_DESC' | translate")
+
+                .desc(ng-show="getParams().verificationSuccess != true",
+                ng-bind-html="'FINALIZATION_UNVALID_DESC' | translate")
+
+                div
+                    .field_form
+                        .field_row(ng-show="getParams().verificationSuccess == true")
+                            div(ng-bind-html="'VERIFICATION_REPPORT' | translate")
+                            div
+                                .document-question-progress-percentage(ng-show="inDownload=== true && percent != 100") {{percent}} %
+                                div(ng-show="inDownload=== true && percent == 100",ng-bind-html="'QUESTION_FILE_TREATEMENT' | translate")
+                                input(  type='file',
+                                ng-file-select='onFileSelect($files)')
+                        mm-awac-modal-field-text(ng-info="comment")
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save();",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'SAVE_BUTTON' | translate")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

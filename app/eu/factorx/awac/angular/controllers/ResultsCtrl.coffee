@@ -1,7 +1,7 @@
 angular
 .module('app.controllers')
-.controller "ResultsCtrl", ($scope, $window, $filter, downloadService, displayFormMenu, modalService, messageFlash, translationService) ->
-    $scope.displayFormMenu = displayFormMenu
+.controller "ResultsCtrl", ($scope, $window, $filter, downloadService, modalService, messageFlash, translationService) ->
+    $scope.displayFormMenu = true
 
     $scope.$root.$watch 'mySites', (nv) ->
         console.log 'watch $root.mySites'

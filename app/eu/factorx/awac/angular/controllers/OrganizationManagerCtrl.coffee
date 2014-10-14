@@ -27,6 +27,8 @@ angular
 
     $scope.statisticsAllowed = false
 
+
+
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
@@ -39,15 +41,17 @@ angular
             $scope.nameInfo.field = $scope.organization.name
             $scope.statisticsAllowed = $scope.organization.statisticsAllowed
 
-            $scope.events = []
 
-
+            downloadService.getJson 'awac/organization/events/load',  (result) ->
+                console.log '----------------------------------------------'
+                console.log result
+                if result.success
+                    $scope.events = result.data.organizationEventList
+                else
+                    messageFlash.displayError result.data.message
 
             $scope.toForm = ->
                 $scope.$root.navToLastFormUsed()
-
-            $scope.getEventList = () ->
-                return $scope.events
 
             $scope.editOrCreateEvent = (event) ->
                 params = {}
@@ -78,10 +82,3 @@ angular
                     else
                         messageFlash.displayError result.data.message
                     return false
-
-    $scope.$watch 'selectedPeriodForEvent', () ->
-        downloadService.getJson 'awac/organization/events/byPeriod/'+$scope.selectedPeriodForEvent,  (result) ->
-            if result.success
-                $scope.events = result.data.organizationEventList
-            else
-                messageFlash.displayError result.data.message

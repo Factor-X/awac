@@ -29,5 +29,7 @@
         .last_menu
             button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='navTo(\'/results\')')
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
-            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}', ng-click='navTo(\'/actions\')')
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}',
+            ng-click='isDisabled || navTo(\'/actions\')',
+            ng-show="$root.instanceName != 'verification'")
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")
