@@ -4,6 +4,14 @@ div
             // user block
             table.survey-header-option
                 tr
+                    td(rowspan=2)
+                        .wallonie_logo
+                    td(rowspan=2)
+                        .awac_logo
+                    td.wide.align-left
+                        .calculateur_type(ng-bind-html='\'TITLE_ENTERPRISE\' | translate', ng-show="$root.instanceName == 'enterprise'")
+                        .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate', ng-show="$root.instanceName == 'municipality'")
+
                     td
                         div
                             select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
@@ -17,11 +25,15 @@ div
                         div(ng-show='$root.currentPerson==null') Your are currently not connected
                 tr
                     td
+                        .entreprise_name {{ $root.organizationName }}
+
+                    td
                         button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
                         button.button.help(
                             type='button',
                             ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                            ng-click="$root.showHelp()"
+                            ng-click="return false; $root.showHelp()",
+                            mm-not-implemented='mm-not-implemented'
                         )
                     td
                         //  organization manager button
@@ -48,15 +60,19 @@ div
                             ng-disabled='$root.currentPerson.isAdmin === false')
                     td
                         //  user data button
-                        button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'USER_DATA_BUTTON\' | translate',
+                            ng-click='$root.nav(\'/user_data\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}'
+                            )
                         // logout button
-                        button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
-            .wallonie_logo
-            .awac_logo
-            div
-                .calculateur_type(ng-bind-html='\'TITLE_ENTERPRISE\' | translate', ng-show="$root.instanceName == 'enterprise'")
-                .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate', ng-show="$root.instanceName == 'municipality'")
-                .entreprise_name {{ $root.organizationName }}
+                        button.button.user_manage(
+                            ng-show='$root.currentPerson!=null',
+                            type='button',
+                            ng-click='$root.logout();',
+                            ng-bind-html='\'LOGOUT_BUTTON\' | translate'
+                            )
         .data_menu(ng-show='displayLittleMenu===true || displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
@@ -80,12 +96,19 @@ div
                     ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'UNCLOSING_FORM\' | translate',
-                    ng-show="$root.closedForms")
+                    ng-show="$root.closedForms",
+                    mm-not-implemented='mm-not-implemented')
                 button.button.verification(type='button',
                     ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
-                    ng-hide="$root.closedForms")
+                    ng-hide="$root.closedForms",
+                    mm-not-implemented='mm-not-implemented')
+                button.button.verification(
+                    type='button',
+                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
+                    mm-not-implemented='mm-not-implemented',
+                    ng-disabled="$root.closedForms !== true")
             .big_separator
             .data_save
                 .last_save(ng-hide='lastSaveTime===null')

@@ -7669,7 +7669,7 @@ jQuery.extend({
       text: "responseText"
     },
 
-    // DataCell converters
+    // Data converters
     // Keys separate source (or catchall "*") and destination types with a single space
     converters: {
 

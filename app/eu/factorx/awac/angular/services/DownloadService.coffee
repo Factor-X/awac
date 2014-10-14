@@ -8,7 +8,7 @@ angular
         @downloadsInProgress
 
     @getJson = (url, callback) ->
-        console.log "GET URL TO "+url
+        console.log "GET URL TO " + url
         deferred = $q.defer()
         @downloadsInProgress++
         promise = $http(
@@ -39,18 +39,20 @@ angular
 
         return deferred.promise
 
-    @postJson = (url, data, callback) ->
-        console.log "POST URL TO "+url
+    @postJson = (url, data, callback, options) ->
+        console.log "POST URL TO " + url
         deferred = $q.defer()
         if data == null
             data = {}
         @downloadsInProgress++
+
         promise = $http(
             method: "POST"
             url: url
             data: data
             headers:
                 "Content-Type": "application/json"
+                "Accept": "application/json,application/octet-stream"
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--

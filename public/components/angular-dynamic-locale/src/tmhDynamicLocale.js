@@ -1,6 +1,16 @@
 ( function(window) {
 'use strict';
-angular.module('tmh.dynamicLocale', []).provider('tmhDynamicLocale', function() {
+angular.module('tmh.dynamicLocale', []).config(['$provide', function ($provide) {
+  function makeStateful($delegate) {
+    $delegate.$stateful = true;
+    return $delegate;
+  }
+
+  $provide.decorator('dateFilter', ['$delegate', makeStateful]);
+  $provide.decorator('numberFilter', ['$delegate', makeStateful]);
+  $provide.decorator('currencyFilter', ['$delegate', makeStateful]);
+
+}]).provider('tmhDynamicLocale', function() {
 
   var defaultLocale,
     localeLocationPattern = 'angular/i18n/angular-locale_{{locale}}.js',
@@ -122,6 +132,7 @@ angular.module('tmh.dynamicLocale', []).provider('tmhDynamicLocale', function() 
         delete promiseCache[localeId];
 
         $rootScope.$apply(function () {
+          if (activeLocale === localeId) activeLocale = $locale.id;
           $rootScope.$broadcast('$localeChangeError', localeId);
           deferred.reject(localeId);
         });
@@ -171,6 +182,13 @@ angular.module('tmh.dynamicLocale', []).provider('tmhDynamicLocale', function() 
        */
       set: function(value) {
         return loadLocale(localeLocation({locale: value}), locale, value, $rootScope, $q, tmhDynamicLocaleCache, $timeout);
+      },
+      /**
+       * @ngdoc method
+       * @description Returns the configured locale
+       */
+      get: function() {
+        return activeLocale;
       }
     };
   }];

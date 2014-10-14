@@ -397,7 +397,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		BaseActivityDataCode baseActivityDataCode = bad.getKey();
 		IndicatorSearchParameter indicatorSearchParam = new IndicatorSearchParameter(interfaceType, bad);
 		Logger.error(NO_SUITABLE_INDICATOR_ERROR_MSG, baseActivityDataCode.getKey(), indicatorSearchParam);
-		logEntries.add(new NoSuitableIndicator(baseActivityDataCode.getKey(), indicatorSearchParam));
+		logEntries.add(new NoSuitableIndicator(bad));
 	}
 
 	private void reportNoSuitableFactorError(BaseActivityData bad, BaseIndicator baseIndicator, FactorSearchParameter factorSearchParam, List<ReportLogEntry> logEntries) {
@@ -410,7 +410,8 @@ public class ReportResultServiceImpl implements ReportResultService {
 	private static void reportLowerRankInGroup(BaseActivityData baseActivityData, String alternativeGroup, Integer rank, Integer minRank, List<ReportLogEntry> logEntries) {
 		Logger.info("--> Excluding BAD '{}' with rank = {} (lowest rank for alternative group '{}' = {})", baseActivityData.getKey().getKey(), rank, alternativeGroup,
 			minRank);
-		logEntries.add(new LowerRankInGroup(baseActivityData.getKey().getKey(), rank, alternativeGroup, minRank));
+
+		logEntries.add(new LowerRankInGroup(baseActivityData));
 	}
 
 	private void reportContribution(BaseActivityResult bar, List<ReportLogEntry> logEntries) {
