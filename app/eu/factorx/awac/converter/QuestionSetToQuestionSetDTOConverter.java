@@ -17,11 +17,10 @@ public class QuestionSetToQuestionSetDTOConverter implements Converter<QuestionS
 
 	@Autowired
 	private QuestionToQuestionDTOConverter questionToQuestionDTOConverter;
-    @Autowired
-    private QuestionSetAnswerService questionSetAnswerService;
 
 	@Override
 	public QuestionSetDTO convert(QuestionSet questionSet) {
+
 		String code = questionSet.getCode().getKey();
 		Boolean repetitionAllowed = questionSet.getRepetitionAllowed();
 		List<QuestionDTO> questions = new ArrayList<>();

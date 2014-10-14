@@ -23,7 +23,8 @@ import java.util.List;
 
 
 @Component
-public class AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
+public class
+        AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
 
     @Autowired
     private AccountToPersonDTOConverter accountToPersonDTOConverter;

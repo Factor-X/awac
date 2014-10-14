@@ -13,13 +13,17 @@ import eu.factorx.awac.models.knowledge.Report;
 
 @Entity
 @Table(name = "awaccalculator")
+@NamedQueries({
+        @NamedQuery(name = AwacCalculator.FIND_BY_CODE, query = "select p from AwacCalculator p where p.interfaceTypeCode = :interfaceTypeCode" )
+})
 public class AwacCalculator extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	public static final String INTERFACE_TYPE_CODE_PROPERTY = "interfaceTypeCode";
+    public static final String FIND_BY_CODE = "AwacCalculator_FIND_BY_KEY";
 
-	@Embedded
+    @Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "code")) })
 	@Column(unique = true, nullable = false)
 	private InterfaceTypeCode interfaceTypeCode;

@@ -1,21 +1,17 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.awac.dto.OrganizationEventDTO;
-import eu.factorx.awac.dto.awac.dto.OrganizationEventResultDTO;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersDTO;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.dto.awac.get.OrganizationEventDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.OrganizationEvent;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.service.*;
+import eu.factorx.awac.service.OrganizationEventService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.PeriodService;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -32,109 +28,103 @@ import java.util.List;
 public class OrganizationEventController extends AbstractController {
 
 
-	@Autowired
-	private OrganizationService organizationService;
+    @Autowired
+    private OrganizationService organizationService;
 
-	@Autowired
-	private OrganizationEventService organizationEventService;
+    @Autowired
+    private OrganizationEventService organizationEventService;
 
-	@Autowired
-	private PeriodService periodService;
+    @Autowired
+    private PeriodService periodService;
 
-	@Autowired
-	private ConversionService conversionService;
+    @Autowired
+    private ConversionService conversionService;
 
-
-	/**
-	 * get all accounts for specified organization
-	 */
-	@Transactional
-	@Security.Authenticated(SecuredController.class)
-	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
-	public Result loadEvents() {
-
-		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
-		Logger.info("Load Events for Period:" + dto.getPeriod());
-
-		// get organization
-		// get organization name through securedController
-		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
-		//Organization org = organizationService.findByName(dto.getOrganization().getName());
-
-		// get organization
-		Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
-		//Period period = periodService.findByCode(PeriodCode.P2013);
-
-		Logger.info ("Organization id : " + org.getId());
-		Logger.info ("Period id : " + period.getId());
+    /**
+     * get all accounts for specified organization
+     *//*
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result loadEventsForOrganization() {
+        return ok(getOrganizationEventDTO(securedController.getCurrentUser().getOrganization()));
+    }*/
 
 
-		// get events for organization and given period
-		//List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
-		// get events for organization and all periods
-		List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(org);
-		Logger.info("organizationList.size():" + organizationList.size());
+    /**
+     * get all accounts for specified organization
+     */
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result loadEventsByPeriod(String periodKey) {
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+        OrganizationEventResultDTO resultDTO = getOrganizationEventDTO(period, securedController.getCurrentUser().getOrganization());
+        Logger.info(resultDTO+"");
+        return ok(resultDTO);
+    }
 
-		List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<OrganizationEventDTO>();
-		for (OrganizationEvent item : organizationList) {
-			Logger.info("item:" + item.getName());
-			organizationEventDTOList.add(conversionService.convert(item,OrganizationEventDTO.class));
-		}
 
-		Logger.info("organizationEventDTOList.size():" + organizationEventDTOList.size());
-		// create return DTO
-		OrganizationEventResultDTO resultDto = new OrganizationEventResultDTO (organizationEventDTOList);
+    private OrganizationEventResultDTO getOrganizationEventDTO(Period period, Organization organization) {
 
-		// return list of associated
-		return ok(resultDto);
-	}
+        // get events for organization and given period
+        //List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
+        // get events for organization and all periods
+        List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(organization);
 
-	/**
-	 * save event
-	 */
+        List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<>();
+        for (OrganizationEvent item : organizationList) {
+            organizationEventDTOList.add(conversionService.convert(item, OrganizationEventDTO.class));
+        }
 
-	@Transactional
-	@Security.Authenticated(SecuredController.class)
-	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
-	public Result saveEvent () {
+        // create return DTO
+        OrganizationEventResultDTO resultDto = new OrganizationEventResultDTO(organizationEventDTOList);
 
-		OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
-		Logger.info("Save Event for Period: " + dto.getPeriod());
+        // return list of associated
+        return resultDto;
+    }
 
-		OrganizationEvent orgEvent = null;
+    /**
+     * save event
+     */
 
-		if (dto.getId()!=0) {
-			Logger.info("Save Event - Update for : " + dto.getId());
-			// update
-			orgEvent = organizationEventService.findById(dto.getId());
-			if (orgEvent!=null) {
-				Logger.info("OrgEvent is not null : " + dto.getId());
-				orgEvent.setName(dto.getName());
-				orgEvent.setDescription(dto.getDescription());
-				orgEvent.setPeriod(periodService.findByCode(new PeriodCode(dto.getPeriod().getKey())));
+    @Transactional
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result saveEvent() {
 
-			} else {
-				Logger.info("OrgEvent is null");
-			}
-		} else {
-			// create
-			Logger.info("Save Event - Create");
-			// get organization
-			//Organization org = organizationService.findByName(dto.getOrganization().getName());
-			// get organization name through securedController
-			Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
-			// get period
-			Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
+        OrganizationEventDTO dto = extractDTOFromRequest(OrganizationEventDTO.class);
 
-			orgEvent = new OrganizationEvent(org,period,dto.getName(),dto.getDescription());
-		}
+        OrganizationEvent orgEvent = null;
 
-		Logger.info("orgEvent content" + orgEvent.toString());
-		organizationEventService.saveOrUpdate(orgEvent);
+        Period period = periodService.findByCode(new PeriodCode(dto.getPeriod().getKey()));
 
-		// return event DTO
-		Logger.info("return...");
-		return ok(conversionService.convert(orgEvent, OrganizationEventDTO.class));
-	}
+        if (dto.getId() != null) {
+            // update
+            orgEvent = organizationEventService.findById(dto.getId());
+            if (orgEvent != null) {
+                orgEvent.setName(dto.getName());
+                orgEvent.setDescription(dto.getDescription());
+                orgEvent.setPeriod(period);
+
+            }
+            else{
+                throw new MyrmexRuntimeException("organization event with id "+dto.getId()+" was not found");
+            }
+        } else {
+
+            //control name / period / organization
+            if(organizationEventService.findByOrganizationAndPeriodAndName(securedController.getCurrentUser().getOrganization(),period,dto.getName())!=null){
+                return unauthorized(new ExceptionsDTO("you cannot use the same name and period for two event"));
+            }
+
+
+            orgEvent = new OrganizationEvent(securedController.getCurrentUser().getOrganization(), period, dto.getName(), dto.getDescription());
+        }
+        Logger.info(orgEvent+"");
+        organizationEventService.saveOrUpdate(orgEvent);
+
+        // return event DTO
+        return ok(conversionService.convert(orgEvent, OrganizationEventDTO.class));
+    }
 
 } // end of class

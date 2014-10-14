@@ -5,6 +5,7 @@ import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegistrationDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.verification.post.VerificationRegistrationDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
@@ -13,6 +14,9 @@ import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.VerificationRequestStatus;
+import eu.factorx.awac.models.forms.AwacCalculatorInstance;
+import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
@@ -22,6 +26,7 @@ import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Configuration;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 
@@ -61,17 +66,32 @@ public class RegistrationController  extends AbstractController {
 	@Autowired
 	private CodeLabelService codeLabelService;
 
+    @Autowired
+    private AwacCalculatorInstanceService awacCalculatorInstanceService;
+
+    @Autowired
+    private VerificationRequestService verificationRequestService;
+
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
 
+    @Autowired
+    private VerificationController verificationController;
+
     public Result verificationRegistration() {
 
-        RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
+        VerificationRegistrationDTO dto = extractDTOFromRequest(VerificationRegistrationDTO.class);
 
         // control organization name
         Organization organization = organizationService.findByName(dto.getOrganizationName());
         if(organization!=null){
             return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
+        }
+
+        //control key
+        VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
+        if(verificationRequest==null|| verificationRequest.getOrganizationVerifier()!=null){
+            return notFound(new ExceptionsDTO("the validation request must be canceled by the customer"));
         }
 
         //create organization
@@ -90,7 +110,10 @@ public class RegistrationController  extends AbstractController {
         securedController.storeIdentifier(account);
 
         // email submission
-        handleEmailSubmission(account);
+        handleEmailSubmission(account,InterfaceTypeCode.VERIFICATION);
+
+        //link the key
+        verificationController.addRequestByKey(dto.getKey());
 
         //create ConnectionFormDTO
         LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -130,6 +153,7 @@ public class RegistrationController  extends AbstractController {
 		//create site
 		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
+        site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 
         //add last year period
         Period period = periodService.findLastYear();
@@ -150,7 +174,7 @@ public class RegistrationController  extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account,InterfaceTypeCode.ENTERPRISE);
 
 		//create ConnectionFormDTO
 		play.Logger.info("create resultDTO...");
@@ -187,7 +211,7 @@ public class RegistrationController  extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account);
+		handleEmailSubmission(account,InterfaceTypeCode.MUNICIPALITY);
 
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
@@ -195,19 +219,31 @@ public class RegistrationController  extends AbstractController {
 		return ok(resultDto);
 	}
 
-	private void handleEmailSubmission (Account account) {
+	private void handleEmailSubmission (Account account,InterfaceTypeCode interfaceType) {
 
 		// email purpose
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
+		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
+		String awacInterfaceTypeFragment;
+
+		if (interfaceType.getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
+		} else {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
+		}
+
 		// prepare email
 		Map values = new HashMap<String, Object>();
 		final String awacHostname = Configuration.root().getString("awac.hostname");
 		String awacLoginUrlFragment = Configuration.root().getString("awac.loginfragment");
 
-		String link = awacHostname + awacLoginUrlFragment;
+		String link = awacHostname+awacInterfaceTypeFragment+awacLoginUrlFragment;
+		//String link = awacHostname + awacLoginUrlFragment;
 
 		values.put("subject", subject);
 		values.put("link", link);

@@ -36,4 +36,4 @@ angular
     ]
 
     $scope.create = () ->
-        modalService.show modalService.EDIT_OR_CREATE_REDUCTION_ACTION
+        modalService.show modalService.CREATE_REDUCTION_ACTION

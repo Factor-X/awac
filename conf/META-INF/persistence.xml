@@ -22,8 +22,8 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
-        <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
+        <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
@@ -40,10 +40,13 @@
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionStatus</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionType</class>
         <class>eu.factorx.awac.models.code.type.ReportCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCode</class>
+        <class>eu.factorx.awac.models.code.type.VerificationStatus</class>
         <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
@@ -71,14 +74,17 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
-        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorInstance</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequest</class>
+        <class>eu.factorx.awac.models.email.EmailVerificationContent</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingAction</class>
         <class>eu.factorx.awac.models.knowledge.Report</class>
         <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
@@ -88,6 +94,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
+        <class>eu.factorx.awac.models.data.answer.Verification</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -100,7 +107,7 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
 			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
 			<property name="hibernate.cache.use_query_cache" value="true"/>
@@ -149,8 +156,8 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
-        <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
+        <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
         <class>eu.factorx.awac.models.code.type.ActivityCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.ActivitySectorCode</class>
@@ -167,10 +174,13 @@
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionStatus</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionType</class>
         <class>eu.factorx.awac.models.code.type.ReportCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCategoryCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCode</class>
+        <class>eu.factorx.awac.models.code.type.VerificationStatus</class>
         <class>eu.factorx.awac.models.data.FormProgress</class>
         <class>eu.factorx.awac.models.data.answer.AnswerRawData</class>
         <class>eu.factorx.awac.models.data.answer.AnswerValue</class>
@@ -198,14 +208,17 @@
         <class>eu.factorx.awac.models.data.question.type.StringQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.ValueSelectionQuestion</class>
         <class>eu.factorx.awac.models.forms.AwacCalculator</class>
-        <class>eu.factorx.awac.models.forms.AwacCalculatorClosed</class>
+        <class>eu.factorx.awac.models.forms.AwacCalculatorInstance</class>
         <class>eu.factorx.awac.models.forms.Form</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequest</class>
+        <class>eu.factorx.awac.models.email.EmailVerificationContent</class>
         <class>eu.factorx.awac.models.invitation.Invitation</class>
         <class>eu.factorx.awac.models.knowledge.BaseIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Factor</class>
         <class>eu.factorx.awac.models.knowledge.FactorValue</class>
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingAction</class>
         <class>eu.factorx.awac.models.knowledge.Report</class>
         <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
@@ -215,6 +228,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
+        <class>eu.factorx.awac.models.data.answer.Verification</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -226,7 +240,7 @@
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false" />
 
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
             <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
             <property name="hibernate.cache.use_query_cache" value="true"/>

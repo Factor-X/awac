@@ -5,6 +5,7 @@ import eu.factorx.awac.models.business.OrganizationEvent;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.OrganizationEventService;
 import org.springframework.stereotype.Component;
+import play.Logger;
 import play.db.jpa.JPA;
 
 import javax.persistence.Query;
@@ -13,63 +14,41 @@ import java.util.List;
 @Component
 public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceImpl<OrganizationEvent> implements OrganizationEventService {
 
-	@Override
-	public List<OrganizationEvent> findByOrganizationAndPeriod(Organization organization, Period period) {
+    @Override
+    public List<OrganizationEvent> findByOrganizationAndPeriod(Organization organization, Period period) {
+
+        return JPA.em().createNamedQuery(OrganizationEvent.FIND_BY_ORGANIZATION_AND_PERIOD, OrganizationEvent.class)
+                .setParameter("organization", organization)
+                .setParameter("period", period)
+                .getResultList();
+    }
+
+    @Override
+    public List<OrganizationEvent> findByOrganization(Organization organization) {
+
+        return JPA.em().createNamedQuery(OrganizationEvent.FIND_BY_ORGANIZATION, OrganizationEvent.class)
+                .setParameter("organization", organization)
+                .getResultList();
+    }
+
+    public OrganizationEvent findByOrganizationAndPeriodAndName(Organization organization, Period period, String name) {
+
+        List<OrganizationEvent> resultList = JPA.em().createNamedQuery(OrganizationEvent.FIND_BY_ORGANIZATION_AND_PERIOD_AND_NAME, OrganizationEvent.class)
+                .setParameter("organization", organization)
+                .setParameter("period", period)
+                .setParameter("name", name)
+                .getResultList();
+        if (resultList.size() > 1) {
+            String errorMsg = "More than one account with organization = '" + organization + ",period:" + period + ",name:" + name;
+            Logger.error(errorMsg);
+            throw new RuntimeException(errorMsg);
+        }
+        if (resultList.size() == 0) {
+            return null;
+        }
+        return resultList.get(0);
 
 
-		Query query = JPA.em().createQuery("" +
-			"select oe " +
-			"from OrganizationEvent oe " +
-			"where oe.organization = :org " +
-			"and oe.period = :period " +
-			"order by oe.id");
-		query.setParameter("org", organization);
-		query.setParameter("period", period);
-
-		return (List<OrganizationEvent>) query.getResultList();
-
-		/*
-		Session session = JPA.em().unwrap(Session.class);
-
-		Criteria criteria = session.createCriteria(OrganizationEvent.class);
-		criteria.add(Restrictions.eq(OrganizationEvent.ORGANIZATION_PROPERTY_NAME, organization));
-		criteria.add(Restrictions.eq(OrganizationEvent.PERIOD_PROPERTY_NAME, period));
-		criteria.addOrder(Order.asc(OrganizationEvent.ID_PROPERTY_NAME));
-		criteria.setCacheable(true);
-
-		@SuppressWarnings("unchecked")
-		List<OrganizationEvent> result = criteria.list();
-		return result;
-		*/
-	}
-
-	@Override
-	public List<OrganizationEvent> findByOrganization(Organization organization) {
-
-
-		Query query = JPA.em().createQuery("" +
-			"select oe " +
-			"from OrganizationEvent oe " +
-			"where oe.organization = :org " +
-			"order by oe.id");
-		query.setParameter("org", organization);
-
-		return (List<OrganizationEvent>) query.getResultList();
-
-/*
-		Session session = JPA.em().unwrap(Session.class);
-
-		Criteria criteria = session.createCriteria(OrganizationEvent.class);
-		criteria.add(Restrictions.eq(OrganizationEvent.ORGANIZATION_PROPERTY_NAME, organization));
-		criteria.addOrder(Order.asc(OrganizationEvent.ID_PROPERTY_NAME));
-		criteria.setCacheable(true);
-
-		@SuppressWarnings("unchecked")
-		List<OrganizationEvent> result = criteria.list();
-
-		return result;
-		*/
-	}
-
+    }
 
 }

@@ -16,6 +16,7 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.FormProgress;
 import eu.factorx.awac.models.data.answer.AnswerValue;
+import eu.factorx.awac.models.data.answer.AuditInfo;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.type.*;
@@ -27,7 +28,7 @@ import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.forms.AwacCalculatorClosed;
+import eu.factorx.awac.models.forms.AwacCalculatorInstance;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
@@ -84,7 +85,7 @@ public class AnswerController extends AbstractController {
     @Autowired
     private AwacCalculatorService awacCalculatorService;
     @Autowired
-    private AwacCalculatorClosedService awacCalculatorClosedService;
+    private AwacCalculatorInstanceService awacCalculatorInstanceService;
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -105,7 +106,12 @@ public class AnswerController extends AbstractController {
 
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 
-        formsClosingDTO.setClosed(awacCalculatorClosedService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope) != null);
+        AwacCalculatorInstance awacCalculatorInstance = awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
+        if (awacCalculatorInstance == null || awacCalculatorInstance.isClosed() == false) {
+            formsClosingDTO.setClosed(false);
+        } else {
+            formsClosingDTO.setClosed(true);
+        }
 
         return ok(formsClosingDTO);
     }
@@ -115,7 +121,7 @@ public class AnswerController extends AbstractController {
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result closeForm() {
 
-        FormsCloseDTO formsCloseDTO =  this.extractDTOFromRequest(FormsCloseDTO.class);
+        FormsCloseDTO formsCloseDTO = this.extractDTOFromRequest(FormsCloseDTO.class);
 
         //control password
         if (!accountService.controlPassword(formsCloseDTO.getPassword(), securedController.getCurrentUser())) {
@@ -131,19 +137,25 @@ public class AnswerController extends AbstractController {
 
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 
-        AwacCalculatorClosed awacCalculatorClosed = awacCalculatorClosedService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
+        AwacCalculatorInstance awacCalculatorInstance = awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
 
-        if (!formsCloseDTO.getClose() && awacCalculatorClosed != null) {
-            awacCalculatorClosedService.remove(awacCalculatorClosed);
-        } else if (formsCloseDTO.getClose() && awacCalculatorClosed == null) {
+        if (awacCalculatorInstance == null) {
+            awacCalculatorInstance = new AwacCalculatorInstance();
+            awacCalculatorInstance.setAwacCalculator(awacCalculator);
+            awacCalculatorInstance.setPeriod(period);
+            awacCalculatorInstance.setScope(scope);
+            awacCalculatorInstance.setClosed(formsCloseDTO.getClose());
 
-            awacCalculatorClosed = new AwacCalculatorClosed();
-            awacCalculatorClosed.setAwacCalculator(awacCalculator);
-            awacCalculatorClosed.setPeriod(period);
-            awacCalculatorClosed.setScope(scope);
-
-            awacCalculatorClosedService.saveOrUpdate(awacCalculatorClosed);
+            awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
         }
+        if (!formsCloseDTO.getClose() && awacCalculatorInstance.isClosed()) {
+            awacCalculatorInstance.setClosed(false);
+            awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
+        } else if (formsCloseDTO.getClose() && awacCalculatorInstance.isClosed() == false) {
+            awacCalculatorInstance.setClosed(true);
+            awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
+        }
+
         return ok(new ResultsDTO());
     }
 
@@ -246,7 +258,7 @@ public class AnswerController extends AbstractController {
         }
 
         //recover / control the auditInfo
-        if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
+        if (questionSetAnswer.getAuditInfo()!=null && questionSetAnswer.getAuditInfo().getDataLocker() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
                 return unauthorized(new ExceptionsDTO("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker()));
             }
@@ -256,6 +268,10 @@ public class AnswerController extends AbstractController {
         }
 
         //update
+        if(questionSetAnswer.getAuditInfo()==null){
+            questionSetAnswer.setAuditInfo(new AuditInfo());
+        }
+
         if (lockQuestionSetDTO.getLock()) {
             questionSetAnswer.getAuditInfo().setDataLocker(securedController.getCurrentUser());
         } else {
@@ -329,13 +345,17 @@ public class AnswerController extends AbstractController {
         }
 
         //recover / control the auditInfo
-        if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+        if (questionSetAnswer.getAuditInfo()!=null && questionSetAnswer.getAuditInfo().getDataValidator() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataValidator().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
                 throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataValidator());
             }
         }
 
         //update
+        if(questionSetAnswer.getAuditInfo()==null){
+            questionSetAnswer.setAuditInfo(new AuditInfo());
+        }
+
         if (lockQuestionSetDTO.getLock()) {
             questionSetAnswer.getAuditInfo().setDataValidator(securedController.getCurrentUser());
         } else {
@@ -490,13 +510,20 @@ public class AnswerController extends AbstractController {
             if (questionSetAnswers.containsKey(questionSet.getCode())) {
                 //add locker
                 QuestionSetAnswer questionSetAnswer = questionSetAnswers.get(questionSet.getCode());
-                if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
-                    questionSetDTO.setDatalocker(conversionService.convert(questionSetAnswer.getAuditInfo().getDataLocker(), PersonDTO.class));
+                if (questionSetAnswer.getAuditInfo() != null) {
+                    if (questionSetAnswer.getAuditInfo().getDataLocker() != null) {
+                        questionSetDTO.setDatalocker(conversionService.convert(questionSetAnswer.getAuditInfo().getDataLocker(), PersonDTO.class));
+                    }
+                    //add validator
+                    if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+                        questionSetDTO.setDataValidator(conversionService.convert(questionSetAnswer.getAuditInfo().getDataValidator(), PersonDTO.class));
+                    }
                 }
-                //add validator
-                if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                    questionSetDTO.setDataValidator(conversionService.convert(questionSetAnswer.getAuditInfo().getDataValidator(), PersonDTO.class));
+                //add verifier
+                if(questionSetAnswer.getVerification()!=null){
+                    questionSetDTO.setVerification(conversionService.convert(questionSetAnswer.getVerification(),VerificationDTO.class));
                 }
+
             }
 
             questionSetDTOs.add(questionSetDTO);
@@ -552,13 +579,15 @@ public class AnswerController extends AbstractController {
         //control locker
         for (int i = questionSetAnswersList.size() - 1; i >= 0; i--) {
             QuestionSetAnswer questionSetAnswer = questionSetAnswersList.get(i);
-            if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
-                questionSetAnswersList.remove(i);
-                //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
-            }
-            if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                questionSetAnswersList.remove(i);
-                //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
+            if(questionSetAnswer.getAuditInfo()!=null) {
+                if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
+                    questionSetAnswersList.remove(i);
+                    //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
+                }
+                if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
+                    questionSetAnswersList.remove(i);
+                    //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
+                }
             }
         }
 
@@ -997,7 +1026,7 @@ public class AnswerController extends AbstractController {
     }
 
 
-    private boolean testCloseable(String periodKey, Long scopeId) {
+    public boolean testCloseable(String periodKey, Long scopeId) {
         Scope scope = scopeService.findById(scopeId);
 
         Period period = periodService.findByCode(new PeriodCode(periodKey));
@@ -1011,8 +1040,8 @@ public class AnswerController extends AbstractController {
                 if (questionSet.getParent() == null) {
                     List<QuestionSetAnswer> questionSetAnswers = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
 
-                    if (questionSetAnswers.size() != 1 || questionSetAnswers.get(0).getAuditInfo().getDataValidator() == null) {
-                        Logger.info("cannot be closed because "+questionSet+" is not close");
+                    if (questionSetAnswers.size() != 1 || questionSetAnswers.get(0).getAuditInfo() == null || questionSetAnswers.get(0).getAuditInfo().getDataValidator() == null) {
+                        Logger.info("cannot be closed because " + questionSet + " is not close");
                         return false;
                     }
                 }

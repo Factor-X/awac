@@ -76,17 +76,19 @@ public class InvitationController extends AbstractController {
 		// get organization name through securedController
 		Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
 
-		Logger.info("lauchInvitation->interfaceTypeCode:"+org.getInterfaceCode());
-		String awacInterfaceTypeFragment;
-		if (org.getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
-		} else {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
-		}
+        Logger.info("lauchInvitation->interfaceTypeCode:" + org.getInterfaceCode());
+        String awacInterfaceTypeFragment = null;
+        if (org.getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
+        } else if (org.getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
+        } else if (org.getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
+        }
 
-		// compute key
-		String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
-		Logger.info("Email Invitation generated key : " + key);
+        // compute key
+        String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
+        Logger.info("Email Invitation generated key : " + key);
 
 		// store key and user
 		Invitation invitation = new Invitation(dto.getInvitationEmail(),key,securedController.getCurrentUser().getOrganization()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                );
@@ -154,15 +156,16 @@ public class InvitationController extends AbstractController {
 		HashMap<String,CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
-		Logger.info("registerInvitation->interfaceTypeCode:"+invitation.getOrganization().getInterfaceCode());
-		String awacInterfaceTypeFragment;
-		if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.enterprisefragment");
-		} else {
-			awacInterfaceTypeFragment=Configuration.root().getString("awac.municipalityfragment");
-		}
+        Logger.info("registerInvitation->interfaceTypeCode:" + invitation.getOrganization().getInterfaceCode());
+        String awacInterfaceTypeFragment=null;
+        if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
+        } else if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
 
-		//http://warriorbeast:9000/calculator#/enterprise#/registration/mOOvr8HkfufNXX5DvBkYd8nb8f
+        } else if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.VERIFICATION.getKey())) {
+            awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
+        }
 
 		// prepare email
 		Map values = new HashMap<String,Object>();

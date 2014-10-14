@@ -26,7 +26,19 @@ public class Validator {
 		for (Field field : declaredFields) {
 
 			Annotation[] annotations = field.getDeclaredAnnotations();
-			for (Annotation annotation : annotations    ) {
+			boolean good = false;
+			for (Annotation annotation : annotations) {
+				if (annotation.annotationType().equals(Optional.class)) {
+					Object v = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
+					if (v == null) good = true;
+					break;
+				}
+			}
+			if (good) {
+				continue;
+			}
+
+			for (Annotation annotation : annotations) {
 				if (annotation.annotationType().getPackage().equals(Validate.class.getPackage())) {
 
 					Object value = object.getClass().getMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1)).invoke(object);
@@ -40,6 +52,7 @@ public class Validator {
 						} else {
 							Validator.validate(value);
 						}
+					} else if (annotation.annotationType().equals(Optional.class)) {
 					} else {
 						// create a script engine manager
 						ScriptEngineManager factory = new ScriptEngineManager();

@@ -23,10 +23,12 @@ import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
+import eu.factorx.awac.service.VerificationRequestService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -90,26 +92,40 @@ public class SecuredController extends Security.Authenticator {
     public void controlDataAccess(Form form, Period period, Scope scope) {
 
         if (form == null) {
-            throw new RuntimeException("You doesn't have the required authorization for the form " + form.getIdentifier());
+            throw new RuntimeException("You doesn't have the required authorization for the form ");
         }
 
         controlDataAccess(period, scope);
     }
+
+    @Autowired
+    private VerificationRequestService verificationRequestService;
 
     public void controlDataAccess(Period period, Scope scope) {
 
         if (period == null || scope == null) {
             throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName() + "/ period : " + period.getLabel());
         }
+        //control my scope
+        try {
+            controlMyInstance(scope, period);
+        } catch (Exception e) {
+            if (!(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope, period) != null)) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    }
 
+    private void controlMyInstance(Scope scope, Period period) throws Exception {
         //test scope
-
         if (!scope.getOrganization().equals(getCurrentUser().getOrganization())) {
-            throw new RuntimeException("This is not your scope");
+            throw new Exception("This is not your scope");
+
         }
 
         //for organization, test association between user and site, and site and period
-        if(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+        if (getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
             boolean founded = false;
             for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(this.getCurrentUser())) {
                 if (accountSiteAssociation.getSite().getId().equals(scope.getId())) {
@@ -118,18 +134,18 @@ public class SecuredController extends Security.Authenticator {
                 }
             }
             if (!founded) {
-                throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName());
+                throw new Exception("You doesn't have the required authorization for the site " + scope.getName());
             }
 
             //test period
             boolean foundedPeriod = false;
-            for (Period periodToFind : ((Site)scope).getListPeriodAvailable()) {
+            for (Period periodToFind : ((Site) scope).getListPeriodAvailable()) {
                 if (periodToFind.equals(period)) {
                     foundedPeriod = true;
                 }
             }
             if (!foundedPeriod) {
-                throw new RuntimeException("You doesn't have the required authorization for the period : " + period.getLabel());
+                throw new Exception("You doesn't have the required authorization for the period : " + period.getLabel());
             }
         }
 

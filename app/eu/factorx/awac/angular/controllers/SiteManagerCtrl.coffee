@@ -24,11 +24,7 @@ angular
 
             $scope.events = []
 
-            data = {}
-            data.organization = $scope.organization
-            data.period = $scope.$root.periods[0]
-
-            downloadService.postJson 'awac/organization/events/load', data, (result) ->
+            downloadService.getJson 'awac/organization/events/byPeriod/'+$scope.$root.periods[0], (result) ->
                 $scope.events = result.data.organizationEventList
 
             $scope.$watchCollection 'assignPeriod', ->

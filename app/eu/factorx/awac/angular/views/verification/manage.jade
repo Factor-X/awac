@@ -1,8 +1,44 @@
-div
+div.verification_manage
     div.my-share-table(loading-container='tableParams.settings().$loading')
-        table.admin-table-import-bad(ng-table='tableParams')
+        table.admin-table-import-bad.table(ng-table='tableParams')
             tr(ng-repeat='request in $data')
-                td(data-title="'request.from'")
-                    | {{request.from}}
-                td(data-title="'Type of ...?'", sortable="'request.type'")
-                    | {{request.type}}
+                td(data-title="'ORGANIZATION' | translateText")
+                    | {{request.organizationCustomer.name}}
+                td(data-title="'CALCULATOR_TYPE'| translateText", sortable="'request.type'")
+                    | {{request.organizationCustomer.interfaceName}}
+                td(data-title="'SITE_PRODUCT'| translateText", sortable="'request.scope.name'")
+                    | {{request.scope.name}}
+                td(data-title="'SITE_MANAGER_EVENT_PERIOD'| translateText", sortable="'request.period.label'")
+                    | {{request.period.label}}
+                td(data-title="'CONTACT'| translateText", sortable="'request.contact.lastName'")
+                    | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}}
+                td(data-title="'COMMENT'| translateText")
+                    | {{request.comment}}
+                td(data-title="'STATUS'| translateText", sortable="'request.type'")
+                    | {{request.status | translateText}}
+                td(data-title="'VERIFICATION_ASSIGNED_USERS'| translateText", sortable="'request.type'")
+                    div(ng-repeat="user in request.verifierList") {{user.firstName}} {{user.lastName}}
+                td(data-title="'MODAL_DOCUMENT_MANAGER_ACTION'| translateText")
+                    div(ng-show="loadingRequest[request.id] === true")
+                        img(src='/assets/images/modal-loading.gif')
+                    div(ng-hide="loadingRequest[request.id] === true")
+                        button.button(
+                            type="button",
+                            ng-show="request.status === 'VERIFICATION_STATUS_WAIT_VERIFIER_CONFIRMATION'",
+                            ng-click="changeStatus(request,'VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION')",
+                            ng-bind-html="'VERIFICATION_REQUEST_ACCEPT' | translate")
+                        button.button(
+                            type="button",
+                            ng-show="request.status === 'VERIFICATION_STATUS_WAIT_VERIFIER_CONFIRMATION'",
+                            ng-click="changeStatus(request,'VERIFICATION_STATUS_REJECTED')",
+                            ng-bind-html="'VERIFICATION_REQUEST_REJECT' | translate")
+                        button.button(
+                            type="button",
+                            ng-show="request.status === 'VERIFICATION_STATUS_WAIT_ASSIGNATION' || request.status === 'VERIFICATION_STATUS_VERIFICATION'",
+                            ng-click="assignRequest(request)",
+                            ng-bind-html="'VERIFICATION_REQUEST_ASSIGN' | translate")
+        div
+            .desc_block(ng-bind-html="'ADD_REQUEST_WITH_KEY_DESC'")
+            span(ng-bind-html="'ADD_REQUEST_WITH_KEY' | translate")
+            input(ng-model="keyToInject")
+            button.button(type="button",ng-click="isDisabled || addKey()",ng-bind-html="'SUBMIT' | translate",ng-disabled="keyToInject==null || keyToInject.length == 0")

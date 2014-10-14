@@ -12,19 +12,13 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.awac.dto.OrganizationEventDTO;
-import eu.factorx.awac.dto.awac.dto.OrganizationEventResultDTO;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersDTO;
-import eu.factorx.awac.dto.awac.dto.SiteAddUsersResultDTO;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationEventDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.OrganizationEvent;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
@@ -43,7 +37,6 @@ import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;

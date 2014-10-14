@@ -41,12 +41,7 @@ angular
 
             $scope.events = []
 
-            data = {}
-            data.organization = $scope.organization
-            data.period = $scope.$root.periods[0]
 
-            downloadService.postJson 'awac/organization/events/load', data, (result) ->
-                $scope.events = result.data.organizationEventList
 
             $scope.toForm = ->
                 $scope.$root.navToLastFormUsed()
@@ -83,4 +78,10 @@ angular
                     else
                         messageFlash.displayError result.data.message
                     return false
-        
+
+    $scope.$watch 'selectedPeriodForEvent', () ->
+        downloadService.getJson 'awac/organization/events/byPeriod/'+$scope.selectedPeriodForEvent,  (result) ->
+            if result.success
+                $scope.events = result.data.organizationEventList
+            else
+                messageFlash.displayError result.data.message
