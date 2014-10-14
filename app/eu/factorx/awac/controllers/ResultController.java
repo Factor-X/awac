@@ -143,7 +143,7 @@ public class ResultController extends AbstractController {
 			Period period = periodService.findByCode(new PeriodCode(periodKey));
 			Period comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
 
-			//launch the download
+			// launch the download
 			response().setContentType("application/octet-stream");
 			response().setHeader("Content-Disposition", "attachment; filename=export.xls");
 
@@ -164,6 +164,8 @@ public class ResultController extends AbstractController {
 		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
 		return ok(new Base64().encode(content));
 	}
+
+
 
 	public Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {
 		ResultsDTO resultsDTO = new ResultsDTO();
