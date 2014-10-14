@@ -13,6 +13,9 @@ touch /tmp/migration/migration_script.sql
 # safety separator
 echo ";" >> /tmp/migration/migration_script.sql
 
+# create verification
+cat ./CELDL-74-verification.sql >> /tmp/migration/migration_script.sql
+
 # create new multi site
 cat ./CELDL-77-Reducing-Actions.sql >> /tmp/migration/migration_script.sql
 

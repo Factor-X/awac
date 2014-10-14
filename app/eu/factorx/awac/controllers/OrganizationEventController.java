@@ -6,11 +6,13 @@ import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.OrganizationEvent;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.OrganizationEventService;
 import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.PeriodService;
+import eu.factorx.awac.service.VerificationRequestService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -40,14 +42,43 @@ public class OrganizationEventController extends AbstractController {
     @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    private VerificationRequestService verificationRequestService;
+
     /**
      * get all accounts for specified organization
-     *//*
+     */
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result loadEventsForOrganization() {
-        return ok(getOrganizationEventDTO(securedController.getCurrentUser().getOrganization()));
-    }*/
+    public Result loadEventsByOrganization(String organizationName) {
+
+        //control organization
+        boolean checked = false;
+        Organization organizationTarget=null;
+        if (securedController.getCurrentUser().getOrganization().getName().equals(organizationName)) {
+            checked = true;
+            organizationTarget = securedController.getCurrentUser().getOrganization();
+        } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+
+            //load organizaiton
+            organizationTarget = organizationService.findByName(organizationName);
+            if (verificationRequestService.findByOrganizationCustomerAndOrganizationVerifier(organizationTarget, securedController.getCurrentUser().getOrganization()).size() > 0) {
+                checked = true;
+            }
+        }
+        if (!checked) {
+            return unauthorized(new ExceptionsDTO("You doesn't have right for this action"));
+        }
+
+        List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(organizationTarget);
+
+        List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<>();
+        for (OrganizationEvent item : organizationList) {
+            organizationEventDTOList.add(conversionService.convert(item, OrganizationEventDTO.class));
+        }
+
+        return ok(new OrganizationEventResultDTO(organizationEventDTOList));
+    }
 
 
     /**
@@ -56,31 +87,18 @@ public class OrganizationEventController extends AbstractController {
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
-    public Result loadEventsByPeriod(String periodKey) {
-        Period period = periodService.findByCode(new PeriodCode(periodKey));
-        OrganizationEventResultDTO resultDTO = getOrganizationEventDTO(period, securedController.getCurrentUser().getOrganization());
-        Logger.info(resultDTO+"");
-        return ok(resultDTO);
-    }
+    public Result load() {
 
+        List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(securedController.getCurrentUser().getOrganization());
 
-    private OrganizationEventResultDTO getOrganizationEventDTO(Period period, Organization organization) {
-
-        // get events for organization and given period
-        //List<OrganizationEvent> organizationList = organizationEventService.findByOrganizationAndPeriod(org,period);
-        // get events for organization and all periods
-        List<OrganizationEvent> organizationList = organizationEventService.findByOrganization(organization);
+        Logger.info(organizationList+"");
 
         List<OrganizationEventDTO> organizationEventDTOList = new ArrayList<>();
         for (OrganizationEvent item : organizationList) {
             organizationEventDTOList.add(conversionService.convert(item, OrganizationEventDTO.class));
         }
 
-        // create return DTO
-        OrganizationEventResultDTO resultDto = new OrganizationEventResultDTO(organizationEventDTOList);
-
-        // return list of associated
-        return resultDto;
+        return ok(new OrganizationEventResultDTO(organizationEventDTOList));
     }
 
     /**
@@ -106,21 +124,20 @@ public class OrganizationEventController extends AbstractController {
                 orgEvent.setDescription(dto.getDescription());
                 orgEvent.setPeriod(period);
 
-            }
-            else{
-                throw new MyrmexRuntimeException("organization event with id "+dto.getId()+" was not found");
+            } else {
+                throw new MyrmexRuntimeException("organization event with id " + dto.getId() + " was not found");
             }
         } else {
 
             //control name / period / organization
-            if(organizationEventService.findByOrganizationAndPeriodAndName(securedController.getCurrentUser().getOrganization(),period,dto.getName())!=null){
+            if (organizationEventService.findByOrganizationAndPeriodAndName(securedController.getCurrentUser().getOrganization(), period, dto.getName()) != null) {
                 return unauthorized(new ExceptionsDTO("you cannot use the same name and period for two event"));
             }
 
 
             orgEvent = new OrganizationEvent(securedController.getCurrentUser().getOrganization(), period, dto.getName(), dto.getDescription());
         }
-        Logger.info(orgEvent+"");
+        Logger.info(orgEvent + "");
         organizationEventService.saveOrUpdate(orgEvent);
 
         // return event DTO

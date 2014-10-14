@@ -52,6 +52,7 @@ CREATE SEQUENCE verificationrequest_id_seq;
   awaccalculatorinstance_id bigint NOT NULL,
   contact_id bigint,
   organizationverifier_id bigint,
+  verificationresultdocument_id bigint,
   CONSTRAINT verificationrequest_pkey PRIMARY KEY (id),
   CONSTRAINT fk_o2y7uyf33tshgp8m9fv9l9y4n FOREIGN KEY (contact_id)
       REFERENCES account (id) MATCH SIMPLE
@@ -61,6 +62,9 @@ CREATE SEQUENCE verificationrequest_id_seq;
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_scqxhrkx1n9wjhuk3vm30emrw FOREIGN KEY (awaccalculatorinstance_id)
       REFERENCES awaccalculatorinstance (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_scqxhrkx1n9jehuk3vm30emrw FOREIGN KEY (verificationresultdocument_id)
+      REFERENCES storedfile (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uk_scqxhrkx1n9wjhuk3vm30emrw UNIQUE (awaccalculatorinstance_id)
 )

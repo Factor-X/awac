@@ -36,7 +36,7 @@ div
                 td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
 
-            tr(ng-repeat="event in getEventList()", ng-show="event.period.key == selectedPeriodForEvent")
+            tr(ng-repeat="event in events", ng-show="event.period.key == selectedPeriodForEvent")
                 td {{event.name}}
                 td {{event.description}}
                 td {{event.period.label}}

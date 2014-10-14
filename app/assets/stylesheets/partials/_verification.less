@@ -53,27 +53,43 @@
 }
 
 .verification {
+
     .menu-verification {
+        background-color: #305b2e;
         .list-request {
             height: 100px;
-            border-bottom: 5px solid green;
+            border-bottom: 5px solid #305b2e;
             overflow: auto;
-            .table {
-                width: ~'calc(100% - 10px)' !important;
-                margin-bottom: 0px;
-                tbody {
-                    tr {
-                        cursor: pointer;
-                    }
-                    .selected {
-                        background-color: red;
+
+            .selected {
+                background-color: #acd595;
+                color: #305b2e;
+            }
+            tbody {
+                tr {
+                    cursor: pointer;
+                    &:hover {
+                        background-color: #d9d9d9;
+                        color: black;
                     }
                 }
-
-            }
-            > div {
-                display: none;
             }
         }
     }
+    .table {
+        width: ~'calc(100% - 10px)' !important;
+        margin-bottom: 0px;
+        thead {
+            background-color: #3c3b37;
+            color: #ffffff;
+            font-weight: normal;
+        }
+        tbody {
+            background-color: #9d9b91;
+            color: #ffffff;
+        }
+
+    }
 }
+
+

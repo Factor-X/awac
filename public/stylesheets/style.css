@@ -1731,7 +1731,8 @@ ul.messenger > li {
     border-color: #000080;
 }
 
-.admin-table-import-bad td {
+.admin-table-import-bad td,
+.admin-table-import-bad th{
     border-right: 1px solid #ddd;
 }
 

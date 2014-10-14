@@ -16,7 +16,17 @@ public class VerificationRequestChangeStatusDTO extends DTO {
     private String newStatus;
     private List<String> verifierIdentifier;
 
+    private Long verificationFinalizationFileId;
+
     public VerificationRequestChangeStatusDTO() {
+    }
+
+    public Long getVerificationFinalizationFileId() {
+        return verificationFinalizationFileId;
+    }
+
+    public void setVerificationFinalizationFileId(Long verificationFinalizationFileId) {
+        this.verificationFinalizationFileId = verificationFinalizationFileId;
     }
 
     public Long getScopeId() {

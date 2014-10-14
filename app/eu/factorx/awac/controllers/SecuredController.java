@@ -103,6 +103,8 @@ public class SecuredController extends Security.Authenticator {
 
     public void controlDataAccess(Period period, Scope scope) {
 
+        Logger.info("period:"+period+", scope:"+scope+",org:"+getCurrentUser().getOrganization());
+
         if (period == null || scope == null) {
             throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName() + "/ period : " + period.getLabel());
         }
@@ -111,7 +113,7 @@ public class SecuredController extends Security.Authenticator {
             controlMyInstance(scope, period);
         } catch (Exception e) {
             if (!(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
-                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope, period) != null)) {
+                    verificationRequestService.findByOrganizationVerifierAndScope(getCurrentUser().getOrganization(), scope) != null)) {
                 throw new RuntimeException(e.getMessage());
             }
         }
