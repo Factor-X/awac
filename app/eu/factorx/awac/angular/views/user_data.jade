@@ -10,7 +10,24 @@ div
         }
 
     .user_data
-        div(class="field_form", style="display:table")
+        div(ng-if='isAnonymousUser()',class="field_form", style="display:table", )
+            mm-awac-modal-field-text(ng-info="anonymous.loginInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.passwordInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.lastNameInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.firstNameInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.emailInfo")
+
+            br
+            div(style="display:table-row")
+                div(style="display:table-cell")
+                div(style="display:table-cell")
+                div(style="display:table-cell")
+                    div(ng-hide="isLoading", style="text-align: right")
+                        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="sendAnonymous()()", ng-disabled="!anonymousFieldValid()")
+
+                    img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+
+        div(ng-if='!isAnonymousUser()',class="field_form", style="display:table", )
             mm-awac-modal-field-text(ng-info="identifierInfo")
             mm-awac-modal-field-text(ng-info="passwordInfo")
                 div(style="width:10px")
@@ -20,7 +37,6 @@ div
             mm-awac-modal-field-text(ng-info="emailInfo")
                 div(style="width:10px")
                     button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
-
             br
             div(style="display:table-row")
                 div(style="display:table-cell")
@@ -28,6 +44,6 @@ div
                 div(style="display:table-cell")
                     div(ng-hide="isLoading", style="text-align: right")
                         button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="send()", ng-disabled="!allFieldValid()")
-
                     img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+
 
