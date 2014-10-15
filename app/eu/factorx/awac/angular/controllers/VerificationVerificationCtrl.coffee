@@ -74,6 +74,8 @@ angular
         $scope.displayMenu = true
         $('.injectFormMenu:first').append($scope.directiveMenu)
 
+        $scope.$root.mySites = [request.scope]
+
         $scope.testClosingValidation()
 
 

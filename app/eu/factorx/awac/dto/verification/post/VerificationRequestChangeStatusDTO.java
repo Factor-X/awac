@@ -19,6 +19,8 @@ public class VerificationRequestChangeStatusDTO extends DTO {
     private Long verificationFinalizationFileId;
     private String verificationRejectedComment;
 
+    private String password;
+
     public VerificationRequestChangeStatusDTO() {
     }
 
@@ -28,6 +30,14 @@ public class VerificationRequestChangeStatusDTO extends DTO {
 
     public void setVerificationFinalizationFileId(Long verificationFinalizationFileId) {
         this.verificationFinalizationFileId = verificationFinalizationFileId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getScopeId() {

@@ -2,8 +2,12 @@ package eu.factorx.awac.models.data.file;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.forms.VerificationRequest;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = StoredFile.FIND_BY_STORED_NAME, query = "select q from StoredFile q where q.storedName in :storedName"),
@@ -23,6 +27,13 @@ public class StoredFile  extends AuditedAbstractEntity {
     @ManyToOne(optional = false)
     private Account account;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "mm_storedfile_organization",
+            joinColumns  = @JoinColumn(name = "storedfile_id", referencedColumnName = "id"),
+            inverseJoinColumns= @JoinColumn(name = "organization_id", referencedColumnName = "id"))
+    private List<Organization> organizationList;
+
+
     public StoredFile() {
     }
 
@@ -31,6 +42,14 @@ public class StoredFile  extends AuditedAbstractEntity {
         this.storedName = storedName;
         this.size = size;
         this.account = account;
+    }
+
+    public List<Organization> getOrganizationList() {
+        return organizationList;
+    }
+
+    public void setOrganizationList(List<Organization> organizationList) {
+        this.organizationList = organizationList;
     }
 
     public String getOriginalName() {
@@ -63,6 +82,13 @@ public class StoredFile  extends AuditedAbstractEntity {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public void addOrganization(Organization organization) {
+        if(this.organizationList==null){
+            this.organizationList = new ArrayList<>();
+        }
+        this.organizationList.add(organization);
     }
 
     @Override

@@ -127,3 +127,22 @@ WITH (
 );
 ALTER TABLE verification
   OWNER TO play;
+
+
+CREATE TABLE mm_storedfile_organization
+(
+  storedfile_id bigint NOT NULL,
+  organization_id bigint NOT NULL,
+  CONSTRAINT fk_1dkzbpy2ri88qqy9p8ctwyp9e FOREIGN KEY (storedfile_id)
+      REFERENCES storedfile (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_7jvbk1borhh9gscfkrxk8ukir FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT uk_mt4b8rprar8nmd6bkqops3odg UNIQUE (storedfile_id, organization_id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE mm_storedfile_organization
+  OWNER TO play;

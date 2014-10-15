@@ -264,8 +264,7 @@ angular
         modalService.show modalService.PASSWORD_CONFIRMATION, data
 
     $scope.consultVerification =->
-        url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
-        $window.open(url);
+        modalService.show modalService.VERIFICATION_DOCUMENT
 
     #
     # used by menu

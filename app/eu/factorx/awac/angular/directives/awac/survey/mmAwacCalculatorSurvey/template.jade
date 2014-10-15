@@ -106,7 +106,7 @@ div
                      type='button',
                      ng-bind-html="'SURVEY_INTERFACE_VERIFICATION_CONSULT' | translate",
                      ng-click="isDisabled || consultVerification()",
-                     ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_VERIFIED'")
+                     ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'")
                 //accept / reject validation
                 button.button.verification(
                     type='button',
@@ -118,26 +118,20 @@ div
                     type='button',
                     ng-bind-html="'VERIFICATION_CANCEL_BUTTON' | translate",
                     ng-click="isDisabled || cancelVerification()",
-                    ng-show="$root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
+                    ng-show="$root.getVerificationRequestStatus()!=null&& $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
 
 
                 button.button.verification(type='button',
                     ng-disabled="$root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'UNCLOSING_FORM\' | translate',
-                    ng-show="$root.closedForms",
-                    mm-not-implemented='mm-not-implemented')
+                    ng-show="$root.closedForms")
                 button.button.verification(type='button',
                 ng-disabled="$root.closeableForms !== true || ($root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED') || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
-                    ng-hide="$root.closedForms",
-                    mm-not-implemented='mm-not-implemented')
-                button.button.verification(
-                    type='button',
-                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate",
-                    mm-not-implemented='mm-not-implemented',
-                    ng-disabled="$root.closedForms !== true")
+                    ng-hide="$root.closedForms")
+
             .big_separator
             .data_save
                 .last_save(ng-hide='lastSaveTime===null')

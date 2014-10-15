@@ -1,10 +1,10 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalPasswordConfirmation", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalVerificationDocument", (directiveService, downloadService, translationService, messageFlash,$window) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngParams: '='
-    templateUrl: "$/angular/templates/mm-awac-modal-password-confirmation.html"
+    templateUrl: "$/angular/templates/mm-awac-modal-verification-document.html"
 
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
@@ -24,6 +24,10 @@ angular
 
         }
 
+        $scope.download =->
+            url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
+            $window.open(url)
+
         $scope.allFieldValid = () ->
             for key in Object.keys($scope.fields)
                 if key != '$$hashKey'
@@ -32,22 +36,27 @@ angular
             return true
 
         #send the request to the server
-        $scope.save = () ->
+        $scope.save = (valid) ->
             if $scope.allFieldValid()
                 $scope.isLoading = true
 
-                data = $scope.getParams().data
-                data.password=$scope.fields.myPassword.field
+                if valid  == true
+                    newStatus ='VERIFICATION_STATUS_VERIFIED'
+                else
+                    newStatus ='VERIFICATION_STATUS_VERIFICATION'
 
-                downloadService.postJson $scope.getParams().url, data, (result) ->
+                data=
+                    scopeId:$scope.$root.scopeSelectedId
+                    periodKey:$scope.$root.periodSelectedKey
+                    password:$scope.fields.myPassword.field
+                    newStatus:newStatus
+
+                downloadService.postJson "/awac/verification/setStatus", data, (result) ->
                     $scope.isLoading = false
                     if result.success
 
                         #display success message
-                        if $scope.getParams().successMessage?
-                            messageFlash.displaySuccess translationService.get $scope.getParams().successMessage
-                        if $scope.getParams().afterSave?
-                            $scope.getParams().afterSave()
+                        $scope.$root.verificationRequest?.status =newStatus
                         #close window
                         $scope.close()
                     else
@@ -58,7 +67,7 @@ angular
             return false
 
         $scope.close = ->
-            modalService.close modalService.PASSWORD_CONFIRMATION
+            modalService.close modalService.VERIFICATION_DOCUMENT
 
     link: (scope) ->
 

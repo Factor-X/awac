@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "VerificationSubmitCtrl",  ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
+.controller "VerificationSubmitCtrl",  ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile,$window) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
     $scope.selectedRequest = null
@@ -74,32 +74,38 @@ angular
         $scope.displayMenu = true
         $('.injectFormMenu:first').append($scope.directiveMenu)
 
+        $scope.$root.mySites = [request.scope]
+
     $scope.isMenuCurrentlySelected = (target) ->
         if '/form/' + $scope.form == target || $scope.form == target
             return true
         return false
 
+    $scope.downloadFile =->
+        url = '/awac/file/download/' + $scope.selectedRequest.verificationSuccessFileId
+        $window.open(url)
+
     $scope.validVerificationFinalization = (valid) ->
-        dto =
-            scopeId: $scope.selectedRequest.scope.id
-            periodKey: $scope.selectedRequest.period.key
 
         if valid== true
             if $scope.requestSelected.status == 'VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_SUCCESS'
-                dto.newStatus ='VERIFICATION_STATUS_VERIFIED'
+                newStatus ='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'
             else
-                dto.newStatus ='VERIFICATION_STATUS_CORRECTION'
+                newStatus ='VERIFICATION_STATUS_CORRECTION'
         else
-            dto.newStatus ='VERIFICATION_STATUS_VERIFICATION'
+            newStatus ='VERIFICATION_STATUS_VERIFICATION'
 
-
-        modalService.show modalService.LOADING
-        downloadService.postJson "/awac/verification/setStatus", dto, (result) ->
-            modalService.close modalService.LOADING
-            if not result.success
-                messageFlash.displayError(result.data.message)
-            else
+        data =
+            url:"/awac/verification/setStatus"
+            successMessage:"CHANGES_SAVED"
+            title:"VALID_REQUEST"
+            data:
+                scopeId: $scope.selectedRequest.scope.id
+                periodKey: $scope.selectedRequest.period.key
+                newStatus:newStatus
+            afterSave:->
                 $scope.removeRequest()
+        modalService.show modalService.PASSWORD_CONFIRMATION, data
 
     $scope.navTo = (target) ->
         form = target.replace('/form/', '')

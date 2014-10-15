@@ -34,11 +34,16 @@
         .data_date_compare
             button.button.verification(type="button",
             ng-click="isDisabled || validVerificationFinalization(true)",
-            ng-bind-html="'FINALIZE_VERIFICATION_VALID_BUTTON' | translate",
+            ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_ACCEPT' | translate",
             )
             button.button.verification(type="button",
             ng-click="isDisabled || validVerificationFinalization(false)",
-            ng-bind-html="'FINALIZE_VERIFICATION_REJECT_BUTTON' | translate",
+            ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_REJECT' | translate",
+            )
+            button.button.verification(type="button",
+            ng-click="isDisabled || downloadFile()",
+            ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate",
+            ng-show="selectedRequest.status == 'VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_SUCCESS' "
             )
 
     .injectFormMenu

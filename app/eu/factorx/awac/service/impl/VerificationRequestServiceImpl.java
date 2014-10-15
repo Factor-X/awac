@@ -61,10 +61,11 @@ public class VerificationRequestServiceImpl extends AbstractJPAPersistenceServic
     }
 
     @Override
-    public VerificationRequest findByOrganizationVerifierAndScope(Organization organizationVerifier, Scope scope) {
-        List<VerificationRequest> resultList = JPA.em().createNamedQuery(VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE, VerificationRequest.class)
+    public VerificationRequest findByOrganizationVerifierAndScopeAndPeriod(Organization organizationVerifier, Scope scope, Period period) {
+        List<VerificationRequest> resultList = JPA.em().createNamedQuery(VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD, VerificationRequest.class)
                 .setParameter("organizationVerifier", organizationVerifier)
                 .setParameter("scope", scope)
+                .setParameter("period", period)
                 .getResultList();
 
         if (resultList.size() > 1) {

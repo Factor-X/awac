@@ -9,11 +9,14 @@
                 h4(class="modal-title",id="myModalLabel", ng-bind-html="getParams().title | translate")
 
             .modal-body
-                .desc(
-                ng-bind-html="getParams().desc | translate",
-                ng-show="getParams().desc != null")
+                .desc(ng-bind-html="getParams().desc | translate")
                 .field_form
+                    .field_row
+                        div
+                        div
+                            button.button(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate",ng-click="download()")
                     mm-awac-modal-field-text(ng-info="fields.myPassword")
+
 
             .modal-footer
 
@@ -25,9 +28,15 @@
 
                     button.button(type="button",
                     class="btn btn-primary",
-                    ng-click="save();",
+                    ng-click="save(true)",
                     ng-disabled="!allFieldValid()",
-                    ng-bind-html="'SAVE_BUTTON' | translate")
+                    ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_ACCEPT' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save(false)",
+                    ng-disabled="!allFieldValid()",
+                    ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_REJECT' | translate")
 
                 img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
 

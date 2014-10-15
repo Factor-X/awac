@@ -25,6 +25,7 @@ angular
     @VERIFICATION_FINALIZATION = 'verification-finalization'
     @PASSWORD_CONFIRMATION = 'password-confirmation'
     @VERIFICATION_CONFIRMATION = 'verification-confirmation'
+    @VERIFICATION_DOCUMENT='verification-document'
 
     @show = (modalName, params) ->
         args = []

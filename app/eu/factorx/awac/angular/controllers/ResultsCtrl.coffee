@@ -11,6 +11,10 @@ angular
                 s.selected = true
     , true
 
+    $scope.getVerificationRequestStatus = ->
+        if $scope.$root.verificationRequest?
+            return $scope.$root.verificationRequest.status
+
     $scope.$watch '$root.periodToCompare', () ->
         $scope.reload()
 
@@ -18,6 +22,11 @@ angular
         console.log 'watch mySites'
         $scope.reload()
     , true
+
+    $scope.downloadVerificationReport = ->
+        url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
+        $window.open(url)
+
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
