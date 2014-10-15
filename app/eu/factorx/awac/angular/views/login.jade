@@ -40,8 +40,15 @@
                             type="button",
                             class="btn btn-primary",
                             ng-bind-html="'LOGIN_BUTTON' | translate",
-                            ng-click="send()",
+                            ng-click="send({anonymous:false})",
                             ng-disabled="!connectionFieldValid()")
+
+                        button.button(
+                            type="button",
+                            class="btn btn-primary",
+                            ng-bind-html="'LOGIN_ANONYMOUS_BUTTON' | translate",
+                            ng-click="send({anonymous:true})")
+
 
                     img(ng-show="isLoading === true",src="/assets/images/modal-loading.gif")
 

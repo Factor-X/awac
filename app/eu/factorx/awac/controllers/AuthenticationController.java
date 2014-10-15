@@ -14,11 +14,18 @@ package eu.factorx.awac.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
 import play.Logger;
 import play.db.jpa.Transactional;
+import play.mvc.Http;
 import play.mvc.Result;
 import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.DTO;
@@ -34,10 +41,6 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.PersonService;
-import eu.factorx.awac.service.VelocityGeneratorService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.email.messages.EmailMessage;
@@ -63,6 +66,19 @@ public class AuthenticationController extends AbstractController {
 
 	@Autowired
 	private VelocityGeneratorService velocityGeneratorService;
+
+	@Autowired
+	private OrganizationService organizationService;
+
+	@Autowired
+	private SiteService siteService;
+
+	@Autowired
+	private AccountSiteAssociationService accountSiteAssociationService;
+
+	@Autowired
+	private PeriodService periodService;
+
 
 	@Transactional(readOnly = true)
 	public Result testAuthentication() {
@@ -92,53 +108,110 @@ public class AuthenticationController extends AbstractController {
 			throw new RuntimeException("The request cannot be convert");
 		}
 
-		//test if the login exist
-		Account account = accountService.findByIdentifier(connectionFormDTO.getLogin());
+		Account account = null;
 
-		//control account
-		if (account == null) {
-			//use the same message for both login and password error
-			// "The couple login / password was not found"
-			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
-		}
+		if ( (connectionFormDTO.getLogin()==null) && (connectionFormDTO.getPassword()==null) ) {
 
-		//test password
-		if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
-			//use the same message for both login and password error
-			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
-		}
+			Http.Cookie cookie = request().cookie("AWAC_ANONYMOUS_IDENTIFIER");
+			if ((cookie!=null) && (!StringUtils.isBlank(cookie.value()))) {
 
-		//control interface
-		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
+				Logger.info("Anonymous login with cookie");
+				account = accountService.findByIdentifier(cookie.value());
+				if (! account.getPerson().getFirstname().equals("anonymous_user") ) {
+					Logger.info("Not an anonymous user login try");
+					return unauthorized (new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
+				}
 
-		if (interfaceTypeCode == null) {
-			return unauthorized(new ExceptionsDTO(account.getOrganization().getInterfaceCode().getKey() + " is not a valid interface"));
-		} else if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
-			//use the same message for both login and password error
-			Logger.info(interfaceTypeCode + "");
-			Logger.info(account.getOrganization() + "");
-			// return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
-			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name(), interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
-		}
-
-		//control acitf
-		if (!account.getActive()) {
-			// "Votre compte est actuellement suspendue. Contactez votre administrateur."
-			return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.SUSPENDED_ACCOUNT.name()));
-		}
-
-		//control change password
-		if (account.getNeedChangePassword()) {
-
-			if (connectionFormDTO.getNewPassword() != null) {
-				account.setPassword(connectionFormDTO.getNewPassword());
-				account.setNeedChangePassword(false);
-				accountService.saveOrUpdate(account);
 			} else {
+				// anonymous login
+				Logger.info("Anonymous login without cookie");
+				// generate dummy user and password
+				// if person doesn't already exist, create it
+
+				String lastName = Long.toString(System.currentTimeMillis());
+				String firstName = "anonymous_user";
+				String identifier = firstName + lastName;
+				String password = Long.toString(System.nanoTime());
+				String email = identifier + "@anonymousorg.org";
+
+
+				Person person = new Person(lastName, firstName, email);
+				personService.saveOrUpdate(person);
+
+				Organization org = new Organization("YourOrg" + lastName, new InterfaceTypeCode(connectionFormDTO.getInterfaceName()));
+				organizationService.saveOrUpdate(org);
+
+				//create account
+				account = new Account(org, person, identifier, password);
+				account.setIsAdmin(true);
+
+				//save account
+				accountService.saveOrUpdate(account);
+
+				// create site & period
+				Site site = new Site(org, "YourSite");
+				site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
+				site.getListPeriodAvailable().add(periodService.findLastYear());
+				siteService.saveOrUpdate(site);
+
+				AccountSiteAssociation asa = new AccountSiteAssociation();
+				asa.setAccount(account);
+				asa.setSite(site);
+				accountSiteAssociationService.saveOrUpdate(asa);
+
+				response().setCookie("AWAC_ANONYMOUS_IDENTIFIER", identifier);
+			} // else cookie does not exist
+
+		} else {
+			// authenticated login
+			//test if the login exist
+			account = accountService.findByIdentifier(connectionFormDTO.getLogin());
+
+			//control account
+			if (account == null) {
 				//use the same message for both login and password error
-				return unauthorized(new MustChangePasswordExceptionsDTO());
+				// "The couple login / password was not found"
+				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
 			}
-		}
+
+			//test password
+			if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
+				//use the same message for both login and password error
+				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
+			}
+
+			//control interface
+			InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
+
+			if (interfaceTypeCode == null) {
+				return unauthorized(new ExceptionsDTO(account.getOrganization().getInterfaceCode().getKey() + " is not a valid interface"));
+			} else if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
+				//use the same message for both login and password error
+				Logger.info(interfaceTypeCode + "");
+				Logger.info(account.getOrganization() + "");
+				// return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
+				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name(), interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
+			}
+
+			//control acitf
+			if (!account.getActive()) {
+				// "Votre compte est actuellement suspendue. Contactez votre administrateur."
+				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.SUSPENDED_ACCOUNT.name()));
+			}
+
+			//control change password
+			if (account.getNeedChangePassword()) {
+
+				if (connectionFormDTO.getNewPassword() != null) {
+					account.setPassword(connectionFormDTO.getNewPassword());
+					account.setNeedChangePassword(false);
+					accountService.saveOrUpdate(account);
+				} else {
+					//use the same message for both login and password error
+					return unauthorized(new MustChangePasswordExceptionsDTO());
+				}
+			}
+		} // end of else not anonymous
 
 		//if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);

@@ -12,7 +12,7 @@ angular
 
     $scope.enterEvent = ->
         if $scope.tabActive[0] == true
-            $scope.send()
+            $scope.send({anonymous:false})
         else if $scope.tabActive[1] == true
             $scope.sendForgotPassword()
 
@@ -60,13 +60,24 @@ angular
         return false
 
     #send the request to the server
-    $scope.send = () ->
+    $scope.send = (options) ->
 
         #active loading mode
         $scope.isLoading = true
 
+        if options.anonymous
+            dto =
+                login: null,
+                password: null,
+                interfaceName: $scope.$root.instanceName
+        else
+            dto =
+                login: $scope.loginInfo.field,
+                password: $scope.passwordInfo.field,
+                interfaceName: $scope.$root.instanceName
+
         #send request
-        downloadService.postJson '/awac/login', { login: $scope.loginInfo.field, password: $scope.passwordInfo.field, interfaceName: $scope.$root.instanceName }, (result) ->
+        downloadService.postJson '/awac/login', dto, (result) ->
             if result.success
 
                 ###
@@ -75,7 +86,7 @@ angular
                     return
                 $("#loginForm").submit()
                 ###
-    
+
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                 $scope.isLoading = false
