@@ -10,5 +10,5 @@
         type='file',
         ng-file-select='onFileSelect($files)',
         ng-hide="getDataToCompare()==true|| getIsAggregation()===true || inDownload === true || getDisabled() === true")
-    div(ng-show="getFileNumber()>0") {{getFileNumber()}} {{'QUESTION_FILE_COUNT_ALREADY_UPLOAD' | translate}}
+    div(ng-show="getFileNumber()>0") {{getFileNumber()}} {{'QUESTION_FILE_COUNT_ALREADY_UPLOAD' | translateText}}
     button.button(type="button",ng-show="getFileNumber()>0",ng-click="openDocumentManager()",ng-bind-html="'QUESTION_FILE_CONSULT' | translate")

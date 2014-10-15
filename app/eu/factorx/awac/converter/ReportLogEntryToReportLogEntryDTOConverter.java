@@ -58,20 +58,25 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
 			LowerRankInGroup lrig = (LowerRankInGroup) entry;
 
 			return new LowerRankInGroupDTO(
-				lrig.getKey(),
-				lrig.getAlternativeGroup(),
-				lrig.getMinRank(),
-				lrig.getRank()
+				lrig.getBaseActivityData().getActivityCategory().getKey(),
+				lrig.getBaseActivityData().getActivitySubCategory().getKey(),
+				lrig.getBaseActivityData().getActivityType().getKey(),
+				lrig.getBaseActivityData().getActivitySource().getKey(),
+				lrig.getBaseActivityData().getValue(),
+				lrig.getBaseActivityData().getUnit().getSymbol()
 			);
 		}
 
-		if(entry instanceof NoSuitableIndicator){
+		if (entry instanceof NoSuitableIndicator) {
 			NoSuitableIndicator nsi = (NoSuitableIndicator) entry;
 
 			return new NoSuitableIndicatorDTO(
-				nsi.getKey(),
-				nsi.getIndicatorSearchParam().getActivityCategory().getKey(),
-				nsi.getIndicatorSearchParam().getActivitySubCategory().getKey()
+				nsi.getBaseActivityData().getActivityCategory().getKey(),
+				nsi.getBaseActivityData().getActivitySubCategory().getKey(),
+				nsi.getBaseActivityData().getActivityType().getKey(),
+				nsi.getBaseActivityData().getActivitySource().getKey(),
+				nsi.getBaseActivityData().getValue(),
+				nsi.getBaseActivityData().getUnit().getSymbol()
 			);
 		}
 

@@ -1,22 +1,21 @@
 package eu.factorx.awac.service.impl.reporting;
 
-import eu.factorx.awac.service.impl.IndicatorSearchParameter;
+import eu.factorx.awac.models.reporting.BaseActivityData;
 
 public class NoSuitableIndicator extends ReportLogEntry {
-	private String                   key;
-	private IndicatorSearchParameter indicatorSearchParam;
 
-	public NoSuitableIndicator(String key, IndicatorSearchParameter indicatorSearchParam) {
+	private BaseActivityData baseActivityData;
 
-		this.key = key;
-		this.indicatorSearchParam = indicatorSearchParam;
+	public NoSuitableIndicator(BaseActivityData bad) {
+
+		this.baseActivityData = bad;
 	}
 
-	public String getKey() {
-		return key;
+	public BaseActivityData getBaseActivityData() {
+		return baseActivityData;
 	}
 
-	public IndicatorSearchParameter getIndicatorSearchParam() {
-		return indicatorSearchParam;
+	public void setBaseActivityData(BaseActivityData baseActivityData) {
+		this.baseActivityData = baseActivityData;
 	}
 }
