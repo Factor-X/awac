@@ -16,7 +16,7 @@ angular.module('app').run (loggerService) ->
 
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash,$compile,$element) ->
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash,$compile,$element,$window) ->
 
     $scope.displayMenu = false
     $scope.displayLittleMenu = false
@@ -229,6 +229,44 @@ angular
     $scope.requestVerification = ->
         modalService.show 'REQUEST_VERIFICATION'
 
+    $scope.cancelVerification = ->
+        data =
+            url:"/awac/verification/setStatus"
+            desc:"CANCEL_VERIFICATION_DESC"
+            successMessage:"CHANGES_SAVED"
+            title:"CANCEL_VERIFICATION_TITLE"
+            data:
+                scopeId:$scope.$root.scopeSelectedId
+                periodKey:$scope.$root.periodSelectedKey
+                newStatus:'VERIFICATION_STATUS_REJECTED'
+            afterSave:->
+                $scope.$root.verificationRequest =null
+                $scope.$root.$broadcast 'CLEAN_VERIFICATION'
+        modalService.show modalService.PASSWORD_CONFIRMATION, data
+
+    $scope.confirmVerifier = ->
+        modalService.show modalService.VERIFICATION_CONFIRMATION
+
+
+
+    $scope.resubmitVerification =->
+        data =
+            url:"/awac/verification/setStatus"
+            desc:"VERIFICATION_RESUBMIT_DESC"
+            successMessage:"CHANGES_SAVED"
+            title:"VERIFICATION_RESUBMIT_TITLE"
+            data:
+                scopeId:$scope.$root.scopeSelectedId
+                periodKey:$scope.$root.periodSelectedKey
+                newStatus:'VERIFICATION_STATUS_VERIFICATION'
+            afterSave:->
+                $scope.$root.verificationRequest?.status ='VERIFICATION_STATUS_REJECTED'
+        modalService.show modalService.PASSWORD_CONFIRMATION, data
+
+    $scope.consultVerification =->
+        url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
+        $window.open(url);
+
     #
     # used by menu
     #
@@ -363,12 +401,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.toDefaultForm = () ->
         $rootScope.nav $rootScope.getDefaultRoute()
-        ###
-        if $rootScope.scopeSelectedId? and $rootScope.periodSelectedKey?
-            $rootScope.onFormPath($rootScope.periodSelectedKey, $rootScope.scopeSelectedId)
-        else
-            $location.path("noScope")
-        ###
 
     $rootScope.$watch "mySites", ->
         $rootScope.computeAvailablePeriod()
@@ -499,6 +531,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     if result.success
                         $rootScope.closeableForms = result.data.closeable
                         $rootScope.closedForms =result.data.closed
+                        $rootScope.verificationRequest = result.data.verificationRequest
                     else
                         messageFlash.displayError result.data.message
 
@@ -512,3 +545,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if $route.current.locals.helpPage?
             modalService.show(modalService.HELP, {template: $route.current.locals.helpPage})
 
+
+    $rootScope.getVerificationRequestStatus = ->
+        return $rootScope.verificationRequest?.status

@@ -53,6 +53,7 @@ CREATE SEQUENCE verificationrequest_id_seq;
   contact_id bigint,
   organizationverifier_id bigint,
   verificationresultdocument_id bigint,
+  verificationrejectedcomment character varying(65550),
   CONSTRAINT verificationrequest_pkey PRIMARY KEY (id),
   CONSTRAINT fk_o2y7uyf33tshgp8m9fv9l9y4n FOREIGN KEY (contact_id)
       REFERENCES account (id) MATCH SIMPLE
@@ -116,7 +117,7 @@ CREATE SEQUENCE verification_id_seq;
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_lii58oeg6xnbk0pavkgta7e91 FOREIGN KEY (verificationrequest_id)
       REFERENCES verificationrequest (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      ON UPDATE NO ACTION ON DELETE CASCADE ,
   CONSTRAINT fk_tp4mkpw6ctcy5vodebuc91ynk FOREIGN KEY (questionsetanswer_id)
       REFERENCES questionsetanswer (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION

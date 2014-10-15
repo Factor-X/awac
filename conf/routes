@@ -140,7 +140,7 @@ POST        /awac/organization/update                                           
 
 #
 # organization event
-GET         /awac/organization/events/load @eu.factorx.awac.controllers.OrganizationEventController.load()
+GET         /awac/organization/events/load                                                         @eu.factorx.awac.controllers.OrganizationEventController.load()
 GET         /awac/organization/events/byOrganization/:organization                                 @eu.factorx.awac.controllers.OrganizationEventController.loadEventsByOrganization(organization:String)
 POST        /awac/organization/events/save                                                         @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()
 
@@ -149,6 +149,7 @@ POST        /awac/organization/events/save                                      
 #
 GET         /awac/verification/requests                                                            @eu.factorx.awac.controllers.VerificationController.getRequests()
 GET         /awac/verification/myVerificationRequests                                              @eu.factorx.awac.controllers.VerificationController.getMyVerificationRequests()
+GET         /awac/verification/verificationRequestsVerifiedToConfirm                               @eu.factorx.awac.controllers.VerificationController.getVerificationRequestsVerifiedToConfirm()
 POST        /awac/verification/createRequest                                                       @eu.factorx.awac.controllers.VerificationController.createRequest()
 POST        /awac/verification/setStatus                                                           @eu.factorx.awac.controllers.VerificationController.setStatus()
 POST        /awac/verification/addRequestByKey                                                     @eu.factorx.awac.controllers.VerificationController.addRequestByKey()

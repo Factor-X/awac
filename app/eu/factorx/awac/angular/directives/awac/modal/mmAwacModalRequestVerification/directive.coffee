@@ -40,7 +40,6 @@ angular
                 placeholder: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_PLACEHOLDER"
                 validationRegex: "^\\S{5,20}$"
                 validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
-                hideIsValidIcon: true
         }
 
         $scope.allFieldValid = () ->
@@ -69,8 +68,9 @@ angular
 
                     #display success message
                     messageFlash.displaySuccess translationService.get "REQUEST_SEND"
-
-                    #TODO
+                    if not $scope.$root.verificationRequest
+                        $scope.$root.verificationRequest = {}
+                    $scope.$root.verificationRequest.status = 'VERIFICATION_STATUS_WAIT_VERIFIER_REGISTRATION'
 
                     #close window
                     $scope.close()

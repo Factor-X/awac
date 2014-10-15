@@ -31,6 +31,7 @@ angular
                     dto.verificationFinalizationFileId = $scope.file.id
                 else
                     dto.newStatus ='VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_REJECT'
+                    dto.verificationRejectedComment = $scope.comment.field
 
 
 

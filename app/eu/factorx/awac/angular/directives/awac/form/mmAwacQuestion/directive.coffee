@@ -335,7 +335,7 @@ angular
                 modalService.show(modalService.QUESTION_COMMENT, args)
 
             scope.isDisabled = () ->
-                if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode()) || scope.$root.instanceName  != 'verification'
+                if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode()) || scope.$root.instanceName  == 'verification'
                     return true
                 return false
 

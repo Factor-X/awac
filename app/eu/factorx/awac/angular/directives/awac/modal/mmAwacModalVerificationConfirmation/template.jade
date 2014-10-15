@@ -1,0 +1,32 @@
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(class="modal-title",ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_TITLE' | translate")
+            .modal-body
+                div(ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_DESC' | translateWithVars: [$root.verificationRequest.organizationVerifier.name]")
+
+            .modal-footer
+
+                div(ng-hide="isLoading")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save(true)",
+                    ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_ACCEPT' | translate")
+
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save(false)",
+                    ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_REJECT' | translate")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

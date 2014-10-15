@@ -35,6 +35,7 @@ public class AwacCalculatorInstance extends AuditedAbstractEntity{
     private VerificationRequest verificationRequest;
 
     public AwacCalculatorInstance() {
+        super();
     }
 
     public VerificationRequest getVerificationRequest() {

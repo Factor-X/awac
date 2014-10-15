@@ -8,6 +8,7 @@ import eu.factorx.awac.dto.awac.post.*;
 import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
@@ -120,6 +121,11 @@ public class AnswerController extends AbstractController {
             formsClosingDTO.setClosed(true);
         }
 
+        //add verificationStatus
+        if(awacCalculatorInstance!=null && awacCalculatorInstance.getVerificationRequest()!=null){
+            formsClosingDTO.setVerificationRequest(conversionService.convert(awacCalculatorInstance, VerificationRequestDTO.class));
+        }
+
         return ok(formsClosingDTO);
     }
 
@@ -196,11 +202,13 @@ public class AnswerController extends AbstractController {
         Map<String, CodeListDTO> codeListDTOs = getNecessaryCodeLists(form.getAllQuestionSets(), lang);
 
         //control if the form is locked or not
-        if (!securedController.isUnlock(form.getAllQuestionSets().get(0), scope, period)) {
+        if (!securedController.isUnlock(form.getAllQuestionSets().get(0), scope, period) && !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             throw new MyrmexRuntimeException(BusinessErrorType.FORM_ALREADY_USED);
         }
         //lock
-        securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);
+        }
 
 
         //lock / validate / vertification : load all questionSetAnswer from basic questionSet

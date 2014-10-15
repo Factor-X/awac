@@ -47,7 +47,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
     @Embedded
     protected EmailVerificationContent emailVerificationContent;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "mm_verifierrequest_account",
             joinColumns = @JoinColumn(name = "verifier_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
@@ -57,6 +57,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
 
     @ManyToOne
     private StoredFile verificationResultDocument;
+    private String verificationRejectedComment;
 
 
     public VerificationRequest() {
@@ -142,5 +143,14 @@ public class VerificationRequest extends AuditedAbstractEntity {
                 ", contact=" + contact +
                 ", emailVerificationContent=" + emailVerificationContent +
                 '}';
+    }
+
+
+    public String getVerificationRejectedComment() {
+        return verificationRejectedComment;
+    }
+
+    public void setVerificationRejectedComment(String verificationRejectedComment) {
+        this.verificationRejectedComment = verificationRejectedComment;
     }
 }

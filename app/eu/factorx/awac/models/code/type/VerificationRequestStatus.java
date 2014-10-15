@@ -15,8 +15,8 @@ public class VerificationRequestStatus  extends Code {
     private static final long serialVersionUID = 1L;
 
     public static final VerificationRequestStatus WAIT_VERIFIER_REGISTRATION = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_VERIFIER_REGISTRATION");
-    public static final VerificationRequestStatus WAIT_CUSTOMER_CONFIRMATION = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION");
     public static final VerificationRequestStatus WAIT_VERIFIER_CONFIRMATION = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_VERIFIER_CONFIRMATION");
+    public static final VerificationRequestStatus WAIT_CUSTOMER_CONFIRMATION = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION");
     public static final VerificationRequestStatus WAIT_ASSIGNATION = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_ASSIGNATION");
     public static final VerificationRequestStatus VERIFICATION = new VerificationRequestStatus("VERIFICATION_STATUS_VERIFICATION");
     public static final VerificationRequestStatus WAIT_VERIFICATION_CONFIRMATION_SUCCESS = new VerificationRequestStatus("VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_SUCCESS");

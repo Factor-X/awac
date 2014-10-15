@@ -15,16 +15,23 @@
                              ng-model="comment",
                              name="comment",
                              ng-disabled="getParams().canBeEdited === false",
-                             focus-me="true")
+                             focus-me="true",
+                             ng-disabled="getParams().readOnly === true")
             .modal-footer
+                div(ng-hide="getParams().readOnly === true")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CANCEL_BUTTON' | translate")
 
-                button.button(type="button",
-                class="btn btn-primary",
-                ng-click="close();",
-                ng-bind-html="'CANCEL_BUTTON' | translate")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="save();",
+                    ng-hide="getParams().canBeEdited === false"
+                    ng-bind-html="'SAVE_BUTTON' | translate")
 
-                button.button(type="button",
-                class="btn btn-primary",
-                ng-click="save();",
-                ng-hide="getParams().canBeEdited === false"
-                ng-bind-html="'SAVE_BUTTON' | translate")
+                div(ng-show="getParams().readOnly === true")
+                    button.button(type="button",
+                    class="btn btn-primary",
+                    ng-click="close();",
+                    ng-bind-html="'CLOSE_BUTTON' | translate")
