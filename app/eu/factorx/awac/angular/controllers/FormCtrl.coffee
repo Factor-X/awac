@@ -41,6 +41,9 @@ angular
         $scope.dataValidator = {}
         $scope.dataVerification = {}
 
+        $scope.$on 'CLEAN_VERIFICATION', ->
+            $scope.dataVerification = []
+
         $scope.loading = true
         $scope.errorMessage = null
 

@@ -38,6 +38,9 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
         //organization customer
         dto.setOrganizationCustomer(organizationToOrganizationDTOConverter.convert(awacCalculatorInstance.getScope().getOrganization()));
 
+        //organization vrifier
+        dto.setOrganizationVerifier(organizationToOrganizationDTOConverter.convert(awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier()));
+
         //scope
         if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
 
@@ -59,6 +62,13 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
         //status
         dto.setStatus(awacCalculatorInstance.getVerificationRequest().getVerificationRequestStatus().getKey());
 
+        //verification rejected comment
+        dto.setVerificationRejectedComment(awacCalculatorInstance.getVerificationRequest().getVerificationRejectedComment());
+
+        //VerificationSuccessFileId
+        if(awacCalculatorInstance.getVerificationRequest().getVerificationResultDocument()!=null) {
+            dto.setVerificationSuccessFileId(awacCalculatorInstance.getVerificationRequest().getVerificationResultDocument().getId());
+        }
         //verifier
         for (Account verifier : awacCalculatorInstance.getVerificationRequest().getVerifierList()) {
             dto.addVerifier(accountToPersonDTOConverter.convert(verifier));

@@ -23,6 +23,9 @@ angular
     @VERIFICATION_REJECT='verification_reject'
     @CONSULT_EVENT='consult-event'
     @VERIFICATION_FINALIZATION = 'verification-finalization'
+    @PASSWORD_CONFIRMATION = 'password-confirmation'
+    @VERIFICATION_CONFIRMATION = 'verification-confirmation'
+    @VERIFICATION_DOCUMENT='verification-document'
 
     @show = (modalName, params) ->
         args = []

@@ -127,13 +127,18 @@ public class VerificationController extends AbstractController {
         //create awacCalculator
         if (awacCalculatorInstance == null) {
 
+            Logger.info("awacCalculatorInstance == null");
+
             awacCalculatorInstance = new AwacCalculatorInstance();
             awacCalculatorInstance.setAwacCalculator(awacCalculator);
             awacCalculatorInstance.setPeriod(period);
             awacCalculatorInstance.setScope(scope);
 
-            awacCalculatorService.saveOrUpdate(awacCalculator);
+            Logger.info("awacCalculatorInstance == " + awacCalculatorInstance);
+            awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
 
+        } else {
+            Logger.info("awacCalculatorInstance == " + awacCalculatorInstance);
         }
 
         //build emailContent
@@ -244,6 +249,9 @@ public class VerificationController extends AbstractController {
     public Result setStatus() {
 
 
+        //TODO send email
+        //TODO add password control
+
         VerificationRequestChangeStatusDTO dto = this.extractDTOFromRequest(VerificationRequestChangeStatusDTO.class);
 
         //load period
@@ -253,7 +261,7 @@ public class VerificationController extends AbstractController {
 
 
         if (scope == null || period == null) {
-            return unauthorized(new ExceptionsDTO("cannot load calculator instance"));
+            return unauthorized(new ExceptionsDTO("cannot load calculator instance for period " + dto.getPeriodKey() + ", scope:" + dto.getScopeId()));
         }
 
         //control scope
@@ -261,8 +269,7 @@ public class VerificationController extends AbstractController {
 
         if (calculatorInstance == null ||
                 calculatorInstance.getVerificationRequest() == null ||
-                calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null ||
-                !calculatorInstance.getVerificationRequest().getOrganizationVerifier().equals(securedController.getCurrentUser().getOrganization())) {
+                calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null) {
             return unauthorized(new ExceptionsDTO("cannot load calculator instance"));
         }
         //load statuses
@@ -317,6 +324,7 @@ public class VerificationController extends AbstractController {
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
 
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            calculatorInstance.getVerificationRequest().setVerificationRejectedComment(dto.getVerificationRejectedComment());
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
                 oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
@@ -329,11 +337,46 @@ public class VerificationController extends AbstractController {
                 return notFound(new ExceptionsDTO("the verification document was not found"));
             }
 
+            //add the customer
+            storedFile.addOrganization(calculatorInstance.getScope().getOrganization());
+
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             calculatorInstance.getVerificationRequest().setVerificationResultDocument(storedFile);
 
             //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
+                oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.VERIFIED) &&
+                oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+                oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.CORRECTION) &&
+                oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
+        } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+                (oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) || oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) &&
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email ?
+        } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+                oldStatus.equals(VerificationRequestStatus.CORRECTION) &&
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                answerController.testCloseable(dto.getPeriodKey(), dto.getScopeId())) {
+            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+            //TODO send email
         }
+
         //TODO
         else {
             return unauthorized(new ExceptionsDTO("cannot do this action"));
@@ -372,6 +415,31 @@ public class VerificationController extends AbstractController {
         //load by account
         for (VerificationRequest request : securedController.getCurrentUser().getVerificationRequestList()) {
             if (request.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFICATION)) {
+                list.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+            }
+        }
+
+        return ok(list);
+    }
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result getVerificationRequestsVerifiedToConfirm() {
+
+        //TODO change to verifier-admin
+
+        //control interface
+        if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+        }
+
+        ListDTO<VerificationRequestDTO> list = new ListDTO<>();
+
+        //load by account
+        for (VerificationRequest request : securedController.getCurrentUser().getVerificationRequestList()) {
+            if (request.getVerificationRequestStatus().equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) ||
+                    request.getVerificationRequestStatus().equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) {
                 list.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
             }
         }

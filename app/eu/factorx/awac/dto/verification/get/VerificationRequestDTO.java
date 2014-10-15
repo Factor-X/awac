@@ -18,6 +18,8 @@ public class VerificationRequestDTO extends DTO{
 
     private OrganizationDTO  organizationCustomer;
 
+    private OrganizationDTO organizationVerifier;
+
     private ScopeDTO scope;
 
     private PeriodDTO period;
@@ -31,6 +33,10 @@ public class VerificationRequestDTO extends DTO{
     private String status;
 
     private List<PersonDTO> verifierList;
+
+    private String verificationRejectedComment;
+
+    private Long verificationSuccessFileId;
 
     public VerificationRequestDTO() {
     }
@@ -52,6 +58,30 @@ public class VerificationRequestDTO extends DTO{
             verifierList = new ArrayList<>();
         }
         verifierList.add(person);
+    }
+
+    public OrganizationDTO getOrganizationVerifier() {
+        return organizationVerifier;
+    }
+
+    public void setOrganizationVerifier(OrganizationDTO organizationVerifier) {
+        this.organizationVerifier = organizationVerifier;
+    }
+
+    public String getVerificationRejectedComment() {
+        return verificationRejectedComment;
+    }
+
+    public void setVerificationRejectedComment(String verificationRejectedComment) {
+        this.verificationRejectedComment = verificationRejectedComment;
+    }
+
+    public Long getVerificationSuccessFileId() {
+        return verificationSuccessFileId;
+    }
+
+    public void setVerificationSuccessFileId(Long verificationSuccessFileId) {
+        this.verificationSuccessFileId = verificationSuccessFileId;
     }
 
     public void setVerifierList(List<PersonDTO> verifierList) {

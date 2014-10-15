@@ -74,13 +74,13 @@ angular
         $scope.displayMenu = true
         $('.injectFormMenu:first').append($scope.directiveMenu)
 
+        $scope.$root.mySites = [request.scope]
+
         $scope.testClosingValidation()
 
 
     $scope.isMenuCurrentlySelected = (target) ->
-        if '/form/' + $scope.form == target
-            return true
-        else if '/results' == target
+        if '/form/' + $scope.form == target || $scope.form == target
             return true
         return false
 
@@ -92,7 +92,7 @@ angular
     $scope.consultEvent = () ->
         data =
             organizationCustomer: $scope.requestSelected.organizationCustomer
-        modalService.show modalService.CONSULT_EVENT,
+        modalService.show modalService.CONSULT_EVENT,data
 
 
     $scope.$on 'TEST_CLOSING_VALIDATION', () ->

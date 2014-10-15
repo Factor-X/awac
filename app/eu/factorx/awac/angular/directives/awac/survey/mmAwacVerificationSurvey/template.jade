@@ -4,6 +4,13 @@ div
             // user block
             table.survey-header-option
                 tr
+                    td(rowspan=2)
+                        .wallonie_logo
+                    td(rowspan=2)
+                        .awac_logo
+                    td.wide.align-left
+                        .calculateur_type(ng-bind-html='\'TITLE_VERIFICATION\' | translate')
+
                     td
                         div
                             select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
@@ -14,8 +21,12 @@ div
                             span(ng-bind-html='\'WELCOME\' | translate')
                             | ,
                             span.username {{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}
+                        div(ng-show='$root.currentPerson==null') Your are currently not connected
 
                 tr
+                    td
+                        .entreprise_name {{ $root.organizationName }}
+
                     td
                         button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
                         button.button.help(
@@ -25,6 +36,13 @@ div
                             ng-click="$root.showHelp()"
                         )
                     td
+                        //  organization manager button
+                        button.button.user_manage(
+                            type='button',
+                            ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
+                            ng-click='isDisabled || $root.nav(\'/organization_manager\')',
+                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
+                            ng-disabled='$root.currentPerson.isAdmin === false')
                         // user manager button
                         button.button.user_manage(
                             type='button',
@@ -37,11 +55,7 @@ div
                         button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
                         // logout button
                         button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
-            .wallonie_logo
-            .awac_logo
-            div
-                .calculateur_type(ng-bind-html='\'TITLE_VERIFICATION\' | translate')
-                .entreprise_name {{ $root.organizationName }}
+
         .verification-menu-background
             div.verification-menu
                 button.button(type="button",ng-click='$root.nav(\'/manage\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/manage\') == true}') Gérer

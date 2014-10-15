@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacSection", (directiveService, downloadService, messageFlash, modalService) ->
+.directive "mmAwacSection", (directiveService, downloadService, messageFlash, modalService, $location) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngTitleCode: '='
@@ -57,20 +57,24 @@ angular
                 return 'lock_open'
 
         scope.valide = ->
-            if (not scope.isValidate() or scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin) and scope.$root.closedForms == false
 
-                data = {}
-                data.questionSetKey = scope.getTitleCode()
-                data.periodCode = scope.$root.periodSelectedKey
-                data.scopeId = scope.$root.scopeSelectedId
-                data.lock = if scope.isValidate() then false else true
 
-                downloadService.postJson '/awac/answer/validateQuestionSet', data, (result) ->
-                    if result.success
-                        scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
-                        scope.$root.testCloseable()
-                    else
-                        messageFlash.displayError(result.data.message)
+            if scope.$root.closedForms == false
+                if not scope.isValidate() or scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin
+                    if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status=='VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
+
+                        data = {}
+                        data.questionSetKey = scope.getTitleCode()
+                        data.periodCode = scope.$root.periodSelectedKey
+                        data.scopeId = scope.$root.scopeSelectedId
+                        data.lock = if scope.isValidate() then false else true
+
+                        downloadService.postJson '/awac/answer/validateQuestionSet', data, (result) ->
+                            if result.success
+                                scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
+                                scope.$root.testCloseable()
+                            else
+                                messageFlash.displayError(result.data.message)
 
 
         scope.isValidateByMyself = ->
@@ -98,8 +102,10 @@ angular
 
         scope.getValidateClass = ->
             if scope.isValidate()
-                if (scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin) and scope.$root.closedForms == false
-                    return 'validate_by_myself'
+                if scope.$root.closedForms == false
+                    if scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin
+                        if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status=='VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
+                            return 'validate_by_myself'
                 return 'validated'
             else
                 return 'validate_no_valid'
@@ -118,30 +124,46 @@ angular
                         scope.$parent.verifyQuestionSet(scope.getTitleCode(), result.data)
                         scope.$emit 'TEST_CLOSING_VALIDATION'
                     else
-                        messageFlash.displayError(scope.getTitleCode(),result.data.message)
+                        messageFlash.displayError(scope.getTitleCode(), result.data.message)
             else
                 if scope.$parent.getQuestionSetVerification(scope.getTitleCode())?
                     comment = scope.$parent.getQuestionSetVerification(scope.getTitleCode()).comment
                 data =
                     questionSetCode: scope.getTitleCode()
                     refreshVerificationStatus: scope.refreshVerificationStatus
-                    comment:comment
+                    comment: comment
                 modalService.show modalService.VERIFICATION_REJECT, data
 
         scope.refreshVerificationStatus = (status) ->
             scope.$parent.verifyQuestionSet(scope.getTitleCode(), status)
 
-        scope.getVerificationClass = (valid) ->
-            if valid
+        scope.getVerificationClass = (valid, disabled = false) ->
+            if disabled == true
                 if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'approved'
-                    return 'verification_approved'
+                    return 'verified_valid'
+                else if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected'
+                    return 'verified_rejected'
                 else
-                    return 'verification_approval'
+                    return 'verified_unverified'
             else
-                if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected'
-                    return 'verification_rejected'
+                if valid
+                    if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'approved'
+                        return 'verification_approved'
+                    else
+                        return 'verification_approval'
                 else
-                    return 'verification_reject'
+                    if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected'
+                        return 'verification_rejected'
+                    else
+                        return 'verification_reject'
+
+        scope.displayVerificationRejectedMessage = ->
+            if scope.$parent.getQuestionSetVerification(scope.getTitleCode())? && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status != 'approved'
+                data =
+                    readOnly: true
+                    comment: scope.$parent.getQuestionSetVerification(scope.getTitleCode()).comment
+
+                modalService.show modalService.VERIFICATION_REJECT, data
 
 
         scope.getVerifier = ->
@@ -153,6 +175,11 @@ angular
             if scope.$parent.getQuestionSetVerification(scope.getTitleCode())?
                 return scope.$parent.getQuestionSetVerification(scope.getTitleCode()).verifier.firstName + " " + scope.$parent.getQuestionSetVerification(scope.getTitleCode()).verifier.lastName
 
+
+        scope.isVerificationDisabled = ->
+            if  $location.path() == '/submit'
+                return true
+            return false
 
 
 

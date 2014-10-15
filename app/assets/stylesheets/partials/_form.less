@@ -30,5 +30,22 @@
             background: url("../images/status/verification_reject.png") center center no-repeat #e5e5ee;
             cursor: pointer;
         }
+        &:disabled {
+            cursor: auto;
+
+        }
     }
+    .verified {
+        &.verified_unverified {
+            background: url('../images/status/verified_unverified.png') center center no-repeat #e5e5ee;
+        }
+        &.verified_valid {
+            background: url('../images/status/verified_valid.png') center center no-repeat #acd595;
+        }
+        &.verified_rejected {
+            background: url('../images/status/verified_rejected.png') center center no-repeat #ff2222;
+            cursor: pointer;
+        }
+    }
+
 }

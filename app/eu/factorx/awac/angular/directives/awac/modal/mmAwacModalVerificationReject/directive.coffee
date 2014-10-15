@@ -17,23 +17,22 @@ angular
         $scope.comment = $scope.ngParams.comment
 
         $scope.save = ->
-            data =
-                questionSetKey: $scope.getParams().questionSetCode
-                periodKey: $scope.$root.periodSelectedKey
-                scopeId: $scope.$root.scopeSelectedId
-                verification:
-                    status: 'rejected'
-                    comment:$scope.comment
-            console.log '----------------------------------------'
-            console.log data
+            if not  $scope.getParams().readOnly or $scope.getParams().readOnly == false
+                data =
+                    questionSetKey: $scope.getParams().questionSetCode
+                    periodKey: $scope.$root.periodSelectedKey
+                    scopeId: $scope.$root.scopeSelectedId
+                    verification:
+                        status: 'rejected'
+                        comment:$scope.comment
 
-            downloadService.postJson '/awac/verification/verify', data, (result) ->
-                if result.success
-                    $scope.getParams().refreshVerificationStatus(result.data)
-                    $scope.$root.$broadcast 'TEST_CLOSING_VALIDATION'
-                    $scope.close()
-                else
-                    messageFlash.displayError(result.data.message)
+                downloadService.postJson '/awac/verification/verify', data, (result) ->
+                    if result.success
+                        $scope.getParams().refreshVerificationStatus(result.data)
+                        $scope.$root.$broadcast 'TEST_CLOSING_VALIDATION'
+                        $scope.close()
+                    else
+                        messageFlash.displayError(result.data.message)
 
     link: (scope) ->
 

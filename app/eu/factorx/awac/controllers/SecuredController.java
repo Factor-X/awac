@@ -113,7 +113,7 @@ public class SecuredController extends Security.Authenticator {
             controlMyInstance(scope, period);
         } catch (Exception e) {
             if (!(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
-                    verificationRequestService.findByOrganizationVerifierAndScope(getCurrentUser().getOrganization(), scope) != null)) {
+                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope,period) != null)) {
                 throw new RuntimeException(e.getMessage());
             }
         }

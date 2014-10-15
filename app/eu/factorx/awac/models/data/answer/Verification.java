@@ -5,6 +5,8 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.VerificationStatus;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.VerificationRequest;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +31,8 @@ public class Verification extends AuditedAbstractEntity {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,cascade = CascadeType.REMOVE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private VerificationRequest verificationRequest;
 
     @OneToOne(optional = false)

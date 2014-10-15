@@ -19,7 +19,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = VerificationRequest.FIND_BY_KEY, query = "select p from VerificationRequest p where p.key = :verificationRequestKey" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier" ),
-        @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope" ),
+        @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
 })
 public class VerificationRequest extends AuditedAbstractEntity {
@@ -27,7 +27,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
     private static final long serialVersionUID = 1L;
     public static final String FIND_BY_KEY = "VerificationRequest_FIND_BY_KEY";
     public static final String FIND_BY_ORGANIZATION_VERIFIER = "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER";
-    public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE= "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE";
+    public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD= "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD";
     public static final String FIND_BY_SCOPE_AND_PERIOD = "VerificationRequest_FIND_BY_SCOPE_AND_PERIOD";
 
     @OneToOne(optional = false)
@@ -47,7 +47,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
     @Embedded
     protected EmailVerificationContent emailVerificationContent;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "mm_verifierrequest_account",
             joinColumns = @JoinColumn(name = "verifier_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
@@ -57,6 +57,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
 
     @ManyToOne
     private StoredFile verificationResultDocument;
+    private String verificationRejectedComment;
 
 
     public VerificationRequest() {
@@ -142,5 +143,14 @@ public class VerificationRequest extends AuditedAbstractEntity {
                 ", contact=" + contact +
                 ", emailVerificationContent=" + emailVerificationContent +
                 '}';
+    }
+
+
+    public String getVerificationRejectedComment() {
+        return verificationRejectedComment;
+    }
+
+    public void setVerificationRejectedComment(String verificationRejectedComment) {
+        this.verificationRejectedComment = verificationRejectedComment;
     }
 }

@@ -275,13 +275,16 @@ div.results.pdf-able
                         br
 
                         div.results_disclaimer
-                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate", ng-hide="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER_VERIFIED' | translate", ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
                         br
                         br
                         br
 
             td.top-aligned
                 div.align-right
+                    button.button(type="button", ng-click="downloadVerificationReport()",ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                        span(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")
                     button.button(type="button", ng-click="exportXls()")
                         span(ng-bind-html="'XLS_EXPORT' | translate")
                     button.button(type="button", mm-not-implemented)

@@ -2,7 +2,6 @@ angular
 .module('app.directives')
 .directive "mmAwacModalConsultEvent", (directiveService, downloadService, translationService, messageFlash,ngTableParams,$filter) ->
     restrict: "E"
-
     scope: directiveService.autoScope
         ngParams: '='
     templateUrl: "$/angular/templates/mm-awac-modal-consult-event.html"
