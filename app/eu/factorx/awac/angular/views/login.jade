@@ -44,6 +44,7 @@
                             ng-disabled="!connectionFieldValid()")
 
                         button.button(
+                            ng-disabled="connectionFieldValid()",
                             type="button",
                             class="btn btn-primary",
                             ng-bind-html="'LOGIN_ANONYMOUS_BUTTON' | translate",
