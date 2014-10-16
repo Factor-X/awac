@@ -33,6 +33,7 @@
                 <bean class="eu.factorx.awac.converter.OrganizationEventToOrganizationEventDTOConverter" />
                 <bean class="eu.factorx.awac.converter.ReportLogEntryToReportLogEntryDTOConverter" />
                 <bean class="eu.factorx.awac.converter.SiteToListPeriodsDTOConverter" />
+                <bean class="eu.factorx.awac.converter.ReducingActionToReducingActionDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>

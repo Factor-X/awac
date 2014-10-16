@@ -334,7 +334,7 @@ jQuery.extend({
 			json: "responseJSON"
 		},
 
-		// DataCell converters
+		// Data converters
 		// Keys separate source (or catchall "*") and destination types with a single space
 		converters: {
 

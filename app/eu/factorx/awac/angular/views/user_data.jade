@@ -2,30 +2,28 @@ div
     .menu_close(ng-click="toForm()")
     h1(ng-bind-html="'USER_DATA_BUTTON' | translate")
 
-    style
-        .edit_icon {
-            width: 22px;
-            height: 22px;
-            top: -1px;
-        }
-
     .user_data
-        div(class="field_form", style="display:table")
+        .field_form
             mm-awac-modal-field-text(ng-info="identifierInfo")
             mm-awac-modal-field-text(ng-info="passwordInfo")
-                div(style="width:10px")
-                    button(type="button", title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}", ng-click="changePassword()", class="edit_icon glyphicon glyphicon-pencil")
+                button.edit_icon(
+                type="button",
+                title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}",
+                ng-click="changePassword()")
+                    span.glyphicon.glyphicon-pencil
+
             mm-awac-modal-field-text(ng-info="lastNameInfo")
             mm-awac-modal-field-text(ng-info="firstNameInfo")
             mm-awac-modal-field-text(ng-info="emailInfo")
-                div(style="width:10px")
-                    button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
+                button.edit_icon(
+                type="button",
+                title="{{'UPDATE_EMAIL_BUTTON' | translateText}}",
+                ng-click="changeEmail()")
+                    span.glyphicon.glyphicon-pencil
 
-            br
-            div(style="display:table-row")
-                div(style="display:table-cell")
-                div(style="display:table-cell")
-                div(style="display:table-cell")
+            .field_row
+                .field_cell
+                .field_cell.field_wide
                     div(ng-hide="isLoading", style="text-align: right")
                         button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="send()", ng-disabled="!allFieldValid()")
 

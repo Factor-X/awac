@@ -14,13 +14,13 @@
     "public/components"
   ],
   "dependencies": {
-    "angular": "*",
-    "angular-animate": "*",
+    "angular": "1.2.26",
+    "angular-animate": "1.2.26",
     "angular-bootstrap": "*",
     "angular-dynamic-locale": "*",
-    "angular-i18n": "*",
-    "angular-route": "*",
-    "angular-sanitize": "*",
+    "angular-i18n": "1.2.26",
+    "angular-route": "1.2.26",
+    "angular-sanitize": "1.2.26",
     "ng-file-upload": "*",
     "bootstrap": "*",
     "jquery": "1.11.*",
@@ -32,6 +32,7 @@
     "tinycolor": "~1.0.0",
     "ng-table": "~0.3.3",
     "log4javascript": "~1.4.9",
-    "font-awesome": "~4.2.0"
+    "font-awesome": "~4.2.0",
+    "angular-bootstrap-datetimepicker": "latest"
   }
 }

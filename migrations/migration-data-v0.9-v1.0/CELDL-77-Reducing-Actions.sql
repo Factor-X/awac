@@ -13,22 +13,27 @@ CREATE TABLE reducingaction
   lastupdatedate timestamp without time zone,
   lastupdateuser character varying(255),
   comment character varying(1000),
-  completionyear integer,
-  duedate date,
-  expectedpaybacktime integer,
+  completiondate timestamp without time zone,
+  duedate timestamp without time zone,
+  expectedpaybacktime character varying(255),
   financialbenefit double precision,
   ghgbenefit double precision,
-  investment double precision,
-  title character varying(255) NOT NULL,
+  investmentcost double precision,
   physicalmeasure character varying(255),
   responsibleperson character varying(255),
-  status character varying(255),
-  type character varying(255),
+  status character varying(1) NOT NULL,
+  title character varying(255) NOT NULL,
+  type character varying(1) NOT NULL,
+  ghgbenefitunit_id bigint,
   scope_id bigint NOT NULL,
+  website character varying(255),
   CONSTRAINT reducingaction_pkey PRIMARY KEY (id),
   CONSTRAINT fk_reducingaction_scope_id FOREIGN KEY (scope_id)
       REFERENCES scope (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT fk_reducingaction_ghgbenefitunit_id FOREIGN KEY (ghgbenefitunit_id)
+      REFERENCES unit (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uk_reducingaction_logical_pkey UNIQUE (title, scope_id)
 )
 WITH (

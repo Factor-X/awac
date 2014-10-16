@@ -78,6 +78,14 @@
                                     display: inline-block;
                                     margin-right: 0.5em;
                                 }
+                                
+                                .box.wide {
+                                    min-width: 250px;
+                                }
+                                
+                                .box.transparent {
+                                    background: @dark;
+                                }
                             }
                         }
                     }
@@ -96,5 +104,18 @@
             }
         }
 
+
+
+    }
+
+
+    button[type="button"].edit_icon {
+        box-sizing: border-box;
+        max-width:  22px;
+        min-width:  22px;
+        min-height: 22px;
+        max-height: 22px;
+        margin: 0;
+        padding: 0;
     }
 }

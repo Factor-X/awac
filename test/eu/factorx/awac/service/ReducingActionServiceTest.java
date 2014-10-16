@@ -13,7 +13,7 @@ import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.ReducingActionType;
+import eu.factorx.awac.models.code.type.ReducingActionTypeCode;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 
 @ContextConfiguration(locations = { "classpath:/components-test.xml" })
@@ -31,7 +31,7 @@ public class ReducingActionServiceTest extends AbstractBaseModelTest {
 		Organization organization = createOrganization("testorg1");
 
 		// create
-		ReducingAction action = createReducingAction("Mobilité: Réduire les déplacements de 10%", organization, ReducingActionType.REDUCING_GES);
+		ReducingAction action = createReducingAction("Mobilité: Réduire les déplacements de 10%", organization, ReducingActionTypeCode.REDUCING_GES);
 		Assert.assertNotNull("Failed to save a new ReducingAction", action);
 		Long actionId = action.getId();
 
@@ -77,8 +77,8 @@ public class ReducingActionServiceTest extends AbstractBaseModelTest {
 		return organizationService.saveOrUpdate(new Organization(name + "_" + System.currentTimeMillis(), InterfaceTypeCode.ENTERPRISE));
 	}
 
-	private ReducingAction createReducingAction(String name, Scope scope, ReducingActionType type) {
-		return reducingActionService.saveOrUpdate(new ReducingAction(name, scope, type));
+	private ReducingAction createReducingAction(String title, Scope scope, ReducingActionTypeCode type) {
+		return reducingActionService.saveOrUpdate(new ReducingAction(title, scope, type));
 	}
 
 }

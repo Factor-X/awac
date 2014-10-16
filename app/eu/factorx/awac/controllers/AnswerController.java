@@ -115,7 +115,7 @@ public class AnswerController extends AbstractController {
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result closeForm() {
 
-        FormsCloseDTO formsCloseDTO =  this.extractDTOFromRequest(FormsCloseDTO.class);
+        FormsCloseDTO formsCloseDTO =  extractDTOFromRequest(FormsCloseDTO.class);
 
         //control password
         if (!accountService.controlPassword(formsCloseDTO.getPassword(), securedController.getCurrentUser())) {

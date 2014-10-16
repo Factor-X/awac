@@ -146,3 +146,9 @@ POST        /awac/organization/events/save                         @eu.factorx.a
 # verification
 #
 GET         /awac/verification/requests                            @eu.factorx.awac.controllers.VerificationController.getRequests()
+
+#
+# reducing actions
+#
+GET         /awac/actions/load                                     @eu.factorx.awac.controllers.ReducingActionController.loadActions()
+POST        /awac/actions/save                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()

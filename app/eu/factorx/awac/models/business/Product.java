@@ -6,6 +6,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
+
 @Entity
 @Table(name = "product")
 public class Product extends Scope {
@@ -61,6 +63,11 @@ public class Product extends Scope {
 	@Override
 	public String toString() {
 		return "Site [id=" + id + ", name='" + name + "', organization=" + organization  + "]";
+	}
+
+	@Override
+	public ScopeTypeCode getScopeType() {
+		return ScopeTypeCode.PRODUCT;
 	}
 
 }

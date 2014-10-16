@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalCreateReductionAction", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalCreateReductionAction", (directiveService, downloadService, translationService, messageFlash, $filter) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -11,63 +11,162 @@ angular
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
 
+        $scope.typeOptions = $scope.getParams().typeOptions
+        $scope.gwpUnits = $scope.getParams().gwpUnits
+        $scope.defaultGwpUnit = _.findWhere($scope.gwpUnits, {code: "U5335"}).code
+        ###
+              if editionMode
+                    $scope.statusOptions = $scope.getParams().statusOptions
+        ###
 
-        data =
-            title: ''
-            type: ''
-            status: ''
-            co2Gain: ''
-            financialGain: ''
-            investissement: ''
-            investmentBack: ''
-            deadline: ''
-            assignee: ''
-            note: ''
-            documents: ''
-
-
-        $scope.passwordInfo =
+        $scope.title =
+            inputName: 'title'
             field: ""
-            fieldType: "password"
-            inputName:'password'
-            fieldTitle: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_TITLE"
-            placeholder: "EMAIL_CHANGE_FORM_PASSWORD_FIELD_PLACEHOLDER"
-            validationRegex: "^\\S{5,20}$"
-            validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_TITLE_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_TITLE_FIELD_PLACEHOLDER"
+            validationRegex: "^.{1,255}$"
+            validationMessage: "REDUCTION_ACTION_TITLE_WRONG_LENGTH"
             hideIsValidIcon: true
             focus: ->
                 return true
 
-        $scope.oldEmailInfo =
-            inputName:'email'
-            field: $scope.getParams().oldEmail
-            fieldTitle: "EMAIL_CHANGE_FORM_OLD_EMAIL_FIELD_TITLE"
-            disabled: true
+        $scope.typeKey =
+            inputName: 'typeKey'
+            field: "1"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_TYPE_FIELD_TITLE"
 
-        $scope.newEmailInfo =
-            inputName:'email'
+        $scope.$watch 'typeKey.field', (n, o) ->
+            if (n != o)
+               if (n == '2')
+                    console.log("Disabling 'ghgBenefit' field ('Better method' selected)")
+                    $scope.ghgBenefit.disabled = true
+                    $scope.ghgBenefitUnitKey.disabled = true
+                else
+                    console.log("Enabling 'ghgBenefit' field")
+                    $scope.ghgBenefit.disabled = false
+                    $scope.ghgBenefitUnitKey.disabled = false
+
+        $scope.scopeTypeKey =
+            inputName: 'scopeTypeKey'
+            field: "1"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_SCOPE_TYPE_FIELD_TITLE"
+
+        $scope.scopeId =
+            inputName: 'scopeId'
+            field: $scope.$root.mySites[0].id
+
+        $scope.physicalMeasure =
+            inputName: 'physicalMeasure'
             field: ""
-            fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
-            placeholder: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_PLACEHOLDER"
-            validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-            validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
+            validationRegex: "^.{0,255}$"
+            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
             hideIsValidIcon: true
+
+        $scope.ghgBenefit =
+            inputName: 'ghgBenefit'
+            field: ""
+            numbersOnly: 'double'
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_PLACEHOLDER"
+
+        $scope.ghgBenefitUnitKey = $scope.defaultGwpUnit
+
+        $scope.financialBenefit =
+            inputName: 'financialBenefit'
+            field: ""
+            numbersOnly: 'double'
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_PLACEHOLDER"
+
+        $scope.investment =
+            inputName: 'investment'
+            field: ""
+            numbersOnly: 'double'
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_INVESTMENT_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_INVESTMENT_FIELD_PLACEHOLDER"
+
+        $scope.expectedPaybackTime =
+            inputName: 'expectedPaybackTime'
+            field: ""
+            validationRegex: "^.{0,255}$"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_PLACEHOLDER"
+            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            hideIsValidIcon: true
+
+        now = new Date()
+        defaultYear = now.getFullYear() + 1
+        defaultDueDate = now.setFullYear(defaultYear);
+
+        $scope.dueDate =
+            inputName: 'dueDate'
+            field: defaultDueDate
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_DUE_DATE_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_DUE_DATE_FIELD_PLACEHOLDER"
+            minValue: new Date()
+            validationMessage: "REDUCTION_ACTION_INVALID_DUE_DATE"
+            hideIsValidIcon: true
+
+        $scope.webSite =
+            inputName: 'webSite'
+            field: ""
+            validationRegex: "^.{0,255}$"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_WEBSITE_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_WEBSITE_FIELD_PLACEHOLDER"
+            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            hideIsValidIcon: true
+
+        $scope.responsiblePerson =
+            inputName: 'responsiblePerson'
+            field: ""
+            validationRegex: "^.{0,255}$"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_PLACEHOLDER"
+            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            hideIsValidIcon: true
+
+        $scope.comment =
+            inputName: 'comment'
+            field: ""
+            fieldType: 'textarea'
+            validationRegex: "^.{0,1000}$"
+            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_COMMENT_FIELD_TITLE"
+            placeholder: "CREATE_REDUCTION_ACTION_FORM_COMMENT_FIELD_PLACEHOLDER"
+            validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
+            hideIsValidIcon: true
+
+        $scope.allFieldValid = () ->
+            if ($scope.title.isValid && $scope.physicalMeasure.isValid && $scope.expectedPaybackTime.isValid && $scope.dueDate.isValid && $scope.webSite.isValid && $scope.responsiblePerson.isValid && $scope.comment.isValid)
+                return true
+            return false
 
         #send the request to the server
         $scope.save = () ->
-
             $scope.isLoading = true
 
             data =
-                password: $scope.passwordInfo.field
-                newEmail: $scope.newEmailInfo.field
+                title: $scope.title.field
+                scopeTypeKey: $scope.scopeTypeKey.field
+                scopeId: $scope.scopeId.field
+                typeKey: $scope.typeKey.field
+                physicalMeasure: $scope.physicalMeasure.field
+                ghgBenefit: $scope.ghgBenefit.field
+                ghgBenefitUnitKey: $scope.ghgBenefitUnitKey
+                financialBenefit: $scope.financialBenefit.field
+                investment: $scope.investment.field
+                expectedPaybackTime: $scope.expectedPaybackTime.field
+                dueDate: $scope.dueDate.field
+                webSite: $scope.webSite.field
+                responsiblePerson: $scope.responsiblePerson.field
+                comment: $scope.comment.field
 
-            downloadService.postJson '/awac/user/email/save', data, (result) ->
+            downloadService.postJson '/awac/actions/save', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     $scope.close()
-                    if $scope.getParams().cb?
-                        $scope.getParams().cb($scope.newEmailInfo.field)
+                    $scope.getParams().cb()
                 else
                     messageFlash.displayError result.data.message
                     $scope.isLoading = false
@@ -75,7 +174,7 @@ angular
             return false
 
         $scope.close = ->
-            modalService.close modalService.EMAIL_CHANGE
+            modalService.close modalService.CREATE_REDUCTION_ACTION
 
-    link: (scope) ->
+        link: (scope) ->
 

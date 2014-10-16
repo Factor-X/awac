@@ -6,33 +6,23 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "scope")
 @Inheritance(strategy = InheritanceType.JOINED)
-// @DiscriminatorColumn(name = "type") // not used by hibernate - see hibernate.atlassian.net/browse/ANN-140
 public abstract class Scope extends AuditedAbstractEntity {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3633516662163632222L;
 
 	protected Scope() {
 		super();
 	}
 
-	public Organization getOrganization() {
-		if (this instanceof Organization) {
-			return (Organization) this;
-		}
-		if (this instanceof Site) {
-			return ((Site) this).getOrganization();
-		}
-		if (this instanceof Product) {
-			return ((Product) this).getOrganization();
-		}
-		return null;
-	}
+	public abstract ScopeTypeCode getScopeType();
 
-    public abstract String getName();
+	public abstract Organization getOrganization();
 
-    public abstract void setName(String name);
+	public abstract String getName();
+
 }

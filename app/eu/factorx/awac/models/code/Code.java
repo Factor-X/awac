@@ -21,6 +21,9 @@ public class Code implements Serializable, Comparable<Code> {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String CODE_LIST_PROPERTY = "codeList";
+	public static final String KEY_PROPERTY = "key";
+
 	@Transient
 	protected CodeList codeList;
 

@@ -4,55 +4,73 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.ReducingActionStatus;
-import eu.factorx.awac.models.code.type.ReducingActionType;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.type.ReducingActionStatusCode;
+import eu.factorx.awac.models.code.type.ReducingActionTypeCode;
 import eu.factorx.awac.models.data.file.StoredFile;
 
 @Entity
 @Table(name = "reducingaction", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { ReducingAction.TITLE_COLUMN_NAME, ReducingAction.SCOPE_COLUMN_NAME })
+		@UniqueConstraint(columnNames = { ReducingAction.TITLE_COLUMN, ReducingAction.SCOPE_COLUMN })
+})
+@NamedQueries({
+		@NamedQuery(name = ReducingAction.FIND_BY_SCOPES, query = "select ra from ReducingAction ra where ra.scope in :scopes"),
 })
 public class ReducingAction extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 7989687565472744555L;
 
-	public static final String TITLE_COLUMN_NAME = "title";
-	public static final String SCOPE_COLUMN_NAME = "scope_id";
+	public static final String TITLE_COLUMN = "title";
+	public static final String SCOPE_COLUMN = "scope_id";
+	public static final String TYPE_COLUMN = "type";
+	public static final String STATUS_COLUMN = "status";
 
-	@Column(name = TITLE_COLUMN_NAME, nullable = false)
+	/**
+	 * @param scopes
+	 *            A collection of {@link Scope}
+	 */
+	public static final String FIND_BY_SCOPES = "ReducingAction.findByScopes";
+
+	@Column(name = TITLE_COLUMN, nullable = false)
 	private String title;
 
 	@ManyToOne
-	@JoinColumn(name = SCOPE_COLUMN_NAME, nullable = false)
+	@JoinColumn(name = SCOPE_COLUMN, nullable = false)
 	private Scope scope;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "type")) })
-	@Column(length = 1, nullable = false)
-	private ReducingActionType type;
+	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = TYPE_COLUMN, length = 1, nullable = false)) })
+	private ReducingActionTypeCode type;
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "key", column = @Column(name = "status")) })
-	@Column(length = 1, nullable = false)
-	private ReducingActionStatus status = ReducingActionStatus.RUNNING;
+	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = STATUS_COLUMN, length = 1, nullable = false)) })
+	private ReducingActionStatusCode status = ReducingActionStatusCode.RUNNING;
 
-	private Integer completionYear;
+	private DateTime completionDate;
 
 	private String physicalMeasure;
 
 	private Double ghgBenefit;
 
+	@ManyToOne
+	private Unit ghgBenefitUnit;
+
 	private Double financialBenefit;
 
-	private Double investment;
+	private Double investmentCost;
 
-	private Integer expectedPaybackTime;
+	/**
+	 * Return on investment expected duration (in years, months...)
+	 */
+	private String expectedPaybackTime;
 
-	private LocalDate dueDate;
+	private DateTime dueDate;
+
+	private String webSite;
 
 	private String responsiblePerson;
 
@@ -74,7 +92,7 @@ public class ReducingAction extends AuditedAbstractEntity {
 	 * @param scope
 	 * @param type
 	 */
-	public ReducingAction(String title, Scope scope, ReducingActionType type) {
+	public ReducingAction(String title, Scope scope, ReducingActionTypeCode type) {
 		super();
 		this.title = title;
 		this.scope = scope;
@@ -85,8 +103,8 @@ public class ReducingAction extends AuditedAbstractEntity {
 		return title;
 	}
 
-	public void setTitle(String name) {
-		this.title = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Scope getScope() {
@@ -97,28 +115,28 @@ public class ReducingAction extends AuditedAbstractEntity {
 		this.scope = scope;
 	}
 
-	public ReducingActionType getType() {
+	public ReducingActionTypeCode getType() {
 		return type;
 	}
 
-	public void setType(ReducingActionType type) {
+	public void setType(ReducingActionTypeCode type) {
 		this.type = type;
 	}
 
-	public ReducingActionStatus getStatus() {
+	public ReducingActionStatusCode getStatus() {
 		return status;
 	}
 
-	public void setStatus(ReducingActionStatus status) {
+	public void setStatus(ReducingActionStatusCode status) {
 		this.status = status;
 	}
 
-	public Integer getCompletionYear() {
-		return completionYear;
+	public DateTime getCompletionDate() {
+		return completionDate;
 	}
 
-	public void setCompletionYear(Integer completionYear) {
-		this.completionYear = completionYear;
+	public void setCompletionDate(DateTime completionDate) {
+		this.completionDate = completionDate;
 	}
 
 	public String getPhysicalMeasure() {
@@ -137,6 +155,14 @@ public class ReducingAction extends AuditedAbstractEntity {
 		this.ghgBenefit = ghgBenefit;
 	}
 
+	public Unit getGhgBenefitUnit() {
+		return ghgBenefitUnit;
+	}
+
+	public void setGhgBenefitUnit(Unit ghgBenefitUnit) {
+		this.ghgBenefitUnit = ghgBenefitUnit;
+	}
+
 	public Double getFinancialBenefit() {
 		return financialBenefit;
 	}
@@ -145,28 +171,36 @@ public class ReducingAction extends AuditedAbstractEntity {
 		this.financialBenefit = financialBenefit;
 	}
 
-	public Double getInvestment() {
-		return investment;
+	public Double getInvestmentCost() {
+		return investmentCost;
 	}
 
-	public void setInvestment(Double investment) {
-		this.investment = investment;
+	public void setInvestmentCost(Double investmentCost) {
+		this.investmentCost = investmentCost;
 	}
 
-	public Integer getExpectedPaybackTime() {
+	public String getExpectedPaybackTime() {
 		return expectedPaybackTime;
 	}
 
-	public void setExpectedPaybackTime(Integer expectedPaybackTime) {
+	public void setExpectedPaybackTime(String expectedPaybackTime) {
 		this.expectedPaybackTime = expectedPaybackTime;
 	}
 
-	public LocalDate getDueDate() {
+	public DateTime getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(LocalDate dueDate) {
+	public void setDueDate(DateTime dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	public String getWebSite() {
+		return webSite;
+	}
+
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
 	}
 
 	public String getResponsiblePerson() {
@@ -193,4 +227,13 @@ public class ReducingAction extends AuditedAbstractEntity {
 		this.documents = documents;
 	}
 
+	@Override
+	public String toString() {
+		return "ReducingAction{" +
+				"title='" + title + '\'' +
+				", scope=" + scope +
+				", type=" + type +
+				", status=" + status +
+				'}';
+	}
 }

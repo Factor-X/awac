@@ -8,15 +8,15 @@ div.actions
 
         thead
             tr
-                th Détails
-                th Actions
-                th Type
-                th Périmètre
-                th Réalisation
+                th {{ "REDUCTION_ACTION_TABLE_DETAILS" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_ACTIONS" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_TYPE" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_SCOPE" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_COMPLETION" | translateText }}
 
         tbody
 
-            tr(ng-repeat-start="a in actions", ng-class="{selected: a.opened}")
+            tr(ng-repeat-start="a in actions")
                 td.details
                     mm-plus-minus-toggle-button(ng-model="a.opened")
                 td.title
@@ -24,44 +24,69 @@ div.actions
                 td.type
                     span.icon.fa.fa-flag
                     span &nbsp;
-                    span.text {{a.type.text}}
+                    span.text {{ (typeOptions | filter: { key: a.typeKey })[0].label }}
                 td.scope
                     span.icon.fa.fa-flag
                     span &nbsp;
-                    span.text {{a.scope.text}}
-                td.realization {{a.realization.period}}
+                    span.text {{a.scope.name}}
+                td.realization {{ a.statusKey == "2" ? a.completionYear : (statusOptions | filter: { key: a.statusKey })[0].label }}
 
             tr(ng-repeat-end, ng-show="a.opened").details
-                td(colspan="5")
-
+                td(colspan="4")
 
                     table
                         tr
-                            td Plus d'informations
+                            td {{ "REDUCTION_ACTION_DETAILS_WEBSITE" | translateText }}:
                             td
-                                a(href="#", target="blank") http://www.site.com
+                                a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
                         tr
-                            td Diminution de
+                            td {{ "REDUCTION_ACTION_DETAILS_PHYSICAL_MEASURE" | translateText }}:
                             td
-                                .box.align-right 9000
-                                .box Litres
+                                .box.wide {{ a.physicalMeasure || "&nbsp;" }}
                         tr
-                            td Gain escompté
+                            td {{ "REDUCTION_ACTION_DETAILS_GHGBENEFIT" | translateText }}:
                             td
-                                .box.align-right 10
-                                .box tonnes de CO2e
+                                .box {{ a.ghgBenefit || "&nbsp;" }}
+                                .box.transparent(ng-if="a.ghgBenefitUnit != null") {{ (gwpUnits | filter: { code: a.ghgBenefitUnit.code })[0].name }}
                         tr
-                            td Gain financier
+                            td {{ "REDUCTION_ACTION_DETAILS_FINANCIALBENEFIT" | translateText }}:
                             td
-                                .box.align-right 14000
-                                .box euros
+                                .box {{ a.financialBenefit || "&nbsp;" }}
+                                .box.transparent euros
+                        tr
+                            td {{ "REDUCTION_ACTION_DETAILS_INVESTMENTCOST" | translateText }}:
+                            td
+                                .box {{ a.investmentCost || "&nbsp;" }}
+                                .box.transparent euros
+                        tr
+                            td {{ "REDUCTION_ACTION_DETAILS_EXPECTEDPAYBACKTIME" | translateText }}:
+                            td
+                                .box {{ a.expectedPaybackTime || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_DETAILS_DUEDATE" | translateText }}:
+                            td
+                                .box {{ (a.dueDate != null) ? (a.dueDate.millis | date: 'dd/MM/yyyy') : "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_DETAILS_RESPONSIBLEPERSON" | translateText }}:
+                            td
+                                .box.wide {{ a.responsiblePerson || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_DETAILS_COMMENT" | translateText }}:
+                            td
+                                .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
+
+                td(style="vertical-align:bottom;")
+                    button.button(type="button", ng-click="create()")
+                        span.fa.fa-plus-circle
+                        span &nbsp;
+                        span Ajouter une action
 
     br
 
     button.button(type="button", ng-click="create()")
         span.fa.fa-plus-circle
         span &nbsp;
-        span Ajouter une section
+        span Ajouter une action
 
     button.button(type="button")
         span.fa.fa-file-excel-o

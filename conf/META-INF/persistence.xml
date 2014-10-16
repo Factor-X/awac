@@ -40,8 +40,8 @@
         <class>eu.factorx.awac.models.code.type.PeriodCode</class>
         <class>eu.factorx.awac.models.code.type.PublicPrivateCode</class>
         <class>eu.factorx.awac.models.code.type.QuestionCode</class>
-        <class>eu.factorx.awac.models.code.type.ReducingActionStatus</class>
-        <class>eu.factorx.awac.models.code.type.ReducingActionType</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionStatusCode</class>
+        <class>eu.factorx.awac.models.code.type.ReducingActionTypeCode</class>
         <class>eu.factorx.awac.models.code.type.ReportCode</class>
         <class>eu.factorx.awac.models.code.type.ScopeTypeCode</class>
         <class>eu.factorx.awac.models.code.type.UnitCategoryCode</class>
