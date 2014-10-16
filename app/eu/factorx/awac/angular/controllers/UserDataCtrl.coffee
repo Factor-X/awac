@@ -157,12 +157,12 @@ angular
         downloadService.postJson '/awac/user/profile/anonymous/save', data, (result) ->
             if result.success
                 messageFlash.displaySuccess "CHANGES_SAVED"
-                $scope.$root.currentPerson.identifier = $scope.anonymous.loginInfo.field
-                $scope.$root.currentPerson.lastName = $scope.anonymous.lastNameInfo.field
-                $scope.$root.currentPerson.firstName = $scope.anonymous.firstNameInfo.field
-                $scope.$root.currentPerson.email = $scope.anonymous.emailInfo.field
-
+                $scope.$root.currentPerson = null
+                $scope.$root.periodSelectedKey=null
+                $scope.$root.scopeSelectedId=null
                 $scope.isLoading = false
+                #logout
+                $scope.$root.nav('/login')
             else
                 messageFlash.displayError result.data.message
                 $scope.isLoading = false

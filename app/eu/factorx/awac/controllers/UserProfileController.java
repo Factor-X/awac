@@ -4,6 +4,7 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
+import eu.factorx.awac.dto.myrmex.get.AnonymousPersonDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ActiveAccountDTO;
@@ -45,23 +46,26 @@ public class UserProfileController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result saveAnonymousUserProfileData() {
 		Account currentUser = securedController.getCurrentUser();
-		PersonDTO personDTO = extractDTOFromRequest(PersonDTO.class);
+		AnonymousPersonDTO anonymousPersonDTO = extractDTOFromRequest(AnonymousPersonDTO.class);
 
 //		if (!personDTO.getIdentifier().equals(currentUser.getIdentifier())) {
 //			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
 //		}
 
 
-		currentUser.setIdentifier(personDTO.getIdentifier());
-		currentUser.setPassword("anonymous9999");
-		currentUser.getPerson().setEmail(personDTO.getEmail());
-		currentUser.getPerson().setLastname(personDTO.getLastName());
-		currentUser.getPerson().setFirstname(personDTO.getFirstName());
-		accountService.saveOrUpdate(currentUser);
+		currentUser.setIdentifier(anonymousPersonDTO.getIdentifier());
+		currentUser.setPassword(anonymousPersonDTO.getPassword());
+		currentUser.getPerson().setEmail(anonymousPersonDTO.getEmail());
+		currentUser.getPerson().setLastname(anonymousPersonDTO.getLastName());
+		currentUser.getPerson().setFirstname(anonymousPersonDTO.getFirstName());
+		try {
+			accountService.saveOrUpdate(currentUser);
+		} catch (Exception e) {
+			throw new RuntimeException("Anonimous user can not be converted to formal user. Please try with another identifier.");
+		}
 
 		// remove cookie
 		response().discardCookie("AWAC_ANONYMOUS_IDENTIFIER");
-
 
 		return ok(new ReturnDTO());
 	}
