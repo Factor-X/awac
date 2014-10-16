@@ -1,33 +1,35 @@
 .nav_tabs(ng-show='displayMenu===true')
     .nav_entreprise
         .site_menu
-            .menu
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='$root.nav(\'/form/TAB2\')')
+            .menu.menu_enterprise
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB2\') == true}', ng-click='navTo(\'/form/TAB2\')')
                     .tab-title(ng-bind-html='\'TAB2\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB2\')')
                     .menu_arrow
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB3\')  == true}', ng-click='$root.nav(\'/form/TAB3\')')
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB3\')  == true}', ng-click='navTo(\'/form/TAB3\')')
                     .tab-title(ng-bind-html='\'TAB3\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB3\')')
                     .menu_arrow
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB4\') == true}', ng-click='$root.nav(\'/form/TAB4\')')
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB4\') == true}', ng-click='navTo(\'/form/TAB4\')')
                     .tab-title(ng-bind-html='\'TAB4\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB4\')')
                     .menu_arrow
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB5\') == true}', ng-click='$root.nav(\'/form/TAB5\')')
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB5\') == true}', ng-click='navTo(\'/form/TAB5\')')
                     .tab-title(ng-bind-html='\'TAB5\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB5\')')
                     .menu_arrow
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB6\') == true}', ng-click='$root.nav(\'/form/TAB6\')')
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB6\') == true}', ng-click='navTo(\'/form/TAB6\')')
                     .tab-title(ng-bind-html='\'TAB6\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB6\')')
                     .menu_arrow
-                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB7\') == true}', ng-click='$root.nav(\'/form/TAB7\')')
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB7\') == true}', ng-click='navTo(\'/form/TAB7\')')
                     .tab-title(ng-bind-html='\'TAB7\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB7\')')
                     .menu_arrow
         .last_menu
-            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='$root.nav(\'/results\')')
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='navTo(\'/results\')')
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
-            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}', ng-click='$root.nav(\'/actions\')')
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}',
+            ng-click='isDisabled || navTo(\'/actions\')',
+            ng-show="$root.instanceName != 'verification'")
                 .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")

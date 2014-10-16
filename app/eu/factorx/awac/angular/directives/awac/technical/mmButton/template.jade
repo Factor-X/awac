@@ -1,0 +1,9 @@
+button.button(
+    type='button',
+    ng-click='ngClick',
+    ng-class='ngClass'
+    )
+    span(class="fa fa-{{ getIcon() }}")
+    span &nbsp;
+    span(ng-bind-html="getCode() | translate")
+

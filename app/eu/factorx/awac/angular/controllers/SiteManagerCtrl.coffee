@@ -22,15 +22,6 @@ angular
             modalService.close(modalService.LOADING)
             $scope.organization = result.data
 
-            $scope.events = []
-
-            data = {}
-            data.organization = $scope.organization
-            data.period = $scope.$root.periods[0]
-
-            downloadService.postJson 'awac/organization/events/load', data, (result) ->
-                $scope.events = result.data.organizationEventList
-
             $scope.$watchCollection 'assignPeriod', ->
                 $scope.refreshPeriod()
 
@@ -62,9 +53,6 @@ angular
                     params.site = site
                 params.organization = $scope.organization
                 modalService.show(modalService.ADD_USER_SITE, params)
-
-            $scope.getEventList = () ->
-                return $scope.events
 
             $scope.periodAssignTo = (site) ->
                 if site.listPeriodAvailable?
@@ -101,15 +89,3 @@ angular
                                 mySites.push site
 
                 $scope.$root.mySites = mySites
-
-            $scope.editOrCreateEvent = (event) ->
-                params = {}
-                params.organization = $scope.organization
-                params.events = $scope.events
-                for period in $scope.$root.periods
-                    if period.key == $scope.selectedPeriodForEvent
-                        params.period = period
-                if event?
-                    params.event = event
-                modalService.show(modalService.EDIT_EVENT, params)
-        

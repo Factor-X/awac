@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
 
 /**
  * Created by florian on 29/09/14.
@@ -11,7 +12,17 @@ public class FormsClosingDTO extends DTO {
 
     private Boolean closeable;
 
+    private VerificationRequestDTO verificationRequest;
+
     public FormsClosingDTO() {
+    }
+
+    public VerificationRequestDTO getVerificationRequest() {
+        return verificationRequest;
+    }
+
+    public void setVerificationRequest(VerificationRequestDTO verificationRequest) {
+        this.verificationRequest = verificationRequest;
     }
 
     public Boolean getClosed() {

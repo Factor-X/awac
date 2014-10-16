@@ -202,7 +202,7 @@ angular
                     return false
 
                 # the body if the limit for the test => continue if this element id not the body
-                if elementToTest.parent()[0].tagName != 'BODY'
+                if elementToTest.parent()? && elementToTest.parent().length>0 &&  elementToTest.parent()[0].tagName != 'BODY'
                     return scope.testVisibility(elementToTest.parent())
                 else
                     # print used for debug
@@ -335,7 +335,7 @@ angular
                 modalService.show(modalService.QUESTION_COMMENT, args)
 
             scope.isDisabled = () ->
-                if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode())
+                if scope.$parent.isQuestionLocked(scope.getQuestionCode()) || scope.$parent.isQuestionValidate(scope.getQuestionCode()) || scope.$root.instanceName  == 'verification'
                     return true
                 return false
 

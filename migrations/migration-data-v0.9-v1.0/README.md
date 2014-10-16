@@ -28,6 +28,14 @@
         $ cd generators
         ```
         
+    - Surveys
+
+        ```sh
+        $ rake generate:surveys
+        ```
+
+    - Restart activator
+
     - Run CodeLabels & Indicators / Factors importers
         
         ```sh
@@ -35,5 +43,10 @@
         $ rake indicators_factors:import
         ```
 
+    - Surveys
+
+         ```sh
+         $ rake surveys:import:enterprise
+         ```
 
   

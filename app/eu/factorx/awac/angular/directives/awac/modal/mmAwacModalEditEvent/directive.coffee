@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash ) ->
+.directive "mmAwacModalEditEvent", (directiveService, downloadService, translationService, messageFlash) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -12,32 +12,27 @@ angular
 
         $scope.createNewEvent = true
         if $scope.getParams().event?
-            $scope.event =  angular.copy($scope.getParams().event)
+            $scope.event = angular.copy($scope.getParams().event)
             $scope.createNewEvent = false
         else
             $scope.event = {}
 
-        $scope.fields = {
-
-            name :{
+        $scope.fields =
+            name:
                 fieldTitle: "NAME"
-                field:$scope.event.name
+                field: $scope.event.name
                 validationRegex: "^.{1,255}$"
                 validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
                 focus: ->
                     return true
-            }
 
-            description :{
+            description:
                 fieldTitle: "DESCRIPTION"
                 validationRegex: "^.{0,65000}$"
                 validationMessage: "CONTROL_FIELD_DEFAULT_TEXT"
-                field:$scope.event.description
-                fieldType:'textarea'
+                field: $scope.event.description
+                fieldType: 'textarea'
                 hideIsValidIcon: true
-            }
-
-        }
 
         $scope.allFieldValid = () ->
             for key in Object.keys($scope.fields)
@@ -48,7 +43,6 @@ angular
 
         #send the request to the server
         $scope.save = () ->
-
             if $scope.allFieldValid()
 
                 #create DTO
@@ -84,7 +78,6 @@ angular
                             $scope.isLoading = false
                 else
                     #create event
-                    data.id = 0
                     downloadService.postJson '/awac/organization/events/save', data, (result) ->
                         if result.success
 
@@ -92,7 +85,9 @@ angular
                             messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
                             # add new event to the list
-                            $scope.getParams().events[$scope.getParams().events.length] = result.data
+                            if not $scope.getParams().events
+                                $scope.getParams().events = []
+                            $scope.getParams().events.push result.data
 
                             #close window
                             $scope.close()

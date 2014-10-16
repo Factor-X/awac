@@ -53,7 +53,7 @@ div.results.pdf-able
                             br
 
                             center
-                                div(style="height: 10cm", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
+                                .diagram(style="height: 10cm", ng-bind-html="o.svgHistograms.R_1 | trustAsHtml")
 
                             br
 
@@ -74,9 +74,9 @@ div.results.pdf-able
                                             span  : {{ totalScope1 | numberToI18N }} tCO2e
                                 tr
                                     td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_2 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_2 | trustAsHtml")
                                         span &nbsp;
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_2 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_2 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
@@ -88,9 +88,9 @@ div.results.pdf-able
                                             span  : {{ totalScope2| numberToI18N }} tCO2e
                                 tr
                                     td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_3 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_3 | trustAsHtml")
                                         span &nbsp;
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_3 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_3 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
@@ -102,26 +102,15 @@ div.results.pdf-able
                                             span  : {{ totalScope3| numberToI18N }} tCO2e
                                 tr
                                     td
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_4 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_4 | trustAsHtml")
                                         span &nbsp;
-                                        div(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_4 | trustAsHtml")
+                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_4 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_4")
 
-
-
-
-
-
-
-
-
                             br
                             br
-
-
-
 
                         div(ng-show="current_tab == 3")
                             h2
@@ -225,31 +214,42 @@ div.results.pdf-able
                                     span &#32;
                                     span(ng-bind-html="'RESULTS_EXPLANATION_NOFACTOR_PART4' | translate")
 
-                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.LowerRankInGroupDTO'")
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART1' | translate")
-                                    span &#32;
-                                    span(ng-bind-html="e.key | translate")
-                                    span &#32;
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART2' | translate")
-                                    span &#32;
-                                    span(ng-bind-html="e.key | translate")
-                                    span &#32;
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART3' | translate")
-                                    span &#32;
-                                    span(ng-bind-html="e.key | translate")
-                                    span &#32;
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART4' | translate")
+                                span(style="color: #33a", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.LowerRankInGroupDTO'")
 
-                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.NoSuitableIndicatorDTO'")
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART1' | translate")
-                                    span &#32;
-                                    span(ng-bind-html="e.key | translate")
-                                    span &#32;
-                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART2' | translate")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART1' | translate")
                                     span &#32;
                                     span(ng-bind-html="e.activityCategory | translate")
                                     span &#32;/&#32;
                                     span(ng-bind-html="e.activitySubCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.value | numberToI18NRoundedOrFullIfLessThanOne")
+                                    span &#32;
+                                    span(ng-bind-html="e.unit")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_LOWER_RANK_PART3' | translate")
+
+                                span(style="color: #a33", ng-show="e.__type == 'eu.factorx.awac.dto.awac.get.NoSuitableIndicatorDTO'")
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART1' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.activityCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activitySubCategory | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activityType | translate")
+                                    span &#32;/&#32;
+                                    span(ng-bind-html="e.activitySource | translate")
+                                    span &#32;
+                                    span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART2' | translate")
+                                    span &#32;
+                                    span(ng-bind-html="e.value | numberToI18NRoundedOrFullIfLessThanOne")
+                                    span &#32;
+                                    span(ng-bind-html="e.unit")
                                     span &#32;
                                     span(ng-bind-html="'RESULTS_EXPLANATION_NOINDICATOR_PART3' | translate")
 
@@ -275,14 +275,17 @@ div.results.pdf-able
                         br
 
                         div.results_disclaimer
-                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate", ng-hide="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER_VERIFIED' | translate", ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
                         br
                         br
                         br
 
             td.top-aligned
                 div.align-right
-                    button.button(type="button", mm-not-implemented)
+                    button.button(type="button", ng-click="downloadVerificationReport()",ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                        span(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")
+                    button.button(type="button", ng-click="exportXls()")
                         span(ng-bind-html="'XLS_EXPORT' | translate")
                     button.button(type="button", mm-not-implemented)
                         span(ng-bind-html="'PDF_EXPORT' | translate")

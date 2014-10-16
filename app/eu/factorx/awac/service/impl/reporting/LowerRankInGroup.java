@@ -1,32 +1,20 @@
 package eu.factorx.awac.service.impl.reporting;
 
+import eu.factorx.awac.models.reporting.BaseActivityData;
+
 public class LowerRankInGroup extends ReportLogEntry {
-	private final String  key;
-	private final Integer rank;
-	private final String  alternativeGroup;
-	private final Integer minRank;
+	private BaseActivityData baseActivityData;
 
-	public LowerRankInGroup(String key, Integer rank, String alternativeGroup, Integer minRank) {
+	public LowerRankInGroup(BaseActivityData baseActivityData) {
 
-		this.key = key;
-		this.rank = rank;
-		this.alternativeGroup = alternativeGroup;
-		this.minRank = minRank;
+		this.baseActivityData = baseActivityData;
 	}
 
-	public String getKey() {
-		return key;
+	public BaseActivityData getBaseActivityData() {
+		return baseActivityData;
 	}
 
-	public Integer getRank() {
-		return rank;
-	}
-
-	public String getAlternativeGroup() {
-		return alternativeGroup;
-	}
-
-	public Integer getMinRank() {
-		return minRank;
+	public void setBaseActivityData(BaseActivityData baseActivityData) {
+		this.baseActivityData = baseActivityData;
 	}
 }

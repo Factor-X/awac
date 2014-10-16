@@ -34,5 +34,6 @@
     "log4javascript": "~1.4.9",
     "font-awesome": "~4.2.0",
     "angular-bootstrap-datetimepicker": "latest"
+    "FileSaver": "*"
   }
 }

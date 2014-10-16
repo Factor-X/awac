@@ -19,66 +19,7 @@
 [ 1. Font ]
 -------------------------------------------------------
 */
-/*
-@font-face {
-    font-family: 'robotolight';
-    src: url('font/Roboto-Light-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Light-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Light-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Light-webfont.svg#robotolight') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
 
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotolight';
-        src: url('font/Roboto-Light-webfont.svg#robotolight') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotoregular';
-    src: url('font/Roboto-Regular-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Regular-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Regular-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotoregular';
-        src: url('font/Roboto-Regular-webfont.svg#robotoregular') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotomedium';
-    src: url('font/Roboto-Medium-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Medium-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Medium-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Medium-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Medium-webfont.svg#robotomedium') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotomedium';
-        src: url('font/Roboto-medium-webfont.svg#robotomedium') format('svg');
-    }
-}
-
-@font-face {
-    font-family: 'robotobold';
-    src: url('font/Roboto-Bold-webfont.eot'); *//* IE9 Compat Modes *//*
-    src: url('font/Roboto-Bold-webfont.eot?#iefix') format('embedded-opentype'), *//* IE6-8 *//* url('font/Roboto-Bold-webfont.woff') format('woff'), *//* Modern Browsers *//* url('font/Roboto-Bold-webfont.ttf') format('truetype'), *//* Safari, Android, iOS *//* url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');*//* Legacy iOS *//*
-    font-weight: normal;
-    font-style: normal;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    @font-face {
-        font-family: 'robotobold';
-        src: url('font/Roboto-Bold-webfont.svg#robotobold') format('svg');
-    }
-}*/
 
 /*-----------------------------------------------------
 [ 2. Structure ]
@@ -128,7 +69,8 @@ select {
 }
 
 .survey-header-option {
-    float: right;
+    width: 100%;
+    white-space: nowrap;
 }
 
 .survey-header-option tr:first-child {
@@ -150,7 +92,7 @@ select {
 }
 
 .survey-header-option td {
-    border-right: 1px solid #61605b;
+    /* border-right: 1px solid #61605b; */
 }
 
 .survey-header-option select {
@@ -183,6 +125,10 @@ select {
 .calculateur_type {
     padding-top: 5px;
     font-size: 12px;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .entreprise_name {
@@ -348,7 +294,6 @@ select {
     color: white !important;
 }
 
-
 .last_menu > * {
     min-width: 49%;
     width: 49%;
@@ -362,7 +307,6 @@ select {
     cursor: pointer;
     transition: all 0.2s ease-out;
 }
-
 
 .menu > * {
     position: relative;
@@ -531,11 +475,6 @@ select {
     background-color: #CFCDC0;
     margin: 10% auto auto;
 }
-
-
-
-
-
 
 .question-comment-textarea {
     width: 530px;
@@ -890,7 +829,7 @@ h1 {
     padding: 3px 0px 3px 35px;
 }
 
-.question_field .optional{
+.question_field .optional {
     font-style: italic;
 }
 
@@ -1125,11 +1064,11 @@ h1 {
     display: block;
 }
 
-.user_icon_red{
+.user_icon_red {
     background-color: #b02828;
 }
 
-.user_icon_green{
+.user_icon_green {
     background-color: #098d38;
 }
 
@@ -1138,7 +1077,8 @@ h1 {
 }
 
 .document-question-block {
-    height: 62px;>
+    height: 62px;
+>
 }
 
 .document-question-block > div {
@@ -1633,8 +1573,8 @@ ul.messenger.messenger-fixed.messenger-on-top {
     list-style-type: none;
 }
 
-.messenger{
-    z-index : 12000 !important;
+.messenger {
+    z-index: 12000 !important;
 }
 
 ul.messenger-theme-flat .messenger-message.alert-success,
@@ -1682,6 +1622,10 @@ ul.messenger > li {
     text-align: right;
 }
 
+.align-left {
+    text-align: left;
+}
+
 .result_table {
     margin: auto;
 }
@@ -1690,8 +1634,6 @@ ul.messenger > li {
     font-size: 1.5em;
     border-bottom: solid 2px #666;
 }
-
-
 
 .forgot_password_success_message {
     text-align: center;
@@ -1731,15 +1673,14 @@ ul.messenger > li {
     border-color: #000080;
 }
 
-.admin-table-import-bad td {
+.admin-table-import-bad td,
+.admin-table-import-bad th{
     border-right: 1px solid #ddd;
 }
 
 .admin-table-import-bad ul {
     list-style-type: none;
 }
-
-
 
 .top-aligned {
     vertical-align: top;
@@ -1770,7 +1711,6 @@ ul.messenger > li {
     padding: 0.5em;
     border: solid 1px #333;
 }
-
 
 .no-scope-message {
     text-align: center;

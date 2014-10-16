@@ -1,9 +1,12 @@
 package eu.factorx.awac.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.SvgContent;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.api.templates.Html;
 import play.mvc.Controller;
 import scala.collection.mutable.StringBuilder;
@@ -17,7 +20,8 @@ public class AbstractController extends Controller {
 	protected SecuredController securedController;
 
 	protected static <T extends DTO> T extractDTOFromRequest(Class<T> DTOclass) {
-		T dto = DTO.getDTO(request().body().asJson(), DTOclass);
+		JsonNode json = request().body().asJson();
+		T dto = DTO.getDTO(json, DTOclass);
 		if (dto == null) {
 			throw new MyrmexRuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
 		}

@@ -1,55 +1,71 @@
 package eu.factorx.awac.dto.awac.get;
 
+import eu.factorx.awac.models.knowledge.Unit;
+
 public class LowerRankInGroupDTO extends ReportLogEntryDTO {
-	private String  key;
-	private String  alternativeGroup;
-	private Integer minRank;
-	private Integer rank;
 
-	public LowerRankInGroupDTO() {
+	private String activityCategory;
+	private String activitySubCategory;
+	private String activityType;
+	private String activitySource;
+	private Double value;
+	private String unit;
+
+	public LowerRankInGroupDTO(String activityCategory, String activitySubCategory, String activityType, String activitySource, Double value, String unit) {
+
+		this.activityCategory = activityCategory;
+		this.activitySubCategory = activitySubCategory;
+		this.activityType = activityType;
+		this.activitySource = activitySource;
+		this.value = value;
+		this.unit = unit;
 	}
 
-	public LowerRankInGroupDTO(
-		String key,
-		String alternativeGroup,
-		Integer minRank,
-		Integer rank
-	) {
-		this.key = key;
-		this.alternativeGroup = alternativeGroup;
-		this.minRank = minRank;
-		this.rank = rank;
+	public String getActivityCategory() {
+		return activityCategory;
 	}
 
-	public String getKey() {
-		return key;
+	public void setActivityCategory(String activityCategory) {
+		this.activityCategory = activityCategory;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public String getActivitySubCategory() {
+		return activitySubCategory;
 	}
 
-	public String getAlternativeGroup() {
-		return alternativeGroup;
+	public void setActivitySubCategory(String activitySubCategory) {
+		this.activitySubCategory = activitySubCategory;
 	}
 
-	public void setAlternativeGroup(String alternativeGroup) {
-		this.alternativeGroup = alternativeGroup;
+	public String getActivityType() {
+		return activityType;
 	}
 
-	public Integer getMinRank() {
-		return minRank;
+	public void setActivityType(String activityType) {
+		this.activityType = activityType;
 	}
 
-	public void setMinRank(Integer minRank) {
-		this.minRank = minRank;
+	public String getActivitySource() {
+		return activitySource;
 	}
 
-	public Integer getRank() {
-		return rank;
+	public void setActivitySource(String activitySource) {
+		this.activitySource = activitySource;
 	}
 
-	public void setRank(Integer rank) {
-		this.rank = rank;
+	public Double getValue() {
+		return value;
+	}
+
+	public void setValue(Double value) {
+		this.value = value;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 }

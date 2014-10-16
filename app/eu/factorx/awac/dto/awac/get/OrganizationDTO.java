@@ -8,6 +8,7 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 public class OrganizationDTO extends ScopeDTO {
 	private Long id;
 	private String name;
+    private String interfaceName;
 	private Boolean statisticsAllowed;
 	private List<SiteDTO> sites;
 	private List<PersonDTO> users;
@@ -25,8 +26,15 @@ public class OrganizationDTO extends ScopeDTO {
 		this.id = id;
 	}
 
+    public String getInterfaceName() {
+        return interfaceName;
+    }
 
-	public String getName() {
+    public void setInterfaceName(String interfaceName) {
+        this.interfaceName = interfaceName;
+    }
+
+    public String getName() {
 		return name;
 	}
 

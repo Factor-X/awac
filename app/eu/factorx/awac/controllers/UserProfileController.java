@@ -20,6 +20,7 @@ import org.springframework.core.convert.ConversionService;
 
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -39,6 +40,32 @@ public class UserProfileController extends AbstractController {
 		PersonDTO personDTO = conversionService.convert(currentUser, PersonDTO.class);
 		return ok(personDTO);
 	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result saveAnonymousUserProfileData() {
+		Account currentUser = securedController.getCurrentUser();
+		PersonDTO personDTO = extractDTOFromRequest(PersonDTO.class);
+
+//		if (!personDTO.getIdentifier().equals(currentUser.getIdentifier())) {
+//			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
+//		}
+
+
+		currentUser.setIdentifier(personDTO.getIdentifier());
+		currentUser.setPassword("anonymous9999");
+		currentUser.getPerson().setEmail(personDTO.getEmail());
+		currentUser.getPerson().setLastname(personDTO.getLastName());
+		currentUser.getPerson().setFirstname(personDTO.getFirstName());
+		accountService.saveOrUpdate(currentUser);
+
+		// remove cookie
+		response().discardCookie("AWAC_ANONYMOUS_IDENTIFIER");
+
+
+		return ok(new ReturnDTO());
+	}
+
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)

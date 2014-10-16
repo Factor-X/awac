@@ -41,6 +41,12 @@ initializeVerificationRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
+        .when('/verification_registration/:key', {
+                templateUrl: '$/angular/views/verification_registration.html'
+                controller: 'VerificationRegistrationCtrl'
+                anonymousAllowed: true
+            }
+        )
         .when('/archive', {
                 templateUrl: '$/angular/views/verification/archive.html'
                 controller: 'VerificationArchiveCtrl'

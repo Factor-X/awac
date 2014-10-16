@@ -18,17 +18,18 @@ import java.util.Map;
 @SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 public class VelocityController extends AbstractController {
 
-	@Autowired
-	VelocityGeneratorService velocityGeneratorService;
-	/**
-	 * Handle the velocity template generation.
-	 */
-	public Result velocity () {
+    @Autowired
+    private VelocityGeneratorService velocityGeneratorService;
 
-		Map values = new HashMap<String,Object>();
-		values.put("name","My name is gaston");
-		values.put("title","This is my titre");
+    /**
+     * Handle the velocity template generation.
+     */
+    public Result velocity() {
 
-		return velocityGeneratorService.ok(velocityGeneratorService.getTemplateNameByMethodName(),values);
-	}
+        Map values = new HashMap<String, Object>();
+        values.put("name", "My name is gaston");
+        values.put("title", "This is my titre");
+
+        return velocityGeneratorService.ok(velocityGeneratorService.getTemplateNameByMethodName(), values);
+    }
 }

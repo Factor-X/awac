@@ -27,6 +27,7 @@ public class OrganizationToOrganizationDTOConverter implements Converter<Organiz
         dto.setId(org.getId());
         dto.setName(org.getName());
         dto.setStatisticsAllowed(org.getStatisticsAllowed());
+        dto.setInterfaceName(org.getInterfaceCode().getKey());
 
         //order site list
         List<Site> siteList = org.getSites();

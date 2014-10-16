@@ -51,6 +51,10 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	@Embedded
 	private AuditInfo auditInfo;
 
+    @OneToOne(mappedBy="questionSetAnswer")
+    private Verification verification;
+
+
 
 	public QuestionSetAnswer() {
 		super();
@@ -76,7 +80,15 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 		auditInfo = new AuditInfo();
 	}
 
-	public AuditInfo getAuditInfo() {
+    public Verification getVerification() {
+        return verification;
+    }
+
+    public void setVerification(Verification verification) {
+        this.verification = verification;
+    }
+
+    public AuditInfo getAuditInfo() {
 		return auditInfo;
 	}
 
