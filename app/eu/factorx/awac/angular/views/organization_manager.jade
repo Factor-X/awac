@@ -2,17 +2,16 @@ div
     .menu_close(ng-click="toForm()")
     h1(ng-bind-html="'ORGANIZATION_MANAGER_TITLE' | translateText")
 
-    div.site_manager
+    .site_manager
 
         br
         h4(ng-bind-html="'ORGANIZATION_MANAGER_PROPERTIES_TITLE' | translateText")
 
-        div(class="field_form", style="display:table; width: 400px;")
+        .field_form(style="width: 600px;")
             mm-awac-modal-field-text(ng-info="nameInfo")
-            br
-            div.field_row
-                div(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
-                div(style="text-align: left;")
+            .field_row
+                .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
+                .field_cell
                     input(type="checkbox", ng-model="statisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
             
 

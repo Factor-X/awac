@@ -1,39 +1,24 @@
 angular
 .module('app.controllers')
-.controller "ActionsCtrl", ($scope, displayFormMenu, modalService) ->
+.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter) ->
     $scope.displayFormMenu = displayFormMenu
 
-    $scope.pouet = true
+    $scope.actions = []
+    $scope.typeOptions = []
+    $scope.statusOptions = []
+    $scope.gwpUnits = []
 
-    $scope.actions = [
-
-        {
-            opened: false
-            title: 'Utiliser des mesures plus précises que "Usages"'
-            type:
-                icon: 'flag'
-                text: 'Meilleure mesure'
-            scope:
-                icon: 'flag'
-                text: 'Namur'
-            realization:
-                period: '2012'
-        }
-        ,
-        {
-            opened: false
-            title: 'Utiliser des mesures plus précises que "Usages"'
-            type:
-                icon: 'flag'
-                text: 'Meilleure mesure'
-            scope:
-                icon: 'flag'
-                text: 'Namur'
-            realization:
-                period: '2012'
-        }
-
-    ]
+    $scope.loadActions = () ->
+        downloadService.getJson "awac/actions/load", (result) ->
+            if result.success
+                $scope.actions = result.data.reducingActions
+                codeLists = result.data.codeLists
+                $scope.typeOptions = _.findWhere(codeLists, {code: 'REDUCING_ACTION_TYPE'}).codeLabels
+                $scope.statusOptions = _.findWhere(codeLists, {code: 'REDUCING_ACTION_STATUS'}).codeLabels
+                $scope.gwpUnits = result.data.gwpUnits
 
     $scope.create = () ->
-        modalService.show modalService.CREATE_REDUCTION_ACTION
+        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
+
+    $scope.loadActions()
+

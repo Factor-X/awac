@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.OnDelete;
@@ -162,4 +163,15 @@ public class Organization extends Scope {
                 ", interfaceCode=" + interfaceCode +
                 '}';
     }
+
+	@Override
+	public ScopeTypeCode getScopeType() {
+		return ScopeTypeCode.ORG;
+	}
+
+	@Override
+	public Organization getOrganization() {
+		return this;
+	}
+
 }

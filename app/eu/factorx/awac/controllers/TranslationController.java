@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import play.db.jpa.Transactional;
+import play.mvc.Http.Context;
 import play.mvc.Result;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.code.CodeList;
@@ -21,8 +22,9 @@ public class TranslationController extends AbstractController {
 
 	@Transactional(readOnly = true)
 	public Result fetch(String language) {
-
 		String lang = language.toUpperCase();
+		Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, language.toUpperCase());
+
 		TranslationsDTO translationsDTO = new TranslationsDTO(lang);
 
 		if (LanguageCode.DUTCH.getKey().equals(lang)) {

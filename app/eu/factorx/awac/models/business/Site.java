@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
@@ -160,6 +161,11 @@ public class Site extends Scope implements Comparable<Site> {
 		}
 		Site rhs = (Site) obj;
 		return new EqualsBuilder().append(this.organization, rhs.organization).append(this.name, rhs.name).isEquals();
+	}
+
+	@Override
+	public ScopeTypeCode getScopeType() {
+		return ScopeTypeCode.SITE;
 	}
 
 }

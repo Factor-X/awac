@@ -1,7 +1,5 @@
 package eu.factorx.awac.models.code;
 
-// ATTENTION: always APPEND new values, never INSERT!!
-// It's because ValueSelectionQuestion persists codeList values in an ordinal way... (this is to fix)
 public enum CodeList {
 
 	// FORMS

@@ -1,5 +1,23 @@
 @media screen {
 
+    .modal {
+        .input-group .form-control {
+            width: 100%;
+            font-size: inherit;
+            border: 1px solid #61605b;
+            border-radius: 0px;
+            height: 22px;
+            padding: 2px 2px 1px 2px;
+            background-color: #efeee8;
+        }
+        .input-group-addon {
+            border: 1px solid #61605b;
+            border-radius: 0px;
+            padding: 2px 2px 1px 2px;
+            min-width: 40px;
+        }
+    }
+
     //
     // FULL-SCREEN MODAL
     //
@@ -36,33 +54,89 @@
     .field_form {
         margin: 20px;
         width: ~"calc(100% - 40px)";
+        display: table;
+
+        .red {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: red;
+            z-index: 9999999;
+        }
 
         .field_row {
-            min-height: 30px;
+            min-height: 22px;
             vertical-align: middle;
             padding-top: 3px;
-            & > div {
-                display: inline-block;
+            display: table-row;
+            &.field_form_separator {
+                border-bottom: 1px solid #737373;
+            }
+            & > .field_cell {
+                display: table-cell;
                 vertical-align: top;
+                border-bottom: solid 4px transparent;
+                box-sizing: border-box;
+                height: 22px;
+
+                &.field_wide {
+                    -webkit-column-span: all; /* Chrome, Safari, Opera */
+                    column-span: all;
+                }
             }
-            & > div:first-child {
-                width: ~"calc(40% - 20px)";
+            & > .field_cell:first-child {
+                min-width: 200px;
+                padding-right: 1em;
             }
 
-            & > div:nth-child(2) {
-                width: ~"calc(60% - 20px)";
+            & > .field_cell:nth-child(2) {
+                width: 100%;
+
+                .wrapper_table {
+                    display: table;
+                    & > .wrapper_row {
+                        display: table-row;
+                        & > .wrapper_cell {
+                            display: table-cell;
+                            margin: 0;
+                            padding: 0;
+                            vertical-align: top;
+                            &:not(:first-child){
+                                border-left: solid 4px transparent;
+                                &[ng-transclude]:empty {
+                                    display: none;
+                                }
+                            }
+                            & > * {
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                }
+
             }
 
-            & > div:nth-child(2) > * {
+            & > .field_cell:nth-child(2) > * {
                 width: 100%;
             }
 
-            & > div:nth-child(3) {
+            & > .field_cell:nth-child(3) {
                 padding-left: 20px;
             }
-            textarea{
-                resize:none;
-                height:150px;
+
+            input, select {
+                height: 22px;
+                padding: 0 4px;
+            }
+            textarea {
+                resize: none;
+                height: 150px;
+            }
+            select {
+                min-width: 100px;
             }
         }
         .error_message > div:last-child {

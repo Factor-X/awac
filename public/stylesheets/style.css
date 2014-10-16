@@ -1725,3 +1725,9 @@ ul.messenger > li {
     margin-left: calc(50% - 300px);
 }
 
+.open .dropdown-menu {
+    display: block;
+    top: auto;
+    left: auto;
+    !important;
+}
