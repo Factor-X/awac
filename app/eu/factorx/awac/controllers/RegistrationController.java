@@ -74,17 +74,17 @@ public class RegistrationController extends AbstractController {
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
 		}
 
-		//control key
+		// control key
 		VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
 		if (verificationRequest == null || verificationRequest.getOrganizationVerifier() != null) {
 			return notFound(new ExceptionsDTO("the validation request must be canceled by the customer"));
 		}
 
-		//create organization
+		// create organization
 		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
 		organizationService.saveOrUpdate(organization);
 
-		//create administrator
+		// create administrator
 		Account account = null;
 		try {
 			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
@@ -92,16 +92,16 @@ public class RegistrationController extends AbstractController {
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
-		//if the login and the password are ok, refresh the session
+		// if the login and the password are ok, refresh the session
 		securedController.storeIdentifier(account);
 
 		// email submission
 		handleEmailSubmission(account, InterfaceTypeCode.VERIFICATION);
 
-		//link the key
+		// link the key
 		verificationController.addRequestByKey(dto.getKey());
 
-		//create ConnectionFormDTO
+		// create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);

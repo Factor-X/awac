@@ -10,16 +10,14 @@ angular
     link: (scope) ->
         directiveService.autoScopeImpl scope
 
-
-
-        scope.isValidationDefined = scope.getInfo().validationRegex? || scope.getInfo().validationFct?
+        scope.isValidationDefined = !!scope.getInfo().validationRegex || !!scope.getInfo().validationFct
         scope.hideIsValidIcon = !!scope.getInfo().hideIsValidIcon
-        scope.fieldType = if (scope.getInfo().fieldType?) then scope.getInfo().fieldType else "text"
+        scope.fieldType = if (!!scope.getInfo().fieldType) then scope.getInfo().fieldType else "text"
 
-        if !scope.getInfo().field?
+        if !scope.getInfo().field
             scope.getInfo().field=""
 
-        if !scope.getInfo().isValid?
+        if scope.getInfo().isValid == undefined
             scope.getInfo().isValid = !scope.isValidationDefined
 
         if scope.isValidationDefined
@@ -37,13 +35,14 @@ angular
 
             isValid = true
 
-            if typeof scope.getInfo().field != 'string'
+            if typeof(scope.getInfo().field) != 'string'
                 scope.getInfo().field+=""
 
             if scope.getInfo().validationRegex?
-                isValid = scope.getInfo().field.match(scope.getInfo().validationRegex)
+                isValid = !!scope.getInfo().field.match(scope.getInfo().validationRegex)
             if scope.getInfo().validationFct?
                 isValid = isValid && scope.getInfo().validationFct()
+
             scope.getInfo().isValid = isValid
             return
 

@@ -5,6 +5,7 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
+import eu.factorx.awac.dto.myrmex.get.AnonymousPersonDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ActiveAccountDTO;
@@ -22,6 +23,7 @@ import org.springframework.core.convert.ConversionService;
 
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -41,6 +43,35 @@ public class UserProfileController extends AbstractController {
 		PersonDTO personDTO = conversionService.convert(currentUser, PersonDTO.class);
 		return ok(personDTO);
 	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result saveAnonymousUserProfileData() {
+		Account currentUser = securedController.getCurrentUser();
+		AnonymousPersonDTO anonymousPersonDTO = extractDTOFromRequest(AnonymousPersonDTO.class);
+
+		// check if identifier already exists
+		Account account = accountService.findByIdentifier(anonymousPersonDTO.getIdentifier());
+		if (account!=null) {
+			// this kind of messages open security issues
+			// do we need to give a more general message?
+			throw new RuntimeException("Identifier already exist. Please try with another identifier");
+		}
+
+		currentUser.setIdentifier(anonymousPersonDTO.getIdentifier());
+		currentUser.setPassword(anonymousPersonDTO.getPassword());
+		currentUser.getPerson().setEmail(anonymousPersonDTO.getEmail());
+		currentUser.getPerson().setLastname(anonymousPersonDTO.getLastName());
+		currentUser.getPerson().setFirstname(anonymousPersonDTO.getFirstName());
+
+		accountService.saveOrUpdate(currentUser);
+
+		// remove cookie
+		response().discardCookie("AWAC_ANONYMOUS_IDENTIFIER");
+
+		return ok(new ReturnDTO());
+	}
+
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)

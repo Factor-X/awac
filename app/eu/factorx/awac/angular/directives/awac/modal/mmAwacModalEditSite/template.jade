@@ -15,9 +15,9 @@
                     mm-awac-modal-field-text(ng-info="fields.description")
                     mm-awac-modal-field-text(ng-info="fields.nace")
                     mm-awac-modal-field-text(ng-info="fields.percentOwned")
-                    div.field_row
-                        div(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translate")
-                        div
+                    .field_row
+                        .field_cell(ng-bind-html="'SITE_MANAGER_ORGANIZATIONAL_STRUCTURE' | translate")
+                        .field_cell
                             select(ng-options='p  as ( p | translateText ) for p  in organizationStructureList ', ng-model='organizationStructure')
 
             .modal-footer

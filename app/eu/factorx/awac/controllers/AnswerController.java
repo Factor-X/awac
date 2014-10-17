@@ -5,6 +5,7 @@ import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
 import eu.factorx.awac.dto.awac.post.*;
+import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
@@ -883,9 +884,9 @@ public class AnswerController extends AbstractController {
                 // build the answer value
                 String strValue = StringUtils.trim(rawAnswerValue.toString());
                 Boolean booleanValue = null;
-                if ("1".equals(strValue)) {
+                if ("1" .equals(strValue)) {
                     booleanValue = Boolean.TRUE;
-                } else if ("0".equals(strValue)) {
+                } else if ("0" .equals(strValue)) {
                     booleanValue = Boolean.FALSE;
                 }
 

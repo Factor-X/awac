@@ -53,6 +53,9 @@ public class ResultController extends AbstractController {
     @Autowired
     private VerificationRequestService verificationRequestService;
 
+	//
+	// ACTIONS
+	//
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
@@ -83,7 +86,6 @@ public class ResultController extends AbstractController {
             return getComparedReport(period, comparedPeriod, scopes);
         }
     }
-
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
@@ -122,21 +124,30 @@ public class ResultController extends AbstractController {
         }
     }
 
+	public Result getReportAsPdf() {
+
+
+
+
+		return ok();
+	}
+
+	//
+	// UTILS
+	//
+
     private Result getSimpleReportAsXls(Period period, List<Scope> scopes) throws IOException, WriteException, BiffException {
         LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
         InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
         byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
         return ok(new Base64().encode(content));
     }
-
     private Result getComparedReportAsXls(Period period, Period comparedPeriod, List<Scope> scopes) throws IOException, WriteException, BiffException {
         LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
         InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
         byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
         return ok(new Base64().encode(content));
     }
-
-
     private Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {
         ResultsDTO resultsDTO = new ResultsDTO();
 
@@ -184,8 +195,6 @@ public class ResultController extends AbstractController {
         // 4. PUSH !!!
         return ok(resultsDTO);
     }
-
-
     private Result getSimpleReport(Period period, List<Scope> scopes) throws BiffException, IOException, WriteException {
         ResultsDTO resultsDTO = new ResultsDTO();
 
@@ -224,7 +233,6 @@ public class ResultController extends AbstractController {
         // 4. PUSH !!!
         return ok(resultsDTO);
     }
-
     private void controlScope(List<Scope> listScope) {
 
         boolean fromMyOrganization = true;
@@ -263,6 +271,7 @@ public class ResultController extends AbstractController {
         }
         throw new MyrmexRuntimeException("this is not your scope");
     }
+
 
 
 }

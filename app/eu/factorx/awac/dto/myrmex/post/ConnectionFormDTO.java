@@ -7,11 +7,11 @@ import eu.factorx.awac.dto.validation.annotations.Pattern;
 
 public class ConnectionFormDTO extends DTO {
 
-	@NotNull
+	@Optional()
 	@Pattern(regexp = Pattern.IDENTIFIER, message = "Login between 5 and 20 letters")
 	private String login;
 
-	@NotNull
+	@Optional()
 	@Pattern(regexp = Pattern.PASSWORD, message = "Password between 5 and 20 letters")
 	private String password;
 

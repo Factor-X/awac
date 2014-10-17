@@ -2,32 +2,42 @@ div
     .menu_close(ng-click="toForm()")
     h1(ng-bind-html="'USER_DATA_BUTTON' | translate")
 
-    style
-        .edit_icon {
-            width: 22px;
-            height: 22px;
-            top: -1px;
-        }
-
     .user_data
-        div(class="field_form", style="display:table")
-            mm-awac-modal-field-text(ng-info="identifierInfo")
-            mm-awac-modal-field-text(ng-info="passwordInfo")
-                div(style="width:10px")
-                    button(type="button", title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}", ng-click="changePassword()", class="edit_icon glyphicon glyphicon-pencil")
-            mm-awac-modal-field-text(ng-info="lastNameInfo")
-            mm-awac-modal-field-text(ng-info="firstNameInfo")
-            mm-awac-modal-field-text(ng-info="emailInfo")
-                div(style="width:10px")
-                    button(type="button", title="{{'UPDATE_EMAIL_BUTTON' | translateText}}", ng-click="changeEmail()", class="edit_icon glyphicon glyphicon-pencil")
-
+        .field_form(ng-if='isAnonymousUser()')
+            mm-awac-modal-field-text(ng-info="anonymous.loginInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.passwordInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.lastNameInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.firstNameInfo")
+            mm-awac-modal-field-text(ng-info="anonymous.emailInfo")
             br
             div(style="display:table-row")
                 div(style="display:table-cell")
                 div(style="display:table-cell")
                 div(style="display:table-cell")
                     div(ng-hide="isLoading", style="text-align: right")
-                        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="send()", ng-disabled="!allFieldValid()")
-
+                        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="sendAnonymous()()", ng-disabled="!anonymousFieldValid()")
                     img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+            div(ng-if='!isAnonymousUser()',class="field_form", style="display:table", )
 
+        .field_form(ng-if='!isAnonymousUser()')
+            mm-awac-modal-field-text(ng-info="identifierInfo")
+            mm-awac-modal-field-text(ng-info="passwordInfo")
+                button.edit_icon(
+                type="button",
+                title="{{'UPDATE_PASSWORD_BUTTON' | translateText}}",
+                ng-click="changePassword()")
+                    span.glyphicon.glyphicon-pencil
+            mm-awac-modal-field-text(ng-info="lastNameInfo")
+            mm-awac-modal-field-text(ng-info="firstNameInfo")
+            mm-awac-modal-field-text(ng-info="emailInfo")
+                button.edit_icon(
+                type="button",
+                title="{{'UPDATE_EMAIL_BUTTON' | translateText}}",
+                ng-click="changeEmail()")
+                    span.glyphicon.glyphicon-pencil
+            .field_row
+                .field_cell
+                .field_cell.field_wide
+                    div(ng-hide="isLoading", style="text-align: right")
+                        button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="send()", ng-disabled="!allFieldValid()")
+                    img(ng-show="isLoading",src="/assets/images/modal-loading.gif")

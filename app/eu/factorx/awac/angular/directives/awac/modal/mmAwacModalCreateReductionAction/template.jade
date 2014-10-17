@@ -1,19 +1,66 @@
-// Modal
 .modal(ng-enter="save()",ng-escape="close()")
     .modal-dialog
-        .modal-content
+        .modal-content(style="width:700px")
             .modal-header
                 button.button(type="button",ng-click="close()")
                     span(aria-hidden="true") &times;
                     span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
-                h4(class="modal-title",id="myModalLabel", ng-bind-html="'EMAIL_CHANGE_FORM_TITLE' | translate")
+                h4(class="modal-title",id="myModalLabel", ng-bind-html="'CREATE_REDUCTION_ACTION_FORM_TITLE' | translate")
 
             .modal-body
                 .field_form
-                    mm-awac-modal-field-text(ng-info="passwordInfo")
+                    mm-awac-modal-field-text(ng-info="title")
+
                     br
-                    mm-awac-modal-field-text(ng-info="oldEmailInfo")
-                    mm-awac-modal-field-text(ng-info="newEmailInfo")
+                    .field_row
+                        .field_cell(ng-click="logField()")
+                            span(ng-bind-html='typeKey.fieldTitle | translate')
+                        .field_cell.field_wide
+                            div(ng-repeat="codeLabel in typeOptions")
+                                input(type="radio", ng-model="typeKey.field", name="{{typeKey.inputName}}", value="{{codeLabel.key}}", style="width :20px !important;margin:0;vertical-align:middle;")
+                                span &nbsp;
+                                span(ng-bind-html="codeLabel.label")
+
+                    br
+                    .field_row
+                        .field_cell(ng-click="logField()")
+                            span(ng-bind-html='scopeTypeKey.fieldTitle | translate')
+                        .field_cell.field_wide
+                            div
+                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="1", style="width :20px !important;margin:0;vertical-align:middle;")
+                                span &nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_ORG' | translate")
+                                span &nbsp;
+                                span( ng-bind-html=" ': <b>' + $root.organizationName + '</b>' ")
+                            div
+                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="2", style="width :20px !important;margin:0;vertical-align:middle;")
+                                span &nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_SITE' | translate")
+                                span &nbsp;
+                                select(
+                                ng-disabled="scopeType.field == '1'",
+                                ng-model="scopeId.field",
+                                ng-options="s.id as s.name for s in $root.mySites")
+
+                    br
+                    mm-awac-modal-field-text(ng-info="physicalMeasure")
+                    mm-awac-modal-field-text(ng-info="ghgBenefit", ng-disabled="typeKey.field == '2'")
+                        select(ng-model="ghgBenefitUnitKey", ng-options="u.code as u.name for u in gwpUnits")
+
+                    br
+                    mm-awac-modal-field-text(ng-info="financialBenefit")
+                        div(style="line-height: 22px;") euros
+                    mm-awac-modal-field-text(ng-info="investment")
+                        div(style="line-height: 22px;") euros
+                    mm-awac-modal-field-text(ng-info="expectedPaybackTime")
+
+                    br
+                    mm-field-date(ng-info="dueDate")
+
+                    br
+                    mm-awac-modal-field-text(ng-info="webSite")
+                    mm-awac-modal-field-text(ng-info="responsiblePerson")
+                    mm-awac-modal-field-text(ng-info="comment")
 
             .modal-footer
 
@@ -30,5 +77,3 @@
                     ng-bind-html="'SAVE_BUTTON' | translate")
 
                 img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
-
-
