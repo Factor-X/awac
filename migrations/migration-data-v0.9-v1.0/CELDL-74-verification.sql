@@ -146,3 +146,41 @@ WITH (
 );
 ALTER TABLE mm_storedfile_organization
   OWNER TO play;
+
+
+
+
+CREATE SEQUENCE verificationrequestcanceled_id_seq;
+
+  CREATE TABLE verificationrequestcanceled
+(
+ id bigserial NOT NULL,
+  creationdate timestamp without time zone,
+  creationuser character varying(255),
+  lastupdatedate timestamp without time zone,
+  lastupdateuser character varying(255),
+  content text,
+  email character varying(255),
+  contact_id bigint,
+  phonenumber character varying(255),
+  awaccalculatorinstance_id bigint NOT NULL,
+  organizationverifier_id bigint,
+  CONSTRAINT verificationrequestcanceled_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_o2y7uyf33tshgpme9fv9l9y4n FOREIGN KEY (contact_id)
+      REFERENCES account (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_qghch49rnv33lg97owp84sr1b FOREIGN KEY (organizationverifier_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_scqxhrkx1n9wjhuk3vje0emrw FOREIGN KEY (awaccalculatorinstance_id)
+      REFERENCES awaccalculatorinstance (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE verificationrequestcanceled
+  OWNER TO play;
+
+
+alter table account add column is_main_verifier boolean not null default false;

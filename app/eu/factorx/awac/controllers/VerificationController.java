@@ -24,6 +24,7 @@ import eu.factorx.awac.models.email.EmailVerificationContent;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.AwacCalculatorInstance;
 import eu.factorx.awac.models.forms.VerificationRequest;
+import eu.factorx.awac.models.forms.VerificationRequestCanceled;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.KeyGenerator;
@@ -80,6 +81,36 @@ public class VerificationController extends AbstractController {
     private QuestionSetAnswerService quesstionSetAnswerService;
     @Autowired
     private StoredFileService storedFileService;
+    @Autowired
+    private VerificationRequestCanceledService verificationRequestCanceledService;
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result getArchivedRequests() {
+
+        //control interface
+        if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+        }
+
+        List<VerificationRequest> verificationRequestList = verificationRequestService.findByOrganizationVerifierAndVerificationRequestStatus(securedController.getCurrentUser().getOrganization(), VerificationRequestStatus.VERIFIED);
+
+        List<VerificationRequestCanceled> verificationRequestCanceledList = verificationRequestCanceledService.findByOrganizationVerifier(securedController.getCurrentUser().getOrganization());
+
+        ListDTO<VerificationRequestDTO> dto = new ListDTO<>();
+
+        for (VerificationRequest request : verificationRequestList) {
+            dto.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+        }
+
+
+        for (VerificationRequestCanceled request : verificationRequestCanceledList) {
+            dto.add(conversionService.convert(request, VerificationRequestDTO.class));
+        }
+
+        return ok(dto);
+    }
 
 
     @Transactional(readOnly = false)
@@ -87,7 +118,7 @@ public class VerificationController extends AbstractController {
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result createRequest() {
 
-        CreateVerificationRequestDTO dto = this.extractDTOFromRequest(CreateVerificationRequestDTO.class);
+        CreateVerificationRequestDTO dto = extractDTOFromRequest(CreateVerificationRequestDTO.class);
 
         //control password
         if (!accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser())) {
@@ -171,10 +202,10 @@ public class VerificationController extends AbstractController {
 
 
         //build email
-        HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+        //HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
         String title = "Demande de vérification";
 
-        Map values = new HashMap<String, Object>();
+        Map<String, Object> values = new HashMap<>();
         values.put("title", title);
         values.put("CUSTOMER_ORGANIZATION", securedController.getCurrentUser().getOrganization().getName());
         values.put("CUSTOMER_INTERFACE_TYPE", securedController.getCurrentUser().getOrganization().getInterfaceCode().getKey());
@@ -193,7 +224,7 @@ public class VerificationController extends AbstractController {
             values.put("CUSTOMER_COMMENT", dto.getComment());
         }
 
-        String velocityContent = null;
+        String velocityContent;
 
         //send email
         if (organizationVerification != null) {
@@ -226,7 +257,7 @@ public class VerificationController extends AbstractController {
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result getRequests() {
+    public Result getRequestsToManage() {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
@@ -238,7 +269,9 @@ public class VerificationController extends AbstractController {
         ListDTO<VerificationRequestDTO> dto = new ListDTO<>();
 
         for (VerificationRequest request : verificationRequestList) {
-            dto.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+            if (!request.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFIED)) {
+                dto.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+            }
         }
 
         return ok(dto);
@@ -272,6 +305,15 @@ public class VerificationController extends AbstractController {
                 calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null) {
             return unauthorized(new ExceptionsDTO("cannot load calculator instance"));
         }
+
+        //control organization
+        if (!calculatorInstance.getScope().getOrganization().equals(securedController.getCurrentUser().getOrganization()) &&
+                (calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null ||
+                        !calculatorInstance.getVerificationRequest().getOrganizationVerifier().equals(securedController.getCurrentUser().getOrganization()))) {
+            return unauthorized(new ExceptionsDTO("this is not your organization"));
+        }
+
+
         //load statuses
         VerificationRequestStatus newStatus = new VerificationRequestStatus(dto.getNewStatus());
         VerificationRequestStatus oldStatus = calculatorInstance.getVerificationRequest().getVerificationRequestStatus();
@@ -282,17 +324,21 @@ public class VerificationController extends AbstractController {
         //control status
         if (newStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_CONFIRMATION) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFIER_CONFIRMATION) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                securedController.getCurrentUser().getIsAdmin()) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email ?
         } else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFIER_CONFIRMATION) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            verificationRequestService.remove(calculatorInstance.getVerificationRequest());
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                securedController.getCurrentUser().getIsAdmin()) {
+            deleteVerificationRequest(calculatorInstance.getVerificationRequest());
+
             //TODO send email !
         } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
                 (oldStatus.equals(VerificationRequestStatus.WAIT_ASSIGNATION) || oldStatus.equals(VerificationRequestStatus.VERIFICATION)) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                securedController.getCurrentUser().getIsAdmin()) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
 
             //load verifier
@@ -308,16 +354,19 @@ public class VerificationController extends AbstractController {
             //TODO send email ?
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_ASSIGNATION) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_CONFIRMATION) &&
-                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser()) &&
+                securedController.getCurrentUser().getIsAdmin()) {
 
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
-                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser()) &&
+                securedController.getCurrentUser().getIsAdmin()) {
             //the request is canceled !!
-            verificationRequestService.remove(calculatorInstance.getVerificationRequest());
+            deleteVerificationRequest(calculatorInstance.getVerificationRequest());
             //TODO send email
-            //TODO archive ?
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
                 oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
                 answerController.testCloseableValidation(period.getPeriodCode().getKey(), scope.getId()).isFinalized() &&
@@ -346,39 +395,58 @@ public class VerificationController extends AbstractController {
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                (securedController.getCurrentUser().getIsAdmin() ||
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
+            //TODO !! send rapport like piece jointe !!
         } else if (newStatus.equals(VerificationRequestStatus.VERIFIED) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
-                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser()) &&
+                securedController.getCurrentUser().getIsAdmin()) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
-                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser()) &&
+                (securedController.getCurrentUser().getIsAdmin() ||
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.CORRECTION) &&
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                (securedController.getCurrentUser().getIsAdmin() ||
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+
+            //dis valid
+            for (Verification verification : calculatorInstance.getVerificationRequest().getVerificationList()) {
+                if (verification.getVerificationStatus().equals(VerificationStatus.REJECTED)) {
+                    verification.getQuestionSetAnswer().getAuditInfo().setDataVerifier(null);
+                }
+            }
+
             //TODO send email
         } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
                 (oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) || oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) &&
-                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+                securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                (securedController.getCurrentUser().getIsAdmin() ||
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email ?
         } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
                 oldStatus.equals(VerificationRequestStatus.CORRECTION) &&
                 !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
-                answerController.testCloseable(dto.getPeriodKey(), dto.getScopeId())) {
+                answerController.testCloseable(dto.getPeriodKey(), dto.getScopeId()) &&
+                accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser()) &&
+                securedController.getCurrentUser().getIsAdmin()) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
             //TODO send email
-        }
-
-        //TODO
-        else {
+        } else {
             return unauthorized(new ExceptionsDTO("cannot do this action"));
         }
 
@@ -450,7 +518,7 @@ public class VerificationController extends AbstractController {
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
     public Result verify() {
-        VerifyDTO dto = this.extractDTOFromRequest(VerifyDTO.class);
+        VerifyDTO dto = extractDTOFromRequest(VerifyDTO.class);
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
@@ -463,7 +531,7 @@ public class VerificationController extends AbstractController {
         QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(dto.getQuestionSetKey()));
         VerificationStatus verificationStatus = new VerificationStatus(dto.getVerification().getStatus());
 
-        if (scope == null || period == null || verificationStatus == null || questionSet == null) {
+        if (scope == null || period == null ||  questionSet == null) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
@@ -476,7 +544,9 @@ public class VerificationController extends AbstractController {
         //control verifier
         VerificationRequest verificationRequest = verificationRequestService.findByVerifierAndScopeAndPeriod(securedController.getCurrentUser(), scope, period);
 
-        if (verificationRequest == null) {
+        if (verificationRequest == null ||
+                !verificationRequest.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFICATION) ||
+                !verificationRequest.getVerifierList().contains(securedController.getCurrentUser())) {
             return unauthorized(new ExceptionsDTO("You are not a verifier"));
         }
 
@@ -529,5 +599,20 @@ public class VerificationController extends AbstractController {
         return verificationRequest;
     }
 
+
+    private void deleteVerificationRequest(VerificationRequest verificationRequest) {
+
+        if (verificationRequest.getOrganizationVerifier() != null) {
+            VerificationRequestCanceled verificationRequestCanceled = new VerificationRequestCanceled(
+                    verificationRequest.getAwacCalculatorInstance(),
+                    verificationRequest.getOrganizationVerifier(),
+                    verificationRequest.getContact(),
+                    verificationRequest.getEmailVerificationContent());
+
+            verificationRequestCanceledService.saveOrUpdate(verificationRequestCanceled);
+        }
+
+        verificationRequestService.remove(verificationRequest);
+    }
 
 }

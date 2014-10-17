@@ -15,6 +15,9 @@ angular
         if $scope.$root.verificationRequest?
             return $scope.$root.verificationRequest.status
 
+    $scope.getVerificationRequestOrganizationVerifierName = ->
+        return $scope.$root.verificationRequest?.organizationVerifier?.name
+
     $scope.$watch '$root.periodToCompare', () ->
         $scope.reload()
 
