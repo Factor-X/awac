@@ -1,17 +1,16 @@
 package eu.factorx.awac.util.email.business;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import eu.factorx.awac.controllers.EmailController;
 import eu.factorx.awac.models.email.MailConfig;
@@ -58,7 +57,7 @@ public class EmailSender implements ApplicationContextAware {
      * @param email the email message
      */
     
-    public void sendEmail(EmailMessage email) throws MessagingException {
+    public void sendEmail(EmailMessage email) throws MessagingException, UnsupportedEncodingException {
     	play.Logger.info("Sending email ...");
         final String username = MailConfig.username;
 		// mail.smpt.password must be define in conf/application.conf
@@ -109,13 +108,36 @@ public class EmailSender implements ApplicationContextAware {
 
             Message mimeMessage = new MimeMessage(session);
             mimeMessage.setFrom(new InternetAddress(MailConfig.fromAddress));
-            //mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(MailConfig.toAddress));
             mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getToAddress()));
-            //mimeMessage.setSubject("Testing Subject");
-            mimeMessage.setSubject(email.getSubject());
-            //mimeMessage.setText("Mail Body");
-			mimeMessage.setContent(email.getContent(),"text/html");
-            //mimeMessage.setText(email.getContent());
+            mimeMessage.setSubject(MimeUtility.encodeText(email.getSubject(), "utf-8", "B"));
+
+			// main body part -> email content
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(email.getContent(), "text/html");
+
+			// multipart
+			Multipart multipart = new MimeMultipart();
+
+			// add mainbodypart to multipart
+			multipart.addBodyPart(messageBodyPart);
+
+			// check if attachments
+			if (email.getAttachmentFilenameList()!=null) {
+				// for each attachment
+				for (String fileName : email.getAttachmentFilenameList()) {
+					try {
+						Logger.info("Attachment found : " + fileName);
+						addAttachment(multipart, fileName);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} // end for
+			} // end if
+
+			// add multipart to message
+			mimeMessage.setContent(multipart);
+
+			// send message
             Transport.send(mimeMessage);
 
             play.Logger.info("Email Successfully sent to " + email.getToAddress());
@@ -125,4 +147,13 @@ public class EmailSender implements ApplicationContextAware {
         }
 
     }
+
+	// add attachment
+	private static void addAttachment(Multipart multipart, String fileName) throws IOException, MessagingException
+	{
+		MimeBodyPart messageAttachment = new MimeBodyPart();
+		messageAttachment.attachFile(fileName);
+		messageAttachment.setFileName(fileName);
+		multipart.addBodyPart(messageAttachment);
+	}
 }

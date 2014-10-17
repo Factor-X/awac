@@ -5,19 +5,19 @@
         span(ng-bind-html='getInfo().fieldTitle | translate')
     .field_cell
 
-        .field_error_message_flash(ng-show="errorMessage.length>0")
-            div(ng-bind-html='errorMessage | translate')
-            img(src='/assets/images/question_field_error_message_icon_arrow.png')
 
         .wrapper_table
             .wrapper_row
                 .wrapper_cell.wide
+                    .error_message_numbers_only(ng-show="errorMessage.length>0")
+                        div {{errorMessage}}
+                        img(src='/assets/images/question_field_error_message_icon_arrow.png')
                     input(
                     ng-hide="fieldType === 'textarea'",
                     type='{{fieldType}}',
                     ng-disabled='getInfo().disabled',
                     ng-model='getInfo().field',
-                    ng-attr-numbers-only="getInfo().numbersOnly",
+                    ng-attr-numbers-only="{{getInfo().numbersOnly}}",
                     ng-class="{input_number: getInfo().numbersOnly === 'integer' || getInfo().numbersOnly === 'double'}"
                     placeholder='{{getInfo().placeholder | translateText}}',
                     name='{{getInfo().inputName}}',
@@ -28,7 +28,7 @@
                     type='{{fieldType}}',
                     ng-disabled='getInfo().disabled',
                     ng-model='getInfo().field',
-                    ng-attr-numbers-only="getInfo().numbersOnly",
+                    ng-attr-numbers-only="{{getInfo().numbersOnly}}",
                     ng-class="{input_number: getInfo().numbersOnly === 'integer' || getInfo().numbersOnly === 'double'}"
                     placeholder='{{getInfo().placeholder | translateText}}',
                     name='{{getInfo().inputName}}',
