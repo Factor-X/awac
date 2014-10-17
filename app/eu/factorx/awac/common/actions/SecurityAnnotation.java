@@ -22,5 +22,6 @@ import java.lang.annotation.Target;
 
 public @interface SecurityAnnotation {
 	boolean isAdmin () default false;
+    boolean isMainVerifier () default false;
 	boolean isSystemAdmin () default false;
 }

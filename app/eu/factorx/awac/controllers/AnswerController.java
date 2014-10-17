@@ -349,7 +349,7 @@ public class AnswerController extends AbstractController {
         securedController.controlDataAccess(period, scope);
 
         //control verification
-        AwacCalculator awacCalculator = new AwacCalculator(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+        AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
         AwacCalculatorInstance awacCalculatorInstance = awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
 
         if (awacCalculatorInstance != null &&
@@ -477,7 +477,7 @@ public class AnswerController extends AbstractController {
         Form form = formService.findById(answersDTO.getFormId());
         Period period = periodService.findById(answersDTO.getPeriodId());
         Scope scope = scopeService.findById(answersDTO.getScopeId());
-        AwacCalculator awacCalculator = new AwacCalculator(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+        AwacCalculator awacCalculator = awacCalculatorService.findByCode(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 
         //test if the form is aviable for the scope / period
         securedController.controlDataAccess(form, period, scope);
