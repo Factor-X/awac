@@ -4,9 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour, ${request.organizationVerifier.name} a accepté votre demande de vérification du bilan du
-périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.
-A vous de confirmer cela dans l'outil pour leur donner accès aux données et que le
-travail de vérification puisse démarrer. Bien à vous, L'outil AWAC
+Bonjour, ${request.organizationVerifier.name} a accepté votre demande de vérification du bilan du périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. A vous de confirmer cela dans l'outil pour leur donner accès aux données et que le travail de vérification puisse démarrer. Bien à vous, L'outil AWAC
 </body>
 </html>

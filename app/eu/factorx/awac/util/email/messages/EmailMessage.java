@@ -14,27 +14,37 @@ package eu.factorx.awac.util.email.messages;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EmailMessage {
 
-	private String toAddress;
+	private List<String> toAddress;
 	private String subject;
 	private String content;
 
 	public EmailMessage(String toAddress, String subject, String content) {
-		this.toAddress = toAddress;
+        this.toAddress = new ArrayList<>();
+		this.toAddress.add(toAddress);
 		this.subject = subject;
 		this.content = content;
 	}
 
-	public String getToAddress() {
-		return toAddress;
-	}
+    public EmailMessage(List<String> toAddress, String subject, String content) {
+        this.toAddress = toAddress;
+        this.subject = subject;
+        this.content = content;
+    }
 
-	public void setToAddress(String toAddress) {
-		this.toAddress = toAddress;
-	}
+    public List<String> getToAddress() {
+        return toAddress;
+    }
 
-	public String getSubject() {
+    public void setToAddress(List<String> toAddress) {
+        this.toAddress = toAddress;
+    }
+
+    public String getSubject() {
 		return subject;
 	}
 

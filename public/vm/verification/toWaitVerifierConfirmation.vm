@@ -4,11 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,
-    ${user.firstName} ${user.firstName}
-a soumis des corrections pour la vérification sur
-    ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.
-A vous de re-vérifier. Bien à vous, L'outil AWAC.
-
+Bonjour, ${user.person.firstName} ${user.person.firstName} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous demande de bien vouloir vérifier son bilan GES réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. Il a joint le message suivant à votre intention: ${request.emailVerificationContent.content}. Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}. Pour accéder ou refuser à sa demande, merci de vous connecter à votre compte de vérification. Bien à vous, L'outil AWAC.
 </body>
 </html>

@@ -4,8 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour, ${user.firstName} ${user.firstName} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous a octroyé l'accès aux données du périmètre
-${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.
-Vous pouvez maintenant assigner ce travail à des collaborateurs dans vos interfaces de vérification. Bien à vous, L'outil AWAC.
+Bonjour, ${user.person.firstName} ${user.person.firstName} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} a annulé sa demande de vérification du bilan GES réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. Bien à vous, L'outil AWAC.
 </body>
 </html>

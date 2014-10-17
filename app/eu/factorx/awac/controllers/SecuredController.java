@@ -73,6 +73,11 @@ public class SecuredController extends Security.Authenticator {
         return ((Account) getCurrentUser()).getIsAdmin();
     }
 
+
+    public boolean isMainVerifier() {
+        return ((Account) getCurrentUser()).getIsMainVerifier();
+    }
+
     public boolean isSystemAdministrator() {
         return (((Account) getCurrentUser()) instanceof SystemAdministrator);
     }
@@ -208,6 +213,7 @@ public class SecuredController extends Security.Authenticator {
     private final static long SESSION_TIME_MAX = 30L * 60L * 1000L;
 
     private static List<LockQuestionSet> lockQuestionSetList = new ArrayList<>();
+
 
 
     private static class LockQuestionSet {

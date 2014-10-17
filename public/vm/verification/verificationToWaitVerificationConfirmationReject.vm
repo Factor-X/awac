@@ -4,9 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour, ${user.firstName} ${user.firstName} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} a annulé sa demande de vérification du bilan GES réalisé sur l'outil de
-l'AWAC pour le périmètre
-    ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.
-Bien à vous, L'outil AWAC.
+Bonjour,${user.person.firstName} ${user.person.firstName} a fini la vérification de ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}. A vous de valider et de renvoyer au client. Bien à vous, L'outil AWAC.
 </body>
 </html>

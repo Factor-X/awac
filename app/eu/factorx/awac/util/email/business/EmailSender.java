@@ -64,33 +64,6 @@ public class EmailSender implements ApplicationContextAware {
 		// mail.smpt.password must be define in conf/application.conf
 		final String password = Configuration.root().getString("mail.smtp.password");
 
-//		UnitService unitService = ctx.getBean(UnitService.class);
-//		if (unitService==null) {
-//			Logger.info("Spring context is null");
-//		} else {
-//
-//			/* getting JPA transaction usinf JPA.with Transaction wrapper - for test purposes*/
-//			try {
-//				JPA.withTransaction("default", false, new play.libs.F.Function0<Void>() {
-//					public Void apply() throws Throwable {
-//						UnitService unitService = ctx.getBean(UnitService.class);
-//						List<Unit> lu = unitService.findAll();
-//						Logger.info("UnitService size = : " + lu.size());
-//						return null;
-//					}
-//				});
-//			} catch (Throwable throwable) {
-//				throw new RuntimeException(throwable);
-//			}
-
-			/* same using Transaction.begin()/commit() - not working */
-//			JPA.em().getTransaction().begin();
-//			Logger.info("Spring context wired : " + new Date(ctx.getStartupDate()));
-//			ctx.getStartupDate();
-//			List<Unit> lu = unitService.findAll();
-//			Logger.info("UnitService size = : " + lu.size());
-//			JPA.em().getTransaction().commit();
-//		}
 
         Properties props = new Properties();
         props.put(MAIL_SMTP_AUTH_KEY, MailConfig.smtpAuth);
@@ -110,7 +83,9 @@ public class EmailSender implements ApplicationContextAware {
             Message mimeMessage = new MimeMessage(session);
             mimeMessage.setFrom(new InternetAddress(MailConfig.fromAddress));
             //mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(MailConfig.toAddress));
-            mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getToAddress()));
+            for(String address : email.getToAddress()) {
+                mimeMessage.addRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
+            }
             //mimeMessage.setSubject("Testing Subject");
             mimeMessage.setSubject(email.getSubject());
             //mimeMessage.setText("Mail Body");
