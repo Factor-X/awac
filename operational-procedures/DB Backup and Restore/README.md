@@ -40,7 +40,7 @@ cd ~/backup
 heroku pgbackups --app awac-dev
 ```
 
-## Create new backup instance and replace old one ,on Heroku Cloud 
+## Create new backup instance and replace old one, on Heroku Cloud 
 ```sh
 heroku pgbackups:capture --expire --app awac-dev
 ```
