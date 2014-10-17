@@ -30,6 +30,34 @@ angular
         url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
         $window.open(url)
 
+    $scope.exportPdf = () ->
+        sites = $scope.mySites.filter((e) ->
+            return e.selected
+        )
+
+        dto =
+            __type: 'eu.factorx.awac.dto.awac.post.GetReportParametersDTO'
+            periodKey: $scope.$root.periodSelectedKey
+            scopesIds: sites.map((s) ->
+                s.id
+            )
+
+        if $scope.$root.periodToCompare != 'default'
+            dto.comparedPeriodKey = $scope.$root.periodToCompare
+
+        downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
+            window.R = result
+
+            byteCharacters = atob(result.data)
+            byteNumbers = new Array(byteCharacters.length)
+            for i in [0...byteCharacters.length]
+                byteNumbers[i] = byteCharacters.charCodeAt(i)
+            byteArray = new Uint8Array(byteNumbers)
+            blob = new Blob([byteArray], { type: 'application/pdf' })
+
+            filename = "export.pdf"
+
+            saveAs(blob,filename)
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
@@ -58,6 +86,30 @@ angular
             filename = "export.xls"
 
             saveAs(blob,filename)
+
+    $scope.dataURItoBlob = (dataURI) ->
+
+        # convert base64 to raw binary data held in a string
+        # doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+        byteString = atob(dataURI.split(",")[1])
+
+        # separate out the mime component
+        mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0]
+
+        # write the bytes of the string to an ArrayBuffer
+        ab = new ArrayBuffer(byteString.length)
+        ia = new Uint8Array(ab)
+        i = 0
+
+        while i < byteString.length
+            ia[i] = byteString.charCodeAt(i)
+            i++
+
+        # write the ArrayBuffer to a blob, and you're done
+        bb = new BlobBuilder()
+        bb.append ab
+        return bb.getBlob(mimeString)
+
 
     $scope.reload = () ->
         sites = $scope.mySites.filter((e) ->
