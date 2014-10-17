@@ -126,15 +126,15 @@ $ heroku logs -t --app awac-dev
 
 ## In case heroku instance does not start
 
-** check whether process is running. (using heroku ps)
-** if no process use heroku scale
+**check whether process is running. (using heroku ps)
+**if no process use heroku scale
 
 ```sh
 $ heroku ps --app awac-dev
 $ heroku scale web=1
 ```
 
-** U can also restart Heroku instance using:
+**U can also restart Heroku instance using:
 
 ```sh
 $ heroku restart --app awac-dev
@@ -142,7 +142,7 @@ $ heroku restart --app awac-dev
 
 ## Apply a purge cache
 
-** only apply in case Heroku deplymlent environement seems to be unstable.
+**only apply in case Heroku deployment environment seems to be unstable.
 
 ```sh
 $ heroku repo:purge_cache -a awac-dev
@@ -150,8 +150,8 @@ $ heroku repo:purge_cache -a awac-dev
 
 ## Clean Heroku git repository
 
-** This will erase all content of heroku git repository.
-** Once done, only the procedure based on an **empty Heroku git repository** and using a Play distribution zip file can be applied
+**This will erase all content of heroku git repository.
+**Once done, only the procedure based on an empty Heroku git repository and using a Play distribution zip file can be applied
 
 ```sh
 $ heroku repo:reset -a awac-dev
