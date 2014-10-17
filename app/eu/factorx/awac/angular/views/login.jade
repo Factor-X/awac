@@ -44,6 +44,8 @@
                             ng-disabled="!connectionFieldValid()")
 
                         button.button(
+                            ng-hide="$root.instanceName == 'municipality' || $root.instanceName == 'verification'",
+                            ng-disabled="connectionFieldValid()",
                             type="button",
                             class="btn btn-primary",
                             ng-bind-html="'LOGIN_ANONYMOUS_BUTTON' | translate",

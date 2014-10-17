@@ -157,12 +157,13 @@ angular
         downloadService.postJson '/awac/user/profile/anonymous/save', data, (result) ->
             if result.success
                 messageFlash.displaySuccess "CHANGES_SAVED"
+                messageFlash.displaySuccess "Please login with your new credentials"
+                #logout
+                $scope.$root.nav('/login')
                 $scope.$root.currentPerson = null
                 $scope.$root.periodSelectedKey=null
                 $scope.$root.scopeSelectedId=null
                 $scope.isLoading = false
-                #logout
-                $scope.$root.nav('/login')
             else
                 messageFlash.displayError result.data.message
                 $scope.isLoading = false

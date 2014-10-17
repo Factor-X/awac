@@ -48,21 +48,21 @@ public class UserProfileController extends AbstractController {
 		Account currentUser = securedController.getCurrentUser();
 		AnonymousPersonDTO anonymousPersonDTO = extractDTOFromRequest(AnonymousPersonDTO.class);
 
-//		if (!personDTO.getIdentifier().equals(currentUser.getIdentifier())) {
-//			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
-//		}
-
+		// check if identifier already exists
+		Account account = accountService.findByIdentifier(anonymousPersonDTO.getIdentifier());
+		if (account!=null) {
+			// this kind of messages open security issues
+			// do we need to give a more general message?
+			throw new RuntimeException("Identifier already exist. Please try with another identifier");
+		}
 
 		currentUser.setIdentifier(anonymousPersonDTO.getIdentifier());
 		currentUser.setPassword(anonymousPersonDTO.getPassword());
 		currentUser.getPerson().setEmail(anonymousPersonDTO.getEmail());
 		currentUser.getPerson().setLastname(anonymousPersonDTO.getLastName());
 		currentUser.getPerson().setFirstname(anonymousPersonDTO.getFirstName());
-		try {
-			accountService.saveOrUpdate(currentUser);
-		} catch (Exception e) {
-			throw new RuntimeException("Anonimous user can not be converted to formal user. Please try with another identifier.");
-		}
+
+		accountService.saveOrUpdate(currentUser);
 
 		// remove cookie
 		response().discardCookie("AWAC_ANONYMOUS_IDENTIFIER");
