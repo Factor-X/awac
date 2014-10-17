@@ -26,7 +26,7 @@ angular
             if scope.isValidationDefined
                 scope.$watch 'getInfo().field', (n, o) ->
                     if n != o
-                        scope.isValid()S
+                        scope.isValid()
 
             scope.isValid = ->
                 if scope.getInfo().disabled == true || scope.getInfo().hidden == true

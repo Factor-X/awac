@@ -22,12 +22,14 @@ public class EmailMessage {
 	private List<String> toAddress;
 	private String subject;
 	private String content;
+	private List<String> attachmentFilenameList;
 
 	public EmailMessage(String toAddress, String subject, String content) {
-        this.toAddress = new ArrayList<>();
-		this.toAddress.add(toAddress);
+		this.toAddress = new ArrayList<>();
+        this.toAddress.add(toAddress);
 		this.subject = subject;
 		this.content = content;
+		this.attachmentFilenameList=null;
 	}
 
     public EmailMessage(List<String> toAddress, String subject, String content) {
@@ -35,6 +37,14 @@ public class EmailMessage {
         this.subject = subject;
         this.content = content;
     }
+
+    public EmailMessage(String toAddress, String subject, String content,List<String> attachmentList) {
+        this.toAddress = new ArrayList<>();
+        this.toAddress.add(toAddress);
+		this.subject = subject;
+		this.content = content;
+		this.attachmentFilenameList = attachmentList;
+	}
 
     public List<String> getToAddress() {
         return toAddress;
@@ -60,12 +70,24 @@ public class EmailMessage {
 		this.content = content;
 	}
 
+
+	public List<String> getAttachmentFilenameList() {
+		return attachmentFilenameList;
+	}
+
+	public void setAttachmentFilenameList(List<String> attachmentFilenameList) {
+		this.attachmentFilenameList = attachmentFilenameList;
+	}
+
 	@Override
 	public String toString() {
 		return "EmailMessage{" +
 				"toAddress='" + toAddress + '\'' +
 				", subject='" + subject + '\'' +
 				", content='" + content + '\'' +
+				", attachmentFilenameList=" + attachmentFilenameList +
 				'}';
 	}
+
+
 }

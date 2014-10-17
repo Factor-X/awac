@@ -100,7 +100,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	try {
 		// Call controller action
 		result = callAction(
-				eu.factorx.awac.controllers.routes.ref.OrganizationEventController.loadEvents(),
+				eu.factorx.awac.controllers.routes.ref.OrganizationEventController.load(),
 				fr
 		); // callAction
 	} catch (Exception e) {
