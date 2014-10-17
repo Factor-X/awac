@@ -287,7 +287,7 @@ div.results.pdf-able
                         span(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")
                     button.button(type="button", ng-click="exportXls()")
                         span(ng-bind-html="'XLS_EXPORT' | translate")
-                    button.button(type="button", mm-not-implemented)
+                    button.button(type="button", ng-click="exportPdf()")
                         span(ng-bind-html="'PDF_EXPORT' | translate")
 
                 br
