@@ -19,6 +19,8 @@ import eu.factorx.awac.models.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeUtility;
+
 //annotate as Spring Component
 @Component
 @Transactional(readOnly = true)
@@ -36,7 +38,8 @@ public class EmailController extends AbstractController {
 
 		try {
 			// send mail
-			EmailMessage email = new EmailMessage(destinationEmail, subject, message);
+			EmailMessage email = new EmailMessage(destinationEmail, MimeUtility.encodeText(subject, "utf-8", "B"), message);
+			//EmailMessage email = new EmailMessage(destinationEmail, subject, message);
 			emailService.send(email);
 		} catch (Exception ex) {
 			ex.printStackTrace();
