@@ -86,7 +86,7 @@ $ cd $SOME_DIR/heroku/awac-dev
 $ git init
 ```
 
-**Add to $SOME_DIR/heroku/awac-dev/.git/config the following definitions:**
+**Add to $SOME_DIR/heroku/awac-dev/.git/config the following definitions:
 
 
 [core]
@@ -105,7 +105,7 @@ $ git init
 **Copy distribution file to local repository**
 
 ```sh
-$ cp *$AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip* *$SOME_DIR/heroku/awac-dev*
+$ cp $AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip* *$SOME_DIR/heroku/awac-dev
 ```
 
 **Create $SOME_DIR/heroku/awac-dev/Procfile with following content
