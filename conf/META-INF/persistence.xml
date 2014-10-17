@@ -95,6 +95,7 @@
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
         <class>eu.factorx.awac.models.data.answer.Verification</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequestCanceled</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -229,6 +230,7 @@
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
         <class>eu.factorx.awac.models.data.answer.Verification</class>
+        <class>eu.factorx.awac.models.forms.VerificationRequestCanceled</class>
        	<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>

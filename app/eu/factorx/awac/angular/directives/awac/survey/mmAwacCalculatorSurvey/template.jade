@@ -86,21 +86,21 @@ div
                 div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
-            div
+            div(ng-show="$root.currentPerson.isAdmin == true")
                 //verification button => start verification
                 button.button.verification(
                     type='button',
                     ng-bind-html="'ASK_VERIFICATION' | translate",
                     ng-click="isDisabled || requestVerification()",
                     ng-show="$root.getVerificationRequestStatus()==null",
-                    ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true")
+                    ng-disabled="$root.closeableForms !== true")
                 //re-submit => is case of correction
                 button.button.verification(
                     type='button',
                     ng-bind-html="'VERIFICATION_RE_SUBMIT_BUTTON' | translate",
                     ng-click="isDisabled || resubmitVerification()",
                     ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION'",
-                    ng-disabled="$root.closeableForms !== true || $root.currentPerson.isAdmin !== true")
+                    ng-disabled="$root.closeableForms !== true")
                 //consult verificaiont => is verified
                 button.button.verification(
                      type='button',
@@ -118,16 +118,20 @@ div
                     type='button',
                     ng-bind-html="'VERIFICATION_CANCEL_BUTTON' | translate",
                     ng-click="isDisabled || cancelVerification()",
-                    ng-show="$root.getVerificationRequestStatus()!=null&& $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
-
+                    ng-show="$root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
+                //consult verification faild comment
+                button.button.verification(type="button",
+                    ng-click="isDisabled || consultVerificationFinalComment()",
+                    ng-bind-html="'VERIFICATION_FINALIZATION_CONSULT_COMMENT' | translate",
+                    ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION' "
+                    )
 
                 button.button.verification(type='button',
-                    ng-disabled="$root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'UNCLOSING_FORM\' | translate',
                     ng-show="$root.closedForms")
                 button.button.verification(type='button',
-                ng-disabled="$root.closeableForms !== true || ($root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED') || $root.currentPerson.isAdmin !== true",
+                    ng-disabled="$root.closeableForms !== true || ($root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED') || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
                     ng-hide="$root.closedForms")

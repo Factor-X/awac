@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
@@ -8,6 +9,7 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.myrmex.post.ActiveAccountDTO;
 import eu.factorx.awac.dto.myrmex.post.AdminAccountDTO;
+import eu.factorx.awac.dto.myrmex.post.MainVerifierAccountDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
@@ -32,7 +34,7 @@ public class UserProfileController extends AbstractController {
 	@Autowired
 	private AccountService accountService;
 
-	@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result getUserProfileData() {
 		Account currentUser = securedController.getCurrentUser();
@@ -127,12 +129,8 @@ public class UserProfileController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result isAdminAccount() {
-
-		//TODO control admin with annotation
-		if (!securedController.isAdministrator()) {
-			throw new MyrmexRuntimeException("");
-		}
 
 		AdminAccountDTO dto = extractDTOFromRequest(AdminAccountDTO.class);
 
@@ -140,13 +138,11 @@ public class UserProfileController extends AbstractController {
 
 		// not from my organization
 		if (!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
-			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}
 
 		// not if it's myself
 		if (account.equals(securedController.getCurrentUser())) {
-			//TODO write exception
 			throw new MyrmexRuntimeException("");
 		}
 
@@ -156,5 +152,37 @@ public class UserProfileController extends AbstractController {
 
 		return ok(new ReturnDTO());
 	}
+
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    public Result isMainVerifier() {
+
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+            return unauthorized("No the good interface");
+        }
+
+        MainVerifierAccountDTO dto = extractDTOFromRequest(MainVerifierAccountDTO.class);
+
+        Account account = accountService.findByIdentifier(dto.getIdentifier());
+
+        // not from my organization
+        if (!account.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+            throw new MyrmexRuntimeException("");
+        }
+
+        // not if it's myself
+        if (account.equals(securedController.getCurrentUser())) {
+            throw new MyrmexRuntimeException("");
+        }
+
+        account.setIsMainVerifier(dto.getIsMainVerifier());
+
+        accountService.saveOrUpdate(account);
+
+        return ok(new ReturnDTO());
+    }
+
 
 }

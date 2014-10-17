@@ -7,7 +7,7 @@ angular
 
     #launch download
     modalService.show(modalService.LOADING)
-    downloadService.getJson "/awac/verification/requests", (result) ->
+    downloadService.getJson "/awac/verification/requestsToManage", (result) ->
         if not result.success
             messageFlash.displayError(result.data.message)
             modalService.close(modalService.LOADING)

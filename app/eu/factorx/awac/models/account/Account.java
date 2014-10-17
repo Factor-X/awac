@@ -67,6 +67,9 @@ public class Account extends AuditedAbstractEntity {
 	@Column(nullable = false, name = "is_admin")
 	private Boolean isAdmin = false;
 
+    @Column(nullable = false, name = "is_main_verifier")
+    private Boolean isMainVerifier = false;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "mm_verifierrequest_account",
             joinColumns  = @JoinColumn(name = "account_id", referencedColumnName = "id"),
@@ -99,6 +102,14 @@ public class Account extends AuditedAbstractEntity {
 
     public void setVerificationRequestList(List<VerificationRequest> verificationRequestList) {
         this.verificationRequestList = verificationRequestList;
+    }
+
+    public Boolean getIsMainVerifier() {
+        return isMainVerifier;
+    }
+
+    public void setIsMainVerifier(Boolean isMainVerifier) {
+        this.isMainVerifier = isMainVerifier;
     }
 
     public Organization getOrganization() {

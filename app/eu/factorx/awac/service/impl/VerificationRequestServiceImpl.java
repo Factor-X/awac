@@ -5,6 +5,7 @@ import eu.factorx.awac.dto.awac.shared.ListDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.VerificationRequestStatus;
 import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.VerificationRequestService;
@@ -95,6 +96,15 @@ public class VerificationRequestServiceImpl extends AbstractJPAPersistenceServic
             }
         }
         return result;
+    }
+
+    @Override
+    public List<VerificationRequest> findByOrganizationVerifierAndVerificationRequestStatus(Organization organizationVerifier, VerificationRequestStatus verificationRequestStatus) {
+        return JPA.em().createNamedQuery(VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_VERIFICATION_REQUEST_STATUS, VerificationRequest.class)
+                .setParameter("organizationVerifier", organizationVerifier)
+                .setParameter("verificationRequestStatus", verificationRequestStatus)
+                .getResultList();
+
     }
 
     @Override

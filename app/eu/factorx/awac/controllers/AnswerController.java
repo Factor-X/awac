@@ -5,7 +5,6 @@ import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
 import eu.factorx.awac.dto.awac.post.*;
-import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
@@ -122,7 +121,7 @@ public class AnswerController extends AbstractController {
         }
 
         //add verificationStatus
-        if(awacCalculatorInstance!=null && awacCalculatorInstance.getVerificationRequest()!=null){
+        if (awacCalculatorInstance != null && awacCalculatorInstance.getVerificationRequest() != null) {
             formsClosingDTO.setVerificationRequest(conversionService.convert(awacCalculatorInstance, VerificationRequestDTO.class));
         }
 
@@ -206,7 +205,7 @@ public class AnswerController extends AbstractController {
             throw new MyrmexRuntimeException(BusinessErrorType.FORM_ALREADY_USED);
         }
         //lock
-        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+        if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             securedController.lockForm(form.getAllQuestionSets().get(0), scope, period);
         }
 
@@ -348,6 +347,17 @@ public class AnswerController extends AbstractController {
         //control authorization
         securedController.controlDataAccess(period, scope);
 
+        //control verification
+        AwacCalculator awacCalculator = new AwacCalculator(securedController.getCurrentUser().getOrganization().getInterfaceCode());
+        AwacCalculatorInstance awacCalculatorInstance = awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
+
+        if (awacCalculatorInstance != null &&
+                awacCalculatorInstance.getVerificationRequest() != null &&
+                !awacCalculatorInstance.getVerificationRequest().getVerificationRequestStatus().equals(VerificationRequestStatus.CORRECTION)) {
+            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+        }
+
+
         //load questionSetAnswer
         List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
 
@@ -466,9 +476,19 @@ public class AnswerController extends AbstractController {
         Form form = formService.findById(answersDTO.getFormId());
         Period period = periodService.findById(answersDTO.getPeriodId());
         Scope scope = scopeService.findById(answersDTO.getScopeId());
+        AwacCalculator awacCalculator = new AwacCalculator(securedController.getCurrentUser().getOrganization().getInterfaceCode());
 
         //test if the form is aviable for the scope / period
         securedController.controlDataAccess(form, period, scope);
+
+
+        AwacCalculatorInstance awacCalculatorInstance = awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, scope);
+
+        if (awacCalculatorInstance != null &&
+                awacCalculatorInstance.getVerificationRequest() != null &&
+                !awacCalculatorInstance.getVerificationRequest().getVerificationRequestStatus().equals(VerificationRequestStatus.CORRECTION)) {
+            return unauthorized(new ExceptionsDTO("This form is in validation : you cannot save it"));
+        }
 
         // validate user organization
         validateUserRightsForScope(currentUser, scope);
@@ -863,9 +883,9 @@ public class AnswerController extends AbstractController {
                 // build the answer value
                 String strValue = StringUtils.trim(rawAnswerValue.toString());
                 Boolean booleanValue = null;
-                if ("1" .equals(strValue)) {
+                if ("1".equals(strValue)) {
                     booleanValue = Boolean.TRUE;
-                } else if ("0" .equals(strValue)) {
+                } else if ("0".equals(strValue)) {
                     booleanValue = Boolean.FALSE;
                 }
 
