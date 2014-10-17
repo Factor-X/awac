@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour,  ${user.firstName} ${user.firstName} a rouvert le travail de vérification sur
+    ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.
+Il n'a pas fait suivre au client et attend un re-travail. Bien à vous, L'outil AWAC.
+
+</body>
+</html>

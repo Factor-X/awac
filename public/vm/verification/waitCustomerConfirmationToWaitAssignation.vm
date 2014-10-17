@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour, ${user.firstName} ${user.firstName} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous a octroyé l'accès aux données du périmètre
+${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.
+Vous pouvez maintenant assigner ce travail à des collaborateurs dans vos interfaces de vérification. Bien à vous, L'outil AWAC.
+</body>
+</html>

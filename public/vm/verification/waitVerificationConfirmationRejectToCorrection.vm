@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour,  ${request.organizationVerifier.name} a fini la vérification de votre bilan GES portant sur ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.
+Tout est en ordre et si vous approuvez le rapport, cela sera reflété dans votre résultat. Bien à vous, L'outil AWAC.
+</body>
+</html>

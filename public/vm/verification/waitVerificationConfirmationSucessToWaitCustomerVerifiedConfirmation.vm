@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour,${user.firstName} ${user.firstName} a fini la vérification de
+    ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.
+A vous de valider et de renvoyer au client. Bien à vous, L'outil AWAC.
+</body>
+</html>
