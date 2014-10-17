@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeUtility;
+import java.util.List;
 
 //annotate as Spring Component
 @Component
@@ -38,7 +39,7 @@ public class EmailController extends AbstractController {
 
 		try {
 			// send mail
-			EmailMessage email = new EmailMessage(destinationEmail, MimeUtility.encodeText(subject, "utf-8", "B"), message);
+			EmailMessage email = new EmailMessage(destinationEmail, subject, message);
 			//EmailMessage email = new EmailMessage(destinationEmail, subject, message);
 			emailService.send(email);
 		} catch (Exception ex) {
@@ -49,6 +50,26 @@ public class EmailController extends AbstractController {
 
 		return ok();
 	}
+
+	/**
+	 * Handle the email submission.
+	 */
+	public Result sendWithAttachments(String destinationEmail, String subject, String message, List<String> filenameList) {
+
+		try {
+			// send mail
+			EmailMessage email = new EmailMessage(destinationEmail, subject, message, filenameList);
+			//EmailMessage email = new EmailMessage(destinationEmail, subject, message);
+			emailService.send(email);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			Logger.error("email", "Confirmation e-mail can not be sent!!!");
+			return badRequest();
+		}
+
+		return ok();
+	}
+
 
 	public Result sendComplete(String destinationEmail,String subject, String message,String interfaceName,String languageKey) {
 
