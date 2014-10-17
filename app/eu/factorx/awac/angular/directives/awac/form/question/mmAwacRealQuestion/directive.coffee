@@ -35,3 +35,6 @@ angular
             scope.$watch 'getAnswer().value', (o,n)->
                 if ""+n != ""+o
                     scope.$parent.edited()
+
+        scope.setErrorMessage = (errorMessage) ->
+            scope.$parent.setErrorMessage(errorMessage)

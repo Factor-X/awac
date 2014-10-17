@@ -49,3 +49,6 @@ angular
             if unitCategory ==null
                 return null
             return unitCategory.units
+
+        scope.setErrorMessage = (errorMessage) ->
+            scope.$parent.setErrorMessage(errorMessage)
