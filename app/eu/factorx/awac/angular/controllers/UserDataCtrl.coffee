@@ -172,7 +172,9 @@ angular
 
     #verify whether anonymous account
     $scope.isAnonymousUser = () ->
-        if $scope.$root.currentPerson?.identifier.contains("anonymous_user")
+        console.log angular.copy $scope.$root.currentPerson
+        console.log angular.copy $scope.$root.currentPerson.identifier
+        if $scope.$root.currentPerson?.identifier.indexOf("anonymous_user") != -1
             console.log("currentUser is an anonymous user")
             true
         else
