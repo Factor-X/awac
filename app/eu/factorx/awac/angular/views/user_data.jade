@@ -3,12 +3,15 @@ div
     h1(ng-bind-html="'USER_DATA_BUTTON' | translate")
 
     .user_data
+        .desc(ng-bind-html="'ANONYMOUS_PROFILE_DESC' | translateText", ng-if='isAnonymousUser()')
         .field_form(ng-if='isAnonymousUser()')
+
             mm-awac-modal-field-text(ng-info="anonymous.loginInfo")
             mm-awac-modal-field-text(ng-info="anonymous.passwordInfo")
             mm-awac-modal-field-text(ng-info="anonymous.lastNameInfo")
             mm-awac-modal-field-text(ng-info="anonymous.firstNameInfo")
             mm-awac-modal-field-text(ng-info="anonymous.emailInfo")
+
             br
             div(style="display:table-row")
                 div(style="display:table-cell")
