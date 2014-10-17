@@ -61,7 +61,9 @@ GET         /awac/velocity                                                      
 # Email Service
 #
 GET         /email/send                                                                            @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
+GET         /email/sendWithAttachments                                                             @eu.factorx.awac.controllers.EmailController.sendWithAttachments(destinationEmail:String,subject:String,message:String,filenameList:java.util.List[String])
 GET         /email/sendComplete                                                                    @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
+
 
 #
 # Javascript routing
@@ -113,8 +115,8 @@ POST        /awac/user/profile/anonymous/save                                   
 POST        /awac/user/email/save                                                                  @eu.factorx.awac.controllers.UserProfileController.updateEmail()
 POST        /awac/user/password/save                                                               @eu.factorx.awac.controllers.UserProfileController.updatePassword()
 POST        /awac/user/isAdminAccount                                                              @eu.factorx.awac.controllers.UserProfileController.isAdminAccount()
+POST        /awac/user/isMainVerifier                                                              @eu.factorx.awac.controllers.UserProfileController.isMainVerifier()
 POST        /awac/user/activeAccount                                                               @eu.factorx.awac.controllers.UserProfileController.activeAccount()
-
 
 #
 # Admin
@@ -151,9 +153,10 @@ POST        /awac/organization/events/save                                      
 #
 # verification
 #
-GET         /awac/verification/requests                                                            @eu.factorx.awac.controllers.VerificationController.getRequests()
+GET         /awac/verification/requestsToManage                                                    @eu.factorx.awac.controllers.VerificationController.getRequestsToManage()
 GET         /awac/verification/myVerificationRequests                                              @eu.factorx.awac.controllers.VerificationController.getMyVerificationRequests()
 GET         /awac/verification/verificationRequestsVerifiedToConfirm                               @eu.factorx.awac.controllers.VerificationController.getVerificationRequestsVerifiedToConfirm()
+GET         /awac/verification/archivedRequests                                                    @eu.factorx.awac.controllers.VerificationController.getArchivedRequests()
 POST        /awac/verification/createRequest                                                       @eu.factorx.awac.controllers.VerificationController.createRequest()
 POST        /awac/verification/setStatus                                                           @eu.factorx.awac.controllers.VerificationController.setStatus()
 POST        /awac/verification/addRequestByKey                                                     @eu.factorx.awac.controllers.VerificationController.addRequestByKey()

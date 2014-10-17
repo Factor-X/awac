@@ -49,3 +49,44 @@
     }
 
 }
+
+.error_message_numbers_only {
+    position: absolute;
+    z-index: 2;
+
+    & > * {
+        display: inline-block;
+
+        &:first-child {
+            background-color: #FF0000;
+            border: 1px solid #B10000;
+            width: 200px;
+            padding: 5px;
+            -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+        }
+
+        &:last-child {
+            vertical-align: top;
+            margin-top: 4px;
+            margin-left: -1px;
+            z-index: 2;
+        }
+    }
+}
+
+.field_row {
+    .error_message_numbers_only {
+        margin-left: -210px;
+    }
+}
+
+
+.question_field {
+    .error_message_numbers_only {
+        margin-left: -172px;
+        margin-top: -25px;
+    }
+}

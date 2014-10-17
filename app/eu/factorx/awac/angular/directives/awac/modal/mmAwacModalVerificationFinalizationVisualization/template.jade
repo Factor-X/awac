@@ -1,0 +1,22 @@
+// Modal
+// Modal
+.modal(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+                h4(class="modal-title",ng-bind-html="'FINALIZE_VERIFICATION_BUTTON' | translate")
+            .modal-body
+                .field_form
+                    textarea(class="question-comment-textarea",
+                    ng-model="comment",
+                    name="comment",
+                    ng-disabled="true",
+                    focus-me="true")
+            .modal-footer
+                button.button(type="button",
+                class="btn btn-primary",
+                ng-click="close();",
+                ng-bind-html="'CANCEL_BUTTON' | translate")

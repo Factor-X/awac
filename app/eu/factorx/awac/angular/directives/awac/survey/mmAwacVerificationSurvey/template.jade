@@ -30,26 +30,26 @@ div
                     td
                         button.button.confidentiality(type='button', mm-not-implemented='mm-not-implemented', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
                         button.button.help(
-                            type='button',
+                        type='button',
 
-                            ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                            ng-click="$root.showHelp()"
+                        ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
+                        ng-click="$root.showHelp()"
                         )
                     td
                         //  organization manager button
                         button.button.user_manage(
-                            type='button',
-                            ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
-                            ng-click='isDisabled || $root.nav(\'/organization_manager\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
-                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        type='button',
+                        ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/organization_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
                         // user manager button
                         button.button.user_manage(
-                            type='button',
-                            ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
-                            ng-click='isDisabled || $root.nav(\'/user_manager\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
-                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        type='button',
+                        ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/user_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
                     td
                         //  user data button
                         button.button.user_manage(type='button', ng-bind-html='\'USER_DATA_BUTTON\' | translate', ng-click='$root.nav(\'/user_data\')', ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}')
@@ -58,10 +58,28 @@ div
 
         .verification-menu-background
             div.verification-menu
-                button.button(type="button",ng-click='$root.nav(\'/manage\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/manage\') == true}') Gérer
-                button.button(type="button",ng-click='$root.nav(\'/verification\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/verification\') == true}') Vérifier
-                button.button(type="button",ng-click='$root.nav(\'/submit\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/submit\') == true}') Soumettre
-                button.button(type="button",ng-click='$root.nav(\'/archive\')',ng-class='{\'selected\': isMenuCurrentlySelected(\'/archive\') == true}') Archiver
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/manage\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/manage\') == true}',
+                ng-disabled="$root.currentPerson.isAdmin !== true",
+                ng-bind-html='\'VERIFICATION_SURVEY_MANAGE\' | translate')
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/verification\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/verification\') == true}',
+                ng-bind-html='\'VERIFICATION_SURVEY_VERIF\' | translate')
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/submit\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/submit\') == true}',
+                ng-disabled="$root.currentPerson.isAdmin !== true && $root.currentPerson.isMainVerifier !== true",
+                ng-bind-html='\'VERIFICATION_SURVEY_SUBMIT\' | translate')
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/archive\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/archive\') == true}',
+                ng-bind-html='\'VERIFICATION_SURVEY_ARCHIVE\' | translate')
 
 
 

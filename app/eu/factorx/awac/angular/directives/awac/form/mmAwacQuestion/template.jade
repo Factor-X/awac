@@ -7,7 +7,7 @@ div(class="question_field",
         span(ng-bind-html="getQuestionCode() | translate", ng-click="logQuestionCode()", ng-class="{optional : getOptional() === true}")
     div
         .status(ng-class="getStatusClass()")
-        .error_message(ng-show="errorMessage.length>0")
+        .error_message_numbers_only(ng-show="errorMessage.length>0")
             div {{errorMessage}}
             img(src='/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data

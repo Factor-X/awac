@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour, ${user.person.firstName} ${user.person.lastName} de l'organisation ${request.awacCalculatorInstance.scope.organization.anme} vous demande de bien vouloir vérifier son bilan GES
+réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${period.label}. Il a joint le message suivant à
+votre intention: ${request.emailVerificationContent.content}. Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}. Pour accéder ou refuser à
+sa demande, merci de suivre le lien suivant et de soit vous logger sur votre compte vérificateur,
+soit vous créer un tel compte grâce à la clé de requête suivante: ${request.key}. Bien à vous, L'outil AWAC.
+</body>
+</html>

@@ -1,1 +1,28 @@
-div
+div.verification_manage
+    div.my-share-table(loading-container='tableParams.settings().$loading')
+        .verification
+            table.admin-table-import-bad.table(ng-table='tableParams')
+                tr(ng-repeat='request in $data')
+                    td(data-title="'ORGANIZATION' | translateText")
+                        | {{request.organizationCustomer.name}}
+                    td(data-title="'CALCULATOR_TYPE'| translateText", sortable="'organizationCustomer.interfaceName'")
+                        | {{request.organizationCustomer.interfaceName}}
+                    td(data-title="'SITE_PRODUCT'| translateText", sortable="'scope.name'")
+                        | {{request.scope.name}}
+                    td(data-title="'SITE_MANAGER_EVENT_PERIOD'| translateText", sortable="'period.label'")
+                        | {{request.period.label}}
+                    td(data-title="'CONTACT'| translateText", sortable="'contact.lastName'")
+                        | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}}
+                    td(data-title="'COMMENT'| translateText")
+                        | {{request.comment}}
+                    td(data-title="'FINALIZED_ ?'| translateText")
+                        span(ng-show="request.status === 'VERIFICATION_STATUS_VERIFIED'",ng-bind-html="'YES' | translate")
+                        span(ng-hide="request.status === 'VERIFICATION_STATUS_VERIFIED'",ng-bind-html="'NO' | translate")
+                    td(data-title="'VERIFICATION_ASSIGNED_USERS'| translateText", sortable="'request.type'")
+                        div(ng-repeat="user in request.verifierList") {{user.firstName}} {{user.lastName}}
+                    td(data-title="'MODAL_DOCUMENT_MANAGER_ACTION'| translateText")
+                        button.button.verification(
+                        type="button",
+                        ng-show="request.status === 'VERIFICATION_STATUS_VERIFIED'",
+                        ng-click="downloadReport(request)",
+                        ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")

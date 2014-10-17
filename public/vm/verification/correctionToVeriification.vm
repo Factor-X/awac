@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${title}</title>
+</head>
+<body>
+Bonjour,
+${user.person.firstName} ${user.person.firstName} a soumis des corrections pour la vérification sur ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}. A vous de re-vérifier. Bien à vous, L'outil AWAC.
+
+</body>
+</html>

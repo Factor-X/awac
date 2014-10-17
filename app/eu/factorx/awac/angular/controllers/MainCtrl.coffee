@@ -247,7 +247,11 @@ angular
     $scope.confirmVerifier = ->
         modalService.show modalService.VERIFICATION_CONFIRMATION
 
-
+    $scope.consultVerificationFinalComment = ->
+        if $scope.$root.verificationRequest?
+            data =
+                comment: $scope.$root.verificationRequest.verificationRejectedComment
+            modalService.show modalService.VERIFICATION_FINALIZATION_VISUALIZATION, data
 
     $scope.resubmitVerification =->
         data =
@@ -276,6 +280,10 @@ angular
 #rootScope
 angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams, $route, modalService)->
     $rootScope.languages = []
+
+    $rootScope.closeableForms = false
+    $rootScope.closedForms =false
+
     $rootScope.languages[0] = {
         value: 'fr'
         label: 'Français'
@@ -519,9 +527,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
-
-    $rootScope.closeableForms = false
-    $rootScope.closedForms =false
 
     $rootScope.testCloseable = ->
         if $rootScope.instanceName != 'verification'

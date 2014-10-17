@@ -8,7 +8,7 @@ initializeVerificationRoutes = (defaultResolve) ->
         $rootScope.onFormPath = (period, scope) ->
             $location.path($rootScope.getFormPath() + '/' + period + '/' + scope)
         $rootScope.getDefaultRoute = ()->
-            return '/manage'
+            return '/verification'
 
     angular
     .module('app')

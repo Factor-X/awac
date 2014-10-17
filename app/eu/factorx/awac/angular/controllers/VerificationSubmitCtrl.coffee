@@ -112,6 +112,11 @@ angular
         $scope.form = form
         $scope.selectRequest()
 
+    $scope.consultFinalComment = ->
+        data =
+            comment: $scope.selectedRequest.verificationRejectedComment
+        modalService.show modalService.VERIFICATION_FINALIZATION_VISUALIZATION, data
+
     $scope.consultEvent = () ->
         data =
             organizationCustomer: $scope.requestSelected.organizationCustomer

@@ -3,6 +3,7 @@ package eu.factorx.awac.service;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.VerificationRequestStatus;
 import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.knowledge.Period;
 
@@ -22,4 +23,6 @@ public interface VerificationRequestService extends PersistenceService<Verificat
     public VerificationRequest findByOrganizationVerifierAndScopeAndPeriod(Organization organizationVerifier, Scope scope,Period period);
 
     public List<VerificationRequest> findByOrganizationCustomerAndOrganizationVerifier(Organization organizationCustomer, Organization organizationVerifier);
+
+public     List<VerificationRequest> findByOrganizationVerifierAndVerificationRequestStatus(Organization organization, VerificationRequestStatus verificationRequestStatus);
 }

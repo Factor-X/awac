@@ -45,6 +45,11 @@
             ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate",
             ng-show="selectedRequest.status == 'VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_SUCCESS' "
             )
+            button.button.verification(type="button",
+            ng-click="isDisabled || consultFinalComment()",
+            ng-bind-html="'VERIFICATION_FINALIZATION_CONSULT_COMMENT' | translate",
+            ng-show="selectedRequest.status == 'VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_REJECT' "
+            )
 
     .injectFormMenu
     .injectForm

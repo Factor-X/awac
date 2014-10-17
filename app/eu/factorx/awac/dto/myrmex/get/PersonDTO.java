@@ -20,6 +20,8 @@ public class PersonDTO extends DTO {
 
 	private Boolean isAdmin;
 
+    private Boolean isMainVerifier;
+
 	private Boolean isActive;
 
 	private String defaultLanguage;
@@ -38,7 +40,15 @@ public class PersonDTO extends DTO {
 		this.defaultLanguage = defaultLanguage;
 	}
 
-	public String getIdentifier() {
+    public Boolean getIsMainVerifier() {
+        return isMainVerifier;
+    }
+
+    public void setIsMainVerifier(Boolean isMainVerifier) {
+        this.isMainVerifier = isMainVerifier;
+    }
+
+    public String getIdentifier() {
 		return identifier;
 	}
 

@@ -276,7 +276,7 @@ div.results.pdf-able
 
                         div.results_disclaimer
                             span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate", ng-hide="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
-                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER_VERIFIED' | translate", ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER_VERIFIED' | translateWithVars: [getVerificationRequestOrganizationVerifierName()]", ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
                         br
                         br
                         br

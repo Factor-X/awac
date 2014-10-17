@@ -34,6 +34,7 @@
                 <bean class="eu.factorx.awac.converter.SiteToListPeriodsDTOConverter" />
                 <bean class="eu.factorx.awac.converter.AwacCalculatorInstanceToVerificationRequestDTOConverter" />
                 <bean class="eu.factorx.awac.converter.VerificationToVerificationDTOConverter" />
+                <bean class="eu.factorx.awac.converter.VerificationRequestCanceledToVerificationRequestDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>
