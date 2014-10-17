@@ -35,27 +35,27 @@ cd ~/backup
 
 **some tips and hints
 
-## show list of backups on Heroku cloud
+## Show list of backups on Heroku cloud
 ```sh
 heroku pgbackups --app awac-dev
 ```
 
-## create new backup instance and replace old one ,on Heroku Cloud 
+## Create new backup instance and replace old one ,on Heroku Cloud 
 ```sh
 heroku pgbackups:capture --expire --app awac-dev
 ```
-## download last backup instance from Heroku Cloud
+## Download last backup instance from Heroku Cloud
  
 wget $(heroku pgbackups:url --app awzc-dev | grep https)  
 
-#create backup url to restore
+## Create backup url to restore
 *note $backupid is one of the values presented in the ID column of "heroku pgbackups --app awac-dev" command
 
 ```sh
 heroku pgbackups:url $backupid
 ```
 
-# Restoring a given backup instance
+## Restoring a given backup instance
 *note $backupid is one of the values presented in the ID column of "heroku pgbackups --app awac-dev" command
  
  ```sh
