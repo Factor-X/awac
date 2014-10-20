@@ -154,7 +154,10 @@ POST        /awac/organization/events/save                                      
 # verification
 #
 GET         /awac/verification/requestsToManage                                                    @eu.factorx.awac.controllers.VerificationController.getRequestsToManage()
+# used for verification interface => return a list of all verificationRequest for witch I'm one of assigned verifier
 GET         /awac/verification/myVerificationRequests                                              @eu.factorx.awac.controllers.VerificationController.getMyVerificationRequests()
+# used for other interface => return a list of verificationRequest associated with my authorized scope (by period and account)
+GET         /awac/verification/verificationRequests/:periodKey                                     @eu.factorx.awac.controllers.VerificationController.getAllMyVerificationRequests(periodKey:String)
 GET         /awac/verification/verificationRequestsVerifiedToConfirm                               @eu.factorx.awac.controllers.VerificationController.getVerificationRequestsVerifiedToConfirm()
 GET         /awac/verification/archivedRequests                                                    @eu.factorx.awac.controllers.VerificationController.getArchivedRequests()
 POST        /awac/verification/createRequest                                                       @eu.factorx.awac.controllers.VerificationController.createRequest()
@@ -167,3 +170,4 @@ POST        /awac/verification/verify                                           
 #
 GET         /awac/actions/load                                                                     @eu.factorx.awac.controllers.ReducingActionController.loadActions()
 POST        /awac/actions/save                                                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()
+GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()

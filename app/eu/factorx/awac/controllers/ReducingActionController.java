@@ -1,9 +1,14 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.*;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +60,48 @@ public class ReducingActionController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result loadActions() {
 		Account currentUser = securedController.getCurrentUser();
-		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 
 		ReducingActionDTOList result = new ReducingActionDTOList(getReducingActionDTOs(authorizedScopes),
 				getCodeListDTOs(CodeList.REDUCING_ACTION_TYPE, CodeList.REDUCING_ACTION_STATUS),
 				getUnitDTOsByCategory(UnitCategoryCode.GWP));
 
 		return ok(result);
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getActionsAsXls() throws WriteException, IOException {
+		Account currentUser = securedController.getCurrentUser();
+		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
+		
+		byte[] content = getExcelExport(reducingActions);		
+		
+		response().setContentType("application/octet-stream");
+		response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+		return ok(new Base64().encode(content));
+	}
+	
+	private byte[] getExcelExport(List<ReducingAction> reducingActions) throws WriteException, IOException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		LanguageCode userLanguage = securedController.getDefaultLanguage();
+
+		// Create cell font and format
+		WritableFont cellFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+		WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+		cellFormat.setAlignment(Alignment.LEFT);
+		cellFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+
+		WorkbookSettings wbSettings = new WorkbookSettings();
+
+		WritableWorkbook wb = Workbook.createWorkbook(byteArrayOutputStream, wbSettings);
+		WritableSheet sheet = wb.getSheet(0);
+		
+		HashMap<String, CodeLabel> interfaceCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
+		sheet.addCell(new Label(0, 0, interfaceCodeLabels.get("REDUCTION_ACTION_FORM_TITLE_FIELD_TITLE").getLabel(userLanguage), cellFormat));
+
+		return byteArrayOutputStream.toByteArray();
 	}
 
 	@Transactional(readOnly = false)
@@ -121,17 +161,6 @@ public class ReducingActionController extends AbstractController {
 		return ok();
 	}
 
-	private List<Scope> getAuthorizedScopes(Account account) {
-		List<Scope> res = new ArrayList<>();
-		// add organization
-		res.add(account.getOrganization());
-		// add authorized sites
-		for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(account)) {
-			res.add(accountSiteAssociation.getSite());
-		}
-		return res;
-	}
-
 	private List<ReducingActionDTO> getReducingActionDTOs(List<Scope> authorizedScopes) {
 		List<ReducingActionDTO> reducingActionDTOs = new ArrayList<>();
 		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
@@ -169,7 +198,7 @@ public class ReducingActionController extends AbstractController {
 	}
 
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {
-		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		if (!authorizedScopes.contains(scope)) {
 			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data for scope '" + scope + "'");
 		}
