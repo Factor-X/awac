@@ -67,7 +67,6 @@ angular
                 $scope.$root.currentPerson.firstName = $scope.firstNameInfo.field
                 $scope.isLoading = false
             else
-                messageFlash.displayError result.data.message
                 $scope.isLoading = false
 
 
@@ -165,7 +164,6 @@ angular
                 $scope.$root.scopeSelectedId=null
                 $scope.isLoading = false
             else
-                messageFlash.displayError result.data.message
                 $scope.isLoading = false
 
         return false

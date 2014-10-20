@@ -57,7 +57,6 @@ angular
 
                 downloadService.postJson "/awac/verification/setStatus", dto, (result) ->
                     if not result.success
-                        messageFlash.displayError(result.data.message)
                         $scope.isLoading = false
                     else
                         $scope.isLoading = false

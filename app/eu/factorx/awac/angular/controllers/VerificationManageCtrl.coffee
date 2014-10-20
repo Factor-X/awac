@@ -9,7 +9,6 @@ angular
     modalService.show(modalService.LOADING)
     downloadService.getJson "/awac/verification/requestsToManage", (result) ->
         if not result.success
-            messageFlash.displayError(result.data.message)
             modalService.close(modalService.LOADING)
         else
             $scope.requests = result.data.list
@@ -46,7 +45,6 @@ angular
 
         downloadService.postJson "/awac/verification/setStatus", dto, (result) ->
             if not result.success
-                messageFlash.displayError(result.data.message)
                 $scope.loadingRequest[request.id] = false
             else
                 #change status
@@ -73,7 +71,6 @@ angular
         $scope.keyToInject=""
         downloadService.postJson "/awac/verification/addRequestByKey", dto, (result) ->
             if not result.success
-                messageFlash.displayError(result.data.message)
                 $scope.addKeyLoading = false
             else
                 #change status

@@ -29,8 +29,6 @@ angular
                 downloadService.postJson '/awac/answer/lockQuestionSet', data, (result) ->
                     if result.success
                         scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock)
-                    else
-                        messageFlash.displayError(result.data.message)
 
         scope.isLockedByMyself = ->
             if scope.$parent.getQuestionSetLocker(scope.getTitleCode())?
@@ -73,8 +71,6 @@ angular
                             if result.success
                                 scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
                                 scope.$root.testCloseable()
-                            else
-                                messageFlash.displayError(result.data.message)
 
 
         scope.isValidateByMyself = ->
@@ -123,8 +119,6 @@ angular
                     if result.success
                         scope.$parent.verifyQuestionSet(scope.getTitleCode(), result.data)
                         scope.$emit 'TEST_CLOSING_VALIDATION'
-                    else
-                        messageFlash.displayError(scope.getTitleCode(), result.data.message)
             else
                 if scope.$parent.getQuestionSetVerification(scope.getTitleCode())?
                     comment = scope.$parent.getQuestionSetVerification(scope.getTitleCode()).comment

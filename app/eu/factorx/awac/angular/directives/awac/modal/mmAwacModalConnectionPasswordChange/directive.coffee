@@ -66,8 +66,6 @@ angular
                     $scope.isLoading = false
                     $scope.close()
                 else
-                    #display the error message
-                    messageFlash.displayError result.data.message
                     #disactive loading mode
                     $scope.isLoading = false
 

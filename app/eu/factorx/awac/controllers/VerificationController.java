@@ -25,6 +25,7 @@ import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.forms.VerificationRequestCanceled;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
@@ -727,5 +728,7 @@ public class VerificationController extends AbstractController {
 
         verificationRequestService.remove(verificationRequest);
     }
+
+
 
 }

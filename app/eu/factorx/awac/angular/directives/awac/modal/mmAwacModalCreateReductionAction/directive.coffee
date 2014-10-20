@@ -173,7 +173,6 @@ angular
                     $scope.close()
                     $scope.getParams().cb()
                 else
-                    messageFlash.displayError result.data.message
                     $scope.isLoading = false
 
             return false

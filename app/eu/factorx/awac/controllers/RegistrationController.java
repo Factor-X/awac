@@ -56,8 +56,6 @@ public class RegistrationController extends AbstractController {
 	@Autowired
 	private CodeLabelService              codeLabelService;
 	@Autowired
-	private AwacCalculatorInstanceService awacCalculatorInstanceService;
-	@Autowired
 	private VerificationRequestService    verificationRequestService;
 	@Autowired
 	private VelocityGeneratorService      velocityGeneratorService;

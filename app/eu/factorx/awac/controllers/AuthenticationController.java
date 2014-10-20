@@ -27,13 +27,11 @@ import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Http;
 import play.mvc.Result;
-import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
@@ -94,6 +92,7 @@ public class AuthenticationController extends AbstractController {
 			}
 
 		}
+        //the error must be empty to do not be displayed !
 		return unauthorized();
 	}
 
@@ -119,7 +118,7 @@ public class AuthenticationController extends AbstractController {
 				account = accountService.findByIdentifier(cookie.value());
 				if (! account.getPerson().getFirstname().equals("anonymous_user") ) {
 					Logger.info("Not an anonymous user login try");
-					return unauthorized (new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
+					return unauthorized (new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
 				}
 
 			} else {
@@ -171,13 +170,13 @@ public class AuthenticationController extends AbstractController {
 			if (account == null) {
 				//use the same message for both login and password error
 				// "The couple login / password was not found"
-				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
+				return unauthorized(new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
 			}
 
 			//test password
 			if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
 				//use the same message for both login and password error
-				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name()));
+				return unauthorized(new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
 			}
 
 			//control interface
@@ -190,13 +189,13 @@ public class AuthenticationController extends AbstractController {
 				Logger.info(interfaceTypeCode + "");
 				Logger.info(account.getOrganization() + "");
 				// return unauthorized(new ExceptionsDTO("This account is not for " + interfaceTypeCode.getKey() + " but for " + account.getOrganization().getInterfaceCode().getKey() + ". Please switch calculator and retry."));
-				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name(), interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
+				return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER, interfaceTypeCode.getKey(), account.getOrganization().getInterfaceCode().getKey()));
 			}
 
 			//control acitf
 			if (!account.getActive()) {
 				// "Votre compte est actuellement suspendue. Contactez votre administrateur."
-				return unauthorized(new TranslatedExceptionDTO(TranslatedExceptionType.SUSPENDED_ACCOUNT.name()));
+				return unauthorized(new ExceptionsDTO(BusinessErrorType.SUSPENDED_ACCOUNT));
 			}
 
 			//control change password

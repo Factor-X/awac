@@ -50,9 +50,7 @@ angular
 
                 downloadService.postJson "/awac/verification/setStatus", dto, (result) ->
                     $scope.isLoading = false
-                    if not result.success
-                        messageFlash.displayError(result.data.message)
-                    else
+                    if result.success
                         if valid == true
                             $scope.$root.verificationRequest.status ='VERIFICATION_STATUS_WAIT_ASSIGNATION'
                         else

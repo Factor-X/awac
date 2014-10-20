@@ -16,7 +16,6 @@ angular
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
 
         if not result.success
-            messageFlash.displayError translationService.get 'UNABLE_LOAD_DATA'
             modalService.close(modalService.LOADING)
         else
             modalService.close(modalService.LOADING)
@@ -70,9 +69,7 @@ angular
 
                 downloadService.postJson 'awac/site/assignPeriodToSite', data, (result) ->
                     $scope.isLoading[site.id] = false
-                    if not result.success
-                        messageFlash.displayError translationService.get 'UNABLE_LOAD_DATA'
-                    else
+                    if result.success
                         site.listPeriodAvailable = result.data.periodsList
                         $scope.refreshMySites()
 

@@ -31,8 +31,6 @@ angular
 
 			downloadService.getJson url , (result) ->
 				if not result.success
-					# TODO ERROR HANDLING
-					messageFlash.displayError result.data.message
 					modalService.close(modalService.LOADING)
 				else
 

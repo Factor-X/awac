@@ -9,7 +9,6 @@ angular
     downloadService.getJson '/awac/verification/myVerificationRequests', (result)->
         if not result.success
             modalService.close(modalService.LOADING)
-            messageFlash.displaySuccess translationService.get result.data
         else
             modalService.close(modalService.LOADING)
             $scope.requests = result.data.list
@@ -102,7 +101,6 @@ angular
         downloadService.getJson '/awac/answer/testClosingValidation/' + $scope.requestSelected.period.key + "/" + $scope.requestSelected.scope.id, (result) ->
             if not result.success
                 modalService.close(modalService.LOADING)
-                messageFlash.displaySuccess translationService.get result.data
             else
                 $scope.verificationFinalization = result.data
 
