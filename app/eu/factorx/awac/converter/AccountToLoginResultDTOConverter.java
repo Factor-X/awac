@@ -62,8 +62,6 @@ public class
             //create siteDTO
             List<AccountSiteAssociation> sites = accountSiteAssociationService.findByAccount(account);
 
-            Logger.info("---------------------------------------- sites : "+sites);
-
 
             //site for calculator
             for (AccountSiteAssociation accountSiteAssociation : sites) {

@@ -71,8 +71,8 @@
             vertical-align: middle;
             padding-top: 3px;
             display: table-row;
-            &.field_form_separator {
-                border-bottom: 1px solid #737373;
+            &.field_form_separator > .field_cell {
+                padding-top:10px;
             }
             & > .field_cell {
                 display: table-cell;
@@ -84,6 +84,10 @@
                 &.field_wide {
                     -webkit-column-span: all; /* Chrome, Safari, Opera */
                     column-span: all;
+                }
+
+                & .field_row.field_form_separator {
+                    padding-top:10px;
                 }
             }
             & > .field_cell:first-child {

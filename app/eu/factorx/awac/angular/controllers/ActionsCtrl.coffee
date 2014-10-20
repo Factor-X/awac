@@ -1,12 +1,13 @@
 angular
 .module('app.controllers')
-.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter) ->
+.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.actions = []
     $scope.typeOptions = []
     $scope.statusOptions = []
     $scope.gwpUnits = []
+
 
     $scope.loadActions = () ->
         downloadService.getJson "awac/actions/load", (result) ->
@@ -18,7 +19,38 @@ angular
                 $scope.gwpUnits = result.data.gwpUnits
 
     $scope.create = () ->
-        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
+        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
 
-    $scope.loadActions()
+    $scope.edit = (action) ->
+        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action })
+
+    $scope.markAsDone = (action) ->
+        $scope.isLoading = true
+        action.statusKey = "2"
+        action.completionDate = new Date()
+        downloadService.postJson '/awac/actions/save', action, (result) ->
+            $scope.isLoading = false
+            if result.success
+                messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+            else
+                messageFlash.displayError result.data.message
+
+    $scope.getScopeName = (scopeTypeKey, scopeId) ->
+        if (scopeTypeKey == "1")
+            return $scope.$root.organizationName
+        else
+            return _.findWhere($scope.$root.mySites, {id: scopeId}).name
+
+    $scope.getTypeLabel = (typeKey) ->
+        return _.findWhere($scope.typeOptions, {key: typeKey }).label
+
+    $scope.getStatusLabel = (statusKey) ->
+        return _.findWhere($scope.statusOptions, {key: statusKey }).label
+
+    $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
+        return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
+
+    $scope.$watch '$root.mySites', (n,o) ->
+        if !!n
+            $scope.loadActions()
 

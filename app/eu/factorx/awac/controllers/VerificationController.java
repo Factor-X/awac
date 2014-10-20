@@ -109,6 +109,32 @@ public class VerificationController extends AbstractController {
         return ok(dto);
     }
 
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result getAllMyVerificationRequests(String periodKey) {
+
+        //load period
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        //load scope
+        List<Scope> scopeList = securedController.getAuthorizedScopes(securedController.getCurrentUser(), period);
+
+        //load awacCalculatorInstance
+        List<AwacCalculatorInstance> awacCalculatorInstanceList = awacCalculatorInstanceService.findByPeriodAndScopes(period, scopeList);
+
+        ListDTO<VerificationRequestDTO> dto = new ListDTO<>();
+
+        for (AwacCalculatorInstance awacCalculatorInstance : awacCalculatorInstanceList) {
+            if (awacCalculatorInstance.getVerificationRequest() != null) {
+                dto.add(conversionService.convert(awacCalculatorInstance, VerificationRequestDTO.class));
+            }
+        }
+
+        return ok(dto);
+
+
+    }
+
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
@@ -504,7 +530,7 @@ public class VerificationController extends AbstractController {
             values.put("request", calculatorInstance.getVerificationRequest());
             values.put("user", securedController.getCurrentUser());
 
-            String velocityContent = velocityGeneratorService.generate("verification/"+emailToSend, values);
+            String velocityContent = velocityGeneratorService.generate("verification/" + emailToSend, values);
 
             EmailMessage email = new EmailMessage(emailTargets, emailTitle, velocityContent);
             emailService.send(email);

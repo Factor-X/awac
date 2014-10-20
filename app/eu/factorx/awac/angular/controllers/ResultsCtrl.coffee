@@ -3,6 +3,8 @@ angular
 .controller "ResultsCtrl", ($scope, $window, $filter, downloadService, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = true
 
+    $scope.verificationRequests=[]
+
     $scope.$root.$watch 'mySites', (nv) ->
         console.log 'watch $root.mySites'
         $scope.mySites = angular.copy $scope.$root.mySites
@@ -26,8 +28,16 @@ angular
         $scope.reload()
     , true
 
-    $scope.downloadVerificationReport = ->
-        url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
+
+    downloadService.getJson '/awac/verification/verificationRequests/'+$scope.$root.periodSelectedKey, (result) ->
+        if not result.success
+            messageFlash.displayError result.data.message
+        else
+            $scope.verificationRequests = result.data.list
+
+
+    $scope.downloadVerificationReport = (verificationRequest)->
+        url = '/awac/file/download/' + verificationRequest.verificationSuccessFileId
         $window.open(url)
 
     $scope.exportPdf = () ->
