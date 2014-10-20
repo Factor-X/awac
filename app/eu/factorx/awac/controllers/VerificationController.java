@@ -83,18 +83,6 @@ public class VerificationController extends AbstractController {
     private VerificationRequestCanceledService verificationRequestCanceledService;
 
     @Transactional(readOnly = false)
-    public Result testError1() {
-        return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
-    }
-
-
-    @Transactional(readOnly = false)
-    public Result testError2() {
-        throw new MyrmexRuntimeException(BusinessErrorType.TEST2,"je suis le param");
-
-    }
-
-    @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result getArchivedRequests() {

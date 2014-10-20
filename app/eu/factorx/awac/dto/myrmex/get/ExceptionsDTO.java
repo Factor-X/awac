@@ -9,33 +9,40 @@ import java.util.List;
 
 public class ExceptionsDTO extends DTO {
 
-	private final String message;
+    private String message=null;
+    private  String messageToTranslate=null;
     private final List<String> params = new ArrayList<>();
 
-	// add default constructor for Json Parser
-	public ExceptionsDTO() { this.message = null; }
+    // add default constructor for Json Parser
+    public ExceptionsDTO() {
+        this.message = null;
+    }
 
-	public ExceptionsDTO(String message) {
-		this.message = message;
-	}
+    public ExceptionsDTO(String message) {
+        this.message = message;
+    }
 
-	public ExceptionsDTO(BusinessErrorType businessError, String... params) {
-		this.message = businessError.toString();
-        for(String param : params) {
+    public ExceptionsDTO(BusinessErrorType businessError, String... params) {
+        this.messageToTranslate = businessError.toString();
+        for (String param : params) {
             this.params.add(param);
         }
-	}
+    }
 
     public ExceptionsDTO(MyrmexRuntimeException t) {
-        this.message = t.getBusinessErrorType().toString();
-        for(String param : t.getParamList()) {
+        this.messageToTranslate = t.getBusinessErrorType().toString();
+        for (String param : t.getParamList()) {
             this.params.add(param);
         }
     }
 
     public String getMessage() {
-		return message;
-	}
+        return message;
+    }
+
+    public String getMessageToTranslate() {
+        return messageToTranslate;
+    }
 
     public List<String> getParams() {
         return params;

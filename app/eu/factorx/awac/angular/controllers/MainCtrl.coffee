@@ -503,7 +503,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             # if this is a form, unlock it
-            if $rootScope.getMainScope()?.formIdentifier?
+            if $rootScope.getMainScope()?.formIdentifier? && $rootScope.currentPerson?
                 downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
 
             routeWithScopeAndPeriod = ['/form','/results','/actions']

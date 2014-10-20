@@ -78,8 +78,8 @@ angular
 
         #send request
         downloadService.postJson '/awac/login', dto, (result) ->
-            if result.success
 
+            if result.success
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                 $scope.isLoading = false

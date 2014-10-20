@@ -164,8 +164,6 @@ POST        /awac/verification/createRequest                                    
 POST        /awac/verification/setStatus                                                           @eu.factorx.awac.controllers.VerificationController.setStatus()
 POST        /awac/verification/addRequestByKey                                                     @eu.factorx.awac.controllers.VerificationController.addRequestByKey()
 POST        /awac/verification/verify                                                              @eu.factorx.awac.controllers.VerificationController.verify()
-GET         /test1                                                                                 @eu.factorx.awac.controllers.VerificationController.testError1()
-GET /test2  @eu.factorx.awac.controllers.VerificationController.testError2()
 
 #
 # reducing actions
