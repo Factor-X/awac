@@ -152,6 +152,7 @@ angular
                 title: $scope.title.field
                 typeKey: $scope.typeKey.field
                 statusKey: $scope.statusKey.field
+                completionDate: $scope.action.completionDate
                 scopeTypeKey: $scope.scopeTypeKey.field
                 scopeId: if ($scope.scopeTypeKey.field == "1") then null else $scope.scopeId.field
                 physicalMeasure: $scope.physicalMeasure.field

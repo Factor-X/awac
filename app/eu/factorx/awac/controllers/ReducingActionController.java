@@ -89,10 +89,19 @@ public class ReducingActionController extends AbstractController {
 		reducingAction.setTitle(dto.getTitle());
 		reducingAction.setScope(scope);
 		reducingAction.setType(ReducingActionTypeCode.valueOf(dto.getTypeKey()));
-		reducingAction.setStatus(ReducingActionStatusCode.valueOf(dto.getStatusKey()));
-		reducingAction.setCompletionDate(toJodaTime(dto.getCompletionDate()));
-		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
 
+		ReducingActionStatusCode status = ReducingActionStatusCode.valueOf(dto.getStatusKey());
+		reducingAction.setStatus(status);
+		Date completionDate = dto.getCompletionDate();
+		if (ReducingActionStatusCode.DONE.equals(status) && (completionDate == null)) {	
+			reducingAction.setCompletionDate(new DateTime());
+		} else if (!ReducingActionStatusCode.DONE.equals(status)) {
+			reducingAction.setCompletionDate(null);
+		} else {
+			reducingAction.setCompletionDate(toJodaTime(completionDate));
+		}
+
+		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
 		reducingAction.setGhgBenefit(dto.getGhgBenefit());
 		String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
 		if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
