@@ -24,12 +24,12 @@ div.actions
                 td.type
                     span.icon.fa.fa-flag
                     span &nbsp;
-                    span.text {{ (typeOptions | filter: { key: a.typeKey })[0].label }}
+                    span.text {{ getTypeLabel(a.typeKey) }}
                 td.scope
                     span.icon.fa.fa-flag
                     span &nbsp;
-                    span.text {{a.scope.name}}
-                td.realization {{ a.statusKey == "2" ? a.completionYear : (statusOptions | filter: { key: a.statusKey })[0].label }}
+                    span.text {{ getScopeName(a.scopeTypeKey, a.scopeId) }}
+                td.realization {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
 
             tr(ng-repeat-end, ng-show="a.opened").details
                 td(colspan="4")
@@ -43,11 +43,11 @@ div.actions
                             td {{ "REDUCTION_ACTION_DETAILS_PHYSICAL_MEASURE" | translateText }}:
                             td
                                 .box.wide {{ a.physicalMeasure || "&nbsp;" }}
-                        tr
+                        tr(ng-if="a.typeKey == '1'")
                             td {{ "REDUCTION_ACTION_DETAILS_GHGBENEFIT" | translateText }}:
                             td
                                 .box {{ a.ghgBenefit || "&nbsp;" }}
-                                .box.transparent(ng-if="a.ghgBenefitUnit != null") {{ (gwpUnits | filter: { code: a.ghgBenefitUnit.code })[0].name }}
+                                .box.transparent {{ getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
                         tr
                             td {{ "REDUCTION_ACTION_DETAILS_FINANCIALBENEFIT" | translateText }}:
                             td
@@ -65,7 +65,7 @@ div.actions
                         tr
                             td {{ "REDUCTION_ACTION_DETAILS_DUEDATE" | translateText }}:
                             td
-                                .box {{ (a.dueDate != null) ? (a.dueDate.millis | date: 'dd/MM/yyyy') : "&nbsp;" }}
+                                .box {{ a.dueDate | date: 'dd/MM/yyyy' }}
                         tr
                             td {{ "REDUCTION_ACTION_DETAILS_RESPONSIBLEPERSON" | translateText }}:
                             td
@@ -76,10 +76,14 @@ div.actions
                                 .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
 
                 td(style="vertical-align:bottom;")
-                    button.button(type="button", ng-click="create()")
+                    button.button(type="button", ng-click="edit(a)")
                         span.fa.fa-plus-circle
                         span &nbsp;
-                        span Ajouter une action
+                        span Editer cette action
+                    button.button(type="button", ng-click="markAsDone(a)")
+                        span.fa.fa-plus-circle
+                        span &nbsp;
+                        span Marquer l'action comme réalisée
 
     br
 
