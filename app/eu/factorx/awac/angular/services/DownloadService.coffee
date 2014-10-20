@@ -1,7 +1,7 @@
 # simple download service
 angular
 .module('app.services')
-.service "downloadService", ($http, $q) ->
+.service "downloadService", ($http, $q,messageFlash,translationService) ->
     @downloadsInProgress = 0
 
     @getDownloadsInProgress = ->
@@ -36,6 +36,8 @@ angular
                 config: config,
                 success: false
             ))
+            #display error
+            messageFlash.displayError translationService.translateExceptionsDTO(data)
 
         return deferred.promise
 
@@ -73,6 +75,8 @@ angular
                 config: config,
                 success: false
             ))
+            #display error
+            messageFlash.displayError translationService.translateExceptionsDTO(data)
 
         return deferred.promise
 

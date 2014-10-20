@@ -152,16 +152,6 @@ angular
     $scope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
 
-    $scope.test1 = ->
-        downloadService.getJson "/test1", (result) ->
-            if not result.success
-                messageFlash.displayError translationService.translateExceptionsDTO(result.data)
-
-    $scope.test2 = ->
-        downloadService.getJson "/test2", (result) ->
-            if not result.success
-                messageFlash.displayError translationService.translateExceptionsDTO(result.data)
-
     $scope.loadPeriodForComparison = ->
         if $scope.$root.scopeSelectedId? and !isNaN($scope.$root.scopeSelectedId)
             url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
@@ -181,8 +171,6 @@ angular
                     #hide data to compare if the period is the same than the period to answer
                     if currentComparisonFounded == false || $scope.$root.periodSelectedKey == $scope.$root.periodToCompare
                         $scope.$root.periodToCompare = 'default'
-                else
-                    messageFlash.displayError result.data.message
 
 
     $scope.getProgress = (form)->
@@ -204,8 +192,6 @@ angular
                 if result.success
                     #console.log result.data
                     $scope.formProgress = result.data.listFormProgress
-                else
-                    messageFlash.displayError result.data.message
 
     $scope.$on "REFRESH_LAST_SAVE_TIME", (event, args) ->
         if args != undefined
@@ -352,8 +338,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.periodSelectedKey=null
                 $rootScope.scopeSelectedId=null
             else
-                messageFlash.displayError result.data.message
-                console.log 'logout !! 2'
                 $rootScope.nav('/login')
 
 
@@ -463,8 +447,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         downloadService.getJson '/awac/user/profile', (result) ->
             if result.success
                 $rootScope.currentPerson = result.data
-            else
-                messageFlash.displayError result.data.message
 
     #
     # Get notifications and show them every hour
@@ -546,8 +528,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                         $rootScope.closeableForms = result.data.closeable
                         $rootScope.closedForms =result.data.closed
                         $rootScope.verificationRequest = result.data.verificationRequest
-                    else
-                        messageFlash.displayError result.data.message
 
     $rootScope.closeForms = ->
         if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?

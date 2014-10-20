@@ -100,8 +100,6 @@ angular
                     messageFlash.displaySuccess translationService.get "CONNECTION_MESSAGE_SUCCESS"
                     $scope.isLoading = false
                 else
-                    #display the error message
-                    messageFlash.displayError result.data.message
                     #disactive loading mode
                     $scope.isLoading = false
 

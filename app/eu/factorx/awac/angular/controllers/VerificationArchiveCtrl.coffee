@@ -9,7 +9,6 @@ angular
     modalService.show(modalService.LOADING)
     downloadService.getJson "/awac/verification/archivedRequests", (result) ->
         if not result.success
-            messageFlash.displayError(result.data.message)
             modalService.close(modalService.LOADING)
         else
             $scope.requests = result.data.list

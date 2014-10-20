@@ -38,8 +38,6 @@ angular
 
               downloadService.postJson '/awac/organization/site/associatedaccounts/save', data, (result) ->
                     if result.success
-                        #display success message
-                        messageFlash.displaySuccess translationService.get 'CHANGES_SAVED'
                         #close window
                         $scope.close()
                     else
@@ -92,19 +90,7 @@ angular
 
           downloadService.postJson '/awac/organization/site/associatedaccounts/load', data, (result) ->
             if result.success
-
-#              for user in result.data.organizationUserList
-#                console.log user
-#                $scope.accounts.push(user)
-#
-#              for selected in result.data.siteSelectedUserList
-#                console.log selected
-#                $scope.selection.push(selected)
-
-
               for user in result.data.organizationUserList
-                console.log user
-                console.log result.data.siteSelectedUserList.length
                 $scope.in = false
                 if result.data.siteSelectedUserList.length
                   for selected in result.data.siteSelectedUserList
@@ -114,16 +100,8 @@ angular
                   $scope.accounts.push(user)
 
               for selected in result.data.siteSelectedUserList
-                console.log selected
                 $scope.selection.push(selected)
                 $scope.accounts.push(selected)
-
-#                $scope.selection.sort(a,b -> return a.identifier < b.identifier)
-#                $scope.accounts.sort(a,b -> return a.identifier < b.identifier)
-
-
-            else
-              messageFlash.displayError result.data.message
 
           $scope.isLoading = false
 

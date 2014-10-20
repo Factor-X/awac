@@ -81,7 +81,6 @@ angular
         #send request
         downloadService.postJson '/awac/register', data, (result) ->
             if result.success
-#        $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'REGISTRATION_SUCCESS'
                 $scope.isLoading = false
                 console.log 'registration'
@@ -89,8 +88,6 @@ angular
             else
                 messageFlash.displaySuccess translationService.get 'REGISTRATION_FAILED'
                 $scope.isLoading = false
-                #display the error message
-                messageFlash.displayError result.data.message
         #disactive loading mode
 
         return false

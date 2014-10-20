@@ -32,8 +32,6 @@ angular
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
-            else
-                messageFlash.displayError result.data.message
 
     $scope.getScopeName = (scopeTypeKey, scopeId) ->
         if (scopeTypeKey == "1")

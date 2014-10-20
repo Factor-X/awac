@@ -80,13 +80,6 @@ angular
         downloadService.postJson '/awac/login', dto, (result) ->
             if result.success
 
-                ###
-                $("#loginForm").submit (e) ->
-                    e.preventDefault()
-                    return
-                $("#loginForm").submit()
-                ###
-
                 $scope.$root.loginSuccess(result.data)
                 messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
                 $scope.isLoading = false
@@ -98,14 +91,6 @@ angular
                         login: $scope.loginInfo.field
                         password: $scope.passwordInfo.field
                     modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
-
-                else if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO'
-                    translateWithVars = $filter('translateWithVars')
-                    messageFlash.displayError translateWithVars(result.data.code, result.data.parameters)
-
-                else
-                    #display the error message
-                    messageFlash.displayError result.data.message
         #disactive loading mode
 
         return false
@@ -124,8 +109,6 @@ angular
                 $scope.isLoading = false
                 return
             else
-                #display the error message
-                messageFlash.displayError result.data.message
                 #disactive loading mode
                 $scope.isLoading = false
                 return
