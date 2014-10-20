@@ -12,12 +12,14 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.awacCalculator = :calculator and p.period = :period and p.scope=:scope" ),
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope=:scope" ),
+        @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_ORGANIZATION, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope=:scope" ),
 
 })
 public class AwacCalculatorInstance extends AuditedAbstractEntity{
 
     public static final String FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE";
     public static final String FIND_BY_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_SCOPE";
+    public static final java.lang.String FIND_BY_PERIOD_AND_ORGANIZATION = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_ORGANIZATION";
 
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
     private AwacCalculator awacCalculator;

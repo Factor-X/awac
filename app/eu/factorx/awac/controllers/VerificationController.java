@@ -109,6 +109,17 @@ public class VerificationController extends AbstractController {
         return ok(dto);
     }
 
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result  getAllMyVerificationRequests(){
+
+        //load awacCalculatorInstance
+        awacCalculatorInstanceService.findByPeriodAndOrganization()
+
+
+
+    }
+
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
