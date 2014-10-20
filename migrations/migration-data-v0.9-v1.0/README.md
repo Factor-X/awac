@@ -47,6 +47,7 @@
 
          ```sh
          $ rake surveys:import:enterprise
+         $ rake surveys:import:municipality
          ```
 
   

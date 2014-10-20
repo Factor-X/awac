@@ -47,7 +47,7 @@ $ git commit -m "new release"
 
 ## Set new build pack to Heroku
 
-**This step** only needs to be done once, whether the buildpack is not the correct one.
+**This step only needs to be done once, whether the buildpack is not the correct one.
 
 Set AWAC buildpack...
 
@@ -74,9 +74,9 @@ $ heroku logs -t --app awac-dev
 
 ## Help guide
 
-** some tips and hints
+**some tips and hints
 
-** In case heroku:git clone doesnt work
+## In case "heroku:git clone" does not work
 
 Starting **Deployment** based on an empty Heroku git repository and using a Play distribution zip file.
 
@@ -86,7 +86,8 @@ $ cd $SOME_DIR/heroku/awac-dev
 $ git init
 ```
 
-**Add to $SOME_DIR/heroku/awac-dev/.git/config the following definitions:**
+**Add to $SOME_DIR/heroku/awac-dev/.git/config the following definitions:
+
 
 [core]
     repositoryformatversion = 0
@@ -100,17 +101,18 @@ $ git init
     remote = origin
     merge = refs/heads/master
 
-**Copy distribution file to local repository
+
+**Copy distribution file to local repository**
 
 ```sh
-$ cp *$AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip* *$SOME_DIR/heroku/awac-dev*
+$ cp $AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip* *$SOME_DIR/heroku/awac-dev
 ```
 
-** Create $SOME_DIR/heroku/awac-dev/Procfile with following content
+**Create $SOME_DIR/heroku/awac-dev/Procfile with following content
 
 web: awac-1.0-SNAPSHOT/bin/awac "-Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL}"
 
-** Add and commit, maintenance mode on, push, maintenance mode off, check logs...
+**Add and commit, maintenance mode on, push, maintenance mode off, check logs...
 
 ```sh
 $ git add –A
@@ -124,23 +126,23 @@ $ heroku logs -t --app awac-dev
 
 ## In case heroku instance does not start
 
-** check whether process is running. (using heroku ps)
-** if no process use heroku scale
+**check whether process is running. (using heroku ps)
+**if no process use heroku scale
 
 ```sh
 $ heroku ps --app awac-dev
 $ heroku scale web=1
 ```
 
-** U can also restart Heroku instance using:
+**U can also restart Heroku instance using:
 
 ```sh
 $ heroku restart --app awac-dev
 ```
 
-## Purge cache
+## Apply a purge cache
 
-** only apply in case Heroku deplymlent environement seems to be unstable.
+**only apply in case Heroku deployment environment seems to be unstable.
 
 ```sh
 $ heroku repo:purge_cache -a awac-dev
@@ -148,8 +150,8 @@ $ heroku repo:purge_cache -a awac-dev
 
 ## Clean Heroku git repository
 
-** This will erase all content of heroku git repository.
-** Once done, only the procedure based on an **empty Heroku git repository** and using a Play distribution zip file can be applied
+**This will erase all content of heroku git repository.
+**Once done, only the procedure based on an empty Heroku git repository and using a Play distribution zip file can be applied
 
 ```sh
 $ heroku repo:reset -a awac-dev
