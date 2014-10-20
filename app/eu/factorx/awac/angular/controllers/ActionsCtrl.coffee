@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter, messageFlash) ->
+.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.actions = []
@@ -27,11 +27,11 @@ angular
     $scope.markAsDone = (action) ->
         $scope.isLoading = true
         action.statusKey = "2"
+        action.completionDate = new Date()
         downloadService.postJson '/awac/actions/save', action, (result) ->
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
-                $scope.loadActions()
             else
                 messageFlash.displayError result.data.message
 

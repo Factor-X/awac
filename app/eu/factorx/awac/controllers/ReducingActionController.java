@@ -112,11 +112,6 @@ public class ReducingActionController extends AbstractController {
 		return ok();
 	}
 
-	private void markAsDone(ReducingAction reducingAction) {
-		reducingAction.setStatus(ReducingActionStatusCode.DONE);
-		reducingAction.setCompletionDate(new DateTime());
-	}
-
 	private List<Scope> getAuthorizedScopes(Account account) {
 		List<Scope> res = new ArrayList<>();
 		// add organization
