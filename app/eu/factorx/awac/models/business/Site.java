@@ -12,11 +12,15 @@ import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(name = "site")
+@NamedQueries({
+        @NamedQuery(name = Site.FIND_BY_ORGANIZATION, query = "select p from Site p where p.organization = :organization"),
+})
 public class Site extends Scope implements Comparable<Site> {
 
 	private static final long serialVersionUID = 1L;
+    public static final String FIND_BY_ORGANIZATION = "site_FIND_BY_ORGANIZATION";
 
-	@ManyToOne(optional = false)
+    @ManyToOne(optional = false)
 	private Organization organization;
 
 	private String name;

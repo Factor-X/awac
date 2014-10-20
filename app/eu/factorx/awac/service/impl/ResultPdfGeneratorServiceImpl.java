@@ -75,26 +75,63 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 		// 3. Graphs
 		String histogram = writeHistogram(lang, allReportResults);
-		String donut1 = writeDonut("R_2",lang, allReportResults);
-		String donut2 = writeDonut("R_3",lang, allReportResults);
-		String donut3 = writeDonut("R_4",lang, allReportResults);
+		String donut1 = writeDonut("R_2", lang, allReportResults);
+		String donut2 = writeDonut("R_3", lang, allReportResults);
+		String donut3 = writeDonut("R_4", lang, allReportResults);
 
 		pdfGenerator.setMemoryResource("mem://svg/histogram", histogram);
 		pdfGenerator.setMemoryResource("mem://svg/donut1", donut1);
 		pdfGenerator.setMemoryResource("mem://svg/donut2", donut2);
 		pdfGenerator.setMemoryResource("mem://svg/donut3", donut3);
 
+		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
+
+		for (ReportResult reportResult : allReportResults.getReportResults()) {
+			if (reportResult.getReport().getCode().getKey().equals("R_1")) {
+
+				int i = 0;
+				content += "<table>";
+				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
+					Double total = e.getValue().get(0);
+					if (total > 0) {
+						content += "<tr>";
+
+						content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
+						content += "<td>" + e.getValue().get(0) + "</td>";
+
+						content += "</tr>";
+						i++;
+					}
+				}
+				content += "</table>";
+
+			}
+		}
+
+		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+
+		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
+		content += "<table>";
+		content += "<tr>";
+		content += "<td>";
 		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" /><br />";
+		content += "</td>";
+		content += "</tr>";
+		content += "</table>";
+
+		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
 		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" /><br />";
+
+		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
 		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" /><br />";
 
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
 		Html html = new Html(sb);
-		byte[] bytes = pdfGenerator.toBytes(html);
 
-		return bytes;
+		return pdfGenerator.toBytes(html);
 	}
 
 	private String writeHistogram(LanguageCode lang, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {

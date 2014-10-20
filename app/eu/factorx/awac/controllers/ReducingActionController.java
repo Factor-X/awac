@@ -73,7 +73,7 @@ public class ReducingActionController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result getActionsAsXls() throws WriteException, IOException {
 		Account currentUser = securedController.getCurrentUser();
-		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
 		
 		byte[] content = getExcelExport(reducingActions);		

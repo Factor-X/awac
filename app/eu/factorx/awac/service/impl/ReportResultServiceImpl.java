@@ -297,7 +297,13 @@ public class ReportResultServiceImpl implements ReportResultService {
 			ArrayList<BaseActivityResult> indicatorActivityResults = new ArrayList<BaseActivityResult>();
 
 			for (BaseIndicator baseIndicator : indicator.getBaseIndicators(reportScope)) {
+				if(reportScope != null) {
+					if (!baseIndicator.getIsoScope().equals(reportScope)) continue;
+				}
 				for (BaseActivityResult baseActivityResult : baseActivityResults) {
+					if(reportScope != null) {
+						if (!baseActivityResult.getBaseIndicator().getIsoScope().equals(reportScope)) continue;
+					}
 					if (baseIndicator.getCode().equals(baseActivityResult.getBaseIndicator().getCode())) {
 						indicatorActivityResults.add(baseActivityResult);
 					}

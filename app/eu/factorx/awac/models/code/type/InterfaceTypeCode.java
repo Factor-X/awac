@@ -17,6 +17,8 @@ public class InterfaceTypeCode extends Code {
 	public static final InterfaceTypeCode ENTERPRISE = new InterfaceTypeCode("enterprise");
 	public static final InterfaceTypeCode MUNICIPALITY = new InterfaceTypeCode("municipality");
 	public static final InterfaceTypeCode HOUSEHOLD = new InterfaceTypeCode("household");
+    public static final InterfaceTypeCode EVENT = new InterfaceTypeCode("event");
+    public static final InterfaceTypeCode LITTLE_EMITTER = new InterfaceTypeCode("littleEmitter");
     public static final InterfaceTypeCode VERIFICATION = new InterfaceTypeCode("verification");
 
 	public InterfaceTypeCode() {

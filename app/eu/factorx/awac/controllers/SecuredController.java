@@ -108,7 +108,7 @@ public class SecuredController extends Security.Authenticator {
 
     public void controlDataAccess(Period period, Scope scope) {
 
-        Logger.info("period:"+period+", scope:"+scope+",org:"+getCurrentUser().getOrganization());
+        Logger.info("period:" + period + ", scope:" + scope + ",org:" + getCurrentUser().getOrganization());
 
         if (period == null || scope == null) {
             throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName() + "/ period : " + period.getLabel());
@@ -118,7 +118,7 @@ public class SecuredController extends Security.Authenticator {
             controlMyInstance(scope, period);
         } catch (Exception e) {
             if (!(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
-                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope,period) != null)) {
+                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope, period) != null)) {
                 throw new RuntimeException(e.getMessage());
             }
         }
@@ -156,6 +156,32 @@ public class SecuredController extends Security.Authenticator {
             }
         }
 
+    }
+
+    public List<Scope> getAuthorizedScopes(Account account) {
+        List<Scope> res = new ArrayList<>();
+        // add organization
+        res.add(account.getOrganization());
+        // add authorized sites
+        for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(account)) {
+            res.add(accountSiteAssociation.getSite());
+        }
+        return res;
+    }
+
+
+    public List<Scope> getAuthorizedScopes(Account account, Period period) {
+        List<Scope> res = new ArrayList<>();
+        // add organization
+        res.add(account.getOrganization());
+        // add authorized sites
+        for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(account)) {
+            if (accountSiteAssociation.getSite().getListPeriodAvailable().contains(period)) {
+                res.add(accountSiteAssociation.getSite());
+            }
+
+        }
+        return res;
     }
 
     public boolean isUnlock(QuestionSet questionSet, Scope scope, Period period) {
@@ -213,7 +239,6 @@ public class SecuredController extends Security.Authenticator {
     private final static long SESSION_TIME_MAX = 30L * 60L * 1000L;
 
     private static List<LockQuestionSet> lockQuestionSetList = new ArrayList<>();
-
 
 
     private static class LockQuestionSet {
