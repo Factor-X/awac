@@ -10,6 +10,4 @@ import java.util.List;
 public interface ProductService extends PersistenceService<Product> {
 
 	public void remove(final Product product);
-
-    List<Product> findByOrganization(Organization organization);
 }

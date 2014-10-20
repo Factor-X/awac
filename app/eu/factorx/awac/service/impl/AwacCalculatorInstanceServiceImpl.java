@@ -55,13 +55,11 @@ public class AwacCalculatorInstanceServiceImpl extends AbstractJPAPersistenceSer
     }
 
     @Override
-    public List<AwacCalculatorInstance> findByPeriodAndOrganization(Period period, Organization organization) {
+    public List<AwacCalculatorInstance> findByPeriodAndScopes(Period period, List<Scope> scopeList) {
 
-        List<Scope> scopeList =organization.getScopes();
-
-        return JPA.em().createNamedQuery(AwacCalculatorInstance.FIND_BY_PERIOD_AND_ORGANIZATION, AwacCalculatorInstance.class)
+        return JPA.em().createNamedQuery(AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPES, AwacCalculatorInstance.class)
                 .setParameter("period", period)
-                .setParameter("organization", organization)
+                .setParameter("scopes", scopeList)
                 .getResultList();
     }
 

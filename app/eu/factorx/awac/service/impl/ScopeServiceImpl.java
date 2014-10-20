@@ -15,34 +15,4 @@ import java.util.List;
 @Component
 public class ScopeServiceImpl extends AbstractJPAPersistenceServiceImpl<Scope> implements ScopeService {
 
-    @Autowired
-    private SiteService siteService;
-
-    @Autowired
-    private ProductService productService;
-
-    public List<Scope> findByOrganization(Organization organization) {
-
-        List<Scope> result = new ArrayList<>();
-
-        if (organization.getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
-            //load site
-            result.addAll(siteService.findByOrganization(organization));
-        } else if (organization.getInterfaceCode().equals(InterfaceTypeCode.EVENT)) {
-            //load product
-            result.addAll(productService.findByOrganization(organization));
-
-        } else if (organization.getInterfaceCode().equals(InterfaceTypeCode.HOUSEHOLD)) {
-            //organization
-        } else if (organization.getInterfaceCode().equals(InterfaceTypeCode.LITTLE_EMITTER)) {
-            //organization
-        } else { //municipality
-            //organization
-        }
-
-
-        return result;
-
-    }
-
 }

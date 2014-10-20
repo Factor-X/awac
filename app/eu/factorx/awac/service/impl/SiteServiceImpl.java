@@ -13,11 +13,4 @@ import java.util.List;
 @Component
 public class SiteServiceImpl extends AbstractJPAPersistenceServiceImpl<Site> implements SiteService {
 
-    @Override
-    public List<Site> findByOrganization(Organization organization) {
-        return JPA.em().createNamedQuery(Site.FIND_BY_ORGANIZATION, Site.class)
-                .setParameter("organization", organization)
-                .getResultList();
-
-    }
 }

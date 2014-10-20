@@ -11,11 +11,4 @@ import java.util.List;
 @Repository
 public class ProductServiceImpl extends AbstractJPAPersistenceServiceImpl<Product> implements ProductService {
 
-    @Override
-    public List<Product> findByOrganization(Organization organization) {
-
-
-
-
-    }
 }

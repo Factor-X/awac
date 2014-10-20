@@ -55,7 +55,7 @@ public class ReducingActionController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result loadActions() {
 		Account currentUser = securedController.getCurrentUser();
-		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 
 		ReducingActionDTOList result = new ReducingActionDTOList(getReducingActionDTOs(authorizedScopes),
 				getCodeListDTOs(CodeList.REDUCING_ACTION_TYPE, CodeList.REDUCING_ACTION_STATUS),
@@ -117,17 +117,6 @@ public class ReducingActionController extends AbstractController {
 		reducingAction.setCompletionDate(new DateTime());
 	}
 
-	private List<Scope> getAuthorizedScopes(Account account) {
-		List<Scope> res = new ArrayList<>();
-		// add organization
-		res.add(account.getOrganization());
-		// add authorized sites
-		for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(account)) {
-			res.add(accountSiteAssociation.getSite());
-		}
-		return res;
-	}
-
 	private List<ReducingActionDTO> getReducingActionDTOs(List<Scope> authorizedScopes) {
 		List<ReducingActionDTO> reducingActionDTOs = new ArrayList<>();
 		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
@@ -165,7 +154,7 @@ public class ReducingActionController extends AbstractController {
 	}
 
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {
-		List<Scope> authorizedScopes = getAuthorizedScopes(currentUser);
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		if (!authorizedScopes.contains(scope)) {
 			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data for scope '" + scope + "'");
 		}

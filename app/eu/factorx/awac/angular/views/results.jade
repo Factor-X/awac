@@ -26,6 +26,17 @@ div.results.pdf-able
                                     td
                                         input(type="checkbox", ng-model="site.selected")
 
+                    .sites-panel-title
+                        span(ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
+
+                    .sites-panel-item(ng-show="verificationRequests.length> 0 ")
+                        table
+                            tr(ng-repeat="verificationRequest in verificationRequests")
+                                td {{ verificationRequest.scope.name }}
+                                td
+                                    button.button(type="button", ng-click="downloadVerificationReport(verificationRequest)",ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
+                                        span(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")
+
             td.top-aligned.horizontally-padded.wide
 
                 div(ng-show="o != null && o != undefined")
@@ -283,8 +294,6 @@ div.results.pdf-able
 
             td.top-aligned
                 div.align-right
-                    button.button(type="button", ng-click="downloadVerificationReport()",ng-show="getVerificationRequestStatus() === 'VERIFICATION_STATUS_VERIFIED'")
-                        span(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate")
                     button.button(type="button", ng-click="exportXls()")
                         span(ng-bind-html="'XLS_EXPORT' | translate")
                     button.button(type="button", ng-click="exportPdf()")
