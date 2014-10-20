@@ -12,18 +12,24 @@ angular
         directiveService.autoScopeImpl $scope
 
         $scope.typeOptions = $scope.getParams().typeOptions
+        $scope.statusOptions = $scope.getParams().statusOptions
         $scope.gwpUnits = $scope.getParams().gwpUnits
-        $scope.defaultGwpUnit = _.findWhere($scope.gwpUnits, {code: "U5335"}).code
-        ###
-              if editionMode
-                    $scope.statusOptions = $scope.getParams().statusOptions
-        ###
+
+        $scope.action = $scope.getParams().action
+        $scope.editMode = !!$scope.action
+        if (!$scope.editMode)
+            $scope.action = {}
+
+        $scope.getDefaultDueDate = () ->
+            defaultDueDate = new Date()
+            defaultDueDate.setFullYear(defaultDueDate.getFullYear() + 1)
+            return defaultDueDate
 
         $scope.title =
             inputName: 'title'
-            field: ""
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_TITLE_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_TITLE_FIELD_PLACEHOLDER"
+            field: $scope.action.title
+            fieldTitle: "REDUCTION_ACTION_FORM_TITLE_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_TITLE_FIELD_PLACEHOLDER"
             validationRegex: "^.{1,255}$"
             validationMessage: "REDUCTION_ACTION_TITLE_WRONG_LENGTH"
             hideIsValidIcon: true
@@ -32,135 +38,133 @@ angular
 
         $scope.typeKey =
             inputName: 'typeKey'
-            field: "1"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_TYPE_FIELD_TITLE"
+            field: $scope.action.typeKey ? "1" # default type: REDUCING_GES
+            fieldTitle: "REDUCTION_ACTION_FORM_TYPE_FIELD_TITLE"
 
-        $scope.$watch 'typeKey.field', (n, o) ->
-            if (n != o)
-               if (n == '2')
-                    console.log("Disabling 'ghgBenefit' field ('Better method' selected)")
-                    $scope.ghgBenefit.disabled = true
-                    $scope.ghgBenefitUnitKey.disabled = true
-                else
-                    console.log("Enabling 'ghgBenefit' field")
-                    $scope.ghgBenefit.disabled = false
-                    $scope.ghgBenefitUnitKey.disabled = false
+        $scope.statusKey =
+            inputName: 'statusKey'
+            field: $scope.action.statusKey ? "1" # default status: RUNNING
+            fieldTitle: "REDUCTION_ACTION_FORM_STATUS_FIELD_TITLE"
 
         $scope.scopeTypeKey =
             inputName: 'scopeTypeKey'
-            field: "1"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_SCOPE_TYPE_FIELD_TITLE"
+            field: $scope.action.scopeTypeKey ? "1" # default scope type: ORG
+            fieldTitle: "REDUCTION_ACTION_FORM_SCOPE_TYPE_FIELD_TITLE"
 
         $scope.scopeId =
             inputName: 'scopeId'
-            field: $scope.$root.mySites[0].id
+            field: if (!!$scope.action.scopeId && ($scope.action.scopeTypeKey == "2")) then $scope.action.scopeId else $scope.$root.mySites[0].id # default site (first)
 
         $scope.physicalMeasure =
             inputName: 'physicalMeasure'
-            field: ""
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
+            field: $scope.action.physicalMeasure
+            fieldTitle: "REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
             validationRegex: "^.{0,255}$"
             validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.ghgBenefit =
             inputName: 'ghgBenefit'
-            field: ""
+            field: $scope.action.ghgBenefit
             numbersOnly: 'double'
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_GHG_BENEFIT_FIELD_PLACEHOLDER"
 
-        $scope.ghgBenefitUnitKey = $scope.defaultGwpUnit
+        $scope.ghgBenefitUnitKey = $scope.action.ghgBenefitUnitKey ? "U5335" # default unit: kgCO2e
+
 
         $scope.financialBenefit =
             inputName: 'financialBenefit'
-            field: ""
+            field: $scope.action.financialBenefit
             numbersOnly: 'double'
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_FINANCIAL_BENEFIT_FIELD_PLACEHOLDER"
 
-        $scope.investment =
+        $scope.investmentCost =
             inputName: 'investment'
-            field: ""
+            field: $scope.action.investmentCost
             numbersOnly: 'double'
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_INVESTMENT_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_INVESTMENT_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_INVESTMENT_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_INVESTMENT_FIELD_PLACEHOLDER"
 
         $scope.expectedPaybackTime =
             inputName: 'expectedPaybackTime'
-            field: ""
+            field: $scope.action.expectedPaybackTime
             validationRegex: "^.{0,255}$"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_EXPECTED_PAYBACK_TIME_FIELD_PLACEHOLDER"
             validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
             hideIsValidIcon: true
 
-        now = new Date()
-        defaultYear = now.getFullYear() + 1
-        defaultDueDate = now.setFullYear(defaultYear);
-
         $scope.dueDate =
             inputName: 'dueDate'
-            field: defaultDueDate
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_DUE_DATE_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_DUE_DATE_FIELD_PLACEHOLDER"
+            field: $scope.action.dueDate ? $scope.getDefaultDueDate()
+            fieldTitle: "REDUCTION_ACTION_FORM_DUE_DATE_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_DUE_DATE_FIELD_PLACEHOLDER"
             minValue: new Date()
             validationMessage: "REDUCTION_ACTION_INVALID_DUE_DATE"
             hideIsValidIcon: true
 
         $scope.webSite =
             inputName: 'webSite'
-            field: ""
+            field: $scope.action.webSite
             validationRegex: "^.{0,255}$"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_WEBSITE_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_WEBSITE_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_WEBSITE_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_WEBSITE_FIELD_PLACEHOLDER"
             validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.responsiblePerson =
             inputName: 'responsiblePerson'
-            field: ""
+            field: $scope.action.responsiblePerson
             validationRegex: "^.{0,255}$"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_RESPONSIBLE_PERSON_FIELD_PLACEHOLDER"
             validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.comment =
             inputName: 'comment'
-            field: ""
+            field: $scope.action.comment
             fieldType: 'textarea'
             validationRegex: "^.{0,1000}$"
-            fieldTitle: "CREATE_REDUCTION_ACTION_FORM_COMMENT_FIELD_TITLE"
-            placeholder: "CREATE_REDUCTION_ACTION_FORM_COMMENT_FIELD_PLACEHOLDER"
+            fieldTitle: "REDUCTION_ACTION_FORM_COMMENT_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_FORM_COMMENT_FIELD_PLACEHOLDER"
             validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.allFieldValid = () ->
-            if ($scope.title.isValid && $scope.physicalMeasure.isValid && $scope.expectedPaybackTime.isValid && $scope.dueDate.isValid && $scope.webSite.isValid && $scope.responsiblePerson.isValid && $scope.comment.isValid)
-                return true
-            return false
+            return ($scope.title.isValid &&
+                $scope.physicalMeasure.isValid &&
+                $scope.expectedPaybackTime.isValid &&
+                $scope.dueDate.isValid &&
+                $scope.webSite.isValid &&
+                $scope.responsiblePerson.isValid &&
+                $scope.comment.isValid)
 
         #send the request to the server
         $scope.save = () ->
             $scope.isLoading = true
 
-            data =
+            data = {
+                id: $scope.action.id
                 title: $scope.title.field
-                scopeTypeKey: $scope.scopeTypeKey.field
-                scopeId: $scope.scopeId.field
                 typeKey: $scope.typeKey.field
+                statusKey: $scope.statusKey.field
+                scopeTypeKey: $scope.scopeTypeKey.field
+                scopeId: if ($scope.scopeTypeKey.field == "1") then null else $scope.scopeId.field
                 physicalMeasure: $scope.physicalMeasure.field
                 ghgBenefit: $scope.ghgBenefit.field
                 ghgBenefitUnitKey: $scope.ghgBenefitUnitKey
                 financialBenefit: $scope.financialBenefit.field
-                investment: $scope.investment.field
+                investmentCost: $scope.investmentCost.field
                 expectedPaybackTime: $scope.expectedPaybackTime.field
                 dueDate: $scope.dueDate.field
                 webSite: $scope.webSite.field
                 responsiblePerson: $scope.responsiblePerson.field
                 comment: $scope.comment.field
+            }
 
             downloadService.postJson '/awac/actions/save', data, (result) ->
                 if result.success
@@ -173,8 +177,25 @@ angular
 
             return false
 
+        $scope.toggleGhgBenefitField = (typeKey) ->
+            if (typeKey == '2') # "better method"
+                $scope.ghgBenefit.field = ""
+                $scope.ghgBenefit.disabled = true
+                $scope.ghgBenefitUnitKey.disabled = true
+            else
+                $scope.ghgBenefit.disabled = false
+                $scope.ghgBenefitUnitKey.disabled = false
+
+        # disabled GHG benefit field if action is not an effective reduction ("better method" type)
+        $scope.$watch 'typeKey.field', (n, o) ->
+            if (n != o)
+                $scope.toggleGhgBenefitField(n)
+
         $scope.close = ->
             modalService.close modalService.CREATE_REDUCTION_ACTION
 
+        $scope.toggleGhgBenefitField($scope.typeKey.field)
+
+        console.log($scope)
         link: (scope) ->
 

@@ -10,8 +10,10 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.api.mvc.SimpleResult;
 import play.api.templates.Html;
 import play.mvc.Result;
+import scala.PartialFunction;
 import scala.collection.mutable.*;
 import scala.collection.mutable.StringBuilder;
 

@@ -104,7 +104,8 @@ div
                                 mm-awac-question(question-code="A162", ng-condition="getAnswer('A159').value == '1'",ng-aggregation="200",ng-tab-set="1",ng-tab="2")
         .horizontal_separator
         mm-awac-section(title-code="A163")
-
+            .element_content
+                .element_text(ng-bind-html="'INTRO_UPSTREAM_DISTRIBUTION' | translate")
             mm-awac-repetition-name(question-code="A164")
             mm-awac-repetition-question(question-set-code="A164", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A164')")
 
