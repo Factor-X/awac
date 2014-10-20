@@ -1,6 +1,6 @@
 angular
 .module('app.services')
-.service "translationService", ($rootScope, downloadService) ->
+.service "translationService", ($rootScope, downloadService,$filter) ->
     svc = this
     svc.elements = null
 
@@ -39,5 +39,11 @@ angular
             txt = v.fallback || ''
 
         return txt
+
+    svc.translateExceptionsDTO =(exception) ->
+        if exception.params?.length > 0
+            return $filter('translateWithVarsText')(exception.message,exception.params)
+        else
+            return $filter('translate')(exception.message)
 
     return

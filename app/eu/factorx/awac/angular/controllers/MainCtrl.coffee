@@ -152,6 +152,16 @@ angular
     $scope.getMainScope = ->
         return mainScope = angular.element($('[ng-view]')[0]).scope()
 
+    $scope.test1 = ->
+        downloadService.getJson "/test1", (result) ->
+            if not result.success
+                messageFlash.displayError translationService.translateExceptionsDTO(result.data)
+
+    $scope.test2 = ->
+        downloadService.getJson "/test2", (result) ->
+            if not result.success
+                messageFlash.displayError translationService.translateExceptionsDTO(result.data)
+
     $scope.loadPeriodForComparison = ->
         if $scope.$root.scopeSelectedId? and !isNaN($scope.$root.scopeSelectedId)
             url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
