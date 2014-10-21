@@ -36,42 +36,42 @@ div.actions
 
                     table
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_WEBSITE" | translateText }}:
+                            td {{ "REDUCTION_ACTION_WEBSITE_FIELD_TITLE" | translateText }}:
                             td
                                 a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_PHYSICAL_MEASURE" | translateText }}:
+                            td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
                             td
                                 .box.wide {{ a.physicalMeasure || "&nbsp;" }}
                         tr(ng-if="a.typeKey == '1'")
-                            td {{ "REDUCTION_ACTION_DETAILS_GHGBENEFIT" | translateText }}:
+                            td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
                             td
                                 .box {{ a.ghgBenefit || "&nbsp;" }}
                                 .box.transparent {{ getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_FINANCIALBENEFIT" | translateText }}:
+                            td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
                             td
                                 .box {{ a.financialBenefit || "&nbsp;" }}
                                 .box.transparent euros
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_INVESTMENTCOST" | translateText }}:
+                            td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
                             td
                                 .box {{ a.investmentCost || "&nbsp;" }}
                                 .box.transparent euros
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_EXPECTEDPAYBACKTIME" | translateText }}:
+                            td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
                             td
                                 .box {{ a.expectedPaybackTime || "&nbsp;" }}
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_DUEDATE" | translateText }}:
+                            td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
                             td
                                 .box {{ a.dueDate | date: 'dd/MM/yyyy' }}
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_RESPONSIBLEPERSON" | translateText }}:
+                            td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
                             td
                                 .box.wide {{ a.responsiblePerson || "&nbsp;" }}
                         tr
-                            td {{ "REDUCTION_ACTION_DETAILS_COMMENT" | translateText }}:
+                            td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
                             td
                                 .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
 
@@ -92,7 +92,7 @@ div.actions
         span &nbsp;
         span Ajouter une action
 
-    button.button(type="button")
+    button.button(type="button", ng-click="exportToXls()")
         span.fa.fa-file-excel-o
         span &nbsp;
         span Exporter au format XLS

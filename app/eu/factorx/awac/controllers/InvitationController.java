@@ -145,12 +145,13 @@ public class InvitationController extends AbstractController {
         account = accountService.saveOrUpdate(account);
 
         // ONLY FOR municipality : assign the new user of the site
-        if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
-            for (Site site : invitation.getOrganization().getSites()) {
-                AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
-                accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
-            }
-        }
+        //if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
+//		if (invitation.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
+//            for (Site site : invitation.getOrganization().getSites()) {
+//                AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
+//                accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
+//            }
+//        }
 
         // delete invitation
         invitationService.remove(invitation);

@@ -170,3 +170,4 @@ POST        /awac/verification/verify                                           
 #
 GET         /awac/actions/load                                                                     @eu.factorx.awac.controllers.ReducingActionController.loadActions()
 POST        /awac/actions/save                                                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()
+GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
