@@ -1,6 +1,6 @@
 div.actions
-    h1
-        span(ng-bind-html="'REDUCTION_ACTIONS' | translate")
+    span
+        h1 {{'REDUCTION_ACTIONS' | translateText }}
 
     br
 
@@ -35,7 +35,7 @@ div.actions
                     span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
 
             tr(ng-repeat-end, ng-show="a.opened").details
-                td(colspan="4")
+                td(colspan="2")
 
                     table
                         tr
@@ -78,7 +78,7 @@ div.actions
                             td
                                 .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
 
-                td(style="vertical-align:bottom;")
+                td(style="vertical-align: bottom; text-align: right", colspan="4")
                     button.button(type="button", ng-click="edit(a)")
                         span.fa.fa-pencil-square-o
                         span &nbsp;
