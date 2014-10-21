@@ -19,6 +19,7 @@ import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -100,12 +101,8 @@ public class AuthenticationController extends AbstractController {
 	// authenticate action cf routes
 	@Transactional(readOnly = false)
 	public Result authenticate() {
-		Logger.info("authenticate - JSON: " + request().body().asJson());
-		ConnectionFormDTO connectionFormDTO = DTO.getDTO(request().body().asJson(), ConnectionFormDTO.class);
 
-		if (connectionFormDTO == null) {
-			throw new RuntimeException("The request cannot be convert");
-		}
+		ConnectionFormDTO connectionFormDTO = this.extractDTOFromRequest(ConnectionFormDTO.class);
 
 		Account account = null;
 
@@ -118,7 +115,7 @@ public class AuthenticationController extends AbstractController {
 				account = accountService.findByIdentifier(cookie.value());
 				if (! account.getPerson().getFirstname().equals("anonymous_user") ) {
 					Logger.info("Not an anonymous user login try");
-					return unauthorized (new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
+					throw new MyrmexRuntimeException(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND);
 				}
 
 			} else {
@@ -170,20 +167,20 @@ public class AuthenticationController extends AbstractController {
 			if (account == null) {
 				//use the same message for both login and password error
 				// "The couple login / password was not found"
-				return unauthorized(new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
+                throw new MyrmexRuntimeException(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND);
 			}
 
 			//test password
 			if (!accountService.controlPassword(connectionFormDTO.getPassword(), account)) {
 				//use the same message for both login and password error
-				return unauthorized(new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
+                throw new MyrmexRuntimeException(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND);
 			}
 
 			//control interface
 			InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
 
 			if (interfaceTypeCode == null) {
-				return unauthorized(new ExceptionsDTO(account.getOrganization().getInterfaceCode().getKey() + " is not a valid interface"));
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_VALID_INTERFACE,account.getOrganization().getInterfaceCode().getKey());
 			} else if (!interfaceTypeCode.equals(account.getOrganization().getInterfaceCode())) {
 				//use the same message for both login and password error
 				Logger.info(interfaceTypeCode + "");

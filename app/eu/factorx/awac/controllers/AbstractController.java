@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.SvgContent;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
@@ -23,7 +24,7 @@ public class AbstractController extends Controller {
 		JsonNode json = request().body().asJson();
 		T dto = DTO.getDTO(json, DTOclass);
 		if (dto == null) {
-			throw new MyrmexRuntimeException("The request content cannot be converted to a '" + DTOclass.getName() + "'.");
+			throw new MyrmexRuntimeException(BusinessErrorType.CONVERSION_DTO_ERROR,DTOclass.getName());
 		}
 		return dto;
 	}

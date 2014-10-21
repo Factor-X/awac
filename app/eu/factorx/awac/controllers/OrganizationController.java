@@ -1,11 +1,11 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
-import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.AccountDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
@@ -15,10 +15,10 @@ import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.SiteService;
-
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexFatalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -58,17 +58,17 @@ public class OrganizationController extends AbstractController {
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result loadAssociatedAccounts() {
 
-
         SiteAddUsersDTO dto = extractDTOFromRequest(SiteAddUsersDTO.class);
-        Logger.info("Load Site Accounts Association - Organization Name: " + dto.getOrganization().getName() + " Site name:" + dto.getSite().getName());
-
-        List<AccountDTO> organizationAccountDtoList = new ArrayList<AccountDTO>();
-        List<AccountDTO> siteAccountDtoList = new ArrayList<AccountDTO>();
 
         // get all users for specified organization
-        organizationAccountDtoList = getOrganizationUserList(dto.getOrganization());
+        List<AccountDTO> organizationAccountDtoList = getOrganizationUserList(securedController.getCurrentUser().getOrganization());
         // get all selected/associated users for specified site
-        siteAccountDtoList = getSiteSelectedUserList(dto.getSite());
+        Site site = siteService.findById(dto.getSite().getId());
+        //control site
+        if(!site.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+            throw new MyrmexFatalException("this is not your site");
+        }
+        List<AccountDTO> siteAccountDtoList = getSiteSelectedUserList(site);
 
         // create return DTO
         SiteAddUsersResultDTO resultDto = new SiteAddUsersResultDTO(organizationAccountDtoList, siteAccountDtoList);
@@ -80,19 +80,21 @@ public class OrganizationController extends AbstractController {
     /**
      * save all site associated accounts for specified site/organisation uple
      */
-
     @Transactional
     @Security.Authenticated(SecuredController.class)
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result saveAssociatedAccounts() {
 
         SiteAddUsersDTO dto = extractDTOFromRequest(SiteAddUsersDTO.class);
-        Logger.info("Save Site Accounts Association - Organization Name: " + dto.getOrganization().getName() + " Site name:" + dto.getSite().getName());
 
         saveSiteSelectedUserList(dto.getSite(), dto.getSelectedAccounts());
 
         // create return DTO
-        SiteAddUsersResultDTO resultDto = new SiteAddUsersResultDTO(getOrganizationUserList(dto.getOrganization()), getSiteSelectedUserList(dto.getSite()));
+        Site site = siteService.findById(dto.getSite().getId());
+        if(!site.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+            throw new MyrmexFatalException("this is not your site");
+        }
+        SiteAddUsersResultDTO resultDto = new SiteAddUsersResultDTO(getOrganizationUserList(securedController.getCurrentUser().getOrganization()), getSiteSelectedUserList(site));
 
         // return list of associated
         return ok(resultDto);
@@ -110,62 +112,43 @@ public class OrganizationController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
     public Result updateOrganization() {
-    	OrganizationDTO organizationDTO = extractDTOFromRequest(OrganizationDTO.class);
-    	Organization organization = securedController.getCurrentUser().getOrganization();
-    	organization.setName(organizationDTO.getName());
-    	organization.setStatisticsAllowed(organizationDTO.getStatisticsAllowed());
-		return ok(new ReturnDTO());
+
+        OrganizationDTO organizationDTO = extractDTOFromRequest(OrganizationDTO.class);
+
+        Organization organization = securedController.getCurrentUser().getOrganization();
+        organization.setName(organizationDTO.getName());
+        organization.setStatisticsAllowed(organizationDTO.getStatisticsAllowed());
+        return ok(new ReturnDTO());
     }
-	
+
     /**
      * *********** Private methods ************************
      */
 
     // get all users for specified organization
-    private List<AccountDTO> getOrganizationUserList(OrganizationDTO dto) {
+    private List<AccountDTO> getOrganizationUserList(Organization org) {
 
-        // get organization
-        Organization org = organizationService.findByName(dto.getName());
         // get associated accounts
         List<AccountDTO> organizationAccountDtoList = new ArrayList<AccountDTO>();
         List<Account> organizationAccountList = org.getAccounts();
 
-        if (organizationAccountDtoList != null) {
-            //Logger.info("Account List");
-            Logger.info("add into list");
-            for (Account account : organizationAccountList) {
-                Logger.info("add account : " + account.getId());
-                AccountDTO adto = conversionService.convert(account, AccountDTO.class);
-                organizationAccountDtoList.add(adto);
-            }
+        for (Account account : organizationAccountList) {
+            AccountDTO adto = conversionService.convert(account, AccountDTO.class);
+            organizationAccountDtoList.add(adto);
         }
-
-        for (AccountDTO accountDTO : organizationAccountDtoList) {
-            Logger.info("Organization account: " + accountDTO.getIdentifier());
-        }
-
 
         return (organizationAccountDtoList);
     } // end of getOrganizationUserList
 
     // get all selected users for specified site
-    private List<AccountDTO> getSiteSelectedUserList(SiteDTO dto) {
+    private List<AccountDTO> getSiteSelectedUserList(Site site) {
         // get associated accounts
         List<AccountDTO> associatedAccountDtoList = new ArrayList<>();
-        Site site = siteService.findById(dto.getId());
         List<AccountSiteAssociation> accountSiteAssociationList = accountSiteAssociationService.findBySite(site);
 
-        if (accountSiteAssociationList != null) {
-            Logger.info("add into list");
-            for (AccountSiteAssociation asa : accountSiteAssociationList) {
-                Logger.info("add asa : " + asa.getId());
-                AccountDTO accountDTO = conversionService.convert(asa.getAccount(), AccountDTO.class);
-                associatedAccountDtoList.add(accountDTO);
-            }
-        }
-
-        for (AccountDTO accountDTO : associatedAccountDtoList) {
-            Logger.info("Associated account: " + accountDTO.getIdentifier());
+        for (AccountSiteAssociation asa : accountSiteAssociationList) {
+            AccountDTO accountDTO = conversionService.convert(asa.getAccount(), AccountDTO.class);
+            associatedAccountDtoList.add(accountDTO);
         }
 
         return (associatedAccountDtoList);

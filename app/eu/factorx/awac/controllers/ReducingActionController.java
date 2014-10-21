@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +160,7 @@ public class ReducingActionController extends AbstractController {
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {
 		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		if (!authorizedScopes.contains(scope)) {
-			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data for scope '" + scope + "'");
+			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE,scope.getName());
 		}
 	}
 

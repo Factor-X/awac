@@ -17,6 +17,8 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.ResultPdfGeneratorServiceImpl;
 import eu.factorx.awac.service.impl.reporting.*;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.Table;
 import jxl.read.biff.BiffException;
@@ -303,7 +305,7 @@ public class ResultController extends AbstractController {
 				}
 			}
 		}
-		throw new MyrmexRuntimeException("this is not your scope");
+		throw new MyrmexFatalException(BusinessErrorType.NOT_YOUR_SCOPE_LITTLE);
 	}
 
 

@@ -61,23 +61,12 @@ public class AdminController extends AbstractController {
 	// @AuthenticatedAsSystemAdmin
 	public Result getAllNotifications() {
 		Account currentUser = securedController.getCurrentUser();
-		validateUserRights(currentUser);
 		List<Notification> all = notificationService.findAll();
 		List<NotificationDTO> dtos = new ArrayList<>();
 		for (Notification notification : all) {
 			dtos.add(conversionService.convert(notification, NotificationDTO.class));
 		}
 		return ok(new NotificationsDTO(dtos));
-	}
-
-
-	private void validateUserRights(Account currentUser) {
-//		if (!securedController.isSystemAdministrator()) {
-//			throw new RuntimeException("" +
-//				"You are not allowed to access admin section. " +
-//				"Your user login '" + currentUser.getIdentifier() + "' has been reported as potential hacker. " +
-//				"Any further attempt will result in an investigation.");
-//		}
 	}
 
 	@Transactional(readOnly = false)

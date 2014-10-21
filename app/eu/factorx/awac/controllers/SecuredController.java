@@ -56,7 +56,7 @@ public class SecuredController extends Security.Authenticator {
 
     @Override
     public Result onUnauthorized(Context ctx) {
-        return unauthorized(new ExceptionsDTO("Not connected"));
+        return unauthorized(new ExceptionsDTO(BusinessErrorType.NOT_CONNECTED));
     }
 
     public boolean isAuthenticated() {
@@ -97,7 +97,7 @@ public class SecuredController extends Security.Authenticator {
     public void controlDataAccess(Form form, Period period, Scope scope) {
 
         if (form == null) {
-            throw new RuntimeException("You doesn't have the required authorization for the form ");
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
         }
 
         controlDataAccess(period, scope);
@@ -108,10 +108,8 @@ public class SecuredController extends Security.Authenticator {
 
     public void controlDataAccess(Period period, Scope scope) {
 
-        Logger.info("period:" + period + ", scope:" + scope + ",org:" + getCurrentUser().getOrganization());
-
         if (period == null || scope == null) {
-            throw new RuntimeException("You doesn't have the required authorization for the site " + scope.getName() + "/ period : " + period.getLabel());
+            throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD,scope.getName(),period.getLabel());
         }
         //control my scope
         try {
@@ -127,7 +125,7 @@ public class SecuredController extends Security.Authenticator {
     private void controlMyInstance(Scope scope, Period period) throws Exception {
         //test scope
         if (!scope.getOrganization().equals(getCurrentUser().getOrganization())) {
-            throw new Exception("This is not your scope");
+            throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE_LITTLE);
 
         }
 
@@ -141,7 +139,7 @@ public class SecuredController extends Security.Authenticator {
                 }
             }
             if (!founded) {
-                throw new Exception("You doesn't have the required authorization for the site " + scope.getName());
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE, scope.getName());
             }
 
             //test period
@@ -152,7 +150,7 @@ public class SecuredController extends Security.Authenticator {
                 }
             }
             if (!foundedPeriod) {
-                throw new Exception("You doesn't have the required authorization for the period : " + period.getLabel());
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_PERIOD,period.getLabel());
             }
         }
 

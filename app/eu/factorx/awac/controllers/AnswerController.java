@@ -5,7 +5,6 @@ import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
 import eu.factorx.awac.dto.awac.post.*;
-import eu.factorx.awac.dto.myrmex.get.BooleanDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
@@ -38,6 +37,7 @@ import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -148,7 +148,7 @@ public class AnswerController extends AbstractController {
         //control password
         if (!accountService.controlPassword(formsCloseDTO.getPassword(), securedController.getCurrentUser())) {
             //use the same message for both login and password error
-            return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND));
         }
 
         Period period = periodService.findByCode(new PeriodCode(formsCloseDTO.getPeriodKey()));
@@ -249,7 +249,7 @@ public class AnswerController extends AbstractController {
         QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(lockQuestionSetDTO.getQuestionSetKey()));
 
         if (questionSet == null || questionSet.getParent() != null) {
-            return unauthorized(new ExceptionsDTO("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey()));
+            new MyrmexFatalException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
         }
 
         //load scope
@@ -266,7 +266,7 @@ public class AnswerController extends AbstractController {
 
         //it can be only one questionSetAnswer because the questionSet doesn't have any parent
         if (questionSetAnswerList.size() > 1) {
-            return unauthorized(new ExceptionsDTO("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey()));
+            new MyrmexFatalException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
         }
 
         //recover the questionSetAnswer
@@ -284,10 +284,10 @@ public class AnswerController extends AbstractController {
         //recover / control the auditInfo
         if (questionSetAnswer.getAuditInfo() != null && questionSetAnswer.getAuditInfo().getDataLocker() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                return unauthorized(new ExceptionsDTO("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataLocker()));
+                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getLastname());
             }
             if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                return unauthorized(new ExceptionsDTO("This questionSetAnswer " + questionSetAnswer + " is already validate"));
+                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_VALIDATE, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getLastname());
             }
         }
 
@@ -336,7 +336,8 @@ public class AnswerController extends AbstractController {
         QuestionSet questionSet = questionSetService.findByCode(new QuestionCode(lockQuestionSetDTO.getQuestionSetKey()));
 
         if (questionSet == null || questionSet.getParent() != null) {
-            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+            //technical message
+            throw new MyrmexFatalException("Fatal error : cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
         }
 
         //load scope
@@ -355,7 +356,8 @@ public class AnswerController extends AbstractController {
         if (awacCalculatorInstance != null &&
                 awacCalculatorInstance.getVerificationRequest() != null &&
                 !awacCalculatorInstance.getVerificationRequest().getVerificationRequestStatus().equals(VerificationRequestStatus.CORRECTION)) {
-            throw new MyrmexRuntimeException("cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
+            //technical message
+            throw new MyrmexRuntimeException("Fatal error : cannot use this questionSet : " + lockQuestionSetDTO.getQuestionSetKey());
         }
 
 
@@ -364,7 +366,8 @@ public class AnswerController extends AbstractController {
 
         //it can be only one questionSetAnswer because the questionSet doesn't have any parent
         if (questionSetAnswerList.size() > 1) {
-            throw new MyrmexRuntimeException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
+            //technical message
+            throw new MyrmexFatalException("Fatal error : more than one questionSetAnswer for : period:" + lockQuestionSetDTO.getPeriodCode() + "/scope:" + lockQuestionSetDTO.getScopeId() + "/questionSetKey:" + lockQuestionSetDTO.getQuestionSetKey());
         }
 
         //recover the questionSetAnswer
@@ -382,7 +385,7 @@ public class AnswerController extends AbstractController {
         //recover / control the auditInfo
         if (questionSetAnswer.getAuditInfo() != null && questionSetAnswer.getAuditInfo().getDataValidator() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataValidator().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                throw new MyrmexRuntimeException("This questionSetAnswer " + questionSetAnswer + " is already locked by " + questionSetAnswer.getAuditInfo().getDataValidator());
+                throw new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataValidator().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataValidator().getPerson().getLastname());
             }
         }
 
@@ -439,7 +442,7 @@ public class AnswerController extends AbstractController {
 
         //control organization
         if (verificationRequestService.findByOrganizationCustomerAndOrganizationVerifier(organizationCustomer, securedController.getCurrentUser().getOrganization()).size() == 0) {
-            return unauthorized(new ExceptionsDTO("you doens't have right for this action"));
+            new MyrmexRuntimeException((BusinessErrorType.WRONG_RIGHT));
         }
 
         //load scope
@@ -488,7 +491,7 @@ public class AnswerController extends AbstractController {
         if (awacCalculatorInstance != null &&
                 awacCalculatorInstance.getVerificationRequest() != null &&
                 !awacCalculatorInstance.getVerificationRequest().getVerificationRequestStatus().equals(VerificationRequestStatus.CORRECTION)) {
-            return unauthorized(new ExceptionsDTO("This form is in validation : you cannot save it"));
+            new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_ACI_IN_VALIDATION);
         }
 
         // validate user organization
@@ -544,12 +547,12 @@ public class AnswerController extends AbstractController {
         // control percentage
         Integer percentage = formProgressDTO.getPercentage();
         if (percentage < 0 || percentage > 100) {
-            throw new RuntimeException("Percentage must be more than 0 and less than 100. Currently : " + percentage);
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_PERCENTAGE);
         }
 
         // control scope
         if (!scope.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
-            throw new RuntimeException("This scope doesn't owned by your organization. Scope asked : " + scope.toString());
+            throw new MyrmexFatalException("This scope doesn't owned by your organization. Scope asked : " + scope.toString());
         }
 
         // try to load
@@ -834,7 +837,7 @@ public class AnswerController extends AbstractController {
 
         if (repetitionIndex == null) {
             if (questionSet.getRepetitionAllowed()) {
-                throw new RuntimeException("Invalid repetition map (" + rawRepetitionMap + "): does not contain entry for QuestionSet '" + questionSetCode
+                throw new MyrmexFatalException("Invalid repetition map (" + rawRepetitionMap + "): does not contain entry for QuestionSet '" + questionSetCode
                         + "' (while repetion is allowed in this QuestionSet)");
             } else {
                 res.put(questionSetCode, 0);
@@ -884,9 +887,9 @@ public class AnswerController extends AbstractController {
                 // build the answer value
                 String strValue = StringUtils.trim(rawAnswerValue.toString());
                 Boolean booleanValue = null;
-                if ("1" .equals(strValue)) {
+                if ("1".equals(strValue)) {
                     booleanValue = Boolean.TRUE;
-                } else if ("0" .equals(strValue)) {
+                } else if ("0".equals(strValue)) {
                     booleanValue = Boolean.FALSE;
                 }
 
@@ -894,7 +897,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (booleanAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -908,7 +911,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (stringAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -923,7 +926,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (integerAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -939,7 +942,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (doubleAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -951,7 +954,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (percentageAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -966,7 +969,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (codeAnswerValue.getValue() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -981,7 +984,7 @@ public class AnswerController extends AbstractController {
 
                 // test if the value is not null
                 if (entityAnswerValue.getEntityId() == null) {
-                    throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                 }
 
                 // add to the list
@@ -996,7 +999,7 @@ public class AnswerController extends AbstractController {
                 for (Map.Entry<String, String> entry : ((LinkedHashMap<String, String>) rawAnswerValue).entrySet()) {
                     StoredFile storedFile = storedFileService.findById(Long.parseLong(entry.getKey()));
                     if (storedFile == null) {
-                        throw new RuntimeException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                        throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
                     }
                     answerValue.add(new DocumentAnswerValue(questionAnswer, storedFile));
                 }
@@ -1017,11 +1020,11 @@ public class AnswerController extends AbstractController {
     private Question getAndVerifyQuestion(AnswerLineDTO answerLine) {
         String questionKey = StringUtils.trimToNull(answerLine.getQuestionKey());
         if (questionKey == null) {
-            throw new RuntimeException("The answer [" + answerLine + "] is not valid : question key is null.");
+            throw new MyrmexFatalException("The answer [" + answerLine + "] is not valid : question key is null.");
         }
         Question question = questionService.findByCode(new QuestionCode(questionKey));
         if (question == null) {
-            throw new RuntimeException("The question key [" + questionKey + "] is not valid.");
+            throw new MyrmexFatalException("The question key [" + questionKey + "] is not valid.");
         }
         return question;
     }
@@ -1033,7 +1036,7 @@ public class AnswerController extends AbstractController {
         if (questionUnitCategory == null) {
             if (answerUnitCode != null) {
                 // TODO this event should not throw a RuntimeException => to improve
-                throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitCode));
+                throw new MyrmexFatalException(String.format(ERROR_ANSWER_UNIT_NOT_AUTHORIZED, questionKey, answerUnitCode));
             } else {
                 return null;
             }
@@ -1041,14 +1044,14 @@ public class AnswerController extends AbstractController {
 
         // the question is linked to a unit category => get unit from client answer, or throw an Exception if client provided no unit
         if (answerUnitCode == null) {
-            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getName()));
+            throw new MyrmexFatalException(String.format(ERROR_ANSWER_UNIT_REQUIRED, questionKey, questionUnitCategory.getName()));
         }
         Unit answerUnit = unitService.findByCode(new UnitCode(answerUnitCode));
 
         // check unit category => throw an Exception if client provided an invalid unit (not part of the question's unit category)
         UnitCategory answerUnitCategory = answerUnit.getCategory();
         if (!questionUnitCategory.equals(answerUnitCategory)) {
-            throw new RuntimeException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
+            throw new MyrmexFatalException(String.format(ERROR_ANSWER_UNIT_INVALID, questionKey, questionUnitCategory.getName(), answerUnit.getName(), answerUnitCategory.getName()));
         }
         return answerUnit;
     }
@@ -1102,7 +1105,7 @@ public class AnswerController extends AbstractController {
 
     private static void validateUserRightsForScope(Account currentUser, Scope scope) {
         if (!scope.getOrganization().equals(currentUser.getOrganization())) {
-            throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
+            throw new MyrmexFatalException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
         }
     }
 
