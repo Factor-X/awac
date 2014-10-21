@@ -45,6 +45,7 @@ public class SiteServiceTest extends AbstractBaseModelTest {
 		Assert.assertNotEquals("assertNotEquals(period1, period2)", period1, period2);
 		org = organizationService.saveOrUpdate(new Organization("anOrg", InterfaceTypeCode.ENTERPRISE));
 		site = new Site(org, "aSite");
+		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 		site.getListPeriodAvailable().add(period1);
 		site = siteService.saveOrUpdate(site);
 		siteId = site.getId();
