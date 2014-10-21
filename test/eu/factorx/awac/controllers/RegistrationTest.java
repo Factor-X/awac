@@ -213,10 +213,9 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 		saveFakeRequest.withHeader("Content-type", "application/json");
 		saveFakeRequest.withJsonBody(node);
 
-		// Call controller action
 		Result result = callAction(
-				eu.factorx.awac.controllers.routes.ref.RegistrationController.municipalityRegistration(),
-				saveFakeRequest
+					eu.factorx.awac.controllers.routes.ref.RegistrationController.municipalityRegistration(),
+					saveFakeRequest
 		); // callAction
 
 		//analyse result
@@ -231,14 +230,6 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
         Account account = accountService.findByIdentifier(identifier2);
 
         assertNotNull("The account was not created", account);
-
-        List<AccountSiteAssociation> siteAssociationList = accountSiteAssociationService.findByAccount(account);
-
-        assertTrue(siteAssociationList.size()==1);
-
-        //control period for the site
-        assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()>1);
-
 
     } // end of authenticateSuccess test
 

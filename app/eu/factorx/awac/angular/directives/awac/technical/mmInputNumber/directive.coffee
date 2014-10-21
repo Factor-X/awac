@@ -7,7 +7,7 @@ angular
 
         scope.$watch attrs.numbersOnly, () ->
 
-            if attrs.numbersOnly == "integer" || attrs.numbersOnly == "double"
+            if attrs.numbersOnly == "integer" || attrs.numbersOnly == "double" || attrs.numbersOnly == "percent"
 
                 if  attrs.numbersOnly == "integer"
                     errorMessage = 'Only integer'
@@ -57,6 +57,9 @@ angular
 
 
                 modelCtrl.$formatters.unshift (modelValue) ->
+                    return scope.displayValue(modelValue)
+
+                scope.displayValue = (modelValue) ->
                     result=parseFloat(modelValue)
                     if  attrs.numbersOnly == "percent"
                         result=result*100
@@ -92,8 +95,10 @@ angular
 
                     return filterFloat value
 
+                #
+                # filter a string to float
+                #
                 filterFloat = (value) ->
-
                     if  attrs.numbersOnly == "integer"
                         regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$")
                     else
@@ -102,6 +107,12 @@ angular
                     return Number(value)  if regexFloat.test(value)
                     return NaN
 
-                scope.$root.$on 'FORM_LOADING_FINISH', (event, current, previous) ->
-                    if modelCtrl.$modelValue?
-                        scope.lastValidValue = modelCtrl.$modelValue
+                #
+                # first initialization : save first value and display it
+                #
+                if modelCtrl.$modelValue?
+                    scope.lastValidValue = parseFloat(modelCtrl.$modelValue)
+                    # first displaying
+                    valueToDisplay = scope.displayValue(scope.lastValidValue)
+                    modelCtrl.$setViewValue(valueToDisplay)
+                    modelCtrl.$render()
