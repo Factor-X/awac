@@ -12,6 +12,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -50,8 +51,7 @@ public class SiteController  extends AbstractController {
 
 		//control id
 		if(dto.getId()== null){
-			throw new MyrmexRuntimeException("");
-			//TODO error
+			throw new MyrmexRuntimeException(BusinessErrorType.DATA_NOT_FOUND);
 		}
 
 		//load site
@@ -59,8 +59,7 @@ public class SiteController  extends AbstractController {
 
 		// if the site is null
 		if(site == null){
-			throw new MyrmexRuntimeException("");
-			//TODO error
+			throw new MyrmexRuntimeException(BusinessErrorType.DATA_NOT_FOUND);
 		}
 
 		//edit

@@ -17,6 +17,7 @@ import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.util.BusinessErrorType;
 
+import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -55,7 +56,7 @@ public class UserProfileController extends AbstractController {
 		if (account!=null) {
 			// this kind of messages open security issues
 			// do we need to give a more general message?
-			throw new RuntimeException("Identifier already exist. Please try with another identifier");
+			throw new MyrmexRuntimeException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
 		}
 
 		currentUser.setIdentifier(anonymousPersonDTO.getIdentifier());
@@ -80,7 +81,7 @@ public class UserProfileController extends AbstractController {
 		PersonDTO personDTO = extractDTOFromRequest(PersonDTO.class);
 
 		if (!personDTO.getIdentifier().equals(currentUser.getIdentifier())) {
-			throw new RuntimeException("Security issue: sent data does not match authenticated user data!");
+			throw new MyrmexFatalException("Security issue: sent data does not match authenticated user data!");
 		}
 
 		currentUser.getPerson().setLastname(personDTO.getLastName());

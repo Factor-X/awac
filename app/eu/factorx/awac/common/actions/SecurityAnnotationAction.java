@@ -30,11 +30,9 @@ public class SecurityAnnotationAction extends Action<SecurityAnnotation> {
             return F.Promise.promise(new F.Function0<SimpleResult>() {
                 @Override
                 public SimpleResult apply() throws Throwable {
-                    return unauthorized(new ExceptionsDTO(BusinessErrorType.ACCESS_NOT_SYSTEM_ADMIN));
-                    //return unauthorized(Exceptions.ACCESS_NOT_SYSTEM_ADMIN);
+                    return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
                 }
             });
-            //F.Promise.pure(unauthorized(Exceptions.ACCESS_NOT_SYSTEM_ADMIN));
         }
 
 
@@ -43,7 +41,7 @@ public class SecurityAnnotationAction extends Action<SecurityAnnotation> {
                 return F.Promise.promise(new F.Function0<SimpleResult>() {
                     @Override
                     public SimpleResult apply() throws Throwable {
-                        return unauthorized(new ExceptionsDTO(BusinessErrorType.ACCESS_NOT_ADMIN));
+                        return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
                     }
                 });
             }
@@ -53,7 +51,7 @@ public class SecurityAnnotationAction extends Action<SecurityAnnotation> {
                 return F.Promise.promise(new F.Function0<SimpleResult>() {
                     @Override
                     public SimpleResult apply() throws Throwable {
-                        return unauthorized(new ExceptionsDTO(BusinessErrorType.ACCESS_NOT_ADMIN));
+                        return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
                     }
                 });
             }

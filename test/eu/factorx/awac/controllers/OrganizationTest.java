@@ -204,7 +204,7 @@ public class OrganizationTest extends AbstractBaseControllerTest {
 		SiteAddUsersDTO dto = new SiteAddUsersDTO();
 		OrganizationDTO orgDTO = conversionService.convert(org,OrganizationDTO.class);
 		SiteDTO siteDTO = conversionService.convert(site,SiteDTO.class);
-		dto.setOrganization(orgDTO);
+		//dto.setOrganization(orgDTO);
 		dto.setSite(siteDTO);
 
 		return dto;
