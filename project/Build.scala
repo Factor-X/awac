@@ -93,4 +93,6 @@ object ApplicationBuild extends Build {
 
     javaOptions ++= Seq("-Xmx512M", "-Xmx2048M", "-XX:MaxPermSize=2048M");
 
+    javaOptions in (Test,test) ++= Seq("-Xms1024M", "-Xmx2048M", "-XX:PermSize=2048M", "-XX:MaxPermSize=2048M", "-XX:+CMSClassUnloadingEnabled", "-XX:+UseConcMarkSweepGC","-XX:+CMSPermGenSweepingEnabled");
+
 }
