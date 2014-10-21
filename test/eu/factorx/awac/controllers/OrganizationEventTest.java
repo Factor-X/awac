@@ -116,7 +116,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	OrganizationEventResultDTO resultDTO = getDTO(result, OrganizationEventResultDTO.class);
 	assertNotNull(resultDTO);
 
-	assertEquals(1, resultDTO.getOrganizationEventList().size());
+	assertEquals(4, resultDTO.getOrganizationEventList().size());
 
   } // end of authenticateSuccess test
 
@@ -128,7 +128,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 		OrganizationEventDTO dto = createDTO(org,period);
 		dto.setName(EVENT_NAME);
 		dto.setDescription(EVENT_DESCRIPTION);
-		dto.setId(0L);
+		//dto.setId(14L);
 
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(),"");
 
