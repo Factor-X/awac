@@ -27,6 +27,11 @@ cat ./CELDL-251-FormChanges.sql >> /tmp/migration/migration_script.sql
 cat ./CELDL-116-periods.sql >> /tmp/migration/migration_script.sql
 
 
+# percentage fix bug
+cat ./CELDL-260-percentage.sql >> /tmp/migration/migration_script.sql
+
+
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 
