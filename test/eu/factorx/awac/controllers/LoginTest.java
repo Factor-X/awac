@@ -12,13 +12,13 @@
 package eu.factorx.awac.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.common.TranslatedExceptionType;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
-import eu.factorx.awac.dto.myrmex.get.TranslatedExceptionDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,24 +114,20 @@ public class LoginTest extends AbstractBaseModelTest {
 		fr.withHeader("Content-type", "application/json");
 		fr.withJsonBody(node);
 
-		// Call controller action
-		Result result = callAction(
-				eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
-				fr
-		); // callAction
+		Result result = null;
+		try {
+			// Call controller action
+			result = callAction(
+					eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
+					fr
+			); // callAction
+		} catch (MyrmexRuntimeException mre) {
 
-		// test results
+			// verify exception .
+			assertEquals(mre.getBusinessErrorType().name(), BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name());
 
-		// expecting an HTTP 401 return code
-		assertEquals(401, status(result));
-		// verify user identifier in session is null
-		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
+		}
 
-		// should return a ExceptionDTO
-		TranslatedExceptionDTO loginResult = getDTO(result, TranslatedExceptionDTO.class);
-
-		// verify lastname of user1 is Dupont.
-		assertEquals(loginResult.getCode(), TranslatedExceptionType.LOGIN_PASSWORD_PAIR_NOT_FOUND.name());
 	} // end of authenticateSuccess test
 
 	@Test
@@ -231,28 +227,19 @@ public class LoginTest extends AbstractBaseModelTest {
 		fr.withHeader("Content-type", "application/json");
 		fr.withJsonBody(node);
 
-		// Call controller action
-		Result result = callAction(
-				eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
-				fr
-		); // callAction
-
-		// test results
-
-		// expecting an HTTP 401 return code
-		assertEquals(401, status(result));
-		// verify user identifier in session is null
-		assertNull(session(result).get(SecuredController.SESSION_IDENTIFIER_STORE));
-
-		// should return a ExceptionDTO
-		String content = new String(contentAsBytes(result));
-		JsonNode jsonResponse = Json.parse(content);
-		//Logger.info("jsonNode: " + jsonResponse.toString());
+		Result result = null;
+		try {
+			// Call controller action
+			result = callAction(
+					eu.factorx.awac.controllers.routes.ref.AuthenticationController.authenticate(),
+					fr
+			); // callAction
+		} catch (MyrmexRuntimeException mre) {
+			// verify exception .
+			assertEquals(mre.getBusinessErrorType().name(), BusinessErrorType.WRONG_INTERFACE_FOR_USER.name());
+		}
 
 
-		TranslatedExceptionDTO loginResult = Json.fromJson(jsonResponse, TranslatedExceptionDTO.class);
-		// verify login code result.
-		assertEquals(loginResult.getCode(), TranslatedExceptionType.WRONG_INTERFACE_FOR_USER.name());
 	} // end of authenticateSuccess test
 
 
