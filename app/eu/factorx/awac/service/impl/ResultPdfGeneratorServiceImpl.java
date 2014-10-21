@@ -101,6 +101,9 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		pdfGenerator.setMemoryResource("mem://svg/donut2", donut2);
 		pdfGenerator.setMemoryResource("mem://svg/donut3", donut3);
 
+		String kiviat = writeKiviat(r_1, allReportResults);
+		pdfGenerator.setMemoryResource("mem://svg/kiviat", kiviat);
+
 
 		// histogram
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
@@ -131,6 +134,14 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<br/>";
 		content += "<br/>";
 		content += addLegend(r_4, lang, allReportResults, false);
+
+		// web
+		content += "<h1>" + translate("KIVIAT_DIAGRAM", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+		content += "<img style=\"display: inline-block; height: 10cm; width: auto;\" src=\"mem://svg/kiviat\" />";
+		content += "<br/>";
+		content += "<br/>";
+		content += addLegend(r_1, lang, allReportResults, true);
+
 
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
@@ -187,6 +198,8 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		pdfGenerator.setMemoryResource("mem://svg/donut3L", donut3L);
 		pdfGenerator.setMemoryResource("mem://svg/donut3R", donut3R);
 
+		String kiviat = writeKiviat(r_1, merged);
+		pdfGenerator.setMemoryResource("mem://svg/kiviat", kiviat);
 
 		// histogram
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
@@ -221,6 +234,13 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<br/>";
 		content += addLegend(r_4, lang, merged, false);
 
+		// web
+		content += "<h1>" + translate("KIVIAT_DIAGRAM", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+		content += "<img style=\"display: inline-block; height: 10cm; width: auto;\" src=\"mem://svg/kiviat\" />";
+		content += "<br/>";
+		content += "<br/>";
+		content += addLegend(r_1, lang, merged, true);
+
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
 		Html html = new Html(sb);
@@ -229,42 +249,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 	}
 
 
-	private String getReportKeyForCalculatorAndRestrictedIsoScope(AwacCalculator awacCalculator, IndicatorIsoScopeCode scope) {
-
-		for (Report report : awacCalculator.getReports()) {
-			if (report.getRestrictedScope() == null) {
-				if (scope == null) {
-					return report.getCode().getKey();
-				}
-			} else {
-				if (report.getRestrictedScope().equals(scope)) {
-					return report.getCode().getKey();
-				}
-			}
-
-		}
-
-		throw new IllegalArgumentException("No report found for calculator id=" + awacCalculator.getId() + " and restrictedIsScope=" + scope);
-	}
-
-	private String getTotal(String reportKey, LanguageCode lang, ReportResultCollection allReportResults) {
-
-		double total = 0.0;
-
-		for (ReportResult reportResult : allReportResults.getReportResults()) {
-			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
-				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
-					total += e.getValue().get(0);
-				}
-				break;
-			}
-		}
-
-		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
-		nf.setMaximumFractionDigits(12);
-
-		return nf.format(total);
-	}
+	// Legend
 
 	private String addLegend(String reportKey, LanguageCode lang, ReportResultCollection allReportResults, boolean numbers) {
 		String content = "";
@@ -292,7 +277,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 								content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i + 1, count) + "\">&nbsp;</span></td>";
 							}
 							content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
-							content += "<td>" + nf.format(total) + " tCO2e" + "</td>";
+							content += "<td style=\"text-align: right\">" + nf.format(total) + " tCO2e" + "</td>";
 							content += "</tr>";
 							i++;
 						}
@@ -360,6 +345,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return content;
 	}
 
+	// Histogram
 
 	private String writeHistogram(String search, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
 		String content = "";
@@ -382,6 +368,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return content;
 	}
 
+	// Donut
 
 	private String writeDonut(String search, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
 
@@ -411,6 +398,32 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		throw new IllegalArgumentException();
 	}
 
+	// Kiviat
+
+	private String writeKiviat(String search, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
+		String content = "";
+		for (ReportResult reportResult : allReportResults.getReportResults()) {
+			String key = reportResult.getReport().getCode().getKey();
+			if (key.equals(search)) {
+				ReportResultAggregation reportResultAggregation = reportResultService.aggregate(reportResult);
+				content += resultSvgGeneratorService.getWeb(reportResultAggregation);
+			}
+		}
+		return content;
+	}
+
+	private String writeKiviat(String search, MergedReportResultCollectionAggregation merged) throws BiffException, IOException, WriteException {
+		String content = "";
+		for (MergedReportResultAggregation mergedReportResultAggregation : merged.getMergedReportResultAggregations()) {
+			String key = mergedReportResultAggregation.getReportCode();
+			if (key.equals(search)) {
+				content += resultSvgGeneratorService.getWeb(mergedReportResultAggregation);
+			}
+		}
+		return content;
+	}
+
+	// Explanation
 
 	private String writeExplanation(LanguageCode lang, ReportResultCollection allReportResults) {
 		String content = "<h1>Explication</h1>";
@@ -550,8 +563,11 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return content;
 	}
 
+	// Table
 
 	private String writeTable(String search, LanguageCode lang, ReportResultCollection allReportResults) {
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
 		String content = "<h1>Rapport</h1>";
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 
@@ -560,11 +576,11 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 				content += "<thead>";
 				content += "<tr>";
-				content += "<th class=\"header\">Indicateur</th>";
-				content += "<th class=\"header\">Scope 1</th>";
-				content += "<th class=\"header\">Scope 2</th>";
-				content += "<th class=\"header\">Scope 3</th>";
-				content += "<th class=\"header\">Hors scope</th>";
+				content += "<th class=\"header\"></th>";
+				content += "<th class=\"header\">" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
 				content += "</tr>";
 				content += "</thead>";
 
@@ -572,18 +588,38 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 				Map<String, List<Double>> activityResults = reportResult.getScopeValuesByIndicator();
 
+				double totalScope1 = 0.0;
+				double totalScope2 = 0.0;
+				double totalScope3 = 0.0;
+				double totalOutOfScope = 0.0;
+
 				for (Map.Entry<String, List<Double>> entry : activityResults.entrySet()) {
 
 					content += "<tr>";
-					content += "<td class=\"dotted\">" + translate(entry.getKey(), CodeList.INDICATOR, lang) + "</td>";
-					content += "<td class=\"dotted\">" + entry.getValue().get(1) + "</td>";
-					content += "<td class=\"dotted\">" + entry.getValue().get(2) + "</td>";
-					content += "<td class=\"dotted\">" + entry.getValue().get(3) + "</td>";
-					content += "<td class=\"dotted\">" + entry.getValue().get(4) + "</td>";
+					content += "<td class=\"dotted\" style=\"white-space: normal\">" + translate(entry.getKey(), CodeList.INDICATOR, lang) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getValue().get(1)) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getValue().get(2)) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getValue().get(3)) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getValue().get(4)) + "</td>";
 					content += "</tr>";
+
+					totalScope1 += entry.getValue().get(1);
+					totalScope2 += entry.getValue().get(2);
+					totalScope3 += entry.getValue().get(3);
+					totalOutOfScope += entry.getValue().get(4);
 
 				}
 				content += "</tbody>";
+
+				content += "<tfoot>";
+				content += "<tr>";
+				content += "<th class=\"footer\" style=\"text-align: right\">" + translate("RESULTS_TOTAL", CodeList.TRANSLATIONS_INTERFACE, lang) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope1) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope2) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope3) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalOutOfScope) + "</th>";
+				content += "</tr>";
+				content += "</tfoot>";
 
 				content += "</table>";
 			}
@@ -593,6 +629,9 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 	private String writeTable(String search, LanguageCode lang, MergedReportResultCollectionAggregation merged) {
 
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
+
 		String content = "<h1>Rapport</h1>";
 		for (MergedReportResultAggregation mrra : merged.getMergedReportResultAggregations()) {
 
@@ -600,15 +639,35 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 				content += "<table>";
 
 				content += "<thead>";
+
 				content += "<tr>";
-				content += "<th class=\"header\">Indicateur</th>";
-				content += "<th class=\"header\">Scope 1</th>";
-				content += "<th class=\"header\">Scope 2</th>";
-				content += "<th class=\"header\">Scope 3</th>";
-				content += "<th class=\"header\">Hors scope</th>";
+				content += "<th class=\"header\"></th>";
+				content += "<th class=\"header\" colspan=\"4\">"+ mrra.getLeftPeriod().getLabel() +"</th>";
+				content += "<th class=\"header\" colspan=\"4\">"+ mrra.getRightPeriod().getLabel() +"</th>";
 				content += "</tr>";
+
+				content += "<tr>";
+				content += "<th class=\"header\"></th>";
+				content += "<th class=\"header\">" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "</tr>";
+
 				content += "</thead>";
 
+				double totalScope1Left = 0.0;
+				double totalScope2Left = 0.0;
+				double totalScope3Left = 0.0;
+				double totalOutOfScopeLeft = 0.0;
+				double totalScope1Right = 0.0;
+				double totalScope2Right = 0.0;
+				double totalScope3Right = 0.0;
+				double totalOutOfScopeRight = 0.0;
 
 				content += "<tbody>";
 
@@ -616,28 +675,88 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 					content += "<tr>";
 
-					content += "<td class=\"dotted\">" + translate(entry.getIndicator(), CodeList.INDICATOR, lang) + "</td>";
+					content += "<td class=\"dotted\" style=\"white-space: normal\">" + translate(entry.getIndicator(), CodeList.INDICATOR, lang) + "</td>";
 
-					content += "<td class=\"dotted\">" + entry.getLeftScope1Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getLeftScope2Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getLeftScope3Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getLeftOutOfScopeValue() + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getLeftScope1Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getLeftScope2Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getLeftScope3Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getLeftOutOfScopeValue()) + "</td>";
 
-					content += "<td class=\"dotted\">" + entry.getRightScope1Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getRightScope2Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getRightScope3Value() + "</td>";
-					content += "<td class=\"dotted\">" + entry.getRightOutOfScopeValue() + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getRightScope1Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getRightScope2Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getRightScope3Value()) + "</td>";
+					content += "<td class=\"dotted\">" + nf.format(entry.getRightOutOfScopeValue()) + "</td>";
 
 					content += "</tr>";
 
+					totalScope1Left += entry.getLeftScope1Value();
+					totalScope2Left += entry.getLeftScope2Value();
+					totalScope3Left += entry.getLeftScope3Value();
+					totalOutOfScopeLeft += entry.getLeftOutOfScopeValue();
+
+					totalScope1Right += entry.getRightScope1Value();
+					totalScope2Right += entry.getRightScope2Value();
+					totalScope3Right += entry.getRightScope3Value();
+					totalOutOfScopeRight += entry.getRightOutOfScopeValue();
+
 				}
 				content += "</tbody>";
+
+
+				content += "<tfoot>";
+				content += "<tr>";
+				content += "<th class=\"footer\" style=\"text-align: right\">" + translate("RESULTS_TOTAL", CodeList.TRANSLATIONS_INTERFACE, lang) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope1Left) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope2Left) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope3Left) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalOutOfScopeLeft) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope1Right) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope2Right) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalScope3Right) + "</th>";
+				content += "<th class=\"footer\">" + nf.format(totalOutOfScopeRight) + "</th>";
+				content += "</tr>";
+				content += "</tfoot>";
 
 				content += "</table>";
 			}
 		}
 		return content;
 
+	}
+
+	// Utils
+
+	private String getReportKeyForCalculatorAndRestrictedIsoScope(AwacCalculator awacCalculator, IndicatorIsoScopeCode scope) {
+
+		for (Report report : awacCalculator.getReports()) {
+			if (report.getRestrictedScope() == null) {
+				if (scope == null) {
+					return report.getCode().getKey();
+				}
+			} else {
+				if (report.getRestrictedScope().equals(scope)) {
+					return report.getCode().getKey();
+				}
+			}
+
+		}
+
+		throw new IllegalArgumentException("No report found for calculator id=" + awacCalculator.getId() + " and restrictedIsScope=" + scope);
+	}
+
+	private String getTotal(String reportKey, LanguageCode lang, ReportResultCollection allReportResults) {
+		double total = 0.0;
+		for (ReportResult reportResult : allReportResults.getReportResults()) {
+			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
+				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
+					total += e.getValue().get(0);
+				}
+				break;
+			}
+		}
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
+		return nf.format(total);
 	}
 
 }
