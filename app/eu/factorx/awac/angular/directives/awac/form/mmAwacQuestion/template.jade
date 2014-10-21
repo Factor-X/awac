@@ -1,5 +1,4 @@
-div(class="question_field",
-    ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
+.question_field(ng-class="{'twoanswer':displayOldDatas()===true, 'oneanswer':displayOldDatas()===false,'condition-false':getCondition() === false}")
     div
         .question_info(ng-show="hasDescription()")
             .question_info_popup(ng-bind-html="getQuestionCode() + '_DESC' | translate")
@@ -11,28 +10,29 @@ div(class="question_field",
             div {{errorMessage}}
             img(src='/assets/images/question_field_error_message_icon_arrow.png')
         span.inject-data
-        button.button( ng-click="editComment(!isDisabled())",
-                       name="{{ getQuestionCode() }}_COMMENT",
-                       class="edit_comment_icon glyphicon glyphicon-pencil",
-                       ng-hide="getAggregation()!=null || isDisabled() && getAnswer().comment == null",
-                       ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
-        div.edit_comment_icon(ng-show="getAggregation()!=null || isDisabled() && getAnswer().comment == null")
+        div.edit_comment_icon
+            button.button( ng-click="editComment(!isDisabled())",
+            name="{{ getQuestionCode() }}_COMMENT",
+            class="edit_comment_icon glyphicon glyphicon-pencil",
+            ng-hide="getAggregation()!=null || isDisabled() && getAnswer().comment == null",
+            ng-class="{edit_comment_icon_selected:getAnswer().comment !=null}")
         .user_icon(ng-hide="getAggregation()!=null || getAnswer().value == null", class="{{getUserClass()}}") {{getUserName(false,true)}}
             div
                 span {{getUserName(false,false)}}
                 img(src='/assets/images/user_icon_arrow.png')
 
-    div(ng-show="displayOldDatas() === true && getAnswer(true) != null")
-        button.button(
-        ng-click="copyDataToCompare()",
-        title="Copier la valeur",
-        ng-hide="isDisabled()") <<
+    .question_comparison(ng-show="displayOldDatas() === true && getAnswer(true) != null")
+        div
+            button.button(
+            ng-click="copyDataToCompare()",
+            title="Copier la valeur",
+            ng-hide="isDisabled()") <<
         span.inject-data-to-compare
-        button.button( ng-click="editComment(false)",
-                       name="OLD_{{ getQuestionCode() }}_COMMENT",
-                       class="edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected",
-                       ng-hide="getAggregation()!=null || getAnswer(true).comment ==null")
-        div.edit_comment_icon(ng-hide="getAnswer(true).comment !=null")
+        .edit_comment_icon
+            button.button( ng-click="editComment(false)",
+            name="OLD_{{ getQuestionCode() }}_COMMENT",
+            class="edit_comment_icon glyphicon glyphicon-pencil edit_comment_icon_selected",
+            ng-hide="getAggregation()!=null || getAnswer(true).comment ==null")
         .user_icon {{getUserName(true,true)}}
             div
                 div {{getUserName(true,false)}}
