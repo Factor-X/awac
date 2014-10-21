@@ -13,6 +13,7 @@ package eu.factorx.awac.service.impl;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import eu.factorx.awac.service.PdfGenerator;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -52,6 +53,7 @@ public class PdfGeneratorImpl implements PdfGenerator {
 		userAgent = new PdfGeneratorUserAgent(renderer.getOutputDevice());
 		userAgent.setSharedContext(renderer.getSharedContext());
 		renderer.getSharedContext().setUserAgentCallback(userAgent);
+
 	}
 
 	public Result ok(Html html) {
@@ -107,8 +109,10 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 			XMLResource xmlResource = XMLResource.load(reader);
 			Document document = xmlResource.getDocument();
+
 			renderer.setDocument(document, documentBaseURL);
 			renderer.layout();
+
 			renderer.createPDF(os);
 		} catch (Exception e) {
 			Logger.error("Creating document from template", e);
@@ -122,7 +126,7 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 	private void addFontDirectory(ITextFontResolver fontResolver,
 	                              String directory) throws DocumentException, IOException {
-		Logger.info("PDF - directory parameter:" + directory );
+		Logger.info("PDF - directory parameter:" + directory);
 
 		Logger.info("PDF - getting file list from currentPath()");
 		File fileList = Play.application(Play.current()).path();
@@ -132,15 +136,14 @@ public class PdfGeneratorImpl implements PdfGenerator {
 
 
 		File dir = new File(directory);
-		if (dir!=null) {
+		if (dir != null) {
 			Logger.info("PDF - dir is not null");
 			for (File file : dir.listFiles()) {
 				Logger.info("file :" + file.getAbsolutePath());
 				fontResolver.addFont(file.getAbsolutePath(), BaseFont.IDENTITY_H,
-						BaseFont.EMBEDDED);
+					BaseFont.EMBEDDED);
 			}
-		}
-		else {
+		} else {
 			Logger.info("PDF - dir is null");
 		}
 	}
