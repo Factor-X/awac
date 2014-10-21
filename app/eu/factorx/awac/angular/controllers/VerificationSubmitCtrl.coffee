@@ -11,7 +11,6 @@ angular
     downloadService.getJson '/awac/verification/verificationRequestsVerifiedToConfirm', (result)->
         if not result.success
             modalService.close(modalService.LOADING)
-            messageFlash.displaySuccess translationService.get result.data
         else
             modalService.close(modalService.LOADING)
             $scope.requests = result.data.list

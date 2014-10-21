@@ -56,18 +56,19 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
-            window.R = result
+            if result.success
+                window.R = result
 
-            byteCharacters = atob(result.data)
-            byteNumbers = new Array(byteCharacters.length)
-            for i in [0...byteCharacters.length]
-                byteNumbers[i] = byteCharacters.charCodeAt(i)
-            byteArray = new Uint8Array(byteNumbers)
-            blob = new Blob([byteArray], { type: 'application/pdf' })
+                byteCharacters = atob(result.data)
+                byteNumbers = new Array(byteCharacters.length)
+                for i in [0...byteCharacters.length]
+                    byteNumbers[i] = byteCharacters.charCodeAt(i)
+                byteArray = new Uint8Array(byteNumbers)
+                blob = new Blob([byteArray], { type: 'application/pdf' })
 
-            filename = "export.pdf"
+                filename = "export.pdf"
 
-            saveAs(blob,filename)
+                saveAs(blob,filename)
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
@@ -85,17 +86,18 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
-            window.R = result
+            if result.success
+                window.R = result
 
-            byteCharacters = atob(result.data)
-            byteNumbers = new Array(byteCharacters.length)
-            for i in [0...byteCharacters.length]
-                byteNumbers[i] = byteCharacters.charCodeAt(i)
-            byteArray = new Uint8Array(byteNumbers)
-            blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
-            filename = "export.xls"
+                byteCharacters = atob(result.data)
+                byteNumbers = new Array(byteCharacters.length)
+                for i in [0...byteCharacters.length]
+                    byteNumbers[i] = byteCharacters.charCodeAt(i)
+                byteArray = new Uint8Array(byteNumbers)
+                blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
+                filename = "export.xls"
 
-            saveAs(blob,filename)
+                saveAs(blob,filename)
 
     $scope.dataURItoBlob = (dataURI) ->
 
@@ -215,9 +217,6 @@ angular
                         $scope.rightTotalEmissions += line.rightScope2Value
                         $scope.rightTotalEmissions += line.rightScope3Value
                         # $scope.rightTotalEmissions += line.rightOutOfScopeValue
-
-                else
-                    messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'
 
 
 

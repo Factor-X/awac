@@ -46,7 +46,6 @@ angular
 #                    if $scope.getParams().cb?
 #                        $scope.getParams().cb($scope.inviteEmailInfo.field)
                 else
-                    messageFlash.displayError result.data.message
                     $scope.isLoading = false
 
             return false

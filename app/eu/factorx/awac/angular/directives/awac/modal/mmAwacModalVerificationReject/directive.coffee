@@ -31,8 +31,6 @@ angular
                         $scope.getParams().refreshVerificationStatus(result.data)
                         $scope.$root.$broadcast 'TEST_CLOSING_VALIDATION'
                         $scope.close()
-                    else
-                        messageFlash.displayError(result.data.message)
 
     link: (scope) ->
 

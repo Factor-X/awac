@@ -50,9 +50,6 @@ angular
                             $scope.getParams().afterSave()
                         #close window
                         $scope.close()
-                    else
-                        #display success message
-                        messageFlash.displayError result.data.message
 
 
             return false

@@ -11,6 +11,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
+import eu.factorx.awac.util.Colors;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,22 +85,73 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		pdfGenerator.setMemoryResource("mem://svg/donut2", donut2);
 		pdfGenerator.setMemoryResource("mem://svg/donut3", donut3);
 
+
+		// histogram
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
-
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
+		content += addLegend("R_1", lang, allReportResults, true);
 
+		// donuts
+		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+
+		// scope 1
+		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
+		content += "<center>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" />";
+		content += "</center>";
+		content += "<br/>";
+		content += addLegend("R_2", lang, allReportResults, false);
+
+		// scope 2
+		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
+		content += "<center>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" /><br />";
+		content += "</center>";
+		content += "<br/>";
+		content += addLegend("R_3", lang, allReportResults, false);
+
+		// scope 3
+		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
+		content += "<center>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" /><br />";
+		content += "</center>";
+		content += "<br/>";
+		content += addLegend("R_4", lang, allReportResults, false);
+
+		content += "</body>";
+		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
+		Html html = new Html(sb);
+
+		return pdfGenerator.toBytes(html);
+	}
+
+	private String addLegend(String reportKey, LanguageCode lang, ReportResultCollection allReportResults, boolean numbers) {
+		String content = "";
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
-			if (reportResult.getReport().getCode().getKey().equals("R_1")) {
+			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
+
+				int count = 0;
+				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
+					if (e.getValue().get(0) > 0) {
+						count++;
+					}
+				}
 
 				int i = 0;
-				content += "<table>";
+				content += "<table style=\"display:table; width: auto; margin: auto; border:solid 3px red;\">";
 				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
 					Double total = e.getValue().get(0);
 					if (total > 0) {
 						content += "<tr>";
 
+						if (numbers) {
+							content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
+						} else {
+							content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i+1, count) + "\">&nbsp;</span></td>";
+						}
+
 						content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
-						content += "<td>" + e.getValue().get(0) + "</td>";
+						content += "<td>" + e.getValue().get(0) + " tCO2e" + "</td>";
 
 						content += "</tr>";
 						i++;
@@ -109,29 +161,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 			}
 		}
-
-		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
-
-		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<table>";
-		content += "<tr>";
-		content += "<td>";
-		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" /><br />";
-		content += "</td>";
-		content += "</tr>";
-		content += "</table>";
-
-		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" /><br />";
-
-		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<img style=\"display: block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" /><br />";
-
-		content += "</body>";
-		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
-		Html html = new Html(sb);
-
-		return pdfGenerator.toBytes(html);
+		return content;
 	}
 
 	private String writeHistogram(LanguageCode lang, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
@@ -310,11 +340,11 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 				content += "<thead>";
 				content += "<tr>";
-				content += "<th>Indicateur</th>";
-				content += "<th>Scope 1</th>";
-				content += "<th>Scope 2</th>";
-				content += "<th>Scope 3</th>";
-				content += "<th>Hors scope</th>";
+				content += "<th class=\"header\">Indicateur</th>";
+				content += "<th class=\"header\">Scope 1</th>";
+				content += "<th class=\"header\">Scope 2</th>";
+				content += "<th class=\"header\">Scope 3</th>";
+				content += "<th class=\"header\">Hors scope</th>";
 				content += "</tr>";
 				content += "</thead>";
 
@@ -326,19 +356,19 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 				for (Map.Entry<String, List<Double>> entry : activityResults.entrySet()) {
 
 					content += "<tr>";
-					content += "<td>";
+					content += "<td class=\"dotted\">";
 					content += translate(entry.getKey(), CodeList.INDICATOR, lang);
 					content += "</td>";
-					content += "<td>";
+					content += "<td class=\"dotted\">";
 					content += entry.getValue().get(1);
 					content += "</td>";
-					content += "<td>";
+					content += "<td class=\"dotted\">";
 					content += entry.getValue().get(2);
 					content += "</td>";
-					content += "<td>";
+					content += "<td class=\"dotted\">";
 					content += entry.getValue().get(3);
 					content += "</td>";
-					content += "<td>";
+					content += "<td class=\"dotted\">";
 					content += entry.getValue().get(4);
 					content += "</td>";
 					content += "</tr>";

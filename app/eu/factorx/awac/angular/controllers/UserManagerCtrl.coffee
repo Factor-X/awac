@@ -43,7 +43,6 @@ angular
                             $scope.isLoading['isActive'][user.email] = false
                         else
                             $scope.isLoading['isActive'][user.email] = false
-                            messageFlash.displayError result.data.message
 
 
             $scope.isAdminUser = (user) ->
@@ -61,7 +60,6 @@ angular
                             $scope.isLoading['admin'][user.email] = false
                         else
                             $scope.isLoading['admin'][user.email] = false
-                            messageFlash.displayError result.data.message
 
             $scope.isMainVerifier = (user) ->
 
@@ -75,8 +73,6 @@ angular
 
                     downloadService.postJson "/awac/user/isMainVerifier", data, (result) ->
                         $scope.isLoading['isMainVerifier'][user.email] = false
-                        if not result.success
-                            messageFlash.displayError result.data.message
 
     $scope.toForm = ->
         $scope.$root.navToLastFormUsed()

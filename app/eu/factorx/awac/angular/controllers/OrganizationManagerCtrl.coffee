@@ -33,9 +33,7 @@ angular
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
         modalService.close(modalService.LOADING)
-        if not result.success
-            messageFlash.displayError translationService.get('UNABLE_LOAD_DATA')
-        else
+        if result.success
             $scope.organization = result.data
 
             $scope.nameInfo.field = $scope.organization.name
@@ -43,12 +41,8 @@ angular
 
 
             downloadService.getJson 'awac/organization/events/load',  (result) ->
-                console.log '----------------------------------------------'
-                console.log result
                 if result.success
                     $scope.events = result.data.organizationEventList
-                else
-                    messageFlash.displayError result.data.message
 
             $scope.toForm = ->
                 $scope.$root.navToLastFormUsed()
@@ -79,6 +73,4 @@ angular
                     if result.success
                         messageFlash.displaySuccess "CHANGES_SAVED"
                         $scope.$root.organizationName = $scope.nameInfo.field
-                    else
-                        messageFlash.displayError result.data.message
                     return false

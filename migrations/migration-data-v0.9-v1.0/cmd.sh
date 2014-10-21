@@ -23,6 +23,10 @@ cat ./CELDL-77-Reducing-Actions.sql >> /tmp/migration/migration_script.sql
 cat ./CELDL-251-FormChanges.sql >> /tmp/migration/migration_script.sql
 
 
+# new periods
+cat ./CELDL-116-periods.sql >> /tmp/migration/migration_script.sql
+
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 

@@ -56,7 +56,6 @@ angular
                         $scope.isLoading = false
                         $scope.close()
                     else
-                        messageFlash.displayError result.data.message
                         $scope.isLoading = false
 
 

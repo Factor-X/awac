@@ -21,7 +21,9 @@ public class SiteTest extends AbstractBaseModelTest {
 
 		Organization org = new Organization(ORGANISATION, InterfaceTypeCode.ENTERPRISE);
 		em.persist(org);
-        em.persist(new Site(org,SITE));
+		Site site = new Site (org,SITE);
+		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
+		em.persist(site);
     } // end of test method
 
 
