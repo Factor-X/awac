@@ -73,7 +73,7 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 		accountService.saveOrUpdate(ac2);
 
 		Site site = new Site(org, "aSite");
-		site = siteService.saveOrUpdate(site);
+		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 
 		List<Site> siteList = new ArrayList<Site>();
 		siteList.add(site);
