@@ -4,10 +4,12 @@ import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.knowledge.Report;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
@@ -19,7 +21,10 @@ import org.springframework.stereotype.Component;
 import play.api.templates.Html;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -51,13 +56,18 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 
 	@Override
-	public byte[] generate(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException {
+	public byte[] generate(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException {
+		if (comparedPeriod == null) {
+			return generateSimple(lang, scopes, period, interfaceCode);
+		} else {
+			return generateCompared(lang, scopes, period, comparedPeriod, interfaceCode);
+		}
+	}
 
+	private byte[] generateSimple(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException {
 
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
-
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
-
 
 		String content = "\n" +
 			"<!DOCTYPE html>\n" +
@@ -67,18 +77,24 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			"</head>\n" +
 			"<body>\n";
 
+		String r_1 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, null);
+		String r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
+		String r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
+		String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+
 
 		// 1. Report
-		content += writeTable(lang, allReportResults);
+		content += writeTable(r_1, lang, allReportResults);
 
 		// 2. Explanation
 		content += writeExplanation(lang, allReportResults);
 
 		// 3. Graphs
-		String histogram = writeHistogram(lang, allReportResults);
-		String donut1 = writeDonut("R_2", lang, allReportResults);
-		String donut2 = writeDonut("R_3", lang, allReportResults);
-		String donut3 = writeDonut("R_4", lang, allReportResults);
+
+		String histogram = writeHistogram(r_1, allReportResults);
+		String donut1 = writeDonut(r_2, allReportResults);
+		String donut2 = writeDonut(r_3, allReportResults);
+		String donut3 = writeDonut(r_4, allReportResults);
 
 		pdfGenerator.setMemoryResource("mem://svg/histogram", histogram);
 		pdfGenerator.setMemoryResource("mem://svg/donut1", donut1);
@@ -89,34 +105,32 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		// histogram
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
-		content += addLegend("R_1", lang, allReportResults, true);
+		content += "<br/>";
+		content += addLegend(r_1, lang, allReportResults, true);
 
 		// donuts
 		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 
 		// scope 1
-		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<center>";
+		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_2, lang, allReportResults) + " tCO2e</h2>";
 		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" />";
-		content += "</center>";
 		content += "<br/>";
-		content += addLegend("R_2", lang, allReportResults, false);
+		content += "<br/>";
+		content += addLegend(r_2, lang, allReportResults, false);
 
 		// scope 2
-		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<center>";
-		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" /><br />";
-		content += "</center>";
+		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_3, lang, allReportResults) + " tCO2e</h2>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" />";
 		content += "<br/>";
-		content += addLegend("R_3", lang, allReportResults, false);
+		content += "<br/>";
+		content += addLegend(r_3, lang, allReportResults, false);
 
 		// scope 3
-		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : tCO2e</h2>";
-		content += "<center>";
-		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" /><br />";
-		content += "</center>";
+		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_4, lang, allReportResults) + " tCO2e</h2>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" />";
 		content += "<br/>";
-		content += addLegend("R_4", lang, allReportResults, false);
+		content += "<br/>";
+		content += addLegend(r_4, lang, allReportResults, false);
 
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
@@ -125,8 +139,137 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return pdfGenerator.toBytes(html);
 	}
 
+	private byte[] generateCompared(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException {
+
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
+		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
+		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
+
+		ReportResultCollectionAggregation left = reportResultService.aggregate(allReportResultsLeft);
+		ReportResultCollectionAggregation right = reportResultService.aggregate(allReportResultsRight);
+
+		MergedReportResultCollectionAggregation merged = reportResultService.mergeAsComparision(left, right);
+
+		String content = "\n" +
+			"<!DOCTYPE html>\n" +
+			"<head>\n" +
+			"    <title>PDF test</title>\n" +
+			"    <link rel=\"stylesheet\" href=\"/public/stylesheets/pdf.css\"/>\n" +
+			"</head>\n" +
+			"<body>\n";
+
+		String r_1 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, null);
+		String r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
+		String r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
+		String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+
+		// 1. Report
+		content += writeTable(r_1, lang, merged);
+
+		// 2. Graphs
+		String histogram = writeHistogram(r_1, merged);
+		List<String> donut1 = writeDonut(r_2, merged);
+		List<String> donut2 = writeDonut(r_3, merged);
+		List<String> donut3 = writeDonut(r_4, merged);
+
+		String donut1L = donut1.get(0);
+		String donut1R = donut1.get(1);
+		String donut2L = donut2.get(0);
+		String donut2R = donut2.get(1);
+		String donut3L = donut3.get(0);
+		String donut3R = donut3.get(1);
+
+		pdfGenerator.setMemoryResource("mem://svg/histogram", histogram);
+		pdfGenerator.setMemoryResource("mem://svg/donut1L", donut1L);
+		pdfGenerator.setMemoryResource("mem://svg/donut1R", donut1R);
+		pdfGenerator.setMemoryResource("mem://svg/donut2L", donut2L);
+		pdfGenerator.setMemoryResource("mem://svg/donut2R", donut2R);
+		pdfGenerator.setMemoryResource("mem://svg/donut3L", donut3L);
+		pdfGenerator.setMemoryResource("mem://svg/donut3R", donut3R);
+
+
+		// histogram
+		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
+		content += "<br/>";
+		content += addLegend(r_1, lang, merged, true);
+
+		// donuts
+		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
+
+		// scope 1
+		content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1L\" />";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1R\" />";
+		content += "<br/>";
+		content += "<br/>";
+		content += addLegend(r_2, lang, merged, false);
+
+		// scope 2
+		content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2L\" />";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2R\" />";
+		content += "<br/>";
+		content += "<br/>";
+		content += addLegend(r_3, lang, merged, false);
+
+		// scope 3
+		content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3L\" />";
+		content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3R\" />";
+		content += "<br/>";
+		content += "<br/>";
+		content += addLegend(r_4, lang, merged, false);
+
+		content += "</body>";
+		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
+		Html html = new Html(sb);
+
+		return pdfGenerator.toBytes(html);
+	}
+
+
+	private String getReportKeyForCalculatorAndRestrictedIsoScope(AwacCalculator awacCalculator, IndicatorIsoScopeCode scope) {
+
+		for (Report report : awacCalculator.getReports()) {
+			if (report.getRestrictedScope() == null) {
+				if (scope == null) {
+					return report.getCode().getKey();
+				}
+			} else {
+				if (report.getRestrictedScope().equals(scope)) {
+					return report.getCode().getKey();
+				}
+			}
+
+		}
+
+		throw new IllegalArgumentException("No report found for calculator id=" + awacCalculator.getId() + " and restrictedIsScope=" + scope);
+	}
+
+	private String getTotal(String reportKey, LanguageCode lang, ReportResultCollection allReportResults) {
+
+		double total = 0.0;
+
+		for (ReportResult reportResult : allReportResults.getReportResults()) {
+			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
+				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
+					total += e.getValue().get(0);
+				}
+				break;
+			}
+		}
+
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
+
+		return nf.format(total);
+	}
+
 	private String addLegend(String reportKey, LanguageCode lang, ReportResultCollection allReportResults, boolean numbers) {
 		String content = "";
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
 
@@ -136,49 +279,111 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 						count++;
 					}
 				}
-
-				int i = 0;
-				content += "<table style=\"display:table; width: auto; margin: auto; border:solid 3px red;\">";
-				for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
-					Double total = e.getValue().get(0);
-					if (total > 0) {
-						content += "<tr>";
-
-						if (numbers) {
-							content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
-						} else {
-							content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i+1, count) + "\">&nbsp;</span></td>";
+				if (count > 0) {
+					int i = 0;
+					content += "<table style=\"display:table; width: auto;\">";
+					for (Map.Entry<String, List<Double>> e : reportResult.getScopeValuesByIndicator().entrySet()) {
+						Double total = e.getValue().get(0);
+						if (total > 0) {
+							content += "<tr>";
+							if (numbers) {
+								content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
+							} else {
+								content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i + 1, count) + "\">&nbsp;</span></td>";
+							}
+							content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
+							content += "<td>" + nf.format(total) + " tCO2e" + "</td>";
+							content += "</tr>";
+							i++;
 						}
-
-						content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
-						content += "<td>" + e.getValue().get(0) + " tCO2e" + "</td>";
-
-						content += "</tr>";
-						i++;
 					}
+					content += "</table>";
 				}
-				content += "</table>";
-
 			}
 		}
 		return content;
 	}
 
-	private String writeHistogram(LanguageCode lang, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
-
+	private String addLegend(String reportKey, LanguageCode lang, MergedReportResultCollectionAggregation merged, boolean numbers) {
 		String content = "";
+		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
+		nf.setMaximumFractionDigits(12);
+		for (MergedReportResultAggregation reportResult : merged.getMergedReportResultAggregations()) {
+			if (reportResult.getReportCode().equals(reportKey)) {
 
+				int count = 0;
+				for (MergedReportResultIndicatorAggregation e : reportResult.getMergedReportResultIndicatorAggregationList()) {
+					if (e.getLeftTotalValue() > 0 || e.getRightTotalValue() > 0) {
+						count++;
+					}
+				}
+
+				if (count > 0) {
+					int i = 0;
+					content += "<table style=\"display:table; width: auto;\">";
+
+					content += "<thead>";
+
+					content += "<tr>";
+
+					content += "<th></th>";
+					content += "<th></th>";
+					content += "<th style=\"text-align: center\">" + reportResult.getLeftPeriod().getLabel() + "</th>";
+					content += "<th style=\"text-align: center\">" + reportResult.getRightPeriod().getLabel() + "</th>";
+
+					content += "</tr>";
+
+					content += "</thead>";
+					content += "<tbody>";
+					for (MergedReportResultIndicatorAggregation e : reportResult.getMergedReportResultIndicatorAggregationList()) {
+						Double left = e.getLeftTotalValue();
+						Double right = e.getRightTotalValue();
+						if (left > 0 || right > 0) {
+							content += "<tr>";
+							if (numbers) {
+								content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
+							} else {
+								content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i + 1, count) + "\">&nbsp;</span></td>";
+							}
+							content += "<td>" + translate(e.getIndicator(), CodeList.INDICATOR, lang) + "</td>";
+							content += "<td style=\"text-align: right\">" + nf.format(left) + " tCO2e" + "</td>";
+							content += "<td style=\"text-align: right\">" + nf.format(right) + " tCO2e" + "</td>";
+							content += "</tr>";
+							i++;
+						}
+					}
+					content += "</tbody>";
+					content += "</table>";
+				}
+			}
+		}
+		return content;
+	}
+
+
+	private String writeHistogram(String search, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
+		String content = "";
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
-			if (reportResult.getReport().getCode().getKey().equals("R_1")) {
+			if (reportResult.getReport().getCode().getKey().equals(search)) {
 				ReportResultAggregation reportResultAggregation = reportResultService.aggregate(reportResult);
 				content += resultSvgGeneratorService.getHistogram(reportResultAggregation);
 			}
 		}
-
 		return content;
 	}
 
-	private String writeDonut(String search, LanguageCode lang, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
+	private String writeHistogram(String search, MergedReportResultCollectionAggregation merged) throws BiffException, IOException, WriteException {
+		String content = "";
+		for (MergedReportResultAggregation mergedReportResultAggregation : merged.getMergedReportResultAggregations()) {
+			if (mergedReportResultAggregation.getReportCode().equals(search)) {
+				content += resultSvgGeneratorService.getHistogram(mergedReportResultAggregation);
+			}
+		}
+		return content;
+	}
+
+
+	private String writeDonut(String search, ReportResultCollection allReportResults) throws BiffException, IOException, WriteException {
 
 		String content = "";
 
@@ -192,6 +397,20 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 		return content;
 	}
+
+	private List<String> writeDonut(String search, MergedReportResultCollectionAggregation merged) throws BiffException, IOException, WriteException {
+		for (MergedReportResultAggregation mergedReportResultAggregation : merged.getMergedReportResultAggregations()) {
+			String key = mergedReportResultAggregation.getReportCode();
+			if (key.equals(search)) {
+				return Arrays.asList(
+					resultSvgGeneratorService.getLeftDonut(mergedReportResultAggregation),
+					resultSvgGeneratorService.getRightDonut(mergedReportResultAggregation)
+				);
+			}
+		}
+		throw new IllegalArgumentException();
+	}
+
 
 	private String writeExplanation(LanguageCode lang, ReportResultCollection allReportResults) {
 		String content = "<h1>Explication</h1>";
@@ -331,11 +550,53 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return content;
 	}
 
-	private String writeTable(LanguageCode lang, ReportResultCollection allReportResults) {
+
+	private String writeTable(String search, LanguageCode lang, ReportResultCollection allReportResults) {
 		String content = "<h1>Rapport</h1>";
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 
-			if (reportResult.getReport().getCode().getKey().equals("R_1")) {
+			if (reportResult.getReport().getCode().getKey().equals(search)) {
+				content += "<table>";
+
+				content += "<thead>";
+				content += "<tr>";
+				content += "<th class=\"header\">Indicateur</th>";
+				content += "<th class=\"header\">Scope 1</th>";
+				content += "<th class=\"header\">Scope 2</th>";
+				content += "<th class=\"header\">Scope 3</th>";
+				content += "<th class=\"header\">Hors scope</th>";
+				content += "</tr>";
+				content += "</thead>";
+
+				content += "<tbody>";
+
+				Map<String, List<Double>> activityResults = reportResult.getScopeValuesByIndicator();
+
+				for (Map.Entry<String, List<Double>> entry : activityResults.entrySet()) {
+
+					content += "<tr>";
+					content += "<td class=\"dotted\">" + translate(entry.getKey(), CodeList.INDICATOR, lang) + "</td>";
+					content += "<td class=\"dotted\">" + entry.getValue().get(1) + "</td>";
+					content += "<td class=\"dotted\">" + entry.getValue().get(2) + "</td>";
+					content += "<td class=\"dotted\">" + entry.getValue().get(3) + "</td>";
+					content += "<td class=\"dotted\">" + entry.getValue().get(4) + "</td>";
+					content += "</tr>";
+
+				}
+				content += "</tbody>";
+
+				content += "</table>";
+			}
+		}
+		return content;
+	}
+
+	private String writeTable(String search, LanguageCode lang, MergedReportResultCollectionAggregation merged) {
+
+		String content = "<h1>Rapport</h1>";
+		for (MergedReportResultAggregation mrra : merged.getMergedReportResultAggregations()) {
+
+			if (mrra.getReportCode().equals(search)) {
 				content += "<table>";
 
 				content += "<thead>";
@@ -351,26 +612,22 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 				content += "<tbody>";
 
-				Map<String, List<Double>> activityResults = reportResult.getScopeValuesByIndicator();
-
-				for (Map.Entry<String, List<Double>> entry : activityResults.entrySet()) {
+				for (MergedReportResultIndicatorAggregation entry : mrra.getMergedReportResultIndicatorAggregationList()) {
 
 					content += "<tr>";
-					content += "<td class=\"dotted\">";
-					content += translate(entry.getKey(), CodeList.INDICATOR, lang);
-					content += "</td>";
-					content += "<td class=\"dotted\">";
-					content += entry.getValue().get(1);
-					content += "</td>";
-					content += "<td class=\"dotted\">";
-					content += entry.getValue().get(2);
-					content += "</td>";
-					content += "<td class=\"dotted\">";
-					content += entry.getValue().get(3);
-					content += "</td>";
-					content += "<td class=\"dotted\">";
-					content += entry.getValue().get(4);
-					content += "</td>";
+
+					content += "<td class=\"dotted\">" + translate(entry.getIndicator(), CodeList.INDICATOR, lang) + "</td>";
+
+					content += "<td class=\"dotted\">" + entry.getLeftScope1Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getLeftScope2Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getLeftScope3Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getLeftOutOfScopeValue() + "</td>";
+
+					content += "<td class=\"dotted\">" + entry.getRightScope1Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getRightScope2Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getRightScope3Value() + "</td>";
+					content += "<td class=\"dotted\">" + entry.getRightOutOfScopeValue() + "</td>";
+
 					content += "</tr>";
 
 				}
@@ -380,6 +637,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			}
 		}
 		return content;
+
 	}
 
 }
