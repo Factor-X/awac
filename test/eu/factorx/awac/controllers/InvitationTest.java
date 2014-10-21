@@ -13,6 +13,8 @@ import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,7 @@ import play.test.FakeRequest;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.*;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
@@ -199,11 +202,20 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		fr.withHeader("Content-type", "application/json");
 		fr.withJsonBody(node);
 
-		// Call controller action
-		Result result = callAction(
-				eu.factorx.awac.controllers.routes.ref.InvitationController.registerInvitation(),
-				fr
-		); // callAction
+		Result result = null;
+		try {
+			// Call controller action
+			result = callAction(
+					eu.factorx.awac.controllers.routes.ref.InvitationController.registerInvitation(),
+					fr
+			); // callAction
+		} catch (MyrmexRuntimeException mre) {
+
+			// verify exception
+			Logger.info("logger MRE -> "+mre.getBusinessErrorType().name());
+			assertEquals(mre.getBusinessErrorType().name(), BusinessErrorType.INVITATION_NOT_VALID.name());
+		}
+
 
 		// wait some time to be sure AKKA actor has time to send the message
 		try {
@@ -211,14 +223,6 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//analyse result
-		// expecting an HTTP 401 return code (unauthorized)
-		assertEquals(401, status(result));
-		// get MyrmexException
-
-		//analyse result
-		ExceptionsDTO exceptionDTO = getDTO(result, ExceptionsDTO.class);
-		Logger.info("unauthorize reason: " + exceptionDTO.getMessage());
 
 	} // end of authenticateSuccess test
 

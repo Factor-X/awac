@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacSection", (directiveService, downloadService, messageFlash, modalService, $location) ->
+.directive "mmAwacSection", (directiveService, downloadService, messageFlash, modalService, $location,$filter) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngTitleCode: '='
@@ -20,15 +20,18 @@ angular
         scope.lock = ->
             if (not scope.isLocked() or scope.isLockedByMyself() or scope.$root.currentPerson.isAdmin) and not scope.isValidate() and scope.$root.closedForms == false
 
-                data = {}
-                data.questionSetKey = scope.getTitleCode()
-                data.periodCode = scope.$root.periodSelectedKey
-                data.scopeId = scope.$root.scopeSelectedId
-                data.lock = if scope.isLocked() then false else true
+                if scope.$parent.validNavigation().valid == false
+                    messageFlash.displayError $filter('translateText')('SAVE_BEFORE_LOCK_OR_VALID')
+                else
+                    data = {}
+                    data.questionSetKey = scope.getTitleCode()
+                    data.periodCode = scope.$root.periodSelectedKey
+                    data.scopeId = scope.$root.scopeSelectedId
+                    data.lock = if scope.isLocked() then false else true
 
-                downloadService.postJson '/awac/answer/lockQuestionSet', data, (result) ->
-                    if result.success
-                        scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock)
+                    downloadService.postJson '/awac/answer/lockQuestionSet', data, (result) ->
+                        if result.success
+                            scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock)
 
         scope.isLockedByMyself = ->
             if scope.$parent.getQuestionSetLocker(scope.getTitleCode())?
@@ -55,22 +58,23 @@ angular
                 return 'lock_open'
 
         scope.valide = ->
-
-
             if scope.$root.closedForms == false
-                if not scope.isValidate() or scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin
-                    if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status=='VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
+                if scope.$parent.validNavigation().valid == false
+                    messageFlash.displayError $filter('translateText')('SAVE_BEFORE_LOCK_OR_VALID')
+                else
+                    if not scope.isValidate() or scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin
+                        if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status == 'VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
 
-                        data = {}
-                        data.questionSetKey = scope.getTitleCode()
-                        data.periodCode = scope.$root.periodSelectedKey
-                        data.scopeId = scope.$root.scopeSelectedId
-                        data.lock = if scope.isValidate() then false else true
+                            data = {}
+                            data.questionSetKey = scope.getTitleCode()
+                            data.periodCode = scope.$root.periodSelectedKey
+                            data.scopeId = scope.$root.scopeSelectedId
+                            data.lock = if scope.isValidate() then false else true
 
-                        downloadService.postJson '/awac/answer/validateQuestionSet', data, (result) ->
-                            if result.success
-                                scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
-                                scope.$root.testCloseable()
+                            downloadService.postJson '/awac/answer/validateQuestionSet', data, (result) ->
+                                if result.success
+                                    scope.$parent.validateQuestionSet(scope.getTitleCode(), data.lock)
+                                    scope.$root.testCloseable()
 
 
         scope.isValidateByMyself = ->
@@ -100,7 +104,7 @@ angular
             if scope.isValidate()
                 if scope.$root.closedForms == false
                     if scope.isValidateByMyself() or scope.$root.currentPerson.isAdmin
-                        if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status=='VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
+                        if not scope.$root.verificationRequest || (scope.$root.verificationRequest.status == 'VERIFICATION_STATUS_CORRECTION' && scope.$parent.getQuestionSetVerification(scope.getTitleCode()).status == 'rejected')
                             return 'validate_by_myself'
                 return 'validated'
             else

@@ -36,3 +36,6 @@ angular
                 if ""+n != ""+o
                     scope.$parent.edited()
 
+        scope.setErrorMessage = (errorMessage) ->
+            scope.$parent.setErrorMessage(errorMessage)
+
