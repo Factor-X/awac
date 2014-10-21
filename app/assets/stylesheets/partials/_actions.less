@@ -118,4 +118,40 @@
         margin: 0;
         padding: 0;
     }
+
+    span.icon {
+        &.scope_type_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+
+            &.org {
+                background: url('../images/organization.png') center center no-repeat;
+            }
+            &.site {
+                background: url('../images/site.png') center center no-repeat;
+            }
+        }
+
+        &.action_type_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+
+            &.reducing {
+                background: url('../images/actions/reduction.png') center center no-repeat;
+            }
+            &.better_measure {
+                background: url('../images/actions/meilleure_mesure.png') center center no-repeat;
+            }
+        }
+
+        &.action_done_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            background: url('../images/actions/done_status.png') center center no-repeat;
+        }
+    }
+
 }

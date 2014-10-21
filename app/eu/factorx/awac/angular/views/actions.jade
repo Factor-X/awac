@@ -22,14 +22,17 @@ div.actions
                 td.title
                     span.text {{a.title}}
                 td.type
-                    span.icon.fa.fa-flag
-                    span &nbsp;
+                    span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
+                    span &nbsp;&nbsp;
                     span.text {{ getTypeLabel(a.typeKey) }}
                 td.scope
-                    span.icon.fa.fa-flag
-                    span &nbsp;
+                    span.icon.scope_type_icon(ng-class="{org: a.scopeTypeKey == '1', site: a.scopeTypeKey == '2'}")
+                    span &nbsp;&nbsp;
                     span.text {{ getScopeName(a.scopeTypeKey, a.scopeId) }}
-                td.realization {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
+                td.realization
+                    span.icon.action_done_icon(ng-show="a.statusKey == '2'")
+                    span &nbsp;&nbsp;
+                    span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
 
             tr(ng-repeat-end, ng-show="a.opened").details
                 td(colspan="4")
@@ -77,11 +80,11 @@ div.actions
 
                 td(style="vertical-align:bottom;")
                     button.button(type="button", ng-click="edit(a)")
-                        span.fa.fa-plus-circle
+                        span.fa.fa-pencil-square-o
                         span &nbsp;
                         span Editer cette action
                     button.button(type="button", ng-click="markAsDone(a)")
-                        span.fa.fa-plus-circle
+                        span.fa.fa-check-square-o
                         span &nbsp;
                         span Marquer l'action comme réalisée
 

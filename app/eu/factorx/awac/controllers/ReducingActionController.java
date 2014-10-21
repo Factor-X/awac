@@ -128,7 +128,8 @@ public class ReducingActionController extends AbstractController {
 
 		reducingAction.setTitle(dto.getTitle());
 		reducingAction.setScope(scope);
-		reducingAction.setType(ReducingActionTypeCode.valueOf(dto.getTypeKey()));
+		ReducingActionTypeCode actionType = ReducingActionTypeCode.valueOf(dto.getTypeKey());
+		reducingAction.setType(actionType);
 
 		ReducingActionStatusCode status = ReducingActionStatusCode.valueOf(dto.getStatusKey());
 		reducingAction.setStatus(status);
@@ -142,12 +143,16 @@ public class ReducingActionController extends AbstractController {
 		}
 
 		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
-		reducingAction.setGhgBenefit(dto.getGhgBenefit());
-		String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
-		if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
-			reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
+		if (ReducingActionTypeCode.BETTER_METHOD.equals(actionType)) {
+			reducingAction.setGhgBenefit(null);
+			reducingAction.setGhgBenefitUnit(null);
+		} else {
+			reducingAction.setGhgBenefit(dto.getGhgBenefit());
+			String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
+			if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
+				reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
+			}
 		}
-
 		reducingAction.setFinancialBenefit(dto.getFinancialBenefit());
 		reducingAction.setInvestmentCost(dto.getInvestmentCost());
 		reducingAction.setExpectedPaybackTime(dto.getExpectedPaybackTime());
