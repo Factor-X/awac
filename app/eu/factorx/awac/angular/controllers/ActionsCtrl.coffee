@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ActionsCtrl", ($scope, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService) ->
+.controller "ActionsCtrl", ($scope, $window, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.actions = []
@@ -32,6 +32,9 @@ angular
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+
+    $scope.exportToXls = () ->
+        $window.open '/awac/actions/exportToXls', translationService.get 'RESULT_DOWNLOAD_START', null
 
     $scope.getScopeName = (scopeTypeKey, scopeId) ->
         if (scopeTypeKey == "1")

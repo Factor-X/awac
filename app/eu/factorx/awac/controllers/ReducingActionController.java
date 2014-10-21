@@ -1,11 +1,14 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 
-import eu.factorx.awac.util.BusinessErrorType;
-import eu.factorx.awac.util.MyrmexRuntimeException;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.*;
+import jxl.write.Number;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,6 @@ import eu.factorx.awac.dto.awac.get.ReducingActionDTOList;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -28,9 +30,31 @@ import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 
 @org.springframework.stereotype.Controller
 public class ReducingActionController extends AbstractController {
+
+	private static final int TITLE_COLUMN = 0;
+	private static final int SCOPE_COLUMN = 1;
+	private static final int TYPE_COLUMN = 2;
+	private static final int STATUS_COLUMN = 3;
+	private static final int COMPLETION_DATE_COLUMN = 4;
+	private static final int PHYSICAL_MEASURE_COLUMN = 5;
+	private static final int GHG_BENEFIT_COLUMN = 6;
+	private static final int GHG_BENEFIT_UNIT_COLUMN = 7;
+	private static final int FINANCIAL_BENEFIT_COLUMN = 8;
+	private static final int INVESTMENT_COLUMN = 9;
+	private static final int EXPECTED_PAYBACK_TIME_COLUMN = 10;
+	private static final int DUE_DATE_COLUMN = 11;
+	private static final int WEBSITE_COLUMN = 12;
+	private static final int RESPONSIBLE_PERSON_COLUMN = 13;
+	private static final int COMMENT_COLUMN = 14;
+
+	private static final String CURRENCY_FORMAT = "#,##0.00 €#164;";
+	private static final String REAL_NUMBER_FORMAT = "#,##0.00";
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
 
 	@Autowired
 	private ReducingActionService reducingActionService;
@@ -46,7 +70,7 @@ public class ReducingActionController extends AbstractController {
 
 	@Autowired
 	private UnitService unitService;
-	
+
 	@Autowired
 	private ScopeService scopeService;
 
@@ -64,6 +88,20 @@ public class ReducingActionController extends AbstractController {
 				getUnitDTOsByCategory(UnitCategoryCode.GWP));
 
 		return ok(result);
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result getActionsAsXls() throws WriteException, IOException {
+		Account currentUser = securedController.getCurrentUser();
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
+		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
+
+		byte[] content = getExcelExport(reducingActions);
+
+		response().setContentType("application/octet-stream");
+		response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+		return ok(content);
 	}
 
 	@Transactional(readOnly = false)
@@ -95,7 +133,7 @@ public class ReducingActionController extends AbstractController {
 		ReducingActionStatusCode status = ReducingActionStatusCode.valueOf(dto.getStatusKey());
 		reducingAction.setStatus(status);
 		Date completionDate = dto.getCompletionDate();
-		if (ReducingActionStatusCode.DONE.equals(status) && (completionDate == null)) {	
+		if (ReducingActionStatusCode.DONE.equals(status) && (completionDate == null)) {
 			reducingAction.setCompletionDate(new DateTime());
 		} else if (!ReducingActionStatusCode.DONE.equals(status)) {
 			reducingAction.setCompletionDate(null);
@@ -121,7 +159,125 @@ public class ReducingActionController extends AbstractController {
 
 		reducingActionService.saveOrUpdate(reducingAction);
 		return ok();
-	}	private List<ReducingActionDTO> getReducingActionDTOs(List<Scope> authorizedScopes) {
+	}
+
+	private byte[] getExcelExport(List<ReducingAction> reducingActions) throws WriteException, IOException {
+		LanguageCode userLanguage = securedController.getDefaultLanguage();
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+		// Headers cell font and format
+		WritableFont headersFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD);
+		WritableCellFormat headersFormat = new WritableCellFormat(headersFont);
+		headersFormat.setAlignment(Alignment.LEFT);
+		headersFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+
+		// Default cell font and format
+		WritableFont cellFont = new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD);
+		WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+
+		// Date cell format
+		WritableCellFormat dateCellFormat = new WritableCellFormat(cellFont, new DateFormat(DATE_FORMAT));
+
+		// Real Number cell format
+		WritableCellFormat realNumberCellFormat = new WritableCellFormat(new NumberFormat(REAL_NUMBER_FORMAT));
+
+		// Currency cell format
+		WritableCellFormat currencyCellFormat = new WritableCellFormat(new NumberFormat(CURRENCY_FORMAT));
+
+		WorkbookSettings wbSettings = new WorkbookSettings();
+		wbSettings.setLocale(new Locale(userLanguage.getKey()));
+		WritableWorkbook wb = Workbook.createWorkbook(byteArrayOutputStream, wbSettings);
+		WritableSheet sheet = wb.createSheet("export", 0);
+
+		HashMap<String, CodeLabel> interfaceCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
+
+		sheet.addCell(new Label(TITLE_COLUMN, 0, getLabel("REDUCTION_ACTION_TITLE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(SCOPE_COLUMN, 0, getLabel("REDUCTION_ACTION_SCOPE_TYPE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(TYPE_COLUMN, 0, getLabel("REDUCTION_ACTION_TYPE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(STATUS_COLUMN, 0, getLabel("REDUCTION_ACTION_STATUS_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(COMPLETION_DATE_COLUMN, 0, getLabel("REDUCTION_ACTION_COMPLETION_DATE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(PHYSICAL_MEASURE_COLUMN, 0, getLabel("REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(GHG_BENEFIT_COLUMN, 0, getLabel("REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(GHG_BENEFIT_UNIT_COLUMN, 0, getLabel("REDUCTION_ACTION_GHG_BENEFIT_UNIT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(FINANCIAL_BENEFIT_COLUMN, 0, getLabel("REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(INVESTMENT_COLUMN, 0, getLabel("REDUCTION_ACTION_INVESTMENT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(EXPECTED_PAYBACK_TIME_COLUMN, 0, getLabel("REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(DUE_DATE_COLUMN, 0, getLabel("REDUCTION_ACTION_DUE_DATE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(WEBSITE_COLUMN, 0, getLabel("REDUCTION_ACTION_WEBSITE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(RESPONSIBLE_PERSON_COLUMN, 0, getLabel("REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+		sheet.addCell(new Label(COMMENT_COLUMN, 0, getLabel("REDUCTION_ACTION_COMMENT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+
+		HashMap<String, CodeLabel> typeCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.REDUCING_ACTION_TYPE);
+		HashMap<String, CodeLabel> statusCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.REDUCING_ACTION_STATUS);
+
+		int row = 1;
+		for (ReducingAction reducingAction : reducingActions) {
+			// title
+			sheet.addCell(new Label(TITLE_COLUMN, row, StringUtils.trimToEmpty(reducingAction.getTitle()), cellFormat));
+			// scope
+			sheet.addCell(new Label(SCOPE_COLUMN, row, reducingAction.getScope().getName(), cellFormat));
+			// type
+			sheet.addCell(new Label(TYPE_COLUMN, row, getLabel(reducingAction.getType().getKey(), typeCodeLabels, userLanguage), cellFormat));
+			// status
+			sheet.addCell(new Label(STATUS_COLUMN, row, getLabel(reducingAction.getStatus().getKey(), statusCodeLabels, userLanguage), cellFormat));
+			// completion date
+			DateTime completionDate = reducingAction.getCompletionDate();
+			if (completionDate != null) {
+				sheet.addCell(new jxl.write.DateTime(COMPLETION_DATE_COLUMN, row, completionDate.toDate(), dateCellFormat));
+			}
+			// Physical measure
+			sheet.addCell(new Label(PHYSICAL_MEASURE_COLUMN, row, StringUtils.trimToEmpty(reducingAction.getPhysicalMeasure()), cellFormat));
+			// GHG Benefit
+			Double ghgBenefit = reducingAction.getGhgBenefit();
+			if (ghgBenefit != null) {
+				sheet.addCell(new Number(GHG_BENEFIT_COLUMN, row, ghgBenefit, realNumberCellFormat));
+			}
+			// GHG Benefit Unit
+			Unit ghgBenefitUnit = reducingAction.getGhgBenefitUnit();
+			if (ghgBenefitUnit != null) {
+				sheet.addCell(new Label(GHG_BENEFIT_UNIT_COLUMN, row, ghgBenefitUnit.getSymbol(), cellFormat));
+			}
+			// Financial Benefit
+			Double financialBenefit = reducingAction.getFinancialBenefit();
+			if (financialBenefit != null) {
+				sheet.addCell(new Number(FINANCIAL_BENEFIT_COLUMN, row, financialBenefit, currencyCellFormat));
+			}
+			// Investment
+			Double investmentCost = reducingAction.getInvestmentCost();
+			if (investmentCost != null) {
+				sheet.addCell(new Number(INVESTMENT_COLUMN, row, investmentCost, currencyCellFormat));
+			}
+			// Expected Payback Time
+			sheet.addCell(new Label(EXPECTED_PAYBACK_TIME_COLUMN, row, StringUtils.trimToEmpty(reducingAction.getExpectedPaybackTime()), cellFormat));
+			// Due Date
+			DateTime dueDate = reducingAction.getDueDate();
+			if (dueDate != null) {
+				sheet.addCell(new jxl.write.DateTime(DUE_DATE_COLUMN, row, dueDate.toDate(), dateCellFormat));
+			}
+			// Website
+			sheet.addCell(new Label(WEBSITE_COLUMN, row, StringUtils.trimToEmpty(reducingAction.getWebSite()), cellFormat));
+			// Comment
+			sheet.addCell(new Label(COMMENT_COLUMN, row, StringUtils.trimToEmpty(reducingAction.getComment()), cellFormat));
+
+			row++;
+		}
+
+		wb.write();
+		wb.close();
+
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	private String getLabel(String key, HashMap<String, CodeLabel> codeLabelsMap, LanguageCode userLanguage) {
+		CodeLabel codeLabel = codeLabelsMap.get(key);
+		if (codeLabel == null) {
+			return key;
+		}
+		return codeLabel.getLabel(userLanguage);
+	}
+
+	private List<ReducingActionDTO> getReducingActionDTOs(List<Scope> authorizedScopes) {
 		List<ReducingActionDTO> reducingActionDTOs = new ArrayList<>();
 		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
 		for (ReducingAction reducingAction : reducingActions) {
@@ -160,7 +316,7 @@ public class ReducingActionController extends AbstractController {
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {
 		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		if (!authorizedScopes.contains(scope)) {
-			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE,scope.getName());
+			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE, scope.getName());
 		}
 	}
 
