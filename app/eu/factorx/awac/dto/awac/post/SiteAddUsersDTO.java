@@ -12,9 +12,6 @@ import java.util.List;
 
 public class SiteAddUsersDTO extends DTO {
 
-
-	private OrganizationDTO organization;
-
 	private SiteDTO site;
 
 	private List<AccountDTO> selectedAccounts;
@@ -30,18 +27,6 @@ public class SiteAddUsersDTO extends DTO {
 		this.site = site;
 	}
 
-	public SiteAddUsersDTO(OrganizationDTO organization) {
-		this.organization = organization;
-	}
-
-	public OrganizationDTO getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(OrganizationDTO organization) {
-		this.organization = organization;
-	}
-
 	public List<AccountDTO> getSelectedAccounts() {
 		return selectedAccounts;
 	}
@@ -50,9 +35,12 @@ public class SiteAddUsersDTO extends DTO {
 		this.selectedAccounts = selectedAccounts;
 	}
 
-	@Override
-	public String toString() {
-		return "SiteAddUsersDTO [organization=" + organization.toString() + "]";
-	}
 
+    @Override
+    public String toString() {
+        return "SiteAddUsersDTO{" +
+                "site=" + site +
+                ", selectedAccounts=" + selectedAccounts +
+                '}';
+    }
 }

@@ -5,8 +5,10 @@ import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.service.StoredFileService;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.FileUtil;
 import eu.factorx.awac.util.KeyGenerator;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Logger;
 import play.db.jpa.Transactional;
@@ -97,7 +99,7 @@ public class FilesController extends AbstractController {
                 }
             }
             if (!founded) {
-                throw new RuntimeException("File " + storedFileId + " doesn't come from our organization");
+                throw new MyrmexRuntimeException(BusinessErrorType.FILE_WRONG_ORGANIZATION, storedFileId+"");
             }
         }
 
@@ -111,38 +113,5 @@ public class FilesController extends AbstractController {
         return ok(inputStream);
     }
 
-
-    /*
-      download a file by is storedFileId
-     */
-    @Transactional(readOnly = true)
-    @Security.Authenticated(SecuredController.class)
-    public Result remove() {
-        /*
-        this.extractDTOFromRequest(ValueDTO)
-
-        //get the storedFile
-        StoredFile storedFile = storedFileService.findById(storedFileId);
-
-        if(storedFile==null){
-            throw new RuntimeException("File "+storedFileId+" was not found");
-        }
-
-
-        //control
-        if(!storedFile.getAccount().getOrganization().equals(securedController.getCurrentUser().getOrganization())){
-            throw new RuntimeException("File "+storedFileId+" doesn't come from our organization");
-        }
-
-
-        //delete from the cloud
-        FileUtil.removeFile(storedFile.getStoredName());
-
-        //delete from the model
-        storedFileService.remove(storedFile);
-
-        */
-        return ok(new ResultsDTO());
-    }
 
 }

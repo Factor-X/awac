@@ -23,7 +23,6 @@ public class NotificationController extends AbstractController {
 	private NotificationService notificationService;
 
 	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
 	public Result getNotifications() {
 		List<Notification> currentOnes = notificationService.findCurrentOnes();
 		List<NotificationDTO> dtos = new ArrayList<>();

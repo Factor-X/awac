@@ -67,8 +67,6 @@ angular
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     $scope.close()
                 else
-                    # TODO ERROR HANDLING
-                    messageFlash.displayError result.data.message
                     $scope.isLoading = false
 
             return false

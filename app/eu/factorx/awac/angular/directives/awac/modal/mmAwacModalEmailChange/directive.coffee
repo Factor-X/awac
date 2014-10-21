@@ -62,7 +62,6 @@ angular
                     if $scope.getParams().cb?
                         $scope.getParams().cb($scope.newEmailInfo.field)
                 else
-                    messageFlash.displayError result.data.message
                     $scope.isLoading = false
 
             return false

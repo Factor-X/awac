@@ -1,23 +1,29 @@
 angular
 .module('app.services')
-.service "translationService", ($rootScope, downloadService) ->
+.service "translationService", ($rootScope,$filter,$http) ->
     svc = this
     svc.elements = null
 
     svc.initialize = (lang) ->
-        downloadService.getJson "/awac/translations/" + lang, (result) ->
-            if result.success
-                svc.elements = result.data.lines
-                $rootScope.$broadcast "LOAD_FINISHED",
-                    type: "TRANSLATIONS"
-                    success: true
-            else
-                # TODO ERROR HANDLING
-                svc.elements = []
-                $rootScope.$broadcast "LOAD_FINISHED",
-                    type: "TRANSLATIONS"
-                    success: false
 
+        $http(
+            method: "GET"
+            url: "/awac/translations/" + lang
+            headers:
+                "Content-Type": "application/json"
+        )
+        .success (data, status, headers, config) ->
+            svc.elements = data.lines
+            $rootScope.$broadcast "LOAD_FINISHED",
+                type: "TRANSLATIONS"
+                success: true
+
+        .error (data, status, headers, config) ->
+            svc.elements = []
+            $rootScope.$broadcast "LOAD_FINISHED",
+                type: "TRANSLATIONS"
+                success: false
+        return
 
     svc.get = (code, count) ->
         return "" unless svc.elements?
@@ -39,5 +45,14 @@ angular
             txt = v.fallback || ''
 
         return txt
+
+    svc.translateExceptionsDTO =(exception) ->
+        console.log exception
+        if exception.params?.length > 0
+            return $filter('translateWithVarsText')(exception.message,exception.params)
+        else if exception.messageToTranslate?
+            return $filter('translate')(exception.messageToTranslate)
+        else
+            return exception.message
 
     return

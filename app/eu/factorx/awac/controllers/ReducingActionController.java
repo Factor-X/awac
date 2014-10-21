@@ -1,28 +1,33 @@
 package eu.factorx.awac.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-import eu.factorx.awac.dto.awac.get.*;
-import eu.factorx.awac.dto.awac.post.CreateReducingActionDTO;
+import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
+import eu.factorx.awac.dto.awac.get.CodeListDTO;
+import eu.factorx.awac.dto.awac.get.ReducingActionDTOList;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.ReducingActionService;
-import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.UnitService;
+import eu.factorx.awac.service.*;
 
 @org.springframework.stereotype.Controller
 public class ReducingActionController extends AbstractController {
@@ -40,69 +45,107 @@ public class ReducingActionController extends AbstractController {
 	private CodeLabelService codeLabelService;
 
 	@Autowired
+	private UnitService unitService;
+	
+	@Autowired
 	private ScopeService scopeService;
 
 	@Autowired
-	private UnitService unitService;
+	private AccountSiteAssociationService accountSiteAssociationService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadActions() {
-		List<ReducingActionDTO> reducingActionDTOs = new ArrayList<>();
-		List<ReducingAction> reducingActions = reducingActionService.findByOrganization(securedController.getCurrentUser().getOrganization());
-		for (ReducingAction reducingAction : reducingActions) {
-			reducingActionDTOs.add(conversionService.convert(reducingAction, ReducingActionDTO.class));
-		}
-		List<CodeListDTO> codeListDTOs = new ArrayList<>();
-		codeListDTOs.add(toCodeListDTO(CodeList.REDUCING_ACTION_TYPE, securedController.getDefaultLanguage()));
-		codeListDTOs.add(toCodeListDTO(CodeList.REDUCING_ACTION_STATUS, securedController.getDefaultLanguage()));
-		List<UnitDTO> gwpUnitDTOs = new ArrayList<>();
-		List<Unit> gwpUnits = unitService.findByCategoryCode(UnitCategoryCode.GWP);
-		for (Unit gwpUnit : gwpUnits) {
-			gwpUnitDTOs.add(new UnitDTO(gwpUnit.getUnitCode().getKey(), gwpUnit.getSymbol()));
-		}
-		return ok(new ReducingActionDTOList(reducingActionDTOs, codeListDTOs, gwpUnitDTOs));
+		Account currentUser = securedController.getCurrentUser();
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
+
+		ReducingActionDTOList result = new ReducingActionDTOList(getReducingActionDTOs(authorizedScopes),
+				getCodeListDTOs(CodeList.REDUCING_ACTION_TYPE, CodeList.REDUCING_ACTION_STATUS),
+				getUnitDTOsByCategory(UnitCategoryCode.GWP));
+
+		return ok(result);
 	}
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result saveAction() {
-		ReducingAction reducingAction = createReducingAction(extractDTOFromRequest(CreateReducingActionDTO.class));
-		reducingActionService.saveOrUpdate(reducingAction);
+		ReducingActionDTO dto = extractDTOFromRequest(ReducingActionDTO.class);
 
-		return ok();
-	}
-
-	private ReducingAction createReducingAction(CreateReducingActionDTO dto) {
 		Account currentUser = securedController.getCurrentUser();
-		Scope scope = null;
+
+		Scope scope;
 		if (ScopeTypeCode.ORG.getKey().equals(dto.getScopeTypeKey())) {
 			scope = currentUser.getOrganization();
 		} else {
-			scope = scopeService.findById(Long.valueOf(dto.getScopeId()));
+			scope = scopeService.findById(dto.getScopeId());
 			validateUserRightsForScope(currentUser, scope);
 		}
 
-		// create new ReducingAction (mandatory fields)
-		ReducingAction reducingAction = new ReducingAction(dto.getTitle(), scope, ReducingActionTypeCode.valueOf(dto.getTypeKey()));
+		ReducingAction reducingAction;
+		if (dto.getId() == null) {
+			reducingAction = new ReducingAction();
+		} else {
+			reducingAction = reducingActionService.findById(dto.getId());
+		}
 
-		// optional fields
-		reducingAction.setComment(dto.getComment());
-		reducingAction.setDueDate(dto.getDueDate());
-		reducingAction.setExpectedPaybackTime(dto.getExpectedPaybackTime());
-		reducingAction.setFinancialBenefit(dto.getFinancialBenefit());
+		reducingAction.setTitle(dto.getTitle());
+		reducingAction.setScope(scope);
+		reducingAction.setType(ReducingActionTypeCode.valueOf(dto.getTypeKey()));
+
+		ReducingActionStatusCode status = ReducingActionStatusCode.valueOf(dto.getStatusKey());
+		reducingAction.setStatus(status);
+		Date completionDate = dto.getCompletionDate();
+		if (ReducingActionStatusCode.DONE.equals(status) && (completionDate == null)) {	
+			reducingAction.setCompletionDate(new DateTime());
+		} else if (!ReducingActionStatusCode.DONE.equals(status)) {
+			reducingAction.setCompletionDate(null);
+		} else {
+			reducingAction.setCompletionDate(toJodaTime(completionDate));
+		}
+
+		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
 		reducingAction.setGhgBenefit(dto.getGhgBenefit());
 		String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
 		if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
-			Unit ghgBenefitUnit = unitService.findByCode(new UnitCode(ghgBenefitUnitKey));
-			reducingAction.setGhgBenefitUnit(ghgBenefitUnit);
+			reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
 		}
-		reducingAction.setInvestmentCost(dto.getInvestmentCost());
-		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
-		reducingAction.setResponsiblePerson(dto.getResponsiblePerson());
-		reducingAction.setWebSite(dto.getWebSite());
 
-		return reducingAction;
+		reducingAction.setFinancialBenefit(dto.getFinancialBenefit());
+		reducingAction.setInvestmentCost(dto.getInvestmentCost());
+		reducingAction.setExpectedPaybackTime(dto.getExpectedPaybackTime());
+		reducingAction.setDueDate(toJodaTime(dto.getDueDate()));
+
+		reducingAction.setWebSite(dto.getWebSite());
+		reducingAction.setResponsiblePerson(dto.getResponsiblePerson());
+		reducingAction.setComment(dto.getComment());
+
+		reducingActionService.saveOrUpdate(reducingAction);
+		return ok();
+	}	private List<ReducingActionDTO> getReducingActionDTOs(List<Scope> authorizedScopes) {
+		List<ReducingActionDTO> reducingActionDTOs = new ArrayList<>();
+		List<ReducingAction> reducingActions = reducingActionService.findByScopes(authorizedScopes);
+		for (ReducingAction reducingAction : reducingActions) {
+			reducingActionDTOs.add(conversionService.convert(reducingAction, ReducingActionDTO.class));
+		}
+		return reducingActionDTOs;
+	}
+
+	private List<UnitDTO> getUnitDTOsByCategory(UnitCategoryCode category) {
+		List<UnitDTO> res = new ArrayList<>();
+		List<Unit> units = unitService.findByCategoryCode(category);
+		for (Unit unit : units) {
+			res.add(new UnitDTO(unit.getUnitCode().getKey(), unit.getSymbol()));
+		}
+		return res;
+	}
+
+	private List<CodeListDTO> getCodeListDTOs(CodeList... codeLists) {
+		LanguageCode userLanguage = securedController.getDefaultLanguage();
+		List<CodeListDTO> res = new ArrayList<>();
+		for (CodeList codeList : codeLists) {
+			res.add(toCodeListDTO(codeList, userLanguage));
+		}
+		return res;
 	}
 
 	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
@@ -114,10 +157,18 @@ public class ReducingActionController extends AbstractController {
 		return new CodeListDTO(codeList.name(), codeLabelDTOs);
 	}
 
-	private static void validateUserRightsForScope(Account currentUser, Scope scope) {
-		if (!scope.getOrganization().equals(currentUser.getOrganization())) {
-			throw new RuntimeException("The user '" + currentUser.getIdentifier() + "' is not allowed to update data of organization '" + scope.getOrganization() + "'");
+	private void validateUserRightsForScope(Account currentUser, Scope scope) {
+		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
+		if (!authorizedScopes.contains(scope)) {
+			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE,scope.getName());
 		}
+	}
+
+	private static DateTime toJodaTime(Date date) {
+		if (date == null) {
+			return null;
+		}
+		return new DateTime(date.getTime());
 	}
 
 }

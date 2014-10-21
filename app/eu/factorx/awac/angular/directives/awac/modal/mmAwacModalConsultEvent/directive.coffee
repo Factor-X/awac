@@ -12,7 +12,6 @@ angular
 
         downloadService.getJson '/awac/organization/events/byOrganization/'+$scope.getParams().organizationCustomer.name, (result) ->
             if not result.success
-                messageFlash.displayError(result.data.message)
                 $scope.isLoading = false
             else
 

@@ -1,5 +1,5 @@
 // Modal
-.modal(ng-enter="save()",ng-escape="close()")
+.modal(ng-enter="save(true)",ng-escape="close()")
     .modal-dialog
         .modal-content
             .modal-header
@@ -9,6 +9,8 @@
                 h4(class="modal-title",ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_TITLE' | translate")
             .modal-body
                 div(ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_DESC' | translateWithVars: [$root.verificationRequest.organizationVerifier.name]")
+                .field_form
+                    mm-awac-modal-field-text(ng-info="fields.myPassword")
 
             .modal-footer
 
@@ -20,11 +22,13 @@
 
                     button.button(type="button",
                     class="btn btn-primary",
+                    ng-disabled="!allFieldValid()",
                     ng-click="save(true)",
                     ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_ACCEPT' | translate")
 
                     button.button(type="button",
                     class="btn btn-primary",
+                    ng-disabled="!allFieldValid()",
                     ng-click="save(false)",
                     ng-bind-html="'VERIFICATION_CUSTOMER_CONFIRMATION_WINDOW_REJECT' | translate")
 

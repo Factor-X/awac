@@ -1,20 +1,21 @@
-package eu.factorx.awac.dto.awac.post;
-
-import java.io.Serializable;
-
-import org.joda.time.DateTime;
+package eu.factorx.awac.dto.awac.shared;
 
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
 
-public class CreateReducingActionDTO extends DTO implements Serializable {
+import java.io.Serializable;
+import java.util.Date;
+
+public class ReducingActionDTO extends DTO implements Serializable {
 
 	private static final long serialVersionUID = 936537094692911494L;
 
-	public CreateReducingActionDTO() {
+	public ReducingActionDTO() {
 		super();
 	}
+
+	private Long id;
 
 	@NotNull
 	@Size(min = 1, max = 255)
@@ -28,6 +29,11 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 	@NotNull
 	private String typeKey;
 
+	@NotNull
+	private String statusKey;
+
+	private Date completionDate;
+
 	@Size(max = 255)
 	private String physicalMeasure;
 
@@ -35,13 +41,14 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 
 	private String ghgBenefitUnitKey;
 
-	private Double investmentCost;
-
 	private Double financialBenefit;
 
+	private Double investmentCost;
+
+	@Size(max = 255)
 	private String expectedPaybackTime;
 
-	private DateTime dueDate;
+	private Date dueDate;
 
 	@Size(max = 255)
 	private String webSite;
@@ -51,6 +58,14 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 
 	@Size(max = 1000)
 	private String comment;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;
@@ -84,6 +99,22 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 		this.typeKey = typeKey;
 	}
 
+	public String getStatusKey() {
+		return statusKey;
+	}
+
+	public void setStatusKey(String statusKey) {
+		this.statusKey = statusKey;
+	}
+
+	public Date getCompletionDate() {
+		return completionDate;
+	}
+
+	public void setCompletionDate(Date completionDate) {
+		this.completionDate = completionDate;
+	}
+
 	public String getPhysicalMeasure() {
 		return physicalMeasure;
 	}
@@ -108,20 +139,20 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 		this.ghgBenefitUnitKey = ghgBenefitUnitKey;
 	}
 
-	public Double getInvestmentCost() {
-		return investmentCost;
-	}
-
-	public void setInvestmentCost(Double investmentCost) {
-		this.investmentCost = investmentCost;
-	}
-
 	public Double getFinancialBenefit() {
 		return financialBenefit;
 	}
 
 	public void setFinancialBenefit(Double financialBenefit) {
 		this.financialBenefit = financialBenefit;
+	}
+
+	public Double getInvestmentCost() {
+		return investmentCost;
+	}
+
+	public void setInvestmentCost(Double investmentCost) {
+		this.investmentCost = investmentCost;
 	}
 
 	public String getExpectedPaybackTime() {
@@ -132,11 +163,11 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 		this.expectedPaybackTime = expectedPaybackTime;
 	}
 
-	public DateTime getDueDate() {
+	public Date getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(DateTime dueDate) {
+	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
 
@@ -162,11 +193,6 @@ public class CreateReducingActionDTO extends DTO implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	@Override
-	public String toString() {
-		return "CreateReducingActionDTO [title=" + title + ", scopeId=" + scopeId + ", typeKey=" + typeKey + ", physicalMeasure=" + physicalMeasure + "]";
 	}
 
 }

@@ -114,8 +114,6 @@ angular
                             #close window
                             $scope.close()
                         else
-                            #display success message
-                            messageFlash.displayError result.data.message
                             $scope.isLoading = false
                 else
                     #create site
@@ -137,7 +135,6 @@ angular
                             #close window
                             $scope.close()
                         else
-                            messageFlash.displayError result.data.message
                             $scope.isLoading = false
             return false
 

@@ -3,6 +3,8 @@ angular
 .controller "ResultsCtrl", ($scope, $window, $filter, downloadService, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = true
 
+    $scope.verificationRequests=[]
+
     $scope.$root.$watch 'mySites', (nv) ->
         console.log 'watch $root.mySites'
         $scope.mySites = angular.copy $scope.$root.mySites
@@ -26,8 +28,16 @@ angular
         $scope.reload()
     , true
 
-    $scope.downloadVerificationReport = ->
-        url = '/awac/file/download/' + $scope.$root.verificationRequest.verificationSuccessFileId
+
+    downloadService.getJson '/awac/verification/verificationRequests/'+$scope.$root.periodSelectedKey, (result) ->
+        if not result.success
+            messageFlash.displayError result.data.message
+        else
+            $scope.verificationRequests = result.data.list
+
+
+    $scope.downloadVerificationReport = (verificationRequest)->
+        url = '/awac/file/download/' + verificationRequest.verificationSuccessFileId
         $window.open(url)
 
     $scope.exportPdf = () ->
@@ -46,18 +56,19 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
-            window.R = result
+            if result.success
+                window.R = result
 
-            byteCharacters = atob(result.data)
-            byteNumbers = new Array(byteCharacters.length)
-            for i in [0...byteCharacters.length]
-                byteNumbers[i] = byteCharacters.charCodeAt(i)
-            byteArray = new Uint8Array(byteNumbers)
-            blob = new Blob([byteArray], { type: 'application/pdf' })
+                byteCharacters = atob(result.data)
+                byteNumbers = new Array(byteCharacters.length)
+                for i in [0...byteCharacters.length]
+                    byteNumbers[i] = byteCharacters.charCodeAt(i)
+                byteArray = new Uint8Array(byteNumbers)
+                blob = new Blob([byteArray], { type: 'application/pdf' })
 
-            filename = "export.pdf"
+                filename = "export.pdf"
 
-            saveAs(blob,filename)
+                saveAs(blob,filename)
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
@@ -75,17 +86,18 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
-            window.R = result
+            if result.success
+                window.R = result
 
-            byteCharacters = atob(result.data)
-            byteNumbers = new Array(byteCharacters.length)
-            for i in [0...byteCharacters.length]
-                byteNumbers[i] = byteCharacters.charCodeAt(i)
-            byteArray = new Uint8Array(byteNumbers)
-            blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
-            filename = "export.xls"
+                byteCharacters = atob(result.data)
+                byteNumbers = new Array(byteCharacters.length)
+                for i in [0...byteCharacters.length]
+                    byteNumbers[i] = byteCharacters.charCodeAt(i)
+                byteArray = new Uint8Array(byteNumbers)
+                blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
+                filename = "export.xls"
 
-            saveAs(blob,filename)
+                saveAs(blob,filename)
 
     $scope.dataURItoBlob = (dataURI) ->
 
@@ -205,9 +217,6 @@ angular
                         $scope.rightTotalEmissions += line.rightScope2Value
                         $scope.rightTotalEmissions += line.rightScope3Value
                         # $scope.rightTotalEmissions += line.rightOutOfScopeValue
-
-                else
-                    messageFlash.displayError translationService.get 'RESULT_LOADING_FAILED'
 
 
 

@@ -14,8 +14,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import play.Logger;
 
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,8 +59,6 @@ public class
 
             //create siteDTO
             List<AccountSiteAssociation> sites = accountSiteAssociationService.findByAccount(account);
-
-            Logger.info("---------------------------------------- sites : "+sites);
 
 
             //site for calculator

@@ -56,8 +56,6 @@ public class RegistrationController extends AbstractController {
 	@Autowired
 	private CodeLabelService              codeLabelService;
 	@Autowired
-	private AwacCalculatorInstanceService awacCalculatorInstanceService;
-	@Autowired
 	private VerificationRequestService    verificationRequestService;
 	@Autowired
 	private VelocityGeneratorService      velocityGeneratorService;
@@ -77,7 +75,7 @@ public class RegistrationController extends AbstractController {
 		// control key
 		VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
 		if (verificationRequest == null || verificationRequest.getOrganizationVerifier() != null) {
-			return notFound(new ExceptionsDTO("the validation request must be canceled by the customer"));
+			return notFound(new ExceptionsDTO(BusinessErrorType.VERIFIER_REGISTRATION_NOT_VALID_REQUEST));
 		}
 
 		// create organization
@@ -116,28 +114,23 @@ public class RegistrationController extends AbstractController {
 		// control organization name
 		Organization organization = organizationService.findByName(dto.getOrganizationName());
 		if (organization != null) {
-			play.Logger.info("Myrmex exception: Organization already exists...");
 			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
 		}
 
 		//create organization
 		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE, dto.getOrganizationStatisticsAllowed());
 
-		play.Logger.info("create organization...");
 		organizationService.saveOrUpdate(organization);
 
-		play.Logger.info("create admin...");
 		//create administrator
 		Account account = null;
 		try {
 			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
 		} catch (MyrmexException e) {
-			play.Logger.info("Myrmex exception:" + e.getToClientMessage());
 			return notFound(new ExceptionsDTO(e.getToClientMessage()));
 		}
 
 		//create site
-		play.Logger.info("create site...");
 		Site site = new Site(organization, dto.getFirstSiteName());
 		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 
@@ -147,12 +140,10 @@ public class RegistrationController extends AbstractController {
 		listAvailablePeriod.add(period);
 		site.setListPeriodAvailable(listAvailablePeriod);
 
-		play.Logger.info("add periods...");
 		siteService.saveOrUpdate(site);
 		organization.getSites().add(site);
 
 		//create link between account and site
-		play.Logger.info("create association...");
 		AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
 		accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
@@ -163,7 +154,6 @@ public class RegistrationController extends AbstractController {
 		handleEmailSubmission(account, InterfaceTypeCode.ENTERPRISE);
 
 		//create ConnectionFormDTO
-		play.Logger.info("create resultDTO...");
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
 		return ok(resultDto);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 
 public class ReducingActionDTOList extends DTO implements Serializable {
 
@@ -17,6 +18,7 @@ public class ReducingActionDTOList extends DTO implements Serializable {
 
 	/**
 	 * @param reducingActions
+	 * @param userScopes
 	 * @param codeLists
 	 * @param gwpUnits
 	 */

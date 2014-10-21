@@ -3,13 +3,11 @@ package eu.factorx.awac.models.data.answer;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.VerificationStatus;
-import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.VerificationRequest;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by florian on 7/10/14.

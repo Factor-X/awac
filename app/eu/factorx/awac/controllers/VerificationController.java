@@ -25,7 +25,9 @@ import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.forms.VerificationRequestCanceled;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
+import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
@@ -88,7 +90,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.NOT_CONNECTED));
         }
 
         List<VerificationRequest> verificationRequestList = verificationRequestService.findByOrganizationVerifierAndVerificationRequestStatus(securedController.getCurrentUser().getOrganization(), VerificationRequestStatus.VERIFIED);
@@ -109,6 +111,32 @@ public class VerificationController extends AbstractController {
         return ok(dto);
     }
 
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result getAllMyVerificationRequests(String periodKey) {
+
+        //load period
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        //load scope
+        List<Scope> scopeList = securedController.getAuthorizedScopes(securedController.getCurrentUser(), period);
+
+        //load awacCalculatorInstance
+        List<AwacCalculatorInstance> awacCalculatorInstanceList = awacCalculatorInstanceService.findByPeriodAndScopes(period, scopeList);
+
+        ListDTO<VerificationRequestDTO> dto = new ListDTO<>();
+
+        for (AwacCalculatorInstance awacCalculatorInstance : awacCalculatorInstanceList) {
+            if (awacCalculatorInstance.getVerificationRequest() != null) {
+                dto.add(conversionService.convert(awacCalculatorInstance, VerificationRequestDTO.class));
+            }
+        }
+
+        return ok(dto);
+
+
+    }
+
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
@@ -120,7 +148,7 @@ public class VerificationController extends AbstractController {
         //control password
         if (!accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser())) {
             //use the same message for both login and password error
-            return unauthorized(new ExceptionsDTO("The couple login / password was not found"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_PASSWORD));
         }
 
         //recover elements
@@ -134,12 +162,12 @@ public class VerificationController extends AbstractController {
                 awacCalculatorInstance.getVerificationRequest() != null &&
                 (awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier() != null ||
                         awacCalculatorInstance.getVerificationRequest().getKey() != null)) {
-            return unauthorized(new ExceptionsDTO("This forms are already sended to verification to " + awacCalculatorInstance.getVerificationRequest().getEmailVerificationContent().getEmail()));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.VERIFICATION_ALREADY_SENT, awacCalculatorInstance.getVerificationRequest().getEmailVerificationContent().getEmail()));
         }
 
         //control closed form
         if (!answerController.testCloseable(dto.getPeriodKey(), dto.getScopeId())) {
-            return unauthorized(new ExceptionsDTO("Sections are not all closed. Please closed them after ask a verification"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.VERIFICATION_SECTION_NOT_CLOSED));
         }
 
         //search email
@@ -155,18 +183,13 @@ public class VerificationController extends AbstractController {
         //create awacCalculator
         if (awacCalculatorInstance == null) {
 
-            Logger.info("awacCalculatorInstance == null");
-
             awacCalculatorInstance = new AwacCalculatorInstance();
             awacCalculatorInstance.setAwacCalculator(awacCalculator);
             awacCalculatorInstance.setPeriod(period);
             awacCalculatorInstance.setScope(scope);
 
-            Logger.info("awacCalculatorInstance == " + awacCalculatorInstance);
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
 
-        } else {
-            Logger.info("awacCalculatorInstance == " + awacCalculatorInstance);
         }
 
         //build emailContent
@@ -240,7 +263,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            throw new MyrmexFatalException("You are not a verifier");
         }
 
         List<VerificationRequest> verificationRequestList = verificationRequestService.findByOrganizationVerifier(securedController.getCurrentUser().getOrganization());
@@ -269,7 +292,7 @@ public class VerificationController extends AbstractController {
 
 
         if (scope == null || period == null) {
-            return unauthorized(new ExceptionsDTO("cannot load calculator instance for period " + dto.getPeriodKey() + ", scope:" + dto.getScopeId()));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.CANNOT_LOAD_CALCULATOR_INSTANCE_PERIOD_SCOPE, dto.getPeriodKey() ,dto.getScopeId()+""));
         }
 
         //control scope
@@ -278,14 +301,14 @@ public class VerificationController extends AbstractController {
         if (calculatorInstance == null ||
                 calculatorInstance.getVerificationRequest() == null ||
                 calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null) {
-            return unauthorized(new ExceptionsDTO("cannot load calculator instance"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.CANNOT_LOAD_CALCULATOR_INSTANCE_PERIOD_SCOPE, dto.getPeriodKey() ,dto.getScopeId()+""));
         }
 
         //control organization
         if (!calculatorInstance.getScope().getOrganization().equals(securedController.getCurrentUser().getOrganization()) &&
-                (calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null ||
-                        !calculatorInstance.getVerificationRequest().getOrganizationVerifier().equals(securedController.getCurrentUser().getOrganization()))) {
-            return unauthorized(new ExceptionsDTO("this is not your organization"));
+            (calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null ||
+            !calculatorInstance.getVerificationRequest().getOrganizationVerifier().equals(securedController.getCurrentUser().getOrganization()))) {
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.NOT_YOUR_ORGANIZATION, calculatorInstance.getVerificationRequest().getOrganizationVerifier().getName()));
         }
 
 
@@ -293,8 +316,6 @@ public class VerificationController extends AbstractController {
         VerificationRequestStatus newStatus = new VerificationRequestStatus(dto.getNewStatus());
         VerificationRequestStatus oldStatus = calculatorInstance.getVerificationRequest().getVerificationRequestStatus();
 
-        Logger.info("newStatus : " + newStatus);
-        Logger.info("oldStatus : " + oldStatus);
         String emailToSend = null;
         List<String> emailTargets = new ArrayList<>();
         String emailTitle = null;
@@ -418,7 +439,7 @@ public class VerificationController extends AbstractController {
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
                 (securedController.getCurrentUser().getIsAdmin() ||
-                        securedController.getCurrentUser().getIsMainVerifier())) {
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
 
             //email
@@ -430,7 +451,7 @@ public class VerificationController extends AbstractController {
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
                 (securedController.getCurrentUser().getIsAdmin() ||
-                        securedController.getCurrentUser().getIsMainVerifier())) {
+                securedController.getCurrentUser().getIsMainVerifier())) {
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
 
             //dis valid
@@ -449,7 +470,7 @@ public class VerificationController extends AbstractController {
                 (oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) || oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) &&
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
                 (securedController.getCurrentUser().getIsAdmin() ||
-                        securedController.getCurrentUser().getIsMainVerifier())) {
+                securedController.getCurrentUser().getIsMainVerifier())) {
 
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
 
@@ -495,7 +516,7 @@ public class VerificationController extends AbstractController {
             emailTargets.addAll(getAssignedAccountEmail(calculatorInstance.getVerificationRequest()));
             emailTitle = "Refus d'un rapport de vérification de bilan GES";
         } else {
-            return unauthorized(new ExceptionsDTO("cannot do this action"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
         }
 
         //send email
@@ -504,7 +525,7 @@ public class VerificationController extends AbstractController {
             values.put("request", calculatorInstance.getVerificationRequest());
             values.put("user", securedController.getCurrentUser());
 
-            String velocityContent = velocityGeneratorService.generate("verification/"+emailToSend, values);
+            String velocityContent = velocityGeneratorService.generate("verification/" + emailToSend, values);
 
             EmailMessage email = new EmailMessage(emailTargets, emailTitle, velocityContent);
             emailService.send(email);
@@ -522,7 +543,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
         VerificationRequestKeyDTO dto = extractDTOFromRequest(VerificationRequestKeyDTO.class);
@@ -558,7 +579,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
         ListDTO<VerificationRequestDTO> list = new ListDTO<>();
@@ -581,7 +602,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
         //load scope and period
@@ -591,22 +612,22 @@ public class VerificationController extends AbstractController {
         VerificationStatus verificationStatus = new VerificationStatus(dto.getVerification().getStatus());
 
         if (scope == null || period == null || questionSet == null) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.CANNOT_LOAD_CALCULATOR_INSTANCE_PERIOD_SCOPE,dto.getPeriodKey(),dto.getScopeId()+""));
         }
 
         List<QuestionSetAnswer> questionSetAnswerList = quesstionSetAnswerService.findByScopeAndPeriodAndQuestionSet(scope, period, questionSet);
 
         if (questionSetAnswerList.size() != 1) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
         //control verifier
         VerificationRequest verificationRequest = verificationRequestService.findByVerifierAndScopeAndPeriod(securedController.getCurrentUser(), scope, period);
 
         if (verificationRequest == null ||
-                !verificationRequest.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFICATION) ||
-                !verificationRequest.getVerifierList().contains(securedController.getCurrentUser())) {
-            return unauthorized(new ExceptionsDTO("You are not a verifier"));
+            !verificationRequest.getVerificationRequestStatus().equals(VerificationRequestStatus.VERIFICATION) ||
+            !verificationRequest.getVerifierList().contains(securedController.getCurrentUser())) {
+            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
         //try to load
@@ -669,7 +690,7 @@ public class VerificationController extends AbstractController {
         //control key
         VerificationRequest verificationRequest = verificationRequestService.findByKey(key);
         if (verificationRequest.getOrganizationVerifier() != null) {
-            throw new MyrmexRuntimeException("the validation request must be canceled by the customer");
+            throw new MyrmexRuntimeException(BusinessErrorType.INVITATION_NOT_VALID);
         }
 
         //
@@ -701,5 +722,7 @@ public class VerificationController extends AbstractController {
 
         verificationRequestService.remove(verificationRequest);
     }
+
+
 
 }
