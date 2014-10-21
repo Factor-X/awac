@@ -9,8 +9,6 @@ import jxl.WorkbookSettings;
 import jxl.write.*;
 import jxl.write.Number;
 
-import eu.factorx.awac.util.BusinessErrorType;
-import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -318,7 +316,7 @@ public class ReducingActionController extends AbstractController {
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {
 		List<Scope> authorizedScopes = securedController.getAuthorizedScopes(currentUser);
 		if (!authorizedScopes.contains(scope)) {
-			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE,scope.getName());
+			throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE, scope.getName());
 		}
 	}
 
