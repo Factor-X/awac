@@ -13,7 +13,7 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-10-17 10:39:50 +0200 */
+/* Generated the 2014-10-21 16:17:51 +0200 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -21,7 +21,6 @@ public static final QuestionCode A3 = new QuestionCode("A3");
 public static final QuestionCode A4 = new QuestionCode("A4");
 public static final QuestionCode A5 = new QuestionCode("A5");
 public static final QuestionCode A6 = new QuestionCode("A6");
-public static final QuestionCode A7 = new QuestionCode("A7");
 public static final QuestionCode A9 = new QuestionCode("A9");
 public static final QuestionCode A10 = new QuestionCode("A10");
 public static final QuestionCode A11 = new QuestionCode("A11");
@@ -404,12 +403,11 @@ public static final QuestionCode A8000 = new QuestionCode("A8000");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-10-17 10:39:52 +0200 */
+/* Generated the 2014-10-21 16:17:52 +0200 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
 public static final QuestionCode AC3 = new QuestionCode("AC3");
-public static final QuestionCode AC5 = new QuestionCode("AC5");
 public static final QuestionCode AC6 = new QuestionCode("AC6");
 public static final QuestionCode AC7 = new QuestionCode("AC7");
 public static final QuestionCode AC8 = new QuestionCode("AC8");
@@ -571,6 +569,10 @@ public static final QuestionCode AC902 = new QuestionCode("AC902");
 public static final QuestionCode AC903 = new QuestionCode("AC903");
 public static final QuestionCode AC904 = new QuestionCode("AC904");
 public static final QuestionCode AC905 = new QuestionCode("AC905");
+public static final QuestionCode AC2000 = new QuestionCode("AC2000");
+public static final QuestionCode AC2001 = new QuestionCode("AC2001");
+public static final QuestionCode AC2002 = new QuestionCode("AC2002");
+public static final QuestionCode AC2003 = new QuestionCode("AC2003");
 public static final QuestionCode AC5000 = new QuestionCode("AC5000");
 public static final QuestionCode AC5001 = new QuestionCode("AC5001");
 public static final QuestionCode AC5002 = new QuestionCode("AC5002");

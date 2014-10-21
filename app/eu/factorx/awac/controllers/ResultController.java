@@ -6,37 +6,30 @@ import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.GetReportParametersDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
-import eu.factorx.awac.service.impl.ResultPdfGeneratorServiceImpl;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import eu.factorx.awac.util.Table;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
-import play.api.templates.Html;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-import scala.collection.mutable.StringBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ResultController extends AbstractController {
@@ -66,7 +59,7 @@ public class ResultController extends AbstractController {
 	@Autowired
 	private SvgGenerator                svgGenerator;
 	@Autowired
-	private ResultPdfGeneratorService resultPdfGeneratorService;
+	private ResultPdfGeneratorService   resultPdfGeneratorService;
 
 	//
 	// ACTIONS
@@ -157,10 +150,14 @@ public class ResultController extends AbstractController {
 		controlScope(scopes);
 
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
+		Period comparedPeriod = null;
+		if (comparedPeriodKey != null) {
+			comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
+		}
 
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, interfaceCode);
+		byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, comparedPeriod, interfaceCode);
 		return ok(new Base64().encode(bytes));
 	}
 

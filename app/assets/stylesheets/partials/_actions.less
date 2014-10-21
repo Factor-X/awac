@@ -1,4 +1,8 @@
 @media screen {
+    h1 {
+        text-align: left;
+        padding: 10px 0 10px 10px;
+    }
     .actions-table {
 
         @dark: #bbb;
@@ -44,15 +48,19 @@
                     border-bottom: solid 4px white;
 
                     &.details {
+                        width: 70px;
                     }
                     &.title {
-                        width: 100%;
+                        width: auto;
                     }
                     &.type {
+                       width:200px;
                     }
                     &.scope {
+                        width: 200px;
                     }
                     &.realization {
+                        width: 100px;
                     }
                 }
 
@@ -118,4 +126,40 @@
         margin: 0;
         padding: 0;
     }
+
+    span.icon {
+        &.scope_type_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+
+            &.org {
+                background: url('../images/organization.png') center center no-repeat;
+            }
+            &.site {
+                background: url('../images/site.png') center center no-repeat;
+            }
+        }
+
+        &.action_type_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+
+            &.reducing {
+                background: url('../images/actions/reduction.png') center center no-repeat;
+            }
+            &.better_measure {
+                background: url('../images/actions/meilleure_mesure.png') center center no-repeat;
+            }
+        }
+
+        &.action_done_icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            background: url('../images/actions/done_status.png') center center no-repeat;
+        }
+    }
+
 }

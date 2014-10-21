@@ -18,7 +18,7 @@ import eu.factorx.awac.models.data.file.StoredFile;
 		@UniqueConstraint(columnNames = { ReducingAction.TITLE_COLUMN, ReducingAction.SCOPE_COLUMN })
 })
 @NamedQueries({
-		@NamedQuery(name = ReducingAction.FIND_BY_SCOPES, query = "select ra from ReducingAction ra where ra.scope in :scopes"),
+		@NamedQuery(name = ReducingAction.FIND_BY_SCOPES, query = "select ra from ReducingAction ra where ra.scope in :scopes order by ra.status, ra.technicalSegment.creationDate"),
 })
 public class ReducingAction extends AuditedAbstractEntity {
 

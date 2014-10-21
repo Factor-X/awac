@@ -19,10 +19,12 @@ angular
                 $scope.gwpUnits = result.data.gwpUnits
 
     $scope.create = () ->
-        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
+        modalService.show(modalService.CREATE_REDUCTION_ACTION,
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
 
     $scope.edit = (action) ->
-        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action })
+        modalService.show(modalService.CREATE_REDUCTION_ACTION,
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action })
 
     $scope.markAsDone = (action) ->
         $scope.isLoading = true
@@ -40,7 +42,9 @@ angular
         if (scopeTypeKey == "1")
             return $scope.$root.organizationName
         else
-            return _.findWhere($scope.$root.mySites, {id: scopeId}).name
+            return $scope.$root.mySites.filter((e) ->
+                ("" + e.id) == ("" + scopeId)
+            )[0].name
 
     $scope.getTypeLabel = (typeKey) ->
         return _.findWhere($scope.typeOptions, {key: typeKey }).label
@@ -51,7 +55,7 @@ angular
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
 
-    $scope.$watch '$root.mySites', (n,o) ->
+    $scope.$watch '$root.mySites', (n, o) ->
         if !!n
             $scope.loadActions()
 

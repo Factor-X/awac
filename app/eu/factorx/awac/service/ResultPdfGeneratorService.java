@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface ResultPdfGeneratorService {
 
-	byte[] generate(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException;
+	byte[] generate(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode) throws WriteException, IOException, BiffException;
 }

@@ -133,7 +133,7 @@ public class AwacMunicipalityInitialData {
         // delete old questions
 		{
 			List<Question> allQuestions = questionService.findAll();
-            List<String> codes = Arrays.asList("AC3", "AC5", "AC6", "AC7", "AC8", "AC11", "AC12", "AC13", "AC14", "AC15", "AC16", "AC17", "AC18", "AC19", "AC20", "AC21", "AC22", "AC23", "AC26", "AC27", "AC901", "AC902", "AC904", "AC905", "AC30", "AC31", "AC34", "AC35", "AC36", "AC38", "AC40", "AC41", "AC43", "AC5001", "AC5002", "AC53", "AC54", "AC55", "AC57", "AC58", "AC59", "AC61", "AC403", "AC404", "AC405", "AC408", "AC409", "AC410", "AC411", "AC414", "AC415", "AC416", "AC417", "AC503", "AC504", "AC505", "AC508", "AC509", "AC510", "AC511", "AC514", "AC515", "AC516", "AC517", "AC603", "AC604", "AC605", "AC608", "AC609", "AC610", "AC611", "AC614", "AC615", "AC616", "AC617", "AC94", "AC95", "AC96", "AC97", "AC99", "AC100", "AC101", "AC102", "AC103", "AC104", "AC105", "AC108", "AC109", "AC110", "AC111", "AC112", "AC113", "AC115", "AC117", "AC118", "AC119", "AC120", "AC121", "AC122", "AC123", "AC124", "AC125", "AC126", "AC127", "AC128", "AC129", "AC131", "AC133", "AC134", "AC135", "AC136", "AC138", "AC140", "AC141", "AC142", "AC143");
+            List<String> codes = Arrays.asList("AC3", "AC6", "AC7", "AC8", "AC11", "AC12", "AC13", "AC2002", "AC2003", "AC14", "AC15", "AC16", "AC17", "AC18", "AC19", "AC20", "AC21", "AC22", "AC23", "AC26", "AC27", "AC901", "AC902", "AC904", "AC905", "AC30", "AC31", "AC34", "AC35", "AC36", "AC38", "AC40", "AC41", "AC43", "AC5001", "AC5002", "AC53", "AC54", "AC55", "AC57", "AC58", "AC59", "AC61", "AC403", "AC404", "AC405", "AC408", "AC409", "AC410", "AC411", "AC414", "AC415", "AC416", "AC417", "AC503", "AC504", "AC505", "AC508", "AC509", "AC510", "AC511", "AC514", "AC515", "AC516", "AC517", "AC603", "AC604", "AC605", "AC608", "AC609", "AC610", "AC611", "AC614", "AC615", "AC616", "AC617", "AC94", "AC95", "AC96", "AC97", "AC99", "AC100", "AC101", "AC102", "AC103", "AC104", "AC105", "AC108", "AC109", "AC110", "AC111", "AC112", "AC113", "AC115", "AC117", "AC118", "AC119", "AC120", "AC121", "AC122", "AC123", "AC124", "AC125", "AC126", "AC127", "AC128", "AC129", "AC131", "AC133", "AC134", "AC135", "AC136", "AC138", "AC140", "AC141", "AC142", "AC143");
 
 			for (Question q : new ArrayList<>(allQuestions)) {
 				if (codes.contains(q.getCode().getKey()) || !q.getCode().getKey().matches("AC[0-9]+")) {
@@ -149,7 +149,7 @@ public class AwacMunicipalityInitialData {
 		// delete old question_sets
 		{
 			List<QuestionSet> allQuestionSets = questionSetService.findAll();
-            List<String> codes = Arrays.asList("AC1", "AC2", "AC9", "AC10", "AC24", "AC25", "AC900", "AC903", "AC28", "AC29", "AC32", "AC33", "AC37", "AC39", "AC42", "AC5000", "AC52", "AC56", "AC60", "AC62", "AC400", "AC401", "AC402", "AC406", "AC407", "AC412", "AC413", "AC500", "AC501", "AC502", "AC506", "AC507", "AC512", "AC513", "AC600", "AC601", "AC602", "AC606", "AC607", "AC612", "AC613", "AC92", "AC93", "AC98", "AC106", "AC107", "AC114", "AC116", "AC130", "AC132", "AC137", "AC139");
+            List<String> codes = Arrays.asList("AC1", "AC2", "AC9", "AC10", "AC24", "AC25", "AC900", "AC903", "AC28", "AC29", "AC32", "AC33", "AC37", "AC39", "AC42", "AC5000", "AC52", "AC2000", "AC2001", "AC56", "AC60", "AC62", "AC400", "AC401", "AC402", "AC406", "AC407", "AC412", "AC413", "AC500", "AC501", "AC502", "AC506", "AC507", "AC512", "AC513", "AC600", "AC601", "AC602", "AC606", "AC607", "AC612", "AC613", "AC92", "AC93", "AC98", "AC106", "AC107", "AC114", "AC116", "AC130", "AC132", "AC137", "AC139");
 
 			for (QuestionSet qs : new ArrayList<>(allQuestionSets)) {
 				if (codes.contains(qs.getCode().getKey()) || !qs.getCode().getKey().matches("AC[0-9]+")) {
@@ -332,6 +332,20 @@ public class AwacMunicipalityInitialData {
     }
     form2.getQuestionSets().add(ac52);
     JPA.em().persist(form2);
+    // == AC2000
+    // Eclairage public
+    QuestionSet ac2000 = questionSetService.findByCode(QuestionCode.AC2000);
+    if( ac2000 == null ) {
+        ac2000 = new QuestionSet(QuestionCode.AC2000, false, ac52);
+        JPA.em().persist(ac2000);
+    }
+    // == AC2001
+    // Coffrets de voirie
+    QuestionSet ac2001 = questionSetService.findByCode(QuestionCode.AC2001);
+    if( ac2001 == null ) {
+        ac2001 = new QuestionSet(QuestionCode.AC2001, false, ac52);
+        JPA.em().persist(ac2001);
+    }
     // == AC56
     // Créez autant de coffrets de voirie que souhaité
     QuestionSet ac56 = questionSetService.findByCode(QuestionCode.AC56);
@@ -366,21 +380,21 @@ public class AwacMunicipalityInitialData {
     // Méthode au choix
     QuestionSet ac401 = questionSetService.findByCode(QuestionCode.AC401);
     if( ac401 == null ) {
-        ac401 = new QuestionSet(QuestionCode.AC401, false, ac400);
+        ac401 = new QuestionSet(QuestionCode.AC401, false, ac2000);
         JPA.em().persist(ac401);
     }
     // == AC402
     // Calcul par les consommations
     QuestionSet ac402 = questionSetService.findByCode(QuestionCode.AC402);
     if( ac402 == null ) {
-        ac402 = new QuestionSet(QuestionCode.AC402, false, ac401);
+        ac402 = new QuestionSet(QuestionCode.AC402, false, ac2001);
         JPA.em().persist(ac402);
     }
     // == AC406
     // Calcul par les kilomètres
     QuestionSet ac406 = questionSetService.findByCode(QuestionCode.AC406);
     if( ac406 == null ) {
-        ac406 = new QuestionSet(QuestionCode.AC406, false, ac401);
+        ac406 = new QuestionSet(QuestionCode.AC406, false, ac2001);
         JPA.em().persist(ac406);
     }
     // == AC407
@@ -394,7 +408,7 @@ public class AwacMunicipalityInitialData {
     // Calcul par euros dépensés
     QuestionSet ac412 = questionSetService.findByCode(QuestionCode.AC412);
     if( ac412 == null ) {
-        ac412 = new QuestionSet(QuestionCode.AC412, false, ac401);
+        ac412 = new QuestionSet(QuestionCode.AC412, false, ac2001);
         JPA.em().persist(ac412);
     }
     // == AC413
@@ -615,30 +629,6 @@ if (ac3 == null) {
 }
 
 
-    // == AC5
-    // Nombre d'employés en début d'année de bilan
-
-    
-IntegerQuestion ac5 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC5);
-if (ac5 == null) {
-    ac5 = new IntegerQuestion(ac2, 0, QuestionCode.AC5, null, null);
-    JPA.em().persist(ac5);
-} else {
-    ac5.setDefaultValue(null);
-    if (!ac5.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac5)) {
-        ac2.getQuestions().remove(ac5);
-        JPA.em().persist(ac2);
-    }
-    if (ac5.getQuestionSet().equals(ac2) && !ac2.getQuestions().contains(ac5)) {
-        ac2.getQuestions().add(ac5);
-        JPA.em().persist(ac2);
-    }
-    ac5.setOrderIndex(0);
-    ac5.setUnitCategory(null);
-    JPA.em().persist(ac5);
-}
-
-
     // == AC6
     // Nombre d'habitants dans la commune en début d'année de bilan
 
@@ -777,6 +767,54 @@ if (ac13 == null) {
     }
     ac13.setOrderIndex(0);
     JPA.em().persist(ac13);
+}
+
+
+    // == AC2002
+    // Nombre de bâtiments concernés par ce groupe
+
+    
+IntegerQuestion ac2002 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2002);
+if (ac2002 == null) {
+    ac2002 = new IntegerQuestion(ac10, 0, QuestionCode.AC2002, null, null);
+    JPA.em().persist(ac2002);
+} else {
+    ac2002.setDefaultValue(null);
+    if (!ac2002.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac2002)) {
+        ac10.getQuestions().remove(ac2002);
+        JPA.em().persist(ac10);
+    }
+    if (ac2002.getQuestionSet().equals(ac10) && !ac10.getQuestions().contains(ac2002)) {
+        ac10.getQuestions().add(ac2002);
+        JPA.em().persist(ac10);
+    }
+    ac2002.setOrderIndex(0);
+    ac2002.setUnitCategory(null);
+    JPA.em().persist(ac2002);
+}
+
+
+    // == AC2003
+    // Nombre d'occupants
+
+    
+IntegerQuestion ac2003 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2003);
+if (ac2003 == null) {
+    ac2003 = new IntegerQuestion(ac10, 0, QuestionCode.AC2003, null, null);
+    JPA.em().persist(ac2003);
+} else {
+    ac2003.setDefaultValue(null);
+    if (!ac2003.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac2003)) {
+        ac10.getQuestions().remove(ac2003);
+        JPA.em().persist(ac10);
+    }
+    if (ac2003.getQuestionSet().equals(ac10) && !ac10.getQuestions().contains(ac2003)) {
+        ac10.getQuestions().add(ac2003);
+        JPA.em().persist(ac10);
+    }
+    ac2003.setOrderIndex(0);
+    ac2003.setUnitCategory(null);
+    JPA.em().persist(ac2003);
 }
 
 
