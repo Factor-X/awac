@@ -370,6 +370,11 @@ select {
     background-color: #9d9b91;
     border-spacing: 5px;
     display: table !important;
+    white-space: nowrap;
+}
+
+.last_menu button {
+    white-space: normal;
 }
 
 .menu_jauge {
@@ -388,6 +393,7 @@ select {
 .menu > div:hover .menu_jauge {
     color: #a4c9dc;
 }
+
 
 .menu_current .menu_jauge {
     color: #acd595 !important;
@@ -493,7 +499,7 @@ select {
 */
 
 button.button[type="button"] {
-    height: 25px;
+    min-height: 25px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -562,14 +568,14 @@ button.button.verification {
 
 button.button.upload {
     float: right;
-    height: 23px;
+    min-height: 23px;
     padding-left: 25px;
     background: url('../images/upload.png') 7px center no-repeat #efeee8;
     color: #3c3b37;
 }
 
 button.button.comments {
-    height: 22px;
+    min-height: 22px;
     width: -moz-calc(100% - 70px);
     width: -webkit-calc(100% - 70px);
     width: calc(100% - 70px);
@@ -584,7 +590,7 @@ button.button.comments {
 }
 
 button.button.add {
-    height: 23px;
+    min-height: 23px;
     background: url('../images/add.png') 7px center no-repeat #9d9b91;
     padding-left: 25px;
 }

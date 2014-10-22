@@ -100,7 +100,8 @@ public class ReducingActionController extends AbstractController {
 		byte[] content = getExcelExport(reducingActions);
 
 		response().setContentType("application/octet-stream");
-		response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+		String fileName = "export_actions_" + new DateTime().toString("yyyyMMdd'-'HH'h'mm") + ".xls";
+		response().setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		return ok(content);
 	}
 
