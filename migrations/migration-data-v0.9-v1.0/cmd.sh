@@ -30,6 +30,10 @@ cat ./CELDL-116-periods.sql >> /tmp/migration/migration_script.sql
 # percentage fix bug
 cat ./CELDL-260-percentage.sql >> /tmp/migration/migration_script.sql
 
+# site association bug fix bug
+cat ./CELDL-268-remove-unique-constraint-accout-site-association.sql >> /tmp/migration/migration_script.sql
+
+
 
 
 # -------------------------------------------------
