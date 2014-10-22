@@ -7118,20 +7118,23 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       dto.comparedPeriodKey = $scope.$root.periodToCompare;
     }
     return downloadService.postJson('/awac/result/getReportAsPdf', dto, function(result) {
-      var blob, byteArray, byteCharacters, byteNumbers, filename, i, _ref;
       if (result.success) {
         window.R = result;
-        byteCharacters = atob(result.data);
-        byteNumbers = new Array(byteCharacters.length);
-        for (i = 0, _ref = byteCharacters.length; (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        byteArray = new Uint8Array(byteNumbers);
-        blob = new Blob([byteArray], {
-          type: 'application/pdf'
-        });
-        filename = "export.pdf";
-        return saveAs(blob, filename);
+        return setTimeout(function() {
+          var blob, byteArray, byteCharacters, byteNumbers, filename, i, _ref;
+          byteCharacters = atob(result.data);
+          byteNumbers = new Array(byteCharacters.length);
+          for (i = 0, _ref = byteCharacters.length; (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          byteArray = new Uint8Array(byteNumbers);
+          blob = new window.Blob([byteArray], {
+            type: 'application/pdf'
+          });
+          filename = "export.pdf";
+          saveAs(blob, filename);
+          return console.log('done !');
+        }, 0);
       }
     });
   };
@@ -7151,20 +7154,22 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       dto.comparedPeriodKey = $scope.$root.periodToCompare;
     }
     return downloadService.postJson('/awac/result/getReportAsXls', dto, function(result) {
-      var blob, byteArray, byteCharacters, byteNumbers, filename, i, _ref;
       if (result.success) {
         window.R = result;
-        byteCharacters = atob(result.data);
-        byteNumbers = new Array(byteCharacters.length);
-        for (i = 0, _ref = byteCharacters.length; (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        byteArray = new Uint8Array(byteNumbers);
-        blob = new Blob([byteArray], {
-          type: 'application/vnd.ms-excel'
-        });
-        filename = "export.xls";
-        return saveAs(blob, filename);
+        return setTimeout(function() {
+          var blob, byteArray, byteCharacters, byteNumbers, filename, i, _ref;
+          byteCharacters = atob(result.data);
+          byteNumbers = new Array(byteCharacters.length);
+          for (i = 0, _ref = byteCharacters.length; (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          byteArray = new Uint8Array(byteNumbers);
+          blob = new Blob([byteArray], {
+            type: 'application/vnd.ms-excel'
+          });
+          filename = "export.xls";
+          return saveAs(blob, filename);
+        }, 0);
       }
     });
   };
