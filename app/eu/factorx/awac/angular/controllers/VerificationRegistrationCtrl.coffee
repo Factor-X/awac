@@ -28,13 +28,13 @@ angular
                 true
 
         emailInfo:
-            fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE"
+            fieldTitle: "USER_EMAIL"
             inputName: 'email'
             validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
             validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
 
         passwordInfo:
-            fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE"
+            fieldTitle: "USER_PASSWORD"
             inputName: 'password'
             fieldType: "password"
             validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$"
