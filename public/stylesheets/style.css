@@ -289,6 +289,10 @@ select {
     border: none;
 }
 
+.last_menu > :not(:first-child){
+    margin-left: 8px;
+}
+
 .menu_current {
     background-color: #305b2e !important;
     color: white !important;

@@ -79,7 +79,8 @@ ng-virtual
 
         tfoot
             tr
-                td
+                td(style="text-align: right")
+                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
                 td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
                     span(ng-bind-html="getLeftTotalScope1() | numberToI18NOrLess")
                 td.align-right.scope2(style="color: {{ ngModel.leftColor }}")
