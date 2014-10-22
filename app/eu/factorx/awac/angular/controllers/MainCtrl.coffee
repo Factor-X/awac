@@ -539,6 +539,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if $route.current.locals.helpPage?
             modalService.show(modalService.HELP, {template: $route.current.locals.helpPage})
 
+    $rootScope.showConfidentiality = ->
+        modalService.show(modalService.HELP, {template: 'confidentiality'})
+
 
     $rootScope.getVerificationRequestStatus = ->
         return $rootScope.verificationRequest?.status

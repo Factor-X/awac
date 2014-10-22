@@ -28,11 +28,14 @@ div
                         .entreprise_name {{ $root.organizationName }}
 
                     td
-                        button.button.confidentiality(type='button', ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate")
+                        button.button.confidentiality(
+                        type='button',
+                        ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate",
+                        ng-click="$root.showConfidentiality()")
                         button.button.help(
                             type='button',
                             ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                            ng-click="return false; $root.showHelp()")
+                            ng-click="$root.showHelp()")
                     td
                         //  organization manager button
                         button.button.user_manage(
