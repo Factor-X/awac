@@ -1,18 +1,16 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.IndicatorCode;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.type.IndicatorCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "indicator")
@@ -30,13 +28,14 @@ public class Indicator extends AuditedAbstractEntity {
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
 	@JoinTable(name = "mm_indicator_baseindicator",
-			joinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "baseindicator_id", referencedColumnName = "id"),
-			uniqueConstraints = @UniqueConstraint(columnNames = { "indicator_id", "baseindicator_id" }))
+		joinColumns = @JoinColumn(name = "indicator_id", referencedColumnName = "id"),
+		inverseJoinColumns = @JoinColumn(name = "baseindicator_id", referencedColumnName = "id"),
+		uniqueConstraints = @UniqueConstraint(columnNames = {"indicator_id", "baseindicator_id"}))
 	private List<BaseIndicator> baseIndicators;
 
 	@OneToMany(mappedBy = ReportIndicator.PROPERTY_NAME_INDICATOR, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OrderColumn(name = "orderindex")
 	private List<ReportIndicator> reportIndicators;
 
 	public Indicator() {

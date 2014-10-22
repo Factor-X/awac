@@ -2,10 +2,15 @@ package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
+import eu.factorx.awac.models.knowledge.Report;
+import eu.factorx.awac.models.knowledge.ReportIndicator;
 import eu.factorx.awac.models.reporting.ReportResult;
+import eu.factorx.awac.service.ReportIndicatorService;
+import eu.factorx.awac.service.ReportService;
 import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Colors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
 import java.util.List;
@@ -13,12 +18,15 @@ import java.util.Map;
 
 public class ReportResultAggregationToReportDTOConverter implements Converter<ReportResultAggregation, ReportDTO> {
 
+	@Autowired
+	private ReportIndicatorService reportIndicatorService;
+
 	@Override
 	public ReportDTO convert(ReportResultAggregation reportResultAggregation) {
 		ReportDTO reportDTO = new ReportDTO();
 
 		reportDTO.setLeftPeriod(reportResultAggregation.getPeriod().getLabel());
-		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(1,1));
+		reportDTO.setLeftColor("#" + Colors.makeGoodColorForSerieElement(1, 1));
 
 		int notNullValues = 0;
 		double total = 0;
@@ -32,6 +40,10 @@ public class ReportResultAggregationToReportDTOConverter implements Converter<Re
 
 		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {
 			ReportLineDTO reportLineDTO = new ReportLineDTO(reportResultIndicatorAggregation.getIndicator());
+
+			ReportIndicator reportIndicator = reportIndicatorService.findByReportCodeAndIndicaotrCode(reportResultAggregation.getReportCode(), reportResultIndicatorAggregation.getIndicator());
+
+			reportLineDTO.setOrder(reportIndicator.getOrderIndex());
 
 			reportLineDTO.setLeftScope1Value(reportResultIndicatorAggregation.getScope1Value());
 			reportLineDTO.setLeftScope2Value(reportResultIndicatorAggregation.getScope2Value());
