@@ -236,7 +236,7 @@ public class BAD_AE_BAD36Test{
     private void controlGlobalBad(BaseActivityData bad){
         /*
         assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_13, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_13));
-        assertTrue("Rank error : Expected : 3, founded : "+bad.getRank(),bad.getRank().equals(3));
+        assertTrue("Rank error : Expected : 0, founded : "+bad.getRank(),bad.getRank().equals(0));
         assertTrue("SpecificPurpose error : Expected : {}, founded : "+bad.getSpecificPurpose(),bad.getSpecificPurpose() == null);
         assertTrue("ActivityCategory error : Expected : {}, founded : "+bad.getActivityCategory(),bad.getActivityCategory().equals(ActivityCategoryCode.AC_1));
         assertTrue("ActivitySubCategory error : Expected : {}, founded : "+bad.getActivitySubCategory(),bad.getActivitySubCategory().equals(ActivitySubCategoryCode.ASC_1));
