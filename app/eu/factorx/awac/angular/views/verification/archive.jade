@@ -15,7 +15,7 @@ div.verification_manage
                         | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}}
                     td(data-title="'COMMENT'| translateText")
                         | {{request.comment}}
-                    td(data-title="'FINALIZED_ ?'| translateText")
+                    td(data-title="'FINALIZED'| translateText")
                         span(ng-show="request.status === 'VERIFICATION_STATUS_VERIFIED'",ng-bind-html="'YES' | translate")
                         span(ng-hide="request.status === 'VERIFICATION_STATUS_VERIFIED'",ng-bind-html="'NO' | translate")
                     td(data-title="'VERIFICATION_ASSIGNED_USERS'| translateText", sortable="'request.type'")
