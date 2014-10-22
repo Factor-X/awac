@@ -13,6 +13,7 @@ import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.models.knowledge.Report;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
@@ -148,8 +149,15 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 
+		String r_1 = "";
+		for (Report report : awacCalculator.getReports()) {
+			if (report.getRestrictedScope() == null) {
+				r_1 = report.getCode().getKey();
+			}
+		}
+
 		// 2.1 Table
-		writeTable(lang, wb, allReportResults, cellFormat);
+		writeTable(r_1, lang, wb, allReportResults, cellFormat);
 
 		// 2.2 Explanation
 		writeExplanation(wb, lang, allReportResults, cellFormat);
@@ -190,11 +198,11 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		return content;
 	}
 
-	private void writeTable(LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
+	private void writeTable(String search, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 			String reportKey = reportResult.getReport().getCode().getKey();
 
-			if (reportKey.equals("R_1")) {
+			if (reportKey.equals(search)) {
 
 				WritableSheet sheet = wb.createSheet("Rapport", wb.getNumberOfSheets());
 
@@ -355,26 +363,26 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 				c9 = translate("RESULTS_EXPLANATION_NOINDICATOR_PART3", CodeList.TRANSLATIONS_INTERFACE, lang);
 			}
 
-			sheet.addCell(new Label(0, row, c1));
-			sheet.addCell(new Label(1, row, c2));
-			sheet.addCell(new Label(2, row, c3));
-			sheet.addCell(new Label(3, row, c4));
-			sheet.addCell(new Label(4, row, c5));
-			sheet.addCell(new Label(5, row, c6));
-			sheet.addCell(new Number(6, row, c7));
-			sheet.addCell(new Label(7, row, c8));
-			sheet.addCell(new Label(8, row, c9));
-			sheet.addCell(new Label(9, row, c10));
-			sheet.addCell(new Label(10, row, c11));
-			sheet.addCell(new Label(11, row, c12));
-			sheet.addCell(new Label(12, row, c13));
-			sheet.addCell(new Number(13, row, c14));
-			sheet.addCell(new Label(14, row, c15));
-			sheet.addCell(new Label(15, row, c16));
-			sheet.addCell(new Label(16, row, c17));
-			sheet.addCell(new Label(17, row, c18));
-			sheet.addCell(new Number(18, row, c19));
-			sheet.addCell(new Label(19, row, c20));
+			if (c1 != null) sheet.addCell(new Label(0, row, c1));
+			if (c2 != null) sheet.addCell(new Label(1, row, c2));
+			if (c3 != null) sheet.addCell(new Label(2, row, c3));
+			if (c4 != null) sheet.addCell(new Label(3, row, c4));
+			if (c5 != null) sheet.addCell(new Label(4, row, c5));
+			if (c6 != null) sheet.addCell(new Label(5, row, c6));
+			if (c7 != null) sheet.addCell(new Number(6, row, c7));
+			if (c8 != null) sheet.addCell(new Label(7, row, c8));
+			if (c9 != null) sheet.addCell(new Label(8, row, c9));
+			if (c10 != null) sheet.addCell(new Label(9, row, c10));
+			if (c11 != null) sheet.addCell(new Label(10, row, c11));
+			if (c12 != null) sheet.addCell(new Label(11, row, c12));
+			if (c13 != null) sheet.addCell(new Label(12, row, c13));
+			if (c14 != null) sheet.addCell(new Number(13, row, c14));
+			if (c15 != null) sheet.addCell(new Label(14, row, c15));
+			if (c16 != null) sheet.addCell(new Label(15, row, c16));
+			if (c17 != null) sheet.addCell(new Label(16, row, c17));
+			if (c18 != null) sheet.addCell(new Label(17, row, c18));
+			if (c19 != null) sheet.addCell(new Number(18, row, c19));
+			if (c20 != null) sheet.addCell(new Label(19, row, c20));
 
 			row++;
 

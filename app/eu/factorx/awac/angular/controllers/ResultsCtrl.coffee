@@ -59,16 +59,21 @@ angular
             if result.success
                 window.R = result
 
-                byteCharacters = atob(result.data)
-                byteNumbers = new Array(byteCharacters.length)
-                for i in [0...byteCharacters.length]
-                    byteNumbers[i] = byteCharacters.charCodeAt(i)
-                byteArray = new Uint8Array(byteNumbers)
-                blob = new Blob([byteArray], { type: 'application/pdf' })
+                setTimeout(()->
+                    byteCharacters = atob(result.data)
+                    byteNumbers = new Array(byteCharacters.length)
+                    for i in [0...byteCharacters.length]
+                        byteNumbers[i] = byteCharacters.charCodeAt(i)
+                    byteArray = new Uint8Array(byteNumbers)
+                    blob = new window.Blob([byteArray], { type: 'application/pdf' })
 
-                filename = "export.pdf"
+                    filename = "export.pdf"
 
-                saveAs(blob,filename)
+                    saveAs(blob, filename)
+
+                    console.log('done !')
+                , 0)
+
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
@@ -89,15 +94,17 @@ angular
             if result.success
                 window.R = result
 
-                byteCharacters = atob(result.data)
-                byteNumbers = new Array(byteCharacters.length)
-                for i in [0...byteCharacters.length]
-                    byteNumbers[i] = byteCharacters.charCodeAt(i)
-                byteArray = new Uint8Array(byteNumbers)
-                blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
-                filename = "export.xls"
+                setTimeout(()->
+                    byteCharacters = atob(result.data)
+                    byteNumbers = new Array(byteCharacters.length)
+                    for i in [0...byteCharacters.length]
+                        byteNumbers[i] = byteCharacters.charCodeAt(i)
+                    byteArray = new Uint8Array(byteNumbers)
+                    blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
+                    filename = "export.xls"
 
-                saveAs(blob,filename)
+                    saveAs(blob,filename)
+                , 0)
 
     $scope.dataURItoBlob = (dataURI) ->
 
