@@ -7088,8 +7088,10 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       dto.comparedPeriodKey = $scope.$root.periodToCompare;
     }
     $scope.pdfLoading = true;
+    modalService.show(modalService.LOADING);
     return downloadService.postJson('/awac/result/getReportAsPdf', dto, function(result) {
       $scope.pdfLoading = false;
+      modalService.close(modalService.LOADING);
       if (result.success) {
         window.R = result;
         return setTimeout(function() {
@@ -7126,8 +7128,10 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       dto.comparedPeriodKey = $scope.$root.periodToCompare;
     }
     $scope.xlsLoading = true;
+    modalService.show(modalService.LOADING);
     return downloadService.postJson('/awac/result/getReportAsXls', dto, function(result) {
       $scope.xlsLoading = false;
+      modalService.close(modalService.LOADING);
       if (result.success) {
         window.R = result;
         return setTimeout(function() {
