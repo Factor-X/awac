@@ -56,9 +56,11 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         $scope.pdfLoading = true
+        modalService.show(modalService.LOADING)
 
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
             $scope.pdfLoading = false
+            modalService.close(modalService.LOADING)
 
             if result.success
                 window.R = result
@@ -95,9 +97,11 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         $scope.xlsLoading = true
+        modalService.show(modalService.LOADING)
 
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
             $scope.xlsLoading = false
+            modalService.close(modalService.LOADING)
             if result.success
                 window.R = result
 
