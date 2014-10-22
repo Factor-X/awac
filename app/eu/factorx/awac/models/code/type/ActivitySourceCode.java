@@ -383,6 +383,11 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode AS_370 = new ActivitySourceCode("AS_370");
 	public static final ActivitySourceCode AS_371 = new ActivitySourceCode("AS_371");
 	public static final ActivitySourceCode AS_372 = new ActivitySourceCode("AS_372");
+    public static final ActivitySourceCode AS_373 = new ActivitySourceCode("AS_373");
+    public static final ActivitySourceCode AS_374 = new ActivitySourceCode("AS_374");
+    public static final ActivitySourceCode AS_375 = new ActivitySourceCode("AS_375");
+    public static final ActivitySourceCode AS_376 = new ActivitySourceCode("AS_376");
+    public static final ActivitySourceCode AS_377 = new ActivitySourceCode("AS_377");
 	private static final long serialVersionUID = 1L;
 
 	protected ActivitySourceCode() {
