@@ -1,8 +1,8 @@
 .loginBackground
     .router-bar
         .awac_logo
-        h1(ng-show="$root.instanceName == 'enterprise'", ng-bind-html="'ENTERPRISE_CALCULATOR_TITLE' | translate")
-        h1(ng-show="$root.instanceName == 'municipality'", ng-bind-html="'MUNICIPALITY_CALCULATOR_TITLE' | translate")
+        h1(ng-show="$root.instanceName == 'enterprise'", ng-bind-html="'TITLE_ENTERPRISE' | translate")
+        h1(ng-show="$root.instanceName == 'municipality'", ng-bind-html="'TITLE_MUNICIPALITY' | translate")
     .loginFrame(ng-enter="enterEvent()")
         select(ng-options="l.value as l.label for l in $root.languages",ng-model="$root.language",style="float:right")
         tabset
@@ -26,7 +26,7 @@
                             ng-disabled="!connectionFieldValid()")
 
                         button.button(
-                            ng-hide="$root.instanceName == 'municipality' || $root.instanceName == 'verification'",
+                            ng-hide="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality' || $root.instanceName == 'verification'",
                             ng-disabled="connectionFieldValid()",
                             type="button",
                             class="btn btn-primary",

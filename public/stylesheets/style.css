@@ -370,6 +370,11 @@ select {
     background-color: #9d9b91;
     border-spacing: 5px;
     display: table !important;
+    white-space: nowrap;
+}
+
+.last_menu button {
+    white-space: normal;
 }
 
 .menu_jauge {
@@ -388,6 +393,7 @@ select {
 .menu > div:hover .menu_jauge {
     color: #a4c9dc;
 }
+
 
 .menu_current .menu_jauge {
     color: #acd595 !important;
