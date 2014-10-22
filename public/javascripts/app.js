@@ -1286,14 +1286,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
       return scope.$watch(attrs.numbersOnly, function() {
         var convertToFloat, convertToString, displayError, errorMessage, filterFloat, nbDecimal, valueToDisplay;
         if (attrs.numbersOnly === "integer" || attrs.numbersOnly === "double" || attrs.numbersOnly === "percent") {
+          scope.lastValidValue = "";
           if (attrs.numbersOnly === "integer") {
             errorMessage = $filter('translateText')('ONLY_INTEGER');
+            nbDecimal = 0;
           } else {
             errorMessage = $filter('translateText')('ONLY_NUMBER');
-          }
-          nbDecimal = 3;
-          if (attrs.numbersOnly === "integer") {
-            nbDecimal = 0;
+            nbDecimal = 3;
           }
           scope.$root.$on('$localeChangeSuccess', function(event, current, previous) {
             var result;
@@ -1378,10 +1377,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
           };
           filterFloat = function(value) {
             var regexFloat;
+            if (value.isNaN) {
+              return NaN;
+            }
             if (attrs.numbersOnly === "integer") {
-              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$");
+              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$");
             } else {
-              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)$");
+              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$");
             }
             if (regexFloat.test(value)) {
               return Number(value);
