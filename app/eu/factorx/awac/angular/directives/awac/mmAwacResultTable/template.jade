@@ -55,7 +55,7 @@ ng-virtual
 
 
         tbody
-            tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
+            tr(ng-repeat="rl in ngModel.reportLines | orderBy:'order'", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
                 td
                     span(ng-bind-html="rl.indicatorName | translate")
 

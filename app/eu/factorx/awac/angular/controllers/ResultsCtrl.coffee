@@ -55,7 +55,11 @@ angular
         if $scope.$root.periodToCompare != 'default'
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
+        $scope.pdfLoading = true
+
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
+            $scope.pdfLoading = false
+
             if result.success
                 window.R = result
 
@@ -90,7 +94,10 @@ angular
         if $scope.$root.periodToCompare != 'default'
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
+        $scope.xlsLoading = true
+
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
+            $scope.xlsLoading = false
             if result.success
                 window.R = result
 
