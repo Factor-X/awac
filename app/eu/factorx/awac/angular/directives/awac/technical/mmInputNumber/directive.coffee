@@ -9,16 +9,14 @@ angular
 
             if attrs.numbersOnly == "integer" || attrs.numbersOnly == "double" || attrs.numbersOnly == "percent"
 
+                scope.lastValidValue=""
+
                 if  attrs.numbersOnly == "integer"
                     errorMessage = $filter('translateText')('ONLY_INTEGER')
+                    nbDecimal = 0
                 else
                     errorMessage = $filter('translateText')('ONLY_NUMBER')
-
-                nbDecimal = 3
-
-                if attrs.numbersOnly == "integer"
-                    nbDecimal = 0
-
+                    nbDecimal = 3
 
                 scope.$root.$on '$localeChangeSuccess', (event, current, previous) ->
                     if modelCtrl.$modelValue?
@@ -99,10 +97,12 @@ angular
                 # filter a string to float
                 #
                 filterFloat = (value) ->
+                    if value.isNaN
+                        return NaN
                     if  attrs.numbersOnly == "integer"
-                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$")
+                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$")
                     else
-                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)$")
+                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
 
                     return Number(value)  if regexFloat.test(value)
                     return NaN
