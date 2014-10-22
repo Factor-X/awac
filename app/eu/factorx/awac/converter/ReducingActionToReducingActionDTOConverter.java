@@ -1,13 +1,17 @@
 package eu.factorx.awac.converter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
 
@@ -46,6 +50,12 @@ public class ReducingActionToReducingActionDTOConverter implements Converter<Red
 		reducingActionDTO.setWebSite(reducingAction.getWebSite());
 		reducingActionDTO.setResponsiblePerson(reducingAction.getResponsiblePerson());
 		reducingActionDTO.setComment(reducingAction.getComment());
+
+		List<FilesUploadedDTO> fileDTOs = new ArrayList<>();
+		for (StoredFile storedFile : reducingAction.getDocuments()) {
+			fileDTOs.add(new FilesUploadedDTO(storedFile.getId(), storedFile.getOriginalName()));
+		}
+		reducingActionDTO.setFiles(fileDTOs);
 
 		return reducingActionDTO;
 	}

@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -220,6 +221,9 @@ public class ReducingAction extends AuditedAbstractEntity {
 	}
 
 	public List<StoredFile> getDocuments() {
+		if (documents == null) {
+			return new ArrayList<>();
+		}
 		return documents;
 	}
 

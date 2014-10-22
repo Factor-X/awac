@@ -77,16 +77,22 @@ div.actions
                             td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
                             td
                                 .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
+                            td
+                                ul
+                                    li(ng-repeat="f in a.files")
+                                        a(href="#", ng-onclick="download(f.id)") {{ f.name }}
 
                 td(style="vertical-align: bottom; text-align: right", colspan="4")
-                    button.button(type="button", ng-click="edit(a)")
-                        span.fa.fa-pencil-square-o
-                        span &nbsp;
-                        span Editer cette action
-                    button.button(type="button", ng-click="markAsDone(a)")
-                        span.fa.fa-check-square-o
-                        span &nbsp;
-                        span Marquer l'action comme réalisée
+                        button.button(type="button", ng-click="edit(a)")
+                            span.fa.fa-pencil-square-o
+                            span &nbsp;
+                            span Editer cette action
+                        button.button(type="button", ng-click="markAsDone(a)")
+                            span.fa.fa-check-square-o
+                            span &nbsp;
+                            span Marquer l'action comme réalisée
 
     br
 
