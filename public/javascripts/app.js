@@ -537,10 +537,8 @@ angular.module('app').run(function($rootScope) {
     return txt;
   };
   svc.translateExceptionsDTO = function(exception) {
-    var _ref;
-    console.log(exception);
-    if (((_ref = exception.params) != null ? _ref.length : void 0) > 0) {
-      return $filter('translateWithVarsText')(exception.message, exception.params);
+    if (Object.keys(exception.params).length > 0) {
+      return $filter('translateTextWithVars')(exception.messageToTranslate, exception.params);
     } else if (exception.messageToTranslate != null) {
       return $filter('translate')(exception.messageToTranslate);
     } else {
@@ -642,7 +640,7 @@ angular.module('app').run(function($rootScope) {
   return function(input) {
     return $sce.trustAsHtml(input);
   };
-});angular.module('app.filters').filter("translateWithVarsText", function($sce, translationService) {
+});angular.module('app.filters').filter("translateTextWithVars", function($sce, translationService) {
   return function(input, vars) {
     var k, text, v;
     text = translationService.get(input, null);
@@ -1406,20 +1404,16 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
       scope.lock = function() {
         var data;
         if ((!scope.isLocked() || scope.isLockedByMyself() || scope.$root.currentPerson.isAdmin) && !scope.isValidate() && scope.$root.closedForms === false) {
-          if (scope.$parent.validNavigation().valid === false) {
-            return messageFlash.displayError($filter('translateText')('SAVE_BEFORE_LOCK_OR_VALID'));
-          } else {
-            data = {};
-            data.questionSetKey = scope.getTitleCode();
-            data.periodCode = scope.$root.periodSelectedKey;
-            data.scopeId = scope.$root.scopeSelectedId;
-            data.lock = scope.isLocked() ? false : true;
-            return downloadService.postJson('/awac/answer/lockQuestionSet', data, function(result) {
-              if (result.success) {
-                return scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock);
-              }
-            });
-          }
+          data = {};
+          data.questionSetKey = scope.getTitleCode();
+          data.periodCode = scope.$root.periodSelectedKey;
+          data.scopeId = scope.$root.scopeSelectedId;
+          data.lock = scope.isLocked() ? false : true;
+          return downloadService.postJson('/awac/answer/lockQuestionSet', data, function(result) {
+            if (result.success) {
+              return scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock);
+            }
+          });
         }
       };
       scope.isLockedByMyself = function() {
@@ -3936,13 +3930,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
         }
       };
       $scope.emailInfo = {
-        fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
+        fieldTitle: "USER_EMAIL",
         inputName: 'email',
         validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
         validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
       };
       $scope.passwordInfo = {
-        fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
+        fieldTitle: "USER_PASSWORD",
         inputName: 'password',
         fieldType: "password",
         validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$",
@@ -4037,13 +4031,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
         }
       };
       $scope.emailInfo = {
-        fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
+        fieldTitle: "USER_EMAIL",
         inputName: 'email',
         validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
         validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
       };
       $scope.passwordInfo = {
-        fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
+        fieldTitle: "USER_PASSWORD",
         inputName: 'password',
         fieldType: "password",
         validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$",
@@ -4243,14 +4237,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
       return scope.$watch(attrs.numbersOnly, function() {
         var convertToFloat, convertToString, displayError, errorMessage, filterFloat, nbDecimal, valueToDisplay;
         if (attrs.numbersOnly === "integer" || attrs.numbersOnly === "double" || attrs.numbersOnly === "percent") {
+          scope.lastValidValue = "";
           if (attrs.numbersOnly === "integer") {
-            errorMessage = 'Only integer';
-          } else {
-            errorMessage = 'Only number';
-          }
-          nbDecimal = 3;
-          if (attrs.numbersOnly === "integer") {
+            errorMessage = $filter('translateText')('ONLY_INTEGER');
             nbDecimal = 0;
+          } else {
+            errorMessage = $filter('translateText')('ONLY_NUMBER');
+            nbDecimal = 3;
           }
           scope.$root.$on('$localeChangeSuccess', function(event, current, previous) {
             var result;
@@ -4335,10 +4328,13 @@ angular.module('app.directives').directive('mmSizeValidator', function(){
           };
           filterFloat = function(value) {
             var regexFloat;
+            if (value.isNaN) {
+              return NaN;
+            }
             if (attrs.numbersOnly === "integer") {
-              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)$");
+              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$");
             } else {
-              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)$");
+              regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$");
             }
             if (regexFloat.test(value)) {
               return Number(value);
@@ -6319,9 +6315,9 @@ angular.module('app.controllers').controller("MainCtrl", function($scope, downlo
     var data;
     data = {
       url: "/awac/verification/setStatus",
-      desc: "CANCEL_VERIFICATION_DESC",
-      successMessage: "CHANGES_SAVED",
-      title: "CANCEL_VERIFICATION_TITLE",
+      desc: 'CANCEL_VERIFICATION_DESC',
+      successMessage: 'CHANGES_SAVED',
+      title: 'CANCEL_VERIFICATION_TITLE',
       data: {
         scopeId: $scope.$root.scopeSelectedId,
         periodKey: $scope.$root.periodSelectedKey,
@@ -6833,13 +6829,13 @@ angular.module('app').run(function($rootScope, $location, downloadService, messa
       }
     },
     emailInfo: {
-      fieldTitle: "EMAIL_CHANGE_FORM_NEW_EMAIL_FIELD_TITLE",
+      fieldTitle: "USER_EMAIL",
       inputName: 'email',
       validationRegex: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
       validationMessage: "EMAIL_VALIDATION_WRONG_FORMAT"
     },
     passwordInfo: {
-      fieldTitle: "PASSWORD_CHANGE_FORM_NEW_PASSWORD_FIELD_TITLE",
+      fieldTitle: "USER_PASSWORD",
       inputName: 'password',
       fieldType: "password",
       validationRegex: "^[A-Za-z0-9#?!@$%^&*-]{5,20}$",
