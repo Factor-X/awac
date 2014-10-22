@@ -228,9 +228,9 @@ angular
     $scope.cancelVerification = ->
         data =
             url:"/awac/verification/setStatus"
-            desc:"CANCEL_VERIFICATION_DESC"
-            successMessage:"CHANGES_SAVED"
-            title:"CANCEL_VERIFICATION_TITLE"
+            desc:'CANCEL_VERIFICATION_DESC'
+            successMessage:'CHANGES_SAVED'
+            title:'CANCEL_VERIFICATION_TITLE'
             data:
                 scopeId:$scope.$root.scopeSelectedId
                 periodKey:$scope.$root.periodSelectedKey

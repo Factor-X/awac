@@ -10,9 +10,9 @@ angular
             if attrs.numbersOnly == "integer" || attrs.numbersOnly == "double" || attrs.numbersOnly == "percent"
 
                 if  attrs.numbersOnly == "integer"
-                    errorMessage = 'Only integer'
+                    errorMessage = $filter('translateText')('ONLY_INTEGER')
                 else
-                    errorMessage = 'Only number'
+                    errorMessage = $filter('translateText')('ONLY_NUMBER')
 
                 nbDecimal = 3
 

@@ -4,6 +4,13 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,  ${request.organizationVerifier.name} a fini la vérification de votre bilan GES portant sur ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}. Tout est en ordre et si vous approuvez le rapport, cela sera reflété dans votre résultat. Bien à vous, L'outil AWAC.
+Bonjour,<br/><br/>
+
+${request.organizationVerifier.name} a fini la vérification de votre bilan GES portant sur ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.<br/>
+Tout est en ordre et si vous approuvez le rapport, cela sera reflété dans votre résultat.<br/><br/>
+
+Bien à vous,<br/>
+L'outil AWAC.<br/>
+
 </body>
 </html>
