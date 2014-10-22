@@ -72,7 +72,7 @@
             padding-top: 3px;
             display: table-row;
             &.field_form_separator > .field_cell {
-                padding-top:10px;
+                padding-top: 10px;
             }
             & > .field_cell {
                 display: table-cell;
@@ -87,7 +87,7 @@
                 }
 
                 & .field_row.field_form_separator {
-                    padding-top:10px;
+                    padding-top: 10px;
                 }
             }
             & > .field_cell:first-child {
@@ -107,7 +107,7 @@
                             margin: 0;
                             padding: 0;
                             vertical-align: top;
-                            &:not(:first-child){
+                            &:not(:first-child) {
                                 border-left: solid 4px transparent;
                                 &[ng-transclude]:empty {
                                     display: none;
@@ -159,6 +159,48 @@
             display: block;
         }
 
+    }
+
+    .modal.create_or_edit_action {
+        .modal-dialog {
+            width: 700px;
+            height: 100%;
+            margin: auto;
+
+            .modal-content {
+                position: relative;
+                height: ~"calc(100% - 2cm)";
+                max-height: 800px;
+                margin: 1cm auto;
+
+
+                .modal-header {
+                    height: 50px;
+                    position: absolute;
+                    top:0;
+                    right: 0;
+                    left: 0;
+
+                }
+
+                .modal-body {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 50px;
+                    bottom: 50px;
+                    overflow-y: auto;
+                }
+
+                .modal-footer {
+                    height: 50px;
+                    position: absolute;
+                    bottom:0;
+                    right: 0;
+                    left: 0;
+                }
+            }
+        }
     }
 }
 
