@@ -287,7 +287,6 @@ select {
     vertical-align: top;
     transition: all 0.1s ease-out;
     border: none;
-    white-space: nowrap;
 }
 
 .last_menu > :not(:first-child){
@@ -374,6 +373,10 @@ select {
     white-space: nowrap;
 }
 
+.last_menu button {
+    white-space: normal;
+}
+
 .menu_jauge {
     position: absolute;
     bottom: 0;
@@ -390,6 +393,7 @@ select {
 .menu > div:hover .menu_jauge {
     color: #a4c9dc;
 }
+
 
 .menu_current .menu_jauge {
     color: #acd595 !important;
