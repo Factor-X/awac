@@ -2,14 +2,14 @@ ng-virtual
     table.indicators_table
         thead
             tr
-                th(width="100%")
+                th
                 th(colspan="4")
                     span.period-header(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}") {{ngModel.leftPeriod}}
                 th(colspan="4", ng-show="ngModel.rightPeriod!=null")
                     span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
 
             tr
-                th(width="100%")
+                th
 
                 th.align-right.scope1(style="color: {{ ngModel.leftColor }}")
                     div

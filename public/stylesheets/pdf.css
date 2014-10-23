@@ -8,6 +8,12 @@ table {
     width: 100%;
 }
 
+table.page-header {
+    border-bottom: solid 2px #aaa;
+    margin-bottom: 1cm;
+    text-align: left;
+}
+
 th.header {
     border-bottom: 0.5pt solid #333;
     padding: 0.25em 0.5em;
@@ -41,8 +47,13 @@ td.dotted {
     text-align: center
 }
 
+div {
+    page-break-inside: avoid;
+}
+
 h1 {
     border-bottom: solid 1pt #333;
+    page-break-after: avoid;
 }
 
 h2 {
