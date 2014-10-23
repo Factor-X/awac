@@ -12,17 +12,18 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	private String color;
 
-	private Double leftScope1Value = Double.valueOf(0);
-	private Double leftScope2Value = Double.valueOf(0);
-	private Double leftScope3Value = Double.valueOf(0);
-	private Double leftPercentage = Double.valueOf(0);
+	private Double leftScope1Value     = Double.valueOf(0);
+	private Double leftScope2Value     = Double.valueOf(0);
+	private Double leftScope3Value     = Double.valueOf(0);
+	private Double leftPercentage      = Double.valueOf(0);
 	private Double leftOutOfScopeValue = Double.valueOf(0);
 
 	private Double rightScope1Value = Double.valueOf(0);
 	private Double rightScope2Value = Double.valueOf(0);
 	private Double rightScope3Value = Double.valueOf(0);
-	private Double rightPercentage = Double.valueOf(0);
+	private Double rightPercentage  = Double.valueOf(0);
 	private Double rightOutOfScopeValue = Double.valueOf(0);
+	private Integer order;
 
 	public ReportLineDTO() {
 		super();
@@ -131,5 +132,13 @@ public class ReportLineDTO extends DTO implements Serializable {
 
 	public void setRightOutOfScopeValue(Double rightOutOfScopeValue) {
 		this.rightOutOfScopeValue = rightOutOfScopeValue;
+	}
+
+	public void setOrder(Integer order) {
+		this.order = order;
+	}
+
+	public Integer getOrder() {
+		return order;
 	}
 }

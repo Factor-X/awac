@@ -1,16 +1,15 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
-import java.util.*;
-
-import javax.persistence.MappedSuperclass;
-
 import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Report;
 import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
+
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
+import java.util.*;
 
 @MappedSuperclass
 public class ReportResult implements Serializable {
@@ -20,6 +19,8 @@ public class ReportResult implements Serializable {
 	private Report report;
 
 	private Map<IndicatorCode, List<BaseActivityResult>> activityResults = new HashMap<>();
+
+	private Map<IndicatorCode, Integer> activityResultsOrder = new HashMap<>();
 
 	private List<ReportLogEntry> logEntries = new ArrayList<>();
 	private Period period;
@@ -48,7 +49,7 @@ public class ReportResult implements Serializable {
 			IndicatorCode indicatorCode = indicator.getCode();
 			List<BaseActivityResult> indicatorActivityResults;
 			if (activityResults.containsKey(indicatorCode)) {
-				indicatorActivityResults  = activityResults.get(indicatorCode);
+				indicatorActivityResults = activityResults.get(indicatorCode);
 			} else {
 				indicatorActivityResults = new ArrayList<BaseActivityResult>();
 			}
@@ -89,7 +90,7 @@ public class ReportResult implements Serializable {
 
 			scopeValuesByIndicator.put(indicatorKey, Arrays.asList(allScopes, scope1, scope2, scope3, outOfScope));
 		}
-		
+
 		return scopeValuesByIndicator;
 	}
 
@@ -103,5 +104,10 @@ public class ReportResult implements Serializable {
 
 	public void setPeriod(Period period) {
 		this.period = period;
+	}
+
+
+	public Map<IndicatorCode, Integer> getActivityResultsOrder() {
+		return activityResultsOrder;
 	}
 }

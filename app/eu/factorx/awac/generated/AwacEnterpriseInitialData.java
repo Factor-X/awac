@@ -133,7 +133,7 @@ public class AwacEnterpriseInitialData {
         // delete old questions
 		{
 			List<Question> allQuestions = questionService.findAll();
-            List<String> codes = Arrays.asList("A2", "A3", "A4", "A5", "A6", "A7", "A9", "A10", "A11", "A12", "A14", "A16", "A17", "A1001", "A1002", "A1004", "A1005", "A21", "A23", "A24", "A26", "A27", "A28", "A32", "A33", "A35", "A36", "A38", "A39", "A43", "A44", "A46", "A48", "A49", "A51", "A403", "A404", "A405", "A408", "A409", "A410", "A411", "A414", "A415", "A416", "A417", "A503", "A504", "A505", "A508", "A509", "A510", "A511", "A514", "A515", "A516", "A517", "A603", "A604", "A605", "A608", "A609", "A610", "A611", "A614", "A615", "A616", "A617", "A95", "A96", "A97", "A98", "A99", "A100", "A101", "A102", "A103", "A104", "A105", "A106", "A107", "A108", "A110", "A111", "A112", "A116", "A117", "A118", "A119", "A120", "A122", "A123", "A124", "A125", "A126", "A127", "A206", "A210", "A211", "A212", "A213", "A214", "A215", "A216", "A217", "A218", "A219", "A220", "A221", "A222", "A225", "A226", "A227", "A228", "A129", "A133", "A134", "A135", "A136", "A137", "A138", "A139", "A500", "A143", "A145", "A146", "A147", "A148", "A149", "A150", "A151", "A152", "A153", "A154", "A155", "A156", "A158", "A159", "A160", "A161", "A162", "A165", "A167", "A168", "A1007", "A1008", "A1010", "A1011", "A169", "A171", "A172", "A174", "A5001", "A5002", "A5003", "A183", "A184", "A186", "A187", "A189", "A190", "A192", "A193", "A195", "A198", "A199", "A200", "A501", "A202", "A203", "A204", "A230", "A232", "A233", "A234", "A235", "A236", "A239", "A240", "A241", "A242", "A310", "A312", "A314", "A315", "A1013", "A1014", "A1016", "A1017", "A316", "A318", "A319", "A321", "A323", "A324", "A326", "A327", "A1019", "A1020", "A1022", "A1023", "A328", "A330", "A331", "A333", "A335", "A336", "A337", "A338", "A245", "A246", "A247", "A248", "A249", "A251", "A254", "A255", "A256", "A257", "A258", "A259", "A260", "A261", "A262", "A263", "A264", "A265", "A267", "A268", "A269", "A270", "A271", "A274", "A276", "A277", "A1025", "A1026", "A1028", "A1029", "A278", "A280", "A281", "A283", "A285", "A286", "A1031", "A1032", "A1034", "A1035", "A287", "A289", "A290", "A292", "A293", "A294", "A295", "A296", "A298", "A299", "A301", "A302", "A5011", "A5012", "A5013", "A5014");
+            List<String> codes = Arrays.asList("A2", "A3", "A4", "A5", "A6", "A9", "A10", "A11", "A12", "A14", "A16", "A17", "A1001", "A1002", "A1004", "A1005", "A21", "A23", "A24", "A26", "A27", "A28", "A32", "A33", "A35", "A36", "A38", "A39", "A43", "A44", "A46", "A48", "A49", "A51", "A403", "A404", "A405", "A408", "A409", "A410", "A411", "A414", "A415", "A416", "A417", "A503", "A504", "A505", "A508", "A509", "A510", "A511", "A514", "A515", "A516", "A517", "A603", "A604", "A605", "A608", "A609", "A610", "A611", "A614", "A615", "A616", "A617", "A95", "A96", "A97", "A98", "A99", "A100", "A101", "A102", "A103", "A104", "A105", "A106", "A107", "A108", "A116", "A117", "A118", "A119", "A120", "A122", "A123", "A124", "A125", "A126", "A127", "A206", "A210", "A211", "A212", "A213", "A214", "A215", "A216", "A217", "A218", "A219", "A220", "A221", "A222", "A225", "A226", "A227", "A228", "A129", "A133", "A134", "A135", "A136", "A137", "A138", "A139", "A500", "A143", "A145", "A146", "A147", "A148", "A149", "A150", "A151", "A152", "A153", "A154", "A155", "A156", "A158", "A159", "A160", "A161", "A162", "A165", "A167", "A168", "A1007", "A1008", "A1010", "A1011", "A169", "A171", "A172", "A174", "A5001", "A5002", "A5003", "A183", "A184", "A186", "A187", "A189", "A190", "A192", "A193", "A195", "A198", "A199", "A200", "A501", "A202", "A203", "A204", "A230", "A232", "A233", "A234", "A235", "A236", "A239", "A240", "A241", "A242", "A310", "A312", "A314", "A315", "A1013", "A1014", "A1016", "A1017", "A316", "A318", "A319", "A321", "A323", "A324", "A326", "A327", "A1019", "A1020", "A1022", "A1023", "A328", "A330", "A331", "A333", "A335", "A336", "A337", "A338", "A245", "A246", "A247", "A248", "A249", "A251", "A254", "A255", "A256", "A257", "A258", "A259", "A260", "A261", "A262", "A263", "A264", "A265", "A267", "A268", "A269", "A270", "A271", "A274", "A276", "A277", "A1025", "A1026", "A1028", "A1029", "A278", "A280", "A281", "A283", "A285", "A286", "A1031", "A1032", "A1034", "A1035", "A287", "A289", "A290", "A292", "A293", "A294", "A295", "A296", "A298", "A299", "A301", "A302", "A5011", "A5012", "A5013", "A5014");
 
 			for (Question q : new ArrayList<>(allQuestions)) {
 				if (codes.contains(q.getCode().getKey()) || !q.getCode().getKey().matches("A[0-9]+")) {
@@ -149,7 +149,7 @@ public class AwacEnterpriseInitialData {
 		// delete old question_sets
 		{
 			List<QuestionSet> allQuestionSets = questionSetService.findAll();
-            List<String> codes = Arrays.asList("A1", "A13", "A15", "A1000", "A1003", "A20", "A22", "A25", "A31", "A34", "A37", "A40", "A41", "A42", "A45", "A47", "A50", "A52", "A400", "A401", "A402", "A406", "A407", "A412", "A413", "A518", "A519", "A502", "A506", "A507", "A512", "A513", "A600", "A601", "A602", "A606", "A607", "A612", "A613", "A93", "A94", "A109", "A113", "A114", "A115", "A121", "A205", "A208", "A209", "A223", "A224", "A128", "A130", "A131", "A132", "A140", "A141", "A142", "A157", "A163", "A164", "A166", "A1006", "A1009", "A170", "A173", "A4999", "A5000", "A180", "A181", "A182", "A185", "A188", "A191", "A194", "A196", "A197", "A201", "A229", "A231", "A237", "A238", "A309", "A311", "A313", "A1012", "A1015", "A317", "A320", "A322", "A325", "A1018", "A1021", "A329", "A332", "A334", "A243", "A244", "A8000", "A250", "A252", "A253", "A266", "A272", "A273", "A275", "A1024", "A1027", "A279", "A282", "A284", "A1030", "A1033", "A288", "A291", "A297", "A300", "A5010");
+            List<String> codes = Arrays.asList("A1", "A13", "A15", "A1000", "A1003", "A20", "A22", "A25", "A31", "A34", "A37", "A40", "A41", "A42", "A45", "A47", "A50", "A52", "A400", "A401", "A402", "A406", "A407", "A412", "A413", "A518", "A519", "A502", "A506", "A507", "A512", "A513", "A600", "A601", "A602", "A606", "A607", "A612", "A613", "A93", "A94", "A113", "A114", "A115", "A121", "A205", "A208", "A209", "A223", "A224", "A128", "A130", "A131", "A132", "A140", "A141", "A142", "A157", "A163", "A164", "A166", "A1006", "A1009", "A170", "A173", "A4999", "A5000", "A180", "A181", "A182", "A185", "A188", "A191", "A194", "A196", "A197", "A201", "A229", "A231", "A237", "A238", "A309", "A311", "A313", "A1012", "A1015", "A317", "A320", "A322", "A325", "A1018", "A1021", "A329", "A332", "A334", "A243", "A244", "A8000", "A250", "A252", "A253", "A266", "A272", "A273", "A275", "A1024", "A1027", "A279", "A282", "A284", "A1030", "A1033", "A288", "A291", "A297", "A300", "A5010");
 
 			for (QuestionSet qs : new ArrayList<>(allQuestionSets)) {
 				if (codes.contains(qs.getCode().getKey()) || !qs.getCode().getKey().matches("A[0-9]+")) {
@@ -195,7 +195,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(form5);
     }
     // == TAB6
-    // BIENS D'EQUIPEMENT, ACTIFS LOUES EN AVAL, FRANCHISES, EMISSIONS FINANCEES
+    // BIENS D'EQUIPEMENT, ACTIFS LOUES EN AVAL, FRANCHISES, INVESTISSEMENTS
     Form form6 = formService.findByIdentifier("TAB6");
     if (form6 == null) {
         form6 = new Form("TAB6");
@@ -515,13 +515,6 @@ public class AwacEnterpriseInitialData {
         a94 = new QuestionSet(QuestionCode.A94, false, a93);
         JPA.em().persist(a94);
     }
-    // == A109
-    // Estimation par nombre d'employés
-    QuestionSet a109 = questionSetService.findByCode(QuestionCode.A109);
-    if( a109 == null ) {
-        a109 = new QuestionSet(QuestionCode.A109, false, a93);
-        JPA.em().persist(a109);
-    }
     // == A113
     // Transport en avion (déplacements professionnels ou des visiteurs)
     QuestionSet a113 = questionSetService.findByCode(QuestionCode.A113);
@@ -652,7 +645,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a157);
     }
     // == A163
-    // Distribution amont: Energie et froid des entrepôts de stockage
+    // Distribution amont: Energie et froid
     QuestionSet a163 = questionSetService.findByCode(QuestionCode.A163);
     if( a163 == null ) {
         a163 = new QuestionSet(QuestionCode.A163, false, null);
@@ -661,28 +654,28 @@ public class AwacEnterpriseInitialData {
     form4.getQuestionSets().add(a163);
     JPA.em().persist(form4);
     // == A164
-    // Créez autant d'entrepôts de stockage que nécessaire
+    // Créez autant de postes de consommation que nécessaire
     QuestionSet a164 = questionSetService.findByCode(QuestionCode.A164);
     if( a164 == null ) {
         a164 = new QuestionSet(QuestionCode.A164, true, a163);
         JPA.em().persist(a164);
     }
     // == A166
-    // Listez les totaux de combustibles utilisés en amont (exprimés en unités d'énergie)
+    // Listez les totaux de combustibles consommés (exprimés en unités d'énergie)
     QuestionSet a166 = questionSetService.findByCode(QuestionCode.A166);
     if( a166 == null ) {
         a166 = new QuestionSet(QuestionCode.A166, true, a164);
         JPA.em().persist(a166);
     }
     // == A1006
-    // Listez les totaux de combustibles utilisés en amont (exprimés en volume)
+    // Listez les totaux de combustibles consommés (exprimés en volume)
     QuestionSet a1006 = questionSetService.findByCode(QuestionCode.A1006);
     if( a1006 == null ) {
         a1006 = new QuestionSet(QuestionCode.A1006, true, a164);
         JPA.em().persist(a1006);
     }
     // == A1009
-    // Listez les totaux de combustibles utilisés en amont (exprimés en poids)
+    // Listez les totaux de combustibles consommés (exprimés en poids)
     QuestionSet a1009 = questionSetService.findByCode(QuestionCode.A1009);
     if( a1009 == null ) {
         a1009 = new QuestionSet(QuestionCode.A1009, true, a164);
@@ -793,7 +786,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a201);
     }
     // == A229
-    // Biens d'équipement (achetées durant l'année de déclaration)
+    // Biens d'équipement
     QuestionSet a229 = questionSetService.findByCode(QuestionCode.A229);
     if( a229 == null ) {
         a229 = new QuestionSet(QuestionCode.A229, false, null);
@@ -802,7 +795,7 @@ public class AwacEnterpriseInitialData {
     form6.getQuestionSets().add(a229);
     JPA.em().persist(form6);
     // == A231
-    // Créez et nommez vos postes d'infrastructure
+    // Créez et nommez vos biens d'équipement
     QuestionSet a231 = questionSetService.findByCode(QuestionCode.A231);
     if( a231 == null ) {
         a231 = new QuestionSet(QuestionCode.A231, true, a229);
@@ -911,7 +904,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a329);
     }
     // == A332
-    // Emissions financées
+    // Investissements financiers
     QuestionSet a332 = questionSetService.findByCode(QuestionCode.A332);
     if( a332 == null ) {
         a332 = new QuestionSet(QuestionCode.A332, false, null);
@@ -1097,6 +1090,7 @@ if (a2 == null) {
     a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null, null);
     JPA.em().persist(a2);
 } else {
+    
     if (!a2.getQuestionSet().equals(a1) && a1.getQuestions().contains(a2)) {
         a1.getQuestions().remove(a2);
         JPA.em().persist(a1);
@@ -1199,27 +1193,6 @@ if (a6 == null) {
 }
 
 
-    // == A7
-    // Est-ce que votre activité est purement ou principalement de bureaux?
-
-    BooleanQuestion a7 = (BooleanQuestion) questionService.findByCode(QuestionCode.A7);
-if (a7 == null) {
-    a7 = new BooleanQuestion(a1, 0, QuestionCode.A7, null);
-    JPA.em().persist(a7);
-} else {
-    if (!a7.getQuestionSet().equals(a1) && a1.getQuestions().contains(a7)) {
-        a1.getQuestions().remove(a7);
-        JPA.em().persist(a1);
-    }
-    if (a7.getQuestionSet().equals(a1) && !a1.getQuestions().contains(a7)) {
-        a1.getQuestions().add(a7);
-        JPA.em().persist(a1);
-    }
-    a7.setOrderIndex(0);
-    JPA.em().persist(a7);
-}
-
-
     // == A9
     // Indiquez la surface totale du site:
 
@@ -1229,6 +1202,7 @@ if (a9 == null) {
     a9 = new DoubleQuestion( a1, 0, QuestionCode.A9, areaUnits, null, areaUnits.getMainUnit() );
     JPA.em().persist(a9);
 } else {
+    
     if (!a9.getQuestionSet().equals(a1) && a1.getQuestions().contains(a9)) {
         a1.getQuestions().remove(a9);
         JPA.em().persist(a1);
@@ -1255,6 +1229,7 @@ if (a10 == null) {
     a10 = new DoubleQuestion( a1, 0, QuestionCode.A10, areaUnits, null, areaUnits.getMainUnit() );
     JPA.em().persist(a10);
 } else {
+    
     if (!a10.getQuestionSet().equals(a1) && a1.getQuestions().contains(a10)) {
         a1.getQuestions().remove(a10);
         JPA.em().persist(a1);
@@ -1280,6 +1255,7 @@ if (a11 == null) {
     a11 = new BooleanQuestion(a1, 0, QuestionCode.A11, null);
     JPA.em().persist(a11);
 } else {
+    
     if (!a11.getQuestionSet().equals(a1) && a1.getQuestions().contains(a11)) {
         a1.getQuestions().remove(a11);
         JPA.em().persist(a1);
@@ -1302,6 +1278,7 @@ if (a12 == null) {
     a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null, null);
     JPA.em().persist(a12);
 } else {
+    
     if (!a12.getQuestionSet().equals(a1) && a1.getQuestions().contains(a12)) {
         a1.getQuestions().remove(a12);
         JPA.em().persist(a1);
@@ -1368,6 +1345,7 @@ if (a17 == null) {
     a17 = new DoubleQuestion( a15, 0, QuestionCode.A17, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(a17);
 } else {
+    
     if (!a17.getQuestionSet().equals(a15) && a15.getQuestions().contains(a17)) {
         a15.getQuestions().remove(a17);
         JPA.em().persist(a15);
@@ -1416,6 +1394,7 @@ if (a1002 == null) {
     a1002 = new DoubleQuestion( a1000, 0, QuestionCode.A1002, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(a1002);
 } else {
+    
     if (!a1002.getQuestionSet().equals(a1000) && a1000.getQuestions().contains(a1002)) {
         a1000.getQuestions().remove(a1002);
         JPA.em().persist(a1000);
@@ -3064,72 +3043,6 @@ if (a108 == null) {
 
 
 
-    // == A110
-    // Etes-vous situés à proximité d'une gare (< 1 km)?
-
-    BooleanQuestion a110 = (BooleanQuestion) questionService.findByCode(QuestionCode.A110);
-if (a110 == null) {
-    a110 = new BooleanQuestion(a109, 0, QuestionCode.A110, null);
-    JPA.em().persist(a110);
-} else {
-    
-    if (!a110.getQuestionSet().equals(a109) && a109.getQuestions().contains(a110)) {
-        a109.getQuestions().remove(a110);
-        JPA.em().persist(a109);
-    }
-    if (a110.getQuestionSet().equals(a109) && !a109.getQuestions().contains(a110)) {
-        a109.getQuestions().add(a110);
-        JPA.em().persist(a109);
-    }
-    a110.setOrderIndex(0);
-    JPA.em().persist(a110);
-}
-
-
-    // == A111
-    // Etes-vous situés à proximité d'un arrêt de transport en commun (< 500 m)?
-
-    BooleanQuestion a111 = (BooleanQuestion) questionService.findByCode(QuestionCode.A111);
-if (a111 == null) {
-    a111 = new BooleanQuestion(a109, 0, QuestionCode.A111, null);
-    JPA.em().persist(a111);
-} else {
-    
-    if (!a111.getQuestionSet().equals(a109) && a109.getQuestions().contains(a111)) {
-        a109.getQuestions().remove(a111);
-        JPA.em().persist(a109);
-    }
-    if (a111.getQuestionSet().equals(a109) && !a109.getQuestions().contains(a111)) {
-        a109.getQuestions().add(a111);
-        JPA.em().persist(a109);
-    }
-    a111.setOrderIndex(0);
-    JPA.em().persist(a111);
-}
-
-
-    // == A112
-    // Etes-vous situés en Agglomération ?
-
-    BooleanQuestion a112 = (BooleanQuestion) questionService.findByCode(QuestionCode.A112);
-if (a112 == null) {
-    a112 = new BooleanQuestion(a109, 0, QuestionCode.A112, null);
-    JPA.em().persist(a112);
-} else {
-    
-    if (!a112.getQuestionSet().equals(a109) && a109.getQuestions().contains(a112)) {
-        a109.getQuestions().remove(a112);
-        JPA.em().persist(a109);
-    }
-    if (a112.getQuestionSet().equals(a109) && !a109.getQuestions().contains(a112)) {
-        a109.getQuestions().add(a112);
-        JPA.em().persist(a109);
-    }
-    a112.setOrderIndex(0);
-    JPA.em().persist(a112);
-}
-
-
     // == A116
     // Catégorie de vol
 
@@ -3197,7 +3110,7 @@ if (a118 == null) {
 
 
     // == A119
-    // Nombre de vols/an
+    // Nombre total de passagers pour cette catégorie de vols
 
     
 IntegerQuestion a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
@@ -3221,7 +3134,7 @@ if (a119 == null) {
 
 
     // == A120
-    // Distance moyenne A/R (km)
+    // Distance totale (aller-retour)
 
     
 DoubleQuestion a120 = (DoubleQuestion) questionService.findByCode(QuestionCode.A120);
@@ -3270,7 +3183,7 @@ if (a122 == null) {
 
 
     // == A123
-    // Connaissez-vous le nombre de km parcourus en avion?
+    // Connaissez-vous la distance totale (aller-retour) parcourue en avion?
 
     BooleanQuestion a123 = (BooleanQuestion) questionService.findByCode(QuestionCode.A123);
 if (a123 == null) {
@@ -3314,7 +3227,7 @@ if (a124 == null) {
 
 
     // == A125
-    // Km moyen assignés par employé voyageant
+    // Distance totale (aller-retour) assignée à chaque employé voyageant
 
     
 DoubleQuestion a125 = (DoubleQuestion) questionService.findByCode(QuestionCode.A125);
@@ -3438,7 +3351,7 @@ if (a210 == null) {
 
 
     // == A211
-    // Catégorie
+    // Famille de matériau (ou service)
 
     ValueSelectionQuestion a211 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A211);
 if (a211 == null) {
@@ -3460,7 +3373,7 @@ if (a211 == null) {
 
 
     // == A212
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a212 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A212);
 if (a212 == null) {
@@ -3482,7 +3395,7 @@ if (a212 == null) {
 
 
     // == A213
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a213 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A213);
 if (a213 == null) {
@@ -3504,7 +3417,7 @@ if (a213 == null) {
 
 
     // == A214
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a214 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A214);
 if (a214 == null) {
@@ -3526,7 +3439,7 @@ if (a214 == null) {
 
 
     // == A215
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a215 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A215);
 if (a215 == null) {
@@ -3548,7 +3461,7 @@ if (a215 == null) {
 
 
     // == A216
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a216 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A216);
 if (a216 == null) {
@@ -3570,7 +3483,7 @@ if (a216 == null) {
 
 
     // == A217
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a217 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A217);
 if (a217 == null) {
@@ -3592,7 +3505,7 @@ if (a217 == null) {
 
 
     // == A218
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a218 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A218);
 if (a218 == null) {
@@ -3614,7 +3527,7 @@ if (a218 == null) {
 
 
     // == A219
-    // Type
+    // Type de matériau (ou service)
 
     ValueSelectionQuestion a219 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A219);
 if (a219 == null) {
@@ -4452,7 +4365,7 @@ if (a162 == null) {
 
 
     // == A165
-    // Entrepôt
+    // Poste de consommation
 
     StringQuestion a165 = (StringQuestion) questionService.findByCode(QuestionCode.A165);
 if (a165 == null) {
@@ -4474,7 +4387,7 @@ if (a165 == null) {
 
 
     // == A167
-    // Combustible utilisé en amont
+    // Combustible consommé en amont
 
     ValueSelectionQuestion a167 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A167);
 if (a167 == null) {
@@ -4523,7 +4436,7 @@ if (a168 == null) {
 
 
     // == A1007
-    // Combustible utilisé en amont
+    // Combustible consommé en amont
 
     ValueSelectionQuestion a1007 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1007);
 if (a1007 == null) {
@@ -4572,7 +4485,7 @@ if (a1008 == null) {
 
 
     // == A1010
-    // Combustible utilisé en amont
+    // Combustible consommé en amont
 
     ValueSelectionQuestion a1010 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1010);
 if (a1010 == null) {
@@ -5189,7 +5102,7 @@ if (a230 == null) {
 
 
     // == A232
-    // Poste d'infrastructure
+    // Nom
 
     StringQuestion a232 = (StringQuestion) questionService.findByCode(QuestionCode.A232);
 if (a232 == null) {
@@ -5211,7 +5124,7 @@ if (a232 == null) {
 
 
     // == A233
-    // Type d'infrastructure
+    // Type d'équipement
 
     ValueSelectionQuestion a233 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A233);
 if (a233 == null) {
@@ -6094,7 +6007,7 @@ if (a245 == null) {
 
 
     // == A246
-    // Quantité vendue de ce produit
+    // Nombre de produits vendus sur l'année du bilan
 
     
 IntegerQuestion a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
@@ -6609,7 +6522,7 @@ if (a271 == null) {
 
 
     // == A274
-    // Entrepôt
+    // Nom de l'entrepôt
 
     StringQuestion a274 = (StringQuestion) questionService.findByCode(QuestionCode.A274);
 if (a274 == null) {
@@ -7343,7 +7256,7 @@ if (a5011 == null) {
 
 
     // == A5012
-    // Poids total de ce poste de déchet issu des produits vendus
+    // Poids total de ce poste de déchet après utilisation ou consommation
 
     
 DoubleQuestion a5012 = (DoubleQuestion) questionService.findByCode(QuestionCode.A5012);
@@ -7370,7 +7283,7 @@ if (a5012 == null) {
 
 
     // == A5013
-    // Catégorie principale de ce poste de déchet:
+    // Type de matière et de traitement de ce poste de déchet
 
     ValueSelectionQuestion a5013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5013);
 if (a5013 == null) {
@@ -7392,7 +7305,7 @@ if (a5013 == null) {
 
 
     // == A5014
-    // Proportion du déchet issu du produit, traité par la méthode précédemment renseignée
+    // % du poids de déchet traité par la méthode précédemment renseignée
 
     PercentageQuestion a5014 = (PercentageQuestion) questionService.findByCode(QuestionCode.A5014);
 if (a5014 == null) {

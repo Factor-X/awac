@@ -1,6 +1,6 @@
 angular
 .module('app.filters')
-.filter "translateWithVarsText", ($sce, translationService) ->
+.filter "translateTextWithVars", ($sce, translationService) ->
     (input, vars) ->
         text = translationService.get(input, null)
         if text?

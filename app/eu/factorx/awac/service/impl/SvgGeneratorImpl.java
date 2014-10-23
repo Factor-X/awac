@@ -46,11 +46,17 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			for (int i = 0; i < data.getRowCount(); i++) {
 				total += (Double) data.getCell(1, i);
 			}
+		}
 
+		if(rows > 0 && total > 0){
 
 			for (int i = 0; i < rows; i++) {
 
 				Double cell = (Double) data.getCell(1, i);
+
+				if(cell == 0) {
+					continue;
+				}
 
 				double percentage = 100.0 * cell / total;
 
@@ -281,7 +287,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		int series = data.getColumnCount() - 1;
 		double maximum = data.max(1, 0, data.getColumnCount() - 1, count - 1);
 
-		int sizex = 200 + count * 200;
+		int sizex = 300 + count * 200;
 		int sizey = 1000;
 
 
@@ -299,7 +305,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		));
 
 		double histoWidth = 200;
-		double left = 200;
+		double left = 300;
 		for (int i = 0; i < count; i++) {
 
 			for (int j = 0; j < series; j++) {

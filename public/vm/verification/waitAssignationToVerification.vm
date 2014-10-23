@@ -4,8 +4,13 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour, ${user.person.firstName} ${user.person.firstName} vous a assigné à la vérification du bilan GES
-de ${request.awacCalculatorInstance.scope.organization.name} pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.
-Vous avez accès à leurs données dans votre interface de vérification. Bien à vous, L'outil AWAC.
+Bonjour,<br/><br/>
+
+${user.person.firstname} ${user.person.lastname} vous a assigné à la vérification du bilan GES de ${request.awacCalculatorInstance.scope.organization.name} pour le périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}.<br/>
+Vous avez accès à leurs données dans votre interface de vérification.<br/><br/>
+
+Bien à vous,<br/>
+L'outil AWAC.<br/>
+
 </body>
 </html>

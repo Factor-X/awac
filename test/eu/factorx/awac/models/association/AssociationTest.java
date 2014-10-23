@@ -75,6 +75,7 @@ public class AssociationTest extends AbstractBaseModelTest {
 
 
 		Site site = new Site(org,SITE_NAME);
+		site.setOrganizationalStructure("organization_structure");
 		em.persist(site);
 
 		site = null;

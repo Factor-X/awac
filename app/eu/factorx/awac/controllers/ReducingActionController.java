@@ -6,6 +6,8 @@ import java.util.*;
 
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.format.Alignment;
+import jxl.format.VerticalAlignment;
 import jxl.write.*;
 import jxl.write.Number;
 
@@ -21,12 +23,14 @@ import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.ReducingActionDTOList;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.*;
@@ -77,6 +81,9 @@ public class ReducingActionController extends AbstractController {
 	@Autowired
 	private AccountSiteAssociationService accountSiteAssociationService;
 
+	@Autowired
+	private StoredFileService storedFileService;
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadActions() {
@@ -100,7 +107,8 @@ public class ReducingActionController extends AbstractController {
 		byte[] content = getExcelExport(reducingActions);
 
 		response().setContentType("application/octet-stream");
-		response().setHeader("Content-Disposition", "attachment; filename=export.xls");
+		String fileName = "export_actions_" + new DateTime().toString("yyyyMMdd'-'HH'h'mm") + ".xls";
+		response().setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		return ok(content);
 	}
 
@@ -128,7 +136,8 @@ public class ReducingActionController extends AbstractController {
 
 		reducingAction.setTitle(dto.getTitle());
 		reducingAction.setScope(scope);
-		reducingAction.setType(ReducingActionTypeCode.valueOf(dto.getTypeKey()));
+		ReducingActionTypeCode actionType = ReducingActionTypeCode.valueOf(dto.getTypeKey());
+		reducingAction.setType(actionType);
 
 		ReducingActionStatusCode status = ReducingActionStatusCode.valueOf(dto.getStatusKey());
 		reducingAction.setStatus(status);
@@ -142,12 +151,16 @@ public class ReducingActionController extends AbstractController {
 		}
 
 		reducingAction.setPhysicalMeasure(dto.getPhysicalMeasure());
-		reducingAction.setGhgBenefit(dto.getGhgBenefit());
-		String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
-		if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
-			reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
+		if (ReducingActionTypeCode.BETTER_METHOD.equals(actionType)) {
+			reducingAction.setGhgBenefit(null);
+			reducingAction.setGhgBenefitUnit(null);
+		} else {
+			reducingAction.setGhgBenefit(dto.getGhgBenefit());
+			String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
+			if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
+				reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
+			}
 		}
-
 		reducingAction.setFinancialBenefit(dto.getFinancialBenefit());
 		reducingAction.setInvestmentCost(dto.getInvestmentCost());
 		reducingAction.setExpectedPaybackTime(dto.getExpectedPaybackTime());
@@ -157,8 +170,15 @@ public class ReducingActionController extends AbstractController {
 		reducingAction.setResponsiblePerson(dto.getResponsiblePerson());
 		reducingAction.setComment(dto.getComment());
 
+		List<StoredFile> documents = new ArrayList<>();
+		for (FilesUploadedDTO file : dto.getFiles()) {
+			documents.add(storedFileService.findById(file.getId()));
+		}
+		reducingAction.getDocuments().clear();
+		reducingAction.getDocuments().addAll(documents);
+
 		reducingActionService.saveOrUpdate(reducingAction);
-		return ok();
+		return ok(conversionService.convert(reducingAction, ReducingActionDTO.class));
 	}
 
 	private byte[] getExcelExport(List<ReducingAction> reducingActions) throws WriteException, IOException {

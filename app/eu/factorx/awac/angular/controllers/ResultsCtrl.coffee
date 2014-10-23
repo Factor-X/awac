@@ -3,7 +3,7 @@ angular
 .controller "ResultsCtrl", ($scope, $window, $filter, downloadService, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = true
 
-    $scope.verificationRequests=[]
+    $scope.verificationRequests = []
 
     $scope.$root.$watch 'mySites', (nv) ->
         console.log 'watch $root.mySites'
@@ -29,7 +29,7 @@ angular
     , true
 
 
-    downloadService.getJson '/awac/verification/verificationRequests/'+$scope.$root.periodSelectedKey, (result) ->
+    downloadService.getJson '/awac/verification/verificationRequests/' + $scope.$root.periodSelectedKey, (result) ->
         if not result.success
             messageFlash.displayError result.data.message
         else
@@ -55,20 +55,11 @@ angular
         if $scope.$root.periodToCompare != 'default'
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
+        $scope.pdfLoading = true
+
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
-            if result.success
-                window.R = result
+            $scope.pdfLoading = false
 
-                byteCharacters = atob(result.data)
-                byteNumbers = new Array(byteCharacters.length)
-                for i in [0...byteCharacters.length]
-                    byteNumbers[i] = byteCharacters.charCodeAt(i)
-                byteArray = new Uint8Array(byteNumbers)
-                blob = new Blob([byteArray], { type: 'application/pdf' })
-
-                filename = "export.pdf"
-
-                saveAs(blob,filename)
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
@@ -85,19 +76,11 @@ angular
         if $scope.$root.periodToCompare != 'default'
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
+        $scope.xlsLoading = true
+
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
-            if result.success
-                window.R = result
+            $scope.xlsLoading = false
 
-                byteCharacters = atob(result.data)
-                byteNumbers = new Array(byteCharacters.length)
-                for i in [0...byteCharacters.length]
-                    byteNumbers[i] = byteCharacters.charCodeAt(i)
-                byteArray = new Uint8Array(byteNumbers)
-                blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
-                filename = "export.xls"
-
-                saveAs(blob,filename)
 
     $scope.dataURItoBlob = (dataURI) ->
 

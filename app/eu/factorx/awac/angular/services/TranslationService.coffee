@@ -1,11 +1,10 @@
 angular
 .module('app.services')
-.service "translationService", ($rootScope,$filter,$http) ->
+.service "translationService", ($rootScope, $filter, $http) ->
     svc = this
     svc.elements = null
 
     svc.initialize = (lang) ->
-
         $http(
             method: "GET"
             url: "/awac/translations/" + lang
@@ -46,10 +45,10 @@ angular
 
         return txt
 
-    svc.translateExceptionsDTO =(exception) ->
-        console.log exception
-        if exception.params?.length > 0
-            return $filter('translateWithVarsText')(exception.message,exception.params)
+    svc.translateExceptionsDTO = (exception) ->
+
+        if exception.params? && Object.keys(exception.params).length > 0
+            return $filter('translateTextWithVars')(exception.messageToTranslate, exception.params)
         else if exception.messageToTranslate?
             return $filter('translate')(exception.messageToTranslate)
         else

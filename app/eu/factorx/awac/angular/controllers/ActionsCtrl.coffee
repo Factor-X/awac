@@ -8,7 +8,6 @@ angular
     $scope.statusOptions = []
     $scope.gwpUnits = []
 
-
     $scope.loadActions = () ->
         downloadService.getJson "awac/actions/load", (result) ->
             if result.success
@@ -19,18 +18,24 @@ angular
                 $scope.gwpUnits = result.data.gwpUnits
 
     $scope.create = () ->
-        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
+        modalService.show(modalService.CREATE_REDUCTION_ACTION,
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions })
 
     $scope.edit = (action) ->
-        modalService.show(modalService.CREATE_REDUCTION_ACTION, { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action })
+        modalService.show(modalService.CREATE_REDUCTION_ACTION,
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, action: action })
 
     $scope.markAsDone = (action) ->
         $scope.isLoading = true
-        action.statusKey = "2"
-        action.completionDate = new Date()
-        downloadService.postJson '/awac/actions/save', action, (result) ->
+
+        data = angular.copy(action)
+        data.statusKey = "2"
+        data.completionDate = new Date()
+
+        downloadService.postJson '/awac/actions/save', data, (result) ->
             $scope.isLoading = false
             if result.success
+                angular.extend(action, result.data)
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
     $scope.exportToXls = () ->
@@ -40,7 +45,9 @@ angular
         if (scopeTypeKey == "1")
             return $scope.$root.organizationName
         else
-            return _.findWhere($scope.$root.mySites, {id: scopeId}).name
+            return $scope.$root.mySites.filter((e) ->
+                ("" + e.id) == ("" + scopeId)
+            )[0].name
 
     $scope.getTypeLabel = (typeKey) ->
         return _.findWhere($scope.typeOptions, {key: typeKey }).label
@@ -51,7 +58,7 @@ angular
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
 
-    $scope.$watch '$root.mySites', (n,o) ->
+    $scope.$watch '$root.mySites', (n, o) ->
         if !!n
             $scope.loadActions()
 

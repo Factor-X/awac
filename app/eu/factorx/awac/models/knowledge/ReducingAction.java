@@ -1,5 +1,6 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ import eu.factorx.awac.models.data.file.StoredFile;
 		@UniqueConstraint(columnNames = { ReducingAction.TITLE_COLUMN, ReducingAction.SCOPE_COLUMN })
 })
 @NamedQueries({
-		@NamedQuery(name = ReducingAction.FIND_BY_SCOPES, query = "select ra from ReducingAction ra where ra.scope in :scopes"),
+		@NamedQuery(name = ReducingAction.FIND_BY_SCOPES, query = "select ra from ReducingAction ra where ra.scope in :scopes order by ra.status, ra.technicalSegment.creationDate"),
 })
 public class ReducingAction extends AuditedAbstractEntity {
 
@@ -220,6 +221,9 @@ public class ReducingAction extends AuditedAbstractEntity {
 	}
 
 	public List<StoredFile> getDocuments() {
+		if (documents == null) {
+			return new ArrayList<>();
+		}
 		return documents;
 	}
 

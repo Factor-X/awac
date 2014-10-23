@@ -30,7 +30,7 @@ angular
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
             #display error
-            if data?.length > 0
+            if !!data
                 messageFlash.displayError translationService.translateExceptionsDTO(data)
             return deferred.resolve(callback(
                 data: data,
@@ -70,7 +70,7 @@ angular
         promise.error (data, status, headers, config) ->
             @downloadsInProgress--
             #display error
-            if data?.length > 0
+            if !!data
                 messageFlash.displayError translationService.translateExceptionsDTO(data)
             return deferred.resolve(callback(
                 data: data,

@@ -1,6 +1,6 @@
-.modal(ng-enter="save()",ng-escape="close()")
+.modal.create_or_edit_action(ng-enter="save()",ng-escape="close()")
     .modal-dialog
-        .modal-content(style="width:700px")
+        .modal-content
 
             .modal-header
                 button.button(type="button",ng-click="close()")
@@ -73,6 +73,23 @@
                     mm-awac-modal-field-text(ng-info="webSite").field_form_separator
                     mm-awac-modal-field-text(ng-info="responsiblePerson")
                     mm-awac-modal-field-text(ng-info="comment")
+
+                    .field_row
+                        .field_cell(ng-click="logField()")
+                            span(ng-bind-html="'REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE' | translate")
+                        .field_cell.field_wide
+                            .document-question-progress-percentage(ng-show="inDownload=== true && percent != 100") {{percent}} %
+                            div(ng-show="inDownload=== true && percent == 100",ng-bind-html="'REDUCTION_ACTION_UPLOAD_IN_TREATMENT' | translate")
+                            input(type='file', ng-file-select='onFileSelect($files)')
+                            table(style="margin-top: 10px;")
+                                tr(ng-repeat="f in files")
+                                    td(style="padding: 5px;")
+                                        button.button(type="button", ng-click="download(f.id)")
+                                            span.fa.fa-download
+                                        button.button(type="button", ng-click="remove(f.id)")
+                                            span.fa.fa-remove
+                                        span &nbsp;&nbsp;
+                                        b {{ f.name }}
 
             .modal-footer
 

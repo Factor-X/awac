@@ -5,7 +5,7 @@
 </head>
 	<body>
     	Votre nouveau compte sur le calculateur en ligne de l'AWAC a été créé.<br>
-    	L'identifiant que avez choisi est ${identifier}.<br><br>
+    	L'identifiant que vous avez choisi est ${identifier}.<br><br>
     	Pour vous connecter, cliquez simplement sur ce lien: ${link}<br><br>
     	Le gestionnaire du calculateur AWAC
 	</body>

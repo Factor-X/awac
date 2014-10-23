@@ -1,11 +1,13 @@
 package eu.factorx.awac.dto.awac.shared;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ReducingActionDTO extends DTO implements Serializable {
 
@@ -58,6 +60,8 @@ public class ReducingActionDTO extends DTO implements Serializable {
 
 	@Size(max = 1000)
 	private String comment;
+
+	private List<FilesUploadedDTO> files;
 
 	public Long getId() {
 		return id;
@@ -195,4 +199,11 @@ public class ReducingActionDTO extends DTO implements Serializable {
 		this.comment = comment;
 	}
 
+	public List<FilesUploadedDTO> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FilesUploadedDTO> files) {
+		this.files = files;
+	}
 }

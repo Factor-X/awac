@@ -13,6 +13,8 @@ package eu.factorx.awac.models.account;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import eu.factorx.awac.models.forms.VerificationRequest;
 import play.data.validation.Constraints.Required;
 
@@ -20,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ import java.util.List;
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a, Person p where p.email = :email and a.person = p"),
+        @NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE, query = "select a from Account a, Person p where p.email = :email and a.organization.interfaceCode = :interface"),
 })
 public class Account extends AuditedAbstractEntity {
 
@@ -40,14 +42,15 @@ public class Account extends AuditedAbstractEntity {
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
 	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 	private static final long serialVersionUID = 1L;
+    public static final java.lang.String FIND_BY_EMAIL_AND_INTERFACE = "Account_FIND_BY_EMAIL_AND_INTERFACE";
 
-	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Organization organization;
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Person person;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String identifier;
 
 	@JsonIgnore
@@ -166,6 +169,21 @@ public class Account extends AuditedAbstractEntity {
 
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Account)) {
+			return false;
+		}
+		Account rhs = (Account) obj;
+		return new EqualsBuilder().append(this.identifier, rhs.identifier).append(this.organization.getInterfaceCode(), rhs.organization.getInterfaceCode()).isEquals();
 	}
 
 	@Override

@@ -72,4 +72,14 @@ public class MyrmexRuntimeException extends RuntimeException {
                 ", paramList=" + paramList +
                 '}';
     }
+    
+    @Override
+    public String getMessage(){
+    	if(this.businessErrorType!=null){
+    		return this.businessErrorType.toString()+paramList;
+    	}
+    	else{
+    		return this.toClientMessage;
+    	}
+    }
 }

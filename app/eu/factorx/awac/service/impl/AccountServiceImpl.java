@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,8 @@ import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 
 @Repository
 public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Account> implements AccountService {
@@ -38,6 +41,12 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 
 	@Override
 	public Account saveOrUpdate(Account account){
+		if (account.getId() == null) {
+			Account existingAccount = findByIdentifier(account.getIdentifier());
+			if (existingAccount != null) {
+				throw new MyrmexRuntimeException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
+			}
+		}
 		if(account.getPassword().length()< 30){
 			StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
 			account.setPassword(standardPasswordEncoder.encode(account.getPassword()));
@@ -50,4 +59,22 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 		StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
 		return standardPasswordEncoder.matches(password, account.getPassword());
 	}
+
+    @Override
+    public Account findByEmailAndInterface(String email, InterfaceTypeCode interfaceTypeCode) {
+
+        List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL_AND_INTERFACE, Account.class)
+                .setParameter("email", email)
+                .setParameter("interface", interfaceTypeCode)
+                .getResultList();
+        if (resultList.size() > 1) {
+            String errorMsg = "More than one account with email = '" + email+ ", interface : '"+interfaceTypeCode;
+            Logger.error(errorMsg);
+            throw new RuntimeException(errorMsg);
+        }
+        if (resultList.size() == 0) {
+            return null;
+        }
+        return resultList.get(0);
+    }
 }

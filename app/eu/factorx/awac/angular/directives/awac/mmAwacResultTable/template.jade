@@ -2,14 +2,14 @@ ng-virtual
     table.indicators_table
         thead
             tr
-                th(width="100%")
+                th
                 th(colspan="4")
                     span.period-header(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}") {{ngModel.leftPeriod}}
                 th(colspan="4", ng-show="ngModel.rightPeriod!=null")
                     span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
 
             tr
-                th(width="100%")
+                th
 
                 th.align-right.scope1(style="color: {{ ngModel.leftColor }}")
                     div
@@ -55,7 +55,7 @@ ng-virtual
 
 
         tbody
-            tr(ng-repeat="rl in ngModel.reportLines", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
+            tr(ng-repeat="rl in ngModel.reportLines | orderBy:'order'", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
                 td
                     span(ng-bind-html="rl.indicatorName | translate")
 
@@ -79,7 +79,8 @@ ng-virtual
 
         tfoot
             tr
-                td
+                td(style="text-align: right")
+                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
                 td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
                     span(ng-bind-html="getLeftTotalScope1() | numberToI18NOrLess")
                 td.align-right.scope2(style="color: {{ ngModel.leftColor }}")

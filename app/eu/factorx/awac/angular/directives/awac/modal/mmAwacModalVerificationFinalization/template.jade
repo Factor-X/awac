@@ -17,7 +17,7 @@
                 div
                     .field_form
                         .field_row(ng-show="getParams().verificationSuccess == true")
-                            div(ng-bind-html="'VERIFICATION_REPPORT' | translate")
+                            div(ng-bind-html="'VERIFICATION_REPORT' | translate")
                             div
                                 .document-question-progress-percentage(ng-show="inDownload=== true && percent != 100") {{percent}} %
                                 div(ng-show="inDownload=== true && percent == 100",ng-bind-html="'QUESTION_FILE_TREATEMENT' | translate")

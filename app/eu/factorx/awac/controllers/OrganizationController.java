@@ -11,6 +11,7 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.OrganizationService;
@@ -114,7 +115,10 @@ public class OrganizationController extends AbstractController {
 
         Organization organization = securedController.getCurrentUser().getOrganization();
         organization.setName(organizationDTO.getName());
-        organization.setStatisticsAllowed(organizationDTO.getStatisticsAllowed());
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+            !securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)) {
+            organization.setStatisticsAllowed(organizationDTO.getStatisticsAllowed());
+        }
         return ok(new ReturnDTO());
     }
 
