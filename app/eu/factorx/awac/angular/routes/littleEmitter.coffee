@@ -1,7 +1,7 @@
 #
 # Routes
 #
-initializeEnterpriseRoutes = (defaultResolve) ->
+initializeLittleEmitterRoutes = (defaultResolve) ->
     angular
     .module('app')
     .run ($rootScope, $location) ->

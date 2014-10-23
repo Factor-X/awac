@@ -400,7 +400,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
-        console.log "to default form "
+        console.log "to default form :"+$rootScope.getDefaultRoute()
         $rootScope.nav $rootScope.getDefaultRoute()
 
     $rootScope.$watch "mySites", ->

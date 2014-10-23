@@ -15,7 +15,7 @@ div.verification_manage
                     div(style="display:inline-block") Value
                         input(ng-model="value.defaultValue")
                     div(style="display:inline-block")
-                        button(ng-click="remove(driver,value)") supprimer
+                        button(ng-click="remove(driver,value.tempId)") supprimer
                 button(ng-click="addValue(driver)") Ajouter une value
     button(ng-click="save()") Sauver les modifications
     button(ng-click="orderDriverValues()") Trier les valeurs par date

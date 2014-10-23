@@ -1,7 +1,7 @@
 #
 # Routes
 #
-initializeEnterpriseRoutes = (defaultResolve) ->
+initializeHouseholdRoutes = (defaultResolve) ->
     angular
     .module('app')
     .run ($rootScope, $location) ->
