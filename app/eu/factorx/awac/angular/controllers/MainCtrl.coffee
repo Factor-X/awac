@@ -115,7 +115,7 @@ angular
 
                 if p == "/noScope"
                     url = $scope.$root.getDefaultRoute()
-                    $scope.root.nav url
+                    $scope.$root.nav url
                 else
                     p=p.replace(new RegExp("\\/:period\\b", 'g'), '')
                     p=p.replace(new RegExp("\\/:scope\\b", 'g'), '')
@@ -377,17 +377,17 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 if scope.id == data.defaultSiteId
                     scopeSelectedId =data.defaultSiteId
 
-        if !$rootScope.scopeSelectedId?
+        if !scopeSelectedId?
             if $rootScope.mySites.length > 0
                 scopeSelectedId = $rootScope.mySites[0].id
 
-        if $rootScope.scopeSelectedId? && !$rootScope.periodSelectedKey?
+        if scopeSelectedId? && !periodSelectedKey?
             for site in $rootScope.mySites
-                if site.id == $rootScope.scopeSelectedId
+                if site.id == scopeSelectedId
                     if $rootScope.instanceName == 'enterprise'
                         if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
                             periodSelectedKey = site.listPeriodAvailable[0].key
-                    else if $rootScope.instanceName == 'municipality'
+                    else
                         periodSelectedKey = $rootScope.periods[0].key
 
         $rootScope.scopeSelectedId =scopeSelectedId
