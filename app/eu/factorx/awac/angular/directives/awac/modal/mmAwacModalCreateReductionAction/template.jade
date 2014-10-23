@@ -45,7 +45,7 @@
                                 span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_ORG' | translate")
                                 span &nbsp;
                                 span(ng-bind-html=" ': <b>' + $root.organizationName + '</b>' ")
-                            div
+                            div(ng-show="$root.instanceName == 'enterprise'")
                                 input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="2", style="width :20px !important;margin:0;vertical-align:middle;")
                                 span &nbsp;
                                 span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_SITE' | translate")
