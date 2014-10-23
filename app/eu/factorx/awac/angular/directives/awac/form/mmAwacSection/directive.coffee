@@ -19,19 +19,15 @@ angular
 
         scope.lock = ->
             if (not scope.isLocked() or scope.isLockedByMyself() or scope.$root.currentPerson.isAdmin) and not scope.isValidate() and scope.$root.closedForms == false
+                  data = {}
+                  data.questionSetKey = scope.getTitleCode()
+                  data.periodCode = scope.$root.periodSelectedKey
+                  data.scopeId = scope.$root.scopeSelectedId
+                  data.lock = if scope.isLocked() then false else true
 
-                if scope.$parent.validNavigation().valid == false
-                    messageFlash.displayError $filter('translateText')('SAVE_BEFORE_LOCK_OR_VALID')
-                else
-                    data = {}
-                    data.questionSetKey = scope.getTitleCode()
-                    data.periodCode = scope.$root.periodSelectedKey
-                    data.scopeId = scope.$root.scopeSelectedId
-                    data.lock = if scope.isLocked() then false else true
-
-                    downloadService.postJson '/awac/answer/lockQuestionSet', data, (result) ->
-                        if result.success
-                            scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock)
+                  downloadService.postJson '/awac/answer/lockQuestionSet', data, (result) ->
+                      if result.success
+                          scope.$parent.lockQuestionSet(scope.getTitleCode(), data.lock)
 
         scope.isLockedByMyself = ->
             if scope.$parent.getQuestionSetLocker(scope.getTitleCode())?

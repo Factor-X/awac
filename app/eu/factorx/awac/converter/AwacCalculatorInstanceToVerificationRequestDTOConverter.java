@@ -26,11 +26,6 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
     @Override
     public VerificationRequestDTO convert(AwacCalculatorInstance awacCalculatorInstance) {
 
-        //control
-        if (awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier() == null) {
-            throw new MyrmexRuntimeException("cannot convert because there is not organization verifier defined");
-        }
-
         VerificationRequestDTO dto = new VerificationRequestDTO();
 
         dto.setId(awacCalculatorInstance.getId());
@@ -39,7 +34,9 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
         dto.setOrganizationCustomer(organizationToOrganizationDTOConverter.convert(awacCalculatorInstance.getScope().getOrganization()));
 
         //organization vrifier
-        dto.setOrganizationVerifier(organizationToOrganizationDTOConverter.convert(awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier()));
+        if(awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier()!=null) {
+            dto.setOrganizationVerifier(organizationToOrganizationDTOConverter.convert(awacCalculatorInstance.getVerificationRequest().getOrganizationVerifier()));
+        }
 
         //scope
         if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {

@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalCreateReductionAction", (directiveService, downloadService, translationService, messageFlash, $filter) ->
+.directive "mmAwacModalCreateReductionAction", (directiveService, downloadService, translationService, messageFlash, $upload, $window) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -134,6 +134,8 @@ angular
             validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
             hideIsValidIcon: true
 
+        $scope.files = $scope.action.files ? []
+
         $scope.allFieldValid = () ->
             return ($scope.title.isValid &&
                 $scope.physicalMeasure.isValid &&
@@ -165,6 +167,7 @@ angular
                 webSite: $scope.webSite.field
                 responsiblePerson: $scope.responsiblePerson.field
                 comment: $scope.comment.field
+                files: $scope.files
             }
 
             downloadService.postJson '/awac/actions/save', data, (result) ->
@@ -196,6 +199,56 @@ angular
 
         $scope.toggleGhgBenefitField($scope.typeKey.field)
 
-        console.log($scope)
+
+        $scope.onFileSelect = ($files) ->
+            $scope.inDownload = true
+
+            #$files: an array of files selected, each file has name, size, and type.
+            i = 0
+
+            while i < $files.length
+                file = $files[i]
+                $scope.upload = $upload.upload(
+                    url: "/awac/file/upload/"
+                    data:
+                        myObj: $scope.myModelObj
+
+                    file: file
+                ).progress((evt) ->
+                    $scope.percent = parseInt(100.0 * evt.loaded / evt.total)
+                    #console.log "percent: " + scope.percent
+                    return
+                ).success((data, status, headers, config) ->
+                    # file is uploaded successfully
+                    $scope.percent = 0
+                    $scope.inDownload = false
+                    fileName = data.name
+                    messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
+                    #console.log data
+
+                    #add the file to the answer
+                    $scope.files.push(data)
+
+                    return
+                ).error((data, status, headers, config) ->
+                    $scope.percent = 0
+                    $scope.inDownload = false
+                    messageFlash.displayError("The upload of the file was failed")
+                    return
+                )
+                i++
+            return
+
+        $scope.download = (storedFileId) ->
+            url = '/awac/file/download/' + storedFileId
+            $window.open(url);
+
+        $scope.remove = (storedFileId) ->
+            for index, file of $scope.files
+                if file.id = storedFileId
+                    $scope.files.splice(index, 1);
+                    break
+            return
+
         link: (scope) ->
 

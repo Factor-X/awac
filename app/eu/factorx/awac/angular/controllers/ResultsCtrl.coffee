@@ -136,6 +136,7 @@ angular
 
 
             downloadService.postJson '/awac/result/getReport', dto, (result) ->
+
                 modalService.close modalService.LOADING
                 if result.success
                     $scope.o = result.data
@@ -198,7 +199,8 @@ angular
                         $scope.rightTotalEmissions += line.rightScope1Value
                         $scope.rightTotalEmissions += line.rightScope2Value
                         $scope.rightTotalEmissions += line.rightScope3Value
-    # $scope.rightTotalEmissions += line.rightOutOfScopeValue
+                        # $scope.rightTotalEmissions += line.rightOutOfScopeValue
+
 
 
     $scope.current_tab = 1;

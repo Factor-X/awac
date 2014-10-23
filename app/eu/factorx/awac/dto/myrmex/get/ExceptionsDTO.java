@@ -5,13 +5,14 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExceptionsDTO extends DTO {
 
     private String message=null;
     private  String messageToTranslate=null;
-    private final List<String> params = new ArrayList<>();
+    private final HashMap<Integer,String> params = new HashMap<Integer,String>();
 
     // add default constructor for Json Parser
     public ExceptionsDTO() {
@@ -24,15 +25,19 @@ public class ExceptionsDTO extends DTO {
 
     public ExceptionsDTO(BusinessErrorType businessError, String... params) {
         this.messageToTranslate = businessError.toString();
+        int i=0;
         for (String param : params) {
-            this.params.add(param);
+            this.params.put(i,param);
+            i++;
         }
     }
 
     public ExceptionsDTO(MyrmexRuntimeException t) {
         this.messageToTranslate = t.getBusinessErrorType().toString();
+        int i=0;
         for (String param : t.getParamList()) {
-            this.params.add(param);
+            this.params.put(i,param);
+            i++;
         }
     }
 
@@ -44,7 +49,7 @@ public class ExceptionsDTO extends DTO {
         return messageToTranslate;
     }
 
-    public List<String> getParams() {
+    public HashMap<Integer, String> getParams() {
         return params;
     }
 

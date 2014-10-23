@@ -21,12 +21,14 @@ import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.ReducingActionDTOList;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
+import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.*;
@@ -76,6 +78,9 @@ public class ReducingActionController extends AbstractController {
 
 	@Autowired
 	private AccountSiteAssociationService accountSiteAssociationService;
+
+	@Autowired
+	private StoredFileService storedFileService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -162,6 +167,13 @@ public class ReducingActionController extends AbstractController {
 		reducingAction.setWebSite(dto.getWebSite());
 		reducingAction.setResponsiblePerson(dto.getResponsiblePerson());
 		reducingAction.setComment(dto.getComment());
+
+		List<StoredFile> documents = new ArrayList<>();
+		for (FilesUploadedDTO file : dto.getFiles()) {
+			documents.add(storedFileService.findById(file.getId()));
+		}
+		reducingAction.getDocuments().clear();
+		reducingAction.getDocuments().addAll(documents);
 
 		reducingActionService.saveOrUpdate(reducingAction);
 		return ok();

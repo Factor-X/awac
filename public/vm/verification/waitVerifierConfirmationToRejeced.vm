@@ -4,6 +4,11 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour, ${request.organizationVerifier.name} a décliné votre demande de vérification du bilan du périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. Bien à vous, L'outil AWAC
+Bonjour,<br/><br/>
+
+${request.organizationVerifier.name} a décliné votre demande de vérification du bilan GES du périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}.<br/><br/>
+
+Bien à vous,<br/>
+L'outil AWAC
 </body>
 </html>

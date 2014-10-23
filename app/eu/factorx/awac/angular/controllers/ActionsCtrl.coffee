@@ -55,6 +55,10 @@ angular
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
 
+    $scope.download = (storedFileId) ->
+        url = '/awac/file/download/' + storedFileId
+        $window.open(url);
+
     $scope.$watch '$root.mySites', (n, o) ->
         if !!n
             $scope.loadActions()
