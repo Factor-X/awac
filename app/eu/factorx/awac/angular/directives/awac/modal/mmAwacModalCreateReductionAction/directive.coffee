@@ -15,10 +15,17 @@ angular
         $scope.statusOptions = $scope.getParams().statusOptions
         $scope.gwpUnits = $scope.getParams().gwpUnits
 
-        $scope.action = $scope.getParams().action
-        $scope.editMode = !!$scope.action
-        if (!$scope.editMode)
-            $scope.action = {}
+        action = $scope.getParams().action
+        $scope.editMode = !!action
+
+        if $scope.editMode
+            $scope.action = angular.copy(action)
+        else
+            $scope.action = {
+                typeKey: '1' # default type: 'Reducing measure'
+                statusKey: '1' # default status: 'Running'
+                scopeTypeKey: '1' # default scope type: 'Organization'
+            }
 
         $scope.getDefaultDueDate = () ->
             defaultDueDate = new Date()
@@ -38,17 +45,17 @@ angular
 
         $scope.typeKey =
             inputName: 'typeKey'
-            field: $scope.action.typeKey ? "1" # default type: REDUCING_GES
+            field: $scope.action.typeKey
             fieldTitle: "REDUCTION_ACTION_TYPE_FIELD_TITLE"
 
         $scope.statusKey =
             inputName: 'statusKey'
-            field: $scope.action.statusKey ? "1" # default status: RUNNING
+            field: $scope.action.statusKey
             fieldTitle: "REDUCTION_ACTION_STATUS_FIELD_TITLE"
 
         $scope.scopeTypeKey =
             inputName: 'scopeTypeKey'
-            field: $scope.action.scopeTypeKey ? "1" # default scope type: ORG
+            field: $scope.action.scopeTypeKey
             fieldTitle: "REDUCTION_ACTION_SCOPE_TYPE_FIELD_TITLE"
 
         $scope.scopeId =
@@ -72,7 +79,6 @@ angular
             placeholder: "REDUCTION_ACTION_GHG_BENEFIT_FIELD_PLACEHOLDER"
 
         $scope.ghgBenefitUnitKey = $scope.action.ghgBenefitUnitKey ? "U5335" # default unit: kgCO2e
-
 
         $scope.financialBenefit =
             inputName: 'financialBenefit'
@@ -208,29 +214,23 @@ angular
 
             while i < $files.length
                 file = $files[i]
-                $scope.upload = $upload.upload(
-                    url: "/awac/file/upload/"
-                    data:
-                        myObj: $scope.myModelObj
 
-                    file: file
-                ).progress((evt) ->
+                $scope.upload = $upload.upload(url: "/awac/file/upload/", file: file)
+                .progress((evt) ->
                     $scope.percent = parseInt(100.0 * evt.loaded / evt.total)
-                    #console.log "percent: " + scope.percent
                     return
-                ).success((data, status, headers, config) ->
+                )
+                .success((data) ->
                     # file is uploaded successfully
                     $scope.percent = 0
                     $scope.inDownload = false
                     fileName = data.name
                     messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
-                    #console.log data
 
-                    #add the file to the answer
                     $scope.files.push(data)
-
                     return
-                ).error((data, status, headers, config) ->
+                )
+                .error((data, status, headers, config) ->
                     $scope.percent = 0
                     $scope.inDownload = false
                     messageFlash.displayError("The upload of the file was failed")

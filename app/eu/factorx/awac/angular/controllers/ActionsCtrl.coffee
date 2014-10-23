@@ -8,7 +8,6 @@ angular
     $scope.statusOptions = []
     $scope.gwpUnits = []
 
-
     $scope.loadActions = () ->
         downloadService.getJson "awac/actions/load", (result) ->
             if result.success
@@ -24,15 +23,19 @@ angular
 
     $scope.edit = (action) ->
         modalService.show(modalService.CREATE_REDUCTION_ACTION,
-            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action })
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action: angular.copy(action) })
 
     $scope.markAsDone = (action) ->
         $scope.isLoading = true
-        action.statusKey = "2"
-        action.completionDate = new Date()
-        downloadService.postJson '/awac/actions/save', action, (result) ->
+
+        data = angular.copy(action)
+        data.statusKey = "2"
+        data.completionDate = new Date()
+
+        downloadService.postJson '/awac/actions/save', data, (result) ->
             $scope.isLoading = false
             if result.success
+                angular.extend(action, result.data)
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
     $scope.exportToXls = () ->
@@ -54,10 +57,6 @@ angular
 
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
-
-    $scope.download = (storedFileId) ->
-        url = '/awac/file/download/' + storedFileId
-        $window.open(url);
 
     $scope.$watch '$root.mySites', (n, o) ->
         if !!n

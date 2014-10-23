@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import java.util.List;
 
