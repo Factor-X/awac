@@ -151,7 +151,7 @@ angular
         return mainScope = angular.element($('[ng-view]')[0]).scope()
 
     $scope.loadPeriodForComparison = ->
-        if $scope.$root.scopeSelectedId? and !isNaN($scope.$root.scopeSelectedId)
+        if !!$scope.$root.scopeSelectedId
             url = '/awac/answer/getPeriodsForComparison/' + $scope.$root.scopeSelectedId
 
             downloadService.getJson url, (result) ->
@@ -185,7 +185,7 @@ angular
 
     $scope.loadFormProgress = ->
         #console.log "$scope.loadFormProgress : "+$scope.$root.scopeSelectedId+" "+$scope.$root.periodSelectedKey
-        if $scope.$root.scopeSelectedId? and $scope.$root.periodSelectedKey?
+        if !!$scope.$root.scopeSelectedId and !!$scope.$root.periodSelectedKey
             downloadService.getJson "/awac/answer/formProgress/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
                 if result.success
                     #console.log result.data
@@ -504,9 +504,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             # if this is a form, unlock it
-            console.log "TEST UNLOCKABLE : "+$rootScope.getMainScope()?.formIdentifier?+"/"+$rootScope.currentPerson?
             if $rootScope.getMainScope()?.formIdentifier? && $rootScope.currentPerson?
-                console.log "----->>>>UNLOCKABLE !! "
                 downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
 
             routeWithScopeAndPeriod = ['/form','/results','/actions']
@@ -525,7 +523,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.testCloseable = ->
         if $rootScope.instanceName != 'verification'
-            if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
+            if !!$rootScope.periodSelectedKey and !!$rootScope.scopeSelectedId
                 downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
                     if result.success
                         $rootScope.closeableForms = result.data.closeable
