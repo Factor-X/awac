@@ -90,7 +90,7 @@ div.actions
                             span.fa.fa-pencil-square-o
                             span &nbsp;
                             span Editer cette action
-                        button.button(type="button", ng-click="markAsDone(a)")
+                        button.button(type="button", ng-click="markAsDone(a)", ng-show="a.statusKey != '2'")
                             span.fa.fa-check-square-o
                             span &nbsp;
                             span Marquer l'action comme réalisée

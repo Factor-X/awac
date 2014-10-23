@@ -23,7 +23,7 @@ angular
 
     $scope.edit = (action) ->
         modalService.show(modalService.CREATE_REDUCTION_ACTION,
-            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, cb: $scope.loadActions, action: angular.copy(action) })
+            { typeOptions: $scope.typeOptions, statusOptions: $scope.statusOptions, gwpUnits: $scope.gwpUnits, action: action })
 
     $scope.markAsDone = (action) ->
         $scope.isLoading = true
