@@ -81,7 +81,7 @@ div.actions
                             td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
                             td
                                 .box.wide
-                                    span(ng-show="a.files.length == 0") &nbsp;
+                                    //span(ng-show="a.files.length == 0") &nbsp;
                                     div(ng-repeat="f in a.files")
                                         a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
 
@@ -89,20 +89,20 @@ div.actions
                         button.button(type="button", ng-click="edit(a)")
                             span.fa.fa-pencil-square-o
                             span &nbsp;
-                            span Editer cette action
+                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_EDIT' | translate")
                         button.button(type="button", ng-click="markAsDone(a)", ng-show="a.statusKey != '2'")
                             span.fa.fa-check-square-o
                             span &nbsp;
-                            span Marquer l'action comme réalisée
+                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_MARK_AS_DONE' | translate")
 
     br
 
     button.button(type="button", ng-click="create()")
         span.fa.fa-plus-circle
         span &nbsp;
-        span Ajouter une action
+        span(ng-bind-html="'REDUCING_ACTION_BUTTON_CREATE' | translate")
 
     button.button(type="button", ng-click="exportToXls()")
         span.fa.fa-file-excel-o
         span &nbsp;
-        span Exporter au format XLS
+        span(ng-bind-html="'REDUCING_ACTION_BUTTON_EXPORT_TO_XLS' | translate")
