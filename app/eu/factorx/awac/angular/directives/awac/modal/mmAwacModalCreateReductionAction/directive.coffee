@@ -179,8 +179,11 @@ angular
             downloadService.postJson '/awac/actions/save', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                    if $scope.editMode
+                        angular.extend($scope.getParams().action, result.data)
                     $scope.close()
-                    $scope.getParams().cb()
+                    if !!$scope.getParams().cb
+                        $scope.getParams().cb()
                 else
                     $scope.isLoading = false
 
