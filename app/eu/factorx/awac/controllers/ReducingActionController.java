@@ -174,8 +174,12 @@ public class ReducingActionController extends AbstractController {
 		for (FilesUploadedDTO file : dto.getFiles()) {
 			documents.add(storedFileService.findById(file.getId()));
 		}
-		reducingAction.getDocuments().clear();
-		reducingAction.getDocuments().addAll(documents);
+		if (dto.getId() == null) {
+			reducingAction.setDocuments(documents);
+		} else {			
+			reducingAction.getDocuments().clear();
+			reducingAction.getDocuments().addAll(documents);
+		}
 
 		reducingActionService.saveOrUpdate(reducingAction);
 		return ok(conversionService.convert(reducingAction, ReducingActionDTO.class));

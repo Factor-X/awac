@@ -175,7 +175,7 @@ angular
                 comment: $scope.comment.field
                 files: $scope.files
             }
-
+            console.log(data)
             downloadService.postJson '/awac/actions/save', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
@@ -231,6 +231,7 @@ angular
                     messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
 
                     $scope.files.push(data)
+                    console.log($scope.files)
                     return
                 )
                 .error((data, status, headers, config) ->
