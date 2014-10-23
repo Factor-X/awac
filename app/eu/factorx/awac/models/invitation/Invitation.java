@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
 		@NamedQuery(name = Invitation.FIND_BY_KEY, query = "select i from Invitation i where i.genkey = :genkey"),
 		@NamedQuery(name = Invitation.FIND_BY_EMAIL, query = "select i from Invitation i where i.email = :email"),
+        @NamedQuery(name = Invitation.FIND_BY_EMAIL_AND_INTERFACE, query = "select i from Invitation i where i.email = :email and i.organization.interfaceCode = :interface")
 })
 public class Invitation extends AuditedAbstractEntity {
 
@@ -34,9 +35,10 @@ public class Invitation extends AuditedAbstractEntity {
 	public static final String FIND_BY_KEY = "Invitation.findByKey";
 	public static final String FIND_BY_EMAIL = "Invitation.findByEmail";
 	private static final long serialVersionUID = 1L;
+    public static final java.lang.String FIND_BY_EMAIL_AND_INTERFACE = "Invitation_FIND_BY_EMAIL_AND_INTERFACE";
 
 
-	@JsonIgnore
+    @JsonIgnore
 	// ignore password field when render in JSON
 	@XmlTransient
 	// ignore password field when render in XML

@@ -11,7 +11,7 @@ div
             mm-awac-modal-field-text(ng-info="nameInfo")
             .field_row
                 .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
-                .field_cell
+                .field_cell(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin'")
                     input(type="checkbox", ng-model="statisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
             
 
@@ -19,28 +19,29 @@ div
             button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="saveOrganization()", ng-disabled="!allFieldValid()")
         img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
 
-        br
-        br
-        h4(ng-bind-html="'SITE_MANAGER_EVENT_TITLE' | translateText")
-        .desc(ng-bind-html="'SITE_MANAGER_EVENT_DESC' | translateText")
-        br
-        div
-            span.select_period(ng-bind-html="'SITE_MANAGER_SELECT_PERIOD' | translateText")
-            select(ng-options='p.key as p.label for p in $root.periods', ng-model='selectedPeriodForEvent')
+        div(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin'")
+            br
+            br
+            h4(ng-bind-html="'SITE_MANAGER_EVENT_TITLE' | translateText")
+            .desc(ng-bind-html="'SITE_MANAGER_EVENT_DESC' | translateText")
+            br
+            div
+                span.select_period(ng-bind-html="'SITE_MANAGER_SELECT_PERIOD' | translateText")
+                select(ng-options='p.key as p.label for p in $root.periods', ng-model='selectedPeriodForEvent')
 
-        table.site_table
-            tr.site_table_header
-                td(ng-bind-html="'SITE_MANAGER_EVENT_NAME' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EVENT_DESCRIPTION' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
-                td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
+            table.site_table
+                tr.site_table_header
+                    td(ng-bind-html="'SITE_MANAGER_EVENT_NAME' | translateText")
+                    td(ng-bind-html="'SITE_MANAGER_EVENT_DESCRIPTION' | translateText")
+                    td(ng-bind-html="'SITE_MANAGER_EVENT_PERIOD' | translateText")
+                    td(ng-bind-html="'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText")
 
-            tr(ng-repeat="event in events", ng-show="event.period.key == selectedPeriodForEvent")
-                td {{event.name}}
-                td {{event.description}}
-                td {{event.period.label}}
-                td
-                    button(type="button", title="{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}", ng-click="editOrCreateEvent(event)", class="edit_icon glyphicon glyphicon-pencil")
+                tr(ng-repeat="event in events", ng-show="event.period.key == selectedPeriodForEvent")
+                    td {{event.name}}
+                    td {{event.description}}
+                    td {{event.period.label}}
+                    td
+                        button(type="button", title="{{'SITE_MANAGER_EDIT_EVENT_BUTTON' | translateText}}", ng-click="editOrCreateEvent(event)", class="edit_icon glyphicon glyphicon-pencil")
 
 
-        button.button.add(type="button", ng-click="editOrCreateEvent()",ng-bind-html="'SITE_MANAGER_ADD_EVENT_BUTTON' | translateText")
+            button.button.add(type="button", ng-click="editOrCreateEvent()",ng-bind-html="'SITE_MANAGER_ADD_EVENT_BUTTON' | translateText")

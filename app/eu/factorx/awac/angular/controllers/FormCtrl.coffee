@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "FormCtrl", ($scope, downloadService, messageFlash, translationService, modalService, $route, $timeout) ->
+.controller "FormCtrl", ($scope, downloadService, messageFlash, translationService, modalService, $route, $timeout,$filter) ->
 
 
 
@@ -56,8 +56,10 @@ angular
         downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
 
             if not result.success
-                $scope.errorMessage = result.data.message
-                messageFlash.displayError(result.data.message)
+                if !!result.data.messageToTranslate
+                    $scope.errorMessage = $filter('translateText')(result.data.messageToTranslate)
+                else
+                    $scope.errorMessage = result.data.message
                 modalService.close(modalService.LOADING)
             else
 

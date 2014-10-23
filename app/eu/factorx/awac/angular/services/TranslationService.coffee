@@ -47,7 +47,7 @@ angular
 
     svc.translateExceptionsDTO = (exception) ->
 
-        if Object.keys(exception.params).length > 0
+        if exception.params? && Object.keys(exception.params).length > 0
             return $filter('translateTextWithVars')(exception.messageToTranslate, exception.params)
         else if exception.messageToTranslate?
             return $filter('translate')(exception.messageToTranslate)

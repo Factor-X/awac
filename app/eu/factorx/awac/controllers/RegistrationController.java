@@ -19,6 +19,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexException;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,17 +70,18 @@ public class RegistrationController extends AbstractController {
 		// control organization name
 		Organization organization = organizationService.findByName(dto.getOrganizationName());
 		if (organization != null) {
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
+            throw new MyrmexRuntimeException(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED);
 		}
 
 		// control key
 		VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
 		if (verificationRequest == null || verificationRequest.getOrganizationVerifier() != null) {
-			return notFound(new ExceptionsDTO(BusinessErrorType.VERIFIER_REGISTRATION_NOT_VALID_REQUEST));
+			throw new MyrmexRuntimeException(BusinessErrorType.VERIFIER_REGISTRATION_NOT_VALID_REQUEST);
 		}
 
 		// create organization
 		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
+        organization.setStatisticsAllowed(false);
 		organizationService.saveOrUpdate(organization);
 
 		// create administrator

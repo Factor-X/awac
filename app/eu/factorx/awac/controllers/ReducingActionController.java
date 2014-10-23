@@ -6,6 +6,8 @@ import java.util.*;
 
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.format.Alignment;
+import jxl.format.VerticalAlignment;
 import jxl.write.*;
 import jxl.write.Number;
 
@@ -176,7 +178,7 @@ public class ReducingActionController extends AbstractController {
 		reducingAction.getDocuments().addAll(documents);
 
 		reducingActionService.saveOrUpdate(reducingAction);
-		return ok();
+		return ok(conversionService.convert(reducingAction, ReducingActionDTO.class));
 	}
 
 	private byte[] getExcelExport(List<ReducingAction> reducingActions) throws WriteException, IOException {

@@ -28,6 +28,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Transactional(readOnly = false)
@@ -74,16 +75,13 @@ public class InvitationController extends AbstractController {
         Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
 
-        // get organization name through securedController
-        Organization org = organizationService.findByName(securedController.getCurrentUser().getOrganization().getName());
-
-        Logger.info("lauchInvitation->interfaceTypeCode:" + org.getInterfaceCode());
+        Logger.info("lauchInvitation->interfaceTypeCode:" + securedController.getCurrentUser().getOrganization().getInterfaceCode());
         String awacInterfaceTypeFragment = null;
-        if (org.getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+        if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
             awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
-        } else if (org.getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
+        } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
             awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
-        } else if (org.getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
+        } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
         }
 

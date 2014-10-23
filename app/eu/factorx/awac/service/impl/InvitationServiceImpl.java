@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.springframework.stereotype.Repository;
 
 import play.Logger;
@@ -34,4 +35,22 @@ public class InvitationServiceImpl extends AbstractJPAPersistenceServiceImpl<Inv
 
 		return resultList;
 	}
+
+    @Override
+    public Invitation findByEmailAndInterface(String email, InterfaceTypeCode interfaceCode) {
+
+        List<Invitation> resultList = JPA.em().createNamedQuery(Invitation.FIND_BY_EMAIL_AND_INTERFACE, Invitation.class)
+                .setParameter("email", email)
+                .setParameter("interface", interfaceCode)
+                .getResultList();
+        if (resultList.size() > 1) {
+            String errorMsg = "More than one genkey found for same invited user";
+            Logger.error(errorMsg);
+            throw new RuntimeException(errorMsg);
+        }
+        if (resultList.size() == 0) {
+            return null;
+        }
+        return resultList.get(0);
+    }
 }
