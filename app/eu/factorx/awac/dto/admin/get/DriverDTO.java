@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class DriverDTO extends DTO {
 
+    private Long id;
+
     private String name;
 
     private List<DriverValueDTO> driverValues;
@@ -20,6 +22,14 @@ public class DriverDTO extends DTO {
     public DriverDTO(String name, List<DriverValueDTO> driverValues) {
         this.name = name;
         this.driverValues = driverValues;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

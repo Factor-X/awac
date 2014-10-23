@@ -18,6 +18,8 @@ public class DriverToDriverDTOConverter implements Converter<Driver, DriverDTO> 
     public DriverDTO convert(Driver driver) {
         DriverDTO driverDTO = new DriverDTO();
 
+        driverDTO.setId(driver.getId());
+
         driverDTO.setName(driver.getName());
 
         for (DriverValue driverValue : driver.getDriverValueList()) {
