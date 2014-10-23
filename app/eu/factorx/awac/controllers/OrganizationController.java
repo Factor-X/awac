@@ -33,9 +33,6 @@ import java.util.List;
 public class OrganizationController extends AbstractController {
 
     @Autowired
-    private OrganizationService organizationService;
-
-    @Autowired
     private AccountService accountService;
 
     @Autowired

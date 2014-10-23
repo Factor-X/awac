@@ -9,6 +9,7 @@ GET         /                                                                   
 GET         /enterprise                                                                            @eu.factorx.awac.controllers.ApplicationController.calculator(app= "enterprise")
 GET         /municipality                                                                          @eu.factorx.awac.controllers.ApplicationController.calculator(app= "municipality")
 GET         /verification                                                                          @eu.factorx.awac.controllers.ApplicationController.verification()
+GET         /admin                                                                                 @eu.factorx.awac.controllers.ApplicationController.admin()
 
 #
 # Translations
@@ -171,3 +172,8 @@ POST        /awac/verification/verify                                           
 GET         /awac/actions/load                                                                     @eu.factorx.awac.controllers.ReducingActionController.loadActions()
 POST        /awac/actions/save                                                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()
 GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
+
+#
+#
+#
+GET         /awac/admin/driver/all                                                                     @eu.factorx.awac.controllers.DriverController.getAll()

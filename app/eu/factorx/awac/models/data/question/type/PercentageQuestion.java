@@ -20,7 +20,7 @@ public class PercentageQuestion extends NumericQuestion {
 	}
 
 	public PercentageQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code,Double defaultValue) {
-		super(questionSet, orderIndex, code, null,defaultValue);
+		super(questionSet, orderIndex, code, null);
 	}
 
 	@Override

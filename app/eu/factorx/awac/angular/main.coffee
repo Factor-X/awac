@@ -91,6 +91,8 @@ if document.querySelector("meta[name=app]")?
         initializeEnterpriseRoutes(defaultResolve)
     else if iName == "verification"
       initializeVerificationRoutes(defaultResolve)
+    else if iName == "admin"
+        initializeAdminRoutes(defaultResolve)
 
 initializeCommonRoutes(defaultResolve)
 

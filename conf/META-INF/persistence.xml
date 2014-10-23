@@ -65,6 +65,8 @@
         <class>eu.factorx.awac.models.data.answer.type.StringAnswerValue</class>
         <class>eu.factorx.awac.models.data.file.StoredFile</class>
         <class>eu.factorx.awac.models.data.question.Question</class>
+        <class>eu.factorx.awac.models.data.question.Driver</class>
+        <class>eu.factorx.awac.models.data.question.DriverValue</class>
         <class>eu.factorx.awac.models.data.question.QuestionSet</class>
         <class>eu.factorx.awac.models.data.question.type.BooleanQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.DocumentQuestion</class>

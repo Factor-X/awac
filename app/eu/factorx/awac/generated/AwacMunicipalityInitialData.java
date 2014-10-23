@@ -600,7 +600,7 @@ if (ac3 == null) {
     ac3 = new IntegerQuestion(ac2, 0, QuestionCode.AC3, null, null);
     JPA.em().persist(ac3);
 } else {
-    ac3.setDefaultValue(null);
+    
     if (!ac3.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac3)) {
         ac2.getQuestions().remove(ac3);
         JPA.em().persist(ac2);
@@ -624,7 +624,7 @@ if (ac5 == null) {
     ac5 = new IntegerQuestion(ac2, 0, QuestionCode.AC5, null, null);
     JPA.em().persist(ac5);
 } else {
-    ac5.setDefaultValue(null);
+    
     if (!ac5.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac5)) {
         ac2.getQuestions().remove(ac5);
         JPA.em().persist(ac2);
@@ -648,7 +648,7 @@ if (ac6 == null) {
     ac6 = new IntegerQuestion(ac2, 0, QuestionCode.AC6, null, null);
     JPA.em().persist(ac6);
 } else {
-    ac6.setDefaultValue(null);
+    
     if (!ac6.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac6)) {
         ac2.getQuestions().remove(ac6);
         JPA.em().persist(ac2);
@@ -672,7 +672,7 @@ if (ac7 == null) {
     ac7 = new IntegerQuestion(ac2, 0, QuestionCode.AC7, null, null);
     JPA.em().persist(ac7);
 } else {
-    ac7.setDefaultValue(null);
+    
     if (!ac7.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac7)) {
         ac2.getQuestions().remove(ac7);
         JPA.em().persist(ac2);
@@ -696,7 +696,7 @@ if (ac8 == null) {
     ac8 = new DoubleQuestion( ac2, 0, QuestionCode.AC8, areaUnits, null, getUnitBySymbol("ha") );
     JPA.em().persist(ac8);
 } else {
-    ac8.setDefaultValue(null);
+    
     if (!ac8.getQuestionSet().equals(ac2) && ac2.getQuestions().contains(ac8)) {
         ac2.getQuestions().remove(ac8);
         JPA.em().persist(ac2);
@@ -722,7 +722,7 @@ if (ac11 == null) {
     ac11 = new StringQuestion(ac10, 0, QuestionCode.AC11, null);
     JPA.em().persist(ac11);
 } else {
-    ac11.setDefaultValue(null);
+    
     if (!ac11.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac11)) {
         ac10.getQuestions().remove(ac11);
         JPA.em().persist(ac10);
@@ -766,7 +766,7 @@ if (ac13 == null) {
     ac13 = new StringQuestion(ac10, 0, QuestionCode.AC13, null);
     JPA.em().persist(ac13);
 } else {
-    ac13.setDefaultValue(null);
+    
     if (!ac13.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac13)) {
         ac10.getQuestions().remove(ac13);
         JPA.em().persist(ac10);
@@ -788,7 +788,7 @@ if (ac14 == null) {
     ac14 = new StringQuestion(ac10, 0, QuestionCode.AC14, null);
     JPA.em().persist(ac14);
 } else {
-    ac14.setDefaultValue(null);
+    
     if (!ac14.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac14)) {
         ac10.getQuestions().remove(ac14);
         JPA.em().persist(ac10);
@@ -810,7 +810,7 @@ if (ac15 == null) {
     ac15 = new StringQuestion(ac10, 0, QuestionCode.AC15, null);
     JPA.em().persist(ac15);
 } else {
-    ac15.setDefaultValue(null);
+    
     if (!ac15.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac15)) {
         ac10.getQuestions().remove(ac15);
         JPA.em().persist(ac10);
@@ -832,7 +832,7 @@ if (ac16 == null) {
     ac16 = new StringQuestion(ac10, 0, QuestionCode.AC16, null);
     JPA.em().persist(ac16);
 } else {
-    ac16.setDefaultValue(null);
+    
     if (!ac16.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac16)) {
         ac10.getQuestions().remove(ac16);
         JPA.em().persist(ac10);
@@ -854,7 +854,7 @@ if (ac17 == null) {
     ac17 = new StringQuestion(ac10, 0, QuestionCode.AC17, null);
     JPA.em().persist(ac17);
 } else {
-    ac17.setDefaultValue(null);
+    
     if (!ac17.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac17)) {
         ac10.getQuestions().remove(ac17);
         JPA.em().persist(ac10);
@@ -876,7 +876,7 @@ if (ac18 == null) {
     ac18 = new StringQuestion(ac10, 0, QuestionCode.AC18, null);
     JPA.em().persist(ac18);
 } else {
-    ac18.setDefaultValue(null);
+    
     if (!ac18.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac18)) {
         ac10.getQuestions().remove(ac18);
         JPA.em().persist(ac10);
@@ -921,7 +921,7 @@ if (ac20 == null) {
     ac20 = new DoubleQuestion( ac10, 0, QuestionCode.AC20, areaUnits, null, getUnitBySymbol("m2") );
     JPA.em().persist(ac20);
 } else {
-    ac20.setDefaultValue(null);
+    
     if (!ac20.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac20)) {
         ac10.getQuestions().remove(ac20);
         JPA.em().persist(ac10);
@@ -948,7 +948,7 @@ if (ac21 == null) {
     ac21 = new DoubleQuestion( ac10, 0, QuestionCode.AC21, areaUnits, null, getUnitBySymbol("m2") );
     JPA.em().persist(ac21);
 } else {
-    ac21.setDefaultValue(null);
+    
     if (!ac21.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac21)) {
         ac10.getQuestions().remove(ac21);
         JPA.em().persist(ac10);
@@ -974,7 +974,7 @@ if (ac22 == null) {
     ac22 = new PercentageQuestion(ac10, 0, QuestionCode.AC22, null);
     JPA.em().persist(ac22);
 } else {
-    ac22.setDefaultValue(null);
+    
     if (!ac22.getQuestionSet().equals(ac10) && ac10.getQuestions().contains(ac22)) {
         ac10.getQuestions().remove(ac22);
         JPA.em().persist(ac10);
@@ -1040,7 +1040,7 @@ if (ac27 == null) {
     ac27 = new DoubleQuestion( ac25, 0, QuestionCode.AC27, energyUnits, null, energyUnits.getMainUnit() );
     JPA.em().persist(ac27);
 } else {
-    ac27.setDefaultValue(null);
+    
     if (!ac27.getQuestionSet().equals(ac25) && ac25.getQuestions().contains(ac27)) {
         ac25.getQuestions().remove(ac27);
         JPA.em().persist(ac25);
@@ -1089,7 +1089,7 @@ if (ac902 == null) {
     ac902 = new DoubleQuestion( ac900, 0, QuestionCode.AC902, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac902);
 } else {
-    ac902.setDefaultValue(null);
+    
     if (!ac902.getQuestionSet().equals(ac900) && ac900.getQuestions().contains(ac902)) {
         ac900.getQuestions().remove(ac902);
         JPA.em().persist(ac900);
@@ -1138,7 +1138,7 @@ if (ac905 == null) {
     ac905 = new DoubleQuestion( ac903, 0, QuestionCode.AC905, massUnits, null, massUnits.getMainUnit() );
     JPA.em().persist(ac905);
 } else {
-    ac905.setDefaultValue(null);
+    
     if (!ac905.getQuestionSet().equals(ac903) && ac903.getQuestions().contains(ac905)) {
         ac903.getQuestions().remove(ac905);
         JPA.em().persist(ac903);
@@ -1165,7 +1165,7 @@ if (ac30 == null) {
     ac30 = new DoubleQuestion( ac29, 0, QuestionCode.AC30, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac30);
 } else {
-    ac30.setDefaultValue(null);
+    
     if (!ac30.getQuestionSet().equals(ac29) && ac29.getQuestions().contains(ac30)) {
         ac29.getQuestions().remove(ac30);
         JPA.em().persist(ac29);
@@ -1192,7 +1192,7 @@ if (ac31 == null) {
     ac31 = new DoubleQuestion( ac29, 0, QuestionCode.AC31, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac31);
 } else {
-    ac31.setDefaultValue(null);
+    
     if (!ac31.getQuestionSet().equals(ac29) && ac29.getQuestions().contains(ac31)) {
         ac29.getQuestions().remove(ac31);
         JPA.em().persist(ac29);
@@ -1240,7 +1240,7 @@ if (ac35 == null) {
     ac35 = new PercentageQuestion(ac33, 0, QuestionCode.AC35, null);
     JPA.em().persist(ac35);
 } else {
-    ac35.setDefaultValue(null);
+    
     if (!ac35.getQuestionSet().equals(ac33) && ac33.getQuestions().contains(ac35)) {
         ac33.getQuestions().remove(ac35);
         JPA.em().persist(ac33);
@@ -1263,7 +1263,7 @@ if (ac36 == null) {
     ac36 = new DoubleQuestion( ac33, 0, QuestionCode.AC36, energyUnits, null, energyUnits.getMainUnit() );
     JPA.em().persist(ac36);
 } else {
-    ac36.setDefaultValue(null);
+    
     if (!ac36.getQuestionSet().equals(ac33) && ac33.getQuestions().contains(ac36)) {
         ac33.getQuestions().remove(ac36);
         JPA.em().persist(ac33);
@@ -1333,7 +1333,7 @@ if (ac41 == null) {
     ac41 = new DoubleQuestion( ac39, 0, QuestionCode.AC41, massUnits, null, massUnits.getMainUnit() );
     JPA.em().persist(ac41);
 } else {
-    ac41.setDefaultValue(null);
+    
     if (!ac41.getQuestionSet().equals(ac39) && ac39.getQuestions().contains(ac41)) {
         ac39.getQuestions().remove(ac41);
         JPA.em().persist(ac39);
@@ -1403,7 +1403,7 @@ if (ac5002 == null) {
     ac5002 = new DoubleQuestion( ac5000, 0, QuestionCode.AC5002, massUnits, null, getUnitBySymbol("t") );
     JPA.em().persist(ac5002);
 } else {
-    ac5002.setDefaultValue(null);
+    
     if (!ac5002.getQuestionSet().equals(ac5000) && ac5000.getQuestions().contains(ac5002)) {
         ac5000.getQuestions().remove(ac5002);
         JPA.em().persist(ac5000);
@@ -1451,7 +1451,7 @@ if (ac54 == null) {
     ac54 = new DoubleQuestion( ac52, 0, QuestionCode.AC54, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac54);
 } else {
-    ac54.setDefaultValue(null);
+    
     if (!ac54.getQuestionSet().equals(ac52) && ac52.getQuestions().contains(ac54)) {
         ac52.getQuestions().remove(ac54);
         JPA.em().persist(ac52);
@@ -1478,7 +1478,7 @@ if (ac55 == null) {
     ac55 = new DoubleQuestion( ac52, 0, QuestionCode.AC55, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac55);
 } else {
-    ac55.setDefaultValue(null);
+    
     if (!ac55.getQuestionSet().equals(ac52) && ac52.getQuestions().contains(ac55)) {
         ac52.getQuestions().remove(ac55);
         JPA.em().persist(ac52);
@@ -1504,7 +1504,7 @@ if (ac57 == null) {
     ac57 = new StringQuestion(ac56, 0, QuestionCode.AC57, null);
     JPA.em().persist(ac57);
 } else {
-    ac57.setDefaultValue(null);
+    
     if (!ac57.getQuestionSet().equals(ac56) && ac56.getQuestions().contains(ac57)) {
         ac56.getQuestions().remove(ac57);
         JPA.em().persist(ac56);
@@ -1527,7 +1527,7 @@ if (ac58 == null) {
     ac58 = new DoubleQuestion( ac56, 0, QuestionCode.AC58, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac58);
 } else {
-    ac58.setDefaultValue(null);
+    
     if (!ac58.getQuestionSet().equals(ac56) && ac56.getQuestions().contains(ac58)) {
         ac56.getQuestions().remove(ac58);
         JPA.em().persist(ac56);
@@ -1554,7 +1554,7 @@ if (ac59 == null) {
     ac59 = new DoubleQuestion( ac56, 0, QuestionCode.AC59, energyUnits, null, getUnitBySymbol("kW.h") );
     JPA.em().persist(ac59);
 } else {
-    ac59.setDefaultValue(null);
+    
     if (!ac59.getQuestionSet().equals(ac56) && ac56.getQuestions().contains(ac59)) {
         ac56.getQuestions().remove(ac59);
         JPA.em().persist(ac56);
@@ -1602,7 +1602,7 @@ if (ac403 == null) {
     ac403 = new DoubleQuestion( ac402, 0, QuestionCode.AC403, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac403);
 } else {
-    ac403.setDefaultValue(null);
+    
     if (!ac403.getQuestionSet().equals(ac402) && ac402.getQuestions().contains(ac403)) {
         ac402.getQuestions().remove(ac403);
         JPA.em().persist(ac402);
@@ -1629,7 +1629,7 @@ if (ac404 == null) {
     ac404 = new DoubleQuestion( ac402, 0, QuestionCode.AC404, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac404);
 } else {
-    ac404.setDefaultValue(null);
+    
     if (!ac404.getQuestionSet().equals(ac402) && ac402.getQuestions().contains(ac404)) {
         ac402.getQuestions().remove(ac404);
         JPA.em().persist(ac402);
@@ -1656,7 +1656,7 @@ if (ac405 == null) {
     ac405 = new DoubleQuestion( ac402, 0, QuestionCode.AC405, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac405);
 } else {
-    ac405.setDefaultValue(null);
+    
     if (!ac405.getQuestionSet().equals(ac402) && ac402.getQuestions().contains(ac405)) {
         ac402.getQuestions().remove(ac405);
         JPA.em().persist(ac402);
@@ -1682,7 +1682,7 @@ if (ac408 == null) {
     ac408 = new StringQuestion(ac407, 0, QuestionCode.AC408, null);
     JPA.em().persist(ac408);
 } else {
-    ac408.setDefaultValue(null);
+    
     if (!ac408.getQuestionSet().equals(ac407) && ac407.getQuestions().contains(ac408)) {
         ac407.getQuestions().remove(ac408);
         JPA.em().persist(ac407);
@@ -1727,7 +1727,7 @@ if (ac410 == null) {
     ac410 = new IntegerQuestion(ac407, 0, QuestionCode.AC410, null, null);
     JPA.em().persist(ac410);
 } else {
-    ac410.setDefaultValue(null);
+    
     if (!ac410.getQuestionSet().equals(ac407) && ac407.getQuestions().contains(ac410)) {
         ac407.getQuestions().remove(ac410);
         JPA.em().persist(ac407);
@@ -1751,7 +1751,7 @@ if (ac411 == null) {
     ac411 = new IntegerQuestion(ac407, 0, QuestionCode.AC411, null, null);
     JPA.em().persist(ac411);
 } else {
-    ac411.setDefaultValue(null);
+    
     if (!ac411.getQuestionSet().equals(ac407) && ac407.getQuestions().contains(ac411)) {
         ac407.getQuestions().remove(ac411);
         JPA.em().persist(ac407);
@@ -1774,7 +1774,7 @@ if (ac414 == null) {
     ac414 = new StringQuestion(ac413, 0, QuestionCode.AC414, null);
     JPA.em().persist(ac414);
 } else {
-    ac414.setDefaultValue(null);
+    
     if (!ac414.getQuestionSet().equals(ac413) && ac413.getQuestions().contains(ac414)) {
         ac413.getQuestions().remove(ac414);
         JPA.em().persist(ac413);
@@ -1819,7 +1819,7 @@ if (ac416 == null) {
     ac416 = new DoubleQuestion( ac413, 0, QuestionCode.AC416, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac416);
 } else {
-    ac416.setDefaultValue(null);
+    
     if (!ac416.getQuestionSet().equals(ac413) && ac413.getQuestions().contains(ac416)) {
         ac413.getQuestions().remove(ac416);
         JPA.em().persist(ac413);
@@ -1846,7 +1846,7 @@ if (ac417 == null) {
     ac417 = new DoubleQuestion( ac413, 0, QuestionCode.AC417, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac417);
 } else {
-    ac417.setDefaultValue(null);
+    
     if (!ac417.getQuestionSet().equals(ac413) && ac413.getQuestions().contains(ac417)) {
         ac413.getQuestions().remove(ac417);
         JPA.em().persist(ac413);
@@ -1873,7 +1873,7 @@ if (ac503 == null) {
     ac503 = new DoubleQuestion( ac502, 0, QuestionCode.AC503, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac503);
 } else {
-    ac503.setDefaultValue(null);
+    
     if (!ac503.getQuestionSet().equals(ac502) && ac502.getQuestions().contains(ac503)) {
         ac502.getQuestions().remove(ac503);
         JPA.em().persist(ac502);
@@ -1900,7 +1900,7 @@ if (ac504 == null) {
     ac504 = new DoubleQuestion( ac502, 0, QuestionCode.AC504, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac504);
 } else {
-    ac504.setDefaultValue(null);
+    
     if (!ac504.getQuestionSet().equals(ac502) && ac502.getQuestions().contains(ac504)) {
         ac502.getQuestions().remove(ac504);
         JPA.em().persist(ac502);
@@ -1927,7 +1927,7 @@ if (ac505 == null) {
     ac505 = new DoubleQuestion( ac502, 0, QuestionCode.AC505, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac505);
 } else {
-    ac505.setDefaultValue(null);
+    
     if (!ac505.getQuestionSet().equals(ac502) && ac502.getQuestions().contains(ac505)) {
         ac502.getQuestions().remove(ac505);
         JPA.em().persist(ac502);
@@ -1953,7 +1953,7 @@ if (ac508 == null) {
     ac508 = new StringQuestion(ac507, 0, QuestionCode.AC508, null);
     JPA.em().persist(ac508);
 } else {
-    ac508.setDefaultValue(null);
+    
     if (!ac508.getQuestionSet().equals(ac507) && ac507.getQuestions().contains(ac508)) {
         ac507.getQuestions().remove(ac508);
         JPA.em().persist(ac507);
@@ -1998,7 +1998,7 @@ if (ac510 == null) {
     ac510 = new IntegerQuestion(ac507, 0, QuestionCode.AC510, null, null);
     JPA.em().persist(ac510);
 } else {
-    ac510.setDefaultValue(null);
+    
     if (!ac510.getQuestionSet().equals(ac507) && ac507.getQuestions().contains(ac510)) {
         ac507.getQuestions().remove(ac510);
         JPA.em().persist(ac507);
@@ -2022,7 +2022,7 @@ if (ac511 == null) {
     ac511 = new IntegerQuestion(ac507, 0, QuestionCode.AC511, null, null);
     JPA.em().persist(ac511);
 } else {
-    ac511.setDefaultValue(null);
+    
     if (!ac511.getQuestionSet().equals(ac507) && ac507.getQuestions().contains(ac511)) {
         ac507.getQuestions().remove(ac511);
         JPA.em().persist(ac507);
@@ -2045,7 +2045,7 @@ if (ac514 == null) {
     ac514 = new StringQuestion(ac513, 0, QuestionCode.AC514, null);
     JPA.em().persist(ac514);
 } else {
-    ac514.setDefaultValue(null);
+    
     if (!ac514.getQuestionSet().equals(ac513) && ac513.getQuestions().contains(ac514)) {
         ac513.getQuestions().remove(ac514);
         JPA.em().persist(ac513);
@@ -2090,7 +2090,7 @@ if (ac516 == null) {
     ac516 = new DoubleQuestion( ac513, 0, QuestionCode.AC516, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac516);
 } else {
-    ac516.setDefaultValue(null);
+    
     if (!ac516.getQuestionSet().equals(ac513) && ac513.getQuestions().contains(ac516)) {
         ac513.getQuestions().remove(ac516);
         JPA.em().persist(ac513);
@@ -2117,7 +2117,7 @@ if (ac517 == null) {
     ac517 = new DoubleQuestion( ac513, 0, QuestionCode.AC517, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac517);
 } else {
-    ac517.setDefaultValue(null);
+    
     if (!ac517.getQuestionSet().equals(ac513) && ac513.getQuestions().contains(ac517)) {
         ac513.getQuestions().remove(ac517);
         JPA.em().persist(ac513);
@@ -2144,7 +2144,7 @@ if (ac603 == null) {
     ac603 = new DoubleQuestion( ac602, 0, QuestionCode.AC603, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac603);
 } else {
-    ac603.setDefaultValue(null);
+    
     if (!ac603.getQuestionSet().equals(ac602) && ac602.getQuestions().contains(ac603)) {
         ac602.getQuestions().remove(ac603);
         JPA.em().persist(ac602);
@@ -2171,7 +2171,7 @@ if (ac604 == null) {
     ac604 = new DoubleQuestion( ac602, 0, QuestionCode.AC604, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac604);
 } else {
-    ac604.setDefaultValue(null);
+    
     if (!ac604.getQuestionSet().equals(ac602) && ac602.getQuestions().contains(ac604)) {
         ac602.getQuestions().remove(ac604);
         JPA.em().persist(ac602);
@@ -2198,7 +2198,7 @@ if (ac605 == null) {
     ac605 = new DoubleQuestion( ac602, 0, QuestionCode.AC605, volumeUnits, null, volumeUnits.getMainUnit() );
     JPA.em().persist(ac605);
 } else {
-    ac605.setDefaultValue(null);
+    
     if (!ac605.getQuestionSet().equals(ac602) && ac602.getQuestions().contains(ac605)) {
         ac602.getQuestions().remove(ac605);
         JPA.em().persist(ac602);
@@ -2224,7 +2224,7 @@ if (ac608 == null) {
     ac608 = new StringQuestion(ac607, 0, QuestionCode.AC608, null);
     JPA.em().persist(ac608);
 } else {
-    ac608.setDefaultValue(null);
+    
     if (!ac608.getQuestionSet().equals(ac607) && ac607.getQuestions().contains(ac608)) {
         ac607.getQuestions().remove(ac608);
         JPA.em().persist(ac607);
@@ -2269,7 +2269,7 @@ if (ac610 == null) {
     ac610 = new IntegerQuestion(ac607, 0, QuestionCode.AC610, null, null);
     JPA.em().persist(ac610);
 } else {
-    ac610.setDefaultValue(null);
+    
     if (!ac610.getQuestionSet().equals(ac607) && ac607.getQuestions().contains(ac610)) {
         ac607.getQuestions().remove(ac610);
         JPA.em().persist(ac607);
@@ -2293,7 +2293,7 @@ if (ac611 == null) {
     ac611 = new IntegerQuestion(ac607, 0, QuestionCode.AC611, null, null);
     JPA.em().persist(ac611);
 } else {
-    ac611.setDefaultValue(null);
+    
     if (!ac611.getQuestionSet().equals(ac607) && ac607.getQuestions().contains(ac611)) {
         ac607.getQuestions().remove(ac611);
         JPA.em().persist(ac607);
@@ -2316,7 +2316,7 @@ if (ac614 == null) {
     ac614 = new StringQuestion(ac613, 0, QuestionCode.AC614, null);
     JPA.em().persist(ac614);
 } else {
-    ac614.setDefaultValue(null);
+    
     if (!ac614.getQuestionSet().equals(ac613) && ac613.getQuestions().contains(ac614)) {
         ac613.getQuestions().remove(ac614);
         JPA.em().persist(ac613);
@@ -2361,7 +2361,7 @@ if (ac616 == null) {
     ac616 = new DoubleQuestion( ac613, 0, QuestionCode.AC616, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac616);
 } else {
-    ac616.setDefaultValue(null);
+    
     if (!ac616.getQuestionSet().equals(ac613) && ac613.getQuestions().contains(ac616)) {
         ac613.getQuestions().remove(ac616);
         JPA.em().persist(ac613);
@@ -2388,7 +2388,7 @@ if (ac617 == null) {
     ac617 = new DoubleQuestion( ac613, 0, QuestionCode.AC617, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac617);
 } else {
-    ac617.setDefaultValue(null);
+    
     if (!ac617.getQuestionSet().equals(ac613) && ac613.getQuestions().contains(ac617)) {
         ac613.getQuestions().remove(ac617);
         JPA.em().persist(ac613);
@@ -2415,7 +2415,7 @@ if (ac94 == null) {
     ac94 = new IntegerQuestion(ac93, 0, QuestionCode.AC94, null, null);
     JPA.em().persist(ac94);
 } else {
-    ac94.setDefaultValue(null);
+    
     if (!ac94.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac94)) {
         ac93.getQuestions().remove(ac94);
         JPA.em().persist(ac93);
@@ -2439,7 +2439,7 @@ if (ac95 == null) {
     ac95 = new IntegerQuestion(ac93, 0, QuestionCode.AC95, null, null);
     JPA.em().persist(ac95);
 } else {
-    ac95.setDefaultValue(null);
+    
     if (!ac95.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac95)) {
         ac93.getQuestions().remove(ac95);
         JPA.em().persist(ac93);
@@ -2463,7 +2463,7 @@ if (ac96 == null) {
     ac96 = new IntegerQuestion(ac93, 0, QuestionCode.AC96, null, null);
     JPA.em().persist(ac96);
 } else {
-    ac96.setDefaultValue(null);
+    
     if (!ac96.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac96)) {
         ac93.getQuestions().remove(ac96);
         JPA.em().persist(ac93);
@@ -2487,7 +2487,7 @@ if (ac97 == null) {
     ac97 = new IntegerQuestion(ac93, 0, QuestionCode.AC97, null, null);
     JPA.em().persist(ac97);
 } else {
-    ac97.setDefaultValue(null);
+    
     if (!ac97.getQuestionSet().equals(ac93) && ac93.getQuestions().contains(ac97)) {
         ac93.getQuestions().remove(ac97);
         JPA.em().persist(ac93);
@@ -2511,7 +2511,7 @@ if (ac99 == null) {
     ac99 = new IntegerQuestion(ac98, 0, QuestionCode.AC99, null, null);
     JPA.em().persist(ac99);
 } else {
-    ac99.setDefaultValue(null);
+    
     if (!ac99.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac99)) {
         ac98.getQuestions().remove(ac99);
         JPA.em().persist(ac98);
@@ -2535,7 +2535,7 @@ if (ac100 == null) {
     ac100 = new IntegerQuestion(ac98, 0, QuestionCode.AC100, null, null);
     JPA.em().persist(ac100);
 } else {
-    ac100.setDefaultValue(null);
+    
     if (!ac100.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac100)) {
         ac98.getQuestions().remove(ac100);
         JPA.em().persist(ac98);
@@ -2559,7 +2559,7 @@ if (ac101 == null) {
     ac101 = new IntegerQuestion(ac98, 0, QuestionCode.AC101, null, null);
     JPA.em().persist(ac101);
 } else {
-    ac101.setDefaultValue(null);
+    
     if (!ac101.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac101)) {
         ac98.getQuestions().remove(ac101);
         JPA.em().persist(ac98);
@@ -2583,7 +2583,7 @@ if (ac102 == null) {
     ac102 = new IntegerQuestion(ac98, 0, QuestionCode.AC102, null, null);
     JPA.em().persist(ac102);
 } else {
-    ac102.setDefaultValue(null);
+    
     if (!ac102.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac102)) {
         ac98.getQuestions().remove(ac102);
         JPA.em().persist(ac98);
@@ -2607,7 +2607,7 @@ if (ac103 == null) {
     ac103 = new IntegerQuestion(ac98, 0, QuestionCode.AC103, null, null);
     JPA.em().persist(ac103);
 } else {
-    ac103.setDefaultValue(null);
+    
     if (!ac103.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac103)) {
         ac98.getQuestions().remove(ac103);
         JPA.em().persist(ac98);
@@ -2631,7 +2631,7 @@ if (ac104 == null) {
     ac104 = new DoubleQuestion( ac98, 0, QuestionCode.AC104, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac104);
 } else {
-    ac104.setDefaultValue(null);
+    
     if (!ac104.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac104)) {
         ac98.getQuestions().remove(ac104);
         JPA.em().persist(ac98);
@@ -2658,7 +2658,7 @@ if (ac105 == null) {
     ac105 = new IntegerQuestion(ac98, 0, QuestionCode.AC105, null, null);
     JPA.em().persist(ac105);
 } else {
-    ac105.setDefaultValue(null);
+    
     if (!ac105.getQuestionSet().equals(ac98) && ac98.getQuestions().contains(ac105)) {
         ac98.getQuestions().remove(ac105);
         JPA.em().persist(ac98);
@@ -2681,7 +2681,7 @@ if (ac108 == null) {
     ac108 = new StringQuestion(ac107, 0, QuestionCode.AC108, null);
     JPA.em().persist(ac108);
 } else {
-    ac108.setDefaultValue(null);
+    
     if (!ac108.getQuestionSet().equals(ac107) && ac107.getQuestions().contains(ac108)) {
         ac107.getQuestions().remove(ac108);
         JPA.em().persist(ac107);
@@ -2748,7 +2748,7 @@ if (ac111 == null) {
     ac111 = new IntegerQuestion(ac107, 0, QuestionCode.AC111, null, null);
     JPA.em().persist(ac111);
 } else {
-    ac111.setDefaultValue(null);
+    
     if (!ac111.getQuestionSet().equals(ac107) && ac107.getQuestions().contains(ac111)) {
         ac107.getQuestions().remove(ac111);
         JPA.em().persist(ac107);
@@ -2772,7 +2772,7 @@ if (ac112 == null) {
     ac112 = new DoubleQuestion( ac107, 0, QuestionCode.AC112, lengthUnits, null, getUnitBySymbol("km") );
     JPA.em().persist(ac112);
 } else {
-    ac112.setDefaultValue(null);
+    
     if (!ac112.getQuestionSet().equals(ac107) && ac107.getQuestions().contains(ac112)) {
         ac107.getQuestions().remove(ac112);
         JPA.em().persist(ac107);
@@ -2841,7 +2841,7 @@ if (ac117 == null) {
     ac117 = new StringQuestion(ac116, 0, QuestionCode.AC117, null);
     JPA.em().persist(ac117);
 } else {
-    ac117.setDefaultValue(null);
+    
     if (!ac117.getQuestionSet().equals(ac116) && ac116.getQuestions().contains(ac117)) {
         ac116.getQuestions().remove(ac117);
         JPA.em().persist(ac116);
@@ -3061,7 +3061,6 @@ if (ac127 == null) {
     ac127 = new PercentageQuestion(ac116, 0, QuestionCode.AC127, 0.9);
     JPA.em().persist(ac127);
 } else {
-    ac127.setDefaultValue(0.9);
     if (!ac127.getQuestionSet().equals(ac116) && ac116.getQuestions().contains(ac127)) {
         ac116.getQuestions().remove(ac127);
         JPA.em().persist(ac116);
@@ -3084,7 +3083,7 @@ if (ac128 == null) {
     ac128 = new DoubleQuestion( ac116, 0, QuestionCode.AC128, massUnits, null, getUnitBySymbol("t") );
     JPA.em().persist(ac128);
 } else {
-    ac128.setDefaultValue(null);
+    
     if (!ac128.getQuestionSet().equals(ac116) && ac116.getQuestions().contains(ac128)) {
         ac116.getQuestions().remove(ac128);
         JPA.em().persist(ac116);
@@ -3111,7 +3110,7 @@ if (ac129 == null) {
     ac129 = new DoubleQuestion( ac116, 0, QuestionCode.AC129, moneyUnits, null, getUnitBySymbol("EUR") );
     JPA.em().persist(ac129);
 } else {
-    ac129.setDefaultValue(null);
+    
     if (!ac129.getQuestionSet().equals(ac116) && ac116.getQuestions().contains(ac129)) {
         ac116.getQuestions().remove(ac129);
         JPA.em().persist(ac116);
@@ -3181,7 +3180,7 @@ if (ac134 == null) {
     ac134 = new DoubleQuestion( ac132, 0, QuestionCode.AC134, areaUnits, null, getUnitBySymbol("m2") );
     JPA.em().persist(ac134);
 } else {
-    ac134.setDefaultValue(null);
+    
     if (!ac134.getQuestionSet().equals(ac132) && ac132.getQuestions().contains(ac134)) {
         ac132.getQuestions().remove(ac134);
         JPA.em().persist(ac132);
@@ -3208,7 +3207,7 @@ if (ac135 == null) {
     ac135 = new DoubleQuestion( ac132, 0, QuestionCode.AC135, massUnits, null, getUnitBySymbol("t") );
     JPA.em().persist(ac135);
 } else {
-    ac135.setDefaultValue(null);
+    
     if (!ac135.getQuestionSet().equals(ac132) && ac132.getQuestions().contains(ac135)) {
         ac132.getQuestions().remove(ac135);
         JPA.em().persist(ac132);
@@ -3235,7 +3234,7 @@ if (ac136 == null) {
     ac136 = new IntegerQuestion(ac132, 0, QuestionCode.AC136, null, null);
     JPA.em().persist(ac136);
 } else {
-    ac136.setDefaultValue(null);
+    
     if (!ac136.getQuestionSet().equals(ac132) && ac132.getQuestions().contains(ac136)) {
         ac132.getQuestions().remove(ac136);
         JPA.em().persist(ac132);
@@ -3279,7 +3278,7 @@ if (ac140 == null) {
     ac140 = new StringQuestion(ac139, 0, QuestionCode.AC140, null);
     JPA.em().persist(ac140);
 } else {
-    ac140.setDefaultValue(null);
+    
     if (!ac140.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac140)) {
         ac139.getQuestions().remove(ac140);
         JPA.em().persist(ac139);
@@ -3301,7 +3300,7 @@ if (ac141 == null) {
     ac141 = new PercentageQuestion(ac139, 0, QuestionCode.AC141, null);
     JPA.em().persist(ac141);
 } else {
-    ac141.setDefaultValue(null);
+    
     if (!ac141.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac141)) {
         ac139.getQuestions().remove(ac141);
         JPA.em().persist(ac139);
@@ -3324,7 +3323,7 @@ if (ac142 == null) {
     ac142 = new IntegerQuestion(ac139, 0, QuestionCode.AC142, null, null);
     JPA.em().persist(ac142);
 } else {
-    ac142.setDefaultValue(null);
+    
     if (!ac142.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac142)) {
         ac139.getQuestions().remove(ac142);
         JPA.em().persist(ac139);
@@ -3348,7 +3347,7 @@ if (ac143 == null) {
     ac143 = new IntegerQuestion(ac139, 0, QuestionCode.AC143, null, null);
     JPA.em().persist(ac143);
 } else {
-    ac143.setDefaultValue(null);
+    
     if (!ac143.getQuestionSet().equals(ac139) && ac139.getQuestions().contains(ac143)) {
         ac139.getQuestions().remove(ac143);
         JPA.em().persist(ac139);

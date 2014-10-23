@@ -23,16 +23,10 @@ public class IntegerQuestion extends NumericQuestion {
 
 	public IntegerQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Integer defaultValue) {
 		super(questionSet, orderIndex, code, unitCategory);
-		if (defaultValue != null) {
-			this.defaultValue = defaultValue.doubleValue();
-		}
 	}
 
     public IntegerQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Integer defaultValue, Unit defaultUnit) {
         super(questionSet, orderIndex, code, unitCategory,defaultUnit);
-        if (defaultValue != null) {
-            this.defaultValue = defaultValue.doubleValue();
-        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.UnitDTO;
+import eu.factorx.awac.service.DriverValueService;
 import eu.factorx.awac.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -18,7 +19,7 @@ import eu.factorx.awac.models.knowledge.UnitCategory;
 public class QuestionToQuestionDTOConverter implements Converter<Question, QuestionDTO> {
 
     @Autowired
-    private UnitService unitService;
+    private DriverValueService driverValueService;
 
     @Override
     public QuestionDTO convert(Question question) {
@@ -38,15 +39,6 @@ public class QuestionToQuestionDTOConverter implements Converter<Question, Quest
             codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
         }
 
-        //add default value
-        if (question instanceof DoubleQuestion) {
-            defaultValue = ((DoubleQuestion) question).getDefaultValue();
-        } else if (question instanceof IntegerQuestion) {
-            Double doubleValue = ((IntegerQuestion) question).getDefaultValue();
-            if (doubleValue != null) {
-                defaultValue = doubleValue.intValue();
-            }
-        }
 
         //add default unit
         if(question instanceof NumericQuestion && ((NumericQuestion)question).getDefaultUnit()!=null){

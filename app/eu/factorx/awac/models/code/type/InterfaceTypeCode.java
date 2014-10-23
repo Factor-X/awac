@@ -20,6 +20,7 @@ public class InterfaceTypeCode extends Code {
     public static final InterfaceTypeCode EVENT = new InterfaceTypeCode("event");
     public static final InterfaceTypeCode LITTLE_EMITTER = new InterfaceTypeCode("littleEmitter");
     public static final InterfaceTypeCode VERIFICATION = new InterfaceTypeCode("verification");
+    public static final InterfaceTypeCode ADMIN = new InterfaceTypeCode("admin");
 
 	public InterfaceTypeCode() {
 		super(CodeList.INTERFACE_TYPE);

@@ -123,6 +123,7 @@ public class SecuredController extends Security.Authenticator {
     }
 
     private void controlMyInstance(Scope scope, Period period) throws Exception {
+
         //test scope
         if (!scope.getOrganization().equals(getCurrentUser().getOrganization())) {
             throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE_LITTLE);
