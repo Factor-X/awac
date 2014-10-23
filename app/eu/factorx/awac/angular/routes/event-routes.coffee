@@ -1,7 +1,7 @@
 #
 # Routes
 #
-initializeEnterpriseRoutes = (defaultResolve) ->
+initializeEventRoutes = (defaultResolve) ->
     angular
     .module('app')
     .run ($rootScope, $location) ->
