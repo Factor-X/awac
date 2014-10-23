@@ -293,10 +293,12 @@ div.results.pdf-able
 
             td.top-aligned
                 div.align-right
-                    button.button(type="button", ng-click="exportXls()")
-                        span(ng-bind-html="'XLS_EXPORT' | translate")
-                    button.button(type="button", ng-click="exportPdf()")
-                        span(ng-bind-html="'PDF_EXPORT' | translate")
+                    button.button(type="button", ng-click="exportXls()", ng-disabled="xlsLoading")
+                        img(ng-show="xlsLoading", src="/assets/images/loading_small.gif")
+                        span(ng-hide="xlsLoading", ng-bind-html="'XLS_EXPORT' | translate")
+                    button.button(type="button", ng-click="exportPdf()", ng-disabled="pdfLoading")
+                        img(ng-show="pdfLoading", src="/assets/images/loading_small.gif")
+                        span(ng-hide="pdfLoading", ng-bind-html="'PDF_EXPORT' | translate")
 
                 br
 

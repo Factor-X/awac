@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
@@ -16,10 +17,10 @@ import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
-import eu.factorx.awac.util.MyrmexRuntimeException;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
@@ -114,19 +115,10 @@ public class ResultController extends AbstractController {
 		if (comparedPeriodKey == null) {
 			Period period = periodService.findByCode(new PeriodCode(periodKey));
 
-			//launch the download
-			response().setContentType("application/octet-stream");
-			response().setHeader("Content-Disposition", "attachment; filename=export.xls");
-
-
 			return getSimpleReportAsXls(period, scopes);
 		} else {
 			Period period = periodService.findByCode(new PeriodCode(periodKey));
 			Period comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
-
-			// launch the download
-			response().setContentType("application/octet-stream");
-			response().setHeader("Content-Disposition", "attachment; filename=export.xls");
 
 			return getComparedReportAsXls(period, comparedPeriod, scopes);
 		}
@@ -158,7 +150,13 @@ public class ResultController extends AbstractController {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 		byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, comparedPeriod, interfaceCode);
-		return ok(new Base64().encode(bytes));
+
+		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
+		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".pdf");
+		downloadFileDTO.setMimeType("application/pdf");
+		downloadFileDTO.setBase64(new Base64().encodeAsString(bytes));
+
+		return ok(downloadFileDTO);
 	}
 
 	//
@@ -169,14 +167,26 @@ public class ResultController extends AbstractController {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
-		return ok(new Base64().encode(content));
+
+		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
+		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".xls");
+		downloadFileDTO.setMimeType("application/vnd.ms-excel");
+		downloadFileDTO.setBase64(new Base64().encodeAsString(content));
+
+		return ok(downloadFileDTO);
 	}
 
 	private Result getComparedReportAsXls(Period period, Period comparedPeriod, List<Scope> scopes) throws IOException, WriteException, BiffException {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
-		return ok(new Base64().encode(content));
+
+		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
+		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".xls");
+		downloadFileDTO.setMimeType("application/vnd.ms-excel");
+		downloadFileDTO.setBase64(new Base64().encodeAsString(content));
+
+		return ok(downloadFileDTO);
 	}
 
 	private Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {

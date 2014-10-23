@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -18,7 +19,6 @@ import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
-import eu.factorx.awac.util.Table;
 import eu.factorx.awac.util.math.Vector2I;
 import jxl.Range;
 import jxl.Workbook;
@@ -50,85 +50,9 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 	@Autowired
 	private QuestionSetAnswerService questionSetAnswerService;
 
-	private String translate(String code, CodeList cl, LanguageCode lang) {
-		CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(cl, code));
-		if (codeLabel == null) {
-			return code;
-		} else {
-			return codeLabel.getLabel(lang);
-		}
-	}
-
-	private WritableCell getRealCell(WritableSheet sheet, int col, int row) {
-		for (Range r : sheet.getMergedCells()) {
-			if (col >= r.getTopLeft().getColumn()
-				&& col <= r.getBottomRight().getColumn()
-				&& row <= r.getTopLeft().getRow()
-				&& row >= r.getBottomRight().getRow()) {
-				return (WritableCell) r.getTopLeft();
-			}
-		}
-		return sheet.getWritableCell(col, row);
-	}
-
-	private void drawBorder(WritableSheet sheet, int col1, int row1, int col2, int row2) throws WriteException {
-
-		jxl.format.BorderLineStyle borderWidth = BorderLineStyle.THIN;
-
-		for (int i = row1; i <= row2; i++) {
-			WritableCell writableCell = getRealCell(sheet, col1, i);
-			CellFormat format = writableCell.getCellFormat();
-			WritableCellFormat cellFormat;
-			if (format == null) {
-				cellFormat = new WritableCellFormat();
-			} else {
-				cellFormat = new WritableCellFormat(format);
-			}
-			cellFormat.setBorder(Border.LEFT, borderWidth);
-			writableCell.setCellFormat(cellFormat);
-		}
-
-		for (int i = row1; i <= row2; i++) {
-			WritableCell writableCell = getRealCell(sheet, col2, i);
-			CellFormat format = writableCell.getCellFormat();
-			WritableCellFormat cellFormat;
-			if (format == null) {
-				cellFormat = new WritableCellFormat();
-			} else {
-				cellFormat = new WritableCellFormat(format);
-			}
-			cellFormat.setBorder(Border.RIGHT, borderWidth);
-			writableCell.setCellFormat(cellFormat);
-		}
-
-		for (int i = col1; i <= col2; i++) {
-			WritableCell writableCell = getRealCell(sheet, i, row1);
-			CellFormat format = writableCell.getCellFormat();
-			WritableCellFormat cellFormat;
-			if (format == null) {
-				cellFormat = new WritableCellFormat();
-			} else {
-				cellFormat = new WritableCellFormat(format);
-			}
-			cellFormat.setBorder(Border.TOP, borderWidth);
-			writableCell.setCellFormat(cellFormat);
-		}
-
-		for (int i = col1; i <= col2; i++) {
-			WritableCell writableCell = getRealCell(sheet, i, row2);
-			CellFormat format = writableCell.getCellFormat();
-			WritableCellFormat cellFormat;
-			if (format == null) {
-				cellFormat = new WritableCellFormat();
-			} else {
-				cellFormat = new WritableCellFormat(format);
-			}
-			cellFormat.setBorder(Border.BOTTOM, borderWidth);
-			writableCell.setCellFormat(cellFormat);
-		}
-
-
-	}
+	//
+	// Simple
+	//
 
 	@Override
 	public byte[] generateExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode) throws IOException, WriteException, BiffException {
@@ -156,18 +80,36 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 			}
 		}
 
+		String organization = scopes.get(0).getOrganization().getName();
+		String sites = "";
+		for (Scope scope : scopes) {
+			if (scope instanceof Site) {
+				Site site = (Site) scope;
+				if (sites.length() > 0) {
+					sites += ", ";
+				}
+				sites += site.getName();
+			}
+		}
+
 		// 2.1 Table
-		writeTable(r_1, lang, wb, allReportResults, cellFormat);
+		writeTable(r_1, organization, sites, period.getLabel(), lang, wb, allReportResults, cellFormat);
 
 		// 2.2 Explanation
-		writeExplanation(wb, lang, allReportResults, cellFormat);
+		writeExplanation(wb, organization, sites, period.getLabel(), lang, allReportResults, cellFormat);
 
 		// 2.3 Survey
 		for (Scope scope : scopes) {
 
 			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + period.getLabel(), wb.getNumberOfSheets());
 
-			Vector2I cell = new Vector2I(0, 0);
+			String thisSite = "";
+			if (scope instanceof Site) {
+				thisSite = ((Site) scope).getName();
+			}
+			insertHeader(sheet, organization, thisSite, period.getLabel(), cellFormat);
+
+			Vector2I cell = new Vector2I(0, 4);
 			for (Form form : awacCalculator.getForms()) {
 				sheet.addCell(new Label(
 					cell.getX(),
@@ -193,28 +135,27 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		wb.write();
 		wb.close();
 
-		byte[] content = byteArrayOutputStream.toByteArray();
-
-		return content;
+		return byteArrayOutputStream.toByteArray();
 	}
 
-	private void writeTable(String search, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
+	private void writeTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 			String reportKey = reportResult.getReport().getCode().getKey();
 
 			if (reportKey.equals(search)) {
 
-				WritableSheet sheet = wb.createSheet("Rapport", wb.getNumberOfSheets());
+				WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
+
+				insertHeader(sheet, organization, sites, period, cellFormat);
 
 				Map<String, List<Double>> scopeValuesByIndicator = reportResult.getScopeValuesByIndicator();
 
-				sheet.addCell(new Label(0, 0, "Indicator", cellFormat));
-				sheet.addCell(new Label(1, 0, "Scope 1", cellFormat));
-				sheet.addCell(new Label(2, 0, "Scope 2", cellFormat));
-				sheet.addCell(new Label(3, 0, "Scope 3", cellFormat));
-				sheet.addCell(new Label(4, 0, "Out of scope", cellFormat));
+				sheet.addCell(new Label(1, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(2, 4, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(3, 4, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(4, 4, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
 
-				int index = 1;
+				int index = 5;
 				for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
 
 
@@ -233,39 +174,41 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		}
 	}
 
-	private void writeExplanation(WritableWorkbook wb, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
+	private void writeExplanation(WritableWorkbook wb, String organization, String sites, String period, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
 		WritableSheet sheet = wb.createSheet("Explication", wb.getNumberOfSheets());
 
-		sheet.addCell(new Label(1, 0, "Activité", cellFormat));
-		sheet.addCell(new Label(9, 0, "Facteur d'émission", cellFormat));
-		sheet.addCell(new Label(18, 0, "Résultat", cellFormat));
+		insertHeader(sheet, organization, sites, period, cellFormat);
+
+		sheet.addCell(new Label(1, 4, "Activité", cellFormat));
+		sheet.addCell(new Label(9, 4, "Facteur d'émission", cellFormat));
+		sheet.addCell(new Label(18, 4, "Résultat", cellFormat));
 
 
-		sheet.addCell(new Label(1, 1, "Catégorie ", cellFormat));
-		sheet.addCell(new Label(2, 1, "Sous-catégorie", cellFormat));
-		sheet.addCell(new Label(3, 1, "Type", cellFormat));
-		sheet.addCell(new Label(4, 1, "Source", cellFormat));
-		sheet.addCell(new Label(6, 1, "Valeur", cellFormat));
-		sheet.addCell(new Label(7, 1, "Unité", cellFormat));
+		sheet.addCell(new Label(1, 5, "Catégorie ", cellFormat));
+		sheet.addCell(new Label(2, 5, "Sous-catégorie", cellFormat));
+		sheet.addCell(new Label(3, 5, "Type", cellFormat));
+		sheet.addCell(new Label(4, 5, "Source", cellFormat));
+		sheet.addCell(new Label(6, 5, "Valeur", cellFormat));
+		sheet.addCell(new Label(7, 5, "Unité", cellFormat));
 
-		sheet.addCell(new Label(9, 1, "Indicateur", cellFormat));
-		sheet.addCell(new Label(10, 1, "Type", cellFormat));
-		sheet.addCell(new Label(11, 1, "Source", cellFormat));
+		sheet.addCell(new Label(9, 5, "Indicateur", cellFormat));
+		sheet.addCell(new Label(10, 5, "Type", cellFormat));
+		sheet.addCell(new Label(11, 5, "Source", cellFormat));
 
-		sheet.addCell(new Label(13, 1, "Valeur", cellFormat));
-		sheet.addCell(new Label(14, 1, "Unité OUT", cellFormat));
+		sheet.addCell(new Label(13, 5, "Valeur", cellFormat));
+		sheet.addCell(new Label(14, 5, "Unité OUT", cellFormat));
 
-		sheet.addCell(new Label(16, 1, "Unité IN", cellFormat));
+		sheet.addCell(new Label(16, 5, "Unité IN", cellFormat));
 
-		sheet.addCell(new Label(18, 1, "Valeur", cellFormat));
-		sheet.addCell(new Label(19, 1, "Unité", cellFormat));
+		sheet.addCell(new Label(18, 5, "Valeur", cellFormat));
+		sheet.addCell(new Label(19, 5, "Unité", cellFormat));
 
-		sheet.mergeCells(1, 0, 7, 0);
-		sheet.mergeCells(9, 0, 16, 0);
-		sheet.mergeCells(18, 0, 19, 0);
+		sheet.mergeCells(1, 4, 7, 4);
+		sheet.mergeCells(9, 4, 16, 4);
+		sheet.mergeCells(18, 4, 19, 4);
 
 
-		int row = 2;
+		int row = 6;
 		for (ReportLogEntry reportLogEntry : allReportResults.getLogEntries()) {
 
 			String c1 = null;
@@ -388,9 +331,9 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 		}
 
-		drawBorder(sheet, 1, 0, 7, row - 1);
-		drawBorder(sheet, 9, 0, 16, row - 1);
-		drawBorder(sheet, 18, 0, 19, row - 1);
+		drawBorder(sheet, 1, 4, 7, row - 1);
+		drawBorder(sheet, 9, 4, 16, row - 1);
+		drawBorder(sheet, 18, 4, 19, row - 1);
 	}
 
 	private Vector2I writePartBorder(WritableSheet sheet, Vector2I cell, QuestionSetAnswer questionSetAnswer, LanguageCode lang, int indent) throws WriteException {
@@ -536,10 +479,12 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		return cell;
 	}
 
+	//
+	// Compared
+	//
 
 	@Override
-	public byte[] generateComparedExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode)
-		throws IOException, WriteException, BiffException {
+	public byte[] generateComparedExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode) throws IOException, WriteException, BiffException {
 
 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -566,14 +511,35 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 
 		// 2.1 Table
-		writeComparisionTable(lang, wb, merged, cellFormat);
+		String r_1 = "";
+		for (Report report : awacCalculator.getReports()) {
+			if (report.getRestrictedScope() == null) {
+				r_1 = report.getCode().getKey();
+			}
+		}
+
+		String organization = scopes.get(0).getOrganization().getName();
+		String sites = "";
+		for (Scope scope : scopes) {
+			if (scope instanceof Site) {
+				Site site = (Site) scope;
+				if (sites.length() > 0) {
+					sites += ", ";
+				}
+				sites += site.getName();
+			}
+		}
+
+		writeComparisionTable(r_1, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
 
 		// 2.3 Survey
 		for (Scope scope : scopes) {
 
 			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + period.getLabel(), wb.getNumberOfSheets());
 
-			Vector2I cell = new Vector2I(0, 0);
+			insertHeader(sheet, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), cellFormat);
+
+			Vector2I cell = new Vector2I(0, 4);
 			for (Form form : awacCalculator.getForms()) {
 				sheet.addCell(new Label(
 					cell.getX(),
@@ -600,7 +566,14 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + comparedPeriod.getLabel(), wb.getNumberOfSheets());
 
-			Vector2I cell = new Vector2I(0, 0);
+			String thisSite = "";
+			if (scope instanceof Site) {
+				thisSite = ((Site) scope).getName();
+			}
+
+			insertHeader(sheet, organization, thisSite, period.getLabel() + " / " + comparedPeriod.getLabel(), cellFormat);
+
+			Vector2I cell = new Vector2I(0, 4);
 			for (Form form : awacCalculator.getForms()) {
 				sheet.addCell(new Label(
 					cell.getX(),
@@ -631,36 +604,38 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		return content;
 	}
 
-	private void writeComparisionTable(LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
+	private void writeComparisionTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
 		for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
 			String reportKey = aggregation.getReportCode();
 
-			if (reportKey.equals("R_1")) {
+			if (reportKey.equals(search)) {
 
-				WritableSheet sheet = wb.createSheet("Rapport", wb.getNumberOfSheets());
+				WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
+
+				insertHeader(sheet, organization, sites, period, cellFormat);
 
 				List<MergedReportResultIndicatorAggregation> scopeValuesByIndicator = aggregation.getMergedReportResultIndicatorAggregationList();
 
-				sheet.addCell(new Label(0, 1, "Indicator", cellFormat));
+				sheet.addCell(new Label(0, 5, "Indicator", cellFormat));
 
-				sheet.addCell(new Label(1, 1, "Scope 1", cellFormat));
-				sheet.addCell(new Label(2, 1, "Scope 2", cellFormat));
-				sheet.addCell(new Label(3, 1, "Scope 3", cellFormat));
-				sheet.addCell(new Label(4, 1, "Out of scope", cellFormat));
+				sheet.addCell(new Label(1, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(2, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(3, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(4, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
 
-				sheet.addCell(new Label(5, 1, "Scope 1", cellFormat));
-				sheet.addCell(new Label(6, 1, "Scope 2", cellFormat));
-				sheet.addCell(new Label(7, 1, "Scope 3", cellFormat));
-				sheet.addCell(new Label(8, 1, "Out of scope", cellFormat));
+				sheet.addCell(new Label(5, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(6, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(7, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+				sheet.addCell(new Label(8, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
 
-				sheet.addCell(new Label(1, 0, aggregation.getLeftPeriod().getLabel(), cellFormat));
-				sheet.addCell(new Label(5, 0, aggregation.getRightPeriod().getLabel(), cellFormat));
+				sheet.addCell(new Label(1, 4, aggregation.getLeftPeriod().getLabel(), cellFormat));
+				sheet.addCell(new Label(5, 4, aggregation.getRightPeriod().getLabel(), cellFormat));
 
-				sheet.mergeCells(1, 0, 4, 0);
-				sheet.mergeCells(5, 0, 8, 0);
+				sheet.mergeCells(1, 4, 4, 4);
+				sheet.mergeCells(5, 4, 8, 4);
 
 
-				int index = 2;
+				int index = 6;
 				for (MergedReportResultIndicatorAggregation row : scopeValuesByIndicator) {
 
 					CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getIndicator()));
@@ -683,25 +658,97 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		}
 	}
 
-	private void writeSheet(WritableSheet sheet, int firstColumn, int firstRow, Table table) throws WriteException {
+	//
+	// Utils
+	//
 
-		for (int r = 0; r < table.getRowCount(); r++) {
-			for (int c = 0; c < table.getColumnCount(); c++) {
-				Object value = table.getCell(c, r);
-				if (value != null) {
-					if (value instanceof Integer) {
-						sheet.addCell(new Number(firstColumn + c, firstRow + r, (Integer) value));
-					} else if (value instanceof Double) {
-						sheet.addCell(new Number(firstColumn + c, firstRow + r, (Double) value));
-					} else if (value instanceof Float) {
-						sheet.addCell(new Number(firstColumn + c, firstRow + r, (Float) value));
-					} else if (value instanceof Long) {
-						sheet.addCell(new Number(firstColumn + c, firstRow + r, (Long) value));
-					} else {
-						sheet.addCell(new Label(firstColumn + c, firstRow + r, value.toString()));
-					}
-				}
+	private void insertHeader(WritableSheet sheet, String organizationName, String sites, String period, WritableCellFormat cellFormat) throws WriteException {
+
+		sheet.addCell(new Label(0, 0, "Organisation", cellFormat));
+		sheet.addCell(new Label(0, 1, "Site(s)", cellFormat));
+		sheet.addCell(new Label(0, 2, "Année", cellFormat));
+
+		sheet.addCell(new Label(1, 0, organizationName));
+		sheet.addCell(new Label(1, 1, sites));
+		sheet.addCell(new Label(1, 2, period));
+
+	}
+
+	private String translate(String code, CodeList cl, LanguageCode lang) {
+		CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(cl, code));
+		if (codeLabel == null) {
+			return code;
+		} else {
+			return codeLabel.getLabel(lang);
+		}
+	}
+
+	private WritableCell getRealCell(WritableSheet sheet, int col, int row) {
+		for (Range r : sheet.getMergedCells()) {
+			if (col >= r.getTopLeft().getColumn()
+				&& col <= r.getBottomRight().getColumn()
+				&& row <= r.getTopLeft().getRow()
+				&& row >= r.getBottomRight().getRow()) {
+				return (WritableCell) r.getTopLeft();
 			}
+		}
+		return sheet.getWritableCell(col, row);
+	}
+
+	private void drawBorder(WritableSheet sheet, int col1, int row1, int col2, int row2) throws WriteException {
+
+		jxl.format.BorderLineStyle borderWidth = BorderLineStyle.THIN;
+
+		for (int i = row1; i <= row2; i++) {
+			WritableCell writableCell = getRealCell(sheet, col1, i);
+			CellFormat format = writableCell.getCellFormat();
+			WritableCellFormat cellFormat;
+			if (format == null) {
+				cellFormat = new WritableCellFormat();
+			} else {
+				cellFormat = new WritableCellFormat(format);
+			}
+			cellFormat.setBorder(Border.LEFT, borderWidth);
+			writableCell.setCellFormat(cellFormat);
+		}
+
+		for (int i = row1; i <= row2; i++) {
+			WritableCell writableCell = getRealCell(sheet, col2, i);
+			CellFormat format = writableCell.getCellFormat();
+			WritableCellFormat cellFormat;
+			if (format == null) {
+				cellFormat = new WritableCellFormat();
+			} else {
+				cellFormat = new WritableCellFormat(format);
+			}
+			cellFormat.setBorder(Border.RIGHT, borderWidth);
+			writableCell.setCellFormat(cellFormat);
+		}
+
+		for (int i = col1; i <= col2; i++) {
+			WritableCell writableCell = getRealCell(sheet, i, row1);
+			CellFormat format = writableCell.getCellFormat();
+			WritableCellFormat cellFormat;
+			if (format == null) {
+				cellFormat = new WritableCellFormat();
+			} else {
+				cellFormat = new WritableCellFormat(format);
+			}
+			cellFormat.setBorder(Border.TOP, borderWidth);
+			writableCell.setCellFormat(cellFormat);
+		}
+
+		for (int i = col1; i <= col2; i++) {
+			WritableCell writableCell = getRealCell(sheet, i, row2);
+			CellFormat format = writableCell.getCellFormat();
+			WritableCellFormat cellFormat;
+			if (format == null) {
+				cellFormat = new WritableCellFormat();
+			} else {
+				cellFormat = new WritableCellFormat(format);
+			}
+			cellFormat.setBorder(Border.BOTTOM, borderWidth);
+			writableCell.setCellFormat(cellFormat);
 		}
 
 

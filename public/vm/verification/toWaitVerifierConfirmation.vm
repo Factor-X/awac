@@ -6,8 +6,11 @@
 <body>
 Bonjour, <br/><br/>
 
-${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous demande de bien vouloir vérifier son bilan GES réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. Il a joint le message suivant à votre intention: ${request.emailVerificationContent.content}.<br/>
+${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous demande de bien vouloir vérifier son bilan GES réalisé sur l'outil de l'AWAC pour le périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}. Il a joint le message suivant à votre intention:<br/>
+${request.emailVerificationContent.content}.<br/><br/>
+
 Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}.<br/><br/>
+
 Pour accéder ou refuser à sa demande, merci de vous connecter à votre compte de vérification. <br/><br/>
 
 Bien à vous,<br/>

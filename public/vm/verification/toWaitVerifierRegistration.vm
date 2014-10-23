@@ -6,12 +6,16 @@
 <body>
 Bonjour,<br/><br/>
 
-${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous demande de bien vouloir vérifier son bilanGES réalisé sur l'outil de l'AWAC pour le périmètre${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}. Il a joint le message suivant à votre intention: ${request.emailVerificationContent.content}.<br/>
+${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous demande de bien vouloir vérifier son bilan GES réalisé sur l'outil de l'AWAC pour le périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}. Il a joint le message suivant à votre intention:<br/>
+${request.emailVerificationContent.content}.<br/><br/>
+
 Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}. <br/><br/>
 
-Si vous possédez déjà un compte de vérification sur l'outil de l'AWAC, mais qui n'est pas associé àla présente adresse courriel fournie par l'AWAC, utilisez cette clé ${request.key} pour gérer la demande depuis votre compte existant.Si vous n'avez pas encore de compte, pour en créer un, suivez le lien suivant  : <br/><br/>
+Si vous possédez déjà un compte de vérification sur l'outil de l'AWAC, mais qui n'est pas associé à la présente adresse courriel fournie par l'AWAC, utilisez cette clé ${request.key} pour gérer la demande depuis votre compte existant.<br/></br>
+
+Si vous n'avez pas encore de compte, pour en créer un, suivez le lien suivant: <br/>
 ${link} <br/><br/>
-et utilisez-y la clé fournie. L'interface de l'outil vous permettra alors d'accepter ou de refuser cette demande.<br/><br/>
+et utilisez-y la clé fournie ci-dessus. L'interface de l'outil vous permettra alors d'accepter ou de refuser cette demande.<br/><br/>
 
 Bien à vous,<br/>
 L'outil AWAC.
