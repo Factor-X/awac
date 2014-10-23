@@ -100,19 +100,18 @@ angular
         if o != n
             $scope.computeScopeAndPeriod()
 
-    $scope.$watch '$root.periodSelectedKey', (o,n,s) ->
+    $scope.$watch '$root.periodSelectedKey', (o,n) ->
         if o != n
             $scope.computeScopeAndPeriod()
 
     $scope.computeScopeAndPeriod = ->
+        console.log '----->>>'+$scope.$root.periodSelectedKey+"-"+$scope.$root.scopeSelectedId
         if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
             $routeParams.form = $route.current.params.form
 
             if $route.current
                 p = $route.current.$$route.originalPath
-
-                console.log p
 
                 if p == "/noScope"
                     url = $scope.$root.getDefaultRoute()
@@ -123,9 +122,8 @@ angular
                     for k,v of $routeParams
                         p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
-                    console.log p
-
-                    $scope.$root.nav(p)
+                    if p != $route.current.$$route.originalPath
+                        $scope.$root.nav(p)
 
             $scope.$root.computeAvailablePeriod()
             $scope.loadPeriodForComparison()
@@ -330,15 +328,17 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # logout the current user
     #
     $rootScope.logout = () ->
-        downloadService.postJson '/awac/logout', null, (result) ->
-            if result.success
-                console.log 'logout !! '
-                $rootScope.nav('/login')
-                $rootScope.currentPerson = null
-                $rootScope.periodSelectedKey=null
-                $rootScope.scopeSelectedId=null
-            else
-                $rootScope.nav('/login')
+        console.log 'logout !! '
+        $location.path('/login')
+        $timeout(
+            $rootScope.currentPerson = null
+            $rootScope.periodSelectedKey=null
+            $rootScope.scopeSelectedId=null
+            $rootScope.mySites=null
+            $rootScope.currentPerson = null
+            $rootScope.organizationName = null
+            downloadService.postJson '/awac/logout', null, (result) ->
+        ,1)
 
 
     $rootScope.testForm = (period,scope) ->
@@ -369,30 +369,30 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         # try to load default scope / period
         #default scope
 
-
-
-
         if data.defaultSiteId? && data.defaultPeriod?
             if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
-                $rootScope.scopeSelectedId =data.defaultSiteId
-                $rootScope.periodSelectedKey =data.defaultPeriod
+                scopeSelectedId =data.defaultSiteId
+                periodSelectedKey =data.defaultPeriod
         else if data.defaultSiteId?
             for scope in $rootScope.mySites
                 if scope.id == data.defaultSiteId
-                    $rootScope.scopeSelectedId =data.defaultSiteId
+                    scopeSelectedId =data.defaultSiteId
 
         if !$rootScope.scopeSelectedId?
             if $rootScope.mySites.length > 0
-                $rootScope.scopeSelectedId = $rootScope.mySites[0].id
+                scopeSelectedId = $rootScope.mySites[0].id
 
         if $rootScope.scopeSelectedId? && !$rootScope.periodSelectedKey?
             for site in $rootScope.mySites
                 if site.id == $rootScope.scopeSelectedId
                     if $rootScope.instanceName == 'enterprise'
                         if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
-                            $rootScope.periodSelectedKey = site.listPeriodAvailable[0].key
+                            periodSelectedKey = site.listPeriodAvailable[0].key
                     else if $rootScope.instanceName == 'municipality'
-                        $rootScope.periodSelectedKey = $rootScope.periods[0].key
+                        periodSelectedKey = $rootScope.periods[0].key
+
+        $rootScope.scopeSelectedId =scopeSelectedId
+        $rootScope.periodSelectedKey =periodSelectedKey
 
         if $rootScope.scopeSelectedId?
             $rootScope.computeAvailablePeriod($rootScope.mySites[0].scope)
@@ -401,6 +401,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
+        console.log "to default form "
         $rootScope.nav $rootScope.getDefaultRoute()
 
     $rootScope.$watch "mySites", ->
@@ -503,7 +504,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 modalService.show result.modalForConfirm, params
         if canBeContinue
             # if this is a form, unlock it
+            console.log "TEST UNLOCKABLE : "+$rootScope.getMainScope()?.formIdentifier?+"/"+$rootScope.currentPerson?
             if $rootScope.getMainScope()?.formIdentifier? && $rootScope.currentPerson?
+                console.log "----->>>>UNLOCKABLE !! "
                 downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.getMainScope().formIdentifier+ "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
 
             routeWithScopeAndPeriod = ['/form','/results','/actions']

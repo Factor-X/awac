@@ -31,6 +31,7 @@ import java.util.List;
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
 		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a, Person p where p.email = :email and a.person = p"),
+        @NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE, query = "select a from Account a, Person p where p.email = :email and a.organization.interfaceCode = :interface"),
 })
 public class Account extends AuditedAbstractEntity {
 
@@ -40,8 +41,9 @@ public class Account extends AuditedAbstractEntity {
 	public static final String FIND_BY_IDENTIFIER = "Account.findByIdentifier";
 	public static final String FIND_BY_EMAIL = "Account.findByEmail";
 	private static final long serialVersionUID = 1L;
+    public static final java.lang.String FIND_BY_EMAIL_AND_INTERFACE = "Account_FIND_BY_EMAIL_AND_INTERFACE";
 
-	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
+    @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Organization organization;
 
 	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)

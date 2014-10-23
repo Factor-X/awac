@@ -20,6 +20,8 @@ initializeVerificationRoutes = (defaultResolve) ->
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
+                    helpPage: () ->
+                        return 'help_manage'
                 }, defaultResolve)
             }
         )
@@ -29,6 +31,8 @@ initializeVerificationRoutes = (defaultResolve) ->
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
+                    helpPage: () ->
+                        return 'help_verification'
                 }, defaultResolve)
             }
         )
@@ -38,6 +42,8 @@ initializeVerificationRoutes = (defaultResolve) ->
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
+                    helpPage: () ->
+                        return 'help_submit'
                 }, defaultResolve)
             }
         )
@@ -53,6 +59,8 @@ initializeVerificationRoutes = (defaultResolve) ->
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
+                    helpPage: () ->
+                        return 'help_archive'
                 }, defaultResolve)
             }
         )

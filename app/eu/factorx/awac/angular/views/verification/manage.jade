@@ -39,7 +39,7 @@ div.verification_manage
                                 ng-click="assignRequest(request)",
                                 ng-bind-html="'VERIFICATION_REQUEST_ASSIGN' | translate")
         div
-            .desc_block(ng-bind-html="'ADD_REQUEST_WITH_KEY_DESC'")
+            .desc_block(ng-bind-html="'ADD_REQUEST_WITH_KEY_DESC'| translate")
             span(ng-bind-html="'ADD_REQUEST_WITH_KEY' | translate")
             input(ng-model="keyToInject")
             button.button(type="button",ng-click="isDisabled || addKey()",ng-bind-html="'SUBMIT' | translate",ng-disabled="keyToInject==null || keyToInject.length == 0")
