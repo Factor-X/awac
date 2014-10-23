@@ -35,6 +35,8 @@
                 <bean class="eu.factorx.awac.converter.AwacCalculatorInstanceToVerificationRequestDTOConverter" />
                 <bean class="eu.factorx.awac.converter.VerificationToVerificationDTOConverter" />
                 <bean class="eu.factorx.awac.converter.VerificationRequestCanceledToVerificationRequestDTOConverter" />
+                <bean class="eu.factorx.awac.converter.DriverToDriverDTOConverter" />
+                <bean class="eu.factorx.awac.converter.DriverValueDriverValueDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>
