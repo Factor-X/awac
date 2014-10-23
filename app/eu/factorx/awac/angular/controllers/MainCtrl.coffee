@@ -328,15 +328,16 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # logout the current user
     #
     $rootScope.logout = () ->
-        console.log 'logout !! '
-        $location.path('/login')
-        $rootScope.currentPerson = null
-        $rootScope.periodSelectedKey=null
-        $rootScope.scopeSelectedId=null
-        $rootScope.mySites=null
-        $rootScope.currentPerson = null
-        $rootScope.organizationName = null
         downloadService.postJson '/awac/logout', null, (result) ->
+            console.log 'logout !! '
+            $rootScope.currentPerson = null
+            $rootScope.periodSelectedKey=null
+            $rootScope.scopeSelectedId=null
+            $rootScope.mySites=null
+            $rootScope.currentPerson = null
+            $rootScope.organizationName = null
+            $location.path('/login')
+
 
 
     $rootScope.testForm = (period,scope) ->
