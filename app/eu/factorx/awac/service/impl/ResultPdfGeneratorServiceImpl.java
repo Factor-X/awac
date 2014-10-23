@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -83,14 +84,32 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
 
 
+		// 0. Header
+		String organization = scopes.get(0).getOrganization().getName();
+		String sites = "";
+		for (Scope scope : scopes) {
+			if (scope instanceof Site) {
+				Site site = (Site) scope;
+				if (sites.length() > 0) {
+					sites += ", ";
+				}
+				sites += site.getName();
+			}
+		}
+
+		content += "<table class=\"page-header\">";
+		content += "<tr><td>Organisation :</td><td width=\"100%\">" + organization + "</td></tr>";
+		content += "<tr><td>Site(s) :</td><td width=\"100%\">" + sites + "</td></tr>";
+		content += "<tr><td>Année :</td><td width=\"100%\">" + period.getLabel() + "</td></tr>";
+		content += "</table>";
+
+
 		// 1. Report
+		content += "<div>";
 		content += writeTable(r_1, lang, allReportResults);
+		content += "</div>";
 
-		// 2. Explanation
-		content += writeExplanation(lang, allReportResults);
-
-		// 3. Graphs
-
+		// 2. Graphs
 		String histogram = writeHistogram(r_1, allReportResults);
 		String donut1 = writeDonut(r_2, allReportResults);
 		String donut2 = writeDonut(r_3, allReportResults);
@@ -106,12 +125,16 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 
 		// histogram
+		content += "<div>";
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
 		content += "<br/>";
 		content += addLegend(r_1, lang, allReportResults, true);
+		content += "</div>";
 
 		// donuts
+		content += "<div>";
+
 		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 
 		// scope 1
@@ -135,13 +158,21 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<br/>";
 		content += addLegend(r_4, lang, allReportResults, false);
 
+		content += "</div>";
+
 		// web
+		content += "<div>";
 		content += "<h1>" + translate("KIVIAT_DIAGRAM", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 		content += "<img style=\"display: inline-block; height: 10cm; width: auto;\" src=\"mem://svg/kiviat\" />";
 		content += "<br/>";
 		content += "<br/>";
 		content += addLegend(r_1, lang, allReportResults, true);
+		content += "</div>";
 
+		// 3. Explanation
+		content += "<div>";
+		content += writeExplanation(lang, allReportResults);
+		content += "</div>";
 
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
@@ -173,6 +204,25 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		String r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
 		String r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
 		String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+
+		// 0. Header
+		String organization = scopes.get(0).getOrganization().getName();
+		String sites = "";
+		for (Scope scope : scopes) {
+			if (scope instanceof Site) {
+				Site site = (Site) scope;
+				if (sites.length() > 0) {
+					sites += ", ";
+				}
+				sites += site.getName();
+			}
+		}
+
+		content += "<table class=\"page-header\">";
+		content += "<tr><td>Organisation :</td><td width=\"100%\">" + organization + "</td></tr>";
+		content += "<tr><td>Site(s) :</td><td width=\"100%\">" + sites + "</td></tr>";
+		content += "<tr><td>Années :</td><td width=\"100%\">" + period.getLabel() + " / " + comparedPeriod.getLabel() + "</td></tr>";
+		content += "</table>";
 
 		// 1. Report
 		content += writeTable(r_1, lang, merged);
@@ -568,7 +618,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 	private String writeTable(String search, LanguageCode lang, ReportResultCollection allReportResults) {
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
 		nf.setMaximumFractionDigits(12);
-		String content = "<h1>Rapport</h1>";
+		String content = "<h1>Résultat</h1>";
 		for (ReportResult reportResult : allReportResults.getReportResults()) {
 
 			if (reportResult.getReport().getCode().getKey().equals(search)) {
@@ -580,7 +630,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 				content += "<th class=\"header\">" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
 				content += "<th class=\"header\">" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
 				content += "<th class=\"header\">" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
-				content += "<th class=\"header\">" + translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)</th>";
+				content += "<th class=\"header\">" + translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)</th>";
 				content += "</tr>";
 				content += "</thead>";
 
@@ -632,7 +682,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
 		nf.setMaximumFractionDigits(12);
 
-		String content = "<h1>Rapport</h1>";
+		String content = "<h1>Résultat</h1>";
 		for (MergedReportResultAggregation mrra : merged.getMergedReportResultAggregations()) {
 
 			if (mrra.getReportCode().equals(search)) {
@@ -642,8 +692,8 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 				content += "<tr>";
 				content += "<th class=\"header\"></th>";
-				content += "<th class=\"header\" colspan=\"4\">"+ mrra.getLeftPeriod().getLabel() +"</th>";
-				content += "<th class=\"header\" colspan=\"4\">"+ mrra.getRightPeriod().getLabel() +"</th>";
+				content += "<th class=\"header\" colspan=\"4\">" + mrra.getLeftPeriod().getLabel() + "</th>";
+				content += "<th class=\"header\" colspan=\"4\">" + mrra.getRightPeriod().getLabel() + "</th>";
 				content += "</tr>";
 
 				content += "<tr>";
