@@ -9,7 +9,7 @@ angular.module 'app.filters', []
 angular.module 'app.services', []
 
 angular.module 'app.controllers', ['app.services', 'ngRoute',
-                                   'angularFileUpload','tmh.dynamicLocale','ngTable']
+                                   'angularFileUpload', 'tmh.dynamicLocale', 'ngTable']
 
 angular.module 'app', [
     'app.directives',
@@ -28,7 +28,7 @@ angular.module("tmh.dynamicLocale").config (tmhDynamicLocaleProvider)->
 #
 
 defaultResolve =
-    testConnection : ($http,$rootScope,$location, downloadService) ->
+    testConnection: ($http, $rootScope, $location, downloadService) ->
 
         # if the current user is null...
         if not $rootScope.currentPerson
@@ -41,8 +41,8 @@ defaultResolve =
                     $location.path '/login'
 
 formResolve =
-    # test if the user is currently connected
-    testConnection : ($http,$rootScope,$location, downloadService,$route) ->
+# test if the user is currently connected
+    testConnection: ($http, $rootScope, $location, downloadService, $route) ->
         # if the current user is null...
         if not $rootScope.currentPerson
 
@@ -54,19 +54,19 @@ formResolve =
                 # if success, add information into rootScope
                 if result.success
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
-                    if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+                    if $rootScope.testForm($route.current.params.period, $route.current.params.scope) == false
                         $location.path "/noScope"
 
-                # if no connected, send to /login route
+                    # if no connected, send to /login route
                 else
                     console.log 'to login  : formResolve'
                     $location.path '/login'
         else
-            if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+            if $rootScope.testForm($route.current.params.period, $route.current.params.scope) == false
                 $location.path '/noScope'
 
 resultResolve =
-    testConnection : ($http,$rootScope,$location, downloadService,$route) ->
+    testConnection: ($http, $rootScope, $location, downloadService, $route) ->
 
         # if the current user is null...
         if not $rootScope.currentPerson
@@ -76,7 +76,7 @@ resultResolve =
                     $rootScope.loginSuccess result.data, !$rootScope.isLogin()
 
                     # control data access
-                    if $rootScope.testForm($route.current.params.period,$route.current.params.scope) == false
+                    if $rootScope.testForm($route.current.params.period, $route.current.params.scope) == false
                         $location.path '/noScope'
                 else
                     console.log 'to login  : resultResolve'
@@ -90,7 +90,7 @@ if document.querySelector("meta[name=app]")?
     else if iName == "enterprise"
         initializeEnterpriseRoutes(defaultResolve)
     else if iName == "verification"
-      initializeVerificationRoutes(defaultResolve)
+        initializeVerificationRoutes(defaultResolve)
 
 initializeCommonRoutes(defaultResolve)
 
@@ -99,3 +99,26 @@ angular
 .run ($rootScope) ->
     $rootScope.instanceName = iName
 
+#
+# Automation of file download
+#
+angular
+.module('app')
+.config ($httpProvider) ->
+    $httpProvider.interceptors.push () ->
+        'request': (config) ->
+            return config
+        'response': (response) ->
+            if response.data.__type == "eu.factorx.awac.dto.awac.get.DownloadFileDTO"
+                setTimeout(()->
+                    byteCharacters = atob(response.data.base64)
+                    byteNumbers = new Array(byteCharacters.length)
+                    for i in [0...byteCharacters.length]
+                        byteNumbers[i] = byteCharacters.charCodeAt(i)
+                    byteArray = new Uint8Array(byteNumbers)
+                    blob = new Blob([byteArray], { type: response.data.mimeType })
+                    filename = response.data.filename
+
+                    saveAs(blob, filename)
+                , 0)
+            return response
