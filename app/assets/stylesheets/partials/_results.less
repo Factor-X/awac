@@ -167,7 +167,10 @@
         }
 
         .indicators_table {
-            width: 100%;
+            max-width: 100%;
+            width: 50%;
+            margin: auto;
+
             & > thead {
                 & > tr {
                     &:last-child {
@@ -193,6 +196,11 @@
                         border-bottom: dotted #666 1px;
                         border-left: dotted #666 1px;
                         border-right: dotted #666 1px;
+
+                        &:first-child{
+                            width: 100%;
+                            white-space: nowrap;
+                        }
                     }
                     & > td.scope1 {
                         border-left: dotted 2px #666;
