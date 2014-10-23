@@ -88,6 +88,7 @@
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.ReducingAction</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingActionAdvice</class>
         <class>eu.factorx.awac.models.knowledge.Report</class>
         <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
