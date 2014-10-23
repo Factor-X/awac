@@ -19,6 +19,9 @@ cat ./CELDL-76-admin_interface.sql >> /tmp/migration/migration_script.sql
 # driver
 cat ./CELDL-238-driver.sql >> /tmp/migration/migration_script.sql
 
+# reducing action advices
+cat ./CELDL-301-reducingactionadvices.sql >> /tmp/migration/migration_script.sql
+
 
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE

@@ -64,9 +64,9 @@
         <class>eu.factorx.awac.models.data.answer.type.NumericAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.StringAnswerValue</class>
         <class>eu.factorx.awac.models.data.file.StoredFile</class>
-        <class>eu.factorx.awac.models.data.question.Question</class>
         <class>eu.factorx.awac.models.data.question.Driver</class>
         <class>eu.factorx.awac.models.data.question.DriverValue</class>
+        <class>eu.factorx.awac.models.data.question.Question</class>
         <class>eu.factorx.awac.models.data.question.QuestionSet</class>
         <class>eu.factorx.awac.models.data.question.type.BooleanQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.DocumentQuestion</class>
@@ -91,6 +91,7 @@
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.ReducingAction</class>
         <class>eu.factorx.awac.models.knowledge.ReducingActionAdvice</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation</class>
         <class>eu.factorx.awac.models.knowledge.Report</class>
         <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>
@@ -203,6 +204,8 @@
         <class>eu.factorx.awac.models.data.answer.type.NumericAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.StringAnswerValue</class>
         <class>eu.factorx.awac.models.data.file.StoredFile</class>
+        <class>eu.factorx.awac.models.data.question.Driver</class>
+        <class>eu.factorx.awac.models.data.question.DriverValue</class>
         <class>eu.factorx.awac.models.data.question.Question</class>
         <class>eu.factorx.awac.models.data.question.QuestionSet</class>
         <class>eu.factorx.awac.models.data.question.type.BooleanQuestion</class>
@@ -227,6 +230,8 @@
         <class>eu.factorx.awac.models.knowledge.Indicator</class>
         <class>eu.factorx.awac.models.knowledge.Period</class>
         <class>eu.factorx.awac.models.knowledge.ReducingAction</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingActionAdvice</class>
+        <class>eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation</class>
         <class>eu.factorx.awac.models.knowledge.Report</class>
         <class>eu.factorx.awac.models.knowledge.ReportIndicator</class>
         <class>eu.factorx.awac.models.knowledge.Unit</class>

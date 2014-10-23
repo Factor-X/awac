@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
 
@@ -19,12 +21,6 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	public static final String TITLE_COLUMN = "title";
 	public static final String CALCULATOR_COLUMN = "calculator_id";
-
-	/**
-	 * @param scopes
-	 *            A collection of {@link Scope}
-	 */
-	public static final String FIND_BY_SCOPES = "ReducingAction.findByScopes";
 
 	@Column(name = TITLE_COLUMN, nullable = false)
 	private String title;
@@ -53,14 +49,21 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	private String responsiblePerson;
 
-	@Column(length = 1000)
+	@Column(columnDefinition = "TEXT")
 	private String comment;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "reducingactionadvice_storedfile",
 			joinColumns = @JoinColumn(name = "reducingactionadvice_id"),
-			inverseJoinColumns = @JoinColumn(name = "storedfile_id"))
+			inverseJoinColumns = @JoinColumn(name = "storedfile_id"),
+			uniqueConstraints = {
+					@UniqueConstraint(columnNames = { "reducingactionadvice_id", "storedfile_id" }, name = "uk_reducingactionadvice_storedfile_logical_pkey")
+			})
 	private List<StoredFile> documents;
+
+	@OneToMany(mappedBy = "actionAdvice")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private List<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations;
 
 	public ReducingActionAdvice() {
 		super();
@@ -152,6 +155,14 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public List<ReducingActionAdviceBaseIndicatorAssociation> getBaseIndicatorAssociations() {
+		return baseIndicatorAssociations;
+	}
+
+	public void setBaseIndicatorAssociations(List<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations) {
+		this.baseIndicatorAssociations = baseIndicatorAssociations;
 	}
 
 	public List<StoredFile> getDocuments() {
