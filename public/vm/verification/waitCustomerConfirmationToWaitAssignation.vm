@@ -5,7 +5,7 @@
 </head>
 <body>
 Bonjour,<br/><br/>
-${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous a octroyé l'accès aux données du périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.<br/>
+${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} vous a octroyé l'accès aux données du périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}.<br/>
 Vous pouvez maintenant assigner ce travail à des collaborateurs dans vos interfaces de vérification.<br/><br/>
 
 Bien à vous,<br/>

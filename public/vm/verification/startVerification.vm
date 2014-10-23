@@ -6,13 +6,14 @@
 <body>
 Bonjour, <br/><br/>
 
-${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.anme} vous demande de bien vouloir vérifier son bilan GES
-réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${period.label}. Il a joint le message suivant à
-votre intention: ${request.emailVerificationContent.content}. <br/>
-Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}. <br/><br/>
+${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.anme} vous demande de bien vouloir vérifier son bilan GES réalisé sur l'outil de l'AWAC pour le périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${period.label}. Il a joint le message suivant à votre intention:<br>
+${request.emailVerificationContent.content}. <br/><br/>
+
+Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}.<br/><br/>
 
 Pour accéder ou refuser à sa demande, merci de suivre le lien suivant et de soit vous logger sur votre compte vérificateur,
-soit vous créer un tel compte grâce à la clé de requête suivante: ${request.key}.<br/><br/>
+soit vous créer un tel compte grâce à la clé de requête suivante:<br>
+${request.key}.<br/><br/>
 Bien à vous,<br/>
 L'outil AWAC.<br/>
 
