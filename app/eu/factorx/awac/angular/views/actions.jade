@@ -80,9 +80,10 @@ div.actions
                         tr
                             td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
                             td
-                                ul
-                                    li(ng-repeat="f in a.files")
-                                        a(href="#", ng-onclick="download(f.id)") {{ f.name }}
+                                .box.wide
+                                    span(ng-show="a.files.length == 0") &nbsp;
+                                    div(ng-repeat="f in a.files")
+                                        a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
 
                 td(style="vertical-align: bottom; text-align: right", colspan="4")
                         button.button(type="button", ng-click="edit(a)")

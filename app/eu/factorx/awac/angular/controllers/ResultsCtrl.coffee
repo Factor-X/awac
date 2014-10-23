@@ -3,7 +3,7 @@ angular
 .controller "ResultsCtrl", ($scope, $window, $filter, downloadService, modalService, messageFlash, translationService) ->
     $scope.displayFormMenu = true
 
-    $scope.verificationRequests=[]
+    $scope.verificationRequests = []
 
     $scope.$root.$watch 'mySites', (nv) ->
         console.log 'watch $root.mySites'
@@ -29,7 +29,7 @@ angular
     , true
 
 
-    downloadService.getJson '/awac/verification/verificationRequests/'+$scope.$root.periodSelectedKey, (result) ->
+    downloadService.getJson '/awac/verification/verificationRequests/' + $scope.$root.periodSelectedKey, (result) ->
         if not result.success
             messageFlash.displayError result.data.message
         else
@@ -56,29 +56,9 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         $scope.pdfLoading = true
-        modalService.show(modalService.LOADING)
 
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
             $scope.pdfLoading = false
-            modalService.close(modalService.LOADING)
-
-            if result.success
-                window.R = result
-
-                setTimeout(()->
-                    byteCharacters = atob(result.data)
-                    byteNumbers = new Array(byteCharacters.length)
-                    for i in [0...byteCharacters.length]
-                        byteNumbers[i] = byteCharacters.charCodeAt(i)
-                    byteArray = new Uint8Array(byteNumbers)
-                    blob = new window.Blob([byteArray], { type: 'application/pdf' })
-
-                    filename = "export.pdf"
-
-                    saveAs(blob, filename)
-
-                    console.log('done !')
-                , 0)
 
 
     $scope.exportXls = () ->
@@ -97,25 +77,10 @@ angular
             dto.comparedPeriodKey = $scope.$root.periodToCompare
 
         $scope.xlsLoading = true
-        modalService.show(modalService.LOADING)
 
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
             $scope.xlsLoading = false
-            modalService.close(modalService.LOADING)
-            if result.success
-                window.R = result
 
-                setTimeout(()->
-                    byteCharacters = atob(result.data)
-                    byteNumbers = new Array(byteCharacters.length)
-                    for i in [0...byteCharacters.length]
-                        byteNumbers[i] = byteCharacters.charCodeAt(i)
-                    byteArray = new Uint8Array(byteNumbers)
-                    blob = new Blob([byteArray], { type: 'application/vnd.ms-excel' })
-                    filename = "export.xls"
-
-                    saveAs(blob,filename)
-                , 0)
 
     $scope.dataURItoBlob = (dataURI) ->
 

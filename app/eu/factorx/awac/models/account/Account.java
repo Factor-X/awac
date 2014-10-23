@@ -13,6 +13,8 @@ package eu.factorx.awac.models.account;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import eu.factorx.awac.models.forms.VerificationRequest;
 import play.data.validation.Constraints.Required;
 
@@ -20,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class Account extends AuditedAbstractEntity {
 	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Person person;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String identifier;
 
 	@JsonIgnore
@@ -168,6 +169,21 @@ public class Account extends AuditedAbstractEntity {
 
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (! (obj instanceof Account)) {
+			return false;
+		}
+		Account rhs = (Account) obj;
+		return new EqualsBuilder().append(this.identifier, rhs.identifier).append(this.organization.getInterfaceCode(), rhs.organization.getInterfaceCode()).isEquals();
 	}
 
 	@Override

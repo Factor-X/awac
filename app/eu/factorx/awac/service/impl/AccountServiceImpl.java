@@ -10,6 +10,8 @@ import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.service.AccountService;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 
 @Repository
 public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Account> implements AccountService {
@@ -39,6 +41,12 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 
 	@Override
 	public Account saveOrUpdate(Account account){
+		if (account.getId() == null) {
+			Account existingAccount = findByIdentifier(account.getIdentifier());
+			if (existingAccount != null) {
+				throw new MyrmexRuntimeException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
+			}
+		}
 		if(account.getPassword().length()< 30){
 			StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder();
 			account.setPassword(standardPasswordEncoder.encode(account.getPassword()));
