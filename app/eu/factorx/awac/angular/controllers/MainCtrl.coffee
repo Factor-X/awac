@@ -334,7 +334,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.periodSelectedKey=null
             $rootScope.scopeSelectedId=null
             $rootScope.mySites=null
-            $rootScope.currentPerson = null
             $rootScope.organizationName = null
             $location.path('/login')
 

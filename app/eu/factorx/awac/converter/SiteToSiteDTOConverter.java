@@ -30,6 +30,7 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 
         SiteDTO dto = new SiteDTO();
         dto.setId(site.getId());
+        dto.setScope(site.getId());
         dto.setName(site.getName());
         dto.setDescription(site.getDescription());
         dto.setNaceCode(site.getNaceCode());
@@ -51,7 +52,6 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
 
         Logger.info(dto.toString());
 
-        dto.setScope(site.getId());
         return dto;
     }
 }

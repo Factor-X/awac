@@ -14,7 +14,6 @@ angular
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
-
         if not result.success
             modalService.close(modalService.LOADING)
         else
@@ -73,7 +72,6 @@ angular
                         site.listPeriodAvailable = result.data.periodsList
                         $scope.refreshMySites()
 
-
             #
             # this function replace my site by organization site
             #
@@ -84,5 +82,6 @@ angular
                         for person in site.listPersons
                             if person.identifier == $scope.$root.currentPerson.identifier
                                 mySites.push site
-
+                console.log "voilà tes nouveaux sites : "
+                console.log $scope.$root.mySites
                 $scope.$root.mySites = mySites
