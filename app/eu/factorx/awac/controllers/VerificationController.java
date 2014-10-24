@@ -302,7 +302,7 @@ public class VerificationController extends AbstractController {
             throw new MyrmexRuntimeException(BusinessErrorType.CANNOT_LOAD_CALCULATOR_INSTANCE_PERIOD_SCOPE, dto.getPeriodKey(), dto.getScopeId() + "");
         }
 
-        //control organizationµ
+        //control organization
         if (!calculatorInstance.getScope().getOrganization().equals(securedController.getCurrentUser().getOrganization()) &&
                 (calculatorInstance.getVerificationRequest().getOrganizationVerifier() == null ||
                         !calculatorInstance.getVerificationRequest().getOrganizationVerifier().equals(securedController.getCurrentUser().getOrganization()))) {
@@ -398,7 +398,7 @@ public class VerificationController extends AbstractController {
             deleteVerificationRequest(calculatorInstance.getVerificationRequest());
 
             //email
-            if(calculatorInstance.getVerificationRequest().getOrganizationVerifier()!=null) {
+            if (calculatorInstance.getVerificationRequest().getOrganizationVerifier() != null) {
                 emailToSend = "reject.vm";
                 emailTargets = getAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
                 emailTitle = "Annulation de la vérification de bilan GES";
@@ -406,23 +406,36 @@ public class VerificationController extends AbstractController {
 
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
                 oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
-                answerController.testCloseableValidation(period.getPeriodCode().getKey(), scope.getId()).isFinalized() &&
+
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
 
+            if (!accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser())) {
+                throw new MyrmexRuntimeException(BusinessErrorType.WRONG_PASSWORD);
+            }
 
-            calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
-            calculatorInstance.getVerificationRequest().setVerificationRejectedComment(dto.getVerificationRejectedComment());
+            if (answerController.testCloseableVerification(period, scope).isFinalized() &&
+                    !answerController.testCloseableVerification(period, scope).isSuccess()) {
 
-            //email
-            emailToSend = "verificationToWaitVerificationConfirmationReject.vm";
-            emailTargets = getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
-            emailTitle = "Bilan GES vérifié à retourner au client";
+                Logger.info("...et on peut continuer");
+
+                calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
+                calculatorInstance.getVerificationRequest().setVerificationRejectedComment(dto.getVerificationRejectedComment());
+
+                //email
+                emailToSend = "verificationToWaitVerificationConfirmationReject.vm";
+                emailTargets = getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
+                emailTitle = "Bilan GES vérifié à retourner au client";
+            }
 
         } else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
                 oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
-                answerController.testCloseableValidation(period.getPeriodCode().getKey(), scope.getId()).isFinalized() &&
+                answerController.testCloseableVerification(period, scope).isFinalized() &&
+                answerController.testCloseableVerification(period, scope).isSuccess() &&
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-
+            
+            if (!accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser())) {
+                throw new MyrmexRuntimeException(BusinessErrorType.WRONG_PASSWORD);
+            }
 
             //control file
             StoredFile storedFile = storedFileService.findById(dto.getVerificationFinalizationFileId());
@@ -542,7 +555,7 @@ public class VerificationController extends AbstractController {
         }
 
         //send email
-        if (emailToSend != null && emailTargets.size()>0) {
+        if (emailToSend != null && emailTargets.size() > 0) {
             Map<String, Object> values = new HashMap<>();
             values.put("request", calculatorInstance.getVerificationRequest());
             values.put("user", securedController.getCurrentUser());
@@ -553,7 +566,11 @@ public class VerificationController extends AbstractController {
             emailService.send(email);
         }
 
+        Logger.info("et mnt je sauve  : " + calculatorInstance.getVerificationRequest());
         awacCalculatorInstanceService.saveOrUpdate(calculatorInstance);
+
+        Logger.info("test : " + verificationRequestService.findById(calculatorInstance.getVerificationRequest().getId()).toString());
+
 
         return ok(new ResultsDTO());
     }
@@ -565,7 +582,7 @@ public class VerificationController extends AbstractController {
 
         //control interface
         if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_INTERFACE_FOR_USER);
         }
 
         VerificationRequestKeyDTO dto = extractDTOFromRequest(VerificationRequestKeyDTO.class);

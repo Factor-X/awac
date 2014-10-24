@@ -154,14 +154,17 @@ public class VerificationRequest extends AuditedAbstractEntity {
     @Override
     public String toString() {
         return "VerificationRequest{" +
-                "verificationRequestStatus=" + verificationRequestStatus +
+                "id="+getId()+
+                ", awacCalculatorInstance=" + awacCalculatorInstance.getId() +
+                ", verificationRequestStatus=" + verificationRequestStatus.getKey() +
                 ", key='" + key + '\'' +
-                ", organizationVerifier=" + organizationVerifier +
-                ", contact=" + contact +
-                ", emailVerificationContent=" + emailVerificationContent +
+                ", organizationVerifier=" + organizationVerifier.getId() +
+                ", contact=" + contact.getId() +
+                ", verifierList=" + verifierList +
+                ", verificationResultDocument=" + verificationResultDocument +
+                ", verificationRejectedComment='" + verificationRejectedComment + '\'' +
                 '}';
     }
-
 
     public String getVerificationRejectedComment() {
         return verificationRejectedComment;

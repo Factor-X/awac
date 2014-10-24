@@ -65,41 +65,6 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
         TypedQuery<QuestionSetAnswer> query = JPAUtils.build(parts, parameters, QuestionSetAnswer.class);
         return query.getResultList();
 
-		/*
-        Session session = JPA.em().unwrap(Session.class);
-		Criteria criteria = session.createCriteria(QuestionSetAnswer.class);
-
-		if (searchParameter.getForm() != null) {
-			Form form = searchParameter.getForm();
-			if (searchParameter.getWithChildren()) {
-				criteria.add(Restrictions.in("questionSet", form.getAllQuestionSets()));
-			} else {
-				criteria.add(Restrictions.in("questionSet", form.getQuestionSets()));
-			}
-		}
-
-		if (searchParameter.getScope() != null) {
-			criteria.add(Restrictions.eq("scope", searchParameter.getScope()));
-		}
-
-		if (searchParameter.getQuestionSet() != null) {
-			criteria.add(Restrictions.eq("questionSet", searchParameter.getQuestionSet()));
-		}
-
-		if (searchParameter.getPeriod() != null) {
-			criteria.add(Restrictions.eq("period", searchParameter.getPeriod()));
-		}
-
-		if (!searchParameter.getWithChildren()) {
-			criteria.add(Restrictions.isNull("parent"));
-		}
-		criteria.addOrder(Order.asc("repetitionIndex"));
-
-		criteria.setCacheable(true);
-		@SuppressWarnings("unchecked")
-		List<QuestionSetAnswer> result = criteria.list();
-		return result;
-		*/
     }
 
     @Override

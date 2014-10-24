@@ -19,15 +19,6 @@ public class UnitCategoryServiceImpl extends AbstractJPAPersistenceServiceImpl<U
 		TypedQuery<UnitCategory> query = JPA.em().createQuery("select e from UnitCategory e", UnitCategory.class);
 		return query.getResultList();
 
-/*
-		long start = System.currentTimeMillis();
-		Criteria criteria = JPA.em().unwrap(Session.class).createCriteria(UnitCategory.class);
-		criteria.setCacheable(true);
-		@SuppressWarnings("unchecked")
-		List<UnitCategory> result = criteria.list();
-		Logger.debug(">>>>>>>>>>> UnitCategoryServiceImpl.findAll() - Took " + (System.currentTimeMillis() - start) + "msec");
-		return result;
-		*/
 	}
 
 	@Override
