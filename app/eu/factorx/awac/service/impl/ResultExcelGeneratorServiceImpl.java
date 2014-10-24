@@ -101,7 +101,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		// 2.3 Survey
 		for (Scope scope : scopes) {
 
-			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + period.getLabel(), wb.getNumberOfSheets());
+			WritableSheet sheet = wb.createSheet("Données " + period.getLabel() + " - " + scope.getName(), wb.getNumberOfSheets());
 
 			String thisSite = "";
 			if (scope instanceof Site) {
@@ -535,9 +535,14 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		// 2.3 Survey
 		for (Scope scope : scopes) {
 
-			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + period.getLabel(), wb.getNumberOfSheets());
+			WritableSheet sheet = wb.createSheet("Données " + period.getLabel() + " - " + scope.getName(), wb.getNumberOfSheets());
 
-			insertHeader(sheet, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), cellFormat);
+			String thisSite = "";
+			if (scope instanceof Site) {
+				thisSite = ((Site) scope).getName();
+			}
+
+			insertHeader(sheet, organization, thisSite, period.getLabel(), cellFormat);
 
 			Vector2I cell = new Vector2I(0, 4);
 			for (Form form : awacCalculator.getForms()) {
@@ -564,14 +569,14 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 		for (Scope scope : scopes) {
 
-			WritableSheet sheet = wb.createSheet("Données " + scope.getName() + " - " + comparedPeriod.getLabel(), wb.getNumberOfSheets());
+			WritableSheet sheet = wb.createSheet("Données " + comparedPeriod.getLabel() + " - " + scope.getName(), wb.getNumberOfSheets());
 
 			String thisSite = "";
 			if (scope instanceof Site) {
 				thisSite = ((Site) scope).getName();
 			}
 
-			insertHeader(sheet, organization, thisSite, period.getLabel() + " / " + comparedPeriod.getLabel(), cellFormat);
+			insertHeader(sheet, organization, thisSite, comparedPeriod.getLabel(), cellFormat);
 
 			Vector2I cell = new Vector2I(0, 4);
 			for (Form form : awacCalculator.getForms()) {
