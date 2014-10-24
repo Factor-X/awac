@@ -273,14 +273,15 @@ div.results.pdf-able
                             h2
                                 span(ng-bind-html="'CONVENTION_OF_MAYORS' | translate")
                             br
+
                             center
-                                table
-                                    tr
-                                        td
-                                            div(style="display:inline-block; max-width: 10cm; max-height: 10cm;", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
-                                        td(style="width: 2em")
-                                        td
-                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
+                                .diagram(style="height: 10cm", ng-bind-html="o.svgHistograms.R_5 | trustAsHtml")
+
+                            br
+
+                            center
+                                div
+                                    mm-awac-result-legend(ng-model="o.reportDTOs.R_5", mode="numbers")
 
 
                         br
