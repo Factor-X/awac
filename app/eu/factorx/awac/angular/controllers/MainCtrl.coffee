@@ -342,7 +342,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.testForm = (period,scope) ->
         if $rootScope.mySites?
             for site in $rootScope.mySites
-                if site.id = scope
+                if parseFloat(site.id) == parseFloat(scope)
                     if $rootScope.instanceName == 'enterprise'
                         for periodToFind in  site.listPeriodAvailable
                             if period+"" == periodToFind.key+""
@@ -367,7 +367,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         # try to load default scope / period
         #default scope
 
-        if data.defaultSiteId? && data.defaultPeriod?
+        if !!data.defaultSiteId && !!data.defaultPeriod
             if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
                 scopeSelectedId =data.defaultSiteId
                 periodSelectedKey =data.defaultPeriod
