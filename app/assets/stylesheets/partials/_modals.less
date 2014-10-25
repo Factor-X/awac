@@ -74,6 +74,7 @@
             &.field_form_separator > .field_cell {
                 padding-top: 10px;
             }
+             
             & > .field_cell {
                 display: table-cell;
                 vertical-align: top;
@@ -88,6 +89,33 @@
 
                 & .field_row.field_form_separator {
                     padding-top: 10px;
+                }
+
+                & > .field_info {
+                    display: inline-block;
+                    position: relative;
+                    float: right;
+                    width: 18px;
+                    height: 18px;
+                    background: url('../images/info.png') no-repeat center center;
+                }
+
+                & > .field_info_popup {
+                    font-weight: normal;
+                    font-size: 12px;
+                    display: none;
+                    position: absolute;
+                    background-color: #efeee8;
+                    /* border: 1px solid #dbd9d2; */
+                    width: 250px;
+                    min-height: 20px;
+                    top: 0;
+                    right: 17px;
+                    padding: 5px;
+                    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                    z-index: 9999;
                 }
             }
             & > .field_cell:first-child {

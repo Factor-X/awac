@@ -185,6 +185,16 @@ public class ReducingActionController extends AbstractController {
 		return ok(conversionService.convert(reducingAction, ReducingActionDTO.class));
 	}
 
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result deleteAction() {
+		ReducingActionDTO dto = extractDTOFromRequest(ReducingActionDTO.class);
+		ReducingAction reducingAction = reducingActionService.findById(dto.getId());
+		validateUserRightsForScope(securedController.getCurrentUser(), reducingAction.getScope());
+		reducingActionService.remove(reducingAction);
+		return ok();
+	}
+
 	private byte[] getExcelExport(List<ReducingAction> reducingActions) throws WriteException, IOException {
 		LanguageCode userLanguage = securedController.getDefaultLanguage();
 

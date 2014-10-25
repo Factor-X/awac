@@ -175,7 +175,7 @@ angular
                 comment: $scope.comment.field
                 files: $scope.files
             }
-            console.log(data)
+
             downloadService.postJson '/awac/actions/save', data, (result) ->
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
