@@ -178,7 +178,14 @@ public class AnswerController extends AbstractController {
         }
         if (!formsCloseDTO.getClose() && awacCalculatorInstance.isClosed()) {
             awacCalculatorInstance.setClosed(false);
+
+            //is there is a veriifciation, remove them
+            if(awacCalculatorInstance.getVerificationRequest()!=null){
+                verificationRequestService.remove(awacCalculatorInstance.getVerificationRequest());
+            }
+
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
+
         } else if (formsCloseDTO.getClose() && awacCalculatorInstance.isClosed() == false) {
             awacCalculatorInstance.setClosed(true);
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
@@ -1143,7 +1150,7 @@ public class AnswerController extends AbstractController {
 
         VerificationFinalizationDTO result = new VerificationFinalizationDTO();
         result.setFinalized(true);
-        result.setSuccess(false);
+        result.setSuccess(true);
 
         List<Form> forms = awacCalculatorService.findByCode(scope.getOrganization().getInterfaceCode()).getForms();
 
