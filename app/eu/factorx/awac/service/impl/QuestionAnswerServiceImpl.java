@@ -42,27 +42,6 @@ public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl
 		return query.getResultList();
 
 
-/*
-		Session session = JPA.em().unwrap(Session.class);
-		Criteria criteria = session.createCriteria(QuestionAnswer.class, "qa");
-
-		criteria.createAlias("qa.questionSetAnswer", "qsa");
-		if (searchParameter.getForm() != null) {
-			criteria.add(Restrictions.in("qsa.questionSet", searchParameter.getForm().getAllQuestionSets()));
-		}
-		if (searchParameter.getScope() != null) {
-			criteria.add(Restrictions.eq("qsa.scope", searchParameter.getScope()));
-		}
-		if (searchParameter.getPeriod() != null) {
-			criteria.add(Restrictions.eq("qsa.period", searchParameter.getPeriod()));
-		}
-		criteria.addOrder(Order.asc("qsa.repetitionIndex"));
-
-		criteria.setCacheable(true);
-		@SuppressWarnings("unchecked")
-		List<QuestionAnswer> result = criteria.list();
-		return result;
-		*/
 	}
 
 	@Override

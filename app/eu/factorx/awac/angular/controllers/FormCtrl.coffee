@@ -744,6 +744,7 @@ angular
             if isFinish == true && atLeastOneQuestion == false
                 isFinish == false
 
+            #return css
             if isFinish == true
                 if allWasSave == false
                     return 'answer_temp'
@@ -904,7 +905,7 @@ angular
             for key in Object.keys($scope.mapQuestionSet)
                 if key != '$$hashKey'
                     questionSet = $scope.mapQuestionSet[key]
-                    if questionSet.questionSetDTO.code
+                    if questionSet.questionSetDTO.code == code
                         result = $scope.foundBasicParent(questionSet)
                         return result.datalocker? && result.datalocker.identifier != $scope.$root.currentPerson.identifier
                     if questionSet.questionSetDTO.questions?

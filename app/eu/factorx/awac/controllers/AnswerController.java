@@ -134,7 +134,13 @@ public class AnswerController extends AbstractController {
 
         FormsClosingDTO formsClosingDTO = new FormsClosingDTO();
 
-        return ok(testCloseableValidation(periodKey, scopeId));
+        Scope scope = scopeService.findById(scopeId);
+
+        Period period = periodService.findByCode(new PeriodCode(periodKey));
+
+        securedController.controlDataAccess(period, scope);
+
+        return ok(testCloseableVerification(period,scope));
     }
 
     @Transactional(readOnly = false)
@@ -171,7 +177,14 @@ public class AnswerController extends AbstractController {
         }
         if (!formsCloseDTO.getClose() && awacCalculatorInstance.isClosed()) {
             awacCalculatorInstance.setClosed(false);
+
+            //is there is a veriifciation, remove them
+            if(awacCalculatorInstance.getVerificationRequest()!=null){
+                verificationRequestService.remove(awacCalculatorInstance.getVerificationRequest());
+            }
+
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
+
         } else if (formsCloseDTO.getClose() && awacCalculatorInstance.isClosed() == false) {
             awacCalculatorInstance.setClosed(true);
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
@@ -1182,18 +1195,11 @@ public class AnswerController extends AbstractController {
         return true;
     }
 
-
-    public VerificationFinalizationDTO testCloseableValidation(String periodKey, Long scopeId) {
+    public VerificationFinalizationDTO testCloseableVerification(Period period,Scope scope) {
 
         VerificationFinalizationDTO result = new VerificationFinalizationDTO();
         result.setFinalized(true);
         result.setSuccess(true);
-
-        Scope scope = scopeService.findById(scopeId);
-
-        Period period = periodService.findByCode(new PeriodCode(periodKey));
-
-        securedController.controlDataAccess(period, scope);
 
         List<Form> forms = awacCalculatorService.findByCode(scope.getOrganization().getInterfaceCode()).getForms();
 
@@ -1205,13 +1211,16 @@ public class AnswerController extends AbstractController {
                     if (questionSetAnswers.size() != 1 ||
                             questionSetAnswers.get(0).getVerification() == null ||
                             questionSetAnswers.get(0).getVerification().getVerificationStatus() == null) {
+
                         result.setFinalized(false);
+                        result.setSuccess(false);
                     } else if (questionSetAnswers.get(0).getVerification().getVerificationStatus().equals(VerificationStatus.REJECTED)) {
                         result.setSuccess(false);
                     }
                 }
             }
         }
+
         return result;
     }
 

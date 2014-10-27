@@ -48,13 +48,13 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			}
 		}
 
-		if(rows > 0 && total > 0){
+		if (rows > 0 && total > 0) {
 
 			for (int i = 0; i < rows; i++) {
 
 				Double cell = (Double) data.getCell(1, i);
 
-				if(cell == 0) {
+				if (cell == 0) {
 					continue;
 				}
 
@@ -244,7 +244,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 			// bg-series
 			String path = computePathData(seriePoints, true);
 
-			String color = Colors.makeGoodColorForSerieElement(s, data.getColumnCount()-1);
+			String color = Colors.makeGoodColorForSerieElement(s, data.getColumnCount() - 1);
 
 			sb.append(String.format("<path d='%s' stroke='#333' fill='none'                     stroke-width='2' transform='translate(1,1)' />", path));
 			sb.append(String.format("<path d='%s' stroke='#%s'  fill='#%s'  fill-opacity='0.25' stroke-width='2'                            />", path, color, color));
@@ -282,10 +282,25 @@ public class SvgGeneratorImpl implements SvgGenerator {
 	@Override
 	public String getHistogram(Table data) {
 
+		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
+		// + Indicator + P1:Scope 1 + P1:Scope 2 + P1:Scope 3 + P1:Out of scope + P2:Scope 1 + P2:Scope 2 + P2:Scope 3 + P2:Out of scope +
+		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
+
 		StringBuilder sb = new StringBuilder();
 		int count = data.getRowCount();
-		int series = data.getColumnCount() - 1;
-		double maximum = data.max(1, 0, data.getColumnCount() - 1, count - 1);
+		int series = (data.getColumnCount() - 1) / 4;
+		double maximum = 0.0;
+
+		for (int i = 0; i < count; i++) {
+			for (int j = 0; j < series; j++) {
+				double sum = 0;
+				for (int iScope = 0; iScope < 4; iScope++) {
+					sum += (Double) data.getCell(1 + j * 4 + iScope, i);
+				}
+				if (sum > maximum) maximum = sum;
+			}
+		}
+
 
 		int sizex = 300 + count * 200;
 		int sizey = 1000;
@@ -307,31 +322,34 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		double histoWidth = 200;
 		double left = 300;
 		for (int i = 0; i < count; i++) {
-
 			for (int j = 0; j < series; j++) {
+				double sum = 0;
+				for (int iScope = 0; iScope < 4; iScope++) {
 
-				String color = Colors.makeGoodColorForSerieElement(j, series);
-				Double cell = (Double) data.getCell(j + 1, i);
-				sb.append(String.format(
-					"<rect " +
-						"x='%s' " +
-						"y='%s' " +
-						"width='%s' " +
-						"height='%s' " +
-						"fill='#%s' " +
-						"stroke='none' " +
-						"stroke-width='0' " +
-						"class='path' " +
-						"/>\n",
-					left + histoWidth * i + (1.0 * histoWidth * 0.8 * j / series) + histoWidth * 0.1,
-					sizey * 0.875 - cell * sizey * 0.75 / cap,
-					histoWidth * 0.8 / series,
-					cell * sizey * 0.75 / cap,
-					color
-				));
+					String color = Colors.makeGoodColorForSerieElement(j, series);
+					color = Colors.interpolate(color, "ffffff", iScope, 4);
 
+					Double cell = (Double) data.getCell(1 + j * 4 + iScope, i);
+					sb.append(String.format(
+						"<rect " +
+							"x='%s' " +
+							"y='%s' " +
+							"width='%s' " +
+							"height='%s' " +
+							"fill='#%s' " +
+							"stroke='white' " +
+							"stroke-width='0' " +
+							"class='path' " +
+							"/>\n",
+						left + histoWidth * i + (1.0 * histoWidth * 0.8 * j / series) + histoWidth * 0.1,
+						sizey * 0.875 - (sum + cell) * sizey * 0.75 / cap,
+						histoWidth * 0.8 / series,
+						cell * sizey * 0.75 / cap,
+						color
+					));
+					sum += cell;
+				}
 			}
-
 		}
 
 		// numbers

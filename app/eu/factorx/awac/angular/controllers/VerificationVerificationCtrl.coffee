@@ -117,6 +117,7 @@ angular
         $scope.requestSelected = null
 
     $scope.finalizeVerification = () ->
+        console.log $scope.verificationFinalization
         data =
             removeRequest:$scope.removeRequest
             verificationSuccess:$scope.verificationFinalization.success

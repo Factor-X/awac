@@ -13,16 +13,16 @@ div
                         .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate', ng-show="$root.instanceName == 'municipality'")
 
                     td
-                        div
-                            select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
+                        select.language-chooser(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
                     td
-                        div(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
+                        .survey-interface-management(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
                     td
-                        div(ng-show='$root.currentPerson!=null')
-                            span(ng-bind-html='\'WELCOME\' | translate')
-                            | ,
-                            span.username {{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}
-                        div(ng-show='$root.currentPerson==null') Your are currently not connected
+                        .login-info
+                            .connected(ng-show='$root.currentPerson!=null')
+                                span(ng-bind-html='\'WELCOME\' | translate')
+                                | ,
+                                span.username {{$root.currentPerson.firstName}} {{$root.currentPerson.lastName}}
+                            .not-connected(ng-show='$root.currentPerson==null') Your are currently not connected
                 tr
                     td
                         .entreprise_name {{ $root.organizationName }}
@@ -33,47 +33,47 @@ div
                         ng-bind-html="'SURVEY_INTERFACE_CONFIDENTIALITY' | translate",
                         ng-click="$root.showConfidentiality()")
                         button.button.help(
-                            type='button',
-                            ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                            ng-click="$root.showHelp()")
+                        type='button',
+                        ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
+                        ng-click="$root.showHelp()")
                     td
                         //  organization manager button
                         button.button.user_manage(
-                            type='button',
-                            ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
-                            ng-click='isDisabled || $root.nav(\'/organization_manager\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
-                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        type='button',
+                        ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/organization_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
                         //  site manager button
                         button.button.user_manage(
-                            ng-show="$root.instanceName == 'enterprise'"
-                            type='button',
-                            ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
-                            ng-click='isDisabled || $root.nav(\'/site_manager\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
-                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        ng-show="$root.instanceName == 'enterprise'"
+                        type='button',
+                        ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/site_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
                         // user manager button
                         button.button.user_manage(
-                            type='button',
-                            ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
-                            ng-click='isDisabled || $root.nav(\'/user_manager\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
-                            ng-disabled='$root.currentPerson.isAdmin === false')
+                        type='button',
+                        ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/user_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
                     td
                         //  user data button
                         button.button.user_manage(
-                            type='button',
-                            ng-bind-html='\'USER_DATA_BUTTON\' | translate',
-                            ng-click='$root.nav(\'/user_data\')',
-                            ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}'
-                            )
+                        type='button',
+                        ng-bind-html='\'USER_DATA_BUTTON\' | translate',
+                        ng-click='$root.nav(\'/user_data\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/user_data\') == true}'
+                        )
                         // logout button
                         button.button.user_manage(
-                            ng-show='$root.currentPerson!=null',
-                            type='button',
-                            ng-click='$root.logout();',
-                            ng-bind-html='\'LOGOUT_BUTTON\' | translate'
-                            )
+                        ng-show='$root.currentPerson!=null',
+                        type='button',
+                        ng-click='$root.logout();',
+                        ng-bind-html='\'LOGOUT_BUTTON\' | translate'
+                        )
         .data_menu(ng-show='displayLittleMenu===true || displayMenu===true')
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
@@ -90,52 +90,51 @@ div
             div(ng-show="$root.currentPerson.isAdmin == true")
                 //verification button => start verification
                 button.button.verification(
-                    type='button',
-                    ng-bind-html="'ASK_VERIFICATION' | translate",
-                    ng-click="isDisabled || requestVerification()",
-                    ng-show="$root.getVerificationRequestStatus()==null",
-                    ng-disabled="$root.closeableForms !== true")
+                type='button',
+                ng-bind-html="'ASK_VERIFICATION' | translate",
+                ng-click="isDisabled || requestVerification()",
+                ng-show="$root.getVerificationRequestStatus()==null",
+                ng-disabled="$root.closeableForms !== true")
                 //re-submit => is case of correction
                 button.button.verification(
-                    type='button',
-                    ng-bind-html="'VERIFICATION_RE_SUBMIT_BUTTON' | translate",
-                    ng-click="isDisabled || resubmitVerification()",
-                    ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION'",
-                    ng-disabled="$root.closeableForms !== true")
+                type='button',
+                ng-bind-html="'VERIFICATION_RE_SUBMIT_BUTTON' | translate",
+                ng-click="isDisabled || resubmitVerification()",
+                ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION'",
+                ng-disabled="$root.closeableForms !== true")
                 //consult verificaiont => is verified
                 button.button.verification(
-                     type='button',
-                     ng-bind-html="'SURVEY_INTERFACE_VERIFICATION_CONSULT' | translate",
-                     ng-click="isDisabled || consultVerification()",
-                     ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'")
+                type='button',
+                ng-bind-html="'SURVEY_INTERFACE_VERIFICATION_CONSULT' | translate",
+                ng-click="isDisabled || consultVerification()",
+                ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'")
                 //accept / reject validation
                 button.button.verification(
-                    type='button',
-                    ng-bind-html="'SURVEY_INTERFACE_VERIFICATION_CONFIRM_VERIFIER' | translate",
-                    ng-click="isDisabled || confirmVerifier()",
-                    ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
+                type='button',
+                ng-bind-html="'SURVEY_INTERFACE_VERIFICATION_CONFIRM_VERIFIER' | translate",
+                ng-click="isDisabled || confirmVerifier()",
+                ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
                 //cancel verification => other case
                 button.button.verification(
-                    type='button',
-                    ng-bind-html="'VERIFICATION_CANCEL_BUTTON' | translate",
-                    ng-click="isDisabled || cancelVerification()",
-                    ng-show="$root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
+                type='button',
+                ng-bind-html="'VERIFICATION_CANCEL_BUTTON' | translate",
+                ng-click="isDisabled || cancelVerification()",
+                ng-show="$root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_CORRECTION' && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_WAIT_CUSTOMER_CONFIRMATION'")
                 //consult verification faild comment
                 button.button.verification(type="button",
-                    ng-click="isDisabled || consultVerificationFinalComment()",
-                    ng-bind-html="'VERIFICATION_FINALIZATION_CONSULT_COMMENT' | translate",
-                    ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION' "
-                    )
+                ng-click="isDisabled || consultVerificationFinalComment()",
+                ng-bind-html="'VERIFICATION_FINALIZATION_CONSULT_COMMENT' | translate",
+                ng-show="$root.getVerificationRequestStatus()==='VERIFICATION_STATUS_CORRECTION' "
+                )
 
                 button.button.verification(type='button',
-                    ng-click="isDisabled || $root.closeForms()",
-                    ng-bind-html='\'UNCLOSING_FORM\' | translate',
-                    ng-show="$root.closedForms")
+                ng-click="isDisabled || $root.closeForms()",
+                ng-bind-html='\'UNCLOSING_FORM\' | translate',
+                ng-show="$root.closedForms")
                 button.button.verification(type='button',
-                    ng-disabled="$root.closeableForms !== true || ($root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED') || $root.currentPerson.isAdmin !== true",
-                    ng-click="isDisabled || $root.closeForms()",
-                    ng-bind-html='\'CLOSING_FORM\' | translate',
-                    ng-hide="$root.closedForms")
+                ng-click="isDisabled || $root.closeForms()",
+                ng-bind-html='\'CLOSING_FORM\' | translate',
+                ng-hide="$root.closedForms || $root.getVerificationRequestStatus()!==null")
 
             .big_separator
             .data_save
