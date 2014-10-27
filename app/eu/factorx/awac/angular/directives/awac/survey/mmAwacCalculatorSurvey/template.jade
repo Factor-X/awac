@@ -132,10 +132,9 @@ div
                     ng-bind-html='\'UNCLOSING_FORM\' | translate',
                     ng-show="$root.closedForms")
                 button.button.verification(type='button',
-                    ng-disabled="$root.closeableForms !== true || ($root.getVerificationRequestStatus()!=null && $root.getVerificationRequestStatus()!='VERIFICATION_STATUS_VERIFIED') || $root.currentPerson.isAdmin !== true",
                     ng-click="isDisabled || $root.closeForms()",
                     ng-bind-html='\'CLOSING_FORM\' | translate',
-                    ng-hide="$root.closedForms")
+                    ng-hide="$root.closedForms || $root.getVerificationRequestStatus()!==null")
 
             .big_separator
             .data_save

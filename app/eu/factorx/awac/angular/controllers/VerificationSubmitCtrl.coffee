@@ -119,7 +119,7 @@ angular
     $scope.consultEvent = () ->
         data =
             organizationCustomer: $scope.requestSelected.organizationCustomer
-        modalService.show modalService.CONSULT_EVENT,
+        modalService.show modalService.CONSULT_EVENT,data
 
 
     $scope.removeRequest = ->

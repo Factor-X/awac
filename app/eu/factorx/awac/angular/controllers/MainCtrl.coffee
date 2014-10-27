@@ -508,10 +508,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             routeWithScopeAndPeriod = ['/form','/results','/actions']
             for route in routeWithScopeAndPeriod
                 if loc.substring(0, route.length) == route
-                    console.log "nav to => "+loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId
                     $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
                     return
-            console.log "nav to => "+loc
             $location.path(loc)
 
             return
