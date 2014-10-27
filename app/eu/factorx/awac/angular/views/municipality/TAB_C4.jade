@@ -3,6 +3,8 @@ div
     div(ng-show="loading===false && errorMessage === null")
         //achat bien et service
         mm-awac-section(title-code="AC114")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC114' | translate")
 
             mm-awac-question(question-code="AC115",ng-optional="true")
 

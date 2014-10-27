@@ -2,6 +2,8 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="A1")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A1' | translate")
 
             mm-awac-question(question-code="A2")
 
@@ -24,6 +26,8 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A13")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A13' | translate")
 
             mm-awac-question(question-code="A14",ng-optional="true")
 
@@ -50,6 +54,8 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A20")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A20' | translate")
 
             mm-awac-question(question-code="A21",ng-optional="true")
 
@@ -70,6 +76,8 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A31")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A31' | translate")
 
             mm-awac-question(question-code="A32")
 
@@ -89,6 +97,8 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A37")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A37' | translate")
 
             mm-awac-question(question-code="A38")
 

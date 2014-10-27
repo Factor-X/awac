@@ -2,6 +2,8 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="AC9")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC9' | translate")
 
             // main loop
             mm-awac-repetition-name(question-code="AC10")
@@ -93,6 +95,8 @@ div
 
         // éclairage public AS52
         mm-awac-section(title-code="AC52")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC52' | translate")
 
             mm-awac-question(question-code="AC53",ng-optional="true")
 

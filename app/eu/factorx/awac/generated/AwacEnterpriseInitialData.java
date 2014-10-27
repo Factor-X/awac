@@ -188,14 +188,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(form4);
     }
     // == TAB5
-    // DECHETS
+    // DECHETS, EAUX USEES
     Form form5 = formService.findByIdentifier("TAB5");
     if (form5 == null) {
         form5 = new Form("TAB5");
         JPA.em().persist(form5);
     }
     // == TAB6
-    // BIENS D'EQUIPEMENT, ACTIFS LOUES EN AVAL, FRANCHISES, INVESTISSEMENTS
+    // BIENS D'EQUIPEMENT, ACTIFS, FRANCHISES, INVESTISSEMENTS
     Form form6 = formService.findByIdentifier("TAB6");
     if (form6 == null) {
         form6 = new Form("TAB6");
@@ -555,7 +555,7 @@ public class AwacEnterpriseInitialData {
     form4.getQuestionSets().add(a205);
     JPA.em().persist(form4);
     // == A208
-    // Méthode par détail des achats
+    // Achat de biens et services
     QuestionSet a208 = questionSetService.findByCode(QuestionCode.A208);
     if( a208 == null ) {
         a208 = new QuestionSet(QuestionCode.A208, false, null);
@@ -3254,7 +3254,7 @@ if (a125 == null) {
 
 
     // == A126
-    // Km moyen assignés par employé voyageant
+    // Distance totale (aller-retour) assignée à chaque employé voyageant
 
     
 DoubleQuestion a126 = (DoubleQuestion) questionService.findByCode(QuestionCode.A126);
@@ -3281,7 +3281,7 @@ if (a126 == null) {
 
 
     // == A127
-    // km moyen parcourus sur l'année:
+    // Distance totale (aller-retour) assignée à chaque employé voyageant
 
     
 DoubleQuestion a127 = (DoubleQuestion) questionService.findByCode(QuestionCode.A127);

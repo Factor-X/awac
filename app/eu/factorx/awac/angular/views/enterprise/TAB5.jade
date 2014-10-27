@@ -4,12 +4,17 @@ div
         // mm-awac-section("Déchets")
         // It lacks a proper fild code for "D2chets alone" -> TODO : insert into Excel file as an additional line
         mm-awac-section(title-code="A173")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A173' | translate")
 
             mm-awac-question(question-code="A174",ng-optional="true")
 
         .horizontal_separator
 
         mm-awac-section(title-code="A4999")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A4999' | translate")
+
             mm-awac-repetition-name(question-code="A5000")
             mm-awac-repetition-question(question-set-code="A5000", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A5000')")
                 mm-awac-question(question-code="A5001",ng-repetition-map="itLevel1")
@@ -21,6 +26,9 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A180")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A180' | translate")
+
             mm-awac-sub-title(question-code="A181")
 
             mm-awac-sub-sub-title(question-code="A182")
