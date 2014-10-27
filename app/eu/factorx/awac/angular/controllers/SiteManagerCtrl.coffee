@@ -29,6 +29,8 @@ angular
 
 
             $scope.toForm = ->
+                $scope.$root.scopeSelectedId =  $scope.$root.mySites[0].id
+                $scope.$root.periodSelectedKey = $scope.$root.mySites[0].listPeriodAvailable[0].key
                 $scope.$root.navToLastFormUsed()
 
             $scope.getSiteList = () ->

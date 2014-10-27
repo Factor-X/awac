@@ -6,9 +6,7 @@
 @import 'partials/_modals';
 @import 'partials/_verification.less';
 @import 'partials/_form.less';
-
 @import 'partials/_plus-minus';
-
 @import "partials/_print";
 
 //
@@ -43,4 +41,188 @@
     color: #f9f2f4;
     width: 600px;
     margin-left: ~"calc(50% - 300px)";
+}
+
+.survey-header {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+
+    .survey-header-option {
+
+        height: auto;
+
+        tr {
+            td {
+                padding: 0;
+                margin: 0;
+                vertical-align: top;
+                &:not(:first-child) {
+                    border-left: solid 8px transparent;
+                }
+            }
+        }
+
+        .wallonie_logo {
+            margin: 0;
+            padding: 0;
+            height: 48px;
+            width: 36px;
+            background-size: 36px 48px;
+        }
+
+        .awac_logo {
+            margin: 0;
+            padding: 0;
+
+            height: 48px;
+            width: 138px;
+            background-size: 138px 48px;
+        }
+
+        .calculateur_type {
+            margin: 0;
+            padding: 4px 0 2px 0;
+        }
+
+        .entreprise_name {
+            margin: 0 4px;
+            padding: 0;
+            font-size: 18px;
+        }
+
+        .survey-interface-management, .login-info, .language-chooser {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 20px;
+            vertical-align: bottom;
+            margin-bottom: 3px;
+            border-bottom: dotted 2px gray;
+        }
+
+    }
+
+}
+
+.big_separator {
+    width: 4px;
+}
+
+.data_menu {
+    height: 30px;
+
+    .data_save {
+        margin: 0;
+        padding: 0;
+        padding-top: 2px;
+        padding-right: 2px;
+        * {
+            vertical-align: top;
+        }
+
+        .small_separator {
+            margin: 4px 8px;
+        }
+
+    }
+}
+
+.nav_entreprise {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 96px;
+
+    .site_menu {
+        margin: 0;
+        padding: 0;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 75%;
+        border-left: solid 4px transparent;
+
+        .menu_enterprise {
+            margin: 0;
+            padding: 0;
+            margin-top: 4px;
+            border-spacing: 0;
+
+            display: table;
+
+            button {
+                display: table-cell;
+                margin: 0;
+                width: ~"calc( 100%/6.0)";
+                min-width: ~"calc( 100%/6.0 )";
+                max-width: ~"calc( 100%/6.0)";
+                border-right: solid 4px #61605b;
+            }
+        }
+
+        .menu_municipality {
+            margin: 0;
+            padding: 0;
+            margin-top: 4px;
+            border-spacing: 0;
+
+            display: table;
+
+            button {
+                display: table-cell;
+                margin: 0;
+                width: ~"calc( 100%/5.0)";
+                min-width: ~"calc( 100%/5.0 )";
+                max-width: ~"calc( 100%/5.0)";
+                border-right: solid 4px #61605b;
+            }
+        }
+    }
+
+    .last_menu {
+        margin: 0;
+        padding: 4px;
+        display: table;
+
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 25%;
+
+        border-spacing: 0;
+
+        button {
+            &:not(:first-child) {
+                margin-left: 4px;
+            }
+            padding: 0;
+            border: 0;
+            width: ~"calc(50% - 2px)";
+
+        }
+
+    }
+
+    button.menu_current, button.button:focus {
+        outline: none;
+
+    }
+
+    .menu_arrow {
+        z-index: 1000;
+    }
+}
+
+.content-with-menu {
+    top: 176px;
+}
+
+.content-without-menu {
+    top: 50px;
+}
+
+.content-with-little-menu{
+    top: 80px !important;
 }

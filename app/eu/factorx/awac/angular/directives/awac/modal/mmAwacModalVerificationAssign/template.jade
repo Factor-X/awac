@@ -8,11 +8,18 @@
                     span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
                 h4(class="modal-title",ng-bind-html="'VERIFICATION_REQUEST_ASSIGN' | translate")
             .modal-body
-                table.list_user_table
-                    tr(ng-repeat="user in users")
-                        td
-                            input(type="checkbox", ng-model="user.selected",ng-value="user.identifier", name="a")
-                        td {{user.firstName}} {{user.lastName}}
+                table.associate-user-table
+                    thead
+                        tr
+                            td
+                                div(ng-bind-html="'SITE_MANAGER_ADD_SELECTED_LABEL' | translate")
+                            td
+                                div(ng-bind-html="'NAME' | translate")
+                    tbody
+                        tr(ng-repeat="user in users")
+                            td
+                                input(type="checkbox", ng-model="user.selected",ng-value="user.identifier", name="a")
+                            td {{user.firstName}} {{user.lastName}}
 
             .modal-footer
 

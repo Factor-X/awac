@@ -1,0 +1,16 @@
+.modal.confirm-dialog(ng-escape="close()")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                h5(class="modal-title", ng-bind-html="titleKey | translate")
+
+            .modal-body
+                .desc(ng-bind-html="messageKey | translate")
+
+            .modal-footer
+                div(ng-hide="isLoading")
+                    button.button(type="button", class="btn btn-primary", ng-click="confirm();", ng-bind-html="'YES_BUTTON' | translate")
+                    span &nbsp;
+                    button.button(type="button", class="btn btn-primary", ng-click="close();", ng-bind-html="'NO_BUTTON' | translate", autofocus="autofocus")
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")

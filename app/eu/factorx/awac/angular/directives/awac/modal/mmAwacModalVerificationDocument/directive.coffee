@@ -54,7 +54,7 @@ angular
                 downloadService.postJson "/awac/verification/setStatus", data, (result) ->
                     $scope.isLoading = false
                     if result.success
-
+                        $scope.$root.testCloseable()
                         #display success message
                         $scope.$root.verificationRequest?.status =newStatus
                         #close window
