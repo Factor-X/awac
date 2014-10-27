@@ -5952,6 +5952,8 @@ angular.module('app.directives').directive('mmRangeValidator', function(){
         return _results;
       };
       $scope.toForm = function() {
+        $scope.$root.scopeSelectedId = $scope.$root.mySites[0].id;
+        $scope.$root.periodSelectedKey = $scope.$root.mySites[0].listPeriodAvailable[0].key;
         return $scope.$root.navToLastFormUsed();
       };
       $scope.getSiteList = function() {
