@@ -27,6 +27,7 @@ angular
     @VERIFICATION_CONFIRMATION = 'verification-confirmation'
     @VERIFICATION_DOCUMENT='verification-document'
     @VERIFICATION_FINALIZATION_VISUALIZATION='verification-finalization-visualization'
+    @DRIVER_ADD_VALUE = 'driver-add-value'
 
     @show = (modalName, params) ->
         args = []

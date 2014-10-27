@@ -20,7 +20,7 @@ public class DriverValueDriverValueDTOConverter implements Converter<DriverValue
         DriverValueDTO driverValueDTO = new DriverValueDTO();
 
         driverValueDTO.setDefaultValue(driverValue.getDefaultValue());
-        driverValueDTO.setFromPeriod(periodToPeriodDTOConverter.convert(driverValue.getFromPeriod()));
+        driverValueDTO.setFromPeriodKey(driverValue.getFromPeriod().getPeriodCode().getKey());
 
         return driverValueDTO;
     }

@@ -10,5 +10,6 @@ import java.util.List;
 public interface DriverService {
     List<Driver> findAll();
 
+    Driver findById(Long driverId);
 }
 

@@ -8,24 +8,24 @@ import eu.factorx.awac.dto.awac.get.PeriodDTO;
  */
 public class DriverValueDTO extends DTO {
 
-    private PeriodDTO  fromPeriod;
+    private String  fromPeriodKey;
 
     private Double defaultValue;
 
     public DriverValueDTO() {
     }
 
-    public DriverValueDTO(Double defaultValue, PeriodDTO fromPeriod) {
+    public DriverValueDTO(String fromPeriodKey, Double defaultValue) {
+        this.fromPeriodKey = fromPeriodKey;
         this.defaultValue = defaultValue;
-        this.fromPeriod = fromPeriod;
     }
 
-    public PeriodDTO getFromPeriod() {
-        return fromPeriod;
+    public String getFromPeriodKey() {
+        return fromPeriodKey;
     }
 
-    public void setFromPeriod(PeriodDTO fromPeriod) {
-        this.fromPeriod = fromPeriod;
+    public void setFromPeriodKey(String fromPeriodKey) {
+        this.fromPeriodKey = fromPeriodKey;
     }
 
     public Double getDefaultValue() {
@@ -39,7 +39,7 @@ public class DriverValueDTO extends DTO {
     @Override
     public String toString() {
         return "DriverValueDTO{" +
-                "fromPeriod=" + fromPeriod +
+                "fromPeriodKey='" + fromPeriodKey + '\'' +
                 ", defaultValue=" + defaultValue +
                 '}';
     }
