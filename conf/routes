@@ -180,3 +180,5 @@ GET         /awac/actions/exportToXls                                           
 #
 #
 GET         /awac/admin/driver/all                                                                 @eu.factorx.awac.controllers.DriverController.getAll()
+GET         /awac/admin/advice/load                                                                @eu.factorx.awac.controllers.ActionAdviceController.loadAdvices()
+

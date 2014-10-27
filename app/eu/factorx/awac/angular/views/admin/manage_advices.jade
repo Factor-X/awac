@@ -1,0 +1,104 @@
+div.actions
+    span
+        h1 {{'REDUCTION_ACTIONS' | translateText }}
+
+    br
+
+    table.actions-table
+
+        thead
+            tr
+                th {{ "REDUCTION_ACTION_TABLE_DETAILS" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_ACTIONS" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_TYPE" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_SCOPE" | translateText }}
+                th {{ "REDUCTION_ACTION_TABLE_COMPLETION" | translateText }}
+
+        tbody
+
+            tr(ng-repeat-start="a in actions")
+                td.details
+                    mm-plus-minus-toggle-button(ng-model="a.opened")
+                td.title
+                    span.text {{a.title}}
+                td.type
+                    span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
+                    span &nbsp;&nbsp;
+                    span.text {{ getTypeLabel(a.typeKey) }}
+                td.scope
+                    span.icon.scope_type_icon(ng-class="{org: a.scopeTypeKey == '1', site: a.scopeTypeKey == '2'}")
+                    span &nbsp;&nbsp;
+                    span.text {{ getScopeName(a.scopeTypeKey, a.scopeId) }}
+                td.realization
+                    span.icon.action_done_icon(ng-show="a.statusKey == '2'")
+                    span &nbsp;&nbsp;
+                    span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
+
+            tr(ng-repeat-end, ng-show="a.opened").details
+                td(colspan="2")
+
+                    table
+                        tr
+                            td {{ "REDUCTION_ACTION_WEBSITE_FIELD_TITLE" | translateText }}:
+                            td
+                                a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
+                        tr
+                            td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
+                            td
+                                .box.wide {{ a.physicalMeasure || "&nbsp;" }}
+                        tr(ng-if="a.typeKey == '1'")
+                            td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
+                            td
+                                .box {{ a.ghgBenefit || "&nbsp;" }}
+                                .box.transparent {{ getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
+                        tr
+                            td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
+                            td
+                                .box {{ a.financialBenefit || "&nbsp;" }}
+                                .box.transparent euros
+                        tr
+                            td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
+                            td
+                                .box {{ a.investmentCost || "&nbsp;" }}
+                                .box.transparent euros
+                        tr
+                            td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
+                            td
+                                .box {{ a.expectedPaybackTime || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
+                            td
+                                .box {{ a.dueDate | date: 'dd/MM/yyyy' }}
+                        tr
+                            td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
+                            td
+                                .box.wide {{ a.responsiblePerson || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
+                            td
+                                .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
+                        tr
+                            td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
+                            td
+                                .box.wide
+                                    //span(ng-show="a.files.length == 0") &nbsp;
+                                    div(ng-repeat="f in a.files")
+                                        a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
+
+                td(style="vertical-align: bottom; text-align: right", colspan="4")
+                        button.button(type="button", ng-click="edit(a)")
+                            span.fa.fa-pencil-square-o
+                            span &nbsp;
+                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_EDIT' | translate")
+
+    br
+
+    button.button(type="button", ng-click="create()")
+        span.fa.fa-plus-circle
+        span &nbsp;
+        span(ng-bind-html="'REDUCING_ACTION_BUTTON_CREATE' | translate")
+
+    button.button(type="button", ng-click="exportToXls()")
+        span.fa.fa-file-excel-o
+        span &nbsp;
+        span(ng-bind-html="'REDUCING_ACTION_BUTTON_EXPORT_TO_XLS' | translate")

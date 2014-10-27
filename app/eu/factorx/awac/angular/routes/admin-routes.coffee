@@ -23,6 +23,15 @@ initializeAdminRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
+        .when('/advice', {
+                templateUrl: '$/angular/views/admin/manage_advices.html'
+                controller: 'AdminActionAdviceCtrl'
+                resolve:angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
         .otherwise({ redirectTo: '/login' })
 
         return
