@@ -140,3 +140,33 @@ div
                                 mm-awac-block.element_table(ng-condition="getAnswer('A5').value == '1' || getAnswer('A5').value == '2'")
                                     mm-awac-question(question-code="A48",ng-tab-set="1",ng-tab="3")
                                     mm-awac-question(question-code="A49",ng-tab-set="1",ng-tab="3")
+
+        .horizontal_separator
+
+        mm-awac-section(title-code="A6000")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A6000' | translate")
+
+            .element_text(ng-bind-html="'FORM_MULTI_METHOD' | translate")
+            .method
+                tabset
+                    tab.tab-color-lightgreen(active="getTab(2,1).active")
+                        tab-heading
+                            i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(2,1)")
+                            .status(class="{{getStatusClassForTab(2,1)}}")
+                            span(ng-bind-html="'A6002' | translate")
+                        .sub_block.tab-color-lightgreen
+                            .element_table
+                                mm-awac-question(question-code="A6003",ng-tab-set="2",ng-tab="1")
+                                mm-awac-question(question-code="A6004",ng-tab-set="2",ng-tab="1")
+                                mm-awac-question(question-code="A6005",ng-tab-set="2",ng-tab="1")
+                    tab.tab-color-green(active="getTab(2,2).active")
+                        tab-heading
+                            i.glyphicon.glyphicon-bell(ng-show="tabIsMaster(2,2)")
+                            .status(class="{{getStatusClassForTab(2,2)}}")
+                            span(ng-bind-html="'A6006' | translate")
+                        .sub_block.tab-color-green
+                            .element_table
+                                mm-awac-question(question-code="A6007",ng-tab-set="2",ng-tab="2")
+                                mm-awac-question(question-code="A6008",ng-tab-set="2",ng-tab="2")
+                                mm-awac-question(question-code="A6009",ng-tab-set="2",ng-tab="2")

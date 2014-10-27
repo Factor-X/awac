@@ -32,10 +32,10 @@ import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
 /*
- * Test for bad AE_BAD26A
+ * Test for bad AE_BAD53A
 */
 @Component
-public class BAD_AE_BAD26ATest{
+public class BAD_AE_BAD53ATest{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -52,7 +52,7 @@ public class BAD_AE_BAD26ATest{
     private PeriodService periodService;
 
     @Autowired
-    private BaseActivityDataAE_BAD26A baseActivityDataAE_BAD26A;
+    private BaseActivityDataAE_BAD53A baseActivityDataAE_BAD53A;
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
@@ -81,8 +81,8 @@ public class BAD_AE_BAD26ATest{
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerA204());
-                answerLineDTOList.addAll(buildAnswerA202());
+                answerLineDTOList.addAll(buildAnswerA6009());
+                answerLineDTOList.addAll(buildAnswerA6007());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -115,7 +115,7 @@ public class BAD_AE_BAD26ATest{
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
-        List<BaseActivityData> bads = baseActivityDataAE_BAD26A.getBaseActivityData(questionSetAnswers);
+        List<BaseActivityData> bads = baseActivityDataAE_BAD53A.getBaseActivityData(questionSetAnswers);
 
         //control content
         //map mapResult
@@ -148,29 +148,29 @@ public class BAD_AE_BAD26ATest{
 
         /**
      * build the AnswerLineDTO
-     * question : A204
+     * question : A6009
      */
-    private List<AnswerLineDTO> buildAnswerA204(){
+    private List<AnswerLineDTO> buildAnswerA6009(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A204","AT_58",  mapRepetition1 ));
+                list.add(new AnswerLineDTO("A6009","AT_58",  mapRepetition1 ));
         
         return list;
     }
         /**
      * build the AnswerLineDTO
-     * question : A202
+     * question : A6007
      */
-    private List<AnswerLineDTO> buildAnswerA202(){
+    private List<AnswerLineDTO> buildAnswerA6007(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A202",23450.0,  mapRepetition1  , UnitCode.U5133.getKey()  ));
+                list.add(new AnswerLineDTO("A6007",23450.0,  mapRepetition1  , UnitCode.U5133.getKey()  ));
         
         return list;
     }
