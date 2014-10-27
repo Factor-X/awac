@@ -240,48 +240,57 @@
     }
 
     .modal.confirm-dialog {
+        display: table !important;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 100%;
 
         .modal-dialog {
+            display: table-cell;
+            width: 100%;
             height: 100%;
-            margin: auto;
+            margin: 0px;
+            padding: 0px;
+            vertical-align: middle;
+            text-align: center;
 
             .modal-content {
-                position: relative;
-                margin-top: ~'calc(50% - 100px)';
-                min-height: 200px;
+                display: inline-block;
+                text-align: left;
                 width: 350px;
-                padding: 10px;
+                min-height: 200px;
+                margin: 0px;
 
-                .modal-header {
-                    height: 40px;
-                    position: absolute;
-                    top:0;
-                    right: 0;
-                    left: 0;
-                    padding: 10px;
-                }
+                    .modal-header {
+                        position: absolute;
+                        height: 40px;
+                        top: 0;
+                        right: 0;
+                        left: 0;
+                        padding: 10px;
+                    }
 
-                .modal-body {
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: 40px;
-                    bottom: 45px;
-                    overflow-y: auto;
-                    padding: 10px 10px 30px 10px;
-                }
+                    .modal-body {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        top: 40px;
+                        bottom: 45px;
+                        overflow-y: auto;
+                        padding: 10px 10px 30px 10px;
+                     }
 
-                .modal-footer {
-                    height: 45px;
-                    position: absolute;
-                    bottom:0;
-                    right: 0;
-                    left: 0;
-                    vertical-align: bottom;
-                    padding: 10px;
+                    .modal-footer {
+                        height: 45px;
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        vertical-align: bottom;
+                        padding: 10px;
+                    }
                 }
             }
         }
     }
-}
-
