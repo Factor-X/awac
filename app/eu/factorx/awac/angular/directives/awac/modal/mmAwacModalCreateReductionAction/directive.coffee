@@ -134,7 +134,7 @@ angular
             inputName: 'comment'
             field: $scope.action.comment
             fieldType: 'textarea'
-            validationRegex: "^.{0,1000}$"
+            validationRegex: ".{0,1000}"
             fieldTitle: "REDUCTION_ACTION_COMMENT_FIELD_TITLE"
             placeholder: "REDUCTION_ACTION_COMMENT_FIELD_PLACEHOLDER"
             validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
@@ -249,7 +249,7 @@ angular
 
         $scope.remove = (storedFileId) ->
             for index, file of $scope.files
-                if file.id = storedFileId
+                if (file.id == storedFileId)
                     $scope.files.splice(index, 1);
                     break
             return

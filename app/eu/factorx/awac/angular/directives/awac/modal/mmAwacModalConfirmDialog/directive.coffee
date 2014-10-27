@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalConfirmDialog", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalConfirmDialog", (directiveService) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngParams: '='
@@ -8,6 +8,9 @@ angular
 
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
+
+        $scope.titleKey = $scope.getParams().titleKey
+        $scope.messageKey = $scope.getParams().messageKey
 
         $scope.close = ->
             modalService.close modalService.CONFIRM_DIALOG

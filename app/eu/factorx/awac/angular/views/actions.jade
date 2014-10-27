@@ -49,26 +49,29 @@ div.actions
                         tr(ng-if="a.typeKey == '1'")
                             td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
                             td
-                                .box {{ a.ghgBenefit || "&nbsp;" }}
-                                .box.transparent {{ getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
+                                .box.wide(ng-show="!!a.ghgBenefit") {{ (a.ghgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
+                                .box.wide(ng-hide="!!a.ghgBenefit") &nbsp;
+
                         tr
                             td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
                             td
-                                .box {{ a.financialBenefit || "&nbsp;" }}
-                                .box.transparent euros
+                                .box.wide(ng-show="!!a.financialBenefit") {{ (a.financialBenefit | numberToI18N) + "&nbsp;EUR" }}
+                                .box.wide(ng-hide="!!a.financialBenefit") &nbsp;
+
                         tr
                             td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
                             td
-                                .box {{ a.investmentCost || "&nbsp;" }}
-                                .box.transparent euros
+                                .box.wide(ng-show="!!a.investmentCost") {{ (a.investmentCost | numberToI18N) + "&nbsp;EUR" }}
+                                .box.wide(ng-hide="!!a.investmentCost") &nbsp;
+
                         tr
                             td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
                             td
-                                .box {{ a.expectedPaybackTime || "&nbsp;" }}
+                                .box.wide {{ a.expectedPaybackTime || "&nbsp;" }}
                         tr
                             td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
                             td
-                                .box {{ a.dueDate | date: 'dd/MM/yyyy' }}
+                                .box.wide {{ a.dueDate | date: 'dd/MM/yyyy' }}
                         tr
                             td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
                             td
@@ -76,14 +79,14 @@ div.actions
                         tr
                             td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
                             td
-                                .box.wide(style="height: 150px;") {{ a.comment || "&nbsp;" }}
+                                .box.wide(style="min-height: 150px;") {{ a.comment || "&nbsp;" }}
                         tr
                             td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
                             td
-                                .box.wide
-                                    //span(ng-show="a.files.length == 0") &nbsp;
+                                .box.wide(ng-show="a.files.length > 0")
                                     div(ng-repeat="f in a.files")
                                         a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
+                                .box.wide(ng-hide="a.files.length > 0") &nbsp;
 
                 td(style="vertical-align: bottom; text-align: right", colspan="4")
 

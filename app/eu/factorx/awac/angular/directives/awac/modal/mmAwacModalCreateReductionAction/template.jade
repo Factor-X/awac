@@ -20,18 +20,17 @@
                             span(ng-bind-html='typeKey.fieldTitle | translate')
                         .field_cell.field_wide
                             div
+                                input(type="radio", ng-model="typeKey.field", name="{{typeKey.inputName}}", value="1")
+                                span &nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_TYPE_REDUCING_GES' | translate")
                                 .field_info
                                     .field_info_popup(ng-bind-html="'REDUCTION_ACTION_TYPE_REDUCING_GES_DESC' | translate")
-                                input(type="radio", ng-model="typeKey.field", name="{{typeKey.inputName}}", value="1", style="width :20px !important;margin:0;vertical-align:middle;")
-                                span &nbsp;
-                                span(ng-bind-html="REDUCTION_ACTION_TYPE_REDUCING_GES")
                             div
-
+                                input(type="radio", ng-model="typeKey.field", name="{{typeKey.inputName}}", value="2")
+                                span &nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_TYPE_BETTER_MEASURE' | translate", ng-class="{selected: typeKey.field == '2'}")
                                 .field_info
                                     .field_info_popup(ng-bind-html="'REDUCTION_ACTION_TYPE_BETTER_MEASURE_DESC' | translate")
-                                input(type="radio", ng-model="typeKey.field", name="{{typeKey.inputName}}", value="2", style="width :20px !important;margin:0;vertical-align:middle;")
-                                span &nbsp;
-                                span(ng-bind-html="REDUCTION_ACTION_TYPE_BETTER_MEASURE")
 
 
                     // Status (radio): 'running', 'done' or 'canceled' (only in edit mode)
@@ -40,7 +39,7 @@
                             span(ng-bind-html='statusKey.fieldTitle | translate')
                         .field_cell.field_wide
                             div(ng-repeat="statusOption in statusOptions")
-                                input(type="radio", ng-model="statusKey.field", name="{{statusKey.inputName}}", value="{{statusOption.key}}", style="width :20px !important;margin:0;vertical-align:middle;")
+                                input(type="radio", ng-model="statusKey.field", name="{{statusKey.inputName}}", value="{{statusOption.key}}")
                                 span &nbsp;
                                 span(ng-bind-html="statusOption.label")
 
@@ -50,13 +49,13 @@
                             span(ng-bind-html='scopeTypeKey.fieldTitle | translate')
                         .field_cell.field_wide
                             div
-                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="1", style="width :20px !important;margin:0;vertical-align:middle;")
+                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="1")
                                 span &nbsp;
                                 span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_ORG' | translate")
                                 span &nbsp;
                                 span(ng-bind-html=" ': <b>' + $root.organizationName + '</b>' ")
                             div(ng-show="$root.instanceName == 'enterprise'")
-                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="2", style="width :20px !important;margin:0;vertical-align:middle;")
+                                input(type="radio", ng-model="scopeTypeKey.field", name="{{scopeTypeKey.inputName}}", value="2")
                                 span &nbsp;
                                 span(ng-bind-html="'REDUCTION_ACTION_SCOPE_TYPE_SITE' | translate")
                                 span &nbsp;

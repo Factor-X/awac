@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -56,7 +57,7 @@ public class ReducingActionController extends AbstractController {
 	private static final int RESPONSIBLE_PERSON_COLUMN = 13;
 	private static final int COMMENT_COLUMN = 14;
 
-	private static final String CURRENCY_FORMAT = "#,##0.00 €#164;";
+	private static final String CURRENCY_FORMAT = "#,###.00 [$€-1]";
 	private static final String REAL_NUMBER_FORMAT = "#,##0.00";
 	private static final String DATE_FORMAT = "dd/MM/yyyy";
 
@@ -214,10 +215,10 @@ public class ReducingActionController extends AbstractController {
 		WritableCellFormat dateCellFormat = new WritableCellFormat(cellFont, new DateFormat(DATE_FORMAT));
 
 		// Real Number cell format
-		WritableCellFormat realNumberCellFormat = new WritableCellFormat(new NumberFormat(REAL_NUMBER_FORMAT));
+		WritableCellFormat realNumberCellFormat = new WritableCellFormat(cellFont, new NumberFormat(REAL_NUMBER_FORMAT));
 
 		// Currency cell format
-		WritableCellFormat currencyCellFormat = new WritableCellFormat(new NumberFormat(CURRENCY_FORMAT));
+		WritableCellFormat currencyCellFormat = new WritableCellFormat(cellFont, new NumberFormat(CURRENCY_FORMAT,  NumberFormat.COMPLEX_FORMAT));
 
 		WorkbookSettings wbSettings = new WorkbookSettings();
 		wbSettings.setLocale(new Locale(userLanguage.getKey()));
@@ -241,6 +242,12 @@ public class ReducingActionController extends AbstractController {
 		sheet.addCell(new Label(WEBSITE_COLUMN, 0, getLabel("REDUCTION_ACTION_WEBSITE_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
 		sheet.addCell(new Label(RESPONSIBLE_PERSON_COLUMN, 0, getLabel("REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
 		sheet.addCell(new Label(COMMENT_COLUMN, 0, getLabel("REDUCTION_ACTION_COMMENT_FIELD_TITLE", interfaceCodeLabels, userLanguage), headersFormat));
+
+		CellView autoSizeCellView = new CellView();
+		autoSizeCellView.setAutosize(true);
+		for(int i = 0; i <= 14; i++) {
+			sheet.setColumnView(i, autoSizeCellView);
+		}
 
 		HashMap<String, CodeLabel> typeCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.REDUCING_ACTION_TYPE);
 		HashMap<String, CodeLabel> statusCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.REDUCING_ACTION_STATUS);

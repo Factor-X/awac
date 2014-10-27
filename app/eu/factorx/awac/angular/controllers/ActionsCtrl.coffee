@@ -47,24 +47,26 @@ angular
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
 
     $scope.deleteAction = (action) ->
+        $scope.isLoading = true
+
         downloadService.postJson "awac/actions/delete", action, (result) ->
+            $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
-                deletedActionId = action.id
-                for index, actionItem of $scope.actions
-                    if actionItem.id = deletedActionId
+                for index, e of $scope.actions
+                    if e.id == action.id
                         $scope.actions.splice(index, 1);
                         break
 
     $scope.confirmDelete = (action) ->
         params =
-            title: "REDUCING_ACTION_DELETE_CONFIRMATION_TITLE"
-            message: "REDUCING_ACTION_DELETE_CONFIRMATION_MESSAGE" + action.title
+            titleKey: "REDUCING_ACTION_DELETE_CONFIRMATION_TITLE"
+            messageKey: "REDUCING_ACTION_DELETE_CONFIRMATION_MESSAGE"
             onConfirm: () ->
                 $scope.deleteAction(action)
         modalService.show(modalService.CONFIRM_DIALOG, params)
 
-    $scope.exportToXls = () ->
+    $scope.exportActionsToXls = () ->
         $window.open '/awac/actions/exportToXls', translationService.get 'RESULT_DOWNLOAD_START', null
 
     $scope.getScopeName = (scopeTypeKey, scopeId) ->
