@@ -8,7 +8,11 @@
 GET         /                                                                                      @eu.factorx.awac.controllers.ApplicationController.index()
 GET         /enterprise                                                                            @eu.factorx.awac.controllers.ApplicationController.calculator(app= "enterprise")
 GET         /municipality                                                                          @eu.factorx.awac.controllers.ApplicationController.calculator(app= "municipality")
+GET         /event                                                                                 @eu.factorx.awac.controllers.ApplicationController.calculator(app= "event")
+GET         /littleEmitter                                                                         @eu.factorx.awac.controllers.ApplicationController.calculator(app= "littleEmitter")
+GET         /household                                                                             @eu.factorx.awac.controllers.ApplicationController.calculator(app= "household")
 GET         /verification                                                                          @eu.factorx.awac.controllers.ApplicationController.verification()
+GET         /admin                                                                                 @eu.factorx.awac.controllers.ApplicationController.admin()
 
 #
 # Translations
@@ -171,3 +175,11 @@ POST        /awac/verification/verify                                           
 GET         /awac/actions/load                                                                     @eu.factorx.awac.controllers.ReducingActionController.loadActions()
 POST        /awac/actions/save                                                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()
 GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
+
+#
+#
+#
+GET         /awac/admin/driver/all                                                                 @eu.factorx.awac.controllers.DriverController.getAll()
+POST        /awac/admin/driver/update                                                              @eu.factorx.awac.controllers.DriverController.update()
+GET         /awac/admin/advice/load                                                                @eu.factorx.awac.controllers.ActionAdviceController.loadAdvices()
+

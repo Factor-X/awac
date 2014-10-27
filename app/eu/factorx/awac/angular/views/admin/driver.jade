@@ -1,0 +1,21 @@
+div.verification_manage
+
+    table.actions-table
+        tr
+            th name
+            th valeurs
+        tr(ng-repeat="driver in drivers")
+            td {{driver.name}}
+            td
+                div(ng-repeat="value in driver.driverValues")
+                    div(style="width:50%;display:inline-block") A partir de
+                        select(
+                        ng-options='p.key as p.label for p in getPeriod(driver,value)',
+                        ng-model="value.fromPeriodKey")
+                    div(style="display:inline-block") Value
+                        input(ng-model="value.defaultValue")
+                    div(style="display:inline-block")
+                        button(ng-click="remove(driver,value.tempId)") supprimer
+                button(ng-click="addValue(driver)") Ajouter une value
+    button(ng-click="save()") Sauver les modifications
+    button(ng-click="orderDriverValues()") Trier les valeurs par date

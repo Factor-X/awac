@@ -21,6 +21,10 @@ import play.mvc.Result;
 public class ApplicationController extends AbstractController {
 
 
+    public Result admin() {
+        return ok(eu.factorx.awac.views.html.admin.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));
+    }
+
     @Transactional
 	public Result index() {
 		return ok(eu.factorx.awac.views.html.index.render(GlobalVariables.STARTUP_DATE_IDENTIFIER));

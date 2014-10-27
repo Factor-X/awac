@@ -25,10 +25,7 @@ import eu.factorx.awac.models.data.answer.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.data.question.type.DoubleQuestion;
-import eu.factorx.awac.models.data.question.type.EntitySelectionQuestion;
-import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
+import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.AwacCalculatorInstance;
 import eu.factorx.awac.models.forms.Form;
@@ -97,6 +94,8 @@ public class AnswerController extends AbstractController {
     private VerificationRequestService verificationRequestService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private DriverValueService driverValueService;
 
 
     @Transactional(readOnly = true)
@@ -222,7 +221,7 @@ public class AnswerController extends AbstractController {
             }
         }
 
-        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers);
+        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers,period);
 
         List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
         List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
@@ -584,11 +583,11 @@ public class AnswerController extends AbstractController {
         return answerLineDTOs;
     }
 
-    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets, HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers) {
+    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets, HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers,Period period) {
         List<QuestionSetDTO> questionSetDTOs = new ArrayList<>();
         for (QuestionSet questionSet : questionSets) {
 
-            QuestionSetDTO questionSetDTO = conversionService.convert(questionSet, QuestionSetDTO.class);
+            QuestionSetDTO questionSetDTO = convertQuestionSet(questionSet, period);
 
             //complete DTO
             if (questionSetAnswers.containsKey(questionSet.getCode())) {
@@ -612,8 +611,58 @@ public class AnswerController extends AbstractController {
 
             questionSetDTOs.add(questionSetDTO);
 
+
+
+
         }
         return questionSetDTOs;
+    }
+
+    private QuestionSetDTO convertQuestionSet(QuestionSet questionSet, Period period) {
+
+        String code = questionSet.getCode().getKey();
+        Boolean repetitionAllowed = questionSet.getRepetitionAllowed();
+        List<QuestionDTO> questions = new ArrayList<>();
+        for (Question question : questionSet.getQuestions()) {
+            questions.add(convertQuestion(question,period));
+        }
+        List<QuestionSetDTO> children = new ArrayList<>();
+        for (QuestionSet childQuestionSet : questionSet.getChildren()) {
+            children.add(convertQuestionSet(childQuestionSet,period));
+        }
+
+        return new QuestionSetDTO(code, repetitionAllowed, children, questions);
+    }
+
+    private QuestionDTO convertQuestion(Question question, Period period) {
+
+        Long unitCategoryId = null;
+        String codeListName = null;
+        Object defaultValue = null;
+        UnitDTO defaultUnit = null;
+
+        if (question instanceof NumericQuestion) {
+            UnitCategory unitCategory = ((NumericQuestion) question).getUnitCategory();
+            if (unitCategory != null) {
+                unitCategoryId = unitCategory.getId();
+            }
+
+        } else if (question instanceof ValueSelectionQuestion) {
+            codeListName = ((ValueSelectionQuestion) question).getCodeList().name();
+        }
+
+        //add driver
+        if (question instanceof NumericQuestion && ((NumericQuestion)question).getDriver()!=null) {
+            defaultValue =  driverValueService.findLastedValid(((NumericQuestion)question), period).getDefaultValue();
+        }
+
+
+        //add default unit
+        if(question instanceof NumericQuestion && ((NumericQuestion)question).getDefaultUnit()!=null){
+            defaultUnit = new UnitDTO(((NumericQuestion)question).getDefaultUnit().getUnitCode().getKey(), ((NumericQuestion)question).getDefaultUnit().getSymbol());
+        }
+
+        return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue,defaultUnit);
     }
 
     private Map<String, CodeListDTO> getNecessaryCodeLists(List<QuestionSet> questionSets, LanguageCode lang) {

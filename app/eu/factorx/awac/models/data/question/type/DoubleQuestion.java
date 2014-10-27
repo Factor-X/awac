@@ -21,12 +21,8 @@ public class DoubleQuestion extends NumericQuestion {
 		super(questionSet, orderIndex, code, unitCategory);
 	}
 
-	public DoubleQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Double defaultValue) {
-		super(questionSet, orderIndex, code, unitCategory, defaultValue);
-	}
-
     public DoubleQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Double defaultValue, Unit defaultUnit) {
-        super(questionSet, orderIndex, code, unitCategory, defaultValue,defaultUnit);
+        super(questionSet, orderIndex, code, unitCategory,defaultUnit);
     }
 
     @Override

@@ -90,7 +90,15 @@ if document.querySelector("meta[name=app]")?
     else if iName == "enterprise"
         initializeEnterpriseRoutes(defaultResolve)
     else if iName == "verification"
-        initializeVerificationRoutes(defaultResolve)
+      initializeVerificationRoutes(defaultResolve)
+    else if iName == "littleEmitter"
+        initializeLittleEmitterRoutes(defaultResolve)
+    else if iName == "event"
+        initializeEventRoutes(defaultResolve)
+    else if iName == "household"
+        initializeHouseholdRoutes(defaultResolve)
+    else if iName == "admin"
+        initializeAdminRoutes(defaultResolve)
 
 initializeCommonRoutes(defaultResolve)
 
