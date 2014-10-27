@@ -12,8 +12,8 @@ angular
 
 
         if $scope.getParams().site?
-            $scope.site =  angular.copy($scope.getParams().site)
-            $scope.createNewSite =false
+            $scope.site = angular.copy($scope.getParams().site)
+            $scope.createNewSite = false
         else
             $scope.site = {}
             #create a default value for percentOwned
@@ -25,19 +25,40 @@ angular
 
         #send the request to the server
         $scope.save = () ->
-
             if $scope.allFieldValid()
 
-              $scope.isLoading = true
+                $scope.isLoading = true
 
-              #create DTO
-              data =
-                  organization: $scope.getParams().organization
-                  site: $scope.getParams().site
-                  selectedAccounts: $scope.selection
+                #create DTO
+                data =
+                    organization: $scope.getParams().organization
+                    site: $scope.getParams().site
+                    selectedAccounts: $scope.selection
 
-              downloadService.postJson '/awac/organization/site/associatedaccounts/save', data, (result) ->
+                downloadService.postJson '/awac/organization/site/associatedaccounts/save', data, (result) ->
                     if result.success
+
+                        #add site to user
+                        ownSite = false
+                        for account in $scope.selection
+                            if account.identifier == $scope.$root.currentPerson.identifier
+                                ownSite = true
+                                break
+
+                        i = 0
+                        founded=false
+                        for site in $scope.$root.mySites
+                            if parseFloat(site.id) == parseFloat($scope.getParams().site.id)
+                                founded=true
+                                if ownSite == false
+                                    $scope.$root.mySites.splice(i, 1)
+                                break
+                            i++
+
+
+                        if ownSite==true && founded==false
+                            $scope.$root.mySites.push $scope.getParams().site
+
                         #close window
                         $scope.close()
                     else
@@ -48,10 +69,10 @@ angular
             return false
 
         # accounts list for a given organization
-        $scope.accounts=[];
+        $scope.accounts = [];
 
         #accounts selection for a given site
-        $scope.selection=[];
+        $scope.selection = [];
 
         # toggle selection for a given account by name
         $scope.toggleSelection = (account) ->
@@ -63,12 +84,12 @@ angular
 
             # is currently selected
             if idx > -1
-              # remove from selection
-              $scope.selection.splice(idx,1);
-              # is newly selected
+                # remove from selection
+                $scope.selection.splice(idx, 1);
+                # is newly selected
             else
-              # add to selection
-              $scope.selection.push(account);
+                # add to selection
+                $scope.selection.push(account);
         # user selection - end
 
         $scope.close = ->
@@ -76,39 +97,39 @@ angular
 
         #get list of all users associated to organisation
         $scope.getAssociatedUsers = () ->
-          console.log("entering getAssociatedUsers")
+            console.log("entering getAssociatedUsers")
 
-          #empty arrays
-          $scope.selection = []
-          $scope.accounts = []
-          $scope.prepare = []
+            #empty arrays
+            $scope.selection = []
+            $scope.accounts = []
+            $scope.prepare = []
 
-          #create DTO
-          data =
-            organization: $scope.getParams().organization
-            site: $scope.getParams().site
+            #create DTO
+            data =
+                organization: $scope.getParams().organization
+                site: $scope.getParams().site
 
-          downloadService.postJson '/awac/organization/site/associatedaccounts/load', data, (result) ->
-            if result.success
-              for user in result.data.organizationUserList
-                $scope.in = false
-                if result.data.siteSelectedUserList.length
-                  for selected in result.data.siteSelectedUserList
-                    if (user.identifier == selected.identifier)
-                      $scope.in = true
-                if $scope.in == false
-                  $scope.accounts.push(user)
+            downloadService.postJson '/awac/organization/site/associatedaccounts/load', data, (result) ->
+                if result.success
+                    for user in result.data.organizationUserList
+                        $scope.in = false
+                        if result.data.siteSelectedUserList.length
+                            for selected in result.data.siteSelectedUserList
+                                if (user.identifier == selected.identifier)
+                                    $scope.in = true
+                        if $scope.in == false
+                            $scope.accounts.push(user)
 
-              for selected in result.data.siteSelectedUserList
-                $scope.selection.push(selected)
-                $scope.accounts.push(selected)
+                    for selected in result.data.siteSelectedUserList
+                        $scope.selection.push(selected)
+                        $scope.accounts.push(selected)
 
-          $scope.isLoading = false
+            $scope.isLoading = false
 
 
     link: (scope) ->
-      console.log("entering mmAwacModalAddUserSite")
-      scope.getAssociatedUsers()
+        console.log("entering mmAwacModalAddUserSite")
+        scope.getAssociatedUsers()
 
 
 

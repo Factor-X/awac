@@ -43,4 +43,37 @@ public class Colors {
 		String bs = Integer.toHexString((int) (b * 256));
 		return rs + gs + bs;
 	}
+
+	public static String interpolate(String color, String target, int current, int total) {
+
+		String r1, g1, b1, r2, g2, b2;
+		int ir1, ig1, ib1, ir2, ig2, ib2;
+
+		r1 = color.substring(0, 2);
+		g1 = color.substring(2, 4);
+		b1 = color.substring(4, 6);
+
+		r2 = target.substring(0, 2);
+		g2 = target.substring(2, 4);
+		b2 = target.substring(4, 6);
+
+		ir1 = Integer.parseInt(r1, 16);
+		ig1 = Integer.parseInt(g1, 16);
+		ib1 = Integer.parseInt(b1, 16);
+
+		ir2 = Integer.parseInt(r2, 16);
+		ig2 = Integer.parseInt(g2, 16);
+		ib2 = Integer.parseInt(b2, 16);
+
+		double ratio = 1.0 * current / total;
+
+		int ifr, ifg, ifb;
+		String fr, fg, fb;
+
+		ifr = (int) (ir1 + ratio * (ir2 - ir1));
+		ifg = (int) (ig1 + ratio * (ig2 - ig1));
+		ifb = (int) (ib1 + ratio * (ib2 - ib1));
+
+		return Integer.toHexString(ifr) + Integer.toHexString(ifg) + Integer.toHexString(ifb);
+	}
 }

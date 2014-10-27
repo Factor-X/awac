@@ -334,7 +334,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.periodSelectedKey=null
             $rootScope.scopeSelectedId=null
             $rootScope.mySites=null
-            $rootScope.currentPerson = null
             $rootScope.organizationName = null
             $location.path('/login')
 
@@ -343,7 +342,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.testForm = (period,scope) ->
         if $rootScope.mySites?
             for site in $rootScope.mySites
-                if site.id = scope
+                if parseFloat(site.id) == parseFloat(scope)
                     if $rootScope.instanceName == 'enterprise'
                         for periodToFind in  site.listPeriodAvailable
                             if period+"" == periodToFind.key+""
@@ -368,7 +367,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         # try to load default scope / period
         #default scope
 
-        if data.defaultSiteId? && data.defaultPeriod?
+        if !!data.defaultSiteId && !!data.defaultPeriod
             if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
                 scopeSelectedId =data.defaultSiteId
                 periodSelectedKey =data.defaultPeriod
@@ -509,10 +508,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             routeWithScopeAndPeriod = ['/form','/results','/actions']
             for route in routeWithScopeAndPeriod
                 if loc.substring(0, route.length) == route
-                    console.log "nav to => "+loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId
                     $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
                     return
-            console.log "nav to => "+loc
             $location.path(loc)
 
             return
