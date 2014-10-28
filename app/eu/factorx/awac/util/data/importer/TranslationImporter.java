@@ -69,6 +69,10 @@ public class TranslationImporter extends WorkbookDataImporter {
 			String labelFr = getCellContent(sheet, 3, i);
 			String labelNl = getCellContent(sheet, 4, i);
 
+            if (StringUtils.isBlank(labelEn)) {
+                Logger.error("No English translation found for key: '{}' -> skipping", key);
+                continue;
+            }
 			CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
 
 			if (!codeLabels.containsKey(codeList)) {
@@ -104,6 +108,10 @@ public class TranslationImporter extends WorkbookDataImporter {
 			String labelFr = getCellContent(sheet, 2, i);
 			String labelNl = getCellContent(sheet, 3, i);
 
+            if (StringUtils.isBlank(labelEn)) {
+                Logger.error("No English translation found for key: '{}' -> skipping", key);
+                continue;
+            }
 			codeLabelService.saveOrUpdate(new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
 		}
 	}
