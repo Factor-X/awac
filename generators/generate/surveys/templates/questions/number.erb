@@ -1,18 +1,6 @@
-<%
-   d = default
-   i = default
-   if d == nil or d.strip.length == 0
-       d = 'null'
-       i = 'null'
-   end
-   if d.strip != 'null'
-       d = "(double) #{default}"
-   end
-%>
-
 IntegerQuestion <%= accronym.downcase %> = (IntegerQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
-    <%= accronym.downcase %> = new IntegerQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, <%= i %>);
+    <%= accronym.downcase %> = new IntegerQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, null);
     JPA.em().persist(<%= accronym.downcase %>);
 } else {
     if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {

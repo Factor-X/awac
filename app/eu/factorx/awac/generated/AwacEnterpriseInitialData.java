@@ -1114,8 +1114,7 @@ public class AwacEnterpriseInitialData {
     // == A2
     // Année de référence pour comparaison du présent bilan GES
 
-    
-IntegerQuestion a2 = (IntegerQuestion) questionService.findByCode(QuestionCode.A2);
+    IntegerQuestion a2 = (IntegerQuestion) questionService.findByCode(QuestionCode.A2);
 if (a2 == null) {
     a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null);
     JPA.em().persist(a2);
@@ -1299,8 +1298,7 @@ if (a11 == null) {
     // == A12
     // Quel est le nombre d'employés sur l'année du bilan?
 
-    
-IntegerQuestion a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
+    IntegerQuestion a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
 if (a12 == null) {
     a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null);
     JPA.em().persist(a12);
@@ -1910,10 +1908,9 @@ if (a6003 == null) {
     
 DoubleQuestion a6004 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6004);
 if (a6004 == null) {
-    a6004 = new DoubleQuestion( a6002, 0, QuestionCode.A6004, volumeUnits, null, volumeUnits.getMainUnit() );
+    a6004 = new DoubleQuestion( a6002, 0, QuestionCode.A6004, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a6004);
 } else {
-    a6004.setDefaultValue(null);
     if (!a6004.getQuestionSet().equals(a6002) && a6002.getQuestions().contains(a6004)) {
         a6002.getQuestions().remove(a6004);
         JPA.em().persist(a6002);
@@ -1959,10 +1956,9 @@ if (a6005 == null) {
     
 DoubleQuestion a6007 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6007);
 if (a6007 == null) {
-    a6007 = new DoubleQuestion( a6006, 0, QuestionCode.A6007, massUnits, null, massUnits.getMainUnit() );
+    a6007 = new DoubleQuestion( a6006, 0, QuestionCode.A6007, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a6007);
 } else {
-    a6007.setDefaultValue(null);
     if (!a6007.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6007)) {
         a6006.getQuestions().remove(a6007);
         JPA.em().persist(a6006);
@@ -1986,10 +1982,9 @@ if (a6007 == null) {
     
 DoubleQuestion a6008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6008);
 if (a6008 == null) {
-    a6008 = new DoubleQuestion( a6006, 0, QuestionCode.A6008, massUnits, null, massUnits.getMainUnit() );
+    a6008 = new DoubleQuestion( a6006, 0, QuestionCode.A6008, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a6008);
 } else {
-    a6008.setDefaultValue(null);
     if (!a6008.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6008)) {
         a6006.getQuestions().remove(a6008);
         JPA.em().persist(a6006);
@@ -2175,8 +2170,7 @@ if (a409 == null) {
     // == A410
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
+    IntegerQuestion a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
 if (a410 == null) {
     a410 = new IntegerQuestion(a407, 0, QuestionCode.A410, null);
     JPA.em().persist(a410);
@@ -2198,8 +2192,7 @@ if (a410 == null) {
     // == A411
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion a411 = (IntegerQuestion) questionService.findByCode(QuestionCode.A411);
+    IntegerQuestion a411 = (IntegerQuestion) questionService.findByCode(QuestionCode.A411);
 if (a411 == null) {
     a411 = new IntegerQuestion(a407, 0, QuestionCode.A411, null);
     JPA.em().persist(a411);
@@ -2439,8 +2432,7 @@ if (a509 == null) {
     // == A510
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
+    IntegerQuestion a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
 if (a510 == null) {
     a510 = new IntegerQuestion(a507, 0, QuestionCode.A510, null);
     JPA.em().persist(a510);
@@ -2462,8 +2454,7 @@ if (a510 == null) {
     // == A511
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion a511 = (IntegerQuestion) questionService.findByCode(QuestionCode.A511);
+    IntegerQuestion a511 = (IntegerQuestion) questionService.findByCode(QuestionCode.A511);
 if (a511 == null) {
     a511 = new IntegerQuestion(a507, 0, QuestionCode.A511, null);
     JPA.em().persist(a511);
@@ -2703,8 +2694,7 @@ if (a609 == null) {
     // == A610
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
+    IntegerQuestion a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
 if (a610 == null) {
     a610 = new IntegerQuestion(a607, 0, QuestionCode.A610, null);
     JPA.em().persist(a610);
@@ -2726,8 +2716,7 @@ if (a610 == null) {
     // == A611
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion a611 = (IntegerQuestion) questionService.findByCode(QuestionCode.A611);
+    IntegerQuestion a611 = (IntegerQuestion) questionService.findByCode(QuestionCode.A611);
 if (a611 == null) {
     a611 = new IntegerQuestion(a607, 0, QuestionCode.A611, null);
     JPA.em().persist(a611);
@@ -2845,8 +2834,7 @@ if (a617 == null) {
     // == A95
     // Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
 
-    
-IntegerQuestion a95 = (IntegerQuestion) questionService.findByCode(QuestionCode.A95);
+    IntegerQuestion a95 = (IntegerQuestion) questionService.findByCode(QuestionCode.A95);
 if (a95 == null) {
     a95 = new IntegerQuestion(a94, 0, QuestionCode.A95, null);
     JPA.em().persist(a95);
@@ -2868,8 +2856,7 @@ if (a95 == null) {
     // == A96
     // Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    
-IntegerQuestion a96 = (IntegerQuestion) questionService.findByCode(QuestionCode.A96);
+    IntegerQuestion a96 = (IntegerQuestion) questionService.findByCode(QuestionCode.A96);
 if (a96 == null) {
     a96 = new IntegerQuestion(a94, 0, QuestionCode.A96, null);
     JPA.em().persist(a96);
@@ -2891,8 +2878,7 @@ if (a96 == null) {
     // == A97
     // Métro pour déplacement domicile-travail des employés (en km.passagers)
 
-    
-IntegerQuestion a97 = (IntegerQuestion) questionService.findByCode(QuestionCode.A97);
+    IntegerQuestion a97 = (IntegerQuestion) questionService.findByCode(QuestionCode.A97);
 if (a97 == null) {
     a97 = new IntegerQuestion(a94, 0, QuestionCode.A97, null);
     JPA.em().persist(a97);
@@ -2914,8 +2900,7 @@ if (a97 == null) {
     // == A98
     // Métro pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    
-IntegerQuestion a98 = (IntegerQuestion) questionService.findByCode(QuestionCode.A98);
+    IntegerQuestion a98 = (IntegerQuestion) questionService.findByCode(QuestionCode.A98);
 if (a98 == null) {
     a98 = new IntegerQuestion(a94, 0, QuestionCode.A98, null);
     JPA.em().persist(a98);
@@ -2937,8 +2922,7 @@ if (a98 == null) {
     // == A99
     // Train national SNCB pour déplacement domicile-travail des employés (en km.passagers)
 
-    
-IntegerQuestion a99 = (IntegerQuestion) questionService.findByCode(QuestionCode.A99);
+    IntegerQuestion a99 = (IntegerQuestion) questionService.findByCode(QuestionCode.A99);
 if (a99 == null) {
     a99 = new IntegerQuestion(a94, 0, QuestionCode.A99, null);
     JPA.em().persist(a99);
@@ -2960,8 +2944,7 @@ if (a99 == null) {
     // == A100
     // Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    
-IntegerQuestion a100 = (IntegerQuestion) questionService.findByCode(QuestionCode.A100);
+    IntegerQuestion a100 = (IntegerQuestion) questionService.findByCode(QuestionCode.A100);
 if (a100 == null) {
     a100 = new IntegerQuestion(a94, 0, QuestionCode.A100, null);
     JPA.em().persist(a100);
@@ -2983,8 +2966,7 @@ if (a100 == null) {
     // == A101
     // Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers)
 
-    
-IntegerQuestion a101 = (IntegerQuestion) questionService.findByCode(QuestionCode.A101);
+    IntegerQuestion a101 = (IntegerQuestion) questionService.findByCode(QuestionCode.A101);
 if (a101 == null) {
     a101 = new IntegerQuestion(a94, 0, QuestionCode.A101, null);
     JPA.em().persist(a101);
@@ -3006,8 +2988,7 @@ if (a101 == null) {
     // == A102
     // Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    
-IntegerQuestion a102 = (IntegerQuestion) questionService.findByCode(QuestionCode.A102);
+    IntegerQuestion a102 = (IntegerQuestion) questionService.findByCode(QuestionCode.A102);
 if (a102 == null) {
     a102 = new IntegerQuestion(a94, 0, QuestionCode.A102, null);
     JPA.em().persist(a102);
@@ -3029,8 +3010,7 @@ if (a102 == null) {
     // == A103
     // Tram pour déplacement domicile-travail des employés (en km.passagers)
 
-    
-IntegerQuestion a103 = (IntegerQuestion) questionService.findByCode(QuestionCode.A103);
+    IntegerQuestion a103 = (IntegerQuestion) questionService.findByCode(QuestionCode.A103);
 if (a103 == null) {
     a103 = new IntegerQuestion(a94, 0, QuestionCode.A103, null);
     JPA.em().persist(a103);
@@ -3052,8 +3032,7 @@ if (a103 == null) {
     // == A104
     // Tram pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    
-IntegerQuestion a104 = (IntegerQuestion) questionService.findByCode(QuestionCode.A104);
+    IntegerQuestion a104 = (IntegerQuestion) questionService.findByCode(QuestionCode.A104);
 if (a104 == null) {
     a104 = new IntegerQuestion(a94, 0, QuestionCode.A104, null);
     JPA.em().persist(a104);
@@ -3075,8 +3054,7 @@ if (a104 == null) {
     // == A105
     // Taxi pour déplacement domicile-travail des employés (en véhicules.km)
 
-    
-IntegerQuestion a105 = (IntegerQuestion) questionService.findByCode(QuestionCode.A105);
+    IntegerQuestion a105 = (IntegerQuestion) questionService.findByCode(QuestionCode.A105);
 if (a105 == null) {
     a105 = new IntegerQuestion(a94, 0, QuestionCode.A105, null);
     JPA.em().persist(a105);
@@ -3098,8 +3076,7 @@ if (a105 == null) {
     // == A106
     // Taxi pour déplacements professionnels & des visiteurs (en véhicules.km)
 
-    
-IntegerQuestion a106 = (IntegerQuestion) questionService.findByCode(QuestionCode.A106);
+    IntegerQuestion a106 = (IntegerQuestion) questionService.findByCode(QuestionCode.A106);
 if (a106 == null) {
     a106 = new IntegerQuestion(a94, 0, QuestionCode.A106, null);
     JPA.em().persist(a106);
@@ -3239,8 +3216,7 @@ if (a118 == null) {
     // == A119
     // Nombre total de passagers pour cette catégorie de vols
 
-    
-IntegerQuestion a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
+    IntegerQuestion a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
 if (a119 == null) {
     a119 = new IntegerQuestion(a115, 0, QuestionCode.A119, null);
     JPA.em().persist(a119);
@@ -3767,8 +3743,7 @@ if (a225 == null) {
     // == A226
     // Quantité
 
-    
-IntegerQuestion a226 = (IntegerQuestion) questionService.findByCode(QuestionCode.A226);
+    IntegerQuestion a226 = (IntegerQuestion) questionService.findByCode(QuestionCode.A226);
 if (a226 == null) {
     a226 = new IntegerQuestion(a224, 0, QuestionCode.A226, null);
     JPA.em().persist(a226);
@@ -3812,8 +3787,7 @@ if (a227 == null) {
     // == A228
     // Facteur d'émission en tCO2e par unité ci-dessus
 
-    
-IntegerQuestion a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
+    IntegerQuestion a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
 if (a228 == null) {
     a228 = new IntegerQuestion(a224, 0, QuestionCode.A228, null);
     JPA.em().persist(a228);
@@ -4793,8 +4767,7 @@ if (a5003 == null) {
     // == A183
     // Nombre d'ouvriers
 
-    
-IntegerQuestion a183 = (IntegerQuestion) questionService.findByCode(QuestionCode.A183);
+    IntegerQuestion a183 = (IntegerQuestion) questionService.findByCode(QuestionCode.A183);
 if (a183 == null) {
     a183 = new IntegerQuestion(a182, 0, QuestionCode.A183, null);
     JPA.em().persist(a183);
@@ -4816,10 +4789,9 @@ if (a183 == null) {
     // == A184
     // Nombre de jours de travail/an
 
-    
-IntegerQuestion a184 = (IntegerQuestion) questionService.findByCode(QuestionCode.A184);
+    IntegerQuestion a184 = (IntegerQuestion) questionService.findByCode(QuestionCode.A184);
 if (a184 == null) {
-    a184 = new IntegerQuestion(a182, 0, QuestionCode.A184, 220);
+    a184 = new IntegerQuestion(a182, 0, QuestionCode.A184, null);
     JPA.em().persist(a184);
 } else {
     if (!a184.getQuestionSet().equals(a182) && a182.getQuestions().contains(a184)) {
@@ -4839,8 +4811,7 @@ if (a184 == null) {
     // == A186
     // Nombre d'employés
 
-    
-IntegerQuestion a186 = (IntegerQuestion) questionService.findByCode(QuestionCode.A186);
+    IntegerQuestion a186 = (IntegerQuestion) questionService.findByCode(QuestionCode.A186);
 if (a186 == null) {
     a186 = new IntegerQuestion(a185, 0, QuestionCode.A186, null);
     JPA.em().persist(a186);
@@ -4862,10 +4833,9 @@ if (a186 == null) {
     // == A187
     // Nombre de jours de travail/an
 
-    
-IntegerQuestion a187 = (IntegerQuestion) questionService.findByCode(QuestionCode.A187);
+    IntegerQuestion a187 = (IntegerQuestion) questionService.findByCode(QuestionCode.A187);
 if (a187 == null) {
-    a187 = new IntegerQuestion(a185, 0, QuestionCode.A187, 220);
+    a187 = new IntegerQuestion(a185, 0, QuestionCode.A187, null);
     JPA.em().persist(a187);
 } else {
     if (!a187.getQuestionSet().equals(a185) && a185.getQuestions().contains(a187)) {
@@ -4885,8 +4855,7 @@ if (a187 == null) {
     // == A189
     // Nombre de lits
 
-    
-IntegerQuestion a189 = (IntegerQuestion) questionService.findByCode(QuestionCode.A189);
+    IntegerQuestion a189 = (IntegerQuestion) questionService.findByCode(QuestionCode.A189);
 if (a189 == null) {
     a189 = new IntegerQuestion(a188, 0, QuestionCode.A189, null);
     JPA.em().persist(a189);
@@ -4908,10 +4877,9 @@ if (a189 == null) {
     // == A190
     // Nombre de jours d'ouverture/an
 
-    
-IntegerQuestion a190 = (IntegerQuestion) questionService.findByCode(QuestionCode.A190);
+    IntegerQuestion a190 = (IntegerQuestion) questionService.findByCode(QuestionCode.A190);
 if (a190 == null) {
-    a190 = new IntegerQuestion(a188, 0, QuestionCode.A190, 365);
+    a190 = new IntegerQuestion(a188, 0, QuestionCode.A190, null);
     JPA.em().persist(a190);
 } else {
     if (!a190.getQuestionSet().equals(a188) && a188.getQuestions().contains(a190)) {
@@ -4931,8 +4899,7 @@ if (a190 == null) {
     // == A192
     // Nombre de couverts/jour
 
-    
-IntegerQuestion a192 = (IntegerQuestion) questionService.findByCode(QuestionCode.A192);
+    IntegerQuestion a192 = (IntegerQuestion) questionService.findByCode(QuestionCode.A192);
 if (a192 == null) {
     a192 = new IntegerQuestion(a191, 0, QuestionCode.A192, null);
     JPA.em().persist(a192);
@@ -4954,10 +4921,9 @@ if (a192 == null) {
     // == A193
     // Nombre de jours d'ouverture/an
 
-    
-IntegerQuestion a193 = (IntegerQuestion) questionService.findByCode(QuestionCode.A193);
+    IntegerQuestion a193 = (IntegerQuestion) questionService.findByCode(QuestionCode.A193);
 if (a193 == null) {
-    a193 = new IntegerQuestion(a191, 0, QuestionCode.A193, 220);
+    a193 = new IntegerQuestion(a191, 0, QuestionCode.A193, null);
     JPA.em().persist(a193);
 } else {
     if (!a193.getQuestionSet().equals(a191) && a191.getQuestions().contains(a193)) {
@@ -5238,8 +5204,7 @@ if (a235 == null) {
     // == A236
     // Quantité
 
-    
-IntegerQuestion a236 = (IntegerQuestion) questionService.findByCode(QuestionCode.A236);
+    IntegerQuestion a236 = (IntegerQuestion) questionService.findByCode(QuestionCode.A236);
 if (a236 == null) {
     a236 = new IntegerQuestion(a231, 0, QuestionCode.A236, null);
     JPA.em().persist(a236);
@@ -5283,8 +5248,7 @@ if (a239 == null) {
     // == A240
     // Quantité
 
-    
-IntegerQuestion a240 = (IntegerQuestion) questionService.findByCode(QuestionCode.A240);
+    IntegerQuestion a240 = (IntegerQuestion) questionService.findByCode(QuestionCode.A240);
 if (a240 == null) {
     a240 = new IntegerQuestion(a238, 0, QuestionCode.A240, null);
     JPA.em().persist(a240);
@@ -5328,8 +5292,7 @@ if (a241 == null) {
     // == A242
     // Facteur d'émission en tCO2e par unité ci-dessus
 
-    
-IntegerQuestion a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
+    IntegerQuestion a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
 if (a242 == null) {
     a242 = new IntegerQuestion(a238, 0, QuestionCode.A242, null);
     JPA.em().persist(a242);
@@ -5655,8 +5618,7 @@ if (a323 == null) {
     // == A324
     // Nombre de franchisés
 
-    
-IntegerQuestion a324 = (IntegerQuestion) questionService.findByCode(QuestionCode.A324);
+    IntegerQuestion a324 = (IntegerQuestion) questionService.findByCode(QuestionCode.A324);
 if (a324 == null) {
     a324 = new IntegerQuestion(a322, 0, QuestionCode.A324, null);
     JPA.em().persist(a324);
@@ -5960,8 +5922,7 @@ if (a336 == null) {
     // == A337
     // Emissions directes totales (tCO2e)
 
-    
-IntegerQuestion a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
+    IntegerQuestion a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
 if (a337 == null) {
     a337 = new IntegerQuestion(a334, 0, QuestionCode.A337, null);
     JPA.em().persist(a337);
@@ -5983,8 +5944,7 @@ if (a337 == null) {
     // == A338
     // Emissions indirectes totales (tCO2e)
 
-    
-IntegerQuestion a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
+    IntegerQuestion a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
 if (a338 == null) {
     a338 = new IntegerQuestion(a334, 0, QuestionCode.A338, null);
     JPA.em().persist(a338);
@@ -6028,8 +5988,7 @@ if (a245 == null) {
     // == A246
     // Nombre de produits vendus sur l'année du bilan
 
-    
-IntegerQuestion a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
+    IntegerQuestion a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
 if (a246 == null) {
     a246 = new IntegerQuestion(a244, 0, QuestionCode.A246, null);
     JPA.em().persist(a246);
@@ -7026,8 +6985,7 @@ if (a292 == null) {
     // == A293
     // Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie
 
-    
-IntegerQuestion a293 = (IntegerQuestion) questionService.findByCode(QuestionCode.A293);
+    IntegerQuestion a293 = (IntegerQuestion) questionService.findByCode(QuestionCode.A293);
 if (a293 == null) {
     a293 = new IntegerQuestion(a291, 0, QuestionCode.A293, null);
     JPA.em().persist(a293);

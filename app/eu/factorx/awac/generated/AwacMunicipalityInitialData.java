@@ -608,8 +608,7 @@ public class AwacMunicipalityInitialData {
     // == AC3
     // Année de référence du calcul
 
-    
-IntegerQuestion ac3 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC3);
+    IntegerQuestion ac3 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC3);
 if (ac3 == null) {
     ac3 = new IntegerQuestion(ac2, 0, QuestionCode.AC3, null);
     JPA.em().persist(ac3);
@@ -631,8 +630,7 @@ if (ac3 == null) {
     // == AC6
     // Nombre d'habitants dans la commune en début d'année de bilan
 
-    
-IntegerQuestion ac6 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC6);
+    IntegerQuestion ac6 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC6);
 if (ac6 == null) {
     ac6 = new IntegerQuestion(ac2, 0, QuestionCode.AC6, null);
     JPA.em().persist(ac6);
@@ -654,8 +652,7 @@ if (ac6 == null) {
     // == AC7
     // Nombre total de bâtiments communaux pris en compte dans le bilan
 
-    
-IntegerQuestion ac7 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC7);
+    IntegerQuestion ac7 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC7);
 if (ac7 == null) {
     ac7 = new IntegerQuestion(ac2, 0, QuestionCode.AC7, null);
     JPA.em().persist(ac7);
@@ -769,8 +766,7 @@ if (ac13 == null) {
     // == AC2002
     // Nombre de bâtiments concernés par ce groupe
 
-    
-IntegerQuestion ac2002 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2002);
+    IntegerQuestion ac2002 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2002);
 if (ac2002 == null) {
     ac2002 = new IntegerQuestion(ac10, 0, QuestionCode.AC2002, null);
     JPA.em().persist(ac2002);
@@ -792,8 +788,7 @@ if (ac2002 == null) {
     // == AC2003
     // Nombre d'occupants
 
-    
-IntegerQuestion ac2003 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2003);
+    IntegerQuestion ac2003 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC2003);
 if (ac2003 == null) {
     ac2003 = new IntegerQuestion(ac10, 0, QuestionCode.AC2003, null);
     JPA.em().persist(ac2003);
@@ -1734,8 +1729,7 @@ if (ac409 == null) {
     // == AC410
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion ac410 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC410);
+    IntegerQuestion ac410 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC410);
 if (ac410 == null) {
     ac410 = new IntegerQuestion(ac407, 0, QuestionCode.AC410, null);
     JPA.em().persist(ac410);
@@ -1757,8 +1751,7 @@ if (ac410 == null) {
     // == AC411
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion ac411 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC411);
+    IntegerQuestion ac411 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC411);
 if (ac411 == null) {
     ac411 = new IntegerQuestion(ac407, 0, QuestionCode.AC411, null);
     JPA.em().persist(ac411);
@@ -1998,8 +1991,7 @@ if (ac509 == null) {
     // == AC510
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion ac510 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC510);
+    IntegerQuestion ac510 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC510);
 if (ac510 == null) {
     ac510 = new IntegerQuestion(ac507, 0, QuestionCode.AC510, null);
     JPA.em().persist(ac510);
@@ -2021,8 +2013,7 @@ if (ac510 == null) {
     // == AC511
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion ac511 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC511);
+    IntegerQuestion ac511 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC511);
 if (ac511 == null) {
     ac511 = new IntegerQuestion(ac507, 0, QuestionCode.AC511, null);
     JPA.em().persist(ac511);
@@ -2262,8 +2253,7 @@ if (ac609 == null) {
     // == AC610
     // Consommation moyenne (L/100km)
 
-    
-IntegerQuestion ac610 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC610);
+    IntegerQuestion ac610 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC610);
 if (ac610 == null) {
     ac610 = new IntegerQuestion(ac607, 0, QuestionCode.AC610, null);
     JPA.em().persist(ac610);
@@ -2285,8 +2275,7 @@ if (ac610 == null) {
     // == AC611
     // Quelle est le nombre de kilomètres parcourus par an?
 
-    
-IntegerQuestion ac611 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC611);
+    IntegerQuestion ac611 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC611);
 if (ac611 == null) {
     ac611 = new IntegerQuestion(ac607, 0, QuestionCode.AC611, null);
     JPA.em().persist(ac611);
@@ -2404,8 +2393,7 @@ if (ac617 == null) {
     // == AC94
     // Bus TEC (en km.passagers)
 
-    
-IntegerQuestion ac94 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC94);
+    IntegerQuestion ac94 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC94);
 if (ac94 == null) {
     ac94 = new IntegerQuestion(ac93, 0, QuestionCode.AC94, null);
     JPA.em().persist(ac94);
@@ -2427,8 +2415,7 @@ if (ac94 == null) {
     // == AC95
     // Métro (en km.passagers)
 
-    
-IntegerQuestion ac95 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC95);
+    IntegerQuestion ac95 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC95);
 if (ac95 == null) {
     ac95 = new IntegerQuestion(ac93, 0, QuestionCode.AC95, null);
     JPA.em().persist(ac95);
@@ -2450,8 +2437,7 @@ if (ac95 == null) {
     // == AC96
     // Train national SNCB (en km.passagers)
 
-    
-IntegerQuestion ac96 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC96);
+    IntegerQuestion ac96 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC96);
 if (ac96 == null) {
     ac96 = new IntegerQuestion(ac93, 0, QuestionCode.AC96, null);
     JPA.em().persist(ac96);
@@ -2473,8 +2459,7 @@ if (ac96 == null) {
     // == AC97
     // Tram  (en km.passagers)
 
-    
-IntegerQuestion ac97 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC97);
+    IntegerQuestion ac97 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC97);
 if (ac97 == null) {
     ac97 = new IntegerQuestion(ac93, 0, QuestionCode.AC97, null);
     JPA.em().persist(ac97);
@@ -2496,8 +2481,7 @@ if (ac97 == null) {
     // == AC99
     // Bus TEC (en km.passagers)
 
-    
-IntegerQuestion ac99 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC99);
+    IntegerQuestion ac99 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC99);
 if (ac99 == null) {
     ac99 = new IntegerQuestion(ac98, 0, QuestionCode.AC99, null);
     JPA.em().persist(ac99);
@@ -2519,8 +2503,7 @@ if (ac99 == null) {
     // == AC100
     // Métro (en km.passagers)
 
-    
-IntegerQuestion ac100 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC100);
+    IntegerQuestion ac100 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC100);
 if (ac100 == null) {
     ac100 = new IntegerQuestion(ac98, 0, QuestionCode.AC100, null);
     JPA.em().persist(ac100);
@@ -2542,8 +2525,7 @@ if (ac100 == null) {
     // == AC101
     // Train national SNCB (en km.passagers)
 
-    
-IntegerQuestion ac101 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC101);
+    IntegerQuestion ac101 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC101);
 if (ac101 == null) {
     ac101 = new IntegerQuestion(ac98, 0, QuestionCode.AC101, null);
     JPA.em().persist(ac101);
@@ -2565,8 +2547,7 @@ if (ac101 == null) {
     // == AC102
     // Tram (en km.passagers)
 
-    
-IntegerQuestion ac102 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC102);
+    IntegerQuestion ac102 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC102);
 if (ac102 == null) {
     ac102 = new IntegerQuestion(ac98, 0, QuestionCode.AC102, null);
     JPA.em().persist(ac102);
@@ -2588,8 +2569,7 @@ if (ac102 == null) {
     // == AC103
     // Taxi (en véhicule.km)
 
-    
-IntegerQuestion ac103 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC103);
+    IntegerQuestion ac103 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC103);
 if (ac103 == null) {
     ac103 = new IntegerQuestion(ac98, 0, QuestionCode.AC103, null);
     JPA.em().persist(ac103);
@@ -2637,8 +2617,7 @@ if (ac104 == null) {
     // == AC105
     // TGV (en km.passagers)
 
-    
-IntegerQuestion ac105 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC105);
+    IntegerQuestion ac105 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC105);
 if (ac105 == null) {
     ac105 = new IntegerQuestion(ac98, 0, QuestionCode.AC105, null);
     JPA.em().persist(ac105);
@@ -2726,8 +2705,7 @@ if (ac110 == null) {
     // == AC111
     // Nombre de vols/an
 
-    
-IntegerQuestion ac111 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC111);
+    IntegerQuestion ac111 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC111);
 if (ac111 == null) {
     ac111 = new IntegerQuestion(ac107, 0, QuestionCode.AC111, null);
     JPA.em().persist(ac111);
@@ -3206,8 +3184,7 @@ if (ac135 == null) {
     // == AC136
     // Nombre d'unités achetées
 
-    
-IntegerQuestion ac136 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC136);
+    IntegerQuestion ac136 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC136);
 if (ac136 == null) {
     ac136 = new IntegerQuestion(ac132, 0, QuestionCode.AC136, null);
     JPA.em().persist(ac136);
@@ -3293,8 +3270,7 @@ if (ac141 == null) {
     // == AC142
     // Emissions directes totales du projet (tCO²e)
 
-    
-IntegerQuestion ac142 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC142);
+    IntegerQuestion ac142 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC142);
 if (ac142 == null) {
     ac142 = new IntegerQuestion(ac139, 0, QuestionCode.AC142, null);
     JPA.em().persist(ac142);
@@ -3316,8 +3292,7 @@ if (ac142 == null) {
     // == AC143
     // Emissions indirectes totales du projet (tCO²e)
 
-    
-IntegerQuestion ac143 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC143);
+    IntegerQuestion ac143 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC143);
 if (ac143 == null) {
     ac143 = new IntegerQuestion(ac139, 0, QuestionCode.AC143, null);
     JPA.em().persist(ac143);
