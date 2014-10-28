@@ -9,7 +9,7 @@ div
 
         .field_form(style="width: 600px;")
             mm-awac-modal-field-text(ng-info="nameInfo")
-            .field_row
+            .field_row(ng-hide="$root.instanceName == 'verification'")
                 .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
                 .field_cell(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin'")
                     input(type="checkbox", ng-model="statisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")

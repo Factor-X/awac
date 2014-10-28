@@ -253,6 +253,8 @@ public class RegistrationController extends AbstractController {
 		if (person == null) {
 			person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
 			personService.saveOrUpdate(person);
+		} else {
+			throw new MyrmexException(BusinessErrorType.EMAIL_ALREADY_USED);
 		}
 
 		//create account
