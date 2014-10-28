@@ -2,10 +2,15 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="A205")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A20' | translate")
+
             mm-awac-question(question-code="A206",ng-optional="true")
 
         .horizontal_separator
         mm-awac-section(title-code="A208")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A20' | translate")
 
             mm-awac-repetition-name(question-code="A209")
             mm-awac-repetition-question(question-set-code="A209", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A209')")
@@ -38,11 +43,17 @@ div
         .horizontal_separator
 
         mm-awac-section(title-code="A128")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A128' | translate")
+
             mm-awac-question(question-code="A129",ng-optional="true")
 
         .horizontal_separator
 
         mm-awac-section(title-code="A130")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A130' | translate")
+
             mm-awac-sub-title(question-code="A131")
             mm-awac-sub-sub-title(question-code="A132")
             mm-awac-question(question-code="A133")
@@ -104,6 +115,9 @@ div
                                 mm-awac-question(question-code="A162", ng-condition="getAnswer('A159').value == '1'",ng-aggregation="200",ng-tab-set="1",ng-tab="2")
         .horizontal_separator
         mm-awac-section(title-code="A163")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_A163' | translate")
+
             .element_content
                 .element_text(ng-bind-html="'INTRO_UPSTREAM_DISTRIBUTION' | translate")
             mm-awac-repetition-name(question-code="A164")

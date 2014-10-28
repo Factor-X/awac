@@ -32,10 +32,10 @@ import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
 /*
- * Test for bad AE_BAD26A
+ * Test for bad AE_BAD52
 */
 @Component
-public class BAD_AE_BAD26ATest{
+public class BAD_AE_BAD52Test{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -52,7 +52,7 @@ public class BAD_AE_BAD26ATest{
     private PeriodService periodService;
 
     @Autowired
-    private BaseActivityDataAE_BAD26A baseActivityDataAE_BAD26A;
+    private BaseActivityDataAE_BAD52 baseActivityDataAE_BAD52;
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
@@ -81,8 +81,9 @@ public class BAD_AE_BAD26ATest{
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerA204());
-                answerLineDTOList.addAll(buildAnswerA202());
+                answerLineDTOList.addAll(buildAnswerA6005());
+                answerLineDTOList.addAll(buildAnswerA6003());
+                answerLineDTOList.addAll(buildAnswerA6004());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -115,12 +116,12 @@ public class BAD_AE_BAD26ATest{
         JPA.em().clear();
         JPA.em().flush();
         Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
-        List<BaseActivityData> bads = baseActivityDataAE_BAD26A.getBaseActivityData(questionSetAnswers);
+        List<BaseActivityData> bads = baseActivityDataAE_BAD52.getBaseActivityData(questionSetAnswers);
 
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(23.45, false);
+                mapResult.put(45.622, false);
         
         String valueGenerated = "";
 
@@ -148,29 +149,43 @@ public class BAD_AE_BAD26ATest{
 
         /**
      * build the AnswerLineDTO
-     * question : A204
+     * question : A6005
      */
-    private List<AnswerLineDTO> buildAnswerA204(){
+    private List<AnswerLineDTO> buildAnswerA6005(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A204","AT_58",  mapRepetition1 ));
+                list.add(new AnswerLineDTO("A6005","AT_60",  mapRepetition1 ));
         
         return list;
     }
         /**
      * build the AnswerLineDTO
-     * question : A202
+     * question : A6003
      */
-    private List<AnswerLineDTO> buildAnswerA202(){
+    private List<AnswerLineDTO> buildAnswerA6003(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("A202",23450.0,  mapRepetition1  , UnitCode.U5133.getKey()  ));
+                list.add(new AnswerLineDTO("A6003","AS_192",  mapRepetition1 ));
+        
+        return list;
+    }
+        /**
+     * build the AnswerLineDTO
+     * question : A6004
+     */
+    private List<AnswerLineDTO> buildAnswerA6004(){
+
+        List<AnswerLineDTO> list = new ArrayList<>();
+
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                list.add(new AnswerLineDTO("A6004",45622.0,  mapRepetition1  , UnitCode.U5126.getKey()  ));
         
         return list;
     }
@@ -183,7 +198,7 @@ public class BAD_AE_BAD26ATest{
     private void controlGlobalBad(BaseActivityData bad){
         /*
         assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_7, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_7));
-        assertTrue("Rank error : Expected : 2, founded : "+bad.getRank(),bad.getRank().equals(2));
+        assertTrue("Rank error : Expected : 1, founded : "+bad.getRank(),bad.getRank().equals(1));
         assertTrue("SpecificPurpose error : Expected : {}, founded : "+bad.getSpecificPurpose(),bad.getSpecificPurpose() == null);
         assertTrue("ActivityCategory error : Expected : {}, founded : "+bad.getActivityCategory(),bad.getActivityCategory().equals(ActivityCategoryCode.AC_1));
         assertTrue("ActivitySubCategory error : Expected : {}, founded : "+bad.getActivitySubCategory(),bad.getActivitySubCategory().equals(ActivitySubCategoryCode.ASC_1));

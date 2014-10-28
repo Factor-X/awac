@@ -133,7 +133,7 @@ public class AwacEnterpriseInitialData {
         // delete old questions
 		{
 			List<Question> allQuestions = questionService.findAll();
-            List<String> codes = Arrays.asList("A2", "A3", "A4", "A5", "A6", "A9", "A10", "A11", "A12", "A14", "A16", "A17", "A1001", "A1002", "A1004", "A1005", "A21", "A23", "A24", "A26", "A27", "A28", "A32", "A33", "A35", "A36", "A38", "A39", "A43", "A44", "A46", "A48", "A49", "A51", "A403", "A404", "A405", "A408", "A409", "A410", "A411", "A414", "A415", "A416", "A417", "A503", "A504", "A505", "A508", "A509", "A510", "A511", "A514", "A515", "A516", "A517", "A603", "A604", "A605", "A608", "A609", "A610", "A611", "A614", "A615", "A616", "A617", "A95", "A96", "A97", "A98", "A99", "A100", "A101", "A102", "A103", "A104", "A105", "A106", "A107", "A108", "A116", "A117", "A118", "A119", "A120", "A122", "A123", "A124", "A125", "A126", "A127", "A206", "A210", "A211", "A212", "A213", "A214", "A215", "A216", "A217", "A218", "A219", "A220", "A221", "A222", "A225", "A226", "A227", "A228", "A129", "A133", "A134", "A135", "A136", "A137", "A138", "A139", "A500", "A143", "A145", "A146", "A147", "A148", "A149", "A150", "A151", "A152", "A153", "A154", "A155", "A156", "A158", "A159", "A160", "A161", "A162", "A165", "A167", "A168", "A1007", "A1008", "A1010", "A1011", "A169", "A171", "A172", "A174", "A5001", "A5002", "A5003", "A183", "A184", "A186", "A187", "A189", "A190", "A192", "A193", "A195", "A198", "A199", "A200", "A501", "A202", "A203", "A204", "A230", "A232", "A233", "A234", "A235", "A236", "A239", "A240", "A241", "A242", "A310", "A312", "A314", "A315", "A1013", "A1014", "A1016", "A1017", "A316", "A318", "A319", "A321", "A323", "A324", "A326", "A327", "A1019", "A1020", "A1022", "A1023", "A328", "A330", "A331", "A333", "A335", "A336", "A337", "A338", "A245", "A246", "A247", "A248", "A249", "A251", "A254", "A255", "A256", "A257", "A258", "A259", "A260", "A261", "A262", "A263", "A264", "A265", "A267", "A268", "A269", "A270", "A271", "A274", "A276", "A277", "A1025", "A1026", "A1028", "A1029", "A278", "A280", "A281", "A283", "A285", "A286", "A1031", "A1032", "A1034", "A1035", "A287", "A289", "A290", "A292", "A293", "A294", "A295", "A296", "A298", "A299", "A301", "A302", "A5011", "A5012", "A5013", "A5014");
+            List<String> codes = Arrays.asList("A2", "A3", "A4", "A5", "A6", "A9", "A10", "A11", "A12", "A14", "A16", "A17", "A1001", "A1002", "A1004", "A1005", "A21", "A23", "A24", "A26", "A27", "A28", "A32", "A33", "A35", "A36", "A38", "A39", "A43", "A44", "A46", "A48", "A49", "A6003", "A6004", "A6005", "A6007", "A6008", "A6009", "A51", "A403", "A404", "A405", "A408", "A409", "A410", "A411", "A414", "A415", "A416", "A417", "A503", "A504", "A505", "A508", "A509", "A510", "A511", "A514", "A515", "A516", "A517", "A603", "A604", "A605", "A608", "A609", "A610", "A611", "A614", "A615", "A616", "A617", "A95", "A96", "A97", "A98", "A99", "A100", "A101", "A102", "A103", "A104", "A105", "A106", "A107", "A108", "A116", "A117", "A118", "A119", "A120", "A122", "A123", "A124", "A125", "A126", "A127", "A206", "A210", "A211", "A212", "A213", "A214", "A215", "A216", "A217", "A218", "A219", "A220", "A221", "A222", "A225", "A226", "A227", "A228", "A129", "A133", "A134", "A135", "A136", "A137", "A138", "A139", "A500", "A143", "A145", "A146", "A147", "A148", "A149", "A150", "A151", "A152", "A153", "A154", "A155", "A156", "A158", "A159", "A160", "A161", "A162", "A165", "A167", "A168", "A1007", "A1008", "A1010", "A1011", "A169", "A171", "A172", "A174", "A5001", "A5002", "A5003", "A183", "A184", "A186", "A187", "A189", "A190", "A192", "A193", "A198", "A199", "A200", "A202", "A203", "A204", "A230", "A232", "A233", "A234", "A235", "A236", "A239", "A240", "A241", "A242", "A310", "A312", "A314", "A315", "A1013", "A1014", "A1016", "A1017", "A316", "A318", "A319", "A321", "A323", "A324", "A326", "A327", "A1019", "A1020", "A1022", "A1023", "A328", "A330", "A331", "A333", "A335", "A336", "A337", "A338", "A245", "A246", "A247", "A248", "A249", "A251", "A254", "A255", "A256", "A257", "A258", "A259", "A260", "A261", "A262", "A263", "A264", "A265", "A267", "A268", "A269", "A270", "A271", "A274", "A276", "A277", "A1025", "A1026", "A1028", "A1029", "A278", "A280", "A281", "A283", "A285", "A286", "A1031", "A1032", "A1034", "A1035", "A287", "A289", "A290", "A292", "A293", "A294", "A295", "A296", "A298", "A299", "A301", "A302", "A5011", "A5012", "A5013", "A5014");
 
 			for (Question q : new ArrayList<>(allQuestions)) {
 				if (codes.contains(q.getCode().getKey()) || !q.getCode().getKey().matches("A[0-9]+")) {
@@ -149,7 +149,7 @@ public class AwacEnterpriseInitialData {
 		// delete old question_sets
 		{
 			List<QuestionSet> allQuestionSets = questionSetService.findAll();
-            List<String> codes = Arrays.asList("A1", "A13", "A15", "A1000", "A1003", "A20", "A22", "A25", "A31", "A34", "A37", "A40", "A41", "A42", "A45", "A47", "A50", "A52", "A400", "A401", "A402", "A406", "A407", "A412", "A413", "A518", "A519", "A502", "A506", "A507", "A512", "A513", "A600", "A601", "A602", "A606", "A607", "A612", "A613", "A93", "A94", "A113", "A114", "A115", "A121", "A205", "A208", "A209", "A223", "A224", "A128", "A130", "A131", "A132", "A140", "A141", "A142", "A157", "A163", "A164", "A166", "A1006", "A1009", "A170", "A173", "A4999", "A5000", "A180", "A181", "A182", "A185", "A188", "A191", "A194", "A196", "A197", "A201", "A229", "A231", "A237", "A238", "A309", "A311", "A313", "A1012", "A1015", "A317", "A320", "A322", "A325", "A1018", "A1021", "A329", "A332", "A334", "A243", "A244", "A8000", "A250", "A252", "A253", "A266", "A272", "A273", "A275", "A1024", "A1027", "A279", "A282", "A284", "A1030", "A1033", "A288", "A291", "A297", "A300", "A5010");
+            List<String> codes = Arrays.asList("A1", "A13", "A15", "A1000", "A1003", "A20", "A22", "A25", "A31", "A34", "A37", "A40", "A41", "A42", "A45", "A47", "A6000", "A6001", "A6002", "A6006", "A50", "A52", "A400", "A401", "A402", "A406", "A407", "A412", "A413", "A518", "A519", "A502", "A506", "A507", "A512", "A513", "A600", "A601", "A602", "A606", "A607", "A612", "A613", "A93", "A94", "A113", "A114", "A115", "A121", "A205", "A208", "A209", "A223", "A224", "A128", "A130", "A131", "A132", "A140", "A141", "A142", "A157", "A163", "A164", "A166", "A1006", "A1009", "A170", "A173", "A4999", "A5000", "A180", "A181", "A182", "A185", "A188", "A191", "A194", "A196", "A197", "A201", "A229", "A231", "A237", "A238", "A309", "A311", "A313", "A1012", "A1015", "A317", "A320", "A322", "A325", "A1018", "A1021", "A329", "A332", "A334", "A243", "A244", "A8000", "A250", "A252", "A253", "A266", "A272", "A273", "A275", "A1024", "A1027", "A279", "A282", "A284", "A1030", "A1033", "A288", "A291", "A297", "A300", "A5010");
 
 			for (QuestionSet qs : new ArrayList<>(allQuestionSets)) {
 				if (codes.contains(qs.getCode().getKey()) || !qs.getCode().getKey().matches("A[0-9]+")) {
@@ -188,14 +188,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(form4);
     }
     // == TAB5
-    // DECHETS
+    // DECHETS, EAUX USEES
     Form form5 = formService.findByIdentifier("TAB5");
     if (form5 == null) {
         form5 = new Form("TAB5");
         JPA.em().persist(form5);
     }
     // == TAB6
-    // BIENS D'EQUIPEMENT, ACTIFS LOUES EN AVAL, FRANCHISES, INVESTISSEMENTS
+    // BIENS D'EQUIPEMENT, ACTIFS, FRANCHISES, INVESTISSEMENTS
     Form form6 = formService.findByIdentifier("TAB6");
     if (form6 == null) {
         form6 = new Form("TAB6");
@@ -333,6 +333,36 @@ public class AwacEnterpriseInitialData {
     if( a47 == null ) {
         a47 = new QuestionSet(QuestionCode.A47, false, a40);
         JPA.em().persist(a47);
+    }
+    // == A6000
+    // Eaux usées industrielles traitées par l'entreprise
+    QuestionSet a6000 = questionSetService.findByCode(QuestionCode.A6000);
+    if( a6000 == null ) {
+        a6000 = new QuestionSet(QuestionCode.A6000, false, null);
+        JPA.em().persist(a6000);
+    }
+    form2.getQuestionSets().add(a6000);
+    JPA.em().persist(form2);
+    // == A6001
+    // Méthodes alternatives
+    QuestionSet a6001 = questionSetService.findByCode(QuestionCode.A6001);
+    if( a6001 == null ) {
+        a6001 = new QuestionSet(QuestionCode.A6001, false, a6000);
+        JPA.em().persist(a6001);
+    }
+    // == A6002
+    // Méthode par la quantité de m³ rejetés
+    QuestionSet a6002 = questionSetService.findByCode(QuestionCode.A6002);
+    if( a6002 == null ) {
+        a6002 = new QuestionSet(QuestionCode.A6002, false, a6001);
+        JPA.em().persist(a6002);
+    }
+    // == A6006
+    // Méthode par le poids de CO2 chimique des effluents rejetés
+    QuestionSet a6006 = questionSetService.findByCode(QuestionCode.A6006);
+    if( a6006 == null ) {
+        a6006 = new QuestionSet(QuestionCode.A6006, false, a6001);
+        JPA.em().persist(a6006);
     }
     // == A50
     // Mobilité
@@ -555,7 +585,7 @@ public class AwacEnterpriseInitialData {
     form4.getQuestionSets().add(a205);
     JPA.em().persist(form4);
     // == A208
-    // Méthode par détail des achats
+    // Achat de biens et services
     QuestionSet a208 = questionSetService.findByCode(QuestionCode.A208);
     if( a208 == null ) {
         a208 = new QuestionSet(QuestionCode.A208, false, null);
@@ -758,7 +788,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a191);
     }
     // == A194
-    // Eaux usées industrielles
+    // Eaux usées industrielles traitées par des tiers
     QuestionSet a194 = questionSetService.findByCode(QuestionCode.A194);
     if( a194 == null ) {
         a194 = new QuestionSet(QuestionCode.A194, false, a180);
@@ -1865,6 +1895,153 @@ if (a49 == null) {
 }
 
 
+
+
+    // == A6003
+    // Source de rejet
+
+    ValueSelectionQuestion a6003 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6003);
+if (a6003 == null) {
+    a6003 = new ValueSelectionQuestion(a6002, 0, QuestionCode.A6003, CodeList.ORIGINEEAUUSEE);
+    JPA.em().persist(a6003);
+} else {
+    if (!a6003.getQuestionSet().equals(a6002) && a6002.getQuestions().contains(a6003)) {
+        a6002.getQuestions().remove(a6003);
+        JPA.em().persist(a6002);
+    }
+    if (a6003.getQuestionSet().equals(a6002) && !a6002.getQuestions().contains(a6003)) {
+        a6002.getQuestions().add(a6003);
+        JPA.em().persist(a6002);
+    }
+    a6003.setOrderIndex(0);
+    a6003.setCodeList(CodeList.ORIGINEEAUUSEE);
+    JPA.em().persist(a6003);
+}
+
+
+    // == A6004
+    // Quantités de m³ rejetés
+
+    
+DoubleQuestion a6004 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6004);
+if (a6004 == null) {
+    a6004 = new DoubleQuestion( a6002, 0, QuestionCode.A6004, volumeUnits, null, volumeUnits.getMainUnit() );
+    JPA.em().persist(a6004);
+} else {
+    a6004.setDefaultValue(null);
+    if (!a6004.getQuestionSet().equals(a6002) && a6002.getQuestions().contains(a6004)) {
+        a6002.getQuestions().remove(a6004);
+        JPA.em().persist(a6002);
+    }
+    if (a6004.getQuestionSet().equals(a6002) && !a6002.getQuestions().contains(a6004)) {
+        a6002.getQuestions().add(a6004);
+        JPA.em().persist(a6002);
+    }
+    a6004.setUnitCategory(volumeUnits);
+    a6004.setOrderIndex(0);
+    a6004.setDefaultUnit(volumeUnits.getMainUnit());
+    JPA.em().persist(a6004);
+}
+
+
+
+
+    // == A6005
+    // Méthode de traitement des eaux usées
+
+    ValueSelectionQuestion a6005 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6005);
+if (a6005 == null) {
+    a6005 = new ValueSelectionQuestion(a6002, 0, QuestionCode.A6005, CodeList.TRAITEMENTEAU);
+    JPA.em().persist(a6005);
+} else {
+    if (!a6005.getQuestionSet().equals(a6002) && a6002.getQuestions().contains(a6005)) {
+        a6002.getQuestions().remove(a6005);
+        JPA.em().persist(a6002);
+    }
+    if (a6005.getQuestionSet().equals(a6002) && !a6002.getQuestions().contains(a6005)) {
+        a6002.getQuestions().add(a6005);
+        JPA.em().persist(a6002);
+    }
+    a6005.setOrderIndex(0);
+    a6005.setCodeList(CodeList.TRAITEMENTEAU);
+    JPA.em().persist(a6005);
+}
+
+
+    // == A6007
+    // Quantités de DCO rejetés
+
+    
+DoubleQuestion a6007 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6007);
+if (a6007 == null) {
+    a6007 = new DoubleQuestion( a6006, 0, QuestionCode.A6007, massUnits, null, massUnits.getMainUnit() );
+    JPA.em().persist(a6007);
+} else {
+    a6007.setDefaultValue(null);
+    if (!a6007.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6007)) {
+        a6006.getQuestions().remove(a6007);
+        JPA.em().persist(a6006);
+    }
+    if (a6007.getQuestionSet().equals(a6006) && !a6006.getQuestions().contains(a6007)) {
+        a6006.getQuestions().add(a6007);
+        JPA.em().persist(a6006);
+    }
+    a6007.setUnitCategory(massUnits);
+    a6007.setOrderIndex(0);
+    a6007.setDefaultUnit(massUnits.getMainUnit());
+    JPA.em().persist(a6007);
+}
+
+
+
+
+    // == A6008
+    // Quantités d'azote rejetés
+
+    
+DoubleQuestion a6008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6008);
+if (a6008 == null) {
+    a6008 = new DoubleQuestion( a6006, 0, QuestionCode.A6008, massUnits, null, massUnits.getMainUnit() );
+    JPA.em().persist(a6008);
+} else {
+    a6008.setDefaultValue(null);
+    if (!a6008.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6008)) {
+        a6006.getQuestions().remove(a6008);
+        JPA.em().persist(a6006);
+    }
+    if (a6008.getQuestionSet().equals(a6006) && !a6006.getQuestions().contains(a6008)) {
+        a6006.getQuestions().add(a6008);
+        JPA.em().persist(a6006);
+    }
+    a6008.setUnitCategory(massUnits);
+    a6008.setOrderIndex(0);
+    a6008.setDefaultUnit(massUnits.getMainUnit());
+    JPA.em().persist(a6008);
+}
+
+
+
+
+    // == A6009
+    // Méthode de traitement des eaux usées
+
+    ValueSelectionQuestion a6009 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6009);
+if (a6009 == null) {
+    a6009 = new ValueSelectionQuestion(a6006, 0, QuestionCode.A6009, CodeList.TRAITEMENTEAU);
+    JPA.em().persist(a6009);
+} else {
+    if (!a6009.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6009)) {
+        a6006.getQuestions().remove(a6009);
+        JPA.em().persist(a6006);
+    }
+    if (a6009.getQuestionSet().equals(a6006) && !a6006.getQuestions().contains(a6009)) {
+        a6006.getQuestions().add(a6009);
+        JPA.em().persist(a6006);
+    }
+    a6009.setOrderIndex(0);
+    a6009.setCodeList(CodeList.TRAITEMENTEAU);
+    JPA.em().persist(a6009);
+}
 
 
     // == A51
@@ -3254,7 +3431,7 @@ if (a125 == null) {
 
 
     // == A126
-    // Km moyen assignés par employé voyageant
+    // Distance totale (aller-retour) assignée à chaque employé voyageant
 
     
 DoubleQuestion a126 = (DoubleQuestion) questionService.findByCode(QuestionCode.A126);
@@ -3281,7 +3458,7 @@ if (a126 == null) {
 
 
     // == A127
-    // km moyen parcourus sur l'année:
+    // Distance totale (aller-retour) assignée à chaque employé voyageant
 
     
 DoubleQuestion a127 = (DoubleQuestion) questionService.findByCode(QuestionCode.A127);
@@ -4889,28 +5066,6 @@ if (a193 == null) {
 }
 
 
-    // == A195
-    // Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
-
-    ValueSelectionQuestion a195 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A195);
-if (a195 == null) {
-    a195 = new ValueSelectionQuestion(a197, 0, QuestionCode.A195, CodeList.TRAITEUREAU);
-    JPA.em().persist(a195);
-} else {
-    if (!a195.getQuestionSet().equals(a197) && a197.getQuestions().contains(a195)) {
-        a197.getQuestions().remove(a195);
-        JPA.em().persist(a197);
-    }
-    if (a195.getQuestionSet().equals(a197) && !a197.getQuestions().contains(a195)) {
-        a197.getQuestions().add(a195);
-        JPA.em().persist(a197);
-    }
-    a195.setOrderIndex(0);
-    a195.setCodeList(CodeList.TRAITEUREAU);
-    JPA.em().persist(a195);
-}
-
-
     // == A198
     // Source de rejet
 
@@ -4979,28 +5134,6 @@ if (a200 == null) {
     a200.setOrderIndex(0);
     a200.setCodeList(CodeList.TRAITEMENTEAU);
     JPA.em().persist(a200);
-}
-
-
-    // == A501
-    // Est-ce l'entreprise qui réalise le traitement ou est-il effectué par des tiers?
-
-    ValueSelectionQuestion a501 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A501);
-if (a501 == null) {
-    a501 = new ValueSelectionQuestion(a201, 0, QuestionCode.A501, CodeList.TRAITEUREAU);
-    JPA.em().persist(a501);
-} else {
-    if (!a501.getQuestionSet().equals(a201) && a201.getQuestions().contains(a501)) {
-        a201.getQuestions().remove(a501);
-        JPA.em().persist(a201);
-    }
-    if (a501.getQuestionSet().equals(a201) && !a201.getQuestions().contains(a501)) {
-        a201.getQuestions().add(a501);
-        JPA.em().persist(a201);
-    }
-    a501.setOrderIndex(0);
-    a501.setCodeList(CodeList.TRAITEUREAU);
-    JPA.em().persist(a501);
 }
 
 

@@ -2,6 +2,8 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="AC1")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC1' | translate")
 
             mm-awac-sub-title(question-code="AC2")
 
