@@ -29,7 +29,7 @@
         .big_separator
         .data_date_compare
             div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
-            select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
+            select(ng-options='p.key as p.label for p in $root.periodsForComparison', ng-model='$root.periodToCompare')
         .big_separator
         .data_date_compare
             button.button.verification(type="button",
