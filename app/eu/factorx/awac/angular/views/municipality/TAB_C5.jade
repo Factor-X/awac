@@ -3,6 +3,8 @@ div
     div(ng-show="loading===false && errorMessage === null")
         //achat bien et service
         mm-awac-section(title-code="AC130")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC130' | translate")
 
             mm-awac-question(question-code="AC131",ng-optional="true")
 
@@ -19,6 +21,8 @@ div
 
         // investissement AC137
         mm-awac-section(title-code="AC137")
+            .element_content
+                .element_text(ng-bind-html="'EXPLAIN_AC137' | translate")
 
             mm-awac-question(question-code="AC138",ng-optional="true")
 
