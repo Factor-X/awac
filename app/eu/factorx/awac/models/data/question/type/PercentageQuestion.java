@@ -19,10 +19,6 @@ public class PercentageQuestion extends NumericQuestion {
 		super(questionSet, orderIndex, code,null);
 	}
 
-	public PercentageQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code,Double defaultValue) {
-		super(questionSet, orderIndex, code, null);
-	}
-
 	@Override
 	public AnswerType getAnswerType() {
 		return AnswerType.PERCENTAGE;

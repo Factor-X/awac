@@ -21,11 +21,7 @@ public class IntegerQuestion extends NumericQuestion {
 		super(questionSet, orderIndex, code, unitCategory);
 	}
 
-	public IntegerQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Integer defaultValue) {
-		super(questionSet, orderIndex, code, unitCategory);
-	}
-
-    public IntegerQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Integer defaultValue, Unit defaultUnit) {
+    public IntegerQuestion(QuestionSet questionSet, int orderIndex, QuestionCode code, UnitCategory unitCategory, Unit defaultUnit) {
         super(questionSet, orderIndex, code, unitCategory,defaultUnit);
     }
 

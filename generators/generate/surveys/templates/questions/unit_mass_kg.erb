@@ -9,10 +9,9 @@
 
 DoubleQuestion <%= accronym.downcase %> = (DoubleQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
-    <%= accronym.downcase %> = new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, <%= unitCategory %>, <%= default %>, <%= unit %> );
+    <%= accronym.downcase %> = new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, <%= unitCategory %>,  <%= unit %> );
     JPA.em().persist(<%= accronym.downcase %>);
 } else {
-    <%= accronym.downcase %>.setDefaultValue(<%= default %>);
     if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
         <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
         JPA.em().persist(<%= parent %>);
