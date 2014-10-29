@@ -1,8 +1,9 @@
 package eu.factorx.awac.dto.myrmex.get;
 
+import org.joda.time.DateTime;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.models.NotificationKind;
-import org.joda.time.DateTime;
 
 public class NotificationDTO extends DTO {
 

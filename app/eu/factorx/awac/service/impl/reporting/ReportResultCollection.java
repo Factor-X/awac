@@ -1,8 +1,8 @@
 package eu.factorx.awac.service.impl.reporting;
 
-import eu.factorx.awac.models.reporting.ReportResult;
-
 import java.util.List;
+
+import eu.factorx.awac.models.reporting.ReportResult;
 
 public class ReportResultCollection {
 

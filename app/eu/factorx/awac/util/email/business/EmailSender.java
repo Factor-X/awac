@@ -2,32 +2,20 @@ package eu.factorx.awac.util.email.business;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import eu.factorx.awac.controllers.EmailController;
-import eu.factorx.awac.models.email.MailConfig;
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.UnitService;
-import eu.factorx.awac.util.email.messages.EmailMessage;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
 import play.Configuration;
 import play.Logger;
-import play.db.jpa.JPA;
-import play.db.jpa.JPAPlugin;
-import play.db.jpa.Transactional;
-import scala.Option;
+import eu.factorx.awac.models.email.MailConfig;
+import eu.factorx.awac.util.email.messages.EmailMessage;
 
 @Component
 public class EmailSender implements ApplicationContextAware {

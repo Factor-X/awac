@@ -1,10 +1,8 @@
 package eu.factorx.awac.dto.awac.post;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Pattern;
-import eu.factorx.awac.models.business.Organization;
 
 public class EmailInvitationDTO extends DTO {
 

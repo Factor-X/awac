@@ -1,11 +1,11 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.dto.DTO;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import eu.factorx.awac.dto.DTO;
 
 public class ResultsDTO extends DTO {
 

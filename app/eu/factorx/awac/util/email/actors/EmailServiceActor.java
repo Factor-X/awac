@@ -1,16 +1,11 @@
 package eu.factorx.awac.util.email.actors;
 
-import static akka.actor.SupervisorStrategy.escalate;
-import static akka.actor.SupervisorStrategy.resume;
-import static akka.actor.SupervisorStrategy.stop;
+import static akka.actor.SupervisorStrategy.*;
 
 import javax.mail.MessagingException;
 
 import scala.concurrent.duration.Duration;
-import akka.actor.OneForOneStrategy;
-import akka.actor.Props;
-import akka.actor.SupervisorStrategy;
-import akka.actor.UntypedActor;
+import akka.actor.*;
 import akka.actor.SupervisorStrategy.Directive;
 import akka.japi.Function;
 import eu.factorx.awac.util.email.workers.EmailServiceWorker;

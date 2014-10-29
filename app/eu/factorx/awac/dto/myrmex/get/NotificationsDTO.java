@@ -1,9 +1,9 @@
 package eu.factorx.awac.dto.myrmex.get;
 
-import eu.factorx.awac.dto.DTO;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
 
 public class NotificationsDTO extends DTO {
 

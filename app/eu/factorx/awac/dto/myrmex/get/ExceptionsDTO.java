@@ -1,12 +1,10 @@
 package eu.factorx.awac.dto.myrmex.get;
 
+import java.util.HashMap;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ExceptionsDTO extends DTO {
 

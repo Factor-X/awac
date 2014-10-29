@@ -1,13 +1,13 @@
 package eu.factorx.awac.dto.verification.get;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.get.ScopeDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by florian on 9/10/14.

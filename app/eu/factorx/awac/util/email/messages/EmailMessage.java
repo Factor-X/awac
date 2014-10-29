@@ -11,9 +11,6 @@
 
 package eu.factorx.awac.util.email.messages;
 
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.LanguageCode;
-
 import java.util.ArrayList;
 import java.util.List;
 

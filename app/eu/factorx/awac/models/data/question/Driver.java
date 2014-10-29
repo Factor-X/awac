@@ -1,10 +1,12 @@
 package eu.factorx.awac.models.data.question;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.knowledge.Period;
-
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import eu.factorx.awac.models.AuditedAbstractEntity;
 
 
 @Entity

@@ -1,13 +1,14 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.QuestionService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.QuestionService;
 
 /**
  * Created by florian on 4/09/14.

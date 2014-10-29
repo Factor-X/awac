@@ -4,10 +4,7 @@ import java.io.IOException;
 
 import javax.mail.MessagingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import akka.actor.UntypedActor;
-import eu.factorx.awac.util.email.service.EmailService;
 import eu.factorx.awac.util.email.business.EmailSender;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 

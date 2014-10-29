@@ -1,16 +1,18 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.type.IndicatorCode;
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.IndicatorCode;
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 
 @Entity
 @Table(name = "indicator")

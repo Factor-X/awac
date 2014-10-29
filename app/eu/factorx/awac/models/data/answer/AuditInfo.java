@@ -1,10 +1,11 @@
 package eu.factorx.awac.models.data.answer;
 
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.forms.VerificationRequest;
-
-import javax.persistence.*;
 import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
+
+import eu.factorx.awac.models.account.Account;
 
 @Embeddable
 public class AuditInfo implements Serializable {

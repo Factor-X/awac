@@ -1,10 +1,10 @@
 package eu.factorx.awac.service.impl.reporting;
 
-import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
-import eu.factorx.awac.models.knowledge.Period;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.knowledge.Period;
 
 public class ReportResultAggregation {
 

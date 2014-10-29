@@ -1,9 +1,10 @@
 package eu.factorx.awac.service.impl;
 
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.service.BaseIndicatorService;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
 
 @Component
 public class BaseIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<BaseIndicator> implements BaseIndicatorService {

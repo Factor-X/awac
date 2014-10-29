@@ -13,7 +13,6 @@ package eu.factorx.awac.models.account;
 import javax.persistence.Entity;
 
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 // import for JAXB annotations -- JAXB stack
 

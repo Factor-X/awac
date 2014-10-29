@@ -1,11 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
 
 public class SiteAddUsersResultDTO extends DTO {
 

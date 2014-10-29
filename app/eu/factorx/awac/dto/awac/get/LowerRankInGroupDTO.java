@@ -1,6 +1,5 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.models.knowledge.Unit;
 
 public class LowerRankInGroupDTO extends ReportLogEntryDTO {
 

@@ -1,7 +1,5 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import play.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

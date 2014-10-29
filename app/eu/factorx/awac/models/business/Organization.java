@@ -5,14 +5,13 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
 @Entity
 @Table(name = "organization")

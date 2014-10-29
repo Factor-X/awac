@@ -1,5 +1,16 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -9,15 +20,6 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.QuestionSetAnswerSearchParameter;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.util.JPAUtils;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionSetAnswer> implements QuestionSetAnswerService {

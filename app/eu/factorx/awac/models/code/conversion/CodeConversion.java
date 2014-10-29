@@ -1,9 +1,9 @@
 package eu.factorx.awac.models.code.conversion;
 
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
-
-import javax.persistence.*;
 
 /**
  * This entity convert a code from a code list to an other code from the same list by the define criteria

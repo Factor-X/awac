@@ -1,8 +1,8 @@
 package eu.factorx.awac.dto.verification.post;
 
-import eu.factorx.awac.dto.DTO;
-
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
 
 /**
  * Created by florian on 9/10/14.

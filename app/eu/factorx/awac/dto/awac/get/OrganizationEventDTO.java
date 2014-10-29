@@ -1,12 +1,6 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
-
-import java.util.List;
 
 public class OrganizationEventDTO extends DTO {
 

@@ -1,11 +1,12 @@
 package eu.factorx.awac.models.knowledge;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.type.PeriodCode;
+import javax.persistence.*;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.type.PeriodCode;
 
 @Entity
 @Table(name = "period")

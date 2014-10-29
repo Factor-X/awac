@@ -1,10 +1,9 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
 
 /**
  * Created by florian on 9/10/14.

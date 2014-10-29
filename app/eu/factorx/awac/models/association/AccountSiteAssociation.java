@@ -10,11 +10,11 @@
  */
 package eu.factorx.awac.models.association;
 
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Site;
-
-import javax.persistence.*;
 
 // import for JAXB annotations -- JAXB stack
 

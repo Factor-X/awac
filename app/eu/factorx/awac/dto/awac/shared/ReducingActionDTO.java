@@ -1,13 +1,13 @@
 package eu.factorx.awac.dto.awac.shared;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 public class ReducingActionDTO extends DTO implements Serializable {
 

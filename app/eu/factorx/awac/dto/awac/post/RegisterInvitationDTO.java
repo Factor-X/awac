@@ -4,7 +4,6 @@ import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Pattern;
-import eu.factorx.awac.dto.validation.annotations.Size;
 
 public class RegisterInvitationDTO extends DTO {
 

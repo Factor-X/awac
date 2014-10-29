@@ -11,11 +11,13 @@
 
 package eu.factorx.awac.service.impl;
 
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Image;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseFont;
-import eu.factorx.awac.service.PdfGenerator;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
@@ -26,6 +28,7 @@ import org.xhtmlrenderer.pdf.*;
 import org.xhtmlrenderer.resource.CSSResource;
 import org.xhtmlrenderer.resource.ImageResource;
 import org.xhtmlrenderer.resource.XMLResource;
+
 import play.Logger;
 import play.api.Play;
 import play.api.templates.Html;
@@ -33,12 +36,11 @@ import play.mvc.Result;
 import play.mvc.Results;
 import scala.Option;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.pdf.BaseFont;
+
+import eu.factorx.awac.service.PdfGenerator;
 
 @Component
 public class PdfGeneratorImpl implements PdfGenerator {

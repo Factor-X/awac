@@ -1,13 +1,13 @@
 package eu.factorx.awac.models.data.file;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.forms.VerificationRequest;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = StoredFile.FIND_BY_STORED_NAME, query = "select q from StoredFile q where q.storedName in :storedName"),

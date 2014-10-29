@@ -1,18 +1,20 @@
 package eu.factorx.awac.service.impl;
 
 
-import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.service.PeriodService;
-import org.joda.time.DateTime;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
-
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Query;
+
+import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.PeriodService;
 
 @Component
 public class PeriodServiceImpl extends AbstractJPAPersistenceServiceImpl<Period> implements PeriodService {

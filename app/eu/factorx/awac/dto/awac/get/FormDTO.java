@@ -1,11 +1,11 @@
 package eu.factorx.awac.dto.awac.get;
 
+import java.util.List;
+import java.util.Map;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public class FormDTO extends DTO {
 

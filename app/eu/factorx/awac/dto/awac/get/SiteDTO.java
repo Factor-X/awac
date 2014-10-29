@@ -1,13 +1,12 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.dto.DTO;
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Range;
 import eu.factorx.awac.dto.validation.annotations.Size;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SiteDTO extends ScopeDTO {
 

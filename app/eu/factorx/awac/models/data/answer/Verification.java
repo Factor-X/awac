@@ -1,13 +1,14 @@
 package eu.factorx.awac.models.data.answer;
 
+import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.VerificationStatus;
 import eu.factorx.awac.models.forms.VerificationRequest;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
 
 /**
  * Created by florian on 7/10/14.

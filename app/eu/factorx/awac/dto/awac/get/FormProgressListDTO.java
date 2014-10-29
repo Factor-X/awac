@@ -1,9 +1,9 @@
 package eu.factorx.awac.dto.awac.get;
 
+import java.util.List;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.FormProgressDTO;
-
-import java.util.List;
 
 
 public class FormProgressListDTO extends DTO{

@@ -2,11 +2,11 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.springframework.stereotype.Repository;
 
 import play.Logger;
 import play.db.jpa.JPA;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.invitation.Invitation;
 import eu.factorx.awac.service.InvitationService;
 

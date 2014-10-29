@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 
 @Entity
 @NamedQueries({

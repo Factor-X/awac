@@ -1,5 +1,23 @@
 package eu.factorx.awac.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import jxl.Range;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.format.CellFormat;
+import jxl.read.biff.BiffException;
+import jxl.write.*;
+import jxl.write.Number;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
@@ -20,23 +38,6 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.math.Vector2I;
-import jxl.Range;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.CellFormat;
-import jxl.read.biff.BiffException;
-import jxl.write.*;
-import jxl.write.Number;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.Boolean;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Component
 public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorService {

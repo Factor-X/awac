@@ -1,13 +1,9 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.QuestionSet;
-import play.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import eu.factorx.awac.models.data.question.Question;
 
 /**
  * Created by florian on 11/09/14.

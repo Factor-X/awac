@@ -1,11 +1,12 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.knowledge.Period;
+import javax.persistence.*;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @Table(uniqueConstraints = {

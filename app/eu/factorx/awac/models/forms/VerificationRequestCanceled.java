@@ -1,15 +1,11 @@
 package eu.factorx.awac.models.forms;
 
+import javax.persistence.*;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.VerificationRequestStatus;
-import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.email.EmailVerificationContent;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by florian on 8/10/14.

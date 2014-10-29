@@ -1,9 +1,9 @@
 package eu.factorx.awac.dto.myrmex.post;
 
+import javax.validation.constraints.Size;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
-
-import javax.validation.constraints.Size;
 
 
 /**

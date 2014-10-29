@@ -1,9 +1,9 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.models.knowledge.Unit;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import eu.factorx.awac.models.knowledge.Unit;
 
 /**
  * Created by florian on 11/09/14.

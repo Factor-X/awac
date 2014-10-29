@@ -1,10 +1,10 @@
 package eu.factorx.awac.dto.awac.post;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.get.PeriodDTO;
 
 /**
  * Created by florian on 19/09/14.

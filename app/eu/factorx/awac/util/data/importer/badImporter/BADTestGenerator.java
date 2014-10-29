@@ -1,15 +1,16 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import play.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import eu.factorx.awac.service.CodeLabelService;
+import eu.factorx.awac.service.QuestionService;
 
 /**
  * Created by florian on 4/09/14.

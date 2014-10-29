@@ -1,14 +1,15 @@
 package eu.factorx.awac.converter.admin;
 
-import eu.factorx.awac.dto.admin.BADLogDTO;
-import eu.factorx.awac.dto.admin.LogLineDTO;
-import eu.factorx.awac.util.data.importer.badImporter.BADLog;
-import org.springframework.core.convert.converter.Converter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.core.convert.converter.Converter;
+
+import eu.factorx.awac.dto.admin.BADLogDTO;
+import eu.factorx.awac.dto.admin.LogLineDTO;
+import eu.factorx.awac.util.data.importer.badImporter.BADLog;
 
 /**
  * Created by florian on 5/09/14.

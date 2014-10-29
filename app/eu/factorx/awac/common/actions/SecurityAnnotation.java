@@ -1,13 +1,8 @@
 package eu.factorx.awac.common.actions;
 
-import eu.factorx.awac.controllers.SecuredController;
+import java.lang.annotation.*;
+
 import play.mvc.With;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 
 /**

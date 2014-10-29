@@ -1,15 +1,8 @@
 package eu.factorx.awac.dto.awac.get;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import play.data.validation.Constraints;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
 
 public class AccountDTO extends DTO {
 

@@ -11,14 +11,15 @@
 
 package eu.factorx.awac.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.service.SvgGenerator;
 import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.Table;
 import eu.factorx.awac.util.math.Vector2D;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class SvgGeneratorImpl implements SvgGenerator {

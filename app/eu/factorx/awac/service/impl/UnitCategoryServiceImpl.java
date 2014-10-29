@@ -1,14 +1,16 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.UnitCategoryService;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import javax.persistence.TypedQuery;
-import java.util.List;
 
 @Component
 public class UnitCategoryServiceImpl extends AbstractJPAPersistenceServiceImpl<UnitCategory> implements UnitCategoryService {

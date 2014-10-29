@@ -1,9 +1,9 @@
 package eu.factorx.awac.models.code.type;
 
+import javax.persistence.Embeddable;
+
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
-
-import javax.persistence.Embeddable;
 
 @Embeddable
 public class QuestionCode extends Code {

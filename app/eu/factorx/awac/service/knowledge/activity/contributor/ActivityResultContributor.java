@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.conversion.ConversionCriterion;
-import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.AnswerValue;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;

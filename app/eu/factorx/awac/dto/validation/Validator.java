@@ -1,12 +1,5 @@
 package eu.factorx.awac.dto.validation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.factorx.awac.dto.validation.annotations.*;
-import org.apache.commons.io.IOUtils;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import play.Logger;
-
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -14,6 +7,16 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+
+import play.Logger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import eu.factorx.awac.dto.validation.annotations.*;
 
 public class Validator {
 	public static void validate(Object object) throws Exception {

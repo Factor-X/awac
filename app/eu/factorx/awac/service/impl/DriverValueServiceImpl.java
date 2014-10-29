@@ -1,11 +1,12 @@
 package eu.factorx.awac.service.impl;
 
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.models.data.question.DriverValue;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.DriverValueService;
 import eu.factorx.awac.util.MyrmexFatalException;
-import org.springframework.stereotype.Component;
 
 @Component
 public class DriverValueServiceImpl extends AbstractJPAPersistenceServiceImpl<DriverValue> implements DriverValueService {

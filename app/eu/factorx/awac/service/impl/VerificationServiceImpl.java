@@ -1,15 +1,15 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.answer.Verification;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.VerificationRequest;
-import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.VerificationService;
-import org.springframework.stereotype.Repository;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import java.util.List;
 
 /**
  * Created by florian on 10/10/14.

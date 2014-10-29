@@ -1,18 +1,20 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
 import eu.factorx.awac.service.QuestionAnswerSearchParameter;
 import eu.factorx.awac.service.QuestionAnswerService;
 import eu.factorx.awac.util.JPAUtils;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
-
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class QuestionAnswerServiceImpl extends AbstractJPAPersistenceServiceImpl<QuestionAnswer> implements QuestionAnswerService {

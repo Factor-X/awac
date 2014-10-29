@@ -1,11 +1,11 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 public class BADTemplate {
 

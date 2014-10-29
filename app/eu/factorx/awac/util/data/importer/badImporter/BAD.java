@@ -1,12 +1,9 @@
 package eu.factorx.awac.util.data.importer.badImporter;
 
-import eu.factorx.awac.models.code.type.ActivityCategoryCode;
-import eu.factorx.awac.models.code.type.BaseActivityDataCode;
-import eu.factorx.awac.models.knowledge.Unit;
-import eu.factorx.awac.models.reporting.BaseActivityData;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.factorx.awac.models.knowledge.Unit;
 
 /**
  * Created by florian on 29/08/14.

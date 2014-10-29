@@ -1,15 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.forms.VerificationRequest;
-import eu.factorx.awac.service.AwacCalculatorService;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
 import play.Logger;
 import play.db.jpa.JPA;
-
-import javax.persistence.TypedQuery;
-import java.util.List;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.service.AwacCalculatorService;
 
 @Component
 public class AwacCalculatorServiceImpl extends AbstractJPAPersistenceServiceImpl<AwacCalculator> implements AwacCalculatorService {

@@ -1,7 +1,6 @@
 package eu.factorx.awac.dto.admin.get;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
 
 /**
  * Created by florian on 21/10/14.

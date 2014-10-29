@@ -1,12 +1,14 @@
 package eu.factorx.awac.models.code;
 
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.data.question.Question;
-import org.apache.commons.lang3.builder.*;
+import java.io.Serializable;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.*;
+
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
 
 /**
  * A <b>Code</b> is an element of a {@link CodeList}, defined as a tuple { {@link CodeList} codeList, {@link String} key}.<br>

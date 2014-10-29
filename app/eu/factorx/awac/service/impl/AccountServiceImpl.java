@@ -2,13 +2,13 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;

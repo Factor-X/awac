@@ -11,11 +11,12 @@
 
 package eu.factorx.awac.models.account;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 // import for JAXB annotations -- JAXB stack
 // import for Json annotations -- jackson stack

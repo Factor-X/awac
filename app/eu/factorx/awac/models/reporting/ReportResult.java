@@ -1,15 +1,16 @@
 package eu.factorx.awac.models.reporting;
 
+import java.io.Serializable;
+import java.util.*;
+
+import javax.persistence.MappedSuperclass;
+
 import eu.factorx.awac.models.code.type.IndicatorCode;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.knowledge.Indicator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Report;
 import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
-
-import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
-import java.util.*;
 
 @MappedSuperclass
 public class ReportResult implements Serializable {

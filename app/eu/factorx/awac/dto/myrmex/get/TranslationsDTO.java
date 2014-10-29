@@ -1,10 +1,11 @@
 package eu.factorx.awac.dto.myrmex.get;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import eu.factorx.awac.dto.DTO;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import eu.factorx.awac.dto.DTO;
 
 public class TranslationsDTO extends DTO {
 

@@ -1,11 +1,12 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.service.DriverService;
-import org.springframework.stereotype.Repository;
-import play.db.jpa.JPA;
-
-import java.util.List;
 
 @Repository
 public class DriverServiceImpl implements DriverService {

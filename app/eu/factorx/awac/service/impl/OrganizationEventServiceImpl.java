@@ -1,15 +1,15 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.OrganizationEvent;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.OrganizationEventService;
-import org.springframework.stereotype.Component;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import javax.persistence.Query;
-import java.util.List;
 
 @Component
 public class OrganizationEventServiceImpl extends AbstractJPAPersistenceServiceImpl<OrganizationEvent> implements OrganizationEventService {

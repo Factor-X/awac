@@ -1,12 +1,11 @@
 package eu.factorx.awac.util.data.importer.badImporter.Reader;
 
-import eu.factorx.awac.util.data.importer.ExcelEquivalenceColumn;
-import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
-import jxl.Sheet;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import jxl.Sheet;
+import eu.factorx.awac.util.data.importer.WorkbookDataImporter;
 
 /**
  * Created by florian on 1/09/14.

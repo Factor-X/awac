@@ -1,5 +1,19 @@
 package eu.factorx.awac.service.impl;
 
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import play.api.templates.Html;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
@@ -15,18 +29,6 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.Colors;
-import jxl.read.biff.BiffException;
-import jxl.write.WriteException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import play.api.templates.Html;
-
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Component
 public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService {

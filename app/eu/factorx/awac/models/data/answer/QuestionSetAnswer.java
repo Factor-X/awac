@@ -1,16 +1,18 @@
 package eu.factorx.awac.models.data.answer;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.data.question.QuestionSet;
-import eu.factorx.awac.models.knowledge.Period;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.data.question.QuestionSet;
+import eu.factorx.awac.models.knowledge.Period;
 
 @Entity
 @NamedQueries({

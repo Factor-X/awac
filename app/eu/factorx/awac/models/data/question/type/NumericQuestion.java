@@ -1,14 +1,14 @@
 package eu.factorx.awac.models.data.question.type;
 
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class NumericQuestion extends Question {

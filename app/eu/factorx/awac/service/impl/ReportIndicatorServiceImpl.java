@@ -1,11 +1,12 @@
 package eu.factorx.awac.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.knowledge.ReportIndicator;
 import eu.factorx.awac.service.ReportIndicatorService;
-import org.springframework.stereotype.Component;
-import play.db.jpa.JPA;
-
-import java.util.List;
 
 @Component
 public class ReportIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<ReportIndicator> implements ReportIndicatorService {

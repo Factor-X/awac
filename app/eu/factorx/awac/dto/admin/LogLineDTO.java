@@ -1,9 +1,9 @@
 package eu.factorx.awac.dto.admin;
 
-import eu.factorx.awac.dto.DTO;
-
 import java.util.HashMap;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
 
 /**
  * Created by florian on 5/09/14.

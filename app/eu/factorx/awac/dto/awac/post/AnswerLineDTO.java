@@ -2,11 +2,11 @@ package eu.factorx.awac.dto.awac.post;
 
 import java.util.Map;
 
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.models.data.question.QuestionSet;
 

@@ -1,19 +1,16 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.models.business.Organization;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.AwacCalculatorInstance;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AwacCalculatorInstanceService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.ScopeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import java.util.List;
 
 /**
  * Created by florian on 26/09/14.

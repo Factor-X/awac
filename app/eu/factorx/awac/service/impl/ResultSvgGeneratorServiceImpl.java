@@ -1,5 +1,13 @@
 package eu.factorx.awac.service.impl;
 
+import java.io.IOException;
+
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.service.ResultSvgGeneratorService;
 import eu.factorx.awac.service.SvgGenerator;
@@ -8,12 +16,6 @@ import eu.factorx.awac.service.impl.reporting.MergedReportResultIndicatorAggrega
 import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Table;
-import jxl.read.biff.BiffException;
-import jxl.write.WriteException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService {
