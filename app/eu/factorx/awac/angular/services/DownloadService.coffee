@@ -16,6 +16,10 @@ angular
             url: url
             headers:
                 "Content-Type": "application/json"
+                #"Last-Modified": "boom"
+                "Pragma": "no-cache"
+                #"Cache-Control": "must-revalidate, private"
+                #"Expires": "-1"
         )
         promise.success (data, status, headers, config) ->
             @downloadsInProgress--
