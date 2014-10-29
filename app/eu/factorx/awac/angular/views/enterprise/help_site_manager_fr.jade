@@ -1,1 +1,38 @@
-h1 Calculateur entreprise de l'AWAC: aide sur la gestion des sites
+h1 Calculateur CO2 entreprise de l'AWAC: aide sur la gestion des sites
+
+h2 Introduction
+
+p Accessible aux seuls utilisateurs avec un statut <b>administrateur</b>, cette interface permet de créer de nouveaux sites sur lesquels l'organisation souhaite calculer son bilan (et sommer les bilans de plusieurs sites).
+
+p Pour chaque site, cela permet également de déterminer quel utilisateur a accès à quel site, et pour quelles années des données doivent être collectées afin d'établir le bilan GES.
+
+h2 Création d'un nouveau site
+
+img(src="/assets/images/help/ajouter_site.png")
+p Cliquez sur ce bouton pour créer un nouveau site. Cela ouvre la fenêtre de déclaration d'un site:
+
+img(src="/assets/images/help/creation_site.png", width="80%")
+
+p Il vous suffit de remplir les différents champs (le code NACE est optionnel, pour votre usage à vous). Le pourcentage à indiquer dans "% des émissions GES comptabilisées par l'organisation" dépend de la règle de consolidation que vous utilisez pour votre bilan GES, en conformité avec les recommandations du GHG Protocol. Il s'agit du % du bilan GES du site à prendre en compte dans le bilan GES de votre organisation selon le niveau de contrôle (opérationnel ou financier) que vous exercez sur ce site. Dans le cas de votre site principal, ou d'une filiale qui vous appartient exclusivement, la valeur est de 100%.
+
+p Une fois qu'un site est créé, vous pouvez à tout moment en modifier le nom, la description, et même le pourcentage à prendre en compte en cliquant sur l'icone présente dans la première colonne "Editer le site".
+
+p Un site n'est jamais détruit, afin que les données - même de bilans très anciens - ne soient jamais perdues. Par contre, s'il n'est plus associé à aucune année de bilan, il n'apparaîtra plus dans les interfaces de travail d'aucun utilisateur.
+
+h2 Déterminer quel utilisateur a accès à quel site
+
+p Lorsqu'un site est créé, aucun utilisateur n'y a accès par défaut. Il faut cliquer sur le bouton d'édition sous "Editer les utilisateurs associés" pour pouvoir alors déterminer clairement quel utilisateur aura ce site présent dans ses interfaces de travail.
+
+img(src="/assets/images/help/site_utilisateurs.png", width="80%")
+p On peut alors décider pour chaque site, qui a accès à ce site. Un utilisateur peut très bien avoir eu accès à un site pendant tout un temps et puis être dissocié du site: aucune des données qu'il a fournies ne sera perdue.
+
+img(src="/assets/images/help/associer_utilisateur.png", width="50%")
+
+p <em>Note</em>: pour les utilisateurs avec le statut d'administrateur, il est aussi nécessaire de réaliser cette association.
+
+h2 Déterminer pour quelle année le bilan d'un site est établi
+
+p Afin de ne pas induire les utilisateurs en erreur et de les faire collecter des données inutiles à l'organisation, il faut également indiquer chaque année pour laquelle des données sont souhaitées, site par site.
+
+img(src="/assets/images/help/site_années.png", width="80%")
+p Pour chaque année de bilan souhaité pour l'organisation, il faut cocher les sites qui participent à ce bilan.
