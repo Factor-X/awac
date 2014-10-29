@@ -26,9 +26,10 @@ import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.VerificationRequestService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import play.Logger;
+
 import play.db.jpa.Transactional;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -107,22 +108,22 @@ public class SecuredController extends Security.Authenticator {
     private VerificationRequestService verificationRequestService;
 
     public void controlDataAccess(Period period, Scope scope) {
-
+    	
         if (period == null || scope == null) {
-            throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD,scope.getName(),period.getLabel());
+            throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD, scope.getName(), period.getLabel());
         }
+
         //control my scope
-        try {
-            controlMyInstance(scope, period);
-        } catch (Exception e) {
-            if (!(getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
-                    verificationRequestService.findByOrganizationVerifierAndScopeAndPeriod(getCurrentUser().getOrganization(), scope, period) != null)) {
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+		try {
+			controlMyInstance(scope, period);
+		} catch (Exception e) {
+			if (!verificationRequestService.hasVerificationAccessToScope(getCurrentUser(), scope)) {
+				throw e;
+			}
+		}
     }
 
-    private void controlMyInstance(Scope scope, Period period) throws Exception {
+    private void controlMyInstance(Scope scope, Period period) {
 
         //test scope
         if (!scope.getOrganization().equals(getCurrentUser().getOrganization())) {
