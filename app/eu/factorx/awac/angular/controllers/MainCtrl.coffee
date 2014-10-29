@@ -289,6 +289,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         value: 'fr'
         label: 'Français'
     }
+    ###
     $rootScope.languages[1] = {
         value: 'en'
         label: 'English'
@@ -297,6 +298,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         value: 'nl'
         label: 'Neederlands'
     }
+    ###
 
     translationService.initialize('fr')
 
@@ -342,7 +344,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.scopeSelectedId=null
             $rootScope.mySites=null
             $rootScope.organizationName = null
-            $location.path('/login')
+            # $location.path('/login')
+            location.href = '/' + $rootScope.instanceName
 
 
 
