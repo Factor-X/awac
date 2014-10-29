@@ -1,14 +1,12 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.forms.AwacCalculatorInstance;
-import eu.factorx.awac.models.forms.VerificationRequestCanceled;
-import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+
+import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.forms.VerificationRequestCanceled;
 
 /**
  * Created by florian on 9/10/14.

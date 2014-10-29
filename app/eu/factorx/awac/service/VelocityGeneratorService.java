@@ -11,9 +11,9 @@
 
 package eu.factorx.awac.service;
 
-import play.mvc.Result;
-
 import java.util.Map;
+
+import play.mvc.Result;
 
 public interface VelocityGeneratorService {
 

@@ -1,5 +1,21 @@
 package eu.factorx.awac.controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
+
+import org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Controller;
+
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
@@ -17,20 +33,6 @@ import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
-import jxl.read.biff.BiffException;
-import jxl.write.WriteException;
-import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Controller;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ResultController extends AbstractController {

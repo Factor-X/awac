@@ -1,10 +1,18 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
 import eu.factorx.awac.dto.awac.post.ListPeriodsDTO;
-import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.PeriodCode;
@@ -14,16 +22,6 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @org.springframework.stereotype.Controller

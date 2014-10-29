@@ -1,7 +1,12 @@
 package eu.factorx.awac.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
 import eu.factorx.awac.dto.awac.post.PasswordChangeDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
@@ -14,19 +19,9 @@ import eu.factorx.awac.dto.myrmex.post.MainVerifierAccountDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.util.BusinessErrorType;
-
 import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
-import play.mvc.Security;
 
 @org.springframework.stereotype.Controller
 public class UserProfileController extends AbstractController {

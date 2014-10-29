@@ -1,12 +1,13 @@
 package eu.factorx.awac.plugins;
 
+import play.Application;
+import play.Logger;
+import play.Plugin;
+
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import play.Application;
-import play.Logger;
-import play.Plugin;
 
 public class S3Plugin extends Plugin {
 

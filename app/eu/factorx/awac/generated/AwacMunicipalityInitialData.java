@@ -1,30 +1,27 @@
 package eu.factorx.awac.generated;
 
-import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
-import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import eu.factorx.awac.service.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
-import eu.factorx.awac.models.Notification;
-import eu.factorx.awac.models.NotificationKind;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
-import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.util.data.importer.*;
-import play.db.jpa.JPA;
-
-import java.util.*;
+import eu.factorx.awac.service.*;
 
 @Component
 public class AwacMunicipalityInitialData {

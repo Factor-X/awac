@@ -11,10 +11,10 @@
 
 package eu.factorx.awac.service;
 
+import java.io.OutputStream;
+
 import play.api.templates.Html;
 import play.mvc.Result;
-
-import java.io.OutputStream;
 
 public interface PdfGenerator {
 

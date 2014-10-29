@@ -1,16 +1,17 @@
 package eu.factorx.awac.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import play.api.templates.Html;
+import play.mvc.Controller;
+import scala.collection.mutable.StringBuilder;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.SvgContent;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import play.Logger;
-import play.api.templates.Html;
-import play.mvc.Controller;
-import scala.collection.mutable.StringBuilder;
 
 
 @org.springframework.stereotype.Controller

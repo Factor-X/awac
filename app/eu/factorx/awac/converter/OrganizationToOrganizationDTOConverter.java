@@ -1,15 +1,16 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Site;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
+import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
 
 @Component
 public class OrganizationToOrganizationDTOConverter implements Converter<Organization, OrganizationDTO> {

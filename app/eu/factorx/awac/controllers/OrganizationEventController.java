@@ -1,5 +1,15 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.OrganizationEventDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
@@ -14,15 +24,6 @@ import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.VerificationRequestService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //annotate as Spring Component
 @Transactional(readOnly = false)

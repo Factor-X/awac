@@ -1,11 +1,13 @@
 package eu.factorx.awac.util;
 
-import org.apache.commons.lang3.StringUtils;
-import play.db.jpa.JPA;
-
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang3.StringUtils;
+
+import play.db.jpa.JPA;
 
 public class JPAUtils {
 	public static <T> TypedQuery<T> build(List<String> parts, Map<String, Object> parameters, Class<T> type) {

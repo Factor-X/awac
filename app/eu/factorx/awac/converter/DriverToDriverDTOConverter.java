@@ -1,11 +1,12 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.admin.get.DriverDTO;
-import eu.factorx.awac.models.data.question.Driver;
-import eu.factorx.awac.models.data.question.DriverValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+
+import eu.factorx.awac.dto.admin.get.DriverDTO;
+import eu.factorx.awac.models.data.question.Driver;
+import eu.factorx.awac.models.data.question.DriverValue;
 
 @Component
 public class DriverToDriverDTOConverter implements Converter<Driver, DriverDTO> {

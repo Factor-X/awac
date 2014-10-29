@@ -1,5 +1,12 @@
 package eu.factorx.awac.converter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.dto.awac.get.KeyValuePairDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
@@ -14,12 +21,6 @@ import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAnswer, AnswerLineDTO> {

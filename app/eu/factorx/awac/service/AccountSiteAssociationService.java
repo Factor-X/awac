@@ -1,11 +1,10 @@
 package eu.factorx.awac.service;
 
+import java.util.List;
+
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.invitation.Invitation;
-
-import java.util.List;
 
 public interface AccountSiteAssociationService extends PersistenceService<AccountSiteAssociation> {
 

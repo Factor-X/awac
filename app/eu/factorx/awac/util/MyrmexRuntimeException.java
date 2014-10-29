@@ -1,11 +1,11 @@
 package eu.factorx.awac.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityTransaction;
 
 import play.db.jpa.JPA;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MyrmexRuntimeException extends RuntimeException {
 

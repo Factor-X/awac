@@ -1,16 +1,15 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.awac.get.FormProgressListDTO;
-import eu.factorx.awac.dto.awac.post.FormProgressDTO;
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.data.FormProgress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import eu.factorx.awac.dto.awac.get.FormProgressListDTO;
+import eu.factorx.awac.dto.awac.post.FormProgressDTO;
+import eu.factorx.awac.models.data.FormProgress;
 
 @Component
 public class FormProgressListToFormProgressListDTOConverter implements Converter<List<FormProgress>, FormProgressListDTO> {

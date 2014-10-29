@@ -1,14 +1,22 @@
 package eu.factorx.awac.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Configuration;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
 import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -19,18 +27,6 @@ import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Configuration;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Transactional(readOnly = false)
 @org.springframework.stereotype.Controller

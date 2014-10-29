@@ -1,5 +1,7 @@
 package eu.factorx.awac.service;
 
+import java.util.List;
+
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
@@ -8,8 +10,6 @@ import eu.factorx.awac.service.impl.reporting.MergedReportResultCollectionAggreg
 import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.ReportResultCollection;
 import eu.factorx.awac.service.impl.reporting.ReportResultCollectionAggregation;
-
-import java.util.List;
 
 public interface ReportResultService {
 

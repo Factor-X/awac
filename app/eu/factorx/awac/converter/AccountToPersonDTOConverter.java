@@ -1,9 +1,10 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
-import eu.factorx.awac.models.account.Account;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.models.account.Account;
 
 /**
  * Created by florian on 4/07/14.

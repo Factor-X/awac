@@ -1,21 +1,14 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.util.email.messages.EmailMessage;
-import eu.factorx.awac.util.email.service.EmailService;
-import eu.factorx.awac.util.pdf.PDF;
-import eu.factorx.awac.util.pdf.SVG;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import play.Logger;
+
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
-
-// for PDF
 import eu.factorx.awac.util.pdf.PDF;
-import eu.factorx.awac.views.html.pdf.*;
+import eu.factorx.awac.util.pdf.SVG;
+import eu.factorx.awac.views.html.pdf.document;
+// for PDF
 
 //annotate as Spring Component
 @Component

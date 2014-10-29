@@ -1,15 +1,16 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.service.VelocityGeneratorService;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
-
-import java.util.HashMap;
-import java.util.Map;
+import eu.factorx.awac.common.actions.SecurityAnnotation;
+import eu.factorx.awac.service.VelocityGeneratorService;
 
 //annotate as Spring Component
 @Component

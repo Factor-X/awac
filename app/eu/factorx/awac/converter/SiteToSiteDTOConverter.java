@@ -1,17 +1,17 @@
 package eu.factorx.awac.converter;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import play.Logger;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.AccountSiteAssociationService;
-import eu.factorx.awac.service.ScopeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-import play.Logger;
-
-import java.util.List;
 
 @Component
 public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {

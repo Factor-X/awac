@@ -1,20 +1,15 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.awac.get.ReportDTO;
-import eu.factorx.awac.dto.awac.get.ReportLineDTO;
-import eu.factorx.awac.models.knowledge.Report;
-import eu.factorx.awac.models.knowledge.ReportIndicator;
-import eu.factorx.awac.models.reporting.ReportResult;
-import eu.factorx.awac.service.ReportIndicatorService;
-import eu.factorx.awac.service.ReportService;
-import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
-import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
-import eu.factorx.awac.util.Colors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
-import java.util.List;
-import java.util.Map;
+import eu.factorx.awac.dto.awac.get.ReportDTO;
+import eu.factorx.awac.dto.awac.get.ReportLineDTO;
+import eu.factorx.awac.models.knowledge.ReportIndicator;
+import eu.factorx.awac.service.ReportIndicatorService;
+import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
+import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
+import eu.factorx.awac.util.Colors;
 
 public class ReportResultAggregationToReportDTOConverter implements Converter<ReportResultAggregation, ReportDTO> {
 

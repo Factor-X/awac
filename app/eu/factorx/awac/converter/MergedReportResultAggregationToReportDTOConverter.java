@@ -1,14 +1,15 @@
 package eu.factorx.awac.converter;
 
+import java.util.List;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.dto.awac.get.ReportDTO;
 import eu.factorx.awac.dto.awac.get.ReportLineDTO;
 import eu.factorx.awac.service.impl.reporting.MergedReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.MergedReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Colors;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class MergedReportResultAggregationToReportDTOConverter implements Converter<MergedReportResultAggregation, ReportDTO> {

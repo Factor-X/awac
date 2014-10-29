@@ -1,26 +1,17 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.LanguageCode;
-import eu.factorx.awac.util.email.service.EmailService;
-import eu.factorx.awac.util.email.messages.EmailMessage;
-import play.*;
-import play.db.jpa.Transactional;
-import play.mvc.*;
-import play.data.*;
-import static play.data.Form.*;
-import static play.mvc.Results.badRequest;
-import static play.mvc.Results.ok;
+import java.util.List;
 
-import eu.factorx.awac.models.*;
-
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.mail.internet.MimeUtility;
-import java.util.List;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
+import eu.factorx.awac.common.actions.SecurityAnnotation;
+import eu.factorx.awac.util.email.messages.EmailMessage;
+import eu.factorx.awac.util.email.service.EmailService;
 
 //annotate as Spring Component
 @Component

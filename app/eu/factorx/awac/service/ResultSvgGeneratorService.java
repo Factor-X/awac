@@ -1,12 +1,11 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.reporting.ReportResult;
-import eu.factorx.awac.service.impl.reporting.MergedReportResultAggregation;
-import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
+import java.io.IOException;
+
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
-
-import java.io.IOException;
+import eu.factorx.awac.service.impl.reporting.MergedReportResultAggregation;
+import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 
 public interface ResultSvgGeneratorService {
 	String getDonut(ReportResultAggregation reportResult) throws IOException, WriteException, BiffException;

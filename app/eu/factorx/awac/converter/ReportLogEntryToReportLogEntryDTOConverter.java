@@ -1,13 +1,14 @@
 package eu.factorx.awac.converter;
 
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.service.impl.reporting.*;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<ReportLogEntry, ReportLogEntryDTO> {

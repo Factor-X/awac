@@ -1,19 +1,16 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.awac.get.UnitDTO;
-import eu.factorx.awac.service.DriverValueService;
-import eu.factorx.awac.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import eu.factorx.awac.dto.awac.get.QuestionDTO;
+import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.models.data.question.Question;
-import eu.factorx.awac.models.data.question.type.DoubleQuestion;
-import eu.factorx.awac.models.data.question.type.IntegerQuestion;
 import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import eu.factorx.awac.models.knowledge.UnitCategory;
+import eu.factorx.awac.service.DriverValueService;
 
 @Component
 public class QuestionToQuestionDTOConverter implements Converter<Question, QuestionDTO> {

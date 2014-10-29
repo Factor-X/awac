@@ -1,5 +1,15 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Play;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
@@ -17,15 +27,6 @@ import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Play;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class AdminController extends AbstractController {

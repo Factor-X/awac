@@ -1,5 +1,16 @@
 package eu.factorx.awac.controllers;
 
+import java.util.*;
+
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
@@ -36,16 +47,6 @@ import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends AbstractController {

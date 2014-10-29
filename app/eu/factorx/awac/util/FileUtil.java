@@ -1,13 +1,15 @@
 package eu.factorx.awac.util;
 
-import com.amazonaws.services.s3.model.*;
-import eu.factorx.awac.plugins.S3Plugin;
-import play.Logger;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import play.Logger;
+
+import com.amazonaws.services.s3.model.*;
+
+import eu.factorx.awac.plugins.S3Plugin;
 
 /**
  * Created by gaetan on 7/7/14.

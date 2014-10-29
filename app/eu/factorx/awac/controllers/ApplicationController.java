@@ -11,11 +11,10 @@
 
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.GlobalVariables;
 import play.Routes;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
+import eu.factorx.awac.GlobalVariables;
 
 @org.springframework.stereotype.Controller
 public class ApplicationController extends AbstractController {

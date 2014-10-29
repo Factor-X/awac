@@ -10,6 +10,17 @@
  */
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import play.db.jpa.Transactional;
+import play.mvc.Http.Context;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.SystemAdministrator;
@@ -26,18 +37,6 @@ import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.VerificationRequestService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import play.db.jpa.Transactional;
-import play.mvc.Http.Context;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 public class SecuredController extends Security.Authenticator {

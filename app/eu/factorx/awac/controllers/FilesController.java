@@ -1,6 +1,16 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.data.file.StoredFile;
@@ -9,16 +19,6 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.FileUtil;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class FilesController extends AbstractController {

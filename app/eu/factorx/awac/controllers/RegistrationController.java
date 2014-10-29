@@ -1,5 +1,17 @@
 package eu.factorx.awac.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Configuration;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
 import eu.factorx.awac.dto.awac.post.RegistrationDTO;
@@ -22,17 +34,6 @@ import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Configuration;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Transactional(readOnly = false)
 @org.springframework.stereotype.Controller

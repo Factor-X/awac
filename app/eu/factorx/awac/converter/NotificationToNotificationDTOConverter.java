@@ -1,9 +1,10 @@
 package eu.factorx.awac.converter;
 
-import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
-import eu.factorx.awac.models.Notification;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+
+import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
+import eu.factorx.awac.models.Notification;
 
 @Component
 public class NotificationToNotificationDTOConverter implements Converter<Notification, NotificationDTO> {
