@@ -2,8 +2,6 @@ div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
         mm-awac-section(title-code="A243")
-            .element_content
-                .element_text(ng-bind-html="'EXPLAIN_A243' | translate")
 
             mm-awac-repetition-name(question-code="A244")
             mm-awac-repetition-question(ng-question-set-code="'A244'", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A244')")
