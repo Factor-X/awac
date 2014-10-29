@@ -740,8 +740,8 @@ public class VerificationController extends AbstractController {
     public VerificationRequest addRequestByKey(String key) {
         //control key
         VerificationRequest verificationRequest = verificationRequestService.findByKey(key);
-        if (verificationRequest.getOrganizationVerifier() != null) {
-            throw new MyrmexRuntimeException(BusinessErrorType.INVITATION_NOT_VALID);
+        if ((verificationRequest == null) || (verificationRequest.getOrganizationVerifier() != null)) {
+            throw new MyrmexRuntimeException(BusinessErrorType.INVALID_VERIFICATION_REQUEST_KEY);
         }
 
         //
