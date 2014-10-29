@@ -9,6 +9,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class EmailVerificationContent implements Serializable {
 
+	private static final long serialVersionUID = -5974153858122641344L;
+
     protected String email;
 
     @Column(columnDefinition = "text")

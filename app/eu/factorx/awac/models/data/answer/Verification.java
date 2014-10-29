@@ -19,6 +19,8 @@ import eu.factorx.awac.models.forms.VerificationRequest;
 })
 public class Verification extends AuditedAbstractEntity {
 
+	private static final long serialVersionUID = 7614927680078651258L;
+
     public static final String FIND_BY_VERIFICATION_REQUEST_AND_QUESTION_SET = "Verification_FIND_BY_VERIFICATION_REQUEST_AND_QUESTION_SET";
 
     @ManyToOne(optional = false)

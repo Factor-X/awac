@@ -18,6 +18,8 @@ import eu.factorx.awac.models.knowledge.Period;
 })
 public class AwacCalculatorInstance extends AuditedAbstractEntity{
 
+	private static final long serialVersionUID = -8171090572287833149L;
+
     public static final String FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE";
     public static final String FIND_BY_PERIOD_AND_SCOPE = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_SCOPE";
     public static final java.lang.String FIND_BY_PERIOD_AND_ORGANIZATION = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_ORGANIZATION";

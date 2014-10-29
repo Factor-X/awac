@@ -10,6 +10,8 @@ import eu.factorx.awac.models.knowledge.Period;
 @Table(name = "drivervalue")
 public class DriverValue extends AuditedAbstractEntity {
 
+	private static final long serialVersionUID = -7811471133652854232L;
+
     @ManyToOne(optional = false)
     private Driver driver;
 

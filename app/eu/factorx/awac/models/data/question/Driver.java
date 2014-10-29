@@ -13,6 +13,8 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 @Table(name = "driver")
 public class Driver extends AuditedAbstractEntity {
 
+	private static final long serialVersionUID = 5073847643332338205L;
+
     private String name;
 
     @OneToMany( mappedBy = "driver")
