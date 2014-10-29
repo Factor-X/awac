@@ -1018,6 +1018,7 @@ h1 {
     position: absolute;
     margin-left: -112px;
     margin-top: -25px;
+    z-index: 1000;
 }
 
 .user_icon > div > * {

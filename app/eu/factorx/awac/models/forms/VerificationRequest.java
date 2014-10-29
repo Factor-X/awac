@@ -7,11 +7,9 @@ import eu.factorx.awac.models.code.type.VerificationRequestStatus;
 import eu.factorx.awac.models.data.answer.Verification;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.email.EmailVerificationContent;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = VerificationRequest.FIND_BY_KEY, query = "select p from VerificationRequest p where p.key = :verificationRequestKey" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier" ),
+        @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_SCOPE_AND_PERIOD, query = "select p from VerificationRequest p where p.awacCalculatorInstance.scope = :scope and p.awacCalculatorInstance.period = :period" ),
         @NamedQuery(name = VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_VERIFICATION_REQUEST_STATUS, query = "select p from VerificationRequest p where p.organizationVerifier = :organizationVerifier and p.verificationRequestStatus = :verificationRequestStatus" )
@@ -31,6 +30,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
     private static final long serialVersionUID = 1L;
     public static final String FIND_BY_KEY = "VerificationRequest_FIND_BY_KEY";
     public static final String FIND_BY_ORGANIZATION_VERIFIER = "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER";
+	public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE = "VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE";
     public static final String FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD= "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE_AND_PERIOD";
     public static final String FIND_BY_SCOPE_AND_PERIOD = "VerificationRequest_FIND_BY_SCOPE_AND_PERIOD";
     public static final java.lang.String FIND_BY_ORGANIZATION_VERIFIER_AND_VERIFICATION_REQUEST_STATUS = "VerificationRequest_FIND_BY_ORGANIZATION_VERIFIER_AND_VERIFICATION_REQUEST_STATUS";

@@ -1,20 +1,20 @@
 package eu.factorx.awac.service.impl;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.shared.ListDTO;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import play.Logger;
+import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.VerificationRequestStatus;
 import eu.factorx.awac.models.forms.VerificationRequest;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.VerificationRequestService;
-import org.springframework.stereotype.Repository;
-import play.Logger;
-import play.db.jpa.JPA;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by florian on 26/09/14.
@@ -114,5 +114,18 @@ public class VerificationRequestServiceImpl extends AbstractJPAPersistenceServic
 
     }
 
+	@Override
+	public boolean hasVerificationAccessToScope(Account user, Scope scope) {
+		Organization userOrganization = user.getOrganization();
+		// check if user is a verifier
+		if (!InterfaceTypeCode.VERIFICATION.equals(userOrganization.getInterfaceCode())) {
+			return false;
+		}
+		// check if verifier has a verification request for given scope
+		return !JPA.em().createNamedQuery(VerificationRequest.FIND_BY_ORGANIZATION_VERIFIER_AND_SCOPE, VerificationRequest.class)
+				.setParameter("organizationVerifier", userOrganization)
+				.setParameter("scope", scope)
+				.getResultList().isEmpty();
+	}
 
 }
