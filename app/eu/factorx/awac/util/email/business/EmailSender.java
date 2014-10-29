@@ -87,7 +87,7 @@ public class EmailSender implements ApplicationContextAware {
 
 			// main body part -> email content
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(email.getContent(), "text/html");
+			messageBodyPart.setContent(email.getContent(), "text/html; charset=utf-8");
 
 			// multipart
 			Multipart multipart = new MimeMultipart();

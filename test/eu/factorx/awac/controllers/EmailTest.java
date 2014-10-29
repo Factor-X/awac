@@ -119,7 +119,7 @@ public class EmailTest extends AbstractBaseControllerTest {
 
 		List<String> filenameList = new ArrayList<>();
 
-		filenameList.add("public/vm/createVerificationRequest.vm");
+		filenameList.add("public/vm/verification/startVerification.vm");
 		filenameList.add("public/images/ajax-loader.gif");
 
 		Result result = null;
