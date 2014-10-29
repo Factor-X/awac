@@ -11,20 +11,14 @@
  
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
-import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountSiteAssociationService;
-import eu.factorx.awac.service.OrganizationService;
-import eu.factorx.awac.service.SiteService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,17 +27,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import static org.junit.Assert.*;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.status;
+import eu.factorx.awac.dto.awac.get.AccountDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
+import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
+import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.service.AccountSiteAssociationService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.SiteService;
 
 //import play.api.mvc.AnyContent;
 //import com.avaje.ebean.Ebean;

@@ -1,13 +1,14 @@
 package eu.factorx.awac.models.business;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

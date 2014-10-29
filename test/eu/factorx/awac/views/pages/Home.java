@@ -11,13 +11,11 @@
  
 package eu.factorx.awac.views.pages;
 
-import org.fluentlenium.core.*;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.fluentlenium.FluentLeniumAssertions.assertThat;
-import static org.fluentlenium.core.filter.FilterConstructor.*;
+import static org.fluentlenium.core.filter.FilterConstructor.withText;
 
+import org.fluentlenium.core.FluentPage;
 //import components.*;
-import eu.factorx.awac.controllers.*;
 
 public class Home extends FluentPage {
     public String getUrl() {

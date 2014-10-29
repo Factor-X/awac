@@ -10,18 +10,7 @@
  */
 package eu.factorx.awac.views;
 
-import org.junit.*;
-
-import play.test.*;
-import static play.test.Helpers.*;
-
-import org.fluentlenium.core.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.fluentlenium.FluentLeniumAssertions.assertThat;
-import static org.fluentlenium.core.filter.FilterConstructor.*;
-import com.google.common.base.*;
-
-import eu.factorx.awac.views.pages.*;
+import play.test.WithBrowser;
 //import components.*;
 
 public class LoginTest extends WithBrowser {

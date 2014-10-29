@@ -1,11 +1,15 @@
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
+import static java.lang.Thread.sleep;
+import static play.test.Helpers.contentAsBytes;
+
+import javax.persistence.EntityManager;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
 import play.db.jpa.JPA;
 import play.db.jpa.JPAPlugin;
 import play.libs.Json;
@@ -14,10 +18,9 @@ import play.test.FakeApplication;
 import play.test.Helpers;
 import scala.Option;
 
-import javax.persistence.EntityManager;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import static java.lang.Thread.sleep;
-import static play.test.Helpers.contentAsBytes;
+import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 
 public abstract class AbstractBaseControllerTest implements ApplicationContextAware {
 

@@ -1,19 +1,18 @@
 package eu.factorx.awac.models.account;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+//import java.util.List;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import play.Logger;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.impl.AccountServiceImpl;
-import play.Logger;
-
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-
-//import java.util.List;
-import org.junit.FixMethodOrder;
-import org.junit.runners.MethodSorters;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

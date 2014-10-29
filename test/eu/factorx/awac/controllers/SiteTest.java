@@ -1,6 +1,23 @@
 package eu.factorx.awac.controllers;
 
+import static org.junit.Assert.*;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
+
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import play.libs.Json;
+import play.mvc.Result;
+import play.test.FakeRequest;
+
 import com.fasterxml.jackson.databind.JsonNode;
+
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.AssignPeriodToSiteDTO;
@@ -9,20 +26,6 @@ import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexRuntimeException;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.libs.Json;
-import play.mvc.Result;
-import play.test.FakeRequest;
-
-import static org.junit.Assert.*;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.status;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

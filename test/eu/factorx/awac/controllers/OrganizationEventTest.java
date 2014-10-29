@@ -11,18 +11,12 @@
  
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.awac.get.OrganizationEventDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.PeriodDTO;
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.OrganizationEvent;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.PeriodCode;
-import eu.factorx.awac.models.knowledge.Period;
-import eu.factorx.awac.service.*;
+import static org.junit.Assert.*;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
+
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -32,16 +26,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import static org.junit.Assert.*;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.status;
+import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationEventDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationEventResultDTO;
+import eu.factorx.awac.dto.awac.get.PeriodDTO;
+import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.OrganizationEvent;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.PeriodCode;
+import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.OrganizationEventService;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.PeriodService;
 
 //import play.api.mvc.AnyContent;
 //import com.avaje.ebean.Ebean;

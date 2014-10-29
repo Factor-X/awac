@@ -1,7 +1,11 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.util.Table;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,15 +13,9 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.api.templates.Html;
+
 import play.mvc.Result;
-import scala.collection.mutable.StringBuilder;
-
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertNotNull;
+import eu.factorx.awac.models.AbstractBaseModelTest;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

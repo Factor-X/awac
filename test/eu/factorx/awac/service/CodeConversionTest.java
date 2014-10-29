@@ -1,15 +1,8 @@
 package eu.factorx.awac.service;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
-import eu.factorx.awac.models.code.conversion.CodeConversion;
-import eu.factorx.awac.models.code.conversion.ConversionCriterion;
-import eu.factorx.awac.models.code.type.ActivitySourceCode;
-import eu.factorx.awac.models.code.type.ActivityTypeCode;
-import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
-import eu.factorx.awac.models.knowledge.Factor;
-import eu.factorx.awac.service.impl.FactorSearchParameter;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.security.CodeSource;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.conversion.ConversionCriterion;
+import eu.factorx.awac.models.code.type.ActivitySourceCode;
 
 
 @ContextConfiguration(locations = { "classpath:/components-test.xml" })

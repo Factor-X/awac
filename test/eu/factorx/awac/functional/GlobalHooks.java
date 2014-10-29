@@ -1,20 +1,21 @@
 package eu.factorx.awac.functional;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
+import static play.test.Helpers.start;
+
+import javax.persistence.EntityManager;
+
+import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.JPAPlugin;
 import play.test.FakeApplication;
 import play.test.TestBrowser;
 import play.test.TestServer;
 import scala.Option;
-import play.Logger;
 
-import javax.persistence.EntityManager;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
-import static play.test.Helpers.*;
+import cucumber.api.java.Before;
 
 public class GlobalHooks {
 

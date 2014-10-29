@@ -11,30 +11,33 @@
 
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import play.Configuration;
-import play.Logger;
-import play.libs.Json;
-import play.mvc.Result;
-import play.test.FakeRequest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.status;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import play.Configuration;
+import play.Logger;
+import play.libs.Json;
+import play.mvc.Result;
+import play.test.FakeRequest;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 //import play.api.mvc.AnyContent;
 //import com.avaje.ebean.Ebean;

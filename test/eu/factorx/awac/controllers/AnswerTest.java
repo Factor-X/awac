@@ -11,30 +11,33 @@
 
 package eu.factorx.awac.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
-import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
-import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
-import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.AbstractBaseModelTest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static play.test.Helpers.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static play.test.Helpers.*;
+import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
+import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
+import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
+import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.AbstractBaseModelTest;
 
 //import play.api.mvc.AnyContent;
 //import com.avaje.ebean.Ebean;

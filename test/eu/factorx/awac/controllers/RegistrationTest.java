@@ -6,9 +6,6 @@ import static play.test.Helpers.status;
 
 import java.util.List;
 
-import eu.factorx.awac.dto.awac.post.RegistrationDTO;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
-import eu.factorx.awac.service.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,10 +23,13 @@ import play.test.FakeRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
+import eu.factorx.awac.dto.awac.post.RegistrationDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.service.*;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -11,9 +11,6 @@
  
 package eu.factorx.awac.views.pages;
 
-import static org.fest.assertions.fluentlenium.FluentLeniumAssertions.assertThat;
-import static org.fluentlenium.core.filter.FilterConstructor.withText;
-
 import org.fluentlenium.core.FluentPage;
 //import components.*;
 

@@ -11,13 +11,8 @@
  
 package eu.factorx.awac.views.pages;
 
-import org.fluentlenium.core.*;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.fluentlenium.FluentLeniumAssertions.assertThat;
-import static org.fluentlenium.core.filter.FilterConstructor.*;
-
+import org.fluentlenium.core.FluentPage;
 //import components.*;
-import eu.factorx.awac.controllers.*;
 
 public class Administrators extends FluentPage {
 //    public String getUrl() {

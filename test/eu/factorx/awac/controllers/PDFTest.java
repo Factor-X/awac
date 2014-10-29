@@ -1,16 +1,18 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import static org.junit.Assert.assertEquals;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
+
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
+
 import play.mvc.Result;
 import play.test.FakeRequest;
-
-import static org.junit.Assert.*;
-import static play.test.Helpers.*;
+import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 //@RunWith(SpringJUnit4ClassRunner.class)

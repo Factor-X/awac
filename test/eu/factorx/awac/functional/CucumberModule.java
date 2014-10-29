@@ -1,11 +1,12 @@
 package eu.factorx.awac.functional;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
+import static play.test.Helpers.*;
 import play.test.Helpers;
 import play.test.TestBrowser;
 import play.test.TestServer;
-import static play.test.Helpers.*;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 
 public class CucumberModule extends AbstractModule {
 	private static int PORT = 9000;
