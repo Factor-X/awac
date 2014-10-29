@@ -19,8 +19,10 @@ import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+
 import play.Configuration;
 import play.Logger;
 import play.db.jpa.Transactional;
@@ -28,7 +30,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Transactional(readOnly = false)
@@ -133,6 +134,11 @@ public class InvitationController extends AbstractController {
         if (invitation == null) {
             throw new MyrmexRuntimeException(BusinessErrorType.INVITATION_NOT_VALID);
         }
+
+		// control email: if a person with same email already exist, throw exception
+		if (personService.getByEmail(dto.getPerson().getEmail()) != null) {
+			throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+		}
 
         // create person
         Person person = new Person(dto.getPerson().getLastName(), dto.getPerson().getFirstName(), dto.getPerson().getEmail());
