@@ -5,6 +5,7 @@ angular
 
     $scope.isLoading = {}
     $scope.isLoading['admin'] = {}
+    $scope.isLoading['isMainVerifier'] = {}
     $scope.isLoading['isActive'] = {}
 
     # load my organization
