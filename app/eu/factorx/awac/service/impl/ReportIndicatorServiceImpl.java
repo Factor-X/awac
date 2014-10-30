@@ -12,7 +12,7 @@ import eu.factorx.awac.service.ReportIndicatorService;
 public class ReportIndicatorServiceImpl extends AbstractJPAPersistenceServiceImpl<ReportIndicator> implements ReportIndicatorService {
 	@Override
 	public List<ReportIndicator> findAll() {
-		return (List<ReportIndicator>) JPA.em().createQuery("select e from ReportIndicator e order by e.orderIndex asc").getResultList();
+		return (List<ReportIndicator>) JPA.em().createQuery("select e from ReportIndicator e order by e.orderIndex asc", ReportIndicator.class).getResultList();
 	}
 
 	@Override

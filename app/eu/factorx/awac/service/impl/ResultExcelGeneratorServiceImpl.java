@@ -9,7 +9,11 @@ import java.util.Map;
 import jxl.Range;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
-import jxl.format.CellFormat;
+import jxl.format.*;
+import jxl.format.Alignment;
+import jxl.format.Border;
+import jxl.format.BorderLineStyle;
+import jxl.format.VerticalAlignment;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Number;
@@ -375,7 +379,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 				if (answerValue instanceof BooleanAnswerValue) {
 					BooleanAnswerValue value = (BooleanAnswerValue) answerValue;
 
-					Boolean tf = value.getValue();
+					java.lang.Boolean tf = value.getValue();
 
 					sheet.addCell(new jxl.write.Boolean(
 						cell.getX() + col,

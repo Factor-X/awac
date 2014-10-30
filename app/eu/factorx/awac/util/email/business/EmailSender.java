@@ -27,7 +27,7 @@ public class EmailSender implements ApplicationContextAware {
 	}
 	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
 		// Assign the ApplicationContext into a static method
-		this.ctx = ctx;
+		EmailSender.ctx = ctx;
 	}
 
     private static final String MAIL_SMTP_AUTH_KEY = "mail.smtp.auth";

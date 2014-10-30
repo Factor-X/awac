@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+@SuppressWarnings("rawtypes")
 public class ContributionFactoryBean implements ApplicationContextAware, InitializingBean, FactoryBean {
 
 	private Class<?> expectedType;
@@ -20,6 +21,7 @@ public class ContributionFactoryBean implements ApplicationContextAware, Initial
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void afterPropertiesSet() throws Exception {
 		contributions = new HashSet(this.applicationContext.getBeansOfType(expectedType, false, false).values());
 
