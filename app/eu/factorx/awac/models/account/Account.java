@@ -196,6 +196,7 @@ public class Account extends AuditedAbstractEntity {
 				", active=" + active +
 				", needChangePassword=" + needChangePassword +
 				", isAdmin=" + isAdmin +
+                ", isMainVerifier=" + isMainVerifier+
 				'}';
 	}
 }

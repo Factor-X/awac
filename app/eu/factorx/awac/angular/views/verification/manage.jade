@@ -12,7 +12,8 @@ div.verification_manage
                     td(data-title="'SITE_MANAGER_EVENT_PERIOD'| translateText", sortable="'period.label'")
                         | {{request.period.label}}
                     td(data-title="'CONTACT'| translateText", sortable="'contact.lastName'")
-                        | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}}
+                        | {{request.contact.firstName}} {{request.contact.lastName}} {{request.contactPhoneNumber}} <br />
+                        | ({{request.contact.email}})
                     td(data-title="'COMMENT'| translateText")
                         | {{request.comment}}
                     td(data-title="'STATUS'| translateText", sortable="'status'")

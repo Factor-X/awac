@@ -119,7 +119,7 @@ POST        /awac/user/profile/anonymous/save                                   
 POST        /awac/user/email/save                                                                  @eu.factorx.awac.controllers.UserProfileController.updateEmail()
 POST        /awac/user/password/save                                                               @eu.factorx.awac.controllers.UserProfileController.updatePassword()
 POST        /awac/user/isAdminAccount                                                              @eu.factorx.awac.controllers.UserProfileController.isAdminAccount()
-POST        /awac/user/isMainVerifier                                                              @eu.factorx.awac.controllers.UserProfileController.isMainVerifier()
+POST        /awac/user/setStatus                                                                   @eu.factorx.awac.controllers.UserProfileController.setStatus()
 POST        /awac/user/activeAccount                                                               @eu.factorx.awac.controllers.UserProfileController.activeAccount()
 
 #
