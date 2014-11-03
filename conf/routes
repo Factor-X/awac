@@ -184,3 +184,4 @@ GET         /awac/admin/driver/all                                              
 POST        /awac/admin/driver/update                                                              @eu.factorx.awac.controllers.DriverController.update()
 GET         /awac/admin/advice/load                                                                @eu.factorx.awac.controllers.ActionAdviceController.loadAdvices()
 
+GET         /awac/admin/factors/all                                                                @eu.factorx.awac.controllers.AdminController.allFactors()

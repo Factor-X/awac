@@ -4,50 +4,31 @@ import eu.factorx.awac.dto.DTO;
 
 public class FactorValueDTO extends DTO {
 
+    private Double value;
+    private String dateIn;
+    private String dateOut;
 
-    private String key;
-    private String description;
-    private String type;
-    private String origin;
-    private List<FactorValueDTO> factorValues;
-
-    public FactorValueDTO() {
-        factorValues = new ArrayList<FactorValueDTO>();
+    public void setValue(Double value) {
+        this.value = value;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public Double getValue() {
+        return value;
     }
 
-    public String getKey() {
-        return key;
+    public void setDateIn(String dateIn) {
+        this.dateIn = dateIn;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getDateIn() {
+        return dateIn;
     }
 
-    public String getDescription() {
-        return description;
+    public void setDateOut(String dateOut) {
+        this.dateOut = dateOut;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public List<FactorValueDTO> getFactorValues() {
-        return factorValues;
+    public String getDateOut() {
+        return dateOut;
     }
 }
