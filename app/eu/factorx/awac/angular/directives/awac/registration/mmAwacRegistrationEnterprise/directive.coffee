@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash,translationService) ->
+.directive "mmAwacRegistrationEnterprise", (directiveService,downloadService,messageFlash,translationService,modalService) ->
     restrict: "E"
     scope:{}
     templateUrl: "$/angular/templates/mm-awac-registration-enterprise.html"
@@ -67,12 +67,17 @@ angular
             validationRegex: "^.{1,255}$"
             validationMessage: "SITE_NAME_WRONG_LENGTH"
 
+        $scope.aggrement_validation = false
+
 
 
         $scope.registrationFieldValid = () ->
-            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid && $scope.firstSiteNameInfo.isValid
+            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.organizationNameInfo.isValid && $scope.firstSiteNameInfo.isValid && $scope.aggrement_validation==true
                 return true
             return false
+
+        $scope.displayAgreement = () ->
+            modalService.show(modalService.HELP, {template: 'agreement'})
 
         #send the request to the server
         $scope.registration = () ->

@@ -1,0 +1,15 @@
+// Modal
+.modal-fullscreen.modal-help
+    .modal-fullscreen-header
+        button.button(type="button",ng-click="close()")
+            span(aria-hidden="true") &times;
+            span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
+
+    .modal-fullscreen-body
+        iframe(style="width:100%;height:100%",ng-src="{{trustSrc('http://www.w3schools.com')}}")
+
+    .modal-fullscreen-footer
+
+
+
+

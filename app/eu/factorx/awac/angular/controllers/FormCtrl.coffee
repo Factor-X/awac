@@ -55,6 +55,11 @@ angular
         #
         downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
 
+            # save last form loaded
+            $scope.$root.lastPeriodSelectedKey = $scope.$root.periodSelectedKey
+            $scope.$root.lastScopeSelectedId = $scope.$root.scopeSelectedId
+            $scope.$root.lastFormIdentifier = $scope.formIdentifier
+
             if not result.success
                 if !!result.data.messageToTranslate
                     $scope.errorMessage = $filter('translateText')(result.data.messageToTranslate)
@@ -741,8 +746,9 @@ angular
                     # if one of this answer are a value == null, the tab is not finish => break
                     if answer.value == null
                         isFinish = false
+
             if isFinish == true && atLeastOneQuestion == false
-                isFinish == false
+                isFinish = false
 
             #return css
             if isFinish == true

@@ -32,8 +32,13 @@ div
                     img(src='/assets/images/modal-loading.gif',
                         ng-show="isLoading['admin'][user.email] === true")
 
-                td(ng-class="{is_admin : getMyself().isAdmin === true && getMyself().email !== user.email}")
-                    .button_delete(ng-click="activeUser(user)",
-                                    ng-hide="isLoading['isActive'][user.email]=== true")
+                td
+                    input(
+                        ng-hide="isLoading['isActive'][user.email]=== true",
+                        type="checkbox",
+                        ng-model="user.isActive",
+                        ng-click="activeUser(user)",
+                        ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email")
+
                     img(src='/assets/images/modal-loading.gif',
                         ng-show="isLoading['isActive'][user.email] === true")

@@ -59,7 +59,6 @@ angular
 
                     downloadService.postJson "/awac/user/activeAccount", data, (result) ->
                         if result.success
-                            user.isActive = !user.isActive
                             $scope.isLoading['isActive'][user.email] = false
                         else
                             $scope.isLoading['isActive'][user.email] = false
