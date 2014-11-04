@@ -65,4 +65,27 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		this.percent = percent;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+
+		ReducingActionAdviceBaseIndicatorAssociation that = (ReducingActionAdviceBaseIndicatorAssociation) o;
+
+		if (!actionAdvice.equals(that.actionAdvice)) return false;
+		if (!baseIndicator.equals(that.baseIndicator)) return false;
+		if (!percent.equals(that.percent)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + actionAdvice.hashCode();
+		result = 31 * result + baseIndicator.hashCode();
+		result = 31 * result + percent.hashCode();
+		return result;
+	}
 }

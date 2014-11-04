@@ -40,6 +40,7 @@
                 <bean class="eu.factorx.awac.converter.DriverToDriverDTOConverter" />
                 <bean class="eu.factorx.awac.converter.DriverValueDriverValueDTOConverter" />
                 <bean class="eu.factorx.awac.converter.BaseIndicatorToBaseIndicatorDTOConverter" />
+                <bean class="eu.factorx.awac.converter.ReducingActionAdviceToReducingActionAdviceDTO" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
             </set>

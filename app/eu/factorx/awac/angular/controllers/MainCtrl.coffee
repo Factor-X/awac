@@ -278,6 +278,11 @@ angular
         $scope.$root.nav(target)
 
 
+    if (typeof String::startsWith != 'function')
+        String::startsWith = (str) ->
+            return this.slice(0, str.length) == str
+
+
 #rootScope
 angular.module('app').run ($rootScope, $location, downloadService, messageFlash, $timeout, translationService, tmhDynamicLocale, $routeParams, $route, modalService)->
     $rootScope.languages = []

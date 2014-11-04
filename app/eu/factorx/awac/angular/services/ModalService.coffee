@@ -29,6 +29,7 @@ angular
     @VERIFICATION_FINALIZATION_VISUALIZATION='verification-finalization-visualization'
     @DRIVER_ADD_VALUE = 'driver-add-value'
     @CONFIRM_DIALOG = 'confirm-dialog'
+    @CREATE_OR_EDIT_REDUCTION_ACTION_ADVICE = 'create-or-edit-reduction-action-advice'
 
     @show = (modalName, params) ->
         args = []
