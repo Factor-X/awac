@@ -1,7 +1,9 @@
 package eu.factorx.awac.models.forms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -61,7 +63,7 @@ public class VerificationRequest extends AuditedAbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             uniqueConstraints = {@UniqueConstraint(columnNames={"verifier_id", "account_id"}),
             })
-    private List<Account> verifierList;
+    private Set<Account> verifierList;
 
     @ManyToOne
     private StoredFile verificationResultDocument;
@@ -136,17 +138,17 @@ public class VerificationRequest extends AuditedAbstractEntity {
         this.emailVerificationContent = EmailVerificationContent;
     }
 
-    public List<Account> getVerifierList() {
+    public Set<Account> getVerifierList() {
         return verifierList;
     }
 
-    public void setVerifierList(List<Account> verifierList) {
+    public void setVerifierList(Set<Account> verifierList) {
         this.verifierList = verifierList;
     }
 
     public void addVerifier(Account verifier){
         if(this.verifierList==null){
-            this.verifierList = new ArrayList<>();
+            this.verifierList = new HashSet<>();
         }
         this.verifierList.add(verifier);
     }

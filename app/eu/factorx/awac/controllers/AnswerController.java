@@ -422,6 +422,9 @@ public class AnswerController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
 
+        if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+            return getPeriodsForComparisonByOrganization(scopeId);
+        }
         Scope scope = scopeService.findById(scopeId);
 
         List<PeriodDTO> periodDTOs = new ArrayList<>();
@@ -448,27 +451,25 @@ public class AnswerController extends AbstractController {
         return ok(new ListPeriodsDTO(periodDTOs));
     }
 
-    @Transactional(readOnly = true)
-    @Security.Authenticated(SecuredController.class)
-    public Result getPeriodsForComparisonByOrganization(long scopeId, String organizationCustomerName) {
+    private Result getPeriodsForComparisonByOrganization(long scopeId) {
+
+        //load scope
+        Scope scope = scopeService.findById(scopeId);
 
         //load organization customer
-        Organization organizationCustomer = organizationService.findByName(organizationCustomerName);
+        Organization organizationCustomer = scope.getOrganization();
 
         //control organization
         if (verificationRequestService.findByOrganizationCustomerAndOrganizationVerifier(organizationCustomer, securedController.getCurrentUser().getOrganization()).size() == 0) {
             new MyrmexRuntimeException((BusinessErrorType.WRONG_RIGHT));
         }
 
-        //load scope
-        Scope scope = scopeService.findById(scopeId);
-
         List<PeriodDTO> periodDTOs = new ArrayList<>();
         List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
         for (Period period : periods) {
 
             //for calculator : restriction by site
-            if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
+            if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
                 //restrict by period by site
                 for (Period periodToTest : ((Site) scope).getListPeriodAvailable()) {
                     if (periodToTest.equals(period)) {
@@ -476,10 +477,10 @@ public class AnswerController extends AbstractController {
                         break;
                     }
                 }
-            } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
+            } else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
             }
-            else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+            else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
                 //TODO
             }
         }
@@ -696,6 +697,15 @@ public class AnswerController extends AbstractController {
             }
         }
         return codeLists;
+    }
+
+    protected CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
+        List<CodeLabel> codeLabels = new ArrayList<CodeLabel>(codeLabelService.findCodeLabelsByList(codeList).values());
+        List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+        for (CodeLabel codeLabel : codeLabels) {
+            codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
+        }
+        return new CodeListDTO(codeList.name(), codeLabelDTOs);
     }
 
     private Map<Long, UnitCategoryDTO> getAllUnitCategories() {

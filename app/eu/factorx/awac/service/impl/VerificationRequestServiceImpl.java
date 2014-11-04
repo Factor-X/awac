@@ -116,6 +116,7 @@ public class VerificationRequestServiceImpl extends AbstractJPAPersistenceServic
 
 	@Override
 	public boolean hasVerificationAccessToScope(Account user, Scope scope) {
+
 		Organization userOrganization = user.getOrganization();
 		// check if user is a verifier
 		if (!InterfaceTypeCode.VERIFICATION.equals(userOrganization.getInterfaceCode())) {

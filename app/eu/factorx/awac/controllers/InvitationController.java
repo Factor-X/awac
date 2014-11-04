@@ -46,16 +46,7 @@ public class InvitationController extends AbstractController {
     private PersonService personService;
 
     @Autowired
-    private ConversionService conversionService;
-
-    @Autowired
     private VelocityGeneratorService velocityGeneratorService;
-
-    @Autowired
-    private AccountSiteAssociationService accountSiteAssociationService;
-
-    @Autowired
-    private OrganizationService organizationService;
 
     @Autowired
     private CodeLabelService codeLabelService;
@@ -68,19 +59,18 @@ public class InvitationController extends AbstractController {
 
         // get InvitationDTO from request
         EmailInvitationDTO dto = extractDTOFromRequest(EmailInvitationDTO.class);
+
+        //cannot invit new account for admin
+        if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)){
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_INTERFACE_FOR_USER);
+        }
+
         //Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
         Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
 
 
         Logger.info("lauchInvitation->interfaceTypeCode:" + securedController.getCurrentUser().getOrganization().getInterfaceCode());
-        String awacInterfaceTypeFragment = null;
-        if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
-        } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
-        } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
-        }
+        String awacInterfaceTypeFragment = Configuration.root().getString("awac."+securedController.getCurrentUser().getOrganization().getInterfaceCode().getKey()+"fragment");
 
         // compute key
         String key = KeyGenerator.generateRandomKey(dto.getInvitationEmail().length());
@@ -144,15 +134,6 @@ public class InvitationController extends AbstractController {
         Account account = new Account(invitation.getOrganization(), person, dto.getPerson().getIdentifier(), dto.getPassword());
         account = accountService.saveOrUpdate(account);
 
-        // ONLY FOR municipality : assign the new user of the site
-        //if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
-//		if (invitation.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.MUNICIPALITY)) {
-//            for (Site site : invitation.getOrganization().getSites()) {
-//                AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site, account);
-//                accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
-//            }
-//        }
-
         // delete invitation
         invitationService.remove(invitation);
 
@@ -161,15 +142,8 @@ public class InvitationController extends AbstractController {
         String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
 
         Logger.info("registerInvitation->interfaceTypeCode:" + invitation.getOrganization().getInterfaceCode());
-        String awacInterfaceTypeFragment = null;
-        if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.ENTERPRISE.getKey())) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
-        } else if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
 
-        } else if (invitation.getOrganization().getInterfaceCode().getKey().equals(InterfaceTypeCode.VERIFICATION.getKey())) {
-            awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
-        }
+        String awacInterfaceTypeFragment = Configuration.root().getString("awac."+invitation.getOrganization().getInterfaceCode().getKey()+"fragment");
 
         // prepare email
         Map values = new HashMap<String, Object>();

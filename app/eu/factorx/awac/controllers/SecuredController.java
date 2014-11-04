@@ -13,7 +13,9 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.SystemAdministrator;
+import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -22,6 +24,7 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.models.knowledge.Period;
+import eu.factorx.awac.service.AccountProductAssociationService;
 import eu.factorx.awac.service.AccountService;
 import eu.factorx.awac.service.AccountSiteAssociationService;
 import eu.factorx.awac.service.VerificationRequestService;
@@ -48,7 +51,8 @@ public class SecuredController extends Security.Authenticator {
     private AccountService accountService;
     @Autowired
     private AccountSiteAssociationService accountSiteAssociationService;
-
+    @Autowired
+    private AccountProductAssociationService accountProductAssociationService;
     @Override
     public String getUsername(Context ctx) {
         return ctx.session().get(SESSION_IDENTIFIER_STORE);
@@ -109,7 +113,7 @@ public class SecuredController extends Security.Authenticator {
     public void controlDataAccess(Period period, Scope scope) {
 
         if (period == null || scope == null) {
-            throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD, scope.getName(), period.getLabel());
+            throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD);
         }
 
         //control my scope
@@ -117,7 +121,7 @@ public class SecuredController extends Security.Authenticator {
             controlMyInstance(scope, period);
         } catch (Exception e) {
             if (!verificationRequestService.hasVerificationAccessToScope(getCurrentUser(), scope)) {
-                throw e;
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_AUTHORIZATION_SCOPE_PERIOD, scope.getName(), period.getLabel());
             }
         }
     }
@@ -130,8 +134,8 @@ public class SecuredController extends Security.Authenticator {
 
         }
 
-        //for organization, test association between user and site, and site and period
-        if (getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+        //for sites, test association between user and site, and site and period
+        if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
             boolean founded = false;
             for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(this.getCurrentUser())) {
                 if (accountSiteAssociation.getSite().getId().equals(scope.getId())) {
@@ -146,6 +150,30 @@ public class SecuredController extends Security.Authenticator {
             //test period
             boolean foundedPeriod = false;
             for (Period periodToFind : ((Site) scope).getListPeriodAvailable()) {
+                if (periodToFind.equals(period)) {
+                    foundedPeriod = true;
+                }
+            }
+            if (!foundedPeriod) {
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_PERIOD, period.getLabel());
+            }
+        }
+        //for product, test association between user and site, and site and period
+        else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+            boolean founded = false;
+            for (AccountProductAssociation accountProductAssociation : accountProductAssociationService.findByAccount(this.getCurrentUser())) {
+                if (accountProductAssociation.getProduct().getId().equals(scope.getId())) {
+                    founded = true;
+                    break;
+                }
+            }
+            if (!founded) {
+                throw new MyrmexRuntimeException(BusinessErrorType.NOT_YOUR_SCOPE, scope.getName());
+            }
+
+            //test period
+            boolean foundedPeriod = false;
+            for (Period periodToFind : ((Product) scope).getListPeriodAvailable()) {
                 if (periodToFind.equals(period)) {
                     foundedPeriod = true;
                 }
@@ -171,13 +199,13 @@ public class SecuredController extends Security.Authenticator {
 
     public List<Scope> getAuthorizedScopes(Account account, Period period) {
         List<Scope> res = new ArrayList<>();
-        // add authorized sites
+
         if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
+            // add authorized sites
             for (AccountSiteAssociation accountSiteAssociation : accountSiteAssociationService.findByAccount(account)) {
                 if (accountSiteAssociation.getSite().getListPeriodAvailable().contains(period)) {
                     res.add(accountSiteAssociation.getSite());
                 }
-
             }
         }
         else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
@@ -185,7 +213,12 @@ public class SecuredController extends Security.Authenticator {
             res.add(account.getOrganization());
         }
         else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
-            //TODO ???
+            // add authorized product
+            for (AccountProductAssociation accountProductAssociation : accountProductAssociationService.findByAccount(account)) {
+                if (accountProductAssociation.getProduct().getListPeriodAvailable().contains(period)) {
+                    res.add(accountProductAssociation.getProduct());
+                }
+            }
         }
         return res;
     }
