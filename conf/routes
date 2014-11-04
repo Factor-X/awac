@@ -178,9 +178,10 @@ POST        /awac/actions/delete                                                
 GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
 
 #
-#
+# Admin interfaces
 #
 GET         /awac/admin/driver/all                                                                 @eu.factorx.awac.controllers.DriverController.getAll()
 POST        /awac/admin/driver/update                                                              @eu.factorx.awac.controllers.DriverController.update()
-GET         /awac/admin/advice/load                                                                @eu.factorx.awac.controllers.ActionAdviceController.loadAdvices()
-
+GET         /awac/admin/advices/load                                                               @eu.factorx.awac.controllers.ReducingActionAdviceController.loadAdvices()
+POST        /awac/admin/advices/save                                                               @eu.factorx.awac.controllers.ReducingActionAdviceController.saveOrUpdateAdvice()
+POST        /awac/admin/advices/delete                                                             @eu.factorx.awac.controllers.ReducingActionAdviceController.deleteAdvice()

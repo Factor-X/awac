@@ -74,7 +74,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 		reportService.removeAll();
 		indicatorService.removeAll();
 		baseIndicatorService.removeAll();
-		codeLabelService.removeCodeLabelsByList(CodeList.INDICATOR);
+		codeLabelService.removeCodeLabelsByList(CodeList.INDICATOR, CodeList.BASE_INDICATOR);
 
 		// sheets
 		this.sheets = getWorkbookSheets(AWAC_DATA_WORKBOOK_PATH);
@@ -113,11 +113,12 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 	private void importData(InterfaceTypeCode interfaceTypeCode, String baseIndicatorsReference, String indicatorsReference, String baseIndicatorIndicatorsReference,
 			String reportsReference, String indicatorReportsReference) {
+		List<CodeLabel> codeLabelsToAdd = new ArrayList<>();
+
 		// 1. Establish a list of all new BaseIndicators
-		List<BaseIndicator> baseIndicators = loadBaseIndicators(baseIndicatorsReference);
+		List<BaseIndicator> baseIndicators = loadBaseIndicators(baseIndicatorsReference, codeLabelsToAdd);
 
 		// 2. Establish a list of all new Indicators
-		List<CodeLabel> codeLabelsToAdd = new ArrayList<>();
 		List<Indicator> indicators = loadIndicators(indicatorsReference, codeLabelsToAdd);
 
 		// 3. Establish a list of all new links between BaseIndicators and Indicators
@@ -182,7 +183,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 	//
 	// Steps
 	//
-	private List<BaseIndicator> loadBaseIndicators(String reference) {
+	private List<BaseIndicator> loadBaseIndicators(String reference, List<CodeLabel> codeLabelsToAdd) {
 		Sheet sheet = getSheet(reference);
 		Cell first = getReferenceCell(reference);
 		int firstColumn = first.getColumn();
@@ -191,6 +192,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 		// indices
 		int KEY_INDEX = 1;
+		int NAME_INDEX = 2;
 		int INDICATORSCOPE_INDEX = 4;
 		int INDICATORCATEGORY_KEY_INDEX = 5;
 		int ACTIVITYCATEGORY_KEY_INDEX = 8;
@@ -207,6 +209,8 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			if (StringUtils.isBlank(key)) {
 				break;
 			}
+
+			String name = getCellContent(sheet, firstColumn + NAME_INDEX, firstRow + i);
 
 			String indicatorScope = getCellContent(sheet, firstColumn + INDICATORSCOPE_INDEX, firstRow + i);
 
@@ -246,6 +250,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 					new ActivitySubCategoryCode(activitySubCategoryKey), activityOwnershipBoolean, unit, deleted);
 
 			baseIndicators.add(baseIndicator);
+			codeLabelsToAdd.add(new CodeLabel(CodeList.BASE_INDICATOR, key, name, name, name));
 		}
 
 		return baseIndicators;

@@ -698,15 +698,6 @@ public class AnswerController extends AbstractController {
         return codeLists;
     }
 
-    private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-        List<CodeLabel> codeLabels = new ArrayList<CodeLabel>(codeLabelService.findCodeLabelsByList(codeList).values());
-        List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
-        for (CodeLabel codeLabel : codeLabels) {
-            codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
-        }
-        return new CodeListDTO(codeList.name(), codeLabelDTOs);
-    }
-
     private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
         Map<Long, UnitCategoryDTO> res = new HashMap<>();
         for (UnitCategory unitCategory : unitCategoryService.findAll()) {

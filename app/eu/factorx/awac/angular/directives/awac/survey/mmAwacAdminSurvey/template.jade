@@ -52,6 +52,12 @@ div
                 ng-click='isDisabled || $root.nav(\'/driver\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/driver\') == true}',
                 ng-bind-html='\'ADMIN_SURVEY_DRIVER\' | translate')
+            div.verification-menu
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/advice\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/advice\') == true}',
+                ng-bind-html='\'REDUCING_ACTION_ADVICES_MENU\' | translate')
 
 
 
