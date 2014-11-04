@@ -251,6 +251,10 @@ public class VerificationController extends AbstractController {
 
         // send email for invitation
         EmailMessage email = new EmailMessage(dto.getEmail(), title, velocityContent);
+        //send email to admin
+        if(organizationVerification!=null){
+            email.addEmails(getAdmins(organizationVerification));
+        }
         emailService.send(email);
 
         return ok();

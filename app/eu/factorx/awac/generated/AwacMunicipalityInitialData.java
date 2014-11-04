@@ -1,27 +1,30 @@
 package eu.factorx.awac.generated;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
-import play.db.jpa.JPA;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
-import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.data.importer.*;
+import play.db.jpa.JPA;
+
+import java.util.*;
 
 @Component
 public class AwacMunicipalityInitialData {
@@ -237,28 +240,28 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac10);
     }
     // == AC24
-    // Consommation de combustible (chauffage de bâtiments et machines statiques p.e. groupe éléctrogène), mesurés soit en énergie, en volume ou en poids
+    // Consommation de combustibles mesurés soit en énergie, en volume ou en poids
     QuestionSet ac24 = questionSetService.findByCode(QuestionCode.AC24);
     if( ac24 == null ) {
         ac24 = new QuestionSet(QuestionCode.AC24, false, ac10);
         JPA.em().persist(ac24);
     }
     // == AC25
-    // Indiquez ici vos différentes consommations de combustibles exprimés en énergie pour l'ensemble du  bâtiment ou groupe de bâtiments (chauffage et machines statiques)
+    // Indiquez ici vos différentes consommations de combustibles exprimés en énergie pour l'ensemble du  bâtiment ou groupe de bâtiments
     QuestionSet ac25 = questionSetService.findByCode(QuestionCode.AC25);
     if( ac25 == null ) {
         ac25 = new QuestionSet(QuestionCode.AC25, true, ac24);
         JPA.em().persist(ac25);
     }
     // == AC900
-    // Indiquez ici vos différentes consommations de combustibles exprimés en volume pour l'ensemble du  bâtiment ou groupe de bâtiments (chauffage et machines statiques)
+    // Indiquez ici vos différentes consommations de combustibles exprimés en volume pour l'ensemble du  bâtiment ou groupe de bâtiments
     QuestionSet ac900 = questionSetService.findByCode(QuestionCode.AC900);
     if( ac900 == null ) {
         ac900 = new QuestionSet(QuestionCode.AC900, true, ac24);
         JPA.em().persist(ac900);
     }
     // == AC903
-    // Indiquez ici vos différentes consommations de combustibles exprimés en poids pour l'ensemble du  bâtiment ou groupe de bâtiments (chauffage et machines statiques)
+    // Indiquez ici vos différentes consommations de combustibles exprimés en poids pour l'ensemble du  bâtiment ou groupe de bâtiments
     QuestionSet ac903 = questionSetService.findByCode(QuestionCode.AC903);
     if( ac903 == null ) {
         ac903 = new QuestionSet(QuestionCode.AC903, true, ac24);
@@ -293,7 +296,7 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac33);
     }
     // == AC37
-    // Utilisation d'un système de refroidissement
+    // Système de refroidissement
     QuestionSet ac37 = questionSetService.findByCode(QuestionCode.AC37);
     if( ac37 == null ) {
         ac37 = new QuestionSet(QuestionCode.AC37, false, ac10);
@@ -381,14 +384,14 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac401);
     }
     // == AC402
-    // Calcul par les consommations
+    // Méthode basée sur les consommations 
     QuestionSet ac402 = questionSetService.findByCode(QuestionCode.AC402);
     if( ac402 == null ) {
         ac402 = new QuestionSet(QuestionCode.AC402, false, ac2001);
         JPA.em().persist(ac402);
     }
     // == AC406
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet ac406 = questionSetService.findByCode(QuestionCode.AC406);
     if( ac406 == null ) {
         ac406 = new QuestionSet(QuestionCode.AC406, false, ac2001);
@@ -402,7 +405,7 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac407);
     }
     // == AC412
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet ac412 = questionSetService.findByCode(QuestionCode.AC412);
     if( ac412 == null ) {
         ac412 = new QuestionSet(QuestionCode.AC412, false, ac2001);
@@ -430,14 +433,14 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac501);
     }
     // == AC502
-    // Calcul par les consommations
+    // Méthode basée sur les consommations
     QuestionSet ac502 = questionSetService.findByCode(QuestionCode.AC502);
     if( ac502 == null ) {
         ac502 = new QuestionSet(QuestionCode.AC502, false, ac501);
         JPA.em().persist(ac502);
     }
     // == AC506
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet ac506 = questionSetService.findByCode(QuestionCode.AC506);
     if( ac506 == null ) {
         ac506 = new QuestionSet(QuestionCode.AC506, false, ac501);
@@ -451,7 +454,7 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac507);
     }
     // == AC512
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet ac512 = questionSetService.findByCode(QuestionCode.AC512);
     if( ac512 == null ) {
         ac512 = new QuestionSet(QuestionCode.AC512, false, ac501);
@@ -479,14 +482,14 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac601);
     }
     // == AC602
-    // Calcul par les consommations
+    // Méthode basée sur les consommations
     QuestionSet ac602 = questionSetService.findByCode(QuestionCode.AC602);
     if( ac602 == null ) {
         ac602 = new QuestionSet(QuestionCode.AC602, false, ac601);
         JPA.em().persist(ac602);
     }
     // == AC606
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet ac606 = questionSetService.findByCode(QuestionCode.AC606);
     if( ac606 == null ) {
         ac606 = new QuestionSet(QuestionCode.AC606, false, ac601);
@@ -500,7 +503,7 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac607);
     }
     // == AC612
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet ac612 = questionSetService.findByCode(QuestionCode.AC612);
     if( ac612 == null ) {
         ac612 = new QuestionSet(QuestionCode.AC612, false, ac601);
@@ -565,7 +568,7 @@ public class AwacMunicipalityInitialData {
         JPA.em().persist(ac116);
     }
     // == AC130
-    // Infrastructures (achetées durant l'année de déclaration)
+    // Biens d'équipement (achetés durant l'année de bilan)
     QuestionSet ac130 = questionSetService.findByCode(QuestionCode.AC130);
     if( ac130 == null ) {
         ac130 = new QuestionSet(QuestionCode.AC130, false, null);
@@ -574,7 +577,7 @@ public class AwacMunicipalityInitialData {
     form5.getQuestionSets().add(ac130);
     JPA.em().persist(form5);
     // == AC132
-    // Veuillez indiquer ici les différentes infrastructures achetées.
+    // Veuillez indiquer ici les différents équipements achetés
     QuestionSet ac132 = questionSetService.findByCode(QuestionCode.AC132);
     if( ac132 == null ) {
         ac132 = new QuestionSet(QuestionCode.AC132, true, ac130);
@@ -1339,7 +1342,7 @@ if (ac40 == null) {
 
 
     // == AC41
-    // Quantité de recharge nécessaire (pour l'année d'utilisation rapportée)
+    // Quantité de recharge nécessaire (pour l'année de bilan)
 
     
 DoubleQuestion ac41 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC41);
@@ -1386,7 +1389,7 @@ if (ac43 == null) {
 
 
     // == AC5001
-    // Catégorie de déchet
+    // Type de déchet
 
     ValueSelectionQuestion ac5001 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AC5001);
 if (ac5001 == null) {
@@ -1455,7 +1458,7 @@ if (ac53 == null) {
 
 
     // == AC54
-    // Eclairage public: consommation d'électricité verte
+    // Consommation d'électricité verte
 
     
 DoubleQuestion ac54 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC54);
@@ -1481,7 +1484,7 @@ if (ac54 == null) {
 
 
     // == AC55
-    // Eclairage public: consommation d'électricité grise
+    // Consommation d'électricité grise
 
     
 DoubleQuestion ac55 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC55);
@@ -2700,7 +2703,7 @@ if (ac110 == null) {
 
 
     // == AC111
-    // Nombre de vols/an
+    // Nombre total de passagers pour cette catégorie de vols
 
     IntegerQuestion ac111 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC111);
 if (ac111 == null) {
@@ -2722,7 +2725,7 @@ if (ac111 == null) {
 
 
     // == AC112
-    // Distance moyenne A/R (km)
+    // Distance totale (aller-retour)
 
     
 DoubleQuestion ac112 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC112);
@@ -3105,7 +3108,7 @@ if (ac131 == null) {
 
 
     // == AC133
-    // Type d'infrastructure
+    // Type d'équipement
 
     ValueSelectionQuestion ac133 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AC133);
 if (ac133 == null) {

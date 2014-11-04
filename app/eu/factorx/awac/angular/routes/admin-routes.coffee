@@ -17,7 +17,16 @@ initializeAdminRoutes = (defaultResolve) ->
         .when('/driver', {
                 templateUrl: '$/angular/views/admin/driver.html'
                 controller: 'AdminDriverManageCtrl'
-                resolve:angular.extend({
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/factors', {
+                templateUrl: '$/angular/views/admin/factors.html'
+                controller: 'AdminFactorsManagerCtrl'
+                resolve: angular.extend({
                     displayLittleFormMenu: () ->
                         return true
                 }, defaultResolve)
@@ -25,7 +34,7 @@ initializeAdminRoutes = (defaultResolve) ->
         )
         .when('/advice', {
                 templateUrl: '$/angular/views/admin/manage_advices.html'
-                controller: 'ActionAdvicesManagerCtrl'
+                controller: 'AdminActionAdviceCtrl'
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
