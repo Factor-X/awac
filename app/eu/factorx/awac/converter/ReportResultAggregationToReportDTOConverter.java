@@ -10,7 +10,9 @@ import eu.factorx.awac.service.ReportIndicatorService;
 import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Colors;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReportResultAggregationToReportDTOConverter implements Converter<ReportResultAggregation, ReportDTO> {
 
 	@Autowired

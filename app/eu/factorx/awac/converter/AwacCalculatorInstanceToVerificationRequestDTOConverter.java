@@ -1,5 +1,8 @@
 package eu.factorx.awac.converter;
 
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
@@ -8,10 +11,12 @@ import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.forms.AwacCalculatorInstance;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by florian on 9/10/14.
  */
+@Component
 class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Converter<AwacCalculatorInstance, VerificationRequestDTO> {
 
     @Autowired
@@ -22,6 +27,9 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
     private SiteToSiteDTOConverter siteToSiteDTOConverter;
     @Autowired
     private AccountToPersonDTOConverter accountToPersonDTOConverter;
+    @Autowired
+    private ProductToProductDTOConverter productToProductDTOConverter;
+
 
     @Override
     public VerificationRequestDTO convert(AwacCalculatorInstance awacCalculatorInstance) {
@@ -39,9 +47,14 @@ class AwacCalculatorInstanceToVerificationRequestDTOConverter implements Convert
         }
 
         //scope
-        if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
-
+        if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
             dto.setScope(siteToSiteDTOConverter.convert(((Site) awacCalculatorInstance.getScope())));
+        }
+        else if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
+            dto.setScope(organizationToOrganizationDTOConverter.convert(((Organization)awacCalculatorInstance.getScope())));
+        }
+        else if (awacCalculatorInstance.getScope().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+            dto.setScope(productToProductDTOConverter.convert(((Product) awacCalculatorInstance.getScope())));
         }
 
         //period

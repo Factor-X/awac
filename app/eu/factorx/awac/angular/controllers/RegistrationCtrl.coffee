@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "RegistrationCtrl", ($scope, downloadService, messageFlash, $compile, $timeout, modalService, translationService, $routeParams) ->
+.controller "RegistrationCtrl", ($scope, downloadService, messageFlash, $compile, $timeout, translationService, $routeParams) ->
 
 
     #logout the lasted user

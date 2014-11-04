@@ -16,6 +16,7 @@
         <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
+        <class>eu.factorx.awac.models.association.AccountProductAssociation</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.OrganizationEvent</class>
         <class>eu.factorx.awac.models.business.Product</class>
@@ -156,6 +157,7 @@
         <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
+        <class>eu.factorx.awac.models.association.AccountProductAssociation</class>
         <class>eu.factorx.awac.models.business.Organization</class>
         <class>eu.factorx.awac.models.business.OrganizationEvent</class>
         <class>eu.factorx.awac.models.business.Product</class>

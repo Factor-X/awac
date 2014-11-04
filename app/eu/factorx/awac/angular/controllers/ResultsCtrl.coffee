@@ -33,6 +33,8 @@ angular
         if not result.success
             messageFlash.displayError result.data.message
         else
+            console.log 'verif request : '
+            console.log result.data.list
             $scope.verificationRequests = result.data.list
 
 
