@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ActionAdvicesManagerCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminAdvicesManagerCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
     $scope.actionAdvices = []

@@ -8,10 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import eu.factorx.awac.models.AbstractEntity;
 
 @Entity
-@Table(name = "mm_reducingactionadvice_baseindicator", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { ReducingActionAdviceBaseIndicatorAssociation.ACTION_ADVICE_COLUMN,
-				ReducingActionAdviceBaseIndicatorAssociation.BASE_INDICATOR_COLUMN })
-})
+@Table(name = "mm_reducingactionadvice_baseindicator")
 public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity {
 
 	public static final String ACTION_ADVICE_COLUMN = "actionadvice_id";

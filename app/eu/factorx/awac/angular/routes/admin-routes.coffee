@@ -34,7 +34,7 @@ initializeAdminRoutes = (defaultResolve) ->
         )
         .when('/advice', {
                 templateUrl: '$/angular/views/admin/manage_advices.html'
-                controller: 'AdminActionAdviceCtrl'
+                controller: 'AdminAdvicesManagerCtrl'
                 resolve:angular.extend({
                     displayLittleFormMenu: () ->
                         return true
