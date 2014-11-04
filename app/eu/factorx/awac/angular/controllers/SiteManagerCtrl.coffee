@@ -29,14 +29,7 @@ angular
 
 
             $scope.toForm = ->
-                if $scope.$root.mySites.length > 0
-                    $scope.$root.scopeSelectedId =  $scope.$root.mySites[0].id
-                    $scope.$root.periodSelectedKey = $scope.$root.mySites[0].listPeriodAvailable[0].key
-                    $scope.$root.navToLastFormUsed()
-                else
-                    $scope.$root.scopeSelectedId = undefined
-                    $scope.$root.periodSelectedKey = undefined
-                    $scope.$root.nav('/noScope')
+                $scope.$root.navToLastFormUsed()
 
 
             $scope.getSiteList = () ->

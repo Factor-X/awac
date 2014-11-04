@@ -47,6 +47,7 @@ angular
 
         if request?
             $scope.requestSelected = request
+            $scope.$root.mySites = [request.scope]
         $scope.selectedRequest = $scope.requestSelected
         $scope.$root.periodSelectedKey = $scope.requestSelected.period.key
         $scope.$root.scopeSelectedId = $scope.requestSelected.scope.id
@@ -63,7 +64,7 @@ angular
         if $scope.form == '/results'
             directiveName = "<div ng-include=\"'$/angular/views/results.html'\" ng-controller=\"ResultsCtrl\"></div>"
         else
-            directiveName = "<div ng-include=\"'$/angular/views/enterprise/" + $scope.form + ".html'\" ng-init=\"init('" + $scope.form + "')\" ng-controller=\"FormCtrl\"></div>"
+            directiveName = "<div ng-include=\"'$/angular/views/"+$scope.requestSelected.organizationCustomer.interfaceName+"/" + $scope.form + ".html'\" ng-init=\"init('" + $scope.form + "')\" ng-controller=\"FormCtrl\"></div>"
         $scope.directive = $compile(directiveName)($scope)
         $('.injectForm:first').append($scope.directive)
 
@@ -73,7 +74,6 @@ angular
         $scope.displayMenu = true
         $('.injectFormMenu:first').append($scope.directiveMenu)
 
-        $scope.$root.mySites = [request.scope]
 
         $scope.testClosingValidation()
 

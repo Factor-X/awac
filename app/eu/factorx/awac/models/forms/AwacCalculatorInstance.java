@@ -91,6 +91,7 @@ public class AwacCalculatorInstance extends AuditedAbstractEntity{
                 "awacCalculator=" + awacCalculator +
                 ", period=" + period +
                 ", scope=" + scope +
+                ", verificationRequest="+verificationRequest+
                 '}';
     }
 }

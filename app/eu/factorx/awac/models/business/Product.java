@@ -1,23 +1,35 @@
 package eu.factorx.awac.models.business;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import eu.factorx.awac.models.knowledge.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "product")
+@NamedQueries({
+        @NamedQuery(name = Product.FIND_BY_ORGANIZATION, query = "select p from Product p where p.organization = :organization"),
+})
 public class Product extends Scope {
 
 	private static final long serialVersionUID = 1L;
+    public static final String FIND_BY_ORGANIZATION = "product_FIND_BY_ORGANIZATION";
 
 	@ManyToOne(optional = false)
 	private Organization organization;
 
 	private String name;
+
+    @ManyToMany (cascade = CascadeType.ALL)
+    @JoinTable(name = "mm_product_period",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "period_id", referencedColumnName = "id"))
+    private List<Period> listPeriodAvailable = new ArrayList<>();
 
 	protected Product() {
 		super();
@@ -29,7 +41,15 @@ public class Product extends Scope {
 		this.name = name;
 	}
 
-	public Organization getOrganization() {
+    public List<Period> getListPeriodAvailable() {
+        return listPeriodAvailable;
+    }
+
+    public void setListPeriodAvailable(List<Period> listPeriodAvailable) {
+        this.listPeriodAvailable = listPeriodAvailable;
+    }
+
+    public Organization getOrganization() {
 		return organization;
 	}
 
@@ -60,12 +80,16 @@ public class Product extends Scope {
 		return new EqualsBuilder().append(this.organization, rhs.organization).append(this.name, rhs.name).isEquals();
 	}
 
-	@Override
-	public String toString() {
-		return "Site [id=" + id + ", name='" + name + "', organization=" + organization  + "]";
-	}
+    @Override
+    public String toString() {
+        return "Product{" +
+                "organization=" + organization +
+                ", name='" + name + '\'' +
+                ", listPeriodAvailable=" + listPeriodAvailable +
+                '}';
+    }
 
-	@Override
+    @Override
 	public ScopeTypeCode getScopeType() {
 		return ScopeTypeCode.PRODUCT;
 	}
