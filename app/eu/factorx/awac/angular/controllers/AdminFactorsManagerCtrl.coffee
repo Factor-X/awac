@@ -9,6 +9,7 @@ angular
     $scope.loadPromise = downloadService.getJson "/awac/admin/factors/all", (result) ->
         modalService.close(modalService.LOADING)
         if result.success == true
+            $scope.periods = result.data.periods
             $scope.factors = result.data.factors
 
             tt = $filter('translateText')
@@ -43,7 +44,6 @@ angular
             modalService.close modalService.LOADING
 
     $scope.remove = (factor) ->
-
 
     $scope.names = (column) ->
         def = $q.defer()

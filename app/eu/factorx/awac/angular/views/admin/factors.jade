@@ -25,11 +25,14 @@ div.factors
                         td {{ row.unitOut }}
 
                         td
-                            datepicker(ng-model="fv.dateIn")
+                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateIn")
                         td
-                            datepicker(ng-model="fv.dateOut")
+                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateOut")
 
-                button.button(type="button") Create new factor value
+                button.button(type="button")
+                    span.fa.fa-plus-circle
+                    span &nbsp;
+                    span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")
 
 
     br
