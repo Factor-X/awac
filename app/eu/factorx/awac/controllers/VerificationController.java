@@ -1,18 +1,5 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Configuration;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.get.VerificationDTO;
@@ -44,6 +31,18 @@ import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Configuration;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * verification controller
@@ -86,7 +85,7 @@ public class VerificationController extends AbstractController {
 
     @Transactional(readOnly = false)
     @Security.Authenticated(SecuredController.class)
-    @SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+    @SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
     public Result getArchivedRequests() {
 
         //control interface
@@ -252,7 +251,7 @@ public class VerificationController extends AbstractController {
         // send email for invitation
         EmailMessage email = new EmailMessage(dto.getEmail(), title, velocityContent);
         //send email to admin
-        if(organizationVerification!=null){
+        if (organizationVerification != null) {
             email.addEmails(getAdmins(organizationVerification));
         }
         emailService.send(email);
@@ -357,6 +356,8 @@ public class VerificationController extends AbstractController {
 
             calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
 
+            calculatorInstance.getVerificationRequest().setVerificationList(null);
+
             //load verifier
             for (String identifier : dto.getVerifierIdentifier()) {
                 Account verifier = accountService.findByIdentifier(identifier);
@@ -365,6 +366,7 @@ public class VerificationController extends AbstractController {
                 if (verifier == null || !verifier.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
                     return unauthorized(new ExceptionsDTO("verifier " + dto.getVerifierIdentifier() + " is not a user from your organization"));
                 }
+
                 calculatorInstance.getVerificationRequest().addVerifier(verifier);
             }
 
@@ -423,7 +425,7 @@ public class VerificationController extends AbstractController {
                 calculatorInstance.getVerificationRequest().setVerificationRequestStatus(newStatus);
                 calculatorInstance.getVerificationRequest().setVerificationRejectedComment(dto.getVerificationRejectedComment());
 
-                Logger.info("email =====>"+getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier()));
+                Logger.info("email =====>" + getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier()));
                 //email
                 emailToSend = "verificationToWaitVerificationConfirmationReject.vm";
                 emailTargets = getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
@@ -476,7 +478,7 @@ public class VerificationController extends AbstractController {
                 oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
                 securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
                 (securedController.getCurrentUser().getIsAdmin() ||
-                securedController.getCurrentUser().getIsMainVerifier())) {
+                        securedController.getCurrentUser().getIsMainVerifier())) {
 
 
             if (!accountService.controlPassword(dto.getPassword(), securedController.getCurrentUser())) {
@@ -575,6 +577,9 @@ public class VerificationController extends AbstractController {
             return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
         }
 
+        //save modification
+        awacCalculatorInstanceService.saveOrUpdate(calculatorInstance);
+
         //send email
         if (emailToSend != null && emailTargets.size() > 0) {
             Map<String, Object> values = new HashMap<>();
@@ -586,8 +591,6 @@ public class VerificationController extends AbstractController {
             EmailMessage email = new EmailMessage(emailTargets, emailTitle, velocityContent);
             emailService.send(email);
         }
-
-        awacCalculatorInstanceService.saveOrUpdate(calculatorInstance);
 
         return ok(new ResultsDTO());
     }
@@ -630,7 +633,7 @@ public class VerificationController extends AbstractController {
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    @SecurityAnnotation(isAdmin = true, isMainVerifier = true)
+    @SecurityAnnotation(isAdmin = false, isMainVerifier = true)
     public Result getVerificationRequestsVerifiedToConfirm() {
 
         //control interface
@@ -638,17 +641,19 @@ public class VerificationController extends AbstractController {
             return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_INTERFACE_FOR_USER));
         }
 
-        ListDTO<VerificationRequestDTO> list = new ListDTO<>();
-
         //load by account
-        for (VerificationRequest request : securedController.getCurrentUser().getVerificationRequestList()) {
+        List<VerificationRequest> verificationRequestList = verificationRequestService.findByOrganizationVerifier(securedController.getCurrentUser().getOrganization());
+
+        ListDTO<VerificationRequestDTO> dto = new ListDTO<>();
+
+        for (VerificationRequest request : verificationRequestList) {
             if (request.getVerificationRequestStatus().equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) ||
-                    request.getVerificationRequestStatus().equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) {
-                list.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
+                request.getVerificationRequestStatus().equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) {
+                dto.add(conversionService.convert(request.getAwacCalculatorInstance(), VerificationRequestDTO.class));
             }
         }
 
-        return ok(list);
+        return ok(dto);
     }
 
     @Transactional(readOnly = false)

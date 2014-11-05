@@ -17,10 +17,7 @@
     Under MacOS, Netstat and CURL seem to run weird, so the **cmd.sh does not contain the call to importers anymore.** -> see point 4.
 
 
-3. Start activator
-
-
-4. Run the generators
+3. Generate the surveys
 
     - Go into the folder
     
@@ -34,8 +31,16 @@
         $ rake generate:surveys
         ```
 
-    - Restart activator
+4. Start activator
 
+5. Run the generators
+
+    - Go into the folder
+    
+        ```sh
+        $ cd generators
+        ```       
+ 
     - Run CodeLabels & Indicators / Factors importers
         
         ```sh
@@ -49,5 +54,3 @@
          $ rake surveys:import:enterprise
          $ rake surveys:import:municipality
          ```
-
-  

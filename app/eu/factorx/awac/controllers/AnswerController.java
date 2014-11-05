@@ -1,16 +1,5 @@
 package eu.factorx.awac.controllers;
 
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
@@ -47,6 +36,16 @@ import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
+
+import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class AnswerController extends AbstractController {
@@ -141,7 +140,7 @@ public class AnswerController extends AbstractController {
 
         securedController.controlDataAccess(period, scope);
 
-        return ok(testCloseableVerification(period,scope));
+        return ok(testCloseableVerification(period, scope));
     }
 
     @Transactional(readOnly = false)
@@ -180,7 +179,7 @@ public class AnswerController extends AbstractController {
             awacCalculatorInstance.setClosed(false);
 
             //is there is a veriifciation, remove them
-            if(awacCalculatorInstance.getVerificationRequest()!=null){
+            if (awacCalculatorInstance.getVerificationRequest() != null) {
                 verificationRequestService.remove(awacCalculatorInstance.getVerificationRequest());
             }
 
@@ -235,7 +234,7 @@ public class AnswerController extends AbstractController {
             }
         }
 
-        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers,period);
+        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers, period);
 
         List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
         List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
@@ -423,6 +422,9 @@ public class AnswerController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
 
+        if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+            return getPeriodsForComparisonByOrganization(scopeId);
+        }
         Scope scope = scopeService.findById(scopeId);
 
         List<PeriodDTO> periodDTOs = new ArrayList<>();
@@ -430,7 +432,7 @@ public class AnswerController extends AbstractController {
         for (Period period : periods) {
 
             //for calculator : restriction by site
-            if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+            if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
                 //restrict by period by site
                 for (Period periodToTest : ((Site) scope).getListPeriodAvailable()) {
                     if (periodToTest.equals(period)) {
@@ -438,35 +440,36 @@ public class AnswerController extends AbstractController {
                         break;
                     }
                 }
-            } else {
+            } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+
+            } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
+                //TODO ??
             }
         }
 
         return ok(new ListPeriodsDTO(periodDTOs));
     }
 
-    @Transactional(readOnly = true)
-    @Security.Authenticated(SecuredController.class)
-    public Result getPeriodsForComparisonByOrganization(long scopeId, String organizationCustomerName) {
+    private Result getPeriodsForComparisonByOrganization(long scopeId) {
+
+        //load scope
+        Scope scope = scopeService.findById(scopeId);
 
         //load organization customer
-        Organization organizationCustomer = organizationService.findByName(organizationCustomerName);
+        Organization organizationCustomer = scope.getOrganization();
 
         //control organization
         if (verificationRequestService.findByOrganizationCustomerAndOrganizationVerifier(organizationCustomer, securedController.getCurrentUser().getOrganization()).size() == 0) {
             new MyrmexRuntimeException((BusinessErrorType.WRONG_RIGHT));
         }
 
-        //load scope
-        Scope scope = scopeService.findById(scopeId);
-
         List<PeriodDTO> periodDTOs = new ArrayList<>();
         List<Period> periods = questionSetAnswerService.getAllQuestionSetAnswersPeriodsByScope(scopeId);
         for (Period period : periods) {
 
             //for calculator : restriction by site
-            if (organizationCustomer.getInterfaceCode().equals(InterfaceTypeCode.ENTERPRISE)) {
+            if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
                 //restrict by period by site
                 for (Period periodToTest : ((Site) scope).getListPeriodAvailable()) {
                     if (periodToTest.equals(period)) {
@@ -474,8 +477,11 @@ public class AnswerController extends AbstractController {
                         break;
                     }
                 }
-            } else {
+            } else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+            }
+            else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+                //TODO
             }
         }
 
@@ -597,7 +603,7 @@ public class AnswerController extends AbstractController {
         return answerLineDTOs;
     }
 
-    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets, HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers,Period period) {
+    private List<QuestionSetDTO> toQuestionSetDTOs(List<QuestionSet> questionSets, HashMap<QuestionCode, QuestionSetAnswer> questionSetAnswers, Period period) {
         List<QuestionSetDTO> questionSetDTOs = new ArrayList<>();
         for (QuestionSet questionSet : questionSets) {
 
@@ -626,8 +632,6 @@ public class AnswerController extends AbstractController {
             questionSetDTOs.add(questionSetDTO);
 
 
-
-
         }
         return questionSetDTOs;
     }
@@ -638,11 +642,11 @@ public class AnswerController extends AbstractController {
         Boolean repetitionAllowed = questionSet.getRepetitionAllowed();
         List<QuestionDTO> questions = new ArrayList<>();
         for (Question question : questionSet.getQuestions()) {
-            questions.add(convertQuestion(question,period));
+            questions.add(convertQuestion(question, period));
         }
         List<QuestionSetDTO> children = new ArrayList<>();
         for (QuestionSet childQuestionSet : questionSet.getChildren()) {
-            children.add(convertQuestionSet(childQuestionSet,period));
+            children.add(convertQuestionSet(childQuestionSet, period));
         }
 
         return new QuestionSetDTO(code, repetitionAllowed, children, questions);
@@ -666,17 +670,17 @@ public class AnswerController extends AbstractController {
         }
 
         //add driver
-        if (question instanceof NumericQuestion && ((NumericQuestion)question).getDriver()!=null) {
-            defaultValue =  driverValueService.findLastedValid(((NumericQuestion)question), period).getDefaultValue();
+        if (question instanceof NumericQuestion && ((NumericQuestion) question).getDriver() != null) {
+            defaultValue = driverValueService.findLastedValid(((NumericQuestion) question), period).getDefaultValue();
         }
 
 
         //add default unit
-        if(question instanceof NumericQuestion && ((NumericQuestion)question).getDefaultUnit()!=null){
-            defaultUnit = new UnitDTO(((NumericQuestion)question).getDefaultUnit().getUnitCode().getKey(), ((NumericQuestion)question).getDefaultUnit().getSymbol());
+        if (question instanceof NumericQuestion && ((NumericQuestion) question).getDefaultUnit() != null) {
+            defaultUnit = new UnitDTO(((NumericQuestion) question).getDefaultUnit().getUnitCode().getKey(), ((NumericQuestion) question).getDefaultUnit().getSymbol());
         }
 
-        return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue,defaultUnit);
+        return new QuestionDTO(question.getCode().getKey(), question.getAnswerType(), codeListName, unitCategoryId, defaultValue, defaultUnit);
     }
 
     private Map<String, CodeListDTO> getNecessaryCodeLists(List<QuestionSet> questionSets, LanguageCode lang) {
@@ -693,6 +697,15 @@ public class AnswerController extends AbstractController {
             }
         }
         return codeLists;
+    }
+
+    protected CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
+        List<CodeLabel> codeLabels = new ArrayList<CodeLabel>(codeLabelService.findCodeLabelsByList(codeList).values());
+        List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+        for (CodeLabel codeLabel : codeLabels) {
+            codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
+        }
+        return new CodeListDTO(codeList.name(), codeLabelDTOs);
     }
 
     private Map<Long, UnitCategoryDTO> getAllUnitCategories() {
@@ -1187,7 +1200,7 @@ public class AnswerController extends AbstractController {
         return true;
     }
 
-    public VerificationFinalizationDTO testCloseableVerification(Period period,Scope scope) {
+    public VerificationFinalizationDTO testCloseableVerification(Period period, Scope scope) {
 
         VerificationFinalizationDTO result = new VerificationFinalizationDTO();
         result.setFinalized(true);

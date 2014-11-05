@@ -4,8 +4,8 @@ div.results.pdf-able
 
     table.wide
         tr
-            td.top-aligned(ng-hide="$root.instanceName == 'municipality'")
-                .sites-panel
+            td.top-aligned
+                .sites-panel(ng-hide="$root.instanceName == 'municipality'")
                     .sites-panel-title
                         span(ng-bind-html="'SITES_LIST' | translate")
 
@@ -26,6 +26,7 @@ div.results.pdf-able
                                     td
                                         input(type="checkbox", ng-model="site.selected")
 
+                .sites-panel
                     .sites-panel-title
                         span(ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
 

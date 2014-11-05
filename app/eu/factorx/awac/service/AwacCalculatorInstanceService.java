@@ -17,4 +17,6 @@ public interface AwacCalculatorInstanceService extends PersistenceService<AwacCa
     public AwacCalculatorInstance findByPeriodAndScope(Period period, Scope scope);
 
     public List<AwacCalculatorInstance> findByPeriodAndScopes(Period period, List<Scope> scopeList);
+
+    public List<AwacCalculatorInstance> findByScope(Scope scope);
 }

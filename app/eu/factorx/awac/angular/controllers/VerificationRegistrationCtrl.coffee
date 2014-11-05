@@ -53,6 +53,12 @@ angular
             validationRegex: "^.{1,255}$"
             validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
 
+        agreementValidation:
+            isValid:false
+
+    $scope.displayAgreement = () ->
+        modalService.show(modalService.HELP, {template: 'agreement'})
+
 
     $scope.allFieldValid = () ->
         for key in Object.keys($scope.fields)

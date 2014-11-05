@@ -83,8 +83,7 @@ CREATE TABLE mm_verifierrequest_account
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_7jvbk7bgrhh9gscfkrxk8ukir FOREIGN KEY (account_id)
       REFERENCES account (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT uk_mt4b8rprad8nmd6bkqops3odg UNIQUE (verifier_id, account_id)
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE

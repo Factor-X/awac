@@ -3,6 +3,7 @@ package eu.factorx.awac.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -45,6 +46,11 @@ public class SiteController  extends AbstractController {
 	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result edit(){
 
+        //control
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)){
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
+        }
+
 		SiteDTO dto = extractDTOFromRequest(SiteDTO.class);
 
 		//control id
@@ -79,6 +85,11 @@ public class SiteController  extends AbstractController {
 	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result create(){
 
+        //control
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)){
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
+        }
+
 		SiteDTO dto = extractDTOFromRequest(SiteDTO.class);
 
 		//create
@@ -110,6 +121,11 @@ public class SiteController  extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
 	public Result assignPeriodToSite(){
+
+        //control
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)){
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
+        }
 
 		AssignPeriodToSiteDTO dto = extractDTOFromRequest(AssignPeriodToSiteDTO.class);
 
@@ -168,6 +184,11 @@ public class SiteController  extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	@SecurityAnnotation(isAdmin = false, isSystemAdmin = false)
 	public Result getSite(long siteId){
+
+        //control
+        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)){
+            throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
+        }
 
 		//load the site
 		Site site = siteService.findById(siteId);

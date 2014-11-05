@@ -12,16 +12,20 @@
                 .desc(ng-bind-html="'VALID_REQUEST_DESC' | translate")
                 .field_form
                     .field_row
-                        div
-                        div
-                            button.button(ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate",ng-click="download()")
+                        .field_cell
+                            div
+                        .field_cell
+                            button.button(
+                            type="button",
+                            ng-bind-html="'DOWNLOAD_VERIFICATION_REPORT' | translate",
+                            ng-click="download()")
                     mm-awac-modal-field-text(ng-info="fields.myPassword")
 
 
             .modal-footer
 
                 div(ng-hide="isLoading")
-                    button.button(type="button",
+                    button.button(,
                     class="btn btn-primary",
                     ng-click="close();",
                     ng-bind-html="'CLOSE_BUTTON' | translate")

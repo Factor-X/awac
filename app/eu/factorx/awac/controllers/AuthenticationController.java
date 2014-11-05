@@ -87,7 +87,9 @@ public class AuthenticationController extends AbstractController {
 
 			Account account = securedController.getCurrentUser();
 
-			if (account.getOrganization().getInterfaceCode().equals(new InterfaceTypeCode(dto.getInterfaceName()))) {
+            InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(dto.getInterfaceName());
+
+			if (account.getOrganization().getInterfaceCode().equals(interfaceTypeCode)) {
 				return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
 			}
 
@@ -133,7 +135,9 @@ public class AuthenticationController extends AbstractController {
 				Person person = new Person(lastName, firstName, email);
 				personService.saveOrUpdate(person);
 
-				Organization org = new Organization("YourOrg" + lastName, new InterfaceTypeCode(connectionFormDTO.getInterfaceName()));
+                InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
+
+				Organization org = new Organization("YourOrg" + lastName, interfaceTypeCode);
 				organizationService.saveOrUpdate(org);
 
 				//create account
@@ -176,7 +180,7 @@ public class AuthenticationController extends AbstractController {
 			}
 
 			//control interface
-			InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(connectionFormDTO.getInterfaceName());
+            InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
 
 			if (interfaceTypeCode == null) {
                 throw new MyrmexRuntimeException(BusinessErrorType.NOT_VALID_INTERFACE,account.getOrganization().getInterfaceCode().getKey());
@@ -232,8 +236,6 @@ public class AuthenticationController extends AbstractController {
 	public Result forgotPassword() {
 
 		ForgotPasswordDTO dto = extractDTOFromRequest(ForgotPasswordDTO.class);
-
-		InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(dto.getInterfaceName());
 
 		Account account = accountService.findByIdentifier(dto.getIdentifier());
 

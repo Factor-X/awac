@@ -80,9 +80,6 @@ public class ReducingActionController extends AbstractController {
 	private ScopeService scopeService;
 
 	@Autowired
-	private AccountSiteAssociationService accountSiteAssociationService;
-
-	@Autowired
 	private StoredFileService storedFileService;
 
 	@Transactional(readOnly = true)

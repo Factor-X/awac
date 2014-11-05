@@ -55,10 +55,6 @@ angular
         #
         downloadService.getJson "/awac/answer/getByForm/" + $scope.formIdentifier + "/" + $scope.$root.periodSelectedKey + "/" + $scope.$root.scopeSelectedId, (result) ->
 
-            # save last form loaded
-            $scope.$root.lastPeriodSelectedKey = $scope.$root.periodSelectedKey
-            $scope.$root.lastScopeSelectedId = $scope.$root.scopeSelectedId
-            $scope.$root.lastFormIdentifier = $scope.formIdentifier
 
             if not result.success
                 if !!result.data.messageToTranslate
@@ -67,6 +63,11 @@ angular
                     $scope.errorMessage = result.data.message
                 modalService.close(modalService.LOADING)
             else
+
+                # save last form loaded
+                $scope.$root.lastPeriodSelectedKey = $scope.$root.periodSelectedKey
+                $scope.$root.lastScopeSelectedId = $scope.$root.scopeSelectedId
+                $scope.$root.lastFormIdentifier = $scope.formIdentifier
 
                 console.log "loading form result : "
                 console.log result.data
