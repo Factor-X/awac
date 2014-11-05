@@ -8,6 +8,7 @@ import eu.factorx.awac.models.code.type.*;
 @Entity
 @Table(name = "baseindicator")
 @NamedQueries({
+		@NamedQuery(name = BaseIndicator.FIND_BY_CODE, query = "select b from BaseIndicator b where b.code = :code"),
 		@NamedQuery(name = BaseIndicator.REMOVE_ALL, query = "delete from BaseIndicator i where i.id is not null"),
 })
 public class BaseIndicator extends AuditedAbstractEntity {
@@ -15,6 +16,7 @@ public class BaseIndicator extends AuditedAbstractEntity {
 	private static final long serialVersionUID = 1L;
 
 	public static final String REMOVE_ALL = "BaseIndicator.removeAll";
+	public static final String FIND_BY_CODE = "BaseIndicator.findByCode";
 
 	@Embedded
 	@Column(unique = true)
@@ -144,6 +146,26 @@ public class BaseIndicator extends AuditedAbstractEntity {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+
+		BaseIndicator that = (BaseIndicator) o;
+
+		if (!code.equals(that.code)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + code.hashCode();
+		return result;
 	}
 
 	@Override

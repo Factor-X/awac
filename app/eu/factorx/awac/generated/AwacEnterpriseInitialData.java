@@ -1,27 +1,30 @@
 package eu.factorx.awac.generated;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
-import play.db.jpa.JPA;
+import eu.factorx.awac.models.Notification;
+import eu.factorx.awac.models.NotificationKind;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.code.type.UnitCategoryCode;
-import eu.factorx.awac.models.data.answer.QuestionAnswer;
-import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.data.question.type.*;
 import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.knowledge.UnitCategory;
-import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.data.importer.*;
+import play.db.jpa.JPA;
+
+import java.util.*;
 
 @Component
 public class AwacEnterpriseInitialData {
@@ -228,21 +231,21 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a13);
     }
     // == A15
-    // Combustion de combustible par les sources statiques des sites de l'entreprise (mesurés en unités d'énergie)
+    // Combustion de combustible (mesurés en unités d'énergie)
     QuestionSet a15 = questionSetService.findByCode(QuestionCode.A15);
     if( a15 == null ) {
         a15 = new QuestionSet(QuestionCode.A15, true, a13);
         JPA.em().persist(a15);
     }
     // == A1000
-    // Combustion de combustible par les sources statiques des sites de l'entreprise (mesurés en volume)
+    // Combustion de combustible (mesurés en volume)
     QuestionSet a1000 = questionSetService.findByCode(QuestionCode.A1000);
     if( a1000 == null ) {
         a1000 = new QuestionSet(QuestionCode.A1000, true, a13);
         JPA.em().persist(a1000);
     }
     // == A1003
-    // Combustion de combustible par les sources statiques des sites de l'entreprise (mesurés en poids)
+    // Combustion de combustible  (mesurés en poids)
     QuestionSet a1003 = questionSetService.findByCode(QuestionCode.A1003);
     if( a1003 == null ) {
         a1003 = new QuestionSet(QuestionCode.A1003, true, a13);
@@ -272,7 +275,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a25);
     }
     // == A31
-    // GES des processus de production
+    // GES des procédés de production
     QuestionSet a31 = questionSetService.findByCode(QuestionCode.A31);
     if( a31 == null ) {
         a31 = new QuestionSet(QuestionCode.A31, false, null);
@@ -281,7 +284,7 @@ public class AwacEnterpriseInitialData {
     form2.getQuestionSets().add(a31);
     JPA.em().persist(form2);
     // == A34
-    // Type de GES émis par la production
+    // Type de GES émis par les procédés de production
     QuestionSet a34 = questionSetService.findByCode(QuestionCode.A34);
     if( a34 == null ) {
         a34 = new QuestionSet(QuestionCode.A34, true, a31);
@@ -304,7 +307,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a40);
     }
     // == A41
-    // Estimation des émissions à partir des recharges de gaz
+    // Méthode directe à partir des recharges
     QuestionSet a41 = questionSetService.findByCode(QuestionCode.A41);
     if( a41 == null ) {
         a41 = new QuestionSet(QuestionCode.A41, false, a40);
@@ -318,14 +321,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a42);
     }
     // == A45
-    // Estimation des émissions à partir de la puissance du groupe de froid
+    // Méthode indirecte à partir de la puissance des équipements de froid
     QuestionSet a45 = questionSetService.findByCode(QuestionCode.A45);
     if( a45 == null ) {
         a45 = new QuestionSet(QuestionCode.A45, false, a40);
         JPA.em().persist(a45);
     }
     // == A47
-    // Estimation des émissions à partir de la consommation électrique du site
+    // Méthode indirecte à partir de la consommation éléctrique du site
     QuestionSet a47 = questionSetService.findByCode(QuestionCode.A47);
     if( a47 == null ) {
         a47 = new QuestionSet(QuestionCode.A47, false, a40);
@@ -394,14 +397,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a401);
     }
     // == A402
-    // Calcul par les consommations
+    // Méthode basée sur les consommations 
     QuestionSet a402 = questionSetService.findByCode(QuestionCode.A402);
     if( a402 == null ) {
         a402 = new QuestionSet(QuestionCode.A402, false, a401);
         JPA.em().persist(a402);
     }
     // == A406
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet a406 = questionSetService.findByCode(QuestionCode.A406);
     if( a406 == null ) {
         a406 = new QuestionSet(QuestionCode.A406, false, a401);
@@ -415,7 +418,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a407);
     }
     // == A412
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet a412 = questionSetService.findByCode(QuestionCode.A412);
     if( a412 == null ) {
         a412 = new QuestionSet(QuestionCode.A412, false, a401);
@@ -443,14 +446,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a519);
     }
     // == A502
-    // Calcul par les consommations
+    // Méthode basée sur les consommations
     QuestionSet a502 = questionSetService.findByCode(QuestionCode.A502);
     if( a502 == null ) {
         a502 = new QuestionSet(QuestionCode.A502, false, a519);
         JPA.em().persist(a502);
     }
     // == A506
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet a506 = questionSetService.findByCode(QuestionCode.A506);
     if( a506 == null ) {
         a506 = new QuestionSet(QuestionCode.A506, false, a519);
@@ -464,7 +467,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a507);
     }
     // == A512
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet a512 = questionSetService.findByCode(QuestionCode.A512);
     if( a512 == null ) {
         a512 = new QuestionSet(QuestionCode.A512, false, a519);
@@ -492,14 +495,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a601);
     }
     // == A602
-    // Calcul par les consommations
+    // Méthode basée sur les consommations
     QuestionSet a602 = questionSetService.findByCode(QuestionCode.A602);
     if( a602 == null ) {
         a602 = new QuestionSet(QuestionCode.A602, false, a601);
         JPA.em().persist(a602);
     }
     // == A606
-    // Calcul par les kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet a606 = questionSetService.findByCode(QuestionCode.A606);
     if( a606 == null ) {
         a606 = new QuestionSet(QuestionCode.A606, false, a601);
@@ -513,7 +516,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a607);
     }
     // == A612
-    // Calcul par euros dépensés
+    // Méthode basée sur les dépenses
     QuestionSet a612 = questionSetService.findByCode(QuestionCode.A612);
     if( a612 == null ) {
         a612 = new QuestionSet(QuestionCode.A612, false, a601);
@@ -591,7 +594,7 @@ public class AwacEnterpriseInitialData {
     form4.getQuestionSets().add(a208);
     JPA.em().persist(form4);
     // == A209
-    // Créez et nommez vos postes d'achats (et préciser la catégorie et le type de matériaux ensuite)
+    // Créez et nommez vos postes d'achats (et préciser la famille et le type de matériaux ensuite)
     QuestionSet a209 = questionSetService.findByCode(QuestionCode.A209);
     if( a209 == null ) {
         a209 = new QuestionSet(QuestionCode.A209, true, a208);
@@ -605,7 +608,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a223);
     }
     // == A224
-    // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la catégorie, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
+    // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la famille, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
     QuestionSet a224 = questionSetService.findByCode(QuestionCode.A224);
     if( a224 == null ) {
         a224 = new QuestionSet(QuestionCode.A224, true, a223);
@@ -651,7 +654,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a140);
     }
     // == A141
-    // Méthode des kilomètres
+    // Méthode basée sur le kilométrage
     QuestionSet a141 = questionSetService.findByCode(QuestionCode.A141);
     if( a141 == null ) {
         a141 = new QuestionSet(QuestionCode.A141, false, a140);
@@ -725,7 +728,7 @@ public class AwacEnterpriseInitialData {
     form5.getQuestionSets().add(a173);
     JPA.em().persist(form5);
     // == A4999
-    // Postes de déchets
+    // Déchets solides
     QuestionSet a4999 = questionSetService.findByCode(QuestionCode.A4999);
     if( a4999 == null ) {
         a4999 = new QuestionSet(QuestionCode.A4999, false, null);
@@ -829,14 +832,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a231);
     }
     // == A237
-    // Autres infrastructures spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
+    // Autres biens d'équipement spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
     QuestionSet a237 = questionSetService.findByCode(QuestionCode.A237);
     if( a237 == null ) {
         a237 = new QuestionSet(QuestionCode.A237, false, a229);
         JPA.em().persist(a237);
     }
     // == A238
-    // Créez et nommez vos postes d'infrastructure spécifiques
+    // Créez et nommez vos biens d'équipement
     QuestionSet a238 = questionSetService.findByCode(QuestionCode.A238);
     if( a238 == null ) {
         a238 = new QuestionSet(QuestionCode.A238, true, a237);
@@ -963,7 +966,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a244);
     }
     // == A8000
-    // Type de produit pour rubriques subséquentes
+    // Utilisation, traitement et fin de vie
     QuestionSet a8000 = questionSetService.findByCode(QuestionCode.A8000);
     if( a8000 == null ) {
         a8000 = new QuestionSet(QuestionCode.A8000, false, a244);
@@ -977,7 +980,7 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a250);
     }
     // == A252
-    // Transport aval: choix de méthodes
+    // Transport aval
     QuestionSet a252 = questionSetService.findByCode(QuestionCode.A252);
     if( a252 == null ) {
         a252 = new QuestionSet(QuestionCode.A252, false, a250);
@@ -998,14 +1001,14 @@ public class AwacEnterpriseInitialData {
         JPA.em().persist(a266);
     }
     // == A272
-    // Distribution avale: Energie et Froid des entrepôts de stockage
+    // Distribution avale: Energie et Froid
     QuestionSet a272 = questionSetService.findByCode(QuestionCode.A272);
     if( a272 == null ) {
         a272 = new QuestionSet(QuestionCode.A272, false, a244);
         JPA.em().persist(a272);
     }
     // == A273
-    // Créez autant d'entrepôts de stockage que nécessaire
+    // Créez autant de postes de consommation que nécessaire
     QuestionSet a273 = questionSetService.findByCode(QuestionCode.A273);
     if( a273 == null ) {
         a273 = new QuestionSet(QuestionCode.A273, true, a272);
@@ -1644,7 +1647,7 @@ if (a32 == null) {
 
 
     // == A33
-    // Pièces documentaires liées aux GES des processus de production
+    // Pièces documentaires liées aux GES des procédés de production
 
     DocumentQuestion a33 = (DocumentQuestion) questionService.findByCode(QuestionCode.A33);
 if (a33 == null) {
@@ -1778,7 +1781,7 @@ if (a43 == null) {
 
 
     // == A44
-    // Quantité de recharge nécessaire pour l'année
+    // Quantité de recharge nécessaire pour l'année de bilan
 
     
 DoubleQuestion a44 = (DoubleQuestion) questionService.findByCode(QuestionCode.A44);
@@ -4331,7 +4334,7 @@ if (a158 == null) {
 
 
     // == A159
-    // Quelle est la provenance des produits?
+    // Quelle est la provenance géographique des produits?
 
     ValueSelectionQuestion a159 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A159);
 if (a159 == null) {
@@ -4714,7 +4717,7 @@ if (a5001 == null) {
 
 
     // == A5002
-    // Type de déchet
+    // Type de déchet et type de traitement
 
     ValueSelectionQuestion a5002 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5002);
 if (a5002 == null) {
@@ -5221,7 +5224,7 @@ if (a236 == null) {
 
 
     // == A239
-    // Poste d'infrastructure
+    // Nom
 
     StringQuestion a239 = (StringQuestion) questionService.findByCode(QuestionCode.A239);
 if (a239 == null) {
@@ -5917,7 +5920,7 @@ if (a336 == null) {
 
 
     // == A337
-    // Emissions directes totales (tCO2e)
+    // Emissions directes totales - Scope 1 (tCO2e)
 
     IntegerQuestion a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
 if (a337 == null) {
@@ -5939,7 +5942,7 @@ if (a337 == null) {
 
 
     // == A338
-    // Emissions indirectes totales (tCO2e)
+    // Emissions indirectes totales - Scope 2 (tCO2e)
 
     IntegerQuestion a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
 if (a338 == null) {
@@ -6354,7 +6357,7 @@ if (a265 == null) {
 
 
     // == A267
-    // Poids total transporté:
+    // Quel est le poids total transporté sur toute l'année du bilan (tous produits confondus)?
 
     
 DoubleQuestion a267 = (DoubleQuestion) questionService.findByCode(QuestionCode.A267);
@@ -6402,7 +6405,7 @@ if (a268 == null) {
 
 
     // == A269
-    // Km assignés en moyenne aux marchandises
+    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
     
 DoubleQuestion a269 = (DoubleQuestion) questionService.findByCode(QuestionCode.A269);
@@ -6428,7 +6431,7 @@ if (a269 == null) {
 
 
     // == A270
-    // Km assignés en moyenne aux marchandises
+    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
     
 DoubleQuestion a270 = (DoubleQuestion) questionService.findByCode(QuestionCode.A270);
@@ -6454,7 +6457,7 @@ if (a270 == null) {
 
 
     // == A271
-    // Km assignés en moyenne aux marchandises
+    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
     
 DoubleQuestion a271 = (DoubleQuestion) questionService.findByCode(QuestionCode.A271);
@@ -6480,7 +6483,7 @@ if (a271 == null) {
 
 
     // == A274
-    // Nom de l'entrepôt
+    // Poste de consommation
 
     StringQuestion a274 = (StringQuestion) questionService.findByCode(QuestionCode.A274);
 if (a274 == null) {
@@ -7223,7 +7226,7 @@ if (a5012 == null) {
 
 
     // == A5013
-    // Type de matière et de traitement de ce poste de déchet
+    // Type de déchet et de traitement de ce poste de déchet
 
     ValueSelectionQuestion a5013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5013);
 if (a5013 == null) {

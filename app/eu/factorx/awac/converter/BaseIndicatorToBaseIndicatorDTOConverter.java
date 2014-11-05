@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import eu.factorx.awac.dto.awac.shared.BaseIndicatorDTO;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
-import eu.factorx.awac.models.knowledge.Unit;
 
 @Component
 public class BaseIndicatorToBaseIndicatorDTOConverter implements Converter<BaseIndicator, BaseIndicatorDTO> {
@@ -20,10 +19,6 @@ public class BaseIndicatorToBaseIndicatorDTOConverter implements Converter<BaseI
 		dto.setActivityCategoryKey(getCodeKey(baseIndicator.getActivityCategory()));
 		dto.setActivitySubCategoryKey(getCodeKey(baseIndicator.getActivitySubCategory()));
 		dto.setActivityOwnership(baseIndicator.getActivityOwnership());
-		Unit baseIndicatorUnit = baseIndicator.getUnit();
-		if (baseIndicatorUnit != null) {
-			dto.setUnitKey(getCodeKey(baseIndicatorUnit.getUnitCode()));
-		}
 		return dto;
 	}
 

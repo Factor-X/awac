@@ -26,6 +26,7 @@ CREATE TABLE reducingactionadvice
   website character varying(255),
   calculator_id bigint NOT NULL,
   ghgbenefitunit_id bigint,
+  type character varying(1) NOT NULL,
   CONSTRAINT reducingactionadvice_pkey PRIMARY KEY (id),
   CONSTRAINT fk_reducingactionadvice_calculator_id FOREIGN KEY (calculator_id)
       REFERENCES awaccalculator (id) MATCH SIMPLE
@@ -60,8 +61,7 @@ CREATE TABLE mm_reducingactionadvice_baseindicator
       ON UPDATE NO ACTION ON DELETE CASCADE,
   CONSTRAINT fk_mm_reducingactionadvice_baseindicator_actionadvice_id FOREIGN KEY (actionadvice_id)
       REFERENCES reducingactionadvice (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT uk_mm_reducingactionadvice_baseindicator_logical_pkey UNIQUE (actionadvice_id, baseindicator_id)
+      ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

@@ -129,9 +129,7 @@ public class AdminController extends AbstractController {
             return unauthorized();
         }
 
-        // InterfaceTypeCode.
-        InterfaceTypeCode interfaceTypeCode = new InterfaceTypeCode(interfaceString);
-
+        InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(interfaceString);
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
     }

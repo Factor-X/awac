@@ -80,9 +80,6 @@ public class ReducingActionController extends AbstractController {
 	private ScopeService scopeService;
 
 	@Autowired
-	private AccountSiteAssociationService accountSiteAssociationService;
-
-	@Autowired
 	private StoredFileService storedFileService;
 
 	@Transactional(readOnly = true)
@@ -334,24 +331,6 @@ public class ReducingActionController extends AbstractController {
 			res.add(new UnitDTO(unit.getUnitCode().getKey(), unit.getSymbol()));
 		}
 		return res;
-	}
-
-	private List<CodeListDTO> getCodeListDTOs(CodeList... codeLists) {
-		LanguageCode userLanguage = securedController.getDefaultLanguage();
-		List<CodeListDTO> res = new ArrayList<>();
-		for (CodeList codeList : codeLists) {
-			res.add(toCodeListDTO(codeList, userLanguage));
-		}
-		return res;
-	}
-
-	private CodeListDTO toCodeListDTO(CodeList codeList, LanguageCode lang) {
-		List<CodeLabel> codeLabels = new ArrayList<>(codeLabelService.findCodeLabelsByList(codeList).values());
-		List<CodeLabelDTO> codeLabelDTOs = new ArrayList<>();
-		for (CodeLabel codeLabel : codeLabels) {
-			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
-		}
-		return new CodeListDTO(codeList.name(), codeLabelDTOs);
 	}
 
 	private void validateUserRightsForScope(Account currentUser, Scope scope) {

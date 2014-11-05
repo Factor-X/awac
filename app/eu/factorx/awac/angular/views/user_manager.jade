@@ -7,13 +7,13 @@ div
         table.user_table
             tr.user_table_header
                 td(ng-bind-html="'NAME' | translate")
-                td(ng-bind-html="'USER_MANAGER_ADMINISTRATOR' | translate")
-                td(ng-bind-html="'USER_MANAGER_MAIN_VERIFIER' | translate",ng-show="$root.instanceName==='verification'")
+                td(ng-bind-html="'USER_MANAGER_ADMINISTRATOR' | translate",ng-hide="$root.instanceName==='verification'")
+                td(ng-bind-html="'STATUS' | translate",ng-show="$root.instanceName==='verification'")
                 td(ng-bind-html="'USER_MANAGER_ACTIF' | translate")
             tr(ng-repeat="user in getUserList()", ng-class="{user_deleted : user.isActive === false}")
                 td {{user.firstName}} {{user.lastName}} ({{user.email}})
 
-                td
+                td(ng-hide="$root.instanceName==='verification'")
                     input(
                         ng-hide="isLoading['admin'][user.email]=== true",
                         type="checkbox",
@@ -23,17 +23,22 @@ div
                     img(src='/assets/images/modal-loading.gif',
                         ng-show="isLoading['admin'][user.email] === true")
                 td(ng-show="$root.instanceName==='verification'")
-                    input(
+                    select(
                         ng-hide="isLoading['admin'][user.email]=== true",
-                        type="checkbox",
-                        ng-model="user.isMainVerifier",
-                        ng-click="isMainVerifier(user)"
+                        ng-options='l.id as l.label | translateText for l in statusesForVerification',
+                        ng-change="changeStatusForVerification(user)",
+                        ng-model='user.tempStatus',
                         ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email || user.isActive == false")
                     img(src='/assets/images/modal-loading.gif',
-                        ng-show="isLoading['isMainVerifier'][user.email] === true")
+                        ng-show="isLoading['admin'][user.email] === true")
 
-                td(ng-class="{is_admin : getMyself().isAdmin === true && getMyself().email !== user.email}")
-                    .button_delete(ng-click="activeUser(user)",
-                                    ng-hide="isLoading['isActive'][user.email]=== true")
+                td
+                    input(
+                        ng-hide="isLoading['isActive'][user.email]=== true",
+                        type="checkbox",
+                        ng-model="user.isActive",
+                        ng-click="activeUser(user)",
+                        ng-disabled="getMyself().isAdmin === false || getMyself().email === user.email")
+
                     img(src='/assets/images/modal-loading.gif',
                         ng-show="isLoading['isActive'][user.email] === true")

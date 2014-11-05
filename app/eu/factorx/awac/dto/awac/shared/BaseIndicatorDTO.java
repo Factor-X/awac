@@ -16,14 +16,11 @@ public class BaseIndicatorDTO extends DTO {
 
 	private Boolean activityOwnership;
 
-	private String unitKey;
-
 	public BaseIndicatorDTO() {
 		super();
 	}
 
-	public BaseIndicatorDTO(String key, String isoScopeKey, String indicatorCategoryKey, String activityCategoryKey, String activitySubCategoryKey, Boolean activityOwnership,
-			String unitKey) {
+	public BaseIndicatorDTO(String key, String isoScopeKey, String indicatorCategoryKey, String activityCategoryKey, String activitySubCategoryKey, Boolean activityOwnership) {
 		super();
 		this.key = key;
 		this.isoScopeKey = isoScopeKey;
@@ -31,7 +28,6 @@ public class BaseIndicatorDTO extends DTO {
 		this.activityCategoryKey = activityCategoryKey;
 		this.activitySubCategoryKey = activitySubCategoryKey;
 		this.activityOwnership = activityOwnership;
-		this.unitKey = unitKey;
 	}
 
 	public String getKey() {
@@ -82,18 +78,10 @@ public class BaseIndicatorDTO extends DTO {
 		this.activityOwnership = activityOwnership;
 	}
 
-	public String getUnitKey() {
-		return unitKey;
-	}
-
-	public void setUnitKey(String unitKey) {
-		this.unitKey = unitKey;
-	}
-
 	@Override
 	public String toString() {
 		return "BaseIndicatorDTO [key=" + key + ", isoScopeKey=" + isoScopeKey + ", indicatorCategoryKey=" + indicatorCategoryKey + ", activityCategoryKey=" + activityCategoryKey
-				+ ", activitySubCategoryKey=" + activitySubCategoryKey + ", activityOwnership=" + activityOwnership + ", unitKey=" + unitKey + "]";
+				+ ", activitySubCategoryKey=" + activitySubCategoryKey + ", activityOwnership=" + activityOwnership + "]";
 	}
 
 }

@@ -1,15 +1,18 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.List;
-
-import javax.persistence.*;
-
+import eu.factorx.awac.models.AuditedAbstractEntity;
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.type.ReducingActionTypeCode;
+import eu.factorx.awac.models.data.file.StoredFile;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.data.file.StoredFile;
-import eu.factorx.awac.models.forms.AwacCalculator;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "reducingactionadvice", uniqueConstraints = {
@@ -21,6 +24,7 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	public static final String TITLE_COLUMN = "title";
 	public static final String CALCULATOR_COLUMN = "calculator_id";
+	public static final String TYPE_COLUMN = "type";
 
 	@Column(name = TITLE_COLUMN, nullable = false)
 	private String title;
@@ -28,6 +32,10 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = CALCULATOR_COLUMN, nullable = false)
 	private AwacCalculator awacCalculator;
+
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = TYPE_COLUMN, length = 1, nullable = false)) })
+	private ReducingActionTypeCode type;
 
 	private String physicalMeasure;
 
@@ -59,11 +67,11 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 			uniqueConstraints = {
 					@UniqueConstraint(columnNames = { "reducingactionadvice_id", "storedfile_id" }, name = "uk_reducingactionadvice_storedfile_logical_pkey")
 			})
-	private List<StoredFile> documents;
+	private List<StoredFile> documents = new ArrayList<>();
 
-	@OneToMany(mappedBy = "actionAdvice")
+	@OneToMany(mappedBy = "actionAdvice", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations;
+	private Set<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations = new HashSet<>();
 
 	public ReducingActionAdvice() {
 		super();
@@ -83,6 +91,14 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	public void setAwacCalculator(AwacCalculator awacCalculator) {
 		this.awacCalculator = awacCalculator;
+	}
+
+	public ReducingActionTypeCode getType() {
+		return type;
+	}
+
+	public void setType(ReducingActionTypeCode type) {
+		this.type = type;
 	}
 
 	public String getPhysicalMeasure() {
@@ -157,12 +173,13 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 		this.comment = comment;
 	}
 
-	public List<ReducingActionAdviceBaseIndicatorAssociation> getBaseIndicatorAssociations() {
+	public Set<ReducingActionAdviceBaseIndicatorAssociation> getBaseIndicatorAssociations() {
 		return baseIndicatorAssociations;
 	}
 
-	public void setBaseIndicatorAssociations(List<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations) {
-		this.baseIndicatorAssociations = baseIndicatorAssociations;
+	public void setBaseIndicatorAssociations(Set<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations) {
+		this.getBaseIndicatorAssociations().clear();
+		this.getBaseIndicatorAssociations().addAll(baseIndicatorAssociations);
 	}
 
 	public List<StoredFile> getDocuments() {
@@ -170,7 +187,31 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	}
 
 	public void setDocuments(List<StoredFile> documents) {
-		this.documents = documents;
+		this.documents.clear();
+		this.documents.addAll(documents);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+
+		ReducingActionAdvice that = (ReducingActionAdvice) o;
+
+		if (!awacCalculator.equals(that.awacCalculator)) return false;
+		if (!title.equals(that.title)) return false;
+		if (!type.equals(that.type)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + title.hashCode();
+		result = 31 * result + awacCalculator.hashCode();
+		result = 31 * result + type.hashCode();
+		return result;
+	}
 }

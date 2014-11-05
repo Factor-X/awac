@@ -22,6 +22,10 @@ public class AwacCalculatorInstanceServiceImpl extends AbstractJPAPersistenceSer
     @Override
     public AwacCalculatorInstance findByCalculatorAndPeriodAndScope(AwacCalculator awacCalculator, Period period, Scope scope) {
 
+        if(awacCalculator==null || period == null || scope == null){
+            throw new RuntimeException("AwacCalculatorInstance findByCalculatorAndPeriodAndScope : one argument is null");
+        }
+
         List<AwacCalculatorInstance> resultList = JPA.em().createNamedQuery(AwacCalculatorInstance.FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE, AwacCalculatorInstance.class)
                 .setParameter("calculator", awacCalculator).setParameter("period", period).setParameter("scope", scope).getResultList();
         if (resultList.size() > 1) {
@@ -52,6 +56,13 @@ public class AwacCalculatorInstanceServiceImpl extends AbstractJPAPersistenceSer
     }
 
     @Override
+    public List<AwacCalculatorInstance> findByScope(Scope scope) {
+        return JPA.em().createNamedQuery(AwacCalculatorInstance.FIND_BY_SCOPE, AwacCalculatorInstance.class)
+                .setParameter("scope", scope)
+                .getResultList();
+    }
+
+    @Override
     public List<AwacCalculatorInstance> findByPeriodAndScopes(Period period, List<Scope> scopeList) {
 
         return JPA.em().createNamedQuery(AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPES, AwacCalculatorInstance.class)
@@ -59,5 +70,6 @@ public class AwacCalculatorInstanceServiceImpl extends AbstractJPAPersistenceSer
                 .setParameter("scopes", scopeList)
                 .getResultList();
     }
+
 
 }

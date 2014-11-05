@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacRegistrationMunicipality", (directiveService,downloadService,messageFlash) ->
+.directive "mmAwacRegistrationMunicipality", (directiveService,downloadService,messageFlash,modalService) ->
     restrict: "E"
     scope:{}
     templateUrl: "$/angular/templates/mm-awac-registration-municipality.html"
@@ -61,11 +61,17 @@ angular
 
         $scope.organizationStatisticsAllowed = true
 
+        $scope.aggrement_validation = false
+
 
         $scope.registrationFieldValid = () ->
-            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.municipalityNameInfo.isValid
+            if $scope.identifierInfo.isValid && $scope.lastNameInfo.isValid && $scope.firstNameInfo.isValid && $scope.emailInfo.isValid && $scope.passwordInfo.isValid && $scope.passwordConfirmInfo.isValid && $scope.municipalityNameInfo.isValid && $scope.aggrement_validation == true
                 return true
             return false
+
+
+        $scope.displayAgreement = () ->
+            modalService.show(modalService.HELP, {template: 'agreement'})
 
         #send the request to the server
         $scope.registration = () ->

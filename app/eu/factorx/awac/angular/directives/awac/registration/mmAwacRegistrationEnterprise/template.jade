@@ -7,7 +7,20 @@ div(class="field_form")
     mm-awac-modal-field-text(ng-info="passwordConfirmInfo").field_form_separator
     mm-awac-modal-field-text(ng-info="organizationNameInfo").field_form_separator
     mm-awac-modal-field-text(ng-info="firstSiteNameInfo").field_form_separator
-    br
+    .field_row
+        .field_cell(ng-bind-html="'REGISTRATION_AGREEMENT_VALIDATION' | translateText")
+        .field_cell
+            div
+                input(
+                    type="checkbox",
+                    style="width: 18px;height: 18px;",
+                    ng-model="aggrement_validation")
+                button.button(
+                type="button",
+                class="btn btn-primary",
+                ng-bind-html="'REGISTRATION_AGREEMENT_CONSULTATION' | translate",
+                ng-click="displayAgreement()")
+
     .field_row.field_form_separator
         .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
         .field_cell(style="text-align: left;")

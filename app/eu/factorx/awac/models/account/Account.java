@@ -11,6 +11,7 @@
 package eu.factorx.awac.models.account;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
@@ -77,7 +78,7 @@ public class Account extends AuditedAbstractEntity {
     @JoinTable(name = "mm_verifierrequest_account",
             joinColumns  = @JoinColumn(name = "account_id", referencedColumnName = "id"),
             inverseJoinColumns= @JoinColumn(name = "verifier_id", referencedColumnName = "id"))
-    private List<VerificationRequest> verificationRequestList;
+    private Set<VerificationRequest> verificationRequestList;
 
 	public Account() {
 	}
@@ -99,11 +100,11 @@ public class Account extends AuditedAbstractEntity {
 		this.isAdmin = isAdmin;
 	}
 
-    public List<VerificationRequest> getVerificationRequestList() {
+    public Set<VerificationRequest> getVerificationRequestList() {
         return verificationRequestList;
     }
 
-    public void setVerificationRequestList(List<VerificationRequest> verificationRequestList) {
+    public void setVerificationRequestList(Set<VerificationRequest> verificationRequestList) {
         this.verificationRequestList = verificationRequestList;
     }
 
@@ -196,6 +197,7 @@ public class Account extends AuditedAbstractEntity {
 				", active=" + active +
 				", needChangePassword=" + needChangePassword +
 				", isAdmin=" + isAdmin +
+                ", isMainVerifier=" + isMainVerifier+
 				'}';
 	}
 }

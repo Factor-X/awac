@@ -43,6 +43,11 @@ public class EmailMessage {
 		this.attachmentFilenameList = attachmentList;
 	}
 
+
+    public void addEmails(List<String> admins) {
+        toAddress.addAll(admins);
+    }
+
     public List<String> getToAddress() {
         return toAddress;
     }
