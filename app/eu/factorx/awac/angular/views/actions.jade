@@ -1,3 +1,38 @@
+div.actions.advices
+    span
+        h1 Conseils
+    br
+    span
+        img(ng-show="computingAdvices",src="/assets/images/modal-loading.gif")
+    table.actions-table(ng-hide="computingAdvices")
+        thead
+            tr
+                th &nbsp;
+                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
+                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
+                th Potentiel CO2
+        tbody
+            tr(ng-repeat="advice in actionAdvices")
+                td.details
+                    button.button(type="button", ng-click="createActionFromAdvice(advice)")
+                        span.text en faire une action
+                td.title
+                    span.text {{ advice.title }}
+                    .field_info(ng-if="!!advice.webSite || !!advice.physicalMeasure")
+                        .field_info_popup
+                            div(ng-if="!!advice.physicalMeasure") {{ advice.physicalMeasure }}
+                            div(ng-if="!!advice.webSite")
+                                span Plus d'infos sur:&nbsp;
+                                a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
+
+                td.type
+                    span.icon.action_type_icon(ng-class="{reducing: advice.typeKey == '1', better_measure: advice.typeKey == '2'}")
+                    span &nbsp;&nbsp;
+                    span.text {{ getTypeLabel(advice.typeKey) }}
+                td.ghgBenefit
+                    span {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) }}
+
+
 div.actions
     span
         h1 {{'REDUCTION_ACTIONS' | translateText }}
@@ -15,7 +50,6 @@ div.actions
                 th {{ "REDUCTION_ACTION_TABLE_COMPLETION" | translateText }}
 
         tbody
-
             tr(ng-repeat-start="a in actions")
                 td.details
                     mm-plus-minus-toggle-button(ng-model="a.opened")

@@ -176,6 +176,7 @@ GET         /awac/actions/load                                                  
 POST        /awac/actions/save                                                                     @eu.factorx.awac.controllers.ReducingActionController.saveAction()
 POST        /awac/actions/delete                                                                   @eu.factorx.awac.controllers.ReducingActionController.deleteAction()
 GET         /awac/actions/exportToXls                                                              @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
+GET         /awac/advices/load/:periodKey                                                          @eu.factorx.awac.controllers.ReducingActionAdviceController.computeAdvices(periodKey:String)
 
 #
 # Admin interfaces
