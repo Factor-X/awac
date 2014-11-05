@@ -190,7 +190,7 @@ angular
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     if $scope.editMode
-                        angular.extend($scope.getParams().action, result.data)
+                        angular.extend($scope.getParams().actionAdvice, result.data)
                     $scope.close()
                     if !!$scope.getParams().cb
                         $scope.getParams().cb()

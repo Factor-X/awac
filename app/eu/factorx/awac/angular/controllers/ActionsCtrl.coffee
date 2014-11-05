@@ -4,18 +4,32 @@ angular
     $scope.displayFormMenu = displayFormMenu
 
     $scope.actions = []
+    $scope.actionAdvices = []
     $scope.typeOptions = []
     $scope.statusOptions = []
     $scope.gwpUnits = []
+    $scope.computingAdvices = true
 
     $scope.loadActions = () ->
         downloadService.getJson "awac/actions/load", (result) ->
             if result.success
-                $scope.actions = result.data.reducingActions
                 codeLists = result.data.codeLists
                 $scope.typeOptions = _.findWhere(codeLists, {code: 'REDUCING_ACTION_TYPE'}).codeLabels
                 $scope.statusOptions = _.findWhere(codeLists, {code: 'REDUCING_ACTION_STATUS'}).codeLabels
                 $scope.gwpUnits = result.data.gwpUnits
+
+                $scope.actions = result.data.reducingActions
+            return
+        return
+
+    $scope.loadAdvices = () ->
+        $scope.computingAdvices = true
+        downloadService.getJson "awac/advices/load/" + $scope.$root.periodSelectedKey, (result) ->
+            $scope.computingAdvices = false
+            if result.success
+                $scope.actionAdvices = result.data.reducingActionAdvices
+            return
+        return
 
     $scope.createAction = () ->
         params =
@@ -84,9 +98,41 @@ angular
         return _.findWhere($scope.statusOptions, {key: statusKey }).label
 
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
+        console.log("getGwpUnitSymbol(gwpUnitCodeKey='" + gwpUnitCodeKey + "')")
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
+
+    $scope.getDefaultDueDate = () ->
+        defaultDueDate = new Date()
+        defaultDueDate.setFullYear(defaultDueDate.getFullYear() + 1)
+        return defaultDueDate
+
+    $scope.createActionFromAdvice = (actionAdvice) ->
+        data =
+            title: actionAdvice.title
+            typeKey: actionAdvice.typeKey
+            statusKey: "1"
+            scopeTypeKey: "1"
+            ghgBenefit: actionAdvice.computedGhgBenefit
+            ghgBenefitUnitKey: actionAdvice.computedGhgBenefitUnitKey
+            physicalMeasure: actionAdvice.physicalMeasure
+            webSite: actionAdvice.webSite
+            responsiblePerson: actionAdvice.responsiblePerson
+            files: []
+            dueDate: $scope.getDefaultDueDate()
+
+        downloadService.postJson '/awac/actions/save', data, (result) ->
+            if result.success
+                messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                if $scope.editMode
+                    angular.extend($scope.getParams().action, result.data)
+                $scope.loadActions()
+            else
+                $scope.isLoading = false
+
+        return false
+
 
     $scope.$watch '$root.mySites', (n, o) ->
         if !!n
             $scope.loadActions()
-
+            $scope.loadAdvices()
