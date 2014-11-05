@@ -1,12 +1,5 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import play.Logger;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.*;
@@ -22,6 +15,12 @@ import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ReportResultService;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import play.Logger;
+
+import java.util.*;
 
 @Component
 public class ReportResultServiceImpl implements ReportResultService {
@@ -129,14 +128,19 @@ public class ReportResultServiceImpl implements ReportResultService {
 		List<ReportResult> reportResults = new ArrayList<>();
 		List<ReportLogEntry> logEntries = new ArrayList<>();
 
-		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
-		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+		List<BaseActivityResult> baseActivityResults = getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 
 		for (Report report : awacCalculator.getReports()) {
 			reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
 		}
 
 		return new ReportResultCollection(reportResults, logEntries);
+	}
+
+	@Override
+	public List<BaseActivityResult> getBaseActivityResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries) {
+		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
+		return computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
 	}
 
 	@Override

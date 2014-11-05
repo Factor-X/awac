@@ -34,4 +34,25 @@
                 td.align-right.data-cell.opacity-50(ng-show="ngModel.rightPeriod != null", style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}")
                     span {{ line.rightPercentage | numberToI18N }}&nbsp;%&nbsp;
 
+    br(ng-show="getMode()=='numbers'")
+    br(ng-show="getMode()=='numbers'")
 
+    table(ng-show="getMode()=='numbers'")
+        tr
+            td(ng-bind-html="'SCOPE_1' | translate")
+            td
+                span.chart-legend-bullet-color(style="background: {{ ngModel.leftScope1Color }}")
+            td(ng-show="ngModel.rightPeriod != null")
+                span.chart-legend-bullet-color(style="background: {{ ngModel.rightScope1Color }}")
+        tr
+            td(ng-bind-html="'SCOPE_2' | translate")
+            td
+                span.chart-legend-bullet-color(style="background: {{ ngModel.leftScope2Color }}")
+            td(ng-show="ngModel.rightPeriod != null")
+                span.chart-legend-bullet-color(style="background: {{ ngModel.rightScope2Color }}")
+        tr
+            td(ng-bind-html="'SCOPE_3' | translate")
+            td
+                span.chart-legend-bullet-color(style="background: {{ ngModel.leftScope3Color }}")
+            td(ng-show="ngModel.rightPeriod != null")
+                span.chart-legend-bullet-color(style="background: {{ ngModel.rightScope3Color }}")

@@ -18,6 +18,9 @@ import java.util.Set;
 @Table(name = "reducingactionadvice", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { ReducingActionAdvice.TITLE_COLUMN, ReducingActionAdvice.CALCULATOR_COLUMN })
 })
+@NamedQueries({
+		@NamedQuery(name = ReducingActionAdvice.FIND_BY_CALCULATOR, query = "select a from ReducingActionAdvice a where a.awacCalculator = :awacCalculator order by type, technicalSegment.creationDate"),
+})
 public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 7989687565472744555L;
@@ -25,6 +28,8 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	public static final String TITLE_COLUMN = "title";
 	public static final String CALCULATOR_COLUMN = "calculator_id";
 	public static final String TYPE_COLUMN = "type";
+
+	public static final String FIND_BY_CALCULATOR = "findByCalculator";
 
 	@Column(name = TITLE_COLUMN, nullable = false)
 	private String title;

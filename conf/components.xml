@@ -43,6 +43,7 @@
                 <bean class="eu.factorx.awac.converter.ReducingActionAdviceToReducingActionAdviceDTO" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
+                <bean class="eu.factorx.awac.converter.admin.FactorToFactorDTOConverter" />
             </set>
         </property>
     </bean>

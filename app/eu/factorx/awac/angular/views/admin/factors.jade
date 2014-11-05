@@ -4,120 +4,45 @@ div.factors
 
     br
 
-    table.factors-table
+    table.factors-table(ng-table="parameters", show-filter="true" )
+        tr(ng-repeat-start="row in $data")
+            td().details(data-title="'FACTORS_TABLE_DETAILS' | translateText")
+                mm-plus-minus-toggle-button(ng-model="a.opened")
+            td().name(data-title="'FACTORS_TABLE_KEY' | translateText", filter="{ 'key': 'text' }") {{ row.key }}
+            td.type(sortable="'typeString'", data-title="'FACTORS_TABLE_TYPE' | translateText", filter="{ 'typeString': 'text' }") {{ row.typeString }}
+            td().unit-category-in(data-title="'FACTORS_TABLE_UNIT_CATEGORY_IN' | translateText", filter="{ 'unitCategoryIn': 'select' }", filter-data="names('unitCategoryIn')") {{ row.unitCategoryIn }}
+            td.origin(sortable="'origin'", data-title="'FACTORS_TABLE_ORIGIN' | translateText", filter="{ 'origin': 'text' }") {{ row.origin }}
 
-        thead
-            tr
-                th {{ "FACTORS_TABLE_DETAILS" | translateText }}
-                th {{ "FACTORS_TABLE_NAME" | translateText }}
-                th {{ "FACTORS_TABLE_DESCRIPTION" | translateText }}
-                th {{ "FACTORS_TABLE_TYPE" | translateText }}
-                th {{ "FACTORS_TABLE_UNIT_IN" | translateText }}
-                th {{ "FACTORS_TABLE_ORIGIN" | translateText }}
 
-        tbody
+        tr(ng-repeat-end, ng-show="a.opened").details
+            td(colspan="5")
+                table
+                    tr(ng-repeat="fv in row.factorValues")
+                        td {{ row.currentValue }}
+                        td {{ row.unitIn }}
 
-            tr(ng-repeat-start="a in factors")
-                td.details
-                    mm-plus-minus-toggle-button(ng-model="a.opened")
-                td.name
-                    span.text {{a.title}}
-                td.description
-                    span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
-                    span &nbsp;&nbsp;
-                    span.text {{ getTypeLabel(a.typeKey) }}
-                td.type
-                    span.icon.scope_type_icon(ng-class="{org: a.scopeTypeKey == '1', site: a.scopeTypeKey == '2'}")
-                    span &nbsp;&nbsp;
-                    span.text {{ getScopeName(a.scopeTypeKey, a.scopeId) }}
-                td.unit-in
-                    span.icon.action_done_icon(ng-show="a.statusKey == '2'")
-                    span &nbsp;&nbsp;
-                    span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
-                td.origin
-                    span.icon.action_done_icon(ng-show="a.statusKey == '2'")
-                    span &nbsp;&nbsp;
-                    span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
+                        td {{ fv.value }}
+                        td {{ row.unitOut }}
 
-            tr(ng-repeat-end, ng-show="a.opened").details
-                td(colspan="2")
+                        td
+                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateIn")
+                        td
+                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateOut")
 
-                    table
-                        tr
-                            td {{ "REDUCTION_ACTION_WEBSITE_FIELD_TITLE" | translateText }}:
-                            td
-                                a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
-                        tr
-                            td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.physicalMeasure || "&nbsp;" }}
-                        tr(ng-if="a.typeKey == '1'")
-                            td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.ghgBenefit") {{ (a.ghgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
-                                .box.wide(ng-hide="!!a.ghgBenefit") &nbsp;
+                button.button(type="button")
+                    span.fa.fa-plus-circle
+                    span &nbsp;
+                    span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")
 
-                        tr
-                            td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.financialBenefit") {{ (a.financialBenefit | numberToI18N) + "&nbsp;EUR" }}
-                                .box.wide(ng-hide="!!a.financialBenefit") &nbsp;
-
-                        tr
-                            td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.investmentCost") {{ (a.investmentCost | numberToI18N) + "&nbsp;EUR" }}
-                                .box.wide(ng-hide="!!a.investmentCost") &nbsp;
-
-                        tr
-                            td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.expectedPaybackTime || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.dueDate | date: 'dd/MM/yyyy' }}
-                        tr
-                            td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.responsiblePerson || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(style="min-height: 150px;") {{ a.comment || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="a.files.length > 0")
-                                    div(ng-repeat="f in a.files")
-                                        a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
-                                .box.wide(ng-hide="a.files.length > 0") &nbsp;
-
-                td(style="vertical-align: bottom; text-align: right", colspan="4")
-
-                        button.button(type="button", ng-click="updateAction(a)")
-                            span.fa.fa-pencil-square-o
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_EDIT' | translate")
-
-                        button.button(type="button", ng-click="confirmDelete(a)")
-                            span.fa.fa-times
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_DELETE' | translate")
-
-                        button.button(type="button", ng-click="markActionAsDone(a)", ng-show="a.statusKey != '2'")
-                            span.fa.fa-check-square-o
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_MARK_AS_DONE' | translate")
 
     br
 
-    button.button(type="button", ng-click="createAction()")
+    button.button(type="button", ng-click="createFactor()")
         span.fa.fa-plus-circle
         span &nbsp;
-        span(ng-bind-html="'REDUCING_ACTION_BUTTON_CREATE' | translate")
+        span(ng-bind-html="'FACTOR_BUTTON_CREATE' | translate")
 
-    button.button(type="button", ng-click="exportActionsToXls()")
+    button.button(type="button", ng-click="exportFactorsToXls()")
         span.fa.fa-file-excel-o
         span &nbsp;
-        span(ng-bind-html="'REDUCING_ACTION_BUTTON_EXPORT_TO_XLS' | translate")
+        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")

@@ -31,6 +31,10 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 	private Double investmentCost;
 
+	private Double computedGhgBenefit;
+
+	private String computedGhgBenefitUnitKey;
+
 	@Size(max = 255)
 	private String expectedPaybackTime;
 
@@ -142,6 +146,22 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 	public void setInvestmentCost(Double investmentCost) {
 		this.investmentCost = investmentCost;
+	}
+
+	public Double getComputedGhgBenefit() {
+		return computedGhgBenefit;
+	}
+
+	public void setComputedGhgBenefit(Double computedGhgBenefit) {
+		this.computedGhgBenefit = computedGhgBenefit;
+	}
+
+	public String getComputedGhgBenefitUnitKey() {
+		return computedGhgBenefitUnitKey;
+	}
+
+	public void setComputedGhgBenefitUnitKey(String computedGhgBenefitUnitKey) {
+		this.computedGhgBenefitUnitKey = computedGhgBenefitUnitKey;
 	}
 
 	public String getExpectedPaybackTime() {
