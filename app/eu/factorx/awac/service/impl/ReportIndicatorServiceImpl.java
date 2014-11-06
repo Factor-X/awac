@@ -16,7 +16,7 @@ public class ReportIndicatorServiceImpl extends AbstractJPAPersistenceServiceImp
 	}
 
 	@Override
-	public ReportIndicator findByReportCodeAndIndicaotrCode(String reportCode, String indicator) {
+	public ReportIndicator findByReportCodeAndIndicatorCode(String reportCode, String indicator) {
 		return JPA.em().createQuery("select e from ReportIndicator e where e.report.code.key = :rc and e.indicator.code.key = :ic", ReportIndicator.class)
 			.setParameter("rc", reportCode)
 			.setParameter("ic", indicator)
