@@ -11,7 +11,10 @@
 
 package eu.factorx.awac.util.email.messages;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EmailMessage {
@@ -19,7 +22,7 @@ public class EmailMessage {
 	private List<String> toAddress;
 	private String subject;
 	private String content;
-	private List<String> attachmentFilenameList;
+	private HashMap<String, ByteArrayOutputStream> attachmentFilenameList;
 
 	public EmailMessage(String toAddress, String subject, String content) {
 		this.toAddress = new ArrayList<>();
@@ -35,13 +38,15 @@ public class EmailMessage {
         this.content = content;
     }
 
-    public EmailMessage(String toAddress, String subject, String content,List<String> attachmentList) {
+    public EmailMessage(String toAddress, String subject, String content,HashMap<String, ByteArrayOutputStream> attachmentList) {
         this.toAddress = new ArrayList<>();
         this.toAddress.add(toAddress);
 		this.subject = subject;
 		this.content = content;
 		this.attachmentFilenameList = attachmentList;
 	}
+
+
 
 
     public void addEmails(List<String> admins) {
@@ -72,16 +77,15 @@ public class EmailMessage {
 		this.content = content;
 	}
 
+    public HashMap<String, ByteArrayOutputStream> getAttachmentFilenameList() {
+        return attachmentFilenameList;
+    }
 
-	public List<String> getAttachmentFilenameList() {
-		return attachmentFilenameList;
-	}
+    public void setAttachmentFilenameList(HashMap<String, ByteArrayOutputStream> attachmentFilenameList) {
+        this.attachmentFilenameList = attachmentFilenameList;
+    }
 
-	public void setAttachmentFilenameList(List<String> attachmentFilenameList) {
-		this.attachmentFilenameList = attachmentFilenameList;
-	}
-
-	@Override
+    @Override
 	public String toString() {
 		return "EmailMessage{" +
 				"toAddress='" + toAddress + '\'' +

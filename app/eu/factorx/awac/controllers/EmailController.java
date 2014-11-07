@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,11 @@ public class EmailController extends AbstractController {
 	/**
 	 * Handle the email submission.
 	 */
-	public Result sendWithAttachments(String destinationEmail, String subject, String message, List<String> filenameList) {
+	public Result sendWithAttachments(String destinationEmail, String subject, String message, java.util.HashMap<String, ByteArrayOutputStream> filenameList) {
 
 		try {
 			// send mail
-			EmailMessage email = new EmailMessage(destinationEmail, subject, message, filenameList);
+			EmailMessage email = new EmailMessage(destinationEmail, subject, message,  filenameList);
 			//EmailMessage email = new EmailMessage(destinationEmail, subject, message);
 			emailService.send(email);
 		} catch (Exception ex) {

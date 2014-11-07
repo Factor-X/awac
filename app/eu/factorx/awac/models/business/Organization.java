@@ -17,6 +17,7 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Table(name = "organization")
 @NamedQueries({
 		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
+        @NamedQuery(name = Organization.FIND_BY_INTERFACE_CODE, query = "select p from Organization p where p.interfaceCode = :interfaceCode"),
 })
 public class Organization extends Scope {
 
@@ -26,8 +27,9 @@ public class Organization extends Scope {
 	public static final String FIND_BY_NAME = "Organization.findByName";
 
 	private static final long serialVersionUID = 1L;
+    public static final java.lang.String FIND_BY_INTERFACE_CODE= "organization_FIND_BY_INTERFACE_CODE";
 
-	@Column(unique = true)
+    @Column(unique = true)
 	private String name;
 
 	private String naceCode;
@@ -36,6 +38,9 @@ public class Organization extends Scope {
 
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Site> sites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<Product> products = new ArrayList<>();
 
 	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	List<Account> accounts = new ArrayList<>();
@@ -110,6 +115,10 @@ public class Organization extends Scope {
 	public List<Site> getSites() {
 		return sites;
 	}
+
+    public List<Product> getProducts() {
+        return products;
+    }
 
 	public void setSites(List<Site> param) {
 		this.sites = param;

@@ -10,7 +10,7 @@ public class ExceptionsDTO extends DTO {
 
     private String message=null;
     private  String messageToTranslate=null;
-    private final HashMap<Integer,String> params = new HashMap<Integer,String>();
+    private final HashMap<Integer,String> params = new HashMap<>();
 
     // add default constructor for Json Parser
     public ExceptionsDTO() {

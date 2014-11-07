@@ -8,6 +8,7 @@ import javax.persistence.*;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
 
 @Entity
 @Table(name = "question")
@@ -43,6 +44,9 @@ public abstract class Question extends AuditedAbstractEntity {
 
 	protected int orderIndex = 0;
 
+    @OneToMany(mappedBy = "question")
+    protected List<QuestionAnswer> questionAnswerList;
+
 	protected Question() {
 		super();
 	}
@@ -59,7 +63,15 @@ public abstract class Question extends AuditedAbstractEntity {
 		this.code = code;
 	}
 
-	public QuestionSet getQuestionSet() {
+    public List<QuestionAnswer> getQuestionAnswerList() {
+        return questionAnswerList;
+    }
+
+    public void setQuestionAnswerList(List<QuestionAnswer> questionAnswerList) {
+        this.questionAnswerList = questionAnswerList;
+    }
+
+    public QuestionSet getQuestionSet() {
 		return questionSet;
 	}
 

@@ -25,6 +25,15 @@ cat ./CELDL-301-reducingactionadvices.sql >> /tmp/migration/migration_script.sql
 # add product model
 cat ./Add_product_model.sql >> /tmp/migration/migration_script.sql
 
+# refactor mm_form_questionset
+cat ./mm_form_questionset_REFACTORING.sql >> /tmp/migration/migration_script.sql
+
+# fix_answer_bug
+cat ./fix_answer_bug.sql.sql >> /tmp/migration/migration_script.sql
+
+
+
+
 
 
 # -------------------------------------------------

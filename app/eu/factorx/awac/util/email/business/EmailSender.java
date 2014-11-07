@@ -1,12 +1,16 @@
 package eu.factorx.awac.util.email.business;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.util.Map;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
 
+import eu.factorx.awac.util.MyrmexFatalException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -16,6 +20,7 @@ import play.Configuration;
 import play.Logger;
 import eu.factorx.awac.models.email.MailConfig;
 import eu.factorx.awac.util.email.messages.EmailMessage;
+import scala.util.parsing.combinator.testing.Str;
 
 @Component
 public class EmailSender implements ApplicationContextAware {
@@ -86,15 +91,14 @@ public class EmailSender implements ApplicationContextAware {
 			// check if attachments
 			if (email.getAttachmentFilenameList()!=null) {
 				// for each attachment
-				for (String fileName : email.getAttachmentFilenameList()) {
-					try {
-						Logger.info("Attachment found : " + fileName);
-						addAttachment(multipart, fileName);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} // end for
-			} // end if
+				for (Map.Entry<String, ByteArrayOutputStream> fileName : email.getAttachmentFilenameList().entrySet())
+                    try {
+                        addAttachment(multipart,fileName.getKey() , fileName.getValue());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                // end for
+            } // end if
 
 			// add multipart to message
 			mimeMessage.setContent(multipart);
@@ -111,11 +115,20 @@ public class EmailSender implements ApplicationContextAware {
     }
 
 	// add attachment
-	private static void addAttachment(Multipart multipart, String fileName) throws IOException, MessagingException
-	{
-		MimeBodyPart messageAttachment = new MimeBodyPart();
-		messageAttachment.attachFile(fileName);
-		messageAttachment.setFileName(fileName);
-		multipart.addBodyPart(messageAttachment);
+	private static void addAttachment(Multipart multipart, String name, ByteArrayOutputStream out) throws IOException, MessagingException{
+
+        if(out==null || name==null){
+            throw new MyrmexFatalException("out or name is null:"+name+"/"+out);
+        }
+        Logger.info(out.toByteArray()+"");
+
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+
+        Logger.info(new ByteArrayInputStream(out.toByteArray())+"");
+
+        DataSource aAttachment = new ByteArrayDataSource(new ByteArrayInputStream(out.toByteArray()),"application/octet-stream");
+        attachmentPart.setDataHandler(new DataHandler(aAttachment));
+        attachmentPart.attachFile(name);
+		multipart.addBodyPart(attachmentPart);
 	}
 }
