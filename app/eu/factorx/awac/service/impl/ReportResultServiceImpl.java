@@ -61,6 +61,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs, List<ReportLogEntry> logEntries) {
 		List<BaseActivityData> res = new ArrayList<>();
 		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
+		reportLowRankMeasureWarnings(minRankByAlternativeGroup, logEntries);
 		for (BaseActivityData baseActivityData : indicatorBADs) {
 			String alternativeGroup = getAlternativeGroupKey(baseActivityData);
 			if (alternativeGroup == null) {
@@ -76,6 +77,15 @@ public class ReportResultServiceImpl implements ReportResultService {
 			}
 		}
 		return res;
+	}
+
+	private static void reportLowRankMeasureWarnings(Map<String, Integer> minRankByAlternativeGroup, List<ReportLogEntry> logEntries) {
+		for (Map.Entry<String, Integer> minRankEntry : minRankByAlternativeGroup.entrySet()) {
+			Integer minRank = minRankEntry.getValue();
+			if (minRank >= 1) {
+				logEntries.add(new LowRankMeasureWarning(minRankEntry.getKey(), minRank));
+			}
+		}
 	}
 
 

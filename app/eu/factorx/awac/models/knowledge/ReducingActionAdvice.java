@@ -7,6 +7,7 @@ import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import play.db.jpa.JPA;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = TYPE_COLUMN, length = 1, nullable = false)) })
 	private ReducingActionTypeCode type;
 
+	@Column(columnDefinition = "TEXT")
 	private String physicalMeasure;
 
 	private Double ghgBenefit;
