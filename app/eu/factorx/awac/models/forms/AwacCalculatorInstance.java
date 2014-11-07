@@ -11,6 +11,7 @@ import eu.factorx.awac.models.knowledge.Period;
 @Table(uniqueConstraints =@UniqueConstraint(columnNames = {"awaccalculator_id", "period_id", "scope_id"}))
 @NamedQueries({
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_CALCULATOR_AND_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.awacCalculator = :calculator and p.period = :period and p.scope=:scope" ),
+        @NamedQuery(name = AwacCalculatorInstance.FIND_BY_CALCULATOR, query = "select p from AwacCalculatorInstance p where p.awacCalculator = :calculator" ),
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPE, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope=:scope" ),
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_ORGANIZATION, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope=:scope" ),
         @NamedQuery(name = AwacCalculatorInstance.FIND_BY_PERIOD_AND_SCOPES, query = "select p from AwacCalculatorInstance p where p.period = :period and p.scope in :scopes" ),
@@ -26,6 +27,7 @@ public class AwacCalculatorInstance extends AuditedAbstractEntity{
     public static final java.lang.String FIND_BY_PERIOD_AND_ORGANIZATION = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_ORGANIZATION";
     public static final java.lang.String FIND_BY_PERIOD_AND_SCOPES = "AwacCalculatorInstance_FIND_BY_PERIOD_AND_SCOPES";
     public static final java.lang.String FIND_BY_SCOPE = "AwacCalculatorInstance_FIND_BY_SCOPE";;
+    public static final java.lang.String FIND_BY_CALCULATOR = "AwacCalculatorInstance_FIND_BY_CALCULATOR";
 
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
     private AwacCalculator awacCalculator;

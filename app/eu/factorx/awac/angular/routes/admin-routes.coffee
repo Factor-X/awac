@@ -41,6 +41,24 @@ initializeAdminRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
+        .when('/translation', {
+                templateUrl: '$/angular/views/admin/translation.html'
+                controller: 'AdminTranslationCtrl'
+                resolve:angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/average', {
+                templateUrl: '$/angular/views/admin/average.html'
+                controller: 'AdminAverageCtrl'
+                resolve:angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
         .otherwise({ redirectTo: '/login' })
 
         return

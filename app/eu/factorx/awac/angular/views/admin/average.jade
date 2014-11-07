@@ -1,0 +1,30 @@
+div.verification_manage
+    span
+        h1 Moyenne
+
+
+    div(style="width:700px")
+        .field_form
+            .field_row
+                .field_cell Periode
+                .field_cell
+                    select(
+                    ng-options='p.key as p.label for p in $root.periods',
+                    ng-model='results.period')
+            .field_row
+                .field_cell Calculateur
+                .field_cell
+                    select(
+                    ng-model="results.interface",
+                    ng-options="interfaceName for interfaceName in interfaceNames")
+            .field_row(ng-show="results.interface == 'enterprise'")
+                .field_cell NACE code
+                .field_cell
+                    select(
+                    ng-options='p.key as p.label for p in naceCodes',
+                    ng-model='naceCode')
+            .field_row
+                .field_cell
+                    button.button(type="button",
+                    ng-disabled="!allFieldValid()",
+                    ng-click="askAverage()") Calculer et envoyer les moyennnes par e-mail
