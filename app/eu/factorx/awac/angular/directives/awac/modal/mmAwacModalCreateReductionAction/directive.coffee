@@ -67,8 +67,9 @@ angular
             field: $scope.action.physicalMeasure
             fieldTitle: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE"
             placeholder: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
-            validationRegex: "^.{0,255}$"
-            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            fieldType: 'textarea'
+            validationRegex: ".{0,1000}"
+            validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.ghgBenefit =

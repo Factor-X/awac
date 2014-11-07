@@ -53,6 +53,7 @@ public class ReducingAction extends AuditedAbstractEntity {
 
 	private DateTime completionDate;
 
+	@Column(columnDefinition = "TEXT")
 	private String physicalMeasure;
 
 	private Double ghgBenefit;
@@ -75,7 +76,7 @@ public class ReducingAction extends AuditedAbstractEntity {
 
 	private String responsiblePerson;
 
-	@Column(length = 1000)
+	@Column(columnDefinition = "TEXT")
 	private String comment;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -66,8 +66,9 @@ angular
             field: $scope.actionAdvice.physicalMeasure
             fieldTitle: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE"
             placeholder: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
-            validationRegex: "^.{0,255}$"
-            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            fieldType: 'textarea'
+            validationRegex: ".{0,1000}"
+            validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.financialBenefit =
@@ -129,17 +130,21 @@ angular
             baseIndicatorKey: ""
             percent: 0
             isValid: () ->
-                return (!!this.baseIndicatorKey) && (this.percent > 0) && (this.percent < 100)
-            reset: () ->
+                if !!this.percent && !!this.baseIndicatorKey
+                    percent = +this.percent.replace(',', '.')
+                    return (percent > 0) && (percent < 100)
+                return false
+            clear: () ->
                 this.baseIndicatorKey = ""
                 this.percent = 0
 
         # Get indicators options related to selected calculator
         $scope.getIndicatorOptions = () ->
             indicatorOptions = indicatorOptionsByInterfaceType[$scope.interfaceTypeKey.field]
-            if ($scope.indicatorAssociations.length > 0)
+            indicatorAssociations = $scope.indicatorAssociations
+            if (indicatorAssociations.length > 0)
                 # remove indicators already associated
-                selectedIndicatorsKeys = _.pluck($scope.indicatorAssociations, "baseIndicatorKey")
+                selectedIndicatorsKeys = _.pluck(indicatorAssociations, "baseIndicatorKey")
                 indicatorOptions = _.reject(indicatorOptions, (codeLabel) ->
                     return _.contains(selectedIndicatorsKeys, codeLabel.key)
                 )
@@ -154,8 +159,14 @@ angular
         $scope.$watch 'interfaceTypeKey.field', (n, o) ->
             if (n != o)
                 $scope.indicatorAssociations = []
-                $scope.indicatorAssociationToAdd.reset()
+                $scope.indicatorAssociationToAdd.clear()
                 $scope.indicatorOptions = $scope.getIndicatorOptions()
+            return
+
+        $scope.$watch 'typeKey.field', (n, o) ->
+            if (n != o)
+                $scope.indicatorAssociations = []
+                $scope.indicatorAssociationToAdd.clear()
             return
 
         $scope.allFieldValid = () ->
@@ -164,7 +175,7 @@ angular
                 $scope.webSite.isValid &&
                 $scope.responsiblePerson.isValid &&
                 $scope.comment.isValid &&
-                $scope.indicatorAssociations.length > 0)
+                (($scope.typeKey.field == "2") || ($scope.indicatorAssociations.length > 0)))
 
         #send the request to the server
         $scope.save = () ->
@@ -190,7 +201,7 @@ angular
                 if result.success
                     messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                     if $scope.editMode
-                        angular.extend($scope.getParams().action, result.data)
+                        angular.extend($scope.getParams().actionAdvice, result.data)
                     $scope.close()
                     if !!$scope.getParams().cb
                         $scope.getParams().cb()
@@ -249,12 +260,12 @@ angular
 
         $scope.addIndicatorAssociation = () ->
             if ($scope.indicatorAssociationToAdd.isValid())
-                $scope.indicatorAssociationToAdd.percent = +$scope.indicatorAssociationToAdd.percent
+                $scope.indicatorAssociationToAdd.percent = +$scope.indicatorAssociationToAdd.percent.replace(',', '.')
                 $scope.indicatorAssociations.push(angular.copy($scope.indicatorAssociationToAdd))
                 $scope.indicatorAssociations = _.sortBy($scope.indicatorAssociations, (indicatorAssociation) ->
                     return parseInt(indicatorAssociation.baseIndicatorKey.match(/\d+/), 10)
                 )
-                $scope.indicatorAssociationToAdd.reset();
+                $scope.indicatorAssociationToAdd.clear();
                 $scope.indicatorOptions = $scope.getIndicatorOptions()
             return
 

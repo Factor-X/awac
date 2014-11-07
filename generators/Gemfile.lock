@@ -1,8 +1,5 @@
 GEM
   remote: https://rubygems.org/
-  remote: https://rubygems.org/
-  remote: https://rubygems.org/
-  remote: https://rubygems.org/
   specs:
     activemodel (4.1.4)
       activesupport (= 4.1.4)
@@ -18,6 +15,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    awesome_print (1.2.0)
     bond (0.5.1)
     builder (3.2.2)
     erubis (2.7.0)
@@ -43,6 +41,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  awesome_print
   erubis
   i18n
   logger

@@ -3,6 +3,7 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.admin.get.FactorDTO;
 import eu.factorx.awac.dto.admin.get.FactorsDTO;
+import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.generated.AwacEnterpriseInitialData;
@@ -11,6 +12,7 @@ import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.FactorImporter;
@@ -32,31 +34,34 @@ public class AdminController extends AbstractController {
 
 
     @Autowired
-    private ConversionService conversionService;
+    private ConversionService           conversionService;
     @Autowired
-    private NotificationService notificationService;
+    private NotificationService         notificationService;
     @Autowired
-    private CodeLabelService codeLabelService;
+    private CodeLabelService            codeLabelService;
     @Autowired
-    private FormService formService;
+    private FormService                 formService;
     @Autowired
-    private TranslationImporter translationImporter;
+    private TranslationImporter         translationImporter;
     @Autowired
-    private CodeLabelImporter codeLabelImporter;
+    private CodeLabelImporter           codeLabelImporter;
     @Autowired
-    private FactorImporter factorImporter;
+    private FactorImporter              factorImporter;
     @Autowired
-    private IndicatorImporter indicatorImporter;
+    private IndicatorImporter           indicatorImporter;
     @Autowired
-    private BADImporter badImporter;
+    private BADImporter                 badImporter;
     @Autowired
-    private AwacEnterpriseInitialData awacEnterpriseInitialData;
+    private AwacEnterpriseInitialData   awacEnterpriseInitialData;
     @Autowired
     private AwacMunicipalityInitialData awacMunicipalityInitialData;
     @Autowired
-    private QuestionSetService questionSetService;
+    private QuestionSetService          questionSetService;
     @Autowired
-    private FactorService factorService;
+    private FactorService               factorService;
+    @Autowired
+    private PeriodService               periodService;
+
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -137,7 +142,14 @@ public class AdminController extends AbstractController {
         for (Factor factor : all) {
             dtos.add(conversionService.convert(factor, FactorDTO.class));
         }
-        return ok(new FactorsDTO(dtos));
+
+        List<Period> periods = periodService.findAll();
+        List<PeriodDTO> periodsDTOs = new ArrayList<>();
+        for (Period period : periods) {
+            periodsDTOs.add(conversionService.convert(period, PeriodDTO.class));
+        }
+
+        return ok(new FactorsDTO(dtos, periodsDTOs));
 
     }
 }

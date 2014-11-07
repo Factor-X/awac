@@ -65,7 +65,7 @@ GET         /awac/velocity                                                  @eu.
 # Email Service
 #
 GET         /email/send                                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
-#GET         /email/sendWithAttachments                                      @eu.factorx.awac.controllers.EmailController.sendWithAttachments(destinationEmail:String,subject:String,message:String,filenameList:java.util.List[String])
+GET         /email/sendWithAttachments                                      @eu.factorx.awac.controllers.EmailController.sendWithAttachments(destinationEmail:String,subject:String,message:String,filenameList:java.util.List[String])
 #GET         /email/sendComplete                                                                    @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
 
 
@@ -174,7 +174,8 @@ POST        /awac/verification/verify                                       @eu.
 GET         /awac/actions/load                                              @eu.factorx.awac.controllers.ReducingActionController.loadActions()
 POST        /awac/actions/save                                              @eu.factorx.awac.controllers.ReducingActionController.saveAction()
 POST        /awac/actions/delete                                            @eu.factorx.awac.controllers.ReducingActionController.deleteAction()
-GET         /awac/actions/exportToXls                                       @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()
+GET         /awac/actions/exportToXls                                       @eu.factorx.awac.controllers.ReducingActionController.getActionsAsXls()                                                                                    
+GET         /awac/advices/load/:periodKey                                   @eu.factorx.awac.controllers.ReducingActionAdviceController.computeAdvices(periodKey:String)
 
 #
 # Admin interfaces
@@ -184,5 +185,8 @@ POST        /awac/admin/driver/update                                       @eu.
 GET         /awac/admin/advices/load                                        @eu.factorx.awac.controllers.ReducingActionAdviceController.loadAdvices()
 POST        /awac/admin/advices/save                                        @eu.factorx.awac.controllers.ReducingActionAdviceController.saveOrUpdateAdvice()
 POST        /awac/admin/advices/delete                                      @eu.factorx.awac.controllers.ReducingActionAdviceController.deleteAdvice()
+
 POST        /awac/admin/average/computeAverage                              @eu.factorx.awac.controllers.AverageController.computeAverage()
-GET         /awac/admin/average/naceCodes                              @eu.factorx.awac.controllers.AverageController.getNaceCodeList()
+GET         /awac/admin/average/naceCodes                                   @eu.factorx.awac.controllers.AverageController.getNaceCodeList()
+
+GET         /awac/admin/factors/all                                         @eu.factorx.awac.controllers.AdminController.allFactors()

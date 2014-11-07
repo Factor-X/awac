@@ -1,10 +1,10 @@
 package eu.factorx.awac.dto.awac.get;
 
-import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.awac.shared.ReducingActionAdviceDTO;
-
 import java.io.Serializable;
 import java.util.List;
+
+import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.dto.awac.shared.ReducingActionAdviceDTO;
 
 public class ReducingActionAdviceDTOList extends DTO implements Serializable {
 
@@ -16,6 +16,15 @@ public class ReducingActionAdviceDTOList extends DTO implements Serializable {
 
 	public ReducingActionAdviceDTOList() {
 		super();
+	}
+
+	/**
+	 * @param reducingActionAdvices
+	 */
+	public ReducingActionAdviceDTOList(
+			List<ReducingActionAdviceDTO> reducingActionAdvices) {
+		super();
+		this.reducingActionAdvices = reducingActionAdvices;
 	}
 
 	/**

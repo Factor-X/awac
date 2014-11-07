@@ -12,14 +12,15 @@ ${request.emailVerificationContent.content}.<br/><br/>
 Son numéro de contact téléphonique : ${request.emailVerificationContent.phoneNumber}.<br/>
 Son email : ${request.contact.person.email}.<br/><br/>
 
-Si vous possédez déjà un compte de vérification sur l'outil de l'AWAC, mais qui n'est pas associé à la présente adresse courriel fournie par l'AWAC, utilisez cette clé ${request.key} pour gérer la demande depuis votre compte existant.<br/></br>
+Si vous possédez déjà un compte de vérification sur l'outil de l'AWAC, mais qui n'est pas associé à la présente adresse courriel fournie par l'AWAC, utilisez cette clé ${request.key} pour gérer la demande depuis votre compte existant.<br/>
+Pour ce faire, il vous suffit de recopier la clé dans la case prévue à cet effet dans l'onglet "Gérer" de votre interface de vérification.<br/></br>
 
 Si vous n'avez pas encore de compte, pour en créer un, suivez le lien suivant: <br/>
 ${link} <br/><br/>
 et utilisez-y la clé fournie ci-dessus. L'interface de l'outil vous permettra alors d'accepter ou de refuser cette demande.<br/><br/>
 
 Bien à vous,<br/>
-L'outil AWAC.
+Le gestionnaire du calculateur AWAC
 
 </body>
 </html>

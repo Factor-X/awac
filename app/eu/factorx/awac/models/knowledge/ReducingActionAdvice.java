@@ -7,6 +7,7 @@ import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import play.db.jpa.JPA;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ import java.util.Set;
 @Table(name = "reducingactionadvice", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { ReducingActionAdvice.TITLE_COLUMN, ReducingActionAdvice.CALCULATOR_COLUMN })
 })
+@NamedQueries({
+		@NamedQuery(name = ReducingActionAdvice.FIND_BY_CALCULATOR, query = "select a from ReducingActionAdvice a where a.awacCalculator = :awacCalculator order by type, technicalSegment.creationDate"),
+})
 public class ReducingActionAdvice extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 7989687565472744555L;
@@ -25,6 +29,8 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	public static final String TITLE_COLUMN = "title";
 	public static final String CALCULATOR_COLUMN = "calculator_id";
 	public static final String TYPE_COLUMN = "type";
+
+	public static final String FIND_BY_CALCULATOR = "findByCalculator";
 
 	@Column(name = TITLE_COLUMN, nullable = false)
 	private String title;
@@ -37,6 +43,7 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = TYPE_COLUMN, length = 1, nullable = false)) })
 	private ReducingActionTypeCode type;
 
+	@Column(columnDefinition = "TEXT")
 	private String physicalMeasure;
 
 	private Double ghgBenefit;

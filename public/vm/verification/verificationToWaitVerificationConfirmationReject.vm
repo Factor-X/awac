@@ -10,6 +10,6 @@ ${user.person.firstname} ${user.person.lastname} a fini la vérification de ${re
 A vous de valider et de renvoyer au client. <br/><br/>
 
 Bien à vous, <br/>
-L'outil AWAC.<br/>
+Le gestionnaire du calculateur AWAC<br/>
 </body>
 </html>

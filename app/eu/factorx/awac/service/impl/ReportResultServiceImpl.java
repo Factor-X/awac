@@ -1,12 +1,5 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import play.Logger;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.*;
@@ -16,12 +9,15 @@ import eu.factorx.awac.models.knowledge.*;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.ReportResult;
-import eu.factorx.awac.service.BaseIndicatorService;
-import eu.factorx.awac.service.FactorService;
-import eu.factorx.awac.service.QuestionSetAnswerService;
-import eu.factorx.awac.service.ReportResultService;
+import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.service.knowledge.activity.contributor.ActivityResultContributor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import play.Logger;
+
+import java.util.*;
 
 @Component
 public class ReportResultServiceImpl implements ReportResultService {
@@ -32,12 +28,14 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 	@Autowired
 	private QuestionSetAnswerService questionSetAnswerService;
-
 	@Autowired
-	private BaseIndicatorService baseIndicatorService;
-
+	private BaseIndicatorService     baseIndicatorService;
 	@Autowired
-	private FactorService factorService;
+	private FactorService            factorService;
+	@Autowired
+	private IndicatorService         indicatorService;
+	@Autowired
+	private ReportIndicatorService   reportIndicatorService;
 
 	/**
 	 * No auto-wiring for this property: contributors have to be explicitly declared in components.xml
@@ -52,7 +50,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		List<BaseActivityData> res = new ArrayList<>();
 		for (BaseActivityData bad : allBads) {
 			if (category.equals(bad.getActivityCategory()) && subCategory.equals(bad.getActivitySubCategory())
-				&& ((ownership == null) || ownership.equals(bad.getActivityOwnership()))) {
+					&& ((ownership == null) || ownership.equals(bad.getActivityOwnership()))) {
 				res.add(bad);
 			}
 		}
@@ -62,6 +60,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 	private static List<BaseActivityData> filterByRank(List<BaseActivityData> indicatorBADs, List<ReportLogEntry> logEntries) {
 		List<BaseActivityData> res = new ArrayList<>();
 		Map<String, Integer> minRankByAlternativeGroup = getMinRankByAlternativeGroup(indicatorBADs);
+		reportLowRankMeasureWarnings(minRankByAlternativeGroup, logEntries);
 		for (BaseActivityData baseActivityData : indicatorBADs) {
 			String alternativeGroup = getAlternativeGroupKey(baseActivityData);
 			if (alternativeGroup == null) {
@@ -79,6 +78,14 @@ public class ReportResultServiceImpl implements ReportResultService {
 		return res;
 	}
 
+	private static void reportLowRankMeasureWarnings(Map<String, Integer> minRankByAlternativeGroup, List<ReportLogEntry> logEntries) {
+		for (Map.Entry<String, Integer> minRankEntry : minRankByAlternativeGroup.entrySet()) {
+			Integer minRank = minRankEntry.getValue();
+			if (minRank >= 1) {
+				logEntries.add(new LowRankMeasureWarning(minRankEntry.getKey(), minRank));
+			}
+		}
+	}
 
 	private static Map<String, Integer> getMinRankByAlternativeGroup(List<BaseActivityData> indicatorBADs) {
 		Map<String, Integer> minRankByAlternativeGroup = new HashMap<>();
@@ -129,14 +136,19 @@ public class ReportResultServiceImpl implements ReportResultService {
 		List<ReportResult> reportResults = new ArrayList<>();
 		List<ReportLogEntry> logEntries = new ArrayList<>();
 
-		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
-		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+		List<BaseActivityResult> baseActivityResults = getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 
 		for (Report report : awacCalculator.getReports()) {
 			reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
 		}
 
 		return new ReportResultCollection(reportResults, logEntries);
+	}
+
+	@Override
+	public List<BaseActivityResult> getBaseActivityResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries) {
+		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
+		return computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
 	}
 
 	@Override
@@ -169,6 +181,18 @@ public class ReportResultServiceImpl implements ReportResultService {
 			indicator.setOutOfScopeValue(entry.getValue().get(4));
 			aggregationForResult.getReportResultIndicatorAggregationList().add(indicator);
 		}
+
+		final Map<String, ReportIndicator> indicators = new HashMap<>();
+		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
+			indicators.put(entry.getKey(), reportIndicatorService.findByReportCodeAndIndicatorCode(reportResult.getReport().getCode().getKey(), entry.getKey()));
+		}
+
+		Collections.sort(aggregationForResult.getReportResultIndicatorAggregationList(), new Comparator<ReportResultIndicatorAggregation>() {
+			@Override
+			public int compare(ReportResultIndicatorAggregation o1, ReportResultIndicatorAggregation o2) {
+				return indicators.get(o1.getIndicator()).getOrderIndex().compareTo(indicators.get(o2.getIndicator()).getOrderIndex());
+			}
+		});
 
 		return aggregationForResult;
 	}
@@ -235,6 +259,19 @@ public class ReportResultServiceImpl implements ReportResultService {
 			r2IndicatorsMap.put(reportResultIndicatorAggregation.getIndicator(), reportResultIndicatorAggregation);
 		}
 
+		List<String> indicatorsList = new ArrayList<>();
+		indicatorsList.addAll(indicators);
+
+		final String rc = result.getReportCode();
+		Collections.sort(indicatorsList, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				ReportIndicator ri1 = reportIndicatorService.findByReportCodeAndIndicatorCode(rc, o1);
+				ReportIndicator ri2 = reportIndicatorService.findByReportCodeAndIndicatorCode(rc, o2);
+				return ri1.getOrderIndex().compareTo(ri2.getOrderIndex());
+			}
+		});
+
 		// For each indicator, create a MergedReportResultIndicatorAggregation
 		for (String indicator : indicators) {
 			MergedReportResultIndicatorAggregation indicatorAggregation = new MergedReportResultIndicatorAggregation();
@@ -298,12 +335,16 @@ public class ReportResultServiceImpl implements ReportResultService {
 			ArrayList<BaseActivityResult> indicatorActivityResults = new ArrayList<BaseActivityResult>();
 
 			for (BaseIndicator baseIndicator : indicator.getBaseIndicators(reportScope)) {
-				if(reportScope != null) {
-					if (!baseIndicator.getIsoScope().equals(reportScope)) continue;
+				if (reportScope != null) {
+					if (!baseIndicator.getIsoScope().equals(reportScope)) {
+						continue;
+					}
 				}
 				for (BaseActivityResult baseActivityResult : baseActivityResults) {
-					if(reportScope != null) {
-						if (!baseActivityResult.getBaseIndicator().getIsoScope().equals(reportScope)) continue;
+					if (reportScope != null) {
+						if (!baseActivityResult.getBaseIndicator().getIsoScope().equals(reportScope)) {
+							continue;
+						}
 					}
 					if (baseIndicator.getCode().equals(baseActivityResult.getBaseIndicator().getCode())) {
 						indicatorActivityResults.add(baseActivityResult);
@@ -416,7 +457,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 	private static void reportLowerRankInGroup(BaseActivityData baseActivityData, String alternativeGroup, Integer rank, Integer minRank, List<ReportLogEntry> logEntries) {
 		Logger.info("--> Excluding BAD '{}' with rank = {} (lowest rank for alternative group '{}' = {})", baseActivityData.getKey().getKey(), rank, alternativeGroup,
-			minRank);
+				minRank);
 
 		logEntries.add(new LowerRankInGroup(baseActivityData));
 	}

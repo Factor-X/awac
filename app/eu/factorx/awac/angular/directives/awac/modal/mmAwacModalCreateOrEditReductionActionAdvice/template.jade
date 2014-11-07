@@ -39,9 +39,6 @@
                                 .field_info
                                     .field_info_popup(ng-bind-html="'REDUCTION_ACTION_TYPE_BETTER_MEASURE_DESC' | translate")
 
-                    // Physical measure (text) (action description: ghg reduction objective, better reporting method description...)
-                    mm-awac-modal-field-text(ng-info="physicalMeasure").field_form_separator
-
                     // Reducing objectives (reduction action - indicator associations)
                     .field_row.field_form_separator
                         .field_cell
@@ -50,38 +47,47 @@
                             .wrapper_table
                                 .wrapper_row
                                     .wrapper_cell(style="width: 100%;vertical-align: top;")
-                                        select(ng-options="bi.key as bi.key + ' - ' + bi.label for bi in indicatorOptions", ng-model="indicatorAssociationToAdd.baseIndicatorKey")
+                                        select(ng-options="bi.key as bi.key + ' - ' + bi.label for bi in indicatorOptions", ng-model="indicatorAssociationToAdd.baseIndicatorKey", ng-disabled="typeKey.field == '2'")
                                     .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 90px;min-width: 90px;")
-                                        input(type='text', ng-model='indicatorAssociationToAdd.percent', style="width: 60px;")
+                                        input(type='text', ng-model='indicatorAssociationToAdd.percent', ng-disabled="typeKey.field == '2'", style="width: 60px;")
                                         span &nbsp;%&nbsp;
                                     .wrapper_cell(style="vertical-align: top;")
                                         button.button(type="button", ng-click="addIndicatorAssociation()", ng-disabled="!indicatorAssociationToAdd.isValid()", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
                                             span.fa.fa-plus-circle
-                    .field_row
+                        .field_cell
+                            div
+                                .error_message(ng-hide='(typeKey.field == "2") || (indicatorAssociations.length > 0)')
+                                    img(src='/assets/images/field_invalid.png')
+                                    div(ng-bind-html="'REDUCTION_ACTION_ADVICE_NO_REDUCTION_OBJECTIVES_ERROR' | translate")
+
+                    .field_row(ng-show="indicatorAssociations.length > 0")
                         .field_cell
                             span &nbsp
                         .field_cell.field_wide
-                            .wrapper_table(style="margin-top:5px;margin-bottom: 30px;")
+                            .wrapper_table(style="margin-top:5px;margin-bottom: 10px;")
                                 .wrapper_row(ng-repeat="bia in indicatorAssociations", style="font-weight:bold;")
                                     .wrapper_cell(style="vertical-align:middle")
                                         button.button(type="button", ng-click="removeIndicatorAssociation(bia.baseIndicatorKey)", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
                                             span.fa.fa-remove.fa-1g
                                     .wrapper_cell(style="vertical-align:middle; padding-left:10px; padding-right:10px; width:100%;") {{ getBaseIndicatorLabel(bia.baseIndicatorKey) }}
-                                    .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ bia.percent + "&nbsp;%" }}
+                                    .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ (bia.percent| numberToI18N) + "&nbsp;%" }}
 
-                    // Cost & Benefits
-                    //mm-awac-modal-field-text(ng-info="financialBenefit").field_form_separator
-                        div(style="line-height: 22px;") euros
-                    //mm-awac-modal-field-text(ng-info="investmentCost")
-                        div(style="line-height: 22px;") euros
-                    //mm-awac-modal-field-text(ng-info="expectedPaybackTime")
-
-                    // Other infos
+                    // Informations to the user
+                    mm-awac-modal-field-text(ng-info="physicalMeasure").field_form_separator
                     mm-awac-modal-field-text(ng-info="webSite").field_form_separator
                     mm-awac-modal-field-text(ng-info="responsiblePerson")
-                    mm-awac-modal-field-text(ng-info="comment")
 
-                    // Attachments
+                    // Cost & Benefits
+                        mm-awac-modal-field-text(ng-info="financialBenefit").field_form_separator
+                            div(style="line-height: 22px;") euros
+                        mm-awac-modal-field-text(ng-info="investmentCost")
+                            div(style="line-height: 22px;") euros
+                        mm-awac-modal-field-text(ng-info="expectedPaybackTime")
+
+                    // Comments (only visible to the creator)
+                    mm-awac-modal-field-text(ng-info="comment").field_form_separator
+
+                    // Attachments (only visible to the creator)
                     .field_row.field_form_separator
                         .field_cell(ng-click="logField()")
                             span(ng-bind-html="'REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE' | translate")

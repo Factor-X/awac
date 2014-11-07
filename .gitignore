@@ -100,3 +100,6 @@ database_backups/
 .last_values
 
 /velocity.log
+
+
+public/javascripts/app.js

@@ -44,7 +44,7 @@ div.actions.advices-mngt
                             td
                                 .box.wide(ng-show="a.baseIndicatorAssociations.length > 0")
                                     div(ng-repeat="bia in a.baseIndicatorAssociations")
-                                        span(ng-bind-html="getBaseIndicatorLabel(bia.baseIndicatorKey) + ': ' + bia.percent + ' %'")
+                                        span(ng-bind-html="getBaseIndicatorLabel(bia.baseIndicatorKey) + ': ' + (bia.percent | numberToI18N) + ' %'")
                                 .box.wide(ng-hide="a.baseIndicatorAssociations.length > 0") &nbsp;
                         //tr
                             td {{ "REDUCTION_ACTION_ADVICE_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:

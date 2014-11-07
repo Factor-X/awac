@@ -9,7 +9,7 @@ Bonjour,<br/><br/>
 ${user.person.firstname} ${user.person.lastname} a soumis des corrections pour la vérification sur ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.<br/>
 A vous de re-vérifier.<br/><br/>
 Bien à vous, <br/>
-L'outil AWAC.
+Le gestionnaire du calculateur AWAC
 
 </body>
 </html>
