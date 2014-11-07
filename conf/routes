@@ -65,7 +65,7 @@ GET         /awac/velocity                                                  @eu.
 # Email Service
 #
 GET         /email/send                                                     @eu.factorx.awac.controllers.EmailController.send(destinationEmail:String,subject:String,message:String)
-GET         /email/sendWithAttachments                                      @eu.factorx.awac.controllers.EmailController.sendWithAttachments(destinationEmail:String,subject:String,message:String,filenameList:java.util.List[String])
+#GET         /email/sendWithAttachments                                      @eu.factorx.awac.controllers.EmailController.sendWithAttachments(destinationEmail:String,subject:String,message:String,filenameList:java.util.List[String])
 #GET         /email/sendComplete                                                                    @eu.factorx.awac.controllers.EmailController.sendComplete(destinationEmail:String,subject:String,message:String,interfaceName:String,languageKey:String)
 
 
