@@ -84,11 +84,13 @@ div.results.pdf-able
                                         h3
                                             span(ng-bind-html="'SCOPE_1' | translate")
                                             span  : {{ leftTotalScope1 | numberToI18N }} tCO2e
+                                            span &nbsp;/&nbsp;
+                                            span  {{ rightTotalScope1 | numberToI18N }} tCO2e
                                 tr
                                     td
                                         .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_2 | trustAsHtml")
                                         span &nbsp;
-                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_2 | trustAsHtml")
+                                        .diagram(ng-show="rightTotalEmissions>0", style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_2 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_2")
@@ -98,11 +100,13 @@ div.results.pdf-able
                                         h3
                                             span(ng-bind-html="'SCOPE_2' | translate")
                                             span  : {{ leftTotalScope2 | numberToI18N }} tCO2e
+                                            span &nbsp;/&nbsp;
+                                            span  {{ rightTotalScope2 | numberToI18N }} tCO2e
                                 tr
                                     td
                                         .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_3 | trustAsHtml")
                                         span &nbsp;
-                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_3 | trustAsHtml")
+                                        .diagram(ng-show="rightTotalEmissions>0",style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_3 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_3")
@@ -112,11 +116,13 @@ div.results.pdf-able
                                         h3
                                             span(ng-bind-html="'SCOPE_3' | translate")
                                             span  : {{ leftTotalScope3 | numberToI18N }} tCO2e
+                                            span &nbsp;/&nbsp;
+                                            span  {{ rightTotalScope3 | numberToI18N }} tCO2e
                                 tr
                                     td
                                         .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_4 | trustAsHtml")
                                         span &nbsp;
-                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_4 | trustAsHtml")
+                                        .diagram(ng-show="rightTotalEmissions>0",style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_4 | trustAsHtml")
                                     td(style="width: 2em")
                                     td
                                         mm-awac-result-legend(ng-model="o.reportDTOs.R_4")

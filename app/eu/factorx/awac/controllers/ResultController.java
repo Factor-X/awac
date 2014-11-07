@@ -152,7 +152,7 @@ public class ResultController extends AbstractController {
         byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, comparedPeriod, interfaceCode);
 
         DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".pdf");
+        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':','h') + ".pdf");
         downloadFileDTO.setMimeType("application/pdf");
         downloadFileDTO.setBase64(new Base64().encodeAsString(bytes));
 
@@ -169,7 +169,7 @@ public class ResultController extends AbstractController {
         byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
 
         DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".xls");
+        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':','h') + ".xls");
         downloadFileDTO.setMimeType("application/vnd.ms-excel");
         downloadFileDTO.setBase64(new Base64().encodeAsString(content));
 
@@ -182,7 +182,7 @@ public class ResultController extends AbstractController {
         byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
 
         DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-Hm") + ".xls");
+        downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':','h') + ".xls");
         downloadFileDTO.setMimeType("application/vnd.ms-excel");
         downloadFileDTO.setBase64(new Base64().encodeAsString(content));
 

@@ -101,3 +101,5 @@ database_backups/
 
 /velocity.log
 
+
+public/javascripts/app.js

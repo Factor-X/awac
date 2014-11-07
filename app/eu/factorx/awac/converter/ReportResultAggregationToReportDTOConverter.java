@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 @Component
 public class ReportResultAggregationToReportDTOConverter implements Converter<ReportResultAggregation, ReportDTO> {
 
@@ -48,7 +51,7 @@ public class ReportResultAggregationToReportDTOConverter implements Converter<Re
         for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {
             ReportLineDTO reportLineDTO = new ReportLineDTO(reportResultIndicatorAggregation.getIndicator());
 
-            ReportIndicator reportIndicator = reportIndicatorService.findByReportCodeAndIndicaotrCode(reportResultAggregation.getReportCode(), reportResultIndicatorAggregation.getIndicator());
+            ReportIndicator reportIndicator = reportIndicatorService.findByReportCodeAndIndicatorCode(reportResultAggregation.getReportCode(), reportResultIndicatorAggregation.getIndicator());
 
             reportLineDTO.setOrder(reportIndicator.getOrderIndex());
 
@@ -65,6 +68,14 @@ public class ReportResultAggregationToReportDTOConverter implements Converter<Re
             reportLineDTO.setLeftPercentage(100 * totalValue / total);
             reportDTO.getReportLines().add(reportLineDTO);
         }
+
+        Collections.sort(reportDTO.getReportLines(), new Comparator<ReportLineDTO>() {
+            @Override
+            public int compare(ReportLineDTO o1, ReportLineDTO o2) {
+                return o1.getOrder().compareTo(o2.getOrder());
+            }
+        });
+
 
         return reportDTO;
     }

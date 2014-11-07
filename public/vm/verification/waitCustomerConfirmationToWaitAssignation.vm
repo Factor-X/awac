@@ -9,7 +9,7 @@ ${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awa
 Vous pouvez maintenant assigner ce travail à des collaborateurs dans vos interfaces de vérification.<br/><br/>
 
 Bien à vous,<br/>
-L'outil AWAC.<br/>
+Le gestionnaire du calculateur AWAC<br/>
 
 </body>
 </html>

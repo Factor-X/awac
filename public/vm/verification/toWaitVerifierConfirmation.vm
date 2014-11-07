@@ -15,6 +15,6 @@ Son email : ${request.contact.person.email}.<br/><br/>
 Pour accéder ou refuser à sa demande, merci de vous connecter à votre compte de vérification. <br/><br/>
 
 Bien à vous,<br/>
-L'outil AWAC.
+Le gestionnaire du calculateur AWAC
 </body>
 </html>

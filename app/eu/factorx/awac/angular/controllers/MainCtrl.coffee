@@ -523,7 +523,10 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             routeWithScopeAndPeriod = ['/form','/results','/actions']
             for route in routeWithScopeAndPeriod
                 if loc.substring(0, route.length) == route
-                    $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
+                    if not $rootScope.periodSelectedKey or not $rootScope.scopeSelectedId
+                        $location.path('/noScope')
+                    else
+                        $location.path(loc + "/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId)
                     return
             $location.path(loc)
 

@@ -9,6 +9,6 @@ Bonjour,<br/><br/>
 ${request.organizationVerifier.name} a décliné votre demande de vérification du bilan GES du périmètre "${request.awacCalculatorInstance.scope.name}" sur l'année ${request.awacCalculatorInstance.period.label}.<br/><br/>
 
 Bien à vous,<br/>
-L'outil AWAC
+Le gestionnaire du calculateur AWAC
 </body>
 </html>
