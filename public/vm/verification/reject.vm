@@ -8,6 +8,6 @@ Bonjour, <br/><br/>
 
 ${user.person.firstname} ${user.person.lastname} de l'organisation ${request.awacCalculatorInstance.scope.organization.name} a annulé sa demande de vérification du bilan GES réalisé sur l'outil de l'AWAC pour le périmètre ${request.awacCalculatorInstance.scope.name} sur l'année ${request.awacCalculatorInstance.period.label}.<br/><br/>
 Bien à vous,<br/>
-L'outil AWAC.
+Le gestionnaire du calculateur AWAC
 </body>
 </html>

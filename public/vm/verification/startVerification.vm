@@ -12,10 +12,13 @@ ${request.emailVerificationContent.content}. <br/><br/>
 Son numéro de contact téléphonique est le ${request.emailVerificationContent.phoneNumber}.<br/><br/>
 
 Pour accéder ou refuser à sa demande, merci de suivre le lien suivant et de soit vous logger sur votre compte vérificateur,
-soit vous créer un tel compte grâce à la clé de requête suivante:<br>
+soit de vous créer un tel compte grâce à la clé de requête suivante:<br>
 ${request.key}.<br/><br/>
+
+La clé est à encoder dans l'onglet "Gérer" de votre interface de vérification.
+
 Bien à vous,<br/>
-L'outil AWAC.<br/>
+Le gestionnaire du calculateur AWAC<br/>
 
 </body>
 </html>
