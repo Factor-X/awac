@@ -139,6 +139,11 @@
                                     border-top:10px;
                                 }
                             }
+                            td:first-child {
+                                padding-top:10px;
+                                vertical-align: top;
+                            }
+
                         }
                     }
                 }
@@ -206,4 +211,17 @@
         }
     }
 
+    &.advices {
+
+        & > .waiting-data {
+            text-align: left;
+            & > img {
+                margin: 0px 10px 0px 10px;
+            }
+            & > span, div {
+                font-style: italic;
+            }
+
+        }
+    }
 }

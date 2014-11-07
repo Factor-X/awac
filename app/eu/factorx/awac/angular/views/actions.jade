@@ -1,28 +1,31 @@
 div.actions.advices
-    span
-        h1 Conseils
+    h1 {{ "REDUCTION_ACTION_ADVICES_TITLE" | translateText }}
     br
-    span
-        img(ng-show="computingAdvices",src="/assets/images/modal-loading.gif")
-    table.actions-table(ng-hide="computingAdvices")
+
+    .waiting-data(ng-show="waitingAdvices")
+        img(src="/assets/images/modal-loading.gif")
+        span Recherche en cours...
+
+    table.actions-table(ng-hide="waitingAdvices")
         thead
             tr
                 th &nbsp;
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
-                th Potentiel CO2
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_TITLE' | translate")
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_TYPE' | translate")
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_COMPUTED_GHG_BENEFIT' | translate")
         tbody
             tr(ng-repeat="advice in actionAdvices")
                 td.details
                     button.button(type="button", ng-click="createActionFromAdvice(advice)")
-                        span.text en faire une action
+                        span.text(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_CREATE_ACTION_FROM_ADVICE' | translate")
                 td.title
                     span.text {{ advice.title }}
                     .field_info(ng-if="!!advice.webSite || !!advice.physicalMeasure")
                         .field_info_popup
                             div(ng-if="!!advice.physicalMeasure") {{ advice.physicalMeasure }}
                             div(ng-if="!!advice.webSite")
-                                span Plus d'infos sur:&nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_ADVICE_MORE_INFO' | translate")
+                                span :&nbsp
                                 a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
 
                 td.type
@@ -31,6 +34,13 @@ div.actions.advices
                     span.text {{ getTypeLabel(advice.typeKey) }}
                 td.ghgBenefit
                     span {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) }}
+                    //.field_info
+                        .field_info_popup
+                            div(ng-if="!!advice.physicalMeasure") {{ advice.physicalMeasure }}
+                            div(ng-if="!!advice.webSite")
+                                span(ng-bind-html=" 'REDUCTION_ACTION_ADVICE_MORE_INFO' | translate")
+                                span :&nbsp
+                                a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
 
 
 div.actions
@@ -79,7 +89,7 @@ div.actions
                         tr
                             td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
                             td
-                                .box.wide {{ a.physicalMeasure || "&nbsp;" }}
+                                .box.wide(style="min-height: 60px;") {{ a.physicalMeasure || "&nbsp;" }}
                         tr(ng-if="a.typeKey == '1'")
                             td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
                             td

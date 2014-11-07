@@ -1,12 +1,12 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import java.io.Serializable;
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
@@ -50,6 +50,41 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 	private List<FilesUploadedDTO> files;
 
 	private List<BaseIndicatorAssociationDTO> baseIndicatorAssociations;
+
+	private LowRankMeasureWarningDTO lowRankMeasureWarning;
+
+	public static class LowRankMeasureWarningDTO extends DTO implements Serializable {
+
+		private String alternativeGroupKey;
+
+		private Integer minRank;
+
+		public LowRankMeasureWarningDTO() {
+			super();
+		}
+
+		public LowRankMeasureWarningDTO(String alternativeGroupKey, Integer minRank) {
+			super();
+			this.alternativeGroupKey = alternativeGroupKey;
+			this.minRank = minRank;
+		}
+
+		public String getAlternativeGroupKey() {
+			return alternativeGroupKey;
+		}
+
+		public void setAlternativeGroupKey(String alternativeGroupKey) {
+			this.alternativeGroupKey = alternativeGroupKey;
+		}
+
+		public Integer getMinRank() {
+			return minRank;
+		}
+
+		public void setMinRank(Integer minRank) {
+			this.minRank = minRank;
+		}
+	}
 
 	public static class BaseIndicatorAssociationDTO extends DTO implements Serializable {
 
@@ -212,4 +247,11 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 		this.baseIndicatorAssociations = baseIndicatorAssociations;
 	}
 
+	public LowRankMeasureWarningDTO getLowRankMeasureWarning() {
+		return lowRankMeasureWarning;
+	}
+
+	public void setLowRankMeasureWarning(LowRankMeasureWarningDTO lowRankMeasureWarning) {
+		this.lowRankMeasureWarning = lowRankMeasureWarning;
+	}
 }

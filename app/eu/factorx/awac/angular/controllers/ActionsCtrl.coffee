@@ -8,7 +8,7 @@ angular
     $scope.typeOptions = []
     $scope.statusOptions = []
     $scope.gwpUnits = []
-    $scope.computingAdvices = true
+    $scope.waitingAdvices = true
 
     $scope.loadActions = () ->
         downloadService.getJson "awac/actions/load", (result) ->
@@ -23,9 +23,9 @@ angular
         return
 
     $scope.loadAdvices = () ->
-        $scope.computingAdvices = true
+        $scope.waitingAdvices = true
         downloadService.getJson "awac/advices/load/" + $scope.$root.periodSelectedKey, (result) ->
-            $scope.computingAdvices = false
+            $scope.waitingAdvices = false
             if result.success
                 $scope.actionAdvices = result.data.reducingActionAdvices
             return
@@ -107,6 +107,9 @@ angular
         return defaultDueDate
 
     $scope.createActionFromAdvice = (actionAdvice) ->
+        if (!! _.findWhere($scope.actions, {scopeTypeKey: '1', title: actionAdvice.title}))
+            messageFlash.displayError "REDUCING_ACTION_ALREADY_EXISTING_ERROR"
+            return
         data =
             title: actionAdvice.title
             typeKey: actionAdvice.typeKey

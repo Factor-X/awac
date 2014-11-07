@@ -20,7 +20,7 @@ CREATE TABLE reducingactionadvice
   financialbenefit double precision,
   ghgbenefit double precision,
   investmentcost double precision,
-  physicalmeasure character varying(255),
+  physicalmeasure text,
   responsibleperson character varying(255),
   title character varying(255) NOT NULL,
   website character varying(255),
