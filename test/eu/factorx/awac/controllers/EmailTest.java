@@ -126,15 +126,15 @@ public class EmailTest extends AbstractBaseControllerTest {
 		filenameList.add("public/images/ajax-loader.gif");
 
 		Result result = null;
-		try {
-			// Call controller action
-			result = callAction(
-				eu.factorx.awac.controllers.routes.ref.EmailController.sendWithAttachments("gaston.hollands@factorx.eu", "AWAC test", "Need to http://localhost:9000/awac/confirm/" + "1", filenameList),
-				fr
-			); // callAction
-		} catch (Exception e) {
-			Logger.info("User is not authorized");
-		}
+//		try {
+//			// Call controller action
+//			result = callAction(
+//				eu.factorx.awac.controllers.routes.ref.EmailController.sendWithAttachments("gaston.hollands@factorx.eu", "AWAC test", "Need to http://localhost:9000/awac/confirm/" + "1", filenameList),
+//				fr
+//			); // callAction
+//		} catch (Exception e) {
+//			Logger.info("User is not authorized");
+//		}
 
 		// wait some time to be sure AKKA actor has time to send the message
 
