@@ -96,10 +96,8 @@ public class ComputeAverage {
         String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
 
         EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - moyenne", velocityContent);
-        //
 
-
-        FileOutputStream outputs = new FileOutputStream(new File("/home/florian/temp/result.xls"));
+        FileOutputStream outputs = new FileOutputStream(new File("/home/gaston/Downloads/export.xls"));
         IOUtils.write(output.toByteArray(), outputs);
 
         //send email

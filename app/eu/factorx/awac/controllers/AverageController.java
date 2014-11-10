@@ -24,6 +24,8 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import eu.factorx.awac.util.batch.messages.ComputeAverageMessage;
+import eu.factorx.awac.util.batch.service.ComputeAverageService;
 import jxl.write.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.db.jpa.Transactional;
@@ -60,6 +62,9 @@ public class AverageController extends AbstractController {
 	private QuestionSetService questionSetService;
     @Autowired
     private ComputeAverage computeAverageService;
+
+    @Autowired
+    ComputeAverageService batchComputeAverageService;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -198,20 +203,38 @@ public class AverageController extends AbstractController {
 		}
 		else {
 
+      //call classical Spring service
             try {
-                computeAverageService.computeAverage(
-                        securedController.getCurrentUser(),
-                        awacCalculator,
-                        scopeAndPeriodList,
-                        period,
-                        organizationComputed,
-                        scopeComputed
-                        );
+
+                    computeAverageService.computeAverage(
+                            securedController.getCurrentUser(),
+                            awacCalculator,
+                            scopeAndPeriodList,
+                            period,
+                            organizationComputed,
+                            scopeComputed
+                            );
             } catch (IOException e) {
-				e.printStackTrace();
-			} catch (WriteException e) {
-				e.printStackTrace();
-			}
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+
+
+// call batch processing
+
+
+//             ComputeAverageMessage msg = new ComputeAverageMessage(
+//                     securedController.getCurrentUser(),
+//                        awacCalculator,
+//                        scopeAndPeriodList,
+//                        period,
+//                        organizationComputed,
+//                        scopeComputed
+//             );
+//
+//             batchComputeAverageService.send(msg);
+
 
 //            BatchMessage batchMessage = new BatchMessage ("AverageController",
 //                    awacCalculator,

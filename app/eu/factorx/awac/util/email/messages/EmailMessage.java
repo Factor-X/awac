@@ -11,6 +11,7 @@
 
 package eu.factorx.awac.util.email.messages;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class EmailMessage {
 	private String subject;
 	private String content;
 	private HashMap<String, ByteArrayOutputStream> attachmentFilenameList;
+    private HashMap<String, ByteArrayInputStream> byteArrayinputStreamList;
 
 	public EmailMessage(String toAddress, String subject, String content) {
 		this.toAddress = new ArrayList<>();
@@ -46,6 +48,13 @@ public class EmailMessage {
 		this.attachmentFilenameList = attachmentList;
 	}
 
+    public EmailMessage(String test, String toAddress, String subject, String content,HashMap<String, ByteArrayInputStream> attachmentList) {
+        this.toAddress = new ArrayList<>();
+        this.toAddress.add(toAddress);
+        this.subject = subject;
+        this.content = content;
+        this.byteArrayinputStreamList = attachmentList;
+    }
 
 
 
@@ -83,6 +92,14 @@ public class EmailMessage {
 
     public void setAttachmentFilenameList(HashMap<String, ByteArrayOutputStream> attachmentFilenameList) {
         this.attachmentFilenameList = attachmentFilenameList;
+    }
+
+    public HashMap<String, ByteArrayInputStream> getByteArrayinputStreamList () {
+        return byteArrayinputStreamList;
+    }
+
+    public void setByteArrayinputStreamList (HashMap<String, ByteArrayInputStream> byteArrayinputStreamList) {
+        this.byteArrayinputStreamList = byteArrayinputStreamList;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package eu.factorx.awac.util.email.business;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Properties;
 
@@ -100,7 +101,22 @@ public class EmailSender implements ApplicationContextAware {
                 // end for
             } // end if
 
-			// add multipart to message
+            // check if attachments
+            if (email.getByteArrayinputStreamList()!=null) {
+                // for each attachment
+                for (Map.Entry<String, ByteArrayInputStream> fileName : email.getByteArrayinputStreamList().entrySet())
+                    try {
+                        addAttachment(multipart,fileName.getKey() , fileName.getValue());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                // end for
+            } // end if
+
+
+
+
+            // add multipart to message
 			mimeMessage.setContent(multipart);
 
 			// send message
@@ -128,7 +144,40 @@ public class EmailSender implements ApplicationContextAware {
 
         DataSource aAttachment = new ByteArrayDataSource(new ByteArrayInputStream(out.toByteArray()),"application/octet-stream");
         attachmentPart.setDataHandler(new DataHandler(aAttachment));
-        attachmentPart.attachFile(name);
+        //attachmentPart.attachFile(name);
+        attachmentPart.setFileName(name);
 		multipart.addBodyPart(attachmentPart);
 	}
+
+    // add attachment based on ByteArrayInputStream
+    private static void addAttachment(Multipart multipart, String name, ByteArrayInputStream in) throws IOException, MessagingException{
+
+        if(in==null || name==null){
+            throw new MyrmexFatalException("in or name is null:"+name+"/"+in);
+        }
+
+        Logger.info(in.toString());
+
+        int length = in.available();
+        byte [] buff = new byte[length];
+        in.read(buff);
+
+        Logger.info("lenght:" + length);
+
+        Field f = null;
+        byte[] buf = null;
+        try {
+            f = ByteArrayInputStream.class.getDeclaredField("buf");
+            f.setAccessible(true);
+            buf = (byte[])f.get(in);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        DataSource aAttachment = new ByteArrayDataSource(buf,"application/octet-stream");
+        attachmentPart.setDataHandler(new DataHandler(aAttachment));
+        attachmentPart.setFileName(name);
+        multipart.addBodyPart(attachmentPart);
+    }
 }

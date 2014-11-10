@@ -16,15 +16,21 @@ import static org.junit.Assert.assertNotNull;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.util.email.messages.EmailMessage;
+import eu.factorx.awac.util.email.service.EmailService;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -47,7 +53,10 @@ import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmailTest extends AbstractBaseControllerTest {
 
-	@Test
+    @Autowired
+    EmailService emailService;
+
+	//@Test
 	public void _001_submitActionSuccess() {
 
 
@@ -125,6 +134,45 @@ public class EmailTest extends AbstractBaseControllerTest {
 		filenameList.add("public/vm/verification/startVerification.vm");
 		filenameList.add("public/images/ajax-loader.gif");
 
+        FileInputStream input = null;
+        try {
+            Logger.info("Creating Filer Input Stream");
+            input = new FileInputStream(new File("/home/gaston/Downloads/export.xls"));
+            Logger.info("Done...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Logger.info("Creating String");
+            String theString = IOUtils.toString(input, "UTF8");
+            Logger.info("file content = " + theString);
+            Logger.info("Done...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayInputStream bais=null;
+        try {
+            bais =  new ByteArrayInputStream(FileUtils.readFileToByteArray(new File("/home/gaston/Downloads/export.xls")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //send email
+        HashMap<String, ByteArrayInputStream> attachementList = new HashMap<>();
+        attachementList.put("gho.xls", bais);
+
+        // send mail
+        EmailMessage email = new EmailMessage("test","gaston.hollands@factorx.eu", "file attachment", "File attachment with InputStream",attachementList);
+        //EmailMessage email = new EmailMessage(destinationEmail, subject, message);
+        emailService.send(email);
+
+
+        //send email
+        //HashMap<String, ByteArrayInputStream> listAttachment = new HashMap<>();
+        //listAttachment.put("average.xls", input);
+
 		Result result = null;
 //		try {
 //			// Call controller action
@@ -145,7 +193,7 @@ public class EmailTest extends AbstractBaseControllerTest {
 		}
 		// test results
 		// expecting an HTTP 200 return code
-		assertEquals(200, status(result));
+		//assertEquals(200, status(result));
 	} // end of authenticateSuccess test
 
 }
