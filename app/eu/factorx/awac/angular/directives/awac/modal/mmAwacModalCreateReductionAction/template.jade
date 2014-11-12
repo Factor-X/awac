@@ -62,7 +62,11 @@
                                 select(ng-options="s.id as s.name for s in $root.mySites", ng-model="scopeId.field", ng-disabled="scopeTypeKey.field == '1'")
 
                     // Physical measure (text) (action description: ghg reduction objective, better reporting method description...)
-                    mm-awac-modal-field-text(ng-info="physicalMeasure").field_form_separator
+                    .field_row.field_form_separator
+                        .field_cell(ng-click="logField()")
+                            span(ng-bind-html='physicalMeasure.fieldTitle | translate')
+                        .field_cell.field_wide
+                            textarea(ckeditor="editorOptions", ng-model="physicalMeasure.field")
 
                     // GHG Benefit (double with unit) (disabled if Type is not 'GES Reduction')
                     mm-awac-modal-field-text(ng-info="ghgBenefit", ng-disabled="typeKey.field == '2'").field_form_separator
@@ -81,7 +85,11 @@
                     // Other infos
                     mm-awac-modal-field-text(ng-info="webSite").field_form_separator
                     mm-awac-modal-field-text(ng-info="responsiblePerson")
-                    mm-awac-modal-field-text(ng-info="comment")
+                    .field_row
+                        .field_cell(ng-click="logField()")
+                            span(ng-bind-html='comment.fieldTitle | translate')
+                        .field_cell.field_wide
+                            textarea(ckeditor="editorOptions", ng-model="comment.field")
 
                     .field_row
                         .field_cell(ng-click="logField()")

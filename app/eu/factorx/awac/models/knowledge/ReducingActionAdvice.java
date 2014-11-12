@@ -1,19 +1,20 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.type.ReducingActionTypeCode;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import play.db.jpa.JPA;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "reducingactionadvice", uniqueConstraints = {

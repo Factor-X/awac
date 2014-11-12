@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS mm_reducingactionadvice_baseindicator;
+DROP TABLE IF EXISTS reducingactionadvice_baseindicator;
 DROP TABLE IF EXISTS reducingactionadvice_storedfile;
 DROP TABLE IF EXISTS reducingactionadvice;
 
@@ -43,31 +43,29 @@ ALTER TABLE reducingactionadvice
   OWNER TO play;
 
 
--- Table: mm_reducingactionadvice_baseindicator
+-- Table: reducingactionadvice_baseindicator
 
-DROP SEQUENCE IF EXISTS "mm_reducingactionadvice_baseindicator_id_seq";
+DROP SEQUENCE IF EXISTS "reducingactionadvice_baseindicator_id_seq";
 
-CREATE SEQUENCE "mm_reducingactionadvice_baseindicator_id_seq";
+CREATE SEQUENCE "reducingactionadvice_baseindicator_id_seq";
 
-CREATE TABLE mm_reducingactionadvice_baseindicator
+CREATE TABLE reducingactionadvice_baseindicator
 (
-  id bigint NOT NULL DEFAULT nextval('mm_reducingactionadvice_baseindicator_id_seq'::regclass),
+  id bigint NOT NULL DEFAULT nextval('reducingactionadvice_baseindicator_id_seq'::regclass),
   percent double precision,
   actionadvice_id bigint NOT NULL,
-  baseindicator_id bigint NOT NULL,
-  CONSTRAINT mm_reducingactionadvice_baseindicator_pkey PRIMARY KEY (id),
-  CONSTRAINT fk_mm_reducingactionadvice_baseindicator_baseindicator_id FOREIGN KEY (baseindicator_id)
-      REFERENCES baseindicator (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT fk_mm_reducingactionadvice_baseindicator_actionadvice_id FOREIGN KEY (actionadvice_id)
-      REFERENCES reducingactionadvice (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE
+  baseindicatorkey character varying(10) NOT NULL,
+  CONSTRAINT reducingactionadvice_baseindicator_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_reducingactionadvice_baseindicator_actionadvice_id FOREIGN KEY (actionadvice_id)
+  REFERENCES reducingactionadvice (id) MATCH SIMPLE
+  ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
-  OIDS=FALSE
+OIDS=FALSE
 );
-ALTER TABLE mm_reducingactionadvice_baseindicator
-  OWNER TO play;
+ALTER TABLE reducingactionadvice_baseindicator
+OWNER TO play;
+
 
 
 -- Table: reducingactionadvice_storedfile

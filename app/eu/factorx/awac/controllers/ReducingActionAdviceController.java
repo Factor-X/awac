@@ -18,7 +18,6 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.ReducingActionAdvice;
 import eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation;
@@ -102,9 +101,9 @@ public class ReducingActionAdviceController extends AbstractController {
 		Set<ReducingActionAdviceBaseIndicatorAssociation> biAssociations = new HashSet<>();
 		if (ReducingActionTypeCode.REDUCING_GES.equals(actionType)) {
 			for (ReducingActionAdviceDTO.BaseIndicatorAssociationDTO biAssociationDTO : dto.getBaseIndicatorAssociations()) {
-				BaseIndicator baseIndicator = baseIndicatorService.getByCode(new BaseIndicatorCode(biAssociationDTO.getBaseIndicatorKey()));
+				BaseIndicatorCode baseIndicatorCode = new BaseIndicatorCode(biAssociationDTO.getBaseIndicatorKey());
 				Double percent = biAssociationDTO.getPercent();
-				biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicator, percent));
+				biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicatorCode, percent));
 			}
 		}
 		advice.setBaseIndicatorAssociations(biAssociations);
@@ -175,18 +174,16 @@ public class ReducingActionAdviceController extends AbstractController {
 		for (ReportLogEntry logEntry : new HashSet<>(logEntries)) {
 			if (logEntry instanceof LowRankMeasureWarning) {
 				LowRankMeasureWarning lowRankMeasureWarning = (LowRankMeasureWarning) logEntry;
-				ReducingActionAdviceDTO.LowRankMeasureWarningDTO lowRankMeasureWarningDTO = new ReducingActionAdviceDTO.LowRankMeasureWarningDTO(lowRankMeasureWarning.getAlternativeGroupKey(), lowRankMeasureWarning.getMinRank());
+				String alternativeGroupKey = lowRankMeasureWarning.getAlternativeGroupKey();
 
 				ReducingActionAdviceDTO reducingActionAdviceDTO = new ReducingActionAdviceDTO();
 				reducingActionAdviceDTO.setTypeKey(ReducingActionTypeCode.BETTER_METHOD.getKey());
-				reducingActionAdviceDTO.setLowRankMeasureWarning(lowRankMeasureWarningDTO);
-				reducingActionAdviceDTO.setTitle(lowRankMeasureWarning.toString());
+				reducingActionAdviceDTO.setAlternativeGroupKey(alternativeGroupKey);
 				res.add(reducingActionAdviceDTO);
 			}
 		}
 		return res;
 	}
-
 
 	private List<ReducingActionAdviceDTO> getReductionActionAdvices(AwacCalculator awacCalculator, List<BaseActivityResult> baseActivityResults) {
 		List<ReducingActionAdviceDTO> reducingActionDTOs = new ArrayList<>();
@@ -212,7 +209,7 @@ public class ReducingActionAdviceController extends AbstractController {
 	private static Double computeGhgBenefit(ReducingActionAdvice advice, List<BaseActivityResult> baseActivityResults) {
 		Map<BaseIndicatorCode, Double> ghgReductionObjectiveByBaseIndicator = new HashMap<>();
 		for (ReducingActionAdviceBaseIndicatorAssociation baseIndicatorAssociation : advice.getBaseIndicatorAssociations()) {
-			ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicator().getCode(), baseIndicatorAssociation.getPercent());
+			ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicatorCode(), baseIndicatorAssociation.getPercent());
 		}
 
 		Double res = 0.0;

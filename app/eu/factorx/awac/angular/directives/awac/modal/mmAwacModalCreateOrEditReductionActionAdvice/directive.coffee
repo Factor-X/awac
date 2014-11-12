@@ -11,21 +11,20 @@ angular
     controller: ($scope, modalService) ->
         directiveService.autoScopeImpl $scope
 
-        interfaceTypeKeys = ['enterprise', 'municipality', 'household', 'event', 'littleEmitter']
-
         interfaceTypeCodeLabels = $scope.getParams().interfaceTypeCodeLabels
-        indicatorCodeLabels = $scope.getParams().baseIndicatorCodeLabels
+        baseIndicatorCodeLabels = $scope.getParams().baseIndicatorCodeLabels
         actionAdvice = $scope.getParams().actionAdvice
 
+        interfaceTypeKeys = ['enterprise', 'municipality', 'household', 'event', 'littleEmitter']
         $scope.interfaceTypeOptions = _.filter(interfaceTypeCodeLabels, (codeLabel) ->
             return _.contains(interfaceTypeKeys, codeLabel.key)
         )
 
-        indicatorOptionsByInterfaceType =
-            enterprise: _.filter(indicatorCodeLabels, (codeLabel) ->
+        baseIndicatorLabelsByInterfaceType =
+            enterprise: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
                 return codeLabel.key.startsWith("BI_")
             )
-            municipality: _.filter(indicatorCodeLabels, (codeLabel) ->
+            municipality: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
                 return codeLabel.key.startsWith("BICo_")
             )
             household: []       # No BaseIndicators! TODO Fix this
@@ -67,9 +66,6 @@ angular
             fieldTitle: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE"
             placeholder: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
             fieldType: 'textarea'
-            validationRegex: ".{0,1000}"
-            validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
-            hideIsValidIcon: true
 
         $scope.financialBenefit =
             inputName: 'financialBenefit'
@@ -124,13 +120,13 @@ angular
 
         $scope.files = $scope.actionAdvice.files ? []
 
-        $scope.indicatorAssociations = $scope.actionAdvice.baseIndicatorAssociations ? []
+        $scope.baseIndicatorAssociations = $scope.actionAdvice.baseIndicatorAssociations ? []
 
-        $scope.indicatorAssociationToAdd =
+        $scope.baseIndicatorAssociationToAdd =
             baseIndicatorKey: ""
             percent: 0
             isValid: () ->
-                if !!this.percent && !!this.baseIndicatorKey
+                if !!this.baseIndicatorKey && !!this.percent
                     percent = +this.percent.replace(',', '.')
                     return (percent > 0) && (percent < 100)
                 return false
@@ -138,45 +134,34 @@ angular
                 this.baseIndicatorKey = ""
                 this.percent = 0
 
-        # Get indicators options related to selected calculator
-        $scope.getIndicatorOptions = () ->
-            indicatorOptions = indicatorOptionsByInterfaceType[$scope.interfaceTypeKey.field]
-            indicatorAssociations = $scope.indicatorAssociations
-            if (indicatorAssociations.length > 0)
-                # remove indicators already associated
-                selectedIndicatorsKeys = _.pluck(indicatorAssociations, "baseIndicatorKey")
-                indicatorOptions = _.reject(indicatorOptions, (codeLabel) ->
-                    return _.contains(selectedIndicatorsKeys, codeLabel.key)
-                )
-            # sort by key
-            indicatorOptions = _.sortBy(indicatorOptions, (codeLabel) ->
-                return parseInt(codeLabel.key.match(/\d+/), 10)
-            )
-            return indicatorOptions
-
-        $scope.indicatorOptions = $scope.getIndicatorOptions()
+        $scope.baseIndicatorOptions = []
 
         $scope.$watch 'interfaceTypeKey.field', (n, o) ->
             if (n != o)
-                $scope.indicatorAssociations = []
-                $scope.indicatorAssociationToAdd.clear()
-                $scope.indicatorOptions = $scope.getIndicatorOptions()
+                $scope.baseIndicatorAssociations = []
+                $scope.baseIndicatorAssociationToAdd.clear()
+                $scope.refreshBaseIndicatorOptions()
             return
 
         $scope.$watch 'typeKey.field', (n, o) ->
             if (n != o)
-                $scope.indicatorAssociations = []
-                $scope.indicatorAssociationToAdd.clear()
+                $scope.baseIndicatorAssociations = []
+                $scope.baseIndicatorAssociationToAdd.clear()
             return
 
         $scope.allFieldValid = () ->
             return ($scope.title.isValid &&
-                $scope.physicalMeasure.isValid &&
                 $scope.webSite.isValid &&
                 $scope.responsiblePerson.isValid &&
-                $scope.comment.isValid &&
-                (($scope.typeKey.field == "2") || ($scope.indicatorAssociations.length > 0)))
+                (($scope.typeKey.field == "2") || ($scope.baseIndicatorAssociations.length > 0)))
 
+        $scope.editorOptions = {
+            language: 'fr'
+            skin: 'moono'
+            uiColor: '#CFCDC0'
+            toolbar: 'Basic'
+            height: '95px'
+        }
         #send the request to the server
         $scope.save = () ->
             $scope.isLoading = true
@@ -194,7 +179,7 @@ angular
                 responsiblePerson: $scope.responsiblePerson.field
                 comment: $scope.comment.field
                 files: $scope.files
-                baseIndicatorAssociations: $scope.indicatorAssociations
+                baseIndicatorAssociations: $scope.baseIndicatorAssociations
             }
 
             downloadService.postJson '/awac/admin/advices/save', data, (result) ->
@@ -258,31 +243,52 @@ angular
                     break
             return
 
-        $scope.addIndicatorAssociation = () ->
-            if ($scope.indicatorAssociationToAdd.isValid())
-                $scope.indicatorAssociationToAdd.percent = +$scope.indicatorAssociationToAdd.percent.replace(',', '.')
-                $scope.indicatorAssociations.push(angular.copy($scope.indicatorAssociationToAdd))
-                $scope.indicatorAssociations = _.sortBy($scope.indicatorAssociations, (indicatorAssociation) ->
-                    return parseInt(indicatorAssociation.baseIndicatorKey.match(/\d+/), 10)
+        $scope.refreshBaseIndicatorOptions = () ->
+            baseIndicatorOptions = baseIndicatorLabelsByInterfaceType[$scope.interfaceTypeKey.field]
+            baseIndicatorAssociations = $scope.baseIndicatorAssociations
+            if (baseIndicatorAssociations.length > 0)
+                # remove baseIndicators already associated
+                selectedIndicatorsKeys = _.pluck(baseIndicatorAssociations, "baseIndicatorKey")
+                baseIndicatorOptions = _.reject(baseIndicatorOptions, (codeLabel) ->
+                    return _.contains(selectedIndicatorsKeys, codeLabel.key)
                 )
-                $scope.indicatorAssociationToAdd.clear();
-                $scope.indicatorOptions = $scope.getIndicatorOptions()
+            # sort by key
+            baseIndicatorOptions = _.sortBy(baseIndicatorOptions, (codeLabel) ->
+                return parseInt(codeLabel.key.match(/\d+/), 10)
+            )
+            $scope.baseIndicatorOptions = baseIndicatorOptions
             return
 
-        $scope.removeIndicatorAssociation = (indicatorKey) ->
-            for index, biAssociation of $scope.indicatorAssociations
-                if (biAssociation.baseIndicatorKey == indicatorKey)
-                    $scope.indicatorAssociations.splice(index, 1);
-                    break
-            $scope.indicatorAssociations = _.sortBy($scope.indicatorAssociations, (indicatorAssociation) ->
-                return parseInt(indicatorAssociation.baseIndicatorKey.match(/\d+/), 10)
+        $scope.sortBaseIndicatorAssociations = () ->
+            $scope.baseIndicatorAssociations = _.sortBy($scope.baseIndicatorAssociations, (baseIndicatorAssociation) ->
+                return parseInt(baseIndicatorAssociation.baseIndicatorKey.match(/\d+/), 10)
             )
-            $scope.indicatorOptions = $scope.getIndicatorOptions()
+            return
+
+        $scope.addBaseIndicatorAssociation = () ->
+            if ($scope.baseIndicatorAssociationToAdd.isValid())
+                $scope.baseIndicatorAssociationToAdd.percent = +$scope.baseIndicatorAssociationToAdd.percent.replace(',', '.')
+                $scope.baseIndicatorAssociations.push(angular.copy($scope.baseIndicatorAssociationToAdd))
+                $scope.baseIndicatorAssociationToAdd.clear();
+
+                $scope.sortBaseIndicatorAssociations();
+                $scope.refreshBaseIndicatorOptions()
+            return
+
+        $scope.removeBaseIndicatorAssociation = (baseIndicatorKey) ->
+            for index, baseIndicatorAssociation of $scope.baseIndicatorAssociations
+                if (baseIndicatorAssociation.baseIndicatorKey == baseIndicatorKey)
+                    $scope.baseIndicatorAssociations.splice(index, 1);
+                    break
+            $scope.refreshBaseIndicatorOptions()
             return
 
         $scope.getBaseIndicatorLabel = (baseIndicatorKey) ->
-            return baseIndicatorKey + " - " + codeLabelHelper.getLabelByKey(indicatorCodeLabels, baseIndicatorKey)
+            return baseIndicatorKey + " - " + codeLabelHelper.getLabelByKey(baseIndicatorCodeLabels, baseIndicatorKey)
 
+        # Get indicators options related to selected calculator
+        $scope.refreshBaseIndicatorOptions()
+        $scope.sortBaseIndicatorAssociations()
 
         link: (scope) ->
 

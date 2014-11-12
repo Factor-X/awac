@@ -46,7 +46,7 @@ public class ReducingActionAdviceToReducingActionAdviceDTO implements Converter<
 
 		List<BaseIndicatorAssociationDTO> baseIndicatorAssociationDTOs = new ArrayList<>();
 		for (ReducingActionAdviceBaseIndicatorAssociation baseIndicatorAssociation : reducingAction.getBaseIndicatorAssociations()) {
-			String baseIndicatorKey = baseIndicatorAssociation.getBaseIndicator().getCode().getKey();
+			String baseIndicatorKey = baseIndicatorAssociation.getBaseIndicatorCode().getKey();
 			Double percent = baseIndicatorAssociation.getPercent();
 			baseIndicatorAssociationDTOs.add(new BaseIndicatorAssociationDTO(baseIndicatorKey, percent));
 		}
