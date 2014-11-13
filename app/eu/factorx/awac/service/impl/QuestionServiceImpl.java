@@ -49,7 +49,7 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 		return resultList;
 	}
 
-	private Set<Long> getQuestionSetsIds(List<QuestionSet> questionSets) {
+	private Set<Long> getQuestionSetsIds(Set<QuestionSet> questionSets) {
 		Set<Long> questionSetsIds = new LinkedHashSet<>();
 		for (QuestionSet questionSet : questionSets) {
 			questionSetsIds.add(questionSet.getId());
