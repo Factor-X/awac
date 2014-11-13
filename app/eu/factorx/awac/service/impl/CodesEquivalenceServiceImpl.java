@@ -1,15 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
-import play.Logger;
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.CodesEquivalenceService;
+import org.springframework.stereotype.Component;
+import play.Logger;
+import play.db.jpa.JPA;
+
+import java.util.List;
 
 @Component
 public class CodesEquivalenceServiceImpl extends AbstractJPAPersistenceServiceImpl<CodesEquivalence> implements CodesEquivalenceService {
@@ -22,6 +21,11 @@ public class CodesEquivalenceServiceImpl extends AbstractJPAPersistenceServiceIm
 			Logger.warn("CodesEquivalenceService - Cannot find code labels for sublist '{}'", codeList);
 		}
 		return resultList;
+	}
+
+	@Override
+	public List<CodesEquivalence> findAllSublistsData() {
+		return JPA.em().createNamedQuery(CodesEquivalence.FIND_ALL_SUBLISTS_DATA, CodesEquivalence.class).getResultList();
 	}
 
 	@Override

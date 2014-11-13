@@ -15,7 +15,7 @@ import eu.factorx.awac.models.knowledge.ReducingActionAdvice;
 import eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation;
 
 @Component
-public class ReducingActionAdviceToReducingActionAdviceDTO implements Converter<ReducingActionAdvice, ReducingActionAdviceDTO> {
+public class ReducingActionAdviceToReducingActionAdviceDTOConverter implements Converter<ReducingActionAdvice, ReducingActionAdviceDTO> {
 
 	@Autowired
 	private BaseIndicatorToBaseIndicatorDTOConverter baseIndicatorToBaseIndicatorDTOConverter;

@@ -2,7 +2,7 @@
 # Modules
 #
 
-angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ngCkeditor']
+angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ngCkeditor', 'ui']
 
 angular.module 'app.filters', []
 

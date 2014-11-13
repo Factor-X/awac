@@ -4,31 +4,27 @@ div.actions.advices-mngt
 
     br
 
-    table.actions-table
-
-        thead
-            tr
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_DETAILS" | translateText }}
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_CALCULATOR" | translateText }}
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
-
-        tbody
-
-            tr(ng-repeat-start="a in actionAdvices")
-                td.details
-                    mm-plus-minus-toggle-button(ng-model="a.opened")
-                td.calculator
-                    span.text {{ getInterfaceTypeLabel(a.interfaceTypeKey) }}
-                td.title
-                    span.text {{ a.title }}
-                td.type
-                    span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
-                    span &nbsp;&nbsp;
-                    span.text {{ getTypeLabel(a.typeKey) }}
-
-            tr(ng-repeat-end, ng-show="a.opened").details
-                td(colspan="4")
+table.actions-table
+    thead
+        tr
+            th {{ "REDUCTION_ACTION_ADVICE_TABLE_DETAILS" | translateText }}
+            th {{ "REDUCTION_ACTION_ADVICE_TABLE_CALCULATOR" | translateText }}
+            th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
+            th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
+    tbody
+        tr(ng-repeat-start="a in actionAdvices")
+            td.details
+                mm-plus-minus-toggle-button(ng-model="a.opened")
+            td.calculator
+                span.text {{ getInterfaceTypeLabel(a.interfaceTypeKey) }}
+            td.title
+                span.text {{ a.title }}
+            td.type
+                span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
+                span &nbsp;&nbsp;
+                span.text {{ getTypeLabel(a.typeKey) }}
+        tr(ng-repeat-end, ng-show="a.opened").details
+            td(colspan="4")
 
                     table(style="width:100%")
                         tr

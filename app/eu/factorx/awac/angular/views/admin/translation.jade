@@ -1,3 +1,33 @@
-div.verification_manage
+div
     span
         h1 Traduction
+    br
+
+    table.actions-table
+        thead
+            tr
+                th Détails
+                th CodeList
+                th CodeList référencée
+
+        tbody
+            tr(ng-repeat-start="s in subLists")
+                td.details
+                    mm-plus-minus-toggle-button(ng-model="s.opened")
+                td.codeList
+                    span.text {{ s.codeList }}
+                td.referencedCodeList
+                    span.text {{ s.referencedCodeList }}
+
+            tr(ng-repeat-end, ng-if="s.opened").details
+                td(colspan="3")
+
+                    ul(ui-sortable, ng-model="s.keys")
+                        li(ng-repeat="key in s.keys")
+                            span.fa.fa-arrows
+                            span &nbsp;
+                            select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.keys[$index]")
+                    p(colspan="3", style="padding-top: 30px; text-decoration: underline;") Ajout d'un nouvel élément:
+
+                    select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="aucun[s.codeList + key]")
+                    button.button(type="button") [ BUTTON ]

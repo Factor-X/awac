@@ -4,6 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.data.question.type.ValueSelectionQuestion;
 import org.springframework.stereotype.Component;
 
 import play.Logger;
@@ -54,6 +56,12 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 			questionSetsIds.addAll(getQuestionSetsIds(questionSet.getChildren()));
 		}
 		return questionSetsIds;
+	}
+
+	@Override
+	public List<CodeList> findAllCodeListsUsed() {
+		return JPA.em().createNamedQuery(ValueSelectionQuestion.FIND_ALL_USED_CODE_LISTS, CodeList.class)
+				.getResultList();
 	}
 
 }
