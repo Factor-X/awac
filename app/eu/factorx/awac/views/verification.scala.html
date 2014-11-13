@@ -28,6 +28,12 @@
         <!-- Log4Javascript -->
         <script src='@routes.Assets.at("components/log4javascript/log4javascript.js")'></script>
 
+        <!-- jQuery -->
+        <script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>
+
+        <!-- jQueryUI -->
+        <script src='@routes.Assets.at("components/jquery-ui/jquery-ui.js")'></script>
+
         <!-- Angular dependencies local -->
         <script src='@routes.Assets.at("components/angular/angular.js")'></script>
         <script src='@routes.Assets.at("components/angular-i18n/angular-locale_fr-fr.js")'></script>
@@ -39,11 +45,11 @@
         <script src='@routes.Assets.at("components/ng-file-upload/angular-file-upload.min.js")'></script>
         <script src='@routes.Assets.at("components/angular-dynamic-locale/src/tmhDynamicLocale.js")'></script>
 
+        <!-- AngularUI -->
+        <script src='@routes.Assets.at("components/angular-ui/build/angular-ui.js")'></script>
+
         <!-- Underscore -->
         <script src='@routes.Assets.at("components/underscore/underscore.js")'></script>
-
-        <!-- jQuery -->
-        <script src='@routes.Assets.at("components/jquery/dist/jquery.min.js")'></script>
 
         <!-- Bootstrap -->
         <script src='@routes.Assets.at("components/bootstrap/dist/js/bootstrap.min.js")'></script>
@@ -63,15 +69,20 @@
         <!-- Tinycolor -->
         <script src='@routes.Assets.at("components/tinycolor/tinycolor.js")'></script>
 
-        <!-- web app -->
-        <script src='@routes.Assets.at("javascripts/app.js")?@startupDateIdentifier'></script>
-
         <!-- ng-table -->
         <script src='@routes.Assets.at("components/ng-table/ng-table.min.js")'></script>
 
         <!-- angular-bootstrap-datetimepicker -->
         <script src='@routes.Assets.at("components/moment/moment.js")'></script>
         <script src='@routes.Assets.at("components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js")'></script>
+
+        <!-- ckEditor -->
+        <script src='@routes.Assets.at("javascripts/ckeditor/ckeditor.js")'></script>
+        <script src='@routes.Assets.at("javascripts/ckeditor/config.js")'></script>
+        <script src='@routes.Assets.at("components/ng-ckeditor/ng-ckeditor.min.js")'></script>
+
+        <!-- web app -->
+        <script src='@(routes.Assets.at("javascripts/app.js") + "?" + startupDateIdentifier)'></script>
 
         <!-- ------------------------------------------------------------------ -->
         <!-- STYLES                                                             -->
@@ -98,6 +109,9 @@
 
         <!-- angular-bootstrap-datetimepicker -->
         <link rel="stylesheet" href='@routes.Assets.at("components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css")'/>
+
+        <!-- ckEditor -->
+        <link rel="stylesheet" href='@routes.Assets.at("javascripts/ckeditor/skins/moono/editor.css")'/>
 
         <!-- Messenger andDeveloper's helper for translations -->
         <script>

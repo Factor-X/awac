@@ -89,7 +89,7 @@ public class AwacMunicipalityInitialData {
 
 			if (secured.getParent() == null) {
 				for (Form form : formService.findAll()) {
-					List<QuestionSet> questionSets = form.getQuestionSets();
+					Set<QuestionSet> questionSets = form.getQuestionSets();
 					for (QuestionSet questionSet : new ArrayList<>(questionSets)) {
 						if (questionSet.getCode().equals(secured.getCode())) {
 							System.out.println(StringUtils.repeat(' ', indent * 4) + "    removing from form " + form.getIdentifier());

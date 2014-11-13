@@ -15,8 +15,7 @@ import eu.factorx.awac.models.data.answer.QuestionAnswer;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
 		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
-		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS_IDS, query = "select q from Question q where q.questionSet.id in :questionSetsIds"),
-
+		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS_IDS, query = "select q from Question q where q.questionSet.id in :questionSetsIds")
 })
 public abstract class Question extends AuditedAbstractEntity {
 

@@ -5,16 +5,13 @@ div.actions.advices-mngt
     br
 
     table.actions-table
-
         thead
             tr
                 th {{ "REDUCTION_ACTION_ADVICE_TABLE_DETAILS" | translateText }}
                 th {{ "REDUCTION_ACTION_ADVICE_TABLE_CALCULATOR" | translateText }}
                 th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
                 th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
-
         tbody
-
             tr(ng-repeat-start="a in actionAdvices")
                 td.details
                     mm-plus-minus-toggle-button(ng-model="a.opened")
@@ -26,58 +23,57 @@ div.actions.advices-mngt
                     span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
                     span &nbsp;&nbsp;
                     span.text {{ getTypeLabel(a.typeKey) }}
-
             tr(ng-repeat-end, ng-show="a.opened").details
                 td(colspan="4")
 
-                    table(style="width:100%")
-                        tr
-                            td
-                                table(style="width:800px;")
-                                    tr
-                                        td {{ "REDUCTION_ACTION_ADVICE_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide(ng-bind-html="a.physicalMeasure || '&nbsp;'")
-                                    tr
-                                        td {{ "REDUCTION_ACTION_ADVICE_WEBSITE_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide(ng-show="!! a.webSite")
-                                                a(href="{{a.webSite}}", target="blank") {{ a.webSite }}
-                                            .box.wide(ng-hide="!! a.webSite") &nbsp;
+                        table(style="width:100%")
+                            tr
+                                td
+                                    table(style="width:800px;")
+                                        tr
+                                            td {{ "REDUCTION_ACTION_ADVICE_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide(ng-bind-html="a.physicalMeasure || '&nbsp;'")
+                                        tr
+                                            td {{ "REDUCTION_ACTION_ADVICE_WEBSITE_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide(ng-show="!! a.webSite")
+                                                    a(href="{{a.webSite}}", target="blank") {{ a.webSite }}
+                                                .box.wide(ng-hide="!! a.webSite") &nbsp;
 
-                                    tr.with-separator
-                                        td {{ "REDUCTION_ACTION_ADVICE_BASE_INDICATORS_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide(ng-show="a.baseIndicatorAssociations.length > 0")
-                                                div(ng-repeat="bia in a.baseIndicatorAssociations")
-                                                    span(ng-bind-html="getBaseIndicatorLabel(bia.baseIndicatorKey) + ': ' + (bia.percent | numberToI18N) + ' %'")
-                                            .box.wide(ng-hide="a.baseIndicatorAssociations.length > 0") &nbsp;
+                                        tr.with-separator
+                                            td {{ "REDUCTION_ACTION_ADVICE_BASE_INDICATORS_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide(ng-show="a.baseIndicatorAssociations.length > 0")
+                                                    div(ng-repeat="bia in a.baseIndicatorAssociations")
+                                                        span(ng-bind-html="getBaseIndicatorLabel(bia.baseIndicatorKey) + ': ' + (bia.percent | numberToI18N) + ' %'")
+                                                .box.wide(ng-hide="a.baseIndicatorAssociations.length > 0") &nbsp;
 
-                                    tr.with-separator
-                                        td {{ "REDUCTION_ACTION_ADVICE_COMMENT_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide(ng-bind-html="a.comment || '&nbsp;'")
-                                    tr
-                                        td {{ "REDUCTION_ACTION_ADVICE_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide {{ a.responsiblePerson || "&nbsp;" }}
-                                    tr
-                                        td {{ "REDUCTION_ACTION_ADVICE_ATTACHMENTS_FIELD_TITLE" | translateText }}:
-                                        td
-                                            .box.wide(ng-show="a.files.length > 0")
-                                                div(ng-repeat="f in a.files")
-                                                    a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
-                                            .box.wide(ng-hide="a.files.length > 0") &nbsp;
+                                        tr.with-separator
+                                            td {{ "REDUCTION_ACTION_ADVICE_COMMENT_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide(ng-bind-html="a.comment || '&nbsp;'")
+                                        tr
+                                            td {{ "REDUCTION_ACTION_ADVICE_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide {{ a.responsiblePerson || "&nbsp;" }}
+                                        tr
+                                            td {{ "REDUCTION_ACTION_ADVICE_ATTACHMENTS_FIELD_TITLE" | translateText }}:
+                                            td
+                                                .box.wide(ng-show="a.files.length > 0")
+                                                    div(ng-repeat="f in a.files")
+                                                        a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
+                                                .box.wide(ng-hide="a.files.length > 0") &nbsp;
 
-                            td(style="vertical-align:bottom; text-align:right;")
-                                button.button(type="button", ng-click="updateActionAdvice(a)")
-                                    span.fa.fa-pencil-square-o
-                                    span &nbsp;
-                                    span(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_EDIT' | translate")
-                                button.button(type="button", ng-click="confirmDelete(a)")
-                                    span.fa.fa-times
-                                    span &nbsp;
-                                    span(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_DELETE' | translate")
+                                td(style="vertical-align:bottom; text-align:right;")
+                                    button.button(type="button", ng-click="updateActionAdvice(a)")
+                                        span.fa.fa-pencil-square-o
+                                        span &nbsp;
+                                        span(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_EDIT' | translate")
+                                    button.button(type="button", ng-click="confirmDelete(a)")
+                                        span.fa.fa-times
+                                        span &nbsp;
+                                        span(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_DELETE' | translate")
 
     br
 

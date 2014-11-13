@@ -10,6 +10,8 @@ public interface CodesEquivalenceService extends PersistenceService<CodesEquival
 
 	List<CodeLabel> findCodeLabelsBySublist(CodeList codeList);
 
+	List<CodesEquivalence> findAllSublistsData();
+
 	void removeAll();
 
 }
