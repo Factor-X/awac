@@ -1,8 +1,8 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.shared.ListDTO;
 import eu.factorx.awac.dto.awac.shared.SubListDTO;
+import eu.factorx.awac.dto.awac.shared.SubListItemDTO;
 import eu.factorx.awac.dto.awac.shared.SublistDTOList;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
@@ -35,32 +35,42 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
-		return ok(new SublistDTOList(getSubListDTOs(), getCodeListDTOs(CodeList.ActivitySource, CodeList.ActivityType)));
+		return ok(toSublistDTOList(codesEquivalenceService.findAllSublistsData()));
 	}
 
-	private List<SubListDTO> getSubListDTOs() {
-		List<CodesEquivalence> sublistsData = codesEquivalenceService.findAllSublistsData();
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result saveSublists() {
+		SublistDTOList dtoList = extractDTOFromRequest(SublistDTOList.class);
+		return ok();
+	}
+
+	private SublistDTOList toSublistDTOList(List<CodesEquivalence> sublistsData) {
 		Map<CodeList, SubListDTO> sublistsMaps = new LinkedHashMap<>();
+		List<CodeList> referencedCodeLists = new ArrayList<>();
+
 		for (CodesEquivalence codesEquivalence : sublistsData) {
+			SubListItemDTO subListItemDTO = new SubListItemDTO(codesEquivalence.getId(), codesEquivalence.getCodeKey(), codesEquivalence.getOrderIndex());
+
 			CodeList codeList = codesEquivalence.getCodeList();
 			CodeList referencedCodeList = codesEquivalence.getReferencedCodeList();
-			String codeKey = codesEquivalence.getCodeKey();
-			if (sublistsMaps.containsKey(codeList)) {
-				SubListDTO subListDTO = sublistsMaps.get(codeList);
-				if (!subListDTO.getReferencedCodeList().equals(referencedCodeList.name())) {
-					throw new RuntimeException("The code list '" + codeList + "' cannot be at the same time a sublist of '" + referencedCodeList + "' and a sublist of '" + subListDTO.getReferencedCodeList() + "'");
-				}
-				subListDTO.getKeys().add(codeKey);
-			} else {
-				SubListDTO subListDTO = new SubListDTO();
-				subListDTO.setCodeList(codeList.name());
-				subListDTO.setReferencedCodeList(referencedCodeList.name());
-				subListDTO.getKeys().add(codeKey);
+
+			SubListDTO subListDTO = sublistsMaps.get(codeList);
+			if (subListDTO == null) {
+				subListDTO = new SubListDTO(codeList.name(), referencedCodeList.name());
+				subListDTO.addItem(subListItemDTO);
 				sublistsMaps.put(codeList, subListDTO);
+			} else {
+				subListDTO.addItem(subListItemDTO);
+			}
+
+			if (!referencedCodeLists.contains(referencedCodeList)) {
+				referencedCodeLists.add(referencedCodeList);
 			}
 		}
-
-		return new ArrayList<>(sublistsMaps.values());
+		List<SubListDTO> subListDTOs = new ArrayList<>(sublistsMaps.values());
+		List<CodeListDTO> codeListDTOs = getCodeListDTOs(referencedCodeLists.toArray(new CodeList[referencedCodeLists.size()]));
+		return new SublistDTOList(subListDTOs, codeListDTOs);
 	}
 
 }

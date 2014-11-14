@@ -22,12 +22,20 @@ div
             tr(ng-repeat-end, ng-if="s.opened").details
                 td(colspan="3")
 
-                    ul(ui-sortable, ng-model="s.keys")
-                        li(ng-repeat="key in s.keys")
+                    ul(ui-sortable="sortableOptions", ng-model="s.items").sortable-list
+                        li(ng-repeat="item in s.items")
                             span.fa.fa-arrows
                             span &nbsp;
-                            select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.keys[$index]")
-                    p(colspan="3", style="padding-top: 30px; text-decoration: underline;") Ajout d'un nouvel élément:
+                            span {{ s.items[$index].orderIndex }}
+                            span &nbsp;
+                            select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.items[$index].key")
 
-                    select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="aucun[s.codeList + key]")
-                    button.button(type="button") [ BUTTON ]
+                    p(colspan="3", style="padding-top: 30px; text-decoration: underline;") Ajout d'un nouvel élément:
+                    select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.itemToAdd")
+                    button.button(type="button", ng-click="additem(s)") Ajouter
+
+    br
+    br
+    button.button(type="button", ng-click="saveChanges()") Enregistrer
+    span &nbsp;
+    button.button(type="button", ng-click="undoChanges()") Annuler les changements

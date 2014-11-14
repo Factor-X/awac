@@ -23,4 +23,29 @@ angular
             )
             return res
 
+    $scope.undoChanges = () ->
+        $scope.loadSubLists()
+        return
+
+    $scope.saveChanges = () ->
+        data = {
+            sublists: $scope.sublists
+        }
+        $scope.isLoading = true
+        downloadService.postJson '/awac/admin/translations/sublists/save', data, (result) ->
+            $scope.isLoading = false
+            if result.success
+                messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+            return
+        return
+
+    $scope.sortableOptions = {
+        update: (e, ui) ->
+            console.log(ui.item.scope())
+    }
+
+    $scope.addKey = (sublist) ->
+        sublist.keys.push(sublist.keyToAdd)
+        sublist.keyToAdd = ""
+
     $scope.loadSubLists()

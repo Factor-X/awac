@@ -11,15 +11,16 @@ public class SubListDTO extends DTO {
 
 	private String referencedCodeList;
 
-	private List<String> keys = new ArrayList<>();
+	private List<SubListItemDTO> items = new ArrayList<>();
 
 	public SubListDTO() {
+		super();
 	}
 
-	public SubListDTO(String codeList, String referencedCodeList, List<String> keys) {
+	public SubListDTO(String codeList, String referencedCodeList) {
+		super();
 		this.codeList = codeList;
 		this.referencedCodeList = referencedCodeList;
-		this.keys = keys;
 	}
 
 	public String getCodeList() {
@@ -38,11 +39,16 @@ public class SubListDTO extends DTO {
 		this.referencedCodeList = referencedCodeList;
 	}
 
-	public List<String> getKeys() {
-		return keys;
+	public List<SubListItemDTO> getItems() {
+		return items;
 	}
 
-	public void setKeys(List<String> keys) {
-		this.keys = keys;
+	public void setItems(List<SubListItemDTO> items) {
+		this.items = items;
 	}
+
+	public boolean addItem(SubListItemDTO subListItemDTO) {
+		return this.items.add(subListItemDTO);
+	}
+
 }

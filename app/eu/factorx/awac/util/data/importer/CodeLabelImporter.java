@@ -163,7 +163,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
             if (referencedCodeKey == null) {
                 break;
             }
-            CodesEquivalence codesEquivalence = new CodesEquivalence(codeList, referencedCodeKey, referencedCodeList, referencedCodeKey);
+            CodesEquivalence codesEquivalence = new CodesEquivalence(codeList, referencedCodeKey, i, referencedCodeList, referencedCodeKey);
             codesEquivalenceService.saveOrUpdate(codesEquivalence);
             codesEquivalences.add(codesEquivalence);
         }
