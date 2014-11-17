@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import eu.factorx.awac.models.forms.Form;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -39,6 +40,12 @@ public class QuestionSet extends AuditedAbstractEntity {
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<QuestionSet> children = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "mm_form_questionset",
+            joinColumns= @JoinColumn(name = "questionset_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "form_id", referencedColumnName = "id"))
+    private Set<Form> formList = new HashSet<>();
+
 	protected QuestionSet() {
 		super();
 	}
@@ -56,7 +63,15 @@ public class QuestionSet extends AuditedAbstractEntity {
 		this.repetitionAllowed = repetitionAllowed;
 	}
 
-	public QuestionCode getCode() {
+    public Set<Form> getFormList() {
+        return formList;
+    }
+
+    public void setFormList(Set<Form> formList) {
+        this.formList = formList;
+    }
+
+    public QuestionCode getCode() {
 		return code;
 	}
 
