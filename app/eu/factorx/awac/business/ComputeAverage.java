@@ -30,14 +30,31 @@ import jxl.write.Number;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import play.Application;
+import play.Play;
+import play.db.jpa.JPA;
+import play.db.jpa.JPAPlugin;
+import play.libs.F;
+import scala.Option;
 
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import java.io.*;
+import java.lang.Boolean;
 import java.util.*;
+import java.util.concurrent.Future;
 
-@Named("ComputeAverageService")
-@Component
+
+//@Named("ComputeAverageService")
+//@Component
+@Service
 public class ComputeAverage {
 
     @Autowired
@@ -51,10 +68,40 @@ public class ComputeAverage {
     @Autowired
     private CodeLabelService codeLabelService;
 
+    // for asynchronous running purposes
+    @Async
+    public Future<Boolean> computeAverageAsync(final Account account, final AwacCalculator awacCalculator, final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList, final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
 
-    public void computeAverage(Account account, AwacCalculator awacCalculator, List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList, Period period, int organizationComputed, int scopeComputed) throws IOException, WriteException {
+        try {
+            JPA.withTransaction("default", false, new play.libs.F.Function0<Void>() {
+                public Void apply() throws Throwable {
 
 
+                    play.Logger.info("Running in Asynch mode ");
+                    try {
+                        computeAverage(
+                                account,
+                                awacCalculator,
+                                scopeAndPeriodList,
+                                period,
+                                organizationComputed,
+                                scopeComputed);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        return new AsyncResult<Boolean>(new Boolean(true));
+    }
+
+    public void computeAverage(final Account account, final AwacCalculator awacCalculator, final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList, final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
+
+        play.Logger.info ("step #1");
         //for each question, compute average
         //compute form by form
         List<AverageValue> averageValueList = new ArrayList<>();
@@ -64,6 +111,7 @@ public class ComputeAverage {
             }
         }
 
+        play.Logger.info ("step #2");
         //
         // EXCEL FILE
         //
@@ -86,7 +134,7 @@ public class ComputeAverage {
 
         ByteArrayOutputStream output = generateExcel(awacCalculator, averageValueList, account.getPerson().getDefaultLanguage(), criteria);
 
-
+        play.Logger.info ("step #3");
         //send email
         Map<String, Object> values = new HashMap<>();
         /*
@@ -105,6 +153,7 @@ public class ComputeAverage {
         listAttachment.put("average.xls", output);
         email.setAttachmentFilenameList(listAttachment);
         emailService.send(email);
+        play.Logger.info ("step #4");
 
     }
 

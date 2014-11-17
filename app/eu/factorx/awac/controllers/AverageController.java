@@ -2,6 +2,7 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.business.ComputeAverage;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
+import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.ComputeAverageDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
@@ -28,10 +29,14 @@ import eu.factorx.awac.util.batch.messages.ComputeAverageMessage;
 import eu.factorx.awac.util.batch.service.ComputeAverageService;
 import jxl.write.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
+import play.Logger;
+import play.api.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 import java.io.*;
+import java.lang.Boolean;
 import java.util.*;
 
 import static play.libs.F.Promise.promise;
@@ -39,6 +44,7 @@ import play.libs.F.*;
 import play.mvc.*;
 import scala.concurrent.duration.Duration;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import static play.libs.F.Promise.promise;
 
@@ -46,6 +52,7 @@ import static play.libs.F.Promise.promise;
  * Created by florian on 5/11/14.
  */
 @org.springframework.stereotype.Controller
+@EnableAsync
 public class AverageController extends AbstractController {
 
 	@Autowired
@@ -65,6 +72,8 @@ public class AverageController extends AbstractController {
 
     @Autowired
     ComputeAverageService batchComputeAverageService;
+
+    public static Future<Boolean> result;
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
@@ -101,6 +110,7 @@ public class AverageController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result computeAverage() throws IOException, WriteException {
+
 
 
 		if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)) {
@@ -203,22 +213,48 @@ public class AverageController extends AbstractController {
 		}
 		else {
 
-      //call classical Spring service
-            try {
+// call classical Spring service
+//            try {
+//
+//                    computeAverageService.computeAverage(
+//                            securedController.getCurrentUser(),
+//                            awacCalculator,
+//                            scopeAndPeriodList,
+//                            period,
+//                            organizationComputed,
+//                            scopeComputed
+//                            );
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (WriteException e) {
+//                e.printStackTrace();
+//            }
 
-                    computeAverageService.computeAverage(
+
+            if ((result==null) || result.isDone ()) {
+                // call asynchronous pring service
+                Logger.info("ASYNCH Service called");
+                try {
+
+                    result = computeAverageService.computeAverageAsync(
                             securedController.getCurrentUser(),
                             awacCalculator,
                             scopeAndPeriodList,
                             period,
                             organizationComputed,
                             scopeComputed
-                            );
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (WriteException e) {
-                e.printStackTrace();
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (WriteException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Logger.info("ASYNCH Service called already in processing");
+                return ok(new ExceptionsDTO("Les moyennes sont en cours de calcul. Vous recevrez le résultat sur votre adresse e-mail dans quelques minutes"));
             }
+
+
 
 
 // call batch processing
@@ -244,6 +280,9 @@ public class AverageController extends AbstractController {
 //                    scopeComputed);
 //
 //            batchService.run(batchMessage);
+
+
+
 
 //            Akka.system().scheduler().scheduleOnce(
 //                    Duration.create(10, TimeUnit.MILLISECONDS),
@@ -286,7 +325,7 @@ public class AverageController extends AbstractController {
 //			);
 		} // else
 
-        return ok();
+        return ok(new ResultsDTO());
 	}
 
     /************************************/
