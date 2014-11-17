@@ -46,7 +46,7 @@ public class ReducingActionAdviceServiceTest extends AbstractBaseModelTest {
 		advice.setTitle("New advice");
 		advice.setType(ReducingActionTypeCode.REDUCING_GES);
 
-		BaseIndicator bi_1 = baseIndicatorService.getByCode(new BaseIndicatorCode("BI_1"));
+		BaseIndicatorCode bi_1 = new BaseIndicatorCode("BI_1");
 		ReducingActionAdviceBaseIndicatorAssociation biAssociation = new ReducingActionAdviceBaseIndicatorAssociation(advice, bi_1, 0.2);
 		advice.getBaseIndicatorAssociations().add(biAssociation);
 
@@ -71,7 +71,7 @@ public class ReducingActionAdviceServiceTest extends AbstractBaseModelTest {
 		ReducingActionAdvice updatedAdvice = reducingActionAdviceService.saveOrUpdate(foundAdvice);
 		Assert.assertTrue(updatedAdvice.getBaseIndicatorAssociations().isEmpty());
 
-		BaseIndicator bi_2 = baseIndicatorService.getByCode(new BaseIndicatorCode("BI_2"));
+		BaseIndicatorCode bi_2 = new BaseIndicatorCode("BI_2");
 		Set<ReducingActionAdviceBaseIndicatorAssociation> biAssociations = new HashSet<>();
 		biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, bi_1, 0.2));
 		biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, bi_2, 0.4));

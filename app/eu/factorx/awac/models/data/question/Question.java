@@ -8,14 +8,14 @@ import javax.persistence.*;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.AnswerType;
+import eu.factorx.awac.models.data.answer.QuestionAnswer;
 
 @Entity
 @Table(name = "question")
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({ @NamedQuery(name = Question.FIND_BY_CODES, query = "select q from Question q where q.code in :codes"),
 		@NamedQuery(name = Question.FIND_BY_CODE, query = "select q from Question q where q.code = :code"),
-		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS_IDS, query = "select q from Question q where q.questionSet.id in :questionSetsIds"),
-
+		@NamedQuery(name = Question.FIND_BY_QUESTION_SETS_IDS, query = "select q from Question q where q.questionSet.id in :questionSetsIds")
 })
 public abstract class Question extends AuditedAbstractEntity {
 
@@ -43,6 +43,9 @@ public abstract class Question extends AuditedAbstractEntity {
 
 	protected int orderIndex = 0;
 
+    @OneToMany(mappedBy = "question")
+    protected List<QuestionAnswer> questionAnswerList;
+
 	protected Question() {
 		super();
 	}
@@ -59,7 +62,15 @@ public abstract class Question extends AuditedAbstractEntity {
 		this.code = code;
 	}
 
-	public QuestionSet getQuestionSet() {
+    public List<QuestionAnswer> getQuestionAnswerList() {
+        return questionAnswerList;
+    }
+
+    public void setQuestionAnswerList(List<QuestionAnswer> questionAnswerList) {
+        this.questionAnswerList = questionAnswerList;
+    }
+
+    public QuestionSet getQuestionSet() {
 		return questionSet;
 	}
 

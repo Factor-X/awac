@@ -68,7 +68,8 @@ object ApplicationBuild extends Build {
             ExclusionRule(organization = "org.xhtmlrenderer")
             ),
         "org.apache.xmlgraphics" % "batik-codec" % "1.7",
-        "rhino" % "js" % "1.7R2"
+        "rhino" % "js" % "1.7R2",
+        "javax.inject" % "javax.inject" % "1"
     )
 
 

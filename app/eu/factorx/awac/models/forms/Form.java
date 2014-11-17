@@ -1,7 +1,9 @@
 package eu.factorx.awac.models.forms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -26,7 +28,7 @@ public class Form extends AuditedAbstractEntity {
 	@JoinTable(name = "mm_form_questionset",
 			joinColumns = @JoinColumn(name = "form_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "questionset_id", referencedColumnName = "id"))
-	private List<QuestionSet> questionSets = new ArrayList<>();
+	private Set<QuestionSet> questionSets = new HashSet<>();
 
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
     private AwacCalculator awacCalculator;
@@ -63,19 +65,19 @@ public class Form extends AuditedAbstractEntity {
 		this.progress = progress;
 	}
 
-	public List<QuestionSet> getQuestionSets() {
-		return questionSets;
+	public Set<QuestionSet> getQuestionSets() {
+		return this.questionSets;
 	}
 
-	public void setQuestionSets(List<QuestionSet> questionSet) {
-		this.questionSets = questionSet;
-	}
+    public void setQuestionSets(Set<QuestionSet> questionSets) {
+        this.questionSets = questionSets;
+    }
 
-	public List<QuestionSet> getAllQuestionSets() {
-		return getAllQuestionSets(this.getQuestionSets());
-	}
+    public List<QuestionSet> getAllQuestionSets() {
+        return getAllQuestionSets(this.questionSets);
+    }
 
-	private List<QuestionSet> getAllQuestionSets(List<QuestionSet> questionSets) {
+    private List<QuestionSet> getAllQuestionSets(Set<QuestionSet> questionSets) {
 		List<QuestionSet> result = new ArrayList<>();
 		for (QuestionSet questionSet : questionSets) {
 			result.add(questionSet);

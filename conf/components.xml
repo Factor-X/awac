@@ -10,7 +10,7 @@
          http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <context:component-scan
-            base-package="eu.factorx.awac,eu.factorx.awac.controllers,eu.factorx.awac.generated,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email"/>
+            base-package="eu.factorx.awac,eu.factorx.awac.controllers,eu.factorx.awac.generated,eu.factorx.awac.service,eu.factorx.awac.converter,eu.factorx.awac.util.data.importer, eu.factorx.awac.util.email, eu.factorx.awac.util.batch"/>
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
@@ -40,7 +40,8 @@
                 <bean class="eu.factorx.awac.converter.DriverToDriverDTOConverter" />
                 <bean class="eu.factorx.awac.converter.DriverValueDriverValueDTOConverter" />
                 <bean class="eu.factorx.awac.converter.BaseIndicatorToBaseIndicatorDTOConverter" />
-                <bean class="eu.factorx.awac.converter.ReducingActionAdviceToReducingActionAdviceDTO" />
+                <bean class="eu.factorx.awac.converter.ReducingActionAdviceToReducingActionAdviceDTOConverter" />
+                <bean class="eu.factorx.awac.converter.CodesEquivalenceToCodesEquivalenceDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
                 <bean class="eu.factorx.awac.converter.admin.FactorToFactorDTOConverter" />

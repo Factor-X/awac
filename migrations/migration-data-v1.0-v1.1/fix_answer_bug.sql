@@ -1,0 +1,1 @@
+delete from answer_value where id = 1171;

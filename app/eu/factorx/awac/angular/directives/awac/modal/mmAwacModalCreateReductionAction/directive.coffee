@@ -67,8 +67,9 @@ angular
             field: $scope.action.physicalMeasure
             fieldTitle: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE"
             placeholder: "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_PLACEHOLDER"
-            validationRegex: "^.{0,255}$"
-            validationMessage: "TEXT_FIELD_MAX_255_CHARACTERS"
+            fieldType: 'textarea'
+            validationRegex: ".{0,1000}"
+            validationMessage: "TEXT_FIELD_MAX_1000_CHARACTERS"
             hideIsValidIcon: true
 
         $scope.ghgBenefit =
@@ -144,12 +145,10 @@ angular
 
         $scope.allFieldValid = () ->
             return ($scope.title.isValid &&
-                $scope.physicalMeasure.isValid &&
                 $scope.expectedPaybackTime.isValid &&
                 $scope.dueDate.isValid &&
                 $scope.webSite.isValid &&
-                $scope.responsiblePerson.isValid &&
-                $scope.comment.isValid)
+                $scope.responsiblePerson.isValid)
 
         #send the request to the server
         $scope.save = () ->
@@ -253,6 +252,14 @@ angular
                     $scope.files.splice(index, 1);
                     break
             return
+
+        $scope.editorOptions = {
+            language: 'fr'
+            skin: 'moono'
+            uiColor: '#CFCDC0'
+            toolbar: 'Basic'
+            height: '95px'
+        }
 
         link: (scope) ->
 

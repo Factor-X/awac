@@ -1,28 +1,31 @@
 div.actions.advices
-    span
-        h1 Conseils
+    h1 {{ "REDUCTION_ACTION_ADVICES_TITLE" | translateText }}
     br
-    span
-        img(ng-show="computingAdvices",src="/assets/images/modal-loading.gif")
-    table.actions-table(ng-hide="computingAdvices")
+
+    .waiting-data(ng-show="waitingAdvices")
+        img(src="/assets/images/modal-loading.gif")
+        span Recherche en cours...
+
+    table.actions-table(ng-hide="waitingAdvices")
         thead
             tr
                 th &nbsp;
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TITLE" | translateText }}
-                th {{ "REDUCTION_ACTION_ADVICE_TABLE_TYPE" | translateText }}
-                th Potentiel CO2
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_TITLE' | translate")
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_TYPE' | translate")
+                th(ng-bind-html="'REDUCTION_ACTION_ADVICE_TABLE_COMPUTED_GHG_BENEFIT' | translate")
         tbody
             tr(ng-repeat="advice in actionAdvices")
                 td.details
                     button.button(type="button", ng-click="createActionFromAdvice(advice)")
-                        span.text en faire une action
+                        span.text(ng-bind-html="'REDUCTION_ACTION_ADVICE_BUTTON_CREATE_ACTION_FROM_ADVICE' | translate")
                 td.title
-                    span.text {{ advice.title }}
+                    span.text(ng-bind-html="advice.title")
                     .field_info(ng-if="!!advice.webSite || !!advice.physicalMeasure")
                         .field_info_popup
-                            div(ng-if="!!advice.physicalMeasure") {{ advice.physicalMeasure }}
+                            div(ng-if="!!advice.physicalMeasure", ng-bind-html="advice.physicalMeasure")
                             div(ng-if="!!advice.webSite")
-                                span Plus d'infos sur:&nbsp;
+                                span(ng-bind-html="'REDUCTION_ACTION_ADVICE_MORE_INFO' | translate")
+                                span :&nbsp
                                 a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
 
                 td.type
@@ -30,7 +33,15 @@ div.actions.advices
                     span &nbsp;&nbsp;
                     span.text {{ getTypeLabel(advice.typeKey) }}
                 td.ghgBenefit
-                    span {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) }}
+                    span(ng-show="advice.typeKey == '1'") {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) }}
+                    span(ng-hide="advice.typeKey == '2'") &nbsp;
+                    //.field_info
+                        .field_info_popup
+                            div(ng-if="!!advice.physicalMeasure") {{ advice.physicalMeasure }}
+                            div(ng-if="!!advice.webSite")
+                                span(ng-bind-html=" 'REDUCTION_ACTION_ADVICE_MORE_INFO' | translate")
+                                span :&nbsp
+                                a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
 
 
 div.actions
@@ -54,7 +65,7 @@ div.actions
                 td.details
                     mm-plus-minus-toggle-button(ng-model="a.opened")
                 td.title
-                    span.text {{a.title}}
+                    span.text(ng-bind-html="a.title")
                 td.type
                     span.icon.action_type_icon(ng-class="{reducing: a.typeKey == '1', better_measure: a.typeKey == '2'}")
                     span &nbsp;&nbsp;
@@ -69,75 +80,78 @@ div.actions
                     span.text {{ (a.statusKey == "2") ? (a.completionDate | date : "yyyy") : getStatusLabel(a.statusKey) }}
 
             tr(ng-repeat-end, ng-show="a.opened").details
-                td(colspan="2")
+                td(colspan="5")
+                    table(style="width:100%")
+                        tr
+                            td
+                                table(style="width:800px;")
+                                    tr
+                                        td {{ "REDUCTION_ACTION_WEBSITE_FIELD_TITLE" | translateText }}:
+                                        td
+                                            a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
+                                    tr
+                                        td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-bind-html="a.physicalMeasure || '&nbsp;'")
+                                    tr(ng-if="a.typeKey == '1'")
+                                        td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-show="!!a.ghgBenefit") {{ (a.ghgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
+                                            .box.wide(ng-hide="!!a.ghgBenefit") &nbsp;
 
-                    table
-                        tr
-                            td {{ "REDUCTION_ACTION_WEBSITE_FIELD_TITLE" | translateText }}:
-                            td
-                                a(href="{{a.webSite}}", target="blank", ng-if="a.webSite != null") {{ a.webSite }}
-                        tr
-                            td {{ "REDUCTION_ACTION_PHYSICAL_MEASURE_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.physicalMeasure || "&nbsp;" }}
-                        tr(ng-if="a.typeKey == '1'")
-                            td {{ "REDUCTION_ACTION_GHG_BENEFIT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.ghgBenefit") {{ (a.ghgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
-                                .box.wide(ng-hide="!!a.ghgBenefit") &nbsp;
+                                    tr
+                                        td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-show="!!a.financialBenefit") {{ (a.financialBenefit | numberToI18N) + "&nbsp;EUR" }}
+                                            .box.wide(ng-hide="!!a.financialBenefit") &nbsp;
 
-                        tr
-                            td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.financialBenefit") {{ (a.financialBenefit | numberToI18N) + "&nbsp;EUR" }}
-                                .box.wide(ng-hide="!!a.financialBenefit") &nbsp;
+                                    tr
+                                        td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-show="!!a.investmentCost") {{ (a.investmentCost | numberToI18N) + "&nbsp;EUR" }}
+                                            .box.wide(ng-hide="!!a.investmentCost") &nbsp;
 
-                        tr
-                            td {{ "REDUCTION_ACTION_INVESTMENT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="!!a.investmentCost") {{ (a.investmentCost | numberToI18N) + "&nbsp;EUR" }}
-                                .box.wide(ng-hide="!!a.investmentCost") &nbsp;
+                                    tr
+                                        td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide {{ a.expectedPaybackTime || "&nbsp;" }}
+                                    tr
+                                        td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide {{ a.dueDate | date: 'dd/MM/yyyy' }}
+                                    tr
+                                        td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide {{ a.responsiblePerson || "&nbsp;" }}
+                                    tr
+                                        td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-bind-html="a.comment || '&nbsp;'")
+                                    tr
+                                        td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-show="a.files.length > 0")
+                                                div(ng-repeat="f in a.files")
+                                                    a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
+                                            .box.wide(ng-hide="a.files.length > 0") &nbsp;
 
-                        tr
-                            td {{ "REDUCTION_ACTION_EXPECTED_PAYBACK_TIME_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.expectedPaybackTime || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_DUE_DATE_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.dueDate | date: 'dd/MM/yyyy' }}
-                        tr
-                            td {{ "REDUCTION_ACTION_RESPONSIBLE_PERSON_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide {{ a.responsiblePerson || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_COMMENT_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(style="min-height: 150px;") {{ a.comment || "&nbsp;" }}
-                        tr
-                            td {{ "REDUCTION_ACTION_ATTACHMENTS_FIELD_TITLE" | translateText }}:
-                            td
-                                .box.wide(ng-show="a.files.length > 0")
-                                    div(ng-repeat="f in a.files")
-                                        a(ng-href="/awac/file/download/{{ f.id }}") {{ f.name }}
-                                .box.wide(ng-hide="a.files.length > 0") &nbsp;
+                            td(style="vertical-align:bottom; text-align:right;")
+                                //td(style="vertical-align: bottom; text-align: right", colspan="4")
 
-                td(style="vertical-align: bottom; text-align: right", colspan="4")
+                                button.button(type="button", ng-click="updateAction(a)")
+                                    span.fa.fa-pencil-square-o
+                                    span &nbsp;
+                                    span(ng-bind-html="'REDUCING_ACTION_BUTTON_EDIT' | translate")
 
-                        button.button(type="button", ng-click="updateAction(a)")
-                            span.fa.fa-pencil-square-o
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_EDIT' | translate")
+                                button.button(type="button", ng-click="confirmDelete(a)")
+                                    span.fa.fa-times
+                                    span &nbsp;
+                                    span(ng-bind-html="'REDUCING_ACTION_BUTTON_DELETE' | translate")
 
-                        button.button(type="button", ng-click="confirmDelete(a)")
-                            span.fa.fa-times
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_DELETE' | translate")
-
-                        button.button(type="button", ng-click="markActionAsDone(a)", ng-show="a.statusKey != '2'")
-                            span.fa.fa-check-square-o
-                            span &nbsp;
-                            span(ng-bind-html="'REDUCING_ACTION_BUTTON_MARK_AS_DONE' | translate")
+                                button.button(type="button", ng-click="markActionAsDone(a)", ng-show="a.statusKey != '2'")
+                                    span.fa.fa-check-square-o
+                                    span &nbsp;
+                                    span(ng-bind-html="'REDUCING_ACTION_BUTTON_MARK_AS_DONE' | translate")
 
     br
 

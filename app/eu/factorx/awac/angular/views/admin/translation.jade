@@ -1,0 +1,41 @@
+div
+    span
+        h1 Traduction
+    br
+
+    table.actions-table
+        thead
+            tr
+                th Détails
+                th CodeList
+                th CodeList référencée
+
+        tbody
+            tr(ng-repeat-start="s in subLists")
+                td.details
+                    mm-plus-minus-toggle-button(ng-model="s.opened")
+                td.codeList
+                    span.text {{ s.codeList }}
+                td.referencedCodeList
+                    span.text {{ s.referencedCodeList }}
+
+            tr(ng-repeat-end, ng-if="s.opened").details
+                td(colspan="3")
+
+                    ul(ui-sortable="sortableOptions", ng-model="s.items").sortable-list
+                        li(ng-repeat="item in s.items")
+                            span.fa.fa-arrows
+                            span &nbsp;
+                            span {{ s.items[$index].orderIndex }}
+                            span &nbsp;
+                            select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.items[$index].key")
+
+                    p(colspan="3", style="padding-top: 30px; text-decoration: underline;") Ajout d'un nouvel élément:
+                    select(ng-options="cl.key as cl.label for cl in codeLabels[s.referencedCodeList]", ng-model="s.itemToAdd")
+                    button.button(type="button", ng-click="additem(s)") Ajouter
+
+    br
+    br
+    button.button(type="button", ng-click="saveChanges()") Enregistrer
+    span &nbsp;
+    button.button(type="button", ng-click="undoChanges()") Annuler les changements

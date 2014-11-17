@@ -1,12 +1,12 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import java.io.Serializable;
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
@@ -50,6 +50,8 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 	private List<FilesUploadedDTO> files;
 
 	private List<BaseIndicatorAssociationDTO> baseIndicatorAssociations;
+
+	private String alternativeGroupKey;
 
 	public static class BaseIndicatorAssociationDTO extends DTO implements Serializable {
 
@@ -212,4 +214,11 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 		this.baseIndicatorAssociations = baseIndicatorAssociations;
 	}
 
+	public String getAlternativeGroupKey() {
+		return alternativeGroupKey;
+	}
+
+	public void setAlternativeGroupKey(String alternativeGroupKey) {
+		this.alternativeGroupKey = alternativeGroupKey;
+	}
 }

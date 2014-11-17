@@ -1,5 +1,14 @@
 package eu.factorx.awac.controllers;
 
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 import eu.factorx.awac.dto.awac.get.ReducingActionAdviceDTOList;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionAdviceDTO;
@@ -9,23 +18,15 @@ import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.ReducingActionAdvice;
 import eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.service.impl.reporting.LowRankMeasureWarning;
 import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-
-import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class ReducingActionAdviceController extends AbstractController {
@@ -56,7 +57,7 @@ public class ReducingActionAdviceController extends AbstractController {
 	public Result computeAdvices(String periodKey) {
 		Organization organization = securedController.getCurrentUser().getOrganization();
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		return ok(new ReducingActionAdviceDTOList(getReducingActionAdviceDTOs(organization, period), null));
+		return ok(new ReducingActionAdviceDTOList(computeAdviceDTOs(organization, period)));
 	}
 
 	/**
@@ -97,16 +98,15 @@ public class ReducingActionAdviceController extends AbstractController {
 
 		advice.setPhysicalMeasure(dto.getPhysicalMeasure());
 
-		Set<ReducingActionAdviceBaseIndicatorAssociation> baseIndicatorAssociations = new HashSet<>();
+		Set<ReducingActionAdviceBaseIndicatorAssociation> biAssociations = new HashSet<>();
 		if (ReducingActionTypeCode.REDUCING_GES.equals(actionType)) {
-			for (ReducingActionAdviceDTO.BaseIndicatorAssociationDTO baseIndicatorAssociationDTO : dto.getBaseIndicatorAssociations()) {
-				BaseIndicatorCode baseIndicatorCode = new BaseIndicatorCode(baseIndicatorAssociationDTO.getBaseIndicatorKey());
-				BaseIndicator baseIndicator = baseIndicatorService.getByCode(baseIndicatorCode);
-				Double percent = baseIndicatorAssociationDTO.getPercent();
-				baseIndicatorAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicator, percent));
+			for (ReducingActionAdviceDTO.BaseIndicatorAssociationDTO biAssociationDTO : dto.getBaseIndicatorAssociations()) {
+				BaseIndicatorCode baseIndicatorCode = new BaseIndicatorCode(biAssociationDTO.getBaseIndicatorKey());
+				Double percent = biAssociationDTO.getPercent();
+				biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicatorCode, percent));
 			}
 		}
-		advice.setBaseIndicatorAssociations(baseIndicatorAssociations);
+		advice.setBaseIndicatorAssociations(biAssociations);
 
 		advice.setFinancialBenefit(dto.getFinancialBenefit());
 		advice.setInvestmentCost(dto.getInvestmentCost());
@@ -125,7 +125,6 @@ public class ReducingActionAdviceController extends AbstractController {
 		reducingActionAdviceService.saveOrUpdate(advice);
 		return ok(conversionService.convert(advice, ReducingActionAdviceDTO.class));
 	}
-
 
 	/**
 	 * Admin only!
@@ -151,7 +150,7 @@ public class ReducingActionAdviceController extends AbstractController {
 		return res;
 	}
 
-	private List<ReducingActionAdviceDTO> getReducingActionAdviceDTOs(Organization organization, Period period) {
+	private List<ReducingActionAdviceDTO> computeAdviceDTOs(Organization organization, Period period) {
 		InterfaceTypeCode interfaceTypeCode = organization.getInterfaceCode();
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceTypeCode);
 
@@ -165,6 +164,29 @@ public class ReducingActionAdviceController extends AbstractController {
 		List<BaseActivityResult> baseActivityResults = reportResultService.getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 
 		List<ReducingActionAdviceDTO> res = new ArrayList<>();
+		res.addAll(getReductionActionAdvices(awacCalculator, baseActivityResults));
+		res.addAll(getBetterMeasureAdvices(logEntries));
+		return res;
+	}
+
+	private List<ReducingActionAdviceDTO> getBetterMeasureAdvices(List<ReportLogEntry> logEntries) {
+		List<ReducingActionAdviceDTO> res = new ArrayList<>();
+		for (ReportLogEntry logEntry : new HashSet<>(logEntries)) {
+			if (logEntry instanceof LowRankMeasureWarning) {
+				LowRankMeasureWarning lowRankMeasureWarning = (LowRankMeasureWarning) logEntry;
+				String alternativeGroupKey = lowRankMeasureWarning.getAlternativeGroupKey();
+
+				ReducingActionAdviceDTO reducingActionAdviceDTO = new ReducingActionAdviceDTO();
+				reducingActionAdviceDTO.setTypeKey(ReducingActionTypeCode.BETTER_METHOD.getKey());
+				reducingActionAdviceDTO.setAlternativeGroupKey(alternativeGroupKey);
+				res.add(reducingActionAdviceDTO);
+			}
+		}
+		return res;
+	}
+
+	private List<ReducingActionAdviceDTO> getReductionActionAdvices(AwacCalculator awacCalculator, List<BaseActivityResult> baseActivityResults) {
+		List<ReducingActionAdviceDTO> reducingActionDTOs = new ArrayList<>();
 		List<ReducingActionAdvice> advices = reducingActionAdviceService.findByCalculator(awacCalculator);
 		Logger.info("Found {} advice(s). Computing reduction objectives...", advices.size());
 		for (ReducingActionAdvice advice : advices) {
@@ -179,15 +201,15 @@ public class ReducingActionAdviceController extends AbstractController {
 			adviceDTO.setComputedGhgBenefit(computedGhgBenefit);
 			adviceDTO.setComputedGhgBenefitUnitKey(computedGhgBenefitUnitCode.getKey());
 
-			res.add(adviceDTO);
+			reducingActionDTOs.add(adviceDTO);
 		}
-		return res;
+		return reducingActionDTOs;
 	}
 
 	private static Double computeGhgBenefit(ReducingActionAdvice advice, List<BaseActivityResult> baseActivityResults) {
 		Map<BaseIndicatorCode, Double> ghgReductionObjectiveByBaseIndicator = new HashMap<>();
 		for (ReducingActionAdviceBaseIndicatorAssociation baseIndicatorAssociation : advice.getBaseIndicatorAssociations()) {
-			ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicator().getCode(), baseIndicatorAssociation.getPercent());
+			ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicatorCode(), baseIndicatorAssociation.getPercent());
 		}
 
 		Double res = 0.0;
@@ -198,7 +220,6 @@ public class ReducingActionAdviceController extends AbstractController {
 				continue;
 			}
 			Double ghgEmission = baseActivityResult.getNumericValue();
-			Logger.info("Found one activity result matching a reduction advice (BaseIndicator = '{}'; GHG Emission = {}tCO2; Advice reduction objective = {}%", baseIndicatorCode, ghgEmission, ghgReductionPercent);
 			res += (ghgEmission * ghgReductionPercent / 100.0);
 		}
 		return res;

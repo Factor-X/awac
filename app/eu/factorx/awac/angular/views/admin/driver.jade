@@ -1,4 +1,6 @@
 div.verification_manage
+    span
+        h1 Traduction
 
     table.actions-table
         tr
@@ -11,11 +13,13 @@ div.verification_manage
                     div(style="width:50%;display:inline-block") A partir de
                         select(
                         ng-options='p.key as p.label for p in getPeriod(driver,value)',
+                         ng-disabled="value.fromPeriodKey == '2000'"
                         ng-model="value.fromPeriodKey")
                     div(style="display:inline-block") Value
                         input(ng-model="value.defaultValue")
                     div(style="display:inline-block")
-                        button(ng-click="remove(driver,value.tempId)") supprimer
+                        button(ng-click="remove(driver,value.tempId)",
+                        ng-hide="value.fromPeriodKey == '2000'") supprimer
                 button(ng-click="addValue(driver)") Ajouter une value
     button(ng-click="save()") Sauver les modifications
     button(ng-click="orderDriverValues()") Trier les valeurs par date

@@ -1,18 +1,20 @@
 package eu.factorx.awac.models.knowledge;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.type.ReducingActionTypeCode;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.forms.AwacCalculator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "reducingactionadvice", uniqueConstraints = {
@@ -42,6 +44,7 @@ public class ReducingActionAdvice extends AuditedAbstractEntity {
 	@AttributeOverrides({ @AttributeOverride(name = Code.KEY_PROPERTY, column = @Column(name = TYPE_COLUMN, length = 1, nullable = false)) })
 	private ReducingActionTypeCode type;
 
+	@Column(columnDefinition = "TEXT")
 	private String physicalMeasure;
 
 	private Double ghgBenefit;

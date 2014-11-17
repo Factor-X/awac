@@ -1,18 +1,15 @@
 package eu.factorx.awac.models.knowledge;
 
+import eu.factorx.awac.models.AbstractEntity;
+import eu.factorx.awac.models.code.type.BaseIndicatorCode;
+
 import javax.persistence.*;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import eu.factorx.awac.models.AbstractEntity;
-
 @Entity
-@Table(name = "mm_reducingactionadvice_baseindicator")
+@Table(name = "reducingactionadvice_baseindicator")
 public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity {
 
 	public static final String ACTION_ADVICE_COLUMN = "actionadvice_id";
-	public static final String BASE_INDICATOR_COLUMN = "baseindicator_id";
 
 	private static final long serialVersionUID = 6627513478859914699L;
 
@@ -20,10 +17,9 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 	@JoinColumn(name = ACTION_ADVICE_COLUMN, nullable = false)
 	private ReducingActionAdvice actionAdvice;
 
-	@ManyToOne
-	@JoinColumn(name = BASE_INDICATOR_COLUMN, nullable = false)
-	@OnDelete(action=OnDeleteAction.CASCADE)
-	private BaseIndicator baseIndicator;
+	@Embedded
+	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "baseindicatorkey", length = 10, nullable = false))})
+	private BaseIndicatorCode baseIndicatorCode;
 
 	private Double percent;
 
@@ -31,10 +27,10 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		super();
 	}
 
-	public ReducingActionAdviceBaseIndicatorAssociation(ReducingActionAdvice actionAdvice, BaseIndicator baseIndicator, Double percent) {
+	public ReducingActionAdviceBaseIndicatorAssociation(ReducingActionAdvice actionAdvice, BaseIndicatorCode baseIndicatorCode, Double percent) {
 		super();
 		this.actionAdvice = actionAdvice;
-		this.baseIndicator = baseIndicator;
+		this.baseIndicatorCode = baseIndicatorCode;
 		this.percent = percent;
 	}
 
@@ -46,12 +42,12 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		this.actionAdvice = actionAdvice;
 	}
 
-	public BaseIndicator getBaseIndicator() {
-		return baseIndicator;
+	public BaseIndicatorCode getBaseIndicatorCode() {
+		return baseIndicatorCode;
 	}
 
-	public void setBaseIndicator(BaseIndicator baseIndicator) {
-		this.baseIndicator = baseIndicator;
+	public void setBaseIndicatorCode(BaseIndicatorCode baseIndicatorCode) {
+		this.baseIndicatorCode = baseIndicatorCode;
 	}
 
 	public Double getPercent() {
@@ -71,7 +67,7 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		ReducingActionAdviceBaseIndicatorAssociation that = (ReducingActionAdviceBaseIndicatorAssociation) o;
 
 		if (!actionAdvice.equals(that.actionAdvice)) return false;
-		if (!baseIndicator.equals(that.baseIndicator)) return false;
+		if (!baseIndicatorCode.equals(that.baseIndicatorCode)) return false;
 		if (!percent.equals(that.percent)) return false;
 
 		return true;
@@ -81,7 +77,7 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 	public int hashCode() {
 		int result = super.hashCode();
 		result = 31 * result + actionAdvice.hashCode();
-		result = 31 * result + baseIndicator.hashCode();
+		result = 31 * result + baseIndicatorCode.hashCode();
 		result = 31 * result + percent.hashCode();
 		return result;
 	}

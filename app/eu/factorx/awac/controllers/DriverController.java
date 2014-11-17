@@ -1,12 +1,6 @@
 package eu.factorx.awac.controllers;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
 import eu.factorx.awac.dto.admin.get.DriverDTO;
 import eu.factorx.awac.dto.admin.get.DriverValueDTO;
 import eu.factorx.awac.dto.admin.get.ListDriverDTO;
@@ -23,6 +17,11 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
 
 
 @org.springframework.stereotype.Controller
@@ -45,33 +44,48 @@ public class DriverController extends AbstractController {
         ListDriverDTO dto = extractDTOFromRequest(ListDriverDTO.class);
 
         //control interface
-        if(!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)){
+        if (!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)) {
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
         }
 
         //load dirver and period
-        for(DriverDTO driverDTO  :dto.getList()){
+        for (DriverDTO driverDTO : dto.getList()) {
             Driver driver = driverService.findById(driverDTO.getId());
 
+            //for all drivers, at least one value from 2000
+            boolean founded = false;
+            if (driverDTO.getDriverValues() != null) {
+                for (DriverValueDTO driverValueDTO : driverDTO.getDriverValues()) {
+                    if (driverValueDTO.getFromPeriodKey().equals("2000") &&
+                            driverValueDTO.getDefaultValue() != null) {
+                        founded = true;
+                    }
+                }
+            }
+
+            if (!founded) {
+                throw new MyrmexFatalException("Each driver must have a value from 2000 ");
+            }
+
             //remove all
-            for(DriverValue driverValue  : driver.getDriverValueList()){
+            for (DriverValue driverValue : driver.getDriverValueList()) {
                 driverValueService.remove(driverValue);
             }
 
             //create new
-            for(DriverValueDTO driverValueDTO: driverDTO.getDriverValues()){
-                if(driverValueDTO.getDefaultValue()!=null && driverValueDTO.getFromPeriodKey()!=null){
+            for (DriverValueDTO driverValueDTO : driverDTO.getDriverValues()) {
+                if (driverValueDTO.getDefaultValue() != null && driverValueDTO.getFromPeriodKey() != null) {
                     //load period
                     Period period = periodService.findByCode(new PeriodCode(driverValueDTO.getFromPeriodKey()));
 
-                    if(period!=null){
+                    if (period != null) {
                         //create value
                         DriverValue driverValue = new DriverValue();
                         driverValue.setDefaultValue(driverValueDTO.getDefaultValue());
                         driverValue.setFromPeriod(period);
-                        driverValue.setDriver( driver);
+                        driverValue.setDriver(driver);
 
-                        driverValueService.saveOrUpdate( driverValue);
+                        driverValueService.saveOrUpdate(driverValue);
                     }
                 }
             }

@@ -3,6 +3,7 @@ import java.util
 import java.util.concurrent.{ExecutorService, Executors, TimeUnit}
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.neuland.jade4j.exceptions.JadeLexerException
 import org.jcoffeescript._
 
 import scalax.file.{Path, PathSet}
@@ -192,8 +193,10 @@ class AngularCompiler {
 
                 setContentIfDifferent(tempFile.getPath, result)
             } catch {
+                case e: JadeLexerException =>
+                    println("[ERROR] " + f.path + " : Line #" + e.getLineNumber + " => " + e.getMessage + "\n" + e.getStackTraceString)
                 case e: Exception =>
-                    println("[ERROR] " + f.path + " : " + e.getMessage + "\n" + e.getStackTraceString)
+                    println("[ERROR] " + f.path + " : " + e.getClass.getName + " => " + e.getMessage + "\n" + e.getStackTraceString)
             }
         }
     }
