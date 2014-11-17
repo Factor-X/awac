@@ -52,7 +52,7 @@ import static play.libs.F.Promise.promise;
  * Created by florian on 5/11/14.
  */
 @org.springframework.stereotype.Controller
-@EnableAsync
+//@EnableAsync
 public class AverageController extends AbstractController {
 
 	@Autowired
@@ -214,45 +214,45 @@ public class AverageController extends AbstractController {
 		else {
 
 // call classical Spring service
-//            try {
-//
-//                    computeAverageService.computeAverage(
-//                            securedController.getCurrentUser(),
-//                            awacCalculator,
-//                            scopeAndPeriodList,
-//                            period,
-//                            organizationComputed,
-//                            scopeComputed
-//                            );
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (WriteException e) {
-//                e.printStackTrace();
-//            }
+            try {
 
-
-            if ((result==null) || result.isDone ()) {
-                // call asynchronous pring service
-                Logger.info("ASYNCH Service called");
-                try {
-
-                    result = computeAverageService.computeAverageAsync(
+                    computeAverageService.computeAverage(
                             securedController.getCurrentUser(),
                             awacCalculator,
                             scopeAndPeriodList,
                             period,
                             organizationComputed,
                             scopeComputed
-                    );
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (WriteException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Logger.info("ASYNCH Service called already in processing");
-                return ok(new ExceptionsDTO("Les moyennes sont en cours de calcul. Vous recevrez le résultat sur votre adresse e-mail dans quelques minutes"));
+                            );
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
             }
+
+
+//            if ((result==null) || result.isDone ()) {
+//                // call asynchronous pring service
+//                Logger.info("ASYNCH Service called");
+//                try {
+//
+//                    result = computeAverageService.computeAverageAsync(
+//                            securedController.getCurrentUser(),
+//                            awacCalculator,
+//                            scopeAndPeriodList,
+//                            period,
+//                            organizationComputed,
+//                            scopeComputed
+//                    );
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (WriteException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                Logger.info("ASYNCH Service called already in processing");
+//                return ok(new ExceptionsDTO("Les moyennes sont en cours de calcul. Vous recevrez le résultat sur votre adresse e-mail dans quelques minutes"));
+//            }
 
 
 

@@ -69,6 +69,7 @@ public class ComputeAverage {
     private CodeLabelService codeLabelService;
 
     // for asynchronous running purposes
+    @play.db.jpa.Transactional(readOnly = true)
     @Async
     public Future<Boolean> computeAverageAsync(final Account account, final AwacCalculator awacCalculator, final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList, final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
 
@@ -145,8 +146,8 @@ public class ComputeAverage {
 
         EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - moyenne", velocityContent);
 
-        FileOutputStream outputs = new FileOutputStream(new File("/home/gaston/Downloads/export.xls"));
-        IOUtils.write(output.toByteArray(), outputs);
+        //FileOutputStream outputs = new FileOutputStream(new File("/home/gaston/Downloads/export.xls"));
+        //IOUtils.write(output.toByteArray(), outputs);
 
         //send email
         HashMap<String, ByteArrayOutputStream> listAttachment = new HashMap<>();
