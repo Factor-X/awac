@@ -6,18 +6,16 @@ angular
     @getLabelByKey = (codeLabels, codeKey) ->
         return _.findWhere(codeLabels, {key: codeKey }).label
 
+    @sortCodeLabelsByNumericKey = (codeLabels) ->
+        return _.sortBy codeLabels, (codeLabel) ->
+            return parseInt codeLabel.key.match(/\d+/), 10
+
     @sortCodeLabelsByKey = (codeLabels) ->
-        res = _.sortBy(codeLabels, (codeLabel) ->
-            return parseInt(codeLabel.key.match(/\d+/), 10)
-        )
-        codeLabels = res
-        return codeLabels
+        return _.sortBy codeLabels, (codeLabel) ->
+            return codeLabel.key
 
     @removeCodeLabelsByKeys = (codeLabels, keysToRemove) ->
-        res = _.reject(codeLabels, (codeLabel) ->
-            return _.contains(keysToRemove, codeLabel.key)
-        )
-        codeLabels = res
-        return codeLabels
+        return _.reject codeLabels, (codeLabel) ->
+            return _.contains keysToRemove, codeLabel.key
 
     return

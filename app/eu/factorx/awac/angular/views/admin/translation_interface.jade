@@ -1,0 +1,21 @@
+table.actions-table
+    thead
+        tr
+            th Détails
+            th Catégorie
+
+    tbody
+        tr(ng-repeat-start="(topic, topicCodeLabels) in codeLabels")
+            td.details
+                mm-plus-minus-toggle-button(ng-model="topic.opened")
+            td.topic
+                span.text {{ topic }}
+        tr(ng-repeat-end, ng-if="topic.opened").details
+            td &nbsp;
+            td
+                table
+                    tr(ng-repeat="codeLabel in topicCodeLabels")
+                        td codeLabel.key
+                        td codeLabel.labelEn
+                        td codeLabel.labelFr
+                        td codeLabel.labelNl

@@ -51,6 +51,9 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 	@Column(length = 4096)
 	private String labelNl;
 
+	@Basic(optional = true)
+	private String topic;
+
 	protected CodeLabel() {
 		super();
 	}
@@ -63,13 +66,13 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 		this.labelNl = labelNl;
 	}
 
-	public CodeLabel(Code code, String labelEn, String labelFr, String labelNl) {
-		super();
-		this.codeList = code.getCodeList();
-		this.key = code.getKey();
+	public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl, String topic) {
+		this.codeList = codeList;
+		this.key = key;
 		this.labelEn = labelEn;
 		this.labelFr = labelFr;
 		this.labelNl = labelNl;
+		this.topic = topic;
 	}
 
 	public CodeList getCodeList() {
@@ -110,6 +113,14 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 
 	public void setLabelNl(String labelNl) {
 		this.labelNl = labelNl;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
 	}
 
 	public String getLabel(LanguageCode languageCode) {

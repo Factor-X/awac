@@ -40,6 +40,13 @@ public class TranslationAdminController extends AbstractController {
 		return ok(new SublistDTOList(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
 	}
 
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadInterfaceCodeLabels() {
+		getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0);
+		return ok(getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0));
+	}
+
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result updateSublist() {

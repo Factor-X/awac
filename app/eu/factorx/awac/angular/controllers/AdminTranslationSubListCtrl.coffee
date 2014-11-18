@@ -10,7 +10,7 @@ angular
             if result.success
                 $scope.subLists = result.data.sublists
                 for i, codeLabelList of result.data.codeLabels
-                    $scope.codeLabels[codeLabelList.code] = codeLabelHelper.sortCodeLabelsByKey codeLabelList.codeLabels
+                    $scope.codeLabels[codeLabelList.code] = codeLabelHelper.sortCodeLabelsByNumericKey codeLabelList.codeLabels
             return
         return
 

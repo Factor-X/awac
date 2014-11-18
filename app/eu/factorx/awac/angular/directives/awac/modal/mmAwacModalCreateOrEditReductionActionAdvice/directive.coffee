@@ -248,10 +248,10 @@ angular
 
             # remove baseIndicators already associated
             if ($scope.baseIndicatorAssociations.length > 0)
-                 codeLabelHelper.removeCodeLabelsByKeys(baseIndicatorOptions, _.pluck($scope.baseIndicatorAssociations, "baseIndicatorKey"))
+                baseIndicatorOptions = codeLabelHelper.removeCodeLabelsByKeys(baseIndicatorOptions, _.pluck($scope.baseIndicatorAssociations, "baseIndicatorKey"))
 
             # sort by key
-            baseIndicatorOptions = codeLabelHelper.sortCodeLabelsByKey baseIndicatorOptions
+            baseIndicatorOptions = codeLabelHelper.sortCodeLabelsByNumericKey baseIndicatorOptions
 
             $scope.baseIndicatorOptions = baseIndicatorOptions
             return

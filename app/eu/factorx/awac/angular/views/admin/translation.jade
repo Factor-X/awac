@@ -32,7 +32,7 @@
     .translation-view
         .animate-switch-container(ng-switch="state")
             .animate-switch(ng-switch-when="interface")
-                div(ng-include="'$/angular/views/admin/translation_interface.html'", ng-controller="AdminTranslationSubListCtrl")
+                div(ng-include="'$/angular/views/admin/translation_interface.html'", ng-controller="AdminTranslationInterfaceCtrl")
             .animate-switch(ng-switch-when="error-messages")
                 div(ng-include="'$/angular/views/admin/translation_error_messages.html'", ng-controller="AdminTranslationSubListCtrl")
             .animate-switch(ng-switch-when="emails")
