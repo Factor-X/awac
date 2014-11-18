@@ -34,6 +34,7 @@ public class FactorToFactorDTOConverter implements Converter<Factor, FactorDTO> 
         List<FactorValueDTO> factorValueDTOs = dto.getFactorValues();
         for (FactorValue factorValue : factor.getValues()) {
             FactorValueDTO fv = new FactorValueDTO();
+            fv.setId(factorValue.getId());
             fv.setValue(factorValue.getValue());
             Date dateIn = factorValue.getDateIn();
             if (dateIn != null) {

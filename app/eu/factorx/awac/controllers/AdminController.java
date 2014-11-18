@@ -2,8 +2,10 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.admin.get.FactorDTO;
+import eu.factorx.awac.dto.admin.get.FactorValueDTO;
 import eu.factorx.awac.dto.admin.get.FactorsDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
+import eu.factorx.awac.dto.awac.post.UpdateFactorsDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
 import eu.factorx.awac.generated.AwacEnterpriseInitialData;
@@ -19,6 +21,7 @@ import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Play;
@@ -129,7 +132,7 @@ public class AdminController extends AbstractController {
             return unauthorized();
         }
 
-        InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(interfaceString);
+        InterfaceTypeCode interfaceTypeCode = InterfaceTypeCode.getByKey(interfaceString);
 
         return ok(conversionService.convert(badImporter.importBAD(interfaceTypeCode), BADLogDTO.class));
     }
@@ -150,6 +153,49 @@ public class AdminController extends AbstractController {
         }
 
         return ok(new FactorsDTO(dtos, periodsDTOs));
+
+    }
+
+    @Transactional(readOnly = false)
+    public Result updateFactors() {
+
+        UpdateFactorsDTO dto = extractDTOFromRequest(UpdateFactorsDTO.class);
+
+        for (FactorDTO factorDTO : dto.getFactors()) {
+            String key = factorDTO.getKey();
+
+            Factor factor = factorService.findByCode(key);
+            if (factor != null) {
+                // UPDATE
+                FactorDTO converted = conversionService.convert(factor, FactorDTO.class);
+
+                List<FactorValueDTO> oldValues = converted.getFactorValues();
+                List<FactorValueDTO> newValues = factorDTO.getFactorValues();
+
+                List<FactorValueDTO> deleted = (List<FactorValueDTO>) CollectionUtils.subtract(oldValues, newValues);
+                List<FactorValueDTO> updated = (List<FactorValueDTO>) CollectionUtils.intersection(oldValues, newValues);
+                List<FactorValueDTO> created = (List<FactorValueDTO>) CollectionUtils.subtract(newValues, oldValues);
+
+                for (FactorValueDTO factorValueDTO : updated) {
+                    System.out.println("UPDATED " + factorValueDTO.getId());
+                }
+
+                for (FactorValueDTO factorValueDTO : created) {
+                    System.out.println("CREATED " + factorValueDTO.getId());
+                }
+
+                for (FactorValueDTO factorValueDTO : deleted) {
+                    System.out.println("DELETED " + factorValueDTO.getId());
+                }
+
+            } else {
+                // CREATE
+
+            }
+        }
+
+
+        return ok();
 
     }
 }
