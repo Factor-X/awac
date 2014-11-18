@@ -96,6 +96,14 @@ angular
     $scope.save = ->
         console.log $scope.factors
         modalService.show modalService.LOADING
+
+        # adjust all dateOuts for modified
+        for f in $scope.factors
+            if $scope.isModified(f)
+                
+
+
+
         downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
             if result.success == true
                 downloadService.getJson "/awac/admin/factors/all", (result) ->
