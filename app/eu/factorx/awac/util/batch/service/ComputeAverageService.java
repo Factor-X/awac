@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import play.Logger;
 import play.Play;
@@ -37,6 +38,7 @@ public class ComputeAverageService implements ApplicationContextAware {
     public static ApplicationContext getApplicationContext() {
         return context;
     }
+
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
         // Assign the ApplicationContext into a static method
@@ -51,9 +53,9 @@ public class ComputeAverageService implements ApplicationContextAware {
      * @see akka.routing.SmallestMailboxRouter
      */
 
-    public ComputeAverageService() throws IOException {
-
-    }
+//    public ComputeAverageService() throws IOException {
+//        //initialize();
+//    }
 
     /**
      * public interface to send out emails that dispatch the message to the listening actors
