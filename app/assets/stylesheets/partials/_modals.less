@@ -351,3 +351,30 @@
 
 
 }
+
+.sortable-list {
+    margin-bottom:5px;
+}
+.sortable-list.header {
+    & > div {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    & > div:first-child {
+        min-width:60px;
+    }
+    font-weight: bold;
+}
+.sortable-item {
+    margin-top:5px;
+    & > div {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    & > div:first-child {
+        cursor: move;
+        min-width:60px;
+    }
+}
+
+

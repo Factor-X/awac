@@ -245,17 +245,14 @@ angular
 
         $scope.refreshBaseIndicatorOptions = () ->
             baseIndicatorOptions = baseIndicatorLabelsByInterfaceType[$scope.interfaceTypeKey.field]
-            baseIndicatorAssociations = $scope.baseIndicatorAssociations
-            if (baseIndicatorAssociations.length > 0)
-                # remove baseIndicators already associated
-                selectedIndicatorsKeys = _.pluck(baseIndicatorAssociations, "baseIndicatorKey")
-                baseIndicatorOptions = _.reject(baseIndicatorOptions, (codeLabel) ->
-                    return _.contains(selectedIndicatorsKeys, codeLabel.key)
-                )
+
+            # remove baseIndicators already associated
+            if ($scope.baseIndicatorAssociations.length > 0)
+                 codeLabelHelper.removeCodeLabelsByKeys(baseIndicatorOptions, _.pluck($scope.baseIndicatorAssociations, "baseIndicatorKey"))
+
             # sort by key
-            baseIndicatorOptions = _.sortBy(baseIndicatorOptions, (codeLabel) ->
-                return parseInt(codeLabel.key.match(/\d+/), 10)
-            )
+            baseIndicatorOptions = codeLabelHelper.sortCodeLabelsByKey baseIndicatorOptions
+
             $scope.baseIndicatorOptions = baseIndicatorOptions
             return
 
