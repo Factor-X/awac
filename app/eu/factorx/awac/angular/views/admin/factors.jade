@@ -4,32 +4,48 @@ div.factors
 
     br
 
+    button.button.btn.save(type="button", ng-click="save()") Enregistrer
+
+    br
+    br
+
     table.factors-table(ng-table="parameters", show-filter="true" )
-        tr(ng-repeat-start="row in $data")
-            td().details(data-title="'FACTORS_TABLE_DETAILS' | translateText")
+        tr(ng-repeat-start="row in $data", ng-class="{ 'row-modified': isModified(row) }")
+            td.details(data-title="'FACTORS_TABLE_DETAILS' | translateText")
                 mm-plus-minus-toggle-button(ng-model="a.opened")
-            td().name(data-title="'FACTORS_TABLE_KEY' | translateText", filter="{ 'key': 'text' }") {{ row.key }}
+            td.name(data-title="'FACTORS_TABLE_KEY' | translateText", filter="{ 'key': 'text' }") {{ row.key }}
             td.type(sortable="'typeString'", data-title="'FACTORS_TABLE_TYPE' | translateText", filter="{ 'typeString': 'text' }") {{ row.typeString }}
-            td().unit-category-in(data-title="'FACTORS_TABLE_UNIT_CATEGORY_IN' | translateText", filter="{ 'unitCategoryIn': 'select' }", filter-data="names('unitCategoryIn')") {{ row.unitCategoryIn }}
+            td.unit-category-in(data-title="'FACTORS_TABLE_UNIT_CATEGORY_IN' | translateText", filter="{ 'unitCategoryIn': 'select' }", filter-data="names('unitCategoryIn')") {{ row.unitCategoryIn }}
             td.origin(sortable="'origin'", data-title="'FACTORS_TABLE_ORIGIN' | translateText", filter="{ 'origin': 'text' }") {{ row.origin }}
 
 
         tr(ng-repeat-end, ng-show="a.opened").details
             td(colspan="5")
                 table
-                    tr(ng-repeat="fv in row.factorValues")
-                        td {{ row.currentValue }}
-                        td {{ row.unitIn }}
-
-                        td {{ fv.value }}
-                        td {{ row.unitOut }}
+                    tr(ng-repeat="fv in row.factorValues | orderBy:'dateIn'")
+                        td
+                            span A partir de
+                        td
+                            select.years(
+                            ng-options="p.key as p.label for p in getAvailablePeriods(row, fv) | orderBy:'label'",
+                            ng-model="fv.dateIn",
+                            style="width: 100px; text-align: right"
+                            )
 
                         td
-                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateIn")
+                            span Valeur
                         td
-                            select(ng-options="p.key as p.label for p in periods | orderBy:'label'", ng-model="fv.dateOut")
+                            input(type="number", step="any", ng-model="fv.value")
+                        td
+                            span tCO2e
+                            span &nbsp;/&nbsp;
+                            span {{ row.unitIn }}
+                        td
+                            button.button.btn.btn-danger(type="button", ng-click="removeFactorValue(row, fv)")
+                                i.fa.fa-times
 
-                button.button(type="button")
+
+                button.button(type="button", ng-click="addValue(row)")
                     span.fa.fa-plus-circle
                     span &nbsp;
                     span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")

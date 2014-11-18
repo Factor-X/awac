@@ -7,6 +7,8 @@ public interface FactorService extends PersistenceService<Factor> {
 
 	Factor findByParameters(FactorSearchParameter searchParameter);
 
+    Factor findByCode(String key);
+
 	void removeAll();
 
 }
