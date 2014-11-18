@@ -10,6 +10,7 @@ import eu.factorx.awac.service.CodesEquivalenceService;
 import eu.factorx.awac.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -35,19 +36,60 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
-		return ok(toSublistDTOList(codesEquivalenceService.findAllSublistsData()));
+		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData());
+		return ok(new SublistDTOList(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadInterfaceCodeLabels() {
+		getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0);
+		return ok(getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0));
 	}
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result saveSublists() {
-		SublistDTOList dtoList = extractDTOFromRequest(SublistDTOList.class);
-		return ok();
+	public Result updateSublist() {
+		SubListDTO dto = extractDTOFromRequest(SubListDTO.class);
+		CodeList codeList = CodeList.valueOf(dto.getCodeList());
+		CodeList referencedCodeList = CodeList.valueOf(dto.getReferencedCodeList());
+
+		List<SubListItemDTO> items = dto.getItems();
+		for (SubListItemDTO item : items) {
+			Long id = item.getId();
+			String key = item.getKey();
+			Integer orderIndex = item.getOrderIndex();
+			if (id == null) {
+				CodesEquivalence codesEquivalence = codesEquivalenceService.saveOrUpdate(new CodesEquivalence(codeList, key, orderIndex, referencedCodeList, key));
+				item.setId(codesEquivalence.getId());
+				Logger.info("Created new sublist item with id = {}: {key: {}, pos: {}}", codesEquivalence.getId(), key, orderIndex);
+			} else {
+				CodesEquivalence codesEquivalence = codesEquivalenceService.findById(id);
+				if (!(key.equals(codesEquivalence.getCodeKey()) && orderIndex.equals(codesEquivalence.getOrderIndex()))) {
+					Logger.info("Updating sublist item with id = {}: {key: {}, pos: {}} -> {key: {}, pos: {}}", codesEquivalence.getId(), codesEquivalence.getCodeKey(), codesEquivalence.getOrderIndex(), key, orderIndex);
+					codesEquivalence.setCodeKey(key);
+					codesEquivalence.setReferencedCodeKey(key);
+					codesEquivalence.setOrderIndex(orderIndex);
+					codesEquivalenceService.saveOrUpdate(codesEquivalence);
+				}
+			}
+		}
+		return ok(dto);
 	}
 
-	private SublistDTOList toSublistDTOList(List<CodesEquivalence> sublistsData) {
-		Map<CodeList, SubListDTO> sublistsMaps = new LinkedHashMap<>();
+	private List<CodeListDTO> getReferencedCodeListDTOs(List<SubListDTO> subListDTOs) {
 		List<CodeList> referencedCodeLists = new ArrayList<>();
+		for (SubListDTO subListDTO : subListDTOs) {
+			CodeList referencedCodeList = CodeList.valueOf(subListDTO.getReferencedCodeList());
+			if (!referencedCodeLists.contains(referencedCodeList)) {
+				referencedCodeLists.add(referencedCodeList);
+			}
+		}
+		return getCodeListDTOs(referencedCodeLists.toArray(new CodeList[referencedCodeLists.size()]));
+	}
+
+	private static List<SubListDTO> toSubListDTOs(List<CodesEquivalence> sublistsData) {
+		Map<CodeList, SubListDTO> sublistsMaps = new LinkedHashMap<>();
 
 		for (CodesEquivalence codesEquivalence : sublistsData) {
 			SubListItemDTO subListItemDTO = new SubListItemDTO(codesEquivalence.getId(), codesEquivalence.getCodeKey(), codesEquivalence.getOrderIndex());
@@ -63,14 +105,9 @@ public class TranslationAdminController extends AbstractController {
 			} else {
 				subListDTO.addItem(subListItemDTO);
 			}
-
-			if (!referencedCodeLists.contains(referencedCodeList)) {
-				referencedCodeLists.add(referencedCodeList);
-			}
 		}
-		List<SubListDTO> subListDTOs = new ArrayList<>(sublistsMaps.values());
-		List<CodeListDTO> codeListDTOs = getCodeListDTOs(referencedCodeLists.toArray(new CodeList[referencedCodeLists.size()]));
-		return new SublistDTOList(subListDTOs, codeListDTOs);
+
+		return new ArrayList<>(sublistsMaps.values());
 	}
 
 }

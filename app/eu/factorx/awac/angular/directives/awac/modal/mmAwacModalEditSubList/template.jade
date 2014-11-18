@@ -1,0 +1,31 @@
+.modal.edit-sub-list(ng-enter="save()",ng-escape="close()")
+    .modal-dialog
+        .modal-content
+
+            .modal-header
+                button.button(type="button",ng-click="close()")
+                    span(aria-hidden="true") &times;
+                    span(class="sr-only") Fermer
+                h4(class="modal-title") Edition de la liste "{{ subList.codeList }}"
+
+            .modal-body
+                .field_form
+                    .field_row
+                        .field_cell.field_wide
+                            .sortable-list.header
+                                div Position
+                                div {{ subList.referencedCodeList }}
+                    .field_row
+                        .field_cell.field_wide
+                            .sortable-list(ui-sortable="sortableOptions", ng-model="subList.items")
+                                .sortable-item(ng-repeat="listItem in subList.items")
+                                        div [ {{ listItem.orderIndex }} ]&nbsp;&nbsp;
+                                        div
+                                            select(ng-options="i.key as (i.key + ' - ' + i.label) for i in codeLabels", ng-model="listItem.key")
+
+            .modal-footer
+                div(ng-hide="isLoading")
+                    button.button(type="button", class="btn btn-primary", ng-click="close();") Annuler
+                    button.button(type="button", class="btn btn-primary", ng-click="save();", ng-disabled="!updated") Enregistrer
+
+                img(ng-show="isLoading",src="/assets/images/modal-loading.gif")

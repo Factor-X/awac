@@ -82,7 +82,7 @@
                             .wrapper_table(style="margin-top:5px;margin-bottom: 10px;")
                                 .wrapper_row(ng-repeat="bia in baseIndicatorAssociations", style="font-weight:bold;")
                                     .wrapper_cell(style="vertical-align:middle")
-                                        button.button(type="button", ng-click="removeIndicatorAssociation(bia.baseIndicatorKey)", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
+                                        button.button(type="button", ng-click="removeBaseIndicatorAssociation(bia.baseIndicatorKey)", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
                                             span.fa.fa-remove.fa-1g
                                     .wrapper_cell(style="vertical-align:middle; padding-left:10px; padding-right:10px; width:100%;") {{ getBaseIndicatorLabel(bia.baseIndicatorKey) }}
                                     .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ (bia.percent| numberToI18N) + "&nbsp;%" }}

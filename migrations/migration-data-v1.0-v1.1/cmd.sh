@@ -37,7 +37,8 @@ cat ./CELDL-236-CodesEquivalence_add_orderIndex_column.sql >> /tmp/migration/mig
 # factor_value_dates_to_integers
 cat ./factor_value_dates_to_integers.sql >> /tmp/migration/migration_script.sql
 
-
+# add topic column to codelabel table
+cat ./CELDL-235-CodeLabel_add_topic_column.sql >> /tmp/migration/migration_script.sql
 
 
 

@@ -9,7 +9,7 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = CodesEquivalence.FIND_ALL_SUBLISTS_DATA,
-				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.id"),
+				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.orderIndex"),
 		@NamedQuery(name = CodesEquivalence.FIND_SUBLIST_CODE_LABELS,
 				query = "select new eu.factorx.awac.models.code.label.CodeLabel(ce.codeList, ce.codeKey, cl.labelEn, cl.labelFr, cl.labelNl) from CodesEquivalence ce, CodeLabel cl where ce.referencedCodeList = cl.codeList and ce.referencedCodeKey = cl.key and ce.codeList = :codeList order by ce.id",
 				hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
@@ -137,6 +137,34 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 
 	public void setReferencedCodeKey(String referencedCodeKey) {
 		this.referencedCodeKey = referencedCodeKey;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+
+		CodesEquivalence that = (CodesEquivalence) o;
+
+		if (!codeKey.equals(that.codeKey)) return false;
+		if (codeList != that.codeList) return false;
+		if (orderIndex != null ? !orderIndex.equals(that.orderIndex) : that.orderIndex != null) return false;
+		if (!referencedCodeKey.equals(that.referencedCodeKey)) return false;
+		if (referencedCodeList != that.referencedCodeList) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + codeList.hashCode();
+		result = 31 * result + codeKey.hashCode();
+		result = 31 * result + (orderIndex != null ? orderIndex.hashCode() : 0);
+		result = 31 * result + referencedCodeList.hashCode();
+		result = 31 * result + referencedCodeKey.hashCode();
+		return result;
 	}
 
 	@Override
