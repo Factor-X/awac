@@ -14,17 +14,19 @@ import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.CUD;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Play;
+import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -156,6 +158,19 @@ public class AdminController extends AbstractController {
 
     }
 
+
+    private FactorValueDTO findById(List<FactorValueDTO> items, Long id) {
+
+        for (FactorValueDTO item : items) {
+            if (item.getId().equals(id)) {
+                return item;
+            }
+        }
+
+        return null;
+
+    }
+
     @Transactional(readOnly = false)
     public Result updateFactors() {
 
@@ -172,28 +187,74 @@ public class AdminController extends AbstractController {
                 List<FactorValueDTO> oldValues = converted.getFactorValues();
                 List<FactorValueDTO> newValues = factorDTO.getFactorValues();
 
-                List<FactorValueDTO> deleted = (List<FactorValueDTO>) CollectionUtils.subtract(oldValues, newValues);
-                List<FactorValueDTO> updated = (List<FactorValueDTO>) CollectionUtils.intersection(oldValues, newValues);
-                List<FactorValueDTO> created = (List<FactorValueDTO>) CollectionUtils.subtract(newValues, oldValues);
+                CUD<FactorValueDTO> cud = CUD.fromLists(oldValues, newValues);
+
+                List<FactorValueDTO> created = cud.getCreated();
+                List<FactorValueDTO> updated = cud.getUpdated();
+                List<FactorValueDTO> deleted = cud.getDeleted();
+
+                for (FactorValueDTO factorValueDTO : deleted) {
+                    for (FactorValue factorValue : factor.getValues()) {
+                        if (factorValue.getId().equals(factorValueDTO.getId())) {
+                            factor.getValues().remove(factorValue);
+                            System.out.println("DELETED #" + factorValueDTO.getId());
+                            break;
+                        }
+                    }
+                }
 
                 for (FactorValueDTO factorValueDTO : updated) {
-                    System.out.println("UPDATED " + factorValueDTO.getId());
+                    for (FactorValue factorValue : factor.getValues()) {
+                        if (factorValue.getId().equals(factorValueDTO.getId())) {
+
+                            if (factorValueDTO.getDateIn() != null) {
+                                factorValue.setDateIn(Integer.valueOf(factorValueDTO.getDateIn()));
+                            } else {
+                                factorValue.setDateIn(null);
+                            }
+
+                            if (factorValueDTO.getDateOut() != null) {
+                                factorValue.setDateIn(Integer.valueOf(factorValueDTO.getDateOut()));
+                            } else {
+                                factorValue.setDateOut(null);
+                            }
+
+                            factorValue.setValue(factorValueDTO.getValue());
+
+                            JPA.em().persist(factorValue);
+
+                            System.out.println("UPDATED #" + factorValueDTO.getId());
+                            break;
+                        }
+                    }
+
                 }
 
                 for (FactorValueDTO factorValueDTO : created) {
-                    System.out.println("CREATED " + factorValueDTO.getId());
+
+                    Integer i = null;
+                    if (factorValueDTO.getDateIn() != null) {
+                        i = Integer.valueOf(factorValueDTO.getDateIn());
+                    }
+
+                    Integer o = null;
+                    if (factorValueDTO.getDateOut() != null) {
+                        o = Integer.valueOf(factorValueDTO.getDateOut());
+                    }
+
+                    FactorValue factorValue = new FactorValue(factorValueDTO.getValue(), i, o, factor);
+
+                    JPA.em().persist(factorValue);
+
+                    System.out.println("CREATED #" + factorValue.getId());
                 }
 
-                for (FactorValueDTO factorValueDTO : deleted) {
-                    System.out.println("DELETED " + factorValueDTO.getId());
-                }
 
             } else {
                 // CREATE
 
             }
         }
-
 
         return ok();
 

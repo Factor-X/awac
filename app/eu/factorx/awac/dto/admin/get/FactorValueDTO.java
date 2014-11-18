@@ -1,8 +1,9 @@
 package eu.factorx.awac.dto.admin.get;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.util.Keyed;
 
-public class FactorValueDTO extends DTO {
+public class FactorValueDTO extends DTO implements Keyed {
 
     private Long   id;
     private Double value;
@@ -75,5 +76,10 @@ public class FactorValueDTO extends DTO {
         result = 31 * result + (dateIn != null ? dateIn.hashCode() : 0);
         result = 31 * result + (dateOut != null ? dateOut.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public Object uniqueKey() {
+        return id;
     }
 }

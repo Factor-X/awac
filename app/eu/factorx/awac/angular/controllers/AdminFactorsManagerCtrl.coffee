@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminFactorsManagerCtrl", ($scope, $filter, $q, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
+.controller "AdminFactorsManagerCtrl", ($scope, $filter, $q, $timeout, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.factors = null
     modalService.show(modalService.LOADING)
@@ -27,8 +27,9 @@ angular
                     indicatorCategory: 'asc'
             }, {
                 counts: []
-                total: $scope.factors.length,
+                total: $scope.factors.length
                 getData: ($defer, params) ->
+                    console.log 'getData'
                     orderedData = $scope.factors
                     orderedData = $filter('filter')(orderedData, params.filter())
 
@@ -39,6 +40,7 @@ angular
 
                     $defer.resolve orderedData.slice((params.page() - 1) * params.count(),
                             params.page() * params.count())
+                $scope: { $data: {} }
             })
 
 
@@ -80,9 +82,13 @@ angular
 
         factor.factorValues.push
             __type: 'eu.factorx.awac.dto.admin.get.FactorValueDTO'
+            id: null
             value: 0
             dateIn: dateIn
             dateOut: null
+
+    $scope.removeFactorValue = (factor, fv) ->
+        factor.factorValues = _.without(factor.factorValues, fv)
 
     #
     # "Save" handler
@@ -91,7 +97,21 @@ angular
         console.log $scope.factors
         modalService.show modalService.LOADING
         downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
-            modalService.close modalService.LOADING
+            if result.success == true
+                downloadService.getJson "/awac/admin/factors/all", (result) ->
+                    modalService.close modalService.LOADING
+                    if result.success == true
+                        $scope.periods = result.data.periods
+                        $scope.factors = result.data.factors
+                        $scope.originalFactors = angular.copy(result.data.factors)
+
+                        tt = $filter('translateText')
+
+                        for f in $scope.factors
+                            f.typeString = tt(f.indicatorCategory) + " / " + tt(f.activityType) + " / " + tt(f.activitySource)
+                        $timeout () ->
+                            $scope.parameters.reload()
+                        , 500
 
     #
     # "Remove factor" handler

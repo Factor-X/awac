@@ -10,6 +10,7 @@ import scalax.file.{Path, PathSet}
 
 class AngularCompiler {
 
+    val coffeeCompiler: JCoffeeScriptCompiler = new JCoffeeScriptCompiler(util.Arrays.asList(Option.BARE))
 
     def compile(path: String): String = {
 
@@ -174,7 +175,7 @@ class AngularCompiler {
             try {
                 if (sourceExtension == "coffee") {
                     val source = scala.io.Source.fromFile(f.path).getLines().mkString("\n")
-                    result = new JCoffeeScriptCompiler(util.Arrays.asList(Option.BARE)).compile(source)
+                    result = coffeeCompiler.compile(source)
                 }
 
                 if (sourceExtension == "js") {

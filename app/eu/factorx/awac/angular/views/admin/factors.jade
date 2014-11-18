@@ -40,6 +40,9 @@ div.factors
                             span tCO2e
                             span &nbsp;/&nbsp;
                             span {{ row.unitIn }}
+                        td
+                            button.button.btn.btn-danger(type="button", ng-click="removeFactorValue(row, fv)")
+                                i.fa.fa-times
 
 
                 button.button(type="button", ng-click="addValue(row)")
