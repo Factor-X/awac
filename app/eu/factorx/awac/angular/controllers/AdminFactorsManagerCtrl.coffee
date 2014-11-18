@@ -100,9 +100,13 @@ angular
         # adjust all dateOuts for modified
         for f in $scope.factors
             if $scope.isModified(f)
-                
 
+                fvs = _.sortBy(f.factorValues, 'dateIn')
 
+                for i in [1...fvs.length]
+                    fvs[i-1].dateOut = '' + (fvs[i].dateIn - 1)
+
+                f.factorValues = fvs
 
         downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
             if result.success == true
