@@ -1,23 +1,22 @@
 package eu.factorx.awac.models.data.answer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.knowledge.Period;
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"),
-	@NamedQuery(name = QuestionSetAnswer.FIND_BY_CODES, query = "select qa from QuestionSetAnswer qa where qa.questionSet.code in :codes"),
+		@NamedQuery(name = QuestionSetAnswer.FIND_DISTINCT_PERIODS, query = "select distinct qsa.period from QuestionSetAnswer qsa where qsa.scope.id = :scopeId"),
+		@NamedQuery(name = QuestionSetAnswer.FIND_BY_CODES, query = "select qa from QuestionSetAnswer qa where qa.questionSet.code in :codes"),
+		@NamedQuery(name = QuestionSetAnswer.FIND_BY_QUESTION_SET, query = "select qa from QuestionSetAnswer qa where qa.questionSet in :questionSet"),
 })
 public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparable<QuestionSetAnswer> {
 
@@ -26,9 +25,10 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	 * : a {@link Long}
 	 */
 	public static final String FIND_DISTINCT_PERIODS = "QuestionSetAnswer.findAllDistinctPeriodsByScopeId";
-	public static final String FIND_BY_CODES         = "QuestionSetAnswer.findByCodes";
+	public static final String FIND_BY_CODES = "QuestionSetAnswer.findByCodes";
 
 	private static final long serialVersionUID = 1L;
+	public static final java.lang.String FIND_BY_QUESTION_SET = "QuestionSetAnswerFIND_BY_QUESTION_SET ";
 
 	@ManyToOne(optional = false)
 	private QuestionSet questionSet;
@@ -53,9 +53,8 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	@Embedded
 	private AuditInfo auditInfo;
 
-    @OneToOne(mappedBy="questionSetAnswer")
-    private Verification verification;
-
+	@OneToOne(mappedBy = "questionSetAnswer")
+	private Verification verification;
 
 
 	public QuestionSetAnswer() {
@@ -82,15 +81,15 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 		auditInfo = new AuditInfo();
 	}
 
-    public Verification getVerification() {
-        return verification;
-    }
+	public Verification getVerification() {
+		return verification;
+	}
 
-    public void setVerification(Verification verification) {
-        this.verification = verification;
-    }
+	public void setVerification(Verification verification) {
+		this.verification = verification;
+	}
 
-    public AuditInfo getAuditInfo() {
+	public AuditInfo getAuditInfo() {
 		return auditInfo;
 	}
 
@@ -163,15 +162,15 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	@Override
 	public String toString() {
 		return "QuestionSetAnswer{" +
-			"id=" + id +
-			"questionSet=" + questionSet +
-			", period=" + period +
-			", scope=" + scope +
-			", parent=" + parent +
-			", repetitionIndex=" + repetitionIndex +
-			", questionAnswers=" + questionAnswers +
-			", auditInfo=" + auditInfo +
-			'}';
+				"id=" + id +
+				"questionSet=" + questionSet +
+				", period=" + period +
+				", scope=" + scope +
+				", parent=" + parent +
+				", repetitionIndex=" + repetitionIndex +
+				", questionAnswers=" + questionAnswers +
+				", auditInfo=" + auditInfo +
+				'}';
 	}
 
 	@Override
@@ -187,7 +186,7 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 		}
 		QuestionSetAnswer rhs = (QuestionSetAnswer) obj;
 		return new EqualsBuilder().append(this.questionSet, rhs.questionSet).append(this.period, rhs.period).append(this.scope, rhs.scope).append(this.parent, rhs.parent)
-			.append(this.repetitionIndex, rhs.repetitionIndex).isEquals();
+				.append(this.repetitionIndex, rhs.repetitionIndex).isEquals();
 	}
 
 	@Override

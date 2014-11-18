@@ -30,6 +30,11 @@
                                     class="btn btn-primary",
                                     ng-bind-html="'REGISTRATION_AGREEMENT_CONSULTATION' | translate",
                                     ng-click="displayAgreement()")
+                            .field_cell
+                                img(ng-show='fields.agreementValidation.isValid == true', src='/assets/images/field_valid.png')
+                                .error_message(ng-hide='fields.agreementValidation.isValid == true')
+                                    img(src='/assets/images/field_invalid.png')
+                                    div(ng-bind-html="'ACCEPT_AGREEMENT' | translateText")
 
                         div(ng-hide="isLoading")
 

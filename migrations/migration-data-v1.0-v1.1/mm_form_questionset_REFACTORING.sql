@@ -7,7 +7,7 @@ insert into mm_form_questionset (form_id,questionset_id) values
 (2,4),
 (2,7),
 (2,9),
-(2,188),
+ -- (2,188),
 (3,15),
 (3,16),
 (3,25),

@@ -15,6 +15,8 @@ angular
         ngTabSet: '='
     #
         ngTab: '='
+    #
+        ngIndex:'='
     # optional : true or false (default : false)
         ngOptional: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
@@ -111,7 +113,11 @@ angular
             #
             scope.getAnswer = (forDataToCompare = false)->
                 if forDataToCompare
-                    return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap())
+                    # if I'm a repetition, I'm looking for an equivalence for all repetition level exepcted the last one
+                    # getFirstRepeteableElement
+                    console.log "je suis l'index : "+scope.getIndex()
+
+                    return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getIndex())
                 else
                     if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
                         scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getTabSet(), scope.getTab(), scope.getOptional()).value = scope.getAggregation()

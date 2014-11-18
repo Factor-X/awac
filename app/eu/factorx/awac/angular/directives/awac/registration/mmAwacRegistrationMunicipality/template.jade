@@ -19,6 +19,11 @@
                 class="btn btn-primary",
                 ng-bind-html="'REGISTRATION_AGREEMENT_CONSULTATION' | translate",
                 ng-click="displayAgreement()")
+        .field_cell
+            img(ng-show='aggrement_validation == true', src='/assets/images/field_valid.png')
+            .error_message(ng-hide='aggrement_validation == true')
+                img(src='/assets/images/field_invalid.png')
+                div(ng-bind-html="'ACCEPT_AGREEMENT' | translateText")
 
     .field_row.field_form_separator
         .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")

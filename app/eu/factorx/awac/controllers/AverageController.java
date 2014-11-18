@@ -2,7 +2,6 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.ComputeAverageDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
@@ -42,20 +41,16 @@ import jxl.write.Number;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import play.Logger;
 import play.db.jpa.Transactional;
-import play.libs.F;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
-import static play.libs.F.Promise.promise;
-
-import play.libs.F.*;
-import play.mvc.*;
-import java.util.concurrent.Callable;
-
-import static play.libs.F.Promise.promise;
 
 /**
  * Created by florian on 5/11/14.
@@ -100,22 +95,7 @@ public class AverageController extends AbstractController {
 
 		return ok(list);
 	}
-/* TODO temp
-	public Result computeAverage() {
-		return async(
-				promise(new Function0<Integer>() {
-					public Integer apply() {
-						return 2;
-					}
-				}).map(new Function<Integer,Result>() {
-					public Result apply(Integer i) {
-						//return ok("Got " + i);
-						return ok(new ResultsDTO());
-					}
-				})
-		);
-	}
-*/
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result computeAverage() throws IOException, WriteException {
@@ -131,6 +111,7 @@ public class AverageController extends AbstractController {
 		//TODO
 		final AwacCalculator awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode(dto.getInterfaceName()));
 		final Period period = periodService.findByCode(new PeriodCode(dto.getPeriodKey()));
+		boolean onlyVerifiedForm = dto.isOnlyVerifiedForm();
 
 
 		//compute scopeAndPEriod list
@@ -157,7 +138,8 @@ public class AverageController extends AbstractController {
 							if (periodToTest.equals(period)) {
 
 								//for organization : found awaccalcultor and check if there is closed
-								if (awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, site) != null) {
+								if (awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, site) != null ||
+										!onlyVerifiedForm) {
 
 									//control NACE code
 									if (computeNace(dto.getNaceCodeListKey(), dto.getNaceCodeKey(), site, period)) {
@@ -176,7 +158,8 @@ public class AverageController extends AbstractController {
 						if (periodToTest.equals(period)) {
 
 							//for municipality : found awaccalcultor and check if there is closed
-							if (awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, organization) != null) {
+							if (awacCalculatorInstanceService.findByCalculatorAndPeriodAndScope(awacCalculator, period, organization) != null ||
+									!onlyVerifiedForm) {
 
 								//control
 								scopeAndPeriodList.add(new ScopeAndPeriod(organization, periodToTest));
@@ -212,18 +195,22 @@ public class AverageController extends AbstractController {
 			}
 		}
 
-		if(scopeAndPeriodList.size()==0){
+		if (scopeAndPeriodList.size() == 0) {
 			//TODO
 			return ok(new ExceptionsDTO("Il n'y a aucun questionnaire qui correspond aux critères demandées"));
-		}
-		else{
+		} else {
 
+			computeAverage(awacCalculator, scopeAndPeriodList, period, organizationComputed, scopeComputed);
+			return ok(new ExceptionsDTO("Les moyennes sont en cours de calcul. Vous recevrez le résultat sur votre adresse e-mail dans quelques minutes"));
+
+			/*
 			return async(
 					promise(new Function0<Integer>() {
 						public Integer apply() {
 
 							try {
-								computeAverage(awacCalculator,scopeAndPeriodList,period,1,1);//TODO,organizationComputed,scopeComputed);
+
+										computeAverage(awacCalculator, scopeAndPeriodList, period, 1, 1);//TODO,organizationComputed,scopeComputed);
 							} catch (IOException e) {
 								e.printStackTrace();
 							} catch (WriteException e) {
@@ -239,6 +226,7 @@ public class AverageController extends AbstractController {
 						}
 					})
 			);
+			*/
 		}
 	}
 
@@ -260,11 +248,7 @@ public class AverageController extends AbstractController {
 		//
 		//compute criteria
 		HashMap<String, String> criteria = new HashMap<>();
-		criteria.put("Calculateur", awacCalculator.getInterfaceTypeCode().
-
-						getKey()
-
-		);
+		criteria.put("Calculateur", awacCalculator.getInterfaceTypeCode().getKey());
 		criteria.put("Periode", period.getLabel());
 		criteria.put("Nomber de formulaire pris en compte", scopeAndPeriodList.size() + "");
 		criteria.put("Organisations prises en compte", organizationComputed + "");
@@ -494,14 +478,129 @@ public class AverageController extends AbstractController {
 
 		List<AverageValue> averageValueList = new ArrayList<>();
 
-		for (QuestionSet child : questionSet.getChildren()) {
-			averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang));
+		List<Com> m = null;
+
+
+		if (!questionSet.getRepetitionAllowed()) {
+
+			//continue the tree if the questionSet is not repetable
+			for (QuestionSet child : questionSet.getChildren()) {
+				averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang));
+			}
+			averageValueList.addAll(computeResponse(questionSet, scopeAndPeriodList, lang, null));
+		} else {
+
+			m = new ArrayList<>();
+
+			//detect all question with list
+			List<ValueSelectionQuestion> questionList = new ArrayList<>();
+			for (Question question : questionSet.getQuestions()) {
+				if (questionSet.getRepetitionAllowed() && question instanceof ValueSelectionQuestion) {
+					questionList.add(((ValueSelectionQuestion) question));
+				}
+			}
+
+			Logger.info("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>QuestionSet : " + questionSet.getCode().getKey() + "(" + m.size() + ")");
+
+
+			for (ScopeAndPeriod scopeAndPeriod : scopeAndPeriodList) {
+
+
+				//looking for questionSetAnswer
+				List<QuestionSetAnswer> questionSetAnswerList = questionSetAnswerService.findByQuestionSetAndCalculatorInstance(questionSet, scopeAndPeriod);
+
+				//for each, test answers from defined question
+				for (QuestionSetAnswer questionSetAnswer : questionSetAnswerList) {
+
+
+					boolean foundForAll = true;
+					Com com = new Com();
+					com.addQuestionSetAnswer(questionSetAnswer);
+
+					//for each defined question...
+					for (ValueSelectionQuestion definedQuestion : questionList) {
+
+						boolean founded = false;
+
+						for (QuestionAnswer questionAnswer : questionSetAnswer.getQuestionAnswers()) {
+							if (questionAnswer.getQuestion().getCode().equals(definedQuestion.getCode()) &&
+									questionAnswer.getAnswerValues() != null &&
+									questionAnswer.getAnswerValues().size() > 0) {
+
+								CodeAnswerValue codeAnswerValue = ((CodeAnswerValue) questionAnswer.getAnswerValues().get(0));
+
+								if (codeAnswerValue.getValue() != null) {
+									com.addValue(definedQuestion, codeAnswerValue.getValue());
+									founded = true;
+									break;
+								}
+
+							}
+						}
+						if (!founded) {
+							foundForAll = false;
+							break;
+						}
+					}
+
+					Logger.info("COM=>" + com);
+
+					if (foundForAll) {
+						if (m.contains(com)) {
+							for (Com com1 : m) {
+								if (com1.equals(com)) {
+									com1.addAllQuestionSet(com.getQuestionSetAnswers());
+								}
+							}
+
+						} else {
+							m.add(com);
+						}
+					}
+
+				}
+			}
+
+			//print com
+
+			for (Com com : m) {
+				Logger.info("=>>>COM : " + com);
+			}
+
+			//TODO continue with a specific COM
+			//continue the tree if the questionSet is not repetable
+			for (QuestionSet child : questionSet.getChildren()) {
+				averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang));
+			}
+
+			//print by Com
+			for (Com com : m) {
+				averageValueList.addAll(computeResponse(questionSet, null, lang, com));
+			}
 		}
+		return averageValueList;
+	}
+
+	private List<AverageValue> computeResponse(QuestionSet questionSet, List<ScopeAndPeriod> scopeAndPeriodList, LanguageCode lang, Com com) {
+
+
+		List<AverageValue> averageValueList = new ArrayList<>();
+
 
 		for (Question question : questionSet.getQuestions()) {
 
+
 			//load answer
-			List<QuestionAnswer> questionAnswerList = questionAnswerService.findByQuestionAndCalculatorInstance(question, scopeAndPeriodList);
+			final List<QuestionAnswer> questionAnswerList;
+			if (scopeAndPeriodList != null) {
+				questionAnswerList = questionAnswerService.findByQuestionAndCalculatorInstance(question, scopeAndPeriodList);
+			} else {
+				if (com.getQuestionSetAnswers() == null || com.getQuestionSetAnswers().size() == 0) {
+					return averageValueList;
+				}
+				Logger.info("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-->ComputedAverageList : " + com);
+				questionAnswerList = questionAnswerService.findByQuestionAndQuestionSetAnswers(question, com.getQuestionSetAnswers());
+			}
 
 			//compute response
 			//YES / NO
@@ -519,8 +618,8 @@ public class AverageController extends AbstractController {
 						}
 					}
 				}
-				averageValueList.add(new AverageValue(question, totalYes, "Oui"));
-				averageValueList.add(new AverageValue(question, totalNo, "non"));
+				averageValueList.add(new AverageValue(question, totalYes, "Oui", com));
+				averageValueList.add(new AverageValue(question, totalNo, "non", com));
 			}
 
 			// CODE
@@ -538,7 +637,7 @@ public class AverageController extends AbstractController {
 					}
 				}
 				for (Map.Entry<Code, Integer> entry : codeMap.entrySet()) {
-					averageValueList.add(new AverageValue(question, entry.getValue(), translate(entry.getKey().getKey(), entry.getKey().getCodeList(), lang)));
+					averageValueList.add(new AverageValue(question, entry.getValue(), translate(entry.getKey().getKey(), entry.getKey().getCodeList(), lang), com));
 				}
 			}
 
@@ -587,7 +686,7 @@ public class AverageController extends AbstractController {
 					standardDeviation = 0.0;
 				}
 
-				averageValueList.add(new AverageValue(question, total, average, unit, standardDeviation));
+				averageValueList.add(new AverageValue(question, total, average, unit, standardDeviation, com));
 
 			}
 
@@ -639,7 +738,7 @@ public class AverageController extends AbstractController {
 					standardDeviation = 0.0;
 				}
 
-				averageValueList.add(new AverageValue(question, total, average, unit, standardDeviation));
+				averageValueList.add(new AverageValue(question, total, average, unit, standardDeviation, com));
 
 			} else {
 				// String => useless ??
@@ -658,7 +757,14 @@ public class AverageController extends AbstractController {
 						}
 					}
 				}
-				averageValueList.add(new AverageValue(question, total));
+				averageValueList.add(new AverageValue(question, total, com));
+			}
+		}
+
+		if (scopeAndPeriodList == null) {
+			Logger.info("==>AVERAGE GENERATED : " + averageValueList.size());
+			for (AverageValue averageValue : averageValueList) {
+				Logger.info("==>" + averageValue);
 			}
 		}
 		return averageValueList;
@@ -683,25 +789,30 @@ public class AverageController extends AbstractController {
 		private Double average = null;
 		private Unit unit = null;
 		private Double standardDeviation = null;
+		private Com com = null;
 
-		private AverageValue(Question question, int nbAnswer) {
+		private AverageValue(Question question, int nbAnswer, Com com) {
 			this.question = question;
 			this.nbAnswer = nbAnswer;
+			this.com = com;
 		}
 
-		private AverageValue(Question question, int nbAnswer, String type) {
+
+		private AverageValue(Question question, int nbAnswer, String type, Com com) {
 			this.question = question;
 			this.nbAnswer = nbAnswer;
 			this.type = type;
+			this.com = com;
 		}
 
 
-		private AverageValue(Question question, int nbAnswer, Double average, Unit unit, Double standardDeviation) {
+		private AverageValue(Question question, int nbAnswer, Double average, Unit unit, Double standardDeviation, Com com) {
 			this.question = question;
 			this.nbAnswer = nbAnswer;
 			this.average = average;
 			this.unit = unit;
 			this.standardDeviation = standardDeviation;
+			this.com = com;
 		}
 
 		public Question getQuestion() {
@@ -747,12 +858,13 @@ public class AverageController extends AbstractController {
 		@Override
 		public String toString() {
 			return "AverageValue{" +
-					"question=" + question +
+					"question=" + question.getCode().getKey() +
 					", nbAnswer=" + nbAnswer +
 					", type='" + type + '\'' +
 					", average=" + average +
-					", unit=" + unit +
+					", unit=" + ((unit != null) ? unit.getSymbol() : "") +
 					", standardDeviation=" + standardDeviation +
+					", com=" + com +
 					'}';
 		}
 	}
@@ -881,8 +993,8 @@ public class AverageController extends AbstractController {
 		@Override
 		public String toString() {
 			return "ScopeAndPeriod{" +
-					"scope=" + scope +
-					", period=" + period +
+					"scope=" + scope.getId() +
+					", period=" + period.getLabel() +
 					'}';
 		}
 
@@ -928,5 +1040,82 @@ public class AverageController extends AbstractController {
 			codeLabelDTOs.add(new CodeLabelDTO(codeLabel.getKey(), codeLabel.getLabel(lang)));
 		}
 		return new CodeListDTO(codeList.name(), codeLabelDTOs);
+	}
+
+	private static class Com {
+
+		private HashMap<ValueSelectionQuestion, Code> values = new HashMap<>();
+		private List<QuestionSetAnswer> questionSetAnswers = new ArrayList<>();
+
+		public void addValue(ValueSelectionQuestion valueSelectionQuestion, Code code) {
+			values.put(valueSelectionQuestion, code);
+		}
+
+		public HashMap<ValueSelectionQuestion, Code> getValues() {
+			return values;
+		}
+
+		public void setValues(HashMap<ValueSelectionQuestion, Code> values) {
+			this.values = values;
+		}
+
+
+		public void addQuestionSetAnswer(QuestionSetAnswer questionSetAnswer) {
+			if (questionSetAnswers == null) {
+				questionSetAnswers = new ArrayList<>();
+			}
+			questionSetAnswers.add(questionSetAnswer);
+		}
+
+		public void addAllQuestionSet(List<QuestionSetAnswer> questionSetAnswers) {
+			if (this.questionSetAnswers == null) {
+				this.questionSetAnswers = new ArrayList<>();
+			}
+			this.questionSetAnswers.addAll(questionSetAnswers);
+
+		}
+
+		public List<QuestionSetAnswer> getQuestionSetAnswers() {
+			return questionSetAnswers;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof Com) {
+				for (Map.Entry<ValueSelectionQuestion, Code> entry : values.entrySet()) {
+					boolean founded = false;
+					for (Map.Entry<ValueSelectionQuestion, Code> entry2 : ((Com) o).getValues().entrySet()) {
+						if (entry.getKey().equals(entry2.getKey()) && entry.getValue().equals(entry2.getValue())) {
+							founded = true;
+							break;
+						}
+					}
+					if (!founded) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+
+		@Override
+		public String toString() {
+			String value = "";
+			for (Map.Entry<ValueSelectionQuestion, Code> entry : values.entrySet()) {
+				value += "{" + entry.getKey().getCode().getKey() + "," + entry.getValue().getKey() + "}";
+			}
+			String setAnswer = "";
+			for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
+				setAnswer += "/" + questionSetAnswer.getId();
+			}
+
+
+			return "Com{" +
+					"values=" + value +
+					",questionSetAnswers=" + setAnswer +
+					'}';
+		}
+
 	}
 }
