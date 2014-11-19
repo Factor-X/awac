@@ -1,6 +1,5 @@
 div.factors
-    span
-        h1 {{'FACTORS' | translateText }}
+    h1 {{'FACTORS' | translateText }}
 
     br
 
@@ -16,7 +15,8 @@ div.factors
             td.name(data-title="'FACTORS_TABLE_KEY' | translateText", filter="{ 'key': 'text' }") {{ row.key }}
             td.type(sortable="'typeString'", data-title="'FACTORS_TABLE_TYPE' | translateText", filter="{ 'typeString': 'text' }") {{ row.typeString }}
             td.unit-category-in(data-title="'FACTORS_TABLE_UNIT_CATEGORY_IN' | translateText", filter="{ 'unitCategoryIn': 'select' }", filter-data="names('unitCategoryIn')") {{ row.unitCategoryIn }}
-            td.origin(sortable="'origin'", data-title="'FACTORS_TABLE_ORIGIN' | translateText", filter="{ 'origin': 'text' }") {{ row.origin }}
+            td.origin(sortable="'origin'", data-title="'FACTORS_TABLE_ORIGIN' | translateText", filter="{ 'origin': 'text' }")
+                input(type="text", ng-model="row.origin")
 
 
         tr(ng-repeat-end, ng-show="a.opened").details
@@ -50,15 +50,43 @@ div.factors
                     span &nbsp;
                     span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")
 
+    button.button(type="button", ng-click="exportFactorsToXls()")
+        span.fa.fa-file-excel-o
+        span &nbsp;
+        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")
 
     br
+    br
+    br
+
+    h3 Créer un facteur
+
+    br
+
+    table.new-factor
+        tr
+            td
+                span(ng-bind-html="'FACTORS_CREATE_TYPE' | translate")
+            td
+                select(ng-options="p as (p | translateText) for p in newFactor.indicatorCategories", ng-model="newFactor.indicatorCategory")
+                span &nbsp;/&nbsp;
+                select(ng-options="p as (p | translateText) for p in newFactor.activityTypes", ng-model="newFactor.activityType")
+                span &nbsp;/&nbsp;
+                select(ng-options="p as (p | translateText) for p in newFactor.activitySources", ng-model="newFactor.activitySource")
+
+        tr
+            td
+                span(ng-bind-html="'FACTORS_CREATE_UNIT_CATEGORY_TYPE' | translate")
+            td
+                select(ng-options="p as (p | translateText) for p in newFactor.unitCategories", ng-model="newFactor.unitCategory")
+
+        tr
+            td
+                span(ng-bind-html="'FACTORS_CREATE_ORIGIN' | translate")
+            td
+                input.origin(type="text", ng-model="newFactor.origin")
 
     button.button(type="button", ng-click="createFactor()")
         span.fa.fa-plus-circle
         span &nbsp;
         span(ng-bind-html="'FACTOR_BUTTON_CREATE' | translate")
-
-    button.button(type="button", ng-click="exportFactorsToXls()")
-        span.fa.fa-file-excel-o
-        span &nbsp;
-        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")

@@ -191,6 +191,7 @@ GET         /awac/admin/average/naceCodes                                   @eu.
 
 GET         /awac/admin/factors/all                                         @eu.factorx.awac.controllers.AdminController.allFactors()
 POST        /awac/admin/factors/update                                      @eu.factorx.awac.controllers.AdminController.updateFactors()
+POST        /awac/admin/factors/create                                      @eu.factorx.awac.controllers.AdminController.createFactor()
 
 GET         /awac/admin/translations/sublists/load                          @eu.factorx.awac.controllers.TranslationAdminController.loadSublists()
 POST        /awac/admin/translations/sublists/save                          @eu.factorx.awac.controllers.TranslationAdminController.updateSublist()

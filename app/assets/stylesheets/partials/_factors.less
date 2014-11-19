@@ -3,6 +3,7 @@
         text-align: left;
         padding: 10px 0 10px 10px;
     }
+
     .factors-table {
 
         @dark: #bbb;
@@ -12,7 +13,7 @@
         width: 100%;
         box-sizing: border-box;
 
-        .input-filter, .filter-select{
+        .input-filter, .filter-select {
             border-radius: 0;
             border: solid 1px #666;
             padding: 0;
@@ -26,7 +27,6 @@
         .row-modified td {
             background: #ffde8c;
         }
-
 
         thead {
             th {
@@ -70,7 +70,7 @@
                         width: auto;
                     }
                     &.type {
-                       width:200px;
+                        width: 200px;
                     }
                     &.scope {
                         width: 200px;
@@ -78,10 +78,11 @@
                     &.realization {
                         width: 100px;
                     }
+                    &.origin input {
+                        width: 100%;
+                        background: white;
+                    }
                 }
-
-
-
 
                 &.details {
 
@@ -89,7 +90,7 @@
                         text-align: right;
                         width: 100px;
 
-                        option{
+                        option {
                             padding: 5px;
                         }
                     }
@@ -115,11 +116,11 @@
                                     display: inline-block;
                                     margin-right: 0.5em;
                                 }
-                                
+
                                 .box.wide {
                                     min-width: 350px;
                                 }
-                                
+
                                 .box.transparent {
                                     background: @dark;
                                 }
@@ -141,15 +142,21 @@
             }
         }
 
-
-
     }
 
+    .new-factor {
+        border-spacing: 4px;
+        border-collapse: separate;
+
+        .origin {
+            width: 100%;
+        }
+    }
 
     button[type="button"].edit_icon {
         box-sizing: border-box;
-        max-width:  22px;
-        min-width:  22px;
+        max-width: 22px;
+        min-width: 22px;
         min-height: 22px;
         max-height: 22px;
         margin: 0;

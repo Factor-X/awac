@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
+import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.FactorService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -52,9 +53,27 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
     }
 
     @Override
+    public Factor findByIndicatorCategoryActivityTypeActivitySourceAndUnitCategory(String indicatorCategory, String activityType, String activitySource, UnitCategory unitCategory) {
+
+        return JPA.em()
+            .createQuery("select e from Factor e where e.indicatorCategory.key = :ic and e.activityType.key = :t and e.activitySource.key = :s and e.unitIn.category = :uc", Factor.class)
+            .setParameter("ic", indicatorCategory)
+            .setParameter("t", activityType)
+            .setParameter("s", activitySource)
+            .setParameter("uc", unitCategory)
+            .getSingleResult();
+
+    }
+
+    @Override
     public void removeAll() {
         JPA.em().createNamedQuery(FactorValue.REMOVE_ALL).executeUpdate();
         JPA.em().createNamedQuery(Factor.REMOVE_ALL).executeUpdate();
+    }
+
+    @Override
+    public Integer getNextKey() {
+        return 1 + JPA.em().createQuery("select max(cast(SUBSTRING(e.key, 10) as integer)) from Factor e", Integer.class).getSingleResult();
     }
 
 }
