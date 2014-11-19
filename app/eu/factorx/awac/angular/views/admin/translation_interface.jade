@@ -1,21 +1,38 @@
-table.actions-table
+h4 Interface
+
+table.translations-table
     thead
         tr
             th Détails
             th Catégorie
 
     tbody
-        tr(ng-repeat-start="(topic, topicCodeLabels) in codeLabels")
+        tr(ng-repeat-start="group in codeLabelsGroups")
             td.details
-                mm-plus-minus-toggle-button(ng-model="topic.opened")
+                mm-plus-minus-toggle-button(ng-model="group.opened")
             td.topic
-                span.text {{ topic }}
-        tr(ng-repeat-end, ng-if="topic.opened").details
+                span.text {{ group.topic }}
+        tr(ng-repeat-end, ng-if="group.opened").details
             td &nbsp;
-            td
-                table
-                    tr(ng-repeat="codeLabel in topicCodeLabels")
-                        td codeLabel.key
-                        td codeLabel.labelEn
-                        td codeLabel.labelFr
-                        td codeLabel.labelNl
+            td.topic-content
+                table.codelabels-table
+                    thead
+                        tr
+                            th Key
+                            th Label FR
+                            th Label FR
+                            th Label NL
+                    tbody
+                        tr(ng-repeat="codeLabel in group.codeLabels")
+                            td.tr-key {{ codeLabel.key }}
+                            td.tr-label
+                                textarea(ng-model="codeLabel.labelEn")
+                            td.tr-label
+                                textarea(ng-model="codeLabel.labelFr")
+                            td.tr-label
+                                textarea(ng-model="codeLabel.labelNl")
+
+br
+button.button(type="button", ng-click="save()") Enregistrer les modifications
+button.button(type="button", ng-click="undo()") Annuler
+

@@ -8,7 +8,7 @@ public class CUD<T> {
     private List<T> updated = new ArrayList<>();
     private List<T> deleted = new ArrayList<>();
 
-    public CUD(List<T> created, List<T> updated, List<T> deleted) {
+    private CUD(List<T> created, List<T> updated, List<T> deleted) {
         this.created = created;
         this.updated = updated;
         this.deleted = deleted;

@@ -109,16 +109,11 @@ public class CodeLabelImporter extends WorkbookDataImporter {
             String labelFr = getCellContent(sheet, 2, i);
             String labelNl = getCellContent(sheet, 3, i);
 
-			String topic = null;
-			if (CodeList.TRANSLATIONS_INTERFACE.equals(codeList)) {
-				topic = getCellContent(sheet, 4, i);
-			}
-
             if (StringUtils.isBlank(labelEn)) {
                 Logger.error("No English translation found for key: '{}' -> skipping", key);
                 continue;
             }
-            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl, topic);
+            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
             codeLabelService.saveOrUpdate(codeLabel);
             codeLabels.put(key, codeLabel);
         }

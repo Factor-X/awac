@@ -1,13 +1,18 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
+import eu.factorx.awac.dto.awac.get.FullCodeLabelDTO;
 import eu.factorx.awac.dto.awac.shared.SubListDTO;
 import eu.factorx.awac.dto.awac.shared.SubListItemDTO;
 import eu.factorx.awac.dto.awac.shared.SublistDTOList;
+import eu.factorx.awac.dto.awac.shared.UpdateCodeLabelsDTO;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
+import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.CodesEquivalenceService;
 import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.util.CUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -15,14 +20,10 @@ import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class TranslationAdminController extends AbstractController {
-
 
 	@Autowired
 	private QuestionService questionService;
@@ -33,18 +34,14 @@ public class TranslationAdminController extends AbstractController {
 	@Autowired
 	private ConversionService conversionService;
 
+	@Autowired
+	private CodeLabelService codeLabelService;
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
 		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData());
 		return ok(new SublistDTOList(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
-	}
-
-	@Transactional(readOnly = true)
-	@Security.Authenticated(SecuredController.class)
-	public Result loadInterfaceCodeLabels() {
-		getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0);
-		return ok(getCodeListDTOs(CodeList.TRANSLATIONS_INTERFACE).get(0));
 	}
 
 	@Transactional(readOnly = false)
@@ -75,6 +72,36 @@ public class TranslationAdminController extends AbstractController {
 			}
 		}
 		return ok(dto);
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadInterfaceCodeLabels() {
+		CodeList codeList = CodeList.TRANSLATIONS_INTERFACE;
+		HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(codeList);
+		List<FullCodeLabelDTO> codeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
+		return ok(new UpdateCodeLabelsDTO(codeList.name(), codeLabelDTOs));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result updateInterfaceCodeLabels() {
+		UpdateCodeLabelsDTO dto = extractDTOFromRequest(UpdateCodeLabelsDTO.class);
+		List<FullCodeLabelDTO> afterCodeLabelDTOs = dto.getCodeLabels();
+
+		HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
+		List<FullCodeLabelDTO> beforeCodeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
+
+		List<FullCodeLabelDTO> updatedCodeLabelDTOs = CUD.fromLists(beforeCodeLabelDTOs, afterCodeLabelDTOs).getUpdated();
+		for (FullCodeLabelDTO fullCodeLabelDTO : updatedCodeLabelDTOs) {
+			CodeLabel codeLabel = codeLabels.get(fullCodeLabelDTO.getKey());
+			Logger.info("Updating " + codeLabel);
+			codeLabel.setLabelEn(fullCodeLabelDTO.getLabelEn());
+			codeLabel.setLabelFr(fullCodeLabelDTO.getLabelFr());
+			codeLabel.setLabelNl(fullCodeLabelDTO.getLabelNl());
+			Logger.info(" -> codeLabel = " + codeLabel);
+		}
+		return ok();
 	}
 
 	private List<CodeListDTO> getReferencedCodeListDTOs(List<SubListDTO> subListDTOs) {
@@ -108,6 +135,14 @@ public class TranslationAdminController extends AbstractController {
 		}
 
 		return new ArrayList<>(sublistsMaps.values());
+	}
+
+	private List<FullCodeLabelDTO> toCodeLabelDTOs(Iterable<CodeLabel> codeLabels) {
+		List<FullCodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+		for (CodeLabel codeLabel : codeLabels) {
+			codeLabelDTOs.add(conversionService.convert(codeLabel, FullCodeLabelDTO.class));
+		}
+		return codeLabelDTOs;
 	}
 
 }
