@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "ActionsCtrl", ($scope, $window, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService) ->
+.controller "ActionsCtrl", ($scope, $window, displayFormMenu, modalService, downloadService, $filter, messageFlash, translationService, $filter) ->
     $scope.displayFormMenu = displayFormMenu
 
     $scope.actions = []
@@ -25,9 +25,14 @@ angular
     $scope.loadAdvices = () ->
         $scope.waitingAdvices = true
         downloadService.getJson "awac/advices/load/" + $scope.$root.periodSelectedKey, (result) ->
-            $scope.waitingAdvices = false
             if result.success
                 $scope.actionAdvices = result.data.reducingActionAdvices
+                for index, e of $scope.actionAdvices
+                    if ((e.typeKey == "2") && (!!e.alternativeGroupKey))
+                        altGroupLabel = translationService.get e.alternativeGroupKey
+                        e.title = $filter("translateTextWithVars")("BETTER_MEASURE_ADVICE_TITLE" , [altGroupLabel])
+                        e.physicalMeasure = translationService.get "BETTER_MEASURE_ADVICE_DESC"
+            $scope.waitingAdvices = false
             return
         return
 
@@ -98,7 +103,6 @@ angular
         return _.findWhere($scope.statusOptions, {key: statusKey }).label
 
     $scope.getGwpUnitSymbol = (gwpUnitCodeKey) ->
-        console.log("getGwpUnitSymbol(gwpUnitCodeKey='" + gwpUnitCodeKey + "')")
         return if (gwpUnitCodeKey != null) then _.findWhere($scope.gwpUnits, {code: gwpUnitCodeKey }).name
 
     $scope.getDefaultDueDate = () ->

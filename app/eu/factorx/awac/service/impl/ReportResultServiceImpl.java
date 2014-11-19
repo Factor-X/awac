@@ -82,7 +82,8 @@ public class ReportResultServiceImpl implements ReportResultService {
 		for (Map.Entry<String, Integer> minRankEntry : minRankByAlternativeGroup.entrySet()) {
 			Integer minRank = minRankEntry.getValue();
 			if (minRank >= 1) {
-				logEntries.add(new LowRankMeasureWarning(minRankEntry.getKey(), minRank));
+				String alternativeGroupKey = StringUtils.split(minRankEntry.getKey(), '-')[0];
+				logEntries.add(new LowRankMeasureWarning(alternativeGroupKey));
 			}
 		}
 	}

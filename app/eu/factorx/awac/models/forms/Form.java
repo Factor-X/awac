@@ -65,10 +65,8 @@ public class Form extends AuditedAbstractEntity {
 		this.progress = progress;
 	}
 
-	public List<QuestionSet> getQuestionSets() {
-        List<QuestionSet> list = new ArrayList<>();
-        list.addAll(this.questionSets);
-		return list;
+	public Set<QuestionSet> getQuestionSets() {
+		return this.questionSets;
 	}
 
     public void setQuestionSets(Set<QuestionSet> questionSets) {
@@ -76,10 +74,10 @@ public class Form extends AuditedAbstractEntity {
     }
 
     public List<QuestionSet> getAllQuestionSets() {
-        return getAllQuestionSets(new ArrayList<QuestionSet>(this.questionSets));
+        return getAllQuestionSets(this.questionSets);
     }
 
-    private List<QuestionSet> getAllQuestionSets(List<QuestionSet> questionSets) {
+    private List<QuestionSet> getAllQuestionSets(Set<QuestionSet> questionSets) {
 		List<QuestionSet> result = new ArrayList<>();
 		for (QuestionSet questionSet : questionSets) {
 			result.add(questionSet);

@@ -1,7 +1,9 @@
 package eu.factorx.awac.models.data.question;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -35,7 +37,7 @@ public class QuestionSet extends AuditedAbstractEntity {
 	private List<Question> questions = new ArrayList<>();
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<QuestionSet> children = new ArrayList<>();
+	private Set<QuestionSet> children = new HashSet<>();
 
 	protected QuestionSet() {
 		super();
@@ -78,11 +80,11 @@ public class QuestionSet extends AuditedAbstractEntity {
 		this.parent = parent;
 	}
 
-	public List<QuestionSet> getChildren() {
+	public Set<QuestionSet> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<QuestionSet> children) {
+	public void setChildren(Set<QuestionSet> children) {
 		this.children = children;
 	}
 

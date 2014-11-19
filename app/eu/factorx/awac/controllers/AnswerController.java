@@ -234,7 +234,8 @@ public class AnswerController extends AbstractController {
             }
         }
 
-        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(form.getQuestionSets(), questionSetAnswers, period);
+		Set<QuestionSet> questionSets = form.getQuestionSets();
+		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(new ArrayList<>(questionSets), questionSetAnswers, period);
 
         List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
         List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);

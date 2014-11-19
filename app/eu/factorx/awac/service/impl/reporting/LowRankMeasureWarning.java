@@ -7,14 +7,11 @@ public class LowRankMeasureWarning extends ReportLogEntry {
 
 	private String alternativeGroupKey;
 
-	private Integer minRank;
-
 	public LowRankMeasureWarning() {
 	}
 
-	public LowRankMeasureWarning(String alternativeGroupKey, Integer minRank) {
+	public LowRankMeasureWarning(String alternativeGroupKey) {
 		this.alternativeGroupKey = alternativeGroupKey;
-		this.minRank = minRank;
 	}
 
 	public String getAlternativeGroupKey() {
@@ -25,31 +22,22 @@ public class LowRankMeasureWarning extends ReportLogEntry {
 		this.alternativeGroupKey = alternativeGroupKey;
 	}
 
-	public Integer getMinRank() {
-		return minRank;
-	}
-
-	public void setMinRank(Integer minRank) {
-		this.minRank = minRank;
-	}
-
 	@Override
 	public String toString() {
-		return "LowRankMeasureWarning {" +
-				"alternativeGroupKey='" + alternativeGroupKey + '\'' +
-				", minRank=" + minRank +
-				'}';
+		return "LowRankMeasureWarning {" + "alternativeGroupKey='" + alternativeGroupKey + '\'' + '}';
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
 		LowRankMeasureWarning that = (LowRankMeasureWarning) o;
 
-		if (!alternativeGroupKey.equals(that.alternativeGroupKey)) return false;
-		if (!minRank.equals(that.minRank)) return false;
+		if (!alternativeGroupKey.equals(that.alternativeGroupKey))
+			return false;
 
 		return true;
 	}
@@ -57,7 +45,6 @@ public class LowRankMeasureWarning extends ReportLogEntry {
 	@Override
 	public int hashCode() {
 		int result = alternativeGroupKey.hashCode();
-		result = 31 * result + minRank.hashCode();
 		return result;
 	}
 }

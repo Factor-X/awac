@@ -34,6 +34,10 @@
     "log4javascript": "~1.4.9",
     "font-awesome": "~4.2.0",
     "angular-bootstrap-datetimepicker": "latest",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "ng-ckeditor": "~0.2.1",
+    "angular-ui": "~0.4.0",
+    "jquery-ui": "~1.11.2",
+    "jquery-ui-sortable": "*"
   }
 }

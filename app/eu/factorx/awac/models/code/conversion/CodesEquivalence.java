@@ -55,6 +55,9 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 	@Basic(optional = false)
 	protected String codeKey;
 
+	@Basic(optional = true)
+	protected Integer orderIndex;
+
 	@Enumerated(EnumType.STRING)
 	@Basic(optional = false)
 	protected CodeList referencedCodeList;
@@ -80,6 +83,22 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 		this.referencedCodeKey = referencedCodeKey;
 	}
 
+	/**
+	 * @param codeList
+	 * @param codeKey
+	 * @param orderIndex
+	 * @param referencedCodeList
+	 * @param referencedCodeKey
+	 */
+	public CodesEquivalence(CodeList codeList, String codeKey, Integer orderIndex, CodeList referencedCodeList, String referencedCodeKey) {
+		super();
+		this.codeList = codeList;
+		this.codeKey = codeKey;
+		this.orderIndex = orderIndex;
+		this.referencedCodeList = referencedCodeList;
+		this.referencedCodeKey = referencedCodeKey;
+	}
+
 	public CodeList getCodeList() {
 		return codeList;
 	}
@@ -94,6 +113,14 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 
 	public void setCodeKey(String codeKey) {
 		this.codeKey = codeKey;
+	}
+
+	public Integer getOrderIndex() {
+		return orderIndex;
+	}
+
+	public void setOrderIndex(Integer orderIndex) {
+		this.orderIndex = orderIndex;
 	}
 
 	public CodeList getReferencedCodeList() {

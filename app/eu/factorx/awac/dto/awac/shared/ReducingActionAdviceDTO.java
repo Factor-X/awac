@@ -51,40 +51,7 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 	private List<BaseIndicatorAssociationDTO> baseIndicatorAssociations;
 
-	private LowRankMeasureWarningDTO lowRankMeasureWarning;
-
-	public static class LowRankMeasureWarningDTO extends DTO implements Serializable {
-
-		private String alternativeGroupKey;
-
-		private Integer minRank;
-
-		public LowRankMeasureWarningDTO() {
-			super();
-		}
-
-		public LowRankMeasureWarningDTO(String alternativeGroupKey, Integer minRank) {
-			super();
-			this.alternativeGroupKey = alternativeGroupKey;
-			this.minRank = minRank;
-		}
-
-		public String getAlternativeGroupKey() {
-			return alternativeGroupKey;
-		}
-
-		public void setAlternativeGroupKey(String alternativeGroupKey) {
-			this.alternativeGroupKey = alternativeGroupKey;
-		}
-
-		public Integer getMinRank() {
-			return minRank;
-		}
-
-		public void setMinRank(Integer minRank) {
-			this.minRank = minRank;
-		}
-	}
+	private String alternativeGroupKey;
 
 	public static class BaseIndicatorAssociationDTO extends DTO implements Serializable {
 
@@ -247,11 +214,11 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 		this.baseIndicatorAssociations = baseIndicatorAssociations;
 	}
 
-	public LowRankMeasureWarningDTO getLowRankMeasureWarning() {
-		return lowRankMeasureWarning;
+	public String getAlternativeGroupKey() {
+		return alternativeGroupKey;
 	}
 
-	public void setLowRankMeasureWarning(LowRankMeasureWarningDTO lowRankMeasureWarning) {
-		this.lowRankMeasureWarning = lowRankMeasureWarning;
+	public void setAlternativeGroupKey(String alternativeGroupKey) {
+		this.alternativeGroupKey = alternativeGroupKey;
 	}
 }

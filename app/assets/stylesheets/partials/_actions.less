@@ -106,13 +106,21 @@
                 }
 
                 &.details {
+
                     td {
                         background: @dark;
                         color: #000;
                         white-space: nowrap;
-                        padding: 0.5em;
+                        padding: 5px;
                         border-left: none;
                         border-right: none;
+                        & > .details-table {
+                            width: 800px;
+                            padding: 10px;
+                        }
+                        & > .button-group {
+                            float: right;
+                        }
                     }
 
                     table {
@@ -126,26 +134,37 @@
                                     background: white;
                                     display: inline-block;
                                     margin-right: 0.5em;
+                                    white-space: normal;
+                                    & > ul {
+                                        padding-left: 40px;
+                                    }
+                                    border-radius: 3px;
                                 }
-                                
+
                                 .box.wide {
-                                    min-width: 350px;
+                                    width: 100%;
                                 }
-                                
+
                                 .box.transparent {
                                     background: @dark;
                                 }
-                                .box.with-separator {
-                                    border-top:10px;
+
+                                &:first-child {
+                                    padding-top: 10px;
+                                    vertical-align: top;
+                                    padding-right: 20px;
+                                }
+                                &:not(:first-child) {
+                                    width: 100%;
                                 }
                             }
-                            td:first-child {
-                                padding-top:10px;
-                                vertical-align: top;
+                            &.with-separator > td {
+                                border-top: 15px solid transparent;
                             }
 
                         }
                     }
+
                 }
 
                 &.selected {
@@ -222,6 +241,12 @@
                 font-style: italic;
             }
 
+        }
+    }
+
+    ul.sortable-list {
+        li {
+            padding:5px;
         }
     }
 }

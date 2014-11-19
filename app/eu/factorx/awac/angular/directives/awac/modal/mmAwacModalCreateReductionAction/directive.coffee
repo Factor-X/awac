@@ -145,12 +145,10 @@ angular
 
         $scope.allFieldValid = () ->
             return ($scope.title.isValid &&
-                $scope.physicalMeasure.isValid &&
                 $scope.expectedPaybackTime.isValid &&
                 $scope.dueDate.isValid &&
                 $scope.webSite.isValid &&
-                $scope.responsiblePerson.isValid &&
-                $scope.comment.isValid)
+                $scope.responsiblePerson.isValid)
 
         #send the request to the server
         $scope.save = () ->
@@ -254,6 +252,14 @@ angular
                     $scope.files.splice(index, 1);
                     break
             return
+
+        $scope.editorOptions = {
+            language: 'fr'
+            skin: 'moono'
+            uiColor: '#CFCDC0'
+            toolbar: 'Basic'
+            height: '95px'
+        }
 
         link: (scope) ->
 

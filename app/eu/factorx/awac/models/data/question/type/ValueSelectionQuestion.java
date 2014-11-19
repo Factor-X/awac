@@ -3,6 +3,7 @@ package eu.factorx.awac.models.data.question.type;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQuery;
 
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.QuestionCode;
@@ -11,9 +12,12 @@ import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
+@NamedQuery(name = ValueSelectionQuestion.FIND_ALL_USED_CODE_LISTS, query = "select distinct q.codeList from ValueSelectionQuestion q")
 public class ValueSelectionQuestion extends Question {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_ALL_USED_CODE_LISTS = "ValueSelectionQuestion.findAllUsedCodeLists";
 
 	@Enumerated(EnumType.STRING)
 	private CodeList codeList;
