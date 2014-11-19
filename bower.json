@@ -1,43 +1,42 @@
 {
-  "name": "awac",
-  "version": "0.0.0",
-  "homepage": "https://github.com/Factor-X/awac",
-  "authors": [
-    "factorx"
-  ],
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/components"
-  ],
-  "dependencies": {
-    "angular": "1.2.26",
-    "angular-animate": "1.2.26",
-    "angular-bootstrap": "*",
-    "angular-dynamic-locale": "*",
-    "angular-i18n": "1.2.26",
-    "angular-route": "1.2.26",
-    "angular-sanitize": "1.2.26",
-    "ng-file-upload": "*",
-    "bootstrap": "3.2.0",
-    "jquery": "1.11.*",
-    "raphael": "*",
-    "graphael": "*",
-    "underscore": "*",
-    "messenger": "*",
-    "chartjs": ">=1.0.1-beta.4",
-    "tinycolor": "~1.0.0",
-    "ng-table": "~0.3.3",
-    "log4javascript": "~1.4.9",
-    "font-awesome": "~4.2.0",
-    "angular-bootstrap-datetimepicker": "latest",
-    "FileSaver": "*",
-    "ng-ckeditor": "~0.2.1",
-    "angular-ui": "~0.4.0",
-    "jquery-ui": "~1.11.2",
-    "jquery-ui-sortable": "*"
-  }
+    "name": "awac",
+    "version": "0.0.0",
+    "homepage": "https://github.com/Factor-X/awac",
+    "authors": [
+        "factorx"
+    ],
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "public/components"
+    ],
+    "dependencies": {
+        "angular": "1.2.26",
+        "angular-animate": "1.2.26",
+        "angular-bootstrap": "*",
+        "angular-dynamic-locale": "*",
+        "angular-i18n": "1.2.26",
+        "angular-route": "1.2.26",
+        "angular-sanitize": "1.2.26",
+        "ng-file-upload": "*",
+        "bootstrap": "3.2.0",
+        "jquery": "1.11.*",
+        "raphael": "*",
+        "graphael": "*",
+        "underscore": "*",
+        "messenger": "*",
+        "chartjs": ">=1.0.1-beta.4",
+        "tinycolor": "~1.0.0",
+        "ng-table": "~0.3.3",
+        "log4javascript": "~1.4.9",
+        "font-awesome": "~4.2.0",
+        "angular-bootstrap-datetimepicker": "latest",
+        "FileSaver": "*",
+        "ng-ckeditor": "~0.2.1",
+        "jquery-ui": "~1.11.2",
+        "angular-ui-sortable": "*"
+    }
 }

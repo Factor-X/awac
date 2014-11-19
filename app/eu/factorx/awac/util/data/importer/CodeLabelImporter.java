@@ -96,6 +96,8 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 
     // Columns: 0:KEY, 1:LABEL_EN, 2:LABEL_FR, 3:LABEL_NL
     private LinkedHashMap<String, CodeLabel> importCodeLabels(Sheet sheet, CodeList codeList) {
+		Logger.info("codeList = " + codeList);
+
         LinkedHashMap<String, CodeLabel> codeLabels = new LinkedHashMap<>();
 
         for (int i = 1; i < sheet.getRows(); i++) {
@@ -107,11 +109,16 @@ public class CodeLabelImporter extends WorkbookDataImporter {
             String labelFr = getCellContent(sheet, 2, i);
             String labelNl = getCellContent(sheet, 3, i);
 
+			String topic = null;
+			if (CodeList.TRANSLATIONS_INTERFACE.equals(codeList)) {
+				topic = getCellContent(sheet, 4, i);
+			}
+
             if (StringUtils.isBlank(labelEn)) {
                 Logger.error("No English translation found for key: '{}' -> skipping", key);
                 continue;
             }
-            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
+            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl, topic);
             codeLabelService.saveOrUpdate(codeLabel);
             codeLabels.put(key, codeLabel);
         }

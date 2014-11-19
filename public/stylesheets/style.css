@@ -56,6 +56,18 @@ input, select, textarea {
     box-sizing: border-box; /* Opera/IE 8+ */
 }
 
+input[type='number'] {
+    -moz-appearance:textfield;
+    text-align: right;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
 select {
     padding: 1px 0 0;
 }

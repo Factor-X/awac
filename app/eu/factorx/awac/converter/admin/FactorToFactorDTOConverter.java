@@ -6,7 +6,6 @@ import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.knowledge.FactorValue;
 import org.springframework.core.convert.converter.Converter;
 
-import java.util.Date;
 import java.util.List;
 
 public class FactorToFactorDTOConverter implements Converter<Factor, FactorDTO> {
@@ -34,14 +33,13 @@ public class FactorToFactorDTOConverter implements Converter<Factor, FactorDTO> 
         List<FactorValueDTO> factorValueDTOs = dto.getFactorValues();
         for (FactorValue factorValue : factor.getValues()) {
             FactorValueDTO fv = new FactorValueDTO();
+            fv.setId(factorValue.getId());
             fv.setValue(factorValue.getValue());
-            Date dateIn = factorValue.getDateIn();
-            if (dateIn != null) {
-                fv.setDateIn(dateIn.toString());
+            if (factorValue.getDateIn() != null) {
+                fv.setDateIn(String.valueOf(factorValue.getDateIn()));
             }
-            Date dateOut = factorValue.getDateOut();
-            if (dateOut != null) {
-                fv.setDateOut(dateOut.toString());
+            if (factorValue.getDateOut() != null) {
+                fv.setDateOut(String.valueOf(factorValue.getDateOut()));
             }
             factorValueDTOs.add(fv);
         }

@@ -1,75 +1,71 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.Date;
+import eu.factorx.awac.models.AuditedAbstractEntity;
 
 import javax.persistence.*;
-
-import eu.factorx.awac.models.AuditedAbstractEntity;
 
 @Entity
 @Table(name = "factor_value")
 @NamedQueries({
-	@NamedQuery(name = FactorValue.REMOVE_ALL, query = "delete from FactorValue fv where fv.id is not null")
+    @NamedQuery(name = FactorValue.REMOVE_ALL, query = "delete from FactorValue fv where fv.id is not null")
 })
 public class FactorValue extends AuditedAbstractEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final String REMOVE_ALL = "FactorValue.removeAll";
+    public static final String REMOVE_ALL = "FactorValue.removeAll";
 
-	private Double value;
+    private Double value;
 
-	@Temporal(TemporalType.DATE)
-	private Date dateIn;
+    private Integer dateIn;
 
-	@Temporal(TemporalType.DATE)
-	private Date dateOut;
+    private Integer dateOut;
 
-	@ManyToOne(optional = false)
-	private Factor factor;
+    @ManyToOne(optional = false)
+    private Factor factor;
 
-	protected FactorValue() {
-		super();
-	}
+    protected FactorValue() {
+        super();
+    }
 
-	public FactorValue(Double value, Date dateIn, Date dateOut, Factor factor) {
-		super();
-		this.value = value;
-		this.dateIn = dateIn;
-		this.dateOut = dateOut;
-		this.factor = factor;
-	}
+    public FactorValue(Double value, Integer dateIn, Integer dateOut, Factor factor) {
+        super();
+        this.value = value;
+        this.dateIn = dateIn;
+        this.dateOut = dateOut;
+        this.factor = factor;
+    }
 
-	public Double getValue() {
-		return value;
-	}
+    public Double getValue() {
+        return value;
+    }
 
-	public void setValue(Double param) {
-		this.value = param;
-	}
+    public void setValue(Double param) {
+        this.value = param;
+    }
 
-	public Date getDateIn() {
-		return dateIn;
-	}
+    public Integer getDateIn() {
+        return dateIn;
+    }
 
-	public void setDateIn(Date param) {
-		this.dateIn = param;
-	}
+    public void setDateIn(Integer param) {
+        this.dateIn = param;
+    }
 
-	public Date getDateOut() {
-		return dateOut;
-	}
+    public Integer getDateOut() {
+        return dateOut;
+    }
 
-	public void setDateOut(Date param) {
-		this.dateOut = param;
-	}
+    public void setDateOut(Integer param) {
+        this.dateOut = param;
+    }
 
-	public Factor getFactor() {
-		return factor;
-	}
+    public Factor getFactor() {
+        return factor;
+    }
 
-	public void setFactor(Factor param) {
-		this.factor = param;
-	}
+    public void setFactor(Factor param) {
+        this.factor = param;
+    }
 
 }
