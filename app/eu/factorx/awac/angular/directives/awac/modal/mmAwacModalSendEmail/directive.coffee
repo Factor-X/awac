@@ -38,9 +38,11 @@ angular
                     onlyOrganizationSharedData: $scope.getParams().onlyOrganizationSharedData
                     emailTitle: $scope.fields.title.field
                     emailContent: $scope.fields.content.field
-                downloadService.postJson "/awac/admin/sendEmail", data, (result) ->
+                console.log data
+                downloadService.postJson "/awac/admin/organizationData/sendEmail", data, (result) ->
                     if result.success
                         $scope.close()
+                        messageFlash.displaySuccess translationService.get('EMAIL_SEND')
 
 
         $scope.close = ->
