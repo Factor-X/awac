@@ -33,9 +33,9 @@ div
             mm-awac-repetition-name(question-code="A15")
             mm-awac-repetition-question(question-set-code="A15", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('A15')")
 
-                mm-awac-question(question-code="A16",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="A16",ng-repetition-map="itLevel1",ng-index="$index")
 
-                mm-awac-question(question-code="A17",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="A17",ng-repetition-map="itLevel1",ng-index="$index")
             mm-awac-repetition-add-button(question-set-code="A15")
 
             mm-awac-repetition-name(question-code="A1000")

@@ -12,7 +12,10 @@ import eu.factorx.awac.models.data.question.Question;
 
 @Entity
 @Table(name = "question_answer")
-@NamedQueries({@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),})
+@NamedQueries({
+		@NamedQuery(name = QuestionAnswer.FIND_BY_CODES, query = "select qa from QuestionAnswer qa where qa.question.code in :codes"),
+		@NamedQuery(name = QuestionAnswer.FIND_BY_CODE_AND_QUESTION_SET_ANSWER, query = "select qa from QuestionAnswer qa where qa.questionSetAnswer in :questionSetAnswers and qa.question.code = :code"),
+})
 public class QuestionAnswer extends AuditedAbstractEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -21,6 +24,7 @@ public class QuestionAnswer extends AuditedAbstractEntity {
 	 * @param codes : a Collection of {@link QuestionCode}
 	 */
 	public static final String FIND_BY_CODES = "QuestionAnswer.findByCodes";
+	public static final java.lang.String FIND_BY_CODE_AND_QUESTION_SET_ANSWER = "QuestionAnswer.FIND_BY_CODE_AND_QUESTION_SET_ANSWER";
 
 	public static final String QUESTION_SET_ANSWER_PROPERTY = "questionSetAnswer";
 

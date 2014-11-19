@@ -98,7 +98,7 @@ public class SecuredController extends Security.Authenticator {
         return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
     }
 
-    public void controlDataAccess(Form form, Period period, Scope scope) {
+    public void controlDataAccess(Form form, Period period, Scope scope){//},boolean returnErrorMessage) {
 
         if (form == null) {
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);

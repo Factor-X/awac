@@ -21,6 +21,7 @@ import java.util.List;
 public class EmailMessage {
 
 	private List<String> toAddress;
+	private final List<String> ccAddresses = new ArrayList<>();
 	private String subject;
 	private String content;
 	private HashMap<String, ByteArrayOutputStream> attachmentFilenameList;
@@ -56,9 +57,15 @@ public class EmailMessage {
         this.byteArrayinputStreamList = attachmentList;
     }
 
+	public void addCcAddress(String email){
+		this.ccAddresses.add(email);
+	}
 
+	public List<String> getCcAddresses() {
+		return ccAddresses;
+	}
 
-    public void addEmails(List<String> admins) {
+	public void addEmails(List<String> admins) {
         toAddress.addAll(admins);
     }
 

@@ -357,7 +357,16 @@ angular
         # get the answer to compare by code and mapIteration
         # return null if this answer doesn't exist
         #
-        $scope.getAnswerToCompare = (code, mapIteration) ->
+        $scope.getAnswerToCompare = (code, mapIteration,index) ->
+
+            if $scope.dataToCompare != null
+                i=0
+                for answer in $scope.dataToCompare.answersSave.listAnswers
+                    if answer.questionKey == code
+                        if i == index
+                            return answer
+                        i++
+            ###
             if $scope.dataToCompare != null
                 for answer in $scope.dataToCompare.answersSave.listAnswers
                     #control the code
@@ -366,8 +375,21 @@ angular
                         #control the repetition map
                         if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
                             return answer
-
+            ###
             return null
+
+
+        #
+        # get the first repetition
+        #
+        $scope.getFirstRepeteableElement = (questionSetCode) ->
+            if $scope.mapQuestionSet[questionSetCode].repetitionAllowed == true
+                return questionSetCode
+            else
+                return getFirstRepeteableElement($scope.mapQuestionSet[questionSetCode].parent.code)
+
+
+
 
         #
         # get the answer by code and mapIteration

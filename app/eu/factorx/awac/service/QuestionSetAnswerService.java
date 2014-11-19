@@ -3,6 +3,7 @@ package eu.factorx.awac.service;
 import java.util.List;
 import java.util.Map;
 
+import eu.factorx.awac.controllers.AverageController;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
@@ -63,4 +64,6 @@ public interface QuestionSetAnswerService extends PersistenceService<QuestionSet
 	public List<QuestionSetAnswer> findByScopeAndPeriodAndQuestionSet(Scope scope, Period period, QuestionSet questionSet);
 
 	public List<QuestionSetAnswer> findByCodes(List<QuestionCode> codes);
+
+	public List<QuestionSetAnswer> findByQuestionSetAndCalculatorInstance(QuestionSet questionSet, AverageController.ScopeAndPeriod scopeAndPeriod);
 }

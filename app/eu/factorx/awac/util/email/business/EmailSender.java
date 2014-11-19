@@ -77,6 +77,9 @@ public class EmailSender implements ApplicationContextAware {
             for(String address : email.getToAddress()) {
                 mimeMessage.addRecipients(Message.RecipientType.TO, InternetAddress.parse(address));
             }
+	        for(String address : email.getCcAddresses()) {
+		        mimeMessage.addRecipients(Message.RecipientType.CC, InternetAddress.parse(address));
+	        }
             mimeMessage.setSubject(MimeUtility.encodeText(email.getSubject(), "utf-8", "B"));
 
 			// main body part -> email content

@@ -23,6 +23,12 @@ div.verification_manage
                     select(
                     ng-options='p.key as p.label for p in naceCodes',
                     ng-model='naceCode')
+            .field_row(ng-show="results.interface == 'enterprise' || results.interface == 'municipality'")
+                .field_cell Uniquement les formulaires cloturés
+                .field_cell
+                    input(
+                        type="checkbox",
+                        ng-model='onlyVerifiedForm')
             .field_row
                 .field_cell
                     button.button(type="button",

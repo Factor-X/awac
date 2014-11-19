@@ -20,6 +20,8 @@ angular
         label:'Tertiaire'
     ]
 
+    $scope.onlyVerifiedForm = true
+
     downloadService.getJson '/awac/admin/average/naceCodes', (result) ->
         if result.success
             for codeList in result.data.list
@@ -63,6 +65,7 @@ angular
             periodKey:$scope.results.period
             naceCodeListKey:naceCodeListKey
             naceCodeKey:naceCodeKey
+            onlyVerifiedForm:$scope.onlyVerifiedForm
         console.log data
         downloadService.postJson '/awac/admin/average/computeAverage', data, (result) ->
             if result.success

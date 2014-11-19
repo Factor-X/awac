@@ -222,7 +222,8 @@ public class AverageController extends AbstractController {
                             scopeAndPeriodList,
                             period,
                             organizationComputed,
-                            scopeComputed
+                            scopeComputed,
+		                    securedController
                             );
             } catch (IOException e) {
                 e.printStackTrace();

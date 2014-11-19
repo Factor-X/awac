@@ -11,8 +11,9 @@ public class ComputeAverageDTO extends DTO {
     private String periodKey;
     private String naceCodeListKey;
     private String naceCodeKey;
+	private boolean onlyVerifiedForm;
 
-    public ComputeAverageDTO() {
+	public ComputeAverageDTO() {
     }
 
     public String getPeriodKey() {
@@ -54,4 +55,12 @@ public class ComputeAverageDTO extends DTO {
                 ", periodKey='" + periodKey + '\'' +
                 '}';
     }
+
+	public boolean isOnlyVerifiedForm() {
+		return onlyVerifiedForm;
+	}
+
+	public void setOnlyVerifiedForm(boolean onlyVerifiedForm) {
+		this.onlyVerifiedForm = onlyVerifiedForm;
+	}
 }
