@@ -54,15 +54,18 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
 
     @Override
     public Factor findByIndicatorCategoryActivityTypeActivitySourceAndUnitCategory(String indicatorCategory, String activityType, String activitySource, UnitCategory unitCategory) {
-
         return JPA.em()
-            .createQuery("select e from Factor e where e.indicatorCategory.key = :ic and e.activityType.key = :t and e.activitySource.key = :s and e.unitIn.category = :uc", Factor.class)
+            .createQuery("" +
+                "select e from Factor e " +
+                "where e.indicatorCategory.key = :ic " +
+                "and e.activityType.key = :t " +
+                "and e.activitySource.key = :s " +
+                "and e.unitIn.category.id = :uc", Factor.class)
             .setParameter("ic", indicatorCategory)
-            .setParameter("t", activityType)
-            .setParameter("s", activitySource)
-            .setParameter("uc", unitCategory)
+            .setParameter("t",  activityType)
+            .setParameter("s",  activitySource)
+            .setParameter("uc", unitCategory.getId())
             .getSingleResult();
-
     }
 
     @Override

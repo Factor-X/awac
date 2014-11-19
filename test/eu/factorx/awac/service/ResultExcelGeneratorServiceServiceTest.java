@@ -39,7 +39,7 @@ public class ResultExcelGeneratorServiceServiceTest extends AbstractBaseModelTes
 			Table scope3 = createRandomTable(10, 10);
 			Table outOfScope = createRandomTable(10, 10);
 
-//			resultExcelGeneratorService.generateExcelInStream(
+//			resultExcelGeneratorService.generateExcel(
 //				output,
 //				allScopes,
 //				scope1,

@@ -3,7 +3,15 @@ div.factors
 
     br
 
-    button.button.btn.save(type="button", ng-click="save()") Enregistrer
+    button.button.btn.save(type="button", ng-click="save()")
+        span.fa.fa-save
+        span &nbsp;
+        span(ng-bind-html="'SAVE' | translate")
+
+    button.button(type="button", ng-click="exportXls()")
+        span.fa.fa-file-excel-o
+        span &nbsp;
+        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")
 
     br
     br
@@ -50,10 +58,6 @@ div.factors
                     span &nbsp;
                     span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")
 
-    button.button(type="button", ng-click="exportFactorsToXls()")
-        span.fa.fa-file-excel-o
-        span &nbsp;
-        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")
 
     br
     br
