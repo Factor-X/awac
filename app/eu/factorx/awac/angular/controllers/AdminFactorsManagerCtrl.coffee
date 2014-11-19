@@ -3,6 +3,10 @@ angular
 .controller "AdminFactorsManagerCtrl", ($scope, $filter, $q, $timeout, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.factors = null
+    $scope.newFactor = {
+        __type: 'eu.factorx.awac.dto.awac.post.CreateFactorDTO'
+    }
+
     modalService.show(modalService.LOADING)
 
     #
@@ -13,6 +17,11 @@ angular
         if result.success == true
             $scope.periods = result.data.periods
             $scope.factors = result.data.factors
+            $scope.newFactor.indicatorCategories = result.data.indicatorCategories
+            $scope.newFactor.activityTypes = result.data.activityTypes
+            $scope.newFactor.activitySources = result.data.activitySources
+            $scope.newFactor.unitCategories = result.data.unitCategories
+
             $scope.originalFactors = angular.copy(result.data.factors)
 
             tt = $filter('translateText')
@@ -104,7 +113,7 @@ angular
                 fvs = _.sortBy(f.factorValues, 'dateIn')
 
                 for i in [1...fvs.length]
-                    fvs[i-1].dateOut = '' + (fvs[i].dateIn - 1)
+                    fvs[i - 1].dateOut = '' + (fvs[i].dateIn - 1)
 
                 f.factorValues = fvs
 
@@ -147,3 +156,8 @@ angular
             def.resolve(d)
 
         return def
+
+    $scope.createFactor = () ->
+        modalService.show modalService.LOADING
+        downloadService.postJson '/awac/admin/factors/create', $scope.newFactor, (result) ->
+            modalService.close modalService.LOADING

@@ -7,4 +7,5 @@ public interface UnitCategoryService extends PersistenceService<UnitCategory> {
 
 	UnitCategory findByCode(UnitCategoryCode unitCategoryCode);
 
+    UnitCategory findByName(String name);
 }
