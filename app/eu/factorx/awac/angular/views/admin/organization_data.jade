@@ -1,0 +1,42 @@
+div.verification_manage
+    span
+        h1 Gestion des utilisateurs
+
+    table.table
+        tr
+            th
+            th(ng-repeat="(key,info) in data",style="width:15%;text-align:center") {{key}}
+        tr
+            th Nombre d'organisations enregistré
+            td(ng-repeat="(key,info) in data",style="text-align:center") {{info.total}}
+        tr
+            th Nombre d'organisations partageant leurs données
+            td(ng-repeat="(key,info) in data",style="text-align:center") {{info.shareData}}
+        tr
+            th Nombre de sites
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                div(ng-show="info.sites > 0 ") {{info.sites}}
+        tr
+            th Nombre de produits
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                div(ng-show="info.products > 0 ") {{info.products}}
+        tr
+            th Nombre de questionnaires clorués
+            td(ng-repeat="(key,info) in data")
+                table.actions-table
+                    tr(ng-repeat="(key,value) in info.closedForm")
+                        td {{key}}
+                        td {{value}}
+        tr
+            th Envoyer emails
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                button.button(
+                type="button",
+                ng-click="sendEmail(key,false)",
+                ng-show="info.total > 0") Envoyer à toutes les organisations
+                br
+                br
+                button.button(
+                type="button",
+                ng-click="sendEmail(key,true)",
+                ng-show="info.shareData > 0") Envoyer uniquement aux organisation partageant leur données

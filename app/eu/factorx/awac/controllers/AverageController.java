@@ -71,7 +71,7 @@ public class AverageController extends AbstractController {
     private ComputeAverage computeAverageService;
 
     @Autowired
-    ComputeAverageService batchComputeAverageService;
+    private ComputeAverageService batchComputeAverageService;
 
     public static Future<Boolean> result;
 
@@ -222,8 +222,7 @@ public class AverageController extends AbstractController {
                             scopeAndPeriodList,
                             period,
                             organizationComputed,
-                            scopeComputed,
-		                    securedController
+                            scopeComputed
                             );
             } catch (IOException e) {
                 e.printStackTrace();

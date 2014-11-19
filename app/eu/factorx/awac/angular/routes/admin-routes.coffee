@@ -59,6 +59,17 @@ initializeAdminRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
+        .when('/organization_data', {
+                templateUrl: '$/angular/views/admin/organization_data.html'
+                controller: 'AdminOrganizationDataCtrl'
+                resolve:angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+
+
         .otherwise({ redirectTo: '/login' })
 
         return

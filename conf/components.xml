@@ -43,6 +43,7 @@
                 <bean class="eu.factorx.awac.converter.ReducingActionAdviceToReducingActionAdviceDTOConverter" />
                 <bean class="eu.factorx.awac.converter.CodesEquivalenceToCodesEquivalenceDTOConverter" />
                 <bean class="eu.factorx.awac.converter.CodeLabelToFullCodeLabelDTOConverter" />
+                <bean class="eu.factorx.awac.converter.OrganizationToOrganizationDataDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
                 <bean class="eu.factorx.awac.converter.admin.FactorToFactorDTOConverter" />
