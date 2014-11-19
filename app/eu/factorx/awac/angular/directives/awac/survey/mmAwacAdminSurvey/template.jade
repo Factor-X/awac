@@ -68,6 +68,11 @@ div
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/average\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/average\') == true}') Moyenne
+            div.verification-menu
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/organization_data\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_data\') == true}') Informations sur les calculateurs
 
 
 

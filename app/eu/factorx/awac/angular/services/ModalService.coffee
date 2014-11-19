@@ -32,6 +32,7 @@ angular
     @AGREEMENT = 'agreement'
     @CREATE_OR_EDIT_REDUCTION_ACTION_ADVICE = 'create-or-edit-reduction-action-advice'
     @EDIT_SUB_LIST = 'edit-sub-list'
+    @SEND_EMAIL = 'send-email'
 
     @show = (modalName, params) ->
         args = []

@@ -1,6 +1,7 @@
 package eu.factorx.awac.dto.awac.get;
 
 import eu.factorx.awac.dto.DTO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PeriodDTO extends DTO {
 	private String key;
@@ -32,7 +33,15 @@ public class PeriodDTO extends DTO {
 		content += ",label:" + label;
 		content += "]";
 		return content;
+	}
 
-
+	@Autowired
+	public boolean equals(Object o) {
+		if (o instanceof PeriodDTO) {
+			if (((PeriodDTO) o).key.equals(this.key)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

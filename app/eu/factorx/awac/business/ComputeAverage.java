@@ -76,8 +76,7 @@ public class ComputeAverage {
 	public Future<Boolean> computeAverageAsync(final Account account, final AwacCalculator awacCalculator,
 	                                           final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
 	                                           final Period period, final int organizationComputed,
-	                                           final int scopeComputed,
-	                                           final SecuredController securedController) throws IOException, WriteException {
+	                                           final int scopeComputed) throws IOException, WriteException {
 
 		try {
 			JPA.withTransaction("default", false, new play.libs.F.Function0<Void>() {
@@ -92,8 +91,7 @@ public class ComputeAverage {
 								scopeAndPeriodList,
 								period,
 								organizationComputed,
-								scopeComputed,
-								securedController
+								scopeComputed
 						);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -110,8 +108,7 @@ public class ComputeAverage {
 
 	public void computeAverage(final Account account, final AwacCalculator awacCalculator,
 	                           final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
-	                           final Period period, final int organizationComputed, final int scopeComputed,
-	                           final SecuredController securedController) throws IOException, WriteException {
+	                           final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
 
         /*
 	    play.Logger.info ("step #1");
@@ -171,7 +168,7 @@ public class ComputeAverage {
 		List<AverageValue> averageValueList = new ArrayList<>();
 		for (Form form : awacCalculator.getForms()) {
 			for (QuestionSet questionSet : form.getQuestionSets()) {
-				averageValueList.addAll(computeAverage(questionSet, scopeAndPeriodList, securedController.getCurrentUser().getPerson().getDefaultLanguage()));
+				averageValueList.addAll(computeAverage(questionSet, scopeAndPeriodList, account.getPerson().getDefaultLanguage()));
 			}
 		}
 
@@ -191,7 +188,7 @@ public class ComputeAverage {
 			criteria.put("Evenements pris en compte", scopeComputed + "");
 		}
 
-		ByteArrayOutputStream output = generateExcel(awacCalculator, averageValueList, securedController.getCurrentUser().getPerson().getDefaultLanguage(), criteria);
+		ByteArrayOutputStream output = generateExcel(awacCalculator, averageValueList, account.getPerson().getDefaultLanguage(), criteria);
 
 
 		//send email
@@ -202,7 +199,7 @@ public class ComputeAverage {
 	    */
 		String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
 
-		EmailMessage email = new EmailMessage(securedController.getCurrentUser().getPerson().getEmail(), "Awac - moyenne", velocityContent);
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - moyenne", velocityContent);
 		//
 
 

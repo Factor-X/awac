@@ -88,12 +88,13 @@ div
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
             div(ng-show="$root.currentPerson.isAdmin == true")
+
                 //verification button => start verification
                 button.button.verification(
                 type='button',
                 ng-bind-html="'ASK_VERIFICATION' | translate",
                 ng-click="isDisabled || requestVerification()",
-                ng-show="$root.getVerificationRequestStatus()==null",
+                ng-show="!$root.closedForms && $root.getVerificationRequestStatus()==null",
                 ng-disabled="$root.closeableForms !== true")
                 //re-submit => is case of correction
                 button.button.verification(
@@ -131,10 +132,12 @@ div
                 ng-click="isDisabled || $root.closeForms()",
                 ng-bind-html='\'UNCLOSING_FORM\' | translate',
                 ng-show="$root.closedForms")
+
                 button.button.verification(type='button',
                 ng-click="isDisabled || $root.closeForms()",
                 ng-bind-html='\'CLOSING_FORM\' | translate',
-                ng-hide="$root.closedForms || $root.getVerificationRequestStatus()!==null")
+                ng-show="!$root.closedForms && $root.getVerificationRequestStatus()==null",
+                ng-disabled="$root.closeableForms !== true")
 
             .big_separator
             .data_save
