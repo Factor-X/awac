@@ -3,35 +3,28 @@ package eu.factorx.awac.dto.awac.shared;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.get.FullCodeLabelDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpdateCodeLabelsDTO extends DTO {
 
-	private String codeList;
-
-	private List<FullCodeLabelDTO> codeLabels;
+	private Map<String, List<FullCodeLabelDTO>> codeLabelsByList;
 
 	public UpdateCodeLabelsDTO() {
+		codeLabelsByList = new HashMap<>();
 	}
 
-	public UpdateCodeLabelsDTO(String codeList, List<FullCodeLabelDTO> codeLabels) {
-		this.codeList = codeList;
-		this.codeLabels = codeLabels;
+	public Map<String, List<FullCodeLabelDTO>> getCodeLabelsByList() {
+		return codeLabelsByList;
 	}
 
-	public String getCodeList() {
-		return codeList;
+	public void setCodeLabelsByList(Map<String, List<FullCodeLabelDTO>> codeLabelsByList) {
+		this.codeLabelsByList = codeLabelsByList;
 	}
 
-	public void setCodeList(String codeList) {
-		this.codeList = codeList;
+	public void putCodeLabels(String codeList, List<FullCodeLabelDTO> codeLabels) {
+		codeLabelsByList.put(codeList, codeLabels);
 	}
 
-	public List<FullCodeLabelDTO> getCodeLabels() {
-		return codeLabels;
-	}
-
-	public void setCodeLabels(List<FullCodeLabelDTO> codeLabels) {
-		this.codeLabels = codeLabels;
-	}
 }

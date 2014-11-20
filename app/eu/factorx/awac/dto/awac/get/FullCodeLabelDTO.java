@@ -90,4 +90,14 @@ public class FullCodeLabelDTO extends DTO implements Keyed {
 		result = 31 * result + (labelNl != null ? labelNl.hashCode() : 0);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "FullCodeLabelDTO{" +
+				"key='" + key + '\'' +
+				", labelEn='" + labelEn + '\'' +
+				", labelFr='" + labelFr + '\'' +
+				", labelNl='" + labelNl + '\'' +
+				'}';
+	}
 }

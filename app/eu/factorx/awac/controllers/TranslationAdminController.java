@@ -13,6 +13,7 @@ import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.CodesEquivalenceService;
 import eu.factorx.awac.service.QuestionService;
 import eu.factorx.awac.util.CUD;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -76,30 +77,38 @@ public class TranslationAdminController extends AbstractController {
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
-	public Result loadInterfaceCodeLabels() {
-		CodeList codeList = CodeList.TRANSLATIONS_INTERFACE;
-		HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(codeList);
-		List<FullCodeLabelDTO> codeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
-		return ok(new UpdateCodeLabelsDTO(codeList.name(), codeLabelDTOs));
+	public Result loadCodeLabels(String codeLists) {
+		UpdateCodeLabelsDTO dto = new UpdateCodeLabelsDTO();
+
+		String[] codeListsNames = StringUtils.split(codeLists, ',');
+		for (String codeListName : codeListsNames) {
+			HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(CodeList.valueOf(codeListName));
+			dto.putCodeLabels(codeListName, toCodeLabelDTOs(codeLabels.values()));
+		}
+
+		return ok(dto);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result updateInterfaceCodeLabels() {
+	public Result updateCodeLabels() {
 		UpdateCodeLabelsDTO dto = extractDTOFromRequest(UpdateCodeLabelsDTO.class);
-		List<FullCodeLabelDTO> afterCodeLabelDTOs = dto.getCodeLabels();
 
-		HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_INTERFACE);
-		List<FullCodeLabelDTO> beforeCodeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
+		for (String codeListName : dto.getCodeLabelsByList().keySet()) {
+			List<FullCodeLabelDTO> afterCodeLabelDTOs = dto.getCodeLabelsByList().get(codeListName);
+			HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(CodeList.valueOf(codeListName));
+			List<FullCodeLabelDTO> beforeCodeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
 
-		List<FullCodeLabelDTO> updatedCodeLabelDTOs = CUD.fromLists(beforeCodeLabelDTOs, afterCodeLabelDTOs).getUpdated();
-		for (FullCodeLabelDTO fullCodeLabelDTO : updatedCodeLabelDTOs) {
-			CodeLabel codeLabel = codeLabels.get(fullCodeLabelDTO.getKey());
-			Logger.info("Updating " + codeLabel);
-			codeLabel.setLabelEn(fullCodeLabelDTO.getLabelEn());
-			codeLabel.setLabelFr(fullCodeLabelDTO.getLabelFr());
-			codeLabel.setLabelNl(fullCodeLabelDTO.getLabelNl());
-			Logger.info(" -> codeLabel = " + codeLabel);
+			List<FullCodeLabelDTO> updatedCodeLabelDTOs = CUD.fromLists(beforeCodeLabelDTOs, afterCodeLabelDTOs).getUpdated();
+			Logger.info("updatedCodeLabelDTOs = " + updatedCodeLabelDTOs);
+			for (FullCodeLabelDTO fullCodeLabelDTO : updatedCodeLabelDTOs) {
+				CodeLabel codeLabel = codeLabels.get(fullCodeLabelDTO.getKey());
+				codeLabel.setLabelEn(fullCodeLabelDTO.getLabelEn());
+				codeLabel.setLabelFr(fullCodeLabelDTO.getLabelFr());
+				codeLabel.setLabelNl(fullCodeLabelDTO.getLabelNl());
+				Logger.info("Before persisting, label en = '{}'", codeLabel.getLabelEn());
+				codeLabelService.saveOrUpdate(codeLabel);
+			}
 		}
 		return ok();
 	}

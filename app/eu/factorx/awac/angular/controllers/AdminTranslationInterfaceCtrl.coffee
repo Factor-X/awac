@@ -2,27 +2,35 @@ angular
 .module('app.controllers')
 .controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
 
+    $scope.codeLabelsByList = {}
     $scope.codeLabelsGroups = []
+    $scope.waitingData = true
+    $scope.isLoading = false
 
     $scope.loadCodeLabels = () ->
-        downloadService.getJson "awac/admin/translations/interface/load", (result) ->
+        downloadService.getJson "/awac/admin/translations/codelabels/load/TRANSLATIONS_INTERFACE", (result) ->
             if result.success
-                codeLabels = codeLabelHelper.sortCodeLabelsByKey result.data.codeLabels
+                $scope.codeLabelsByList = result.data.codeLabelsByList
+                codeLabels = codeLabelHelper.sortCodeLabelsByKey $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"]
                 codeLabelsByTopic = _.groupBy codeLabels, (codeLabel) ->
                     return codeLabel.topic
                 for topic, topicCodeLabels of codeLabelsByTopic
                     $scope.codeLabelsGroups.push({topic: topic, codeLabels: topicCodeLabels})
-
-            console.log($scope.codeLabelsGroups)
+            $scope.waitingData = false
             return
         return
 
     $scope.save = () ->
-        data = {}
-        data.codeLabels = []
-        for topic, codeLabels of $scope.codeLabelsGroups
-            data.codeLabels.push codeLabels
-        downloadService.postJson "/awac/admin/translations/interface/save", data, (result) ->
+        $scope.isLoading = true
+        # create new array of code labels
+        codeLabels = []
+        for i, codeLabelsGroup of $scope.codeLabelsGroups
+            codeLabels.concat(codeLabelsGroup.codeLabels)
+        $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"] = codeLabels
+
+        data = {codeLabelsByList: $scope.codeLabelsByList}
+
+        downloadService.postJson "/awac/admin/translations/codelabels/save", data, (result) ->
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"

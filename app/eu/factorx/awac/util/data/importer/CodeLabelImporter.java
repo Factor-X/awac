@@ -113,7 +113,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
                 Logger.error("No English translation found for key: '{}' -> skipping", key);
                 continue;
             }
-            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
+            CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl, i);
             codeLabelService.saveOrUpdate(codeLabel);
             codeLabels.put(key, codeLabel);
         }

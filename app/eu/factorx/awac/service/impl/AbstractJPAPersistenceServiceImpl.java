@@ -42,7 +42,8 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 			// of given entity was updated.
 			((AuditedAbstractEntity) entity).preUpdate();
 		}
-		return JPA.em().merge(entity);
+		E merge = JPA.em().merge(entity);
+		return merge;
 	}
 
 	@Override
