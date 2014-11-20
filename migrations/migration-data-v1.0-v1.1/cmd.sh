@@ -40,7 +40,8 @@ cat ./factor_value_dates_to_integers.sql >> /tmp/migration/migration_script.sql
 # add topic column to codelabel table
 cat ./CELDL-235-CodeLabel_add_topic_column.sql >> /tmp/migration/migration_script.sql
 
-
+# update factor values to set 2000 everywhere
+cat ./update_factor_values_to_set_2000_everywhere.sql >> /tmp/migration/migration_script.sql
 
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE

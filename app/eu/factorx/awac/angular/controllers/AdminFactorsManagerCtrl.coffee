@@ -5,6 +5,7 @@ angular
     $scope.factors = null
     $scope.newFactor = {
         __type: 'eu.factorx.awac.dto.awac.post.CreateFactorDTO'
+        valueSince2000: 0.0
     }
 
     modalService.show(modalService.LOADING)

@@ -1,0 +1,33 @@
+@media screen {
+
+    .admin-menu-background {
+        background-color: #3c3b37;
+        height: 40px;
+        text-align: center;
+        .admin-menu {
+            display: inline-block;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-top: 2px;
+
+            height: 100%;
+            & > button {
+                vertical-align: top;
+                padding: 5px 50px;
+                height: 30px;
+                font-weight: bold;
+                border-radius: 0;
+                -webkit-border-top-left-radius: 5px;
+                -webkit-border-top-right-radius: 5px;
+                -moz-border-top-left-radius: 5px;
+                -moz-border-top-right-radius: 5px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                &.selected {
+                    height: 35px;
+                }
+            }
+        }
+    }
+
+}

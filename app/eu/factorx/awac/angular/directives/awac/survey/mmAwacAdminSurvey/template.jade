@@ -45,34 +45,40 @@ div
                         // logout button
                         button.button.user_manage(ng-show='$root.currentPerson!=null', type='button', ng-click='$root.logout();', ng-bind-html='\'LOGOUT_BUTTON\' | translate')
 
-        .verification-menu-background
-            div.verification-menu
+        .admin-menu-background
+            div.admin-menu
                 button.button(
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/driver\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/driver\') == true}',
                 ng-bind-html='\'ADMIN_SURVEY_DRIVER\' | translate')
-            div.verification-menu
+            div.admin-menu
                 button.button(
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/advice\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/advice\') == true}',
                 ng-bind-html='\'REDUCING_ACTION_ADVICES_MENU\' | translate')
-            div.verification-menu
+            div.admin-menu
                 button.button(
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/translation\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/translation\') == true}') Traduction
-            div.verification-menu
+            div.admin-menu
                 button.button(
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/average\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/average\') == true}') Moyenne
-            div.verification-menu
+            div.admin-menu
                 button.button(
                 type="button",
                 ng-click='isDisabled || $root.nav(\'/organization_data\')',
                 ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_data\') == true}') Informations sur les calculateurs
+            div.admin-menu
+                button.button(
+                type="button",
+                ng-click='isDisabled || $root.nav(\'/factors\')',
+                ng-class='{\'selected\': isMenuCurrentlySelected(\'/factors\') == true}',
+                ng-bind-html="'FACTORS' | translate")
 
 
 

@@ -153,6 +153,7 @@ public class AdminController extends AbstractController {
     }
 
     @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
     public Result allFactors() {
 
         List<Factor> all = factorService.findAll();
@@ -184,20 +185,24 @@ public class AdminController extends AbstractController {
 
 
     private FactorValueDTO findById(List<FactorValueDTO> items, Long id) {
-
         for (FactorValueDTO item : items) {
             if (item.getId().equals(id)) {
                 return item;
             }
         }
-
         return null;
-
     }
 
     @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
     public Result createFactor() throws Exception {
+
+        if (!securedController.getCurrentUser().getIsAdmin()) {
+            return forbidden();
+        }
+
         CreateFactorDTO dto = extractDTOFromRequest(CreateFactorDTO.class);
+
 
         UnitCategory unitCategory = unitCategoryService.findByName(dto.getUnitCategory());
         UnitCategory unitCategoryOut = unitCategoryService.findByCode(UnitCategoryCode.GWP);
@@ -223,6 +228,11 @@ public class AdminController extends AbstractController {
                 dto.getOrigin()
             );
             factorService.saveOrUpdate(factor);
+
+            FactorValue fv = new FactorValue(dto.getValueSince2000(), 2000, null, factor);
+            factor.getValues().add(fv);
+            factorService.saveOrUpdate(factor);
+
             return ok();
         }
 
@@ -230,6 +240,9 @@ public class AdminController extends AbstractController {
 
     @Transactional(readOnly = false)
     public Result updateFactors() {
+        if (!securedController.getCurrentUser().getIsAdmin()) {
+            return forbidden();
+        }
 
         UpdateFactorsDTO dto = extractDTOFromRequest(UpdateFactorsDTO.class);
 
@@ -328,7 +341,12 @@ public class AdminController extends AbstractController {
     }
 
     @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
     public Result exportFactors() throws Exception {
+
+        if (!securedController.getCurrentUser().getIsAdmin()) {
+            return forbidden();
+        }
 
         LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
         byte[] content = factorsExcelGeneratorService.generateExcel(lang);
