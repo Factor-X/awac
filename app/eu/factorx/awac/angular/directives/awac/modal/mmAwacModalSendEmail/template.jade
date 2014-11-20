@@ -8,8 +8,9 @@
                     span(class="sr-only", ng-bind-html="'CLOSE_BUTTON' | translate")
                 h4(class="modal-title",ng-bind-html="'SITE_MANAGER_ADD_USER_TITLE' | translate")
             .modal-body
-                mm-awac-modal-field-text(ng-info="fields.title")
-                mm-awac-modal-field-text(ng-info="fields.content")
+                .field_form
+                    mm-awac-modal-field-text(ng-info="fields.title")
+                    mm-awac-modal-field-text(ng-info="fields.content")
 
             .modal-footer
 

@@ -15,12 +15,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public class EmailMessage {
 
-	private List<String> toAddress;
+	private Collection<String> toAddress;
 	private final List<String> ccAddresses = new ArrayList<>();
 	private String subject;
 	private String content;
@@ -35,7 +36,7 @@ public class EmailMessage {
 		this.attachmentFilenameList=null;
 	}
 
-    public EmailMessage(List<String> toAddress, String subject, String content) {
+    public EmailMessage(Collection<String> toAddress, String subject, String content) {
         this.toAddress = toAddress;
         this.subject = subject;
         this.content = content;
@@ -69,7 +70,7 @@ public class EmailMessage {
         toAddress.addAll(admins);
     }
 
-    public List<String> getToAddress() {
+    public Collection<String> getToAddress() {
         return toAddress;
     }
 

@@ -4,6 +4,7 @@ import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.admin.get.FactorDTO;
 import eu.factorx.awac.dto.admin.get.FactorValueDTO;
 import eu.factorx.awac.dto.admin.get.FactorsDTO;
+import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.post.CreateFactorDTO;
 import eu.factorx.awac.dto.awac.post.UpdateFactorsDTO;
@@ -27,7 +28,9 @@ import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
 import eu.factorx.awac.util.data.importer.TranslationImporter;
 import eu.factorx.awac.util.data.importer.badImporter.BADImporter;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Play;
@@ -36,6 +39,7 @@ import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,36 +49,37 @@ public class AdminController extends AbstractController {
 
 
     @Autowired
-    private ConversionService           conversionService;
+    private ConversionService            conversionService;
     @Autowired
-    private NotificationService         notificationService;
+    private NotificationService          notificationService;
     @Autowired
-    private CodeLabelService            codeLabelService;
+    private CodeLabelService             codeLabelService;
     @Autowired
-    private FormService                 formService;
+    private FormService                  formService;
     @Autowired
-    private TranslationImporter         translationImporter;
+    private TranslationImporter          translationImporter;
     @Autowired
-    private CodeLabelImporter           codeLabelImporter;
+    private CodeLabelImporter            codeLabelImporter;
     @Autowired
-    private FactorImporter              factorImporter;
+    private FactorImporter               factorImporter;
     @Autowired
-    private IndicatorImporter           indicatorImporter;
+    private IndicatorImporter            indicatorImporter;
     @Autowired
-    private BADImporter                 badImporter;
+    private BADImporter                  badImporter;
     @Autowired
-    private AwacEnterpriseInitialData   awacEnterpriseInitialData;
+    private AwacEnterpriseInitialData    awacEnterpriseInitialData;
     @Autowired
-    private AwacMunicipalityInitialData awacMunicipalityInitialData;
+    private AwacMunicipalityInitialData  awacMunicipalityInitialData;
     @Autowired
-    private QuestionSetService          questionSetService;
+    private QuestionSetService           questionSetService;
     @Autowired
-    private FactorService               factorService;
+    private FactorService                factorService;
     @Autowired
-    private PeriodService               periodService;
+    private PeriodService                periodService;
     @Autowired
-    private UnitCategoryService         unitCategoryService;
-
+    private UnitCategoryService          unitCategoryService;
+    @Autowired
+    private FactorsExcelGeneratorService factorsExcelGeneratorService;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -197,15 +202,16 @@ public class AdminController extends AbstractController {
         UnitCategory unitCategory = unitCategoryService.findByName(dto.getUnitCategory());
         UnitCategory unitCategoryOut = unitCategoryService.findByCode(UnitCategoryCode.GWP);
 
-        Factor f = factorService.findByIndicatorCategoryActivityTypeActivitySourceAndUnitCategory(
-            dto.getIndicatorCategory(),
-            dto.getActivityType(),
-            dto.getActivitySource(),
-            unitCategory);
+        try {
+            Factor f = factorService.findByIndicatorCategoryActivityTypeActivitySourceAndUnitCategory(
+                dto.getIndicatorCategory(),
+                dto.getActivityType(),
+                dto.getActivitySource(),
+                unitCategory);
 
-        if (f != null) {
             throw new Exception("FACTOR ALREADY EXISTS");
-        } else {
+
+        } catch (NoResultException e) {
             Integer nextKey = factorService.getNextKey();
             Factor factor = new Factor(
                 "F_CARBON_" + nextKey,
@@ -217,11 +223,10 @@ public class AdminController extends AbstractController {
                 dto.getOrigin()
             );
             factorService.saveOrUpdate(factor);
+            return ok();
         }
 
-        return ok();
     }
-
 
     @Transactional(readOnly = false)
     public Result updateFactors() {
@@ -319,6 +324,21 @@ public class AdminController extends AbstractController {
         }
 
         return ok();
+
+    }
+
+    @Transactional(readOnly = false)
+    public Result exportFactors() throws Exception {
+
+        LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+        byte[] content = factorsExcelGeneratorService.generateExcel(lang);
+
+        DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
+        downloadFileDTO.setFilename("export_factors_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");
+        downloadFileDTO.setMimeType("application/vnd.ms-excel");
+        downloadFileDTO.setBase64(new Base64().encodeAsString(content));
+
+        return ok(downloadFileDTO);
 
     }
 }
