@@ -97,7 +97,15 @@ angular
             dateOut: null
 
     $scope.removeFactorValue = (factor, fv) ->
-        factor.factorValues = _.without(factor.factorValues, fv)
+
+        params =
+            titleKey: "FACTORS_DELETE_CONFIRMATION_TITLE"
+            messageKey: "FACTORS_DELETE_CONFIRMATION_MESSAGE"
+            onConfirm: () ->
+                factor.factorValues = _.without(factor.factorValues, fv)
+
+        modalService.show modalService.CONFIRM_DIALOG, params
+
 
     $scope.reload = () ->
         downloadService.getJson "/awac/admin/factors/all", (result) ->
@@ -141,12 +149,6 @@ angular
         downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
             if result.success == true
                 $scope.reload()
-
-    #
-    # "Remove factor" handler
-    #
-    $scope.remove = (factor) ->
-        noop = 0
 
     #
     # Names for search field in table
