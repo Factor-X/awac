@@ -1,6 +1,7 @@
 .loginBackground
     .router-bar
-        .awac_logo
+        .wallonie_logo
+        a.awac_logo(href="http://www.awac.be", target="_blank")
         h1(ng-show="$root.instanceName == 'enterprise'", ng-bind-html="'TITLE_ENTERPRISE' | translate")
         h1(ng-show="$root.instanceName == 'municipality'", ng-bind-html="'TITLE_MUNICIPALITY' | translate")
     .loginFrame(ng-enter="enterEvent()")

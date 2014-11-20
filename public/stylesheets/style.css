@@ -120,6 +120,7 @@ select {
 }
 
 .wallonie_logo {
+    display: inline-block;
     vertical-align: top;
     height: 60px;
     width: 48px;
@@ -127,6 +128,7 @@ select {
 }
 
 .awac_logo {
+    display: inline-block;
     vertical-align: top;
     height: 60px;
     width: 173px;
