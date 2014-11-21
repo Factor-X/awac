@@ -250,7 +250,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 					new ActivitySubCategoryCode(activitySubCategoryKey), activityOwnershipBoolean, unit, deleted);
 
 			baseIndicators.add(baseIndicator);
-			codeLabelsToAdd.add(new CodeLabel(CodeList.BASE_INDICATOR, key, name, name, name));
+			codeLabelsToAdd.add(new CodeLabel(CodeList.BASE_INDICATOR, key, name, name, name, i));
 		}
 
 		return baseIndicators;
@@ -287,7 +287,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 			Indicator indicator = new Indicator(new IndicatorCode(key));
 
 			indicators.add(indicator);
-			codeLabelsToAdd.add(new CodeLabel(CodeList.INDICATOR, key, name, name, name));
+			codeLabelsToAdd.add(new CodeLabel(CodeList.INDICATOR, key, name, name, name, i));
 		}
 
 		return indicators;

@@ -1,28 +1,25 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import play.Logger;
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.CodesEquivalenceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import play.Logger;
+import play.db.jpa.JPA;
+
+import java.util.*;
 
 @Repository
 public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<CodeLabel> implements CodeLabelService {
 
 	@Autowired
 	private CodesEquivalenceService codesEquivalenceService;
-	
+
 	@Override
-	public HashMap<String,CodeLabel> findCodeLabelsByList(CodeList codeList) {
+	public HashMap<String, CodeLabel> findCodeLabelsByList(CodeList codeList) {
 		List<CodeLabel> resultList = JPA.em().createNamedQuery(CodeLabel.FIND_BY_LIST, CodeLabel.class)
 				.setParameter(CodeLabel.CODE_LIST_PROPERTY_NAME, codeList).getResultList();
 
@@ -53,6 +50,19 @@ public class CodeLabelServiceImpl extends AbstractJPAPersistenceServiceImpl<Code
 			int nbDeleted = JPA.em().createNamedQuery(CodeLabel.REMOVE_BY_LIST).setParameter("codeList", codeList).executeUpdate();
 			Logger.info("Deleted {} code labels of list '{}'", nbDeleted, codeList);
 		}
+	}
+
+	@Override
+	public Map<CodeList, List<CodeLabel>> findAllBaseLists() {
+		Map<CodeList, List<CodeLabel>> res = new LinkedHashMap<>();
+		for (CodeLabel codeLabel : findAll()) {
+			CodeList codeList = codeLabel.getCodeList();
+			if (!res.containsKey(codeList)) {
+				res.put(codeList, new ArrayList<CodeLabel>());
+			}
+			res.get(codeList).add(codeLabel);
+		}
+		return res;
 	}
 
 	@Override

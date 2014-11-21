@@ -115,7 +115,7 @@ angular
                 if forDataToCompare
                     # if I'm a repetition, I'm looking for an equivalence for all repetition level exepcted the last one
                     # getFirstRepeteableElement
-                    console.log "je suis l'index : "+scope.getIndex()
+                    #console.log "je suis l'index : "+scope.getIndex()
 
                     return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getIndex())
                 else

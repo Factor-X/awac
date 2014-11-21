@@ -1,19 +1,16 @@
 package eu.factorx.awac.models.code.label;
 
-import java.io.Serializable;
-
-import javax.persistence.*;
-
-import org.apache.commons.lang3.builder.*;
-
 import eu.factorx.awac.models.AuditedAbstractEntity;
-import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
+import org.apache.commons.lang3.builder.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "code_label", uniqueConstraints = { @UniqueConstraint(columnNames = { CodeLabel.COLUMN_NAME_CODELIST,
-		CodeLabel.COLUMN_NAME_KEY }) })
+@Table(name = "code_label", uniqueConstraints = {@UniqueConstraint(columnNames = {CodeLabel.COLUMN_NAME_CODELIST,
+		CodeLabel.COLUMN_NAME_KEY})})
 @NamedQueries({
 		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
 		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
@@ -52,27 +49,23 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 	private String labelNl;
 
 	@Basic(optional = true)
+	protected Integer orderIndex;
+
+	@Basic(optional = true)
 	private String topic;
 
 	protected CodeLabel() {
 		super();
 	}
 
-	public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl) {
+	public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl, Integer orderIndex) {
+		super();
 		this.codeList = codeList;
 		this.key = key;
 		this.labelEn = labelEn;
 		this.labelFr = labelFr;
 		this.labelNl = labelNl;
-	}
-
-	public CodeLabel(CodeList codeList, String key, String labelEn, String labelFr, String labelNl, String topic) {
-		this.codeList = codeList;
-		this.key = key;
-		this.labelEn = labelEn;
-		this.labelFr = labelFr;
-		this.labelNl = labelNl;
-		this.topic = topic;
+		this.orderIndex = orderIndex;
 	}
 
 	public CodeList getCodeList() {
@@ -113,6 +106,14 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 
 	public void setLabelNl(String labelNl) {
 		this.labelNl = labelNl;
+	}
+
+	public Integer getOrderIndex() {
+		return orderIndex;
+	}
+
+	public void setOrderIndex(Integer orderIndex) {
+		this.orderIndex = orderIndex;
 	}
 
 	public String getTopic() {
@@ -164,6 +165,14 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(codeList.name()).append(key).toString();
+		return "CodeLabel{" +
+				"codeList=" + codeList +
+				", key='" + key + '\'' +
+				", labelEn='" + labelEn + '\'' +
+				", labelFr='" + labelFr + '\'' +
+				", labelNl='" + labelNl + '\'' +
+				", orderIndex=" + orderIndex +
+				", topic='" + topic + '\'' +
+				'}';
 	}
 }

@@ -1,21 +1,42 @@
-table.actions-table
+h4 Interface
+
+.waiting-data(ng-show="waitingData")
+    img(src="/assets/images/modal-loading.gif")
+    span Veuillez patienter...
+
+table.translations-table(ng-hide="waitingData")
     thead
         tr
             th Détails
             th Catégorie
 
     tbody
-        tr(ng-repeat-start="(topic, topicCodeLabels) in codeLabels")
+        tr(ng-repeat-start="group in codeLabelsGroups")
             td.details
-                mm-plus-minus-toggle-button(ng-model="topic.opened")
+                mm-plus-minus-toggle-button(ng-model="group.opened")
             td.topic
-                span.text {{ topic }}
-        tr(ng-repeat-end, ng-if="topic.opened").details
+                span.text {{ group.topic }}
+        tr(ng-repeat-end, ng-show="group.opened").details
             td &nbsp;
-            td
-                table
-                    tr(ng-repeat="codeLabel in topicCodeLabels")
-                        td codeLabel.key
-                        td codeLabel.labelEn
-                        td codeLabel.labelFr
-                        td codeLabel.labelNl
+            td.topic-content
+                table.codelabels-table
+                    thead
+                        tr
+                            th Clé
+                            th Libellé EN
+                            th Libellé FR
+                            th Libellé NL
+                    tbody
+                        tr(ng-repeat="codeLabel in group.codeLabels")
+                            td.td-key {{ codeLabel.key }}
+                            td.td-label
+                                textarea(ng-model="codeLabel.labelEn")
+                            td.td-label
+                                textarea(ng-model="codeLabel.labelFr")
+                            td.td-label
+                                textarea(ng-model="codeLabel.labelNl")
+
+br
+button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
+button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+

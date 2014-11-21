@@ -4,6 +4,12 @@
         a.awac_logo(href="http://www.awac.be", target="_blank")
         h1(ng-show="$root.instanceName == 'enterprise'", ng-bind-html="'TITLE_ENTERPRISE' | translate")
         h1(ng-show="$root.instanceName == 'municipality'", ng-bind-html="'TITLE_MUNICIPALITY' | translate")
+        h1(ng-show="$root.instanceName == 'household'", ng-bind-html="'TITLE_HOUSEHOLD' | translate")
+        h1(ng-show="$root.instanceName == 'event'", ng-bind-html="'TITLE_EVENT' | translate")
+        h1(ng-show="$root.instanceName == 'littleEmitter'", ng-bind-html="'TITLE_LITTLE_EMITTER' | translate")
+        h1(ng-show="$root.instanceName == 'verification'", ng-bind-html="'TITLE_VERIFICATION' | translate")
+        h1(ng-show="$root.instanceName == 'admin'", ng-bind-html="'TITLE_ADMIN' | translate")
+
     .loginFrame(ng-enter="enterEvent()")
         select(ng-options="l.value as l.label for l in $root.languages",ng-model="$root.language",style="float:right")
         tabset
