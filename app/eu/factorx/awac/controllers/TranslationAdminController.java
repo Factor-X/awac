@@ -110,25 +110,24 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadFormsLabels() {
-		UpdateFormsLabelsDTO res = new UpdateFormsLabelsDTO();
-		List<AwacCalculator> calculators = awacCalculatorService.findAll();
-		for (AwacCalculator calculator : calculators) {
-			InterfaceTypeCode code = calculator.getInterfaceTypeCode();
-			InterfaceTypeCode interfaceTypeCode = code;
-			CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(interfaceTypeCode);
-			FullCodeLabelDTO fullCodeLabelDTO = conversionService.convert(codeLabel, FullCodeLabelDTO.class);
-
-			UpdateFormsLabelsDTO.CalculatorItem calculatorItem = new
-			List<Form> forms = calculator.getForms();
-
-		}
-		List<Form> forms = formService.findAll();
-		for (Form form : forms) {
-			String identifier = form.getIdentifier();
-			codeLabelService.findCodeLabelByCode()
-		}
-		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
-		return ok(new UpdateBaseListsDTO(baseListDTOs));
+//		UpdateFormsLabelsDTO res = new UpdateFormsLabelsDTO();
+//		List<AwacCalculator> calculators = awacCalculatorService.findAll();
+//		for (AwacCalculator calculator : calculators) {
+//			InterfaceTypeCode code = calculator.getInterfaceTypeCode();
+//			InterfaceTypeCode interfaceTypeCode = code;
+//			CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(interfaceTypeCode);
+//			FullCodeLabelDTO fullCodeLabelDTO = conversionService.convert(codeLabel, FullCodeLabelDTO.class);
+//
+//			UpdateFormsLabelsDTO.CalculatorItem calculatorItem = new
+//		}
+//		List<Form> forms = formService.findAll();
+//		for (Form form : forms) {
+//			String identifier = form.getIdentifier();
+//			codeLabelService.findCodeLabelByCode()
+//		}
+//		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
+//		return ok(new UpdateBaseListsDTO(baseListDTOs));
+		return null;
 	}
 
 
