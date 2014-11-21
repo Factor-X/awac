@@ -12,11 +12,17 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 
 @Entity
 @Table(name = "form")
-@NamedQueries({ @NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier") })
+@NamedQueries({
+		@NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier"),
+		@NamedQuery(name = Form.FIND_BY_CALCULATOR, query = "select f from Form f where f.awacCalculator = :calculator")
+})
 public class Form extends AuditedAbstractEntity {
 
-	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_BY_IDENTIFIER = "Form.findByIdentifier";
+
+	public static final String FIND_BY_CALCULATOR = "Form.findByCalculator";
 
 	@Column(unique = true)
 	private String identifier;

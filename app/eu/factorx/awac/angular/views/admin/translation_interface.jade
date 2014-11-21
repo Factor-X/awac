@@ -22,18 +22,18 @@ table.translations-table(ng-hide="waitingData")
                 table.codelabels-table
                     thead
                         tr
-                            th Key
-                            th Label EN
-                            th Label FR
-                            th Label NL
+                            th Clé
+                            th Libellé EN
+                            th Libellé FR
+                            th Libellé NL
                     tbody
                         tr(ng-repeat="codeLabel in group.codeLabels")
-                            td.tr-key {{ codeLabel.key }}
-                            td.tr-label
+                            td.td-key {{ codeLabel.key }}
+                            td.td-label
                                 textarea(ng-model="codeLabel.labelEn")
-                            td.tr-label
+                            td.td-label
                                 textarea(ng-model="codeLabel.labelFr")
-                            td.tr-label
+                            td.td-label
                                 textarea(ng-model="codeLabel.labelNl")
 
 br

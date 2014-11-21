@@ -165,6 +165,14 @@ public class CodeLabel extends AuditedAbstractEntity implements Serializable, Co
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(codeList.name()).append(key).toString();
+		return "CodeLabel{" +
+				"codeList=" + codeList +
+				", key='" + key + '\'' +
+				", labelEn='" + labelEn + '\'' +
+				", labelFr='" + labelFr + '\'' +
+				", labelNl='" + labelNl + '\'' +
+				", orderIndex=" + orderIndex +
+				", topic='" + topic + '\'' +
+				'}';
 	}
 }

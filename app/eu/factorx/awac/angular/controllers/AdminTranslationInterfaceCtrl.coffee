@@ -7,13 +7,19 @@ angular
     $scope.waitingData = true
     $scope.isLoading = false
 
+    $scope.sortableOptions =
+        axis: 'y'
+        stop: (e, ui) ->
+            for index of $scope.subList.items
+                $scope.subList.items[index].orderIndex = +index;
+
     $scope.loadCodeLabels = () ->
         downloadService.getJson "/awac/admin/translations/codelabels/load/TRANSLATIONS_INTERFACE", (result) ->
             if result.success
                 $scope.codeLabelsByList = result.data.codeLabelsByList
-                codeLabels = codeLabelHelper.sortCodeLabelsByKey $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"]
+                codeLabels = codeLabelHelper.sortCodeLabelsByOrder $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"]
                 codeLabelsByTopic = _.groupBy codeLabels, (codeLabel) ->
-                    return codeLabel.topic
+                    return codeLabel.topic || ""
                 for topic, topicCodeLabels of codeLabelsByTopic
                     $scope.codeLabelsGroups.push({topic: topic, codeLabels: topicCodeLabels})
             $scope.waitingData = false

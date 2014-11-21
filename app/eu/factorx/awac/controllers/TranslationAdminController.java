@@ -2,17 +2,17 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.FullCodeLabelDTO;
-import eu.factorx.awac.dto.awac.shared.SubListDTO;
-import eu.factorx.awac.dto.awac.shared.SubListItemDTO;
-import eu.factorx.awac.dto.awac.shared.SublistDTOList;
-import eu.factorx.awac.dto.awac.shared.UpdateCodeLabelsDTO;
+import eu.factorx.awac.dto.awac.get.UpdateFormsLabelsDTO;
+import eu.factorx.awac.dto.awac.shared.*;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.service.CodeLabelService;
-import eu.factorx.awac.service.CodesEquivalenceService;
-import eu.factorx.awac.service.QuestionService;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.forms.Form;
+import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.CUD;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -38,11 +38,17 @@ public class TranslationAdminController extends AbstractController {
 	@Autowired
 	private CodeLabelService codeLabelService;
 
+	@Autowired
+	private FormService formService;
+
+	@Autowired
+	private AwacCalculatorService awacCalculatorService;
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
 		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData());
-		return ok(new SublistDTOList(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
+		return ok(new UpdateSubListsDTO(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
 	}
 
 	@Transactional(readOnly = false)
@@ -73,6 +79,92 @@ public class TranslationAdminController extends AbstractController {
 			}
 		}
 		return ok(dto);
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadBaseLists() {
+		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
+		return ok(new UpdateBaseListsDTO(baseListDTOs));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result updateBaseLists() {
+		UpdateBaseListsDTO dto = extractDTOFromRequest(UpdateBaseListsDTO.class);
+		for (BaseListDTO baseListDTO : dto.getBaseLists()) {
+			CodeList codeList = CodeList.valueOf(baseListDTO.getCodeList());
+			List<FullCodeLabelDTO> codeLabelsDTOs = baseListDTO.getCodeLabels();
+
+			HashMap<String, CodeLabel> savedCodeLabels = codeLabelService.findCodeLabelsByList(codeList);
+			List<FullCodeLabelDTO> savedCodeLabelsDTOs = toCodeLabelDTOs(savedCodeLabels.values());
+
+			CUD<FullCodeLabelDTO> cud = CUD.fromLists(savedCodeLabelsDTOs, codeLabelsDTOs);
+			updateCodeLabels(savedCodeLabels, cud.getUpdated());
+			saveCodeLabels(codeList, cud.getCreated());
+		}
+		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
+		return ok(new UpdateBaseListsDTO(baseListDTOs));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadFormsLabels() {
+		UpdateFormsLabelsDTO res = new UpdateFormsLabelsDTO();
+		List<AwacCalculator> calculators = awacCalculatorService.findAll();
+		for (AwacCalculator calculator : calculators) {
+			InterfaceTypeCode code = calculator.getInterfaceTypeCode();
+			InterfaceTypeCode interfaceTypeCode = code;
+			CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(interfaceTypeCode);
+			FullCodeLabelDTO fullCodeLabelDTO = conversionService.convert(codeLabel, FullCodeLabelDTO.class);
+
+			UpdateFormsLabelsDTO.CalculatorItem calculatorItem = new
+			List<Form> forms = calculator.getForms();
+
+		}
+		List<Form> forms = formService.findAll();
+		for (Form form : forms) {
+			String identifier = form.getIdentifier();
+			codeLabelService.findCodeLabelByCode()
+		}
+		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
+		return ok(new UpdateBaseListsDTO(baseListDTOs));
+	}
+
+
+	private void updateCodeLabels(HashMap<String, CodeLabel> savedCodeLabels, List<FullCodeLabelDTO> updatedCodeLabelDTOs) {
+		for (FullCodeLabelDTO codeLabelDTO : updatedCodeLabelDTOs) {
+			CodeLabel codeLabel = savedCodeLabels.get(codeLabelDTO.getKey());
+			Logger.info("Updating code label: \n\told: {} \n\tnew:{}", codeLabel, codeLabelDTO);
+			codeLabel.setLabelEn(codeLabelDTO.getLabelEn());
+			codeLabel.setLabelFr(codeLabelDTO.getLabelFr());
+			codeLabel.setLabelNl(codeLabelDTO.getLabelNl());
+			codeLabel.setOrderIndex(codeLabelDTO.getOrderIndex());
+			codeLabel.setTopic(codeLabelDTO.getTopic());
+			codeLabelService.saveOrUpdate(codeLabel);
+		}
+	}
+
+	private void saveCodeLabels(CodeList codeList, List<FullCodeLabelDTO> createdCodeLabelDTOs) {
+		for (FullCodeLabelDTO codeLabelDTO : createdCodeLabelDTOs) {
+			CodeLabel codeLabel = new CodeLabel(codeList, codeLabelDTO.getKey(), codeLabelDTO.getLabelEn(), codeLabelDTO.getLabelFr(), codeLabelDTO.getLabelNl(), codeLabelDTO.getOrderIndex());
+			codeLabelService.saveOrUpdate(codeLabel);
+			codeLabelDTO.setId(codeLabel.getId());
+		}
+	}
+
+	private List<BaseListDTO> getBaseListDTOs() {
+		CodeList[] codeListsToExclude = {CodeList.TRANSLATIONS_SURVEY, CodeList.QUESTION,
+				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE};
+
+		List<BaseListDTO> baseListDTOs = new ArrayList<>();
+		for (Map.Entry<CodeList, List<CodeLabel>> entry : codeLabelService.findAllBaseLists().entrySet()) {
+			CodeList codeList = entry.getKey();
+			if (!ArrayUtils.contains(codeListsToExclude, codeList)) {
+				baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(entry.getValue())));
+			}
+		}
+		return baseListDTOs;
 	}
 
 	@Transactional(readOnly = true)
