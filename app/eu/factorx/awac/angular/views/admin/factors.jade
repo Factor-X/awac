@@ -1,16 +1,24 @@
 div.factors
-    h1 {{'FACTORS' | translateText }}
 
     br
 
-    button.button.btn.save(type="button", ng-click="save()") Enregistrer
+    button.button.btn.save(type="button", ng-click="save()")
+        span.fa.fa-save
+        span &nbsp;
+        span(ng-bind-html="'SAVE_BUTTON' | translate")
+
+
+    button.button(type="button", ng-click="exportXls()")
+        span.fa.fa-file-excel-o
+        span &nbsp;
+        span(ng-bind-html="'FACTORS_BUTTON_EXPORT_TO_XLS' | translate")
 
     br
     br
 
     table.factors-table(ng-table="parameters", show-filter="true" )
         tr(ng-repeat-start="row in $data", ng-class="{ 'row-modified': isModified(row) }")
-            td.details(data-title="'FACTORS_TABLE_DETAILS' | translateText")
+            td.details(data-title="")
                 mm-plus-minus-toggle-button(ng-model="a.opened")
             td.name(data-title="'FACTORS_TABLE_KEY' | translateText", filter="{ 'key': 'text' }") {{ row.key }}
             td.type(sortable="'typeString'", data-title="'FACTORS_TABLE_TYPE' | translateText", filter="{ 'typeString': 'text' }") {{ row.typeString }}
@@ -24,16 +32,17 @@ div.factors
                 table
                     tr(ng-repeat="fv in row.factorValues | orderBy:'dateIn'")
                         td
-                            span A partir de
+                            span(ng-bind-html="'FACTORS_TABLE_DETAILS_FROM' | translate")
                         td
                             select.years(
                             ng-options="p.key as p.label for p in getAvailablePeriods(row, fv) | orderBy:'label'",
                             ng-model="fv.dateIn",
+                            ng-disabled="fv.dateIn == 2000"
                             style="width: 100px; text-align: right"
                             )
 
                         td
-                            span Valeur
+                            span(ng-bind-html="'FACTORS_TABLE_DETAILS_VALUE' | translate")
                         td
                             input(type="number", step="any", ng-model="fv.value")
                         td
@@ -41,52 +50,56 @@ div.factors
                             span &nbsp;/&nbsp;
                             span {{ row.unitIn }}
                         td
-                            button.button.btn.btn-danger(type="button", ng-click="removeFactorValue(row, fv)")
+                            button.button.btn.btn-danger(type="button", ng-click="removeFactorValue(row, fv)", ng-hide="fv.dateIn == 2000")
                                 i.fa.fa-times
 
 
                 button.button(type="button", ng-click="addValue(row)")
                     span.fa.fa-plus-circle
                     span &nbsp;
-                    span(ng-bind-html="'FACTOR_BUTTON_CREATE_FACTOR_VALUE' | translate")
+                    span(ng-bind-html="'FACTORS_TABLE_DETAILS_BUTTON_CREATE_FACTOR_VALUE' | translate")
 
-    button.button(type="button", ng-click="exportFactorsToXls()")
-        span.fa.fa-file-excel-o
-        span &nbsp;
-        span(ng-bind-html="'FACTOR_BUTTON_EXPORT_TO_XLS' | translate")
-
-    br
-    br
-    br
-
-    h3 Créer un facteur
 
     br
 
-    table.new-factor
-        tr
-            td
-                span(ng-bind-html="'FACTORS_CREATE_TYPE' | translate")
-            td
-                select(ng-options="p as (p | translateText) for p in newFactor.indicatorCategories", ng-model="newFactor.indicatorCategory")
-                span &nbsp;/&nbsp;
-                select(ng-options="p as (p | translateText) for p in newFactor.activityTypes", ng-model="newFactor.activityType")
-                span &nbsp;/&nbsp;
-                select(ng-options="p as (p | translateText) for p in newFactor.activitySources", ng-model="newFactor.activitySource")
+    h3
+        span(ng-bind-html="'FACTORS_CREATE_TITLE' | translate")
 
-        tr
-            td
-                span(ng-bind-html="'FACTORS_CREATE_UNIT_CATEGORY_TYPE' | translate")
-            td
-                select(ng-options="p as (p | translateText) for p in newFactor.unitCategories", ng-model="newFactor.unitCategory")
+    br
 
-        tr
-            td
-                span(ng-bind-html="'FACTORS_CREATE_ORIGIN' | translate")
-            td
-                input.origin(type="text", ng-model="newFactor.origin")
+    div(ng-form, name="form")
+        table.new-factor
+            tr
+                td
+                    span(ng-bind-html="'FACTORS_CREATE_TYPE' | translate")
+                td
+                    select(ng-options="p as (p | translateText) for p in newFactor.indicatorCategories", ng-model="newFactor.indicatorCategory", required)
+                    span &nbsp;/&nbsp;
+                    select(ng-options="p as (p | translateText) for p in newFactor.activityTypes", ng-model="newFactor.activityType", required)
+                    span &nbsp;/&nbsp;
+                    select(ng-options="p as (p | translateText) for p in newFactor.activitySources", ng-model="newFactor.activitySource", required)
 
-    button.button(type="button", ng-click="createFactor()")
-        span.fa.fa-plus-circle
-        span &nbsp;
-        span(ng-bind-html="'FACTOR_BUTTON_CREATE' | translate")
+            tr
+                td
+                    span(ng-bind-html="'FACTORS_CREATE_UNIT_CATEGORY_TYPE' | translate")
+                td
+                    select(ng-options="p as (p | translateText) for p in newFactor.unitCategories", ng-model="newFactor.unitCategory", required)
+
+            tr
+                td
+                    span(ng-bind-html="'FACTORS_CREATE_VALUE_SINCE_2000' | translate")
+                td
+                    input.valueSince2000(type="number", ng-model="newFactor.valueSince2000", required)
+
+            tr
+                td
+                    span(ng-bind-html="'FACTORS_CREATE_ORIGIN' | translate")
+                td
+                    input.origin(type="text", ng-model="newFactor.origin")
+
+
+
+        button.button(type="button", ng-click="createFactor()", ng-disabled="form.$invalid")
+            span.fa.fa-plus-circle
+            span &nbsp;
+            span(ng-bind-html="'FACTORS_BUTTON_CREATE' | translate")
