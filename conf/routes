@@ -199,4 +199,7 @@ POST        /awac/admin/translations/sublists/save                          @eu.
 GET         /awac/admin/translations/interface/load                         @eu.factorx.awac.controllers.TranslationAdminController.loadInterfaceCodeLabels()
 
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
-POST /awac/admin/organizationData/sendEmail                                   @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+POST /awac/admin/organizationData/sendEmail                                 @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+
+
+GET         /awac/admin/translations/wysiwyg/all                           @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()

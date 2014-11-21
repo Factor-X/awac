@@ -43,6 +43,9 @@ cat ./CELDL-235-CodeLabel_add_topic_column.sql >> /tmp/migration/migration_scrip
 # update factor values to set 2000 everywhere
 cat ./update_factor_values_to_set_2000_everywhere.sql >> /tmp/migration/migration_script.sql
 
+# add_wysiwyg_document
+cat ./add_wysiwyg_document.sql >> /tmp/migration/migration_script.sql
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 
