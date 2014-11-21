@@ -1,9 +1,10 @@
 package eu.factorx.awac.dto.admin.get;
 
+import eu.factorx.awac.dto.DTO;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import eu.factorx.awac.dto.DTO;
+import java.util.Set;
 
 /**
  * Created by florian on 21/10/14.
@@ -16,12 +17,32 @@ public class DriverDTO extends DTO {
 
     private List<DriverValueDTO> driverValues;
 
+    private Set<String> calculatorNames;
+
+    private String expectedValueType;
+
     public DriverDTO() {
     }
 
     public DriverDTO(String name, List<DriverValueDTO> driverValues) {
         this.name = name;
         this.driverValues = driverValues;
+    }
+
+    public String getExpectedValueType() {
+        return expectedValueType;
+    }
+
+    public void setExpectedValueType(String expectedValueType) {
+        this.expectedValueType = expectedValueType;
+    }
+
+    public Set<String> getCalculatorNames() {
+        return calculatorNames;
+    }
+
+    public void setCalculatorNames(Set<String> calculatorNames) {
+        this.calculatorNames = calculatorNames;
     }
 
     public Long getId() {
@@ -48,8 +69,8 @@ public class DriverDTO extends DTO {
         this.driverValues = driverValues;
     }
 
-    public void addDriverValue(DriverValueDTO driverValueDTO){
-        if(this.driverValues==null){
+    public void addDriverValue(DriverValueDTO driverValueDTO) {
+        if (this.driverValues == null) {
             this.driverValues = new ArrayList<>();
         }
 

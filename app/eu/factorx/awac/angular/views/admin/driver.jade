@@ -1,13 +1,16 @@
 div.verification_manage
     span
-        h1 Traduction
+        h1 Drivers
 
     table.actions-table
         tr
-            th name
-            th valeurs
+            th Nom
+            th Calcuateur(s)
+            th Valeurs
         tr(ng-repeat="driver in drivers")
             td {{driver.name}}
+            td
+                div(ng-repeat="calculator in driver.calculatorNames") {{calculator}}
             td
                 div(ng-repeat="value in driver.driverValues")
                     div(style="width:50%;display:inline-block") A partir de
@@ -15,11 +18,12 @@ div.verification_manage
                         ng-options='p.key as p.label for p in getPeriod(driver,value)',
                          ng-disabled="value.fromPeriodKey == '2000'"
                         ng-model="value.fromPeriodKey")
-                    div(style="display:inline-block") Value
-                        input(ng-model="value.defaultValue")
+                    div(style="display:inline-block") Valeur
+                        input(ng-model="value.defaultValue",
+                        ng-attr-numbers-only="{{driver.expectedValueType}}")
                     div(style="display:inline-block")
                         button(ng-click="remove(driver,value.tempId)",
                         ng-hide="value.fromPeriodKey == '2000'") supprimer
-                button(ng-click="addValue(driver)") Ajouter une value
+                button(ng-click="addValue(driver)") Ajouter une valeur
     button(ng-click="save()") Sauver les modifications
     button(ng-click="orderDriverValues()") Trier les valeurs par date
