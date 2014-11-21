@@ -81,18 +81,7 @@ div.actions
 
             tr(ng-repeat-end, ng-show="a.opened").details
                 td(colspan="5")
-                    table(style="width:100%")    br
-
-    button.button(type="button", ng-click="createAction()")
-        span.fa.fa-plus-circle
-        span &nbsp;
-        span(ng-bind-html="'REDUCING_ACTION_BUTTON_CREATE' | translate")
-
-    button.button(type="button", ng-click="exportActionsToXls()")
-        span.fa.fa-file-excel-o
-        span &nbsp;
-        span(ng-bind-html="'REDUCING_ACTION_BUTTON_EXPORT_TO_XLS' | translate")
-
+                    table(style="width:100%")
                         tr
                             td
                                 table(style="width:800px;")
