@@ -1,10 +1,11 @@
 angular
 .module('app.controllers')
-.controller "AdminFactorsManagerCtrl", ($scope, $filter, $q, $timeout, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
+.controller "AdminFactorsManagerCtrl", ($scope, $filter, $q, $timeout, $location, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.factors = null
     $scope.newFactor = {
         __type: 'eu.factorx.awac.dto.awac.post.CreateFactorDTO'
+        valueSince2000: 0.0
     }
 
     modalService.show(modalService.LOADING)
@@ -96,7 +97,14 @@ angular
             dateOut: null
 
     $scope.removeFactorValue = (factor, fv) ->
-        factor.factorValues = _.without(factor.factorValues, fv)
+        params =
+            titleKey: "FACTORS_DELETE_CONFIRMATION_TITLE"
+            messageKey: "FACTORS_DELETE_CONFIRMATION_MESSAGE"
+            onConfirm: () ->
+                factor.factorValues = _.without(factor.factorValues, fv)
+
+        modalService.show modalService.CONFIRM_DIALOG, params
+
 
     $scope.reload = () ->
         downloadService.getJson "/awac/admin/factors/all", (result) ->
@@ -123,29 +131,24 @@ angular
     # "Save" handler
     #
     $scope.save = ->
-        console.log $scope.factors
-        modalService.show modalService.LOADING
+        if $scope.hasEdits()
+            modalService.show modalService.LOADING
 
-        # adjust all dateOuts for modified
-        for f in $scope.factors
-            if $scope.isModified(f)
+            # adjust all dateOuts for modified
+            for f in $scope.factors
+                if $scope.isModified(f)
 
-                fvs = _.sortBy(f.factorValues, 'dateIn')
+                    fvs = _.sortBy(f.factorValues, 'dateIn')
 
-                for i in [1...fvs.length]
-                    fvs[i - 1].dateOut = '' + (fvs[i].dateIn - 1)
+                    for i in [1...fvs.length]
+                        fvs[i - 1].dateOut = '' + (fvs[i].dateIn - 1)
 
-                f.factorValues = fvs
+                    f.factorValues = fvs
 
-        downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
-            if result.success == true
-                $scope.reload()
+            downloadService.postJson '/awac/admin/factors/update', {__type: 'eu.factorx.awac.dto.awac.post.UpdateFactorsDTO', factors: $scope.factors}, (result) ->
+                if result.success == true
+                    $scope.reload()
 
-    #
-    # "Remove factor" handler
-    #
-    $scope.remove = (factor) ->
-        noop = 0
 
     #
     # Names for search field in table
@@ -170,3 +173,33 @@ angular
             modalService.close modalService.LOADING
             if result.success == true
                 $scope.reload()
+
+    $scope.hasEdits = () ->
+        return _.any($scope.factors, $scope.isModified)
+
+
+    $scope.ignoreChanges = false
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless next != current
+        return unless $scope.hasEdits() and !$scope.ignoreChanges
+
+        # stop changing
+        event.preventDefault()
+
+        # show confirm
+        params =
+            titleKey: "FACTORS_CANCEL_CONFIRMATION_TITLE"
+            messageKey: "FACTORS_CANCEL_CONFIRMATION_MESSAGE"
+            onConfirm: () ->
+                $scope.ignoreChanges = true
+                $location.path(next.split('#')[1])
+        modalService.show modalService.CONFIRM_DIALOG, params
+
+
+
+
+
+
+
+
+

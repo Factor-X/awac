@@ -24,13 +24,15 @@ public class ReportResultAggregationToReportDTOConverter implements Converter<Re
     public ReportDTO convert(ReportResultAggregation reportResultAggregation) {
         ReportDTO reportDTO = new ReportDTO();
 
+
+
         reportDTO.setLeftScope1Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(0, 2), "ffffff", 0, 4));
-        reportDTO.setLeftScope2Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(0, 2), "ffffff", 1, 4));
-        reportDTO.setLeftScope3Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(0, 2), "ffffff", 2, 4));
+        reportDTO.setLeftScope2Color("#DD1C1C");
+        reportDTO.setLeftScope3Color("#EF5E5E");
 
         reportDTO.setRightScope1Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(1, 2), "ffffff", 0, 4));
-        reportDTO.setRightScope2Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(1, 2), "ffffff", 1, 4));
-        reportDTO.setRightScope3Color("#" + Colors.interpolate(Colors.makeGoodColorForSerieElement(1, 2), "ffffff", 2, 4));
+        reportDTO.setRightScope2Color("#3CE6E6");
+        reportDTO.setRightScope3Color("#73F2CD");
 
 
         reportDTO.setLeftPeriod(reportResultAggregation.getPeriod().getLabel());

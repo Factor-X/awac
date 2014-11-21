@@ -356,6 +356,22 @@ public class SvgGeneratorImpl implements SvgGenerator {
                         String color = Colors.makeGoodColorForSerieElement(j, series);
                         color = Colors.interpolate(color, "ffffff", iScope, 4);
 
+                        if (i == 1) {
+                            if (j == 0) {
+                                color = "DD1C1C";
+                            } else {
+                                color = "3CE6E6";
+                            }
+                        }
+
+                        if (i == 2) {
+                            if (j == 0) {
+                                color = "EF5E5E";
+                            } else {
+                                color = "73F2CD";
+                            }
+                        }
+
                         Double cell = (Double) data.getCell(1 + j * 4 + iScope, i);
                         sb.append(String.format(
                             "<rect " +
