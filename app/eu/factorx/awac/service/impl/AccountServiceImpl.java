@@ -60,21 +60,4 @@ public class AccountServiceImpl extends AbstractJPAPersistenceServiceImpl<Accoun
 		return standardPasswordEncoder.matches(password, account.getPassword());
 	}
 
-    @Override
-    public Account findByEmailAndInterface(String email, InterfaceTypeCode interfaceTypeCode) {
-
-        List<Account> resultList = JPA.em().createNamedQuery(Account.FIND_BY_EMAIL_AND_INTERFACE, Account.class)
-                .setParameter("email", email)
-                .setParameter("interface", interfaceTypeCode)
-                .getResultList();
-        if (resultList.size() > 1) {
-            String errorMsg = "More than one account with email = '" + email+ ", interface : '"+interfaceTypeCode;
-            Logger.error(errorMsg);
-            throw new RuntimeException(errorMsg);
-        }
-        if (resultList.size() == 0) {
-            return null;
-        }
-        return resultList.get(0);
-    }
 }

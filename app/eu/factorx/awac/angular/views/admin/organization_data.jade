@@ -17,18 +17,18 @@ div.verification_manage
             td(ng-repeat="(key,info) in data",style="text-align:center")
                 div(ng-show="info.sites > 0 ") {{info.sites}}
         tr
-            th Nombre de produits
+            th Nombre d'évènements
             td(ng-repeat="(key,info) in data",style="text-align:center")
                 div(ng-show="info.products > 0 ") {{info.products}}
         tr
-            th Nombre de questionnaires clorués
+            th Nombre de bilans cloturés
             td(ng-repeat="(key,info) in data")
                 table.actions-table
                     tr(ng-repeat="(key,value) in info.closedForm")
                         td {{key}}
                         td {{value}}
         tr
-            th Envoyer emails
+            th Envoye d'emails
             td(ng-repeat="(key,info) in data",style="text-align:center")
                 button.button(
                 type="button",
