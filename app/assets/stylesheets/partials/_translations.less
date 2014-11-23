@@ -20,7 +20,104 @@
         }
 
         .translation-view {
-            padding: 2em;
+            padding: 1.5em;
+        }
+
+        .translations-table {
+            .base-table();
+        }
+
+        td.topic {
+            width: 100%
+        }
+
+        td.topic-content {
+            width: 100%
+        }
+
+        table.codelabels-table {
+            width:100%;
+            td.td-order {
+                width: 60px !important;
+            }
+            td {
+                width:25% !important;
+                white-space: normal !important;
+                vertical-align:top !important;
+                textarea {
+                    width: 100%;
+                    resize:vertical;
+                    max-height:100px;
+                }
+            }
+        }
+
+        h4 {
+            margin-top: 0px;
+            margin-bottom: 15px;
+        }
+
+        .baselist-item {
+            white-space: nowrap;
+            * {
+                display: inline-block;
+                vertical-align: top;
+            }
+            & > * {
+                padding:5px;
+            }
+
+        }
+
+        .baselist-add-item {
+            //margin:10px 0px 5px 5px;
+        }
+
+        .baselist-header > * {
+            font-weight: bold;
+            display: inline-block;
+            white-space: nowrap;
+            padding:5px;
+        }
+
+        .baselist-content {
+            width: 100%;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .order-column {
+            width: 40px;
+        }
+
+        .key-column {
+            width: 100px;
+            font-weight: bold;
+            & > * {
+                width: 100%
+            }
+        }
+
+        .labels-columns {
+            display: inline-block;
+            white-space: nowrap;
+            width: ~"calc(100% - 150px)";
+            padding: 0px;
+            & > * {
+                display: inline-block;
+                width: 33%;
+                padding: 5px;
+                & > * {
+                    width: 100%
+                }
+            }
+        }
+
+    }
+
+    .admin-translations-helps {
+        .list-group-item {
+            cursor: pointer;
         }
     }
 }

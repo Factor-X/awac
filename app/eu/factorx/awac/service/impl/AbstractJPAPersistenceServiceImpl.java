@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
@@ -42,7 +43,8 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 			// of given entity was updated.
 			((AuditedAbstractEntity) entity).preUpdate();
 		}
-		return JPA.em().merge(entity);
+		E merge = JPA.em().merge(entity);
+		return merge;
 	}
 
 	@Override
@@ -73,7 +75,8 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 
 	@Override
 	public List<E> findAll() {
-		return (List<E>) JPA.em().createQuery(String.format("select e from %s e", entityClass.getName())).getResultList();
+		Query query = JPA.em().createQuery(String.format("select e from %s e", entityClass.getName()));
+		return (List<E>) query.getResultList();
 	}
 
 	@Override

@@ -5,17 +5,17 @@ import eu.factorx.awac.dto.awac.get.CodeListDTO;
 
 import java.util.List;
 
-public class SublistDTOList extends DTO {
+public class UpdateSubListsDTO extends DTO {
 
 	private List<SubListDTO> sublists;
 
 	private List<CodeListDTO> codeLabels;
 
-	public SublistDTOList() {
+	public UpdateSubListsDTO() {
 		super();
 	}
 
-	public SublistDTOList(List<SubListDTO> sublists, List<CodeListDTO> codeLabels) {
+	public UpdateSubListsDTO(List<SubListDTO> sublists, List<CodeListDTO> codeLabels) {
 		this.sublists = sublists;
 		this.codeLabels = codeLabels;
 	}

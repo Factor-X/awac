@@ -2,7 +2,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
- 
+
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>DefaultDS</non-jta-data-source>
@@ -23,6 +23,7 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
+        <class>eu.factorx.awac.models.code.WysiwygDocument</class>
         <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
         <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
@@ -105,42 +106,41 @@
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
- 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
         <properties>
- 
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
- 
+
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
-            <property name="hibernate.use_sql_comments" value="false" />
+            <property name="hibernate.use_sql_comments" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
-			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
-			<property name="hibernate.cache.use_query_cache" value="true"/>
-			<property name="hibernate.cache.region_prefix" value=""/>
-			<property name="hibernate.cache.use_structured_entries" value="true"/>
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.region_prefix" value=""/>
+            <property name="hibernate.cache.use_structured_entries" value="true"/>
 
-			<property name="hibernate.generate_statistics" value="true"/>
+            <property name="hibernate.generate_statistics" value="true"/>
 
-            <property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
+            <property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"/>
 
-     		<property name="connection.autocommit" value="true" />
-     	
-     		<property name="jadira.usertype.autoRegisterUserTypes" value="true" />
-			<property name="jadira.usertype.javaZone" value="UTC" />
-			<property name="jadira.usertype.databaseZone" value="UTC" />
+            <property name="connection.autocommit" value="true"/>
 
-
+            <property name="jadira.usertype.autoRegisterUserTypes" value="true"/>
+            <property name="jadira.usertype.javaZone" value="UTC"/>
+            <property name="jadira.usertype.databaseZone" value="UTC"/>
 
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/awac"/>
             <property name="javax.persistence.jdbc.user" value="play"/>
             <property name="javax.persistence.jdbc.password" value="play"/>
-     		   
+
         </properties>
-        
+
 
     </persistence-unit>
 
@@ -164,6 +164,7 @@
         <class>eu.factorx.awac.models.business.Scope</class>
         <class>eu.factorx.awac.models.business.Site</class>
         <class>eu.factorx.awac.models.code.Code</class>
+        <class>eu.factorx.awac.models.code.WysiwygDocument</class>
         <class>eu.factorx.awac.models.code.conversion.CodeConversion</class>
         <class>eu.factorx.awac.models.code.conversion.CodesEquivalence</class>
         <class>eu.factorx.awac.models.code.label.CodeLabel</class>
@@ -243,7 +244,7 @@
         <class>eu.factorx.awac.models.reporting.BaseActivityResult</class>
         <class>eu.factorx.awac.models.reporting.ReportBusinessException</class>
         <class>eu.factorx.awac.models.reporting.ReportResult</class>
-       	<exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
@@ -252,31 +253,32 @@
 
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
-            <property name="hibernate.use_sql_comments" value="false" />
+            <property name="hibernate.use_sql_comments" value="false"/>
 
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
-            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
             <property name="hibernate.cache.use_query_cache" value="true"/>
             <property name="hibernate.cache.region_prefix" value=""/>
             <property name="hibernate.cache.use_structured_entries" value="true"/>
 
             <property name="hibernate.generate_statistics" value="true"/>
 
-            <property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
+            <property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"/>
 
-            <property name="connection.autocommit" value="true" />
+            <property name="connection.autocommit" value="true"/>
 
-            <property name="jadira.usertype.autoRegisterUserTypes" value="true" />
+            <property name="jadira.usertype.autoRegisterUserTypes" value="true"/>
         </properties>
 
         <!--<properties>-->
-            <!--<property name="hibernate.dialect"-->
-                      <!--value="org.hibernate.dialect.H2Dialect"/>-->
-            <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
-            <!--<property name="hibernate.show_sql" value="false"></property>-->
-            <!--<property name="hibernate.format_sql" value="true"></property>-->
-            <!--<property name="hibernate.connection.autocommit" value="true" />-->
+        <!--<property name="hibernate.dialect"-->
+        <!--value="org.hibernate.dialect.H2Dialect"/>-->
+        <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
+        <!--<property name="hibernate.show_sql" value="false"></property>-->
+        <!--<property name="hibernate.format_sql" value="true"></property>-->
+        <!--<property name="hibernate.connection.autocommit" value="true" />-->
         <!--</properties>-->
     </persistence-unit>
 

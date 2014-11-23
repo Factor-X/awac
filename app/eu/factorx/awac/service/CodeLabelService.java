@@ -1,6 +1,8 @@
 package eu.factorx.awac.service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
@@ -13,6 +15,8 @@ public interface CodeLabelService extends PersistenceService<CodeLabel> {
 	CodeLabel findCodeLabelByCode(Code code);
 
 	void removeCodeLabelsByList(CodeList... codeLists);
+
+	Map<CodeList, List<CodeLabel>> findAllBaseLists();
 
 	void removeAll();
 

@@ -1,9 +1,7 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.admin.BADLogDTO;
-import eu.factorx.awac.dto.admin.get.FactorDTO;
-import eu.factorx.awac.dto.admin.get.FactorValueDTO;
-import eu.factorx.awac.dto.admin.get.FactorsDTO;
+import eu.factorx.awac.dto.admin.get.*;
 import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
 import eu.factorx.awac.dto.awac.get.PeriodDTO;
 import eu.factorx.awac.dto.awac.post.CreateFactorDTO;
@@ -15,6 +13,7 @@ import eu.factorx.awac.generated.AwacMunicipalityInitialData;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.WysiwygDocument;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.Factor;
@@ -80,6 +79,8 @@ public class AdminController extends AbstractController {
     private UnitCategoryService          unitCategoryService;
     @Autowired
     private FactorsExcelGeneratorService factorsExcelGeneratorService;
+    @Autowired
+    private WysiwygDocumentService       wysiwygDocumentService;
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -359,4 +360,19 @@ public class AdminController extends AbstractController {
         return ok(downloadFileDTO);
 
     }
+
+
+    @Transactional(readOnly = true)
+    @Security.Authenticated(SecuredController.class)
+    public Result allWysiwygDocuments() {
+
+        List<WysiwygDocument> all = wysiwygDocumentService.findAll();
+        List<WysiwygDocumentDTO> dtos = new ArrayList<>();
+        for (WysiwygDocument wd : all) {
+            dtos.add(conversionService.convert(wd, WysiwygDocumentDTO.class));
+        }
+
+        return ok(new WysiwygDocumentsDTO(dtos));
+    }
+
 }
