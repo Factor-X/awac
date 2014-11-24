@@ -21,7 +21,7 @@ initializeVerificationRoutes = (defaultResolve) ->
                     displayLittleFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_manage'
+                        return 'help:manage'
                 }, defaultResolve)
             }
         )
@@ -32,7 +32,7 @@ initializeVerificationRoutes = (defaultResolve) ->
                     displayLittleFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_verification'
+                        return 'help:verification'
                 }, defaultResolve)
             }
         )
@@ -43,7 +43,7 @@ initializeVerificationRoutes = (defaultResolve) ->
                     displayLittleFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_submit'
+                        return 'help:submit'
                 }, defaultResolve)
             }
         )
@@ -60,7 +60,7 @@ initializeVerificationRoutes = (defaultResolve) ->
                     displayLittleFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_archive'
+                        return 'help:archive'
                 }, defaultResolve)
             }
         )

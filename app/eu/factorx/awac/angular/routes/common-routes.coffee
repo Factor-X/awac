@@ -37,7 +37,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 controller: 'UserDataCtrl'
                 resolve: angular.extend({
                     helpPage: () ->
-                        return 'help_user_data'
+                        return 'help:user:data'
                 }, defaultResolve)
             }
         )
@@ -46,7 +46,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 controller: 'OrganizationManagerCtrl'
                 resolve: angular.extend({
                     helpPage: () ->
-                        return 'help_organization_manager'
+                        return 'help:organization:manager'
                 }, defaultResolve)
 
             }
@@ -56,7 +56,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 controller: 'UserManagerCtrl'
                 resolve: angular.extend({
                     helpPage: () ->
-                        return 'help_user_manager'
+                        return 'help:user:manager'
                 }, defaultResolve)
 
             }
@@ -66,7 +66,7 @@ initializeCommonRoutes = (defaultResolve) ->
                 controller: 'SiteManagerCtrl'
                 resolve: angular.extend({
                     helpPage: () ->
-                        return 'help_site_manager'
+                        return 'help:site:manager'
                 }, defaultResolve)
 
             }

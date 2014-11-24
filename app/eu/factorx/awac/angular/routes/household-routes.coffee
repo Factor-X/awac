@@ -23,7 +23,7 @@ initializeHouseholdRoutes = (defaultResolve) ->
                 controller: 'FormCtrl'
                 resolve: angular.extend({
                     helpPage: () ->
-                        return 'help_form'
+                        return 'help:form'
                 }, formResolve)
 
             }
@@ -35,7 +35,7 @@ initializeHouseholdRoutes = (defaultResolve) ->
                     displayFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_results'
+                        return 'help:results'
                 }, resultResolve)
 
             }
@@ -47,7 +47,7 @@ initializeHouseholdRoutes = (defaultResolve) ->
                     displayFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_actions'
+                        return 'help:actions'
                 }, defaultResolve)
 
             }

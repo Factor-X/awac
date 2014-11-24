@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Base64Image Plugin for CKEditor (http://github.com/nmmf/base64image)
  * Created by ALL-INKL.COM - Neue Medien M�nnich - 04. Feb 2014
  * Licensed under the terms of GPL, LGPL and MPL licenses.
@@ -10,17 +10,17 @@ CKEDITOR.plugins.add("base64image", {
 	hidpi	:	true,
     init	: 	function(editor){
 					var pluginName = 'base64imageDialog';
-					
+
 					editor.ui.addButton("base64image", {
 						label: editor.lang.common.image,
 						command: pluginName,
 						toolbar: "insert"
 					});
 					CKEDITOR.dialog.add(pluginName, this.path+"dialogs/base64image.js");
-					
+
 					var allowed = 'img[alt,!src]{border-style,border-width,float,height,margin,margin-bottom,margin-left,margin-right,margin-top,width}',
 						required = 'img[alt,src]';
-					
+
 					editor.addCommand( pluginName, new CKEDITOR.dialogCommand( pluginName, {
 						allowedContent: allowed,
 						requiredContent: required,

@@ -375,4 +375,16 @@ public class AdminController extends AbstractController {
         return ok(new WysiwygDocumentsDTO(dtos));
     }
 
+
+    @Transactional(readOnly = false)
+    @Security.Authenticated(SecuredController.class)
+    public Result updateWysiwygDocument() {
+        WysiwygDocumentDTO dto = extractDTOFromRequest(WysiwygDocumentDTO.class);
+        WysiwygDocument wysiwygDocument = wysiwygDocumentService.findByCategoryAndName(dto.getCategory(), dto.getName());
+        wysiwygDocument.setContent(dto.getContent());
+        wysiwygDocumentService.saveOrUpdate(wysiwygDocument);
+        return ok();
+    }
+
 }
+

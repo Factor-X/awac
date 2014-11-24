@@ -1,0 +1,23 @@
+DROP TABLE IF EXISTS wysiwyg_document;
+DROP SEQUENCE IF EXISTS "wysiwyg_document_id_seq";
+
+CREATE SEQUENCE "wysiwyg_document_id_seq";
+
+CREATE TABLE wysiwyg_document
+(
+  id bigint NOT NULL DEFAULT nextval('wysiwyg_document_id_seq'::regclass),
+  creationdate timestamp without time zone,
+  creationuser character varying(255),
+  lastupdatedate timestamp without time zone,
+  lastupdateuser character varying(255),
+  content text NOT NULL,
+  name character varying(255) NOT NULL,
+  category character varying(255) NOT NULL,
+  CONSTRAINT wysiwyg_document_pkey PRIMARY KEY (id),
+   CONSTRAINT uk_wysiwyg_document_logical_pkey UNIQUE (category, name)
+)
+WITH (
+  OIDS=FALSE
+);
+
+

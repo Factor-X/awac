@@ -26,7 +26,7 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                     displayFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_form'
+                        return 'help:form'
                 }, formResolve)
 
             }
@@ -38,7 +38,7 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                     displayFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_results'
+                        return 'help:results'
                 }, defaultResolve)
             }
         )
@@ -49,7 +49,7 @@ initializeMunicipalityRoutes = (defaultResolve) ->
                     displayFormMenu: () ->
                         return true
                     helpPage: () ->
-                        return 'help_actions'
+                        return 'help:actions'
                 }, defaultResolve)
             }
         )

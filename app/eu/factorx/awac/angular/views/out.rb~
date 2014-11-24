@@ -1,0 +1,15 @@
+require "base64"
+
+a = ARGV.first
+
+puts a.gsub(/\<img [^\>]*\>/) {|m| 
+
+	url = m.scan(/\/assets\/images\/([^\.]*).png/).first.first
+
+	orig = File.open("/home/gaetan/Projects/awac/public/images/" + url + ".png", "rb").read
+
+	data = Base64.strict_encode64(orig)
+
+	'<img src="data:image/png;base64,'+data+'" />'
+
+}

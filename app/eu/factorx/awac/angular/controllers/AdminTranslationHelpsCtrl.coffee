@@ -3,18 +3,12 @@ angular
 .controller "AdminTranslationHelpsCtrl", ($scope, $compile, $timeout, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
     $scope.files = [];
 
-    for f in $scope.files
-        f.original = f.content
 
     if $scope.files.length > 0
         $scope.selectedFile = $scope.files[0]
 
     $scope.select = (file) ->
         $scope.selectedFile = file
-        for k,v of CKEDITOR.instances
-            $timeout () ->
-                v.resetUndo()
-            , 50
 
     $scope.isModified = (file) ->
         return file.content != file.original
@@ -26,13 +20,39 @@ angular
         downloadService.getJson "/awac/admin/translations/wysiwyg/all", (result) ->
             if result.success
                 $scope.files = result.data.files
+                for f in $scope.files
+                    f.original = f.content
+
+    $scope.categories = [
+        {key: 'enterprise', label: 'Entreprise'},
+        {key: 'municipality', label: 'Communes'},
+        {key: 'household', label: 'Ménages'},
+        {key: 'verification', label: 'Vérification'},
+    ]
+
+    $scope.save = (f) ->
+        downloadService.postJson "/awac/admin/translations/wysiwyg/update", _.omit(f, 'original'), (result) ->
+            if result.success
+                f.original = f.content
+
 
     $scope.editorOptions =
         language: 'fr'
         skin: 'moono'
         uiColor: '#CFCDC0'
-        height: '300px'
+        height: '500px',
+        toolbar: 'Wysisyg'
 
+    # Handle CTRL+S to save
+    $(window).keydown (event) ->
+
+        if (!( String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) && !(event.which == 19)) || !$scope.selectedFile
+            return true
+
+        $scope.save($scope.selectedFile);
+
+        event.preventDefault();
+        return false;
 
     $scope.load()
 
