@@ -16,14 +16,35 @@ angular
     #
         ngTab: '='
     #
-        ngIndex:'='
+        ngMapIndex:'='
     # optional : true or false (default : false)
         ngOptional: '='
     templateUrl: "$/angular/templates/mm-awac-question.html"
     replace: true
     compile: () ->
+
         post: (scope, element) ->
             directiveService.autoScopeImpl scope
+            ###
+            if scope.$parent.$parent? && scope.$parent.$parent.getQuestionSetCode?
+               console.log scope.getQuestionCode()+"/2=>"+scope.$parent.$parent.$index+"/"+scope.$parent.$parent.getQuestionSetCode()
+            if scope.$parent.$parent.$parent.$parent? && scope.$parent.$parent.$parent.$parent.$$childScopeClass.getQuestionSetCode?
+                console.log scope.getQuestionCode()+"/4=>"+scope.$parent.$parent.$parent.$parent.$index+"/"+scope.$parent.$parent.$parent.$parent.$$childScopeClass.getQuestionSetCode()
+            ###
+
+            #if scope.$parent.$parent? && scope.$parent.$parent.getQuestionSetCode?
+
+            #console.log scope.getQuestionCode()+"/2=>"+scope.$parent.$parent.$index+"/"+scope.$parent.$parent.getQuestionSetCode()
+
+            #console.log scope.$parent
+            #console.log scope.$parent.$parent.dataToCompare
+            if scope.$parent.getQuestionSetCode?
+                console.log "----------------- : "+scope.getQuestionCode()
+                console.log scope.$parent.getQuestionSetCode()
+
+
+
+            # console.log "index:"+scope.$index
 
             scope.$watch 'ngAggregation', ->
                 if scope.getAggregation()?
@@ -45,7 +66,6 @@ angular
             #
             scope.getTemplate = (dataToCompare)->
                 if $('.inject-data:first', element).html() == ''
-
 
                     toCompare = ""
                     isAggregation = "false"
@@ -117,7 +137,7 @@ angular
                     # getFirstRepeteableElement
                     #console.log "je suis l'index : "+scope.getIndex()
 
-                    return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getIndex())
+                    return scope.$parent.getAnswerToCompare(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getMapIndex())
                 else
                     if scope.ngAggregation? && scope.$parent.getAnswerOrCreate(scope.getQuestionCode(),scope.getRepetitionMap(), scope.getTabSet(), scope.getTab()).value == null
                         scope.$parent.getAnswerOrCreate(scope.getQuestionCode(), scope.getRepetitionMap(),scope.getTabSet(), scope.getTab(), scope.getOptional()).value = scope.getAggregation()
