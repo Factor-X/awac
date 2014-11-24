@@ -1,7 +1,4 @@
 .admin-translation
-    span
-        h1 Traductions
-    br
 
     ul.nav.nav-pills.navbar-inverse
         li.dropdown(role='presentation')
@@ -29,6 +26,9 @@
                 li
                     a(href="#", ng-click="toState('sub-lists')", onclick="return false") Sous-listes
 
+        li
+            a(href="#", ng-click="toState('helps')", onclick="return false") Textes d'aide
+
     .translation-view
         .animate-switch-container(ng-switch="state")
             .animate-switch(ng-switch-when="interface")
@@ -43,6 +43,8 @@
                 div(ng-include="'$/angular/views/admin/translation_base_lists.html'", ng-controller="AdminTranslationBaseListCtrl")
             .animate-switch(ng-switch-when="sub-lists")
                 div(ng-include="'$/angular/views/admin/translation_sub_lists.html'", ng-controller="AdminTranslationSubListCtrl")
+            .animate-switch(ng-switch-when="helps")
+                div(ng-include="'$/angular/views/admin/translation_helps.html'", ng-controller="AdminTranslationHelpsCtrl")
             .animate-switch(ng-switch-default)
                 span DEFAULT
 

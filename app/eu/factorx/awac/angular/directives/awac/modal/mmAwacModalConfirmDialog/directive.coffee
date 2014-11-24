@@ -17,7 +17,13 @@ angular
 
         $scope.confirm = () ->
             if !!$scope.getParams().onConfirm
-                $scope.getParams().onConfirm()
+                if !!$scope.getParams().confirmParams && $scope.getParams().confirmParams.length > 0
+                    if $scope.getParams().confirmParams.length == 1
+                        $scope.getParams().onConfirm($scope.getParams().confirmParams[0])
+                    if $scope.getParams().confirmParams.length == 2
+                        $scope.getParams().onConfirm($scope.getParams().confirmParams[0],$scope.getParams().confirmParams[1])
+                else
+                    $scope.getParams().onConfirm()
             $scope.close()
 
     link: (scope) ->

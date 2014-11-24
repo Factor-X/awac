@@ -2,6 +2,7 @@
 Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
+
 body
 {
 	/* Font */
@@ -12,12 +13,9 @@ body
 	color: #333;
 
 	/* Remove the background color to make it transparent */
-	/*background-color: #fff;*/
-    /* custom */
-    background-color: #efeee8;
+	background-color: #fff;
 
-    /* custom */
-	margin: 10px;
+	margin: 20px;
 }
 
 .cke_editable
@@ -50,11 +48,6 @@ blockquote
 	border-right-width: 5px;
 }
 
-p
-{
-    margin: 5px 0px 2px 0px;
-}
-
 a
 {
 	color: #0782C1;
@@ -65,7 +58,7 @@ ol,ul,dl
 	/* IE7: reset rtl list margin. (#7334) */
 	*margin-right: 0px;
 	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
-	padding: 0 20px;
+	padding: 0 40px;
 }
 
 h1,h2,h3,h4,h5,h6
@@ -73,7 +66,6 @@ h1,h2,h3,h4,h5,h6
 	font-weight: normal;
 	line-height: 1.2;
 }
-
 
 hr
 {
@@ -140,4 +132,3 @@ a > img {
 	border: none;
 	outline: 1px solid #0782C1;
 }
-

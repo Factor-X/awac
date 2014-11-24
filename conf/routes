@@ -204,4 +204,7 @@ GET         /awac/admin/translations/surveyslabels/load                     @eu.
 POST        /awac/admin/translations/surveyslabels/save                     @eu.factorx.awac.controllers.TranslationAdminController.updateSurveysLabels()
 
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
-POST /awac/admin/organizationData/sendEmail                                   @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+POST /awac/admin/organizationData/sendEmail                                 @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+
+
+GET         /awac/admin/translations/wysiwyg/all                           @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()

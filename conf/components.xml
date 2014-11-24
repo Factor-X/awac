@@ -47,6 +47,7 @@
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
                 <bean class="eu.factorx.awac.converter.admin.FactorToFactorDTOConverter" />
+                <bean class="eu.factorx.awac.converter.admin.WysiwygDocumentToWysiwygDocumentDTOConverter" />
             </set>
         </property>
     </bean>
