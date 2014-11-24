@@ -28,12 +28,12 @@ angular
     $scope.getPeriod = (driver, currentDriverValue) ->
         periods = []
         for period in $scope.$root.periods
-            founded=false
+            founded = false
             for driverValue in driver.driverValues
                 if period.key == driverValue?.fromPeriodKey && period.key != currentDriverValue?.fromPeriodKey
-                    founded=true
+                    founded = true
                     break
-            if founded==false
+            if founded == false
                 periods.push period
         return periods
 
@@ -41,28 +41,40 @@ angular
         for driver in $scope.drivers
             driverValues = []
             for driverValue in driver.driverValues
-                i=0
-                founded=false
+                i = 0
+                founded = false
                 for sortedDriver in driverValues
-                    if parseFloat(sortedDriver.fromPeriodKey)  > parseFloat(driverValue.fromPeriodKey)
-                        driverValues.splice(i,0,driverValue)
-                        founded=true
+                    if parseFloat(sortedDriver.fromPeriodKey) > parseFloat(driverValue.fromPeriodKey)
+                        driverValues.splice(i, 0, driverValue)
+                        founded = true
                         break
                     i++
-                if founded==false
+                if founded == false
                     driverValues.push driverValue
             driver.driverValues = driverValues
 
     $scope.save = ->
         modalService.show modalService.LOADING
-        downloadService.postJson '/awac/admin/driver/update', {list:$scope.drivers}, (result) ->
+        downloadService.postJson '/awac/admin/driver/update', {list: $scope.drivers}, (result) ->
             modalService.close modalService.LOADING
 
-    $scope.remove =(driver,valueTempId) ->
-        i=0
+    $scope.remove = (driver, valueTempId) ->
+        params =
+            titleKey:'DRIVER_CONFIRM_REMOVE_MODAL_TITLE'
+            messageKey:'DRIVER_CONFIRM_REMOVE_MODAL_BODY'
+            onConfirm: $scope.removeConfirmed
+            confirmParams: [
+                driver
+                valueTempId
+            ]
+
+        modalService.show modalService.CONFIRM_DIALOG, params
+
+    $scope.removeConfirmed = (driver, valueTempId) ->
+        i = 0
         for value in driver.driverValues
             if value.tempId == valueTempId
-                driver.driverValues.splice(i,1)
+                driver.driverValues.splice(i, 1)
                 break
             i++
 
