@@ -200,6 +200,8 @@ GET         /awac/admin/translations/baselists/load                         @eu.
 POST        /awac/admin/translations/baselists/save                         @eu.factorx.awac.controllers.TranslationAdminController.updateBaseLists()
 GET         /awac/admin/translations/codelabels/load/:codeLists             @eu.factorx.awac.controllers.TranslationAdminController.loadCodeLabels(codeLists:String)
 POST        /awac/admin/translations/codelabels/save                        @eu.factorx.awac.controllers.TranslationAdminController.updateCodeLabels()
+GET         /awac/admin/translations/surveyslabels/load                     @eu.factorx.awac.controllers.TranslationAdminController.loadSurveysLabels()
+POST        /awac/admin/translations/surveyslabels/save                     @eu.factorx.awac.controllers.TranslationAdminController.updateSurveysLabels()
 
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
 POST /awac/admin/organizationData/sendEmail                                   @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()

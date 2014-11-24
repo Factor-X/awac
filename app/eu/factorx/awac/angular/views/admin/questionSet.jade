@@ -1,0 +1,4 @@
+div {{params.label.key}}
+    ul
+        li(ng-repeat="child in params.children")
+            div(ng-include="'$/angular/views/admin/questionSet.html'", ng-init="params = questionSet")

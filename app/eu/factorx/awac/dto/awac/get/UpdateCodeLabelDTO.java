@@ -3,7 +3,7 @@ package eu.factorx.awac.dto.awac.get;
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.util.Keyed;
 
-public class FullCodeLabelDTO extends DTO implements Keyed {
+public class UpdateCodeLabelDTO extends DTO implements Keyed {
 
 	private Long id;
 	private String key;
@@ -13,10 +13,10 @@ public class FullCodeLabelDTO extends DTO implements Keyed {
 	private String topic;
 	private Integer orderIndex;
 
-	public FullCodeLabelDTO() {
+	public UpdateCodeLabelDTO() {
 	}
 
-	public FullCodeLabelDTO(Long id, String key, String labelEn, String labelFr, String labelNl, String topic, Integer orderIndex) {
+	public UpdateCodeLabelDTO(Long id, String key, String labelEn, String labelFr, String labelNl, String topic, Integer orderIndex) {
 		this.id = id;
 		this.key = key;
 		this.labelEn = labelEn;
@@ -92,7 +92,7 @@ public class FullCodeLabelDTO extends DTO implements Keyed {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		FullCodeLabelDTO that = (FullCodeLabelDTO) o;
+		UpdateCodeLabelDTO that = (UpdateCodeLabelDTO) o;
 
 		if (!key.equals(that.key)) return false;
 		if (!labelEn.equals(that.labelEn)) return false;
