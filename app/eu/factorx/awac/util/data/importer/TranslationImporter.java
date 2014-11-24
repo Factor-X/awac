@@ -51,6 +51,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 
 	private void importManyCodeListsTranslations(Sheet sheet) {
 		Map<CodeList, List<CodeLabel>> codeLabels = new HashMap<>();
+		int orderIndex = 1;
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 
@@ -73,11 +74,15 @@ public class TranslationImporter extends WorkbookDataImporter {
                 Logger.error("No English translation found for key: '{}' -> skipping", key);
                 continue;
             }
-			CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl);
+			CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl, orderIndex);
 
 			if (!codeLabels.containsKey(codeList)) {
+				orderIndex = 1;
+				codeLabel.setOrderIndex(1);
 				codeLabels.put(codeList, new ArrayList<CodeLabel>());
 			}
+			orderIndex++;
+
 			codeLabels.get(codeList).add(codeLabel);
 		}
 		saveCodeLabels(codeLabels);
@@ -93,7 +98,6 @@ public class TranslationImporter extends WorkbookDataImporter {
 			}
 	        Logger.info("====== Imported code list '{}' ({} items)", codeList, codeListLabels.size());
 		}
-		
 	}
 
 	private void importTranslations(Sheet sheet, CodeList codeList) {
@@ -108,11 +112,25 @@ public class TranslationImporter extends WorkbookDataImporter {
 			String labelFr = getCellContent(sheet, 2, i);
 			String labelNl = getCellContent(sheet, 3, i);
 
-            if (StringUtils.isBlank(labelEn)) {
+			if (StringUtils.isBlank(labelEn)) {
                 Logger.error("No English translation found for key: '{}' -> skipping", key);
                 continue;
             }
-			codeLabelService.saveOrUpdate(new CodeLabel(codeList, key, labelEn, labelFr, labelNl));
+
+			CodeLabel codeLabel = new CodeLabel(codeList, key, labelEn, labelFr, labelNl, i);
+
+			// a 'topic' field was specially added for 'TRANSLATIONS_INTERFACE' code list (in order to group the numerous items
+			// TODO Ugly code here! :-(
+			if (CodeList.TRANSLATIONS_INTERFACE.equals(codeList)) {
+				String interfaceTopic = getCellContent(sheet, 4, i);
+				if (interfaceTopic == null) {
+					Logger.warn("'topic' property is undefined: {}", codeLabel);
+					interfaceTopic = "undefined";
+		    	}
+				codeLabel.setTopic(interfaceTopic);
+			}
+
+			codeLabelService.saveOrUpdate(codeLabel);
 		}
 	}
 }

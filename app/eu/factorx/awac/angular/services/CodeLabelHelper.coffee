@@ -14,6 +14,10 @@ angular
         return _.sortBy codeLabels, (codeLabel) ->
             return codeLabel.key
 
+    @sortCodeLabelsByOrder = (codeLabels) ->
+        return _.sortBy codeLabels, (codeLabel) ->
+            return codeLabel.orderIndex
+
     @removeCodeLabelsByKeys = (codeLabels, keysToRemove) ->
         return _.reject codeLabels, (codeLabel) ->
             return _.contains keysToRemove, codeLabel.key

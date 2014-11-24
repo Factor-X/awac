@@ -11,7 +11,7 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 		@NamedQuery(name = CodesEquivalence.FIND_ALL_SUBLISTS_DATA,
 				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.orderIndex"),
 		@NamedQuery(name = CodesEquivalence.FIND_SUBLIST_CODE_LABELS,
-				query = "select new eu.factorx.awac.models.code.label.CodeLabel(ce.codeList, ce.codeKey, cl.labelEn, cl.labelFr, cl.labelNl) from CodesEquivalence ce, CodeLabel cl where ce.referencedCodeList = cl.codeList and ce.referencedCodeKey = cl.key and ce.codeList = :codeList order by ce.id",
+				query = "select new eu.factorx.awac.models.code.label.CodeLabel(ce.codeList, ce.codeKey, cl.labelEn, cl.labelFr, cl.labelNl, ce.orderIndex) from CodesEquivalence ce, CodeLabel cl where ce.referencedCodeList = cl.codeList and ce.referencedCodeKey = cl.key and ce.codeList = :codeList order by ce.orderIndex",
 				hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
 		@NamedQuery(name = CodesEquivalence.FIND_BY_CODE_AND_TARGET_CODELIST,
 				query = "select eq from CodesEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey and eq.referencedCodeList = :referencedCodeList"),

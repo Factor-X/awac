@@ -196,7 +196,13 @@ GET         /awac/admin/factors/export                                      @eu.
 
 GET         /awac/admin/translations/sublists/load                          @eu.factorx.awac.controllers.TranslationAdminController.loadSublists()
 POST        /awac/admin/translations/sublists/save                          @eu.factorx.awac.controllers.TranslationAdminController.updateSublist()
-GET         /awac/admin/translations/interface/load                         @eu.factorx.awac.controllers.TranslationAdminController.loadInterfaceCodeLabels()
+GET         /awac/admin/translations/baselists/load                         @eu.factorx.awac.controllers.TranslationAdminController.loadBaseLists()
+POST        /awac/admin/translations/baselists/save                         @eu.factorx.awac.controllers.TranslationAdminController.updateBaseLists()
+GET         /awac/admin/translations/codelabels/load/:codeLists             @eu.factorx.awac.controllers.TranslationAdminController.loadCodeLabels(codeLists:String)
+POST        /awac/admin/translations/codelabels/save                        @eu.factorx.awac.controllers.TranslationAdminController.updateCodeLabels()
 
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
-POST /awac/admin/organizationData/sendEmail                                   @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+POST /awac/admin/organizationData/sendEmail                                 @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+
+
+GET         /awac/admin/translations/wysiwyg/all                           @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()

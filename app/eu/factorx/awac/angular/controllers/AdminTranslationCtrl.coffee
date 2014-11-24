@@ -3,7 +3,7 @@ angular
 .controller "AdminTranslationCtrl", ($scope, displayLittleFormMenu) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
-    $scope.state = "sub-lists"
+    $scope.state = "base-lists"
     $scope.toState = (s) ->
         $scope.state = s
         return false

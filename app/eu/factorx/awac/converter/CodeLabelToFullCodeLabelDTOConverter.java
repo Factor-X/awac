@@ -8,8 +8,8 @@ public class CodeLabelToFullCodeLabelDTOConverter implements Converter<CodeLabel
 
 	@Override
 	public FullCodeLabelDTO convert(CodeLabel codeLabel) {
-		return new FullCodeLabelDTO(codeLabel.getKey(), codeLabel.getLabelEn(), codeLabel.getLabelFr(),
-				codeLabel.getLabelNl(), codeLabel.getTopic());
+		return new FullCodeLabelDTO(codeLabel.getId(), codeLabel.getKey(), codeLabel.getLabelEn(), codeLabel.getLabelFr(),
+				codeLabel.getLabelNl(), codeLabel.getTopic(), codeLabel.getOrderIndex());
 	}
 
 }
