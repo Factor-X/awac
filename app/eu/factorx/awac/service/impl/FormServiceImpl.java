@@ -1,14 +1,14 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.hibernate.Hibernate;
-import org.springframework.stereotype.Repository;
-
-import play.Logger;
-import play.db.jpa.JPA;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.service.FormService;
+import org.hibernate.Hibernate;
+import org.springframework.stereotype.Repository;
+import play.Logger;
+import play.db.jpa.JPA;
+
+import java.util.List;
 
 @Repository
 public class FormServiceImpl extends AbstractJPAPersistenceServiceImpl<Form> implements FormService {
@@ -22,12 +22,18 @@ public class FormServiceImpl extends AbstractJPAPersistenceServiceImpl<Form> imp
 			Logger.error(errorMsg);
 			throw new RuntimeException(errorMsg);
 		}
-		if(resultList.size()==0){
+		if (resultList.size() == 0) {
 			return null;
 		}
 		Form form = resultList.get(0);
 		Hibernate.initialize(form.getQuestionSets());
 		return form;
+	}
+
+	@Override
+	public List<Form> findByCalculator(AwacCalculator awacCalculator) {
+		return JPA.em().createNamedQuery(Form.FIND_BY_CALCULATOR, Form.class)
+				.setParameter("awacCalculator", awacCalculator).getResultList();
 	}
 
 }

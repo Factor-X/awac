@@ -69,9 +69,6 @@ angular
                 $scope.$root.lastScopeSelectedId = $scope.$root.scopeSelectedId
                 $scope.$root.lastFormIdentifier = $scope.formIdentifier
 
-                console.log "loading form result : "
-                console.log result.data
-
                 $scope.o = angular.copy(result.data)
 
                 #build the list of answers
@@ -141,9 +138,6 @@ angular
                 for qSet in $scope.o.questionSets
                     $scope.loopRepetition(qSet)
 
-                console.log "$scope.mapRepetition"
-                console.log $scope.mapRepetition
-
                 #use the defaultValues to completed null value
                 for questionSetDTO in $scope.o.questionSets
                     $scope.addDefaultValue(questionSetDTO)
@@ -203,9 +197,6 @@ angular
             for answer in listAnswerToSave
                 if not $scope.isQuestionLocked(answer.questionKey) && not $scope.isQuestionValidate(answer.questionKey)
                     finalList.push answer
-
-            console.log "listAnswerToSave"
-            console.log finalList
 
             if finalList.length == 0
                 messageFlash.displayInfo translationService.get('ALL_ANSWERS_ALREADY_SAVED')
@@ -353,10 +344,42 @@ angular
                             return result
             return null
 
+
+
+
+        $scope.getAnswerToCompare = (code, useless,mapIndex) ->
+
+            if $scope.dataToCompare != null
+                # convert index to id
+                if mapIndex?
+                    mapIteration = {}
+                    for indexKey in Object.keys(mapIndex)
+                        if $scope.mapRepetitionEquivalenceForComparison[indexKey]?
+                            for key in Object.keys($scope.mapRepetitionEquivalenceForComparison[indexKey])
+                                if $scope.mapRepetitionEquivalenceForComparison[indexKey][key] == mapIndex[indexKey]
+                                    repetitionKey = key
+
+                                    # build the iteration map
+                                    mapIteration[indexKey] =parseFloat(repetitionKey)
+
+                    if Object.keys(mapIteration).length == 0
+                        return null
+
+                for answer in $scope.dataToCompare.answersSave.listAnswers
+                    #control the code
+                    if answer.questionKey == code
+
+                        #control the repetition map
+                        if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
+                            return answer
+
+            return null
+
         #
         # get the answer to compare by code and mapIteration
         # return null if this answer doesn't exist
         #
+        ###
         $scope.getAnswerToCompare = (code, mapIteration,index) ->
 
             if $scope.dataToCompare != null
@@ -366,16 +389,6 @@ angular
                         if i == index
                             return answer
                         i++
-            ###
-            if $scope.dataToCompare != null
-                for answer in $scope.dataToCompare.answersSave.listAnswers
-                    #control the code
-                    if answer.questionKey == code
-
-                        #control the repetition map
-                        if $scope.compareRepetitionMap(answer.mapRepetition, mapIteration)
-                            return answer
-            ###
             return null
 
 
@@ -388,7 +401,7 @@ angular
             else
                 return getFirstRepeteableElement($scope.mapQuestionSet[questionSetCode].parent.code)
 
-
+        ###
 
 
         #
@@ -397,7 +410,6 @@ angular
         #
         $scope.getAnswerOrCreate = (code, mapIteration , tabSet=null, tab = null, optional = false) ->
             if code == null || code == undefined
-                console.log "ERROR !! getAnswerOrCreate : code is null or undefined"
                 return null
 
 
@@ -597,6 +609,8 @@ angular
             return result
 
 
+        $scope.mapRepetitionEquivalenceForComparison ={}
+
         #
         # watch 'periodToCompare' variable and load the data to compare when the value is different than 'default'
         # the result is savec to $scope.dataToCompare
@@ -606,6 +620,18 @@ angular
                 downloadService.getJson '/awac/answer/getByForm/' + $scope.formIdentifier + "/" + $scope.$root.periodToCompare + "/" + $scope.$root.scopeSelectedId, (result)->
                     if result.success
                         $scope.dataToCompare = result.data
+
+                        # build the repetition equivalence table
+                        for answer in result.data.answersSave.listAnswers
+                            if answer.mapRepetition? && Object.keys(answer.mapRepetition).length > 0
+                                for repetitionKey in Object.keys(answer.mapRepetition)
+                                    index=0
+                                    if not $scope.mapRepetitionEquivalenceForComparison[repetitionKey]
+                                        $scope.mapRepetitionEquivalenceForComparison[repetitionKey] = {}
+                                    else
+                                        index=Object.keys($scope.mapRepetitionEquivalenceForComparison[repetitionKey]).length
+                                    if !$scope.mapRepetitionEquivalenceForComparison[repetitionKey][answer.mapRepetition[repetitionKey]]?
+                                        $scope.mapRepetitionEquivalenceForComparison[repetitionKey][answer.mapRepetition[repetitionKey]] = index
                     else
                         $scope.dataToCompare = null
             else
@@ -677,11 +703,6 @@ angular
             else
                 percentage = answered / total * 100
                 percentage = Math.floor(percentage)
-
-            console.log "PROGRESS : " + answered + "/" + total + "=" + percentage
-            console.log listTotal
-
-
 
             #build formProgressDTO
             formProgressDTO = {}
@@ -985,9 +1006,6 @@ angular
                     $scope.dataValidator[code] = $scope.$root.currentPerson
                 if $scope.mapQuestionSet[code]?
                     $scope.mapQuestionSet[code].questionSetDTO.dataValidator = $scope.$root.currentPerson
-                else
-                    console.log "not found "+code+" into $scope.mapQuestionSet : "
-                    console.log $scope.mapQuestionSet
             else
                 if $scope.dataValidator[code]?
                     delete $scope.dataValidator[code]

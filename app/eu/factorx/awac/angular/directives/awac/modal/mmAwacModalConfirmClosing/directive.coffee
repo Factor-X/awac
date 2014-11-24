@@ -49,6 +49,8 @@ angular
                 downloadService.postJson "/awac/answer/closeForm/",dto, (result)->
                     if result.success
                         $scope.$root.closedForms = close
+                        $scope.$root.verificationRequest =null
+                        $scope.$root.$broadcast 'CLEAN_VERIFICATION'
                         if close
                             messageFlash.displaySuccess $filter('translate')('MODAL_CONFIRM_CLOSING_SUCCESS')
                         else
