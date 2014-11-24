@@ -11,10 +11,10 @@ div
             mm-awac-repetition-name(question-code="AC132")
             mm-awac-repetition-question(question-set-code="AC132", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC132')")
 
-                mm-awac-question(question-code="AC133", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC134",ng-repetition-map="itLevel1", ng-condition="(getAnswer('AC133',itLevel1).value | stringToFloat) < 18   || getAnswer('AC133',itLevel1).value == '23'")
-                mm-awac-question(question-code="AC135",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'")
-                mm-awac-question(question-code="AC136",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'")
+                mm-awac-question(question-code="AC133", ng-map-index="{'AC132':$index}",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC134",ng-map-index="{'AC132':$index}",ng-repetition-map="itLevel1", ng-condition="(getAnswer('AC133',itLevel1).value | stringToFloat) < 18   || getAnswer('AC133',itLevel1).value == '23'")
+                mm-awac-question(question-code="AC135",ng-map-index="{'AC132':$index}",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '20' || getAnswer('AC133',itLevel1).value == '21'|| getAnswer('AC133',itLevel1).value == '22'")
+                mm-awac-question(question-code="AC136",ng-map-index="{'AC132':$index}",ng-repetition-map="itLevel1", ng-condition="getAnswer('AC133',itLevel1).value == '18' || getAnswer('AC133',itLevel1).value == '19'")
             mm-awac-repetition-add-button(question-set-code="AC132")
 
         .horizontal_separator
@@ -29,9 +29,9 @@ div
             mm-awac-repetition-name(question-code="AC139")
             mm-awac-repetition-question(question-set-code="AC139", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AC139')")
 
-                mm-awac-question(question-code="AC140", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC141", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC142", ng-repetition-map="itLevel1")
-                mm-awac-question(question-code="AC143", ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC140", ng-map-index="{'AC139':$index}",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC141", ng-map-index="{'AC139':$index}",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC142", ng-map-index="{'AC139':$index}",ng-repetition-map="itLevel1")
+                mm-awac-question(question-code="AC143", ng-map-index="{'AC139':$index}",ng-repetition-map="itLevel1")
 
             mm-awac-repetition-add-button(question-set-code="AC139")

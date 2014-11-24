@@ -354,12 +354,13 @@ angular
                 if mapIndex?
                     mapIteration = {}
                     for indexKey in Object.keys(mapIndex)
-                        for key in Object.keys($scope.mapRepetitionEquivalenceForComparison[indexKey])
-                            if $scope.mapRepetitionEquivalenceForComparison[indexKey][key] == mapIndex[indexKey]
-                                repetitionKey = key
+                        if $scope.mapRepetitionEquivalenceForComparison[indexKey]?
+                            for key in Object.keys($scope.mapRepetitionEquivalenceForComparison[indexKey])
+                                if $scope.mapRepetitionEquivalenceForComparison[indexKey][key] == mapIndex[indexKey]
+                                    repetitionKey = key
 
-                                # build the iteration map
-                                mapIteration[indexKey] =parseFloat(repetitionKey)
+                                    # build the iteration map
+                                    mapIteration[indexKey] =parseFloat(repetitionKey)
 
                     if Object.keys(mapIteration).length == 0
                         return null
