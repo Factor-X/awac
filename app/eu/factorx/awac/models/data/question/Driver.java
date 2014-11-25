@@ -35,7 +35,11 @@ public class Driver extends AuditedAbstractEntity {
     public Driver() {
     }
 
-    public List<DoubleQuestion> getDoubleQuestionList() {
+	public Driver(String name) {
+		this.name = name;
+	}
+
+	public List<DoubleQuestion> getDoubleQuestionList() {
         return doubleQuestionList;
     }
 

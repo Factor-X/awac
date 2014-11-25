@@ -33,14 +33,9 @@ public class FilesController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     public Result upload() {
 
-        Logger.info("upload");
-
 
         MultipartFormData body = request().body().asMultipartFormData();
         List<MultipartFormData.FilePart> files = body.getFiles();
-
-        Logger.info("files : " + files.size());
-
 
         FilesUploadedDTO filesUploadedDTO = null;
 
@@ -68,7 +63,6 @@ public class FilesController extends AbstractController {
             //complete the result
             filesUploadedDTO = new FilesUploadedDTO(storedFile.getId(), storedFile.getOriginalName());
 
-            Logger.info("storedFile : " + storedFile);
         }
         return ok(filesUploadedDTO);
     }

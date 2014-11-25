@@ -107,7 +107,7 @@ angular
                         scope.percent = 0
                         scope.inDownload = false
                         fileName = data.name
-                        messageFlash.displaySuccess("The file " + fileName + " was upload successfully")
+                        messageFlash.displaySuccess($filter('translateText')('FILE_UPLOAD_SUCCESS'))
                         #console.log data
 
                         #add the file to the answer
@@ -121,7 +121,7 @@ angular
                     ).error((data, status, headers, config) ->
                         scope.percent = 0
                         scope.inDownload = false
-                        messageFlash.displayError("The upload of the file was faild")
+                        messageFlash.displayError($filter('translateText')('FILE_UPLOAD_FAIL'))
                         return
                     )
                     i++
