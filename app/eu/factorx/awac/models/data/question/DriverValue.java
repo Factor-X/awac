@@ -26,7 +26,10 @@ public class DriverValue extends AuditedAbstractEntity {
     public DriverValue() {
     }
 
+
+
     public DriverValue(Driver driver, Period fromPeriod, Double defaultValue) {
+
         this.driver = driver;
         this.fromPeriod = fromPeriod;
         this.defaultValue = defaultValue;
