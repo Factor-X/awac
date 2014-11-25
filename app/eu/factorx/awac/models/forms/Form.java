@@ -14,7 +14,7 @@ import eu.factorx.awac.models.data.question.QuestionSet;
 @Table(name = "form")
 @NamedQueries({
 		@NamedQuery(name = Form.FIND_BY_IDENTIFIER, query = "select f from Form f where f.identifier = :identifier"),
-		@NamedQuery(name = Form.FIND_BY_CALCULATOR, query = "select f from Form f where f.awacCalculator = :calculator")
+		@NamedQuery(name = Form.FIND_BY_CALCULATOR, query = "select f from Form f where f.awacCalculator = :awacCalculator")
 })
 public class Form extends AuditedAbstractEntity {
 

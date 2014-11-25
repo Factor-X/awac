@@ -1,14 +1,16 @@
 package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.FullCodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.UpdateFormsLabelsDTO;
+import eu.factorx.awac.dto.awac.get.FormLabelsDTO;
+import eu.factorx.awac.dto.awac.get.UpdateCodeLabelDTO;
+import eu.factorx.awac.dto.awac.get.UpdateSurveysLabelsDTO;
 import eu.factorx.awac.dto.awac.shared.*;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import eu.factorx.awac.models.data.question.Question;
+import eu.factorx.awac.models.data.question.QuestionSet;
 import eu.factorx.awac.models.forms.Form;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.CUD;
@@ -94,12 +96,12 @@ public class TranslationAdminController extends AbstractController {
 		UpdateBaseListsDTO dto = extractDTOFromRequest(UpdateBaseListsDTO.class);
 		for (BaseListDTO baseListDTO : dto.getBaseLists()) {
 			CodeList codeList = CodeList.valueOf(baseListDTO.getCodeList());
-			List<FullCodeLabelDTO> codeLabelsDTOs = baseListDTO.getCodeLabels();
+			List<UpdateCodeLabelDTO> codeLabelsDTOs = baseListDTO.getCodeLabels();
 
 			HashMap<String, CodeLabel> savedCodeLabels = codeLabelService.findCodeLabelsByList(codeList);
-			List<FullCodeLabelDTO> savedCodeLabelsDTOs = toCodeLabelDTOs(savedCodeLabels.values());
+			List<UpdateCodeLabelDTO> savedCodeLabelsDTOs = toCodeLabelDTOs(savedCodeLabels.values());
 
-			CUD<FullCodeLabelDTO> cud = CUD.fromLists(savedCodeLabelsDTOs, codeLabelsDTOs);
+			CUD<UpdateCodeLabelDTO> cud = CUD.fromLists(savedCodeLabelsDTOs, codeLabelsDTOs);
 			updateCodeLabels(savedCodeLabels, cud.getUpdated());
 			saveCodeLabels(codeList, cud.getCreated());
 		}
@@ -109,30 +111,62 @@ public class TranslationAdminController extends AbstractController {
 
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
-	public Result loadFormsLabels() {
-//		UpdateFormsLabelsDTO res = new UpdateFormsLabelsDTO();
-//		List<AwacCalculator> calculators = awacCalculatorService.findAll();
-//		for (AwacCalculator calculator : calculators) {
-//			InterfaceTypeCode code = calculator.getInterfaceTypeCode();
-//			InterfaceTypeCode interfaceTypeCode = code;
-//			CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(interfaceTypeCode);
-//			FullCodeLabelDTO fullCodeLabelDTO = conversionService.convert(codeLabel, FullCodeLabelDTO.class);
-//
-//			UpdateFormsLabelsDTO.CalculatorItem calculatorItem = new
-//		}
-//		List<Form> forms = formService.findAll();
-//		for (Form form : forms) {
-//			String identifier = form.getIdentifier();
-//			codeLabelService.findCodeLabelByCode()
-//		}
-//		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
-//		return ok(new UpdateBaseListsDTO(baseListDTOs));
-		return null;
+	public Result loadSurveysLabels() {
+		UpdateSurveysLabelsDTO res = new UpdateSurveysLabelsDTO();
+		HashMap<String, CodeLabel> questionCodeLabels = codeLabelService.findCodeLabelsByList(CodeList.QUESTION);
+
+		for (Form form : formService.findAll()) {
+			FormLabelsDTO formItem = new FormLabelsDTO(form.getIdentifier(), form.getAwacCalculator().getInterfaceTypeCode().getKey());
+			for (QuestionSet questionSet : form.getQuestionSets()) {
+				formItem.addQuestionSet(toQuestionSetItem(questionSet, questionCodeLabels));
+			}
+			res.addForm(formItem);
+		}
+		return ok(res);
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result updateSurveysLabels() {
+		UpdateCodeLabelsDTO updatedCodeLabelsDTO = extractDTOFromRequest(UpdateCodeLabelsDTO.class);
+		List<UpdateCodeLabelDTO> codeLabelDTOs = updatedCodeLabelsDTO.getCodeLabelsByList().get(CodeList.QUESTION.name());
+		for (UpdateCodeLabelDTO codeLabelDTO : codeLabelDTOs) {
+			CodeLabel codeLabel = codeLabelService.findById(codeLabelDTO.getId());
+			codeLabel.setLabelEn(codeLabelDTO.getLabelEn());
+			codeLabel.setLabelFr(codeLabelDTO.getLabelFr());
+			codeLabel.setLabelNl(codeLabelDTO.getLabelNl());
+			codeLabelService.saveOrUpdate(codeLabel);
+		}
+		return ok();
+	}
+
+	private FormLabelsDTO.QuestionSetItem toQuestionSetItem(QuestionSet questionSet, Map<String, CodeLabel> questionCodeLabels) {
+		FormLabelsDTO.QuestionSetItem questionSetItem = new FormLabelsDTO.QuestionSetItem(getQuestionCodeLabelDTO(questionSet.getCode(), questionCodeLabels));
+		for (Question question : questionSet.getQuestions()) {
+			FormLabelsDTO.QuestionItem questionItem = new FormLabelsDTO.QuestionItem(getQuestionCodeLabelDTO(question.getCode(), questionCodeLabels));
+			questionSetItem.addQuestion(questionItem);
+		}
+		for (QuestionSet childQuestionSet : questionSet.getChildren()) {
+			questionSetItem.addChild(toQuestionSetItem(childQuestionSet, questionCodeLabels));
+		}
+		return questionSetItem;
+	}
+
+	private UpdateCodeLabelDTO getQuestionCodeLabelDTO(QuestionCode code, Map<String, CodeLabel> questionCodeLabels) {
+		UpdateCodeLabelDTO res;
+		String codeKey = code.getKey();
+		if (questionCodeLabels.containsKey(codeKey)) {
+			res = conversionService.convert(questionCodeLabels.get(codeKey), UpdateCodeLabelDTO.class);
+		} else {
+			res = new UpdateCodeLabelDTO();
+			res.setKey(codeKey);
+		}
+		return res;
 	}
 
 
-	private void updateCodeLabels(HashMap<String, CodeLabel> savedCodeLabels, List<FullCodeLabelDTO> updatedCodeLabelDTOs) {
-		for (FullCodeLabelDTO codeLabelDTO : updatedCodeLabelDTOs) {
+	private void updateCodeLabels(HashMap<String, CodeLabel> savedCodeLabels, List<UpdateCodeLabelDTO> updatedCodeLabelDTOs) {
+		for (UpdateCodeLabelDTO codeLabelDTO : updatedCodeLabelDTOs) {
 			CodeLabel codeLabel = savedCodeLabels.get(codeLabelDTO.getKey());
 			Logger.info("Updating code label: \n\told: {} \n\tnew:{}", codeLabel, codeLabelDTO);
 			codeLabel.setLabelEn(codeLabelDTO.getLabelEn());
@@ -144,8 +178,8 @@ public class TranslationAdminController extends AbstractController {
 		}
 	}
 
-	private void saveCodeLabels(CodeList codeList, List<FullCodeLabelDTO> createdCodeLabelDTOs) {
-		for (FullCodeLabelDTO codeLabelDTO : createdCodeLabelDTOs) {
+	private void saveCodeLabels(CodeList codeList, List<UpdateCodeLabelDTO> createdCodeLabelDTOs) {
+		for (UpdateCodeLabelDTO codeLabelDTO : createdCodeLabelDTOs) {
 			CodeLabel codeLabel = new CodeLabel(codeList, codeLabelDTO.getKey(), codeLabelDTO.getLabelEn(), codeLabelDTO.getLabelFr(), codeLabelDTO.getLabelNl(), codeLabelDTO.getOrderIndex());
 			codeLabelService.saveOrUpdate(codeLabel);
 			codeLabelDTO.setId(codeLabel.getId());
@@ -186,13 +220,13 @@ public class TranslationAdminController extends AbstractController {
 		UpdateCodeLabelsDTO dto = extractDTOFromRequest(UpdateCodeLabelsDTO.class);
 
 		for (String codeListName : dto.getCodeLabelsByList().keySet()) {
-			List<FullCodeLabelDTO> afterCodeLabelDTOs = dto.getCodeLabelsByList().get(codeListName);
+			List<UpdateCodeLabelDTO> afterCodeLabelDTOs = dto.getCodeLabelsByList().get(codeListName);
 			HashMap<String, CodeLabel> codeLabels = codeLabelService.findCodeLabelsByList(CodeList.valueOf(codeListName));
-			List<FullCodeLabelDTO> beforeCodeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
+			List<UpdateCodeLabelDTO> beforeCodeLabelDTOs = toCodeLabelDTOs(codeLabels.values());
 
-			List<FullCodeLabelDTO> updatedCodeLabelDTOs = CUD.fromLists(beforeCodeLabelDTOs, afterCodeLabelDTOs).getUpdated();
+			List<UpdateCodeLabelDTO> updatedCodeLabelDTOs = CUD.fromLists(beforeCodeLabelDTOs, afterCodeLabelDTOs).getUpdated();
 			Logger.info("updatedCodeLabelDTOs = " + updatedCodeLabelDTOs);
-			for (FullCodeLabelDTO fullCodeLabelDTO : updatedCodeLabelDTOs) {
+			for (UpdateCodeLabelDTO fullCodeLabelDTO : updatedCodeLabelDTOs) {
 				CodeLabel codeLabel = codeLabels.get(fullCodeLabelDTO.getKey());
 				codeLabel.setLabelEn(fullCodeLabelDTO.getLabelEn());
 				codeLabel.setLabelFr(fullCodeLabelDTO.getLabelFr());
@@ -237,10 +271,10 @@ public class TranslationAdminController extends AbstractController {
 		return new ArrayList<>(sublistsMaps.values());
 	}
 
-	private List<FullCodeLabelDTO> toCodeLabelDTOs(Iterable<CodeLabel> codeLabels) {
-		List<FullCodeLabelDTO> codeLabelDTOs = new ArrayList<>();
+	private List<UpdateCodeLabelDTO> toCodeLabelDTOs(Iterable<CodeLabel> codeLabels) {
+		List<UpdateCodeLabelDTO> codeLabelDTOs = new ArrayList<>();
 		for (CodeLabel codeLabel : codeLabels) {
-			codeLabelDTOs.add(conversionService.convert(codeLabel, FullCodeLabelDTO.class));
+			codeLabelDTOs.add(conversionService.convert(codeLabel, UpdateCodeLabelDTO.class));
 		}
 		return codeLabelDTOs;
 	}
