@@ -220,5 +220,6 @@ POST        /awac/admin/translations/surveyslabels/save                     @eu.
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
 POST        /awac/admin/organizationData/sendEmail                          @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
 
-
 GET         /awac/admin/translations/wysiwyg/all                            @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()
+POST        /awac/admin/translations/wysiwyg/update                         @eu.factorx.awac.controllers.AdminController.updateWysiwygDocument()
+GET         /awac/admin/translations/wysiwyg/get/:category/:name            @eu.factorx.awac.controllers.TranslationController.getWysiwygDocument(category:String,name:String)

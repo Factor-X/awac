@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalHelp", (directiveService) ->
+.directive "mmAwacModalHelp", (directiveService, downloadService) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -11,7 +11,9 @@ angular
         directiveService.autoScopeImpl $scope
 
         if $scope.getParams().template?
-            $scope.url = "$/angular/views/" + $scope.$root.instanceName + "/" + $scope.getParams().template + "_" + $scope.$root.language + ".html"
+            downloadService.getJson "/awac/admin/translations/wysiwyg/get/" + $scope.$root.instanceName + "/" + $scope.getParams().template + ":" + $scope.$root.language, (result) ->
+                if result.success
+                    $('.modal-help-content').html(result.data.content)
 
         $scope.close = ->
             modalService.close modalService.HELP

@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacDocumentQuestion", (directiveService, translationService, $upload, messageFlash, modalService) ->
+.directive "mmAwacDocumentQuestion", (directiveService, translationService, $upload, messageFlash, modalService, $filter) ->
     restrict: "E"
     scope: directiveService.autoScope
         ngDataToCompare: '='

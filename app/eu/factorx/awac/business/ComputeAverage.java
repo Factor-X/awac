@@ -154,16 +154,16 @@ public class ComputeAverage {
 	    */
 		String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
 
-		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - moyenne", velocityContent);
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - statistiques", velocityContent);
 		//
 
-
-		FileOutputStream outputs = new FileOutputStream(new File("/home/florian/temp/result.xls"));
-		IOUtils.write(output.toByteArray(), outputs);
+        // Local write for test purposes
+    	//	FileOutputStream outputs = new FileOutputStream(new File("/home/florian/temp/result.xls"));
+	    //	IOUtils.write(output.toByteArray(), outputs);
 
 		//send email
 		HashMap<String, ByteArrayOutputStream> listAttachment = new HashMap<>();
-		listAttachment.put("average.xls", output);
+		listAttachment.put("statistiques_AWAC.xls", output);
 		email.setAttachmentFilenameList(listAttachment);
 		emailService.send(email);
 
@@ -307,7 +307,7 @@ public class ComputeAverage {
 		WritableWorkbook wb = Workbook.createWorkbook(byteArrayOutputStream, wbSettings);
 
 		//create the excel file
-		WritableSheet sheet = wb.createSheet("Moyenne", wb.getNumberOfSheets());
+		WritableSheet sheet = wb.createSheet("Statistiques", wb.getNumberOfSheets());
 
 		int row = 0;
 		for (Map.Entry<String, String> entry : criteria.entrySet()) {

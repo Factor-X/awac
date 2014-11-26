@@ -3,13 +3,13 @@
     .row
         .col-md-3
 
-            .panel.panel-default
+            .panel.panel-default(ng-repeat="c in categories")
                 .panel-heading
                     span.fa.fa-folder
                     span &nbsp;
-                    span Textes de confidentialité
+                    span {{ c.label }}
                 .list-group
-                    .list-group-item(ng-repeat="file in (files | filter:{category: 'confidentiality'})", ng-class="{active: isSelected(file)}", ng-click="select(file)")
+                    .list-group-item(ng-repeat="file in (files | filter:{category: c.key})", ng-class="{active: isSelected(file)}", ng-click="select(file)")
                         span.badge.alert-warning(ng-show="isModified(file)")
                             span.fa.fa-edit
                             span &nbsp;
@@ -17,39 +17,6 @@
                         span.fa.fa-file-o
                         span &nbsp;
                         span {{ file.name }}
-
-            .panel.panel-default
-                .panel-heading
-                    span.fa.fa-folder
-                    span &nbsp;
-                    span Agreements
-                .list-group
-                    .list-group-item(ng-repeat="file in (files | filter:{category: 'agreement'})", ng-class="{active: isSelected(file)}", ng-click="select(file)")
-                        span.badge.alert-warning(ng-show="isModified(file)")
-                            span.fa.fa-edit
-                            span &nbsp;
-                            span modifié
-                        span.fa.fa-file-o
-                        span &nbsp;
-                        span {{ file.name }}
-
-            .panel.panel-default
-                .panel-heading
-                    span.fa.fa-folder
-                    span &nbsp;
-                    span Textes d'aide
-                .list-group
-                    .list-group-item(ng-repeat="file in (files | filter:{category: 'help'})", ng-class="{active: isSelected(file)}", ng-click="select(file)")
-                        span.badge.alert-warning(ng-show="isModified(file)")
-                            span.fa.fa-edit
-                            span &nbsp;
-                            span modifié
-
-                        span.fa.fa-file-o
-                        span &nbsp;
-                        span {{ file.name }}
-
-        span {{ selectedFile }}
 
         .col-md-9
 
@@ -57,7 +24,7 @@
                 .col-md-9
                     h4 {{ selectedFile.name }}
                 .col-md-3
-                    button.button.save.pull-right(type="button", ng-disabled="!isModified(selectedFile)")
+                    button.button.save.pull-right(type="button", ng-disabled="!isModified(selectedFile)", ng-click="save(selectedFile)")
                         span.fa.fa-save
                         span &nbsp;
                         span enregistrer
