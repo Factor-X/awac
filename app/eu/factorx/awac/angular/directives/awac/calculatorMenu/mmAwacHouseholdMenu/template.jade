@@ -1,0 +1,32 @@
+.nav_tabs(ng-show='displayMenu===true')
+    .nav_entreprise
+        .site_menu
+            .menu.menu_municipality
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M1\') == true}', ng-click='navTo(\'/form/TAB_M1\')')
+                    .tab-title(ng-bind-html='\'TAB_M1\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M1\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M2\') == true}', ng-click='navTo(\'/form/TAB_M2\')')
+                    .tab-title(ng-bind-html='\'TAB_M2\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M2\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M3\')  == true}', ng-click='navTo(\'/form/TAB_M3\')')
+                    .tab-title(ng-bind-html='\'TAB_M3\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M3\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M4\') == true}', ng-click='navTo(\'/form/TAB_M4\')')
+                    .tab-title(ng-bind-html='\'TAB_M4\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M4\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M5\') == true}', ng-click='navTo(\'/form/TAB_M5\')')
+                    .tab-title(ng-bind-html='\'TAB_M5\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M5\')')
+                    .menu_arrow
+
+        .last_menu
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='navTo(\'/results\')')
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}',
+            ng-click='isDisabled || navTo(\'/actions\')',
+            ng-show="$root.instanceName != 'verification'")
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")
