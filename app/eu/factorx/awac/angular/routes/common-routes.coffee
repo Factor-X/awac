@@ -71,6 +71,16 @@ initializeCommonRoutes = (defaultResolve) ->
 
             }
         )
+        .when('/product_manager', {
+                templateUrl: '$/angular/views/product_manager.html'
+                controller: 'ProductManagerCtrl'
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_product_manager'
+                }, defaultResolve)
+
+            }
+        )
         .when('/registration/:key', {
                 templateUrl: '$/angular/views/user_registration.html'
                 controller: 'RegistrationCtrl'

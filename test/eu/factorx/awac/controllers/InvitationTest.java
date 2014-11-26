@@ -77,7 +77,8 @@ public class InvitationTest extends AbstractBaseControllerTest {
 
 		// ConnectionFormDTO
 		ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
-		Organization org = organizationService.findByName("Factor-X");
+		//id 14 = factor-X
+		Organization org = organizationService.findById(FACTORX_ID);
 
 		Logger.info("organization id : " + org.getId());
 

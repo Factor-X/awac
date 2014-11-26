@@ -44,6 +44,7 @@
                 <bean class="eu.factorx.awac.converter.CodesEquivalenceToCodesEquivalenceDTOConverter" />
                 <bean class="eu.factorx.awac.converter.CodeLabelToFullCodeLabelDTOConverter" />
                 <bean class="eu.factorx.awac.converter.OrganizationToOrganizationDataDTOConverter" />
+                <bean class="eu.factorx.awac.converter.ProductToListPeriodsDTOConverter" />
                 <!-- admin -->
                 <bean class="eu.factorx.awac.converter.admin.BADLogToBADLogDTOConverter" />
                 <bean class="eu.factorx.awac.converter.admin.FactorToFactorDTOConverter" />

@@ -46,6 +46,13 @@ cat ./update_factor_values_to_set_2000_everywhere.sql >> /tmp/migration/migratio
 # add_wysiwyg_document
 cat ./add_wysiwyg_document.sql >> /tmp/migration/migration_script.sql
 
+#remove the organization name constraint
+cat ./remove_organization_name_unique_constraint.sql >> /tmp/migration/migration_script.sql
+
+# add desrption to product
+cat ./product.sql >> /tmp/migration/migration_script.sql
+
+
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
 

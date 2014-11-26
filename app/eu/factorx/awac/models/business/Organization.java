@@ -16,7 +16,6 @@ import eu.factorx.awac.models.code.type.ScopeTypeCode;
 @Entity
 @Table(name = "organization")
 @NamedQueries({
-		@NamedQuery(name = Organization.FIND_BY_NAME, query = "select p from Organization p where p.name = :name"),
         @NamedQuery(name = Organization.FIND_BY_INTERFACE_CODE, query = "select p from Organization p where p.interfaceCode = :interfaceCode"),
 })
 public class Organization extends Scope {
@@ -29,7 +28,6 @@ public class Organization extends Scope {
 	private static final long serialVersionUID = 1L;
     public static final java.lang.String FIND_BY_INTERFACE_CODE= "organization_FIND_BY_INTERFACE_CODE";
 
-    @Column(unique = true)
 	private String name;
 
 	private String naceCode;

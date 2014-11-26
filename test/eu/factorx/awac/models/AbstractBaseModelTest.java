@@ -25,6 +25,7 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 public abstract class AbstractBaseModelTest implements ApplicationContextAware {
 
     public static final String TEST_USER = "TEST_USER";
+	public static final long FACTORX_ID = 14L;
 
     protected static EntityManager em;
     protected ApplicationContext applicationContext;

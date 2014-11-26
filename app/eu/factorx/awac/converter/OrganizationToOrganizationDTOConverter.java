@@ -3,6 +3,7 @@ package eu.factorx.awac.converter;
 import java.util.Collections;
 import java.util.List;
 
+import eu.factorx.awac.models.business.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class OrganizationToOrganizationDTOConverter implements Converter<Organiz
     @Autowired
     private AccountToPersonDTOConverter accountToPersonDTOConverter;
 
+	@Autowired
+	private ProductToProductDTOConverter productToProductDTOConverter;
+
     @Override
     public OrganizationDTO convert(Organization org) {
 
@@ -38,6 +42,16 @@ public class OrganizationToOrganizationDTOConverter implements Converter<Organiz
         for (Site site : siteList) {
             dto.getSites().add(siteToSiteDTOConverter.convert(site));
         }
+
+	    //order product list
+	    List<Product> productList = org.getProducts();
+
+	    Collections.sort(productList);
+
+	    for (Product product: productList) {
+		    dto.getProducts().add(productToProductDTOConverter.convert(product));
+	    }
+
         for (Account account : org.getAccounts()) {
             dto.getUsers().add(accountToPersonDTOConverter.convert(account));
         }

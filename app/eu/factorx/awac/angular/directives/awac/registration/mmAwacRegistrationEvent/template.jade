@@ -1,0 +1,44 @@
+div(class="field_form")
+    mm-awac-modal-field-text(ng-info="fields.firstNameInfo")
+    mm-awac-modal-field-text(ng-info="fields.lastNameInfo")
+    mm-awac-modal-field-text(ng-info="fields.emailInfo")
+    mm-awac-modal-field-text(ng-info="fields.identifierInfo")
+    mm-awac-modal-field-text(ng-info="fields.passwordInfo")
+    mm-awac-modal-field-text(ng-info="fields.passwordConfirmInfo").field_form_separator
+    mm-awac-modal-field-text(ng-info="fields.organizationNameInfo").field_form_separator
+    mm-awac-modal-field-text(ng-info="fields.firstProductNameInfo").field_form_separator
+    .field_row
+        .field_cell(ng-bind-html="'REGISTRATION_AGREEMENT_VALIDATION' | translateText")
+        .field_cell
+            div
+                input(
+                    type="checkbox",
+                    style="width: 18px;height: 18px;",
+                    ng-model="aggrement_validation")
+                button.button(
+                type="button",
+                class="btn btn-primary",
+                ng-bind-html="'REGISTRATION_AGREEMENT_CONSULTATION' | translate",
+                ng-click="displayAgreement()")
+        .field_cell
+            img(ng-show='aggrement_validation == true', src='/assets/images/field_valid.png')
+            .error_message(ng-hide='aggrement_validation == true')
+                img(src='/assets/images/field_invalid.png')
+                div(ng-bind-html="'ACCEPT_AGREEMENT' | translateText")
+
+    .field_row.field_form_separator
+        .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
+        .field_cell(style="text-align: left;")
+            input(type="checkbox", ng-model="organizationStatisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
+
+    div(ng-hide="isLoading")
+
+        button.button(
+        type="button",
+        class="btn btn-primary",
+        ng-bind-html="'REGISTRATION_BUTTON' | translate",
+        ng-click="registration()",
+        ng-disabled="!allFieldValid()")
+
+    img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
+

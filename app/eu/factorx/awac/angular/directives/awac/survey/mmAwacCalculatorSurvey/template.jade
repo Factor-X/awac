@@ -37,14 +37,14 @@ div
                         ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
                         ng-click="$root.showHelp()")
                     td
-                        //  organization manager button
+                        //  organization manager button => for all calculator
                         button.button.user_manage(
                         type='button',
                         ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/organization_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
                         ng-disabled='$root.currentPerson.isAdmin === false')
-                        //  site manager button
+                        //  site manager button => only for enterprise
                         button.button.user_manage(
                         ng-show="$root.instanceName == 'enterprise'"
                         type='button',
@@ -52,8 +52,17 @@ div
                         ng-click='isDisabled || $root.nav(\'/site_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
                         ng-disabled='$root.currentPerson.isAdmin === false')
-                        // user manager button
+                        //  product manager button => only for event
                         button.button.user_manage(
+                        ng-show="$root.instanceName == 'event'"
+                        type='button',
+                        ng-bind-html='\'EVENT_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/product_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/product_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
+                        // user manager button => not for little_emitter or household
+                        button.button.user_manage(
+                        ng-hide="$root.instanceName == 'household' || $root.instanceName == 'little-emitter'"
                         type='button',
                         ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/user_manager\')',
@@ -78,16 +87,23 @@ div
             .data_date
                 div(ng-bind-html='\'PERIOD_DATA\' | translate')
                 select(ng-options='p.key as p.label for p in $root.availablePeriods', ng-model='$root.periodSelectedKey')
+
+            //select site => only for entreprise
+            //select site => only for event
             .big_separator(ng-show="$root.instanceName == 'enterprise'")
-            .data_date_compare(ng-show="$root.instanceName == 'enterprise'")
-                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_SITE' | translate")
-                select(ng-options='s.scope as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
+            .data_date_compare(ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'event'")
+                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_SITE' | translate",ng-show="$root.instanceName == 'enterprise'")
+                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_PRODUCT' | translate",ng-show="$root.instanceName == 'event'")
+                select(ng-options='s.id as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
+
             .big_separator
             .data_date_compare
                 div(ng-bind-html="'SURVEY_INTERFACE_COMPARE_TO' | translate")
                 select(ng-options='p.key as p.label for p in periodsForComparison', ng-model='$root.periodToCompare')
             .big_separator
-            div(ng-show="$root.currentPerson.isAdmin == true")
+
+            //verification and closed => only for enterprise and municipality
+            div(ng-show="$root.currentPerson.isAdmin == true && ($root.instanceName == 'municipality' || $root.instanceName == 'enterprise')")
 
                 //verification button => start verification
                 button.button.verification(

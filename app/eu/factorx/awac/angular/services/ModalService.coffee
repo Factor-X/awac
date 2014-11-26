@@ -33,6 +33,8 @@ angular
     @CREATE_OR_EDIT_REDUCTION_ACTION_ADVICE = 'create-or-edit-reduction-action-advice'
     @EDIT_SUB_LIST = 'edit-sub-list'
     @SEND_EMAIL = 'send-email'
+    @EDIT_PRODUCT = 'edit-product'
+    @ADD_USER_PRODUCT = 'add-user-product'
 
     @show = (modalName, params) ->
         args = []

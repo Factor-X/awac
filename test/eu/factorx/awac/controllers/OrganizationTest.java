@@ -81,7 +81,7 @@ public class OrganizationTest extends AbstractBaseControllerTest {
   	@Test
 	public void _001_getAllAccounts() {
 
-	Organization org = organisationService.findByName(ORGANISATION_NAME);
+	Organization org = organisationService.findById(FACTORX_ID);
 	Site site = siteService.findById(1L);
 	SiteAddUsersDTO dto = createDTO(org,site);
 
@@ -131,7 +131,7 @@ public class OrganizationTest extends AbstractBaseControllerTest {
 
 		List sites = new ArrayList<Site> ();
 
-		Organization org = organisationService.findByName(ORGANISATION_NAME);
+		Organization org = organisationService.findById(FACTORX_ID);
 		Site site = siteService.findById(1L);
 		SiteAddUsersDTO dto = createDTO(org,site);
 

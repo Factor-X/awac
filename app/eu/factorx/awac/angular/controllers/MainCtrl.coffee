@@ -35,7 +35,7 @@ angular
     #
     # inject the menu
     #
-    if $scope.$root.instanceName == "municipality" || $scope.$root.instanceName == "enterprise"
+    if $scope.$root.instanceName != "verification" && $scope.$root.instanceName != "admin"
         directive = $compile("<mm-awac-" + $scope.$root.instanceName + "-menu></mm-awac-" + $scope.$root.instanceName + "_menu>")($scope)
         p=$('.inject-menu:first',$element)
         $(directive).insertAfter p
@@ -382,6 +382,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         # try to load default scope / period
         #default scope
 
+        # TODO change defaultSiteId by defaultProductId
         if !!data.defaultSiteId && !!data.defaultPeriod
             if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
                 scopeSelectedId =data.defaultSiteId
@@ -396,11 +397,11 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 scopeSelectedId = $rootScope.mySites[0].id
 
         if scopeSelectedId? && !periodSelectedKey?
-            for site in $rootScope.mySites
-                if site.id == scopeSelectedId
-                    if $rootScope.instanceName == 'enterprise'
-                        if site.listPeriodAvailable? && site.listPeriodAvailable.length > 0
-                            periodSelectedKey = site.listPeriodAvailable[0].key
+            for scope in $rootScope.mySites
+                if scope.id == scopeSelectedId
+                    if $rootScope.instanceName == 'enterprise' || $rootScope.instanceName == 'event'
+                        if scope.listPeriodAvailable? && scope.listPeriodAvailable.length > 0
+                            periodSelectedKey = scope.listPeriodAvailable[0].key
                     else
                         periodSelectedKey = $rootScope.periods[0].key
 
@@ -441,7 +442,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 else
                     $rootScope.availablePeriods = null
                     $location.path("noScope")
-        else if $rootScope.instanceName == 'municipality'
+        else if $rootScope.instanceName == 'event'
+            #TODO implement
+        else
             $rootScope.availablePeriods = $rootScope.periods
 
 

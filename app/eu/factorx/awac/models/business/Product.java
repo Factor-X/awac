@@ -15,7 +15,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = Product.FIND_BY_ORGANIZATION, query = "select p from Product p where p.organization = :organization"),
 })
-public class Product extends Scope {
+public class Product extends Scope  implements Comparable<Product> {
 
 	private static final long serialVersionUID = 1L;
     public static final String FIND_BY_ORGANIZATION = "product_FIND_BY_ORGANIZATION";
@@ -24,6 +24,8 @@ public class Product extends Scope {
 	private Organization organization;
 
 	private String name;
+
+	private String description;
 
     @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable(name = "mm_product_period",
@@ -89,9 +91,21 @@ public class Product extends Scope {
                 '}';
     }
 
+	@Override
+	public int compareTo(Product o) {
+		return this.getTechnicalSegment().getCreationDate().compareTo(o.getTechnicalSegment().getCreationDate());
+	}
+
     @Override
 	public ScopeTypeCode getScopeType() {
 		return ScopeTypeCode.PRODUCT;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

@@ -47,7 +47,7 @@ public class ScopeServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_findByOrganization() {
 
-		Scope scope = organizationService.findByName(ORGANIZATION_NAME);
+		Scope scope = organizationService.findById(FACTORX_ID);
 
 		assertNotNull("Scope not found for organization "+ORGANIZATION_NAME, scope);
 		assertEquals("Organization expected "+ORGANIZATION_NAME+" but found : "+scope.getOrganization().getName(), ORGANIZATION_NAME, scope.getOrganization().getName());

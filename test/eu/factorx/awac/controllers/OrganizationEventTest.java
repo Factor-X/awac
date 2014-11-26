@@ -80,7 +80,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
   	@Test
 	public void _001_getAllEvents() {
 
-	Organization org = organisationService.findByName(ORGANISATION_NAME);
+	Organization org = organisationService.findById(FACTORX_ID);
 	Period period = periodService.findByCode(PeriodCode.P2013);
 	OrganizationEventDTO dto = createDTO(org,period);
 
@@ -128,7 +128,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	@Test
 	public void _002_saveEvent() {
 
-		Organization org = organisationService.findByName(ORGANISATION_NAME);
+		Organization org = organisationService.findById(FACTORX_ID);
 		Period period = periodService.findByCode(PeriodCode.P2013);
 		OrganizationEventDTO dto = createDTO(org,period);
 		dto.setName(EVENT_NAME);
@@ -173,7 +173,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	public void _003_updateEvent() {
 
 
-		Organization org = organisationService.findByName(ORGANISATION_NAME);
+		Organization org = organisationService.findById(FACTORX_ID);
 		Period period = periodService.findByCode(PeriodCode.P2013);
 
 		List<OrganizationEvent> list = organizationEventService.findByOrganizationAndPeriod(org,period);
@@ -222,7 +222,7 @@ public class OrganizationEventTest extends AbstractNoDefaultTransactionBaseContr
 	@Test
 	public void _004_DeleteAllEvents() {
 		em.getTransaction().begin();
-		Organization org = organisationService.findByName(ORGANISATION_NAME);
+		Organization org = organisationService.findById(FACTORX_ID);
 		Period period = periodService.findByCode(PeriodCode.P2013);
 
 		organizationEventService.remove(organizationEventService.findByOrganizationAndPeriod(org,period));

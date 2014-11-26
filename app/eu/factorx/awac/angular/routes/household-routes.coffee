@@ -8,8 +8,7 @@ initializeHouseholdRoutes = (defaultResolve) ->
         $rootScope.onFormPath = (period, scope) ->
             $location.path($rootScope.getFormPath() + '/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
-            # TODO
-            return null #'/form/TAB2'
+            return '/form/TAB_M1'
         $rootScope.getDefaultRoute = ()->
             return $rootScope.getFormPath()
 

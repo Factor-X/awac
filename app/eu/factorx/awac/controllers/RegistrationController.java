@@ -1,27 +1,16 @@
 package eu.factorx.awac.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Configuration;
-import play.Logger;
-import play.db.jpa.Transactional;
-import play.mvc.Result;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
-import eu.factorx.awac.dto.awac.post.EnterpriseAccountCreationDTO;
-import eu.factorx.awac.dto.awac.post.RegistrationDTO;
+import eu.factorx.awac.dto.awac.post.*;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.post.VerificationRegistrationDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.account.Person;
+import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
@@ -34,45 +23,138 @@ import eu.factorx.awac.util.MyrmexException;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Configuration;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
 
-@Transactional(readOnly = false)
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @org.springframework.stereotype.Controller
 public class RegistrationController extends AbstractController {
 
 	@Autowired
-	private PersonService                 personService;
+	private PersonService personService;
 	@Autowired
-	private AccountService                accountService;
+	private AccountService accountService;
 	@Autowired
-	private OrganizationService           organizationService;
+	private OrganizationService organizationService;
 	@Autowired
-	private ConversionService             conversionService;
+	private ConversionService conversionService;
 	@Autowired
-	private SiteService                   siteService;
+	private SiteService siteService;
 	@Autowired
 	private AccountSiteAssociationService accountSiteAssociationService;
 	@Autowired
-	private PeriodService                 periodService;
+	private PeriodService periodService;
 	@Autowired
-	private EmailService                  emailService;
+	private EmailService emailService;
 	@Autowired
-	private CodeLabelService              codeLabelService;
+	private CodeLabelService codeLabelService;
 	@Autowired
-	private VerificationRequestService    verificationRequestService;
+	private VerificationRequestService verificationRequestService;
 	@Autowired
-	private VelocityGeneratorService      velocityGeneratorService;
+	private VelocityGeneratorService velocityGeneratorService;
 	@Autowired
-	private VerificationController        verificationController;
+	private VerificationController verificationController;
+	@Autowired
+	private ProductService productService;
+	@Autowired
+	private AccountProductAssociationService accountProductAssociationService;
 
+	/**
+	 *
+	 * create organization (with the lastName of the person)
+	 * create administrator
+	 *
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public Result householdRegistration() {
+
+		HouseholdAccountCreationDTO dto = extractDTOFromRequest(HouseholdAccountCreationDTO.class);
+
+		// control organization name
+
+		//create organization
+		Organization organization = new Organization(dto.getPerson().getLastName(), InterfaceTypeCode.HOUSEHOLD, dto.getOrganizationStatisticsAllowed());
+		organizationService.saveOrUpdate(organization);
+
+		//create administrator
+		Account account = null;
+		try {
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
+		} catch (MyrmexException e) {
+			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+		}
+
+		//if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account);
+
+		// email submission
+		handleEmailSubmission(account, InterfaceTypeCode.HOUSEHOLD);
+
+		//create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+		return ok(resultDto);
+
+	}
+
+	/**
+	 *
+	 * create organization (with specific name)
+	 * create administrator
+	 *
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public Result littleEmitterRegistration() {
+
+		LittleEmitterAccountCreationDTO dto = extractDTOFromRequest(LittleEmitterAccountCreationDTO.class);
+
+		// control organization name
+
+		//create organization
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.LITTLE_EMITTER, dto.getOrganizationStatisticsAllowed());
+		organizationService.saveOrUpdate(organization);
+
+		//create administrator
+		Account account = null;
+		try {
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
+		} catch (MyrmexException e) {
+			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+		}
+
+		//if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account);
+
+		// email submission
+		handleEmailSubmission(account, InterfaceTypeCode.LITTLE_EMITTER);
+
+		//create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+		return ok(resultDto);
+
+	}
+
+	/**
+	 * control the key
+	 * create organizaiton (with specific name)
+	 * create adminstrator
+	 * @return
+	 */
+	@Transactional(readOnly = false)
 	public Result verificationRegistration() {
 
 		VerificationRegistrationDTO dto = extractDTOFromRequest(VerificationRegistrationDTO.class);
-
-		// control organization name
-		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if (organization != null) {
-            throw new MyrmexRuntimeException(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED);
-		}
 
 		// control key
 		VerificationRequest verificationRequest = verificationRequestService.findByKey(dto.getKey());
@@ -81,8 +163,8 @@ public class RegistrationController extends AbstractController {
 		}
 
 		// create organization
-		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
-        organization.setStatisticsAllowed(false);
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.VERIFICATION);
+		organization.setStatisticsAllowed(false);
 		organizationService.saveOrUpdate(organization);
 
 		// create administrator
@@ -109,19 +191,23 @@ public class RegistrationController extends AbstractController {
 	}
 
 
+	/**
+	 * create organzaiton (with specific name)
+	 * create administrator
+	 * create site
+	 * assign lastPeriod to the site
+	 * assign the account to the site
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
 
 		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
 
 		// control organization name
-		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if (organization != null) {
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_ORGANIZATION_NAME_ALREADY_USED));
-		}
 
 		//create organization
-		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE, dto.getOrganizationStatisticsAllowed());
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.ENTERPRISE, dto.getOrganizationStatisticsAllowed());
 
 		organizationService.saveOrUpdate(organization);
 
@@ -162,20 +248,76 @@ public class RegistrationController extends AbstractController {
 		return ok(resultDto);
 	}
 
+	/**
+	 * create organzaiton (with specific name)
+	 * create administrator
+	 * create site
+	 * assign lastPeriod to the event
+	 * assign the account to the event
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public Result eventRegistration() {
 
+		EventAccountCreationDTO dto = extractDTOFromRequest(EventAccountCreationDTO.class);
+
+		// control organization name
+
+		//create organization
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.EVENT, dto.getOrganizationStatisticsAllowed());
+
+		organizationService.saveOrUpdate(organization);
+
+		//create administrator
+		Account account = null;
+		try {
+			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
+		} catch (MyrmexException e) {
+			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+		}
+
+		//create site
+		Product product = new Product(organization,dto.getFirstProductName());
+
+		//add last year period
+		Period period = periodService.findLastYear();
+		List<Period> listAvailablePeriod = new ArrayList<>();
+		listAvailablePeriod.add(period);
+		product.setListPeriodAvailable(listAvailablePeriod);
+
+		productService.saveOrUpdate(product);
+		organization.getProducts().add(product);
+
+		//create link between account and site
+		AccountProductAssociation accountSiteAssociation = new AccountProductAssociation(product, account);
+		accountProductAssociationService.saveOrUpdate(accountSiteAssociation);
+
+		//if the login and the password are ok, refresh the session
+		securedController.storeIdentifier(account);
+
+		// email submission
+		handleEmailSubmission(account, InterfaceTypeCode.EVENT);
+
+		//create ConnectionFormDTO
+		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
+
+		return ok(resultDto);
+	}
+
+	/**
+	 * create organzaiton (with specific name)
+	 * create administrator
+	 * @return
+	 */
 	@Transactional(readOnly = false)
 	public Result municipalityRegistration() {
 
 		RegistrationDTO dto = extractDTOFromRequest(RegistrationDTO.class);
 
 		// control organization name
-		Organization organization = organizationService.findByName(dto.getOrganizationName());
-		if (organization != null) {
-			return notFound(new ExceptionsDTO(BusinessErrorType.INVALID_MUNICIPALITY_NAME_ALREADY_USED));
-		}
 
 		//create organization
-		organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY, dto.getOrganizationStatisticsAllowed());
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.MUNICIPALITY, dto.getOrganizationStatisticsAllowed());
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
@@ -197,6 +339,10 @@ public class RegistrationController extends AbstractController {
 
 		return ok(resultDto);
 	}
+
+	/* --------
+	 * PRIVATE FUNCTION
+	 */
 
 	private void handleEmailSubmission(Account account, InterfaceTypeCode interfaceType) {
 
@@ -245,7 +391,6 @@ public class RegistrationController extends AbstractController {
 		if (account != null) {
 			throw new MyrmexException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
 		}
-
 
 		//control email
 		Person person = personService.getByEmail(personDTO.getEmail());

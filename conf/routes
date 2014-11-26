@@ -9,7 +9,7 @@ GET         /                                                               @eu.
 GET         /enterprise                                                     @eu.factorx.awac.controllers.ApplicationController.calculator(app= "enterprise")
 GET         /municipality                                                   @eu.factorx.awac.controllers.ApplicationController.calculator(app= "municipality")
 GET         /event                                                          @eu.factorx.awac.controllers.ApplicationController.calculator(app= "event")
-GET         /littleEmitter                                                  @eu.factorx.awac.controllers.ApplicationController.calculator(app= "littleEmitter")
+GET         /little-emitter                                                 @eu.factorx.awac.controllers.ApplicationController.calculator(app= "little-emitter")
 GET         /household                                                      @eu.factorx.awac.controllers.ApplicationController.calculator(app= "household")
 GET         /verification                                                   @eu.factorx.awac.controllers.ApplicationController.verification()
 GET         /admin                                                          @eu.factorx.awac.controllers.ApplicationController.admin()
@@ -37,7 +37,10 @@ POST        /awac/forgotPassword                                            @eu.
 #
 POST        /awac/registration/enterprise                                   @eu.factorx.awac.controllers.RegistrationController.enterpriseRegistration()
 POST        /awac/registration/municipality                                 @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
+POST        /awac/registration/household                                    @eu.factorx.awac.controllers.RegistrationController.householdRegistration()
 POST        /awac/registration/validator                                    @eu.factorx.awac.controllers.RegistrationController.verificationRegistration()
+POST        /awac/registration/little_emitter                               @eu.factorx.awac.controllers.RegistrationController.littleEmitterRegistration()
+POST        /awac/registration/event                                        @eu.factorx.awac.controllers.RegistrationController.eventRegistration()
 
 
 #
@@ -139,10 +142,21 @@ POST        /awac/site/assignPeriodToSite                                   @eu.
 GET         /awac/site/:siteId                                              @eu.factorx.awac.controllers.SiteController.getSite(siteId:Long)
 
 #
+# product
+#
+POST        /awac/product/edit                                              @eu.factorx.awac.controllers.ProductController.edit()
+POST        /awac/product/create                                            @eu.factorx.awac.controllers.ProductController.create()
+POST        /awac/product/assignPeriodToProduct                             @eu.factorx.awac.controllers.ProductController.assignPeriodToProduct()
+GET         /awac/product/:productId                                        @eu.factorx.awac.controllers.ProductController.getProduct(productId:Long)
+
+
+#
 # organization
 #
 POST        /awac/organization/site/associatedaccounts/load                 @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccounts()
+POST        /awac/organization/product/associatedaccounts/load              @eu.factorx.awac.controllers.OrganizationController.loadAssociatedAccountsForProduct()
 POST        /awac/organization/site/associatedaccounts/save                 @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccounts()
+POST        /awac/organization/product/associatedaccounts/save                 @eu.factorx.awac.controllers.OrganizationController.saveAssociatedAccountsForProduct()
 GET         /awac/organization/getMyOrganization                            @eu.factorx.awac.controllers.OrganizationController.getMyOrganization()
 POST        /awac/organization/update                                       @eu.factorx.awac.controllers.OrganizationController.updateOrganization()
 
@@ -150,7 +164,7 @@ POST        /awac/organization/update                                       @eu.
 #
 # organization event
 GET         /awac/organization/events/load                                  @eu.factorx.awac.controllers.OrganizationEventController.load()
-GET         /awac/organization/events/byOrganization/:organization          @eu.factorx.awac.controllers.OrganizationEventController.loadEventsByOrganization(organization:String)
+GET         /awac/organization/events/byOrganization/:organization          @eu.factorx.awac.controllers.OrganizationEventController.loadEventsByOrganization(organization:Long)
 POST        /awac/organization/events/save                                  @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()
 
 #
@@ -204,7 +218,7 @@ GET         /awac/admin/translations/surveyslabels/load                     @eu.
 POST        /awac/admin/translations/surveyslabels/save                     @eu.factorx.awac.controllers.TranslationAdminController.updateSurveysLabels()
 
 GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
-POST /awac/admin/organizationData/sendEmail                                 @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+POST        /awac/admin/organizationData/sendEmail                          @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
 
 
-GET         /awac/admin/translations/wysiwyg/all                           @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()
+GET         /awac/admin/translations/wysiwyg/all                            @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()

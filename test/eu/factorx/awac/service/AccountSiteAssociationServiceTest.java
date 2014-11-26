@@ -46,6 +46,8 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 	private ScopeService scopeService;
 
 
+	Long organizationId = null;
+
 
 	@Test
     public void _001_createAccountSiteAssociation() {
@@ -75,6 +77,8 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 		org.setSites(siteList);
 		organizationService.saveOrUpdate(org);
 
+		organizationId = org.getId();
+
 		AccountSiteAssociation accountSiteAssociation = new AccountSiteAssociation(site,ac);
 		accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
 
@@ -89,7 +93,7 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 	@Test
 	public void _002_deleteAll() {
 
-		Organization org = organizationService.findByName("testing");
+		Organization org = organizationService.findById(organizationId);
 		assertNotNull(org);
 
 		Account acc = accountService.findByIdentifier("gho");

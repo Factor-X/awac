@@ -1,0 +1,33 @@
+div
+    .menu_close(ng-click="toForm()")
+    h1(ng-bind-html="'PRODUCT_MANAGER_BUTTON' | translateText")
+
+    div.site_manager
+
+        h4(ng-bind-html="'EVENT_MANAGER_EVENT_LIST_TITLE' | translateText")
+        .desc(ng-bind-html="'EVENT_MANAGER_EVENT_LIST_DESC' | translateText")
+
+        table.site_table
+            tr.site_table_header
+                td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
+                td(ng-bind-html="'NAME' | translateText")
+                td(ng-bind-html="'DESCRIPTION' | translateText")
+                td(ng-bind-html="'SITE_MANAGER_ADD_USERS_BUTTON' | translateText")
+                td
+                    select(ng-options='p.key as p.label for p in $root.periods', ng-model='assignPeriod')
+
+            tr(ng-repeat="product in getProductList()")
+                td
+                    button(type="button", title="{{'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText}}", ng-click="editOrCreateProduct(product)", class="edit_icon glyphicon glyphicon-pencil")
+                td {{product.name}}
+                td {{product.description}}
+                td
+                    button(type="button", title="{{'SITE_MANAGER_ADD_USERS_BUTTON' | translateText}}", ng-click="addUsers(product)", class="edit_icon glyphicon glyphicon-pencil")
+                td
+                    input(  ng-hide="isLoading[product.id]=== true",
+                            type="checkbox",
+                            ng-model="isPeriodChecked[product.id]",
+                            ng-click="assignPeriodToProduct(product)")
+                    img(src='/assets/images/modal-loading.gif',ng-show="isLoading[product.id]=== true")
+
+        button.button.add(type="button", ng-click="editOrCreateProduct()",ng-bind-html="'SITE_MANAGER_ADD_SITE_BUTTON' | translateText")

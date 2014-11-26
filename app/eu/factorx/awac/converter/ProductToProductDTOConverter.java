@@ -35,6 +35,8 @@ public class ProductToProductDTOConverter implements Converter<Product, ProductD
 
 		ProductDTO dto = new ProductDTO();
 
+		dto.setId(product.getId());
+		dto.setDescription(product.getDescription());
         dto.setName(product.getName());
 
         if (product.getListPeriodAvailable() != null) {

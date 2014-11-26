@@ -26,12 +26,15 @@ public class OrganisationServiceTest extends AbstractBaseModelTest {
 
 	@Autowired
 	private OrganizationService organizationService;
+	private Long organizationId=null;
 
-    @Test
+	@Test
     public void _001_createOrganization() {
 
 		Organization org = new Organization(ORGANIZATION_NAME, InterfaceTypeCode.ENTERPRISE);
 		organizationService.saveOrUpdate(org);
+
+	    organizationId = org.getId();
 
 		//em.persist(org);
 
@@ -46,7 +49,7 @@ public class OrganisationServiceTest extends AbstractBaseModelTest {
 		play.Logger.info("Spring @" + new Date(applicationContext.getStartupDate()));
 
 		Organization org = null;
-		org = organizationService.findByName(ORGANIZATION_NAME);
+		org = organizationService.findById(organizationId);
 		assertEquals(org.getName(), ORGANIZATION_NAME);
 	} // end of test method
 
@@ -57,7 +60,7 @@ public class OrganisationServiceTest extends AbstractBaseModelTest {
 
 
 		Organization org = null;
-		org = organizationService.findByName(ORGANIZATION_NAME);
+		org = organizationService.findById(organizationId);
 		assertEquals(org.getName(), ORGANIZATION_NAME);
 
 		organizationService.remove(org);
@@ -65,7 +68,7 @@ public class OrganisationServiceTest extends AbstractBaseModelTest {
 		Organization reload=null;
 
 		try {
-			reload = organizationService.findByName(ORGANIZATION_NAME);
+			reload = organizationService.findById(organizationId);
 		} catch (Exception empty) {}
 
 		assertNull(reload);
