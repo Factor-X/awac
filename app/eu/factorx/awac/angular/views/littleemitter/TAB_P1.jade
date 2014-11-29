@@ -1,24 +1,22 @@
 div
     div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
     div(ng-show="loading===false && errorMessage === null")
-        mm-awac-section(title-code="AM31")
+        mm-awac-section(title-code="AP2")
 
-            mm-awac-question(question-code="AM4")
+            mm-awac-question(question-code="AP5")
 
-            mm-awac-question(question-code="AM5")
+            mm-awac-question(question-code="AP6", ng-condition="getAnswer('AP5').value == '5'")
 
-            mm-awac-question(question-code="AM6")
+            mm-awac-question(question-code="AP7")
+            
+            mm-awac-question(question-code="AP8")
 
-        .horizontal_separator
+            mm-awac-question(question-code="AP9")
 
-        mm-awac-section(title-code="AM7")
+            mm-awac-question(question-code="AP10")
 
-            mm-awac-question(question-code="AM8")
+            mm-awac-question(question-code="AP11")
 
-            mm-awac-question(question-code="AM9")
+            mm-awac-question(question-code="AP12")
 
-            mm-awac-question(question-code="AM10")
-
-            mm-awac-question(question-code="AM11")
-
-            mm-awac-question(question-code="AM12")
+            mm-awac-question(question-code="AP13", ng-condition="getAnswer('AP10').value >= 300")
