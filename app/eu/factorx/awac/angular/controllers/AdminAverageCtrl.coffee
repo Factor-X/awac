@@ -1,7 +1,9 @@
 angular
 .module('app.controllers')
 .controller "AdminAverageCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile,$window) ->
+
     $scope.displayLittleFormMenu = displayLittleFormMenu
+    $scope.isLoading = false
 
     $scope.naceCodes = [
         key:null
@@ -27,8 +29,6 @@ angular
             for codeList in result.data.list
                 for code in codeList.codeLabels
                     $scope.naceCodes.push {key:codeList.code+"/"+code.key, label:code.label}
-
-
 
     $scope.interfaceNames =[
         "enterprise"
@@ -56,6 +56,7 @@ angular
 
 
     $scope.askAverage = (interfaceName) ->
+        $scope.isLoading = true
         if $scope.naceCode?
             naceCodeListKey = $scope.naceCode.split("/")[0]
             if $scope.naceCode.split("/").length > 1
@@ -68,5 +69,6 @@ angular
             onlyVerifiedForm:$scope.onlyVerifiedForm
         console.log data
         downloadService.postJson '/awac/admin/average/computeAverage', data, (result) ->
+            $scope.isLoading = false
             if result.success
                 messageFlash.displayInfo result.data.message

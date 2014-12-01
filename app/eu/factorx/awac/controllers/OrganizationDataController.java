@@ -64,25 +64,28 @@ public class OrganizationDataController extends AbstractController {
 		}
 
 
-		//load the email list
-		List<Organization> organizations = organizationService.findByInterfaceTypeCode(interfaceTypeCode);
-		Set<String> emailList = new HashSet<>();
+        //send one email by organization
+        List<Organization> organizations = organizationService.findByInterfaceTypeCode(interfaceTypeCode);
+        for (Organization organization : organizations) {
+            if (dto.isOnlyOrganizationSharedData() == false ||
+                    (organization.getStatisticsAllowed() != null && organization.getStatisticsAllowed() == true)) {
 
-		for (Organization organization : organizations) {
-			if (dto.isOnlyOrganizationSharedData() == false ||
-					(organization.getStatisticsAllowed() != null && organization.getStatisticsAllowed() == true)) {
-				for (Account account : organization.getAccounts()) {
-					//TODO select ??
-					emailList.add(account.getPerson().getEmail());
-				}
-			}
-		}
+                //load the email list
+                Set<String> emailList = new HashSet<>();
 
-		//send email
-		if (emailList.size() > 0) {
-			EmailMessage email = new EmailMessage(emailList, dto.getEmailTitle(), dto.getEmailContent());
-			emailService.send(email);
-		}
+                for (Account account : organization.getAccounts()) {
+                    if (account.getActive()) {
+                        emailList.add(account.getPerson().getEmail());
+                    }
+                }
+
+                //send email
+                if (emailList.size() > 0) {
+                    EmailMessage email = new EmailMessage(emailList, dto.getEmailTitle(), dto.getEmailContent());
+                    emailService.send(email);
+                }
+            }
+        }
 
 		return ok(new ResultsDTO());
 	}
