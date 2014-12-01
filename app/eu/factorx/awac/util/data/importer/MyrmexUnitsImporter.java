@@ -128,12 +128,19 @@ public class MyrmexUnitsImporter extends WorkbookDataImporter {
 			}
 			UnitCategory category = unitCategoriesByRef.get(ref);
 			String mainUnitRef = getCellContent(unitCategoriesSheet, 2, i);
+			String mainFactorUnitRef = getCellContent(unitCategoriesSheet, 4, i);
 			Unit mainUnit = unitsByRef.get(mainUnitRef);
+			Unit mainFactorUnit = unitsByRef.get(mainFactorUnitRef);
 			if (mainUnit == null) {
 				throw new RuntimeException("Cannot find the main unit (ref = " + mainUnitRef + ") of the category '" + category.getName()
 						+ "'");
 			}
+            if (mainFactorUnit == null) {
+                throw new RuntimeException("Cannot find the main factor unit (ref = " + mainUnitRef + ") of the category '" + category.getName()
+                    + "'");
+            }
 			category.setMainUnit(mainUnit);
+            category.setMainFactorUnit(mainFactorUnit);
 			unitCategoryService.saveOrUpdate(category);
 		}
 	}
