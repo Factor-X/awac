@@ -4,12 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,<br/><br/>
-
-Voici les statistiques demandées.<br/><br/>
-
-
-Le gestionnaire des calculateurs AWAC
-
+${content}
 </body>
 </html>
