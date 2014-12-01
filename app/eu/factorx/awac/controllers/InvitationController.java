@@ -88,12 +88,18 @@ public class InvitationController extends AbstractController {
         // retrieve traductions
         HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
         String subject = traductions.get("INVITATION_EMAIL_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+        String content = traductions.get("INVITATION_EMAIL_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+
+        content = content.replace("${organization}",securedController.getCurrentUser().getOrganization().getName());
+        content = content.replace("${link}",link);
+
 
         Map values = new HashMap<String, Object>();
         values.put("subject", subject);
-        values.put("link", link);
-        values.put("hostname", awacHostname);
-        values.put("organization", securedController.getCurrentUser().getOrganization().getName());
+        values.put("content", content);
+        //values.put("link", link);
+        //values.put("hostname", awacHostname);
+        //values.put("organization", securedController.getCurrentUser().getOrganization().getName());
 
         String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
 
@@ -140,6 +146,8 @@ public class InvitationController extends AbstractController {
         // retrieve traductions
         HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
         String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+
 
         Logger.info("registerInvitation->interfaceTypeCode:" + invitation.getOrganization().getInterfaceCode());
 
@@ -152,10 +160,14 @@ public class InvitationController extends AbstractController {
 
         String link = awacHostname + awacInterfaceTypeFragment + awacLoginUrlFragment;
 
+        content = content.replace("${identifier}",account.getIdentifier());
+        content = content.replace("${link}",link);
+
         values.put("subject", subject);
-        values.put("link", link);
-        values.put("hostname", awacHostname);
-        values.put("identifier", account.getIdentifier());
+        values.put("content", content);
+//        values.put("link", link);
+//        values.put("hostname", awacHostname);
+//        values.put("identifier", account.getIdentifier());
 
 
         String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
