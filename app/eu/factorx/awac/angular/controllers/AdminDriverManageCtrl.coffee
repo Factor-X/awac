@@ -19,6 +19,7 @@ angular
                 for value in driver.driverValues
                     value.tempId = ++$scope.tempIdCounter
             $scope.orderDriverValues()
+            $scope.originalDrivers = angular.copy($scope.drivers)
 
 
     $scope.addValue = (driver) ->
@@ -60,8 +61,8 @@ angular
 
     $scope.remove = (driver, valueTempId) ->
         params =
-            titleKey:'DRIVER_CONFIRM_REMOVE_MODAL_TITLE'
-            messageKey:'DRIVER_CONFIRM_REMOVE_MODAL_BODY'
+            titleKey: 'DRIVER_CONFIRM_REMOVE_MODAL_TITLE'
+            messageKey: 'DRIVER_CONFIRM_REMOVE_MODAL_BODY'
             onConfirm: $scope.removeConfirmed
             confirmParams: [
                 driver
@@ -77,6 +78,39 @@ angular
                 driver.driverValues.splice(i, 1)
                 break
             i++
+
+    #
+    # Check if driver is modified
+    #
+    $scope.isModified = (drivers) ->
+        original = _.find $scope.originalDrivers, (o) ->
+            return o.key == drivers.key
+
+        compared = _.omit(drivers, 'typeString')
+
+        eq = angular.equals(original, compared)
+        console.log original
+        console.log compared
+        console.log eq
+
+        return !eq
+
+    $scope.ignoreChanges = false
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless next != current
+        return unless _.any($scope.drivers, $scope.isModified) and !$scope.ignoreChanges
+
+        # stop changing
+        event.preventDefault()
+
+        # show confirm
+        params =
+            titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
+            messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+            onConfirm: () ->
+                $scope.ignoreChanges = true
+                $location.path(next.split('#')[1])
+        modalService.show modalService.CONFIRM_DIALOG, params
 
 
 
