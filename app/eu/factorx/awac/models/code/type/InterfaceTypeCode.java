@@ -50,7 +50,7 @@ public class InterfaceTypeCode extends Code {
             return ScopeTypeCode.ORG;
         }
 
-        return null;
+        return ScopeTypeCode.ORG;
     }
 
 
