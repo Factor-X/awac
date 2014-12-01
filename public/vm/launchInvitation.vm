@@ -4,8 +4,6 @@
         <title>${subject}</title>
     </head>
     <body>
-    	${organization} vous invite à rejoindre son compte sur le calculateur en ligne de l'AWAC.<br>
-    	Pour répondre à cette invitation, cliquez simplement sur ce lien: ${link}<br><br>
-    	Le gestionnaire du calculateur AWAC
+    	${content}
     </body>
 </html>
