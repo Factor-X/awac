@@ -151,6 +151,14 @@ div.results.pdf-able
                         div(ng-show="current_tab == 5")
                             h2
                                 span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+                            br
+                            center
+                                .diagram(style="height: 10cm", ng-bind-html="o.svgHistogramsCEF.R_1 | trustAsHtml")
+                            br
+                            center
+                                div
+                                    mm-awac-result-legend(ng-model="o.reportCEFDTOs.R_1", mode="numbers")
+
 
                         div(ng-show="current_tab == 6")
                             h2
@@ -327,7 +335,7 @@ div.results.pdf-able
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_numbers(ng-bind-html="'NUMBERS' | translate")
 
-                    .charts-panel-tab(ng-click="", ng-class="{ active: current_tab == 5 }", mm-not-implemented)
+                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }")
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_constant_factors(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
 
