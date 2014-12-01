@@ -13,6 +13,8 @@ import eu.factorx.awac.dto.verification.post.VerifyDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
+import eu.factorx.awac.models.code.CodeList;
+import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.Verification;
@@ -223,13 +225,26 @@ public class VerificationController extends AbstractController {
 		String emailTemplate;
 		String title;
 
-		Map<String, Object> values = new HashMap<>();
+        /*** Add CELDL-405 ***/
+        String subject;
+        String content;
+        HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
+        //String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+        //String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+
+
+        Map<String, Object> values = new HashMap<>();
 		if (organizationVerification != null) {
 			emailTemplate = "verification/toWaitVerifierConfirmation.vm";
-			title = "Demande de vérification de bilan GES";
+			//title = "Demande de vérification de bilan GES";
+            subject = traductions.get("VERIFICATION_toWaitVerifierConfirmation_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_toWaitVerifierConfirmation_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 		} else {
 			emailTemplate = "verification/toWaitVerifierRegistration.vm";
-			title = "Invitation comme vérificateur de bilan GES sur l'outil AWAC";
+            //title = "Invitation comme vérificateur de bilan GES sur l'outil AWAC";
+            subject = traductions.get("VERIFICATION_toWaitVerifierRegistration_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_toWaitVerifierRegistration_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
 			String awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
 
@@ -239,17 +254,28 @@ public class VerificationController extends AbstractController {
 
 			String link = awacHostname + awacInterfaceTypeFragment + awacRegistrationUrl + verificationRequest.getKey();
 
-			values.put("link", link);
+            content = content.replace("${link}",link);
+			//values.put("link", link);
 		}
 
+        content = content.replace("${user.person.firstname}",securedController.getCurrentUser().getPerson().getFirstname());
+        content = content.replace("${user.person.lastname}",securedController.getCurrentUser().getPerson().getLastname());
+        content = content.replace("${request.awacCalculatorInstance.scope.organization.name}",verificationRequest.getAwacCalculatorInstance().getScope().getOrganization().getName());
+        content = content.replace("${request.emailVerificationContent.content}",verificationRequest.getEmailVerificationContent().getContent());
+        content = content.replace("${request.emailVerificationContent.phoneNumber}",verificationRequest.getEmailVerificationContent().getPhoneNumber());
+        content = content.replace("${request.contact.person.email}",verificationRequest.getContact().getPerson().getEmail());
+        content = content.replace("${request.key}",verificationRequest.getKey());
 
-		values.put("request", verificationRequest);
-		values.put("user", securedController.getCurrentUser());
+//		values.put("request", verificationRequest);
+//		values.put("user", securedController.getCurrentUser());
+
+        values.put("subject", subject);
+        values.put("content", content);
 
 		String velocityContent = velocityGeneratorService.generate(emailTemplate, values);
 
 		// send email for invitation
-		EmailMessage email = new EmailMessage(dto.getEmail(), title, velocityContent);
+		EmailMessage email = new EmailMessage(dto.getEmail(), subject, velocityContent);
 		email.addCcAddress(securedController.getCurrentUser().getPerson().getEmail());
 		//send email to admin
 		if (organizationVerification != null) {
