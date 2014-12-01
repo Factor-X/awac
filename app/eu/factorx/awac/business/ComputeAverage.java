@@ -133,14 +133,14 @@ public class ComputeAverage {
 		//compute criteria
 		HashMap<String, String> criteria = new HashMap<>();
 		criteria.put("Calculateur", awacCalculator.getInterfaceTypeCode().getKey());
-		criteria.put("Periode", period.getLabel());
-		criteria.put("Nomber de formulaire pris en compte", scopeAndPeriodList.size() + "");
-		criteria.put("Organisations prises en compte", organizationComputed + "");
+		criteria.put("Période", period.getLabel());
+		criteria.put("Nombre de formulaires pris en compte", scopeAndPeriodList.size() + "");
+		criteria.put("Nombre d'organisations prises en compte", organizationComputed + "");
 
 		if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.ENTERPRISE)) {
-			criteria.put("Sites pris en compte", scopeComputed + "");
+			criteria.put("Nombre de sites pris en compte", scopeComputed + "");
 		} else if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT)) {
-			criteria.put("Evenements pris en compte", scopeComputed + "");
+			criteria.put("Nombre d'évènements pris en compte", scopeComputed + "");
 		}
 
 		ByteArrayOutputStream output = generateExcel(awacCalculator, averageValueList, account.getPerson().getDefaultLanguage(), criteria);

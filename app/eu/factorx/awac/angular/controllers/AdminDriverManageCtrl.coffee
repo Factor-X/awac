@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminDriverManageCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile) ->
+.controller "AdminDriverManageCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, $location) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
 
@@ -106,7 +106,7 @@ angular
     $scope.ignoreChanges = false
 
     $scope.$root.$on '$locationChangeStart', (event, next, current) ->
-        console.log "wasEdited:"+wasEdited
+        return unless !$scope.ignoreChanges
         if wasEdited == true
             #return unless _.any($scope.drivers, $scope.isModified) and !$scope.ignoreChanges
 

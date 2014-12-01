@@ -253,12 +253,9 @@ public class AuthenticationController extends AbstractController {
         String content = traductions.get("RESET_PASSWORD_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
 
 
-
-
         Map values = new HashMap<String, Object>();
 		values.put("title", title);
-        content.replace("${password}",password);
-        play.Logger.info("Content: " + content);
+        content = content.replace("${password}",password);
         values.put("content", content);
 
 		//values.put("password", password);
