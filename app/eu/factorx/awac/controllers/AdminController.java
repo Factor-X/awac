@@ -224,7 +224,7 @@ public class AdminController extends AbstractController {
                 new IndicatorCategoryCode(dto.getIndicatorCategory()),
                 new ActivityTypeCode(dto.getActivityType()),
                 new ActivitySourceCode(dto.getActivitySource()),
-                unitCategory.getMainUnit(),
+                unitCategory.getMainFactorUnit(),
                 unitCategoryOut.getMainUnit(),
                 dto.getOrigin()
             );
