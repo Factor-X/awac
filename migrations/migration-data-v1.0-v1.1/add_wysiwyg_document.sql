@@ -122,11 +122,13 @@ INSERT INTO wysiwyg_document VALUES (3, '2014-11-24 14:57:04.087', 'admin', '201
 
 <p>Nous apportons le plus grand soin &agrave; la gestion de ce site. Nous ne garantissons toutefois pas l&#39;exactitude des informations qui y sont propos&eacute;es. Celles-ci sont par ailleurs susceptibles d&#39;&ecirc;tre modifi&eacute;es sans avis pr&eacute;alable. Il en r&eacute;sulte que nous d&eacute;clinons toute responsabilit&eacute; quant &agrave; l&#39;utilisation qui pourrait &ecirc;tre faite du contenu de ce site. Les liens hypertextes pr&eacute;sents sur le site et aiguillant les utilisateurs vers d&#39;autres sites Internet n&#39;engagent pas notre responsabilit&eacute; quant au contenu de ces sites.</p>
 
-<h2>Protection des donn&eacute;es &agrave; caract&egrave;re personnel</h2>
+<h2>Protection de vos donn&eacute;es</h2>
 
 <p>Il vous est loisible de visiter notre site internet sans nous fournir de donn&eacute;es &agrave; caract&egrave;re personnel (1). Vous pouvez acc&eacute;der &agrave; la base de calcul et de r&eacute;sultats en ne saisissant que des donn&eacute;es g&eacute;n&eacute;rales &agrave; caract&egrave;re non personnel.</p>
 
-<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992. Elles seront trait&eacute;es, moyennant votre accord, anonymement &agrave; des fins statistiques et pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l&rsquo;exception du sous-traitant avec lequel l&rsquo;AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales. L&rsquo;AWAC s&#39;engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d&#39;&eacute;viter que des tiers n&#39;abusent des donn&eacute;es &agrave; caract&egrave;re personnel qui lui ont &eacute;t&eacute; communiqu&eacute;es.</p>
+<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992.</p>
+
+<p>Les donn&eacute;es fournies seront utilis&eacute;es pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l’exception du sous-traitant avec lequel l’AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales.  L’AWAC s'engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d'assurer la confidentialit&eacute; des donn&eacute;es communiqu&eacute;es.</p>
 
 <p>Les donn&eacute;es saisies en ligne et les r&eacute;sultats associ&eacute;s sont trait&eacute;s collectivement et anonymement. Ces donn&eacute;es et r&eacute;sultats pourront &ecirc;tre exploit&eacute;s, en totalit&eacute; ou en partie, en vue de r&eacute;alisations statistiques, de r&eacute;alisations de rapports ou d&rsquo;&eacute;tudes relatives &agrave; la consommation d&rsquo;&eacute;nergie et d&rsquo;&eacute;mission de gaz &agrave; effet de serre.</p>
 
@@ -272,7 +274,9 @@ INSERT INTO wysiwyg_document VALUES (8, '2014-11-24 14:57:12.38', 'admin', '2014
 
 <h2>Protection de la vie priv&eacute;e</h2>
 
-<p>Si vous nous fournissez des informations personnelles, elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992. Les autres donn&eacute;es seront trait&eacute;es, moyennant votre accord (voir plus bas), anonymement &agrave; des fins statistiques et pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l&rsquo;exception du sous-traitant avec lequel l&rsquo;AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales. L&rsquo;AWAC s&#39;engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d&#39;&eacute;viter que des tiers n&#39;abusent des donn&eacute;es &agrave; caract&egrave;re personnel qui lui ont &eacute;t&eacute; communiqu&eacute;es.</p>
+<p>Si vous nous fournissez des informations personnelles, elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992.</p>
+
+<p>Les donn&eacute;es fournies seront utilis&eacute;es pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l’exception du sous-traitant avec lequel l’AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales.  L’AWAC s'engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d'assurer la confidentialit&eacute; des donn&eacute;es communiqu&eacute;es.</p>
 
 <h2>Confidentialit&eacute; de vos donn&eacute;es</h2>
 
@@ -466,11 +470,13 @@ INSERT INTO wysiwyg_document VALUES (13, '2014-11-24 14:57:18.329', 'admin', '20
 
 <p>Nous apportons le plus grand soin &agrave; la gestion de ce site. Nous ne garantissons toutefois pas l&#39;exactitude des informations qui y sont propos&eacute;es. Celles-ci sont par ailleurs susceptibles d&#39;&ecirc;tre modifi&eacute;es sans avis pr&eacute;alable. Il en r&eacute;sulte que nous d&eacute;clinons toute responsabilit&eacute; quant &agrave; l&#39;utilisation qui pourrait &ecirc;tre faite du contenu de ce site. Les liens hypertextes pr&eacute;sents sur le site et aiguillant les utilisateurs vers d&#39;autres sites Internet n&#39;engagent pas notre responsabilit&eacute; quant au contenu de ces sites.</p>
 
-<h2>Protection des donn&eacute;es &agrave; caract&egrave;re personnel</h2>
+<h2>Protection de vos donn&eacute;es</h2>
 
 <p>Il vous est loisible de visiter notre site internet sans nous fournir de donn&eacute;es &agrave; caract&egrave;re personnel (1). Vous pouvez acc&eacute;der &agrave; la base de calcul et de r&eacute;sultats en ne saisissant que des donn&eacute;es g&eacute;n&eacute;rales &agrave; caract&egrave;re non personnel.</p>
 
-<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992. Elles seront trait&eacute;es, moyennant votre accord, anonymement &agrave; des fins statistiques et pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l&rsquo;exception du sous-traitant avec lequel l&rsquo;AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales. L&rsquo;AWAC s&#39;engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d&#39;&eacute;viter que des tiers n&#39;abusent des donn&eacute;es &agrave; caract&egrave;re personnel qui lui ont &eacute;t&eacute; communiqu&eacute;es.</p>
+<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992.</p>
+
+<p>Les donn&eacute;es fournies seront utilis&eacute;es pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l’exception du sous-traitant avec lequel l’AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales.  L’AWAC s'engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d'assurer la confidentialit&eacute; des donn&eacute;es communiqu&eacute;es.</p>
 
 <p>Les donn&eacute;es saisies en ligne et les r&eacute;sultats associ&eacute;s sont trait&eacute;s collectivement et anonymement. Ces donn&eacute;es et r&eacute;sultats pourront &ecirc;tre exploit&eacute;s, en totalit&eacute; ou en partie, en vue de r&eacute;alisations statistiques, de r&eacute;alisations de rapports ou d&rsquo;&eacute;tudes relatives &agrave; la consommation d&rsquo;&eacute;nergie et d&rsquo;&eacute;mission de gaz &agrave; effet de serre.</p>
 
@@ -850,11 +856,13 @@ INSERT INTO wysiwyg_document VALUES (22, '2014-11-24 14:57:28.928', 'admin', '20
 
 <p>Nous apportons le plus grand soin &agrave; la gestion de ce site. Nous ne garantissons toutefois pas l&#39;exactitude des informations qui y sont propos&eacute;es. Celles-ci sont par ailleurs susceptibles d&#39;&ecirc;tre modifi&eacute;es sans avis pr&eacute;alable. Il en r&eacute;sulte que nous d&eacute;clinons toute responsabilit&eacute; quant &agrave; l&#39;utilisation qui pourrait &ecirc;tre faite du contenu de ce site. Les liens hypertextes pr&eacute;sents sur le site et aiguillant les utilisateurs vers d&#39;autres sites Internet n&#39;engagent pas notre responsabilit&eacute; quant au contenu de ces sites.</p>
 
-<h2>Protection des donn&eacute;es &agrave; caract&egrave;re personnel</h2>
+<h2>Protection de vos donn&eacute;es</h2>
 
 <p>Il vous est loisible de visiter notre site internet sans nous fournir de donn&eacute;es &agrave; caract&egrave;re personnel (1). Vous pouvez acc&eacute;der &agrave; la base de calcul et de r&eacute;sultats en ne saisissant que des donn&eacute;es g&eacute;n&eacute;rales &agrave; caract&egrave;re non personnel.</p>
 
-<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992. Elles seront trait&eacute;es, moyennant votre accord, anonymement &agrave; des fins statistiques et pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l&rsquo;exception du sous-traitant avec lequel l&rsquo;AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales. L&rsquo;AWAC s&#39;engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d&#39;&eacute;viter que des tiers n&#39;abusent des donn&eacute;es &agrave; caract&egrave;re personnel qui lui ont &eacute;t&eacute; communiqu&eacute;es.</p>
+<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992.</p>
+
+<p>Les donn&eacute;es fournies seront utilis&eacute;es pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l’exception du sous-traitant avec lequel l’AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales.  L’AWAC s'engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d'assurer la confidentialit&eacute; des donn&eacute;es communiqu&eacute;es.</p>
 
 <p>Les donn&eacute;es saisies en ligne et les r&eacute;sultats associ&eacute;s sont trait&eacute;s collectivement et anonymement. Ces donn&eacute;es et r&eacute;sultats pourront &ecirc;tre exploit&eacute;s, en totalit&eacute; ou en partie, en vue de r&eacute;alisations statistiques, de r&eacute;alisations de rapports ou d&rsquo;&eacute;tudes relatives &agrave; la consommation d&rsquo;&eacute;nergie et d&rsquo;&eacute;mission de gaz &agrave; effet de serre.</p>
 
@@ -1206,11 +1214,13 @@ INSERT INTO wysiwyg_document VALUES (30, '2014-11-24 14:57:37.563', 'admin', '20
 
 <p>Nous apportons le plus grand soin &agrave; la gestion de ce site. Nous ne garantissons toutefois pas l&#39;exactitude des informations qui y sont propos&eacute;es. Celles-ci sont par ailleurs susceptibles d&#39;&ecirc;tre modifi&eacute;es sans avis pr&eacute;alable. Il en r&eacute;sulte que nous d&eacute;clinons toute responsabilit&eacute; quant &agrave; l&#39;utilisation qui pourrait &ecirc;tre faite du contenu de ce site. Les liens hypertextes pr&eacute;sents sur le site et aiguillant les utilisateurs vers d&#39;autres sites Internet n&#39;engagent pas notre responsabilit&eacute; quant au contenu de ces sites.</p>
 
-<h2>Protection des donn&eacute;es &agrave; caract&egrave;re personnel</h2>
+<h2>Protection de vos donn&eacute;es</h2>
 
 <p>Il vous est loisible de visiter notre site internet sans nous fournir de donn&eacute;es &agrave; caract&egrave;re personnel (1). Vous pouvez acc&eacute;der &agrave; la base de calcul et de r&eacute;sultats en ne saisissant que des donn&eacute;es g&eacute;n&eacute;rales &agrave; caract&egrave;re non personnel.</p>
 
-<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992. Elles seront trait&eacute;es, moyennant votre accord, anonymement &agrave; des fins statistiques et pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l&rsquo;exception du sous-traitant avec lequel l&rsquo;AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales. L&rsquo;AWAC s&#39;engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d&#39;&eacute;viter que des tiers n&#39;abusent des donn&eacute;es &agrave; caract&egrave;re personnel qui lui ont &eacute;t&eacute; communiqu&eacute;es.</p>
+<p>Si vous nous fournissez des informations personnelles (2), elles seront trait&eacute;es conform&eacute;ment aux dispositions de la loi du 8 d&eacute;cembre 1992.</p>
+
+<p>Les donn&eacute;es fournies seront utilis&eacute;es pour vous adresser des messages &eacute;lectroniques g&eacute;n&eacute;raux; elles ne seront pas communiqu&eacute;es &agrave; des tiers, &agrave; l’exception du sous-traitant avec lequel l’AWAC a conclu une convention relative &agrave; la confidentialit&eacute; des donn&eacute;es, ni utilis&eacute;es &agrave; des fins commerciales.  L’AWAC s'engage &agrave; prendre les meilleures mesures de s&eacute;curit&eacute; afin d'assurer la confidentialit&eacute; des donn&eacute;es communiqu&eacute;es.</p>
 
 <p>Les donn&eacute;es saisies en ligne et les r&eacute;sultats associ&eacute;s sont trait&eacute;s collectivement et anonymement. Ces donn&eacute;es et r&eacute;sultats pourront &ecirc;tre exploit&eacute;s, en totalit&eacute; ou en partie, en vue de r&eacute;alisations statistiques, de r&eacute;alisations de rapports ou d&rsquo;&eacute;tudes relatives &agrave; la consommation d&rsquo;&eacute;nergie et d&rsquo;&eacute;mission de gaz &agrave; effet de serre.</p>
 
