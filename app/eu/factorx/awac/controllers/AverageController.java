@@ -329,9 +329,7 @@ public class AverageController extends AbstractController {
                     }
                 }
             }
-        } else
-
-        {
+        } else {
             return true;
         }
 

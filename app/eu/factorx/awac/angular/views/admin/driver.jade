@@ -20,10 +20,11 @@ div.verification_manage
                         ng-model="value.fromPeriodKey")
                     div(style="display:inline-block") Valeur
                         input(ng-model="value.defaultValue",
-                        ng-attr-numbers-only="{{driver.expectedValueType}}")
+                        ng-attr-numbers-only="{{driver.expectedValueType}}",
+                        ng-click="wasEdited()")
                     div(style="display:inline-block")
-                        button(ng-click="remove(driver,value.tempId)",
+                        button.button(type="button",ng-click="remove(driver,value.tempId)",
                         ng-hide="value.fromPeriodKey == '2000'") supprimer
-                button(ng-click="addValue(driver)") Ajouter une valeur
-    button(ng-click="save()") Sauver les modifications
-    button(ng-click="orderDriverValues()") Trier les valeurs par date
+                button.button(type="button",ng-click="addValue(driver)") Ajouter une valeur
+    button.button(type="button",ng-click="save()") Sauver les modifications
+    button.button(type="button",ng-click="orderDriverValues()") Trier les valeurs par date
