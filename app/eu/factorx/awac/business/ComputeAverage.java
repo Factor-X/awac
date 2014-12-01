@@ -152,9 +152,20 @@ public class ComputeAverage {
 		values.put("request", calculatorInstance.getVerificationRequest());
 	    values.put("user", securedController.getCurrentUser());
 	    */
-		String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
 
-		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), "Awac - statistiques", velocityContent);
+        /*** Add CELDL-405 ***/
+        String subject;
+        String content;
+        HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
+        subject = traductions.get("AVERAGE_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+        content = traductions.get("AVERAGE_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+
+        values.put("content", content);
+
+        String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
+
+		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), subject, velocityContent);
 		//
 
         // Local write for test purposes
