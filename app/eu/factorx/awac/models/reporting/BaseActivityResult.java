@@ -1,71 +1,78 @@
 package eu.factorx.awac.models.reporting;
 
-import java.io.Serializable;
-
-import javax.persistence.MappedSuperclass;
-
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Factor;
 
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
+
 @MappedSuperclass
 public class BaseActivityResult implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private BaseIndicator baseIndicator;
+    private BaseIndicator    baseIndicator;
+    private BaseActivityData activityData;
+    private Factor           factor;
+    private Site             site;
+    private Integer          year;
 
-	private BaseActivityData activityData;
+    protected BaseActivityResult() {
+        super();
+    }
 
-	private Factor factor;
+    public BaseActivityResult(BaseIndicator baseIndicator, BaseActivityData activityData, Factor factor, Site site, Integer year) {
+        super();
+        this.baseIndicator = baseIndicator;
+        this.activityData = activityData;
+        this.factor = factor;
+        this.site = site;
+        this.year = year;
+    }
 
-	private Site site;
+    public BaseIndicator getBaseIndicator() {
+        return baseIndicator;
+    }
 
-	protected BaseActivityResult() {
-		super();
-	}
+    public void setBaseIndicator(BaseIndicator baseIndicator) {
+        this.baseIndicator = baseIndicator;
+    }
 
-	public BaseActivityResult(BaseIndicator baseIndicator, BaseActivityData activityData, Factor factor, Site site) {
-		super();
-		this.baseIndicator = baseIndicator;
-		this.activityData = activityData;
-		this.factor = factor;
-		this.site = site;
-	}
+    public BaseActivityData getActivityData() {
+        return activityData;
+    }
 
-	public BaseIndicator getBaseIndicator() {
-		return baseIndicator;
-	}
+    public void setActivityData(BaseActivityData activityData) {
+        this.activityData = activityData;
+    }
 
-	public void setBaseIndicator(BaseIndicator baseIndicator) {
-		this.baseIndicator = baseIndicator;
-	}
+    public Factor getFactor() {
+        return factor;
+    }
 
-	public BaseActivityData getActivityData() {
-		return activityData;
-	}
+    public void setFactor(Factor factor) {
+        this.factor = factor;
+    }
 
-	public void setActivityData(BaseActivityData activityData) {
-		this.activityData = activityData;
-	}
+    public Site getSite() {
+        return site;
+    }
 
-	public Factor getFactor() {
-		return factor;
-	}
+    public void setSite(Site site) {
+        this.site = site;
+    }
 
-	public void setFactor(Factor factor) {
-		this.factor = factor;
-	}
+    public Integer getYear() {
+        return year;
+    }
 
-	public Site getSite() {
-		return site;
-	}
+    public void setYear(Integer year) {
+        this.year = year;
+    }
 
-	public void setSite(Site site) {
-		this.site = site;
-	}
-
-	public Double getNumericValue() {
+    /*
+    public Double getNumericValue() {
 		if (activityData == null || factor == null) {
 			return null;
 		}
@@ -77,10 +84,12 @@ public class BaseActivityResult implements Serializable {
 			return (activityDataValue * factorValue);
 		}
 	}
+	*/
 
-	@Override
-	public String toString() {
-		return "BaseActivityResult [baseIndicator='" + baseIndicator.getCode().getKey() + "' (scope " + baseIndicator.getIsoScope().getKey() + "), activityData='" + activityData.getKey().getKey() + "' (rank = " + activityData.getRank() + "), factor='" + factor.getKey() + "', value = " + getNumericValue() + "]";
-	}
+
+    @Override
+    public String toString() {
+        return "BaseActivityResult [baseIndicator='" + baseIndicator.getCode().getKey() + "' (scope " + baseIndicator.getIsoScope().getKey() + "), activityData='" + activityData.getKey().getKey() + "' (rank = " + activityData.getRank() + "), factor='" + factor.getKey() + /* "', value = " + getNumericValue() + */ "]";
+    }
 
 }
