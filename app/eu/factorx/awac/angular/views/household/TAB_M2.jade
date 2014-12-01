@@ -1,0 +1,127 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AM13")
+
+            mm-awac-question(question-code="AM14")
+
+            mm-awac-question(question-code="AM15")
+
+            mm-awac-question(question-code="AM16", ng-condition="getAnswer('AM14').value == '2'")
+
+            mm-awac-question(question-code="A17")
+
+            mm-awac-question(question-code="A18")
+
+            mm-awac-question(question-code="A19")
+
+            mm-awac-question(question-code="A20", ng-condition="getAnswer('AM19').value == '1'")
+
+            mm-awac-question(question-code="A21", ng-condition="getAnswer('AM19').value == '1'")
+
+            mm-awac-question(question-code="A22", ng-condition="getAnswer('AM19').value == '1'")
+
+        .horizontal_separator
+
+        mm-awac-section(title-code="AM24")
+
+            mm-awac-question(question-code="AM25",ng-optional="true")
+
+            mm-awac-repetition-name(question-code="AM26")
+            mm-awac-repetition-question(question-set-code="AM26", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AM26')")
+
+                mm-awac-question(question-code="AM27",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}")
+                mm-awac-question(question-code="AM28",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM27').value == 'AS_42'")
+                mm-awac-question(question-code="AM29",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM27').value != 'AS_42' || getAnswer('AM28').value == '0'")
+                mm-awac-question(question-code="AM30",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '1' && (getAnswer('AM27').value == 'AS_1' || getAnswer('AM27').value == 'AS_3' || getAnswer('AM27').value == 'AS_376' || getAnswer('AM27').value == 'AS_377' || getAnswer('AM27').value == 'AS_4' || getAnswer('AM27').value == 'AS_15' || getAnswer('AM27').value == 'AS_16')")
+                mm-awac-question(question-code="AM31",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '1' && (getAnswer('AM27').value == 'AS_10' || getAnswer('AM27').value == 'AS_11' || getAnswer('AM27').value == 'AS_13')")
+                mm-awac-question(question-code="AM32",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '1' && getAnswer('AM27').value == 'AS_42'")
+                mm-awac-question(question-code="AM33",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2'")
+                mm-awac-question(question-code="AM34",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_1'")
+                mm-awac-question(question-code="AM35",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && (getAnswer('AM27').value == 'AS_3' || getAnswer('AM27').value == 'AS_4' || getAnswer('AM27').value == 'AS_376' || getAnswer('AM27').value == 'AS_377')")
+                mm-awac-question(question-code="AM36",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_15'")
+                mm-awac-question(question-code="AM37",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_16'")
+                mm-awac-question(question-code="AM38",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && (getAnswer('AM27').value == 'AS_11' || getAnswer('AM27').value == 'AS_13')")
+                mm-awac-question(question-code="AM39",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_10'")
+                mm-awac-question(question-code="AM40",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_42'")
+                mm-awac-question(question-code="AM41",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_1'")
+                mm-awac-question(question-code="AM42",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && (getAnswer('AM27').value == 'AS_3' || getAnswer('AM27').value == 'AS_4' || getAnswer('AM27').value == 'AS_376' || getAnswer('AM27').value == 'AS_377')")
+                mm-awac-question(question-code="AM43",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_15'")
+                mm-awac-question(question-code="AM44",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_16'")
+                mm-awac-question(question-code="AM45",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && (getAnswer('AM27').value == 'AS_11' || getAnswer('AM27').value == 'AS_13')")
+                mm-awac-question(question-code="AM46",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_10'")
+                mm-awac-question(question-code="AM47",ng-repetition-map="itLevel1",ng-map-index="{'AM26':$index}", ng-condition="getAnswer('AM29').value == '2' && getAnswer('AM27').value == 'AS_42'")
+
+            mm-awac-repetition-add-button(question-set-code="AM26")
+
+        .horizontal_separator
+
+        mm-awac-section(title-code="AM48")
+
+            mm-awac-question(question-code="AM49")
+            mm-awac-question(question-code="AM50")
+            mm-awac-question(question-code="AM51", ng-condition="getAnswer('AM50').value == '0'")
+            mm-awac-question(question-code="AM52", ng-condition="getAnswer('AM50').value == '1' && getAnswer('AM49').value != 'AS_42'")
+            mm-awac-question(question-code="AM53", ng-condition="getAnswer('AM50').value == '1' && getAnswer('AM49').value == 'AS_42'")
+            mm-awac-question(question-code="AM54", ng-condition="getAnswer('AM50').value == '2'")
+            mm-awac-question(question-code="AM55", ng-condition="getAnswer('AM50').value == '2' && (getAnswer('AM49').value == 'AS_3' || getAnswer('AM49').value == 'AS_4' || getAnswer('AM49').value == 'AS_376' || getAnswer('AM49').value == 'AS_377')")
+            mm-awac-question(question-code="AM56", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_15'")
+            mm-awac-question(question-code="AM57", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_16'")
+            mm-awac-question(question-code="AM58", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_42'")
+            mm-awac-question(question-code="AM59", ng-condition="getAnswer('AM50').value == '2' && (getAnswer('AM49').value == 'AS_3' || getAnswer('AM49').value == 'AS_4' || getAnswer('AM49').value == 'AS_376' || getAnswer('AM49').value == 'AS_377')")
+            mm-awac-question(question-code="AM60", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_15'")
+            mm-awac-question(question-code="AM61", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_16'")
+            mm-awac-question(question-code="AM62", ng-condition="getAnswer('AM50').value == '2' && getAnswer('AM49').value == 'AS_42'")
+
+        .horizontal_separator
+        mm-awac-section(title-code="AM63")
+
+            mm-awac-question(question-code="AM64",ng-optional="true")
+            mm-awac-question(question-code="AM65")
+            mm-awac-question(question-code="AM66")
+            mm-awac-question(question-code="AM67", ng-condition="getAnswer('AM66').value == '1'")
+            mm-awac-question(question-code="AM68", ng-condition="getAnswer('AM66').value == '2'")
+            mm-awac-question(question-code="AM69", ng-condition="getAnswer('AM66').value == '2'")
+            mm-awac-question(question-code="AM70", ng-condition="getAnswer('AM66').value == '2'")
+
+            mm-awac-question(question-code="AM71")
+            mm-awac-sub-sub-title(question-code="AM72", ng-condition="getAnswer('AM71').value == '1'",ng-optional="true")
+            mm-awac-question(question-code="AM73",ng-optional="true")
+            mm-awac-question(question-code="AM74", ng-condition="getAnswer('AM73').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM75",ng-optional="true")
+            mm-awac-question(question-code="AM76", ng-condition="getAnswer('AM75').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM77",ng-optional="true")
+            mm-awac-question(question-code="AM78", ng-condition="getAnswer('AM77').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM79",ng-optional="true")
+            mm-awac-question(question-code="AM80", ng-condition="getAnswer('AM79').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM81",ng-optional="true")
+            mm-awac-question(question-code="AM82", ng-condition="getAnswer('AM81').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM83",ng-optional="true")
+            mm-awac-question(question-code="AM84", ng-condition="getAnswer('AM83').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM85",ng-optional="true")
+            mm-awac-question(question-code="AM86", ng-condition="getAnswer('AM85').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM87",ng-optional="true")
+            mm-awac-question(question-code="AM88", ng-condition="getAnswer('AM87').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM89",ng-optional="true")
+            mm-awac-question(question-code="AM90", ng-condition="getAnswer('AM89').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM91",ng-optional="true")
+            mm-awac-question(question-code="AM92", ng-condition="getAnswer('AM91').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM93",ng-optional="true")
+            mm-awac-question(question-code="AM94",ng-optional="true")
+            mm-awac-question(question-code="AM95", ng-condition="getAnswer('AM94').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM96",ng-optional="true")
+            mm-awac-question(question-code="AM97", ng-condition="getAnswer('AM96').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM98",ng-optional="true")
+            mm-awac-question(question-code="AM99", ng-condition="getAnswer('AM98').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM100",ng-optional="true")
+            mm-awac-question(question-code="AM101", ng-condition="getAnswer('AM100').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM102",ng-optional="true")
+            mm-awac-question(question-code="AM103", ng-condition="getAnswer('AM102').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM104",ng-optional="true")
+            mm-awac-question(question-code="AM105", ng-condition="getAnswer('AM104').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM106",ng-optional="true")
+            mm-awac-question(question-code="AM107", ng-condition="getAnswer('AM106').value != '0'",ng-optional="true")
+            mm-awac-question(question-code="AM108",ng-optional="true")
+            mm-awac-question(question-code="AM109", ng-condition="getAnswer('AM108').value != '0'",ng-optional="true")
+
+
