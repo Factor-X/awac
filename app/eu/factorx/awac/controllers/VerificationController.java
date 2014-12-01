@@ -266,6 +266,7 @@ public class VerificationController extends AbstractController {
         content = content.replace("${request.contact.person.email}",verificationRequest.getContact().getPerson().getEmail());
         content = content.replace("${request.key}",verificationRequest.getKey());
 
+
 //		values.put("request", verificationRequest);
 //		values.put("user", securedController.getCurrentUser());
 
@@ -313,7 +314,13 @@ public class VerificationController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result setStatus() {
 
-		VerificationRequestChangeStatusDTO dto = extractDTOFromRequest(VerificationRequestChangeStatusDTO.class);
+        /*** Add CELDL-405 ***/
+        String subject = null;
+        String content = null;
+        HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+
+
+        VerificationRequestChangeStatusDTO dto = extractDTOFromRequest(VerificationRequestChangeStatusDTO.class);
 
 		//load period
 		Period period = periodService.findByCode(new PeriodCode(dto.getPeriodKey()));
@@ -360,9 +367,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitVerifierConfirmationToWaitCustomerConfirmation.vm";
 			emailTargets = getAdmins(calculatorInstance.getScope().getOrganization());
-			emailTitle = "Confirmation de vérification de votre bilan GES";
+			//emailTitle = "Confirmation de vérification de votre bilan GES";
+            subject = traductions.get("VERIFICATION_waitVerifierConfirmationToWaitCustomerConfirmation_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitVerifierConfirmationToWaitCustomerConfirmation_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
 				oldStatus.equals(VerificationRequestStatus.WAIT_VERIFIER_CONFIRMATION) &&
 				securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				securedController.getCurrentUser().getIsAdmin()) {
@@ -374,7 +384,9 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitVerifierConfirmationToRejeced.vm";
 			emailTargets = getAdmins(calculatorInstance.getScope().getOrganization());
-			emailTitle = "Refus de vérification de votre bilan GES";
+            //emailTitle = "Refus de vérification de votre bilan GES";
+            subject = traductions.get("VERIFICATION_waitVerifierConfirmationToRejeced_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitVerifierConfirmationToRejeced_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
 		} else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
 				(oldStatus.equals(VerificationRequestStatus.WAIT_ASSIGNATION) || oldStatus.equals(VerificationRequestStatus.VERIFICATION)) &&
@@ -400,9 +412,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitAssignationToVerification.vm";
 			emailTargets = getAssignedAccountEmail(calculatorInstance.getVerificationRequest());
-			emailTitle = "Tâche de vérification de bilan GES";
+			//emailTitle = "Tâche de vérification de bilan GES";
+            subject = traductions.get("VERIFICATION_waitAssignationToVerification_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitAssignationToVerification_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.WAIT_ASSIGNATION) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.WAIT_ASSIGNATION) &&
 				oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_CONFIRMATION) &&
 				!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				securedController.getCurrentUser().getIsAdmin()) {
@@ -416,9 +431,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitCustomerConfirmationToWaitAssignation.vm";
 			emailTargets = getAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
-			emailTitle = "Vérfication de bilan GES";
+			//emailTitle = "Vérfication de bilan GES";
+            subject = traductions.get("VERIFICATION_waitCustomerConfirmationToWaitAssignation_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitCustomerConfirmationToWaitAssignation_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.REJECTED) &&
 				!securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				securedController.getCurrentUser().getIsAdmin()) {
 
@@ -435,8 +453,12 @@ public class VerificationController extends AbstractController {
 			if (calculatorInstance.getVerificationRequest().getOrganizationVerifier() != null) {
 				emailToSend = "reject.vm";
 				emailTargets = getAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
-				emailTitle = "Annulation de la vérification de bilan GES";
-			}
+				//emailTitle = "Annulation de la vérification de bilan GES";
+                subject = traductions.get("VERIFICATION_reject_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+                content = traductions.get("VERIFICATION_reject_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+
+
+            }
 
 		} else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
 				oldStatus.equals(VerificationRequestStatus.VERIFICATION) &&
@@ -456,7 +478,9 @@ public class VerificationController extends AbstractController {
 				//email
 				emailToSend = "verificationToWaitVerificationConfirmationReject.vm";
 				emailTargets = getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
-				emailTitle = "Bilan GES vérifié à retourner au client";
+				//emailTitle = "Bilan GES vérifié à retourner au client";
+                subject = traductions.get("VERIFICATION_verificationToWaitVerificationConfirmationReject_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+                content = traductions.get("VERIFICATION_verificationToWaitVerificationConfirmationReject_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 			}
 
 		} else if (newStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
@@ -481,9 +505,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "verificationToWaitVerificationConfirmationSuccess.vm";
 			emailTargets = getMainVerifierAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
-			emailTitle = "Bilan GES vérifié à retourner au client";
+			//emailTitle = "Bilan GES vérifié à retourner au client";
+            subject = traductions.get("VERIFICATION_verificationToWaitVerificationConfirmationSuccess_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_verificationToWaitVerificationConfirmationSuccess_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
 				oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS) &&
 				securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				(securedController.getCurrentUser().getIsAdmin() ||
@@ -499,9 +526,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitVerificationConfirmationSucessToWaitCustomerVerifiedConfirmation.vm";
 			emailTargets = getAdmins(calculatorInstance.getScope().getOrganization());
-			emailTitle = "Retour de vérification de votre bilan GES";
+			//emailTitle = "Retour de vérification de votre bilan GES";
+            subject = traductions.get("VERIFICATION_waitVerificationConfirmationSucessToWaitCustomerVerifiedConfirmation_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitVerificationConfirmationSucessToWaitCustomerVerifiedConfirmation_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.CORRECTION) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.CORRECTION) &&
 				oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) &&
 				securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				(securedController.getCurrentUser().getIsAdmin() ||
@@ -525,9 +555,12 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitVerificationConfirmationRejectToCorrection.vm";
 			emailTargets = getAdmins(calculatorInstance.getScope().getOrganization());
-			emailTitle = "Retour de vérification de votre bilan GES";
+			//emailTitle = "Retour de vérification de votre bilan GES";
+            subject = traductions.get("VERIFICATION_waitVerificationConfirmationRejectToCorrection_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitVerificationConfirmationRejectToCorrection_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
-		} else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
+
+        } else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
 				(oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_REJECT) || oldStatus.equals(VerificationRequestStatus.WAIT_VERIFICATION_CONFIRMATION_SUCCESS)) &&
 				securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
 				(securedController.getCurrentUser().getIsAdmin() ||
@@ -543,7 +576,9 @@ public class VerificationController extends AbstractController {
 			//email
 			emailToSend = "waitVerificationConfirmationRejectToVeriification.vm";
 			emailTargets = getAssignedAccountEmail(calculatorInstance.getVerificationRequest());
-			emailTitle = "Travail complémentaire pour vérification de bilan GES";
+			//emailTitle = "Travail complémentaire pour vérification de bilan GES";
+            subject = traductions.get("VERIFICATION_waitVerificationConfirmationRejectToVeriification_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitVerificationConfirmationRejectToVeriification_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
 
 		} else if (newStatus.equals(VerificationRequestStatus.VERIFICATION) &&
 				oldStatus.equals(VerificationRequestStatus.CORRECTION) &&
@@ -562,7 +597,10 @@ public class VerificationController extends AbstractController {
 			emailToSend = "correctionToVeriification.vm";
 			emailTargets = getAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier());
 			emailTargets.addAll(getAssignedAccountEmail(calculatorInstance.getVerificationRequest()));
-			emailTitle = "Données corrigées de bilan GES";
+			//emailTitle = "Données corrigées de bilan GES";
+            subject = traductions.get("VERIFICATION_correctionToVeriification_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_correctionToVeriification_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+
 
 		} else if (newStatus.equals(VerificationRequestStatus.VERIFIED) &&
 				oldStatus.equals(VerificationRequestStatus.WAIT_CUSTOMER_VERIFIED_CONFIRMATION) &&
@@ -599,8 +637,11 @@ public class VerificationController extends AbstractController {
 				emailTargets.addAll(getAdmins(calculatorInstance.getVerificationRequest().getOrganizationVerifier()));
 				emailTargets.addAll(getAssignedAccountEmail(calculatorInstance.getVerificationRequest()));
 			}
-			emailTitle = "Refus d'un rapport de vérification de bilan GES";
-		} else {
+			//emailTitle = "Refus d'un rapport de vérification de bilan GES";
+            subject = traductions.get("VERIFICATION_waitCustomerVerifiedConfirmationToVerification_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+            content = traductions.get("VERIFICATION_waitCustomerVerifiedConfirmationToVerification_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+
+        } else {
 			return unauthorized(new ExceptionsDTO(BusinessErrorType.WRONG_RIGHT));
 		}
 
@@ -610,12 +651,28 @@ public class VerificationController extends AbstractController {
 		//send email
 		if (emailToSend != null && emailTargets.size() > 0) {
 			Map<String, Object> values = new HashMap<>();
-			values.put("request", calculatorInstance.getVerificationRequest());
-			values.put("user", securedController.getCurrentUser());
+			//values.put("request", calculatorInstance.getVerificationRequest());
+			//values.put("user", securedController.getCurrentUser());
+
+            content = content.replace("${user.person.firstname}",securedController.getCurrentUser().getPerson().getFirstname());
+            content = content.replace("${user.person.lastname}",securedController.getCurrentUser().getPerson().getLastname());
+            content = content.replace("${request.awacCalculatorInstance.scope.organization.name}",calculatorInstance.getVerificationRequest().getAwacCalculatorInstance().getScope().getOrganization().getName());
+            content = content.replace("${request.emailVerificationContent.content}",calculatorInstance.getVerificationRequest().getEmailVerificationContent().getContent());
+            content = content.replace("${request.emailVerificationContent.phoneNumber}",calculatorInstance.getVerificationRequest().getEmailVerificationContent().getPhoneNumber());
+            content = content.replace("${request.contact.person.email}",calculatorInstance.getVerificationRequest().getContact().getPerson().getEmail());
+            content = content.replace("${request.key}",calculatorInstance.getVerificationRequest().getKey());
+            content = content.replace("${request.awacCalculatorInstance.period.label}",calculatorInstance.getPeriod().getLabel());
+            content = content.replace("${request.organizationVerifier.name}",calculatorInstance.getVerificationRequest().getOrganizationVerifier().getName());
+
+//		values.put("request", verificationRequest);
+//		values.put("user", securedController.getCurrentUser());
+
+            values.put("subject", subject);
+            values.put("content", content);
 
 			String velocityContent = velocityGeneratorService.generate("verification/" + emailToSend, values);
 
-			EmailMessage email = new EmailMessage(emailTargets, emailTitle, velocityContent);
+			EmailMessage email = new EmailMessage(emailTargets, subject, velocityContent);
 			emailService.send(email);
 		}
 

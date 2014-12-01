@@ -4,13 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,<br/><br/>
-
-${user.person.firstname} ${user.person.lastname} n'est pas satisfait du rapport de vérification sur ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label} et ne l'a pas accepté.<br/>
-Il vous appartient d'en re-soumettre un nouveau.<br/><br/>
-
-Bien à vous,<br/>
-Le gestionnaire du calculateur AWAC
-
+${content}
 </body>
 </html>
