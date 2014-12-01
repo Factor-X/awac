@@ -1,87 +1,95 @@
 package eu.factorx.awac.converter;
 
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Factor;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
+import eu.factorx.awac.service.BaseActivityResultService;
+import eu.factorx.awac.service.FactorValueService;
 import eu.factorx.awac.service.impl.reporting.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<ReportLogEntry, ReportLogEntryDTO> {
-	@Override
-	public ReportLogEntryDTO convert(ReportLogEntry entry) {
-		if (entry instanceof Contribution) {
 
-			BaseActivityResult bar = ((Contribution) entry).getBar();
+    @Autowired
+    private FactorValueService        factorValueService;
+    @Autowired
+    private BaseActivityResultService baseActivityResultService;
 
-			BaseIndicator baseIndicator = bar.getBaseIndicator();
-			BaseActivityData activityData = bar.getActivityData();
-			Factor factor = bar.getFactor();
+    @Override
+    public ReportLogEntryDTO convert(ReportLogEntry entry) {
+        if (entry instanceof Contribution) {
 
-			return new ReportLogContributionEntryDTO(
-				baseIndicator.getActivityCategory().getKey(),
-				baseIndicator.getActivitySubCategory().getKey(),
-				baseIndicator.getUnit().getSymbol(),
-				activityData.getValue(),
-				activityData.getUnit().getSymbol(),
-				baseIndicator.getIndicatorCategory().getKey(),
-				activityData.getActivityType().getKey(),
-				activityData.getActivitySource().getKey(),
-				factor.getUnitIn().getSymbol(),
-				factor.getUnitOut().getSymbol(),
-				factor.getCurrentValue(),
-				bar.getNumericValue());
+            BaseActivityResult bar = ((Contribution) entry).getBar();
 
-		}
+            BaseIndicator baseIndicator = bar.getBaseIndicator();
+            BaseActivityData activityData = bar.getActivityData();
+            Factor factor = bar.getFactor();
 
-		if (entry instanceof NoSuitableFactor) {
+            return new ReportLogContributionEntryDTO(
+                baseIndicator.getActivityCategory().getKey(),
+                baseIndicator.getActivitySubCategory().getKey(),
+                baseIndicator.getUnit().getSymbol(),
+                activityData.getValue(),
+                activityData.getUnit().getSymbol(),
+                baseIndicator.getIndicatorCategory().getKey(),
+                activityData.getActivityType().getKey(),
+                activityData.getActivitySource().getKey(),
+                factor.getUnitIn().getSymbol(),
+                factor.getUnitOut().getSymbol(),
+                factorValueService.findByFactorAndYear(factor, bar.getYear()).getValue(),
+                baseActivityResultService.getValueForYear(bar));
 
-			BaseActivityData activityData = ((NoSuitableFactor) entry).getBad();
-			BaseIndicator baseIndicator = ((NoSuitableFactor) entry).getBaseIndicator();
+        }
 
-			return new ReportLogNoSuitableFactorEntryDTO(
-				baseIndicator.getActivityCategory().getKey(),
-				baseIndicator.getActivitySubCategory().getKey(),
-				baseIndicator.getUnit().getSymbol(),
-				activityData.getValue(),
-				activityData.getUnit().getSymbol(),
-				baseIndicator.getIndicatorCategory().getKey(),
-				activityData.getActivityType().getKey(),
-				activityData.getActivitySource().getKey());
+        if (entry instanceof NoSuitableFactor) {
 
-		}
+            BaseActivityData activityData = ((NoSuitableFactor) entry).getBad();
+            BaseIndicator baseIndicator = ((NoSuitableFactor) entry).getBaseIndicator();
 
-		if (entry instanceof LowerRankInGroup) {
-			LowerRankInGroup lrig = (LowerRankInGroup) entry;
+            return new ReportLogNoSuitableFactorEntryDTO(
+                baseIndicator.getActivityCategory().getKey(),
+                baseIndicator.getActivitySubCategory().getKey(),
+                baseIndicator.getUnit().getSymbol(),
+                activityData.getValue(),
+                activityData.getUnit().getSymbol(),
+                baseIndicator.getIndicatorCategory().getKey(),
+                activityData.getActivityType().getKey(),
+                activityData.getActivitySource().getKey());
 
-			return new LowerRankInGroupDTO(
-				lrig.getBaseActivityData().getActivityCategory().getKey(),
-				lrig.getBaseActivityData().getActivitySubCategory().getKey(),
-				lrig.getBaseActivityData().getActivityType().getKey(),
-				lrig.getBaseActivityData().getActivitySource().getKey(),
-				lrig.getBaseActivityData().getValue(),
-				lrig.getBaseActivityData().getUnit().getSymbol()
-			);
-		}
+        }
 
-		if (entry instanceof NoSuitableIndicator) {
-			NoSuitableIndicator nsi = (NoSuitableIndicator) entry;
+        if (entry instanceof LowerRankInGroup) {
+            LowerRankInGroup lrig = (LowerRankInGroup) entry;
 
-			return new NoSuitableIndicatorDTO(
-				nsi.getBaseActivityData().getActivityCategory().getKey(),
-				nsi.getBaseActivityData().getActivitySubCategory().getKey(),
-				nsi.getBaseActivityData().getActivityType().getKey(),
-				nsi.getBaseActivityData().getActivitySource().getKey(),
-				nsi.getBaseActivityData().getValue(),
-				nsi.getBaseActivityData().getUnit().getSymbol()
-			);
-		}
+            return new LowerRankInGroupDTO(
+                lrig.getBaseActivityData().getActivityCategory().getKey(),
+                lrig.getBaseActivityData().getActivitySubCategory().getKey(),
+                lrig.getBaseActivityData().getActivityType().getKey(),
+                lrig.getBaseActivityData().getActivitySource().getKey(),
+                lrig.getBaseActivityData().getValue(),
+                lrig.getBaseActivityData().getUnit().getSymbol()
+            );
+        }
 
-		return null;
-	}
+        if (entry instanceof NoSuitableIndicator) {
+            NoSuitableIndicator nsi = (NoSuitableIndicator) entry;
+
+            return new NoSuitableIndicatorDTO(
+                nsi.getBaseActivityData().getActivityCategory().getKey(),
+                nsi.getBaseActivityData().getActivitySubCategory().getKey(),
+                nsi.getBaseActivityData().getActivityType().getKey(),
+                nsi.getBaseActivityData().getActivitySource().getKey(),
+                nsi.getBaseActivityData().getValue(),
+                nsi.getBaseActivityData().getUnit().getSymbol()
+            );
+        }
+
+        return null;
+    }
 
 }
