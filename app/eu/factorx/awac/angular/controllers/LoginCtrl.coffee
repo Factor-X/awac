@@ -62,35 +62,37 @@ angular
     #send the request to the server
     $scope.send = (options) ->
 
-        #active loading mode
-        $scope.isLoading = true
+        if $scope.connectionFieldValid()
 
-        if options.anonymous
-            dto =
-                login: null,
-                password: null,
-                interfaceName: $scope.$root.instanceName
-        else
-            dto =
-                login: $scope.loginInfo.field,
-                password: $scope.passwordInfo.field,
-                interfaceName: $scope.$root.instanceName
+            #active loading mode
+            $scope.isLoading = true
 
-        #send request
-        downloadService.postJson '/awac/login', dto, (result) ->
-
-            if result.success
-                $scope.$root.loginSuccess(result.data)
-                messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
-                $scope.isLoading = false
+            if options.anonymous
+                dto =
+                    login: null,
+                    password: null,
+                    interfaceName: $scope.$root.instanceName
             else
-                $scope.isLoading = false
-                if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
-                    # must change password
-                    params =
-                        login: $scope.loginInfo.field
-                        password: $scope.passwordInfo.field
-                    modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
+                dto =
+                    login: $scope.loginInfo.field,
+                    password: $scope.passwordInfo.field,
+                    interfaceName: $scope.$root.instanceName
+
+            #send request
+            downloadService.postJson '/awac/login', dto, (result) ->
+
+                if result.success
+                    $scope.$root.loginSuccess(result.data)
+                    messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
+                    $scope.isLoading = false
+                else
+                    $scope.isLoading = false
+                    if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
+                        # must change password
+                        params =
+                            login: $scope.loginInfo.field
+                            password: $scope.passwordInfo.field
+                        modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
         #disactive loading mode
 
         return false
