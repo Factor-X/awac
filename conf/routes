@@ -198,6 +198,8 @@ GET         /awac/admin/translations/sublists/load                          @eu.
 POST        /awac/admin/translations/sublists/save                          @eu.factorx.awac.controllers.TranslationAdminController.updateSublist()
 GET         /awac/admin/translations/baselists/load                         @eu.factorx.awac.controllers.TranslationAdminController.loadBaseLists()
 POST        /awac/admin/translations/baselists/save                         @eu.factorx.awac.controllers.TranslationAdminController.updateBaseLists()
+GET         /awac/admin/translations/linkedlists/load                       @eu.factorx.awac.controllers.TranslationAdminController.loadLinkedLists()
+POST        /awac/admin/translations/linkedlists/save                       @eu.factorx.awac.controllers.TranslationAdminController.updateLinkedLists()
 GET         /awac/admin/translations/codelabels/load/:codeLists             @eu.factorx.awac.controllers.TranslationAdminController.loadCodeLabels(codeLists:String)
 POST        /awac/admin/translations/codelabels/save                        @eu.factorx.awac.controllers.TranslationAdminController.updateCodeLabels()
 GET         /awac/admin/translations/surveyslabels/load                     @eu.factorx.awac.controllers.TranslationAdminController.loadSurveysLabels()
