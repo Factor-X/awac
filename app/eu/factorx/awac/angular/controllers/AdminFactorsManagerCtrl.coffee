@@ -32,11 +32,11 @@ angular
 
             $scope.parameters = new ngTableParams({
                 page: 1
-                count: 5
+                count: 10
                 sorting:
                     indicatorCategory: 'asc'
+
             }, {
-                counts: []
                 total: $scope.factors.length
                 getData: ($defer, params) ->
                     console.log 'getData'

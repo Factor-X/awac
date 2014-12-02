@@ -14,7 +14,11 @@ public interface ReportResultService {
 
     ReportResultCollection getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period);
 
+    ReportResultCollection getReportResultsCEF(AwacCalculator awacCalculator, List<Scope> scopes, Period period, Period reference);
+
     List<BaseActivityResult> getBaseActivityResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries);
+
+    List<BaseActivityResult> getBaseActivityResultsCEF(AwacCalculator awacCalculator, List<Scope> scopes, Period period, Period reference, List<ReportLogEntry> logEntries);
 
     ReportResultCollectionAggregation aggregate(ReportResultCollection reportResultCollection);
 

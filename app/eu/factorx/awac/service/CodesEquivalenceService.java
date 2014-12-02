@@ -12,6 +12,10 @@ public interface CodesEquivalenceService extends PersistenceService<CodesEquival
 
 	List<CodesEquivalence> findAllSublistsData();
 
+	Boolean isLinkedList(CodeList codeList);
+
+	List<CodesEquivalence> findAllLinkedListsData();
+
 	void removeAll();
 
 }

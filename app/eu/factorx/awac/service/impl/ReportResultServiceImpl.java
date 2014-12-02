@@ -151,9 +151,33 @@ public class ReportResultServiceImpl implements ReportResultService {
     }
 
     @Override
+    public ReportResultCollection getReportResultsCEF(AwacCalculator awacCalculator, List<Scope> scopes, Period period, Period reference) {
+        List<ReportResult> reportResults = new ArrayList<>();
+        List<ReportLogEntry> logEntries = new ArrayList<>();
+
+        List<BaseActivityResult> baseActivityResults = getBaseActivityResultsCEF(awacCalculator, scopes, period, reference, logEntries);
+
+        for (Report report : awacCalculator.getReports()) {
+            reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
+        }
+
+        return new ReportResultCollection(reportResults, logEntries);
+    }
+
+    @Override
     public List<BaseActivityResult> getBaseActivityResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries) {
         List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
         return computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+    }
+
+    @Override
+    public List<BaseActivityResult> getBaseActivityResultsCEF(AwacCalculator awacCalculator, List<Scope> scopes, Period period, Period reference, List<ReportLogEntry> logEntries) {
+        List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
+        List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+        for (BaseActivityResult baseActivityResult : baseActivityResults) {
+            baseActivityResult.setYear(Integer.valueOf(reference.getPeriodCode().getKey()));
+        }
+        return baseActivityResults;
     }
 
     @Override

@@ -24,6 +24,8 @@
                 li
                     a(href="#", ng-click="toState('base-lists')", onclick="return false") Listes de base
                 li
+                    a(href="#", ng-click="toState('linked-lists')", onclick="return false") Listes liées
+                li
                     a(href="#", ng-click="toState('sub-lists')", onclick="return false") Sous-listes
 
         li
@@ -41,6 +43,8 @@
                 div(ng-include="'$/angular/views/admin/translation_surveys.html'", ng-controller="AdminTranslationSurveysLabelsCtrl")
             .animate-switch(ng-switch-when="base-lists")
                 div(ng-include="'$/angular/views/admin/translation_base_lists.html'", ng-controller="AdminTranslationBaseListCtrl")
+            .animate-switch(ng-switch-when="linked-lists")
+                div(ng-include="'$/angular/views/admin/translation_linked_lists.html'", ng-controller="AdminTranslationLinkedListCtrl")
             .animate-switch(ng-switch-when="sub-lists")
                 div(ng-include="'$/angular/views/admin/translation_sub_lists.html'", ng-controller="AdminTranslationSubListCtrl")
             .animate-switch(ng-switch-when="helps")

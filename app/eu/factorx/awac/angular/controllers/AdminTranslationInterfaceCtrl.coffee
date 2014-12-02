@@ -31,7 +31,7 @@ angular
         # create new array of code labels
         codeLabels = []
         for i, codeLabelsGroup of $scope.codeLabelsGroups
-            codeLabels.concat(codeLabelsGroup.codeLabels)
+            codeLabels = codeLabels.concat(codeLabelsGroup.codeLabels)
         $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"] = codeLabels
 
         data = {codeLabelsByList: $scope.codeLabelsByList}

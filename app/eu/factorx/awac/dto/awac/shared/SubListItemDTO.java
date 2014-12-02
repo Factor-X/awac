@@ -1,8 +1,9 @@
 package eu.factorx.awac.dto.awac.shared;
 
 import eu.factorx.awac.dto.DTO;
+import eu.factorx.awac.util.Keyed;
 
-public class SubListItemDTO extends DTO {
+public class SubListItemDTO extends DTO implements Keyed {
 
 	private Long id;
 
@@ -41,5 +42,10 @@ public class SubListItemDTO extends DTO {
 
 	public void setOrderIndex(Integer orderIndex) {
 		this.orderIndex = orderIndex;
+	}
+
+	@Override
+	public Object uniqueKey() {
+		return id;
 	}
 }
