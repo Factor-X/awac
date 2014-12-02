@@ -247,7 +247,9 @@ public class ResultController extends AbstractController {
         List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
         for (ReportLogEntry logEntry : logEntries) {
             ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
-            dtoLogEntries.add(reportLogEntryDTO);
+			if (reportLogEntryDTO != null) {
+				dtoLogEntries.add(reportLogEntryDTO);
+			}
         }
 
         // 4. PUSH !!!
@@ -287,7 +289,9 @@ public class ResultController extends AbstractController {
         List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
         for (ReportLogEntry logEntry : logEntries) {
             ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
-            dtoLogEntries.add(reportLogEntryDTO);
+			if (reportLogEntryDTO != null) {
+				dtoLogEntries.add(reportLogEntryDTO);
+			}
         }
 
         // 4. PUSH !!!
