@@ -15,13 +15,17 @@ public class ResultsDTO extends DTO {
     private final Map<String, String>     svgWebs;
     private final Map<String, String>     svgHistograms;
     private final List<ReportLogEntryDTO> logEntries;
+    private       Map<String, ReportDTO>  reportCEFDTOs;
+    private       Map<String, String>     svgHistogramsCEF;
 
     public ResultsDTO() {
         reportDTOs = new HashMap<>();
+        reportCEFDTOs = new HashMap<>();
         leftSvgDonuts = new HashMap<>();
         rightSvgDonuts = new HashMap<>();
         svgWebs = new HashMap<>();
         svgHistograms = new HashMap<>();
+        svgHistogramsCEF = new HashMap<>();
         logEntries = new ArrayList<ReportLogEntryDTO>();
     }
 
@@ -49,4 +53,19 @@ public class ResultsDTO extends DTO {
         return logEntries;
     }
 
+    public Map<String, ReportDTO> getReportCEFDTOs() {
+        return reportCEFDTOs;
+    }
+
+    public void setReportCEFDTOs(Map<String, ReportDTO> reportCEFDTOs) {
+        this.reportCEFDTOs = reportCEFDTOs;
+    }
+
+    public Map<String, String> getSvgHistogramsCEF() {
+        return svgHistogramsCEF;
+    }
+
+    public void setSvgHistogramsCEF(Map<String, String> svgHistogramsCEF) {
+        this.svgHistogramsCEF = svgHistogramsCEF;
+    }
 }

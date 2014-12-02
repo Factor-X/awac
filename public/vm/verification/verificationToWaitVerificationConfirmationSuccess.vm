@@ -4,11 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,<br/><br/>
-${user.person.firstname} ${user.person.lastname} a fini la vérification de ${request.awacCalculatorInstance.scope.organization.name} / ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.<br/>
-A vous de valider et de renvoyer au client.<br/><br/>
-
-Bien à vous,<br/>
-Le gestionnaire du calculateur AWAC<br/>
+${content}
 </body>
 </html>

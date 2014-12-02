@@ -125,7 +125,7 @@ public class FactorImporter extends WorkbookDataImporter {
 			if (value == null) {
 				noValueFactors++;
 			} else {
-				FactorValue factorvalue = new FactorValue(value, null, null, factor);
+				FactorValue factorvalue = new FactorValue(value, 2000, null, factor);
 				factor.getValues().add(factorvalue);
 				factorService.saveOrUpdate(factor);
 			}

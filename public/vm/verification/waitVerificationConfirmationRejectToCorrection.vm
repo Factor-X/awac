@@ -4,13 +4,6 @@
     <title>${title}</title>
 </head>
 <body>
-Bonjour,<br/><br/>
-
-${request.organizationVerifier.name} a fini la vérification de votre bilan GES portant sur ${request.awacCalculatorInstance.scope.name} / ${request.awacCalculatorInstance.period.label}.<br/>
-Des données sont rejetées et il vous appartient de les corriger et de re-soumettre.<br/><br/>
-
-Bien à vous,<br/>
-Le gestionnaire du calculateur AWAC
-
+${content}
 </body>
 </html>
