@@ -294,7 +294,7 @@ public class AdminController extends AbstractController {
                             }
 
                             if (factorValueDTO.getDateOut() != null) {
-                                factorValue.setDateIn(Integer.valueOf(factorValueDTO.getDateOut()));
+                                factorValue.setDateOut(Integer.valueOf(factorValueDTO.getDateOut()));
                             } else {
                                 factorValue.setDateOut(null);
                             }
