@@ -265,6 +265,8 @@ public class VerificationController extends AbstractController {
         content = content.replace("${request.emailVerificationContent.phoneNumber}",verificationRequest.getEmailVerificationContent().getPhoneNumber());
         content = content.replace("${request.contact.person.email}",verificationRequest.getContact().getPerson().getEmail());
         content = content.replace("${request.key}",verificationRequest.getKey());
+        content = content.replace("${request.awacCalculatorInstance.period.label}",verificationRequest.getAwacCalculatorInstance().getPeriod().getLabel());
+        content = content.replace("${request.awacCalculatorInstance.scope.name}",verificationRequest.getAwacCalculatorInstance().getScope().getName());
 
 
 //		values.put("request", verificationRequest);
