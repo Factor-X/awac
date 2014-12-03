@@ -6,58 +6,37 @@ div
             mm-awac-question(question-code="AEV12", ng-optional="true")
 
             mm-awac-repetition-name(question-code="AEV13")
-            mm-awac-repetition-question(question-set-code="AEV13", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMAEVByQuestionSet('AEV13')")
-
-                mm-awac-question(question-code="AEV14",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2' && (getAnswer('AEV18').value == 'AS_3' || getAnswer('AEV18').value == 'AS_4' || getAnswer('AEV18').value == 'AS_376' || getAnswer('AEV18').value == 'AS_377')")
-                mm-awac-question(question-code="AEV15",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2' && (getAnswer('AEV18').value == 'AS_11' || getAnswer('AEV18').value == 'AS_13')")
-                mm-awac-question(question-code="AEV16",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2' && getAnswer('AEV18').value == 'AS_10'")
-                mm-awac-question(question-code="AEV17",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2' && getAnswer('AEV18').value == 'AS_42'")
-                mm-awac-question(question-code="AEV18",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}")
-                mm-awac-question(question-code="AEV19",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV18').value == 'AS_42'")
-                mm-awac-question(question-code="AEV20",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV18').value != 'AS_42' || getAnswer('AEV19').value == 'false'")
-                mm-awac-question(question-code="AEV21",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '1' && (getAnswer('AEV18').value == 'AS_1' || getAnswer('AEV18').value == 'AS_3' || getAnswer('AEV18').value == 'AS_376' || getAnswer('AEV18').value == 'AS_377' || getAnswer('AEV18').value == 'AS_4')")
-                mm-awac-question(question-code="AEV22",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '1' && (getAnswer('AEV18').value == 'AS_10' || getAnswer('AEV18').value == 'AS_11' || getAnswer('AEV18').value == 'AS_13')")
-                mm-awac-question(question-code="AEV23",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '1' && getAnswer('AEV18').value == 'AS_42'")
-                mm-awac-question(question-code="AEV24",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2'")
-                mm-awac-question(question-code="AEV25",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '3' && (getAnswer('AEV18').value == 'AS_1' || getAnswer('AEV18').value == 'AS_3' || getAnswer('AEV18').value == 'AS_376' || getAnswer('AEV18').value == 'AS_377' || getAnswer('AEV18').value == 'AS_4')")
-                mm-awac-question(question-code="AEV26",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV13':$index}", ng-condition="getAnswer('AEV20').value == '2' && getAnswer('AEV18').value == 'AS_1'")
-
+            mm-awac-repetition-question(question-set-code="AEV13", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV13')")
+                mm-awac-question(question-code="AEV14",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
+                mm-awac-question(question-code="AEV15",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
+                mm-awac-question(question-code="AEV16",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '1' && (getAnswer('AEV14').value == 'AS_1' || getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV17",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '1' && (getAnswer('AEV14').value == 'AS_10' || getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV14",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2'")
+                mm-awac-question(question-code="AEV19",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_1'")
+                mm-awac-question(question-code="AEV20",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV21",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV22",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_10'")
+                mm-awac-question(question-code="AEV23",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_1'")
+                mm-awac-question(question-code="AEV24",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV25",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV26",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_10'")
             mm-awac-repetition-add-button(question-set-code="AEV13")
 
         .horizontal_separator
 
-        mm-awac-section(title-code="AEV41")
+        mm-awac-section(title-code="AEV27")
 
-            mm-awac-question(question-code="AEV42", ng-optional="true")
-            mm-awac-question(question-code="AEV43")
-            mm-awac-question(question-code="AEV44")
-            mm-awac-question(question-code="AEV45", ng-condition="getAnswer('AEV44').value == '1'")
-            mm-awac-question(question-code="AEV46", ng-condition="getAnswer('AEV44').value == '2'")
-            mm-awac-question(question-code="AEV47", ng-condition="getAnswer('AEV44').value == '2'")
-            mm-awac-question(question-code="AEV48", ng-condition="getAnswer('AEV44').value == '3'")
-            mm-awac-question(question-code="AEV49", ng-condition="getAnswer('AEV44').value == '3'")
-            mm-awac-question(question-code="AEV50", ng-condition="getAnswer('AEV44').value == '3'")
+            mm-awac-question(question-code="AEV28", ng-optional="true")
+            mm-awac-question(question-code="AEV29")
+            mm-awac-question(question-code="AEV30")
 
         .horizontal_separator
     
-        mm-awac-section(title-code="AEV51")
+        mm-awac-section(title-code="AEV31")
 
-            mm-awac-question(question-code="AEV52",ng-optional="true")
-            
-            mm-awac-repetition-name(question-code="AEV53")
-            mm-awac-repetition-question(question-set-code="AEV53", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMAEVByQuestionSet('AEV53')")
-                mm-awac-question(question-code="AEV54",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV53':$index}")
-                mm-awac-question(question-code="AEV55",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV53':$index}")
-            mm-awac-repetition-add-button(question-set-code="AEV53")
+            mm-awac-question(question-code="AEV32",ng-optional="true")
 
-        .horizontal_separator
-
-        mm-awac-section(title-code="AEV56")
-
-            mm-awac-question(question-code="AEV57",ng-optional="true")
-
-            mm-awac-repetition-name(question-code="AEV58")
-            mm-awac-repetition-question(question-set-code="AEV58", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMAEVByQuestionSet('AEV58')")
-                mm-awac-question(question-code="AEV59",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV58':$index}")
-                mm-awac-question(question-code="AEV60",ng-repetition-mAEV="itLevel1",ng-mAEV-index="{'AEV58':$index}")
-            mm-awac-repetition-add-button(question-set-code="AEV58")
+            mm-awac-question(question-code="AEV33")
+            mm-awac-question(question-code="AEV34", ng-condition="getAnswer('AEV33').value == '1')
+            mm-awac-question(question-code="AEV35", ng-condition="getAnswer('AEV33').value == '1')
+            mm-awac-question(question-code="AEV35", ng-condition="getAnswer('AEV33').value == '2')
