@@ -1,0 +1,19 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AEV106")
+
+            mm-awac-question(question-code="AEV107", ng-optional="true")
+
+            mm-awac-repetition-name(question-code="AEV109", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-question(question-set-code="AEV109", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV109')")
+                mm-awac-question(question-code="A110",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}")
+                mm-awac-question(question-code="A111",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV110').value != '13' && getAnswer('AEV110').value != '14' && getAnswer('AEV110').value != '15' && getAnswer('AEV110').value != '16'")
+                mm-awac-sub-title(question-code="A112",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '1'")
+                mm-awac-question(question-code="A113",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '1'")
+                mm-awac-question(question-code="A114",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '1'")
+                mm-awac-question(question-code="A115",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '1'")
+                mm-awac-sub-title(question-code="A116",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '2'")
+                mm-awac-question(question-code="A117",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV111').value == '2'")
+                mm-awac-question(question-code="A122",ng-repetition-map="itLevel1",ng-map-index="{'AEV109':$index}", ng-condition="getAnswer('AEV110').value == '13' || getAnswer('AEV110').value == '14' || getAnswer('AEV110').value == '15' || getAnswer('AEV110').value == '16'")
+            mm-awac-repetition-add-button(question-set-code="AEV109")

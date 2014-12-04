@@ -7,10 +7,32 @@
    end
 %>
 
-DoubleQuestion <%= accronym.downcase %> = (DoubleQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+
+<%= accronym.downcase %> = (DoubleQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
     <%= accronym.downcase %> = new DoubleQuestion( <%= parent %>, 0, QuestionCode.<%= accronym %>, <%= unitCategory %>, <%= unit %> );
     JPA.em().persist(<%= accronym.downcase %>);
+
+    // cleanup the driver
+    Driver <%= accronym.downcase %>_driver = driverService.findByName("<%= accronym %>");
+    if (<%= accronym.downcase %>_driver != null) {
+        driverService.remove(<%= accronym.downcase %>_driver);
+    }
+
+    <% if default != 'null' %>
+    // recreate with good value
+    <%= accronym.downcase %>_driver = new Driver("<%= accronym %>");
+    driverService.saveOrUpdate(<%= accronym.downcase %>_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(<%= accronym.downcase %>_driver, p2000, Double.valueOf(<%= default %>));
+    <%= accronym.downcase %>_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(<%= accronym.downcase %>_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)<%= accronym.downcase %>).setDriver(<%= accronym.downcase %>_driver);
+    JPA.em().persist(<%= accronym.downcase %>);
+    <% end %>
+
 } else {
     if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
         <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
@@ -20,9 +42,31 @@ if (<%= accronym.downcase %> == null) {
         <%= parent %>.getQuestions().add(<%= accronym.downcase %>);
         JPA.em().persist(<%= parent %>);
     }
-    <%= accronym.downcase %>.setUnitCategory(<%= unitCategory %>);
+    ((NumericQuestion)<%= accronym.downcase %>).setUnitCategory(<%= unitCategory %>);
     <%= accronym.downcase %>.setOrderIndex(0);
-    <%= accronym.downcase %>.setDefaultUnit(<%= unit %>);
+    ((NumericQuestion)<%= accronym.downcase %>).setDefaultUnit(<%= unit %>);
+
+    // cleanup the driver
+    Driver <%= accronym.downcase %>_driver = driverService.findByName("<%= accronym %>");
+    if (<%= accronym.downcase %>_driver != null) {
+        driverService.remove(<%= accronym.downcase %>_driver);
+    }
+
+    <% if default != 'null' %>
+    // recreate with good value
+    <%= accronym.downcase %>_driver = new Driver("<%= accronym %>");
+    driverService.saveOrUpdate(<%= accronym.downcase %>_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(<%= accronym.downcase %>_driver, p2000, Double.valueOf(<%= default %>));
+    <%= accronym.downcase %>_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(<%= accronym.downcase %>_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)<%= accronym.downcase %>).setDriver(<%= accronym.downcase %>_driver);
+    <% else %>
+    ((NumericQuestion)<%= accronym.downcase %>).setDriver(null);
+    <% end %>
+
     JPA.em().persist(<%= accronym.downcase %>);
 }
 

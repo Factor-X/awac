@@ -1,0 +1,42 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AEV11")
+
+            mm-awac-question(question-code="AEV12", ng-optional="true")
+
+            mm-awac-repetition-name(question-code="AEV13")
+            mm-awac-repetition-question(question-set-code="AEV13", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV13')")
+                mm-awac-question(question-code="AEV14",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
+                mm-awac-question(question-code="AEV15",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
+                mm-awac-question(question-code="AEV16",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '1' && (getAnswer('AEV14').value == 'AS_1' || getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV17",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '1' && (getAnswer('AEV14').value == 'AS_10' || getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV14",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2'")
+                mm-awac-question(question-code="AEV19",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_1'")
+                mm-awac-question(question-code="AEV20",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV21",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV22",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_10'")
+                mm-awac-question(question-code="AEV23",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_1'")
+                mm-awac-question(question-code="AEV24",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_3' || getAnswer('AEV14').value == 'AS_376' || getAnswer('AEV14').value == 'AS_377' || getAnswer('AEV14').value == 'AS_4')")
+                mm-awac-question(question-code="AEV25",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && (getAnswer('AEV14').value == 'AS_11' || getAnswer('AEV14').value == 'AS_13')")
+                mm-awac-question(question-code="AEV26",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15').value == '2' && getAnswer('AEV14').value == 'AS_10'")
+            mm-awac-repetition-add-button(question-set-code="AEV13")
+
+        .horizontal_separator
+
+        mm-awac-section(title-code="AEV27")
+
+            mm-awac-question(question-code="AEV28", ng-optional="true")
+            mm-awac-question(question-code="AEV29")
+            mm-awac-question(question-code="AEV30")
+
+        .horizontal_separator
+    
+        mm-awac-section(title-code="AEV31")
+
+            mm-awac-question(question-code="AEV32",ng-optional="true")
+
+            mm-awac-question(question-code="AEV33")
+            mm-awac-question(question-code="AEV34", ng-condition="getAnswer('AEV33').value == '1')
+            mm-awac-question(question-code="AEV35", ng-condition="getAnswer('AEV33').value == '1')
+            mm-awac-question(question-code="AEV35", ng-condition="getAnswer('AEV33').value == '2')

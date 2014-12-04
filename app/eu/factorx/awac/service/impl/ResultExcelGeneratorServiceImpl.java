@@ -564,6 +564,15 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         MergedReportResultCollectionAggregation merged = reportResultService.mergeAsComparision(left, right);
 
 
+
+
+        ReportResultCollection allReportResultsCEFLeft = reportResultService.getReportResultsCEF(awacCalculator, scopes, period, comparedPeriod);
+        MergedReportResultCollectionAggregation mergedReportResultCEFCollectionAggregation = reportResultService.mergeAsComparision(
+            reportResultService.aggregate(allReportResultsCEFLeft),
+            reportResultService.aggregate(allReportResultsRight)
+        );
+
+
         // 2.1 Table
         String r_1 = "";
         for (Report report : awacCalculator.getReports()) {
@@ -584,7 +593,8 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
             }
         }
 
-        writeComparisionTable(r_1, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
+        writeComparisionTable(r_1, "Résultat", organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
+        writeComparisionTable(r_1, "Résultat facteurs constants", organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, mergedReportResultCEFCollectionAggregation, cellFormat);
 
         // 2.3 Survey
         for (Scope scope : scopes) {
@@ -663,13 +673,13 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         return content;
     }
 
-    private void writeComparisionTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
+    private void writeComparisionTable(String search, String title, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
         for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
             String reportKey = aggregation.getReportCode();
 
             if (reportKey.equals(search)) {
 
-                WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
+                WritableSheet sheet = wb.createSheet(title, wb.getNumberOfSheets());
 
                 insertHeader(sheet, organization, sites, period, cellFormat);
 

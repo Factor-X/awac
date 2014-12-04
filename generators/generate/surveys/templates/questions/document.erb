@@ -1,4 +1,4 @@
-DocumentQuestion <%= accronym.downcase %> = (DocumentQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+<%= accronym.downcase %> = (DocumentQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
     <%= accronym.downcase %> = new DocumentQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>);
     JPA.em().persist(<%= accronym.downcase %>);

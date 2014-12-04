@@ -6,6 +6,8 @@ import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import eu.factorx.awac.models.data.question.Driver;
+import eu.factorx.awac.models.data.question.DriverValue;
 
 import play.Logger;
 import eu.factorx.awac.models.Notification;
@@ -49,6 +51,26 @@ public class Awac<%= name %>InitialData {
 
 	@Autowired
     private QuestionSetAnswerService questionSetAnswerService;
+
+	@Autowired
+    private DriverService driverService;
+
+    @Autowired
+    private PeriodService periodService;
+
+    private Form <%= forms.collect{ |f| 'form' + f.number.to_s }.join(',') %>;
+    private QuestionSet <%= question_sets.collect{|qs| qs.accronym.downcase }.join(',') %>;
+    private Question <%= questions.collect{|q| q.accronym.downcase }.join(',') %>;
+
+    private UnitCategory energyUnits;
+    private UnitCategory massUnits;
+    private UnitCategory volumeUnits;
+    private UnitCategory lengthUnits;
+    private UnitCategory areaUnits;
+    private UnitCategory powerUnits;
+    private UnitCategory moneyUnits;
+    private UnitCategory timeUnits;
+
 
 	private void deleteQuestion(Question question, int indent) {
 		System.out.println(StringUtils.repeat(' ', indent * 4) + "Deleting question " + question.getCode().getKey());
@@ -120,14 +142,14 @@ public class Awac<%= name %>InitialData {
 
         long startTime = System.currentTimeMillis();
 
-        UnitCategory energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
-        UnitCategory massUnits    = getUnitCategoryByCode(UnitCategoryCode.MASS);
-        UnitCategory volumeUnits  = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
-        UnitCategory lengthUnits  = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
-        UnitCategory areaUnits    = getUnitCategoryByCode(UnitCategoryCode.AREA);
-        UnitCategory powerUnits   = getUnitCategoryByCode(UnitCategoryCode.POWER);
-        UnitCategory moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
-        UnitCategory timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
+        energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
+        massUnits    = getUnitCategoryByCode(UnitCategoryCode.MASS);
+        volumeUnits  = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
+        lengthUnits  = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
+        areaUnits    = getUnitCategoryByCode(UnitCategoryCode.AREA);
+        powerUnits   = getUnitCategoryByCode(UnitCategoryCode.POWER);
+        moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
+        timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
 
         // delete old questions
@@ -161,6 +183,21 @@ public class Awac<%= name %>InitialData {
 			}
 		}
 
+        <% for f in forms %>
+        createForm<%= f.number %>();
+        <% end %>
+
+        <% for qs in question_sets %>
+        createQuestionSet<%= qs.accronym.upcase %>();
+        <% end %>
+
+        <% for q in questions %>
+        createQuestion<%= q.accronym.upcase %>();
+        <% end %>
+
+
+        Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
+    }
 
 <%= partial(
         :template => 'forms',
@@ -182,9 +219,6 @@ public class Awac<%= name %>InitialData {
                 :questions => questions
         }
 ) %>
-
-        Logger.info("===> CREATE AWAC <%= name %> INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
-    }
 
     private UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
         return unitCategoryService.findByCode(unitCategoryCode);

@@ -39,9 +39,6 @@ CREATE TABLE reducingactionadvice
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE reducingactionadvice
-  OWNER TO play;
-
 
 -- Table: reducingactionadvice_baseindicator
 
@@ -63,10 +60,6 @@ CREATE TABLE reducingactionadvice_baseindicator
 WITH (
 OIDS=FALSE
 );
-ALTER TABLE reducingactionadvice_baseindicator
-OWNER TO play;
-
-
 
 -- Table: reducingactionadvice_storedfile
 
@@ -85,5 +78,5 @@ CREATE TABLE reducingactionadvice_storedfile
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE reducingactionadvice_storedfile
-  OWNER TO play;
+
+

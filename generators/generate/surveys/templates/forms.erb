@@ -3,11 +3,13 @@
     // =========================================================================
 
 <% for f in forms %>
-    // == <%= f.code %>
-    // <%= f.name %>
-    Form form<%= f.number %> = formService.findByIdentifier("<%= f.code %>");
-    if (form<%= f.number %> == null) {
-        form<%= f.number %> = new Form("<%= f.code %>");
-        JPA.em().persist(form<%= f.number %>);
+    private void createForm<%= f.number %>() {
+        // == <%= f.code %>
+        // <%= f.name %>
+        form<%= f.number %> = formService.findByIdentifier("<%= f.code %>");
+        if (form<%= f.number %> == null) {
+            form<%= f.number %> = new Form("<%= f.code %>");
+            JPA.em().persist(form<%= f.number %>);
+        }
     }
 <% end %>

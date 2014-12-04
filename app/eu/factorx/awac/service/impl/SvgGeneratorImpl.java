@@ -356,7 +356,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
                         String color = Colors.makeGoodColorForSerieElement(j, series);
                         color = Colors.interpolate(color, "ffffff", iScope, 4);
 
-                        if (i == 1) {
+                        if (iScope == 1) {
                             if (j == 0) {
                                 color = "DD1C1C";
                             } else {
@@ -364,7 +364,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
                             }
                         }
 
-                        if (i == 2) {
+                        if (iScope == 2) {
                             if (j == 0) {
                                 color = "EF5E5E";
                             } else {
