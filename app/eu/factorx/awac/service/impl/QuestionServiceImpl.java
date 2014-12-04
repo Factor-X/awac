@@ -64,4 +64,10 @@ public class QuestionServiceImpl extends AbstractJPAPersistenceServiceImpl<Quest
 				.getResultList();
 	}
 
+	@Override
+	public List<CodeList> findCodeListsByForm(Form form) {
+		return JPA.em().createNamedQuery(ValueSelectionQuestion.FIND_CODE_LISTS_BY_QUESTION_SETS, CodeList.class)
+				.setParameter("questionSets", form.getAllQuestionSets())
+				.getResultList();
+	}
 }

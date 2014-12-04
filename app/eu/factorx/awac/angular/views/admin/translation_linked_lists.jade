@@ -9,12 +9,15 @@ table.translations-table(ng-hide="waitingData")
         tr
             th Détails
             th CodeList
+            th Calculateur(s)
     tbody
         tr(ng-repeat-start="linkedList in linkedLists")
             td.details
                 mm-plus-minus-toggle-button(ng-model="linkedList.opened")
             td.codelist
                 span.text {{ linkedList.codeList }}
+            td.calculators
+                span.text {{ linkedList.calculators }}
         tr(ng-repeat-end, ng-show="linkedList.opened").details
             td(colspan="2")
                 .linkedlist-header

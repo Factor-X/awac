@@ -9,6 +9,7 @@ table.translations-table(ng-hide="waitingData")
             th Détails
             th CodeList
             th CodeList référencée
+            th Calculateur(s)
     tbody
         tr(ng-repeat-start="subList in subLists")
             td.details
@@ -17,6 +18,8 @@ table.translations-table(ng-hide="waitingData")
                 span.text {{ subList.codeList }}
             td.referencedCodeList
                 span.text {{ subList.referencedCodeList }}
+            td.calculators
+                span.text {{ subList.calculators }}
         tr(ng-repeat-end, ng-show="subList.opened").details
             td(colspan="3")
                 .sublist-header

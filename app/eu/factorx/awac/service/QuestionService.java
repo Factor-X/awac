@@ -17,4 +17,5 @@ public interface QuestionService extends PersistenceService<Question> {
 
 	List<CodeList> findAllCodeListsUsed();
 
+	List<CodeList> findCodeListsByForm(Form form);
 }

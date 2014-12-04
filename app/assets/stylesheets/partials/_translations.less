@@ -99,10 +99,19 @@
             }
         }
 
+        .calculator_column {
+            width: 100px;
+        }
+
         .labels-columns {
             display: inline-block;
             white-space: nowrap;
-            width: ~"calc(100% - 150px)";
+            &:not(.with-calculator-info) {
+                width: ~"calc(100% - 150px)";
+            }
+            &.with-calculator-info {
+                width: ~"calc(100% - 250px)";
+            }
             padding: 0px;
             & > * {
                 display: inline-block;
