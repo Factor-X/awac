@@ -6,10 +6,6 @@ angular
         modelCtrl.$parsers.push (inputValue) ->
             return ""  unless inputValue?
             transformedInput = inputValue.replace(/[^0-9+.]/g, "")
-            console.log 'OK I WATCH !:'
-            console.log this
-            console.log arguments
-            console.log transformedInput
 
             unless transformedInput is inputValue
                 modelCtrl.$setViewValue transformedInput
