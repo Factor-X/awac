@@ -264,7 +264,7 @@ public class VerificationController extends AbstractController {
         content = content.replace("${request.emailVerificationContent.content}",verificationRequest.getEmailVerificationContent().getContent());
         content = content.replace("${request.emailVerificationContent.phoneNumber}",verificationRequest.getEmailVerificationContent().getPhoneNumber());
         content = content.replace("${request.contact.person.email}",verificationRequest.getContact().getPerson().getEmail());
-        content = content.replace("${request.key}",verificationRequest.getKey());
+        content = content.replace("${request.key}",verificationRequest.getKey()==null?"":verificationRequest.getKey());
         content = content.replace("${request.awacCalculatorInstance.period.label}",verificationRequest.getAwacCalculatorInstance().getPeriod().getLabel());
         content = content.replace("${request.awacCalculatorInstance.scope.name}",verificationRequest.getAwacCalculatorInstance().getScope().getName());
 
@@ -662,9 +662,11 @@ public class VerificationController extends AbstractController {
             content = content.replace("${request.emailVerificationContent.content}",calculatorInstance.getVerificationRequest().getEmailVerificationContent().getContent());
             content = content.replace("${request.emailVerificationContent.phoneNumber}",calculatorInstance.getVerificationRequest().getEmailVerificationContent().getPhoneNumber());
             content = content.replace("${request.contact.person.email}",calculatorInstance.getVerificationRequest().getContact().getPerson().getEmail());
-            content = content.replace("${request.key}",calculatorInstance.getVerificationRequest().getKey());
+            content = content.replace("${request.key}",calculatorInstance.getVerificationRequest().getKey()==null?"":calculatorInstance.getVerificationRequest().getKey());
             content = content.replace("${request.awacCalculatorInstance.period.label}",calculatorInstance.getPeriod().getLabel());
             content = content.replace("${request.organizationVerifier.name}",calculatorInstance.getVerificationRequest().getOrganizationVerifier().getName());
+            content = content.replace("${request.awacCalculatorInstance.scope.name}",calculatorInstance.getScope().getName()==null?"":calculatorInstance.getScope().getName());
+
 
 //		values.put("request", verificationRequest);
 //		values.put("user", securedController.getCurrentUser());
