@@ -1,11 +1,15 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.dto.admin.get.AvailableLanguagesDTO;
 import eu.factorx.awac.dto.admin.get.WysiwygDocumentDTO;
 import eu.factorx.awac.dto.myrmex.get.TranslationsDTO;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.WysiwygDocument;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
+import eu.factorx.awac.service.AwacCalculatorService;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.WysiwygDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ public class TranslationController extends AbstractController {
     private WysiwygDocumentService wysiwygDocumentService;
     @Autowired
     private ConversionService      conversionService;
+    @Autowired
+    private AwacCalculatorService  awacCalculatorService;
 
     @Transactional(readOnly = true)
     public Result fetch(String language) {
@@ -71,5 +77,12 @@ public class TranslationController extends AbstractController {
         WysiwygDocument wysiwygDocument = wysiwygDocumentService.findByCategoryAndName(category, name);
         return ok(conversionService.convert(wysiwygDocument, WysiwygDocumentDTO.class));
     }
+
+    @Transactional(readOnly = true)
+    public Result getAvailableLanguages(String calculatorName) {
+        AwacCalculator awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode(calculatorName));
+        return ok(new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled()));
+    }
+
 
 }

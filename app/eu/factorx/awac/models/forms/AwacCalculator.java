@@ -36,6 +36,18 @@ public class AwacCalculator extends AuditedAbstractEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Form> forms;
 
+
+    @Column(name = "fr_enabled")
+    private boolean frEnabled;
+
+    @Column(name = "nl_enabled")
+    private boolean nlEnabled;
+
+    @Column(name = "en_enabled")
+    private boolean enEnabled;
+
+
+
 	public AwacCalculator() {
 		super();
 	}
@@ -72,4 +84,28 @@ public class AwacCalculator extends AuditedAbstractEntity {
 		this.reports = reports;
 	}
 
+
+    public boolean isFrEnabled() {
+        return frEnabled;
+    }
+
+    public void setFrEnabled(boolean frEnabled) {
+        this.frEnabled = frEnabled;
+    }
+
+    public boolean isNlEnabled() {
+        return nlEnabled;
+    }
+
+    public void setNlEnabled(boolean nlEnabled) {
+        this.nlEnabled = nlEnabled;
+    }
+
+    public boolean isEnEnabled() {
+        return enEnabled;
+    }
+
+    public void setEnEnabled(boolean enEnabled) {
+        this.enEnabled = enEnabled;
+    }
 }
