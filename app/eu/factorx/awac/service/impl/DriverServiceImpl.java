@@ -1,24 +1,23 @@
 package eu.factorx.awac.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Repository;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.service.DriverService;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
 
-@Repository
-public class DriverServiceImpl implements DriverService {
+import java.util.List;
 
+@Component
+public class DriverServiceImpl extends AbstractJPAPersistenceServiceImpl<Driver> implements DriverService {
     @Override
-    public List<Driver> findAll() {
-        return (List<Driver>) JPA.em().createQuery(String.format("select e from %s e", Driver.class.getName())).getResultList();
-    }
+    public Driver findByName(String name) {
+        List<Driver> list = JPA.em().createQuery("select d from Driver d where d.name = :name", Driver.class).setParameter("name", name).getResultList();
 
-    @Override
-    public Driver findById(final Long id) {
-        return JPA.em().find(Driver.class, id);
-    }
+        if (list.size() > 0) {
+            return list.get(0);
+        } else {
+            return null;
+        }
 
+    }
 }

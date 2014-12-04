@@ -1,4 +1,4 @@
-ValueSelectionQuestion <%= accronym.downcase %> = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+<%= accronym.downcase %> = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
     <%= accronym.downcase %> = new ValueSelectionQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, CodeList.<%= default %>);
     JPA.em().persist(<%= accronym.downcase %>);
@@ -12,6 +12,6 @@ if (<%= accronym.downcase %> == null) {
         JPA.em().persist(<%= parent %>);
     }
     <%= accronym.downcase %>.setOrderIndex(0);
-    <%= accronym.downcase %>.setCodeList(CodeList.<%= default %>);
+    ((ValueSelectionQuestion)<%= accronym.downcase %>).setCodeList(CodeList.<%= default %>);
     JPA.em().persist(<%= accronym.downcase %>);
 }

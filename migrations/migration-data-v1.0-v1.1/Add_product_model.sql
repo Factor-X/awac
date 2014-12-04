@@ -25,8 +25,6 @@ WITH (
   OIDS=FALSE
 );
 
-ALTER TABLE account_product_association OWNER TO play;
-
 DROP TABLE IF EXISTS mm_product_period;
 
 CREATE TABLE mm_product_period(
@@ -43,4 +41,3 @@ WITH (
           OIDS=FALSE
      );
 
-ALTER TABLE mm_product_period OWNER TO play;

@@ -16,8 +16,6 @@ CREATE TABLE driver
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE driver
-  OWNER TO play;
 
 
 CREATE SEQUENCE "drivervalue_id_seq";
@@ -36,16 +34,14 @@ CREATE TABLE drivervalue
   CONSTRAINT drivervalue_pkey PRIMARY KEY (id),
   CONSTRAINT fk_from_period_id FOREIGN KEY (from_period_id)
       REFERENCES period (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE,
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_driver_id2 FOREIGN KEY (driver_id)
       REFERENCES driver (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE
+    ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE drivervalue
-  OWNER TO play;
 
 
 
@@ -59,7 +55,7 @@ ALTER TABLE drivervalue
  alter table percentagequestion add column driver_id bigint null;
  alter table percentagequestion add CONSTRAINT fk_siodkpsokfposdfk FOREIGN KEY (driver_id)
       REFERENCES driver (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE;
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- data
 insert into driver (id,name) values (1,'Taux de recyclé');
@@ -72,7 +68,7 @@ update percentagequestion set driver_id = 1 where id = 333;
  alter table doublequestion add column driver_id bigint null;
  alter table doublequestion add CONSTRAINT fk_siodkpsokfpo5sdfk FOREIGN KEY (driver_id)
       REFERENCES driver (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE;
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- integer
 
@@ -80,7 +76,7 @@ update percentagequestion set driver_id = 1 where id = 333;
  alter table integerquestion add column driver_id bigint null;
  alter table integerquestion add CONSTRAINT fk_siodkps8okfpo5sdfk FOREIGN KEY (driver_id)
       REFERENCES driver (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE;
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- data
 insert into driver (id,name) values (2,'Nombre de jours de travail/an');
@@ -94,4 +90,6 @@ insert into driver (id,name) values (3,'Nombre de jours d''ouverture/an');
 insert into drivervalue (driver_id,defaultvalue,from_period_id) values (3,365,14);
 update integerquestion set driver_id = 3 where id = 131;
 
+
+SELECT setval('driver_id_seq', 3);
 

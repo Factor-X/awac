@@ -1,9 +1,9 @@
-BooleanQuestion <%= accronym.downcase %> = (BooleanQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
+<%= accronym.downcase %> = (BooleanQuestion) questionService.findByCode(QuestionCode.<%= accronym %>);
 if (<%= accronym.downcase %> == null) {
     <%= accronym.downcase %> = new BooleanQuestion(<%= parent %>, 0, QuestionCode.<%= accronym %>, <%= default %>);
     JPA.em().persist(<%= accronym.downcase %>);
 } else {
-    <%= accronym.downcase %>.setDefaultValue(<%= default %>);
+    ((BooleanQuestion)<%= accronym.downcase %>).setDefaultValue(<%= default %>);
     if (!<%= accronym.downcase %>.getQuestionSet().equals(<%= parent %>) && <%= parent %>.getQuestions().contains(<%= accronym.downcase %>)) {
         <%= parent %>.getQuestions().remove(<%= accronym.downcase %>);
         JPA.em().persist(<%= parent %>);
