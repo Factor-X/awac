@@ -1,6 +1,8 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationHelpsCtrl", ($scope, $compile, $timeout, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationHelpsCtrl", ($scope, $compile, $timeout, downloadService, displayLittleFormMenu, modalService, messageFlash, translationService, codeLabelHelper) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
+
     $scope.files = [];
 
 

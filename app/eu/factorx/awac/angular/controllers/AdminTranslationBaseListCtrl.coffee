@@ -1,6 +1,7 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationBaseListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationBaseListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
     fixedLists = ['ActivityCategory', 'ActivitySource', 'ActivitySubCategory', 'ActivityType', 'IndicatorCategory',
                   'BASE_INDICATOR', 'INDICATOR', 'INTERFACE_TYPE', 'REDUCING_ACTION_STATUS', 'REDUCING_ACTION_TYPE']
 

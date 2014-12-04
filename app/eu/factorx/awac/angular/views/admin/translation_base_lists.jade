@@ -1,67 +1,72 @@
-h4 Listes de base
+.admin-translation
 
-.waiting-data(ng-show="waitingData")
-    img(src="/assets/images/modal-loading.gif")
-    span Veuillez patienter...
+    mm-admin-translations-navigation-bar
 
-div(ng-repeat="baseLists in allBaseLists")
-    h5 {{ groupsLabels[$index] }}
-    table.translations-table(ng-hide="waitingData")
-        thead
-            tr
-                th Détails
-                th CodeList
-                th(ng-if="$index == 2") Calculateur(s)
+    .translation-view
+        h4 Listes de base
 
-        tbody
-            tr(ng-repeat-start="baseList in baseLists")
-                td.details
-                    mm-plus-minus-toggle-button(ng-model="baseList.opened")
-                td.codelist
-                    span.text {{ baseList.codeList }}
-                td.calculator(ng-if="$parent.$index == 2")
-                    span.text {{ baseList.calculators }}
+        .waiting-data(ng-show="waitingData")
+            img(src="/assets/images/modal-loading.gif")
+            span Veuillez patienter...
 
-            tr(ng-repeat-end, ng-show="baseList.opened").details
-                td(colspan="{{($parent.$index == 2) ? 3 : 2}}")
-                    .baselist-header
-                        .order-column #
-                        .key-column Clé
-                        .calculator_column(ng-if="(baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')") Calculateur
-                        .labels-columns
-                            .label-column Libellé EN
-                            .label-column Libellé FR
-                            .label-column Libellé NL
+        div(ng-repeat="baseLists in allBaseLists")
+            h5 {{ groupsLabels[$index] }}
+            table.translations-table(ng-hide="waitingData")
+                thead
+                    tr
+                        th Détails
+                        th CodeList
+                        th(ng-if="$index == 2") Calculateur(s)
 
-                    .baselist-content
-                        .baselist-items(ui-sortable="sortableOptions", ng-model="baseList.codeLabels")
-                            .baselist-item(ng-repeat="codeLabel in baseList.codeLabels")
-                                .order-column {{ $index + 1 }}
-                                .key-column {{ codeLabel.key }}
-                                .calculator_column(ng-if="(baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')") {{ getCalculatorByKeyPrefix(codeLabel.key) }}
-                                .labels-columns(ng-class="{'with-calculator-info': (baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')}")
-                                    .label-column
-                                        textarea(ng-model="codeLabel.labelEn")
-                                    .label-column
-                                        textarea(ng-model="codeLabel.labelFr")
-                                    .label-column
-                                        textarea(ng-model="codeLabel.labelNl")
+                tbody
+                    tr(ng-repeat-start="baseList in baseLists")
+                        td.details
+                            mm-plus-minus-toggle-button(ng-model="baseList.opened")
+                        td.codelist
+                            span.text {{ baseList.codeList }}
+                        td.calculator(ng-if="$parent.$index == 2")
+                            span.text {{ baseList.calculators }}
 
-                        .baselist-add-item(ng-if="(baseList.codeList != 'ActivityCategory') &&  (baseList.codeList != 'ActivitySubCategory')") Ajouter un élément:
-                            .baselist-item
-                                .order-column
-                                    button.button(type="button", ng-click="addCodeLabel(baseList)", style="margin:0; min-height:22px; padding:0px 5px 2px 5px; border-radius:2px;")
-                                        span.fa.fa-plus-circle(style="vertical-align:middle;")
-                                .key-column
-                                        input(ng-model="codeLabelToAdd.key")
+                    tr(ng-repeat-end, ng-show="baseList.opened").details
+                        td(colspan="{{($parent.$index == 2) ? 3 : 2}}")
+                            .baselist-header
+                                .order-column #
+                                .key-column Clé
+                                .calculator_column(ng-if="(baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')") Calculateur
                                 .labels-columns
-                                    .label-column
-                                        textarea(ng-model="codeLabelToAdd.labelEn")
-                                    .label-column
-                                        textarea(ng-model="codeLabelToAdd.labelFr")
-                                    .label-column
-                                        textarea(ng-model="codeLabelToAdd.labelNl")
+                                    .label-column Libellé EN
+                                    .label-column Libellé FR
+                                    .label-column Libellé NL
 
-br
-button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+                            .baselist-content
+                                .baselist-items(ui-sortable="sortableOptions", ng-model="baseList.codeLabels")
+                                    .baselist-item(ng-repeat="codeLabel in baseList.codeLabels")
+                                        .order-column {{ $index + 1 }}
+                                        .key-column {{ codeLabel.key }}
+                                        .calculator_column(ng-if="(baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')") {{ getCalculatorByKeyPrefix(codeLabel.key) }}
+                                        .labels-columns(ng-class="{'with-calculator-info': (baseList.codeList == 'INDICATOR') || (baseList.codeList == 'BASE_INDICATOR')}")
+                                            .label-column
+                                                textarea(ng-model="codeLabel.labelEn")
+                                            .label-column
+                                                textarea(ng-model="codeLabel.labelFr")
+                                            .label-column
+                                                textarea(ng-model="codeLabel.labelNl")
+
+                                .baselist-add-item(ng-if="(baseList.codeList != 'ActivityCategory') &&  (baseList.codeList != 'ActivitySubCategory')") Ajouter un élément:
+                                    .baselist-item
+                                        .order-column
+                                            button.button(type="button", ng-click="addCodeLabel(baseList)", style="margin:0; min-height:22px; padding:0px 5px 2px 5px; border-radius:2px;")
+                                                span.fa.fa-plus-circle(style="vertical-align:middle;")
+                                        .key-column
+                                            input(ng-model="codeLabelToAdd.key")
+                                        .labels-columns
+                                            .label-column
+                                                textarea(ng-model="codeLabelToAdd.labelEn")
+                                            .label-column
+                                                textarea(ng-model="codeLabelToAdd.labelFr")
+                                            .label-column
+                                                textarea(ng-model="codeLabelToAdd.labelNl")
+
+        br
+        button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
+        button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler

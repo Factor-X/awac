@@ -41,10 +41,78 @@ initializeAdminRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
-        .when('/translation', {
-                templateUrl: '$/angular/views/admin/translation.html'
-                controller: 'AdminTranslationCtrl'
-                resolve:angular.extend({
+        .when('/translation', { redirectTo: '/translation/interface' })
+        .when('/translation/interface', {
+                templateUrl: '$/angular/views/admin/translation_interface.html'
+                controller: "AdminTranslationInterfaceCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/error-messages', {
+                templateUrl: '$/angular/views/admin/translation_single_list.html'
+                controller: "AdminTranslationSingleListCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                    state: () ->
+                        return 'error-message'
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/emails', {
+                templateUrl: '$/angular/views/admin/translation_single_list.html'
+                controller: "AdminTranslationSingleListCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                    state: () ->
+                        return 'emails'
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/forms', {
+                templateUrl: '$/angular/views/admin/translation_surveys.html'
+                controller: "AdminTranslationSurveysLabelsCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/base-lists', {
+                templateUrl: '$/angular/views/admin/translation_base_lists.html'
+                controller: "AdminTranslationBaseListCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/linked-lists', {
+                templateUrl: '$/angular/views/admin/translation_linked_lists.html'
+                controller: "AdminTranslationLinkedListCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/sub-lists', {
+                templateUrl: '$/angular/views/admin/translation_sub_lists.html'
+                controller: "AdminTranslationSubListCtrl"
+                resolve: angular.extend({
+                    displayLittleFormMenu: () ->
+                        return true
+                }, defaultResolve)
+            }
+        )
+        .when('/translation/helps', {
+                templateUrl: '$/angular/views/admin/translation_helps.html'
+                controller: "AdminTranslationHelpsCtrl"
+                resolve: angular.extend({
                     displayLittleFormMenu: () ->
                         return true
                 }, defaultResolve)
@@ -68,7 +136,6 @@ initializeAdminRoutes = (defaultResolve) ->
                 }, defaultResolve)
             }
         )
-
 
         .otherwise({ redirectTo: '/login' })
 

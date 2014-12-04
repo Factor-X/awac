@@ -1,39 +1,44 @@
-.admin-translations-helps
+.admin-translation
 
-    .row
-        .col-md-3
+    mm-admin-translations-navigation-bar
 
-            .panel.panel-default(ng-repeat="c in categories")
-                .panel-heading
-                    span.fa.fa-folder
-                    span &nbsp;
-                    span {{ c.label }}
-                    span(style="float:right")
-                        button.button(type="button",ng-hide="c.displayed==true",ng-click="c.displayed=true") +
-                        button.button(type="button",ng-show="c.displayed==true",ng-click="c.displayed=false") -
-                .list-group(ng-show="c.displayed==true")
-                    .list-group-item(ng-repeat="file in (files | filter:{category: c.key} | orderBy:'name')", ng-class="{active: isSelected(file)}", ng-click="select(file)")
-                        span.badge.alert-warning(ng-show="isModified(file)")
-                            span.fa.fa-edit
-                            span &nbsp;
-                            span modifié
-                        span.fa.fa-file-o
-                        span &nbsp;
-                        span {{ file.name }}
+    .translation-view
+        .admin-translations-helps
 
-        .col-md-9
-
-            .row(ng-if="selectedFile")
-                .col-md-9
-                    h4 {{ selectedFile.name }}
+            .row
                 .col-md-3
-                    button.button.save.pull-right(type="button", ng-disabled="!isModified(selectedFile)", ng-click="save(selectedFile)")
-                        span.fa.fa-save
-                        span &nbsp;
-                        span enregistrer
 
-            .editor(ng-if="selectedFile")
-                textarea(ckeditor="editorOptions", ng-model="selectedFile.content")
+                    .panel.panel-default(ng-repeat="c in categories")
+                        .panel-heading
+                            span.fa.fa-folder
+                            span &nbsp;
+                            span {{ c.label }}
+                            span(style="float:right")
+                                button.button(type="button",ng-hide="c.displayed==true",ng-click="c.displayed=true") +
+                                button.button(type="button",ng-show="c.displayed==true",ng-click="c.displayed=false") -
+                        .list-group(ng-show="c.displayed==true")
+                            .list-group-item(ng-repeat="file in (files | filter:{category: c.key} | orderBy:'name')", ng-class="{active: isSelected(file)}", ng-click="select(file)")
+                                span.badge.alert-warning(ng-show="isModified(file)")
+                                    span.fa.fa-edit
+                                    span &nbsp;
+                                    span modifié
+                                span.fa.fa-file-o
+                                span &nbsp;
+                                span {{ file.name }}
+
+                .col-md-9
+
+                    .row(ng-if="selectedFile")
+                        .col-md-9
+                            h4 {{ selectedFile.name }}
+                        .col-md-3
+                            button.button.save.pull-right(type="button", ng-disabled="!isModified(selectedFile)", ng-click="save(selectedFile)")
+                                span.fa.fa-save
+                                span &nbsp;
+                                span enregistrer
+
+                    .editor(ng-if="selectedFile")
+                        textarea(ckeditor="editorOptions", ng-model="selectedFile.content")
 
 
 

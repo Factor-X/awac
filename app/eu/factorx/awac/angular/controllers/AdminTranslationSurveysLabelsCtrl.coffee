@@ -1,6 +1,7 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationSurveysLabelsCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationSurveysLabelsCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, displayLittleFormMenu, codeLabelHelper) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.formLabelsByCalculator = {}
     $scope.initialLabels = {}
     $scope.waitingData = true
@@ -61,12 +62,6 @@ angular
                 $scope.initialLabels = angular.copy(finalLabels)
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
             $scope.isLoading = false
-
-
-    #    $scope.asJsObj = (questionSet) ->
-    #        return {
-    #            key: questionSet.label.key
-    #        }
 
     $scope.getJsonObj = (strQuestionSet) ->
         return strQuestionSet;
