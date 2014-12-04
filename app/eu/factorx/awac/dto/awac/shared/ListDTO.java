@@ -5,9 +5,6 @@ import java.util.List;
 
 import eu.factorx.awac.dto.DTO;
 
-/**
- * Created by florian on 9/10/14.
- */
 public class ListDTO<T extends DTO> extends DTO {
 
     private List<T> list;

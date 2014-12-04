@@ -49,6 +49,8 @@ cat ./add_wysiwyg_document.sql >> /tmp/migration/migration_script.sql
 # add_main_factor_unit
 cat ./add_main_factor_unit.sql >> /tmp/migration/migration_script.sql
 
+# add_languages_to_awac_calculator
+cat ./add_languages_to_awac_calculator.sql >> /tmp/migration/migration_script.sql
 
 # -------------------------------------------------
 # KEEP THIS SECTION AT THE END OF THE FILE
