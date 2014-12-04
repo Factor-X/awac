@@ -28,6 +28,8 @@ angular
         {key: 'municipality', label: 'Communes'},
         {key: 'household', label: 'Ménages'},
         {key: 'verification', label: 'Vérification'},
+        {key: 'event', label: 'Evènements'},
+        {key: 'littleemitter', label: 'Petits émetteurs '},
     ]
 
     $scope.save = (f) ->

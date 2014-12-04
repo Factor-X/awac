@@ -8,8 +8,11 @@
                     span.fa.fa-folder
                     span &nbsp;
                     span {{ c.label }}
-                .list-group
-                    .list-group-item(ng-repeat="file in (files | filter:{category: c.key})", ng-class="{active: isSelected(file)}", ng-click="select(file)")
+                    span(style="float:right")
+                        button.button(type="button",ng-hide="c.displayed==true",ng-click="c.displayed=true") +
+                        button.button(type="button",ng-show="c.displayed==true",ng-click="c.displayed=false") -
+                .list-group(ng-show="c.displayed==true")
+                    .list-group-item(ng-repeat="file in (files | filter:{category: c.key} | orderBy:'name')", ng-class="{active: isSelected(file)}", ng-click="select(file)")
                         span.badge.alert-warning(ng-show="isModified(file)")
                             span.fa.fa-edit
                             span &nbsp;
