@@ -58,7 +58,7 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 
 		period = periodService.findByCode(PERIOD_CODE);
 		form = formService.findByIdentifier(FORM_IDENTIFIER);
-		scope = organizationService.findByName(ORGANIZATION_NAME);
+		scope = organizationService.findById(FACTORX_ID);
 
 		FormProgress fp = formProgressService.saveOrUpdate(new FormProgress(period, form, scope, percentage));
 
@@ -82,7 +82,7 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 	public void _002_findByPeriodAndByScope() {
 
 		Period period = periodService.findByCode(PERIOD_CODE);
-		Scope scope = organizationService.findByName(ORGANIZATION_NAME);
+		Scope scope = organizationService.findById(FACTORX_ID);
 
 		assertNotNull("Period is null, founded by "+PERIOD_CODE, period);
 		assertNotNull("Scope is null, founded by "+ORGANIZATION_NAME, scope);
@@ -97,7 +97,7 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 	public void _003_findByPeriodAndByScopeAndForm() {
 
 		Period period = periodService.findByCode(PERIOD_CODE);
-		Scope scope = organizationService.findByName(ORGANIZATION_NAME);
+		Scope scope = organizationService.findById(FACTORX_ID);
 		Form form = formService.findByIdentifier(FORM_IDENTIFIER);
 
 		assertNotNull("Form is null, founded by "+FORM_IDENTIFIER, form);
@@ -121,7 +121,7 @@ public class FormProgressServiceTest extends AbstractBaseModelTest {
 
 		period = periodService.findByCode(PERIOD_CODE);
 		form = formService.findByIdentifier(FORM_IDENTIFIER);
-		scope = organizationService.findByName(ORGANIZATION_NAME);
+		scope = organizationService.findById(FACTORX_ID);
 
 		FormProgress formProgress = formProgressService.findByPeriodAndByScopeAndForm(period,scope,form);
 

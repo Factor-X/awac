@@ -1,21 +1,25 @@
 package eu.factorx.awac.dto.awac.get;
 
+import eu.factorx.awac.dto.myrmex.get.PersonDTO;
+import eu.factorx.awac.dto.myrmex.get.ProductDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 
 public class OrganizationDTO extends ScopeDTO {
 	private Long id;
 	private String name;
-    private String interfaceName;
+	private String interfaceName;
 	private Boolean statisticsAllowed;
 	private List<SiteDTO> sites;
+	private List<ProductDTO> products;
 	private List<PersonDTO> users;
 
 	public OrganizationDTO() {
 		sites = new ArrayList<>();
 		users = new ArrayList<>();
+		products = new ArrayList<>();
+
 	}
 
 	public Long getId() {
@@ -26,15 +30,15 @@ public class OrganizationDTO extends ScopeDTO {
 		this.id = id;
 	}
 
-    public String getInterfaceName() {
-        return interfaceName;
-    }
+	public String getInterfaceName() {
+		return interfaceName;
+	}
 
-    public void setInterfaceName(String interfaceName) {
-        this.interfaceName = interfaceName;
-    }
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}
 
-    public String getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -62,6 +66,14 @@ public class OrganizationDTO extends ScopeDTO {
 		return users;
 	}
 
+	public List<ProductDTO> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<ProductDTO> products) {
+		this.products = products;
+	}
+
 	public void setUsers(List<PersonDTO> users) {
 		this.users = users;
 	}
@@ -71,7 +83,10 @@ public class OrganizationDTO extends ScopeDTO {
 		return "OrganizationDTO{" +
 				"id=" + id +
 				", name='" + name + '\'' +
+				", interfaceName='" + interfaceName + '\'' +
+				", statisticsAllowed=" + statisticsAllowed +
 				", sites=" + sites +
+				", products=" + products +
 				", users=" + users +
 				'}';
 	}

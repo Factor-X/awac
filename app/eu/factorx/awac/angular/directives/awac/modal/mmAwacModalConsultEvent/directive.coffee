@@ -10,7 +10,7 @@ angular
         directiveService.autoScopeImpl $scope
 
 
-        downloadService.getJson '/awac/organization/events/byOrganization/'+$scope.getParams().organizationCustomer.name, (result) ->
+        downloadService.getJson '/awac/organization/events/byOrganization/'+$scope.getParams().organizationCustomer.id, (result) ->
             if not result.success
                 $scope.isLoading = false
             else

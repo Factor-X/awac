@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface OrganizationService extends PersistenceService<Organization> {
 
-	public Organization findByName(String name);
-
     public List<Organization> findByInterfaceTypeCode(InterfaceTypeCode interfaceTypeCode) ;
 }

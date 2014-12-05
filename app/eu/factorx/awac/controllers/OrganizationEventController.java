@@ -51,18 +51,16 @@ public class OrganizationEventController extends AbstractController {
      */
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
-    public Result loadEventsByOrganization(String organizationName) {
+    public Result loadEventsByOrganization(Long organizationId) {
 
         //control organization
         boolean checked = false;
-        Organization organizationTarget=null;
-        if (securedController.getCurrentUser().getOrganization().getName().equals(organizationName)) {
+        Organization organizationTarget=organizationService.findById(organizationId);
+        if (organizationTarget.equals(securedController.getCurrentUser().getOrganization())) {
             checked = true;
-            organizationTarget = securedController.getCurrentUser().getOrganization();
         } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
 
             //load organizaiton
-            organizationTarget = organizationService.findByName(organizationName);
             if (verificationRequestService.findByOrganizationCustomerAndOrganizationVerifier(organizationTarget, securedController.getCurrentUser().getOrganization()).size() > 0) {
                 checked = true;
             }

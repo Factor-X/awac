@@ -3,6 +3,11 @@ package eu.factorx.awac.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.factorx.awac.dto.awac.get.*;
+import eu.factorx.awac.dto.myrmex.get.ProductDTO;
+import eu.factorx.awac.models.association.AccountProductAssociation;
+import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -11,10 +16,6 @@ import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
-import eu.factorx.awac.dto.awac.get.AccountDTO;
-import eu.factorx.awac.dto.awac.get.OrganizationDTO;
-import eu.factorx.awac.dto.awac.get.SiteAddUsersResultDTO;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
 import eu.factorx.awac.dto.awac.post.SiteAddUsersDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.models.account.Account;
@@ -22,9 +23,6 @@ import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.service.AccountService;
-import eu.factorx.awac.service.AccountSiteAssociationService;
-import eu.factorx.awac.service.SiteService;
 import eu.factorx.awac.util.MyrmexFatalException;
 
 //annotate as Spring Component
@@ -41,13 +39,44 @@ public class OrganizationController extends AbstractController {
     @Autowired
     private AccountSiteAssociationService accountSiteAssociationService;
 
+
+	@Autowired
+	private AccountProductAssociationService accountProductAssociationService;
+
     @Autowired
     private SiteService siteService;
+
+	@Autowired
+	private ProductService productService;
 
     @Autowired
     private SecuredController securedController;
 
-    /**
+	@Transactional
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+	public  Result loadAssociatedAccountsForProduct() {
+
+		ProductAddUsersDTO dto = extractDTOFromRequest(ProductAddUsersDTO.class);
+
+		// get all users for specified organization
+		List<AccountDTO> organizationAccountDtoList = getOrganizationUserList(securedController.getCurrentUser().getOrganization());
+		// get all selected/associated users for specified site
+		Product product = productService.findById(dto.getProduct().getId());
+		//control site
+		if(!product.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+			throw new MyrmexFatalException("this is not your site");
+		}
+		List<AccountDTO> siteAccountDtoList = getProductSelectedUserList(product);
+
+		// create return DTO
+		ProductAddUsersResultDTO resultDto = new ProductAddUsersResultDTO(organizationAccountDtoList, siteAccountDtoList);
+
+		// return list of associated
+		return ok(resultDto);
+	}
+
+	/**
      * get all accounts for specified organization
      */
     @Transactional
@@ -96,6 +125,26 @@ public class OrganizationController extends AbstractController {
         // return list of associated
         return ok(resultDto);
     }
+
+	@Transactional
+	@Security.Authenticated(SecuredController.class)
+	@SecurityAnnotation(isAdmin = true, isSystemAdmin = false)
+	public Result saveAssociatedAccountsForProduct() {
+
+		ProductAddUsersDTO dto = extractDTOFromRequest(ProductAddUsersDTO.class);
+
+		saveProductSelectedUserList(dto.getProduct(), dto.getSelectedAccounts());
+
+		// create return DTO
+		Product product = productService.findById(dto.getProduct().getId());
+		if(!product.getOrganization().equals(securedController.getCurrentUser().getOrganization())) {
+			throw new MyrmexFatalException("this is not your site");
+		}
+		ProductAddUsersResultDTO resultDto = new ProductAddUsersResultDTO(getOrganizationUserList(securedController.getCurrentUser().getOrganization()), getProductSelectedUserList(product));
+
+		// return list of associated
+		return ok(resultDto);
+	}
 
     @Transactional
     @Security.Authenticated(SecuredController.class)
@@ -154,6 +203,20 @@ public class OrganizationController extends AbstractController {
         return (associatedAccountDtoList);
     } // end of getSiteSelectedUserList
 
+	// get all selected users for specified site
+	private List<AccountDTO> getProductSelectedUserList(Product product) {
+		// get associated accounts
+		List<AccountDTO> associatedAccountDtoList = new ArrayList<>();
+		List<AccountProductAssociation> accountProductAssociationList = accountProductAssociationService.findByProduct(product);
+
+		for (AccountProductAssociation apa : accountProductAssociationList) {
+			AccountDTO accountDTO = conversionService.convert(apa.getAccount(), AccountDTO.class);
+			associatedAccountDtoList.add(accountDTO);
+		}
+
+		return (associatedAccountDtoList);
+	} // end of getSiteSelectedUserList
+
     // save all selected users for specified site
     private void saveSiteSelectedUserList(SiteDTO siteDto, List<AccountDTO> associatedAccountDtoList) {
 
@@ -176,5 +239,23 @@ public class OrganizationController extends AbstractController {
             accountSiteAssociationService.saveOrUpdate(accountSiteAssociation);
         }
     } // end of saveSiteSelectedUserList
+
+	private void saveProductSelectedUserList(ProductDTO productDTO, List<AccountDTO> associatedAccountDtoList) {
+
+		Product product = productService.findById(productDTO.getId());
+		List<AccountProductAssociation> accountProductAssociations = accountProductAssociationService.findByProduct(product);
+
+		if (accountProductAssociations!= null) {
+			for (AccountProductAssociation apa : accountProductAssociations) {
+				accountProductAssociationService.remove(apa);
+			}
+		}
+
+		for (AccountDTO accountDto : associatedAccountDtoList) {
+			Account account = accountService.findByIdentifier(accountDto.getIdentifier());
+			AccountProductAssociation accountProductAssociation = new AccountProductAssociation(product, account);
+			accountProductAssociationService.saveOrUpdate(accountProductAssociation);
+		}
+	}
 
 } // end of class

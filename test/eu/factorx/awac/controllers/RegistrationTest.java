@@ -255,7 +255,7 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
         accountSiteAssociationService.remove(associationList);
         //accountService.remove(account);
 
-        organization = organizationService.findByName(organisationName);
+        organization = organizationService.findById(FACTORX_ID);
         assertNotNull(organization);
 
 //        siteList=organization.getSites();

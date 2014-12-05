@@ -91,7 +91,7 @@ if document.querySelector("meta[name=app]")?
         initializeEnterpriseRoutes(defaultResolve)
     else if iName == "verification"
         initializeVerificationRoutes(defaultResolve)
-    else if iName == "littleEmitter"
+    else if iName == "little-emitter"
         initializeLittleEmitterRoutes(defaultResolve)
     else if iName == "event"
         initializeEventRoutes(defaultResolve)

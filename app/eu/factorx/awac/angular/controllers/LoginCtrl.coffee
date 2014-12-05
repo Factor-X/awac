@@ -128,6 +128,12 @@ angular
                 directiveName = "mm-awac-registration-enterprise"
             else if $scope.$root.instanceName == 'municipality'
                 directiveName = "mm-awac-registration-municipality"
+            else if $scope.$root.instanceName == 'household'
+                directiveName = "mm-awac-registration-household"
+            else if $scope.$root.instanceName == 'little-emitter'
+                directiveName = "mm-awac-registration-little-emitter"
+            else if $scope.$root.instanceName == 'event'
+                directiveName = "mm-awac-registration-event"
 
             directive = $compile("<" + directiveName + "></" + directiveName + ">")($scope)
             $('.inject-registration-form').append(directive)

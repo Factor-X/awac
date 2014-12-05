@@ -17,6 +17,8 @@ public class ProductDTO extends ScopeDTO {
     @Size(min = 1, max = 255)
     private String name;
 
+	private String description;
+
     private List<PeriodDTO> listPeriodAvailable;
 
     private List<PersonDTO> listPersons;
@@ -24,7 +26,15 @@ public class ProductDTO extends ScopeDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(String name) {
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public ProductDTO(String name) {
         this.name = name;
     }
 

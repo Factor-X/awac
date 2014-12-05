@@ -29,6 +29,7 @@ public class SiteToSiteDTOConverter implements Converter<Site, SiteDTO> {
     public SiteDTO convert(Site site) {
 
         SiteDTO dto = new SiteDTO();
+
         dto.setId(site.getId());
         dto.setScope(site.getId());
         dto.setName(site.getName());
