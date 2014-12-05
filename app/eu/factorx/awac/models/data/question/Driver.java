@@ -3,12 +3,12 @@ package eu.factorx.awac.models.data.question;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.data.question.type.DoubleQuestion;
 import eu.factorx.awac.models.data.question.type.IntegerQuestion;
-import eu.factorx.awac.models.data.question.type.NumericQuestion;
 import eu.factorx.awac.models.data.question.type.PercentageQuestion;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,30 +16,30 @@ import java.util.List;
 @Table(name = "driver")
 public class Driver extends AuditedAbstractEntity {
 
-    private static final long serialVersionUID = 5073847643332338205L;
+    private static final long serialVersionUID = 5073884243332338205L;
 
     private String name;
 
     @OneToMany(mappedBy = "driver")
-    private List<DriverValue> driverValueList;
+    private List<DriverValue> driverValueList = new ArrayList<>();
 
     @OneToMany(mappedBy = "driver")
-    private List<DoubleQuestion> doubleQuestionList;
+    private List<DoubleQuestion> doubleQuestionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "driver")
-    private List<IntegerQuestion> integerQuestionList;
+    private List<IntegerQuestion> integerQuestionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "driver")
-    private List<PercentageQuestion> percentageQuestionList;
+    private List<PercentageQuestion> percentageQuestionList = new ArrayList<>();
 
     public Driver() {
     }
 
-	public Driver(String name) {
-		this.name = name;
-	}
+    public Driver(String name) {
+        this.name = name;
+    }
 
-	public List<DoubleQuestion> getDoubleQuestionList() {
+    public List<DoubleQuestion> getDoubleQuestionList() {
         return doubleQuestionList;
     }
 

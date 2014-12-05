@@ -8,6 +8,7 @@ import eu.factorx.awac.dto.awac.shared.*;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -28,6 +29,7 @@ import java.util.*;
 @org.springframework.stereotype.Controller
 public class TranslationAdminController extends AbstractController {
 
+	public static final CodeList[] BASE_LISTS = {CodeList.ActivityType, CodeList.ActivitySource, CodeList.ActivityCategory, CodeList.ActivitySubCategory, CodeList.INDICATOR_TYPE};
 	@Autowired
 	private QuestionService questionService;
 
@@ -49,38 +51,53 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
-		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData());
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
+		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData(), interfaceTypesByCodeList);
 		return ok(new UpdateSubListsDTO(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
 	}
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
 	public Result updateSublist() {
-		SubListDTO dto = extractDTOFromRequest(SubListDTO.class);
-		CodeList codeList = CodeList.valueOf(dto.getCodeList());
-		CodeList referencedCodeList = CodeList.valueOf(dto.getReferencedCodeList());
+		UpdateSubListsDTO dto = extractDTOFromRequest(UpdateSubListsDTO.class);
+		Map<CodeList, List<SubListItemDTO>> newSubListDTOs = getSubListDTOMap(dto.getSublists());
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
-		List<SubListItemDTO> items = dto.getItems();
-		for (SubListItemDTO item : items) {
-			Long id = item.getId();
-			String key = item.getKey();
-			Integer orderIndex = item.getOrderIndex();
-			if (id == null) {
-				CodesEquivalence codesEquivalence = codesEquivalenceService.saveOrUpdate(new CodesEquivalence(codeList, key, orderIndex, referencedCodeList, key));
-				item.setId(codesEquivalence.getId());
-				Logger.info("Created new sublist item with id = {}: {key: {}, pos: {}}", codesEquivalence.getId(), key, orderIndex);
-			} else {
-				CodesEquivalence codesEquivalence = codesEquivalenceService.findById(id);
-				if (!(key.equals(codesEquivalence.getCodeKey()) && orderIndex.equals(codesEquivalence.getOrderIndex()))) {
-					Logger.info("Updating sublist item with id = {}: {key: {}, pos: {}} -> {key: {}, pos: {}}", codesEquivalence.getId(), codesEquivalence.getCodeKey(), codesEquivalence.getOrderIndex(), key, orderIndex);
-					codesEquivalence.setCodeKey(key);
-					codesEquivalence.setReferencedCodeKey(key);
-					codesEquivalence.setOrderIndex(orderIndex);
-					codesEquivalenceService.saveOrUpdate(codesEquivalence);
-				}
-			}
+		for (SubListDTO oldSubListDTO : toSubListDTOs(codesEquivalenceService.findAllSublistsData(), interfaceTypesByCodeList)) {
+			CodeList codeList = CodeList.valueOf(oldSubListDTO.getCodeList());
+			CodeList referencedCodeList = CodeList.valueOf(oldSubListDTO.getReferencedCodeList());
+
+			List<SubListItemDTO> oldListItems = oldSubListDTO.getItems();
+			List<SubListItemDTO> newListItems = newSubListDTOs.get(codeList);
+
+			CUD<SubListItemDTO> cud = CUD.fromLists(oldListItems, newListItems);
+			updateSubListItems(cud.getUpdated());
+			saveSubListItems(codeList, referencedCodeList, cud.getCreated());
 		}
-		return ok(dto);
+		return loadSublists();
+	}
+
+	private void saveSubListItems(CodeList codeList, CodeList referencedCodeList, List<SubListItemDTO> created) {
+		for (SubListItemDTO subListItemDTO : created) {
+			String key = subListItemDTO.getKey();
+			codesEquivalenceService.saveOrUpdate(new CodesEquivalence(codeList, key, subListItemDTO.getOrderIndex(), referencedCodeList, key));
+		}
+	}
+
+	private void updateSubListItems(List<SubListItemDTO> updated) {
+		for (SubListItemDTO subListItemDTO : updated) {
+			CodesEquivalence codesEquivalence = codesEquivalenceService.findById(subListItemDTO.getId());
+			codesEquivalence.setOrderIndex(subListItemDTO.getOrderIndex());
+			codesEquivalenceService.saveOrUpdate(codesEquivalence);
+		}
+	}
+
+	private static Map<CodeList,List<SubListItemDTO>> getSubListDTOMap(List<SubListDTO> sublists) {
+		Map<CodeList, List<SubListItemDTO>> res = new HashMap<>();
+		for (SubListDTO subListDTO: sublists) {
+			res.put(CodeList.valueOf(subListDTO.getCodeList()), subListDTO.getItems());
+		}
+		return res;
 	}
 
 	@Transactional(readOnly = true)
@@ -107,6 +124,109 @@ public class TranslationAdminController extends AbstractController {
 		}
 		List<BaseListDTO> baseListDTOs = getBaseListDTOs();
 		return ok(new UpdateBaseListsDTO(baseListDTOs));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(SecuredController.class)
+	public Result loadLinkedLists() {
+		return ok(new UpdateLinkedListsDTO(getLinkedListDTOs(), getCodeListDTOs(CodeList.ActivitySource, CodeList.ActivityType, CodeList.ActivitySubCategory)));
+	}
+
+	@Transactional(readOnly = false)
+	@Security.Authenticated(SecuredController.class)
+	public Result updateLinkedLists() {
+		UpdateLinkedListsDTO dto = extractDTOFromRequest(UpdateLinkedListsDTO.class);
+		Map<CodeList, List<LinkedListItemDTO>> newlinkedListDTOs = byCodeList(dto.getLinkedLists());
+
+		for (LinkedListDTO oldLinkedListDTO : getLinkedListDTOs()) {
+			CodeList codeList = CodeList.valueOf(oldLinkedListDTO.getCodeList());
+
+			List<LinkedListItemDTO> oldListItems = oldLinkedListDTO.getItems();
+			List<LinkedListItemDTO> newListItems = newlinkedListDTOs.get(codeList);
+
+			CUD<LinkedListItemDTO> cud = CUD.fromLists(oldListItems, newListItems);
+			updateLinkedListItems(cud.getUpdated());
+			saveLinkedListItems(codeList, cud.getCreated());
+		}
+		return loadLinkedLists();
+	}
+
+	private void saveLinkedListItems(CodeList codeList, List<LinkedListItemDTO> createdItems) {
+		for (LinkedListItemDTO listItemDTO : createdItems) {
+			String codeKey = listItemDTO.getKey();
+			codeLabelService.saveOrUpdate(new CodeLabel(codeList, codeKey, listItemDTO.getLabelEn(), listItemDTO.getLabelFr(), listItemDTO.getLabelNl(), listItemDTO.getOrderIndex()));
+			codesEquivalenceService.saveOrUpdate(new CodesEquivalence(codeList, codeKey, CodeList.ActivitySource, listItemDTO.getActivitySourceKey()));
+			codesEquivalenceService.saveOrUpdate(new CodesEquivalence(codeList, codeKey, CodeList.ActivityType, listItemDTO.getActivityTypeKey()));
+		}
+	}
+
+	private void updateLinkedListItems(List<LinkedListItemDTO> updatedItems) {
+		for (LinkedListItemDTO listItemDTO : updatedItems) {
+			CodeLabel codeLabel = codeLabelService.findById(listItemDTO.getId());
+			codeLabel.setLabelEn(listItemDTO.getLabelEn());
+			codeLabel.setLabelFr(listItemDTO.getLabelFr());
+			codeLabel.setLabelNl(listItemDTO.getLabelNl());
+			codeLabel.setOrderIndex(listItemDTO.getOrderIndex());
+			codeLabelService.saveOrUpdate(codeLabel);
+		}
+	}
+
+	private static Map<CodeList, List<LinkedListItemDTO>> byCodeList(List<LinkedListDTO> linkedLists) {
+		Map<CodeList, List<LinkedListItemDTO>> res = new HashMap<>();
+		for (LinkedListDTO linkedListDTO : linkedLists) {
+			res.put(CodeList.valueOf(linkedListDTO.getCodeList()), linkedListDTO.getItems());
+		}
+		return res;
+	}
+
+	private List<LinkedListDTO> getLinkedListDTOs() {
+		List<LinkedListDTO> res = new ArrayList<>();
+
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
+		Map<CodeList, Map<String, List<CodesEquivalence>>> codesEquivalences = getCodesEquivalencesMap(codesEquivalenceService.findAllLinkedListsData());
+		Map<CodeList, List<CodeLabel>> codeLabels = codeLabelService.findAllBaseLists();
+
+		for (CodeList codeList : codeLabels.keySet()) {
+			if (codesEquivalences.containsKey(codeList)) {
+				res.add(toLinkedListDTO(codeList, codeLabels.get(codeList), codesEquivalences.get(codeList), toString(interfaceTypesByCodeList.get(codeList))));
+			}
+		}
+		return res;
+	}
+
+	private LinkedListDTO toLinkedListDTO(CodeList codeList, List<CodeLabel> allCodeLabels, Map<String, List<CodesEquivalence>> allCodesEquivalences, String calculators) {
+		List<LinkedListItemDTO> linkedListItemDTOs = new ArrayList<>();
+
+		for (CodeLabel codeLabel : allCodeLabels) {
+			String codeKey = codeLabel.getKey();
+			Map<CodeList, String> links = new HashMap<>();
+			for (CodesEquivalence codesEquivalence : allCodesEquivalences.get(codeKey)) {
+				CodeList referencedCodeList = codesEquivalence.getReferencedCodeList();
+				links.put(referencedCodeList, codesEquivalence.getReferencedCodeKey());
+			}
+			String activitySourceKey = links.get(CodeList.ActivitySource);
+			String activityTypeKey = links.get(CodeList.ActivityType);
+			linkedListItemDTOs.add(new LinkedListItemDTO(codeLabel.getId(), codeLabel.getKey(), codeLabel.getLabelEn(), codeLabel.getLabelFr(), codeLabel.getLabelNl(), codeLabel.getOrderIndex(), activitySourceKey, activityTypeKey));
+		}
+		return new LinkedListDTO(codeList.name(), linkedListItemDTOs, calculators);
+	}
+
+	private Map<CodeList, Map<String, List<CodesEquivalence>>> getCodesEquivalencesMap(List<CodesEquivalence> codesEquivalences) {
+		Map<CodeList, Map<String, List<CodesEquivalence>>> res = new HashMap<>();
+		for (CodesEquivalence codesEquivalence : codesEquivalences) {
+			CodeList codeList = codesEquivalence.getCodeList();
+			String codeKey = codesEquivalence.getCodeKey();
+			if (!res.containsKey(codeList)) {
+				res.put(codeList, new HashMap<String, List<CodesEquivalence>>());
+			}
+			Map<String, List<CodesEquivalence>> codeListData = res.get(codeList);
+			if (!codeListData.containsKey(codeKey)) {
+				codeListData.put(codeKey, new ArrayList<CodesEquivalence>());
+			}
+			codeListData.get(codeKey).add(codesEquivalence);
+		}
+		Logger.info("Found {} linked lists: {}", res.size(), StringUtils.join(res.keySet(), ','));
+		return res;
 	}
 
 	@Transactional(readOnly = true)
@@ -186,23 +306,45 @@ public class TranslationAdminController extends AbstractController {
 		}
 	}
 
+	//	private List<BaseListDTO> getBaseListDTOs() {
+//		List<BaseListDTO> baseListDTOs = new ArrayList<>();
+//		for (CodeList codeList : BASE_LISTS) {
+//			HashMap<String, CodeLabel> codeLabelsByList = codeLabelService.findCodeLabelsByList(codeList);
+//			baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(codeLabelsByList.values())));
+//		}
+//		return baseListDTOs;
+//	}
+//
 	private List<BaseListDTO> getBaseListDTOs() {
 		CodeList[] codeListsToExclude = {CodeList.TRANSLATIONS_SURVEY, CodeList.QUESTION,
 				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE};
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
 		List<BaseListDTO> baseListDTOs = new ArrayList<>();
 		for (Map.Entry<CodeList, List<CodeLabel>> entry : codeLabelService.findAllBaseLists().entrySet()) {
 			CodeList codeList = entry.getKey();
-			if (!ArrayUtils.contains(codeListsToExclude, codeList)) {
-				baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(entry.getValue())));
+			if (!ArrayUtils.contains(codeListsToExclude, codeList) && (!codesEquivalenceService.isLinkedList(codeList))) {
+				baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(entry.getValue()), toString(interfaceTypesByCodeList.get(codeList))));
 			}
 		}
 		return baseListDTOs;
 	}
 
+	private String toString(List<InterfaceTypeCode> interfaceTypeCodes) {
+		if (interfaceTypeCodes == null) {
+			return "";
+		}
+		List<String> res = new ArrayList<>();
+		for (InterfaceTypeCode interfaceTypeCode : interfaceTypeCodes) {
+			res.add(interfaceTypeCode.getKey());
+		}
+		return StringUtils.join(res, ", ");
+	}
+
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadCodeLabels(String codeLists) {
+		Logger.info("loadCodeLabels(codeLists = {})", codeLists);
 		UpdateCodeLabelsDTO dto = new UpdateCodeLabelsDTO();
 
 		String[] codeListsNames = StringUtils.split(codeLists, ',');
@@ -249,7 +391,7 @@ public class TranslationAdminController extends AbstractController {
 		return getCodeListDTOs(referencedCodeLists.toArray(new CodeList[referencedCodeLists.size()]));
 	}
 
-	private static List<SubListDTO> toSubListDTOs(List<CodesEquivalence> sublistsData) {
+	private List<SubListDTO> toSubListDTOs(List<CodesEquivalence> sublistsData, Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList) {
 		Map<CodeList, SubListDTO> sublistsMaps = new LinkedHashMap<>();
 
 		for (CodesEquivalence codesEquivalence : sublistsData) {
@@ -260,7 +402,7 @@ public class TranslationAdminController extends AbstractController {
 
 			SubListDTO subListDTO = sublistsMaps.get(codeList);
 			if (subListDTO == null) {
-				subListDTO = new SubListDTO(codeList.name(), referencedCodeList.name());
+				subListDTO = new SubListDTO(codeList.name(), referencedCodeList.name(), toString(interfaceTypesByCodeList.get(codeList)));
 				subListDTO.addItem(subListItemDTO);
 				sublistsMaps.put(codeList, subListDTO);
 			} else {

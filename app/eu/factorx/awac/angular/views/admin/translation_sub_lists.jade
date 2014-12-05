@@ -1,27 +1,49 @@
-h4 Sous-listes
+.admin-translation
 
-table.actions-table
-    thead
-        tr
-            th Détails
-            th CodeList
-            th CodeList référencée
-            th &nbsp;
-    tbody
-        tr(ng-repeat-start="subList in subLists")
-            td.details
-                mm-plus-minus-toggle-button(ng-model="subList.opened")
-            td.codeList
-                span.text {{ subList.codeList }}
-            td.referencedCodeList
-                span.text {{ subList.referencedCodeList }}
-            td.editButton
-                button.button(type="button", ng-click="editSubList(subList)") Editer
-        tr(ng-repeat-end, ng-if="subList.opened").details
-            td &nbsp;
-            td(colspan="3")
-                table
-                    tr(ng-repeat="listItem in subList.items")
-                        td [{{ listItem.orderIndex }}]
-                        td {{ listItem.key }}
-                        td {{ getLabelByKey(subList.referencedCodeList, listItem.key) }}
+    mm-admin-translations-navigation-bar
+
+    .translation-view
+        .translation-title Sous-listes
+        .waiting-data(ng-show="waitingData")
+            img(src="/assets/images/modal-loading.gif")
+            span Veuillez patienter...
+
+        table.translations-table(ng-hide="waitingData")
+            thead
+                tr
+                    th Détails
+                    th CodeList
+                    th CodeList référencée
+                    th Calculateur(s)
+            tbody
+                tr(ng-repeat-start="subList in subLists")
+                    td.details
+                        mm-plus-minus-toggle-button(ng-model="subList.$opened")
+                    td.codelist
+                        span.text {{ subList.codeList }}
+                    td.referencedCodeList
+                        span.text {{ subList.referencedCodeList }}
+                    td.calculators
+                        span.text {{ subList.calculators }}
+                tr(ng-repeat-end, ng-show="subList.$opened").details
+                    td(colspan="4")
+                        .sublist-header
+                            .order-column #
+                            .list-column {{ subList.referencedCodeList }}
+                        .sublist-content
+                            .sublist-items(ui-sortable="sortableOptions", ng-model="subList.items")
+                                .sublist-item(ng-repeat="item in subList.items")
+                                    .order-column {{ $index + 1 }}
+                                    .list-column {{ item.key + " - " + getLabelByKey(subList.referencedCodeList, item.key) }}
+                            .sublist-add-item Ajouter un élément:
+                                .sublist-item
+                                    .order-column
+                                        button.button(type="button", ng-click="addItem(subList)", style="margin:0; min-height:22px; padding:0px 5px 2px 5px; border-radius:2px;")
+                                            span.fa.fa-plus-circle(style="vertical-align:middle;")
+                                    .list-column
+                                        select(ng-model="itemToAdd.key", ng-options="cl.key as cl.key + ' - ' + cl.label for cl in codeLabels[subList.referencedCodeList]")
+
+        .translation-actions
+            button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
+            button.button(type="button", ng-click="loadSubLists()", ng-disabled="isLoading", ng-hide="waitingData") Annuler
+                                                        

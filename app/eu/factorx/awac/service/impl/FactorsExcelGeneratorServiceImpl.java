@@ -29,7 +29,7 @@ import java.util.Locale;
 public class FactorsExcelGeneratorServiceImpl implements FactorsExcelGeneratorService {
 
     @Autowired
-    private FactorService    factorService;
+    private FactorService factorService;
     @Autowired
     private CodeLabelService codeLabelService;
 
@@ -52,85 +52,78 @@ public class FactorsExcelGeneratorServiceImpl implements FactorsExcelGeneratorSe
 
         sheet.addCell(new Label(0, row, "Clé", cellFormat));
         sheet.addCell(new Label(1, row, "Catégorie", cellFormat));
+        sheet.addCell(new Label(2, row, "Type", cellFormat));
+        sheet.addCell(new Label(3, row, "Source", cellFormat));
         sheet.addCell(new Label(4, row, "Unité entrante", cellFormat));
-        sheet.addCell(new Label(5, row, "Origine", cellFormat));
-
+        sheet.addCell(new Label(5, row, "Unité sortante", cellFormat));
+        sheet.addCell(new Label(6, row, "Origine", cellFormat));
+        sheet.addCell(new Label(7, row, "Valeur ...", cellFormat));
+        sheet.addCell(new Label(8, row, "...valable de", cellFormat));
+        sheet.addCell(new Label(9, row, "à", cellFormat));
 
         row++;
 
         for (Factor factor : factorService.findAll()) {
 
-            sheet.addCell(new Label(0, row, factor.getKey()));
-
-            CodeLabel icLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.IndicatorCategory, factor.getIndicatorCategory().getKey()));
-            sheet.addCell(new Label(1, row, icLabel.getLabel(lang)));
-
-            CodeLabel atLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivityType, factor.getActivityType().getKey()));
-            sheet.addCell(new Label(2, row, atLabel.getLabel(lang)));
-
-            CodeLabel asLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivitySource, factor.getActivitySource().getKey()));
-            sheet.addCell(new Label(3, row, asLabel.getLabel(lang)));
-
-            sheet.addCell(new Label(4, row, factor.getUnitIn().getName()));
-
-            sheet.addCell(new Label(5, row, factor.getInstitution()));
-
-            row++;
-
             List<FactorValue> values = factor.getValues();
 
             if (values.size() > 0) {
-
-                row++;
-
-                int begin = row;
-
-                sheet.addCell(new Label(1, row, "De", cellFormat));
-                sheet.addCell(new Label(2, row, "à", cellFormat));
-                sheet.addCell(new Label(3, row, "Valeur", cellFormat));
-                sheet.addCell(new Label(4, row, "Unité sortante", cellFormat));
-                sheet.addCell(new Label(5, row, "", cellFormat));
-                sheet.addCell(new Label(6, row, "Unité entrante", cellFormat));
-
-                row++;
-
-
                 for (FactorValue factorValue : values) {
+                    sheet.addCell(new Label(0, row, factor.getKey()));
+
+                    CodeLabel icLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.IndicatorCategory, factor.getIndicatorCategory().getKey()));
+                    sheet.addCell(new Label(1, row, icLabel.getLabel(lang)));
+
+                    CodeLabel atLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivityType, factor.getActivityType().getKey()));
+                    sheet.addCell(new Label(2, row, atLabel.getLabel(lang)));
+
+                    CodeLabel asLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivitySource, factor.getActivitySource().getKey()));
+                    sheet.addCell(new Label(3, row, asLabel.getLabel(lang)));
+
+                    sheet.addCell(new Label(4, row, factor.getUnitIn().getSymbol()));
+
+                    sheet.addCell(new Label(5, row, factor.getUnitOut().getSymbol()));
+
+                    sheet.addCell(new Label(6, row, factor.getInstitution()));
+
+                    sheet.addCell(new Number(7, row, factorValue.getValue()));
+
                     Integer dateIn = factorValue.getDateIn();
                     if (dateIn != null) {
-                        sheet.addCell(new Number(1, row, dateIn));
+                        sheet.addCell(new Number(8, row, dateIn));
                     } else {
-                        sheet.addCell(new Label(1, row, ""));
+                        sheet.addCell(new Label(8, row, ""));
                     }
 
                     Integer dateOut = factorValue.getDateOut();
                     if (dateOut != null) {
-                        sheet.addCell(new Number(2, row, dateOut));
+                        sheet.addCell(new Number(9, row, dateOut));
                     } else {
-                        sheet.addCell(new Label(2, row, ""));
+                        sheet.addCell(new Label(9, row, ""));
                     }
-                    sheet.addCell(new Number(3, row, factorValue.getValue()));
-                    sheet.addCell(new Label(4, row, factor.getUnitOut().getSymbol()));
-                    sheet.addCell(new Label(5, row, "/"));
-                    sheet.addCell(new Label(6, row, factor.getUnitIn().getSymbol()));
 
                     row++;
                 }
+            } else {
+                sheet.addCell(new Label(0, row, factor.getKey()));
 
-                sheet.addCell(new Label(1, row, ""));
-                sheet.addCell(new Label(2, row, ""));
-                sheet.addCell(new Label(3, row, ""));
-                sheet.addCell(new Label(4, row, ""));
-                sheet.addCell(new Label(5, row, ""));
-                sheet.addCell(new Label(6, row, ""));
+                CodeLabel icLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.IndicatorCategory, factor.getIndicatorCategory().getKey()));
+                sheet.addCell(new Label(1, row, icLabel.getLabel(lang)));
 
-                drawBorder(sheet, 1, begin, 6, row - 1);
+                CodeLabel atLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivityType, factor.getActivityType().getKey()));
+                sheet.addCell(new Label(2, row, atLabel.getLabel(lang)));
 
+                CodeLabel asLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.ActivitySource, factor.getActivitySource().getKey()));
+                sheet.addCell(new Label(3, row, asLabel.getLabel(lang)));
+
+                sheet.addCell(new Label(4, row, factor.getUnitIn().getSymbol()));
+
+                sheet.addCell(new Label(5, row, factor.getUnitOut().getSymbol()));
+
+                sheet.addCell(new Label(6, row, factor.getInstitution()));
                 row++;
             }
-
         }
-
 
         wb.write();
         wb.close();
@@ -141,9 +134,9 @@ public class FactorsExcelGeneratorServiceImpl implements FactorsExcelGeneratorSe
     private WritableCell getRealCell(WritableSheet sheet, int col, int row) {
         for (Range r : sheet.getMergedCells()) {
             if (col >= r.getTopLeft().getColumn()
-                && col <= r.getBottomRight().getColumn()
-                && row <= r.getTopLeft().getRow()
-                && row >= r.getBottomRight().getRow()) {
+                    && col <= r.getBottomRight().getColumn()
+                    && row <= r.getTopLeft().getRow()
+                    && row >= r.getBottomRight().getRow()) {
                 return (WritableCell) r.getTopLeft();
             }
         }

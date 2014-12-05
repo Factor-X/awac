@@ -14,6 +14,11 @@ public class PeriodCode extends Code {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final PeriodCode P2000 = new PeriodCode("2000");
+	public static final PeriodCode P2001 = new PeriodCode("2001");
+	public static final PeriodCode P2002 = new PeriodCode("2002");
+	public static final PeriodCode P2003 = new PeriodCode("2003");
+	public static final PeriodCode P2004 = new PeriodCode("2004");
 	public static final PeriodCode P2005 = new PeriodCode("2005");
 	public static final PeriodCode P2006 = new PeriodCode("2006");
 	public static final PeriodCode P2007 = new PeriodCode("2007");

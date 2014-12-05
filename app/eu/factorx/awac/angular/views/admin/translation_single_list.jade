@@ -1,24 +1,29 @@
-h4 Messages d'erreur
-table.translations-table(ng-hide="waitingData")
-    tr
-        td.details
-            table.codelabels-table
-                thead
-                    tr
-                        th Clé
-                        th Libellé EN
-                        th Libellé FR
-                        th Libellé NL
-                tbody
-                    tr(ng-repeat="codeLabel in codeLabels")
-                        td.td-key {{ codeLabel.key }}
-                        td.td-label
-                            textarea(ng-model="codeLabel.labelEn")
-                        td.td-label
-                            textarea(ng-model="codeLabel.labelFr")
-                        td.td-label
-                            textarea(ng-model="codeLabel.labelNl")
+.admin-translation
 
-br
-button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+    mm-admin-translations-navigation-bar
+
+    .translation-view
+        .translation-title {{ baseListLabel }}
+        table.translations-table(ng-hide="waitingData")
+            tr
+                td.details
+                    table.codelabels-table
+                        thead
+                            tr
+                                th Clé
+                                th Libellé EN
+                                th Libellé FR
+                                th Libellé NL
+                        tbody
+                            tr(ng-repeat="codeLabel in codeLabels")
+                                td.td-key {{ codeLabel.key }}
+                                td.td-label
+                                    textarea(ng-model="codeLabel.labelEn")
+                                td.td-label
+                                    textarea(ng-model="codeLabel.labelFr")
+                                td.td-label
+                                    textarea(ng-model="codeLabel.labelNl")
+
+        .translation-actions
+            button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
+            button.button(type="button", ng-click="undo()", ng-disabled="isLoading", ng-hide="waitingData") Annuler

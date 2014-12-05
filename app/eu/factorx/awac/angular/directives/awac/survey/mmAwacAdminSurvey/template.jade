@@ -11,12 +11,12 @@ div
                     td.wide.align-left
                         .calculateur_type(ng-bind-html='\'TITLE_ADMIN\' | translate')
 
-                    td
+                    td.survey-interface-management
                         div
                             select(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
-                    td
+                    td.survey-interface-management
                         div(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
-                    td
+                    td.survey-interface-management
                         div(ng-show='$root.currentPerson!=null')
                             span(ng-bind-html='\'WELCOME\' | translate')
                             | ,
@@ -26,11 +26,6 @@ div
                 tr
                     td
                     td
-                        button.button.help(
-                        type='button',
-                        ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
-                        ng-click="$root.showHelp()"
-                        )
                     td
                         // user manager button
                         button.button.user_manage(

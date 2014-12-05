@@ -21,6 +21,21 @@
 
         .translation-view {
             padding: 1.5em;
+            .translation-title {
+                margin-top: 0px;
+                margin-bottom: 15px;
+                font-size: 18px;
+            }
+            .translation-section {
+                & > .section-title {
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin: 1.2em 0em 0.8em 0em;
+                }
+            }
+            .translation-actions {
+                margin-top:20px;
+            }
         }
 
         .translations-table {
@@ -99,10 +114,19 @@
             }
         }
 
+        .calculator_column {
+            width: 100px;
+        }
+
         .labels-columns {
             display: inline-block;
             white-space: nowrap;
-            width: ~"calc(100% - 150px)";
+            &:not(.with-calculator-info) {
+                width: ~"calc(100% - 150px)";
+            }
+            &.with-calculator-info {
+                width: ~"calc(100% - 250px)";
+            }
             padding: 0px;
             & > * {
                 display: inline-block;
@@ -181,7 +205,122 @@
                 }
             }
         }
+    }
 
+    .linkedlist-header {
+        & > * {
+            font-weight: bold;
+            display: inline-block;
+            white-space: nowrap;
+            padding: 5px;
+        }
+    }
+
+    .linkedlist-content {
+        width: 100%;
+        display: inline-block;
+        white-space: nowrap;
+        .linkedlist-item {
+            white-space: nowrap;
+            * {
+                display: inline-block;
+                vertical-align: top;
+            }
+            & > * {
+                padding: 5px;
+            }
+
+        }
+    }
+
+    .linkedlist-header, .linkedlist-content, .linkedlist-add-item {
+
+        .order-column {
+            width: 40px;
+            cursor: move;
+        }
+
+        .key-column {
+            width: 100px;
+            font-weight: bold;
+            & > * {
+                width: 100%
+            }
+        }
+
+        .labels-columns {
+            display: inline-block;
+            white-space: nowrap;
+            width: ~"calc(100% - 150px)";
+            padding: 0px;
+            & > * {
+                display: inline-block;
+                width: 20%;
+                padding: 5px;
+                & > * {
+                    width: 100%
+                }
+            }
+
+        }
+    }
+
+    .sublist-header {
+        & > * {
+            font-weight: bold;
+            display: inline-block;
+            white-space: nowrap;
+            padding: 5px;
+        }
+    }
+
+    .sublist-content {
+        width: 100%;
+        display: inline-block;
+        white-space: nowrap;
+        .sublist-item {
+            white-space: nowrap;
+            * {
+                display: inline-block;
+                vertical-align: top;
+            }
+            & > * {
+                padding: 5px;
+            }
+
+        }
+    }
+
+    .sublist-header, .sublist-content, .sublist-add-item {
+
+        .order-column {
+            width: 40px;
+            cursor: move;
+        }
+
+        .key-column {
+            width: 100px;
+            font-weight: bold;
+            & > * {
+                width: 100%
+            }
+        }
+
+        .labels-columns {
+            display: inline-block;
+            white-space: nowrap;
+            width: ~"calc(100% - 150px)";
+            padding: 0px;
+            & > * {
+                display: inline-block;
+                width: 20%;
+                padding: 5px;
+                & > * {
+                    width: 100%
+                }
+            }
+
+        }
     }
 
     .admin-translations-helps {
@@ -190,7 +329,7 @@
         }
     }
 
-    .nav .open >a, .nav .open > a:hover, .nav .open > a:focus {
+    .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
         background-color: #0988b5 !important;
     }
 }

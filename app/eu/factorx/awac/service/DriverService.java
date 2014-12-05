@@ -1,15 +1,11 @@
 package eu.factorx.awac.service;
 
-import java.util.List;
-
 import eu.factorx.awac.models.data.question.Driver;
+import eu.factorx.awac.models.data.question.DriverValue;
 
-/**
- * Created by florian on 21/10/14.
- */
-public interface DriverService {
-    List<Driver> findAll();
+public interface DriverService extends PersistenceService<Driver> {
 
-    Driver findById(Long driverId);
+    Driver findByName(String name);
+
 }
 

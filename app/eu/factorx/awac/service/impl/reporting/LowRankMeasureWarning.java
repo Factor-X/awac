@@ -1,7 +1,7 @@
 package eu.factorx.awac.service.impl.reporting;
 
 /**
- * This warning is reported when it exist a better method to evaluate the result of a specific activity (alternativeGroupKey), eg when <code></code>minRank != 1</code>
+ * This warning is reported when it exist a better method to evaluate the result of a specific activity (alternativeGroupKey), eg when <code>minRank != 1</code>
  */
 public class LowRankMeasureWarning extends ReportLogEntry {
 

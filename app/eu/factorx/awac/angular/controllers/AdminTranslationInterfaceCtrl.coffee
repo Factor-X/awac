@@ -1,6 +1,8 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
+
+    $scope.displayLittleFormMenu = displayLittleFormMenu
 
     $scope.codeLabelsByList = {}
     $scope.codeLabelsGroups = []
@@ -22,6 +24,7 @@ angular
                     return codeLabel.topic || ""
                 for topic, topicCodeLabels of codeLabelsByTopic
                     $scope.codeLabelsGroups.push({topic: topic, codeLabels: topicCodeLabels})
+                $scope.initialCodeLabelsGroups = angular.copy($scope.codeLabelsGroups)
             $scope.waitingData = false
             return
         return
@@ -31,7 +34,7 @@ angular
         # create new array of code labels
         codeLabels = []
         for i, codeLabelsGroup of $scope.codeLabelsGroups
-            codeLabels.concat(codeLabelsGroup.codeLabels)
+            codeLabels = codeLabels.concat(codeLabelsGroup.codeLabels)
         $scope.codeLabelsByList["TRANSLATIONS_INTERFACE"] = codeLabels
 
         data = {codeLabelsByList: $scope.codeLabelsByList}
@@ -40,6 +43,23 @@ angular
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                $scope.loadCodeLabels()
 
+    $scope.ignoreChanges = false
+
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless !$scope.ignoreChanges
+        eq = angular.equals($scope.initialCodeLabelsGroups, $scope.codeLabelsGroups)
+        if !eq
+            event.preventDefault()
+
+            # show confirm
+            params =
+                titleKey: "CONFIRM_EXIT_TITLE"
+                messageKey: "CONFIRM_EXIT_MESSAGE"
+                onConfirm: () ->
+                    $scope.ignoreChanges = true
+                    $location.path(next.split('#')[1])
+            modalService.show modalService.CONFIRM_DIALOG, params
 
     $scope.loadCodeLabels()

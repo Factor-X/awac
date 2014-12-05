@@ -1,0 +1,26 @@
+ALTER TABLE unit_category ADD COLUMN mainFactorUnit_id BIGINT NULL;
+UPDATE unit_category SET mainFactorUnit_id = mainunit_id;
+ALTER TABLE unit_category ALTER COLUMN mainFactorUnit_id SET NOT NULL;
+ALTER TABLE ONLY unit_category ADD CONSTRAINT mainFactorUnit_id FOREIGN KEY (mainFactorUnit_id) REFERENCES unit(id);
+
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5101') where REF='UC5002';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5115') where REF='UC5003';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5126') where REF='UC5004';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5135') where REF='UC5005';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5141') where REF='UC5006';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5145') where REF='UC5007';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5150') where REF='UC5008';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5151') where REF='UC5009';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5321') where REF='UC5010';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5324') where REF='UC5011';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5160') where REF='UC5012';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5161') where REF='UC5013';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5170') where REF='UC5014';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5168') where REF='UC5015';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5331') where REF='UC5016';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5327') where REF='UC5017';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5328') where REF='UC5018';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5329') where REF='UC5019';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5330') where REF='UC5020';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5332') where REF='UC5022';
+UPDATE unit_category SET mainFactorUnit_id=(select id from unit where REF='U5336') where REF='UC5024';

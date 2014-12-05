@@ -6,6 +6,8 @@ import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import eu.factorx.awac.models.data.question.Driver;
+import eu.factorx.awac.models.data.question.DriverValue;
 
 import play.Logger;
 import eu.factorx.awac.models.Notification;
@@ -49,6 +51,26 @@ public class AwacEnterpriseInitialData {
 
 	@Autowired
     private QuestionSetAnswerService questionSetAnswerService;
+
+	@Autowired
+    private DriverService driverService;
+
+    @Autowired
+    private PeriodService periodService;
+
+    private Form form2,form3,form4,form5,form6,form7;
+    private QuestionSet a1,a13,a15,a1000,a1003,a20,a22,a25,a31,a34,a37,a40,a41,a42,a45,a47,a6000,a6001,a6002,a6006,a50,a52,a400,a401,a402,a406,a407,a412,a413,a518,a519,a502,a506,a507,a512,a513,a600,a601,a602,a606,a607,a612,a613,a93,a94,a113,a114,a115,a121,a205,a208,a209,a223,a224,a128,a130,a131,a132,a140,a141,a142,a157,a163,a164,a166,a1006,a1009,a170,a173,a4999,a5000,a180,a181,a182,a185,a188,a191,a194,a196,a197,a201,a229,a231,a237,a238,a309,a311,a313,a1012,a1015,a317,a320,a322,a325,a1018,a1021,a329,a332,a334,a243,a244,a8000,a250,a252,a253,a266,a272,a273,a275,a1024,a1027,a279,a282,a284,a1030,a1033,a288,a291,a297,a300,a5010;
+    private Question a2,a3,a4,a5,a6,a9,a10,a11,a12,a14,a16,a17,a1001,a1002,a1004,a1005,a21,a23,a24,a26,a27,a28,a32,a33,a35,a36,a38,a39,a43,a44,a46,a48,a49,a6003,a6004,a6005,a6007,a6008,a6009,a51,a403,a404,a405,a408,a409,a410,a411,a414,a415,a416,a417,a503,a504,a505,a508,a509,a510,a511,a514,a515,a516,a517,a603,a604,a605,a608,a609,a610,a611,a614,a615,a616,a617,a95,a96,a97,a98,a99,a100,a101,a102,a103,a104,a105,a106,a107,a108,a116,a117,a118,a119,a120,a122,a123,a124,a125,a126,a127,a206,a210,a211,a212,a213,a214,a215,a216,a217,a218,a219,a220,a221,a222,a225,a226,a227,a228,a129,a133,a134,a135,a136,a137,a138,a139,a500,a143,a145,a146,a147,a148,a149,a150,a151,a152,a153,a154,a155,a156,a158,a159,a160,a161,a162,a165,a167,a168,a1007,a1008,a1010,a1011,a169,a171,a172,a174,a5001,a5002,a5003,a183,a184,a186,a187,a189,a190,a192,a193,a198,a199,a200,a202,a203,a204,a230,a232,a233,a234,a235,a236,a239,a240,a241,a242,a310,a312,a314,a315,a1013,a1014,a1016,a1017,a316,a318,a319,a321,a323,a324,a326,a327,a1019,a1020,a1022,a1023,a328,a330,a331,a333,a335,a336,a337,a338,a245,a246,a247,a248,a249,a251,a254,a255,a256,a257,a258,a259,a260,a261,a262,a263,a264,a265,a267,a268,a269,a270,a271,a274,a276,a277,a1025,a1026,a1028,a1029,a278,a280,a281,a283,a285,a286,a1031,a1032,a1034,a1035,a287,a289,a290,a292,a293,a294,a295,a296,a298,a299,a301,a302,a5011,a5012,a5013,a5014;
+
+    private UnitCategory energyUnits;
+    private UnitCategory massUnits;
+    private UnitCategory volumeUnits;
+    private UnitCategory lengthUnits;
+    private UnitCategory areaUnits;
+    private UnitCategory powerUnits;
+    private UnitCategory moneyUnits;
+    private UnitCategory timeUnits;
+
 
 	private void deleteQuestion(Question question, int indent) {
 		System.out.println(StringUtils.repeat(' ', indent * 4) + "Deleting question " + question.getCode().getKey());
@@ -120,14 +142,14 @@ public class AwacEnterpriseInitialData {
 
         long startTime = System.currentTimeMillis();
 
-        UnitCategory energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
-        UnitCategory massUnits    = getUnitCategoryByCode(UnitCategoryCode.MASS);
-        UnitCategory volumeUnits  = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
-        UnitCategory lengthUnits  = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
-        UnitCategory areaUnits    = getUnitCategoryByCode(UnitCategoryCode.AREA);
-        UnitCategory powerUnits   = getUnitCategoryByCode(UnitCategoryCode.POWER);
-        UnitCategory moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
-        UnitCategory timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
+        energyUnits  = getUnitCategoryByCode(UnitCategoryCode.ENERGY);
+        massUnits    = getUnitCategoryByCode(UnitCategoryCode.MASS);
+        volumeUnits  = getUnitCategoryByCode(UnitCategoryCode.VOLUME);
+        lengthUnits  = getUnitCategoryByCode(UnitCategoryCode.LENGTH);
+        areaUnits    = getUnitCategoryByCode(UnitCategoryCode.AREA);
+        powerUnits   = getUnitCategoryByCode(UnitCategoryCode.POWER);
+        moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
+        timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
 
         // delete old questions
@@ -161,52 +183,462 @@ public class AwacEnterpriseInitialData {
 			}
 		}
 
+        createForm2();
+        createForm3();
+        createForm4();
+        createForm5();
+        createForm6();
+        createForm7();
+
+        createQuestionSetA1();
+        createQuestionSetA13();
+        createQuestionSetA15();
+        createQuestionSetA1000();
+        createQuestionSetA1003();
+        createQuestionSetA20();
+        createQuestionSetA22();
+        createQuestionSetA25();
+        createQuestionSetA31();
+        createQuestionSetA34();
+        createQuestionSetA37();
+        createQuestionSetA40();
+        createQuestionSetA41();
+        createQuestionSetA42();
+        createQuestionSetA45();
+        createQuestionSetA47();
+        createQuestionSetA6000();
+        createQuestionSetA6001();
+        createQuestionSetA6002();
+        createQuestionSetA6006();
+        createQuestionSetA50();
+        createQuestionSetA52();
+        createQuestionSetA400();
+        createQuestionSetA401();
+        createQuestionSetA402();
+        createQuestionSetA406();
+        createQuestionSetA407();
+        createQuestionSetA412();
+        createQuestionSetA413();
+        createQuestionSetA518();
+        createQuestionSetA519();
+        createQuestionSetA502();
+        createQuestionSetA506();
+        createQuestionSetA507();
+        createQuestionSetA512();
+        createQuestionSetA513();
+        createQuestionSetA600();
+        createQuestionSetA601();
+        createQuestionSetA602();
+        createQuestionSetA606();
+        createQuestionSetA607();
+        createQuestionSetA612();
+        createQuestionSetA613();
+        createQuestionSetA93();
+        createQuestionSetA94();
+        createQuestionSetA113();
+        createQuestionSetA114();
+        createQuestionSetA115();
+        createQuestionSetA121();
+        createQuestionSetA205();
+        createQuestionSetA208();
+        createQuestionSetA209();
+        createQuestionSetA223();
+        createQuestionSetA224();
+        createQuestionSetA128();
+        createQuestionSetA130();
+        createQuestionSetA131();
+        createQuestionSetA132();
+        createQuestionSetA140();
+        createQuestionSetA141();
+        createQuestionSetA142();
+        createQuestionSetA157();
+        createQuestionSetA163();
+        createQuestionSetA164();
+        createQuestionSetA166();
+        createQuestionSetA1006();
+        createQuestionSetA1009();
+        createQuestionSetA170();
+        createQuestionSetA173();
+        createQuestionSetA4999();
+        createQuestionSetA5000();
+        createQuestionSetA180();
+        createQuestionSetA181();
+        createQuestionSetA182();
+        createQuestionSetA185();
+        createQuestionSetA188();
+        createQuestionSetA191();
+        createQuestionSetA194();
+        createQuestionSetA196();
+        createQuestionSetA197();
+        createQuestionSetA201();
+        createQuestionSetA229();
+        createQuestionSetA231();
+        createQuestionSetA237();
+        createQuestionSetA238();
+        createQuestionSetA309();
+        createQuestionSetA311();
+        createQuestionSetA313();
+        createQuestionSetA1012();
+        createQuestionSetA1015();
+        createQuestionSetA317();
+        createQuestionSetA320();
+        createQuestionSetA322();
+        createQuestionSetA325();
+        createQuestionSetA1018();
+        createQuestionSetA1021();
+        createQuestionSetA329();
+        createQuestionSetA332();
+        createQuestionSetA334();
+        createQuestionSetA243();
+        createQuestionSetA244();
+        createQuestionSetA8000();
+        createQuestionSetA250();
+        createQuestionSetA252();
+        createQuestionSetA253();
+        createQuestionSetA266();
+        createQuestionSetA272();
+        createQuestionSetA273();
+        createQuestionSetA275();
+        createQuestionSetA1024();
+        createQuestionSetA1027();
+        createQuestionSetA279();
+        createQuestionSetA282();
+        createQuestionSetA284();
+        createQuestionSetA1030();
+        createQuestionSetA1033();
+        createQuestionSetA288();
+        createQuestionSetA291();
+        createQuestionSetA297();
+        createQuestionSetA300();
+        createQuestionSetA5010();
+
+        createQuestionA2();
+        createQuestionA3();
+        createQuestionA4();
+        createQuestionA5();
+        createQuestionA6();
+        createQuestionA9();
+        createQuestionA10();
+        createQuestionA11();
+        createQuestionA12();
+        createQuestionA14();
+        createQuestionA16();
+        createQuestionA17();
+        createQuestionA1001();
+        createQuestionA1002();
+        createQuestionA1004();
+        createQuestionA1005();
+        createQuestionA21();
+        createQuestionA23();
+        createQuestionA24();
+        createQuestionA26();
+        createQuestionA27();
+        createQuestionA28();
+        createQuestionA32();
+        createQuestionA33();
+        createQuestionA35();
+        createQuestionA36();
+        createQuestionA38();
+        createQuestionA39();
+        createQuestionA43();
+        createQuestionA44();
+        createQuestionA46();
+        createQuestionA48();
+        createQuestionA49();
+        createQuestionA6003();
+        createQuestionA6004();
+        createQuestionA6005();
+        createQuestionA6007();
+        createQuestionA6008();
+        createQuestionA6009();
+        createQuestionA51();
+        createQuestionA403();
+        createQuestionA404();
+        createQuestionA405();
+        createQuestionA408();
+        createQuestionA409();
+        createQuestionA410();
+        createQuestionA411();
+        createQuestionA414();
+        createQuestionA415();
+        createQuestionA416();
+        createQuestionA417();
+        createQuestionA503();
+        createQuestionA504();
+        createQuestionA505();
+        createQuestionA508();
+        createQuestionA509();
+        createQuestionA510();
+        createQuestionA511();
+        createQuestionA514();
+        createQuestionA515();
+        createQuestionA516();
+        createQuestionA517();
+        createQuestionA603();
+        createQuestionA604();
+        createQuestionA605();
+        createQuestionA608();
+        createQuestionA609();
+        createQuestionA610();
+        createQuestionA611();
+        createQuestionA614();
+        createQuestionA615();
+        createQuestionA616();
+        createQuestionA617();
+        createQuestionA95();
+        createQuestionA96();
+        createQuestionA97();
+        createQuestionA98();
+        createQuestionA99();
+        createQuestionA100();
+        createQuestionA101();
+        createQuestionA102();
+        createQuestionA103();
+        createQuestionA104();
+        createQuestionA105();
+        createQuestionA106();
+        createQuestionA107();
+        createQuestionA108();
+        createQuestionA116();
+        createQuestionA117();
+        createQuestionA118();
+        createQuestionA119();
+        createQuestionA120();
+        createQuestionA122();
+        createQuestionA123();
+        createQuestionA124();
+        createQuestionA125();
+        createQuestionA126();
+        createQuestionA127();
+        createQuestionA206();
+        createQuestionA210();
+        createQuestionA211();
+        createQuestionA212();
+        createQuestionA213();
+        createQuestionA214();
+        createQuestionA215();
+        createQuestionA216();
+        createQuestionA217();
+        createQuestionA218();
+        createQuestionA219();
+        createQuestionA220();
+        createQuestionA221();
+        createQuestionA222();
+        createQuestionA225();
+        createQuestionA226();
+        createQuestionA227();
+        createQuestionA228();
+        createQuestionA129();
+        createQuestionA133();
+        createQuestionA134();
+        createQuestionA135();
+        createQuestionA136();
+        createQuestionA137();
+        createQuestionA138();
+        createQuestionA139();
+        createQuestionA500();
+        createQuestionA143();
+        createQuestionA145();
+        createQuestionA146();
+        createQuestionA147();
+        createQuestionA148();
+        createQuestionA149();
+        createQuestionA150();
+        createQuestionA151();
+        createQuestionA152();
+        createQuestionA153();
+        createQuestionA154();
+        createQuestionA155();
+        createQuestionA156();
+        createQuestionA158();
+        createQuestionA159();
+        createQuestionA160();
+        createQuestionA161();
+        createQuestionA162();
+        createQuestionA165();
+        createQuestionA167();
+        createQuestionA168();
+        createQuestionA1007();
+        createQuestionA1008();
+        createQuestionA1010();
+        createQuestionA1011();
+        createQuestionA169();
+        createQuestionA171();
+        createQuestionA172();
+        createQuestionA174();
+        createQuestionA5001();
+        createQuestionA5002();
+        createQuestionA5003();
+        createQuestionA183();
+        createQuestionA184();
+        createQuestionA186();
+        createQuestionA187();
+        createQuestionA189();
+        createQuestionA190();
+        createQuestionA192();
+        createQuestionA193();
+        createQuestionA198();
+        createQuestionA199();
+        createQuestionA200();
+        createQuestionA202();
+        createQuestionA203();
+        createQuestionA204();
+        createQuestionA230();
+        createQuestionA232();
+        createQuestionA233();
+        createQuestionA234();
+        createQuestionA235();
+        createQuestionA236();
+        createQuestionA239();
+        createQuestionA240();
+        createQuestionA241();
+        createQuestionA242();
+        createQuestionA310();
+        createQuestionA312();
+        createQuestionA314();
+        createQuestionA315();
+        createQuestionA1013();
+        createQuestionA1014();
+        createQuestionA1016();
+        createQuestionA1017();
+        createQuestionA316();
+        createQuestionA318();
+        createQuestionA319();
+        createQuestionA321();
+        createQuestionA323();
+        createQuestionA324();
+        createQuestionA326();
+        createQuestionA327();
+        createQuestionA1019();
+        createQuestionA1020();
+        createQuestionA1022();
+        createQuestionA1023();
+        createQuestionA328();
+        createQuestionA330();
+        createQuestionA331();
+        createQuestionA333();
+        createQuestionA335();
+        createQuestionA336();
+        createQuestionA337();
+        createQuestionA338();
+        createQuestionA245();
+        createQuestionA246();
+        createQuestionA247();
+        createQuestionA248();
+        createQuestionA249();
+        createQuestionA251();
+        createQuestionA254();
+        createQuestionA255();
+        createQuestionA256();
+        createQuestionA257();
+        createQuestionA258();
+        createQuestionA259();
+        createQuestionA260();
+        createQuestionA261();
+        createQuestionA262();
+        createQuestionA263();
+        createQuestionA264();
+        createQuestionA265();
+        createQuestionA267();
+        createQuestionA268();
+        createQuestionA269();
+        createQuestionA270();
+        createQuestionA271();
+        createQuestionA274();
+        createQuestionA276();
+        createQuestionA277();
+        createQuestionA1025();
+        createQuestionA1026();
+        createQuestionA1028();
+        createQuestionA1029();
+        createQuestionA278();
+        createQuestionA280();
+        createQuestionA281();
+        createQuestionA283();
+        createQuestionA285();
+        createQuestionA286();
+        createQuestionA1031();
+        createQuestionA1032();
+        createQuestionA1034();
+        createQuestionA1035();
+        createQuestionA287();
+        createQuestionA289();
+        createQuestionA290();
+        createQuestionA292();
+        createQuestionA293();
+        createQuestionA294();
+        createQuestionA295();
+        createQuestionA296();
+        createQuestionA298();
+        createQuestionA299();
+        createQuestionA301();
+        createQuestionA302();
+        createQuestionA5011();
+        createQuestionA5012();
+        createQuestionA5013();
+        createQuestionA5014();
+
+
+        Logger.info("===> CREATE AWAC Enterprise INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
+    }
 
     // =========================================================================
     // FORMS
     // =========================================================================
 
-    // == TAB2
-    // DESCRIPTION, CONSOMMATION & REJETS DU  SITE
-    Form form2 = formService.findByIdentifier("TAB2");
-    if (form2 == null) {
-        form2 = new Form("TAB2");
-        JPA.em().persist(form2);
+    private void createForm2() {
+        // == TAB2
+        // DESCRIPTION, CONSOMMATION & REJETS DU  SITE
+        form2 = formService.findByIdentifier("TAB2");
+        if (form2 == null) {
+            form2 = new Form("TAB2");
+            JPA.em().persist(form2);
+        }
     }
-    // == TAB3
-    // MOBILITE
-    Form form3 = formService.findByIdentifier("TAB3");
-    if (form3 == null) {
-        form3 = new Form("TAB3");
-        JPA.em().persist(form3);
+    private void createForm3() {
+        // == TAB3
+        // MOBILITE
+        form3 = formService.findByIdentifier("TAB3");
+        if (form3 == null) {
+            form3 = new Form("TAB3");
+            JPA.em().persist(form3);
+        }
     }
-    // == TAB4
-    // ACHATS, TRANSPORT ET DISTRIBUTION AMONT
-    Form form4 = formService.findByIdentifier("TAB4");
-    if (form4 == null) {
-        form4 = new Form("TAB4");
-        JPA.em().persist(form4);
+    private void createForm4() {
+        // == TAB4
+        // ACHATS, TRANSPORT ET DISTRIBUTION AMONT
+        form4 = formService.findByIdentifier("TAB4");
+        if (form4 == null) {
+            form4 = new Form("TAB4");
+            JPA.em().persist(form4);
+        }
     }
-    // == TAB5
-    // DECHETS, EAUX USEES
-    Form form5 = formService.findByIdentifier("TAB5");
-    if (form5 == null) {
-        form5 = new Form("TAB5");
-        JPA.em().persist(form5);
+    private void createForm5() {
+        // == TAB5
+        // DECHETS, EAUX USEES
+        form5 = formService.findByIdentifier("TAB5");
+        if (form5 == null) {
+            form5 = new Form("TAB5");
+            JPA.em().persist(form5);
+        }
     }
-    // == TAB6
-    // BIENS D'EQUIPEMENT, ACTIFS, FRANCHISES, INVESTISSEMENTS
-    Form form6 = formService.findByIdentifier("TAB6");
-    if (form6 == null) {
-        form6 = new Form("TAB6");
-        JPA.em().persist(form6);
+    private void createForm6() {
+        // == TAB6
+        // BIENS D'EQUIPEMENT, ACTIFS, FRANCHISES, INVESTISSEMENTS
+        form6 = formService.findByIdentifier("TAB6");
+        if (form6 == null) {
+            form6 = new Form("TAB6");
+            JPA.em().persist(form6);
+        }
     }
-    // == TAB7
-    // PRODUITS VENDUS
-    Form form7 = formService.findByIdentifier("TAB7");
-    if (form7 == null) {
-        form7 = new Form("TAB7");
-        JPA.em().persist(form7);
+    private void createForm7() {
+        // == TAB7
+        // PRODUITS VENDUS
+        form7 = formService.findByIdentifier("TAB7");
+        if (form7 == null) {
+            form7 = new Form("TAB7");
+            JPA.em().persist(form7);
+        }
     }
 
 
@@ -214,896 +646,1138 @@ public class AwacEnterpriseInitialData {
     // QUESTION SETS
     // =========================================================================
 
-    // == A1
-    // Données générales
-    QuestionSet a1 = questionSetService.findByCode(QuestionCode.A1);
-    if( a1 == null ) {
-        a1 = new QuestionSet(QuestionCode.A1, false, null);
-        JPA.em().persist(a1);
-    }
-    form2.getQuestionSets().add(a1);
-    JPA.em().persist(form2);
-    // == A13
-    // Consommation de combustibles
-    QuestionSet a13 = questionSetService.findByCode(QuestionCode.A13);
-    if( a13 == null ) {
-        a13 = new QuestionSet(QuestionCode.A13, false, a1);
-        JPA.em().persist(a13);
-    }
-    // == A15
-    // Combustion de combustible (mesurés en unités d'énergie)
-    QuestionSet a15 = questionSetService.findByCode(QuestionCode.A15);
-    if( a15 == null ) {
-        a15 = new QuestionSet(QuestionCode.A15, true, a13);
-        JPA.em().persist(a15);
-    }
-    // == A1000
-    // Combustion de combustible (mesurés en volume)
-    QuestionSet a1000 = questionSetService.findByCode(QuestionCode.A1000);
-    if( a1000 == null ) {
-        a1000 = new QuestionSet(QuestionCode.A1000, true, a13);
-        JPA.em().persist(a1000);
-    }
-    // == A1003
-    // Combustion de combustible  (mesurés en poids)
-    QuestionSet a1003 = questionSetService.findByCode(QuestionCode.A1003);
-    if( a1003 == null ) {
-        a1003 = new QuestionSet(QuestionCode.A1003, true, a13);
-        JPA.em().persist(a1003);
-    }
-    // == A20
-    // Electricité et vapeur achetées
-    QuestionSet a20 = questionSetService.findByCode(QuestionCode.A20);
-    if( a20 == null ) {
-        a20 = new QuestionSet(QuestionCode.A20, false, null);
-        JPA.em().persist(a20);
-    }
-    form2.getQuestionSets().add(a20);
-    JPA.em().persist(form2);
-    // == A22
-    // Electricité
-    QuestionSet a22 = questionSetService.findByCode(QuestionCode.A22);
-    if( a22 == null ) {
-        a22 = new QuestionSet(QuestionCode.A22, false, a20);
-        JPA.em().persist(a22);
-    }
-    // == A25
-    // Vapeur
-    QuestionSet a25 = questionSetService.findByCode(QuestionCode.A25);
-    if( a25 == null ) {
-        a25 = new QuestionSet(QuestionCode.A25, true, a20);
-        JPA.em().persist(a25);
-    }
-    // == A31
-    // GES des procédés de production
-    QuestionSet a31 = questionSetService.findByCode(QuestionCode.A31);
-    if( a31 == null ) {
-        a31 = new QuestionSet(QuestionCode.A31, false, null);
-        JPA.em().persist(a31);
-    }
-    form2.getQuestionSets().add(a31);
-    JPA.em().persist(form2);
-    // == A34
-    // Type de GES émis par les procédés de production
-    QuestionSet a34 = questionSetService.findByCode(QuestionCode.A34);
-    if( a34 == null ) {
-        a34 = new QuestionSet(QuestionCode.A34, true, a31);
-        JPA.em().persist(a34);
-    }
-    // == A37
-    // Systèmes de refroidissement
-    QuestionSet a37 = questionSetService.findByCode(QuestionCode.A37);
-    if( a37 == null ) {
-        a37 = new QuestionSet(QuestionCode.A37, false, null);
-        JPA.em().persist(a37);
-    }
-    form2.getQuestionSets().add(a37);
-    JPA.em().persist(form2);
-    // == A40
-    // Méthodes au choix
-    QuestionSet a40 = questionSetService.findByCode(QuestionCode.A40);
-    if( a40 == null ) {
-        a40 = new QuestionSet(QuestionCode.A40, false, a37);
-        JPA.em().persist(a40);
-    }
-    // == A41
-    // Méthode directe à partir des recharges
-    QuestionSet a41 = questionSetService.findByCode(QuestionCode.A41);
-    if( a41 == null ) {
-        a41 = new QuestionSet(QuestionCode.A41, false, a40);
-        JPA.em().persist(a41);
-    }
-    // == A42
-    // Listes des types de gaz réfrigérants utilisés
-    QuestionSet a42 = questionSetService.findByCode(QuestionCode.A42);
-    if( a42 == null ) {
-        a42 = new QuestionSet(QuestionCode.A42, true, a41);
-        JPA.em().persist(a42);
-    }
-    // == A45
-    // Méthode indirecte à partir de la puissance des équipements de froid
-    QuestionSet a45 = questionSetService.findByCode(QuestionCode.A45);
-    if( a45 == null ) {
-        a45 = new QuestionSet(QuestionCode.A45, false, a40);
-        JPA.em().persist(a45);
-    }
-    // == A47
-    // Méthode indirecte à partir de la consommation éléctrique du site
-    QuestionSet a47 = questionSetService.findByCode(QuestionCode.A47);
-    if( a47 == null ) {
-        a47 = new QuestionSet(QuestionCode.A47, false, a40);
-        JPA.em().persist(a47);
-    }
-    // == A6000
-    // Eaux usées industrielles traitées par l'entreprise
-    QuestionSet a6000 = questionSetService.findByCode(QuestionCode.A6000);
-    if( a6000 == null ) {
-        a6000 = new QuestionSet(QuestionCode.A6000, false, null);
-        JPA.em().persist(a6000);
-    }
-    form2.getQuestionSets().add(a6000);
-    JPA.em().persist(form2);
-    // == A6001
-    // Méthodes alternatives
-    QuestionSet a6001 = questionSetService.findByCode(QuestionCode.A6001);
-    if( a6001 == null ) {
-        a6001 = new QuestionSet(QuestionCode.A6001, false, a6000);
-        JPA.em().persist(a6001);
-    }
-    // == A6002
-    // Méthode par la quantité de m³ rejetés
-    QuestionSet a6002 = questionSetService.findByCode(QuestionCode.A6002);
-    if( a6002 == null ) {
-        a6002 = new QuestionSet(QuestionCode.A6002, false, a6001);
-        JPA.em().persist(a6002);
-    }
-    // == A6006
-    // Méthode par le poids de CO2 chimique des effluents rejetés
-    QuestionSet a6006 = questionSetService.findByCode(QuestionCode.A6006);
-    if( a6006 == null ) {
-        a6006 = new QuestionSet(QuestionCode.A6006, false, a6001);
-        JPA.em().persist(a6006);
-    }
-    // == A50
-    // Mobilité
-    QuestionSet a50 = questionSetService.findByCode(QuestionCode.A50);
-    if( a50 == null ) {
-        a50 = new QuestionSet(QuestionCode.A50, false, null);
-        JPA.em().persist(a50);
-    }
-    form3.getQuestionSets().add(a50);
-    JPA.em().persist(form3);
-    // == A52
-    // Transport routier
-    QuestionSet a52 = questionSetService.findByCode(QuestionCode.A52);
-    if( a52 == null ) {
-        a52 = new QuestionSet(QuestionCode.A52, false, null);
-        JPA.em().persist(a52);
-    }
-    form3.getQuestionSets().add(a52);
-    JPA.em().persist(form3);
-    // == A400
-    // Véhicules de société ou détenus par l'entreprise
-    QuestionSet a400 = questionSetService.findByCode(QuestionCode.A400);
-    if( a400 == null ) {
-        a400 = new QuestionSet(QuestionCode.A400, false, a52);
-        JPA.em().persist(a400);
-    }
-    // == A401
-    // Méthode au choix
-    QuestionSet a401 = questionSetService.findByCode(QuestionCode.A401);
-    if( a401 == null ) {
-        a401 = new QuestionSet(QuestionCode.A401, false, a400);
-        JPA.em().persist(a401);
-    }
-    // == A402
-    // Méthode basée sur les consommations 
-    QuestionSet a402 = questionSetService.findByCode(QuestionCode.A402);
-    if( a402 == null ) {
-        a402 = new QuestionSet(QuestionCode.A402, false, a401);
-        JPA.em().persist(a402);
-    }
-    // == A406
-    // Méthode basée sur le kilométrage
-    QuestionSet a406 = questionSetService.findByCode(QuestionCode.A406);
-    if( a406 == null ) {
-        a406 = new QuestionSet(QuestionCode.A406, false, a401);
-        JPA.em().persist(a406);
-    }
-    // == A407
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a407 = questionSetService.findByCode(QuestionCode.A407);
-    if( a407 == null ) {
-        a407 = new QuestionSet(QuestionCode.A407, true, a406);
-        JPA.em().persist(a407);
-    }
-    // == A412
-    // Méthode basée sur les dépenses
-    QuestionSet a412 = questionSetService.findByCode(QuestionCode.A412);
-    if( a412 == null ) {
-        a412 = new QuestionSet(QuestionCode.A412, false, a401);
-        JPA.em().persist(a412);
-    }
-    // == A413
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a413 = questionSetService.findByCode(QuestionCode.A413);
-    if( a413 == null ) {
-        a413 = new QuestionSet(QuestionCode.A413, true, a412);
-        JPA.em().persist(a413);
-    }
-    // == A518
-    // Autres véhicules pour déplacements domicile-travail des employés
-    QuestionSet a518 = questionSetService.findByCode(QuestionCode.A518);
-    if( a518 == null ) {
-        a518 = new QuestionSet(QuestionCode.A518, false, a52);
-        JPA.em().persist(a518);
-    }
-    // == A519
-    // Méthode au choix
-    QuestionSet a519 = questionSetService.findByCode(QuestionCode.A519);
-    if( a519 == null ) {
-        a519 = new QuestionSet(QuestionCode.A519, false, a518);
-        JPA.em().persist(a519);
-    }
-    // == A502
-    // Méthode basée sur les consommations
-    QuestionSet a502 = questionSetService.findByCode(QuestionCode.A502);
-    if( a502 == null ) {
-        a502 = new QuestionSet(QuestionCode.A502, false, a519);
-        JPA.em().persist(a502);
-    }
-    // == A506
-    // Méthode basée sur le kilométrage
-    QuestionSet a506 = questionSetService.findByCode(QuestionCode.A506);
-    if( a506 == null ) {
-        a506 = new QuestionSet(QuestionCode.A506, false, a519);
-        JPA.em().persist(a506);
-    }
-    // == A507
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a507 = questionSetService.findByCode(QuestionCode.A507);
-    if( a507 == null ) {
-        a507 = new QuestionSet(QuestionCode.A507, true, a506);
-        JPA.em().persist(a507);
-    }
-    // == A512
-    // Méthode basée sur les dépenses
-    QuestionSet a512 = questionSetService.findByCode(QuestionCode.A512);
-    if( a512 == null ) {
-        a512 = new QuestionSet(QuestionCode.A512, false, a519);
-        JPA.em().persist(a512);
-    }
-    // == A513
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a513 = questionSetService.findByCode(QuestionCode.A513);
-    if( a513 == null ) {
-        a513 = new QuestionSet(QuestionCode.A513, true, a512);
-        JPA.em().persist(a513);
-    }
-    // == A600
-    // Autres véhicules pour déplacements divers (véhicules loués, visiteurs, consultants, sous-traitants…)
-    QuestionSet a600 = questionSetService.findByCode(QuestionCode.A600);
-    if( a600 == null ) {
-        a600 = new QuestionSet(QuestionCode.A600, false, a52);
-        JPA.em().persist(a600);
-    }
-    // == A601
-    // Méthode au choix
-    QuestionSet a601 = questionSetService.findByCode(QuestionCode.A601);
-    if( a601 == null ) {
-        a601 = new QuestionSet(QuestionCode.A601, false, a600);
-        JPA.em().persist(a601);
-    }
-    // == A602
-    // Méthode basée sur les consommations
-    QuestionSet a602 = questionSetService.findByCode(QuestionCode.A602);
-    if( a602 == null ) {
-        a602 = new QuestionSet(QuestionCode.A602, false, a601);
-        JPA.em().persist(a602);
-    }
-    // == A606
-    // Méthode basée sur le kilométrage
-    QuestionSet a606 = questionSetService.findByCode(QuestionCode.A606);
-    if( a606 == null ) {
-        a606 = new QuestionSet(QuestionCode.A606, false, a601);
-        JPA.em().persist(a606);
-    }
-    // == A607
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a607 = questionSetService.findByCode(QuestionCode.A607);
-    if( a607 == null ) {
-        a607 = new QuestionSet(QuestionCode.A607, true, a606);
-        JPA.em().persist(a607);
-    }
-    // == A612
-    // Méthode basée sur les dépenses
-    QuestionSet a612 = questionSetService.findByCode(QuestionCode.A612);
-    if( a612 == null ) {
-        a612 = new QuestionSet(QuestionCode.A612, false, a601);
-        JPA.em().persist(a612);
-    }
-    // == A613
-    // Créez autant de catégories de véhicules que souhaité
-    QuestionSet a613 = questionSetService.findByCode(QuestionCode.A613);
-    if( a613 == null ) {
-        a613 = new QuestionSet(QuestionCode.A613, true, a612);
-        JPA.em().persist(a613);
-    }
-    // == A93
-    // Transport en commun
-    QuestionSet a93 = questionSetService.findByCode(QuestionCode.A93);
-    if( a93 == null ) {
-        a93 = new QuestionSet(QuestionCode.A93, false, null);
-        JPA.em().persist(a93);
-    }
-    form3.getQuestionSets().add(a93);
-    JPA.em().persist(form3);
-    // == A94
-    // Estimation par le détail des déplacements
-    QuestionSet a94 = questionSetService.findByCode(QuestionCode.A94);
-    if( a94 == null ) {
-        a94 = new QuestionSet(QuestionCode.A94, false, a93);
-        JPA.em().persist(a94);
-    }
-    // == A113
-    // Transport en avion (déplacements professionnels ou des visiteurs)
-    QuestionSet a113 = questionSetService.findByCode(QuestionCode.A113);
-    if( a113 == null ) {
-        a113 = new QuestionSet(QuestionCode.A113, false, null);
-        JPA.em().persist(a113);
-    }
-    form3.getQuestionSets().add(a113);
-    JPA.em().persist(form3);
-    // == A114
-    // Méthode par le détail des vols
-    QuestionSet a114 = questionSetService.findByCode(QuestionCode.A114);
-    if( a114 == null ) {
-        a114 = new QuestionSet(QuestionCode.A114, false, a113);
-        JPA.em().persist(a114);
-    }
-    // == A115
-    // Créez autant de catégories de vol que nécessaire
-    QuestionSet a115 = questionSetService.findByCode(QuestionCode.A115);
-    if( a115 == null ) {
-        a115 = new QuestionSet(QuestionCode.A115, true, a114);
-        JPA.em().persist(a115);
-    }
-    // == A121
-    // Méthode des moyennes
-    QuestionSet a121 = questionSetService.findByCode(QuestionCode.A121);
-    if( a121 == null ) {
-        a121 = new QuestionSet(QuestionCode.A121, false, a113);
-        JPA.em().persist(a121);
-    }
-    // == A205
-    // Achat de biens et services
-    QuestionSet a205 = questionSetService.findByCode(QuestionCode.A205);
-    if( a205 == null ) {
-        a205 = new QuestionSet(QuestionCode.A205, false, null);
-        JPA.em().persist(a205);
-    }
-    form4.getQuestionSets().add(a205);
-    JPA.em().persist(form4);
-    // == A208
-    // Achat de biens et services
-    QuestionSet a208 = questionSetService.findByCode(QuestionCode.A208);
-    if( a208 == null ) {
-        a208 = new QuestionSet(QuestionCode.A208, false, null);
-        JPA.em().persist(a208);
-    }
-    form4.getQuestionSets().add(a208);
-    JPA.em().persist(form4);
-    // == A209
-    // Créez et nommez vos postes d'achats (et préciser la famille et le type de matériaux ensuite)
-    QuestionSet a209 = questionSetService.findByCode(QuestionCode.A209);
-    if( a209 == null ) {
-        a209 = new QuestionSet(QuestionCode.A209, true, a208);
-        JPA.em().persist(a209);
-    }
-    // == A223
-    // Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
-    QuestionSet a223 = questionSetService.findByCode(QuestionCode.A223);
-    if( a223 == null ) {
-        a223 = new QuestionSet(QuestionCode.A223, false, a208);
-        JPA.em().persist(a223);
-    }
-    // == A224
-    // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la famille, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
-    QuestionSet a224 = questionSetService.findByCode(QuestionCode.A224);
-    if( a224 == null ) {
-        a224 = new QuestionSet(QuestionCode.A224, true, a223);
-        JPA.em().persist(a224);
-    }
-    // == A128
-    // Transport et distribution de marchandises amont
-    QuestionSet a128 = questionSetService.findByCode(QuestionCode.A128);
-    if( a128 == null ) {
-        a128 = new QuestionSet(QuestionCode.A128, false, null);
-        JPA.em().persist(a128);
-    }
-    form4.getQuestionSets().add(a128);
-    JPA.em().persist(form4);
-    // == A130
-    // Transport amont
-    QuestionSet a130 = questionSetService.findByCode(QuestionCode.A130);
-    if( a130 == null ) {
-        a130 = new QuestionSet(QuestionCode.A130, false, null);
-        JPA.em().persist(a130);
-    }
-    form4.getQuestionSets().add(a130);
-    JPA.em().persist(form4);
-    // == A131
-    // Transport avec des véhicules détenus par l'entreprise
-    QuestionSet a131 = questionSetService.findByCode(QuestionCode.A131);
-    if( a131 == null ) {
-        a131 = new QuestionSet(QuestionCode.A131, false, a130);
-        JPA.em().persist(a131);
-    }
-    // == A132
-    // Méthode par consommation de carburants
-    QuestionSet a132 = questionSetService.findByCode(QuestionCode.A132);
-    if( a132 == null ) {
-        a132 = new QuestionSet(QuestionCode.A132, false, a131);
-        JPA.em().persist(a132);
-    }
-    // == A140
-    // Transport effectué par des transporteurs
-    QuestionSet a140 = questionSetService.findByCode(QuestionCode.A140);
-    if( a140 == null ) {
-        a140 = new QuestionSet(QuestionCode.A140, false, a130);
-        JPA.em().persist(a140);
-    }
-    // == A141
-    // Méthode basée sur le kilométrage
-    QuestionSet a141 = questionSetService.findByCode(QuestionCode.A141);
-    if( a141 == null ) {
-        a141 = new QuestionSet(QuestionCode.A141, false, a140);
-        JPA.em().persist(a141);
-    }
-    // == A142
-    // Créez autant de schémas modaux que nécessaire
-    QuestionSet a142 = questionSetService.findByCode(QuestionCode.A142);
-    if( a142 == null ) {
-        a142 = new QuestionSet(QuestionCode.A142, true, a141);
-        JPA.em().persist(a142);
-    }
-    // == A157
-    // Méthode des moyennes
-    QuestionSet a157 = questionSetService.findByCode(QuestionCode.A157);
-    if( a157 == null ) {
-        a157 = new QuestionSet(QuestionCode.A157, false, a140);
-        JPA.em().persist(a157);
-    }
-    // == A163
-    // Distribution amont: Energie et froid
-    QuestionSet a163 = questionSetService.findByCode(QuestionCode.A163);
-    if( a163 == null ) {
-        a163 = new QuestionSet(QuestionCode.A163, false, null);
-        JPA.em().persist(a163);
-    }
-    form4.getQuestionSets().add(a163);
-    JPA.em().persist(form4);
-    // == A164
-    // Créez autant de postes de consommation que nécessaire
-    QuestionSet a164 = questionSetService.findByCode(QuestionCode.A164);
-    if( a164 == null ) {
-        a164 = new QuestionSet(QuestionCode.A164, true, a163);
-        JPA.em().persist(a164);
-    }
-    // == A166
-    // Listez les totaux de combustibles consommés (exprimés en unités d'énergie)
-    QuestionSet a166 = questionSetService.findByCode(QuestionCode.A166);
-    if( a166 == null ) {
-        a166 = new QuestionSet(QuestionCode.A166, true, a164);
-        JPA.em().persist(a166);
-    }
-    // == A1006
-    // Listez les totaux de combustibles consommés (exprimés en volume)
-    QuestionSet a1006 = questionSetService.findByCode(QuestionCode.A1006);
-    if( a1006 == null ) {
-        a1006 = new QuestionSet(QuestionCode.A1006, true, a164);
-        JPA.em().persist(a1006);
-    }
-    // == A1009
-    // Listez les totaux de combustibles consommés (exprimés en poids)
-    QuestionSet a1009 = questionSetService.findByCode(QuestionCode.A1009);
-    if( a1009 == null ) {
-        a1009 = new QuestionSet(QuestionCode.A1009, true, a164);
-        JPA.em().persist(a1009);
-    }
-    // == A170
-    // Listez les gaz réfrigérants utilisés pour les marchandises amont
-    QuestionSet a170 = questionSetService.findByCode(QuestionCode.A170);
-    if( a170 == null ) {
-        a170 = new QuestionSet(QuestionCode.A170, true, a164);
-        JPA.em().persist(a170);
-    }
-    // == A173
-    // Déchets générés par les opérations
-    QuestionSet a173 = questionSetService.findByCode(QuestionCode.A173);
-    if( a173 == null ) {
-        a173 = new QuestionSet(QuestionCode.A173, false, null);
-        JPA.em().persist(a173);
-    }
-    form5.getQuestionSets().add(a173);
-    JPA.em().persist(form5);
-    // == A4999
-    // Déchets solides
-    QuestionSet a4999 = questionSetService.findByCode(QuestionCode.A4999);
-    if( a4999 == null ) {
-        a4999 = new QuestionSet(QuestionCode.A4999, false, null);
-        JPA.em().persist(a4999);
-    }
-    form5.getQuestionSets().add(a4999);
-    JPA.em().persist(form5);
-    // == A5000
-    // Listez vos différents postes de déchets
-    QuestionSet a5000 = questionSetService.findByCode(QuestionCode.A5000);
-    if( a5000 == null ) {
-        a5000 = new QuestionSet(QuestionCode.A5000, true, a4999);
-        JPA.em().persist(a5000);
-    }
-    // == A180
-    // Eaux usées
-    QuestionSet a180 = questionSetService.findByCode(QuestionCode.A180);
-    if( a180 == null ) {
-        a180 = new QuestionSet(QuestionCode.A180, false, null);
-        JPA.em().persist(a180);
-    }
-    form5.getQuestionSets().add(a180);
-    JPA.em().persist(form5);
-    // == A181
-    // Eaux usées domestiques par grand type de bâtiments
-    QuestionSet a181 = questionSetService.findByCode(QuestionCode.A181);
-    if( a181 == null ) {
-        a181 = new QuestionSet(QuestionCode.A181, false, a180);
-        JPA.em().persist(a181);
-    }
-    // == A182
-    // Usine ou atelier
-    QuestionSet a182 = questionSetService.findByCode(QuestionCode.A182);
-    if( a182 == null ) {
-        a182 = new QuestionSet(QuestionCode.A182, false, a181);
-        JPA.em().persist(a182);
-    }
-    // == A185
-    // Bureau
-    QuestionSet a185 = questionSetService.findByCode(QuestionCode.A185);
-    if( a185 == null ) {
-        a185 = new QuestionSet(QuestionCode.A185, false, a181);
-        JPA.em().persist(a185);
-    }
-    // == A188
-    // Hôtel, pension, hôpitaux, prison
-    QuestionSet a188 = questionSetService.findByCode(QuestionCode.A188);
-    if( a188 == null ) {
-        a188 = new QuestionSet(QuestionCode.A188, false, a181);
-        JPA.em().persist(a188);
-    }
-    // == A191
-    // Restaurant ou cantine
-    QuestionSet a191 = questionSetService.findByCode(QuestionCode.A191);
-    if( a191 == null ) {
-        a191 = new QuestionSet(QuestionCode.A191, false, a181);
-        JPA.em().persist(a191);
-    }
-    // == A194
-    // Eaux usées industrielles traitées par des tiers
-    QuestionSet a194 = questionSetService.findByCode(QuestionCode.A194);
-    if( a194 == null ) {
-        a194 = new QuestionSet(QuestionCode.A194, false, a180);
-        JPA.em().persist(a194);
-    }
-    // == A196
-    // Méthodes alternatives
-    QuestionSet a196 = questionSetService.findByCode(QuestionCode.A196);
-    if( a196 == null ) {
-        a196 = new QuestionSet(QuestionCode.A196, false, a194);
-        JPA.em().persist(a196);
-    }
-    // == A197
-    // Méthode par la quantité de m³ rejetés
-    QuestionSet a197 = questionSetService.findByCode(QuestionCode.A197);
-    if( a197 == null ) {
-        a197 = new QuestionSet(QuestionCode.A197, false, a196);
-        JPA.em().persist(a197);
-    }
-    // == A201
-    // Méthode par le poids de CO2 chimique des effluents rejetés
-    QuestionSet a201 = questionSetService.findByCode(QuestionCode.A201);
-    if( a201 == null ) {
-        a201 = new QuestionSet(QuestionCode.A201, false, a196);
-        JPA.em().persist(a201);
-    }
-    // == A229
-    // Biens d'équipement
-    QuestionSet a229 = questionSetService.findByCode(QuestionCode.A229);
-    if( a229 == null ) {
-        a229 = new QuestionSet(QuestionCode.A229, false, null);
-        JPA.em().persist(a229);
-    }
-    form6.getQuestionSets().add(a229);
-    JPA.em().persist(form6);
-    // == A231
-    // Créez et nommez vos biens d'équipement
-    QuestionSet a231 = questionSetService.findByCode(QuestionCode.A231);
-    if( a231 == null ) {
-        a231 = new QuestionSet(QuestionCode.A231, true, a229);
-        JPA.em().persist(a231);
-    }
-    // == A237
-    // Autres biens d'équipement spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
-    QuestionSet a237 = questionSetService.findByCode(QuestionCode.A237);
-    if( a237 == null ) {
-        a237 = new QuestionSet(QuestionCode.A237, false, a229);
-        JPA.em().persist(a237);
-    }
-    // == A238
-    // Créez et nommez vos biens d'équipement
-    QuestionSet a238 = questionSetService.findByCode(QuestionCode.A238);
-    if( a238 == null ) {
-        a238 = new QuestionSet(QuestionCode.A238, true, a237);
-        JPA.em().persist(a238);
-    }
-    // == A309
-    // Actifs loués (aval)
-    QuestionSet a309 = questionSetService.findByCode(QuestionCode.A309);
-    if( a309 == null ) {
-        a309 = new QuestionSet(QuestionCode.A309, false, null);
-        JPA.em().persist(a309);
-    }
-    form6.getQuestionSets().add(a309);
-    JPA.em().persist(form6);
-    // == A311
-    // Créez autant de catégories d'actifs loués que nécessaire
-    QuestionSet a311 = questionSetService.findByCode(QuestionCode.A311);
-    if( a311 == null ) {
-        a311 = new QuestionSet(QuestionCode.A311, true, a309);
-        JPA.em().persist(a311);
-    }
-    // == A313
-    // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en unités d'énergie)
-    QuestionSet a313 = questionSetService.findByCode(QuestionCode.A313);
-    if( a313 == null ) {
-        a313 = new QuestionSet(QuestionCode.A313, true, a311);
-        JPA.em().persist(a313);
-    }
-    // == A1012
-    // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en volume)
-    QuestionSet a1012 = questionSetService.findByCode(QuestionCode.A1012);
-    if( a1012 == null ) {
-        a1012 = new QuestionSet(QuestionCode.A1012, true, a311);
-        JPA.em().persist(a1012);
-    }
-    // == A1015
-    // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en poids)
-    QuestionSet a1015 = questionSetService.findByCode(QuestionCode.A1015);
-    if( a1015 == null ) {
-        a1015 = new QuestionSet(QuestionCode.A1015, true, a311);
-        JPA.em().persist(a1015);
-    }
-    // == A317
-    // Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués
-    QuestionSet a317 = questionSetService.findByCode(QuestionCode.A317);
-    if( a317 == null ) {
-        a317 = new QuestionSet(QuestionCode.A317, true, a311);
-        JPA.em().persist(a317);
-    }
-    // == A320
-    // Franchises
-    QuestionSet a320 = questionSetService.findByCode(QuestionCode.A320);
-    if( a320 == null ) {
-        a320 = new QuestionSet(QuestionCode.A320, false, null);
-        JPA.em().persist(a320);
-    }
-    form6.getQuestionSets().add(a320);
-    JPA.em().persist(form6);
-    // == A322
-    // Créez autant de catégories de franchisés que nécessaire
-    QuestionSet a322 = questionSetService.findByCode(QuestionCode.A322);
-    if( a322 == null ) {
-        a322 = new QuestionSet(QuestionCode.A322, true, a320);
-        JPA.em().persist(a322);
-    }
-    // == A325
-    // Listez les moyennes de combustibles utilisés par franchisé (exprimés en unités d'énergie)
-    QuestionSet a325 = questionSetService.findByCode(QuestionCode.A325);
-    if( a325 == null ) {
-        a325 = new QuestionSet(QuestionCode.A325, true, a322);
-        JPA.em().persist(a325);
-    }
-    // == A1018
-    // Listez les moyennes de combustibles utilisés par franchisé (exprimés en volume)
-    QuestionSet a1018 = questionSetService.findByCode(QuestionCode.A1018);
-    if( a1018 == null ) {
-        a1018 = new QuestionSet(QuestionCode.A1018, true, a322);
-        JPA.em().persist(a1018);
-    }
-    // == A1021
-    // Listez les moyennes de combustibles utilisés par franchisé (exprimés en poids)
-    QuestionSet a1021 = questionSetService.findByCode(QuestionCode.A1021);
-    if( a1021 == null ) {
-        a1021 = new QuestionSet(QuestionCode.A1021, true, a322);
-        JPA.em().persist(a1021);
-    }
-    // == A329
-    // Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé
-    QuestionSet a329 = questionSetService.findByCode(QuestionCode.A329);
-    if( a329 == null ) {
-        a329 = new QuestionSet(QuestionCode.A329, true, a322);
-        JPA.em().persist(a329);
-    }
-    // == A332
-    // Investissements financiers
-    QuestionSet a332 = questionSetService.findByCode(QuestionCode.A332);
-    if( a332 == null ) {
-        a332 = new QuestionSet(QuestionCode.A332, false, null);
-        JPA.em().persist(a332);
-    }
-    form6.getQuestionSets().add(a332);
-    JPA.em().persist(form6);
-    // == A334
-    // Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
-    QuestionSet a334 = questionSetService.findByCode(QuestionCode.A334);
-    if( a334 == null ) {
-        a334 = new QuestionSet(QuestionCode.A334, true, a332);
-        JPA.em().persist(a334);
-    }
-    // == A243
-    // Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus
-    QuestionSet a243 = questionSetService.findByCode(QuestionCode.A243);
-    if( a243 == null ) {
-        a243 = new QuestionSet(QuestionCode.A243, false, null);
-        JPA.em().persist(a243);
-    }
-    form7.getQuestionSets().add(a243);
-    JPA.em().persist(form7);
-    // == A244
-    // Lister les différents produits ou groupes de produits vendus par l'entreprise
-    QuestionSet a244 = questionSetService.findByCode(QuestionCode.A244);
-    if( a244 == null ) {
-        a244 = new QuestionSet(QuestionCode.A244, true, a243);
-        JPA.em().persist(a244);
-    }
-    // == A8000
-    // Utilisation, traitement et fin de vie
-    QuestionSet a8000 = questionSetService.findByCode(QuestionCode.A8000);
-    if( a8000 == null ) {
-        a8000 = new QuestionSet(QuestionCode.A8000, false, a244);
-        JPA.em().persist(a8000);
-    }
-    // == A250
-    // Transport et distribution aval
-    QuestionSet a250 = questionSetService.findByCode(QuestionCode.A250);
-    if( a250 == null ) {
-        a250 = new QuestionSet(QuestionCode.A250, false, a244);
-        JPA.em().persist(a250);
-    }
-    // == A252
-    // Transport aval
-    QuestionSet a252 = questionSetService.findByCode(QuestionCode.A252);
-    if( a252 == null ) {
-        a252 = new QuestionSet(QuestionCode.A252, false, a250);
-        JPA.em().persist(a252);
-    }
-    // == A253
-    // Méthode par kilométrage
-    QuestionSet a253 = questionSetService.findByCode(QuestionCode.A253);
-    if( a253 == null ) {
-        a253 = new QuestionSet(QuestionCode.A253, false, a252);
-        JPA.em().persist(a253);
-    }
-    // == A266
-    // Méthode des moyennes
-    QuestionSet a266 = questionSetService.findByCode(QuestionCode.A266);
-    if( a266 == null ) {
-        a266 = new QuestionSet(QuestionCode.A266, false, a252);
-        JPA.em().persist(a266);
-    }
-    // == A272
-    // Distribution avale: Energie et Froid
-    QuestionSet a272 = questionSetService.findByCode(QuestionCode.A272);
-    if( a272 == null ) {
-        a272 = new QuestionSet(QuestionCode.A272, false, a244);
-        JPA.em().persist(a272);
-    }
-    // == A273
-    // Créez autant de postes de consommation que nécessaire
-    QuestionSet a273 = questionSetService.findByCode(QuestionCode.A273);
-    if( a273 == null ) {
-        a273 = new QuestionSet(QuestionCode.A273, true, a272);
-        JPA.em().persist(a273);
-    }
-    // == A275
-    // Listez les totaux de combustibles utilisés (exprimés en unités d'énergie)
-    QuestionSet a275 = questionSetService.findByCode(QuestionCode.A275);
-    if( a275 == null ) {
-        a275 = new QuestionSet(QuestionCode.A275, true, a273);
-        JPA.em().persist(a275);
-    }
-    // == A1024
-    // Listez les totaux de combustibles utilisés (exprimés en volume)
-    QuestionSet a1024 = questionSetService.findByCode(QuestionCode.A1024);
-    if( a1024 == null ) {
-        a1024 = new QuestionSet(QuestionCode.A1024, true, a273);
-        JPA.em().persist(a1024);
-    }
-    // == A1027
-    // Listez les totaux de combustibles utilisés (exprimés en poids)
-    QuestionSet a1027 = questionSetService.findByCode(QuestionCode.A1027);
-    if( a1027 == null ) {
-        a1027 = new QuestionSet(QuestionCode.A1027, true, a273);
-        JPA.em().persist(a1027);
-    }
-    // == A279
-    // Listez les gaz réfrigérants
-    QuestionSet a279 = questionSetService.findByCode(QuestionCode.A279);
-    if( a279 == null ) {
-        a279 = new QuestionSet(QuestionCode.A279, true, a273);
-        JPA.em().persist(a279);
-    }
-    // == A282
-    // Traitement
-    QuestionSet a282 = questionSetService.findByCode(QuestionCode.A282);
-    if( a282 == null ) {
-        a282 = new QuestionSet(QuestionCode.A282, false, a244);
-        JPA.em().persist(a282);
-    }
-    // == A284
-    // Listez les totaux de combustibles (exprimés en unités d'énergie)
-    QuestionSet a284 = questionSetService.findByCode(QuestionCode.A284);
-    if( a284 == null ) {
-        a284 = new QuestionSet(QuestionCode.A284, true, a282);
-        JPA.em().persist(a284);
-    }
-    // == A1030
-    // Listez les totaux de combustibles (exprimés en volume)
-    QuestionSet a1030 = questionSetService.findByCode(QuestionCode.A1030);
-    if( a1030 == null ) {
-        a1030 = new QuestionSet(QuestionCode.A1030, true, a282);
-        JPA.em().persist(a1030);
-    }
-    // == A1033
-    // Listez les totaux de combustibles (exprimés en poids)
-    QuestionSet a1033 = questionSetService.findByCode(QuestionCode.A1033);
-    if( a1033 == null ) {
-        a1033 = new QuestionSet(QuestionCode.A1033, true, a282);
-        JPA.em().persist(a1033);
-    }
-    // == A288
-    // Listez les gaz réfrigérants
-    QuestionSet a288 = questionSetService.findByCode(QuestionCode.A288);
-    if( a288 == null ) {
-        a288 = new QuestionSet(QuestionCode.A288, true, a282);
-        JPA.em().persist(a288);
-    }
-    // == A291
-    // Utilisation
-    QuestionSet a291 = questionSetService.findByCode(QuestionCode.A291);
-    if( a291 == null ) {
-        a291 = new QuestionSet(QuestionCode.A291, false, a244);
-        JPA.em().persist(a291);
-    }
-    // == A297
-    // Listez les gaz émis par utilisation de produit
-    QuestionSet a297 = questionSetService.findByCode(QuestionCode.A297);
-    if( a297 == null ) {
-        a297 = new QuestionSet(QuestionCode.A297, true, a291);
-        JPA.em().persist(a297);
-    }
-    // == A300
-    // Traitement de fin de vie
-    QuestionSet a300 = questionSetService.findByCode(QuestionCode.A300);
-    if( a300 == null ) {
-        a300 = new QuestionSet(QuestionCode.A300, false, a244);
-        JPA.em().persist(a300);
-    }
-    // == A5010
-    // Créez autant de postes de déchet que nécessaire
-    QuestionSet a5010 = questionSetService.findByCode(QuestionCode.A5010);
-    if( a5010 == null ) {
-        a5010 = new QuestionSet(QuestionCode.A5010, true, a300);
-        JPA.em().persist(a5010);
+    private void createQuestionSetA1() {
+        // == A1
+        // Données générales
+        a1 = questionSetService.findByCode(QuestionCode.A1);
+        if( a1 == null ) {
+            a1 = new QuestionSet(QuestionCode.A1, false, null);
+            JPA.em().persist(a1);
+        }
+        form2.getQuestionSets().add(a1);
+        JPA.em().persist(form2);
+    }
+    private void createQuestionSetA13() {
+        // == A13
+        // Consommation de combustibles
+        a13 = questionSetService.findByCode(QuestionCode.A13);
+        if( a13 == null ) {
+            a13 = new QuestionSet(QuestionCode.A13, false, a1);
+            JPA.em().persist(a13);
+        }
+    }
+    private void createQuestionSetA15() {
+        // == A15
+        // Combustion de combustible (mesurés en unités d'énergie)
+        a15 = questionSetService.findByCode(QuestionCode.A15);
+        if( a15 == null ) {
+            a15 = new QuestionSet(QuestionCode.A15, true, a13);
+            JPA.em().persist(a15);
+        }
+    }
+    private void createQuestionSetA1000() {
+        // == A1000
+        // Combustion de combustible (mesurés en volume)
+        a1000 = questionSetService.findByCode(QuestionCode.A1000);
+        if( a1000 == null ) {
+            a1000 = new QuestionSet(QuestionCode.A1000, true, a13);
+            JPA.em().persist(a1000);
+        }
+    }
+    private void createQuestionSetA1003() {
+        // == A1003
+        // Combustion de combustible  (mesurés en poids)
+        a1003 = questionSetService.findByCode(QuestionCode.A1003);
+        if( a1003 == null ) {
+            a1003 = new QuestionSet(QuestionCode.A1003, true, a13);
+            JPA.em().persist(a1003);
+        }
+    }
+    private void createQuestionSetA20() {
+        // == A20
+        // Electricité et vapeur achetées
+        a20 = questionSetService.findByCode(QuestionCode.A20);
+        if( a20 == null ) {
+            a20 = new QuestionSet(QuestionCode.A20, false, null);
+            JPA.em().persist(a20);
+        }
+        form2.getQuestionSets().add(a20);
+        JPA.em().persist(form2);
+    }
+    private void createQuestionSetA22() {
+        // == A22
+        // Electricité
+        a22 = questionSetService.findByCode(QuestionCode.A22);
+        if( a22 == null ) {
+            a22 = new QuestionSet(QuestionCode.A22, false, a20);
+            JPA.em().persist(a22);
+        }
+    }
+    private void createQuestionSetA25() {
+        // == A25
+        // Vapeur
+        a25 = questionSetService.findByCode(QuestionCode.A25);
+        if( a25 == null ) {
+            a25 = new QuestionSet(QuestionCode.A25, true, a20);
+            JPA.em().persist(a25);
+        }
+    }
+    private void createQuestionSetA31() {
+        // == A31
+        // GES des procédés de production
+        a31 = questionSetService.findByCode(QuestionCode.A31);
+        if( a31 == null ) {
+            a31 = new QuestionSet(QuestionCode.A31, false, null);
+            JPA.em().persist(a31);
+        }
+        form2.getQuestionSets().add(a31);
+        JPA.em().persist(form2);
+    }
+    private void createQuestionSetA34() {
+        // == A34
+        // Type de GES émis par les procédés de production
+        a34 = questionSetService.findByCode(QuestionCode.A34);
+        if( a34 == null ) {
+            a34 = new QuestionSet(QuestionCode.A34, true, a31);
+            JPA.em().persist(a34);
+        }
+    }
+    private void createQuestionSetA37() {
+        // == A37
+        // Systèmes de refroidissement
+        a37 = questionSetService.findByCode(QuestionCode.A37);
+        if( a37 == null ) {
+            a37 = new QuestionSet(QuestionCode.A37, false, null);
+            JPA.em().persist(a37);
+        }
+        form2.getQuestionSets().add(a37);
+        JPA.em().persist(form2);
+    }
+    private void createQuestionSetA40() {
+        // == A40
+        // Méthodes au choix
+        a40 = questionSetService.findByCode(QuestionCode.A40);
+        if( a40 == null ) {
+            a40 = new QuestionSet(QuestionCode.A40, false, a37);
+            JPA.em().persist(a40);
+        }
+    }
+    private void createQuestionSetA41() {
+        // == A41
+        // Méthode directe à partir des recharges
+        a41 = questionSetService.findByCode(QuestionCode.A41);
+        if( a41 == null ) {
+            a41 = new QuestionSet(QuestionCode.A41, false, a40);
+            JPA.em().persist(a41);
+        }
+    }
+    private void createQuestionSetA42() {
+        // == A42
+        // Listes des types de gaz réfrigérants utilisés
+        a42 = questionSetService.findByCode(QuestionCode.A42);
+        if( a42 == null ) {
+            a42 = new QuestionSet(QuestionCode.A42, true, a41);
+            JPA.em().persist(a42);
+        }
+    }
+    private void createQuestionSetA45() {
+        // == A45
+        // Méthode indirecte à partir de la puissance des équipements de froid
+        a45 = questionSetService.findByCode(QuestionCode.A45);
+        if( a45 == null ) {
+            a45 = new QuestionSet(QuestionCode.A45, false, a40);
+            JPA.em().persist(a45);
+        }
+    }
+    private void createQuestionSetA47() {
+        // == A47
+        // Méthode indirecte à partir de la consommation éléctrique du site
+        a47 = questionSetService.findByCode(QuestionCode.A47);
+        if( a47 == null ) {
+            a47 = new QuestionSet(QuestionCode.A47, false, a40);
+            JPA.em().persist(a47);
+        }
+    }
+    private void createQuestionSetA6000() {
+        // == A6000
+        // Eaux usées industrielles traitées par l'entreprise
+        a6000 = questionSetService.findByCode(QuestionCode.A6000);
+        if( a6000 == null ) {
+            a6000 = new QuestionSet(QuestionCode.A6000, false, null);
+            JPA.em().persist(a6000);
+        }
+        form2.getQuestionSets().add(a6000);
+        JPA.em().persist(form2);
+    }
+    private void createQuestionSetA6001() {
+        // == A6001
+        // Méthodes alternatives
+        a6001 = questionSetService.findByCode(QuestionCode.A6001);
+        if( a6001 == null ) {
+            a6001 = new QuestionSet(QuestionCode.A6001, false, a6000);
+            JPA.em().persist(a6001);
+        }
+    }
+    private void createQuestionSetA6002() {
+        // == A6002
+        // Méthode par la quantité de m³ rejetés
+        a6002 = questionSetService.findByCode(QuestionCode.A6002);
+        if( a6002 == null ) {
+            a6002 = new QuestionSet(QuestionCode.A6002, false, a6001);
+            JPA.em().persist(a6002);
+        }
+    }
+    private void createQuestionSetA6006() {
+        // == A6006
+        // Méthode par le poids de CO2 chimique des effluents rejetés
+        a6006 = questionSetService.findByCode(QuestionCode.A6006);
+        if( a6006 == null ) {
+            a6006 = new QuestionSet(QuestionCode.A6006, false, a6001);
+            JPA.em().persist(a6006);
+        }
+    }
+    private void createQuestionSetA50() {
+        // == A50
+        // Mobilité
+        a50 = questionSetService.findByCode(QuestionCode.A50);
+        if( a50 == null ) {
+            a50 = new QuestionSet(QuestionCode.A50, false, null);
+            JPA.em().persist(a50);
+        }
+        form3.getQuestionSets().add(a50);
+        JPA.em().persist(form3);
+    }
+    private void createQuestionSetA52() {
+        // == A52
+        // Transport routier
+        a52 = questionSetService.findByCode(QuestionCode.A52);
+        if( a52 == null ) {
+            a52 = new QuestionSet(QuestionCode.A52, false, null);
+            JPA.em().persist(a52);
+        }
+        form3.getQuestionSets().add(a52);
+        JPA.em().persist(form3);
+    }
+    private void createQuestionSetA400() {
+        // == A400
+        // Véhicules de société ou détenus par l'entreprise
+        a400 = questionSetService.findByCode(QuestionCode.A400);
+        if( a400 == null ) {
+            a400 = new QuestionSet(QuestionCode.A400, false, a52);
+            JPA.em().persist(a400);
+        }
+    }
+    private void createQuestionSetA401() {
+        // == A401
+        // Méthode au choix
+        a401 = questionSetService.findByCode(QuestionCode.A401);
+        if( a401 == null ) {
+            a401 = new QuestionSet(QuestionCode.A401, false, a400);
+            JPA.em().persist(a401);
+        }
+    }
+    private void createQuestionSetA402() {
+        // == A402
+        // Méthode basée sur les consommations 
+        a402 = questionSetService.findByCode(QuestionCode.A402);
+        if( a402 == null ) {
+            a402 = new QuestionSet(QuestionCode.A402, false, a401);
+            JPA.em().persist(a402);
+        }
+    }
+    private void createQuestionSetA406() {
+        // == A406
+        // Méthode basée sur le kilométrage
+        a406 = questionSetService.findByCode(QuestionCode.A406);
+        if( a406 == null ) {
+            a406 = new QuestionSet(QuestionCode.A406, false, a401);
+            JPA.em().persist(a406);
+        }
+    }
+    private void createQuestionSetA407() {
+        // == A407
+        // Créez autant de catégories de véhicules que souhaité
+        a407 = questionSetService.findByCode(QuestionCode.A407);
+        if( a407 == null ) {
+            a407 = new QuestionSet(QuestionCode.A407, true, a406);
+            JPA.em().persist(a407);
+        }
+    }
+    private void createQuestionSetA412() {
+        // == A412
+        // Méthode basée sur les dépenses
+        a412 = questionSetService.findByCode(QuestionCode.A412);
+        if( a412 == null ) {
+            a412 = new QuestionSet(QuestionCode.A412, false, a401);
+            JPA.em().persist(a412);
+        }
+    }
+    private void createQuestionSetA413() {
+        // == A413
+        // Créez autant de catégories de véhicules que souhaité
+        a413 = questionSetService.findByCode(QuestionCode.A413);
+        if( a413 == null ) {
+            a413 = new QuestionSet(QuestionCode.A413, true, a412);
+            JPA.em().persist(a413);
+        }
+    }
+    private void createQuestionSetA518() {
+        // == A518
+        // Autres véhicules pour déplacements domicile-travail des employés
+        a518 = questionSetService.findByCode(QuestionCode.A518);
+        if( a518 == null ) {
+            a518 = new QuestionSet(QuestionCode.A518, false, a52);
+            JPA.em().persist(a518);
+        }
+    }
+    private void createQuestionSetA519() {
+        // == A519
+        // Méthode au choix
+        a519 = questionSetService.findByCode(QuestionCode.A519);
+        if( a519 == null ) {
+            a519 = new QuestionSet(QuestionCode.A519, false, a518);
+            JPA.em().persist(a519);
+        }
+    }
+    private void createQuestionSetA502() {
+        // == A502
+        // Méthode basée sur les consommations
+        a502 = questionSetService.findByCode(QuestionCode.A502);
+        if( a502 == null ) {
+            a502 = new QuestionSet(QuestionCode.A502, false, a519);
+            JPA.em().persist(a502);
+        }
+    }
+    private void createQuestionSetA506() {
+        // == A506
+        // Méthode basée sur le kilométrage
+        a506 = questionSetService.findByCode(QuestionCode.A506);
+        if( a506 == null ) {
+            a506 = new QuestionSet(QuestionCode.A506, false, a519);
+            JPA.em().persist(a506);
+        }
+    }
+    private void createQuestionSetA507() {
+        // == A507
+        // Créez autant de catégories de véhicules que souhaité
+        a507 = questionSetService.findByCode(QuestionCode.A507);
+        if( a507 == null ) {
+            a507 = new QuestionSet(QuestionCode.A507, true, a506);
+            JPA.em().persist(a507);
+        }
+    }
+    private void createQuestionSetA512() {
+        // == A512
+        // Méthode basée sur les dépenses
+        a512 = questionSetService.findByCode(QuestionCode.A512);
+        if( a512 == null ) {
+            a512 = new QuestionSet(QuestionCode.A512, false, a519);
+            JPA.em().persist(a512);
+        }
+    }
+    private void createQuestionSetA513() {
+        // == A513
+        // Créez autant de catégories de véhicules que souhaité
+        a513 = questionSetService.findByCode(QuestionCode.A513);
+        if( a513 == null ) {
+            a513 = new QuestionSet(QuestionCode.A513, true, a512);
+            JPA.em().persist(a513);
+        }
+    }
+    private void createQuestionSetA600() {
+        // == A600
+        // Autres véhicules pour déplacements divers (véhicules loués, visiteurs, consultants, sous-traitants…)
+        a600 = questionSetService.findByCode(QuestionCode.A600);
+        if( a600 == null ) {
+            a600 = new QuestionSet(QuestionCode.A600, false, a52);
+            JPA.em().persist(a600);
+        }
+    }
+    private void createQuestionSetA601() {
+        // == A601
+        // Méthode au choix
+        a601 = questionSetService.findByCode(QuestionCode.A601);
+        if( a601 == null ) {
+            a601 = new QuestionSet(QuestionCode.A601, false, a600);
+            JPA.em().persist(a601);
+        }
+    }
+    private void createQuestionSetA602() {
+        // == A602
+        // Méthode basée sur les consommations
+        a602 = questionSetService.findByCode(QuestionCode.A602);
+        if( a602 == null ) {
+            a602 = new QuestionSet(QuestionCode.A602, false, a601);
+            JPA.em().persist(a602);
+        }
+    }
+    private void createQuestionSetA606() {
+        // == A606
+        // Méthode basée sur le kilométrage
+        a606 = questionSetService.findByCode(QuestionCode.A606);
+        if( a606 == null ) {
+            a606 = new QuestionSet(QuestionCode.A606, false, a601);
+            JPA.em().persist(a606);
+        }
+    }
+    private void createQuestionSetA607() {
+        // == A607
+        // Créez autant de catégories de véhicules que souhaité
+        a607 = questionSetService.findByCode(QuestionCode.A607);
+        if( a607 == null ) {
+            a607 = new QuestionSet(QuestionCode.A607, true, a606);
+            JPA.em().persist(a607);
+        }
+    }
+    private void createQuestionSetA612() {
+        // == A612
+        // Méthode basée sur les dépenses
+        a612 = questionSetService.findByCode(QuestionCode.A612);
+        if( a612 == null ) {
+            a612 = new QuestionSet(QuestionCode.A612, false, a601);
+            JPA.em().persist(a612);
+        }
+    }
+    private void createQuestionSetA613() {
+        // == A613
+        // Créez autant de catégories de véhicules que souhaité
+        a613 = questionSetService.findByCode(QuestionCode.A613);
+        if( a613 == null ) {
+            a613 = new QuestionSet(QuestionCode.A613, true, a612);
+            JPA.em().persist(a613);
+        }
+    }
+    private void createQuestionSetA93() {
+        // == A93
+        // Transport en commun
+        a93 = questionSetService.findByCode(QuestionCode.A93);
+        if( a93 == null ) {
+            a93 = new QuestionSet(QuestionCode.A93, false, null);
+            JPA.em().persist(a93);
+        }
+        form3.getQuestionSets().add(a93);
+        JPA.em().persist(form3);
+    }
+    private void createQuestionSetA94() {
+        // == A94
+        // Estimation par le détail des déplacements
+        a94 = questionSetService.findByCode(QuestionCode.A94);
+        if( a94 == null ) {
+            a94 = new QuestionSet(QuestionCode.A94, false, a93);
+            JPA.em().persist(a94);
+        }
+    }
+    private void createQuestionSetA113() {
+        // == A113
+        // Transport en avion (déplacements professionnels ou des visiteurs)
+        a113 = questionSetService.findByCode(QuestionCode.A113);
+        if( a113 == null ) {
+            a113 = new QuestionSet(QuestionCode.A113, false, null);
+            JPA.em().persist(a113);
+        }
+        form3.getQuestionSets().add(a113);
+        JPA.em().persist(form3);
+    }
+    private void createQuestionSetA114() {
+        // == A114
+        // Méthode par le détail des vols
+        a114 = questionSetService.findByCode(QuestionCode.A114);
+        if( a114 == null ) {
+            a114 = new QuestionSet(QuestionCode.A114, false, a113);
+            JPA.em().persist(a114);
+        }
+    }
+    private void createQuestionSetA115() {
+        // == A115
+        // Créez autant de catégories de vol que nécessaire
+        a115 = questionSetService.findByCode(QuestionCode.A115);
+        if( a115 == null ) {
+            a115 = new QuestionSet(QuestionCode.A115, true, a114);
+            JPA.em().persist(a115);
+        }
+    }
+    private void createQuestionSetA121() {
+        // == A121
+        // Méthode des moyennes
+        a121 = questionSetService.findByCode(QuestionCode.A121);
+        if( a121 == null ) {
+            a121 = new QuestionSet(QuestionCode.A121, false, a113);
+            JPA.em().persist(a121);
+        }
+    }
+    private void createQuestionSetA205() {
+        // == A205
+        // Achat de biens et services
+        a205 = questionSetService.findByCode(QuestionCode.A205);
+        if( a205 == null ) {
+            a205 = new QuestionSet(QuestionCode.A205, false, null);
+            JPA.em().persist(a205);
+        }
+        form4.getQuestionSets().add(a205);
+        JPA.em().persist(form4);
+    }
+    private void createQuestionSetA208() {
+        // == A208
+        // Achat de biens et services
+        a208 = questionSetService.findByCode(QuestionCode.A208);
+        if( a208 == null ) {
+            a208 = new QuestionSet(QuestionCode.A208, false, null);
+            JPA.em().persist(a208);
+        }
+        form4.getQuestionSets().add(a208);
+        JPA.em().persist(form4);
+    }
+    private void createQuestionSetA209() {
+        // == A209
+        // Créez et nommez vos postes d'achats (et préciser la famille et le type de matériaux ensuite)
+        a209 = questionSetService.findByCode(QuestionCode.A209);
+        if( a209 == null ) {
+            a209 = new QuestionSet(QuestionCode.A209, true, a208);
+            JPA.em().persist(a209);
+        }
+    }
+    private void createQuestionSetA223() {
+        // == A223
+        // Autres matériaux spécifiques pour lesquels l'entreprise dispose du facteur d'émissions cradle-to-gate
+        a223 = questionSetService.findByCode(QuestionCode.A223);
+        if( a223 == null ) {
+            a223 = new QuestionSet(QuestionCode.A223, false, a208);
+            JPA.em().persist(a223);
+        }
+    }
+    private void createQuestionSetA224() {
+        // == A224
+        // Créez et nommez vos postes d'achats spécifiques (et précisez ensuite la famille, le type de matériaux et le facteur d'émission cradle-to-gate spécifique)
+        a224 = questionSetService.findByCode(QuestionCode.A224);
+        if( a224 == null ) {
+            a224 = new QuestionSet(QuestionCode.A224, true, a223);
+            JPA.em().persist(a224);
+        }
+    }
+    private void createQuestionSetA128() {
+        // == A128
+        // Transport et distribution de marchandises amont
+        a128 = questionSetService.findByCode(QuestionCode.A128);
+        if( a128 == null ) {
+            a128 = new QuestionSet(QuestionCode.A128, false, null);
+            JPA.em().persist(a128);
+        }
+        form4.getQuestionSets().add(a128);
+        JPA.em().persist(form4);
+    }
+    private void createQuestionSetA130() {
+        // == A130
+        // Transport amont
+        a130 = questionSetService.findByCode(QuestionCode.A130);
+        if( a130 == null ) {
+            a130 = new QuestionSet(QuestionCode.A130, false, null);
+            JPA.em().persist(a130);
+        }
+        form4.getQuestionSets().add(a130);
+        JPA.em().persist(form4);
+    }
+    private void createQuestionSetA131() {
+        // == A131
+        // Transport avec des véhicules détenus par l'entreprise
+        a131 = questionSetService.findByCode(QuestionCode.A131);
+        if( a131 == null ) {
+            a131 = new QuestionSet(QuestionCode.A131, false, a130);
+            JPA.em().persist(a131);
+        }
+    }
+    private void createQuestionSetA132() {
+        // == A132
+        // Méthode par consommation de carburants
+        a132 = questionSetService.findByCode(QuestionCode.A132);
+        if( a132 == null ) {
+            a132 = new QuestionSet(QuestionCode.A132, false, a131);
+            JPA.em().persist(a132);
+        }
+    }
+    private void createQuestionSetA140() {
+        // == A140
+        // Transport effectué par des transporteurs
+        a140 = questionSetService.findByCode(QuestionCode.A140);
+        if( a140 == null ) {
+            a140 = new QuestionSet(QuestionCode.A140, false, a130);
+            JPA.em().persist(a140);
+        }
+    }
+    private void createQuestionSetA141() {
+        // == A141
+        // Méthode basée sur le kilométrage
+        a141 = questionSetService.findByCode(QuestionCode.A141);
+        if( a141 == null ) {
+            a141 = new QuestionSet(QuestionCode.A141, false, a140);
+            JPA.em().persist(a141);
+        }
+    }
+    private void createQuestionSetA142() {
+        // == A142
+        // Créez autant de schémas modaux que nécessaire
+        a142 = questionSetService.findByCode(QuestionCode.A142);
+        if( a142 == null ) {
+            a142 = new QuestionSet(QuestionCode.A142, true, a141);
+            JPA.em().persist(a142);
+        }
+    }
+    private void createQuestionSetA157() {
+        // == A157
+        // Méthode des moyennes
+        a157 = questionSetService.findByCode(QuestionCode.A157);
+        if( a157 == null ) {
+            a157 = new QuestionSet(QuestionCode.A157, false, a140);
+            JPA.em().persist(a157);
+        }
+    }
+    private void createQuestionSetA163() {
+        // == A163
+        // Distribution amont: Energie et froid
+        a163 = questionSetService.findByCode(QuestionCode.A163);
+        if( a163 == null ) {
+            a163 = new QuestionSet(QuestionCode.A163, false, null);
+            JPA.em().persist(a163);
+        }
+        form4.getQuestionSets().add(a163);
+        JPA.em().persist(form4);
+    }
+    private void createQuestionSetA164() {
+        // == A164
+        // Créez autant de postes de consommation que nécessaire
+        a164 = questionSetService.findByCode(QuestionCode.A164);
+        if( a164 == null ) {
+            a164 = new QuestionSet(QuestionCode.A164, true, a163);
+            JPA.em().persist(a164);
+        }
+    }
+    private void createQuestionSetA166() {
+        // == A166
+        // Listez les totaux de combustibles consommés (exprimés en unités d'énergie)
+        a166 = questionSetService.findByCode(QuestionCode.A166);
+        if( a166 == null ) {
+            a166 = new QuestionSet(QuestionCode.A166, true, a164);
+            JPA.em().persist(a166);
+        }
+    }
+    private void createQuestionSetA1006() {
+        // == A1006
+        // Listez les totaux de combustibles consommés (exprimés en volume)
+        a1006 = questionSetService.findByCode(QuestionCode.A1006);
+        if( a1006 == null ) {
+            a1006 = new QuestionSet(QuestionCode.A1006, true, a164);
+            JPA.em().persist(a1006);
+        }
+    }
+    private void createQuestionSetA1009() {
+        // == A1009
+        // Listez les totaux de combustibles consommés (exprimés en poids)
+        a1009 = questionSetService.findByCode(QuestionCode.A1009);
+        if( a1009 == null ) {
+            a1009 = new QuestionSet(QuestionCode.A1009, true, a164);
+            JPA.em().persist(a1009);
+        }
+    }
+    private void createQuestionSetA170() {
+        // == A170
+        // Listez les gaz réfrigérants utilisés pour les marchandises amont
+        a170 = questionSetService.findByCode(QuestionCode.A170);
+        if( a170 == null ) {
+            a170 = new QuestionSet(QuestionCode.A170, true, a164);
+            JPA.em().persist(a170);
+        }
+    }
+    private void createQuestionSetA173() {
+        // == A173
+        // Déchets générés par les opérations
+        a173 = questionSetService.findByCode(QuestionCode.A173);
+        if( a173 == null ) {
+            a173 = new QuestionSet(QuestionCode.A173, false, null);
+            JPA.em().persist(a173);
+        }
+        form5.getQuestionSets().add(a173);
+        JPA.em().persist(form5);
+    }
+    private void createQuestionSetA4999() {
+        // == A4999
+        // Déchets solides
+        a4999 = questionSetService.findByCode(QuestionCode.A4999);
+        if( a4999 == null ) {
+            a4999 = new QuestionSet(QuestionCode.A4999, false, null);
+            JPA.em().persist(a4999);
+        }
+        form5.getQuestionSets().add(a4999);
+        JPA.em().persist(form5);
+    }
+    private void createQuestionSetA5000() {
+        // == A5000
+        // Listez vos différents postes de déchets
+        a5000 = questionSetService.findByCode(QuestionCode.A5000);
+        if( a5000 == null ) {
+            a5000 = new QuestionSet(QuestionCode.A5000, true, a4999);
+            JPA.em().persist(a5000);
+        }
+    }
+    private void createQuestionSetA180() {
+        // == A180
+        // Eaux usées
+        a180 = questionSetService.findByCode(QuestionCode.A180);
+        if( a180 == null ) {
+            a180 = new QuestionSet(QuestionCode.A180, false, null);
+            JPA.em().persist(a180);
+        }
+        form5.getQuestionSets().add(a180);
+        JPA.em().persist(form5);
+    }
+    private void createQuestionSetA181() {
+        // == A181
+        // Eaux usées domestiques par grand type de bâtiments
+        a181 = questionSetService.findByCode(QuestionCode.A181);
+        if( a181 == null ) {
+            a181 = new QuestionSet(QuestionCode.A181, false, a180);
+            JPA.em().persist(a181);
+        }
+    }
+    private void createQuestionSetA182() {
+        // == A182
+        // Usine ou atelier
+        a182 = questionSetService.findByCode(QuestionCode.A182);
+        if( a182 == null ) {
+            a182 = new QuestionSet(QuestionCode.A182, false, a181);
+            JPA.em().persist(a182);
+        }
+    }
+    private void createQuestionSetA185() {
+        // == A185
+        // Bureau
+        a185 = questionSetService.findByCode(QuestionCode.A185);
+        if( a185 == null ) {
+            a185 = new QuestionSet(QuestionCode.A185, false, a181);
+            JPA.em().persist(a185);
+        }
+    }
+    private void createQuestionSetA188() {
+        // == A188
+        // Hôtel, pension, hôpitaux, prison
+        a188 = questionSetService.findByCode(QuestionCode.A188);
+        if( a188 == null ) {
+            a188 = new QuestionSet(QuestionCode.A188, false, a181);
+            JPA.em().persist(a188);
+        }
+    }
+    private void createQuestionSetA191() {
+        // == A191
+        // Restaurant ou cantine
+        a191 = questionSetService.findByCode(QuestionCode.A191);
+        if( a191 == null ) {
+            a191 = new QuestionSet(QuestionCode.A191, false, a181);
+            JPA.em().persist(a191);
+        }
+    }
+    private void createQuestionSetA194() {
+        // == A194
+        // Eaux usées industrielles traitées par des tiers
+        a194 = questionSetService.findByCode(QuestionCode.A194);
+        if( a194 == null ) {
+            a194 = new QuestionSet(QuestionCode.A194, false, a180);
+            JPA.em().persist(a194);
+        }
+    }
+    private void createQuestionSetA196() {
+        // == A196
+        // Méthodes alternatives
+        a196 = questionSetService.findByCode(QuestionCode.A196);
+        if( a196 == null ) {
+            a196 = new QuestionSet(QuestionCode.A196, false, a194);
+            JPA.em().persist(a196);
+        }
+    }
+    private void createQuestionSetA197() {
+        // == A197
+        // Méthode par la quantité de m³ rejetés
+        a197 = questionSetService.findByCode(QuestionCode.A197);
+        if( a197 == null ) {
+            a197 = new QuestionSet(QuestionCode.A197, false, a196);
+            JPA.em().persist(a197);
+        }
+    }
+    private void createQuestionSetA201() {
+        // == A201
+        // Méthode par le poids de CO2 chimique des effluents rejetés
+        a201 = questionSetService.findByCode(QuestionCode.A201);
+        if( a201 == null ) {
+            a201 = new QuestionSet(QuestionCode.A201, false, a196);
+            JPA.em().persist(a201);
+        }
+    }
+    private void createQuestionSetA229() {
+        // == A229
+        // Biens d'équipement
+        a229 = questionSetService.findByCode(QuestionCode.A229);
+        if( a229 == null ) {
+            a229 = new QuestionSet(QuestionCode.A229, false, null);
+            JPA.em().persist(a229);
+        }
+        form6.getQuestionSets().add(a229);
+        JPA.em().persist(form6);
+    }
+    private void createQuestionSetA231() {
+        // == A231
+        // Créez et nommez vos biens d'équipement
+        a231 = questionSetService.findByCode(QuestionCode.A231);
+        if( a231 == null ) {
+            a231 = new QuestionSet(QuestionCode.A231, true, a229);
+            JPA.em().persist(a231);
+        }
+    }
+    private void createQuestionSetA237() {
+        // == A237
+        // Autres biens d'équipement spécifiques pour lesquels l'entreprise dispose du facteur d'émission cradle-to-gate
+        a237 = questionSetService.findByCode(QuestionCode.A237);
+        if( a237 == null ) {
+            a237 = new QuestionSet(QuestionCode.A237, false, a229);
+            JPA.em().persist(a237);
+        }
+    }
+    private void createQuestionSetA238() {
+        // == A238
+        // Créez et nommez vos biens d'équipement
+        a238 = questionSetService.findByCode(QuestionCode.A238);
+        if( a238 == null ) {
+            a238 = new QuestionSet(QuestionCode.A238, true, a237);
+            JPA.em().persist(a238);
+        }
+    }
+    private void createQuestionSetA309() {
+        // == A309
+        // Actifs loués (aval)
+        a309 = questionSetService.findByCode(QuestionCode.A309);
+        if( a309 == null ) {
+            a309 = new QuestionSet(QuestionCode.A309, false, null);
+            JPA.em().persist(a309);
+        }
+        form6.getQuestionSets().add(a309);
+        JPA.em().persist(form6);
+    }
+    private void createQuestionSetA311() {
+        // == A311
+        // Créez autant de catégories d'actifs loués que nécessaire
+        a311 = questionSetService.findByCode(QuestionCode.A311);
+        if( a311 == null ) {
+            a311 = new QuestionSet(QuestionCode.A311, true, a309);
+            JPA.em().persist(a311);
+        }
+    }
+    private void createQuestionSetA313() {
+        // == A313
+        // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en unités d'énergie)
+        a313 = questionSetService.findByCode(QuestionCode.A313);
+        if( a313 == null ) {
+            a313 = new QuestionSet(QuestionCode.A313, true, a311);
+            JPA.em().persist(a313);
+        }
+    }
+    private void createQuestionSetA1012() {
+        // == A1012
+        // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en volume)
+        a1012 = questionSetService.findByCode(QuestionCode.A1012);
+        if( a1012 == null ) {
+            a1012 = new QuestionSet(QuestionCode.A1012, true, a311);
+            JPA.em().persist(a1012);
+        }
+    }
+    private void createQuestionSetA1015() {
+        // == A1015
+        // Listez les totaux de combustibles utilisés pour les actifs loués (exprimés en poids)
+        a1015 = questionSetService.findByCode(QuestionCode.A1015);
+        if( a1015 == null ) {
+            a1015 = new QuestionSet(QuestionCode.A1015, true, a311);
+            JPA.em().persist(a1015);
+        }
+    }
+    private void createQuestionSetA317() {
+        // == A317
+        // Listez les gaz réfrigérants et autres nécessaires à l'opération des actifs loués
+        a317 = questionSetService.findByCode(QuestionCode.A317);
+        if( a317 == null ) {
+            a317 = new QuestionSet(QuestionCode.A317, true, a311);
+            JPA.em().persist(a317);
+        }
+    }
+    private void createQuestionSetA320() {
+        // == A320
+        // Franchises
+        a320 = questionSetService.findByCode(QuestionCode.A320);
+        if( a320 == null ) {
+            a320 = new QuestionSet(QuestionCode.A320, false, null);
+            JPA.em().persist(a320);
+        }
+        form6.getQuestionSets().add(a320);
+        JPA.em().persist(form6);
+    }
+    private void createQuestionSetA322() {
+        // == A322
+        // Créez autant de catégories de franchisés que nécessaire
+        a322 = questionSetService.findByCode(QuestionCode.A322);
+        if( a322 == null ) {
+            a322 = new QuestionSet(QuestionCode.A322, true, a320);
+            JPA.em().persist(a322);
+        }
+    }
+    private void createQuestionSetA325() {
+        // == A325
+        // Listez les moyennes de combustibles utilisés par franchisé (exprimés en unités d'énergie)
+        a325 = questionSetService.findByCode(QuestionCode.A325);
+        if( a325 == null ) {
+            a325 = new QuestionSet(QuestionCode.A325, true, a322);
+            JPA.em().persist(a325);
+        }
+    }
+    private void createQuestionSetA1018() {
+        // == A1018
+        // Listez les moyennes de combustibles utilisés par franchisé (exprimés en volume)
+        a1018 = questionSetService.findByCode(QuestionCode.A1018);
+        if( a1018 == null ) {
+            a1018 = new QuestionSet(QuestionCode.A1018, true, a322);
+            JPA.em().persist(a1018);
+        }
+    }
+    private void createQuestionSetA1021() {
+        // == A1021
+        // Listez les moyennes de combustibles utilisés par franchisé (exprimés en poids)
+        a1021 = questionSetService.findByCode(QuestionCode.A1021);
+        if( a1021 == null ) {
+            a1021 = new QuestionSet(QuestionCode.A1021, true, a322);
+            JPA.em().persist(a1021);
+        }
+    }
+    private void createQuestionSetA329() {
+        // == A329
+        // Listez les gaz réfrigérants et autres utilisés en moyenne par franchisé
+        a329 = questionSetService.findByCode(QuestionCode.A329);
+        if( a329 == null ) {
+            a329 = new QuestionSet(QuestionCode.A329, true, a322);
+            JPA.em().persist(a329);
+        }
+    }
+    private void createQuestionSetA332() {
+        // == A332
+        // Investissements financiers
+        a332 = questionSetService.findByCode(QuestionCode.A332);
+        if( a332 == null ) {
+            a332 = new QuestionSet(QuestionCode.A332, false, null);
+            JPA.em().persist(a332);
+        }
+        form6.getQuestionSets().add(a332);
+        JPA.em().persist(form6);
+    }
+    private void createQuestionSetA334() {
+        // == A334
+        // Veuillez indiquer ici tous les projets dans lesquels votre entreprise investit
+        a334 = questionSetService.findByCode(QuestionCode.A334);
+        if( a334 == null ) {
+            a334 = new QuestionSet(QuestionCode.A334, true, a332);
+            JPA.em().persist(a334);
+        }
+    }
+    private void createQuestionSetA243() {
+        // == A243
+        // Transport & Distribution, Traitement, Utilisation et Fin de vie des produits vendus
+        a243 = questionSetService.findByCode(QuestionCode.A243);
+        if( a243 == null ) {
+            a243 = new QuestionSet(QuestionCode.A243, false, null);
+            JPA.em().persist(a243);
+        }
+        form7.getQuestionSets().add(a243);
+        JPA.em().persist(form7);
+    }
+    private void createQuestionSetA244() {
+        // == A244
+        // Lister les différents produits ou groupes de produits vendus par l'entreprise
+        a244 = questionSetService.findByCode(QuestionCode.A244);
+        if( a244 == null ) {
+            a244 = new QuestionSet(QuestionCode.A244, true, a243);
+            JPA.em().persist(a244);
+        }
+    }
+    private void createQuestionSetA8000() {
+        // == A8000
+        // Utilisation, traitement et fin de vie
+        a8000 = questionSetService.findByCode(QuestionCode.A8000);
+        if( a8000 == null ) {
+            a8000 = new QuestionSet(QuestionCode.A8000, false, a244);
+            JPA.em().persist(a8000);
+        }
+    }
+    private void createQuestionSetA250() {
+        // == A250
+        // Transport et distribution aval
+        a250 = questionSetService.findByCode(QuestionCode.A250);
+        if( a250 == null ) {
+            a250 = new QuestionSet(QuestionCode.A250, false, a244);
+            JPA.em().persist(a250);
+        }
+    }
+    private void createQuestionSetA252() {
+        // == A252
+        // Transport aval
+        a252 = questionSetService.findByCode(QuestionCode.A252);
+        if( a252 == null ) {
+            a252 = new QuestionSet(QuestionCode.A252, false, a250);
+            JPA.em().persist(a252);
+        }
+    }
+    private void createQuestionSetA253() {
+        // == A253
+        // Méthode par kilométrage
+        a253 = questionSetService.findByCode(QuestionCode.A253);
+        if( a253 == null ) {
+            a253 = new QuestionSet(QuestionCode.A253, false, a252);
+            JPA.em().persist(a253);
+        }
+    }
+    private void createQuestionSetA266() {
+        // == A266
+        // Méthode des moyennes
+        a266 = questionSetService.findByCode(QuestionCode.A266);
+        if( a266 == null ) {
+            a266 = new QuestionSet(QuestionCode.A266, false, a252);
+            JPA.em().persist(a266);
+        }
+    }
+    private void createQuestionSetA272() {
+        // == A272
+        // Distribution avale: Energie et Froid
+        a272 = questionSetService.findByCode(QuestionCode.A272);
+        if( a272 == null ) {
+            a272 = new QuestionSet(QuestionCode.A272, false, a244);
+            JPA.em().persist(a272);
+        }
+    }
+    private void createQuestionSetA273() {
+        // == A273
+        // Créez autant de postes de consommation que nécessaire
+        a273 = questionSetService.findByCode(QuestionCode.A273);
+        if( a273 == null ) {
+            a273 = new QuestionSet(QuestionCode.A273, true, a272);
+            JPA.em().persist(a273);
+        }
+    }
+    private void createQuestionSetA275() {
+        // == A275
+        // Listez les totaux de combustibles utilisés (exprimés en unités d'énergie)
+        a275 = questionSetService.findByCode(QuestionCode.A275);
+        if( a275 == null ) {
+            a275 = new QuestionSet(QuestionCode.A275, true, a273);
+            JPA.em().persist(a275);
+        }
+    }
+    private void createQuestionSetA1024() {
+        // == A1024
+        // Listez les totaux de combustibles utilisés (exprimés en volume)
+        a1024 = questionSetService.findByCode(QuestionCode.A1024);
+        if( a1024 == null ) {
+            a1024 = new QuestionSet(QuestionCode.A1024, true, a273);
+            JPA.em().persist(a1024);
+        }
+    }
+    private void createQuestionSetA1027() {
+        // == A1027
+        // Listez les totaux de combustibles utilisés (exprimés en poids)
+        a1027 = questionSetService.findByCode(QuestionCode.A1027);
+        if( a1027 == null ) {
+            a1027 = new QuestionSet(QuestionCode.A1027, true, a273);
+            JPA.em().persist(a1027);
+        }
+    }
+    private void createQuestionSetA279() {
+        // == A279
+        // Listez les gaz réfrigérants
+        a279 = questionSetService.findByCode(QuestionCode.A279);
+        if( a279 == null ) {
+            a279 = new QuestionSet(QuestionCode.A279, true, a273);
+            JPA.em().persist(a279);
+        }
+    }
+    private void createQuestionSetA282() {
+        // == A282
+        // Traitement
+        a282 = questionSetService.findByCode(QuestionCode.A282);
+        if( a282 == null ) {
+            a282 = new QuestionSet(QuestionCode.A282, false, a244);
+            JPA.em().persist(a282);
+        }
+    }
+    private void createQuestionSetA284() {
+        // == A284
+        // Listez les totaux de combustibles (exprimés en unités d'énergie)
+        a284 = questionSetService.findByCode(QuestionCode.A284);
+        if( a284 == null ) {
+            a284 = new QuestionSet(QuestionCode.A284, true, a282);
+            JPA.em().persist(a284);
+        }
+    }
+    private void createQuestionSetA1030() {
+        // == A1030
+        // Listez les totaux de combustibles (exprimés en volume)
+        a1030 = questionSetService.findByCode(QuestionCode.A1030);
+        if( a1030 == null ) {
+            a1030 = new QuestionSet(QuestionCode.A1030, true, a282);
+            JPA.em().persist(a1030);
+        }
+    }
+    private void createQuestionSetA1033() {
+        // == A1033
+        // Listez les totaux de combustibles (exprimés en poids)
+        a1033 = questionSetService.findByCode(QuestionCode.A1033);
+        if( a1033 == null ) {
+            a1033 = new QuestionSet(QuestionCode.A1033, true, a282);
+            JPA.em().persist(a1033);
+        }
+    }
+    private void createQuestionSetA288() {
+        // == A288
+        // Listez les gaz réfrigérants
+        a288 = questionSetService.findByCode(QuestionCode.A288);
+        if( a288 == null ) {
+            a288 = new QuestionSet(QuestionCode.A288, true, a282);
+            JPA.em().persist(a288);
+        }
+    }
+    private void createQuestionSetA291() {
+        // == A291
+        // Utilisation
+        a291 = questionSetService.findByCode(QuestionCode.A291);
+        if( a291 == null ) {
+            a291 = new QuestionSet(QuestionCode.A291, false, a244);
+            JPA.em().persist(a291);
+        }
+    }
+    private void createQuestionSetA297() {
+        // == A297
+        // Listez les gaz émis par utilisation de produit
+        a297 = questionSetService.findByCode(QuestionCode.A297);
+        if( a297 == null ) {
+            a297 = new QuestionSet(QuestionCode.A297, true, a291);
+            JPA.em().persist(a297);
+        }
+    }
+    private void createQuestionSetA300() {
+        // == A300
+        // Traitement de fin de vie
+        a300 = questionSetService.findByCode(QuestionCode.A300);
+        if( a300 == null ) {
+            a300 = new QuestionSet(QuestionCode.A300, false, a244);
+            JPA.em().persist(a300);
+        }
+    }
+    private void createQuestionSetA5010() {
+        // == A5010
+        // Créez autant de postes de déchet que nécessaire
+        a5010 = questionSetService.findByCode(QuestionCode.A5010);
+        if( a5010 == null ) {
+            a5010 = new QuestionSet(QuestionCode.A5010, true, a300);
+            JPA.em().persist(a5010);
+        }
     }
 
 
@@ -1111,13 +1785,21 @@ public class AwacEnterpriseInitialData {
     // QUESTIONS
     // =========================================================================
 
-    // == A2
-    // Année de référence pour comparaison du présent bilan GES
+    private void createQuestionA2() {
+        // == A2
+        // Année de référence pour comparaison du présent bilan GES
 
-    IntegerQuestion a2 = (IntegerQuestion) questionService.findByCode(QuestionCode.A2);
+        a2 = (IntegerQuestion) questionService.findByCode(QuestionCode.A2);
 if (a2 == null) {
     a2 = new IntegerQuestion(a1, 0, QuestionCode.A2, null);
     JPA.em().persist(a2);
+
+    // cleanup the driver
+    Driver a2_driver = driverService.findByName("A2");
+    if (a2_driver != null) {
+        driverService.remove(a2_driver);
+    }
+
 } else {
     if (!a2.getQuestionSet().equals(a1) && a1.getQuestions().contains(a2)) {
         a1.getQuestions().remove(a2);
@@ -1128,15 +1810,25 @@ if (a2 == null) {
         JPA.em().persist(a1);
     }
     a2.setOrderIndex(0);
-    a2.setUnitCategory(null);
+    ((NumericQuestion)a2).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a2_driver = driverService.findByName("A2");
+    if (a2_driver != null) {
+        driverService.remove(a2_driver);
+    }
+
+    ((NumericQuestion)a2).setDriver(null);
+
     JPA.em().persist(a2);
 }
 
+    }
+    private void createQuestionA3() {
+        // == A3
+        // A quel secteur principal appartient votre site?
 
-    // == A3
-    // A quel secteur principal appartient votre site?
-
-    ValueSelectionQuestion a3 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A3);
+        a3 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A3);
 if (a3 == null) {
     a3 = new ValueSelectionQuestion(a1, 0, QuestionCode.A3, CodeList.SECTEURPRINCIPAL);
     JPA.em().persist(a3);
@@ -1150,15 +1842,16 @@ if (a3 == null) {
         JPA.em().persist(a1);
     }
     a3.setOrderIndex(0);
-    a3.setCodeList(CodeList.SECTEURPRINCIPAL);
+    ((ValueSelectionQuestion)a3).setCodeList(CodeList.SECTEURPRINCIPAL);
     JPA.em().persist(a3);
 }
 
+    }
+    private void createQuestionA4() {
+        // == A4
+        // Quel est le code NACE principal de votre site?
 
-    // == A4
-    // Quel est le code NACE principal de votre site?
-
-    ValueSelectionQuestion a4 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A4);
+        a4 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A4);
 if (a4 == null) {
     a4 = new ValueSelectionQuestion(a1, 0, QuestionCode.A4, CodeList.SECTEURPRIMAIRE);
     JPA.em().persist(a4);
@@ -1172,15 +1865,16 @@ if (a4 == null) {
         JPA.em().persist(a1);
     }
     a4.setOrderIndex(0);
-    a4.setCodeList(CodeList.SECTEURPRIMAIRE);
+    ((ValueSelectionQuestion)a4).setCodeList(CodeList.SECTEURPRIMAIRE);
     JPA.em().persist(a4);
 }
 
+    }
+    private void createQuestionA5() {
+        // == A5
+        // Quel est le code NACE principal de votre site?
 
-    // == A5
-    // Quel est le code NACE principal de votre site?
-
-    ValueSelectionQuestion a5 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5);
+        a5 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5);
 if (a5 == null) {
     a5 = new ValueSelectionQuestion(a1, 0, QuestionCode.A5, CodeList.SECTEURSECONDAIRE);
     JPA.em().persist(a5);
@@ -1194,15 +1888,16 @@ if (a5 == null) {
         JPA.em().persist(a1);
     }
     a5.setOrderIndex(0);
-    a5.setCodeList(CodeList.SECTEURSECONDAIRE);
+    ((ValueSelectionQuestion)a5).setCodeList(CodeList.SECTEURSECONDAIRE);
     JPA.em().persist(a5);
 }
 
+    }
+    private void createQuestionA6() {
+        // == A6
+        // Quel est le code NACE principal de votre site?
 
-    // == A6
-    // Quel est le code NACE principal de votre site?
-
-    ValueSelectionQuestion a6 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6);
+        a6 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6);
 if (a6 == null) {
     a6 = new ValueSelectionQuestion(a1, 0, QuestionCode.A6, CodeList.SECTEURTERTIAIRE);
     JPA.em().persist(a6);
@@ -1216,19 +1911,29 @@ if (a6 == null) {
         JPA.em().persist(a1);
     }
     a6.setOrderIndex(0);
-    a6.setCodeList(CodeList.SECTEURTERTIAIRE);
+    ((ValueSelectionQuestion)a6).setCodeList(CodeList.SECTEURTERTIAIRE);
     JPA.em().persist(a6);
 }
 
+    }
+    private void createQuestionA9() {
+        // == A9
+        // Indiquez la surface totale du site:
 
-    // == A9
-    // Indiquez la surface totale du site:
+        
 
-    
-DoubleQuestion a9 = (DoubleQuestion) questionService.findByCode(QuestionCode.A9);
+a9 = (DoubleQuestion) questionService.findByCode(QuestionCode.A9);
 if (a9 == null) {
     a9 = new DoubleQuestion( a1, 0, QuestionCode.A9, areaUnits, areaUnits.getMainUnit() );
     JPA.em().persist(a9);
+
+    // cleanup the driver
+    Driver a9_driver = driverService.findByName("A9");
+    if (a9_driver != null) {
+        driverService.remove(a9_driver);
+    }
+
+
 } else {
     if (!a9.getQuestionSet().equals(a1) && a1.getQuestions().contains(a9)) {
         a1.getQuestions().remove(a9);
@@ -1238,23 +1943,42 @@ if (a9 == null) {
         a1.getQuestions().add(a9);
         JPA.em().persist(a1);
     }
-    a9.setUnitCategory(areaUnits);
+    ((NumericQuestion)a9).setUnitCategory(areaUnits);
     a9.setOrderIndex(0);
-    a9.setDefaultUnit(areaUnits.getMainUnit());
+    ((NumericQuestion)a9).setDefaultUnit(areaUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a9_driver = driverService.findByName("A9");
+    if (a9_driver != null) {
+        driverService.remove(a9_driver);
+    }
+
+    ((NumericQuestion)a9).setDriver(null);
+
     JPA.em().persist(a9);
 }
 
 
 
+    }
+    private void createQuestionA10() {
+        // == A10
+        // Quelle est la surface des bureaux?
 
-    // == A10
-    // Quelle est la surface des bureaux?
+        
 
-    
-DoubleQuestion a10 = (DoubleQuestion) questionService.findByCode(QuestionCode.A10);
+a10 = (DoubleQuestion) questionService.findByCode(QuestionCode.A10);
 if (a10 == null) {
     a10 = new DoubleQuestion( a1, 0, QuestionCode.A10, areaUnits, areaUnits.getMainUnit() );
     JPA.em().persist(a10);
+
+    // cleanup the driver
+    Driver a10_driver = driverService.findByName("A10");
+    if (a10_driver != null) {
+        driverService.remove(a10_driver);
+    }
+
+
 } else {
     if (!a10.getQuestionSet().equals(a1) && a1.getQuestions().contains(a10)) {
         a1.getQuestions().remove(a10);
@@ -1264,24 +1988,34 @@ if (a10 == null) {
         a1.getQuestions().add(a10);
         JPA.em().persist(a1);
     }
-    a10.setUnitCategory(areaUnits);
+    ((NumericQuestion)a10).setUnitCategory(areaUnits);
     a10.setOrderIndex(0);
-    a10.setDefaultUnit(areaUnits.getMainUnit());
+    ((NumericQuestion)a10).setDefaultUnit(areaUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a10_driver = driverService.findByName("A10");
+    if (a10_driver != null) {
+        driverService.remove(a10_driver);
+    }
+
+    ((NumericQuestion)a10).setDriver(null);
+
     JPA.em().persist(a10);
 }
 
 
 
+    }
+    private void createQuestionA11() {
+        // == A11
+        // Etes-vous participant aux accords de branche de 2ème génération?
 
-    // == A11
-    // Etes-vous participant aux accords de branche de 2ème génération?
-
-    BooleanQuestion a11 = (BooleanQuestion) questionService.findByCode(QuestionCode.A11);
+        a11 = (BooleanQuestion) questionService.findByCode(QuestionCode.A11);
 if (a11 == null) {
     a11 = new BooleanQuestion(a1, 0, QuestionCode.A11, null);
     JPA.em().persist(a11);
 } else {
-    a11.setDefaultValue(null);
+    ((BooleanQuestion)a11).setDefaultValue(null);
     if (!a11.getQuestionSet().equals(a1) && a1.getQuestions().contains(a11)) {
         a1.getQuestions().remove(a11);
         JPA.em().persist(a1);
@@ -1294,14 +2028,22 @@ if (a11 == null) {
     JPA.em().persist(a11);
 }
 
+    }
+    private void createQuestionA12() {
+        // == A12
+        // Quel est le nombre d'employés sur l'année du bilan?
 
-    // == A12
-    // Quel est le nombre d'employés sur l'année du bilan?
-
-    IntegerQuestion a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
+        a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
 if (a12 == null) {
     a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null);
     JPA.em().persist(a12);
+
+    // cleanup the driver
+    Driver a12_driver = driverService.findByName("A12");
+    if (a12_driver != null) {
+        driverService.remove(a12_driver);
+    }
+
 } else {
     if (!a12.getQuestionSet().equals(a1) && a1.getQuestions().contains(a12)) {
         a1.getQuestions().remove(a12);
@@ -1312,15 +2054,25 @@ if (a12 == null) {
         JPA.em().persist(a1);
     }
     a12.setOrderIndex(0);
-    a12.setUnitCategory(null);
+    ((NumericQuestion)a12).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a12_driver = driverService.findByName("A12");
+    if (a12_driver != null) {
+        driverService.remove(a12_driver);
+    }
+
+    ((NumericQuestion)a12).setDriver(null);
+
     JPA.em().persist(a12);
 }
 
+    }
+    private void createQuestionA14() {
+        // == A14
+        // Pièces documentaires liées aux consommations de combustible
 
-    // == A14
-    // Pièces documentaires liées aux consommations de combustible
-
-    DocumentQuestion a14 = (DocumentQuestion) questionService.findByCode(QuestionCode.A14);
+        a14 = (DocumentQuestion) questionService.findByCode(QuestionCode.A14);
 if (a14 == null) {
     a14 = new DocumentQuestion(a13, 0, QuestionCode.A14);
     JPA.em().persist(a14);
@@ -1337,11 +2089,12 @@ if (a14 == null) {
     JPA.em().persist(a14);
 }
 
+    }
+    private void createQuestionA16() {
+        // == A16
+        // Combustible
 
-    // == A16
-    // Combustible
-
-    ValueSelectionQuestion a16 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A16);
+        a16 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A16);
 if (a16 == null) {
     a16 = new ValueSelectionQuestion(a15, 0, QuestionCode.A16, CodeList.COMBUSTIBLE);
     JPA.em().persist(a16);
@@ -1355,19 +2108,28 @@ if (a16 == null) {
         JPA.em().persist(a15);
     }
     a16.setOrderIndex(0);
-    a16.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a16).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a16);
 }
 
+    }
+    private void createQuestionA17() {
+        // == A17
+        // Quantité
 
-    // == A17
-    // Quantité
-
-    
-DoubleQuestion a17 = (DoubleQuestion) questionService.findByCode(QuestionCode.A17);
+        
+a17 = (DoubleQuestion) questionService.findByCode(QuestionCode.A17);
 if (a17 == null) {
     a17 = new DoubleQuestion( a15, 0, QuestionCode.A17, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a17);
+
+    // cleanup the driver
+    Driver a17_driver = driverService.findByName("A17");
+    if (a17_driver != null) {
+        driverService.remove(a17_driver);
+    }
+
+
 } else {
     if (!a17.getQuestionSet().equals(a15) && a15.getQuestions().contains(a17)) {
         a15.getQuestions().remove(a17);
@@ -1377,19 +2139,29 @@ if (a17 == null) {
         a15.getQuestions().add(a17);
         JPA.em().persist(a15);
     }
-    a17.setUnitCategory(energyUnits);
+    ((NumericQuestion)a17).setUnitCategory(energyUnits);
     a17.setOrderIndex(0);
-    a17.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a17).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a17_driver = driverService.findByName("A17");
+    if (a17_driver != null) {
+        driverService.remove(a17_driver);
+    }
+
+    ((NumericQuestion)a17).setDriver(null);
+
     JPA.em().persist(a17);
 }
 
 
 
+    }
+    private void createQuestionA1001() {
+        // == A1001
+        // Combustible
 
-    // == A1001
-    // Combustible
-
-    ValueSelectionQuestion a1001 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1001);
+        a1001 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1001);
 if (a1001 == null) {
     a1001 = new ValueSelectionQuestion(a1000, 0, QuestionCode.A1001, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1001);
@@ -1403,19 +2175,27 @@ if (a1001 == null) {
         JPA.em().persist(a1000);
     }
     a1001.setOrderIndex(0);
-    a1001.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1001).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1001);
 }
 
+    }
+    private void createQuestionA1002() {
+        // == A1002
+        // Quantité
 
-    // == A1002
-    // Quantité
-
-    
-DoubleQuestion a1002 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1002);
+        
+a1002 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1002);
 if (a1002 == null) {
     a1002 = new DoubleQuestion( a1000, 0, QuestionCode.A1002, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1002);
+
+    // cleanup the driver
+    Driver a1002_driver = driverService.findByName("A1002");
+    if (a1002_driver != null) {
+        driverService.remove(a1002_driver);
+    }
+
 } else {
     if (!a1002.getQuestionSet().equals(a1000) && a1000.getQuestions().contains(a1002)) {
         a1000.getQuestions().remove(a1002);
@@ -1425,19 +2205,29 @@ if (a1002 == null) {
         a1000.getQuestions().add(a1002);
         JPA.em().persist(a1000);
     }
-    a1002.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1002).setUnitCategory(volumeUnits);
     a1002.setOrderIndex(0);
-    a1002.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1002).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1002_driver = driverService.findByName("A1002");
+    if (a1002_driver != null) {
+        driverService.remove(a1002_driver);
+    }
+
+    ((NumericQuestion)a1002).setDriver(null);
+
     JPA.em().persist(a1002);
 }
 
 
 
+    }
+    private void createQuestionA1004() {
+        // == A1004
+        // Combustible
 
-    // == A1004
-    // Combustible
-
-    ValueSelectionQuestion a1004 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1004);
+        a1004 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1004);
 if (a1004 == null) {
     a1004 = new ValueSelectionQuestion(a1003, 0, QuestionCode.A1004, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1004);
@@ -1451,19 +2241,27 @@ if (a1004 == null) {
         JPA.em().persist(a1003);
     }
     a1004.setOrderIndex(0);
-    a1004.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1004).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1004);
 }
 
+    }
+    private void createQuestionA1005() {
+        // == A1005
+        // Quantité
 
-    // == A1005
-    // Quantité
-
-    
-DoubleQuestion a1005 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1005);
+        
+a1005 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1005);
 if (a1005 == null) {
     a1005 = new DoubleQuestion( a1003, 0, QuestionCode.A1005, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1005);
+
+    // cleanup the driver
+    Driver a1005_driver = driverService.findByName("A1005");
+    if (a1005_driver != null) {
+        driverService.remove(a1005_driver);
+    }
+
 } else {
     if (!a1005.getQuestionSet().equals(a1003) && a1003.getQuestions().contains(a1005)) {
         a1003.getQuestions().remove(a1005);
@@ -1473,19 +2271,30 @@ if (a1005 == null) {
         a1003.getQuestions().add(a1005);
         JPA.em().persist(a1003);
     }
-    a1005.setUnitCategory(massUnits);
+    ((NumericQuestion)a1005).setUnitCategory(massUnits);
     a1005.setOrderIndex(0);
-    a1005.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1005).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1005_driver = driverService.findByName("A1005");
+    if (a1005_driver != null) {
+        driverService.remove(a1005_driver);
+    }
+
+    ((NumericQuestion)a1005).setDriver(null);
+
     JPA.em().persist(a1005);
 }
 
 
 
+    }
+    private void createQuestionA21() {
+        // == A21
+        // Pièces documentaires liées aux achats d'électricité et de vapeur
 
-    // == A21
-    // Pièces documentaires liées aux achats d'électricité et de vapeur
-
-    DocumentQuestion a21 = (DocumentQuestion) questionService.findByCode(QuestionCode.A21);
+        a21 = (DocumentQuestion) questionService.findByCode(QuestionCode.A21);
 if (a21 == null) {
     a21 = new DocumentQuestion(a20, 0, QuestionCode.A21);
     JPA.em().persist(a21);
@@ -1502,15 +2311,24 @@ if (a21 == null) {
     JPA.em().persist(a21);
 }
 
+    }
+    private void createQuestionA23() {
+        // == A23
+        // Consommation d'électricité verte
 
-    // == A23
-    // Consommation d'électricité verte
-
-    
-DoubleQuestion a23 = (DoubleQuestion) questionService.findByCode(QuestionCode.A23);
+        
+a23 = (DoubleQuestion) questionService.findByCode(QuestionCode.A23);
 if (a23 == null) {
     a23 = new DoubleQuestion( a22, 0, QuestionCode.A23, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a23);
+
+    // cleanup the driver
+    Driver a23_driver = driverService.findByName("A23");
+    if (a23_driver != null) {
+        driverService.remove(a23_driver);
+    }
+
+
 } else {
     if (!a23.getQuestionSet().equals(a22) && a22.getQuestions().contains(a23)) {
         a22.getQuestions().remove(a23);
@@ -1520,23 +2338,41 @@ if (a23 == null) {
         a22.getQuestions().add(a23);
         JPA.em().persist(a22);
     }
-    a23.setUnitCategory(energyUnits);
+    ((NumericQuestion)a23).setUnitCategory(energyUnits);
     a23.setOrderIndex(0);
-    a23.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a23).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a23_driver = driverService.findByName("A23");
+    if (a23_driver != null) {
+        driverService.remove(a23_driver);
+    }
+
+    ((NumericQuestion)a23).setDriver(null);
+
     JPA.em().persist(a23);
 }
 
 
 
+    }
+    private void createQuestionA24() {
+        // == A24
+        // Consommation d'électricité grise
 
-    // == A24
-    // Consommation d'électricité grise
-
-    
-DoubleQuestion a24 = (DoubleQuestion) questionService.findByCode(QuestionCode.A24);
+        
+a24 = (DoubleQuestion) questionService.findByCode(QuestionCode.A24);
 if (a24 == null) {
     a24 = new DoubleQuestion( a22, 0, QuestionCode.A24, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a24);
+
+    // cleanup the driver
+    Driver a24_driver = driverService.findByName("A24");
+    if (a24_driver != null) {
+        driverService.remove(a24_driver);
+    }
+
+
 } else {
     if (!a24.getQuestionSet().equals(a22) && a22.getQuestions().contains(a24)) {
         a22.getQuestions().remove(a24);
@@ -1546,19 +2382,29 @@ if (a24 == null) {
         a22.getQuestions().add(a24);
         JPA.em().persist(a22);
     }
-    a24.setUnitCategory(energyUnits);
+    ((NumericQuestion)a24).setUnitCategory(energyUnits);
     a24.setOrderIndex(0);
-    a24.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a24).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a24_driver = driverService.findByName("A24");
+    if (a24_driver != null) {
+        driverService.remove(a24_driver);
+    }
+
+    ((NumericQuestion)a24).setDriver(null);
+
     JPA.em().persist(a24);
 }
 
 
 
+    }
+    private void createQuestionA26() {
+        // == A26
+        // Energie primaire utilisée pour produire la vapeur:
 
-    // == A26
-    // Energie primaire utilisée pour produire la vapeur:
-
-    ValueSelectionQuestion a26 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A26);
+        a26 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A26);
 if (a26 == null) {
     a26 = new ValueSelectionQuestion(a25, 0, QuestionCode.A26, CodeList.ENERGIEVAPEUR);
     JPA.em().persist(a26);
@@ -1572,18 +2418,26 @@ if (a26 == null) {
         JPA.em().persist(a25);
     }
     a26.setOrderIndex(0);
-    a26.setCodeList(CodeList.ENERGIEVAPEUR);
+    ((ValueSelectionQuestion)a26).setCodeList(CodeList.ENERGIEVAPEUR);
     JPA.em().persist(a26);
 }
 
+    }
+    private void createQuestionA27() {
+        // == A27
+        // Efficacité de la chaudière
 
-    // == A27
-    // Efficacité de la chaudière
-
-    PercentageQuestion a27 = (PercentageQuestion) questionService.findByCode(QuestionCode.A27);
+        a27 = (PercentageQuestion) questionService.findByCode(QuestionCode.A27);
 if (a27 == null) {
     a27 = new PercentageQuestion(a25, 0, QuestionCode.A27);
     JPA.em().persist(a27);
+
+    // cleanup the driver
+    Driver a27_driver = driverService.findByName("A27");
+    if (a27_driver != null) {
+        driverService.remove(a27_driver);
+    }
+
 } else {
     if (!a27.getQuestionSet().equals(a25) && a25.getQuestions().contains(a27)) {
         a25.getQuestions().remove(a27);
@@ -1594,18 +2448,36 @@ if (a27 == null) {
         JPA.em().persist(a25);
     }
     a27.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a27_driver = driverService.findByName("A27");
+    if (a27_driver != null) {
+        driverService.remove(a27_driver);
+    }
+
+    ((NumericQuestion)a27).setDriver(null);
+
     JPA.em().persist(a27);
 }
 
+    }
+    private void createQuestionA28() {
+        // == A28
+        // Quantité achetée
 
-    // == A28
-    // Quantité achetée
-
-    
-DoubleQuestion a28 = (DoubleQuestion) questionService.findByCode(QuestionCode.A28);
+        
+a28 = (DoubleQuestion) questionService.findByCode(QuestionCode.A28);
 if (a28 == null) {
     a28 = new DoubleQuestion( a25, 0, QuestionCode.A28, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a28);
+
+    // cleanup the driver
+    Driver a28_driver = driverService.findByName("A28");
+    if (a28_driver != null) {
+        driverService.remove(a28_driver);
+    }
+
+
 } else {
     if (!a28.getQuestionSet().equals(a25) && a25.getQuestions().contains(a28)) {
         a25.getQuestions().remove(a28);
@@ -1615,24 +2487,34 @@ if (a28 == null) {
         a25.getQuestions().add(a28);
         JPA.em().persist(a25);
     }
-    a28.setUnitCategory(energyUnits);
+    ((NumericQuestion)a28).setUnitCategory(energyUnits);
     a28.setOrderIndex(0);
-    a28.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a28).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a28_driver = driverService.findByName("A28");
+    if (a28_driver != null) {
+        driverService.remove(a28_driver);
+    }
+
+    ((NumericQuestion)a28).setDriver(null);
+
     JPA.em().persist(a28);
 }
 
 
 
+    }
+    private void createQuestionA32() {
+        // == A32
+        // Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
 
-    // == A32
-    // Est-ce que vos activités impliquent des procédés chimiques et physiques émetteurs directs de gaz à effet de serre ?
-
-    BooleanQuestion a32 = (BooleanQuestion) questionService.findByCode(QuestionCode.A32);
+        a32 = (BooleanQuestion) questionService.findByCode(QuestionCode.A32);
 if (a32 == null) {
     a32 = new BooleanQuestion(a31, 0, QuestionCode.A32, null);
     JPA.em().persist(a32);
 } else {
-    a32.setDefaultValue(null);
+    ((BooleanQuestion)a32).setDefaultValue(null);
     if (!a32.getQuestionSet().equals(a31) && a31.getQuestions().contains(a32)) {
         a31.getQuestions().remove(a32);
         JPA.em().persist(a31);
@@ -1645,11 +2527,12 @@ if (a32 == null) {
     JPA.em().persist(a32);
 }
 
+    }
+    private void createQuestionA33() {
+        // == A33
+        // Pièces documentaires liées aux GES des procédés de production
 
-    // == A33
-    // Pièces documentaires liées aux GES des procédés de production
-
-    DocumentQuestion a33 = (DocumentQuestion) questionService.findByCode(QuestionCode.A33);
+        a33 = (DocumentQuestion) questionService.findByCode(QuestionCode.A33);
 if (a33 == null) {
     a33 = new DocumentQuestion(a31, 0, QuestionCode.A33);
     JPA.em().persist(a33);
@@ -1666,11 +2549,12 @@ if (a33 == null) {
     JPA.em().persist(a33);
 }
 
+    }
+    private void createQuestionA35() {
+        // == A35
+        // Type de GES
 
-    // == A35
-    // Type de GES
-
-    ValueSelectionQuestion a35 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A35);
+        a35 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A35);
 if (a35 == null) {
     a35 = new ValueSelectionQuestion(a34, 0, QuestionCode.A35, CodeList.GES);
     JPA.em().persist(a35);
@@ -1684,19 +2568,27 @@ if (a35 == null) {
         JPA.em().persist(a34);
     }
     a35.setOrderIndex(0);
-    a35.setCodeList(CodeList.GES);
+    ((ValueSelectionQuestion)a35).setCodeList(CodeList.GES);
     JPA.em().persist(a35);
 }
 
+    }
+    private void createQuestionA36() {
+        // == A36
+        // Quantité
 
-    // == A36
-    // Quantité
-
-    
-DoubleQuestion a36 = (DoubleQuestion) questionService.findByCode(QuestionCode.A36);
+        
+a36 = (DoubleQuestion) questionService.findByCode(QuestionCode.A36);
 if (a36 == null) {
     a36 = new DoubleQuestion( a34, 0, QuestionCode.A36, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a36);
+
+    // cleanup the driver
+    Driver a36_driver = driverService.findByName("A36");
+    if (a36_driver != null) {
+        driverService.remove(a36_driver);
+    }
+
 } else {
     if (!a36.getQuestionSet().equals(a34) && a34.getQuestions().contains(a36)) {
         a34.getQuestions().remove(a36);
@@ -1706,24 +2598,35 @@ if (a36 == null) {
         a34.getQuestions().add(a36);
         JPA.em().persist(a34);
     }
-    a36.setUnitCategory(massUnits);
+    ((NumericQuestion)a36).setUnitCategory(massUnits);
     a36.setOrderIndex(0);
-    a36.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a36).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a36_driver = driverService.findByName("A36");
+    if (a36_driver != null) {
+        driverService.remove(a36_driver);
+    }
+
+    ((NumericQuestion)a36).setDriver(null);
+
     JPA.em().persist(a36);
 }
 
 
 
+    }
+    private void createQuestionA38() {
+        // == A38
+        // Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
 
-    // == A38
-    // Disposez-vous d’un système de froid nécessitant un apport ponctuel d’agent réfrigérant (p.e. les chillers, les climatiseurs à air et à eau glacée, les réfrigérateurs, bacs à surgelés, etc.)?
-
-    BooleanQuestion a38 = (BooleanQuestion) questionService.findByCode(QuestionCode.A38);
+        a38 = (BooleanQuestion) questionService.findByCode(QuestionCode.A38);
 if (a38 == null) {
     a38 = new BooleanQuestion(a37, 0, QuestionCode.A38, null);
     JPA.em().persist(a38);
 } else {
-    a38.setDefaultValue(null);
+    ((BooleanQuestion)a38).setDefaultValue(null);
     if (!a38.getQuestionSet().equals(a37) && a37.getQuestions().contains(a38)) {
         a37.getQuestions().remove(a38);
         JPA.em().persist(a37);
@@ -1736,11 +2639,12 @@ if (a38 == null) {
     JPA.em().persist(a38);
 }
 
+    }
+    private void createQuestionA39() {
+        // == A39
+        // Pièces documentaires liées aux systèmes de refroidissement
 
-    // == A39
-    // Pièces documentaires liées aux systèmes de refroidissement
-
-    DocumentQuestion a39 = (DocumentQuestion) questionService.findByCode(QuestionCode.A39);
+        a39 = (DocumentQuestion) questionService.findByCode(QuestionCode.A39);
 if (a39 == null) {
     a39 = new DocumentQuestion(a37, 0, QuestionCode.A39);
     JPA.em().persist(a39);
@@ -1757,11 +2661,12 @@ if (a39 == null) {
     JPA.em().persist(a39);
 }
 
+    }
+    private void createQuestionA43() {
+        // == A43
+        // Type de gaz
 
-    // == A43
-    // Type de gaz
-
-    ValueSelectionQuestion a43 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A43);
+        a43 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A43);
 if (a43 == null) {
     a43 = new ValueSelectionQuestion(a42, 0, QuestionCode.A43, CodeList.FRIGORIGENE);
     JPA.em().persist(a43);
@@ -1775,19 +2680,27 @@ if (a43 == null) {
         JPA.em().persist(a42);
     }
     a43.setOrderIndex(0);
-    a43.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a43).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a43);
 }
 
+    }
+    private void createQuestionA44() {
+        // == A44
+        // Quantité de recharge nécessaire pour l'année de bilan
 
-    // == A44
-    // Quantité de recharge nécessaire pour l'année de bilan
-
-    
-DoubleQuestion a44 = (DoubleQuestion) questionService.findByCode(QuestionCode.A44);
+        
+a44 = (DoubleQuestion) questionService.findByCode(QuestionCode.A44);
 if (a44 == null) {
     a44 = new DoubleQuestion( a42, 0, QuestionCode.A44, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a44);
+
+    // cleanup the driver
+    Driver a44_driver = driverService.findByName("A44");
+    if (a44_driver != null) {
+        driverService.remove(a44_driver);
+    }
+
 } else {
     if (!a44.getQuestionSet().equals(a42) && a42.getQuestions().contains(a44)) {
         a42.getQuestions().remove(a44);
@@ -1797,23 +2710,42 @@ if (a44 == null) {
         a42.getQuestions().add(a44);
         JPA.em().persist(a42);
     }
-    a44.setUnitCategory(massUnits);
+    ((NumericQuestion)a44).setUnitCategory(massUnits);
     a44.setOrderIndex(0);
-    a44.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a44).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a44_driver = driverService.findByName("A44");
+    if (a44_driver != null) {
+        driverService.remove(a44_driver);
+    }
+
+    ((NumericQuestion)a44).setDriver(null);
+
     JPA.em().persist(a44);
 }
 
 
 
+    }
+    private void createQuestionA46() {
+        // == A46
+        // Quel est la puissance frigorifique des groupes froid?
 
-    // == A46
-    // Quel est la puissance frigorifique des groupes froid?
-
-    
-DoubleQuestion a46 = (DoubleQuestion) questionService.findByCode(QuestionCode.A46);
+        
+a46 = (DoubleQuestion) questionService.findByCode(QuestionCode.A46);
 if (a46 == null) {
     a46 = new DoubleQuestion( a45, 0, QuestionCode.A46, powerUnits, powerUnits.getMainUnit() );
     JPA.em().persist(a46);
+
+    // cleanup the driver
+    Driver a46_driver = driverService.findByName("A46");
+    if (a46_driver != null) {
+        driverService.remove(a46_driver);
+    }
+
+
 } else {
     if (!a46.getQuestionSet().equals(a45) && a45.getQuestions().contains(a46)) {
         a45.getQuestions().remove(a46);
@@ -1823,24 +2755,34 @@ if (a46 == null) {
         a45.getQuestions().add(a46);
         JPA.em().persist(a45);
     }
-    a46.setUnitCategory(powerUnits);
+    ((NumericQuestion)a46).setUnitCategory(powerUnits);
     a46.setOrderIndex(0);
-    a46.setDefaultUnit(powerUnits.getMainUnit());
+    ((NumericQuestion)a46).setDefaultUnit(powerUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a46_driver = driverService.findByName("A46");
+    if (a46_driver != null) {
+        driverService.remove(a46_driver);
+    }
+
+    ((NumericQuestion)a46).setDriver(null);
+
     JPA.em().persist(a46);
 }
 
 
 
+    }
+    private void createQuestionA48() {
+        // == A48
+        // Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
 
-    // == A48
-    // Est-ce que votre entreprise produit du sucre ou des pâtes sèches?
-
-    BooleanQuestion a48 = (BooleanQuestion) questionService.findByCode(QuestionCode.A48);
+        a48 = (BooleanQuestion) questionService.findByCode(QuestionCode.A48);
 if (a48 == null) {
     a48 = new BooleanQuestion(a47, 0, QuestionCode.A48, null);
     JPA.em().persist(a48);
 } else {
-    a48.setDefaultValue(null);
+    ((BooleanQuestion)a48).setDefaultValue(null);
     if (!a48.getQuestionSet().equals(a47) && a47.getQuestions().contains(a48)) {
         a47.getQuestions().remove(a48);
         JPA.em().persist(a47);
@@ -1853,15 +2795,23 @@ if (a48 == null) {
     JPA.em().persist(a48);
 }
 
+    }
+    private void createQuestionA49() {
+        // == A49
+        // Quel est le nombre d'heures de fonctionnement annuel du site?
 
-    // == A49
-    // Quel est le nombre d'heures de fonctionnement annuel du site?
-
-    
-DoubleQuestion a49 = (DoubleQuestion) questionService.findByCode(QuestionCode.A49);
+        
+a49 = (DoubleQuestion) questionService.findByCode(QuestionCode.A49);
 if (a49 == null) {
     a49 = new DoubleQuestion( a47, 0, QuestionCode.A49, timeUnits, getUnitBySymbol("h") );
     JPA.em().persist(a49);
+
+    // cleanup the driver
+    Driver a49_driver = driverService.findByName("A49");
+    if (a49_driver != null) {
+        driverService.remove(a49_driver);
+    }
+
 } else {
     if (!a49.getQuestionSet().equals(a47) && a47.getQuestions().contains(a49)) {
         a47.getQuestions().remove(a49);
@@ -1871,19 +2821,29 @@ if (a49 == null) {
         a47.getQuestions().add(a49);
         JPA.em().persist(a47);
     }
-    a49.setUnitCategory(timeUnits);
+    ((NumericQuestion)a49).setUnitCategory(timeUnits);
     a49.setOrderIndex(0);
-    a49.setDefaultUnit(getUnitBySymbol("h"));
+    ((NumericQuestion)a49).setDefaultUnit(getUnitBySymbol("h"));
+
+    // cleanup the driver
+    Driver a49_driver = driverService.findByName("A49");
+    if (a49_driver != null) {
+        driverService.remove(a49_driver);
+    }
+
+    ((NumericQuestion)a49).setDriver(null);
+
     JPA.em().persist(a49);
 }
 
 
 
+    }
+    private void createQuestionA6003() {
+        // == A6003
+        // Source de rejet
 
-    // == A6003
-    // Source de rejet
-
-    ValueSelectionQuestion a6003 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6003);
+        a6003 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6003);
 if (a6003 == null) {
     a6003 = new ValueSelectionQuestion(a6002, 0, QuestionCode.A6003, CodeList.ORIGINEEAUUSEE);
     JPA.em().persist(a6003);
@@ -1897,19 +2857,27 @@ if (a6003 == null) {
         JPA.em().persist(a6002);
     }
     a6003.setOrderIndex(0);
-    a6003.setCodeList(CodeList.ORIGINEEAUUSEE);
+    ((ValueSelectionQuestion)a6003).setCodeList(CodeList.ORIGINEEAUUSEE);
     JPA.em().persist(a6003);
 }
 
+    }
+    private void createQuestionA6004() {
+        // == A6004
+        // Quantités de m³ rejetés
 
-    // == A6004
-    // Quantités de m³ rejetés
-
-    
-DoubleQuestion a6004 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6004);
+        
+a6004 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6004);
 if (a6004 == null) {
     a6004 = new DoubleQuestion( a6002, 0, QuestionCode.A6004, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a6004);
+
+    // cleanup the driver
+    Driver a6004_driver = driverService.findByName("A6004");
+    if (a6004_driver != null) {
+        driverService.remove(a6004_driver);
+    }
+
 } else {
     if (!a6004.getQuestionSet().equals(a6002) && a6002.getQuestions().contains(a6004)) {
         a6002.getQuestions().remove(a6004);
@@ -1919,19 +2887,29 @@ if (a6004 == null) {
         a6002.getQuestions().add(a6004);
         JPA.em().persist(a6002);
     }
-    a6004.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a6004).setUnitCategory(volumeUnits);
     a6004.setOrderIndex(0);
-    a6004.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a6004).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a6004_driver = driverService.findByName("A6004");
+    if (a6004_driver != null) {
+        driverService.remove(a6004_driver);
+    }
+
+    ((NumericQuestion)a6004).setDriver(null);
+
     JPA.em().persist(a6004);
 }
 
 
 
+    }
+    private void createQuestionA6005() {
+        // == A6005
+        // Méthode de traitement des eaux usées
 
-    // == A6005
-    // Méthode de traitement des eaux usées
-
-    ValueSelectionQuestion a6005 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6005);
+        a6005 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6005);
 if (a6005 == null) {
     a6005 = new ValueSelectionQuestion(a6002, 0, QuestionCode.A6005, CodeList.TRAITEMENTEAU);
     JPA.em().persist(a6005);
@@ -1945,19 +2923,27 @@ if (a6005 == null) {
         JPA.em().persist(a6002);
     }
     a6005.setOrderIndex(0);
-    a6005.setCodeList(CodeList.TRAITEMENTEAU);
+    ((ValueSelectionQuestion)a6005).setCodeList(CodeList.TRAITEMENTEAU);
     JPA.em().persist(a6005);
 }
 
+    }
+    private void createQuestionA6007() {
+        // == A6007
+        // Quantités de DCO rejetés
 
-    // == A6007
-    // Quantités de DCO rejetés
-
-    
-DoubleQuestion a6007 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6007);
+        
+a6007 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6007);
 if (a6007 == null) {
     a6007 = new DoubleQuestion( a6006, 0, QuestionCode.A6007, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a6007);
+
+    // cleanup the driver
+    Driver a6007_driver = driverService.findByName("A6007");
+    if (a6007_driver != null) {
+        driverService.remove(a6007_driver);
+    }
+
 } else {
     if (!a6007.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6007)) {
         a6006.getQuestions().remove(a6007);
@@ -1967,23 +2953,41 @@ if (a6007 == null) {
         a6006.getQuestions().add(a6007);
         JPA.em().persist(a6006);
     }
-    a6007.setUnitCategory(massUnits);
+    ((NumericQuestion)a6007).setUnitCategory(massUnits);
     a6007.setOrderIndex(0);
-    a6007.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a6007).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a6007_driver = driverService.findByName("A6007");
+    if (a6007_driver != null) {
+        driverService.remove(a6007_driver);
+    }
+
+    ((NumericQuestion)a6007).setDriver(null);
+
     JPA.em().persist(a6007);
 }
 
 
 
+    }
+    private void createQuestionA6008() {
+        // == A6008
+        // Quantités d'azote rejetés
 
-    // == A6008
-    // Quantités d'azote rejetés
-
-    
-DoubleQuestion a6008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6008);
+        
+a6008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A6008);
 if (a6008 == null) {
     a6008 = new DoubleQuestion( a6006, 0, QuestionCode.A6008, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a6008);
+
+    // cleanup the driver
+    Driver a6008_driver = driverService.findByName("A6008");
+    if (a6008_driver != null) {
+        driverService.remove(a6008_driver);
+    }
+
 } else {
     if (!a6008.getQuestionSet().equals(a6006) && a6006.getQuestions().contains(a6008)) {
         a6006.getQuestions().remove(a6008);
@@ -1993,19 +2997,30 @@ if (a6008 == null) {
         a6006.getQuestions().add(a6008);
         JPA.em().persist(a6006);
     }
-    a6008.setUnitCategory(massUnits);
+    ((NumericQuestion)a6008).setUnitCategory(massUnits);
     a6008.setOrderIndex(0);
-    a6008.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a6008).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a6008_driver = driverService.findByName("A6008");
+    if (a6008_driver != null) {
+        driverService.remove(a6008_driver);
+    }
+
+    ((NumericQuestion)a6008).setDriver(null);
+
     JPA.em().persist(a6008);
 }
 
 
 
+    }
+    private void createQuestionA6009() {
+        // == A6009
+        // Méthode de traitement des eaux usées
 
-    // == A6009
-    // Méthode de traitement des eaux usées
-
-    ValueSelectionQuestion a6009 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6009);
+        a6009 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A6009);
 if (a6009 == null) {
     a6009 = new ValueSelectionQuestion(a6006, 0, QuestionCode.A6009, CodeList.TRAITEMENTEAU);
     JPA.em().persist(a6009);
@@ -2019,15 +3034,16 @@ if (a6009 == null) {
         JPA.em().persist(a6006);
     }
     a6009.setOrderIndex(0);
-    a6009.setCodeList(CodeList.TRAITEMENTEAU);
+    ((ValueSelectionQuestion)a6009).setCodeList(CodeList.TRAITEMENTEAU);
     JPA.em().persist(a6009);
 }
 
+    }
+    private void createQuestionA51() {
+        // == A51
+        // Pièces documentaires liées à la mobilité
 
-    // == A51
-    // Pièces documentaires liées à la mobilité
-
-    DocumentQuestion a51 = (DocumentQuestion) questionService.findByCode(QuestionCode.A51);
+        a51 = (DocumentQuestion) questionService.findByCode(QuestionCode.A51);
 if (a51 == null) {
     a51 = new DocumentQuestion(a50, 0, QuestionCode.A51);
     JPA.em().persist(a51);
@@ -2044,15 +3060,23 @@ if (a51 == null) {
     JPA.em().persist(a51);
 }
 
+    }
+    private void createQuestionA403() {
+        // == A403
+        // Consommation d'essence
 
-    // == A403
-    // Consommation d'essence
-
-    
-DoubleQuestion a403 = (DoubleQuestion) questionService.findByCode(QuestionCode.A403);
+        
+a403 = (DoubleQuestion) questionService.findByCode(QuestionCode.A403);
 if (a403 == null) {
     a403 = new DoubleQuestion( a402, 0, QuestionCode.A403, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a403);
+
+    // cleanup the driver
+    Driver a403_driver = driverService.findByName("A403");
+    if (a403_driver != null) {
+        driverService.remove(a403_driver);
+    }
+
 } else {
     if (!a403.getQuestionSet().equals(a402) && a402.getQuestions().contains(a403)) {
         a402.getQuestions().remove(a403);
@@ -2062,23 +3086,40 @@ if (a403 == null) {
         a402.getQuestions().add(a403);
         JPA.em().persist(a402);
     }
-    a403.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a403).setUnitCategory(volumeUnits);
     a403.setOrderIndex(0);
-    a403.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a403).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a403_driver = driverService.findByName("A403");
+    if (a403_driver != null) {
+        driverService.remove(a403_driver);
+    }
+
+    ((NumericQuestion)a403).setDriver(null);
+
     JPA.em().persist(a403);
 }
 
 
 
+    }
+    private void createQuestionA404() {
+        // == A404
+        // Consommation de diesel
 
-    // == A404
-    // Consommation de diesel
-
-    
-DoubleQuestion a404 = (DoubleQuestion) questionService.findByCode(QuestionCode.A404);
+        
+a404 = (DoubleQuestion) questionService.findByCode(QuestionCode.A404);
 if (a404 == null) {
     a404 = new DoubleQuestion( a402, 0, QuestionCode.A404, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a404);
+
+    // cleanup the driver
+    Driver a404_driver = driverService.findByName("A404");
+    if (a404_driver != null) {
+        driverService.remove(a404_driver);
+    }
+
 } else {
     if (!a404.getQuestionSet().equals(a402) && a402.getQuestions().contains(a404)) {
         a402.getQuestions().remove(a404);
@@ -2088,23 +3129,40 @@ if (a404 == null) {
         a402.getQuestions().add(a404);
         JPA.em().persist(a402);
     }
-    a404.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a404).setUnitCategory(volumeUnits);
     a404.setOrderIndex(0);
-    a404.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a404).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a404_driver = driverService.findByName("A404");
+    if (a404_driver != null) {
+        driverService.remove(a404_driver);
+    }
+
+    ((NumericQuestion)a404).setDriver(null);
+
     JPA.em().persist(a404);
 }
 
 
 
+    }
+    private void createQuestionA405() {
+        // == A405
+        // Consommation de gaz de pétrole liquéfié (GPL)
 
-    // == A405
-    // Consommation de gaz de pétrole liquéfié (GPL)
-
-    
-DoubleQuestion a405 = (DoubleQuestion) questionService.findByCode(QuestionCode.A405);
+        
+a405 = (DoubleQuestion) questionService.findByCode(QuestionCode.A405);
 if (a405 == null) {
     a405 = new DoubleQuestion( a402, 0, QuestionCode.A405, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a405);
+
+    // cleanup the driver
+    Driver a405_driver = driverService.findByName("A405");
+    if (a405_driver != null) {
+        driverService.remove(a405_driver);
+    }
+
 } else {
     if (!a405.getQuestionSet().equals(a402) && a402.getQuestions().contains(a405)) {
         a402.getQuestions().remove(a405);
@@ -2114,24 +3172,34 @@ if (a405 == null) {
         a402.getQuestions().add(a405);
         JPA.em().persist(a402);
     }
-    a405.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a405).setUnitCategory(volumeUnits);
     a405.setOrderIndex(0);
-    a405.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a405).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a405_driver = driverService.findByName("A405");
+    if (a405_driver != null) {
+        driverService.remove(a405_driver);
+    }
+
+    ((NumericQuestion)a405).setDriver(null);
+
     JPA.em().persist(a405);
 }
 
 
 
+    }
+    private void createQuestionA408() {
+        // == A408
+        // Catégorie de véhicule
 
-    // == A408
-    // Catégorie de véhicule
-
-    StringQuestion a408 = (StringQuestion) questionService.findByCode(QuestionCode.A408);
+        a408 = (StringQuestion) questionService.findByCode(QuestionCode.A408);
 if (a408 == null) {
     a408 = new StringQuestion(a407, 0, QuestionCode.A408, null);
     JPA.em().persist(a408);
 } else {
-    a408.setDefaultValue(null);
+    ((StringQuestion)a408).setDefaultValue(null);
     if (!a408.getQuestionSet().equals(a407) && a407.getQuestions().contains(a408)) {
         a407.getQuestions().remove(a408);
         JPA.em().persist(a407);
@@ -2144,11 +3212,12 @@ if (a408 == null) {
     JPA.em().persist(a408);
 }
 
+    }
+    private void createQuestionA409() {
+        // == A409
+        // Quel type de carburant utilise-t-il ?
 
-    // == A409
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a409 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A409);
+        a409 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A409);
 if (a409 == null) {
     a409 = new ValueSelectionQuestion(a407, 0, QuestionCode.A409, CodeList.CARBURANT);
     JPA.em().persist(a409);
@@ -2162,18 +3231,26 @@ if (a409 == null) {
         JPA.em().persist(a407);
     }
     a409.setOrderIndex(0);
-    a409.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a409).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a409);
 }
 
+    }
+    private void createQuestionA410() {
+        // == A410
+        // Consommation moyenne (L/100km)
 
-    // == A410
-    // Consommation moyenne (L/100km)
-
-    IntegerQuestion a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
+        a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
 if (a410 == null) {
     a410 = new IntegerQuestion(a407, 0, QuestionCode.A410, null);
     JPA.em().persist(a410);
+
+    // cleanup the driver
+    Driver a410_driver = driverService.findByName("A410");
+    if (a410_driver != null) {
+        driverService.remove(a410_driver);
+    }
+
 } else {
     if (!a410.getQuestionSet().equals(a407) && a407.getQuestions().contains(a410)) {
         a407.getQuestions().remove(a410);
@@ -2184,18 +3261,35 @@ if (a410 == null) {
         JPA.em().persist(a407);
     }
     a410.setOrderIndex(0);
-    a410.setUnitCategory(null);
+    ((NumericQuestion)a410).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a410_driver = driverService.findByName("A410");
+    if (a410_driver != null) {
+        driverService.remove(a410_driver);
+    }
+
+    ((NumericQuestion)a410).setDriver(null);
+
     JPA.em().persist(a410);
 }
 
+    }
+    private void createQuestionA411() {
+        // == A411
+        // Quelle est le nombre de kilomètres parcourus par an?
 
-    // == A411
-    // Quelle est le nombre de kilomètres parcourus par an?
-
-    IntegerQuestion a411 = (IntegerQuestion) questionService.findByCode(QuestionCode.A411);
+        a411 = (IntegerQuestion) questionService.findByCode(QuestionCode.A411);
 if (a411 == null) {
     a411 = new IntegerQuestion(a407, 0, QuestionCode.A411, null);
     JPA.em().persist(a411);
+
+    // cleanup the driver
+    Driver a411_driver = driverService.findByName("A411");
+    if (a411_driver != null) {
+        driverService.remove(a411_driver);
+    }
+
 } else {
     if (!a411.getQuestionSet().equals(a407) && a407.getQuestions().contains(a411)) {
         a407.getQuestions().remove(a411);
@@ -2206,20 +3300,30 @@ if (a411 == null) {
         JPA.em().persist(a407);
     }
     a411.setOrderIndex(0);
-    a411.setUnitCategory(null);
+    ((NumericQuestion)a411).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a411_driver = driverService.findByName("A411");
+    if (a411_driver != null) {
+        driverService.remove(a411_driver);
+    }
+
+    ((NumericQuestion)a411).setDriver(null);
+
     JPA.em().persist(a411);
 }
 
+    }
+    private void createQuestionA414() {
+        // == A414
+        // Catégorie de véhicule
 
-    // == A414
-    // Catégorie de véhicule
-
-    StringQuestion a414 = (StringQuestion) questionService.findByCode(QuestionCode.A414);
+        a414 = (StringQuestion) questionService.findByCode(QuestionCode.A414);
 if (a414 == null) {
     a414 = new StringQuestion(a413, 0, QuestionCode.A414, null);
     JPA.em().persist(a414);
 } else {
-    a414.setDefaultValue(null);
+    ((StringQuestion)a414).setDefaultValue(null);
     if (!a414.getQuestionSet().equals(a413) && a413.getQuestions().contains(a414)) {
         a413.getQuestions().remove(a414);
         JPA.em().persist(a413);
@@ -2232,11 +3336,12 @@ if (a414 == null) {
     JPA.em().persist(a414);
 }
 
+    }
+    private void createQuestionA415() {
+        // == A415
+        // Quel type de carburant utilise-t-il ?
 
-    // == A415
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a415 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A415);
+        a415 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A415);
 if (a415 == null) {
     a415 = new ValueSelectionQuestion(a413, 0, QuestionCode.A415, CodeList.CARBURANT);
     JPA.em().persist(a415);
@@ -2250,19 +3355,27 @@ if (a415 == null) {
         JPA.em().persist(a413);
     }
     a415.setOrderIndex(0);
-    a415.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a415).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a415);
 }
 
+    }
+    private void createQuestionA416() {
+        // == A416
+        // Prix moyen du litre de ce carburant
 
-    // == A416
-    // Prix moyen du litre de ce carburant
-
-    
-DoubleQuestion a416 = (DoubleQuestion) questionService.findByCode(QuestionCode.A416);
+        
+a416 = (DoubleQuestion) questionService.findByCode(QuestionCode.A416);
 if (a416 == null) {
     a416 = new DoubleQuestion( a413, 0, QuestionCode.A416, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a416);
+
+    // cleanup the driver
+    Driver a416_driver = driverService.findByName("A416");
+    if (a416_driver != null) {
+        driverService.remove(a416_driver);
+    }
+
 } else {
     if (!a416.getQuestionSet().equals(a413) && a413.getQuestions().contains(a416)) {
         a413.getQuestions().remove(a416);
@@ -2272,23 +3385,40 @@ if (a416 == null) {
         a413.getQuestions().add(a416);
         JPA.em().persist(a413);
     }
-    a416.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a416).setUnitCategory(moneyUnits);
     a416.setOrderIndex(0);
-    a416.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a416).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a416_driver = driverService.findByName("A416");
+    if (a416_driver != null) {
+        driverService.remove(a416_driver);
+    }
+
+    ((NumericQuestion)a416).setDriver(null);
+
     JPA.em().persist(a416);
 }
 
 
 
+    }
+    private void createQuestionA417() {
+        // == A417
+        // Quel est le montant annuel de dépenses en carburant?
 
-    // == A417
-    // Quel est le montant annuel de dépenses en carburant?
-
-    
-DoubleQuestion a417 = (DoubleQuestion) questionService.findByCode(QuestionCode.A417);
+        
+a417 = (DoubleQuestion) questionService.findByCode(QuestionCode.A417);
 if (a417 == null) {
     a417 = new DoubleQuestion( a413, 0, QuestionCode.A417, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a417);
+
+    // cleanup the driver
+    Driver a417_driver = driverService.findByName("A417");
+    if (a417_driver != null) {
+        driverService.remove(a417_driver);
+    }
+
 } else {
     if (!a417.getQuestionSet().equals(a413) && a413.getQuestions().contains(a417)) {
         a413.getQuestions().remove(a417);
@@ -2298,23 +3428,40 @@ if (a417 == null) {
         a413.getQuestions().add(a417);
         JPA.em().persist(a413);
     }
-    a417.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a417).setUnitCategory(moneyUnits);
     a417.setOrderIndex(0);
-    a417.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a417).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a417_driver = driverService.findByName("A417");
+    if (a417_driver != null) {
+        driverService.remove(a417_driver);
+    }
+
+    ((NumericQuestion)a417).setDriver(null);
+
     JPA.em().persist(a417);
 }
 
 
 
+    }
+    private void createQuestionA503() {
+        // == A503
+        // Consommation d'essence
 
-    // == A503
-    // Consommation d'essence
-
-    
-DoubleQuestion a503 = (DoubleQuestion) questionService.findByCode(QuestionCode.A503);
+        
+a503 = (DoubleQuestion) questionService.findByCode(QuestionCode.A503);
 if (a503 == null) {
     a503 = new DoubleQuestion( a502, 0, QuestionCode.A503, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a503);
+
+    // cleanup the driver
+    Driver a503_driver = driverService.findByName("A503");
+    if (a503_driver != null) {
+        driverService.remove(a503_driver);
+    }
+
 } else {
     if (!a503.getQuestionSet().equals(a502) && a502.getQuestions().contains(a503)) {
         a502.getQuestions().remove(a503);
@@ -2324,23 +3471,40 @@ if (a503 == null) {
         a502.getQuestions().add(a503);
         JPA.em().persist(a502);
     }
-    a503.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a503).setUnitCategory(volumeUnits);
     a503.setOrderIndex(0);
-    a503.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a503).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a503_driver = driverService.findByName("A503");
+    if (a503_driver != null) {
+        driverService.remove(a503_driver);
+    }
+
+    ((NumericQuestion)a503).setDriver(null);
+
     JPA.em().persist(a503);
 }
 
 
 
+    }
+    private void createQuestionA504() {
+        // == A504
+        // Consommation de diesel
 
-    // == A504
-    // Consommation de diesel
-
-    
-DoubleQuestion a504 = (DoubleQuestion) questionService.findByCode(QuestionCode.A504);
+        
+a504 = (DoubleQuestion) questionService.findByCode(QuestionCode.A504);
 if (a504 == null) {
     a504 = new DoubleQuestion( a502, 0, QuestionCode.A504, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a504);
+
+    // cleanup the driver
+    Driver a504_driver = driverService.findByName("A504");
+    if (a504_driver != null) {
+        driverService.remove(a504_driver);
+    }
+
 } else {
     if (!a504.getQuestionSet().equals(a502) && a502.getQuestions().contains(a504)) {
         a502.getQuestions().remove(a504);
@@ -2350,23 +3514,40 @@ if (a504 == null) {
         a502.getQuestions().add(a504);
         JPA.em().persist(a502);
     }
-    a504.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a504).setUnitCategory(volumeUnits);
     a504.setOrderIndex(0);
-    a504.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a504).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a504_driver = driverService.findByName("A504");
+    if (a504_driver != null) {
+        driverService.remove(a504_driver);
+    }
+
+    ((NumericQuestion)a504).setDriver(null);
+
     JPA.em().persist(a504);
 }
 
 
 
+    }
+    private void createQuestionA505() {
+        // == A505
+        // Consommation de gaz de pétrole liquéfié (GPL)
 
-    // == A505
-    // Consommation de gaz de pétrole liquéfié (GPL)
-
-    
-DoubleQuestion a505 = (DoubleQuestion) questionService.findByCode(QuestionCode.A505);
+        
+a505 = (DoubleQuestion) questionService.findByCode(QuestionCode.A505);
 if (a505 == null) {
     a505 = new DoubleQuestion( a502, 0, QuestionCode.A505, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a505);
+
+    // cleanup the driver
+    Driver a505_driver = driverService.findByName("A505");
+    if (a505_driver != null) {
+        driverService.remove(a505_driver);
+    }
+
 } else {
     if (!a505.getQuestionSet().equals(a502) && a502.getQuestions().contains(a505)) {
         a502.getQuestions().remove(a505);
@@ -2376,24 +3557,34 @@ if (a505 == null) {
         a502.getQuestions().add(a505);
         JPA.em().persist(a502);
     }
-    a505.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a505).setUnitCategory(volumeUnits);
     a505.setOrderIndex(0);
-    a505.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a505).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a505_driver = driverService.findByName("A505");
+    if (a505_driver != null) {
+        driverService.remove(a505_driver);
+    }
+
+    ((NumericQuestion)a505).setDriver(null);
+
     JPA.em().persist(a505);
 }
 
 
 
+    }
+    private void createQuestionA508() {
+        // == A508
+        // Catégorie de véhicule
 
-    // == A508
-    // Catégorie de véhicule
-
-    StringQuestion a508 = (StringQuestion) questionService.findByCode(QuestionCode.A508);
+        a508 = (StringQuestion) questionService.findByCode(QuestionCode.A508);
 if (a508 == null) {
     a508 = new StringQuestion(a507, 0, QuestionCode.A508, null);
     JPA.em().persist(a508);
 } else {
-    a508.setDefaultValue(null);
+    ((StringQuestion)a508).setDefaultValue(null);
     if (!a508.getQuestionSet().equals(a507) && a507.getQuestions().contains(a508)) {
         a507.getQuestions().remove(a508);
         JPA.em().persist(a507);
@@ -2406,11 +3597,12 @@ if (a508 == null) {
     JPA.em().persist(a508);
 }
 
+    }
+    private void createQuestionA509() {
+        // == A509
+        // Quel type de carburant utilise-t-il ?
 
-    // == A509
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a509 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A509);
+        a509 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A509);
 if (a509 == null) {
     a509 = new ValueSelectionQuestion(a507, 0, QuestionCode.A509, CodeList.CARBURANT);
     JPA.em().persist(a509);
@@ -2424,18 +3616,26 @@ if (a509 == null) {
         JPA.em().persist(a507);
     }
     a509.setOrderIndex(0);
-    a509.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a509).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a509);
 }
 
+    }
+    private void createQuestionA510() {
+        // == A510
+        // Consommation moyenne (L/100km)
 
-    // == A510
-    // Consommation moyenne (L/100km)
-
-    IntegerQuestion a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
+        a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
 if (a510 == null) {
     a510 = new IntegerQuestion(a507, 0, QuestionCode.A510, null);
     JPA.em().persist(a510);
+
+    // cleanup the driver
+    Driver a510_driver = driverService.findByName("A510");
+    if (a510_driver != null) {
+        driverService.remove(a510_driver);
+    }
+
 } else {
     if (!a510.getQuestionSet().equals(a507) && a507.getQuestions().contains(a510)) {
         a507.getQuestions().remove(a510);
@@ -2446,18 +3646,35 @@ if (a510 == null) {
         JPA.em().persist(a507);
     }
     a510.setOrderIndex(0);
-    a510.setUnitCategory(null);
+    ((NumericQuestion)a510).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a510_driver = driverService.findByName("A510");
+    if (a510_driver != null) {
+        driverService.remove(a510_driver);
+    }
+
+    ((NumericQuestion)a510).setDriver(null);
+
     JPA.em().persist(a510);
 }
 
+    }
+    private void createQuestionA511() {
+        // == A511
+        // Quelle est le nombre de kilomètres parcourus par an?
 
-    // == A511
-    // Quelle est le nombre de kilomètres parcourus par an?
-
-    IntegerQuestion a511 = (IntegerQuestion) questionService.findByCode(QuestionCode.A511);
+        a511 = (IntegerQuestion) questionService.findByCode(QuestionCode.A511);
 if (a511 == null) {
     a511 = new IntegerQuestion(a507, 0, QuestionCode.A511, null);
     JPA.em().persist(a511);
+
+    // cleanup the driver
+    Driver a511_driver = driverService.findByName("A511");
+    if (a511_driver != null) {
+        driverService.remove(a511_driver);
+    }
+
 } else {
     if (!a511.getQuestionSet().equals(a507) && a507.getQuestions().contains(a511)) {
         a507.getQuestions().remove(a511);
@@ -2468,20 +3685,30 @@ if (a511 == null) {
         JPA.em().persist(a507);
     }
     a511.setOrderIndex(0);
-    a511.setUnitCategory(null);
+    ((NumericQuestion)a511).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a511_driver = driverService.findByName("A511");
+    if (a511_driver != null) {
+        driverService.remove(a511_driver);
+    }
+
+    ((NumericQuestion)a511).setDriver(null);
+
     JPA.em().persist(a511);
 }
 
+    }
+    private void createQuestionA514() {
+        // == A514
+        // Catégorie de véhicule
 
-    // == A514
-    // Catégorie de véhicule
-
-    StringQuestion a514 = (StringQuestion) questionService.findByCode(QuestionCode.A514);
+        a514 = (StringQuestion) questionService.findByCode(QuestionCode.A514);
 if (a514 == null) {
     a514 = new StringQuestion(a513, 0, QuestionCode.A514, null);
     JPA.em().persist(a514);
 } else {
-    a514.setDefaultValue(null);
+    ((StringQuestion)a514).setDefaultValue(null);
     if (!a514.getQuestionSet().equals(a513) && a513.getQuestions().contains(a514)) {
         a513.getQuestions().remove(a514);
         JPA.em().persist(a513);
@@ -2494,11 +3721,12 @@ if (a514 == null) {
     JPA.em().persist(a514);
 }
 
+    }
+    private void createQuestionA515() {
+        // == A515
+        // Quel type de carburant utilise-t-il ?
 
-    // == A515
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a515 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A515);
+        a515 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A515);
 if (a515 == null) {
     a515 = new ValueSelectionQuestion(a513, 0, QuestionCode.A515, CodeList.CARBURANT);
     JPA.em().persist(a515);
@@ -2512,19 +3740,27 @@ if (a515 == null) {
         JPA.em().persist(a513);
     }
     a515.setOrderIndex(0);
-    a515.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a515).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a515);
 }
 
+    }
+    private void createQuestionA516() {
+        // == A516
+        // Prix moyen du litre de ce carburant
 
-    // == A516
-    // Prix moyen du litre de ce carburant
-
-    
-DoubleQuestion a516 = (DoubleQuestion) questionService.findByCode(QuestionCode.A516);
+        
+a516 = (DoubleQuestion) questionService.findByCode(QuestionCode.A516);
 if (a516 == null) {
     a516 = new DoubleQuestion( a513, 0, QuestionCode.A516, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a516);
+
+    // cleanup the driver
+    Driver a516_driver = driverService.findByName("A516");
+    if (a516_driver != null) {
+        driverService.remove(a516_driver);
+    }
+
 } else {
     if (!a516.getQuestionSet().equals(a513) && a513.getQuestions().contains(a516)) {
         a513.getQuestions().remove(a516);
@@ -2534,23 +3770,40 @@ if (a516 == null) {
         a513.getQuestions().add(a516);
         JPA.em().persist(a513);
     }
-    a516.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a516).setUnitCategory(moneyUnits);
     a516.setOrderIndex(0);
-    a516.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a516).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a516_driver = driverService.findByName("A516");
+    if (a516_driver != null) {
+        driverService.remove(a516_driver);
+    }
+
+    ((NumericQuestion)a516).setDriver(null);
+
     JPA.em().persist(a516);
 }
 
 
 
+    }
+    private void createQuestionA517() {
+        // == A517
+        // Quel est le montant annuel de dépenses en carburant?
 
-    // == A517
-    // Quel est le montant annuel de dépenses en carburant?
-
-    
-DoubleQuestion a517 = (DoubleQuestion) questionService.findByCode(QuestionCode.A517);
+        
+a517 = (DoubleQuestion) questionService.findByCode(QuestionCode.A517);
 if (a517 == null) {
     a517 = new DoubleQuestion( a513, 0, QuestionCode.A517, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a517);
+
+    // cleanup the driver
+    Driver a517_driver = driverService.findByName("A517");
+    if (a517_driver != null) {
+        driverService.remove(a517_driver);
+    }
+
 } else {
     if (!a517.getQuestionSet().equals(a513) && a513.getQuestions().contains(a517)) {
         a513.getQuestions().remove(a517);
@@ -2560,23 +3813,40 @@ if (a517 == null) {
         a513.getQuestions().add(a517);
         JPA.em().persist(a513);
     }
-    a517.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a517).setUnitCategory(moneyUnits);
     a517.setOrderIndex(0);
-    a517.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a517).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a517_driver = driverService.findByName("A517");
+    if (a517_driver != null) {
+        driverService.remove(a517_driver);
+    }
+
+    ((NumericQuestion)a517).setDriver(null);
+
     JPA.em().persist(a517);
 }
 
 
 
+    }
+    private void createQuestionA603() {
+        // == A603
+        // Consommation d'essence
 
-    // == A603
-    // Consommation d'essence
-
-    
-DoubleQuestion a603 = (DoubleQuestion) questionService.findByCode(QuestionCode.A603);
+        
+a603 = (DoubleQuestion) questionService.findByCode(QuestionCode.A603);
 if (a603 == null) {
     a603 = new DoubleQuestion( a602, 0, QuestionCode.A603, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a603);
+
+    // cleanup the driver
+    Driver a603_driver = driverService.findByName("A603");
+    if (a603_driver != null) {
+        driverService.remove(a603_driver);
+    }
+
 } else {
     if (!a603.getQuestionSet().equals(a602) && a602.getQuestions().contains(a603)) {
         a602.getQuestions().remove(a603);
@@ -2586,23 +3856,40 @@ if (a603 == null) {
         a602.getQuestions().add(a603);
         JPA.em().persist(a602);
     }
-    a603.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a603).setUnitCategory(volumeUnits);
     a603.setOrderIndex(0);
-    a603.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a603).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a603_driver = driverService.findByName("A603");
+    if (a603_driver != null) {
+        driverService.remove(a603_driver);
+    }
+
+    ((NumericQuestion)a603).setDriver(null);
+
     JPA.em().persist(a603);
 }
 
 
 
+    }
+    private void createQuestionA604() {
+        // == A604
+        // Consommation de diesel
 
-    // == A604
-    // Consommation de diesel
-
-    
-DoubleQuestion a604 = (DoubleQuestion) questionService.findByCode(QuestionCode.A604);
+        
+a604 = (DoubleQuestion) questionService.findByCode(QuestionCode.A604);
 if (a604 == null) {
     a604 = new DoubleQuestion( a602, 0, QuestionCode.A604, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a604);
+
+    // cleanup the driver
+    Driver a604_driver = driverService.findByName("A604");
+    if (a604_driver != null) {
+        driverService.remove(a604_driver);
+    }
+
 } else {
     if (!a604.getQuestionSet().equals(a602) && a602.getQuestions().contains(a604)) {
         a602.getQuestions().remove(a604);
@@ -2612,23 +3899,40 @@ if (a604 == null) {
         a602.getQuestions().add(a604);
         JPA.em().persist(a602);
     }
-    a604.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a604).setUnitCategory(volumeUnits);
     a604.setOrderIndex(0);
-    a604.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a604).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a604_driver = driverService.findByName("A604");
+    if (a604_driver != null) {
+        driverService.remove(a604_driver);
+    }
+
+    ((NumericQuestion)a604).setDriver(null);
+
     JPA.em().persist(a604);
 }
 
 
 
+    }
+    private void createQuestionA605() {
+        // == A605
+        // Consommation de gaz de pétrole liquéfié (GPL)
 
-    // == A605
-    // Consommation de gaz de pétrole liquéfié (GPL)
-
-    
-DoubleQuestion a605 = (DoubleQuestion) questionService.findByCode(QuestionCode.A605);
+        
+a605 = (DoubleQuestion) questionService.findByCode(QuestionCode.A605);
 if (a605 == null) {
     a605 = new DoubleQuestion( a602, 0, QuestionCode.A605, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a605);
+
+    // cleanup the driver
+    Driver a605_driver = driverService.findByName("A605");
+    if (a605_driver != null) {
+        driverService.remove(a605_driver);
+    }
+
 } else {
     if (!a605.getQuestionSet().equals(a602) && a602.getQuestions().contains(a605)) {
         a602.getQuestions().remove(a605);
@@ -2638,24 +3942,34 @@ if (a605 == null) {
         a602.getQuestions().add(a605);
         JPA.em().persist(a602);
     }
-    a605.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a605).setUnitCategory(volumeUnits);
     a605.setOrderIndex(0);
-    a605.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a605).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a605_driver = driverService.findByName("A605");
+    if (a605_driver != null) {
+        driverService.remove(a605_driver);
+    }
+
+    ((NumericQuestion)a605).setDriver(null);
+
     JPA.em().persist(a605);
 }
 
 
 
+    }
+    private void createQuestionA608() {
+        // == A608
+        // Catégorie de véhicule
 
-    // == A608
-    // Catégorie de véhicule
-
-    StringQuestion a608 = (StringQuestion) questionService.findByCode(QuestionCode.A608);
+        a608 = (StringQuestion) questionService.findByCode(QuestionCode.A608);
 if (a608 == null) {
     a608 = new StringQuestion(a607, 0, QuestionCode.A608, null);
     JPA.em().persist(a608);
 } else {
-    a608.setDefaultValue(null);
+    ((StringQuestion)a608).setDefaultValue(null);
     if (!a608.getQuestionSet().equals(a607) && a607.getQuestions().contains(a608)) {
         a607.getQuestions().remove(a608);
         JPA.em().persist(a607);
@@ -2668,11 +3982,12 @@ if (a608 == null) {
     JPA.em().persist(a608);
 }
 
+    }
+    private void createQuestionA609() {
+        // == A609
+        // Quel type de carburant utilise-t-il ?
 
-    // == A609
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a609 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A609);
+        a609 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A609);
 if (a609 == null) {
     a609 = new ValueSelectionQuestion(a607, 0, QuestionCode.A609, CodeList.CARBURANT);
     JPA.em().persist(a609);
@@ -2686,18 +4001,26 @@ if (a609 == null) {
         JPA.em().persist(a607);
     }
     a609.setOrderIndex(0);
-    a609.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a609).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a609);
 }
 
+    }
+    private void createQuestionA610() {
+        // == A610
+        // Consommation moyenne (L/100km)
 
-    // == A610
-    // Consommation moyenne (L/100km)
-
-    IntegerQuestion a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
+        a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
 if (a610 == null) {
     a610 = new IntegerQuestion(a607, 0, QuestionCode.A610, null);
     JPA.em().persist(a610);
+
+    // cleanup the driver
+    Driver a610_driver = driverService.findByName("A610");
+    if (a610_driver != null) {
+        driverService.remove(a610_driver);
+    }
+
 } else {
     if (!a610.getQuestionSet().equals(a607) && a607.getQuestions().contains(a610)) {
         a607.getQuestions().remove(a610);
@@ -2708,18 +4031,35 @@ if (a610 == null) {
         JPA.em().persist(a607);
     }
     a610.setOrderIndex(0);
-    a610.setUnitCategory(null);
+    ((NumericQuestion)a610).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a610_driver = driverService.findByName("A610");
+    if (a610_driver != null) {
+        driverService.remove(a610_driver);
+    }
+
+    ((NumericQuestion)a610).setDriver(null);
+
     JPA.em().persist(a610);
 }
 
+    }
+    private void createQuestionA611() {
+        // == A611
+        // Quelle est le nombre de kilomètres parcourus par an?
 
-    // == A611
-    // Quelle est le nombre de kilomètres parcourus par an?
-
-    IntegerQuestion a611 = (IntegerQuestion) questionService.findByCode(QuestionCode.A611);
+        a611 = (IntegerQuestion) questionService.findByCode(QuestionCode.A611);
 if (a611 == null) {
     a611 = new IntegerQuestion(a607, 0, QuestionCode.A611, null);
     JPA.em().persist(a611);
+
+    // cleanup the driver
+    Driver a611_driver = driverService.findByName("A611");
+    if (a611_driver != null) {
+        driverService.remove(a611_driver);
+    }
+
 } else {
     if (!a611.getQuestionSet().equals(a607) && a607.getQuestions().contains(a611)) {
         a607.getQuestions().remove(a611);
@@ -2730,20 +4070,30 @@ if (a611 == null) {
         JPA.em().persist(a607);
     }
     a611.setOrderIndex(0);
-    a611.setUnitCategory(null);
+    ((NumericQuestion)a611).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a611_driver = driverService.findByName("A611");
+    if (a611_driver != null) {
+        driverService.remove(a611_driver);
+    }
+
+    ((NumericQuestion)a611).setDriver(null);
+
     JPA.em().persist(a611);
 }
 
+    }
+    private void createQuestionA614() {
+        // == A614
+        // Catégorie de véhicule
 
-    // == A614
-    // Catégorie de véhicule
-
-    StringQuestion a614 = (StringQuestion) questionService.findByCode(QuestionCode.A614);
+        a614 = (StringQuestion) questionService.findByCode(QuestionCode.A614);
 if (a614 == null) {
     a614 = new StringQuestion(a613, 0, QuestionCode.A614, null);
     JPA.em().persist(a614);
 } else {
-    a614.setDefaultValue(null);
+    ((StringQuestion)a614).setDefaultValue(null);
     if (!a614.getQuestionSet().equals(a613) && a613.getQuestions().contains(a614)) {
         a613.getQuestions().remove(a614);
         JPA.em().persist(a613);
@@ -2756,11 +4106,12 @@ if (a614 == null) {
     JPA.em().persist(a614);
 }
 
+    }
+    private void createQuestionA615() {
+        // == A615
+        // Quel type de carburant utilise-t-il ?
 
-    // == A615
-    // Quel type de carburant utilise-t-il ?
-
-    ValueSelectionQuestion a615 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A615);
+        a615 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A615);
 if (a615 == null) {
     a615 = new ValueSelectionQuestion(a613, 0, QuestionCode.A615, CodeList.CARBURANT);
     JPA.em().persist(a615);
@@ -2774,19 +4125,27 @@ if (a615 == null) {
         JPA.em().persist(a613);
     }
     a615.setOrderIndex(0);
-    a615.setCodeList(CodeList.CARBURANT);
+    ((ValueSelectionQuestion)a615).setCodeList(CodeList.CARBURANT);
     JPA.em().persist(a615);
 }
 
+    }
+    private void createQuestionA616() {
+        // == A616
+        // Prix moyen du litre de ce carburant
 
-    // == A616
-    // Prix moyen du litre de ce carburant
-
-    
-DoubleQuestion a616 = (DoubleQuestion) questionService.findByCode(QuestionCode.A616);
+        
+a616 = (DoubleQuestion) questionService.findByCode(QuestionCode.A616);
 if (a616 == null) {
     a616 = new DoubleQuestion( a613, 0, QuestionCode.A616, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a616);
+
+    // cleanup the driver
+    Driver a616_driver = driverService.findByName("A616");
+    if (a616_driver != null) {
+        driverService.remove(a616_driver);
+    }
+
 } else {
     if (!a616.getQuestionSet().equals(a613) && a613.getQuestions().contains(a616)) {
         a613.getQuestions().remove(a616);
@@ -2796,23 +4155,40 @@ if (a616 == null) {
         a613.getQuestions().add(a616);
         JPA.em().persist(a613);
     }
-    a616.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a616).setUnitCategory(moneyUnits);
     a616.setOrderIndex(0);
-    a616.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a616).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a616_driver = driverService.findByName("A616");
+    if (a616_driver != null) {
+        driverService.remove(a616_driver);
+    }
+
+    ((NumericQuestion)a616).setDriver(null);
+
     JPA.em().persist(a616);
 }
 
 
 
+    }
+    private void createQuestionA617() {
+        // == A617
+        // Quel est le montant annuel de dépenses en carburant?
 
-    // == A617
-    // Quel est le montant annuel de dépenses en carburant?
-
-    
-DoubleQuestion a617 = (DoubleQuestion) questionService.findByCode(QuestionCode.A617);
+        
+a617 = (DoubleQuestion) questionService.findByCode(QuestionCode.A617);
 if (a617 == null) {
     a617 = new DoubleQuestion( a613, 0, QuestionCode.A617, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a617);
+
+    // cleanup the driver
+    Driver a617_driver = driverService.findByName("A617");
+    if (a617_driver != null) {
+        driverService.remove(a617_driver);
+    }
+
 } else {
     if (!a617.getQuestionSet().equals(a613) && a613.getQuestions().contains(a617)) {
         a613.getQuestions().remove(a617);
@@ -2822,22 +4198,39 @@ if (a617 == null) {
         a613.getQuestions().add(a617);
         JPA.em().persist(a613);
     }
-    a617.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a617).setUnitCategory(moneyUnits);
     a617.setOrderIndex(0);
-    a617.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a617).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a617_driver = driverService.findByName("A617");
+    if (a617_driver != null) {
+        driverService.remove(a617_driver);
+    }
+
+    ((NumericQuestion)a617).setDriver(null);
+
     JPA.em().persist(a617);
 }
 
 
 
+    }
+    private void createQuestionA95() {
+        // == A95
+        // Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
 
-    // == A95
-    // Bus TEC pour déplacement domicile-travail des employés (en km.passagers)
-
-    IntegerQuestion a95 = (IntegerQuestion) questionService.findByCode(QuestionCode.A95);
+        a95 = (IntegerQuestion) questionService.findByCode(QuestionCode.A95);
 if (a95 == null) {
     a95 = new IntegerQuestion(a94, 0, QuestionCode.A95, null);
     JPA.em().persist(a95);
+
+    // cleanup the driver
+    Driver a95_driver = driverService.findByName("A95");
+    if (a95_driver != null) {
+        driverService.remove(a95_driver);
+    }
+
 } else {
     if (!a95.getQuestionSet().equals(a94) && a94.getQuestions().contains(a95)) {
         a94.getQuestions().remove(a95);
@@ -2848,18 +4241,35 @@ if (a95 == null) {
         JPA.em().persist(a94);
     }
     a95.setOrderIndex(0);
-    a95.setUnitCategory(null);
+    ((NumericQuestion)a95).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a95_driver = driverService.findByName("A95");
+    if (a95_driver != null) {
+        driverService.remove(a95_driver);
+    }
+
+    ((NumericQuestion)a95).setDriver(null);
+
     JPA.em().persist(a95);
 }
 
+    }
+    private void createQuestionA96() {
+        // == A96
+        // Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    // == A96
-    // Bus TEC pour déplacements professionnels & des visiteurs (en km.passagers)
-
-    IntegerQuestion a96 = (IntegerQuestion) questionService.findByCode(QuestionCode.A96);
+        a96 = (IntegerQuestion) questionService.findByCode(QuestionCode.A96);
 if (a96 == null) {
     a96 = new IntegerQuestion(a94, 0, QuestionCode.A96, null);
     JPA.em().persist(a96);
+
+    // cleanup the driver
+    Driver a96_driver = driverService.findByName("A96");
+    if (a96_driver != null) {
+        driverService.remove(a96_driver);
+    }
+
 } else {
     if (!a96.getQuestionSet().equals(a94) && a94.getQuestions().contains(a96)) {
         a94.getQuestions().remove(a96);
@@ -2870,18 +4280,35 @@ if (a96 == null) {
         JPA.em().persist(a94);
     }
     a96.setOrderIndex(0);
-    a96.setUnitCategory(null);
+    ((NumericQuestion)a96).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a96_driver = driverService.findByName("A96");
+    if (a96_driver != null) {
+        driverService.remove(a96_driver);
+    }
+
+    ((NumericQuestion)a96).setDriver(null);
+
     JPA.em().persist(a96);
 }
 
+    }
+    private void createQuestionA97() {
+        // == A97
+        // Métro pour déplacement domicile-travail des employés (en km.passagers)
 
-    // == A97
-    // Métro pour déplacement domicile-travail des employés (en km.passagers)
-
-    IntegerQuestion a97 = (IntegerQuestion) questionService.findByCode(QuestionCode.A97);
+        a97 = (IntegerQuestion) questionService.findByCode(QuestionCode.A97);
 if (a97 == null) {
     a97 = new IntegerQuestion(a94, 0, QuestionCode.A97, null);
     JPA.em().persist(a97);
+
+    // cleanup the driver
+    Driver a97_driver = driverService.findByName("A97");
+    if (a97_driver != null) {
+        driverService.remove(a97_driver);
+    }
+
 } else {
     if (!a97.getQuestionSet().equals(a94) && a94.getQuestions().contains(a97)) {
         a94.getQuestions().remove(a97);
@@ -2892,18 +4319,35 @@ if (a97 == null) {
         JPA.em().persist(a94);
     }
     a97.setOrderIndex(0);
-    a97.setUnitCategory(null);
+    ((NumericQuestion)a97).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a97_driver = driverService.findByName("A97");
+    if (a97_driver != null) {
+        driverService.remove(a97_driver);
+    }
+
+    ((NumericQuestion)a97).setDriver(null);
+
     JPA.em().persist(a97);
 }
 
+    }
+    private void createQuestionA98() {
+        // == A98
+        // Métro pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    // == A98
-    // Métro pour déplacements professionnels & des visiteurs (en km.passagers)
-
-    IntegerQuestion a98 = (IntegerQuestion) questionService.findByCode(QuestionCode.A98);
+        a98 = (IntegerQuestion) questionService.findByCode(QuestionCode.A98);
 if (a98 == null) {
     a98 = new IntegerQuestion(a94, 0, QuestionCode.A98, null);
     JPA.em().persist(a98);
+
+    // cleanup the driver
+    Driver a98_driver = driverService.findByName("A98");
+    if (a98_driver != null) {
+        driverService.remove(a98_driver);
+    }
+
 } else {
     if (!a98.getQuestionSet().equals(a94) && a94.getQuestions().contains(a98)) {
         a94.getQuestions().remove(a98);
@@ -2914,18 +4358,35 @@ if (a98 == null) {
         JPA.em().persist(a94);
     }
     a98.setOrderIndex(0);
-    a98.setUnitCategory(null);
+    ((NumericQuestion)a98).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a98_driver = driverService.findByName("A98");
+    if (a98_driver != null) {
+        driverService.remove(a98_driver);
+    }
+
+    ((NumericQuestion)a98).setDriver(null);
+
     JPA.em().persist(a98);
 }
 
+    }
+    private void createQuestionA99() {
+        // == A99
+        // Train national SNCB pour déplacement domicile-travail des employés (en km.passagers)
 
-    // == A99
-    // Train national SNCB pour déplacement domicile-travail des employés (en km.passagers)
-
-    IntegerQuestion a99 = (IntegerQuestion) questionService.findByCode(QuestionCode.A99);
+        a99 = (IntegerQuestion) questionService.findByCode(QuestionCode.A99);
 if (a99 == null) {
     a99 = new IntegerQuestion(a94, 0, QuestionCode.A99, null);
     JPA.em().persist(a99);
+
+    // cleanup the driver
+    Driver a99_driver = driverService.findByName("A99");
+    if (a99_driver != null) {
+        driverService.remove(a99_driver);
+    }
+
 } else {
     if (!a99.getQuestionSet().equals(a94) && a94.getQuestions().contains(a99)) {
         a94.getQuestions().remove(a99);
@@ -2936,18 +4397,35 @@ if (a99 == null) {
         JPA.em().persist(a94);
     }
     a99.setOrderIndex(0);
-    a99.setUnitCategory(null);
+    ((NumericQuestion)a99).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a99_driver = driverService.findByName("A99");
+    if (a99_driver != null) {
+        driverService.remove(a99_driver);
+    }
+
+    ((NumericQuestion)a99).setDriver(null);
+
     JPA.em().persist(a99);
 }
 
+    }
+    private void createQuestionA100() {
+        // == A100
+        // Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    // == A100
-    // Train national SNCB pour déplacements professionnels & des visiteurs (en km.passagers)
-
-    IntegerQuestion a100 = (IntegerQuestion) questionService.findByCode(QuestionCode.A100);
+        a100 = (IntegerQuestion) questionService.findByCode(QuestionCode.A100);
 if (a100 == null) {
     a100 = new IntegerQuestion(a94, 0, QuestionCode.A100, null);
     JPA.em().persist(a100);
+
+    // cleanup the driver
+    Driver a100_driver = driverService.findByName("A100");
+    if (a100_driver != null) {
+        driverService.remove(a100_driver);
+    }
+
 } else {
     if (!a100.getQuestionSet().equals(a94) && a94.getQuestions().contains(a100)) {
         a94.getQuestions().remove(a100);
@@ -2958,18 +4436,35 @@ if (a100 == null) {
         JPA.em().persist(a94);
     }
     a100.setOrderIndex(0);
-    a100.setUnitCategory(null);
+    ((NumericQuestion)a100).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a100_driver = driverService.findByName("A100");
+    if (a100_driver != null) {
+        driverService.remove(a100_driver);
+    }
+
+    ((NumericQuestion)a100).setDriver(null);
+
     JPA.em().persist(a100);
 }
 
+    }
+    private void createQuestionA101() {
+        // == A101
+        // Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers)
 
-    // == A101
-    // Train international (TGV) pour déplacement domicile-travail des employés (en km.passagers)
-
-    IntegerQuestion a101 = (IntegerQuestion) questionService.findByCode(QuestionCode.A101);
+        a101 = (IntegerQuestion) questionService.findByCode(QuestionCode.A101);
 if (a101 == null) {
     a101 = new IntegerQuestion(a94, 0, QuestionCode.A101, null);
     JPA.em().persist(a101);
+
+    // cleanup the driver
+    Driver a101_driver = driverService.findByName("A101");
+    if (a101_driver != null) {
+        driverService.remove(a101_driver);
+    }
+
 } else {
     if (!a101.getQuestionSet().equals(a94) && a94.getQuestions().contains(a101)) {
         a94.getQuestions().remove(a101);
@@ -2980,18 +4475,35 @@ if (a101 == null) {
         JPA.em().persist(a94);
     }
     a101.setOrderIndex(0);
-    a101.setUnitCategory(null);
+    ((NumericQuestion)a101).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a101_driver = driverService.findByName("A101");
+    if (a101_driver != null) {
+        driverService.remove(a101_driver);
+    }
+
+    ((NumericQuestion)a101).setDriver(null);
+
     JPA.em().persist(a101);
 }
 
+    }
+    private void createQuestionA102() {
+        // == A102
+        // Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    // == A102
-    // Train international (TGV) pour déplacements professionnels & des visiteurs (en km.passagers)
-
-    IntegerQuestion a102 = (IntegerQuestion) questionService.findByCode(QuestionCode.A102);
+        a102 = (IntegerQuestion) questionService.findByCode(QuestionCode.A102);
 if (a102 == null) {
     a102 = new IntegerQuestion(a94, 0, QuestionCode.A102, null);
     JPA.em().persist(a102);
+
+    // cleanup the driver
+    Driver a102_driver = driverService.findByName("A102");
+    if (a102_driver != null) {
+        driverService.remove(a102_driver);
+    }
+
 } else {
     if (!a102.getQuestionSet().equals(a94) && a94.getQuestions().contains(a102)) {
         a94.getQuestions().remove(a102);
@@ -3002,18 +4514,35 @@ if (a102 == null) {
         JPA.em().persist(a94);
     }
     a102.setOrderIndex(0);
-    a102.setUnitCategory(null);
+    ((NumericQuestion)a102).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a102_driver = driverService.findByName("A102");
+    if (a102_driver != null) {
+        driverService.remove(a102_driver);
+    }
+
+    ((NumericQuestion)a102).setDriver(null);
+
     JPA.em().persist(a102);
 }
 
+    }
+    private void createQuestionA103() {
+        // == A103
+        // Tram pour déplacement domicile-travail des employés (en km.passagers)
 
-    // == A103
-    // Tram pour déplacement domicile-travail des employés (en km.passagers)
-
-    IntegerQuestion a103 = (IntegerQuestion) questionService.findByCode(QuestionCode.A103);
+        a103 = (IntegerQuestion) questionService.findByCode(QuestionCode.A103);
 if (a103 == null) {
     a103 = new IntegerQuestion(a94, 0, QuestionCode.A103, null);
     JPA.em().persist(a103);
+
+    // cleanup the driver
+    Driver a103_driver = driverService.findByName("A103");
+    if (a103_driver != null) {
+        driverService.remove(a103_driver);
+    }
+
 } else {
     if (!a103.getQuestionSet().equals(a94) && a94.getQuestions().contains(a103)) {
         a94.getQuestions().remove(a103);
@@ -3024,18 +4553,35 @@ if (a103 == null) {
         JPA.em().persist(a94);
     }
     a103.setOrderIndex(0);
-    a103.setUnitCategory(null);
+    ((NumericQuestion)a103).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a103_driver = driverService.findByName("A103");
+    if (a103_driver != null) {
+        driverService.remove(a103_driver);
+    }
+
+    ((NumericQuestion)a103).setDriver(null);
+
     JPA.em().persist(a103);
 }
 
+    }
+    private void createQuestionA104() {
+        // == A104
+        // Tram pour déplacements professionnels & des visiteurs (en km.passagers)
 
-    // == A104
-    // Tram pour déplacements professionnels & des visiteurs (en km.passagers)
-
-    IntegerQuestion a104 = (IntegerQuestion) questionService.findByCode(QuestionCode.A104);
+        a104 = (IntegerQuestion) questionService.findByCode(QuestionCode.A104);
 if (a104 == null) {
     a104 = new IntegerQuestion(a94, 0, QuestionCode.A104, null);
     JPA.em().persist(a104);
+
+    // cleanup the driver
+    Driver a104_driver = driverService.findByName("A104");
+    if (a104_driver != null) {
+        driverService.remove(a104_driver);
+    }
+
 } else {
     if (!a104.getQuestionSet().equals(a94) && a94.getQuestions().contains(a104)) {
         a94.getQuestions().remove(a104);
@@ -3046,18 +4592,35 @@ if (a104 == null) {
         JPA.em().persist(a94);
     }
     a104.setOrderIndex(0);
-    a104.setUnitCategory(null);
+    ((NumericQuestion)a104).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a104_driver = driverService.findByName("A104");
+    if (a104_driver != null) {
+        driverService.remove(a104_driver);
+    }
+
+    ((NumericQuestion)a104).setDriver(null);
+
     JPA.em().persist(a104);
 }
 
+    }
+    private void createQuestionA105() {
+        // == A105
+        // Taxi pour déplacement domicile-travail des employés (en véhicules.km)
 
-    // == A105
-    // Taxi pour déplacement domicile-travail des employés (en véhicules.km)
-
-    IntegerQuestion a105 = (IntegerQuestion) questionService.findByCode(QuestionCode.A105);
+        a105 = (IntegerQuestion) questionService.findByCode(QuestionCode.A105);
 if (a105 == null) {
     a105 = new IntegerQuestion(a94, 0, QuestionCode.A105, null);
     JPA.em().persist(a105);
+
+    // cleanup the driver
+    Driver a105_driver = driverService.findByName("A105");
+    if (a105_driver != null) {
+        driverService.remove(a105_driver);
+    }
+
 } else {
     if (!a105.getQuestionSet().equals(a94) && a94.getQuestions().contains(a105)) {
         a94.getQuestions().remove(a105);
@@ -3068,18 +4631,35 @@ if (a105 == null) {
         JPA.em().persist(a94);
     }
     a105.setOrderIndex(0);
-    a105.setUnitCategory(null);
+    ((NumericQuestion)a105).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a105_driver = driverService.findByName("A105");
+    if (a105_driver != null) {
+        driverService.remove(a105_driver);
+    }
+
+    ((NumericQuestion)a105).setDriver(null);
+
     JPA.em().persist(a105);
 }
 
+    }
+    private void createQuestionA106() {
+        // == A106
+        // Taxi pour déplacements professionnels & des visiteurs (en véhicules.km)
 
-    // == A106
-    // Taxi pour déplacements professionnels & des visiteurs (en véhicules.km)
-
-    IntegerQuestion a106 = (IntegerQuestion) questionService.findByCode(QuestionCode.A106);
+        a106 = (IntegerQuestion) questionService.findByCode(QuestionCode.A106);
 if (a106 == null) {
     a106 = new IntegerQuestion(a94, 0, QuestionCode.A106, null);
     JPA.em().persist(a106);
+
+    // cleanup the driver
+    Driver a106_driver = driverService.findByName("A106");
+    if (a106_driver != null) {
+        driverService.remove(a106_driver);
+    }
+
 } else {
     if (!a106.getQuestionSet().equals(a94) && a94.getQuestions().contains(a106)) {
         a94.getQuestions().remove(a106);
@@ -3090,19 +4670,36 @@ if (a106 == null) {
         JPA.em().persist(a94);
     }
     a106.setOrderIndex(0);
-    a106.setUnitCategory(null);
+    ((NumericQuestion)a106).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a106_driver = driverService.findByName("A106");
+    if (a106_driver != null) {
+        driverService.remove(a106_driver);
+    }
+
+    ((NumericQuestion)a106).setDriver(null);
+
     JPA.em().persist(a106);
 }
 
+    }
+    private void createQuestionA107() {
+        // == A107
+        // Taxi pour déplacement domicile-travail des employés (en valeur)
 
-    // == A107
-    // Taxi pour déplacement domicile-travail des employés (en valeur)
-
-    
-DoubleQuestion a107 = (DoubleQuestion) questionService.findByCode(QuestionCode.A107);
+        
+a107 = (DoubleQuestion) questionService.findByCode(QuestionCode.A107);
 if (a107 == null) {
     a107 = new DoubleQuestion( a94, 0, QuestionCode.A107, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a107);
+
+    // cleanup the driver
+    Driver a107_driver = driverService.findByName("A107");
+    if (a107_driver != null) {
+        driverService.remove(a107_driver);
+    }
+
 } else {
     if (!a107.getQuestionSet().equals(a94) && a94.getQuestions().contains(a107)) {
         a94.getQuestions().remove(a107);
@@ -3112,23 +4709,40 @@ if (a107 == null) {
         a94.getQuestions().add(a107);
         JPA.em().persist(a94);
     }
-    a107.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a107).setUnitCategory(moneyUnits);
     a107.setOrderIndex(0);
-    a107.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a107).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a107_driver = driverService.findByName("A107");
+    if (a107_driver != null) {
+        driverService.remove(a107_driver);
+    }
+
+    ((NumericQuestion)a107).setDriver(null);
+
     JPA.em().persist(a107);
 }
 
 
 
+    }
+    private void createQuestionA108() {
+        // == A108
+        // Taxi pour déplacements professionnels & des visiteurs (en valeur)
 
-    // == A108
-    // Taxi pour déplacements professionnels & des visiteurs (en valeur)
-
-    
-DoubleQuestion a108 = (DoubleQuestion) questionService.findByCode(QuestionCode.A108);
+        
+a108 = (DoubleQuestion) questionService.findByCode(QuestionCode.A108);
 if (a108 == null) {
     a108 = new DoubleQuestion( a94, 0, QuestionCode.A108, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a108);
+
+    // cleanup the driver
+    Driver a108_driver = driverService.findByName("A108");
+    if (a108_driver != null) {
+        driverService.remove(a108_driver);
+    }
+
 } else {
     if (!a108.getQuestionSet().equals(a94) && a94.getQuestions().contains(a108)) {
         a94.getQuestions().remove(a108);
@@ -3138,24 +4752,34 @@ if (a108 == null) {
         a94.getQuestions().add(a108);
         JPA.em().persist(a94);
     }
-    a108.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a108).setUnitCategory(moneyUnits);
     a108.setOrderIndex(0);
-    a108.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a108).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a108_driver = driverService.findByName("A108");
+    if (a108_driver != null) {
+        driverService.remove(a108_driver);
+    }
+
+    ((NumericQuestion)a108).setDriver(null);
+
     JPA.em().persist(a108);
 }
 
 
 
+    }
+    private void createQuestionA116() {
+        // == A116
+        // Catégorie de vol
 
-    // == A116
-    // Catégorie de vol
-
-    StringQuestion a116 = (StringQuestion) questionService.findByCode(QuestionCode.A116);
+        a116 = (StringQuestion) questionService.findByCode(QuestionCode.A116);
 if (a116 == null) {
     a116 = new StringQuestion(a115, 0, QuestionCode.A116, null);
     JPA.em().persist(a116);
 } else {
-    a116.setDefaultValue(null);
+    ((StringQuestion)a116).setDefaultValue(null);
     if (!a116.getQuestionSet().equals(a115) && a115.getQuestions().contains(a116)) {
         a115.getQuestions().remove(a116);
         JPA.em().persist(a115);
@@ -3168,11 +4792,12 @@ if (a116 == null) {
     JPA.em().persist(a116);
 }
 
+    }
+    private void createQuestionA117() {
+        // == A117
+        // Type de vol
 
-    // == A117
-    // Type de vol
-
-    ValueSelectionQuestion a117 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A117);
+        a117 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A117);
 if (a117 == null) {
     a117 = new ValueSelectionQuestion(a115, 0, QuestionCode.A117, CodeList.TYPEVOL);
     JPA.em().persist(a117);
@@ -3186,15 +4811,16 @@ if (a117 == null) {
         JPA.em().persist(a115);
     }
     a117.setOrderIndex(0);
-    a117.setCodeList(CodeList.TYPEVOL);
+    ((ValueSelectionQuestion)a117).setCodeList(CodeList.TYPEVOL);
     JPA.em().persist(a117);
 }
 
+    }
+    private void createQuestionA118() {
+        // == A118
+        // Classe du vol
 
-    // == A118
-    // Classe du vol
-
-    ValueSelectionQuestion a118 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A118);
+        a118 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A118);
 if (a118 == null) {
     a118 = new ValueSelectionQuestion(a115, 0, QuestionCode.A118, CodeList.CATEGORIEVOL);
     JPA.em().persist(a118);
@@ -3208,18 +4834,26 @@ if (a118 == null) {
         JPA.em().persist(a115);
     }
     a118.setOrderIndex(0);
-    a118.setCodeList(CodeList.CATEGORIEVOL);
+    ((ValueSelectionQuestion)a118).setCodeList(CodeList.CATEGORIEVOL);
     JPA.em().persist(a118);
 }
 
+    }
+    private void createQuestionA119() {
+        // == A119
+        // Nombre total de passagers pour cette catégorie de vols
 
-    // == A119
-    // Nombre total de passagers pour cette catégorie de vols
-
-    IntegerQuestion a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
+        a119 = (IntegerQuestion) questionService.findByCode(QuestionCode.A119);
 if (a119 == null) {
     a119 = new IntegerQuestion(a115, 0, QuestionCode.A119, null);
     JPA.em().persist(a119);
+
+    // cleanup the driver
+    Driver a119_driver = driverService.findByName("A119");
+    if (a119_driver != null) {
+        driverService.remove(a119_driver);
+    }
+
 } else {
     if (!a119.getQuestionSet().equals(a115) && a115.getQuestions().contains(a119)) {
         a115.getQuestions().remove(a119);
@@ -3230,19 +4864,36 @@ if (a119 == null) {
         JPA.em().persist(a115);
     }
     a119.setOrderIndex(0);
-    a119.setUnitCategory(null);
+    ((NumericQuestion)a119).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a119_driver = driverService.findByName("A119");
+    if (a119_driver != null) {
+        driverService.remove(a119_driver);
+    }
+
+    ((NumericQuestion)a119).setDriver(null);
+
     JPA.em().persist(a119);
 }
 
+    }
+    private void createQuestionA120() {
+        // == A120
+        // Distance totale (aller-retour)
 
-    // == A120
-    // Distance totale (aller-retour)
-
-    
-DoubleQuestion a120 = (DoubleQuestion) questionService.findByCode(QuestionCode.A120);
+        
+a120 = (DoubleQuestion) questionService.findByCode(QuestionCode.A120);
 if (a120 == null) {
     a120 = new DoubleQuestion( a115, 0, QuestionCode.A120, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a120);
+
+    // cleanup the driver
+    Driver a120_driver = driverService.findByName("A120");
+    if (a120_driver != null) {
+        driverService.remove(a120_driver);
+    }
+
 } else {
     if (!a120.getQuestionSet().equals(a115) && a115.getQuestions().contains(a120)) {
         a115.getQuestions().remove(a120);
@@ -3252,22 +4903,39 @@ if (a120 == null) {
         a115.getQuestions().add(a120);
         JPA.em().persist(a115);
     }
-    a120.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a120).setUnitCategory(lengthUnits);
     a120.setOrderIndex(0);
-    a120.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a120).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a120_driver = driverService.findByName("A120");
+    if (a120_driver != null) {
+        driverService.remove(a120_driver);
+    }
+
+    ((NumericQuestion)a120).setDriver(null);
+
     JPA.em().persist(a120);
 }
 
 
 
+    }
+    private void createQuestionA122() {
+        // == A122
+        // % des employés qui réalisent des déplacements en avion
 
-    // == A122
-    // % des employés qui réalisent des déplacements en avion
-
-    PercentageQuestion a122 = (PercentageQuestion) questionService.findByCode(QuestionCode.A122);
+        a122 = (PercentageQuestion) questionService.findByCode(QuestionCode.A122);
 if (a122 == null) {
     a122 = new PercentageQuestion(a121, 0, QuestionCode.A122);
     JPA.em().persist(a122);
+
+    // cleanup the driver
+    Driver a122_driver = driverService.findByName("A122");
+    if (a122_driver != null) {
+        driverService.remove(a122_driver);
+    }
+
 } else {
     if (!a122.getQuestionSet().equals(a121) && a121.getQuestions().contains(a122)) {
         a121.getQuestions().remove(a122);
@@ -3278,19 +4946,29 @@ if (a122 == null) {
         JPA.em().persist(a121);
     }
     a122.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a122_driver = driverService.findByName("A122");
+    if (a122_driver != null) {
+        driverService.remove(a122_driver);
+    }
+
+    ((NumericQuestion)a122).setDriver(null);
+
     JPA.em().persist(a122);
 }
 
+    }
+    private void createQuestionA123() {
+        // == A123
+        // Connaissez-vous la distance totale (aller-retour) parcourue en avion?
 
-    // == A123
-    // Connaissez-vous la distance totale (aller-retour) parcourue en avion?
-
-    BooleanQuestion a123 = (BooleanQuestion) questionService.findByCode(QuestionCode.A123);
+        a123 = (BooleanQuestion) questionService.findByCode(QuestionCode.A123);
 if (a123 == null) {
     a123 = new BooleanQuestion(a121, 0, QuestionCode.A123, null);
     JPA.em().persist(a123);
 } else {
-    a123.setDefaultValue(null);
+    ((BooleanQuestion)a123).setDefaultValue(null);
     if (!a123.getQuestionSet().equals(a121) && a121.getQuestions().contains(a123)) {
         a121.getQuestions().remove(a123);
         JPA.em().persist(a121);
@@ -3303,16 +4981,17 @@ if (a123 == null) {
     JPA.em().persist(a123);
 }
 
+    }
+    private void createQuestionA124() {
+        // == A124
+        // Les voyages ont-ils lieu en Europe?
 
-    // == A124
-    // Les voyages ont-ils lieu en Europe?
-
-    BooleanQuestion a124 = (BooleanQuestion) questionService.findByCode(QuestionCode.A124);
+        a124 = (BooleanQuestion) questionService.findByCode(QuestionCode.A124);
 if (a124 == null) {
     a124 = new BooleanQuestion(a121, 0, QuestionCode.A124, null);
     JPA.em().persist(a124);
 } else {
-    a124.setDefaultValue(null);
+    ((BooleanQuestion)a124).setDefaultValue(null);
     if (!a124.getQuestionSet().equals(a121) && a121.getQuestions().contains(a124)) {
         a121.getQuestions().remove(a124);
         JPA.em().persist(a121);
@@ -3325,15 +5004,23 @@ if (a124 == null) {
     JPA.em().persist(a124);
 }
 
+    }
+    private void createQuestionA125() {
+        // == A125
+        // Distance totale (aller-retour) assignée à chaque employé voyageant
 
-    // == A125
-    // Distance totale (aller-retour) assignée à chaque employé voyageant
-
-    
-DoubleQuestion a125 = (DoubleQuestion) questionService.findByCode(QuestionCode.A125);
+        
+a125 = (DoubleQuestion) questionService.findByCode(QuestionCode.A125);
 if (a125 == null) {
     a125 = new DoubleQuestion( a121, 0, QuestionCode.A125, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a125);
+
+    // cleanup the driver
+    Driver a125_driver = driverService.findByName("A125");
+    if (a125_driver != null) {
+        driverService.remove(a125_driver);
+    }
+
 } else {
     if (!a125.getQuestionSet().equals(a121) && a121.getQuestions().contains(a125)) {
         a121.getQuestions().remove(a125);
@@ -3343,23 +5030,40 @@ if (a125 == null) {
         a121.getQuestions().add(a125);
         JPA.em().persist(a121);
     }
-    a125.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a125).setUnitCategory(lengthUnits);
     a125.setOrderIndex(0);
-    a125.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a125).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a125_driver = driverService.findByName("A125");
+    if (a125_driver != null) {
+        driverService.remove(a125_driver);
+    }
+
+    ((NumericQuestion)a125).setDriver(null);
+
     JPA.em().persist(a125);
 }
 
 
 
+    }
+    private void createQuestionA126() {
+        // == A126
+        // Distance totale (aller-retour) assignée à chaque employé voyageant
 
-    // == A126
-    // Distance totale (aller-retour) assignée à chaque employé voyageant
-
-    
-DoubleQuestion a126 = (DoubleQuestion) questionService.findByCode(QuestionCode.A126);
+        
+a126 = (DoubleQuestion) questionService.findByCode(QuestionCode.A126);
 if (a126 == null) {
     a126 = new DoubleQuestion( a121, 0, QuestionCode.A126, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a126);
+
+    // cleanup the driver
+    Driver a126_driver = driverService.findByName("A126");
+    if (a126_driver != null) {
+        driverService.remove(a126_driver);
+    }
+
 } else {
     if (!a126.getQuestionSet().equals(a121) && a121.getQuestions().contains(a126)) {
         a121.getQuestions().remove(a126);
@@ -3369,23 +5073,40 @@ if (a126 == null) {
         a121.getQuestions().add(a126);
         JPA.em().persist(a121);
     }
-    a126.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a126).setUnitCategory(lengthUnits);
     a126.setOrderIndex(0);
-    a126.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a126).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a126_driver = driverService.findByName("A126");
+    if (a126_driver != null) {
+        driverService.remove(a126_driver);
+    }
+
+    ((NumericQuestion)a126).setDriver(null);
+
     JPA.em().persist(a126);
 }
 
 
 
+    }
+    private void createQuestionA127() {
+        // == A127
+        // Distance totale (aller-retour) assignée à chaque employé voyageant
 
-    // == A127
-    // Distance totale (aller-retour) assignée à chaque employé voyageant
-
-    
-DoubleQuestion a127 = (DoubleQuestion) questionService.findByCode(QuestionCode.A127);
+        
+a127 = (DoubleQuestion) questionService.findByCode(QuestionCode.A127);
 if (a127 == null) {
     a127 = new DoubleQuestion( a121, 0, QuestionCode.A127, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a127);
+
+    // cleanup the driver
+    Driver a127_driver = driverService.findByName("A127");
+    if (a127_driver != null) {
+        driverService.remove(a127_driver);
+    }
+
 } else {
     if (!a127.getQuestionSet().equals(a121) && a121.getQuestions().contains(a127)) {
         a121.getQuestions().remove(a127);
@@ -3395,19 +5116,29 @@ if (a127 == null) {
         a121.getQuestions().add(a127);
         JPA.em().persist(a121);
     }
-    a127.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a127).setUnitCategory(lengthUnits);
     a127.setOrderIndex(0);
-    a127.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a127).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a127_driver = driverService.findByName("A127");
+    if (a127_driver != null) {
+        driverService.remove(a127_driver);
+    }
+
+    ((NumericQuestion)a127).setDriver(null);
+
     JPA.em().persist(a127);
 }
 
 
 
+    }
+    private void createQuestionA206() {
+        // == A206
+        // Pièces documentaires liées aux achats
 
-    // == A206
-    // Pièces documentaires liées aux achats
-
-    DocumentQuestion a206 = (DocumentQuestion) questionService.findByCode(QuestionCode.A206);
+        a206 = (DocumentQuestion) questionService.findByCode(QuestionCode.A206);
 if (a206 == null) {
     a206 = new DocumentQuestion(a205, 0, QuestionCode.A206);
     JPA.em().persist(a206);
@@ -3424,16 +5155,17 @@ if (a206 == null) {
     JPA.em().persist(a206);
 }
 
+    }
+    private void createQuestionA210() {
+        // == A210
+        // Poste d'achat
 
-    // == A210
-    // Poste d'achat
-
-    StringQuestion a210 = (StringQuestion) questionService.findByCode(QuestionCode.A210);
+        a210 = (StringQuestion) questionService.findByCode(QuestionCode.A210);
 if (a210 == null) {
     a210 = new StringQuestion(a209, 0, QuestionCode.A210, null);
     JPA.em().persist(a210);
 } else {
-    a210.setDefaultValue(null);
+    ((StringQuestion)a210).setDefaultValue(null);
     if (!a210.getQuestionSet().equals(a209) && a209.getQuestions().contains(a210)) {
         a209.getQuestions().remove(a210);
         JPA.em().persist(a209);
@@ -3446,11 +5178,12 @@ if (a210 == null) {
     JPA.em().persist(a210);
 }
 
+    }
+    private void createQuestionA211() {
+        // == A211
+        // Famille de matériau (ou service)
 
-    // == A211
-    // Famille de matériau (ou service)
-
-    ValueSelectionQuestion a211 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A211);
+        a211 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A211);
 if (a211 == null) {
     a211 = new ValueSelectionQuestion(a209, 0, QuestionCode.A211, CodeList.TYPEACHAT);
     JPA.em().persist(a211);
@@ -3464,15 +5197,16 @@ if (a211 == null) {
         JPA.em().persist(a209);
     }
     a211.setOrderIndex(0);
-    a211.setCodeList(CodeList.TYPEACHAT);
+    ((ValueSelectionQuestion)a211).setCodeList(CodeList.TYPEACHAT);
     JPA.em().persist(a211);
 }
 
+    }
+    private void createQuestionA212() {
+        // == A212
+        // Type de matériau (ou service)
 
-    // == A212
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a212 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A212);
+        a212 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A212);
 if (a212 == null) {
     a212 = new ValueSelectionQuestion(a209, 0, QuestionCode.A212, CodeList.ACHATMETAL);
     JPA.em().persist(a212);
@@ -3486,15 +5220,16 @@ if (a212 == null) {
         JPA.em().persist(a209);
     }
     a212.setOrderIndex(0);
-    a212.setCodeList(CodeList.ACHATMETAL);
+    ((ValueSelectionQuestion)a212).setCodeList(CodeList.ACHATMETAL);
     JPA.em().persist(a212);
 }
 
+    }
+    private void createQuestionA213() {
+        // == A213
+        // Type de matériau (ou service)
 
-    // == A213
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a213 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A213);
+        a213 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A213);
 if (a213 == null) {
     a213 = new ValueSelectionQuestion(a209, 0, QuestionCode.A213, CodeList.ACHATPLASTIQUE);
     JPA.em().persist(a213);
@@ -3508,15 +5243,16 @@ if (a213 == null) {
         JPA.em().persist(a209);
     }
     a213.setOrderIndex(0);
-    a213.setCodeList(CodeList.ACHATPLASTIQUE);
+    ((ValueSelectionQuestion)a213).setCodeList(CodeList.ACHATPLASTIQUE);
     JPA.em().persist(a213);
 }
 
+    }
+    private void createQuestionA214() {
+        // == A214
+        // Type de matériau (ou service)
 
-    // == A214
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a214 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A214);
+        a214 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A214);
 if (a214 == null) {
     a214 = new ValueSelectionQuestion(a209, 0, QuestionCode.A214, CodeList.ACHATPAPIER);
     JPA.em().persist(a214);
@@ -3530,15 +5266,16 @@ if (a214 == null) {
         JPA.em().persist(a209);
     }
     a214.setOrderIndex(0);
-    a214.setCodeList(CodeList.ACHATPAPIER);
+    ((ValueSelectionQuestion)a214).setCodeList(CodeList.ACHATPAPIER);
     JPA.em().persist(a214);
 }
 
+    }
+    private void createQuestionA215() {
+        // == A215
+        // Type de matériau (ou service)
 
-    // == A215
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a215 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A215);
+        a215 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A215);
 if (a215 == null) {
     a215 = new ValueSelectionQuestion(a209, 0, QuestionCode.A215, CodeList.ACHATVERRE);
     JPA.em().persist(a215);
@@ -3552,15 +5289,16 @@ if (a215 == null) {
         JPA.em().persist(a209);
     }
     a215.setOrderIndex(0);
-    a215.setCodeList(CodeList.ACHATVERRE);
+    ((ValueSelectionQuestion)a215).setCodeList(CodeList.ACHATVERRE);
     JPA.em().persist(a215);
 }
 
+    }
+    private void createQuestionA216() {
+        // == A216
+        // Type de matériau (ou service)
 
-    // == A216
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a216 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A216);
+        a216 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A216);
 if (a216 == null) {
     a216 = new ValueSelectionQuestion(a209, 0, QuestionCode.A216, CodeList.ACHATCHIMIQUE);
     JPA.em().persist(a216);
@@ -3574,15 +5312,16 @@ if (a216 == null) {
         JPA.em().persist(a209);
     }
     a216.setOrderIndex(0);
-    a216.setCodeList(CodeList.ACHATCHIMIQUE);
+    ((ValueSelectionQuestion)a216).setCodeList(CodeList.ACHATCHIMIQUE);
     JPA.em().persist(a216);
 }
 
+    }
+    private void createQuestionA217() {
+        // == A217
+        // Type de matériau (ou service)
 
-    // == A217
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a217 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A217);
+        a217 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A217);
 if (a217 == null) {
     a217 = new ValueSelectionQuestion(a209, 0, QuestionCode.A217, CodeList.ACHATROUTE);
     JPA.em().persist(a217);
@@ -3596,15 +5335,16 @@ if (a217 == null) {
         JPA.em().persist(a209);
     }
     a217.setOrderIndex(0);
-    a217.setCodeList(CodeList.ACHATROUTE);
+    ((ValueSelectionQuestion)a217).setCodeList(CodeList.ACHATROUTE);
     JPA.em().persist(a217);
 }
 
+    }
+    private void createQuestionA218() {
+        // == A218
+        // Type de matériau (ou service)
 
-    // == A218
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a218 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A218);
+        a218 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A218);
 if (a218 == null) {
     a218 = new ValueSelectionQuestion(a209, 0, QuestionCode.A218, CodeList.ACHATAGRO);
     JPA.em().persist(a218);
@@ -3618,15 +5358,16 @@ if (a218 == null) {
         JPA.em().persist(a209);
     }
     a218.setOrderIndex(0);
-    a218.setCodeList(CodeList.ACHATAGRO);
+    ((ValueSelectionQuestion)a218).setCodeList(CodeList.ACHATAGRO);
     JPA.em().persist(a218);
 }
 
+    }
+    private void createQuestionA219() {
+        // == A219
+        // Type de matériau (ou service)
 
-    // == A219
-    // Type de matériau (ou service)
-
-    ValueSelectionQuestion a219 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A219);
+        a219 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A219);
 if (a219 == null) {
     a219 = new ValueSelectionQuestion(a209, 0, QuestionCode.A219, CodeList.ACHATSERVICE);
     JPA.em().persist(a219);
@@ -3640,18 +5381,26 @@ if (a219 == null) {
         JPA.em().persist(a209);
     }
     a219.setOrderIndex(0);
-    a219.setCodeList(CodeList.ACHATSERVICE);
+    ((ValueSelectionQuestion)a219).setCodeList(CodeList.ACHATSERVICE);
     JPA.em().persist(a219);
 }
 
+    }
+    private void createQuestionA220() {
+        // == A220
+        // Taux de recyclé
 
-    // == A220
-    // Taux de recyclé
-
-    PercentageQuestion a220 = (PercentageQuestion) questionService.findByCode(QuestionCode.A220);
+        a220 = (PercentageQuestion) questionService.findByCode(QuestionCode.A220);
 if (a220 == null) {
     a220 = new PercentageQuestion(a209, 0, QuestionCode.A220);
     JPA.em().persist(a220);
+
+    // cleanup the driver
+    Driver a220_driver = driverService.findByName("A220");
+    if (a220_driver != null) {
+        driverService.remove(a220_driver);
+    }
+
 } else {
     if (!a220.getQuestionSet().equals(a209) && a209.getQuestions().contains(a220)) {
         a209.getQuestions().remove(a220);
@@ -3662,18 +5411,35 @@ if (a220 == null) {
         JPA.em().persist(a209);
     }
     a220.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a220_driver = driverService.findByName("A220");
+    if (a220_driver != null) {
+        driverService.remove(a220_driver);
+    }
+
+    ((NumericQuestion)a220).setDriver(null);
+
     JPA.em().persist(a220);
 }
 
+    }
+    private void createQuestionA221() {
+        // == A221
+        // Quantité
 
-    // == A221
-    // Quantité
-
-    
-DoubleQuestion a221 = (DoubleQuestion) questionService.findByCode(QuestionCode.A221);
+        
+a221 = (DoubleQuestion) questionService.findByCode(QuestionCode.A221);
 if (a221 == null) {
     a221 = new DoubleQuestion( a209, 0, QuestionCode.A221, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a221);
+
+    // cleanup the driver
+    Driver a221_driver = driverService.findByName("A221");
+    if (a221_driver != null) {
+        driverService.remove(a221_driver);
+    }
+
 } else {
     if (!a221.getQuestionSet().equals(a209) && a209.getQuestions().contains(a221)) {
         a209.getQuestions().remove(a221);
@@ -3683,23 +5449,41 @@ if (a221 == null) {
         a209.getQuestions().add(a221);
         JPA.em().persist(a209);
     }
-    a221.setUnitCategory(massUnits);
+    ((NumericQuestion)a221).setUnitCategory(massUnits);
     a221.setOrderIndex(0);
-    a221.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a221).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a221_driver = driverService.findByName("A221");
+    if (a221_driver != null) {
+        driverService.remove(a221_driver);
+    }
+
+    ((NumericQuestion)a221).setDriver(null);
+
     JPA.em().persist(a221);
 }
 
 
 
+    }
+    private void createQuestionA222() {
+        // == A222
+        // Quantité
 
-    // == A222
-    // Quantité
-
-    
-DoubleQuestion a222 = (DoubleQuestion) questionService.findByCode(QuestionCode.A222);
+        
+a222 = (DoubleQuestion) questionService.findByCode(QuestionCode.A222);
 if (a222 == null) {
     a222 = new DoubleQuestion( a209, 0, QuestionCode.A222, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(a222);
+
+    // cleanup the driver
+    Driver a222_driver = driverService.findByName("A222");
+    if (a222_driver != null) {
+        driverService.remove(a222_driver);
+    }
+
 } else {
     if (!a222.getQuestionSet().equals(a209) && a209.getQuestions().contains(a222)) {
         a209.getQuestions().remove(a222);
@@ -3709,24 +5493,34 @@ if (a222 == null) {
         a209.getQuestions().add(a222);
         JPA.em().persist(a209);
     }
-    a222.setUnitCategory(moneyUnits);
+    ((NumericQuestion)a222).setUnitCategory(moneyUnits);
     a222.setOrderIndex(0);
-    a222.setDefaultUnit(getUnitBySymbol("EUR"));
+    ((NumericQuestion)a222).setDefaultUnit(getUnitBySymbol("EUR"));
+
+    // cleanup the driver
+    Driver a222_driver = driverService.findByName("A222");
+    if (a222_driver != null) {
+        driverService.remove(a222_driver);
+    }
+
+    ((NumericQuestion)a222).setDriver(null);
+
     JPA.em().persist(a222);
 }
 
 
 
+    }
+    private void createQuestionA225() {
+        // == A225
+        // Poste d'achat
 
-    // == A225
-    // Poste d'achat
-
-    StringQuestion a225 = (StringQuestion) questionService.findByCode(QuestionCode.A225);
+        a225 = (StringQuestion) questionService.findByCode(QuestionCode.A225);
 if (a225 == null) {
     a225 = new StringQuestion(a224, 0, QuestionCode.A225, null);
     JPA.em().persist(a225);
 } else {
-    a225.setDefaultValue(null);
+    ((StringQuestion)a225).setDefaultValue(null);
     if (!a225.getQuestionSet().equals(a224) && a224.getQuestions().contains(a225)) {
         a224.getQuestions().remove(a225);
         JPA.em().persist(a224);
@@ -3739,14 +5533,22 @@ if (a225 == null) {
     JPA.em().persist(a225);
 }
 
+    }
+    private void createQuestionA226() {
+        // == A226
+        // Quantité
 
-    // == A226
-    // Quantité
-
-    IntegerQuestion a226 = (IntegerQuestion) questionService.findByCode(QuestionCode.A226);
+        a226 = (IntegerQuestion) questionService.findByCode(QuestionCode.A226);
 if (a226 == null) {
     a226 = new IntegerQuestion(a224, 0, QuestionCode.A226, null);
     JPA.em().persist(a226);
+
+    // cleanup the driver
+    Driver a226_driver = driverService.findByName("A226");
+    if (a226_driver != null) {
+        driverService.remove(a226_driver);
+    }
+
 } else {
     if (!a226.getQuestionSet().equals(a224) && a224.getQuestions().contains(a226)) {
         a224.getQuestions().remove(a226);
@@ -3757,20 +5559,30 @@ if (a226 == null) {
         JPA.em().persist(a224);
     }
     a226.setOrderIndex(0);
-    a226.setUnitCategory(null);
+    ((NumericQuestion)a226).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a226_driver = driverService.findByName("A226");
+    if (a226_driver != null) {
+        driverService.remove(a226_driver);
+    }
+
+    ((NumericQuestion)a226).setDriver(null);
+
     JPA.em().persist(a226);
 }
 
+    }
+    private void createQuestionA227() {
+        // == A227
+        // Unité dans laquelle s'exprime cette quantité
 
-    // == A227
-    // Unité dans laquelle s'exprime cette quantité
-
-    StringQuestion a227 = (StringQuestion) questionService.findByCode(QuestionCode.A227);
+        a227 = (StringQuestion) questionService.findByCode(QuestionCode.A227);
 if (a227 == null) {
     a227 = new StringQuestion(a224, 0, QuestionCode.A227, null);
     JPA.em().persist(a227);
 } else {
-    a227.setDefaultValue(null);
+    ((StringQuestion)a227).setDefaultValue(null);
     if (!a227.getQuestionSet().equals(a224) && a224.getQuestions().contains(a227)) {
         a224.getQuestions().remove(a227);
         JPA.em().persist(a224);
@@ -3783,14 +5595,22 @@ if (a227 == null) {
     JPA.em().persist(a227);
 }
 
+    }
+    private void createQuestionA228() {
+        // == A228
+        // Facteur d'émission en tCO2e par unité ci-dessus
 
-    // == A228
-    // Facteur d'émission en tCO2e par unité ci-dessus
-
-    IntegerQuestion a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
+        a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
 if (a228 == null) {
     a228 = new IntegerQuestion(a224, 0, QuestionCode.A228, null);
     JPA.em().persist(a228);
+
+    // cleanup the driver
+    Driver a228_driver = driverService.findByName("A228");
+    if (a228_driver != null) {
+        driverService.remove(a228_driver);
+    }
+
 } else {
     if (!a228.getQuestionSet().equals(a224) && a224.getQuestions().contains(a228)) {
         a224.getQuestions().remove(a228);
@@ -3801,15 +5621,25 @@ if (a228 == null) {
         JPA.em().persist(a224);
     }
     a228.setOrderIndex(0);
-    a228.setUnitCategory(null);
+    ((NumericQuestion)a228).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a228_driver = driverService.findByName("A228");
+    if (a228_driver != null) {
+        driverService.remove(a228_driver);
+    }
+
+    ((NumericQuestion)a228).setDriver(null);
+
     JPA.em().persist(a228);
 }
 
+    }
+    private void createQuestionA129() {
+        // == A129
+        // Pièces documentaires liées au transport et stockage amont
 
-    // == A129
-    // Pièces documentaires liées au transport et stockage amont
-
-    DocumentQuestion a129 = (DocumentQuestion) questionService.findByCode(QuestionCode.A129);
+        a129 = (DocumentQuestion) questionService.findByCode(QuestionCode.A129);
 if (a129 == null) {
     a129 = new DocumentQuestion(a128, 0, QuestionCode.A129);
     JPA.em().persist(a129);
@@ -3826,15 +5656,23 @@ if (a129 == null) {
     JPA.em().persist(a129);
 }
 
+    }
+    private void createQuestionA133() {
+        // == A133
+        // Consommation d'essence
 
-    // == A133
-    // Consommation d'essence
-
-    
-DoubleQuestion a133 = (DoubleQuestion) questionService.findByCode(QuestionCode.A133);
+        
+a133 = (DoubleQuestion) questionService.findByCode(QuestionCode.A133);
 if (a133 == null) {
     a133 = new DoubleQuestion( a132, 0, QuestionCode.A133, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(a133);
+
+    // cleanup the driver
+    Driver a133_driver = driverService.findByName("A133");
+    if (a133_driver != null) {
+        driverService.remove(a133_driver);
+    }
+
 } else {
     if (!a133.getQuestionSet().equals(a132) && a132.getQuestions().contains(a133)) {
         a132.getQuestions().remove(a133);
@@ -3844,23 +5682,40 @@ if (a133 == null) {
         a132.getQuestions().add(a133);
         JPA.em().persist(a132);
     }
-    a133.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a133).setUnitCategory(volumeUnits);
     a133.setOrderIndex(0);
-    a133.setDefaultUnit(getUnitBySymbol("l"));
+    ((NumericQuestion)a133).setDefaultUnit(getUnitBySymbol("l"));
+
+    // cleanup the driver
+    Driver a133_driver = driverService.findByName("A133");
+    if (a133_driver != null) {
+        driverService.remove(a133_driver);
+    }
+
+    ((NumericQuestion)a133).setDriver(null);
+
     JPA.em().persist(a133);
 }
 
 
 
+    }
+    private void createQuestionA134() {
+        // == A134
+        // Consommation de diesel
 
-    // == A134
-    // Consommation de diesel
-
-    
-DoubleQuestion a134 = (DoubleQuestion) questionService.findByCode(QuestionCode.A134);
+        
+a134 = (DoubleQuestion) questionService.findByCode(QuestionCode.A134);
 if (a134 == null) {
     a134 = new DoubleQuestion( a132, 0, QuestionCode.A134, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(a134);
+
+    // cleanup the driver
+    Driver a134_driver = driverService.findByName("A134");
+    if (a134_driver != null) {
+        driverService.remove(a134_driver);
+    }
+
 } else {
     if (!a134.getQuestionSet().equals(a132) && a132.getQuestions().contains(a134)) {
         a132.getQuestions().remove(a134);
@@ -3870,23 +5725,40 @@ if (a134 == null) {
         a132.getQuestions().add(a134);
         JPA.em().persist(a132);
     }
-    a134.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a134).setUnitCategory(volumeUnits);
     a134.setOrderIndex(0);
-    a134.setDefaultUnit(getUnitBySymbol("l"));
+    ((NumericQuestion)a134).setDefaultUnit(getUnitBySymbol("l"));
+
+    // cleanup the driver
+    Driver a134_driver = driverService.findByName("A134");
+    if (a134_driver != null) {
+        driverService.remove(a134_driver);
+    }
+
+    ((NumericQuestion)a134).setDriver(null);
+
     JPA.em().persist(a134);
 }
 
 
 
+    }
+    private void createQuestionA135() {
+        // == A135
+        // Consommation de gaz de pétrole liquéfié (GPL)
 
-    // == A135
-    // Consommation de gaz de pétrole liquéfié (GPL)
-
-    
-DoubleQuestion a135 = (DoubleQuestion) questionService.findByCode(QuestionCode.A135);
+        
+a135 = (DoubleQuestion) questionService.findByCode(QuestionCode.A135);
 if (a135 == null) {
     a135 = new DoubleQuestion( a132, 0, QuestionCode.A135, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(a135);
+
+    // cleanup the driver
+    Driver a135_driver = driverService.findByName("A135");
+    if (a135_driver != null) {
+        driverService.remove(a135_driver);
+    }
+
 } else {
     if (!a135.getQuestionSet().equals(a132) && a132.getQuestions().contains(a135)) {
         a132.getQuestions().remove(a135);
@@ -3896,24 +5768,34 @@ if (a135 == null) {
         a132.getQuestions().add(a135);
         JPA.em().persist(a132);
     }
-    a135.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a135).setUnitCategory(volumeUnits);
     a135.setOrderIndex(0);
-    a135.setDefaultUnit(getUnitBySymbol("l"));
+    ((NumericQuestion)a135).setDefaultUnit(getUnitBySymbol("l"));
+
+    // cleanup the driver
+    Driver a135_driver = driverService.findByName("A135");
+    if (a135_driver != null) {
+        driverService.remove(a135_driver);
+    }
+
+    ((NumericQuestion)a135).setDriver(null);
+
     JPA.em().persist(a135);
 }
 
 
 
+    }
+    private void createQuestionA136() {
+        // == A136
+        // Est-ce les marchandises sont refrigérées durant le transport?
 
-    // == A136
-    // Est-ce les marchandises sont refrigérées durant le transport?
-
-    BooleanQuestion a136 = (BooleanQuestion) questionService.findByCode(QuestionCode.A136);
+        a136 = (BooleanQuestion) questionService.findByCode(QuestionCode.A136);
 if (a136 == null) {
     a136 = new BooleanQuestion(a132, 0, QuestionCode.A136, null);
     JPA.em().persist(a136);
 } else {
-    a136.setDefaultValue(null);
+    ((BooleanQuestion)a136).setDefaultValue(null);
     if (!a136.getQuestionSet().equals(a132) && a132.getQuestions().contains(a136)) {
         a132.getQuestions().remove(a136);
         JPA.em().persist(a132);
@@ -3926,11 +5808,12 @@ if (a136 == null) {
     JPA.em().persist(a136);
 }
 
+    }
+    private void createQuestionA137() {
+        // == A137
+        // Type de Gaz
 
-    // == A137
-    // Type de Gaz
-
-    ValueSelectionQuestion a137 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A137);
+        a137 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A137);
 if (a137 == null) {
     a137 = new ValueSelectionQuestion(a132, 0, QuestionCode.A137, CodeList.FRIGORIGENEBASE);
     JPA.em().persist(a137);
@@ -3944,20 +5827,21 @@ if (a137 == null) {
         JPA.em().persist(a132);
     }
     a137.setOrderIndex(0);
-    a137.setCodeList(CodeList.FRIGORIGENEBASE);
+    ((ValueSelectionQuestion)a137).setCodeList(CodeList.FRIGORIGENEBASE);
     JPA.em().persist(a137);
 }
 
+    }
+    private void createQuestionA138() {
+        // == A138
+        // Connaissez-vous la quantité annuelle de recharge de ce gaz?
 
-    // == A138
-    // Connaissez-vous la quantité annuelle de recharge de ce gaz?
-
-    BooleanQuestion a138 = (BooleanQuestion) questionService.findByCode(QuestionCode.A138);
+        a138 = (BooleanQuestion) questionService.findByCode(QuestionCode.A138);
 if (a138 == null) {
     a138 = new BooleanQuestion(a132, 0, QuestionCode.A138, null);
     JPA.em().persist(a138);
 } else {
-    a138.setDefaultValue(null);
+    ((BooleanQuestion)a138).setDefaultValue(null);
     if (!a138.getQuestionSet().equals(a132) && a132.getQuestions().contains(a138)) {
         a132.getQuestions().remove(a138);
         JPA.em().persist(a132);
@@ -3970,15 +5854,23 @@ if (a138 == null) {
     JPA.em().persist(a138);
 }
 
+    }
+    private void createQuestionA139() {
+        // == A139
+        // Quantité de recharge annuelle
 
-    // == A139
-    // Quantité de recharge annuelle
-
-    
-DoubleQuestion a139 = (DoubleQuestion) questionService.findByCode(QuestionCode.A139);
+        
+a139 = (DoubleQuestion) questionService.findByCode(QuestionCode.A139);
 if (a139 == null) {
     a139 = new DoubleQuestion( a132, 0, QuestionCode.A139, massUnits, getUnitBySymbol("kg") );
     JPA.em().persist(a139);
+
+    // cleanup the driver
+    Driver a139_driver = driverService.findByName("A139");
+    if (a139_driver != null) {
+        driverService.remove(a139_driver);
+    }
+
 } else {
     if (!a139.getQuestionSet().equals(a132) && a132.getQuestions().contains(a139)) {
         a132.getQuestions().remove(a139);
@@ -3988,23 +5880,41 @@ if (a139 == null) {
         a132.getQuestions().add(a139);
         JPA.em().persist(a132);
     }
-    a139.setUnitCategory(massUnits);
+    ((NumericQuestion)a139).setUnitCategory(massUnits);
     a139.setOrderIndex(0);
-    a139.setDefaultUnit(getUnitBySymbol("kg"));
+    ((NumericQuestion)a139).setDefaultUnit(getUnitBySymbol("kg"));
+
+
+    // cleanup the driver
+    Driver a139_driver = driverService.findByName("A139");
+    if (a139_driver != null) {
+        driverService.remove(a139_driver);
+    }
+
+    ((NumericQuestion)a139).setDriver(null);
+
     JPA.em().persist(a139);
 }
 
 
 
+    }
+    private void createQuestionA500() {
+        // == A500
+        // Quantité de recharge annuelle
 
-    // == A500
-    // Quantité de recharge annuelle
-
-    
-DoubleQuestion a500 = (DoubleQuestion) questionService.findByCode(QuestionCode.A500);
+        
+a500 = (DoubleQuestion) questionService.findByCode(QuestionCode.A500);
 if (a500 == null) {
     a500 = new DoubleQuestion( a132, 0, QuestionCode.A500, massUnits, getUnitBySymbol("kg") );
     JPA.em().persist(a500);
+
+    // cleanup the driver
+    Driver a500_driver = driverService.findByName("A500");
+    if (a500_driver != null) {
+        driverService.remove(a500_driver);
+    }
+
 } else {
     if (!a500.getQuestionSet().equals(a132) && a132.getQuestions().contains(a500)) {
         a132.getQuestions().remove(a500);
@@ -4014,24 +5924,35 @@ if (a500 == null) {
         a132.getQuestions().add(a500);
         JPA.em().persist(a132);
     }
-    a500.setUnitCategory(massUnits);
+    ((NumericQuestion)a500).setUnitCategory(massUnits);
     a500.setOrderIndex(0);
-    a500.setDefaultUnit(getUnitBySymbol("kg"));
+    ((NumericQuestion)a500).setDefaultUnit(getUnitBySymbol("kg"));
+
+
+    // cleanup the driver
+    Driver a500_driver = driverService.findByName("A500");
+    if (a500_driver != null) {
+        driverService.remove(a500_driver);
+    }
+
+    ((NumericQuestion)a500).setDriver(null);
+
     JPA.em().persist(a500);
 }
 
 
 
+    }
+    private void createQuestionA143() {
+        // == A143
+        // Nom du produit transporté
 
-    // == A143
-    // Nom du produit transporté
-
-    StringQuestion a143 = (StringQuestion) questionService.findByCode(QuestionCode.A143);
+        a143 = (StringQuestion) questionService.findByCode(QuestionCode.A143);
 if (a143 == null) {
     a143 = new StringQuestion(a142, 0, QuestionCode.A143, null);
     JPA.em().persist(a143);
 } else {
-    a143.setDefaultValue(null);
+    ((StringQuestion)a143).setDefaultValue(null);
     if (!a143.getQuestionSet().equals(a142) && a142.getQuestions().contains(a143)) {
         a142.getQuestions().remove(a143);
         JPA.em().persist(a142);
@@ -4044,15 +5965,23 @@ if (a143 == null) {
     JPA.em().persist(a143);
 }
 
+    }
+    private void createQuestionA145() {
+        // == A145
+        // Poids total transporté sur l'année de bilan
 
-    // == A145
-    // Poids total transporté sur l'année de bilan
-
-    
-DoubleQuestion a145 = (DoubleQuestion) questionService.findByCode(QuestionCode.A145);
+        
+a145 = (DoubleQuestion) questionService.findByCode(QuestionCode.A145);
 if (a145 == null) {
     a145 = new DoubleQuestion( a142, 0, QuestionCode.A145, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a145);
+
+    // cleanup the driver
+    Driver a145_driver = driverService.findByName("A145");
+    if (a145_driver != null) {
+        driverService.remove(a145_driver);
+    }
+
 } else {
     if (!a145.getQuestionSet().equals(a142) && a142.getQuestions().contains(a145)) {
         a142.getQuestions().remove(a145);
@@ -4062,23 +5991,41 @@ if (a145 == null) {
         a142.getQuestions().add(a145);
         JPA.em().persist(a142);
     }
-    a145.setUnitCategory(massUnits);
+    ((NumericQuestion)a145).setUnitCategory(massUnits);
     a145.setOrderIndex(0);
-    a145.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a145).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a145_driver = driverService.findByName("A145");
+    if (a145_driver != null) {
+        driverService.remove(a145_driver);
+    }
+
+    ((NumericQuestion)a145).setDriver(null);
+
     JPA.em().persist(a145);
 }
 
 
 
+    }
+    private void createQuestionA146() {
+        // == A146
+        // Distance entre le point d'enlèvement et de livraison du produit
 
-    // == A146
-    // Distance entre le point d'enlèvement et de livraison du produit
-
-    
-DoubleQuestion a146 = (DoubleQuestion) questionService.findByCode(QuestionCode.A146);
+        
+a146 = (DoubleQuestion) questionService.findByCode(QuestionCode.A146);
 if (a146 == null) {
     a146 = new DoubleQuestion( a142, 0, QuestionCode.A146, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a146);
+
+    // cleanup the driver
+    Driver a146_driver = driverService.findByName("A146");
+    if (a146_driver != null) {
+        driverService.remove(a146_driver);
+    }
+
 } else {
     if (!a146.getQuestionSet().equals(a142) && a142.getQuestions().contains(a146)) {
         a142.getQuestions().remove(a146);
@@ -4088,22 +6035,39 @@ if (a146 == null) {
         a142.getQuestions().add(a146);
         JPA.em().persist(a142);
     }
-    a146.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a146).setUnitCategory(lengthUnits);
     a146.setOrderIndex(0);
-    a146.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a146).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a146_driver = driverService.findByName("A146");
+    if (a146_driver != null) {
+        driverService.remove(a146_driver);
+    }
+
+    ((NumericQuestion)a146).setDriver(null);
+
     JPA.em().persist(a146);
 }
 
 
 
+    }
+    private void createQuestionA147() {
+        // == A147
+        // % de distance effectuée par transport routier local par camion
 
-    // == A147
-    // % de distance effectuée par transport routier local par camion
-
-    PercentageQuestion a147 = (PercentageQuestion) questionService.findByCode(QuestionCode.A147);
+        a147 = (PercentageQuestion) questionService.findByCode(QuestionCode.A147);
 if (a147 == null) {
     a147 = new PercentageQuestion(a142, 0, QuestionCode.A147);
     JPA.em().persist(a147);
+
+    // cleanup the driver
+    Driver a147_driver = driverService.findByName("A147");
+    if (a147_driver != null) {
+        driverService.remove(a147_driver);
+    }
+
 } else {
     if (!a147.getQuestionSet().equals(a142) && a142.getQuestions().contains(a147)) {
         a142.getQuestions().remove(a147);
@@ -4114,17 +6078,34 @@ if (a147 == null) {
         JPA.em().persist(a142);
     }
     a147.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a147_driver = driverService.findByName("A147");
+    if (a147_driver != null) {
+        driverService.remove(a147_driver);
+    }
+
+    ((NumericQuestion)a147).setDriver(null);
+
     JPA.em().persist(a147);
 }
 
+    }
+    private void createQuestionA148() {
+        // == A148
+        // % de distance effectuée par transport routier local par camionnette
 
-    // == A148
-    // % de distance effectuée par transport routier local par camionnette
-
-    PercentageQuestion a148 = (PercentageQuestion) questionService.findByCode(QuestionCode.A148);
+        a148 = (PercentageQuestion) questionService.findByCode(QuestionCode.A148);
 if (a148 == null) {
     a148 = new PercentageQuestion(a142, 0, QuestionCode.A148);
     JPA.em().persist(a148);
+
+    // cleanup the driver
+    Driver a148_driver = driverService.findByName("A148");
+    if (a148_driver != null) {
+        driverService.remove(a148_driver);
+    }
+
 } else {
     if (!a148.getQuestionSet().equals(a142) && a142.getQuestions().contains(a148)) {
         a142.getQuestions().remove(a148);
@@ -4135,17 +6116,34 @@ if (a148 == null) {
         JPA.em().persist(a142);
     }
     a148.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a148_driver = driverService.findByName("A148");
+    if (a148_driver != null) {
+        driverService.remove(a148_driver);
+    }
+
+    ((NumericQuestion)a148).setDriver(null);
+
     JPA.em().persist(a148);
 }
 
+    }
+    private void createQuestionA149() {
+        // == A149
+        // % de distance effectuée par transport routier international
 
-    // == A149
-    // % de distance effectuée par transport routier international
-
-    PercentageQuestion a149 = (PercentageQuestion) questionService.findByCode(QuestionCode.A149);
+        a149 = (PercentageQuestion) questionService.findByCode(QuestionCode.A149);
 if (a149 == null) {
     a149 = new PercentageQuestion(a142, 0, QuestionCode.A149);
     JPA.em().persist(a149);
+
+    // cleanup the driver
+    Driver a149_driver = driverService.findByName("A149");
+    if (a149_driver != null) {
+        driverService.remove(a149_driver);
+    }
+
 } else {
     if (!a149.getQuestionSet().equals(a142) && a142.getQuestions().contains(a149)) {
         a142.getQuestions().remove(a149);
@@ -4156,17 +6154,34 @@ if (a149 == null) {
         JPA.em().persist(a142);
     }
     a149.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a149_driver = driverService.findByName("A149");
+    if (a149_driver != null) {
+        driverService.remove(a149_driver);
+    }
+
+    ((NumericQuestion)a149).setDriver(null);
+
     JPA.em().persist(a149);
 }
 
+    }
+    private void createQuestionA150() {
+        // == A150
+        // % de distance effectuée par voie ferroviaire
 
-    // == A150
-    // % de distance effectuée par voie ferroviaire
-
-    PercentageQuestion a150 = (PercentageQuestion) questionService.findByCode(QuestionCode.A150);
+        a150 = (PercentageQuestion) questionService.findByCode(QuestionCode.A150);
 if (a150 == null) {
     a150 = new PercentageQuestion(a142, 0, QuestionCode.A150);
     JPA.em().persist(a150);
+
+    // cleanup the driver
+    Driver a150_driver = driverService.findByName("A150");
+    if (a150_driver != null) {
+        driverService.remove(a150_driver);
+    }
+
 } else {
     if (!a150.getQuestionSet().equals(a142) && a142.getQuestions().contains(a150)) {
         a142.getQuestions().remove(a150);
@@ -4177,17 +6192,34 @@ if (a150 == null) {
         JPA.em().persist(a142);
     }
     a150.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a150_driver = driverService.findByName("A150");
+    if (a150_driver != null) {
+        driverService.remove(a150_driver);
+    }
+
+    ((NumericQuestion)a150).setDriver(null);
+
     JPA.em().persist(a150);
 }
 
+    }
+    private void createQuestionA151() {
+        // == A151
+        // % de distance effectuée par voie maritime
 
-    // == A151
-    // % de distance effectuée par voie maritime
-
-    PercentageQuestion a151 = (PercentageQuestion) questionService.findByCode(QuestionCode.A151);
+        a151 = (PercentageQuestion) questionService.findByCode(QuestionCode.A151);
 if (a151 == null) {
     a151 = new PercentageQuestion(a142, 0, QuestionCode.A151);
     JPA.em().persist(a151);
+
+    // cleanup the driver
+    Driver a151_driver = driverService.findByName("A151");
+    if (a151_driver != null) {
+        driverService.remove(a151_driver);
+    }
+
 } else {
     if (!a151.getQuestionSet().equals(a142) && a142.getQuestions().contains(a151)) {
         a142.getQuestions().remove(a151);
@@ -4198,17 +6230,34 @@ if (a151 == null) {
         JPA.em().persist(a142);
     }
     a151.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a151_driver = driverService.findByName("A151");
+    if (a151_driver != null) {
+        driverService.remove(a151_driver);
+    }
+
+    ((NumericQuestion)a151).setDriver(null);
+
     JPA.em().persist(a151);
 }
 
+    }
+    private void createQuestionA152() {
+        // == A152
+        // % de distance effectuée par voie fluviale
 
-    // == A152
-    // % de distance effectuée par voie fluviale
-
-    PercentageQuestion a152 = (PercentageQuestion) questionService.findByCode(QuestionCode.A152);
+        a152 = (PercentageQuestion) questionService.findByCode(QuestionCode.A152);
 if (a152 == null) {
     a152 = new PercentageQuestion(a142, 0, QuestionCode.A152);
     JPA.em().persist(a152);
+
+    // cleanup the driver
+    Driver a152_driver = driverService.findByName("A152");
+    if (a152_driver != null) {
+        driverService.remove(a152_driver);
+    }
+
 } else {
     if (!a152.getQuestionSet().equals(a142) && a142.getQuestions().contains(a152)) {
         a142.getQuestions().remove(a152);
@@ -4219,17 +6268,34 @@ if (a152 == null) {
         JPA.em().persist(a142);
     }
     a152.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a152_driver = driverService.findByName("A152");
+    if (a152_driver != null) {
+        driverService.remove(a152_driver);
+    }
+
+    ((NumericQuestion)a152).setDriver(null);
+
     JPA.em().persist(a152);
 }
 
+    }
+    private void createQuestionA153() {
+        // == A153
+        // % de distance effectuée par transport aérien court courrier (<1000 km)
 
-    // == A153
-    // % de distance effectuée par transport aérien court courrier (<1000 km)
-
-    PercentageQuestion a153 = (PercentageQuestion) questionService.findByCode(QuestionCode.A153);
+        a153 = (PercentageQuestion) questionService.findByCode(QuestionCode.A153);
 if (a153 == null) {
     a153 = new PercentageQuestion(a142, 0, QuestionCode.A153);
     JPA.em().persist(a153);
+
+    // cleanup the driver
+    Driver a153_driver = driverService.findByName("A153");
+    if (a153_driver != null) {
+        driverService.remove(a153_driver);
+    }
+
 } else {
     if (!a153.getQuestionSet().equals(a142) && a142.getQuestions().contains(a153)) {
         a142.getQuestions().remove(a153);
@@ -4240,17 +6306,34 @@ if (a153 == null) {
         JPA.em().persist(a142);
     }
     a153.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a153_driver = driverService.findByName("A153");
+    if (a153_driver != null) {
+        driverService.remove(a153_driver);
+    }
+
+    ((NumericQuestion)a153).setDriver(null);
+
     JPA.em().persist(a153);
 }
 
+    }
+    private void createQuestionA154() {
+        // == A154
+        // % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
 
-    // == A154
-    // % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
-
-    PercentageQuestion a154 = (PercentageQuestion) questionService.findByCode(QuestionCode.A154);
+        a154 = (PercentageQuestion) questionService.findByCode(QuestionCode.A154);
 if (a154 == null) {
     a154 = new PercentageQuestion(a142, 0, QuestionCode.A154);
     JPA.em().persist(a154);
+
+    // cleanup the driver
+    Driver a154_driver = driverService.findByName("A154");
+    if (a154_driver != null) {
+        driverService.remove(a154_driver);
+    }
+
 } else {
     if (!a154.getQuestionSet().equals(a142) && a142.getQuestions().contains(a154)) {
         a142.getQuestions().remove(a154);
@@ -4261,17 +6344,34 @@ if (a154 == null) {
         JPA.em().persist(a142);
     }
     a154.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a154_driver = driverService.findByName("A154");
+    if (a154_driver != null) {
+        driverService.remove(a154_driver);
+    }
+
+    ((NumericQuestion)a154).setDriver(null);
+
     JPA.em().persist(a154);
 }
 
+    }
+    private void createQuestionA155() {
+        // == A155
+        // % de distance effectuée par transport aérien long courrier (> 4000 km)
 
-    // == A155
-    // % de distance effectuée par transport aérien long courrier (> 4000 km)
-
-    PercentageQuestion a155 = (PercentageQuestion) questionService.findByCode(QuestionCode.A155);
+        a155 = (PercentageQuestion) questionService.findByCode(QuestionCode.A155);
 if (a155 == null) {
     a155 = new PercentageQuestion(a142, 0, QuestionCode.A155);
     JPA.em().persist(a155);
+
+    // cleanup the driver
+    Driver a155_driver = driverService.findByName("A155");
+    if (a155_driver != null) {
+        driverService.remove(a155_driver);
+    }
+
 } else {
     if (!a155.getQuestionSet().equals(a142) && a142.getQuestions().contains(a155)) {
         a142.getQuestions().remove(a155);
@@ -4282,17 +6382,34 @@ if (a155 == null) {
         JPA.em().persist(a142);
     }
     a155.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a155_driver = driverService.findByName("A155");
+    if (a155_driver != null) {
+        driverService.remove(a155_driver);
+    }
+
+    ((NumericQuestion)a155).setDriver(null);
+
     JPA.em().persist(a155);
 }
 
+    }
+    private void createQuestionA156() {
+        // == A156
+        // Total (supposé être égal à 100%)
 
-    // == A156
-    // Total (supposé être égal à 100%)
-
-    PercentageQuestion a156 = (PercentageQuestion) questionService.findByCode(QuestionCode.A156);
+        a156 = (PercentageQuestion) questionService.findByCode(QuestionCode.A156);
 if (a156 == null) {
     a156 = new PercentageQuestion(a142, 0, QuestionCode.A156);
     JPA.em().persist(a156);
+
+    // cleanup the driver
+    Driver a156_driver = driverService.findByName("A156");
+    if (a156_driver != null) {
+        driverService.remove(a156_driver);
+    }
+
 } else {
     if (!a156.getQuestionSet().equals(a142) && a142.getQuestions().contains(a156)) {
         a142.getQuestions().remove(a156);
@@ -4303,18 +6420,35 @@ if (a156 == null) {
         JPA.em().persist(a142);
     }
     a156.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a156_driver = driverService.findByName("A156");
+    if (a156_driver != null) {
+        driverService.remove(a156_driver);
+    }
+
+    ((NumericQuestion)a156).setDriver(null);
+
     JPA.em().persist(a156);
 }
 
+    }
+    private void createQuestionA158() {
+        // == A158
+        // Quel est le poids total transporté sur toute l'année du bilan (tous produits confondus)?
 
-    // == A158
-    // Quel est le poids total transporté sur toute l'année du bilan (tous produits confondus)?
-
-    
-DoubleQuestion a158 = (DoubleQuestion) questionService.findByCode(QuestionCode.A158);
+        
+a158 = (DoubleQuestion) questionService.findByCode(QuestionCode.A158);
 if (a158 == null) {
     a158 = new DoubleQuestion( a157, 0, QuestionCode.A158, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a158);
+
+    // cleanup the driver
+    Driver a158_driver = driverService.findByName("A158");
+    if (a158_driver != null) {
+        driverService.remove(a158_driver);
+    }
+
 } else {
     if (!a158.getQuestionSet().equals(a157) && a157.getQuestions().contains(a158)) {
         a157.getQuestions().remove(a158);
@@ -4324,19 +6458,30 @@ if (a158 == null) {
         a157.getQuestions().add(a158);
         JPA.em().persist(a157);
     }
-    a158.setUnitCategory(massUnits);
+    ((NumericQuestion)a158).setUnitCategory(massUnits);
     a158.setOrderIndex(0);
-    a158.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a158).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a158_driver = driverService.findByName("A158");
+    if (a158_driver != null) {
+        driverService.remove(a158_driver);
+    }
+
+    ((NumericQuestion)a158).setDriver(null);
+
     JPA.em().persist(a158);
 }
 
 
 
+    }
+    private void createQuestionA159() {
+        // == A159
+        // Quelle est la provenance géographique des produits?
 
-    // == A159
-    // Quelle est la provenance géographique des produits?
-
-    ValueSelectionQuestion a159 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A159);
+        a159 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A159);
 if (a159 == null) {
     a159 = new ValueSelectionQuestion(a157, 0, QuestionCode.A159, CodeList.PROVENANCESIMPLIFIEE);
     JPA.em().persist(a159);
@@ -4350,19 +6495,27 @@ if (a159 == null) {
         JPA.em().persist(a157);
     }
     a159.setOrderIndex(0);
-    a159.setCodeList(CodeList.PROVENANCESIMPLIFIEE);
+    ((ValueSelectionQuestion)a159).setCodeList(CodeList.PROVENANCESIMPLIFIEE);
     JPA.em().persist(a159);
 }
 
+    }
+    private void createQuestionA160() {
+        // == A160
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A160
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a160 = (DoubleQuestion) questionService.findByCode(QuestionCode.A160);
+        
+a160 = (DoubleQuestion) questionService.findByCode(QuestionCode.A160);
 if (a160 == null) {
     a160 = new DoubleQuestion( a157, 0, QuestionCode.A160, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a160);
+
+    // cleanup the driver
+    Driver a160_driver = driverService.findByName("A160");
+    if (a160_driver != null) {
+        driverService.remove(a160_driver);
+    }
+
 } else {
     if (!a160.getQuestionSet().equals(a157) && a157.getQuestions().contains(a160)) {
         a157.getQuestions().remove(a160);
@@ -4372,23 +6525,40 @@ if (a160 == null) {
         a157.getQuestions().add(a160);
         JPA.em().persist(a157);
     }
-    a160.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a160).setUnitCategory(lengthUnits);
     a160.setOrderIndex(0);
-    a160.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a160).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a160_driver = driverService.findByName("A160");
+    if (a160_driver != null) {
+        driverService.remove(a160_driver);
+    }
+
+    ((NumericQuestion)a160).setDriver(null);
+
     JPA.em().persist(a160);
 }
 
 
 
+    }
+    private void createQuestionA161() {
+        // == A161
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A161
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a161 = (DoubleQuestion) questionService.findByCode(QuestionCode.A161);
+        
+a161 = (DoubleQuestion) questionService.findByCode(QuestionCode.A161);
 if (a161 == null) {
     a161 = new DoubleQuestion( a157, 0, QuestionCode.A161, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a161);
+
+    // cleanup the driver
+    Driver a161_driver = driverService.findByName("A161");
+    if (a161_driver != null) {
+        driverService.remove(a161_driver);
+    }
+
 } else {
     if (!a161.getQuestionSet().equals(a157) && a157.getQuestions().contains(a161)) {
         a157.getQuestions().remove(a161);
@@ -4398,23 +6568,40 @@ if (a161 == null) {
         a157.getQuestions().add(a161);
         JPA.em().persist(a157);
     }
-    a161.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a161).setUnitCategory(lengthUnits);
     a161.setOrderIndex(0);
-    a161.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a161).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a161_driver = driverService.findByName("A161");
+    if (a161_driver != null) {
+        driverService.remove(a161_driver);
+    }
+
+    ((NumericQuestion)a161).setDriver(null);
+
     JPA.em().persist(a161);
 }
 
 
 
+    }
+    private void createQuestionA162() {
+        // == A162
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A162
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a162 = (DoubleQuestion) questionService.findByCode(QuestionCode.A162);
+        
+a162 = (DoubleQuestion) questionService.findByCode(QuestionCode.A162);
 if (a162 == null) {
     a162 = new DoubleQuestion( a157, 0, QuestionCode.A162, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a162);
+
+    // cleanup the driver
+    Driver a162_driver = driverService.findByName("A162");
+    if (a162_driver != null) {
+        driverService.remove(a162_driver);
+    }
+
 } else {
     if (!a162.getQuestionSet().equals(a157) && a157.getQuestions().contains(a162)) {
         a157.getQuestions().remove(a162);
@@ -4424,24 +6611,34 @@ if (a162 == null) {
         a157.getQuestions().add(a162);
         JPA.em().persist(a157);
     }
-    a162.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a162).setUnitCategory(lengthUnits);
     a162.setOrderIndex(0);
-    a162.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a162).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a162_driver = driverService.findByName("A162");
+    if (a162_driver != null) {
+        driverService.remove(a162_driver);
+    }
+
+    ((NumericQuestion)a162).setDriver(null);
+
     JPA.em().persist(a162);
 }
 
 
 
+    }
+    private void createQuestionA165() {
+        // == A165
+        // Poste de consommation
 
-    // == A165
-    // Poste de consommation
-
-    StringQuestion a165 = (StringQuestion) questionService.findByCode(QuestionCode.A165);
+        a165 = (StringQuestion) questionService.findByCode(QuestionCode.A165);
 if (a165 == null) {
     a165 = new StringQuestion(a164, 0, QuestionCode.A165, null);
     JPA.em().persist(a165);
 } else {
-    a165.setDefaultValue(null);
+    ((StringQuestion)a165).setDefaultValue(null);
     if (!a165.getQuestionSet().equals(a164) && a164.getQuestions().contains(a165)) {
         a164.getQuestions().remove(a165);
         JPA.em().persist(a164);
@@ -4454,11 +6651,12 @@ if (a165 == null) {
     JPA.em().persist(a165);
 }
 
+    }
+    private void createQuestionA167() {
+        // == A167
+        // Combustible consommé en amont
 
-    // == A167
-    // Combustible consommé en amont
-
-    ValueSelectionQuestion a167 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A167);
+        a167 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A167);
 if (a167 == null) {
     a167 = new ValueSelectionQuestion(a166, 0, QuestionCode.A167, CodeList.COMBUSTIBLE);
     JPA.em().persist(a167);
@@ -4472,19 +6670,28 @@ if (a167 == null) {
         JPA.em().persist(a166);
     }
     a167.setOrderIndex(0);
-    a167.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a167).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a167);
 }
 
+    }
+    private void createQuestionA168() {
+        // == A168
+        // Quantité
 
-    // == A168
-    // Quantité
-
-    
-DoubleQuestion a168 = (DoubleQuestion) questionService.findByCode(QuestionCode.A168);
+        
+a168 = (DoubleQuestion) questionService.findByCode(QuestionCode.A168);
 if (a168 == null) {
     a168 = new DoubleQuestion( a166, 0, QuestionCode.A168, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a168);
+
+    // cleanup the driver
+    Driver a168_driver = driverService.findByName("A168");
+    if (a168_driver != null) {
+        driverService.remove(a168_driver);
+    }
+
+
 } else {
     if (!a168.getQuestionSet().equals(a166) && a166.getQuestions().contains(a168)) {
         a166.getQuestions().remove(a168);
@@ -4494,19 +6701,29 @@ if (a168 == null) {
         a166.getQuestions().add(a168);
         JPA.em().persist(a166);
     }
-    a168.setUnitCategory(energyUnits);
+    ((NumericQuestion)a168).setUnitCategory(energyUnits);
     a168.setOrderIndex(0);
-    a168.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a168).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a168_driver = driverService.findByName("A168");
+    if (a168_driver != null) {
+        driverService.remove(a168_driver);
+    }
+
+    ((NumericQuestion)a168).setDriver(null);
+
     JPA.em().persist(a168);
 }
 
 
 
+    }
+    private void createQuestionA1007() {
+        // == A1007
+        // Combustible consommé en amont
 
-    // == A1007
-    // Combustible consommé en amont
-
-    ValueSelectionQuestion a1007 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1007);
+        a1007 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1007);
 if (a1007 == null) {
     a1007 = new ValueSelectionQuestion(a1006, 0, QuestionCode.A1007, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1007);
@@ -4520,19 +6737,27 @@ if (a1007 == null) {
         JPA.em().persist(a1006);
     }
     a1007.setOrderIndex(0);
-    a1007.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1007).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1007);
 }
 
+    }
+    private void createQuestionA1008() {
+        // == A1008
+        // Quantité
 
-    // == A1008
-    // Quantité
-
-    
-DoubleQuestion a1008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1008);
+        
+a1008 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1008);
 if (a1008 == null) {
     a1008 = new DoubleQuestion( a1006, 0, QuestionCode.A1008, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1008);
+
+    // cleanup the driver
+    Driver a1008_driver = driverService.findByName("A1008");
+    if (a1008_driver != null) {
+        driverService.remove(a1008_driver);
+    }
+
 } else {
     if (!a1008.getQuestionSet().equals(a1006) && a1006.getQuestions().contains(a1008)) {
         a1006.getQuestions().remove(a1008);
@@ -4542,19 +6767,29 @@ if (a1008 == null) {
         a1006.getQuestions().add(a1008);
         JPA.em().persist(a1006);
     }
-    a1008.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1008).setUnitCategory(volumeUnits);
     a1008.setOrderIndex(0);
-    a1008.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1008).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1008_driver = driverService.findByName("A1008");
+    if (a1008_driver != null) {
+        driverService.remove(a1008_driver);
+    }
+
+    ((NumericQuestion)a1008).setDriver(null);
+
     JPA.em().persist(a1008);
 }
 
 
 
+    }
+    private void createQuestionA1010() {
+        // == A1010
+        // Combustible consommé en amont
 
-    // == A1010
-    // Combustible consommé en amont
-
-    ValueSelectionQuestion a1010 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1010);
+        a1010 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1010);
 if (a1010 == null) {
     a1010 = new ValueSelectionQuestion(a1009, 0, QuestionCode.A1010, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1010);
@@ -4568,19 +6803,27 @@ if (a1010 == null) {
         JPA.em().persist(a1009);
     }
     a1010.setOrderIndex(0);
-    a1010.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1010).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1010);
 }
 
+    }
+    private void createQuestionA1011() {
+        // == A1011
+        // Quantité
 
-    // == A1011
-    // Quantité
-
-    
-DoubleQuestion a1011 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1011);
+        
+a1011 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1011);
 if (a1011 == null) {
     a1011 = new DoubleQuestion( a1009, 0, QuestionCode.A1011, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1011);
+
+    // cleanup the driver
+    Driver a1011_driver = driverService.findByName("A1011");
+    if (a1011_driver != null) {
+        driverService.remove(a1011_driver);
+    }
+
 } else {
     if (!a1011.getQuestionSet().equals(a1009) && a1009.getQuestions().contains(a1011)) {
         a1009.getQuestions().remove(a1011);
@@ -4590,23 +6833,42 @@ if (a1011 == null) {
         a1009.getQuestions().add(a1011);
         JPA.em().persist(a1009);
     }
-    a1011.setUnitCategory(massUnits);
+    ((NumericQuestion)a1011).setUnitCategory(massUnits);
     a1011.setOrderIndex(0);
-    a1011.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1011).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1011_driver = driverService.findByName("A1011");
+    if (a1011_driver != null) {
+        driverService.remove(a1011_driver);
+    }
+
+    ((NumericQuestion)a1011).setDriver(null);
+
     JPA.em().persist(a1011);
 }
 
 
 
+    }
+    private void createQuestionA169() {
+        // == A169
+        // Electricité
 
-    // == A169
-    // Electricité
-
-    
-DoubleQuestion a169 = (DoubleQuestion) questionService.findByCode(QuestionCode.A169);
+        
+a169 = (DoubleQuestion) questionService.findByCode(QuestionCode.A169);
 if (a169 == null) {
     a169 = new DoubleQuestion( a164, 0, QuestionCode.A169, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a169);
+
+    // cleanup the driver
+    Driver a169_driver = driverService.findByName("A169");
+    if (a169_driver != null) {
+        driverService.remove(a169_driver);
+    }
+
+
 } else {
     if (!a169.getQuestionSet().equals(a164) && a164.getQuestions().contains(a169)) {
         a164.getQuestions().remove(a169);
@@ -4616,19 +6878,29 @@ if (a169 == null) {
         a164.getQuestions().add(a169);
         JPA.em().persist(a164);
     }
-    a169.setUnitCategory(energyUnits);
+    ((NumericQuestion)a169).setUnitCategory(energyUnits);
     a169.setOrderIndex(0);
-    a169.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a169).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a169_driver = driverService.findByName("A169");
+    if (a169_driver != null) {
+        driverService.remove(a169_driver);
+    }
+
+    ((NumericQuestion)a169).setDriver(null);
+
     JPA.em().persist(a169);
 }
 
 
 
+    }
+    private void createQuestionA171() {
+        // == A171
+        // Type de gaz
 
-    // == A171
-    // Type de gaz
-
-    ValueSelectionQuestion a171 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A171);
+        a171 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A171);
 if (a171 == null) {
     a171 = new ValueSelectionQuestion(a170, 0, QuestionCode.A171, CodeList.FRIGORIGENE);
     JPA.em().persist(a171);
@@ -4642,19 +6914,27 @@ if (a171 == null) {
         JPA.em().persist(a170);
     }
     a171.setOrderIndex(0);
-    a171.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a171).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a171);
 }
 
+    }
+    private void createQuestionA172() {
+        // == A172
+        // Quantité de recharge nécessaire pour l'année
 
-    // == A172
-    // Quantité de recharge nécessaire pour l'année
-
-    
-DoubleQuestion a172 = (DoubleQuestion) questionService.findByCode(QuestionCode.A172);
+        
+a172 = (DoubleQuestion) questionService.findByCode(QuestionCode.A172);
 if (a172 == null) {
     a172 = new DoubleQuestion( a170, 0, QuestionCode.A172, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a172);
+
+    // cleanup the driver
+    Driver a172_driver = driverService.findByName("A172");
+    if (a172_driver != null) {
+        driverService.remove(a172_driver);
+    }
+
 } else {
     if (!a172.getQuestionSet().equals(a170) && a170.getQuestions().contains(a172)) {
         a170.getQuestions().remove(a172);
@@ -4664,19 +6944,30 @@ if (a172 == null) {
         a170.getQuestions().add(a172);
         JPA.em().persist(a170);
     }
-    a172.setUnitCategory(massUnits);
+    ((NumericQuestion)a172).setUnitCategory(massUnits);
     a172.setOrderIndex(0);
-    a172.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a172).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a172_driver = driverService.findByName("A172");
+    if (a172_driver != null) {
+        driverService.remove(a172_driver);
+    }
+
+    ((NumericQuestion)a172).setDriver(null);
+
     JPA.em().persist(a172);
 }
 
 
 
+    }
+    private void createQuestionA174() {
+        // == A174
+        // Pièces documentaires liées aux déchets
 
-    // == A174
-    // Pièces documentaires liées aux déchets
-
-    DocumentQuestion a174 = (DocumentQuestion) questionService.findByCode(QuestionCode.A174);
+        a174 = (DocumentQuestion) questionService.findByCode(QuestionCode.A174);
 if (a174 == null) {
     a174 = new DocumentQuestion(a173, 0, QuestionCode.A174);
     JPA.em().persist(a174);
@@ -4693,16 +6984,17 @@ if (a174 == null) {
     JPA.em().persist(a174);
 }
 
+    }
+    private void createQuestionA5001() {
+        // == A5001
+        // Poste de déchet
 
-    // == A5001
-    // Poste de déchet
-
-    StringQuestion a5001 = (StringQuestion) questionService.findByCode(QuestionCode.A5001);
+        a5001 = (StringQuestion) questionService.findByCode(QuestionCode.A5001);
 if (a5001 == null) {
     a5001 = new StringQuestion(a5000, 0, QuestionCode.A5001, null);
     JPA.em().persist(a5001);
 } else {
-    a5001.setDefaultValue(null);
+    ((StringQuestion)a5001).setDefaultValue(null);
     if (!a5001.getQuestionSet().equals(a5000) && a5000.getQuestions().contains(a5001)) {
         a5000.getQuestions().remove(a5001);
         JPA.em().persist(a5000);
@@ -4715,11 +7007,12 @@ if (a5001 == null) {
     JPA.em().persist(a5001);
 }
 
+    }
+    private void createQuestionA5002() {
+        // == A5002
+        // Type de déchet et type de traitement
 
-    // == A5002
-    // Type de déchet et type de traitement
-
-    ValueSelectionQuestion a5002 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5002);
+        a5002 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5002);
 if (a5002 == null) {
     a5002 = new ValueSelectionQuestion(a5000, 0, QuestionCode.A5002, CodeList.GESTIONDECHETS);
     JPA.em().persist(a5002);
@@ -4733,19 +7026,27 @@ if (a5002 == null) {
         JPA.em().persist(a5000);
     }
     a5002.setOrderIndex(0);
-    a5002.setCodeList(CodeList.GESTIONDECHETS);
+    ((ValueSelectionQuestion)a5002).setCodeList(CodeList.GESTIONDECHETS);
     JPA.em().persist(a5002);
 }
 
+    }
+    private void createQuestionA5003() {
+        // == A5003
+        // Quantité
 
-    // == A5003
-    // Quantité
-
-    
-DoubleQuestion a5003 = (DoubleQuestion) questionService.findByCode(QuestionCode.A5003);
+        
+a5003 = (DoubleQuestion) questionService.findByCode(QuestionCode.A5003);
 if (a5003 == null) {
     a5003 = new DoubleQuestion( a5000, 0, QuestionCode.A5003, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a5003);
+
+    // cleanup the driver
+    Driver a5003_driver = driverService.findByName("A5003");
+    if (a5003_driver != null) {
+        driverService.remove(a5003_driver);
+    }
+
 } else {
     if (!a5003.getQuestionSet().equals(a5000) && a5000.getQuestions().contains(a5003)) {
         a5000.getQuestions().remove(a5003);
@@ -4755,22 +7056,40 @@ if (a5003 == null) {
         a5000.getQuestions().add(a5003);
         JPA.em().persist(a5000);
     }
-    a5003.setUnitCategory(massUnits);
+    ((NumericQuestion)a5003).setUnitCategory(massUnits);
     a5003.setOrderIndex(0);
-    a5003.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a5003).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a5003_driver = driverService.findByName("A5003");
+    if (a5003_driver != null) {
+        driverService.remove(a5003_driver);
+    }
+
+    ((NumericQuestion)a5003).setDriver(null);
+
     JPA.em().persist(a5003);
 }
 
 
 
+    }
+    private void createQuestionA183() {
+        // == A183
+        // Nombre d'ouvriers
 
-    // == A183
-    // Nombre d'ouvriers
-
-    IntegerQuestion a183 = (IntegerQuestion) questionService.findByCode(QuestionCode.A183);
+        a183 = (IntegerQuestion) questionService.findByCode(QuestionCode.A183);
 if (a183 == null) {
     a183 = new IntegerQuestion(a182, 0, QuestionCode.A183, null);
     JPA.em().persist(a183);
+
+    // cleanup the driver
+    Driver a183_driver = driverService.findByName("A183");
+    if (a183_driver != null) {
+        driverService.remove(a183_driver);
+    }
+
 } else {
     if (!a183.getQuestionSet().equals(a182) && a182.getQuestions().contains(a183)) {
         a182.getQuestions().remove(a183);
@@ -4781,17 +7100,45 @@ if (a183 == null) {
         JPA.em().persist(a182);
     }
     a183.setOrderIndex(0);
-    a183.setUnitCategory(null);
+    ((NumericQuestion)a183).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a183_driver = driverService.findByName("A183");
+    if (a183_driver != null) {
+        driverService.remove(a183_driver);
+    }
+
+    ((NumericQuestion)a183).setDriver(null);
+
     JPA.em().persist(a183);
 }
 
+    }
+    private void createQuestionA184() {
+        // == A184
+        // Nombre de jours de travail/an
 
-    // == A184
-    // Nombre de jours de travail/an
-
-    IntegerQuestion a184 = (IntegerQuestion) questionService.findByCode(QuestionCode.A184);
+        a184 = (IntegerQuestion) questionService.findByCode(QuestionCode.A184);
 if (a184 == null) {
     a184 = new IntegerQuestion(a182, 0, QuestionCode.A184, null);
+    JPA.em().persist(a184);
+
+    // cleanup the driver
+    Driver a184_driver = driverService.findByName("A184");
+    if (a184_driver != null) {
+        driverService.remove(a184_driver);
+    }
+
+    // recreate with good value
+    a184_driver = new Driver("A184");
+    driverService.saveOrUpdate(a184_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a184_driver, p2000, Double.valueOf(220));
+    a184_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a184_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a184).setDriver(a184_driver);
     JPA.em().persist(a184);
 } else {
     if (!a184.getQuestionSet().equals(a182) && a182.getQuestions().contains(a184)) {
@@ -4803,18 +7150,44 @@ if (a184 == null) {
         JPA.em().persist(a182);
     }
     a184.setOrderIndex(0);
-    a184.setUnitCategory(null);
+    ((NumericQuestion)a184).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a184_driver = driverService.findByName("A184");
+    if (a184_driver != null) {
+        driverService.remove(a184_driver);
+    }
+
+    // recreate with good value
+    a184_driver = new Driver("A184");
+    driverService.saveOrUpdate(a184_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a184_driver, p2000, Double.valueOf(220));
+    a184_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a184_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a184).setDriver(a184_driver);
+
     JPA.em().persist(a184);
 }
 
+    }
+    private void createQuestionA186() {
+        // == A186
+        // Nombre d'employés
 
-    // == A186
-    // Nombre d'employés
-
-    IntegerQuestion a186 = (IntegerQuestion) questionService.findByCode(QuestionCode.A186);
+        a186 = (IntegerQuestion) questionService.findByCode(QuestionCode.A186);
 if (a186 == null) {
     a186 = new IntegerQuestion(a185, 0, QuestionCode.A186, null);
     JPA.em().persist(a186);
+
+    // cleanup the driver
+    Driver a186_driver = driverService.findByName("A186");
+    if (a186_driver != null) {
+        driverService.remove(a186_driver);
+    }
+
 } else {
     if (!a186.getQuestionSet().equals(a185) && a185.getQuestions().contains(a186)) {
         a185.getQuestions().remove(a186);
@@ -4825,17 +7198,45 @@ if (a186 == null) {
         JPA.em().persist(a185);
     }
     a186.setOrderIndex(0);
-    a186.setUnitCategory(null);
+    ((NumericQuestion)a186).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a186_driver = driverService.findByName("A186");
+    if (a186_driver != null) {
+        driverService.remove(a186_driver);
+    }
+
+    ((NumericQuestion)a186).setDriver(null);
+
     JPA.em().persist(a186);
 }
 
+    }
+    private void createQuestionA187() {
+        // == A187
+        // Nombre de jours de travail/an
 
-    // == A187
-    // Nombre de jours de travail/an
-
-    IntegerQuestion a187 = (IntegerQuestion) questionService.findByCode(QuestionCode.A187);
+        a187 = (IntegerQuestion) questionService.findByCode(QuestionCode.A187);
 if (a187 == null) {
     a187 = new IntegerQuestion(a185, 0, QuestionCode.A187, null);
+    JPA.em().persist(a187);
+
+    // cleanup the driver
+    Driver a187_driver = driverService.findByName("A187");
+    if (a187_driver != null) {
+        driverService.remove(a187_driver);
+    }
+
+    // recreate with good value
+    a187_driver = new Driver("A187");
+    driverService.saveOrUpdate(a187_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a187_driver, p2000, Double.valueOf(220));
+    a187_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a187_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a187).setDriver(a187_driver);
     JPA.em().persist(a187);
 } else {
     if (!a187.getQuestionSet().equals(a185) && a185.getQuestions().contains(a187)) {
@@ -4847,18 +7248,44 @@ if (a187 == null) {
         JPA.em().persist(a185);
     }
     a187.setOrderIndex(0);
-    a187.setUnitCategory(null);
+    ((NumericQuestion)a187).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a187_driver = driverService.findByName("A187");
+    if (a187_driver != null) {
+        driverService.remove(a187_driver);
+    }
+
+    // recreate with good value
+    a187_driver = new Driver("A187");
+    driverService.saveOrUpdate(a187_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a187_driver, p2000, Double.valueOf(220));
+    a187_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a187_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a187).setDriver(a187_driver);
+
     JPA.em().persist(a187);
 }
 
+    }
+    private void createQuestionA189() {
+        // == A189
+        // Nombre de lits
 
-    // == A189
-    // Nombre de lits
-
-    IntegerQuestion a189 = (IntegerQuestion) questionService.findByCode(QuestionCode.A189);
+        a189 = (IntegerQuestion) questionService.findByCode(QuestionCode.A189);
 if (a189 == null) {
     a189 = new IntegerQuestion(a188, 0, QuestionCode.A189, null);
     JPA.em().persist(a189);
+
+    // cleanup the driver
+    Driver a189_driver = driverService.findByName("A189");
+    if (a189_driver != null) {
+        driverService.remove(a189_driver);
+    }
+
 } else {
     if (!a189.getQuestionSet().equals(a188) && a188.getQuestions().contains(a189)) {
         a188.getQuestions().remove(a189);
@@ -4869,17 +7296,45 @@ if (a189 == null) {
         JPA.em().persist(a188);
     }
     a189.setOrderIndex(0);
-    a189.setUnitCategory(null);
+    ((NumericQuestion)a189).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a189_driver = driverService.findByName("A189");
+    if (a189_driver != null) {
+        driverService.remove(a189_driver);
+    }
+
+    ((NumericQuestion)a189).setDriver(null);
+
     JPA.em().persist(a189);
 }
 
+    }
+    private void createQuestionA190() {
+        // == A190
+        // Nombre de jours d'ouverture/an
 
-    // == A190
-    // Nombre de jours d'ouverture/an
-
-    IntegerQuestion a190 = (IntegerQuestion) questionService.findByCode(QuestionCode.A190);
+        a190 = (IntegerQuestion) questionService.findByCode(QuestionCode.A190);
 if (a190 == null) {
     a190 = new IntegerQuestion(a188, 0, QuestionCode.A190, null);
+    JPA.em().persist(a190);
+
+    // cleanup the driver
+    Driver a190_driver = driverService.findByName("A190");
+    if (a190_driver != null) {
+        driverService.remove(a190_driver);
+    }
+
+    // recreate with good value
+    a190_driver = new Driver("A190");
+    driverService.saveOrUpdate(a190_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a190_driver, p2000, Double.valueOf(365));
+    a190_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a190_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a190).setDriver(a190_driver);
     JPA.em().persist(a190);
 } else {
     if (!a190.getQuestionSet().equals(a188) && a188.getQuestions().contains(a190)) {
@@ -4891,18 +7346,44 @@ if (a190 == null) {
         JPA.em().persist(a188);
     }
     a190.setOrderIndex(0);
-    a190.setUnitCategory(null);
+    ((NumericQuestion)a190).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a190_driver = driverService.findByName("A190");
+    if (a190_driver != null) {
+        driverService.remove(a190_driver);
+    }
+
+    // recreate with good value
+    a190_driver = new Driver("A190");
+    driverService.saveOrUpdate(a190_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a190_driver, p2000, Double.valueOf(365));
+    a190_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a190_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a190).setDriver(a190_driver);
+
     JPA.em().persist(a190);
 }
 
+    }
+    private void createQuestionA192() {
+        // == A192
+        // Nombre de couverts/jour
 
-    // == A192
-    // Nombre de couverts/jour
-
-    IntegerQuestion a192 = (IntegerQuestion) questionService.findByCode(QuestionCode.A192);
+        a192 = (IntegerQuestion) questionService.findByCode(QuestionCode.A192);
 if (a192 == null) {
     a192 = new IntegerQuestion(a191, 0, QuestionCode.A192, null);
     JPA.em().persist(a192);
+
+    // cleanup the driver
+    Driver a192_driver = driverService.findByName("A192");
+    if (a192_driver != null) {
+        driverService.remove(a192_driver);
+    }
+
 } else {
     if (!a192.getQuestionSet().equals(a191) && a191.getQuestions().contains(a192)) {
         a191.getQuestions().remove(a192);
@@ -4913,17 +7394,45 @@ if (a192 == null) {
         JPA.em().persist(a191);
     }
     a192.setOrderIndex(0);
-    a192.setUnitCategory(null);
+    ((NumericQuestion)a192).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a192_driver = driverService.findByName("A192");
+    if (a192_driver != null) {
+        driverService.remove(a192_driver);
+    }
+
+    ((NumericQuestion)a192).setDriver(null);
+
     JPA.em().persist(a192);
 }
 
+    }
+    private void createQuestionA193() {
+        // == A193
+        // Nombre de jours d'ouverture/an
 
-    // == A193
-    // Nombre de jours d'ouverture/an
-
-    IntegerQuestion a193 = (IntegerQuestion) questionService.findByCode(QuestionCode.A193);
+        a193 = (IntegerQuestion) questionService.findByCode(QuestionCode.A193);
 if (a193 == null) {
     a193 = new IntegerQuestion(a191, 0, QuestionCode.A193, null);
+    JPA.em().persist(a193);
+
+    // cleanup the driver
+    Driver a193_driver = driverService.findByName("A193");
+    if (a193_driver != null) {
+        driverService.remove(a193_driver);
+    }
+
+    // recreate with good value
+    a193_driver = new Driver("A193");
+    driverService.saveOrUpdate(a193_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a193_driver, p2000, Double.valueOf(220));
+    a193_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a193_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a193).setDriver(a193_driver);
     JPA.em().persist(a193);
 } else {
     if (!a193.getQuestionSet().equals(a191) && a191.getQuestions().contains(a193)) {
@@ -4935,15 +7444,34 @@ if (a193 == null) {
         JPA.em().persist(a191);
     }
     a193.setOrderIndex(0);
-    a193.setUnitCategory(null);
+    ((NumericQuestion)a193).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a193_driver = driverService.findByName("A193");
+    if (a193_driver != null) {
+        driverService.remove(a193_driver);
+    }
+
+    // recreate with good value
+    a193_driver = new Driver("A193");
+    driverService.saveOrUpdate(a193_driver);
+    Period p2000 = periodService.findByCode(PeriodCode.P2000);
+    DriverValue dv = new DriverValue(a193_driver, p2000, Double.valueOf(220));
+    a193_driver.getDriverValueList().add(dv);;
+    driverService.saveOrUpdate(a193_driver);
+    JPA.em().persist(dv);
+
+    ((NumericQuestion)a193).setDriver(a193_driver);
+
     JPA.em().persist(a193);
 }
 
+    }
+    private void createQuestionA198() {
+        // == A198
+        // Source de rejet
 
-    // == A198
-    // Source de rejet
-
-    ValueSelectionQuestion a198 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A198);
+        a198 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A198);
 if (a198 == null) {
     a198 = new ValueSelectionQuestion(a197, 0, QuestionCode.A198, CodeList.ORIGINEEAUUSEE);
     JPA.em().persist(a198);
@@ -4957,19 +7485,27 @@ if (a198 == null) {
         JPA.em().persist(a197);
     }
     a198.setOrderIndex(0);
-    a198.setCodeList(CodeList.ORIGINEEAUUSEE);
+    ((ValueSelectionQuestion)a198).setCodeList(CodeList.ORIGINEEAUUSEE);
     JPA.em().persist(a198);
 }
 
+    }
+    private void createQuestionA199() {
+        // == A199
+        // Quantités de m³ rejetés
 
-    // == A199
-    // Quantités de m³ rejetés
-
-    
-DoubleQuestion a199 = (DoubleQuestion) questionService.findByCode(QuestionCode.A199);
+        
+a199 = (DoubleQuestion) questionService.findByCode(QuestionCode.A199);
 if (a199 == null) {
     a199 = new DoubleQuestion( a197, 0, QuestionCode.A199, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a199);
+
+    // cleanup the driver
+    Driver a199_driver = driverService.findByName("A199");
+    if (a199_driver != null) {
+        driverService.remove(a199_driver);
+    }
+
 } else {
     if (!a199.getQuestionSet().equals(a197) && a197.getQuestions().contains(a199)) {
         a197.getQuestions().remove(a199);
@@ -4979,19 +7515,29 @@ if (a199 == null) {
         a197.getQuestions().add(a199);
         JPA.em().persist(a197);
     }
-    a199.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a199).setUnitCategory(volumeUnits);
     a199.setOrderIndex(0);
-    a199.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a199).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a199_driver = driverService.findByName("A199");
+    if (a199_driver != null) {
+        driverService.remove(a199_driver);
+    }
+
+    ((NumericQuestion)a199).setDriver(null);
+
     JPA.em().persist(a199);
 }
 
 
 
+    }
+    private void createQuestionA200() {
+        // == A200
+        // Méthode de traitement des eaux usées
 
-    // == A200
-    // Méthode de traitement des eaux usées
-
-    ValueSelectionQuestion a200 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A200);
+        a200 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A200);
 if (a200 == null) {
     a200 = new ValueSelectionQuestion(a197, 0, QuestionCode.A200, CodeList.TRAITEMENTEAU);
     JPA.em().persist(a200);
@@ -5005,19 +7551,27 @@ if (a200 == null) {
         JPA.em().persist(a197);
     }
     a200.setOrderIndex(0);
-    a200.setCodeList(CodeList.TRAITEMENTEAU);
+    ((ValueSelectionQuestion)a200).setCodeList(CodeList.TRAITEMENTEAU);
     JPA.em().persist(a200);
 }
 
+    }
+    private void createQuestionA202() {
+        // == A202
+        // Quantités de DCO rejetés
 
-    // == A202
-    // Quantités de DCO rejetés
-
-    
-DoubleQuestion a202 = (DoubleQuestion) questionService.findByCode(QuestionCode.A202);
+        
+a202 = (DoubleQuestion) questionService.findByCode(QuestionCode.A202);
 if (a202 == null) {
     a202 = new DoubleQuestion( a201, 0, QuestionCode.A202, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a202);
+
+    // cleanup the driver
+    Driver a202_driver = driverService.findByName("A202");
+    if (a202_driver != null) {
+        driverService.remove(a202_driver);
+    }
+
 } else {
     if (!a202.getQuestionSet().equals(a201) && a201.getQuestions().contains(a202)) {
         a201.getQuestions().remove(a202);
@@ -5027,23 +7581,41 @@ if (a202 == null) {
         a201.getQuestions().add(a202);
         JPA.em().persist(a201);
     }
-    a202.setUnitCategory(massUnits);
+    ((NumericQuestion)a202).setUnitCategory(massUnits);
     a202.setOrderIndex(0);
-    a202.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a202).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a202_driver = driverService.findByName("A202");
+    if (a202_driver != null) {
+        driverService.remove(a202_driver);
+    }
+
+    ((NumericQuestion)a202).setDriver(null);
+
     JPA.em().persist(a202);
 }
 
 
 
+    }
+    private void createQuestionA203() {
+        // == A203
+        // Quantités d'azote rejetés
 
-    // == A203
-    // Quantités d'azote rejetés
-
-    
-DoubleQuestion a203 = (DoubleQuestion) questionService.findByCode(QuestionCode.A203);
+        
+a203 = (DoubleQuestion) questionService.findByCode(QuestionCode.A203);
 if (a203 == null) {
     a203 = new DoubleQuestion( a201, 0, QuestionCode.A203, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a203);
+
+    // cleanup the driver
+    Driver a203_driver = driverService.findByName("A203");
+    if (a203_driver != null) {
+        driverService.remove(a203_driver);
+    }
+
 } else {
     if (!a203.getQuestionSet().equals(a201) && a201.getQuestions().contains(a203)) {
         a201.getQuestions().remove(a203);
@@ -5053,19 +7625,30 @@ if (a203 == null) {
         a201.getQuestions().add(a203);
         JPA.em().persist(a201);
     }
-    a203.setUnitCategory(massUnits);
+    ((NumericQuestion)a203).setUnitCategory(massUnits);
     a203.setOrderIndex(0);
-    a203.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a203).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a203_driver = driverService.findByName("A203");
+    if (a203_driver != null) {
+        driverService.remove(a203_driver);
+    }
+
+    ((NumericQuestion)a203).setDriver(null);
+
     JPA.em().persist(a203);
 }
 
 
 
+    }
+    private void createQuestionA204() {
+        // == A204
+        // Méthode de traitement des eaux usées
 
-    // == A204
-    // Méthode de traitement des eaux usées
-
-    ValueSelectionQuestion a204 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A204);
+        a204 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A204);
 if (a204 == null) {
     a204 = new ValueSelectionQuestion(a201, 0, QuestionCode.A204, CodeList.TRAITEMENTEAU);
     JPA.em().persist(a204);
@@ -5079,15 +7662,16 @@ if (a204 == null) {
         JPA.em().persist(a201);
     }
     a204.setOrderIndex(0);
-    a204.setCodeList(CodeList.TRAITEMENTEAU);
+    ((ValueSelectionQuestion)a204).setCodeList(CodeList.TRAITEMENTEAU);
     JPA.em().persist(a204);
 }
 
+    }
+    private void createQuestionA230() {
+        // == A230
+        // Pièces documentaires liées aux biens d'équipements
 
-    // == A230
-    // Pièces documentaires liées aux biens d'équipements
-
-    DocumentQuestion a230 = (DocumentQuestion) questionService.findByCode(QuestionCode.A230);
+        a230 = (DocumentQuestion) questionService.findByCode(QuestionCode.A230);
 if (a230 == null) {
     a230 = new DocumentQuestion(a229, 0, QuestionCode.A230);
     JPA.em().persist(a230);
@@ -5104,16 +7688,17 @@ if (a230 == null) {
     JPA.em().persist(a230);
 }
 
+    }
+    private void createQuestionA232() {
+        // == A232
+        // Nom
 
-    // == A232
-    // Nom
-
-    StringQuestion a232 = (StringQuestion) questionService.findByCode(QuestionCode.A232);
+        a232 = (StringQuestion) questionService.findByCode(QuestionCode.A232);
 if (a232 == null) {
     a232 = new StringQuestion(a231, 0, QuestionCode.A232, null);
     JPA.em().persist(a232);
 } else {
-    a232.setDefaultValue(null);
+    ((StringQuestion)a232).setDefaultValue(null);
     if (!a232.getQuestionSet().equals(a231) && a231.getQuestions().contains(a232)) {
         a231.getQuestions().remove(a232);
         JPA.em().persist(a231);
@@ -5126,11 +7711,12 @@ if (a232 == null) {
     JPA.em().persist(a232);
 }
 
+    }
+    private void createQuestionA233() {
+        // == A233
+        // Type d'équipement
 
-    // == A233
-    // Type d'équipement
-
-    ValueSelectionQuestion a233 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A233);
+        a233 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A233);
 if (a233 == null) {
     a233 = new ValueSelectionQuestion(a231, 0, QuestionCode.A233, CodeList.INFRASTRUCTURE);
     JPA.em().persist(a233);
@@ -5144,19 +7730,29 @@ if (a233 == null) {
         JPA.em().persist(a231);
     }
     a233.setOrderIndex(0);
-    a233.setCodeList(CodeList.INFRASTRUCTURE);
+    ((ValueSelectionQuestion)a233).setCodeList(CodeList.INFRASTRUCTURE);
     JPA.em().persist(a233);
 }
 
+    }
+    private void createQuestionA234() {
+        // == A234
+        // Quantité
 
-    // == A234
-    // Quantité
+        
 
-    
-DoubleQuestion a234 = (DoubleQuestion) questionService.findByCode(QuestionCode.A234);
+a234 = (DoubleQuestion) questionService.findByCode(QuestionCode.A234);
 if (a234 == null) {
     a234 = new DoubleQuestion( a231, 0, QuestionCode.A234, areaUnits, areaUnits.getMainUnit() );
     JPA.em().persist(a234);
+
+    // cleanup the driver
+    Driver a234_driver = driverService.findByName("A234");
+    if (a234_driver != null) {
+        driverService.remove(a234_driver);
+    }
+
+
 } else {
     if (!a234.getQuestionSet().equals(a231) && a231.getQuestions().contains(a234)) {
         a231.getQuestions().remove(a234);
@@ -5166,23 +7762,40 @@ if (a234 == null) {
         a231.getQuestions().add(a234);
         JPA.em().persist(a231);
     }
-    a234.setUnitCategory(areaUnits);
+    ((NumericQuestion)a234).setUnitCategory(areaUnits);
     a234.setOrderIndex(0);
-    a234.setDefaultUnit(areaUnits.getMainUnit());
+    ((NumericQuestion)a234).setDefaultUnit(areaUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a234_driver = driverService.findByName("A234");
+    if (a234_driver != null) {
+        driverService.remove(a234_driver);
+    }
+
+    ((NumericQuestion)a234).setDriver(null);
+
     JPA.em().persist(a234);
 }
 
 
 
+    }
+    private void createQuestionA235() {
+        // == A235
+        // Quantité
 
-    // == A235
-    // Quantité
-
-    
-DoubleQuestion a235 = (DoubleQuestion) questionService.findByCode(QuestionCode.A235);
+        
+a235 = (DoubleQuestion) questionService.findByCode(QuestionCode.A235);
 if (a235 == null) {
     a235 = new DoubleQuestion( a231, 0, QuestionCode.A235, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a235);
+
+    // cleanup the driver
+    Driver a235_driver = driverService.findByName("A235");
+    if (a235_driver != null) {
+        driverService.remove(a235_driver);
+    }
+
 } else {
     if (!a235.getQuestionSet().equals(a231) && a231.getQuestions().contains(a235)) {
         a231.getQuestions().remove(a235);
@@ -5192,22 +7805,40 @@ if (a235 == null) {
         a231.getQuestions().add(a235);
         JPA.em().persist(a231);
     }
-    a235.setUnitCategory(massUnits);
+    ((NumericQuestion)a235).setUnitCategory(massUnits);
     a235.setOrderIndex(0);
-    a235.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a235).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a235_driver = driverService.findByName("A235");
+    if (a235_driver != null) {
+        driverService.remove(a235_driver);
+    }
+
+    ((NumericQuestion)a235).setDriver(null);
+
     JPA.em().persist(a235);
 }
 
 
 
+    }
+    private void createQuestionA236() {
+        // == A236
+        // Quantité
 
-    // == A236
-    // Quantité
-
-    IntegerQuestion a236 = (IntegerQuestion) questionService.findByCode(QuestionCode.A236);
+        a236 = (IntegerQuestion) questionService.findByCode(QuestionCode.A236);
 if (a236 == null) {
     a236 = new IntegerQuestion(a231, 0, QuestionCode.A236, null);
     JPA.em().persist(a236);
+
+    // cleanup the driver
+    Driver a236_driver = driverService.findByName("A236");
+    if (a236_driver != null) {
+        driverService.remove(a236_driver);
+    }
+
 } else {
     if (!a236.getQuestionSet().equals(a231) && a231.getQuestions().contains(a236)) {
         a231.getQuestions().remove(a236);
@@ -5218,20 +7849,30 @@ if (a236 == null) {
         JPA.em().persist(a231);
     }
     a236.setOrderIndex(0);
-    a236.setUnitCategory(null);
+    ((NumericQuestion)a236).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a236_driver = driverService.findByName("A236");
+    if (a236_driver != null) {
+        driverService.remove(a236_driver);
+    }
+
+    ((NumericQuestion)a236).setDriver(null);
+
     JPA.em().persist(a236);
 }
 
+    }
+    private void createQuestionA239() {
+        // == A239
+        // Nom
 
-    // == A239
-    // Nom
-
-    StringQuestion a239 = (StringQuestion) questionService.findByCode(QuestionCode.A239);
+        a239 = (StringQuestion) questionService.findByCode(QuestionCode.A239);
 if (a239 == null) {
     a239 = new StringQuestion(a238, 0, QuestionCode.A239, null);
     JPA.em().persist(a239);
 } else {
-    a239.setDefaultValue(null);
+    ((StringQuestion)a239).setDefaultValue(null);
     if (!a239.getQuestionSet().equals(a238) && a238.getQuestions().contains(a239)) {
         a238.getQuestions().remove(a239);
         JPA.em().persist(a238);
@@ -5244,14 +7885,22 @@ if (a239 == null) {
     JPA.em().persist(a239);
 }
 
+    }
+    private void createQuestionA240() {
+        // == A240
+        // Quantité
 
-    // == A240
-    // Quantité
-
-    IntegerQuestion a240 = (IntegerQuestion) questionService.findByCode(QuestionCode.A240);
+        a240 = (IntegerQuestion) questionService.findByCode(QuestionCode.A240);
 if (a240 == null) {
     a240 = new IntegerQuestion(a238, 0, QuestionCode.A240, null);
     JPA.em().persist(a240);
+
+    // cleanup the driver
+    Driver a240_driver = driverService.findByName("A240");
+    if (a240_driver != null) {
+        driverService.remove(a240_driver);
+    }
+
 } else {
     if (!a240.getQuestionSet().equals(a238) && a238.getQuestions().contains(a240)) {
         a238.getQuestions().remove(a240);
@@ -5262,20 +7911,30 @@ if (a240 == null) {
         JPA.em().persist(a238);
     }
     a240.setOrderIndex(0);
-    a240.setUnitCategory(null);
+    ((NumericQuestion)a240).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a240_driver = driverService.findByName("A240");
+    if (a240_driver != null) {
+        driverService.remove(a240_driver);
+    }
+
+    ((NumericQuestion)a240).setDriver(null);
+
     JPA.em().persist(a240);
 }
 
+    }
+    private void createQuestionA241() {
+        // == A241
+        // Unité dans laquelle s'exprime cette quantité
 
-    // == A241
-    // Unité dans laquelle s'exprime cette quantité
-
-    StringQuestion a241 = (StringQuestion) questionService.findByCode(QuestionCode.A241);
+        a241 = (StringQuestion) questionService.findByCode(QuestionCode.A241);
 if (a241 == null) {
     a241 = new StringQuestion(a238, 0, QuestionCode.A241, null);
     JPA.em().persist(a241);
 } else {
-    a241.setDefaultValue(null);
+    ((StringQuestion)a241).setDefaultValue(null);
     if (!a241.getQuestionSet().equals(a238) && a238.getQuestions().contains(a241)) {
         a238.getQuestions().remove(a241);
         JPA.em().persist(a238);
@@ -5288,14 +7947,22 @@ if (a241 == null) {
     JPA.em().persist(a241);
 }
 
+    }
+    private void createQuestionA242() {
+        // == A242
+        // Facteur d'émission en tCO2e par unité ci-dessus
 
-    // == A242
-    // Facteur d'émission en tCO2e par unité ci-dessus
-
-    IntegerQuestion a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
+        a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
 if (a242 == null) {
     a242 = new IntegerQuestion(a238, 0, QuestionCode.A242, null);
     JPA.em().persist(a242);
+
+    // cleanup the driver
+    Driver a242_driver = driverService.findByName("A242");
+    if (a242_driver != null) {
+        driverService.remove(a242_driver);
+    }
+
 } else {
     if (!a242.getQuestionSet().equals(a238) && a238.getQuestions().contains(a242)) {
         a238.getQuestions().remove(a242);
@@ -5306,15 +7973,25 @@ if (a242 == null) {
         JPA.em().persist(a238);
     }
     a242.setOrderIndex(0);
-    a242.setUnitCategory(null);
+    ((NumericQuestion)a242).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a242_driver = driverService.findByName("A242");
+    if (a242_driver != null) {
+        driverService.remove(a242_driver);
+    }
+
+    ((NumericQuestion)a242).setDriver(null);
+
     JPA.em().persist(a242);
 }
 
+    }
+    private void createQuestionA310() {
+        // == A310
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A310
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a310 = (DocumentQuestion) questionService.findByCode(QuestionCode.A310);
+        a310 = (DocumentQuestion) questionService.findByCode(QuestionCode.A310);
 if (a310 == null) {
     a310 = new DocumentQuestion(a309, 0, QuestionCode.A310);
     JPA.em().persist(a310);
@@ -5331,16 +8008,17 @@ if (a310 == null) {
     JPA.em().persist(a310);
 }
 
+    }
+    private void createQuestionA312() {
+        // == A312
+        // Catégorie d'actif loué
 
-    // == A312
-    // Catégorie d'actif loué
-
-    StringQuestion a312 = (StringQuestion) questionService.findByCode(QuestionCode.A312);
+        a312 = (StringQuestion) questionService.findByCode(QuestionCode.A312);
 if (a312 == null) {
     a312 = new StringQuestion(a311, 0, QuestionCode.A312, null);
     JPA.em().persist(a312);
 } else {
-    a312.setDefaultValue(null);
+    ((StringQuestion)a312).setDefaultValue(null);
     if (!a312.getQuestionSet().equals(a311) && a311.getQuestions().contains(a312)) {
         a311.getQuestions().remove(a312);
         JPA.em().persist(a311);
@@ -5353,11 +8031,12 @@ if (a312 == null) {
     JPA.em().persist(a312);
 }
 
+    }
+    private void createQuestionA314() {
+        // == A314
+        // Combustible utilisé
 
-    // == A314
-    // Combustible utilisé
-
-    ValueSelectionQuestion a314 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A314);
+        a314 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A314);
 if (a314 == null) {
     a314 = new ValueSelectionQuestion(a313, 0, QuestionCode.A314, CodeList.COMBUSTIBLE);
     JPA.em().persist(a314);
@@ -5371,19 +8050,28 @@ if (a314 == null) {
         JPA.em().persist(a313);
     }
     a314.setOrderIndex(0);
-    a314.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a314).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a314);
 }
 
+    }
+    private void createQuestionA315() {
+        // == A315
+        // Quantité
 
-    // == A315
-    // Quantité
-
-    
-DoubleQuestion a315 = (DoubleQuestion) questionService.findByCode(QuestionCode.A315);
+        
+a315 = (DoubleQuestion) questionService.findByCode(QuestionCode.A315);
 if (a315 == null) {
     a315 = new DoubleQuestion( a313, 0, QuestionCode.A315, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a315);
+
+    // cleanup the driver
+    Driver a315_driver = driverService.findByName("A315");
+    if (a315_driver != null) {
+        driverService.remove(a315_driver);
+    }
+
+
 } else {
     if (!a315.getQuestionSet().equals(a313) && a313.getQuestions().contains(a315)) {
         a313.getQuestions().remove(a315);
@@ -5393,19 +8081,29 @@ if (a315 == null) {
         a313.getQuestions().add(a315);
         JPA.em().persist(a313);
     }
-    a315.setUnitCategory(energyUnits);
+    ((NumericQuestion)a315).setUnitCategory(energyUnits);
     a315.setOrderIndex(0);
-    a315.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a315).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a315_driver = driverService.findByName("A315");
+    if (a315_driver != null) {
+        driverService.remove(a315_driver);
+    }
+
+    ((NumericQuestion)a315).setDriver(null);
+
     JPA.em().persist(a315);
 }
 
 
 
+    }
+    private void createQuestionA1013() {
+        // == A1013
+        // Combustible utilisé
 
-    // == A1013
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1013);
+        a1013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1013);
 if (a1013 == null) {
     a1013 = new ValueSelectionQuestion(a1012, 0, QuestionCode.A1013, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1013);
@@ -5419,19 +8117,27 @@ if (a1013 == null) {
         JPA.em().persist(a1012);
     }
     a1013.setOrderIndex(0);
-    a1013.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1013).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1013);
 }
 
+    }
+    private void createQuestionA1014() {
+        // == A1014
+        // Quantité
 
-    // == A1014
-    // Quantité
-
-    
-DoubleQuestion a1014 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1014);
+        
+a1014 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1014);
 if (a1014 == null) {
     a1014 = new DoubleQuestion( a1012, 0, QuestionCode.A1014, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1014);
+
+    // cleanup the driver
+    Driver a1014_driver = driverService.findByName("A1014");
+    if (a1014_driver != null) {
+        driverService.remove(a1014_driver);
+    }
+
 } else {
     if (!a1014.getQuestionSet().equals(a1012) && a1012.getQuestions().contains(a1014)) {
         a1012.getQuestions().remove(a1014);
@@ -5441,19 +8147,29 @@ if (a1014 == null) {
         a1012.getQuestions().add(a1014);
         JPA.em().persist(a1012);
     }
-    a1014.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1014).setUnitCategory(volumeUnits);
     a1014.setOrderIndex(0);
-    a1014.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1014).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1014_driver = driverService.findByName("A1014");
+    if (a1014_driver != null) {
+        driverService.remove(a1014_driver);
+    }
+
+    ((NumericQuestion)a1014).setDriver(null);
+
     JPA.em().persist(a1014);
 }
 
 
 
+    }
+    private void createQuestionA1016() {
+        // == A1016
+        // Combustible utilisé
 
-    // == A1016
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1016 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1016);
+        a1016 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1016);
 if (a1016 == null) {
     a1016 = new ValueSelectionQuestion(a1015, 0, QuestionCode.A1016, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1016);
@@ -5467,19 +8183,27 @@ if (a1016 == null) {
         JPA.em().persist(a1015);
     }
     a1016.setOrderIndex(0);
-    a1016.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1016).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1016);
 }
 
+    }
+    private void createQuestionA1017() {
+        // == A1017
+        // Quantité
 
-    // == A1017
-    // Quantité
-
-    
-DoubleQuestion a1017 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1017);
+        
+a1017 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1017);
 if (a1017 == null) {
     a1017 = new DoubleQuestion( a1015, 0, QuestionCode.A1017, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1017);
+
+    // cleanup the driver
+    Driver a1017_driver = driverService.findByName("A1017");
+    if (a1017_driver != null) {
+        driverService.remove(a1017_driver);
+    }
+
 } else {
     if (!a1017.getQuestionSet().equals(a1015) && a1015.getQuestions().contains(a1017)) {
         a1015.getQuestions().remove(a1017);
@@ -5489,23 +8213,42 @@ if (a1017 == null) {
         a1015.getQuestions().add(a1017);
         JPA.em().persist(a1015);
     }
-    a1017.setUnitCategory(massUnits);
+    ((NumericQuestion)a1017).setUnitCategory(massUnits);
     a1017.setOrderIndex(0);
-    a1017.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1017).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1017_driver = driverService.findByName("A1017");
+    if (a1017_driver != null) {
+        driverService.remove(a1017_driver);
+    }
+
+    ((NumericQuestion)a1017).setDriver(null);
+
     JPA.em().persist(a1017);
 }
 
 
 
+    }
+    private void createQuestionA316() {
+        // == A316
+        // Electricité
 
-    // == A316
-    // Electricité
-
-    
-DoubleQuestion a316 = (DoubleQuestion) questionService.findByCode(QuestionCode.A316);
+        
+a316 = (DoubleQuestion) questionService.findByCode(QuestionCode.A316);
 if (a316 == null) {
     a316 = new DoubleQuestion( a311, 0, QuestionCode.A316, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a316);
+
+    // cleanup the driver
+    Driver a316_driver = driverService.findByName("A316");
+    if (a316_driver != null) {
+        driverService.remove(a316_driver);
+    }
+
+
 } else {
     if (!a316.getQuestionSet().equals(a311) && a311.getQuestions().contains(a316)) {
         a311.getQuestions().remove(a316);
@@ -5515,19 +8258,29 @@ if (a316 == null) {
         a311.getQuestions().add(a316);
         JPA.em().persist(a311);
     }
-    a316.setUnitCategory(energyUnits);
+    ((NumericQuestion)a316).setUnitCategory(energyUnits);
     a316.setOrderIndex(0);
-    a316.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a316).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a316_driver = driverService.findByName("A316");
+    if (a316_driver != null) {
+        driverService.remove(a316_driver);
+    }
+
+    ((NumericQuestion)a316).setDriver(null);
+
     JPA.em().persist(a316);
 }
 
 
 
+    }
+    private void createQuestionA318() {
+        // == A318
+        // Type de gaz
 
-    // == A318
-    // Type de gaz
-
-    ValueSelectionQuestion a318 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A318);
+        a318 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A318);
 if (a318 == null) {
     a318 = new ValueSelectionQuestion(a317, 0, QuestionCode.A318, CodeList.FRIGORIGENE);
     JPA.em().persist(a318);
@@ -5541,19 +8294,27 @@ if (a318 == null) {
         JPA.em().persist(a317);
     }
     a318.setOrderIndex(0);
-    a318.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a318).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a318);
 }
 
+    }
+    private void createQuestionA319() {
+        // == A319
+        // Quantité de recharge nécessaire pour l'année
 
-    // == A319
-    // Quantité de recharge nécessaire pour l'année
-
-    
-DoubleQuestion a319 = (DoubleQuestion) questionService.findByCode(QuestionCode.A319);
+        
+a319 = (DoubleQuestion) questionService.findByCode(QuestionCode.A319);
 if (a319 == null) {
     a319 = new DoubleQuestion( a317, 0, QuestionCode.A319, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a319);
+
+    // cleanup the driver
+    Driver a319_driver = driverService.findByName("A319");
+    if (a319_driver != null) {
+        driverService.remove(a319_driver);
+    }
+
 } else {
     if (!a319.getQuestionSet().equals(a317) && a317.getQuestions().contains(a319)) {
         a317.getQuestions().remove(a319);
@@ -5563,19 +8324,30 @@ if (a319 == null) {
         a317.getQuestions().add(a319);
         JPA.em().persist(a317);
     }
-    a319.setUnitCategory(massUnits);
+    ((NumericQuestion)a319).setUnitCategory(massUnits);
     a319.setOrderIndex(0);
-    a319.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a319).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a319_driver = driverService.findByName("A319");
+    if (a319_driver != null) {
+        driverService.remove(a319_driver);
+    }
+
+    ((NumericQuestion)a319).setDriver(null);
+
     JPA.em().persist(a319);
 }
 
 
 
+    }
+    private void createQuestionA321() {
+        // == A321
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A321
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a321 = (DocumentQuestion) questionService.findByCode(QuestionCode.A321);
+        a321 = (DocumentQuestion) questionService.findByCode(QuestionCode.A321);
 if (a321 == null) {
     a321 = new DocumentQuestion(a320, 0, QuestionCode.A321);
     JPA.em().persist(a321);
@@ -5592,16 +8364,17 @@ if (a321 == null) {
     JPA.em().persist(a321);
 }
 
+    }
+    private void createQuestionA323() {
+        // == A323
+        // Catégorie de franchisé
 
-    // == A323
-    // Catégorie de franchisé
-
-    StringQuestion a323 = (StringQuestion) questionService.findByCode(QuestionCode.A323);
+        a323 = (StringQuestion) questionService.findByCode(QuestionCode.A323);
 if (a323 == null) {
     a323 = new StringQuestion(a322, 0, QuestionCode.A323, null);
     JPA.em().persist(a323);
 } else {
-    a323.setDefaultValue(null);
+    ((StringQuestion)a323).setDefaultValue(null);
     if (!a323.getQuestionSet().equals(a322) && a322.getQuestions().contains(a323)) {
         a322.getQuestions().remove(a323);
         JPA.em().persist(a322);
@@ -5614,14 +8387,22 @@ if (a323 == null) {
     JPA.em().persist(a323);
 }
 
+    }
+    private void createQuestionA324() {
+        // == A324
+        // Nombre de franchisés
 
-    // == A324
-    // Nombre de franchisés
-
-    IntegerQuestion a324 = (IntegerQuestion) questionService.findByCode(QuestionCode.A324);
+        a324 = (IntegerQuestion) questionService.findByCode(QuestionCode.A324);
 if (a324 == null) {
     a324 = new IntegerQuestion(a322, 0, QuestionCode.A324, null);
     JPA.em().persist(a324);
+
+    // cleanup the driver
+    Driver a324_driver = driverService.findByName("A324");
+    if (a324_driver != null) {
+        driverService.remove(a324_driver);
+    }
+
 } else {
     if (!a324.getQuestionSet().equals(a322) && a322.getQuestions().contains(a324)) {
         a322.getQuestions().remove(a324);
@@ -5632,15 +8413,25 @@ if (a324 == null) {
         JPA.em().persist(a322);
     }
     a324.setOrderIndex(0);
-    a324.setUnitCategory(null);
+    ((NumericQuestion)a324).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a324_driver = driverService.findByName("A324");
+    if (a324_driver != null) {
+        driverService.remove(a324_driver);
+    }
+
+    ((NumericQuestion)a324).setDriver(null);
+
     JPA.em().persist(a324);
 }
 
+    }
+    private void createQuestionA326() {
+        // == A326
+        // Combustible utilisé
 
-    // == A326
-    // Combustible utilisé
-
-    ValueSelectionQuestion a326 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A326);
+        a326 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A326);
 if (a326 == null) {
     a326 = new ValueSelectionQuestion(a325, 0, QuestionCode.A326, CodeList.COMBUSTIBLE);
     JPA.em().persist(a326);
@@ -5654,19 +8445,28 @@ if (a326 == null) {
         JPA.em().persist(a325);
     }
     a326.setOrderIndex(0);
-    a326.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a326).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a326);
 }
 
+    }
+    private void createQuestionA327() {
+        // == A327
+        // Quantité
 
-    // == A327
-    // Quantité
-
-    
-DoubleQuestion a327 = (DoubleQuestion) questionService.findByCode(QuestionCode.A327);
+        
+a327 = (DoubleQuestion) questionService.findByCode(QuestionCode.A327);
 if (a327 == null) {
     a327 = new DoubleQuestion( a325, 0, QuestionCode.A327, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a327);
+
+    // cleanup the driver
+    Driver a327_driver = driverService.findByName("A327");
+    if (a327_driver != null) {
+        driverService.remove(a327_driver);
+    }
+
+
 } else {
     if (!a327.getQuestionSet().equals(a325) && a325.getQuestions().contains(a327)) {
         a325.getQuestions().remove(a327);
@@ -5676,19 +8476,29 @@ if (a327 == null) {
         a325.getQuestions().add(a327);
         JPA.em().persist(a325);
     }
-    a327.setUnitCategory(energyUnits);
+    ((NumericQuestion)a327).setUnitCategory(energyUnits);
     a327.setOrderIndex(0);
-    a327.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a327).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a327_driver = driverService.findByName("A327");
+    if (a327_driver != null) {
+        driverService.remove(a327_driver);
+    }
+
+    ((NumericQuestion)a327).setDriver(null);
+
     JPA.em().persist(a327);
 }
 
 
 
+    }
+    private void createQuestionA1019() {
+        // == A1019
+        // Combustible utilisé
 
-    // == A1019
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1019 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1019);
+        a1019 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1019);
 if (a1019 == null) {
     a1019 = new ValueSelectionQuestion(a1018, 0, QuestionCode.A1019, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1019);
@@ -5702,19 +8512,27 @@ if (a1019 == null) {
         JPA.em().persist(a1018);
     }
     a1019.setOrderIndex(0);
-    a1019.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1019).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1019);
 }
 
+    }
+    private void createQuestionA1020() {
+        // == A1020
+        // Quantité
 
-    // == A1020
-    // Quantité
-
-    
-DoubleQuestion a1020 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1020);
+        
+a1020 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1020);
 if (a1020 == null) {
     a1020 = new DoubleQuestion( a1018, 0, QuestionCode.A1020, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1020);
+
+    // cleanup the driver
+    Driver a1020_driver = driverService.findByName("A1020");
+    if (a1020_driver != null) {
+        driverService.remove(a1020_driver);
+    }
+
 } else {
     if (!a1020.getQuestionSet().equals(a1018) && a1018.getQuestions().contains(a1020)) {
         a1018.getQuestions().remove(a1020);
@@ -5724,19 +8542,29 @@ if (a1020 == null) {
         a1018.getQuestions().add(a1020);
         JPA.em().persist(a1018);
     }
-    a1020.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1020).setUnitCategory(volumeUnits);
     a1020.setOrderIndex(0);
-    a1020.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1020).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1020_driver = driverService.findByName("A1020");
+    if (a1020_driver != null) {
+        driverService.remove(a1020_driver);
+    }
+
+    ((NumericQuestion)a1020).setDriver(null);
+
     JPA.em().persist(a1020);
 }
 
 
 
+    }
+    private void createQuestionA1022() {
+        // == A1022
+        // Combustible utilisé
 
-    // == A1022
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1022 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1022);
+        a1022 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1022);
 if (a1022 == null) {
     a1022 = new ValueSelectionQuestion(a1021, 0, QuestionCode.A1022, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1022);
@@ -5750,19 +8578,27 @@ if (a1022 == null) {
         JPA.em().persist(a1021);
     }
     a1022.setOrderIndex(0);
-    a1022.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1022).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1022);
 }
 
+    }
+    private void createQuestionA1023() {
+        // == A1023
+        // Quantité
 
-    // == A1023
-    // Quantité
-
-    
-DoubleQuestion a1023 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1023);
+        
+a1023 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1023);
 if (a1023 == null) {
     a1023 = new DoubleQuestion( a1021, 0, QuestionCode.A1023, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1023);
+
+    // cleanup the driver
+    Driver a1023_driver = driverService.findByName("A1023");
+    if (a1023_driver != null) {
+        driverService.remove(a1023_driver);
+    }
+
 } else {
     if (!a1023.getQuestionSet().equals(a1021) && a1021.getQuestions().contains(a1023)) {
         a1021.getQuestions().remove(a1023);
@@ -5772,23 +8608,42 @@ if (a1023 == null) {
         a1021.getQuestions().add(a1023);
         JPA.em().persist(a1021);
     }
-    a1023.setUnitCategory(massUnits);
+    ((NumericQuestion)a1023).setUnitCategory(massUnits);
     a1023.setOrderIndex(0);
-    a1023.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1023).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1023_driver = driverService.findByName("A1023");
+    if (a1023_driver != null) {
+        driverService.remove(a1023_driver);
+    }
+
+    ((NumericQuestion)a1023).setDriver(null);
+
     JPA.em().persist(a1023);
 }
 
 
 
+    }
+    private void createQuestionA328() {
+        // == A328
+        // Electricité (moyenne par franchisé)
 
-    // == A328
-    // Electricité (moyenne par franchisé)
-
-    
-DoubleQuestion a328 = (DoubleQuestion) questionService.findByCode(QuestionCode.A328);
+        
+a328 = (DoubleQuestion) questionService.findByCode(QuestionCode.A328);
 if (a328 == null) {
     a328 = new DoubleQuestion( a322, 0, QuestionCode.A328, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a328);
+
+    // cleanup the driver
+    Driver a328_driver = driverService.findByName("A328");
+    if (a328_driver != null) {
+        driverService.remove(a328_driver);
+    }
+
+
 } else {
     if (!a328.getQuestionSet().equals(a322) && a322.getQuestions().contains(a328)) {
         a322.getQuestions().remove(a328);
@@ -5798,19 +8653,29 @@ if (a328 == null) {
         a322.getQuestions().add(a328);
         JPA.em().persist(a322);
     }
-    a328.setUnitCategory(energyUnits);
+    ((NumericQuestion)a328).setUnitCategory(energyUnits);
     a328.setOrderIndex(0);
-    a328.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a328).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a328_driver = driverService.findByName("A328");
+    if (a328_driver != null) {
+        driverService.remove(a328_driver);
+    }
+
+    ((NumericQuestion)a328).setDriver(null);
+
     JPA.em().persist(a328);
 }
 
 
 
+    }
+    private void createQuestionA330() {
+        // == A330
+        // Type de gaz
 
-    // == A330
-    // Type de gaz
-
-    ValueSelectionQuestion a330 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A330);
+        a330 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A330);
 if (a330 == null) {
     a330 = new ValueSelectionQuestion(a329, 0, QuestionCode.A330, CodeList.FRIGORIGENE);
     JPA.em().persist(a330);
@@ -5824,19 +8689,27 @@ if (a330 == null) {
         JPA.em().persist(a329);
     }
     a330.setOrderIndex(0);
-    a330.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a330).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a330);
 }
 
+    }
+    private void createQuestionA331() {
+        // == A331
+        // Quantité de recharge nécessaire pour l'année
 
-    // == A331
-    // Quantité de recharge nécessaire pour l'année
-
-    
-DoubleQuestion a331 = (DoubleQuestion) questionService.findByCode(QuestionCode.A331);
+        
+a331 = (DoubleQuestion) questionService.findByCode(QuestionCode.A331);
 if (a331 == null) {
     a331 = new DoubleQuestion( a329, 0, QuestionCode.A331, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a331);
+
+    // cleanup the driver
+    Driver a331_driver = driverService.findByName("A331");
+    if (a331_driver != null) {
+        driverService.remove(a331_driver);
+    }
+
 } else {
     if (!a331.getQuestionSet().equals(a329) && a329.getQuestions().contains(a331)) {
         a329.getQuestions().remove(a331);
@@ -5846,19 +8719,30 @@ if (a331 == null) {
         a329.getQuestions().add(a331);
         JPA.em().persist(a329);
     }
-    a331.setUnitCategory(massUnits);
+    ((NumericQuestion)a331).setUnitCategory(massUnits);
     a331.setOrderIndex(0);
-    a331.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a331).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a331_driver = driverService.findByName("A331");
+    if (a331_driver != null) {
+        driverService.remove(a331_driver);
+    }
+
+    ((NumericQuestion)a331).setDriver(null);
+
     JPA.em().persist(a331);
 }
 
 
 
+    }
+    private void createQuestionA333() {
+        // == A333
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A333
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a333 = (DocumentQuestion) questionService.findByCode(QuestionCode.A333);
+        a333 = (DocumentQuestion) questionService.findByCode(QuestionCode.A333);
 if (a333 == null) {
     a333 = new DocumentQuestion(a332, 0, QuestionCode.A333);
     JPA.em().persist(a333);
@@ -5875,16 +8759,17 @@ if (a333 == null) {
     JPA.em().persist(a333);
 }
 
+    }
+    private void createQuestionA335() {
+        // == A335
+        // Nom du projet
 
-    // == A335
-    // Nom du projet
-
-    StringQuestion a335 = (StringQuestion) questionService.findByCode(QuestionCode.A335);
+        a335 = (StringQuestion) questionService.findByCode(QuestionCode.A335);
 if (a335 == null) {
     a335 = new StringQuestion(a334, 0, QuestionCode.A335, null);
     JPA.em().persist(a335);
 } else {
-    a335.setDefaultValue(null);
+    ((StringQuestion)a335).setDefaultValue(null);
     if (!a335.getQuestionSet().equals(a334) && a334.getQuestions().contains(a335)) {
         a334.getQuestions().remove(a335);
         JPA.em().persist(a334);
@@ -5897,14 +8782,22 @@ if (a335 == null) {
     JPA.em().persist(a335);
 }
 
+    }
+    private void createQuestionA336() {
+        // == A336
+        // Part d'investissements dans le projet
 
-    // == A336
-    // Part d'investissements dans le projet
-
-    PercentageQuestion a336 = (PercentageQuestion) questionService.findByCode(QuestionCode.A336);
+        a336 = (PercentageQuestion) questionService.findByCode(QuestionCode.A336);
 if (a336 == null) {
     a336 = new PercentageQuestion(a334, 0, QuestionCode.A336);
     JPA.em().persist(a336);
+
+    // cleanup the driver
+    Driver a336_driver = driverService.findByName("A336");
+    if (a336_driver != null) {
+        driverService.remove(a336_driver);
+    }
+
 } else {
     if (!a336.getQuestionSet().equals(a334) && a334.getQuestions().contains(a336)) {
         a334.getQuestions().remove(a336);
@@ -5915,17 +8808,34 @@ if (a336 == null) {
         JPA.em().persist(a334);
     }
     a336.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a336_driver = driverService.findByName("A336");
+    if (a336_driver != null) {
+        driverService.remove(a336_driver);
+    }
+
+    ((NumericQuestion)a336).setDriver(null);
+
     JPA.em().persist(a336);
 }
 
+    }
+    private void createQuestionA337() {
+        // == A337
+        // Emissions directes totales - Scope 1 (tCO2e)
 
-    // == A337
-    // Emissions directes totales - Scope 1 (tCO2e)
-
-    IntegerQuestion a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
+        a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
 if (a337 == null) {
     a337 = new IntegerQuestion(a334, 0, QuestionCode.A337, null);
     JPA.em().persist(a337);
+
+    // cleanup the driver
+    Driver a337_driver = driverService.findByName("A337");
+    if (a337_driver != null) {
+        driverService.remove(a337_driver);
+    }
+
 } else {
     if (!a337.getQuestionSet().equals(a334) && a334.getQuestions().contains(a337)) {
         a334.getQuestions().remove(a337);
@@ -5936,18 +8846,35 @@ if (a337 == null) {
         JPA.em().persist(a334);
     }
     a337.setOrderIndex(0);
-    a337.setUnitCategory(null);
+    ((NumericQuestion)a337).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a337_driver = driverService.findByName("A337");
+    if (a337_driver != null) {
+        driverService.remove(a337_driver);
+    }
+
+    ((NumericQuestion)a337).setDriver(null);
+
     JPA.em().persist(a337);
 }
 
+    }
+    private void createQuestionA338() {
+        // == A338
+        // Emissions indirectes totales - Scope 2 (tCO2e)
 
-    // == A338
-    // Emissions indirectes totales - Scope 2 (tCO2e)
-
-    IntegerQuestion a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
+        a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
 if (a338 == null) {
     a338 = new IntegerQuestion(a334, 0, QuestionCode.A338, null);
     JPA.em().persist(a338);
+
+    // cleanup the driver
+    Driver a338_driver = driverService.findByName("A338");
+    if (a338_driver != null) {
+        driverService.remove(a338_driver);
+    }
+
 } else {
     if (!a338.getQuestionSet().equals(a334) && a334.getQuestions().contains(a338)) {
         a334.getQuestions().remove(a338);
@@ -5958,20 +8885,30 @@ if (a338 == null) {
         JPA.em().persist(a334);
     }
     a338.setOrderIndex(0);
-    a338.setUnitCategory(null);
+    ((NumericQuestion)a338).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a338_driver = driverService.findByName("A338");
+    if (a338_driver != null) {
+        driverService.remove(a338_driver);
+    }
+
+    ((NumericQuestion)a338).setDriver(null);
+
     JPA.em().persist(a338);
 }
 
+    }
+    private void createQuestionA245() {
+        // == A245
+        // Nom du produit ou groupe de produits
 
-    // == A245
-    // Nom du produit ou groupe de produits
-
-    StringQuestion a245 = (StringQuestion) questionService.findByCode(QuestionCode.A245);
+        a245 = (StringQuestion) questionService.findByCode(QuestionCode.A245);
 if (a245 == null) {
     a245 = new StringQuestion(a244, 0, QuestionCode.A245, null);
     JPA.em().persist(a245);
 } else {
-    a245.setDefaultValue(null);
+    ((StringQuestion)a245).setDefaultValue(null);
     if (!a245.getQuestionSet().equals(a244) && a244.getQuestions().contains(a245)) {
         a244.getQuestions().remove(a245);
         JPA.em().persist(a244);
@@ -5984,14 +8921,22 @@ if (a245 == null) {
     JPA.em().persist(a245);
 }
 
+    }
+    private void createQuestionA246() {
+        // == A246
+        // Nombre de produits vendus sur l'année du bilan
 
-    // == A246
-    // Nombre de produits vendus sur l'année du bilan
-
-    IntegerQuestion a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
+        a246 = (IntegerQuestion) questionService.findByCode(QuestionCode.A246);
 if (a246 == null) {
     a246 = new IntegerQuestion(a244, 0, QuestionCode.A246, null);
     JPA.em().persist(a246);
+
+    // cleanup the driver
+    Driver a246_driver = driverService.findByName("A246");
+    if (a246_driver != null) {
+        driverService.remove(a246_driver);
+    }
+
 } else {
     if (!a246.getQuestionSet().equals(a244) && a244.getQuestions().contains(a246)) {
         a244.getQuestions().remove(a246);
@@ -6002,20 +8947,30 @@ if (a246 == null) {
         JPA.em().persist(a244);
     }
     a246.setOrderIndex(0);
-    a246.setUnitCategory(null);
+    ((NumericQuestion)a246).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a246_driver = driverService.findByName("A246");
+    if (a246_driver != null) {
+        driverService.remove(a246_driver);
+    }
+
+    ((NumericQuestion)a246).setDriver(null);
+
     JPA.em().persist(a246);
 }
 
+    }
+    private void createQuestionA247() {
+        // == A247
+        // Unité dans laquelle s'exprime cette quantité
 
-    // == A247
-    // Unité dans laquelle s'exprime cette quantité
-
-    StringQuestion a247 = (StringQuestion) questionService.findByCode(QuestionCode.A247);
+        a247 = (StringQuestion) questionService.findByCode(QuestionCode.A247);
 if (a247 == null) {
     a247 = new StringQuestion(a244, 0, QuestionCode.A247, null);
     JPA.em().persist(a247);
 } else {
-    a247.setDefaultValue(null);
+    ((StringQuestion)a247).setDefaultValue(null);
     if (!a247.getQuestionSet().equals(a244) && a244.getQuestions().contains(a247)) {
         a244.getQuestions().remove(a247);
         JPA.em().persist(a244);
@@ -6028,11 +8983,12 @@ if (a247 == null) {
     JPA.em().persist(a247);
 }
 
+    }
+    private void createQuestionA248() {
+        // == A248
+        // S'agit-il d'un produit (ou groupe de produits) final ou intermédiaire?
 
-    // == A248
-    // S'agit-il d'un produit (ou groupe de produits) final ou intermédiaire?
-
-    ValueSelectionQuestion a248 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A248);
+        a248 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A248);
 if (a248 == null) {
     a248 = new ValueSelectionQuestion(a244, 0, QuestionCode.A248, CodeList.TYPEPRODUIT);
     JPA.em().persist(a248);
@@ -6046,20 +9002,21 @@ if (a248 == null) {
         JPA.em().persist(a244);
     }
     a248.setOrderIndex(0);
-    a248.setCodeList(CodeList.TYPEPRODUIT);
+    ((ValueSelectionQuestion)a248).setCodeList(CodeList.TYPEPRODUIT);
     JPA.em().persist(a248);
 }
 
+    }
+    private void createQuestionA249() {
+        // == A249
+        // Connaissez-vous la ou les applications ultérieures?
 
-    // == A249
-    // Connaissez-vous la ou les applications ultérieures?
-
-    BooleanQuestion a249 = (BooleanQuestion) questionService.findByCode(QuestionCode.A249);
+        a249 = (BooleanQuestion) questionService.findByCode(QuestionCode.A249);
 if (a249 == null) {
     a249 = new BooleanQuestion(a244, 0, QuestionCode.A249, null);
     JPA.em().persist(a249);
 } else {
-    a249.setDefaultValue(null);
+    ((BooleanQuestion)a249).setDefaultValue(null);
     if (!a249.getQuestionSet().equals(a244) && a244.getQuestions().contains(a249)) {
         a244.getQuestions().remove(a249);
         JPA.em().persist(a244);
@@ -6072,11 +9029,12 @@ if (a249 == null) {
     JPA.em().persist(a249);
 }
 
+    }
+    private void createQuestionA251() {
+        // == A251
+        // Pièces documentaires liées au transport et stockage aval
 
-    // == A251
-    // Pièces documentaires liées au transport et stockage aval
-
-    DocumentQuestion a251 = (DocumentQuestion) questionService.findByCode(QuestionCode.A251);
+        a251 = (DocumentQuestion) questionService.findByCode(QuestionCode.A251);
 if (a251 == null) {
     a251 = new DocumentQuestion(a250, 0, QuestionCode.A251);
     JPA.em().persist(a251);
@@ -6093,15 +9051,23 @@ if (a251 == null) {
     JPA.em().persist(a251);
 }
 
+    }
+    private void createQuestionA254() {
+        // == A254
+        // Poids total transporté sur l'année de bilan:
 
-    // == A254
-    // Poids total transporté sur l'année de bilan:
-
-    
-DoubleQuestion a254 = (DoubleQuestion) questionService.findByCode(QuestionCode.A254);
+        
+a254 = (DoubleQuestion) questionService.findByCode(QuestionCode.A254);
 if (a254 == null) {
     a254 = new DoubleQuestion( a253, 0, QuestionCode.A254, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a254);
+
+    // cleanup the driver
+    Driver a254_driver = driverService.findByName("A254");
+    if (a254_driver != null) {
+        driverService.remove(a254_driver);
+    }
+
 } else {
     if (!a254.getQuestionSet().equals(a253) && a253.getQuestions().contains(a254)) {
         a253.getQuestions().remove(a254);
@@ -6111,23 +9077,41 @@ if (a254 == null) {
         a253.getQuestions().add(a254);
         JPA.em().persist(a253);
     }
-    a254.setUnitCategory(massUnits);
+    ((NumericQuestion)a254).setUnitCategory(massUnits);
     a254.setOrderIndex(0);
-    a254.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a254).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a254_driver = driverService.findByName("A254");
+    if (a254_driver != null) {
+        driverService.remove(a254_driver);
+    }
+
+    ((NumericQuestion)a254).setDriver(null);
+
     JPA.em().persist(a254);
 }
 
 
 
+    }
+    private void createQuestionA255() {
+        // == A255
+        // Distance entre le point d'enlèvement et de livraison du produit
 
-    // == A255
-    // Distance entre le point d'enlèvement et de livraison du produit
-
-    
-DoubleQuestion a255 = (DoubleQuestion) questionService.findByCode(QuestionCode.A255);
+        
+a255 = (DoubleQuestion) questionService.findByCode(QuestionCode.A255);
 if (a255 == null) {
     a255 = new DoubleQuestion( a253, 0, QuestionCode.A255, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a255);
+
+    // cleanup the driver
+    Driver a255_driver = driverService.findByName("A255");
+    if (a255_driver != null) {
+        driverService.remove(a255_driver);
+    }
+
 } else {
     if (!a255.getQuestionSet().equals(a253) && a253.getQuestions().contains(a255)) {
         a253.getQuestions().remove(a255);
@@ -6137,22 +9121,39 @@ if (a255 == null) {
         a253.getQuestions().add(a255);
         JPA.em().persist(a253);
     }
-    a255.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a255).setUnitCategory(lengthUnits);
     a255.setOrderIndex(0);
-    a255.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a255).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a255_driver = driverService.findByName("A255");
+    if (a255_driver != null) {
+        driverService.remove(a255_driver);
+    }
+
+    ((NumericQuestion)a255).setDriver(null);
+
     JPA.em().persist(a255);
 }
 
 
 
+    }
+    private void createQuestionA256() {
+        // == A256
+        // % de distance effectuée par transport routier local par camion
 
-    // == A256
-    // % de distance effectuée par transport routier local par camion
-
-    PercentageQuestion a256 = (PercentageQuestion) questionService.findByCode(QuestionCode.A256);
+        a256 = (PercentageQuestion) questionService.findByCode(QuestionCode.A256);
 if (a256 == null) {
     a256 = new PercentageQuestion(a253, 0, QuestionCode.A256);
     JPA.em().persist(a256);
+
+    // cleanup the driver
+    Driver a256_driver = driverService.findByName("A256");
+    if (a256_driver != null) {
+        driverService.remove(a256_driver);
+    }
+
 } else {
     if (!a256.getQuestionSet().equals(a253) && a253.getQuestions().contains(a256)) {
         a253.getQuestions().remove(a256);
@@ -6163,17 +9164,34 @@ if (a256 == null) {
         JPA.em().persist(a253);
     }
     a256.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a256_driver = driverService.findByName("A256");
+    if (a256_driver != null) {
+        driverService.remove(a256_driver);
+    }
+
+    ((NumericQuestion)a256).setDriver(null);
+
     JPA.em().persist(a256);
 }
 
+    }
+    private void createQuestionA257() {
+        // == A257
+        // % de distance effectuée par transport routier local par camionnette
 
-    // == A257
-    // % de distance effectuée par transport routier local par camionnette
-
-    PercentageQuestion a257 = (PercentageQuestion) questionService.findByCode(QuestionCode.A257);
+        a257 = (PercentageQuestion) questionService.findByCode(QuestionCode.A257);
 if (a257 == null) {
     a257 = new PercentageQuestion(a253, 0, QuestionCode.A257);
     JPA.em().persist(a257);
+
+    // cleanup the driver
+    Driver a257_driver = driverService.findByName("A257");
+    if (a257_driver != null) {
+        driverService.remove(a257_driver);
+    }
+
 } else {
     if (!a257.getQuestionSet().equals(a253) && a253.getQuestions().contains(a257)) {
         a253.getQuestions().remove(a257);
@@ -6184,17 +9202,34 @@ if (a257 == null) {
         JPA.em().persist(a253);
     }
     a257.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a257_driver = driverService.findByName("A257");
+    if (a257_driver != null) {
+        driverService.remove(a257_driver);
+    }
+
+    ((NumericQuestion)a257).setDriver(null);
+
     JPA.em().persist(a257);
 }
 
+    }
+    private void createQuestionA258() {
+        // == A258
+        // % de distance effectuée par transport routier international
 
-    // == A258
-    // % de distance effectuée par transport routier international
-
-    PercentageQuestion a258 = (PercentageQuestion) questionService.findByCode(QuestionCode.A258);
+        a258 = (PercentageQuestion) questionService.findByCode(QuestionCode.A258);
 if (a258 == null) {
     a258 = new PercentageQuestion(a253, 0, QuestionCode.A258);
     JPA.em().persist(a258);
+
+    // cleanup the driver
+    Driver a258_driver = driverService.findByName("A258");
+    if (a258_driver != null) {
+        driverService.remove(a258_driver);
+    }
+
 } else {
     if (!a258.getQuestionSet().equals(a253) && a253.getQuestions().contains(a258)) {
         a253.getQuestions().remove(a258);
@@ -6205,17 +9240,34 @@ if (a258 == null) {
         JPA.em().persist(a253);
     }
     a258.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a258_driver = driverService.findByName("A258");
+    if (a258_driver != null) {
+        driverService.remove(a258_driver);
+    }
+
+    ((NumericQuestion)a258).setDriver(null);
+
     JPA.em().persist(a258);
 }
 
+    }
+    private void createQuestionA259() {
+        // == A259
+        // % de distance effectuée par voie ferroviaire
 
-    // == A259
-    // % de distance effectuée par voie ferroviaire
-
-    PercentageQuestion a259 = (PercentageQuestion) questionService.findByCode(QuestionCode.A259);
+        a259 = (PercentageQuestion) questionService.findByCode(QuestionCode.A259);
 if (a259 == null) {
     a259 = new PercentageQuestion(a253, 0, QuestionCode.A259);
     JPA.em().persist(a259);
+
+    // cleanup the driver
+    Driver a259_driver = driverService.findByName("A259");
+    if (a259_driver != null) {
+        driverService.remove(a259_driver);
+    }
+
 } else {
     if (!a259.getQuestionSet().equals(a253) && a253.getQuestions().contains(a259)) {
         a253.getQuestions().remove(a259);
@@ -6226,17 +9278,34 @@ if (a259 == null) {
         JPA.em().persist(a253);
     }
     a259.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a259_driver = driverService.findByName("A259");
+    if (a259_driver != null) {
+        driverService.remove(a259_driver);
+    }
+
+    ((NumericQuestion)a259).setDriver(null);
+
     JPA.em().persist(a259);
 }
 
+    }
+    private void createQuestionA260() {
+        // == A260
+        // % de distance effectuée par voie maritime
 
-    // == A260
-    // % de distance effectuée par voie maritime
-
-    PercentageQuestion a260 = (PercentageQuestion) questionService.findByCode(QuestionCode.A260);
+        a260 = (PercentageQuestion) questionService.findByCode(QuestionCode.A260);
 if (a260 == null) {
     a260 = new PercentageQuestion(a253, 0, QuestionCode.A260);
     JPA.em().persist(a260);
+
+    // cleanup the driver
+    Driver a260_driver = driverService.findByName("A260");
+    if (a260_driver != null) {
+        driverService.remove(a260_driver);
+    }
+
 } else {
     if (!a260.getQuestionSet().equals(a253) && a253.getQuestions().contains(a260)) {
         a253.getQuestions().remove(a260);
@@ -6247,17 +9316,34 @@ if (a260 == null) {
         JPA.em().persist(a253);
     }
     a260.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a260_driver = driverService.findByName("A260");
+    if (a260_driver != null) {
+        driverService.remove(a260_driver);
+    }
+
+    ((NumericQuestion)a260).setDriver(null);
+
     JPA.em().persist(a260);
 }
 
+    }
+    private void createQuestionA261() {
+        // == A261
+        // % de distance effectuée par voie fluviale
 
-    // == A261
-    // % de distance effectuée par voie fluviale
-
-    PercentageQuestion a261 = (PercentageQuestion) questionService.findByCode(QuestionCode.A261);
+        a261 = (PercentageQuestion) questionService.findByCode(QuestionCode.A261);
 if (a261 == null) {
     a261 = new PercentageQuestion(a253, 0, QuestionCode.A261);
     JPA.em().persist(a261);
+
+    // cleanup the driver
+    Driver a261_driver = driverService.findByName("A261");
+    if (a261_driver != null) {
+        driverService.remove(a261_driver);
+    }
+
 } else {
     if (!a261.getQuestionSet().equals(a253) && a253.getQuestions().contains(a261)) {
         a253.getQuestions().remove(a261);
@@ -6268,17 +9354,34 @@ if (a261 == null) {
         JPA.em().persist(a253);
     }
     a261.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a261_driver = driverService.findByName("A261");
+    if (a261_driver != null) {
+        driverService.remove(a261_driver);
+    }
+
+    ((NumericQuestion)a261).setDriver(null);
+
     JPA.em().persist(a261);
 }
 
+    }
+    private void createQuestionA262() {
+        // == A262
+        // % de distance effectuée par transport aérien court courrier (<1000 km)
 
-    // == A262
-    // % de distance effectuée par transport aérien court courrier (<1000 km)
-
-    PercentageQuestion a262 = (PercentageQuestion) questionService.findByCode(QuestionCode.A262);
+        a262 = (PercentageQuestion) questionService.findByCode(QuestionCode.A262);
 if (a262 == null) {
     a262 = new PercentageQuestion(a253, 0, QuestionCode.A262);
     JPA.em().persist(a262);
+
+    // cleanup the driver
+    Driver a262_driver = driverService.findByName("A262");
+    if (a262_driver != null) {
+        driverService.remove(a262_driver);
+    }
+
 } else {
     if (!a262.getQuestionSet().equals(a253) && a253.getQuestions().contains(a262)) {
         a253.getQuestions().remove(a262);
@@ -6289,17 +9392,34 @@ if (a262 == null) {
         JPA.em().persist(a253);
     }
     a262.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a262_driver = driverService.findByName("A262");
+    if (a262_driver != null) {
+        driverService.remove(a262_driver);
+    }
+
+    ((NumericQuestion)a262).setDriver(null);
+
     JPA.em().persist(a262);
 }
 
+    }
+    private void createQuestionA263() {
+        // == A263
+        // % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
 
-    // == A263
-    // % de distance effectuée par transport aérien moyen courrier (1000 à 4000 km)
-
-    PercentageQuestion a263 = (PercentageQuestion) questionService.findByCode(QuestionCode.A263);
+        a263 = (PercentageQuestion) questionService.findByCode(QuestionCode.A263);
 if (a263 == null) {
     a263 = new PercentageQuestion(a253, 0, QuestionCode.A263);
     JPA.em().persist(a263);
+
+    // cleanup the driver
+    Driver a263_driver = driverService.findByName("A263");
+    if (a263_driver != null) {
+        driverService.remove(a263_driver);
+    }
+
 } else {
     if (!a263.getQuestionSet().equals(a253) && a253.getQuestions().contains(a263)) {
         a253.getQuestions().remove(a263);
@@ -6310,17 +9430,34 @@ if (a263 == null) {
         JPA.em().persist(a253);
     }
     a263.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a263_driver = driverService.findByName("A263");
+    if (a263_driver != null) {
+        driverService.remove(a263_driver);
+    }
+
+    ((NumericQuestion)a263).setDriver(null);
+
     JPA.em().persist(a263);
 }
 
+    }
+    private void createQuestionA264() {
+        // == A264
+        // % de distance effectuée par transport aérien long courrier (> 4000 km)
 
-    // == A264
-    // % de distance effectuée par transport aérien long courrier (> 4000 km)
-
-    PercentageQuestion a264 = (PercentageQuestion) questionService.findByCode(QuestionCode.A264);
+        a264 = (PercentageQuestion) questionService.findByCode(QuestionCode.A264);
 if (a264 == null) {
     a264 = new PercentageQuestion(a253, 0, QuestionCode.A264);
     JPA.em().persist(a264);
+
+    // cleanup the driver
+    Driver a264_driver = driverService.findByName("A264");
+    if (a264_driver != null) {
+        driverService.remove(a264_driver);
+    }
+
 } else {
     if (!a264.getQuestionSet().equals(a253) && a253.getQuestions().contains(a264)) {
         a253.getQuestions().remove(a264);
@@ -6331,17 +9468,34 @@ if (a264 == null) {
         JPA.em().persist(a253);
     }
     a264.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a264_driver = driverService.findByName("A264");
+    if (a264_driver != null) {
+        driverService.remove(a264_driver);
+    }
+
+    ((NumericQuestion)a264).setDriver(null);
+
     JPA.em().persist(a264);
 }
 
+    }
+    private void createQuestionA265() {
+        // == A265
+        // Total (supposé être égal à 100%)
 
-    // == A265
-    // Total (supposé être égal à 100%)
-
-    PercentageQuestion a265 = (PercentageQuestion) questionService.findByCode(QuestionCode.A265);
+        a265 = (PercentageQuestion) questionService.findByCode(QuestionCode.A265);
 if (a265 == null) {
     a265 = new PercentageQuestion(a253, 0, QuestionCode.A265);
     JPA.em().persist(a265);
+
+    // cleanup the driver
+    Driver a265_driver = driverService.findByName("A265");
+    if (a265_driver != null) {
+        driverService.remove(a265_driver);
+    }
+
 } else {
     if (!a265.getQuestionSet().equals(a253) && a253.getQuestions().contains(a265)) {
         a253.getQuestions().remove(a265);
@@ -6352,18 +9506,35 @@ if (a265 == null) {
         JPA.em().persist(a253);
     }
     a265.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a265_driver = driverService.findByName("A265");
+    if (a265_driver != null) {
+        driverService.remove(a265_driver);
+    }
+
+    ((NumericQuestion)a265).setDriver(null);
+
     JPA.em().persist(a265);
 }
 
+    }
+    private void createQuestionA267() {
+        // == A267
+        // Quel est le poids total transporté sur toute l'année du bilan (tous produits confondus)?
 
-    // == A267
-    // Quel est le poids total transporté sur toute l'année du bilan (tous produits confondus)?
-
-    
-DoubleQuestion a267 = (DoubleQuestion) questionService.findByCode(QuestionCode.A267);
+        
+a267 = (DoubleQuestion) questionService.findByCode(QuestionCode.A267);
 if (a267 == null) {
     a267 = new DoubleQuestion( a266, 0, QuestionCode.A267, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a267);
+
+    // cleanup the driver
+    Driver a267_driver = driverService.findByName("A267");
+    if (a267_driver != null) {
+        driverService.remove(a267_driver);
+    }
+
 } else {
     if (!a267.getQuestionSet().equals(a266) && a266.getQuestions().contains(a267)) {
         a266.getQuestions().remove(a267);
@@ -6373,19 +9544,30 @@ if (a267 == null) {
         a266.getQuestions().add(a267);
         JPA.em().persist(a266);
     }
-    a267.setUnitCategory(massUnits);
+    ((NumericQuestion)a267).setUnitCategory(massUnits);
     a267.setOrderIndex(0);
-    a267.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a267).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a267_driver = driverService.findByName("A267");
+    if (a267_driver != null) {
+        driverService.remove(a267_driver);
+    }
+
+    ((NumericQuestion)a267).setDriver(null);
+
     JPA.em().persist(a267);
 }
 
 
 
+    }
+    private void createQuestionA268() {
+        // == A268
+        // Quelle est la destination géographique des produits vendus?
 
-    // == A268
-    // Quelle est la destination géographique des produits vendus?
-
-    ValueSelectionQuestion a268 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A268);
+        a268 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A268);
 if (a268 == null) {
     a268 = new ValueSelectionQuestion(a266, 0, QuestionCode.A268, CodeList.PROVENANCESIMPLIFIEE);
     JPA.em().persist(a268);
@@ -6399,19 +9581,27 @@ if (a268 == null) {
         JPA.em().persist(a266);
     }
     a268.setOrderIndex(0);
-    a268.setCodeList(CodeList.PROVENANCESIMPLIFIEE);
+    ((ValueSelectionQuestion)a268).setCodeList(CodeList.PROVENANCESIMPLIFIEE);
     JPA.em().persist(a268);
 }
 
+    }
+    private void createQuestionA269() {
+        // == A269
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A269
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a269 = (DoubleQuestion) questionService.findByCode(QuestionCode.A269);
+        
+a269 = (DoubleQuestion) questionService.findByCode(QuestionCode.A269);
 if (a269 == null) {
     a269 = new DoubleQuestion( a266, 0, QuestionCode.A269, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a269);
+
+    // cleanup the driver
+    Driver a269_driver = driverService.findByName("A269");
+    if (a269_driver != null) {
+        driverService.remove(a269_driver);
+    }
+
 } else {
     if (!a269.getQuestionSet().equals(a266) && a266.getQuestions().contains(a269)) {
         a266.getQuestions().remove(a269);
@@ -6421,23 +9611,40 @@ if (a269 == null) {
         a266.getQuestions().add(a269);
         JPA.em().persist(a266);
     }
-    a269.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a269).setUnitCategory(lengthUnits);
     a269.setOrderIndex(0);
-    a269.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a269).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a269_driver = driverService.findByName("A269");
+    if (a269_driver != null) {
+        driverService.remove(a269_driver);
+    }
+
+    ((NumericQuestion)a269).setDriver(null);
+
     JPA.em().persist(a269);
 }
 
 
 
+    }
+    private void createQuestionA270() {
+        // == A270
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A270
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a270 = (DoubleQuestion) questionService.findByCode(QuestionCode.A270);
+        
+a270 = (DoubleQuestion) questionService.findByCode(QuestionCode.A270);
 if (a270 == null) {
     a270 = new DoubleQuestion( a266, 0, QuestionCode.A270, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a270);
+
+    // cleanup the driver
+    Driver a270_driver = driverService.findByName("A270");
+    if (a270_driver != null) {
+        driverService.remove(a270_driver);
+    }
+
 } else {
     if (!a270.getQuestionSet().equals(a266) && a266.getQuestions().contains(a270)) {
         a266.getQuestions().remove(a270);
@@ -6447,23 +9654,40 @@ if (a270 == null) {
         a266.getQuestions().add(a270);
         JPA.em().persist(a266);
     }
-    a270.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a270).setUnitCategory(lengthUnits);
     a270.setOrderIndex(0);
-    a270.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a270).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a270_driver = driverService.findByName("A270");
+    if (a270_driver != null) {
+        driverService.remove(a270_driver);
+    }
+
+    ((NumericQuestion)a270).setDriver(null);
+
     JPA.em().persist(a270);
 }
 
 
 
+    }
+    private void createQuestionA271() {
+        // == A271
+        // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
 
-    // == A271
-    // Distance moyenne assignée entre le point d'enlèvement et le point de livraison
-
-    
-DoubleQuestion a271 = (DoubleQuestion) questionService.findByCode(QuestionCode.A271);
+        
+a271 = (DoubleQuestion) questionService.findByCode(QuestionCode.A271);
 if (a271 == null) {
     a271 = new DoubleQuestion( a266, 0, QuestionCode.A271, lengthUnits, getUnitBySymbol("km") );
     JPA.em().persist(a271);
+
+    // cleanup the driver
+    Driver a271_driver = driverService.findByName("A271");
+    if (a271_driver != null) {
+        driverService.remove(a271_driver);
+    }
+
 } else {
     if (!a271.getQuestionSet().equals(a266) && a266.getQuestions().contains(a271)) {
         a266.getQuestions().remove(a271);
@@ -6473,24 +9697,34 @@ if (a271 == null) {
         a266.getQuestions().add(a271);
         JPA.em().persist(a266);
     }
-    a271.setUnitCategory(lengthUnits);
+    ((NumericQuestion)a271).setUnitCategory(lengthUnits);
     a271.setOrderIndex(0);
-    a271.setDefaultUnit(getUnitBySymbol("km"));
+    ((NumericQuestion)a271).setDefaultUnit(getUnitBySymbol("km"));
+
+    // cleanup the driver
+    Driver a271_driver = driverService.findByName("A271");
+    if (a271_driver != null) {
+        driverService.remove(a271_driver);
+    }
+
+    ((NumericQuestion)a271).setDriver(null);
+
     JPA.em().persist(a271);
 }
 
 
 
+    }
+    private void createQuestionA274() {
+        // == A274
+        // Poste de consommation
 
-    // == A274
-    // Poste de consommation
-
-    StringQuestion a274 = (StringQuestion) questionService.findByCode(QuestionCode.A274);
+        a274 = (StringQuestion) questionService.findByCode(QuestionCode.A274);
 if (a274 == null) {
     a274 = new StringQuestion(a273, 0, QuestionCode.A274, null);
     JPA.em().persist(a274);
 } else {
-    a274.setDefaultValue(null);
+    ((StringQuestion)a274).setDefaultValue(null);
     if (!a274.getQuestionSet().equals(a273) && a273.getQuestions().contains(a274)) {
         a273.getQuestions().remove(a274);
         JPA.em().persist(a273);
@@ -6503,11 +9737,12 @@ if (a274 == null) {
     JPA.em().persist(a274);
 }
 
+    }
+    private void createQuestionA276() {
+        // == A276
+        // Combustible utilisé
 
-    // == A276
-    // Combustible utilisé
-
-    ValueSelectionQuestion a276 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A276);
+        a276 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A276);
 if (a276 == null) {
     a276 = new ValueSelectionQuestion(a275, 0, QuestionCode.A276, CodeList.COMBUSTIBLE);
     JPA.em().persist(a276);
@@ -6521,19 +9756,28 @@ if (a276 == null) {
         JPA.em().persist(a275);
     }
     a276.setOrderIndex(0);
-    a276.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a276).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a276);
 }
 
+    }
+    private void createQuestionA277() {
+        // == A277
+        // Quantité
 
-    // == A277
-    // Quantité
-
-    
-DoubleQuestion a277 = (DoubleQuestion) questionService.findByCode(QuestionCode.A277);
+        
+a277 = (DoubleQuestion) questionService.findByCode(QuestionCode.A277);
 if (a277 == null) {
     a277 = new DoubleQuestion( a275, 0, QuestionCode.A277, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a277);
+
+    // cleanup the driver
+    Driver a277_driver = driverService.findByName("A277");
+    if (a277_driver != null) {
+        driverService.remove(a277_driver);
+    }
+
+
 } else {
     if (!a277.getQuestionSet().equals(a275) && a275.getQuestions().contains(a277)) {
         a275.getQuestions().remove(a277);
@@ -6543,19 +9787,29 @@ if (a277 == null) {
         a275.getQuestions().add(a277);
         JPA.em().persist(a275);
     }
-    a277.setUnitCategory(energyUnits);
+    ((NumericQuestion)a277).setUnitCategory(energyUnits);
     a277.setOrderIndex(0);
-    a277.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a277).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a277_driver = driverService.findByName("A277");
+    if (a277_driver != null) {
+        driverService.remove(a277_driver);
+    }
+
+    ((NumericQuestion)a277).setDriver(null);
+
     JPA.em().persist(a277);
 }
 
 
 
+    }
+    private void createQuestionA1025() {
+        // == A1025
+        // Combustible utilisé
 
-    // == A1025
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1025 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1025);
+        a1025 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1025);
 if (a1025 == null) {
     a1025 = new ValueSelectionQuestion(a1024, 0, QuestionCode.A1025, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1025);
@@ -6569,19 +9823,27 @@ if (a1025 == null) {
         JPA.em().persist(a1024);
     }
     a1025.setOrderIndex(0);
-    a1025.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1025).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1025);
 }
 
+    }
+    private void createQuestionA1026() {
+        // == A1026
+        // Quantité
 
-    // == A1026
-    // Quantité
-
-    
-DoubleQuestion a1026 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1026);
+        
+a1026 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1026);
 if (a1026 == null) {
     a1026 = new DoubleQuestion( a1024, 0, QuestionCode.A1026, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1026);
+
+    // cleanup the driver
+    Driver a1026_driver = driverService.findByName("A1026");
+    if (a1026_driver != null) {
+        driverService.remove(a1026_driver);
+    }
+
 } else {
     if (!a1026.getQuestionSet().equals(a1024) && a1024.getQuestions().contains(a1026)) {
         a1024.getQuestions().remove(a1026);
@@ -6591,19 +9853,29 @@ if (a1026 == null) {
         a1024.getQuestions().add(a1026);
         JPA.em().persist(a1024);
     }
-    a1026.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1026).setUnitCategory(volumeUnits);
     a1026.setOrderIndex(0);
-    a1026.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1026).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1026_driver = driverService.findByName("A1026");
+    if (a1026_driver != null) {
+        driverService.remove(a1026_driver);
+    }
+
+    ((NumericQuestion)a1026).setDriver(null);
+
     JPA.em().persist(a1026);
 }
 
 
 
+    }
+    private void createQuestionA1028() {
+        // == A1028
+        // Combustible utilisé
 
-    // == A1028
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1028 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1028);
+        a1028 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1028);
 if (a1028 == null) {
     a1028 = new ValueSelectionQuestion(a1027, 0, QuestionCode.A1028, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1028);
@@ -6617,19 +9889,27 @@ if (a1028 == null) {
         JPA.em().persist(a1027);
     }
     a1028.setOrderIndex(0);
-    a1028.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1028).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1028);
 }
 
+    }
+    private void createQuestionA1029() {
+        // == A1029
+        // Quantité
 
-    // == A1029
-    // Quantité
-
-    
-DoubleQuestion a1029 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1029);
+        
+a1029 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1029);
 if (a1029 == null) {
     a1029 = new DoubleQuestion( a1027, 0, QuestionCode.A1029, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1029);
+
+    // cleanup the driver
+    Driver a1029_driver = driverService.findByName("A1029");
+    if (a1029_driver != null) {
+        driverService.remove(a1029_driver);
+    }
+
 } else {
     if (!a1029.getQuestionSet().equals(a1027) && a1027.getQuestions().contains(a1029)) {
         a1027.getQuestions().remove(a1029);
@@ -6639,23 +9919,42 @@ if (a1029 == null) {
         a1027.getQuestions().add(a1029);
         JPA.em().persist(a1027);
     }
-    a1029.setUnitCategory(massUnits);
+    ((NumericQuestion)a1029).setUnitCategory(massUnits);
     a1029.setOrderIndex(0);
-    a1029.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1029).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1029_driver = driverService.findByName("A1029");
+    if (a1029_driver != null) {
+        driverService.remove(a1029_driver);
+    }
+
+    ((NumericQuestion)a1029).setDriver(null);
+
     JPA.em().persist(a1029);
 }
 
 
 
+    }
+    private void createQuestionA278() {
+        // == A278
+        // Electricité
 
-    // == A278
-    // Electricité
-
-    
-DoubleQuestion a278 = (DoubleQuestion) questionService.findByCode(QuestionCode.A278);
+        
+a278 = (DoubleQuestion) questionService.findByCode(QuestionCode.A278);
 if (a278 == null) {
     a278 = new DoubleQuestion( a273, 0, QuestionCode.A278, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a278);
+
+    // cleanup the driver
+    Driver a278_driver = driverService.findByName("A278");
+    if (a278_driver != null) {
+        driverService.remove(a278_driver);
+    }
+
+
 } else {
     if (!a278.getQuestionSet().equals(a273) && a273.getQuestions().contains(a278)) {
         a273.getQuestions().remove(a278);
@@ -6665,19 +9964,29 @@ if (a278 == null) {
         a273.getQuestions().add(a278);
         JPA.em().persist(a273);
     }
-    a278.setUnitCategory(energyUnits);
+    ((NumericQuestion)a278).setUnitCategory(energyUnits);
     a278.setOrderIndex(0);
-    a278.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a278).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a278_driver = driverService.findByName("A278");
+    if (a278_driver != null) {
+        driverService.remove(a278_driver);
+    }
+
+    ((NumericQuestion)a278).setDriver(null);
+
     JPA.em().persist(a278);
 }
 
 
 
+    }
+    private void createQuestionA280() {
+        // == A280
+        // Type de gaz
 
-    // == A280
-    // Type de gaz
-
-    ValueSelectionQuestion a280 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A280);
+        a280 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A280);
 if (a280 == null) {
     a280 = new ValueSelectionQuestion(a279, 0, QuestionCode.A280, CodeList.FRIGORIGENE);
     JPA.em().persist(a280);
@@ -6691,19 +10000,27 @@ if (a280 == null) {
         JPA.em().persist(a279);
     }
     a280.setOrderIndex(0);
-    a280.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a280).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a280);
 }
 
+    }
+    private void createQuestionA281() {
+        // == A281
+        // Quantité de recharge nécessaire pour l'année
 
-    // == A281
-    // Quantité de recharge nécessaire pour l'année
-
-    
-DoubleQuestion a281 = (DoubleQuestion) questionService.findByCode(QuestionCode.A281);
+        
+a281 = (DoubleQuestion) questionService.findByCode(QuestionCode.A281);
 if (a281 == null) {
     a281 = new DoubleQuestion( a279, 0, QuestionCode.A281, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a281);
+
+    // cleanup the driver
+    Driver a281_driver = driverService.findByName("A281");
+    if (a281_driver != null) {
+        driverService.remove(a281_driver);
+    }
+
 } else {
     if (!a281.getQuestionSet().equals(a279) && a279.getQuestions().contains(a281)) {
         a279.getQuestions().remove(a281);
@@ -6713,19 +10030,30 @@ if (a281 == null) {
         a279.getQuestions().add(a281);
         JPA.em().persist(a279);
     }
-    a281.setUnitCategory(massUnits);
+    ((NumericQuestion)a281).setUnitCategory(massUnits);
     a281.setOrderIndex(0);
-    a281.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a281).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a281_driver = driverService.findByName("A281");
+    if (a281_driver != null) {
+        driverService.remove(a281_driver);
+    }
+
+    ((NumericQuestion)a281).setDriver(null);
+
     JPA.em().persist(a281);
 }
 
 
 
+    }
+    private void createQuestionA283() {
+        // == A283
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A283
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a283 = (DocumentQuestion) questionService.findByCode(QuestionCode.A283);
+        a283 = (DocumentQuestion) questionService.findByCode(QuestionCode.A283);
 if (a283 == null) {
     a283 = new DocumentQuestion(a282, 0, QuestionCode.A283);
     JPA.em().persist(a283);
@@ -6742,11 +10070,12 @@ if (a283 == null) {
     JPA.em().persist(a283);
 }
 
+    }
+    private void createQuestionA285() {
+        // == A285
+        // Combustible utilisé
 
-    // == A285
-    // Combustible utilisé
-
-    ValueSelectionQuestion a285 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A285);
+        a285 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A285);
 if (a285 == null) {
     a285 = new ValueSelectionQuestion(a284, 0, QuestionCode.A285, CodeList.COMBUSTIBLE);
     JPA.em().persist(a285);
@@ -6760,19 +10089,28 @@ if (a285 == null) {
         JPA.em().persist(a284);
     }
     a285.setOrderIndex(0);
-    a285.setCodeList(CodeList.COMBUSTIBLE);
+    ((ValueSelectionQuestion)a285).setCodeList(CodeList.COMBUSTIBLE);
     JPA.em().persist(a285);
 }
 
+    }
+    private void createQuestionA286() {
+        // == A286
+        // Quantité
 
-    // == A286
-    // Quantité
-
-    
-DoubleQuestion a286 = (DoubleQuestion) questionService.findByCode(QuestionCode.A286);
+        
+a286 = (DoubleQuestion) questionService.findByCode(QuestionCode.A286);
 if (a286 == null) {
     a286 = new DoubleQuestion( a284, 0, QuestionCode.A286, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a286);
+
+    // cleanup the driver
+    Driver a286_driver = driverService.findByName("A286");
+    if (a286_driver != null) {
+        driverService.remove(a286_driver);
+    }
+
+
 } else {
     if (!a286.getQuestionSet().equals(a284) && a284.getQuestions().contains(a286)) {
         a284.getQuestions().remove(a286);
@@ -6782,19 +10120,29 @@ if (a286 == null) {
         a284.getQuestions().add(a286);
         JPA.em().persist(a284);
     }
-    a286.setUnitCategory(energyUnits);
+    ((NumericQuestion)a286).setUnitCategory(energyUnits);
     a286.setOrderIndex(0);
-    a286.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a286).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a286_driver = driverService.findByName("A286");
+    if (a286_driver != null) {
+        driverService.remove(a286_driver);
+    }
+
+    ((NumericQuestion)a286).setDriver(null);
+
     JPA.em().persist(a286);
 }
 
 
 
+    }
+    private void createQuestionA1031() {
+        // == A1031
+        // Combustible utilisé
 
-    // == A1031
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1031 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1031);
+        a1031 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1031);
 if (a1031 == null) {
     a1031 = new ValueSelectionQuestion(a1030, 0, QuestionCode.A1031, CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1031);
@@ -6808,19 +10156,27 @@ if (a1031 == null) {
         JPA.em().persist(a1030);
     }
     a1031.setOrderIndex(0);
-    a1031.setCodeList(CodeList.COMBUSTIBLEVOLUME);
+    ((ValueSelectionQuestion)a1031).setCodeList(CodeList.COMBUSTIBLEVOLUME);
     JPA.em().persist(a1031);
 }
 
+    }
+    private void createQuestionA1032() {
+        // == A1032
+        // Quantité
 
-    // == A1032
-    // Quantité
-
-    
-DoubleQuestion a1032 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1032);
+        
+a1032 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1032);
 if (a1032 == null) {
     a1032 = new DoubleQuestion( a1030, 0, QuestionCode.A1032, volumeUnits, volumeUnits.getMainUnit() );
     JPA.em().persist(a1032);
+
+    // cleanup the driver
+    Driver a1032_driver = driverService.findByName("A1032");
+    if (a1032_driver != null) {
+        driverService.remove(a1032_driver);
+    }
+
 } else {
     if (!a1032.getQuestionSet().equals(a1030) && a1030.getQuestions().contains(a1032)) {
         a1030.getQuestions().remove(a1032);
@@ -6830,19 +10186,29 @@ if (a1032 == null) {
         a1030.getQuestions().add(a1032);
         JPA.em().persist(a1030);
     }
-    a1032.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a1032).setUnitCategory(volumeUnits);
     a1032.setOrderIndex(0);
-    a1032.setDefaultUnit(volumeUnits.getMainUnit());
+    ((NumericQuestion)a1032).setDefaultUnit(volumeUnits.getMainUnit());
+
+    // cleanup the driver
+    Driver a1032_driver = driverService.findByName("A1032");
+    if (a1032_driver != null) {
+        driverService.remove(a1032_driver);
+    }
+
+    ((NumericQuestion)a1032).setDriver(null);
+
     JPA.em().persist(a1032);
 }
 
 
 
+    }
+    private void createQuestionA1034() {
+        // == A1034
+        // Combustible utilisé
 
-    // == A1034
-    // Combustible utilisé
-
-    ValueSelectionQuestion a1034 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1034);
+        a1034 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A1034);
 if (a1034 == null) {
     a1034 = new ValueSelectionQuestion(a1033, 0, QuestionCode.A1034, CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1034);
@@ -6856,19 +10222,27 @@ if (a1034 == null) {
         JPA.em().persist(a1033);
     }
     a1034.setOrderIndex(0);
-    a1034.setCodeList(CodeList.COMBUSTIBLEPOIDS);
+    ((ValueSelectionQuestion)a1034).setCodeList(CodeList.COMBUSTIBLEPOIDS);
     JPA.em().persist(a1034);
 }
 
+    }
+    private void createQuestionA1035() {
+        // == A1035
+        // Quantité
 
-    // == A1035
-    // Quantité
-
-    
-DoubleQuestion a1035 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1035);
+        
+a1035 = (DoubleQuestion) questionService.findByCode(QuestionCode.A1035);
 if (a1035 == null) {
     a1035 = new DoubleQuestion( a1033, 0, QuestionCode.A1035, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a1035);
+
+    // cleanup the driver
+    Driver a1035_driver = driverService.findByName("A1035");
+    if (a1035_driver != null) {
+        driverService.remove(a1035_driver);
+    }
+
 } else {
     if (!a1035.getQuestionSet().equals(a1033) && a1033.getQuestions().contains(a1035)) {
         a1033.getQuestions().remove(a1035);
@@ -6878,23 +10252,42 @@ if (a1035 == null) {
         a1033.getQuestions().add(a1035);
         JPA.em().persist(a1033);
     }
-    a1035.setUnitCategory(massUnits);
+    ((NumericQuestion)a1035).setUnitCategory(massUnits);
     a1035.setOrderIndex(0);
-    a1035.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a1035).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a1035_driver = driverService.findByName("A1035");
+    if (a1035_driver != null) {
+        driverService.remove(a1035_driver);
+    }
+
+    ((NumericQuestion)a1035).setDriver(null);
+
     JPA.em().persist(a1035);
 }
 
 
 
+    }
+    private void createQuestionA287() {
+        // == A287
+        // Electricité
 
-    // == A287
-    // Electricité
-
-    
-DoubleQuestion a287 = (DoubleQuestion) questionService.findByCode(QuestionCode.A287);
+        
+a287 = (DoubleQuestion) questionService.findByCode(QuestionCode.A287);
 if (a287 == null) {
     a287 = new DoubleQuestion( a282, 0, QuestionCode.A287, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a287);
+
+    // cleanup the driver
+    Driver a287_driver = driverService.findByName("A287");
+    if (a287_driver != null) {
+        driverService.remove(a287_driver);
+    }
+
+
 } else {
     if (!a287.getQuestionSet().equals(a282) && a282.getQuestions().contains(a287)) {
         a282.getQuestions().remove(a287);
@@ -6904,19 +10297,29 @@ if (a287 == null) {
         a282.getQuestions().add(a287);
         JPA.em().persist(a282);
     }
-    a287.setUnitCategory(energyUnits);
+    ((NumericQuestion)a287).setUnitCategory(energyUnits);
     a287.setOrderIndex(0);
-    a287.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a287).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a287_driver = driverService.findByName("A287");
+    if (a287_driver != null) {
+        driverService.remove(a287_driver);
+    }
+
+    ((NumericQuestion)a287).setDriver(null);
+
     JPA.em().persist(a287);
 }
 
 
 
+    }
+    private void createQuestionA289() {
+        // == A289
+        // Type de gaz
 
-    // == A289
-    // Type de gaz
-
-    ValueSelectionQuestion a289 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A289);
+        a289 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A289);
 if (a289 == null) {
     a289 = new ValueSelectionQuestion(a288, 0, QuestionCode.A289, CodeList.FRIGORIGENE);
     JPA.em().persist(a289);
@@ -6930,19 +10333,27 @@ if (a289 == null) {
         JPA.em().persist(a288);
     }
     a289.setOrderIndex(0);
-    a289.setCodeList(CodeList.FRIGORIGENE);
+    ((ValueSelectionQuestion)a289).setCodeList(CodeList.FRIGORIGENE);
     JPA.em().persist(a289);
 }
 
+    }
+    private void createQuestionA290() {
+        // == A290
+        // Quantité de recharge nécessaire pour l'année
 
-    // == A290
-    // Quantité de recharge nécessaire pour l'année
-
-    
-DoubleQuestion a290 = (DoubleQuestion) questionService.findByCode(QuestionCode.A290);
+        
+a290 = (DoubleQuestion) questionService.findByCode(QuestionCode.A290);
 if (a290 == null) {
     a290 = new DoubleQuestion( a288, 0, QuestionCode.A290, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a290);
+
+    // cleanup the driver
+    Driver a290_driver = driverService.findByName("A290");
+    if (a290_driver != null) {
+        driverService.remove(a290_driver);
+    }
+
 } else {
     if (!a290.getQuestionSet().equals(a288) && a288.getQuestions().contains(a290)) {
         a288.getQuestions().remove(a290);
@@ -6952,19 +10363,30 @@ if (a290 == null) {
         a288.getQuestions().add(a290);
         JPA.em().persist(a288);
     }
-    a290.setUnitCategory(massUnits);
+    ((NumericQuestion)a290).setUnitCategory(massUnits);
     a290.setOrderIndex(0);
-    a290.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a290).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a290_driver = driverService.findByName("A290");
+    if (a290_driver != null) {
+        driverService.remove(a290_driver);
+    }
+
+    ((NumericQuestion)a290).setDriver(null);
+
     JPA.em().persist(a290);
 }
 
 
 
+    }
+    private void createQuestionA292() {
+        // == A292
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A292
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a292 = (DocumentQuestion) questionService.findByCode(QuestionCode.A292);
+        a292 = (DocumentQuestion) questionService.findByCode(QuestionCode.A292);
 if (a292 == null) {
     a292 = new DocumentQuestion(a291, 0, QuestionCode.A292);
     JPA.em().persist(a292);
@@ -6981,14 +10403,22 @@ if (a292 == null) {
     JPA.em().persist(a292);
 }
 
+    }
+    private void createQuestionA293() {
+        // == A293
+        // Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie
 
-    // == A293
-    // Nombre total d'utilisations du produit ou groupe de produits sur toute sa durée de vie
-
-    IntegerQuestion a293 = (IntegerQuestion) questionService.findByCode(QuestionCode.A293);
+        a293 = (IntegerQuestion) questionService.findByCode(QuestionCode.A293);
 if (a293 == null) {
     a293 = new IntegerQuestion(a291, 0, QuestionCode.A293, null);
     JPA.em().persist(a293);
+
+    // cleanup the driver
+    Driver a293_driver = driverService.findByName("A293");
+    if (a293_driver != null) {
+        driverService.remove(a293_driver);
+    }
+
 } else {
     if (!a293.getQuestionSet().equals(a291) && a291.getQuestions().contains(a293)) {
         a291.getQuestions().remove(a293);
@@ -6999,19 +10429,36 @@ if (a293 == null) {
         JPA.em().persist(a291);
     }
     a293.setOrderIndex(0);
-    a293.setUnitCategory(null);
+    ((NumericQuestion)a293).setUnitCategory(null);
+
+    // cleanup the driver
+    Driver a293_driver = driverService.findByName("A293");
+    if (a293_driver != null) {
+        driverService.remove(a293_driver);
+    }
+
+    ((NumericQuestion)a293).setDriver(null);
+
     JPA.em().persist(a293);
 }
 
+    }
+    private void createQuestionA294() {
+        // == A294
+        // Consommation de diesel par utilisation de produit
 
-    // == A294
-    // Consommation de diesel par utilisation de produit
-
-    
-DoubleQuestion a294 = (DoubleQuestion) questionService.findByCode(QuestionCode.A294);
+        
+a294 = (DoubleQuestion) questionService.findByCode(QuestionCode.A294);
 if (a294 == null) {
     a294 = new DoubleQuestion( a291, 0, QuestionCode.A294, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(a294);
+
+    // cleanup the driver
+    Driver a294_driver = driverService.findByName("A294");
+    if (a294_driver != null) {
+        driverService.remove(a294_driver);
+    }
+
 } else {
     if (!a294.getQuestionSet().equals(a291) && a291.getQuestions().contains(a294)) {
         a291.getQuestions().remove(a294);
@@ -7021,23 +10468,40 @@ if (a294 == null) {
         a291.getQuestions().add(a294);
         JPA.em().persist(a291);
     }
-    a294.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a294).setUnitCategory(volumeUnits);
     a294.setOrderIndex(0);
-    a294.setDefaultUnit(getUnitBySymbol("l"));
+    ((NumericQuestion)a294).setDefaultUnit(getUnitBySymbol("l"));
+
+    // cleanup the driver
+    Driver a294_driver = driverService.findByName("A294");
+    if (a294_driver != null) {
+        driverService.remove(a294_driver);
+    }
+
+    ((NumericQuestion)a294).setDriver(null);
+
     JPA.em().persist(a294);
 }
 
 
 
+    }
+    private void createQuestionA295() {
+        // == A295
+        // Consommation d'essence par utilisation de produit
 
-    // == A295
-    // Consommation d'essence par utilisation de produit
-
-    
-DoubleQuestion a295 = (DoubleQuestion) questionService.findByCode(QuestionCode.A295);
+        
+a295 = (DoubleQuestion) questionService.findByCode(QuestionCode.A295);
 if (a295 == null) {
     a295 = new DoubleQuestion( a291, 0, QuestionCode.A295, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(a295);
+
+    // cleanup the driver
+    Driver a295_driver = driverService.findByName("A295");
+    if (a295_driver != null) {
+        driverService.remove(a295_driver);
+    }
+
 } else {
     if (!a295.getQuestionSet().equals(a291) && a291.getQuestions().contains(a295)) {
         a291.getQuestions().remove(a295);
@@ -7047,23 +10511,41 @@ if (a295 == null) {
         a291.getQuestions().add(a295);
         JPA.em().persist(a291);
     }
-    a295.setUnitCategory(volumeUnits);
+    ((NumericQuestion)a295).setUnitCategory(volumeUnits);
     a295.setOrderIndex(0);
-    a295.setDefaultUnit(getUnitBySymbol("l"));
+    ((NumericQuestion)a295).setDefaultUnit(getUnitBySymbol("l"));
+
+    // cleanup the driver
+    Driver a295_driver = driverService.findByName("A295");
+    if (a295_driver != null) {
+        driverService.remove(a295_driver);
+    }
+
+    ((NumericQuestion)a295).setDriver(null);
+
     JPA.em().persist(a295);
 }
 
 
 
+    }
+    private void createQuestionA296() {
+        // == A296
+        // Consommation d'électricité par utilisation de produit
 
-    // == A296
-    // Consommation d'électricité par utilisation de produit
-
-    
-DoubleQuestion a296 = (DoubleQuestion) questionService.findByCode(QuestionCode.A296);
+        
+a296 = (DoubleQuestion) questionService.findByCode(QuestionCode.A296);
 if (a296 == null) {
     a296 = new DoubleQuestion( a291, 0, QuestionCode.A296, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(a296);
+
+    // cleanup the driver
+    Driver a296_driver = driverService.findByName("A296");
+    if (a296_driver != null) {
+        driverService.remove(a296_driver);
+    }
+
+
 } else {
     if (!a296.getQuestionSet().equals(a291) && a291.getQuestions().contains(a296)) {
         a291.getQuestions().remove(a296);
@@ -7073,19 +10555,29 @@ if (a296 == null) {
         a291.getQuestions().add(a296);
         JPA.em().persist(a291);
     }
-    a296.setUnitCategory(energyUnits);
+    ((NumericQuestion)a296).setUnitCategory(energyUnits);
     a296.setOrderIndex(0);
-    a296.setDefaultUnit(getUnitBySymbol("kW.h"));
+    ((NumericQuestion)a296).setDefaultUnit(getUnitBySymbol("kW.h"));
+
+    // cleanup the driver
+    Driver a296_driver = driverService.findByName("A296");
+    if (a296_driver != null) {
+        driverService.remove(a296_driver);
+    }
+
+    ((NumericQuestion)a296).setDriver(null);
+
     JPA.em().persist(a296);
 }
 
 
 
+    }
+    private void createQuestionA298() {
+        // == A298
+        // Gaz émis
 
-    // == A298
-    // Gaz émis
-
-    ValueSelectionQuestion a298 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A298);
+        a298 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A298);
 if (a298 == null) {
     a298 = new ValueSelectionQuestion(a297, 0, QuestionCode.A298, CodeList.GESSIMPLIFIE);
     JPA.em().persist(a298);
@@ -7099,19 +10591,27 @@ if (a298 == null) {
         JPA.em().persist(a297);
     }
     a298.setOrderIndex(0);
-    a298.setCodeList(CodeList.GESSIMPLIFIE);
+    ((ValueSelectionQuestion)a298).setCodeList(CodeList.GESSIMPLIFIE);
     JPA.em().persist(a298);
 }
 
+    }
+    private void createQuestionA299() {
+        // == A299
+        // Quantité
 
-    // == A299
-    // Quantité
-
-    
-DoubleQuestion a299 = (DoubleQuestion) questionService.findByCode(QuestionCode.A299);
+        
+a299 = (DoubleQuestion) questionService.findByCode(QuestionCode.A299);
 if (a299 == null) {
     a299 = new DoubleQuestion( a297, 0, QuestionCode.A299, massUnits, massUnits.getMainUnit() );
     JPA.em().persist(a299);
+
+    // cleanup the driver
+    Driver a299_driver = driverService.findByName("A299");
+    if (a299_driver != null) {
+        driverService.remove(a299_driver);
+    }
+
 } else {
     if (!a299.getQuestionSet().equals(a297) && a297.getQuestions().contains(a299)) {
         a297.getQuestions().remove(a299);
@@ -7121,19 +10621,30 @@ if (a299 == null) {
         a297.getQuestions().add(a299);
         JPA.em().persist(a297);
     }
-    a299.setUnitCategory(massUnits);
+    ((NumericQuestion)a299).setUnitCategory(massUnits);
     a299.setOrderIndex(0);
-    a299.setDefaultUnit(massUnits.getMainUnit());
+    ((NumericQuestion)a299).setDefaultUnit(massUnits.getMainUnit());
+
+
+    // cleanup the driver
+    Driver a299_driver = driverService.findByName("A299");
+    if (a299_driver != null) {
+        driverService.remove(a299_driver);
+    }
+
+    ((NumericQuestion)a299).setDriver(null);
+
     JPA.em().persist(a299);
 }
 
 
 
+    }
+    private void createQuestionA301() {
+        // == A301
+        // Fournir ici les documents éventuels justifiant les données suivantes
 
-    // == A301
-    // Fournir ici les documents éventuels justifiant les données suivantes
-
-    DocumentQuestion a301 = (DocumentQuestion) questionService.findByCode(QuestionCode.A301);
+        a301 = (DocumentQuestion) questionService.findByCode(QuestionCode.A301);
 if (a301 == null) {
     a301 = new DocumentQuestion(a300, 0, QuestionCode.A301);
     JPA.em().persist(a301);
@@ -7150,15 +10661,23 @@ if (a301 == null) {
     JPA.em().persist(a301);
 }
 
+    }
+    private void createQuestionA302() {
+        // == A302
+        // Poids total de produit vendu
 
-    // == A302
-    // Poids total de produit vendu
-
-    
-DoubleQuestion a302 = (DoubleQuestion) questionService.findByCode(QuestionCode.A302);
+        
+a302 = (DoubleQuestion) questionService.findByCode(QuestionCode.A302);
 if (a302 == null) {
     a302 = new DoubleQuestion( a300, 0, QuestionCode.A302, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a302);
+
+    // cleanup the driver
+    Driver a302_driver = driverService.findByName("A302");
+    if (a302_driver != null) {
+        driverService.remove(a302_driver);
+    }
+
 } else {
     if (!a302.getQuestionSet().equals(a300) && a300.getQuestions().contains(a302)) {
         a300.getQuestions().remove(a302);
@@ -7168,24 +10687,35 @@ if (a302 == null) {
         a300.getQuestions().add(a302);
         JPA.em().persist(a300);
     }
-    a302.setUnitCategory(massUnits);
+    ((NumericQuestion)a302).setUnitCategory(massUnits);
     a302.setOrderIndex(0);
-    a302.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a302).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a302_driver = driverService.findByName("A302");
+    if (a302_driver != null) {
+        driverService.remove(a302_driver);
+    }
+
+    ((NumericQuestion)a302).setDriver(null);
+
     JPA.em().persist(a302);
 }
 
 
 
+    }
+    private void createQuestionA5011() {
+        // == A5011
+        // Poste de déchet
 
-    // == A5011
-    // Poste de déchet
-
-    StringQuestion a5011 = (StringQuestion) questionService.findByCode(QuestionCode.A5011);
+        a5011 = (StringQuestion) questionService.findByCode(QuestionCode.A5011);
 if (a5011 == null) {
     a5011 = new StringQuestion(a5010, 0, QuestionCode.A5011, null);
     JPA.em().persist(a5011);
 } else {
-    a5011.setDefaultValue(null);
+    ((StringQuestion)a5011).setDefaultValue(null);
     if (!a5011.getQuestionSet().equals(a5010) && a5010.getQuestions().contains(a5011)) {
         a5010.getQuestions().remove(a5011);
         JPA.em().persist(a5010);
@@ -7198,15 +10728,23 @@ if (a5011 == null) {
     JPA.em().persist(a5011);
 }
 
+    }
+    private void createQuestionA5012() {
+        // == A5012
+        // Poids total de ce poste de déchet après utilisation ou consommation
 
-    // == A5012
-    // Poids total de ce poste de déchet après utilisation ou consommation
-
-    
-DoubleQuestion a5012 = (DoubleQuestion) questionService.findByCode(QuestionCode.A5012);
+        
+a5012 = (DoubleQuestion) questionService.findByCode(QuestionCode.A5012);
 if (a5012 == null) {
     a5012 = new DoubleQuestion( a5010, 0, QuestionCode.A5012, massUnits, getUnitBySymbol("t") );
     JPA.em().persist(a5012);
+
+    // cleanup the driver
+    Driver a5012_driver = driverService.findByName("A5012");
+    if (a5012_driver != null) {
+        driverService.remove(a5012_driver);
+    }
+
 } else {
     if (!a5012.getQuestionSet().equals(a5010) && a5010.getQuestions().contains(a5012)) {
         a5010.getQuestions().remove(a5012);
@@ -7216,19 +10754,30 @@ if (a5012 == null) {
         a5010.getQuestions().add(a5012);
         JPA.em().persist(a5010);
     }
-    a5012.setUnitCategory(massUnits);
+    ((NumericQuestion)a5012).setUnitCategory(massUnits);
     a5012.setOrderIndex(0);
-    a5012.setDefaultUnit(getUnitBySymbol("t"));
+    ((NumericQuestion)a5012).setDefaultUnit(getUnitBySymbol("t"));
+
+
+    // cleanup the driver
+    Driver a5012_driver = driverService.findByName("A5012");
+    if (a5012_driver != null) {
+        driverService.remove(a5012_driver);
+    }
+
+    ((NumericQuestion)a5012).setDriver(null);
+
     JPA.em().persist(a5012);
 }
 
 
 
+    }
+    private void createQuestionA5013() {
+        // == A5013
+        // Type de déchet et de traitement de ce poste de déchet
 
-    // == A5013
-    // Type de déchet et de traitement de ce poste de déchet
-
-    ValueSelectionQuestion a5013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5013);
+        a5013 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.A5013);
 if (a5013 == null) {
     a5013 = new ValueSelectionQuestion(a5010, 0, QuestionCode.A5013, CodeList.GESTIONDECHETS);
     JPA.em().persist(a5013);
@@ -7242,18 +10791,26 @@ if (a5013 == null) {
         JPA.em().persist(a5010);
     }
     a5013.setOrderIndex(0);
-    a5013.setCodeList(CodeList.GESTIONDECHETS);
+    ((ValueSelectionQuestion)a5013).setCodeList(CodeList.GESTIONDECHETS);
     JPA.em().persist(a5013);
 }
 
+    }
+    private void createQuestionA5014() {
+        // == A5014
+        // % du poids de déchet traité par la méthode précédemment renseignée
 
-    // == A5014
-    // % du poids de déchet traité par la méthode précédemment renseignée
-
-    PercentageQuestion a5014 = (PercentageQuestion) questionService.findByCode(QuestionCode.A5014);
+        a5014 = (PercentageQuestion) questionService.findByCode(QuestionCode.A5014);
 if (a5014 == null) {
     a5014 = new PercentageQuestion(a5010, 0, QuestionCode.A5014);
     JPA.em().persist(a5014);
+
+    // cleanup the driver
+    Driver a5014_driver = driverService.findByName("A5014");
+    if (a5014_driver != null) {
+        driverService.remove(a5014_driver);
+    }
+
 } else {
     if (!a5014.getQuestionSet().equals(a5010) && a5010.getQuestions().contains(a5014)) {
         a5010.getQuestions().remove(a5014);
@@ -7264,14 +10821,20 @@ if (a5014 == null) {
         JPA.em().persist(a5010);
     }
     a5014.setOrderIndex(0);
+
+    // cleanup the driver
+    Driver a5014_driver = driverService.findByName("A5014");
+    if (a5014_driver != null) {
+        driverService.remove(a5014_driver);
+    }
+
+    ((NumericQuestion)a5014).setDriver(null);
+
     JPA.em().persist(a5014);
 }
 
-
-
-
-        Logger.info("===> CREATE AWAC Enterprise INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
     }
+
 
     private UnitCategory getUnitCategoryByCode(UnitCategoryCode unitCategoryCode) {
         return unitCategoryService.findByCode(unitCategoryCode);

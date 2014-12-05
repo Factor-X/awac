@@ -1,6 +1,8 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationHelpsCtrl", ($scope, $compile, $timeout, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationHelpsCtrl", ($scope, $compile, $timeout, downloadService, displayLittleFormMenu, modalService, messageFlash, translationService, codeLabelHelper) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
+
     $scope.files = [];
 
 
@@ -28,6 +30,8 @@ angular
         {key: 'municipality', label: 'Communes'},
         {key: 'household', label: 'Ménages'},
         {key: 'verification', label: 'Vérification'},
+        {key: 'event', label: 'Evènements'},
+        {key: 'littleemitter', label: 'Petits émetteurs '},
     ]
 
     $scope.save = (f) ->

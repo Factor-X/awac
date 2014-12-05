@@ -16,7 +16,6 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
-import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.MyrmexFatalException;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
@@ -226,11 +225,31 @@ public class ResultController extends AbstractController {
 
         }
 
+
+        ReportResultCollection allReportResultsCEFLeft = reportResultService.getReportResultsCEF(awacCalculator, scopes, period, comparedPeriod);
+
+        MergedReportResultCollectionAggregation mergedReportResultCEFCollectionAggregation = reportResultService.mergeAsComparision(
+            reportResultService.aggregate(allReportResultsCEFLeft),
+            reportResultService.aggregate(allReportResultsRight)
+        );
+
+        for (MergedReportResultAggregation mergedReportResultAggregation : mergedReportResultCEFCollectionAggregation.getMergedReportResultAggregations()) {
+            String reportKey = mergedReportResultAggregation.getReportCode();
+
+            // 2.2b. Each ReportResult is rendered to a SVG string - WEB
+            resultsDTO.getReportCEFDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
+            // 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
+            resultsDTO.getSvgHistogramsCEF().put(reportKey, resultSvgGeneratorService.getHistogram(mergedReportResultAggregation));
+        }
+
+
         // 3. Add log entries
         List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
         for (ReportLogEntry logEntry : logEntries) {
             ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
-            dtoLogEntries.add(reportLogEntryDTO);
+			if (reportLogEntryDTO != null) {
+				dtoLogEntries.add(reportLogEntryDTO);
+			}
         }
 
         // 4. PUSH !!!
@@ -239,7 +258,6 @@ public class ResultController extends AbstractController {
 
     private Result getSimpleReport(Period period, List<Scope> scopes) throws BiffException, IOException, WriteException {
         ResultsDTO resultsDTO = new ResultsDTO();
-
 
         // 1. Compute the ReportResult
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(scopes.get(0).getOrganization().getInterfaceCode());
@@ -264,13 +282,16 @@ public class ResultController extends AbstractController {
 
             // 2.5. Each ReportResult is rendered to a SVG string - WEB
             resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResultAggregation));
+
         }
 
         // 3. Add log entries
         List<ReportLogEntryDTO> dtoLogEntries = resultsDTO.getLogEntries();
         for (ReportLogEntry logEntry : logEntries) {
             ReportLogEntryDTO reportLogEntryDTO = conversionService.convert(logEntry, ReportLogEntryDTO.class);
-            dtoLogEntries.add(reportLogEntryDTO);
+			if (reportLogEntryDTO != null) {
+				dtoLogEntries.add(reportLogEntryDTO);
+			}
         }
 
         // 4. PUSH !!!

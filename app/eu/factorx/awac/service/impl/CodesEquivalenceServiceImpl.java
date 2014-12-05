@@ -29,6 +29,20 @@ public class CodesEquivalenceServiceImpl extends AbstractJPAPersistenceServiceIm
 	}
 
 	@Override
+	public Boolean isLinkedList(CodeList codeList) {
+		Long nbCodesEquivalences = JPA.em()
+				.createNamedQuery(CodesEquivalence.COUNT_LINKED_LIST_EQUIVALENCES, Long.class)
+				.setParameter(CodesEquivalence.CODE_LIST_PROPERTY_NAME, codeList)
+				.getSingleResult();
+		return (nbCodesEquivalences > 0);
+	}
+
+	@Override
+	public List<CodesEquivalence> findAllLinkedListsData() {
+		return JPA.em().createNamedQuery(CodesEquivalence.FIND_ALL_LINKED_LISTS_DATA, CodesEquivalence.class).getResultList();
+	}
+
+	@Override
 	public void removeAll() {
 		int nbDeleted = JPA.em().createNamedQuery(CodesEquivalence.REMOVE_ALL).executeUpdate();
 		Logger.info("Deleted {} code equivalences", nbDeleted);

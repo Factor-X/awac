@@ -20,72 +20,76 @@ import eu.factorx.awac.models.code.type.UnitCategoryCode;
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UnitCategory extends AuditedAbstractEntity {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param String name : a {@link String}
-	 */
-	public static final String FIND_BY_NAME = "UnitCategory.findByName";
+    /**
+     * @param String name : a {@link String}
+     */
+    public static final String FIND_BY_NAME = "UnitCategory.findByName";
 
-	/**
-	 * @param UnitCategoryCode unitCategoryCode : a {@link UnitCategoryCode}
-	 */
-	public static final String FIND_BY_CODE = "UnitCategory.findByCode";
+    /**
+     * @param UnitCategoryCode unitCategoryCode : a {@link UnitCategoryCode}
+     */
+    public static final String FIND_BY_CODE = "UnitCategory.findByCode";
 
-	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "ref"))})
-	private UnitCategoryCode unitCategoryCode;
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "ref"))})
+    private UnitCategoryCode unitCategoryCode;
 
-	// TODO i18n?
-	private String name;
+    // TODO i18n?
+    private String name;
 
-	private String symbol;
+    private String symbol;
 
-	@ManyToOne(optional = true)
-	private Unit mainUnit;
+    @ManyToOne(optional = true)
+    private Unit mainUnit;
 
-	@OneToMany(mappedBy = "category")
-	@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
-	private List<Unit> units;
+    @OneToMany(mappedBy = "category")
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    private List<Unit> units;
 
-	public UnitCategory() {
-		super();
-	}
+    @ManyToOne(optional = true)
+    // @Column(name = "main_factor_unit_id")
+    private Unit mainFactorUnit;
 
-	public UnitCategory(UnitCategoryCode unitCategoryCode, String name, String symbol, Unit mainUnit) {
-		super();
-		this.unitCategoryCode = unitCategoryCode;
-		this.name = name;
-		this.symbol = symbol;
-		this.mainUnit = mainUnit;
-	}
+    public UnitCategory() {
+        super();
+    }
 
-	public UnitCategoryCode getUnitCategoryCode() {
-		return unitCategoryCode;
-	}
+    public UnitCategory(UnitCategoryCode unitCategoryCode, String name, String symbol, Unit mainUnit) {
+        super();
+        this.unitCategoryCode = unitCategoryCode;
+        this.name = name;
+        this.symbol = symbol;
+        this.mainUnit = mainUnit;
+    }
 
-	public void setUnitCategoryCode(UnitCategoryCode unitCategoryCode) {
-		this.unitCategoryCode = unitCategoryCode;
-	}
+    public UnitCategoryCode getUnitCategoryCode() {
+        return unitCategoryCode;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setUnitCategoryCode(UnitCategoryCode unitCategoryCode) {
+        this.unitCategoryCode = unitCategoryCode;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getSymbol() {
-		return symbol;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
+    public String getSymbol() {
+        return symbol;
+    }
 
-	public Unit getMainUnit() {
-		return mainUnit;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public Unit getMainUnit() {
+        return mainUnit;
 	}
 
 	public void setMainUnit(Unit mainUnit) {
@@ -100,4 +104,11 @@ public class UnitCategory extends AuditedAbstractEntity {
 		this.units = units;
 	}
 
+    public Unit getMainFactorUnit() {
+        return mainFactorUnit;
+    }
+
+    public void setMainFactorUnit(Unit mainFactorUnit) {
+        this.mainFactorUnit = mainFactorUnit;
+    }
 }

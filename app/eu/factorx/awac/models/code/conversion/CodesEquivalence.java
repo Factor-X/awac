@@ -17,7 +17,11 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 				query = "select eq from CodesEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey and eq.referencedCodeList = :referencedCodeList"),
 		@NamedQuery(name = CodesEquivalence.COUNT_SUBLIST_EQUIVALENCES,
 				query = "select count(ce.id) from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey and ce.codeList = :codeList and ce.referencedCodeList = :referencedCodeList"),
-		@NamedQuery(name = CodesEquivalence.REMOVE_ALL, query = "delete from CodesEquivalence ce where ce.id is not null"),
+		@NamedQuery(name = CodesEquivalence.COUNT_LINKED_LIST_EQUIVALENCES,
+				query = "select count(ce.id) from CodesEquivalence ce where ce.codeList = :codeList and ce.codeKey <> ce.referencedCodeKey"),
+		@NamedQuery(name = CodesEquivalence.FIND_ALL_LINKED_LISTS_DATA,
+				query = "select ce from CodesEquivalence ce where ce.codeKey <> ce.referencedCodeKey"),
+		@NamedQuery(name = CodesEquivalence.REMOVE_ALL, query = "delete from CodesEquivalence ce where ce.id is not null")
 })
 public class CodesEquivalence extends AuditedAbstractEntity {
 
@@ -43,6 +47,10 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 	public static final String COUNT_SUBLIST_EQUIVALENCES = "CodesEquivalence.countSublistEquivalences";
 
 	public static final String REMOVE_ALL = "CodesEquivalence.removeAll";
+
+	public static final String COUNT_LINKED_LIST_EQUIVALENCES = "CodesEquivalence.countLinkedListEquivalences";
+
+	public static final String FIND_ALL_LINKED_LISTS_DATA = "CodesEquivalence.findAllLinkedListsData";
 
 	public static final String CODE_LIST_PROPERTY_NAME = "codeList";
 	public static final String CODE_KEY_PROPERTY_NAME = "codeKey";

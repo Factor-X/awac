@@ -1,14 +1,38 @@
 div.verification_manage
     span
-        h1 Gestion des utilisateurs
+        h1 Information sur les calculateurs
 
     table.table
         tr
             th
             th(ng-repeat="(key,info) in data",style="width:15%;text-align:center") {{key}}
+
+        tr
+            th Français
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                span(style="color: darkgreen", ng-show="info.frEnabled") Activé
+                span(style="color: darkred", ng-hide="info.frEnabled") Désactivé
+        tr
+            th Néerlandais
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                span(style="color: darkgreen", ng-show="info.nlEnabled") Activé
+                span(style="color: darkred", ng-hide="info.nlEnabled") Désactivé
+                button.button(type="button", ng-click="toggleLanguageEnabled(key,'nl')")
+                    i.fa.fa-exchange
+
+        tr
+            th Anglais
+            td(ng-repeat="(key,info) in data",style="text-align:center")
+                span(style="color: darkgreen", ng-show="info.enEnabled") Activé
+                span(style="color: darkred", ng-hide="info.enEnabled") Désactivé
+                button.button(type="button", ng-click="toggleLanguageEnabled(key,'en')")
+                    i.fa.fa-exchange
+
+
         tr
             th Nombre d'organisations enregistré
             td(ng-repeat="(key,info) in data",style="text-align:center") {{info.total}}
+
         tr
             th Nombre d'organisations partageant leurs données
             td(ng-repeat="(key,info) in data",style="text-align:center") {{info.shareData}}

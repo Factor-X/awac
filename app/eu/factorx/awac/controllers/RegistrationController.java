@@ -350,6 +350,7 @@ public class RegistrationController extends AbstractController {
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
 
 		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
 		String awacInterfaceTypeFragment;
@@ -370,10 +371,16 @@ public class RegistrationController extends AbstractController {
 		String link = awacHostname + awacInterfaceTypeFragment + awacLoginUrlFragment;
 		//String link = awacHostname + awacLoginUrlFragment;
 
-		values.put("subject", subject);
-		values.put("link", link);
-		values.put("hostname", awacHostname);
-		values.put("identifier", account.getIdentifier());
+        content = content.replace("${identifier}",account.getIdentifier());
+        content = content.replace("${link}",link);
+
+        values.put("subject", subject);
+        values.put("content", content);
+
+//		values.put("subject", subject);
+//		values.put("link", link);
+//		values.put("hostname", awacHostname);
+//		values.put("identifier", account.getIdentifier());
 
 
 		String velocityContent = velocityGeneratorService.generate("registerInvitation.vm", values);

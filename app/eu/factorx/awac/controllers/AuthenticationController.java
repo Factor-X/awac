@@ -250,10 +250,15 @@ public class AuthenticationController extends AbstractController {
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		String title = traductions.get("RESET_PASSWORD_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+        String content = traductions.get("RESET_PASSWORD_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
 
-		Map values = new HashMap<String, Object>();
+
+        Map values = new HashMap<String, Object>();
 		values.put("title", title);
-		values.put("password", password);
+        content = content.replace("${password}",password);
+        values.put("content", content);
+
+		//values.put("password", password);
 
 
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);

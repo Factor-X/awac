@@ -1,30 +1,13 @@
 package eu.factorx.awac.buisness.bad.enterprise;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.status;
-
-import java.util.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import play.db.jpa.JPA;
-import play.libs.Json;
-import play.mvc.Result;
-import play.test.FakeRequest;
-
 import com.fasterxml.jackson.databind.JsonNode;
-
 import eu.factorx.awac.controllers.SecuredController;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
+import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
-import eu.factorx.awac.models.code.type.QuestionCode;
-import eu.factorx.awac.models.code.type.UnitCode;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.reporting.BaseActivityData;
@@ -32,7 +15,21 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.enterprise.BaseActivityDataAE_BAD2B;
+import eu.factorx.awac.service.knowledge.activity.contributor.enterprise.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import play.db.jpa.JPA;
+import play.libs.Json;
+import play.mvc.Result;
+import play.test.FakeRequest;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.status;
 
 /*
  * Test for bad AE_BAD2B

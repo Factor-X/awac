@@ -1,0 +1,22 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AEV94")
+
+            mm-awac-question(question-code="AEV95", ng-optional="true")
+
+        .horizontal_separator
+        mm-awac-section(title-code="AEV96")
+
+            mm-awac-sub-title(question-code="AEV97")
+
+            mm-awac-repetition-name(question-code="AEV98", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-question(question-set-code="AEV98", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV98')")
+                mm-awac-question(question-code="AEV99",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV100",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV101",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV102",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV103",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV104",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+                mm-awac-question(question-code="AEV105",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
+            mm-awac-repetition-add-button(question-set-code="AEV98")

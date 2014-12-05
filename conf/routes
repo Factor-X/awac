@@ -9,7 +9,7 @@ GET         /                                                               @eu.
 GET         /enterprise                                                     @eu.factorx.awac.controllers.ApplicationController.calculator(app= "enterprise")
 GET         /municipality                                                   @eu.factorx.awac.controllers.ApplicationController.calculator(app= "municipality")
 GET         /event                                                          @eu.factorx.awac.controllers.ApplicationController.calculator(app= "event")
-GET         /little-emitter                                                 @eu.factorx.awac.controllers.ApplicationController.calculator(app= "little-emitter")
+GET         /little_emitter                                                 @eu.factorx.awac.controllers.ApplicationController.calculator(app= "little-emitter")
 GET         /household                                                      @eu.factorx.awac.controllers.ApplicationController.calculator(app= "household")
 GET         /verification                                                   @eu.factorx.awac.controllers.ApplicationController.verification()
 GET         /admin                                                          @eu.factorx.awac.controllers.ApplicationController.admin()
@@ -164,7 +164,7 @@ POST        /awac/organization/update                                       @eu.
 #
 # organization event
 GET         /awac/organization/events/load                                  @eu.factorx.awac.controllers.OrganizationEventController.load()
-GET         /awac/organization/events/byOrganization/:organization          @eu.factorx.awac.controllers.OrganizationEventController.loadEventsByOrganization(organization:Long)
+GET         /awac/organization/events/byOrganization/:organization          @eu.factorx.awac.controllers.OrganizationEventController.loadEventsByOrganization(organization:String)
 POST        /awac/organization/events/save                                  @eu.factorx.awac.controllers.OrganizationEventController.saveEvent()
 
 #
@@ -208,17 +208,21 @@ POST        /awac/admin/factors/update                                      @eu.
 POST        /awac/admin/factors/create                                      @eu.factorx.awac.controllers.AdminController.createFactor()
 GET         /awac/admin/factors/export                                      @eu.factorx.awac.controllers.AdminController.exportFactors()
 
-GET         /awac/admin/translations/sublists/load                          @eu.factorx.awac.controllers.TranslationAdminController.loadSublists()
-POST        /awac/admin/translations/sublists/save                          @eu.factorx.awac.controllers.TranslationAdminController.updateSublist()
-GET         /awac/admin/translations/baselists/load                         @eu.factorx.awac.controllers.TranslationAdminController.loadBaseLists()
-POST        /awac/admin/translations/baselists/save                         @eu.factorx.awac.controllers.TranslationAdminController.updateBaseLists()
-GET         /awac/admin/translations/codelabels/load/:codeLists             @eu.factorx.awac.controllers.TranslationAdminController.loadCodeLabels(codeLists:String)
-POST        /awac/admin/translations/codelabels/save                        @eu.factorx.awac.controllers.TranslationAdminController.updateCodeLabels()
-GET         /awac/admin/translations/surveyslabels/load                     @eu.factorx.awac.controllers.TranslationAdminController.loadSurveysLabels()
-POST        /awac/admin/translations/surveyslabels/save                     @eu.factorx.awac.controllers.TranslationAdminController.updateSurveysLabels()
+GET         /awac/admin/translations/sublists/load                               @eu.factorx.awac.controllers.TranslationAdminController.loadSublists()
+POST        /awac/admin/translations/sublists/save                               @eu.factorx.awac.controllers.TranslationAdminController.updateSublist()
+GET         /awac/admin/translations/baselists/load                              @eu.factorx.awac.controllers.TranslationAdminController.loadBaseLists()
+POST        /awac/admin/translations/baselists/save                              @eu.factorx.awac.controllers.TranslationAdminController.updateBaseLists()
+GET         /awac/admin/translations/linkedlists/load                            @eu.factorx.awac.controllers.TranslationAdminController.loadLinkedLists()
+POST        /awac/admin/translations/linkedlists/save                            @eu.factorx.awac.controllers.TranslationAdminController.updateLinkedLists()
+GET         /awac/admin/translations/codelabels/load/:codeLists                  @eu.factorx.awac.controllers.TranslationAdminController.loadCodeLabels(codeLists:String)
+POST        /awac/admin/translations/codelabels/save                             @eu.factorx.awac.controllers.TranslationAdminController.updateCodeLabels()
+GET         /awac/admin/translations/surveyslabels/load                          @eu.factorx.awac.controllers.TranslationAdminController.loadSurveysLabels()
+POST        /awac/admin/translations/surveyslabels/save                          @eu.factorx.awac.controllers.TranslationAdminController.updateSurveysLabels()
 
-GET         /awac/admin/organizationData                                    @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
-POST        /awac/admin/organizationData/sendEmail                          @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+GET         /awac/admin/organizationData                                         @eu.factorx.awac.controllers.OrganizationDataController.getOrganizationData()
+POST        /awac/admin/organizationData/sendEmail                               @eu.factorx.awac.controllers.OrganizationDataController.sendEmail()
+GET         /awac/admin/organizationData/getLanguagesData                        @eu.factorx.awac.controllers.OrganizationDataController.getLanguagesData()
+GET         /awac/admin/organizationData/toggleLanguage/:calculator/:lang        @eu.factorx.awac.controllers.OrganizationDataController.toggleLanguage(calculator:String,lang:String)
 
 GET         /awac/admin/translations/wysiwyg/all                            @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()
 POST        /awac/admin/translations/wysiwyg/update                         @eu.factorx.awac.controllers.AdminController.updateWysiwygDocument()

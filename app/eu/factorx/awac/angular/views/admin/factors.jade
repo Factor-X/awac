@@ -44,7 +44,7 @@ div.factors
                         td
                             span(ng-bind-html="'FACTORS_TABLE_DETAILS_VALUE' | translate")
                         td
-                            input(type="number", step="any", ng-model="fv.value")
+                            input.align-right(type="text", mm-force-numbers, ng-model="fv.value")
                         td
                             span tCO2e
                             span &nbsp;/&nbsp;

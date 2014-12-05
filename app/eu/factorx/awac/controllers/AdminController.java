@@ -21,7 +21,9 @@ import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.*;
+import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.CUD;
+import eu.factorx.awac.util.MyrmexFatalException;
 import eu.factorx.awac.util.data.importer.CodeLabelImporter;
 import eu.factorx.awac.util.data.importer.FactorImporter;
 import eu.factorx.awac.util.data.importer.IndicatorImporter;
@@ -215,7 +217,7 @@ public class AdminController extends AbstractController {
                 dto.getActivitySource(),
                 unitCategory);
 
-            throw new Exception("FACTOR ALREADY EXISTS");
+            throw new MyrmexFatalException(BusinessErrorType.FACTOR_ALREADY_EXISTS);
 
         } catch (NoResultException e) {
             Integer nextKey = factorService.getNextKey();
@@ -224,7 +226,7 @@ public class AdminController extends AbstractController {
                 new IndicatorCategoryCode(dto.getIndicatorCategory()),
                 new ActivityTypeCode(dto.getActivityType()),
                 new ActivitySourceCode(dto.getActivitySource()),
-                unitCategory.getMainUnit(),
+                unitCategory.getMainFactorUnit(),
                 unitCategoryOut.getMainUnit(),
                 dto.getOrigin()
             );
@@ -294,7 +296,7 @@ public class AdminController extends AbstractController {
                             }
 
                             if (factorValueDTO.getDateOut() != null) {
-                                factorValue.setDateIn(Integer.valueOf(factorValueDTO.getDateOut()));
+                                factorValue.setDateOut(Integer.valueOf(factorValueDTO.getDateOut()));
                             } else {
                                 factorValue.setDateOut(null);
                             }

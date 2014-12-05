@@ -1,0 +1,73 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+
+        mm-awac-section(title-code="AEV38")
+
+            mm-awac-question(question-code="AEV39", ng-optional="true")
+            mm-awac-question(question-code="AEV40")
+            mm-awac-question(question-code="AEV41")
+
+            mm-awac-sub-title(question-code="AEV42")
+            mm-awac-question(question-code="AEV43")
+            mm-awac-question(question-code="AEV44")
+            mm-awac-question(question-code="AEV45")
+            mm-awac-question(question-code="AEV46")
+            mm-awac-question(question-code="AEV47")
+            mm-awac-question(question-code="AEV48")
+            mm-awac-question(question-code="AEV49")
+            mm-awac-question(question-code="AEV50")
+            mm-awac-question(question-code="AEV51")
+            mm-awac-question(question-code="AEV52")
+            mm-awac-question(question-code="AEV53")
+            mm-awac-question(question-code="AEV54")
+            mm-awac-question(question-code="AEV55")
+            mm-awac-question(question-code="AEV56")
+
+    .horizontal_separator
+        mm-awac-section(title-code="AEV57")
+
+            mm-awac-repetition-name(question-code="AEV58", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-question(question-set-code="AEV58", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV58')")
+                mm-awac-question(question-code="AEV59",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
+                mm-awac-question(question-code="AEV60",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
+                mm-awac-question(question-code="AEV61",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
+                mm-awac-question(question-code="AEV62",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
+                mm-awac-question(question-code="AEV63",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
+            mm-awac-repetition-add-button(question-set-code="AEV58")
+
+        .horizontal_separator
+        mm-awac-section(title-code="AEV64")
+            mm-awac-question(question-code="AEV65", ng-optional="true")
+
+            mm-awac-sub-title(question-code="AEV66")
+
+            mm-awac-repetition-name(question-code="AEV67", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-question(question-set-code="AEV67", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV67')")
+                mm-awac-question(question-code="AEV68",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")
+                mm-awac-question(question-code="AEV74",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")
+                mm-awac-question(question-code="AEV76",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")
+                mm-awac-question(question-code="AEV77",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")
+            mm-awac-repetition-add-button(question-set-code="AEV67")
+
+            mm-awac-sub-title(question-code="AEV78")
+            mm-awac-question(question-code="AEV79")
+            mm-awac-question(question-code="AEV80")
+            mm-awac-question(question-code="AEV81")
+            mm-awac-question(question-code="AEV82")
+            mm-awac-question(question-code="AEV83")
+
+            mm-awac-sub-title(question-code="AEV84")
+
+            mm-awac-repetition-name(question-code="AEV85", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-question(question-set-code="AEV85", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV85')")
+                mm-awac-question(question-code="AEV86",ng-repetition-map="itLevel1",ng-map-index="{'AEV85':$index}")
+                mm-awac-question(question-code="AEV87",ng-repetition-map="itLevel1",ng-map-index="{'AEV85':$index}")
+                mm-awac-question(question-code="AEV88",ng-repetition-map="itLevel1",ng-map-index="{'AEV85':$index}")
+                mm-awac-question(question-code="AEV89",ng-repetition-map="itLevel1",ng-map-index="{'AEV85':$index}")
+                mm-awac-question(question-code="AEV90",ng-repetition-map="itLevel1",ng-map-index="{'AEV85':$index}")
+            mm-awac-repetition-add-button(question-set-code="AEV85")
+
+            mm-awac-sub-title(question-code="AEV91")
+            mm-awac-question(question-code="AEV92")
+            mm-awac-question(question-code="AEV93")

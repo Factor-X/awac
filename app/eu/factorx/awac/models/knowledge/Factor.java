@@ -136,11 +136,12 @@ public class Factor extends AuditedAbstractEntity {
 	public void setValues(List<FactorValue> values) {
 		this.values = values;
 	}
-
+/*
 	public Double getCurrentValue() {
 		FactorValue factorValue = this.values.get(0); // TODO Find this value from the current date
 		return factorValue.getValue();
 	}
+*/
 
 	@Override
 	public String toString() {

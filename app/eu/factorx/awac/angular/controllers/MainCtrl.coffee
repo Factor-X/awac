@@ -16,8 +16,7 @@ angular.module('app').run (loggerService) ->
 
 angular
 .module('app.controllers')
-.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash,$compile,$element,$window) ->
-
+.controller "MainCtrl", ($scope, downloadService, translationService, $sce, $location, $route, $routeParams, modalService, $timeout, messageFlash, $compile, $element, $window) ->
     $scope.displayMenu = false
     $scope.displayLittleMenu = false
 
@@ -37,7 +36,7 @@ angular
     #
     if $scope.$root.instanceName != "verification" && $scope.$root.instanceName != "admin"
         directive = $compile("<mm-awac-" + $scope.$root.instanceName + "-menu></mm-awac-" + $scope.$root.instanceName + "_menu>")($scope)
-        p=$('.inject-menu:first',$element)
+        p = $('.inject-menu:first', $element)
         $(directive).insertAfter p
 
     #
@@ -97,22 +96,21 @@ angular
             $scope.displayLittleMenu = false
 
 
-
     #
     # Periods
     #
     $scope.periodKey = null
 
-    $scope.$watch '$root.scopeSelectedId', (o,n) ->
+    $scope.$watch '$root.scopeSelectedId', (o, n) ->
         if o != n
             $scope.computeScopeAndPeriod()
 
-    $scope.$watch '$root.periodSelectedKey', (o,n) ->
+    $scope.$watch '$root.periodSelectedKey', (o, n) ->
         if o != n
             $scope.computeScopeAndPeriod()
 
     $scope.computeScopeAndPeriod = ->
-        console.log '----->>>'+$scope.$root.periodSelectedKey+"-"+$scope.$root.scopeSelectedId
+        console.log '----->>>' + $scope.$root.periodSelectedKey + "-" + $scope.$root.scopeSelectedId
         if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
             $routeParams.form = $route.current.params.form
@@ -124,8 +122,8 @@ angular
                     url = $scope.$root.getDefaultRoute()
                     $scope.$root.nav url
                 else
-                    p=p.replace(new RegExp("\\/:period\\b", 'g'), '')
-                    p=p.replace(new RegExp("\\/:scope\\b", 'g'), '')
+                    p = p.replace(new RegExp("\\/:period\\b", 'g'), '')
+                    p = p.replace(new RegExp("\\/:scope\\b", 'g'), '')
                     for k,v of $routeParams
                         p = p.replace(new RegExp("\\:" + k + "\\b", 'g'), v)
 
@@ -136,7 +134,6 @@ angular
             $scope.loadPeriodForComparison()
             $scope.loadFormProgress()
             $scope.$root.testCloseable()
-
 
 
     $scope.periodsForComparison = [
@@ -166,7 +163,7 @@ angular
                     $scope.periodsForComparison = [
                         {'key': 'default', 'label': translationService.get('NO_PERIOD_SELECTED')}
                     ]
-                    currentComparisonFounded=false
+                    currentComparisonFounded = false
                     for period in result.data.periodDTOList
                         if period.key != $scope.$root.periodSelectedKey
                             $scope.periodsForComparison.push period
@@ -232,16 +229,16 @@ angular
 
     $scope.cancelVerification = ->
         data =
-            url:"/awac/verification/setStatus"
-            desc:'CANCEL_VERIFICATION_DESC'
-            successMessage:'CHANGES_SAVED'
-            title:'CANCEL_VERIFICATION_TITLE'
+            url: "/awac/verification/setStatus"
+            desc: 'CANCEL_VERIFICATION_DESC'
+            successMessage: 'CHANGES_SAVED'
+            title: 'CANCEL_VERIFICATION_TITLE'
             data:
-                scopeId:$scope.$root.scopeSelectedId
-                periodKey:$scope.$root.periodSelectedKey
-                newStatus:'VERIFICATION_STATUS_REJECTED'
-            afterSave:->
-                $scope.$root.verificationRequest =null
+                scopeId: $scope.$root.scopeSelectedId
+                periodKey: $scope.$root.periodSelectedKey
+                newStatus: 'VERIFICATION_STATUS_REJECTED'
+            afterSave: ->
+                $scope.$root.verificationRequest = null
                 $scope.$root.$broadcast 'CLEAN_VERIFICATION'
         modalService.show modalService.PASSWORD_CONFIRMATION, data
 
@@ -254,21 +251,21 @@ angular
                 comment: $scope.$root.verificationRequest.verificationRejectedComment
             modalService.show modalService.VERIFICATION_FINALIZATION_VISUALIZATION, data
 
-    $scope.resubmitVerification =->
+    $scope.resubmitVerification = ->
         data =
-            url:"/awac/verification/setStatus"
-            desc:"VERIFICATION_RESUBMIT_DESC"
-            successMessage:"CHANGES_SAVED"
-            title:"VERIFICATION_RESUBMIT_TITLE"
+            url: "/awac/verification/setStatus"
+            desc: "VERIFICATION_RESUBMIT_DESC"
+            successMessage: "CHANGES_SAVED"
+            title: "VERIFICATION_RESUBMIT_TITLE"
             data:
-                scopeId:$scope.$root.scopeSelectedId
-                periodKey:$scope.$root.periodSelectedKey
-                newStatus:'VERIFICATION_STATUS_VERIFICATION'
-            afterSave:->
-                $scope.$root.verificationRequest?.status ='VERIFICATION_STATUS_REJECTED'
+                scopeId: $scope.$root.scopeSelectedId
+                periodKey: $scope.$root.periodSelectedKey
+                newStatus: 'VERIFICATION_STATUS_VERIFICATION'
+            afterSave: ->
+                $scope.$root.verificationRequest?.status = 'VERIFICATION_STATUS_REJECTED'
         modalService.show modalService.PASSWORD_CONFIRMATION, data
 
-    $scope.consultVerification =->
+    $scope.consultVerification = ->
         modalService.show modalService.VERIFICATION_DOCUMENT
 
     #
@@ -288,31 +285,31 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.languages = []
 
     $rootScope.closeableForms = false
-    $rootScope.closedForms =false
+    $rootScope.closedForms = false
 
-    $rootScope.languages[0] = {
-        value: 'fr'
-        label: 'Français'
-    }
-    ###
-    $rootScope.languages[1] = {
-        value: 'en'
-        label: 'English'
-    }
-    $rootScope.languages[2] = {
-        value: 'nl'
-        label: 'Neederlands'
-    }
-    ###
+    downloadService.getJson '/awac/translations/available/' + $rootScope.instanceName, (result) ->
+        if result.success
+            if result.data.frEnabled
+                $rootScope.languages.push
+                    value: 'fr'
+                    label: 'Français'
 
-    translationService.initialize('fr')
+            if result.data.nlEnabled
+                $rootScope.languages.push
+                    value: 'nl'
+                    label: 'Neederlands'
 
-    $rootScope.language = 'fr'
+            if result.data.enEnabled
+                $rootScope.languages.push
+                    value: 'en'
+                    label: 'English'
+            translationService.initialize($rootScope.languages[0].value)
+            $rootScope.language = $rootScope.languages[0].value
 
     $rootScope.$watch 'language', (lang) ->
-        translationService.initialize(lang)
-        tmhDynamicLocale.set(lang.toLowerCase())
-    #TODO save the langauge changement
+        if lang
+            translationService.initialize(lang)
+            tmhDynamicLocale.set(lang.toLowerCase())
 
     #
     # getRegisterKey
@@ -335,7 +332,10 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     #
     $rootScope.hideHeader = () ->
         #console.log("hideHeader:" + $location.path().substring(0, 13))
-        return ($location.path().substring(0, 6) == "/login" || $location.path().substring(0, 13) == "/registration"  || $location.path().substring(0, 26) == "/verification_registration")
+        return (
+                $location.path().substring(0, 6) == "/login" ||
+                $location.path().substring(0, 13) == "/registration" ||
+                $location.path().substring(0, 26) == "/verification_registration")
 
 
     #
@@ -345,33 +345,31 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         downloadService.postJson '/awac/logout', null, (result) ->
             console.log 'logout !! '
             $rootScope.currentPerson = null
-            $rootScope.periodSelectedKey=null
-            $rootScope.scopeSelectedId=null
-            $rootScope.mySites=null
+            $rootScope.periodSelectedKey = null
+            $rootScope.scopeSelectedId = null
+            $rootScope.mySites = null
             $rootScope.organizationName = null
             # $location.path('/login')
             location.href = '/' + $rootScope.instanceName
 
 
-
-    $rootScope.testForm = (period,scope) ->
+    $rootScope.testForm = (period, scope) ->
         if $rootScope.mySites?
             for site in $rootScope.mySites
                 if parseFloat(site.id) == parseFloat(scope)
                     if $rootScope.instanceName == 'enterprise'
                         for periodToFind in  site.listPeriodAvailable
-                            if period+"" == periodToFind.key+""
+                            if period + "" == periodToFind.key + ""
                                 return true
                     else
                         for periodToFind in  $rootScope.periods
-                            if period+"" == periodToFind.key+""
+                            if period + "" == periodToFind.key + ""
                                 return true
         return false
     #
     # success after login => store some datas, display the path
     #
     $rootScope.loginSuccess = (data, skipRedirect) ->
-
         console.log "DATA connection : "
         console.log angular.copy data
 
@@ -384,13 +382,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
         # TODO change defaultSiteId by defaultProductId
         if !!data.defaultSiteId && !!data.defaultPeriod
-            if $rootScope.testForm(data.defaultSiteId,data.defaultPeriod) == true
-                scopeSelectedId =data.defaultSiteId
-                periodSelectedKey =data.defaultPeriod
+            if $rootScope.testForm(data.defaultSiteId, data.defaultPeriod) == true
+                scopeSelectedId = data.defaultSiteId
+                periodSelectedKey = data.defaultPeriod
         else if data.defaultSiteId?
             for scope in $rootScope.mySites
                 if scope.id == data.defaultSiteId
-                    scopeSelectedId =data.defaultSiteId
+                    scopeSelectedId = data.defaultSiteId
 
         if !scopeSelectedId?
             if $rootScope.mySites.length > 0
@@ -405,8 +403,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     else
                         periodSelectedKey = $rootScope.periods[0].key
 
-        $rootScope.scopeSelectedId =scopeSelectedId
-        $rootScope.periodSelectedKey =periodSelectedKey
+        $rootScope.scopeSelectedId = scopeSelectedId
+        $rootScope.periodSelectedKey = periodSelectedKey
 
         if $rootScope.scopeSelectedId?
             $rootScope.computeAvailablePeriod($rootScope.mySites[0].scope)
@@ -415,14 +413,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
-        console.log "to default form :"+$rootScope.getDefaultRoute()
+        console.log "to default form :" + $rootScope.getDefaultRoute()
         $rootScope.nav $rootScope.getDefaultRoute()
 
     $rootScope.$watch "mySites", ->
         $rootScope.computeAvailablePeriod()
 
     $rootScope.computeAvailablePeriod = (scopeId) ->
-
         if $rootScope.instanceName == 'enterprise'
             if !scopeId?
                 scopeId = $rootScope.scopeSelectedId
@@ -431,13 +428,13 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     if site.scope == scopeId
                         $rootScope.availablePeriods = site.listPeriodAvailable
 
-                currentPeriodFounded=false
+                currentPeriodFounded = false
                 if $rootScope.availablePeriods?
                     for period in $rootScope.availablePeriods
                         if period.key == $rootScope.periodSelectedKey
                             currentPeriodFounded = true
                     if not currentPeriodFounded
-                        if $rootScope.availablePeriods.length>0
+                        if $rootScope.availablePeriods.length > 0
                             $rootScope.periodSelectedKey = $rootScope.availablePeriods[0].key
                 else
                     $rootScope.availablePeriods = null
@@ -521,9 +518,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
         if canBeContinue
             # if this is a form, unlock it
             if $rootScope.getMainScope()?.formIdentifier? && $rootScope.currentPerson? && !!$rootScope.lastPeriodSelectedKey && !!$rootScope.lastScopeSelectedId && !!$rootScope.lastFormIdentifier
-                downloadService.getJson "/awac/answer/unlockForm/"+$rootScope.lastFormIdentifier + "/" + $rootScope.lastPeriodSelectedKey + "/" + $rootScope.lastScopeSelectedId, (result)->
+                downloadService.getJson "/awac/answer/unlockForm/" + $rootScope.lastFormIdentifier + "/" + $rootScope.lastPeriodSelectedKey + "/" + $rootScope.lastScopeSelectedId, (result)->
 
-            routeWithScopeAndPeriod = ['/form','/results','/actions']
+            routeWithScopeAndPeriod = ['/form', '/results', '/actions']
             for route in routeWithScopeAndPeriod
                 if loc.substring(0, route.length) == route
                     if not $rootScope.periodSelectedKey or not $rootScope.scopeSelectedId
@@ -541,16 +538,15 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.testCloseable = ->
         if $rootScope.instanceName != 'verification'
             if !!$rootScope.periodSelectedKey and !!$rootScope.scopeSelectedId
-                downloadService.getJson "/awac/answer/testClosing/"+$rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
+                downloadService.getJson "/awac/answer/testClosing/" + $rootScope.periodSelectedKey + "/" + $rootScope.scopeSelectedId, (result)->
                     if result.success
                         $rootScope.closeableForms = result.data.closeable
-                        $rootScope.closedForms =result.data.closed
+                        $rootScope.closedForms = result.data.closed
                         $rootScope.verificationRequest = result.data.verificationRequest
 
     $rootScope.closeForms = ->
         if $rootScope.periodSelectedKey? and $rootScope.scopeSelectedId?
             modalService.show(modalService.CONFIRM_CLOSING)
-
 
 
     $rootScope.showHelp = () ->

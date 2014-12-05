@@ -1,0 +1,77 @@
+.admin-translation
+
+    mm-admin-translations-navigation-bar
+
+    .translation-view
+        .translation-title Listes liées
+
+        .waiting-data(ng-show="waitingData")
+            img(src="/assets/images/modal-loading.gif")
+            span Veuillez patienter...
+
+        table.translations-table(ng-hide="waitingData")
+            thead
+                tr
+                    th Détails
+                    th CodeList
+                    th Calculateur(s)
+            tbody
+                tr(ng-repeat-start="linkedList in linkedLists")
+                    td.details
+                        mm-plus-minus-toggle-button(ng-model="linkedList.$opened")
+                    td.codelist
+                        span.text {{ linkedList.codeList }}
+                    td.calculators
+                        span.text {{ linkedList.calculators }}
+                tr(ng-repeat-end, ng-show="linkedList.$opened").details
+                    td(colspan="3")
+                        .linkedlist-header
+                            .order-column #
+                            .key-column Clé
+                            .labels-columns
+                                .label-column Libellé EN
+                                .label-column Libellé FR
+                                .label-column Libellé NL
+                                .link-column ActivitySource
+                                .link-column ActivityType
+
+                        .linkedlist-content
+                            .linkedlist-items(ui-sortable="sortableOptions", ng-model="linkedList.items")
+                                .linkedlist-item(ng-repeat="item in linkedList.items")
+                                    .order-column {{ $index + 1 }}
+                                    .key-column {{ item.key }}
+                                    .labels-columns
+                                        .label-column
+                                            textarea(ng-model="item.labelEn")
+                                        .label-column
+                                            textarea(ng-model="item.labelFr")
+                                        .label-column
+                                            textarea(ng-model="item.labelNl")
+                                        .link-column
+                                            textarea(readonly) {{ getActivitySourceLabel(item.activitySourceKey) }}
+                                        .link-column
+                                            textarea(readonly) {{ getActivityTypeLabel(item.activityTypeKey) }}
+
+                            .linkedlist-add-item Ajouter un élément:
+                                .linkedlist-item
+                                    .order-column
+                                        button.button(type="button", ng-click="addItem(linkedList)", style="margin:0; min-height:22px; padding:0px 5px 2px 5px; border-radius:2px;")
+                                            span.fa.fa-plus-circle(style="vertical-align:middle;")
+                                    .key-column
+                                        input(ng-model="itemToAdd.key")
+                                    .labels-columns
+                                        .label-column
+                                            textarea(ng-model="itemToAdd.labelEn")
+                                        .label-column
+                                            textarea(ng-model="itemToAdd.labelFr")
+                                        .label-column
+                                            textarea(ng-model="itemToAdd.labelNl")
+                                        .link-column
+                                            select(ng-model="itemToAdd.activitySourceKey", ng-options="cl.key as cl.key + ' - ' + cl.label for cl in activitySourcesLabels")
+                                        .link-column
+                                            select(ng-model="itemToAdd.activityTypeKey", ng-options="cl.key as cl.key + ' - ' + cl.label for cl in activityTypesLabels")
+
+        .translation-actions
+            button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
+            button.button(type="button", ng-click="loadLinkedLists()", ng-disabled="isLoading", ng-hide="waitingData") Annuler
+                                  

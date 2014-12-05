@@ -1,0 +1,18 @@
+div
+    div.form-error-message(ng-show="errorMessage != null") {{errorMessage}}
+    div(ng-show="loading===false && errorMessage === null")
+        mm-awac-section(title-code="AEV2")
+
+            mm-awac-question(question-code="AEV3")
+
+            mm-awac-question(question-code="AEV4", ng-condition="getAnswer('AEV3').value == '4'")
+
+            mm-awac-question(question-code="AEV5")
+            
+            mm-awac-question(question-code="AEV6")
+
+            mm-awac-question(question-code="AEV7")
+
+            mm-awac-question(question-code="AEV8")
+
+            mm-awac-question(question-code="AEV9", ng-optional="true")
