@@ -69,9 +69,3 @@
         .translation-actions
             button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
             button.button(type="button", ng-click="undo()", ng-disabled="isLoading", ng-hide="waitingData") Annuler
-
-    .row
-        .col-md-6
-            pre {{ allBaseLists | json }}
-        .col-md-6
-            pre {{ originalData | json }}

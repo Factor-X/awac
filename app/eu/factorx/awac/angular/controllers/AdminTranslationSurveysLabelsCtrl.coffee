@@ -74,8 +74,8 @@ angular
 
             # show confirm
             params =
-                titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
-                messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+                titleKey: "CONFIRM_EXIT_TITLE"
+                messageKey: "CONFIRM_EXIT_MESSAGE"
                 onConfirm: () ->
                     $scope.ignoreChanges = true
                     $location.path(next.split('#')[1])
