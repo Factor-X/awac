@@ -1,6 +1,7 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationSubListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationSubListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.subLists = []
     $scope.codeLabels = {}
     $scope.isLoading = false

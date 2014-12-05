@@ -1,8 +1,9 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationSingleListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationSingleListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, state) ->
 
-    $scope.state = $scope.$parent.state
+    $scope.displayLittleFormMenu = displayLittleFormMenu
+    $scope.state = state
 
     $scope.baseLists = []
     $scope.codeLabels = {}

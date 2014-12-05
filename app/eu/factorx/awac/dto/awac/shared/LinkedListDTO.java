@@ -10,12 +10,15 @@ public class LinkedListDTO extends DTO {
 
 	private List<LinkedListItemDTO> items;
 
+	private String calculators;
+
 	public LinkedListDTO() {
 	}
 
-	public LinkedListDTO(String codeList, List<LinkedListItemDTO> items) {
+	public LinkedListDTO(String codeList, List<LinkedListItemDTO> items, String calculators) {
 		this.codeList = codeList;
 		this.items = items;
+		this.calculators = calculators;
 	}
 
 	public String getCodeList() {
@@ -32,5 +35,13 @@ public class LinkedListDTO extends DTO {
 
 	public void setItems(List<LinkedListItemDTO> items) {
 		this.items = items;
+	}
+
+	public String getCalculators() {
+		return calculators;
+	}
+
+	public void setCalculators(String calculators) {
+		this.calculators = calculators;
 	}
 }

@@ -1,0 +1,32 @@
+.admin-translation-nav
+
+    ul.nav.nav-pills.navbar-inverse
+        li.dropdown(role='presentation')
+            a.dropdown-toggle(data-toggle='dropdown', role='button', aria-expanded='false')
+                | Interface et Messages
+                span.caret
+            ul.dropdown-menu(role='menu')
+                li
+                    a(href="#/translation/interface") Interface
+                li
+                    a(href="#/translation/error-messages") Messages d'erreurs
+                li
+                    a(href="#/translation/emails") E-Mails
+
+        li
+            a(href="#/translation/forms") Questionnaires
+
+        li.dropdown(role='presentation')
+            a.dropdown-toggle(data-toggle='dropdown', role='button', aria-expanded='false')
+                | Listes de choix
+                span.caret
+            ul.dropdown-menu(role='menu')
+                li
+                    a(href="#/translation/base-lists") Listes de base
+                li
+                    a(href="#/translation/linked-lists") Listes liées
+                li
+                    a(href="#/translation/sub-lists") Sous-listes
+
+        li
+            a(href="#/translation/helps") Textes d'aide

@@ -12,14 +12,17 @@ public class BaseListDTO extends DTO {
 
 	private List<UpdateCodeLabelDTO> codeLabels = new ArrayList<>();
 
+	private String calculators;
+
 	public BaseListDTO() {
 		super();
 	}
 
-	public BaseListDTO(String codeList, List<UpdateCodeLabelDTO> codeLabels) {
+	public BaseListDTO(String codeList, List<UpdateCodeLabelDTO> codeLabels, String calculators) {
 		super();
 		this.codeList = codeList;
 		this.codeLabels = codeLabels;
+		this.calculators = calculators;
 	}
 
 	public String getCodeList() {
@@ -36,5 +39,13 @@ public class BaseListDTO extends DTO {
 
 	public void setCodeLabels(List<UpdateCodeLabelDTO> codeLabels) {
 		this.codeLabels = codeLabels;
+	}
+
+	public String getCalculators() {
+		return calculators;
+	}
+
+	public void setCalculators(String calculators) {
+		this.calculators = calculators;
 	}
 }

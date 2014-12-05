@@ -1,7 +1,8 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationLinkedListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper) ->
+.controller "AdminTranslationLinkedListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
 
+    $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.linkedLists = []
     $scope.activitySourcesLabels = []
     $scope.activityTypesLabels = []

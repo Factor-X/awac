@@ -8,6 +8,7 @@ import eu.factorx.awac.dto.awac.shared.*;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.conversion.CodesEquivalence;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.QuestionCode;
 import eu.factorx.awac.models.data.question.Question;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -50,7 +51,8 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadSublists() {
-		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData());
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
+		List<SubListDTO> subListDTOs = toSubListDTOs(codesEquivalenceService.findAllSublistsData(), interfaceTypesByCodeList);
 		return ok(new UpdateSubListsDTO(subListDTOs, getReferencedCodeListDTOs(subListDTOs)));
 	}
 
@@ -60,8 +62,9 @@ public class TranslationAdminController extends AbstractController {
 		UpdateSubListsDTO dto = extractDTOFromRequest(UpdateSubListsDTO.class);
 		Logger.info("dto.getSublists() = " + dto.getSublists());
 		Map<CodeList, List<SubListItemDTO>> newSubListDTOs = getSubListDTOMap(dto.getSublists());
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
-		for (SubListDTO oldSubListDTO : toSubListDTOs(codesEquivalenceService.findAllSublistsData())) {
+		for (SubListDTO oldSubListDTO : toSubListDTOs(codesEquivalenceService.findAllSublistsData(), interfaceTypesByCodeList)) {
 			CodeList codeList = CodeList.valueOf(oldSubListDTO.getCodeList());
 			CodeList referencedCodeList = CodeList.valueOf(oldSubListDTO.getReferencedCodeList());
 
@@ -180,18 +183,19 @@ public class TranslationAdminController extends AbstractController {
 	private List<LinkedListDTO> getLinkedListDTOs() {
 		List<LinkedListDTO> res = new ArrayList<>();
 
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 		Map<CodeList, Map<String, List<CodesEquivalence>>> codesEquivalences = getCodesEquivalencesMap(codesEquivalenceService.findAllLinkedListsData());
 		Map<CodeList, List<CodeLabel>> codeLabels = codeLabelService.findAllBaseLists();
 
 		for (CodeList codeList : codeLabels.keySet()) {
 			if (codesEquivalences.containsKey(codeList)) {
-				res.add(toLinkedListDTO(codeList, codeLabels.get(codeList), codesEquivalences.get(codeList)));
+				res.add(toLinkedListDTO(codeList, codeLabels.get(codeList), codesEquivalences.get(codeList), toString(interfaceTypesByCodeList.get(codeList))));
 			}
 		}
 		return res;
 	}
 
-	private LinkedListDTO toLinkedListDTO(CodeList codeList, List<CodeLabel> allCodeLabels, Map<String, List<CodesEquivalence>> allCodesEquivalences) {
+	private LinkedListDTO toLinkedListDTO(CodeList codeList, List<CodeLabel> allCodeLabels, Map<String, List<CodesEquivalence>> allCodesEquivalences, String calculators) {
 		List<LinkedListItemDTO> linkedListItemDTOs = new ArrayList<>();
 
 		for (CodeLabel codeLabel : allCodeLabels) {
@@ -205,7 +209,7 @@ public class TranslationAdminController extends AbstractController {
 			String activityTypeKey = links.get(CodeList.ActivityType);
 			linkedListItemDTOs.add(new LinkedListItemDTO(codeLabel.getId(), codeLabel.getKey(), codeLabel.getLabelEn(), codeLabel.getLabelFr(), codeLabel.getLabelNl(), codeLabel.getOrderIndex(), activitySourceKey, activityTypeKey));
 		}
-		return new LinkedListDTO(codeList.name(), linkedListItemDTOs);
+		return new LinkedListDTO(codeList.name(), linkedListItemDTOs, calculators);
 	}
 
 	private Map<CodeList, Map<String, List<CodesEquivalence>>> getCodesEquivalencesMap(List<CodesEquivalence> codesEquivalences) {
@@ -315,15 +319,27 @@ public class TranslationAdminController extends AbstractController {
 	private List<BaseListDTO> getBaseListDTOs() {
 		CodeList[] codeListsToExclude = {CodeList.TRANSLATIONS_SURVEY, CodeList.QUESTION,
 				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE};
+		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
 		List<BaseListDTO> baseListDTOs = new ArrayList<>();
 		for (Map.Entry<CodeList, List<CodeLabel>> entry : codeLabelService.findAllBaseLists().entrySet()) {
 			CodeList codeList = entry.getKey();
 			if (!ArrayUtils.contains(codeListsToExclude, codeList) && (!codesEquivalenceService.isLinkedList(codeList))) {
-				baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(entry.getValue())));
+				baseListDTOs.add(new BaseListDTO(codeList.name(), toCodeLabelDTOs(entry.getValue()), toString(interfaceTypesByCodeList.get(codeList))));
 			}
 		}
 		return baseListDTOs;
+	}
+
+	private String toString(List<InterfaceTypeCode> interfaceTypeCodes) {
+		if (interfaceTypeCodes == null) {
+			return "";
+		}
+		List<String> res = new ArrayList<>();
+		for (InterfaceTypeCode interfaceTypeCode : interfaceTypeCodes) {
+			res.add(interfaceTypeCode.getKey());
+		}
+		return StringUtils.join(res, ", ");
 	}
 
 	@Transactional(readOnly = true)
@@ -375,7 +391,7 @@ public class TranslationAdminController extends AbstractController {
 		return getCodeListDTOs(referencedCodeLists.toArray(new CodeList[referencedCodeLists.size()]));
 	}
 
-	private static List<SubListDTO> toSubListDTOs(List<CodesEquivalence> sublistsData) {
+	private List<SubListDTO> toSubListDTOs(List<CodesEquivalence> sublistsData, Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList) {
 		Map<CodeList, SubListDTO> sublistsMaps = new LinkedHashMap<>();
 
 		for (CodesEquivalence codesEquivalence : sublistsData) {
@@ -386,7 +402,7 @@ public class TranslationAdminController extends AbstractController {
 
 			SubListDTO subListDTO = sublistsMaps.get(codeList);
 			if (subListDTO == null) {
-				subListDTO = new SubListDTO(codeList.name(), referencedCodeList.name());
+				subListDTO = new SubListDTO(codeList.name(), referencedCodeList.name(), toString(interfaceTypesByCodeList.get(codeList)));
 				subListDTO.addItem(subListItemDTO);
 				sublistsMaps.put(codeList, subListDTO);
 			} else {

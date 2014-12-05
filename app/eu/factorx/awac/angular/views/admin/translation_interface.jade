@@ -1,42 +1,47 @@
-h4 Interface
+.admin-translation
 
-.waiting-data(ng-show="waitingData")
-    img(src="/assets/images/modal-loading.gif")
-    span Veuillez patienter...
+    mm-admin-translations-navigation-bar
 
-table.translations-table(ng-hide="waitingData")
-    thead
-        tr
-            th Détails
-            th Catégorie
+    .translation-view
+        h4 Interface
 
-    tbody
-        tr(ng-repeat-start="group in codeLabelsGroups")
-            td.details
-                mm-plus-minus-toggle-button(ng-model="group.opened")
-            td.topic
-                span.text {{ group.topic }}
-        tr(ng-repeat-end, ng-show="group.opened").details
-            td &nbsp;
-            td.topic-content
-                table.codelabels-table
-                    thead
-                        tr
-                            th Clé
-                            th Libellé EN
-                            th Libellé FR
-                            th Libellé NL
-                    tbody
-                        tr(ng-repeat="codeLabel in group.codeLabels")
-                            td.td-key {{ codeLabel.key }}
-                            td.td-label
-                                textarea(ng-model="codeLabel.labelEn")
-                            td.td-label
-                                textarea(ng-model="codeLabel.labelFr")
-                            td.td-label
-                                textarea(ng-model="codeLabel.labelNl")
+        .waiting-data(ng-show="waitingData")
+            img(src="/assets/images/modal-loading.gif")
+            span Veuillez patienter...
 
-br
-button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+        table.translations-table(ng-hide="waitingData")
+            thead
+                tr
+                    th Détails
+                    th Catégorie
+
+            tbody
+                tr(ng-repeat-start="group in codeLabelsGroups")
+                    td.details
+                        mm-plus-minus-toggle-button(ng-model="group.opened")
+                    td.topic
+                        span.text {{ group.topic }}
+                tr(ng-repeat-end, ng-show="group.opened").details
+                    td &nbsp;
+                    td.topic-content
+                        table.codelabels-table
+                            thead
+                                tr
+                                    th Clé
+                                    th Libellé EN
+                                    th Libellé FR
+                                    th Libellé NL
+                            tbody
+                                tr(ng-repeat="codeLabel in group.codeLabels")
+                                    td.td-key {{ codeLabel.key }}
+                                    td.td-label
+                                        textarea(ng-model="codeLabel.labelEn")
+                                    td.td-label
+                                        textarea(ng-model="codeLabel.labelFr")
+                                    td.td-label
+                                        textarea(ng-model="codeLabel.labelNl")
+
+        br
+        button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
+        button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
 

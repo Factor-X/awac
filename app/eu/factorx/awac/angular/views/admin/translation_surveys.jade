@@ -1,35 +1,40 @@
-h4 Données des formulaires
+.admin-translation
 
-.waiting-data(ng-show="waitingData")
-    img(src="/assets/images/modal-loading.gif")
-    span Veuillez patienter...
+    mm-admin-translations-navigation-bar
 
-div(ng-repeat="(calculatorCodeKey, calculatorForms) in formLabelsByCalculator", ng-hide="waitingData")
-    h5 {{ calculatorCodeKey }}
+    .translation-view
+        h4 Données des formulaires
 
-    table.translations-table
-        thead
-            tr
-                th Détails
-                th Formulaire
-        tbody
-            tr(ng-repeat-start="form in calculatorForms")
-                td.details
-                    mm-plus-minus-toggle-button(ng-model="form.opened")
-                td.codelist
-                    span.text {{ form.codeKey }}
-            tr(ng-repeat-end, ng-if="form.opened").details
-                td(colspan="2")
-                    .form-labels
-                        .form-labels-header
-                            .label-key Clé
-                            .question-labels
-                                .question-label Libellé En
-                                .question-label Libellé Fr
-                                .question-label Libellé Nl
-                        .form-labels-content(ng-repeat="questionSet in form.questionSets")
-                            mm-awac-question-set-tree(ng-model="questionSet")
+        .waiting-data(ng-show="waitingData")
+            img(src="/assets/images/modal-loading.gif")
+            span Veuillez patienter...
 
-br
-button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+        div(ng-repeat="(calculatorCodeKey, calculatorForms) in formLabelsByCalculator", ng-hide="waitingData")
+            h5 {{ calculatorCodeKey }}
+
+            table.translations-table
+                thead
+                    tr
+                        th Détails
+                        th Formulaire
+                tbody
+                    tr(ng-repeat-start="form in calculatorForms")
+                        td.details
+                            mm-plus-minus-toggle-button(ng-model="form.opened")
+                        td.codelist
+                            span.text {{ form.codeKey }}
+                    tr(ng-repeat-end, ng-if="form.opened").details
+                        td(colspan="2")
+                            .form-labels
+                                .form-labels-header
+                                    .label-key Clé
+                                    .question-labels
+                                        .question-label Libellé En
+                                        .question-label Libellé Fr
+                                        .question-label Libellé Nl
+                                .form-labels-content(ng-repeat="questionSet in form.questionSets")
+                                    mm-awac-question-set-tree(ng-model="questionSet")
+
+        br
+        button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
+        button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
