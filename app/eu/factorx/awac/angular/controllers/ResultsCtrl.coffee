@@ -175,6 +175,18 @@ angular
                         $scope.o.svgHistograms.R_4 = $scope.o.svgHistograms.RCo_4
                         $scope.o.svgHistograms.R_5 = $scope.o.svgHistograms.RCo_5
 
+                        $scope.o.svgHistogramsCEF.R_1 = $scope.o.svgHistogramsCEF.RCo_1
+                        $scope.o.svgHistogramsCEF.R_2 = $scope.o.svgHistogramsCEF.RCo_2
+                        $scope.o.svgHistogramsCEF.R_3 = $scope.o.svgHistogramsCEF.RCo_3
+                        $scope.o.svgHistogramsCEF.R_4 = $scope.o.svgHistogramsCEF.RCo_4
+                        $scope.o.svgHistogramsCEF.R_5 = $scope.o.svgHistogramsCEF.RCo_5
+
+                        $scope.o.reportCEFDTOs.R_1 = $scope.o.reportCEFDTOs.RCo_1
+                        $scope.o.reportCEFDTOs.R_2 = $scope.o.reportCEFDTOs.RCo_2
+                        $scope.o.reportCEFDTOs.R_3 = $scope.o.reportCEFDTOs.RCo_3
+                        $scope.o.reportCEFDTOs.R_4 = $scope.o.reportCEFDTOs.RCo_4
+                        $scope.o.reportCEFDTOs.R_5 = $scope.o.reportCEFDTOs.RCo_5
+
 
                     $scope.leftTotalEmissions = 0;
                     $scope.leftTotalScope1 = 0;

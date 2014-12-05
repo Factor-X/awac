@@ -151,6 +151,11 @@ div.results.pdf-able
                         div(ng-show="current_tab == 5")
                             h2
                                 span(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
+                                span &nbsp;(
+                                span(ng-bind-html="'USED_EMISSION_FACTORS' | translate")
+                                span :&nbsp;
+                                span {{ o.reportDTOs.R_1.rightPeriod }}
+                                span )
                             br
                             center
                                 .diagram(style="height: 10cm", ng-bind-html="o.svgHistogramsCEF.R_1 | trustAsHtml")
