@@ -58,7 +58,7 @@ initializeAdminRoutes = (defaultResolve) ->
                     displayLittleFormMenu: () ->
                         return true
                     state: () ->
-                        return 'error-message'
+                        return 'error-messages'
                 }, defaultResolve)
             }
         )

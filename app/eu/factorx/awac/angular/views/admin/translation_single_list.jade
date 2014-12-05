@@ -3,7 +3,7 @@
     mm-admin-translations-navigation-bar
 
     .translation-view
-        h4 {{ baseListLabel }}
+        .translation-title {{ baseListLabel }}
         table.translations-table(ng-hide="waitingData")
             tr
                 td.details
@@ -24,6 +24,6 @@
                                 td.td-label
                                     textarea(ng-model="codeLabel.labelNl")
 
-        br
-        button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-        button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+        .translation-actions
+            button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
+            button.button(type="button", ng-click="undo()", ng-disabled="isLoading", ng-hide="waitingData") Annuler

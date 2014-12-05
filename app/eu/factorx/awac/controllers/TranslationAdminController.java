@@ -60,7 +60,6 @@ public class TranslationAdminController extends AbstractController {
 	@Security.Authenticated(SecuredController.class)
 	public Result updateSublist() {
 		UpdateSubListsDTO dto = extractDTOFromRequest(UpdateSubListsDTO.class);
-		Logger.info("dto.getSublists() = " + dto.getSublists());
 		Map<CodeList, List<SubListItemDTO>> newSubListDTOs = getSubListDTOMap(dto.getSublists());
 		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
@@ -345,6 +344,7 @@ public class TranslationAdminController extends AbstractController {
 	@Transactional(readOnly = true)
 	@Security.Authenticated(SecuredController.class)
 	public Result loadCodeLabels(String codeLists) {
+		Logger.info("loadCodeLabels(codeLists = {})", codeLists);
 		UpdateCodeLabelsDTO dto = new UpdateCodeLabelsDTO();
 
 		String[] codeListsNames = StringUtils.split(codeLists, ',');

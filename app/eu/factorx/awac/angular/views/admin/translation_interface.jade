@@ -3,7 +3,7 @@
     mm-admin-translations-navigation-bar
 
     .translation-view
-        h4 Interface
+        .translation-title Interface
 
         .waiting-data(ng-show="waitingData")
             img(src="/assets/images/modal-loading.gif")
@@ -18,10 +18,10 @@
             tbody
                 tr(ng-repeat-start="group in codeLabelsGroups")
                     td.details
-                        mm-plus-minus-toggle-button(ng-model="group.opened")
+                        mm-plus-minus-toggle-button(ng-model="group.$opened")
                     td.topic
                         span.text {{ group.topic }}
-                tr(ng-repeat-end, ng-show="group.opened").details
+                tr(ng-repeat-end, ng-show="group.$opened").details
                     td &nbsp;
                     td.topic-content
                         table.codelabels-table
@@ -41,7 +41,7 @@
                                     td.td-label
                                         textarea(ng-model="codeLabel.labelNl")
 
-        br
-        button.button(type="button", ng-click="save()", ng-disabled="isLoading") Enregistrer les modifications
-        button.button(type="button", ng-click="undo()", ng-disabled="isLoading") Annuler
+        .translation-actions
+            button.button(type="button", ng-click="save()", ng-disabled="isLoading", ng-hide="waitingData") Enregistrer les modifications
+            button.button(type="button", ng-click="undo()", ng-disabled="isLoading", ng-hide="waitingData") Annuler
 

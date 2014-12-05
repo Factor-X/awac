@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationSubListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+.controller "AdminTranslationSubListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.subLists = []
     $scope.codeLabels = {}
@@ -19,20 +19,23 @@ angular
                 $scope.subLists = $scope.sortLinkedListsItems(result.data.sublists)
                 $scope.subLists = _.sortBy $scope.subLists, (list) ->
                     return list.codeList
+                $scope.initialSubLists = angular.copy($scope.subLists)
                 for codeLabelList in result.data.codeLabels
                     $scope.codeLabels[codeLabelList.code] = codeLabelHelper.sortCodeLabelsByNumericKey codeLabelList.codeLabels
                 $scope.waitingData = false
             return
         return
 
+    updateOrderIndexes = (baseLists) ->
+        for baseList in baseLists
+            for index, codeLabel of baseList.codeLabels
+                codeLabel.orderIndex = +index + 1
+        return baseLists
+
     $scope.save = ->
         $scope.isLoading = true
 
-        # update orderIndex field
-        for subList in $scope.subLists
-            for index, item of subList.items
-                item.orderIndex = +index + 1
-        data = {sublists: $scope.subLists}
+        data = {sublists: updateOrderIndexes($scope.subLists)}
 
         # post data
         downloadService.postJson "awac/admin/translations/sublists/save", data, (result) ->
@@ -65,5 +68,22 @@ angular
 
     $scope.getLabelByKey = (codeList, key) ->
         return codeLabelHelper.getLabelByKey($scope.codeLabels[codeList], key)
+
+    $scope.ignoreChanges = false
+
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless !$scope.ignoreChanges
+        eq = angular.equals($scope.initialSubLists, updateOrderIndexes($scope.subLists))
+        if !eq
+            event.preventDefault()
+
+            # show confirm
+            params =
+                titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
+                messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+                onConfirm: () ->
+                    $scope.ignoreChanges = true
+                    $location.path(next.split('#')[1])
+            modalService.show modalService.CONFIRM_DIALOG, params
 
     $scope.loadSubLists()

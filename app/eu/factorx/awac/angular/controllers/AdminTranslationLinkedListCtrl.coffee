@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationLinkedListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+.controller "AdminTranslationLinkedListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
 
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.linkedLists = []
@@ -32,6 +32,7 @@ angular
         downloadService.getJson "awac/admin/translations/linkedlists/load", (result) ->
             if result.success
                 $scope.linkedLists = $scope.sortLinkedListsItems(result.data.linkedLists)
+                $scope.initialLinkedLists = angular.copy($scope.linkedLists)
                 codeLabels = result.data.codeLabels
                 $scope.activitySourcesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels, {code: 'ActivitySource'}).codeLabels)
                 $scope.activityTypesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels, {code: 'ActivityType'}).codeLabels)
@@ -39,21 +40,24 @@ angular
             return
         return
 
+    updateOrderIndexes = (linkedLists) ->
+        # update orderIndex field
+        for linkedList in linkedLists
+            for index, item of linkedList.items
+                item.orderIndex = +index + 1
+        return linkedLists
+
     $scope.save = ->
         $scope.isLoading = true
 
-        # update orderIndex field
-        for linkedList in $scope.linkedLists
-            for index, item of linkedList.items
-                item.orderIndex = +index + 1
-        data = {linkedLists: $scope.linkedLists}
+        data = {linkedLists: updateOrderIndexes($scope.linkedLists)}
 
         # post data
         downloadService.postJson "awac/admin/translations/linkedlists/save", data, (result) ->
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
-                angular.extend($scope.linkedLists, $scope.sortLinkedListsItems(result.data.linkedLists))
+                $scope.loadLinkedLists()
             return
 
         return
@@ -83,5 +87,22 @@ angular
 
     $scope.getActivityTypeLabel = (key) ->
         return key + " - " + codeLabelHelper.getLabelByKey($scope.activityTypesLabels, key)
+
+    $scope.ignoreChanges = false
+
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless !$scope.ignoreChanges
+        eq = angular.equals($scope.initialLinkedLists, updateOrderIndexes($scope.linkedLists))
+        if !eq
+            event.preventDefault()
+
+            # show confirm
+            params =
+                titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
+                messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+                onConfirm: () ->
+                    $scope.ignoreChanges = true
+                    $location.path(next.split('#')[1])
+            modalService.show modalService.CONFIRM_DIALOG, params
 
     $scope.loadLinkedLists()

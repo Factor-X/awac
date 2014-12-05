@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+.controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
 
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
@@ -24,6 +24,7 @@ angular
                     return codeLabel.topic || ""
                 for topic, topicCodeLabels of codeLabelsByTopic
                     $scope.codeLabelsGroups.push({topic: topic, codeLabels: topicCodeLabels})
+                $scope.initialCodeLabelsGroups = angular.copy($scope.codeLabelsGroups)
             $scope.waitingData = false
             return
         return
@@ -42,6 +43,23 @@ angular
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                $scope.loadCodeLabels()
 
+    $scope.ignoreChanges = false
+
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless !$scope.ignoreChanges
+        eq = angular.equals($scope.initialCodeLabelsGroups, $scope.codeLabelsGroups)
+        if !eq
+            event.preventDefault()
+
+            # show confirm
+            params =
+                titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
+                messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+                onConfirm: () ->
+                    $scope.ignoreChanges = true
+                    $location.path(next.split('#')[1])
+            modalService.show modalService.CONFIRM_DIALOG, params
 
     $scope.loadCodeLabels()

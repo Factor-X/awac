@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "AdminTranslationBaseListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu) ->
+.controller "AdminTranslationBaseListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     fixedLists = ['ActivityCategory', 'ActivitySource', 'ActivitySubCategory', 'ActivityType', 'IndicatorCategory',
                   'BASE_INDICATOR', 'INDICATOR', 'INTERFACE_TYPE', 'REDUCING_ACTION_STATUS', 'REDUCING_ACTION_TYPE']
@@ -34,33 +34,41 @@ angular
             if result.success
                 allBaseLists = result.data.baseLists
                 $scope.allBaseLists = [getSystemBaseLists(allBaseLists), getActionsBaseLists(allBaseLists), getSurveysBaseLists(allBaseLists)]
+                $scope.originalData = updateOrderIndexes(angular.copy($scope.allBaseLists))
             $scope.waitingData = false
             return
         return
 
     getSystemBaseLists = (allBaseLists) ->
         res = []
-        res[0] = _.findWhere(allBaseLists, {codeList: 'ActivitySource'})
-        res[1] = _.findWhere(allBaseLists, {codeList: 'ActivityType'})
-        res[2] = _.findWhere(allBaseLists, {codeList: 'ActivityCategory'})
-        res[3] = _.findWhere(allBaseLists, {codeList: 'ActivitySubCategory'})
-        res[4] = _.findWhere(allBaseLists, {codeList: 'IndicatorCategory'})
-        res[5] = _.findWhere(allBaseLists, {codeList: 'INDICATOR'})
-        res[6] = _.findWhere(allBaseLists, {codeList: 'BASE_INDICATOR'})
-        res[7] = _.findWhere(allBaseLists, {codeList: 'INTERFACE_TYPE'})
+        res[0] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'ActivitySource'}))
+        res[1] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'ActivityType'}))
+        res[2] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'ActivityCategory'}))
+        res[3] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'ActivitySubCategory'}))
+        res[4] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'IndicatorCategory'}))
+        res[5] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'INDICATOR'}))
+        res[6] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'BASE_INDICATOR'}))
+        res[7] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'INTERFACE_TYPE'}))
         return res
+
+    sortCodeLabels = (baseList) ->
+        baseList.codeLabels = codeLabelHelper.sortCodeLabelsByOrder(baseList.codeLabels)
+        return baseList
 
     getActionsBaseLists = (allBaseLists) ->
         res = []
-        res[0] = _.findWhere(allBaseLists, {codeList: 'REDUCING_ACTION_TYPE'})
-        res[1] = _.findWhere(allBaseLists, {codeList: 'REDUCING_ACTION_STATUS'})
+        res[0] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'REDUCING_ACTION_TYPE'}))
+        res[1] = sortCodeLabels(_.findWhere(allBaseLists, {codeList: 'REDUCING_ACTION_STATUS'}))
         return res
 
     getSurveysBaseLists = (allBaseLists) ->
         res = _.filter allBaseLists, (baseList) ->
             return ! _.contains(fixedLists, baseList.codeList)
-        return _.sortBy res, (baseList) ->
+        res = _.sortBy res, (baseList) ->
             return baseList.codeList
+        for baseList in res
+            baseList = sortCodeLabels(baseList)
+        return res
 
     $scope.getCalculatorByKeyPrefix = (codeKey) ->
         if codeKey.startsWith("I_") || codeKey.startsWith("BI_")
@@ -89,24 +97,41 @@ angular
         $scope.codeLabelToAdd.clear()
         return
 
+    updateOrderIndexes = (baseLists) ->
+        for baseList in baseLists
+            for index, codeLabel of baseList.codeLabels
+                codeLabel.orderIndex = +index + 1
+        return baseLists
+
     $scope.save = () ->
         $scope.isLoading = true
 
-        # update orderIndex field
-        for baseList in $scope.baseLists
-            for index, codeLabel of baseList.codeLabels
-                codeLabel.orderIndex = +index + 1
-
-        data = {baseLists: $scope.baseLists}
+        data = {baseLists: updateOrderIndexes($scope.baseLists)}
 
         downloadService.postJson "/awac/admin/translations/baselists/save", data, (result) ->
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
             console.log("result.data", result.data)
-            angular.extend($scope.baseLists, $scope.sortItems(result.data.baseLists))
-
+            $scope.loadBaseLists()
             return
 
+    $scope.ignoreChanges = false
+
+    $scope.$root.$on '$locationChangeStart', (event, next, current) ->
+        return unless !$scope.ignoreChanges
+        updatedData = updateOrderIndexes($scope.allBaseLists)
+        eq = angular.equals($scope.originalData, updatedData)
+        if !eq
+            event.preventDefault()
+
+            # show confirm
+            params =
+                titleKey: "DIVERS_CANCEL_CONFIRMATION_TITLE"
+                messageKey: "DIVERS_CANCEL_CONFIRMATION_MESSAGE"
+                onConfirm: () ->
+                    $scope.ignoreChanges = true
+                    $location.path(next.split('#')[1])
+            modalService.show modalService.CONFIRM_DIALOG, params
 
     $scope.loadBaseLists()
