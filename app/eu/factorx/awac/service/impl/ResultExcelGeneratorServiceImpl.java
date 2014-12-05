@@ -22,7 +22,6 @@ import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
-import eu.factorx.awac.service.knowledge.activity.contributor.municipality.BaseActivityDataAC_BAD11B;
 import eu.factorx.awac.util.math.Vector2I;
 import jxl.Range;
 import jxl.Workbook;
@@ -118,7 +117,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
             if (scope instanceof Site) {
                 thisSite = ((Site) scope).getName();
             }
-            insertHeader(sheet, organization, thisSite, period.getLabel(), cellFormat);
+            insertHeader(sheet, null, organization, thisSite, period.getLabel(), cellFormat);
 
             Vector2I cell = new Vector2I(0, 4);
             for (Form form : awacCalculator.getForms()) {
@@ -157,7 +156,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
                 WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
 
-                insertHeader(sheet, organization, sites, period, cellFormat);
+                insertHeader(sheet, null, organization, sites, period, cellFormat);
 
                 Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
 
@@ -188,7 +187,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
     private void writeExplanation(WritableWorkbook wb, String organization, String sites, String period, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
         WritableSheet sheet = wb.createSheet("Explication", wb.getNumberOfSheets());
 
-        insertHeader(sheet, organization, sites, period, cellFormat);
+        insertHeader(sheet, null, organization, sites, period, cellFormat);
 
         sheet.addCell(new Label(1, 4, "Activité", cellFormat));
         sheet.addCell(new Label(9, 4, "Facteur d'émission", cellFormat));
@@ -564,8 +563,6 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         MergedReportResultCollectionAggregation merged = reportResultService.mergeAsComparision(left, right);
 
 
-
-
         ReportResultCollection allReportResultsCEFLeft = reportResultService.getReportResultsCEF(awacCalculator, scopes, period, comparedPeriod);
         MergedReportResultCollectionAggregation mergedReportResultCEFCollectionAggregation = reportResultService.mergeAsComparision(
             reportResultService.aggregate(allReportResultsCEFLeft),
@@ -593,8 +590,8 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
             }
         }
 
-        writeComparisionTable(r_1, "Résultat", organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
-        writeComparisionTable(r_1, "Résultat facteurs constants", organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, mergedReportResultCEFCollectionAggregation, cellFormat);
+        writeComparisionTable(r_1, "Résultat", null, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
+        writeComparisionTable(r_1, "Résultat facteurs constants", comparedPeriod.getLabel(), organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, mergedReportResultCEFCollectionAggregation, cellFormat);
 
         // 2.3 Survey
         for (Scope scope : scopes) {
@@ -606,7 +603,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
                 thisSite = ((Site) scope).getName();
             }
 
-            insertHeader(sheet, organization, thisSite, period.getLabel(), cellFormat);
+            insertHeader(sheet, null, organization, thisSite, period.getLabel(), cellFormat);
 
             Vector2I cell = new Vector2I(0, 4);
             for (Form form : awacCalculator.getForms()) {
@@ -640,7 +637,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
                 thisSite = ((Site) scope).getName();
             }
 
-            insertHeader(sheet, organization, thisSite, comparedPeriod.getLabel(), cellFormat);
+            insertHeader(sheet, null, organization, thisSite, comparedPeriod.getLabel(), cellFormat);
 
             Vector2I cell = new Vector2I(0, 4);
             for (Form form : awacCalculator.getForms()) {
@@ -673,7 +670,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         return content;
     }
 
-    private void writeComparisionTable(String search, String title, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
+    private void writeComparisionTable(String search, String title, String cefPeriod, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
         for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
             String reportKey = aggregation.getReportCode();
 
@@ -681,7 +678,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
                 WritableSheet sheet = wb.createSheet(title, wb.getNumberOfSheets());
 
-                insertHeader(sheet, organization, sites, period, cellFormat);
+                insertHeader(sheet, cefPeriod, organization, sites, period, cellFormat);
 
                 List<MergedReportResultIndicatorAggregation> scopeValuesByIndicator = aggregation.getMergedReportResultIndicatorAggregationList();
 
@@ -731,15 +728,21 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
     // Utils
     //
 
-    private void insertHeader(WritableSheet sheet, String organizationName, String sites, String period, WritableCellFormat cellFormat) throws WriteException {
+    private void insertHeader(WritableSheet sheet, String cefPeriod, String organizationName, String sites, String period, WritableCellFormat cellFormat) throws WriteException {
 
         sheet.addCell(new Label(0, 0, "Organisation", cellFormat));
         sheet.addCell(new Label(0, 1, "Site(s)", cellFormat));
         sheet.addCell(new Label(0, 2, "Année", cellFormat));
+        if (cefPeriod != null) {
+            sheet.addCell(new Label(0, 3, "Facteurs utilisés", cellFormat));
+        }
 
         sheet.addCell(new Label(1, 0, organizationName));
         sheet.addCell(new Label(1, 1, sites));
         sheet.addCell(new Label(1, 2, period));
+        if (cefPeriod != null) {
+            sheet.addCell(new Label(1, 3, cefPeriod));
+        }
 
     }
 
