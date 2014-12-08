@@ -1,6 +1,6 @@
 a.oneelement.dropdown-toggle(id="{{id}}",role='button', data-toggle='dropdown', data-target='#', href='')
     .input-group
-        input.form-control(type='text', ng-model='resultFormated')
+        input.form-control(type='text', ng-model="getAnswer().value")
         span.input-group-addon
             i.glyphicon.glyphicon-calendar
     ul.dropdown-menu.date_input(role='menu', aria-labelledby='dLabel')

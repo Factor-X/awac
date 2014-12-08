@@ -64,6 +64,10 @@ angular
                 modalService.close(modalService.LOADING)
             else
 
+                #display
+                console.log "LOADED DATA : "
+                console.log result.data
+
                 # save last form loaded
                 $scope.$root.lastPeriodSelectedKey = $scope.$root.periodSelectedKey
                 $scope.$root.lastScopeSelectedId = $scope.$root.scopeSelectedId

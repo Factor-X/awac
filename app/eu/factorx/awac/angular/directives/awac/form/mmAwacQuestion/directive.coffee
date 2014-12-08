@@ -87,8 +87,7 @@ angular
                         if answerType == 'BOOLEAN'
                             directiveName = "boolean-question"
                         else if answerType == 'INTEGER'
-                            directiveName = "real-question"
-                            directiveName = "date-question"
+                            directiveName = "integer-question"
                         else if answerType == 'DOUBLE'
                             if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
                                 directiveName = "real-with-unit-question"
@@ -103,7 +102,7 @@ angular
                         else if answerType == 'DOCUMENT'
                             directiveName = "document-question"
                         else if answerType == 'DATE_TIME'
-                          directiveName = "date-question"
+                            directiveName = "date-question"
 
                         # add params
                         params = " "
