@@ -40,10 +40,8 @@ psql -h localhost -U play -d awac -w < ./add_wysiwyg_document.sql
 # add_main_factor_unit
 psql -h localhost -U play -d awac -w < ./add_main_factor_unit.sql 
 #remove the organization name constraint
-psql -h localhost -U play -d awac -w <  ./remove_organization_name_unique_constraint.sql >> /tmp/migration/migration_script.sql
+psql -h localhost -U play -d awac -w <  ./remove_organization_name_unique_constraint.sql
 
-# add desrption to product
-psql -h localhost -U play -d awac -w <  ./product.sql >> /tmp/migration/migration_script.sql
 
 
 # -------------------------------------------------
