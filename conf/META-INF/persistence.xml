@@ -59,6 +59,7 @@
         <class>eu.factorx.awac.models.data.answer.Verification</class>
         <class>eu.factorx.awac.models.data.answer.type.BooleanAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.CodeAnswerValue</class>
+        <class>eu.factorx.awac.models.data.answer.type.DateTimeAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.DocumentAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.DoubleAnswerValue</class>
         <class>eu.factorx.awac.models.data.answer.type.EntityAnswerValue</class>
@@ -71,6 +72,7 @@
         <class>eu.factorx.awac.models.data.question.Question</class>
         <class>eu.factorx.awac.models.data.question.QuestionSet</class>
         <class>eu.factorx.awac.models.data.question.type.BooleanQuestion</class>
+        <class>eu.factorx.awac.models.data.question.type.DateTimeQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.DocumentQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.DoubleQuestion</class>
         <class>eu.factorx.awac.models.data.question.type.EntitySelectionQuestion</class>
