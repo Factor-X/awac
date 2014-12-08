@@ -39,6 +39,18 @@ public class IndicatorImporter extends WorkbookDataImporter {
 	public static final String MUNICIPALITY_REPORTS_REFERENCE = "Reports-commune:A1";
 	public static final String MUNICIPALITY_INDICATOR_REPORTS_REFERENCE = "Reports-commune:F1";
 
+	public static final String HOUSEHOLD_BASE_INDICATORS_REFERENCE = "BaseIndicators-menage:A1";
+	public static final String HOUSEHOLD_INDICATORS_REFERENCE = "Indicators-menage:A1";
+	public static final String HOUSEHOLD_BASE_INDICATOR_INDICATORS_REFERENCE = "Indicators-menage:F1";
+	public static final String HOUSEHOLD_REPORTS_REFERENCE = "Reports-menage:A1";
+	public static final String HOUSEHOLD_INDICATOR_REPORTS_REFERENCE = "Reports-menage:F1";
+
+	public static final String SMALL_EMITTERS_BASE_INDICATORS_REFERENCE = "BaseIndicators-petit emetteur:A1";
+	public static final String SMALL_EMITTERS_INDICATORS_REFERENCE = "Indicators-petit emetteur:A1";
+	public static final String SMALL_EMITTERS_BASE_INDICATOR_INDICATORS_REFERENCE = "Indicators-petit emetteur:F1";
+	public static final String SMALL_EMITTERS_REPORTS_REFERENCE = "Reports-petit emetteur:A1";
+	public static final String SMALL_EMITTERS_INDICATOR_REPORTS_REFERENCE = "Reports-petit emetteur:F1";
+
 	private Map<String, Sheet> sheets;
 	private Map<String, Unit> units;
 
@@ -108,6 +120,24 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				MUNICIPALITY_BASE_INDICATOR_INDICATORS_REFERENCE,
 				MUNICIPALITY_REPORTS_REFERENCE,
 				MUNICIPALITY_INDICATOR_REPORTS_REFERENCE);
+
+		// HOUSEHOLD DATA
+		Logger.info("== Importing Household Data");
+		importData(InterfaceTypeCode.HOUSEHOLD,
+				HOUSEHOLD_BASE_INDICATORS_REFERENCE,
+				HOUSEHOLD_INDICATORS_REFERENCE,
+				HOUSEHOLD_BASE_INDICATOR_INDICATORS_REFERENCE,
+				HOUSEHOLD_REPORTS_REFERENCE,
+				HOUSEHOLD_INDICATOR_REPORTS_REFERENCE);
+
+		// SMALL EMITTERS DATA
+		Logger.info("== Importing Small Emitters Data");
+		importData(InterfaceTypeCode.LITTLE_EMITTER,
+				SMALL_EMITTERS_BASE_INDICATORS_REFERENCE,
+				SMALL_EMITTERS_INDICATORS_REFERENCE,
+				SMALL_EMITTERS_BASE_INDICATOR_INDICATORS_REFERENCE,
+				SMALL_EMITTERS_REPORTS_REFERENCE,
+				SMALL_EMITTERS_INDICATOR_REPORTS_REFERENCE);
 
 	}
 

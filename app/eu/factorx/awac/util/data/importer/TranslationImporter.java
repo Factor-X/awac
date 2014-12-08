@@ -20,7 +20,9 @@ public class TranslationImporter extends WorkbookDataImporter {
 	private static final String TRANSLATIONS_WORKBOOK_PATH = "data_importer_resources/translations/translations_common.xls";
 	private static final String TRANSLATIONS_ENTERPRISES_PATH = "data_importer_resources/translations/translations_Enterprise.generated.xls";
 	private static final String TRANSLATIONS_MUNICIPALITY_PATH = "data_importer_resources/translations/translations_Municipality.generated.xls";
-	
+	private static final String TRANSLATIONS_HOUSEHOLD_PATH = "data_importer_resources/translations/translations_Household.generated.xls";
+	private static final String TRANSLATIONS_SMALL_EMITTER_PATH = "data_importer_resources/translations/translations_SmallEmitter.generated.xls";
+
 	@Autowired
 	private CodeLabelService codeLabelService;
 
@@ -40,7 +42,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 		importTranslations(wbSheets.get("EMAIL_MESSAGES"), CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 		importManyCodeListsTranslations(wbSheets.get("OTHERS"));
 
-		for (String workbookPath : new String[] {TRANSLATIONS_ENTERPRISES_PATH, TRANSLATIONS_MUNICIPALITY_PATH}) {
+		for (String workbookPath : new String[] {TRANSLATIONS_ENTERPRISES_PATH, TRANSLATIONS_MUNICIPALITY_PATH, TRANSLATIONS_HOUSEHOLD_PATH, TRANSLATIONS_SMALL_EMITTER_PATH}) {
 			wbSheets = getWorkbookSheets(workbookPath);
 			importTranslations(wbSheets.get("FORMS"), CodeList.TRANSLATIONS_SURVEY);
 			importTranslations(wbSheets.get("QUESTION_SETS"), CodeList.QUESTION);
