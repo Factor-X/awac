@@ -978,7 +978,6 @@ h1 {
 / / font-weight : 700;
     color: white;
     padding: 5px 0;
-    vertical-align: middle;
 }
 
 .status.answer {
@@ -1025,8 +1024,6 @@ h1 {
     text-align: center;
     background-color: #9d9b91;
     color: white;
-    /*font-style: italic;*/
-    vertical-align: middle;
 }
 
 .user_icon > div {
