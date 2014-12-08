@@ -25,6 +25,14 @@ public class DateTimeAnswerValue extends AnswerValue {
 		this.dateTime = dateTime;
 	}
 
+	public DateTime getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(DateTime dateTime) {
+		this.dateTime = dateTime;
+	}
+
 	@Override
 	protected AnswerRawData getRawData() {
 		return new AnswerRawData();
