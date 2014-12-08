@@ -39,7 +39,7 @@ class QuestionCodeWriter
             @logger.info 'WRITTEN ' + outfile
 
         rescue Exception => e
-            @logger.error 'Error in ' + filename + ' ' + e.message
+            @logger.error 'Error in ' + infile + ' ' + e.message
             raise e
         end
 
