@@ -1,5 +1,6 @@
 package eu.factorx.awac.converter;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,7 +101,11 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
                         ((HashMap<Long, String>) rawAnswerValue).put(storedFile.getId(), storedFile.getOriginalName());
                     }
                     break;
-            }
+				case DATE_TIME:
+					DateTimeAnswerValue dateTimeAnswerValue = (DateTimeAnswerValue) answerValue;
+					rawAnswerValue = dateTimeAnswerValue.getDateTime().toDate();
+					break;
+			}
 
             answerLine.setValue(rawAnswerValue);
             answerLine.setUnitCode(unitCode);

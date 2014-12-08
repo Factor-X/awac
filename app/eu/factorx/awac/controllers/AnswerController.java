@@ -1073,7 +1073,20 @@ public class AnswerController extends AbstractController {
                 }
 
                 break;
-        }
+			case DATE_TIME:
+				// build the answer value
+				strValue = StringUtils.trimToNull(rawAnswerValue.toString());
+				Long longValue = Long.valueOf(strValue);
+				DateTime dateTime = null;
+				if (longValue != null) {
+					dateTime = new DateTime(longValue);
+					answerValue.add(new DateTimeAnswerValue(questionAnswer, dateTime));
+				}
+				if (longValue == null || dateTime == null) {
+					throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+				}
+				break;
+		}
 
         //add comment into each answerValue
         if (answerLine.getComment() != null) {
