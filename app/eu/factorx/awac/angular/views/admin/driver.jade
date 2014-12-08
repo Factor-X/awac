@@ -8,7 +8,7 @@ div.verification_manage
             th Caculateur(s)
             th Valeurs
         tr(ng-repeat="driver in drivers")
-            td {{driver.name}}
+            td(ng-bind-html="driver.name | translate")
             td
                 div(ng-repeat="calculator in driver.calculatorNames") {{calculator}}
             td

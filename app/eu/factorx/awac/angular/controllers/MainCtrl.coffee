@@ -286,6 +286,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     $rootScope.closeableForms = false
     $rootScope.closedForms = false
 
+    console.log "$rootScope.instanceName == ", $rootScope.instanceName
     downloadService.getJson '/awac/translations/available/' + $rootScope.instanceName, (result) ->
         if result.success
             if result.data.frEnabled
