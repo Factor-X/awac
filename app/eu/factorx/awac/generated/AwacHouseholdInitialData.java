@@ -3225,7 +3225,7 @@ if (am73 == null) {
 
         am74 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM74);
 if (am74 == null) {
-    am74 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM74, CodeList.A_A_A_A_B_C_D);
+    am74 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM74, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am74);
 } else {
     if (!am74.getQuestionSet().equals(am72) && am72.getQuestions().contains(am74)) {
@@ -3237,7 +3237,7 @@ if (am74 == null) {
         JPA.em().persist(am72);
     }
     am74.setOrderIndex(0);
-    ((ValueSelectionQuestion)am74).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am74).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am74);
 }
 
@@ -3287,7 +3287,7 @@ if (am75 == null) {
 
         am76 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM76);
 if (am76 == null) {
-    am76 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM76, CodeList.A_A_A_A_B_C_D);
+    am76 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM76, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am76);
 } else {
     if (!am76.getQuestionSet().equals(am72) && am72.getQuestions().contains(am76)) {
@@ -3299,7 +3299,7 @@ if (am76 == null) {
         JPA.em().persist(am72);
     }
     am76.setOrderIndex(0);
-    ((ValueSelectionQuestion)am76).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am76).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am76);
 }
 
@@ -3349,7 +3349,7 @@ if (am77 == null) {
 
         am78 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM78);
 if (am78 == null) {
-    am78 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM78, CodeList.A_A_A_A_B_C_D);
+    am78 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM78, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am78);
 } else {
     if (!am78.getQuestionSet().equals(am72) && am72.getQuestions().contains(am78)) {
@@ -3361,7 +3361,7 @@ if (am78 == null) {
         JPA.em().persist(am72);
     }
     am78.setOrderIndex(0);
-    ((ValueSelectionQuestion)am78).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am78).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am78);
 }
 
@@ -3411,7 +3411,7 @@ if (am79 == null) {
 
         am80 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM80);
 if (am80 == null) {
-    am80 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM80, CodeList.A_A_A_A_B_C_D);
+    am80 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM80, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am80);
 } else {
     if (!am80.getQuestionSet().equals(am72) && am72.getQuestions().contains(am80)) {
@@ -3423,7 +3423,7 @@ if (am80 == null) {
         JPA.em().persist(am72);
     }
     am80.setOrderIndex(0);
-    ((ValueSelectionQuestion)am80).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am80).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am80);
 }
 
@@ -3473,7 +3473,7 @@ if (am81 == null) {
 
         am82 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM82);
 if (am82 == null) {
-    am82 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM82, CodeList.A_A_A_A_B_C_D);
+    am82 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM82, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am82);
 } else {
     if (!am82.getQuestionSet().equals(am72) && am72.getQuestions().contains(am82)) {
@@ -3485,7 +3485,7 @@ if (am82 == null) {
         JPA.em().persist(am72);
     }
     am82.setOrderIndex(0);
-    ((ValueSelectionQuestion)am82).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am82).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am82);
 }
 
@@ -3535,7 +3535,7 @@ if (am83 == null) {
 
         am84 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM84);
 if (am84 == null) {
-    am84 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM84, CodeList.A_A_A_A_B_C_D);
+    am84 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM84, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am84);
 } else {
     if (!am84.getQuestionSet().equals(am72) && am72.getQuestions().contains(am84)) {
@@ -3547,7 +3547,7 @@ if (am84 == null) {
         JPA.em().persist(am72);
     }
     am84.setOrderIndex(0);
-    ((ValueSelectionQuestion)am84).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am84).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am84);
 }
 
@@ -3597,7 +3597,7 @@ if (am85 == null) {
 
         am86 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM86);
 if (am86 == null) {
-    am86 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM86, CodeList.A_A_A_A_B_C_D);
+    am86 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM86, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am86);
 } else {
     if (!am86.getQuestionSet().equals(am72) && am72.getQuestions().contains(am86)) {
@@ -3609,7 +3609,7 @@ if (am86 == null) {
         JPA.em().persist(am72);
     }
     am86.setOrderIndex(0);
-    ((ValueSelectionQuestion)am86).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am86).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am86);
 }
 
@@ -3659,7 +3659,7 @@ if (am87 == null) {
 
         am88 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM88);
 if (am88 == null) {
-    am88 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM88, CodeList.A_A_A_A_B_C_D);
+    am88 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM88, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am88);
 } else {
     if (!am88.getQuestionSet().equals(am72) && am72.getQuestions().contains(am88)) {
@@ -3671,7 +3671,7 @@ if (am88 == null) {
         JPA.em().persist(am72);
     }
     am88.setOrderIndex(0);
-    ((ValueSelectionQuestion)am88).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am88).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am88);
 }
 
@@ -3721,7 +3721,7 @@ if (am89 == null) {
 
         am90 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM90);
 if (am90 == null) {
-    am90 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM90, CodeList.A_A_A_A_B_C_D);
+    am90 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM90, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am90);
 } else {
     if (!am90.getQuestionSet().equals(am72) && am72.getQuestions().contains(am90)) {
@@ -3733,7 +3733,7 @@ if (am90 == null) {
         JPA.em().persist(am72);
     }
     am90.setOrderIndex(0);
-    ((ValueSelectionQuestion)am90).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am90).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am90);
 }
 
@@ -3783,7 +3783,7 @@ if (am91 == null) {
 
         am92 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM92);
 if (am92 == null) {
-    am92 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM92, CodeList.A_A_A_A_B_C_D);
+    am92 = new ValueSelectionQuestion(am72, 0, QuestionCode.AM92, CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am92);
 } else {
     if (!am92.getQuestionSet().equals(am72) && am72.getQuestions().contains(am92)) {
@@ -3795,7 +3795,7 @@ if (am92 == null) {
         JPA.em().persist(am72);
     }
     am92.setOrderIndex(0);
-    ((ValueSelectionQuestion)am92).setCodeList(CodeList.A_A_A_A_B_C_D);
+    ((ValueSelectionQuestion)am92).setCodeList(CodeList.TYPEENERGYLABEL);
     JPA.em().persist(am92);
 }
 

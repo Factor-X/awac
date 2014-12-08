@@ -8,12 +8,12 @@ import eu.factorx.awac.models.code.CodeList;
 @Embeddable
 public class QuestionCode extends Code {
 
-	public static final CodeList CODE_TYPE = CodeList.QUESTION;
+    public static final CodeList CODE_TYPE = CodeList.QUESTION;
 
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-12-08 09:11:10 +0100 */
+/* Generated the 2014-12-08 09:23:48 +0100 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -407,7 +407,7 @@ public static final QuestionCode A8000 = new QuestionCode("A8000");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-12-08 09:11:19 +0100 */
+/* Generated the 2014-12-08 09:21:59 +0100 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
@@ -583,14 +583,205 @@ public static final QuestionCode AC5002 = new QuestionCode("AC5002");
 
 /* END GENERATED QUESTION_CODES MUNICIPALITY */
 
-	private static final long serialVersionUID = 1L;
+    /* BEGIN GENERATED QUESTION_CODES HOUSEHOLD */
 
-	public QuestionCode() {
-		super(CodeList.QUESTION);
-	}
 
-	public QuestionCode(String key) {
-		super(CODE_TYPE, key);
-	}
+/* Generated the 2014-12-08 09:22:08 +0100 */
+
+public static final QuestionCode AM2 = new QuestionCode("AM2");
+public static final QuestionCode AM3 = new QuestionCode("AM3");
+public static final QuestionCode AM4 = new QuestionCode("AM4");
+public static final QuestionCode AM5 = new QuestionCode("AM5");
+public static final QuestionCode AM6 = new QuestionCode("AM6");
+public static final QuestionCode AM7 = new QuestionCode("AM7");
+public static final QuestionCode AM8 = new QuestionCode("AM8");
+public static final QuestionCode AM9 = new QuestionCode("AM9");
+public static final QuestionCode AM10 = new QuestionCode("AM10");
+public static final QuestionCode AM11 = new QuestionCode("AM11");
+public static final QuestionCode AM12 = new QuestionCode("AM12");
+public static final QuestionCode AM13 = new QuestionCode("AM13");
+public static final QuestionCode AM14 = new QuestionCode("AM14");
+public static final QuestionCode AM15 = new QuestionCode("AM15");
+public static final QuestionCode AM16 = new QuestionCode("AM16");
+public static final QuestionCode AM17 = new QuestionCode("AM17");
+public static final QuestionCode AM18 = new QuestionCode("AM18");
+public static final QuestionCode AM19 = new QuestionCode("AM19");
+public static final QuestionCode AM20 = new QuestionCode("AM20");
+public static final QuestionCode AM21 = new QuestionCode("AM21");
+public static final QuestionCode AM22 = new QuestionCode("AM22");
+public static final QuestionCode AM23 = new QuestionCode("AM23");
+public static final QuestionCode AM24 = new QuestionCode("AM24");
+public static final QuestionCode AM25 = new QuestionCode("AM25");
+public static final QuestionCode AM26 = new QuestionCode("AM26");
+public static final QuestionCode AM27 = new QuestionCode("AM27");
+public static final QuestionCode AM28 = new QuestionCode("AM28");
+public static final QuestionCode AM29 = new QuestionCode("AM29");
+public static final QuestionCode AM30 = new QuestionCode("AM30");
+public static final QuestionCode AM31 = new QuestionCode("AM31");
+public static final QuestionCode AM32 = new QuestionCode("AM32");
+public static final QuestionCode AM33 = new QuestionCode("AM33");
+public static final QuestionCode AM34 = new QuestionCode("AM34");
+public static final QuestionCode AM35 = new QuestionCode("AM35");
+public static final QuestionCode AM36 = new QuestionCode("AM36");
+public static final QuestionCode AM37 = new QuestionCode("AM37");
+public static final QuestionCode AM38 = new QuestionCode("AM38");
+public static final QuestionCode AM39 = new QuestionCode("AM39");
+public static final QuestionCode AM40 = new QuestionCode("AM40");
+public static final QuestionCode AM41 = new QuestionCode("AM41");
+public static final QuestionCode AM42 = new QuestionCode("AM42");
+public static final QuestionCode AM43 = new QuestionCode("AM43");
+public static final QuestionCode AM44 = new QuestionCode("AM44");
+public static final QuestionCode AM45 = new QuestionCode("AM45");
+public static final QuestionCode AM46 = new QuestionCode("AM46");
+public static final QuestionCode AM47 = new QuestionCode("AM47");
+public static final QuestionCode AM48 = new QuestionCode("AM48");
+public static final QuestionCode AM49 = new QuestionCode("AM49");
+public static final QuestionCode AM50 = new QuestionCode("AM50");
+public static final QuestionCode AM51 = new QuestionCode("AM51");
+public static final QuestionCode AM52 = new QuestionCode("AM52");
+public static final QuestionCode AM53 = new QuestionCode("AM53");
+public static final QuestionCode AM54 = new QuestionCode("AM54");
+public static final QuestionCode AM55 = new QuestionCode("AM55");
+public static final QuestionCode AM56 = new QuestionCode("AM56");
+public static final QuestionCode AM57 = new QuestionCode("AM57");
+public static final QuestionCode AM58 = new QuestionCode("AM58");
+public static final QuestionCode AM59 = new QuestionCode("AM59");
+public static final QuestionCode AM60 = new QuestionCode("AM60");
+public static final QuestionCode AM61 = new QuestionCode("AM61");
+public static final QuestionCode AM62 = new QuestionCode("AM62");
+public static final QuestionCode AM63 = new QuestionCode("AM63");
+public static final QuestionCode AM64 = new QuestionCode("AM64");
+public static final QuestionCode AM65 = new QuestionCode("AM65");
+public static final QuestionCode AM66 = new QuestionCode("AM66");
+public static final QuestionCode AM67 = new QuestionCode("AM67");
+public static final QuestionCode AM68 = new QuestionCode("AM68");
+public static final QuestionCode AM69 = new QuestionCode("AM69");
+public static final QuestionCode AM70 = new QuestionCode("AM70");
+public static final QuestionCode AM71 = new QuestionCode("AM71");
+public static final QuestionCode AM72 = new QuestionCode("AM72");
+public static final QuestionCode AM73 = new QuestionCode("AM73");
+public static final QuestionCode AM74 = new QuestionCode("AM74");
+public static final QuestionCode AM75 = new QuestionCode("AM75");
+public static final QuestionCode AM76 = new QuestionCode("AM76");
+public static final QuestionCode AM77 = new QuestionCode("AM77");
+public static final QuestionCode AM78 = new QuestionCode("AM78");
+public static final QuestionCode AM79 = new QuestionCode("AM79");
+public static final QuestionCode AM80 = new QuestionCode("AM80");
+public static final QuestionCode AM81 = new QuestionCode("AM81");
+public static final QuestionCode AM82 = new QuestionCode("AM82");
+public static final QuestionCode AM83 = new QuestionCode("AM83");
+public static final QuestionCode AM84 = new QuestionCode("AM84");
+public static final QuestionCode AM85 = new QuestionCode("AM85");
+public static final QuestionCode AM86 = new QuestionCode("AM86");
+public static final QuestionCode AM87 = new QuestionCode("AM87");
+public static final QuestionCode AM88 = new QuestionCode("AM88");
+public static final QuestionCode AM89 = new QuestionCode("AM89");
+public static final QuestionCode AM90 = new QuestionCode("AM90");
+public static final QuestionCode AM91 = new QuestionCode("AM91");
+public static final QuestionCode AM92 = new QuestionCode("AM92");
+public static final QuestionCode AM93 = new QuestionCode("AM93");
+public static final QuestionCode AM94 = new QuestionCode("AM94");
+public static final QuestionCode AM95 = new QuestionCode("AM95");
+public static final QuestionCode AM96 = new QuestionCode("AM96");
+public static final QuestionCode AM97 = new QuestionCode("AM97");
+public static final QuestionCode AM98 = new QuestionCode("AM98");
+public static final QuestionCode AM99 = new QuestionCode("AM99");
+public static final QuestionCode AM100 = new QuestionCode("AM100");
+public static final QuestionCode AM101 = new QuestionCode("AM101");
+public static final QuestionCode AM102 = new QuestionCode("AM102");
+public static final QuestionCode AM103 = new QuestionCode("AM103");
+public static final QuestionCode AM104 = new QuestionCode("AM104");
+public static final QuestionCode AM105 = new QuestionCode("AM105");
+public static final QuestionCode AM106 = new QuestionCode("AM106");
+public static final QuestionCode AM107 = new QuestionCode("AM107");
+public static final QuestionCode AM108 = new QuestionCode("AM108");
+public static final QuestionCode AM109 = new QuestionCode("AM109");
+public static final QuestionCode AM110 = new QuestionCode("AM110");
+public static final QuestionCode AM111 = new QuestionCode("AM111");
+public static final QuestionCode AM112 = new QuestionCode("AM112");
+public static final QuestionCode AM113 = new QuestionCode("AM113");
+public static final QuestionCode AM114 = new QuestionCode("AM114");
+public static final QuestionCode AM115 = new QuestionCode("AM115");
+public static final QuestionCode AM116 = new QuestionCode("AM116");
+public static final QuestionCode AM117 = new QuestionCode("AM117");
+public static final QuestionCode AM118 = new QuestionCode("AM118");
+public static final QuestionCode AM119 = new QuestionCode("AM119");
+public static final QuestionCode AM120 = new QuestionCode("AM120");
+public static final QuestionCode AM121 = new QuestionCode("AM121");
+public static final QuestionCode AM122 = new QuestionCode("AM122");
+public static final QuestionCode AM123 = new QuestionCode("AM123");
+public static final QuestionCode AM124 = new QuestionCode("AM124");
+public static final QuestionCode AM125 = new QuestionCode("AM125");
+public static final QuestionCode AM126 = new QuestionCode("AM126");
+public static final QuestionCode AM127 = new QuestionCode("AM127");
+public static final QuestionCode AM128 = new QuestionCode("AM128");
+public static final QuestionCode AM129 = new QuestionCode("AM129");
+public static final QuestionCode AM130 = new QuestionCode("AM130");
+public static final QuestionCode AM131 = new QuestionCode("AM131");
+public static final QuestionCode AM132 = new QuestionCode("AM132");
+public static final QuestionCode AM133 = new QuestionCode("AM133");
+public static final QuestionCode AM134 = new QuestionCode("AM134");
+public static final QuestionCode AM135 = new QuestionCode("AM135");
+public static final QuestionCode AM136 = new QuestionCode("AM136");
+public static final QuestionCode AM137 = new QuestionCode("AM137");
+public static final QuestionCode AM138 = new QuestionCode("AM138");
+public static final QuestionCode AM139 = new QuestionCode("AM139");
+public static final QuestionCode AM140 = new QuestionCode("AM140");
+public static final QuestionCode AM141 = new QuestionCode("AM141");
+public static final QuestionCode AM142 = new QuestionCode("AM142");
+public static final QuestionCode AM143 = new QuestionCode("AM143");
+public static final QuestionCode AM144 = new QuestionCode("AM144");
+public static final QuestionCode AM145 = new QuestionCode("AM145");
+public static final QuestionCode AM146 = new QuestionCode("AM146");
+public static final QuestionCode AM147 = new QuestionCode("AM147");
+public static final QuestionCode AM148 = new QuestionCode("AM148");
+public static final QuestionCode AM149 = new QuestionCode("AM149");
+public static final QuestionCode AM150 = new QuestionCode("AM150");
+public static final QuestionCode AM151 = new QuestionCode("AM151");
+public static final QuestionCode AM152 = new QuestionCode("AM152");
+public static final QuestionCode AM153 = new QuestionCode("AM153");
+public static final QuestionCode AM154 = new QuestionCode("AM154");
+public static final QuestionCode AM155 = new QuestionCode("AM155");
+public static final QuestionCode AM156 = new QuestionCode("AM156");
+public static final QuestionCode AM157 = new QuestionCode("AM157");
+public static final QuestionCode AM158 = new QuestionCode("AM158");
+public static final QuestionCode AM159 = new QuestionCode("AM159");
+public static final QuestionCode AM160 = new QuestionCode("AM160");
+public static final QuestionCode AM161 = new QuestionCode("AM161");
+public static final QuestionCode AM166 = new QuestionCode("AM166");
+public static final QuestionCode AM168 = new QuestionCode("AM168");
+public static final QuestionCode AM169 = new QuestionCode("AM169");
+public static final QuestionCode AM170 = new QuestionCode("AM170");
+public static final QuestionCode AM171 = new QuestionCode("AM171");
+public static final QuestionCode AM172 = new QuestionCode("AM172");
+public static final QuestionCode AM173 = new QuestionCode("AM173");
+public static final QuestionCode AM174 = new QuestionCode("AM174");
+public static final QuestionCode AM175 = new QuestionCode("AM175");
+public static final QuestionCode AM176 = new QuestionCode("AM176");
+public static final QuestionCode AM177 = new QuestionCode("AM177");
+public static final QuestionCode AM178 = new QuestionCode("AM178");
+public static final QuestionCode AM179 = new QuestionCode("AM179");
+public static final QuestionCode AM500 = new QuestionCode("AM500");
+public static final QuestionCode AM600 = new QuestionCode("AM600");
+
+/* END GENERATED QUESTION_CODES HOUSEHOLD */
+
+    /* BEGIN GENERATED QUESTION_CODES SMALL_EMITTER */
+
+    /* END GENERATED QUESTION_CODES SMALL_EMITTER */
+
+    /* BEGIN GENERATED QUESTION_CODES EVENT */
+
+    /* END GENERATED QUESTION_CODES EVENT */
+
+    private static final long serialVersionUID = 1L;
+
+    public QuestionCode() {
+        super(CodeList.QUESTION);
+    }
+
+    public QuestionCode(String key) {
+        super(CODE_TYPE, key);
+    }
 
 }
