@@ -10,3 +10,18 @@ files :
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : commune-activityData
   question_regex : AC[0-9]+
+-
+  name           : Household
+  xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet          : menage-activityData
+  question_regex : AM[0-9]+
+-
+  name           : SmallEmitter
+  xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet          : petit emetteur-activityData
+  question_regex : AP[0-9]+
+-
+  name           : Event
+  xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
+  sheet          : evenement - activityData
+  question_regex : AEV[0-9]+
