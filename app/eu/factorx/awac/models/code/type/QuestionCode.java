@@ -13,7 +13,7 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-12-08 09:26:42 +0100 */
+/* Generated the 2014-12-08 09:28:03 +0100 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -407,7 +407,7 @@ public static final QuestionCode A8000 = new QuestionCode("A8000");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-12-08 09:26:46 +0100 */
+/* Generated the 2014-12-08 09:28:11 +0100 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
@@ -586,7 +586,7 @@ public static final QuestionCode AC5002 = new QuestionCode("AC5002");
     /* BEGIN GENERATED QUESTION_CODES HOUSEHOLD */
 
 
-/* Generated the 2014-12-08 09:26:48 +0100 */
+/* Generated the 2014-12-08 09:28:19 +0100 */
 
 public static final QuestionCode AM2 = new QuestionCode("AM2");
 public static final QuestionCode AM3 = new QuestionCode("AM3");
@@ -768,7 +768,172 @@ public static final QuestionCode AM600 = new QuestionCode("AM600");
 
     /* BEGIN GENERATED QUESTION_CODES SMALLEMITTER */
 
-    /* END GENERATED QUESTION_CODES SMALLEMITTER */
+
+/* Generated the 2014-12-08 09:28:26 +0100 */
+
+public static final QuestionCode AP2 = new QuestionCode("AP2");
+public static final QuestionCode AP5 = new QuestionCode("AP5");
+public static final QuestionCode AP6 = new QuestionCode("AP6");
+public static final QuestionCode AP7 = new QuestionCode("AP7");
+public static final QuestionCode AP8 = new QuestionCode("AP8");
+public static final QuestionCode AP9 = new QuestionCode("AP9");
+public static final QuestionCode AP10 = new QuestionCode("AP10");
+public static final QuestionCode AP11 = new QuestionCode("AP11");
+public static final QuestionCode AP12 = new QuestionCode("AP12");
+public static final QuestionCode AP13 = new QuestionCode("AP13");
+public static final QuestionCode AP14 = new QuestionCode("AP14");
+public static final QuestionCode AP15 = new QuestionCode("AP15");
+public static final QuestionCode AP16 = new QuestionCode("AP16");
+public static final QuestionCode AP17 = new QuestionCode("AP17");
+public static final QuestionCode AP18 = new QuestionCode("AP18");
+public static final QuestionCode AP19 = new QuestionCode("AP19");
+public static final QuestionCode AP20 = new QuestionCode("AP20");
+public static final QuestionCode AP21 = new QuestionCode("AP21");
+public static final QuestionCode AP22 = new QuestionCode("AP22");
+public static final QuestionCode AP23 = new QuestionCode("AP23");
+public static final QuestionCode AP24 = new QuestionCode("AP24");
+public static final QuestionCode AP25 = new QuestionCode("AP25");
+public static final QuestionCode AP26 = new QuestionCode("AP26");
+public static final QuestionCode AP27 = new QuestionCode("AP27");
+public static final QuestionCode AP28 = new QuestionCode("AP28");
+public static final QuestionCode AP29 = new QuestionCode("AP29");
+public static final QuestionCode AP30 = new QuestionCode("AP30");
+public static final QuestionCode AP31 = new QuestionCode("AP31");
+public static final QuestionCode AP32 = new QuestionCode("AP32");
+public static final QuestionCode AP33 = new QuestionCode("AP33");
+public static final QuestionCode AP34 = new QuestionCode("AP34");
+public static final QuestionCode AP35 = new QuestionCode("AP35");
+public static final QuestionCode AP36 = new QuestionCode("AP36");
+public static final QuestionCode AP37 = new QuestionCode("AP37");
+public static final QuestionCode AP38 = new QuestionCode("AP38");
+public static final QuestionCode AP41 = new QuestionCode("AP41");
+public static final QuestionCode AP42 = new QuestionCode("AP42");
+public static final QuestionCode AP43 = new QuestionCode("AP43");
+public static final QuestionCode AP44 = new QuestionCode("AP44");
+public static final QuestionCode AP45 = new QuestionCode("AP45");
+public static final QuestionCode AP46 = new QuestionCode("AP46");
+public static final QuestionCode AP47 = new QuestionCode("AP47");
+public static final QuestionCode AP48 = new QuestionCode("AP48");
+public static final QuestionCode AP49 = new QuestionCode("AP49");
+public static final QuestionCode AP50 = new QuestionCode("AP50");
+public static final QuestionCode AP51 = new QuestionCode("AP51");
+public static final QuestionCode AP52 = new QuestionCode("AP52");
+public static final QuestionCode AP53 = new QuestionCode("AP53");
+public static final QuestionCode AP54 = new QuestionCode("AP54");
+public static final QuestionCode AP55 = new QuestionCode("AP55");
+public static final QuestionCode AP56 = new QuestionCode("AP56");
+public static final QuestionCode AP57 = new QuestionCode("AP57");
+public static final QuestionCode AP58 = new QuestionCode("AP58");
+public static final QuestionCode AP59 = new QuestionCode("AP59");
+public static final QuestionCode AP60 = new QuestionCode("AP60");
+public static final QuestionCode AP61 = new QuestionCode("AP61");
+public static final QuestionCode AP62 = new QuestionCode("AP62");
+public static final QuestionCode AP63 = new QuestionCode("AP63");
+public static final QuestionCode AP64 = new QuestionCode("AP64");
+public static final QuestionCode AP65 = new QuestionCode("AP65");
+public static final QuestionCode AP66 = new QuestionCode("AP66");
+public static final QuestionCode AP67 = new QuestionCode("AP67");
+public static final QuestionCode AP68 = new QuestionCode("AP68");
+public static final QuestionCode AP69 = new QuestionCode("AP69");
+public static final QuestionCode AP70 = new QuestionCode("AP70");
+public static final QuestionCode AP71 = new QuestionCode("AP71");
+public static final QuestionCode AP73 = new QuestionCode("AP73");
+public static final QuestionCode AP76 = new QuestionCode("AP76");
+public static final QuestionCode AP77 = new QuestionCode("AP77");
+public static final QuestionCode AP78 = new QuestionCode("AP78");
+public static final QuestionCode AP79 = new QuestionCode("AP79");
+public static final QuestionCode AP80 = new QuestionCode("AP80");
+public static final QuestionCode AP81 = new QuestionCode("AP81");
+public static final QuestionCode AP82 = new QuestionCode("AP82");
+public static final QuestionCode AP83 = new QuestionCode("AP83");
+public static final QuestionCode AP84 = new QuestionCode("AP84");
+public static final QuestionCode AP85 = new QuestionCode("AP85");
+public static final QuestionCode AP86 = new QuestionCode("AP86");
+public static final QuestionCode AP87 = new QuestionCode("AP87");
+public static final QuestionCode AP90 = new QuestionCode("AP90");
+public static final QuestionCode AP91 = new QuestionCode("AP91");
+public static final QuestionCode AP92 = new QuestionCode("AP92");
+public static final QuestionCode AP93 = new QuestionCode("AP93");
+public static final QuestionCode AP94 = new QuestionCode("AP94");
+public static final QuestionCode AP95 = new QuestionCode("AP95");
+public static final QuestionCode AP96 = new QuestionCode("AP96");
+public static final QuestionCode AP97 = new QuestionCode("AP97");
+public static final QuestionCode AP98 = new QuestionCode("AP98");
+public static final QuestionCode AP99 = new QuestionCode("AP99");
+public static final QuestionCode AP100 = new QuestionCode("AP100");
+public static final QuestionCode AP101 = new QuestionCode("AP101");
+public static final QuestionCode AP102 = new QuestionCode("AP102");
+public static final QuestionCode AP103 = new QuestionCode("AP103");
+public static final QuestionCode AP104 = new QuestionCode("AP104");
+public static final QuestionCode AP105 = new QuestionCode("AP105");
+public static final QuestionCode AP106 = new QuestionCode("AP106");
+public static final QuestionCode AP107 = new QuestionCode("AP107");
+public static final QuestionCode AP108 = new QuestionCode("AP108");
+public static final QuestionCode AP109 = new QuestionCode("AP109");
+public static final QuestionCode AP110 = new QuestionCode("AP110");
+public static final QuestionCode AP112 = new QuestionCode("AP112");
+public static final QuestionCode AP116 = new QuestionCode("AP116");
+public static final QuestionCode AP117 = new QuestionCode("AP117");
+public static final QuestionCode AP118 = new QuestionCode("AP118");
+public static final QuestionCode AP119 = new QuestionCode("AP119");
+public static final QuestionCode AP120 = new QuestionCode("AP120");
+public static final QuestionCode AP121 = new QuestionCode("AP121");
+public static final QuestionCode AP122 = new QuestionCode("AP122");
+public static final QuestionCode AP123 = new QuestionCode("AP123");
+public static final QuestionCode AP124 = new QuestionCode("AP124");
+public static final QuestionCode AP125 = new QuestionCode("AP125");
+public static final QuestionCode AP127 = new QuestionCode("AP127");
+public static final QuestionCode AP131 = new QuestionCode("AP131");
+public static final QuestionCode AP132 = new QuestionCode("AP132");
+public static final QuestionCode AP133 = new QuestionCode("AP133");
+public static final QuestionCode AP134 = new QuestionCode("AP134");
+public static final QuestionCode AP135 = new QuestionCode("AP135");
+public static final QuestionCode AP136 = new QuestionCode("AP136");
+public static final QuestionCode AP137 = new QuestionCode("AP137");
+public static final QuestionCode AP138 = new QuestionCode("AP138");
+public static final QuestionCode AP139 = new QuestionCode("AP139");
+public static final QuestionCode AP140 = new QuestionCode("AP140");
+public static final QuestionCode AP141 = new QuestionCode("AP141");
+public static final QuestionCode AP142 = new QuestionCode("AP142");
+public static final QuestionCode AP143 = new QuestionCode("AP143");
+public static final QuestionCode AP144 = new QuestionCode("AP144");
+public static final QuestionCode AP145 = new QuestionCode("AP145");
+public static final QuestionCode AP146 = new QuestionCode("AP146");
+public static final QuestionCode AP147 = new QuestionCode("AP147");
+public static final QuestionCode AP148 = new QuestionCode("AP148");
+public static final QuestionCode AP149 = new QuestionCode("AP149");
+public static final QuestionCode AP150 = new QuestionCode("AP150");
+public static final QuestionCode AP151 = new QuestionCode("AP151");
+public static final QuestionCode AP152 = new QuestionCode("AP152");
+public static final QuestionCode AP153 = new QuestionCode("AP153");
+public static final QuestionCode AP154 = new QuestionCode("AP154");
+public static final QuestionCode AP155 = new QuestionCode("AP155");
+public static final QuestionCode AP156 = new QuestionCode("AP156");
+public static final QuestionCode AP157 = new QuestionCode("AP157");
+public static final QuestionCode AP158 = new QuestionCode("AP158");
+public static final QuestionCode AP159 = new QuestionCode("AP159");
+public static final QuestionCode AP160 = new QuestionCode("AP160");
+public static final QuestionCode AP161 = new QuestionCode("AP161");
+public static final QuestionCode AP162 = new QuestionCode("AP162");
+public static final QuestionCode AP163 = new QuestionCode("AP163");
+public static final QuestionCode AP164 = new QuestionCode("AP164");
+public static final QuestionCode AP165 = new QuestionCode("AP165");
+public static final QuestionCode AP166 = new QuestionCode("AP166");
+public static final QuestionCode AP187 = new QuestionCode("AP187");
+public static final QuestionCode AP188 = new QuestionCode("AP188");
+public static final QuestionCode AP189 = new QuestionCode("AP189");
+public static final QuestionCode AP190 = new QuestionCode("AP190");
+public static final QuestionCode AP191 = new QuestionCode("AP191");
+public static final QuestionCode AP192 = new QuestionCode("AP192");
+public static final QuestionCode AP193 = new QuestionCode("AP193");
+public static final QuestionCode AP194 = new QuestionCode("AP194");
+public static final QuestionCode AP195 = new QuestionCode("AP195");
+public static final QuestionCode AP196 = new QuestionCode("AP196");
+public static final QuestionCode AP500 = new QuestionCode("AP500");
+public static final QuestionCode AP501 = new QuestionCode("AP501");
+public static final QuestionCode AP600 = new QuestionCode("AP600");
+
+/* END GENERATED QUESTION_CODES SMALLEMITTER */
 
     /* BEGIN GENERATED QUESTION_CODES EVENT */
 
