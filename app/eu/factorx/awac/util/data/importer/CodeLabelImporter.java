@@ -30,6 +30,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
     private static final String CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
 	private static final String CODES_TO_IMPORT_HOUSEHOLD_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Household.generated.xls";
 	private static final String CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_SmallEmitter.generated.xls";
+	private static final String CODES_TO_IMPORT_EVENT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Event.generated.xls";
 
     //use the original excel file
     private static final String ORIGINAL_EXCEL_FILE = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
@@ -77,9 +78,14 @@ public class CodeLabelImporter extends WorkbookDataImporter {
 		importCodesEquivalences(householdWbSheets);
 
 		Logger.info("== Importing Small Emitters Code DataCell (from {})", CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH);
-		Map<String, Sheet> smallEmittersyWbSheets = getWorkbookSheets(CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH);
-		importCodeLabels(smallEmittersyWbSheets);
-		importCodesEquivalences(smallEmittersyWbSheets);
+		Map<String, Sheet> smallEmittersWbSheets = getWorkbookSheets(CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH);
+		importCodeLabels(smallEmittersWbSheets);
+		importCodesEquivalences(smallEmittersWbSheets);
+
+		Logger.info("== Importing Event Code DataCell (from {})", CODES_TO_IMPORT_EVENT_WORKBOOK_PATH);
+		Map<String, Sheet> eventWbSheets = getWorkbookSheets(CODES_TO_IMPORT_EVENT_WORKBOOK_PATH);
+		importCodeLabels(eventWbSheets);
+		importCodesEquivalences(eventWbSheets);
 
 		//load code equivalence
         Logger.info("== Importing Municipality Code DataCell (from {})", ORIGINAL_EXCEL_FILE + "/" + SHEET_CODE_CONVERSION);

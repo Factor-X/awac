@@ -51,6 +51,12 @@ public class IndicatorImporter extends WorkbookDataImporter {
 	public static final String SMALL_EMITTERS_REPORTS_REFERENCE = "Reports-petit emetteur:A1";
 	public static final String SMALL_EMITTERS_INDICATOR_REPORTS_REFERENCE = "Reports-petit emetteur:F1";
 
+	public static final String EVENT_BASE_INDICATORS_REFERENCE = "BaseIndicators-evenement:A1";
+	public static final String EVENT_INDICATORS_REFERENCE = "Indicators-evenement:A1";
+	public static final String EVENT_BASE_INDICATOR_INDICATORS_REFERENCE = "Indicators-evenement:F1";
+	public static final String EVENT_REPORTS_REFERENCE = "Reports-evenement:A1";
+	public static final String EVENT_INDICATOR_REPORTS_REFERENCE = "Reports-evenement:F1";
+
 	private Map<String, Sheet> sheets;
 	private Map<String, Unit> units;
 
@@ -138,6 +144,15 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				SMALL_EMITTERS_BASE_INDICATOR_INDICATORS_REFERENCE,
 				SMALL_EMITTERS_REPORTS_REFERENCE,
 				SMALL_EMITTERS_INDICATOR_REPORTS_REFERENCE);
+
+		// EVENT DATA
+		Logger.info("== Importing Event Data");
+		importData(InterfaceTypeCode.EVENT,
+				EVENT_BASE_INDICATORS_REFERENCE,
+				EVENT_INDICATORS_REFERENCE,
+				EVENT_BASE_INDICATOR_INDICATORS_REFERENCE,
+				EVENT_REPORTS_REFERENCE,
+				EVENT_INDICATOR_REPORTS_REFERENCE);
 
 	}
 
