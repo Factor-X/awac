@@ -110,7 +110,6 @@ angular
             $scope.computeScopeAndPeriod()
 
     $scope.computeScopeAndPeriod = ->
-        console.log '----->>>' + $scope.$root.periodSelectedKey + "-" + $scope.$root.scopeSelectedId
         if $scope.$root.periodSelectedKey? && $scope.$root.scopeSelectedId?
 
             $routeParams.form = $route.current.params.form
@@ -414,7 +413,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
             $rootScope.toDefaultForm()
 
     $rootScope.toDefaultForm = () ->
-        console.log "to default form :" + $rootScope.getDefaultRoute()
         $rootScope.nav $rootScope.getDefaultRoute()
 
     $rootScope.$watch "mySites", ->

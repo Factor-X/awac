@@ -5,21 +5,45 @@ package eu.factorx.awac.util.data.importer.badImporter;
  */
 public enum TemplateName {
 
-    BAD_ENTERPRISE( "public/template/bad.vm",
-                    "app/eu/factorx/awac/service/knowledge/activity/contributor/enterprise/",
-                    "eu.factorx.awac.service.knowledge.activity.contributor.enterprise",
-                    //test
-                    "public/template/badTest.vm",
-                    "test/eu/factorx/awac/buisness/bad/enterprise/",
-                    "eu.factorx.awac.buisness.bad.enterprise"),
+    BAD_ENTERPRISE("public/template/bad.vm",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/enterprise/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.enterprise",
+            //test
+            "public/template/badTest.vm",
+            "test/eu/factorx/awac/buisness/bad/enterprise/",
+            "eu.factorx.awac.buisness.bad.enterprise"),
 
-    BAD_MUNICIPALITY(   "public/template/bad.vm",
-                        "app/eu/factorx/awac/service/knowledge/activity/contributor/municipality/",
-                        "eu.factorx.awac.service.knowledge.activity.contributor.municipality",
-                        //test
-                        "public/template/badTest.vm",
-                        "test/eu/factorx/awac/buisness/bad/municipality/",
-                        "eu.factorx.awac.buisness.bad.municipality");
+    BAD_MUNICIPALITY("public/template/bad.vm",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/municipality/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.municipality",
+            //test
+            "public/template/badTest.vm",
+            "test/eu/factorx/awac/buisness/bad/municipality/",
+            "eu.factorx.awac.buisness.bad.municipality"),
+
+    BAD_LITTLE_EMITTER("public/template/bad.vm",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/littleEmitter/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.littleEmitter",
+            //test
+            "public/template/badTest.vm",
+            "test/eu/factorx/awac/buisness/bad/littleEmitter/",
+            "eu.factorx.awac.buisness.bad.littleEmitter"),
+
+    BAD_HOUSEHOLD("public/template/bad.vm",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/household/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.household",
+            //test
+            "public/template/badTest.vm",
+            "test/eu/factorx/awac/buisness/bad/household/",
+            "eu.factorx.awac.buisness.bad.household"),
+
+    BAD_EVENT("public/template/bad.vm",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/event/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.event",
+            //test
+            "public/template/badTest.vm",
+            "test/eu/factorx/awac/buisness/bad/event/",
+            "eu.factorx.awac.buisness.bad.event");
 
     private final String template;
     private final String path;
