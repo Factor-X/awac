@@ -103,7 +103,7 @@ public class QuestionAnswerToAnswerLineConverter implements Converter<QuestionAn
                     break;
 				case DATE_TIME:
 					DateTimeAnswerValue dateTimeAnswerValue = (DateTimeAnswerValue) answerValue;
-					rawAnswerValue = dateTimeAnswerValue.getDateTime().toDate();
+					rawAnswerValue = dateTimeAnswerValue.getDateTime().toDate().getTime();
 					break;
 			}
 
