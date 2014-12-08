@@ -407,7 +407,7 @@ public static final QuestionCode A8000 = new QuestionCode("A8000");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-12-08 09:21:59 +0100 */
+/* Generated the 2014-12-08 09:23:57 +0100 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
@@ -586,7 +586,7 @@ public static final QuestionCode AC5002 = new QuestionCode("AC5002");
     /* BEGIN GENERATED QUESTION_CODES HOUSEHOLD */
 
 
-/* Generated the 2014-12-08 09:22:08 +0100 */
+/* Generated the 2014-12-08 09:24:05 +0100 */
 
 public static final QuestionCode AM2 = new QuestionCode("AM2");
 public static final QuestionCode AM3 = new QuestionCode("AM3");

@@ -5353,7 +5353,7 @@ if (am142 == null) {
 
         am144 = (ValueSelectionQuestion) questionService.findByCode(QuestionCode.AM144);
 if (am144 == null) {
-    am144 = new ValueSelectionQuestion(am143, 0, QuestionCode.AM144, CodeList.ELECTRIQUE_NON_ELECTRIQUE);
+    am144 = new ValueSelectionQuestion(am143, 0, QuestionCode.AM144, CodeList.TYPEVELO);
     JPA.em().persist(am144);
 } else {
     if (!am144.getQuestionSet().equals(am143) && am143.getQuestions().contains(am144)) {
@@ -5365,7 +5365,7 @@ if (am144 == null) {
         JPA.em().persist(am143);
     }
     am144.setOrderIndex(0);
-    ((ValueSelectionQuestion)am144).setCodeList(CodeList.ELECTRIQUE_NON_ELECTRIQUE);
+    ((ValueSelectionQuestion)am144).setCodeList(CodeList.TYPEVELO);
     JPA.em().persist(am144);
 }
 
