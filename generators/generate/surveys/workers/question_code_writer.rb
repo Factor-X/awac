@@ -19,9 +19,12 @@ class QuestionCodeWriter
 
             lines = codes.sort { |a, b| a.match('([0-9]+)')[0].to_i <=> b.match('([0-9]+)')[0].to_i }.collect { |code| 'public static final QuestionCode ' + code+ ' = new QuestionCode("'+ code +'");' }
 
+
             begin_text = '/* BEGIN GENERATED QUESTION_CODES ' + Code.make(name) + ' */'
             end_text   = '/* END GENERATED QUESTION_CODES ' + Code.make(name) + ' */'
             comment    = '/* Generated the ' + Time.now.to_s + ' */'
+
+            @logger.info 'LOOKING FOR comment section in QuestionCode with code: ' + Code.make(name)
 
             begin_index = source.index(begin_text)
             end_index   = source.index(end_text, begin_index)
