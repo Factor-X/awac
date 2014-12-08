@@ -968,6 +968,7 @@ h1 {
 }
 
 .status {
+    vertical-align: top;
     margin-right: 12px;
     display: inline-block;
     width: 21px;
@@ -1013,6 +1014,7 @@ h1 {
 }
 
 .user_icon {
+    vertical-align: top;
     margin: 0 5px;
     display: inline-block;
     width: 20px;
