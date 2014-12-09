@@ -51,7 +51,7 @@
                                                 .label-column
                                                     textarea(ng-model="codeLabel.labelNl")
 
-                                    .baselist-add-item(ng-if="(baseList.codeList != 'ActivityCategory') &&  (baseList.codeList != 'ActivitySubCategory')") Ajouter un élément:
+                                    .baselist-add-item(ng-if="(baseList.codeList != 'ActivityCategory') &&  (baseList.codeList != 'ActivitySubCategory') && (baseList.codeList != 'ActivitySource') && (baseList.codeList != 'ActivityType')") Ajouter un élément:
                                         .baselist-item
                                             .order-column
                                                 button.button(type="button", ng-click="addCodeLabel(baseList)", style="margin:0; min-height:22px; padding:0px 5px 2px 5px; border-radius:2px;")

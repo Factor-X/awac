@@ -25,6 +25,14 @@ public class ActivitySubCategoryCode extends Code {
 	public static final ActivitySubCategoryCode ASC_11 = new ActivitySubCategoryCode("ASC_11");
 	public static final ActivitySubCategoryCode ASC_12 = new ActivitySubCategoryCode("ASC_12");
     public static final ActivitySubCategoryCode ASC_13 = new ActivitySubCategoryCode("ASC_13");
+    public static final ActivitySubCategoryCode ASC_14 = new ActivitySubCategoryCode("ASC_14");
+    public static final ActivitySubCategoryCode ASC_15 = new ActivitySubCategoryCode("ASC_15");
+    public static final ActivitySubCategoryCode ASC_16 = new ActivitySubCategoryCode("ASC_16");
+    public static final ActivitySubCategoryCode ASC_17 = new ActivitySubCategoryCode("ASC_17");
+    public static final ActivitySubCategoryCode ASC_18 = new ActivitySubCategoryCode("ASC_18");
+    public static final ActivitySubCategoryCode ASC_19 = new ActivitySubCategoryCode("ASC_19");
+    public static final ActivitySubCategoryCode ASC_20 = new ActivitySubCategoryCode("ASC_20");
+    public static final ActivitySubCategoryCode ASC_21 = new ActivitySubCategoryCode("ASC_21");
 	private static final long serialVersionUID = 1L;
 	protected ActivitySubCategoryCode() {
 		super(CodeList.ActivitySubCategory);

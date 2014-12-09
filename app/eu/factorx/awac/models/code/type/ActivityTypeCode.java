@@ -98,6 +98,7 @@ public class ActivityTypeCode extends Code {
 	public static final ActivityTypeCode AT_84 = new ActivityTypeCode("AT_84");
 	public static final ActivityTypeCode AT_85 = new ActivityTypeCode("AT_85");
     public static final ActivityTypeCode AT_86 = new ActivityTypeCode("AT_86");
+    public static final ActivityTypeCode AT_87 = new ActivityTypeCode("AT_87");
 	private static final long serialVersionUID = 1L;
 	protected ActivityTypeCode() {
 		super(CodeList.ActivityType);
