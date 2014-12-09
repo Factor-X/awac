@@ -19,6 +19,6 @@ div
 
             mm-awac-question(question-code="AM10")
 
-            mm-awac-question(question-code="AM11")
+            mm-awac-question(question-code="AM11", ng-aggregation="(getAnswer('AM8').value | nullToZero)+(getAnswer('AM9').value | nullToZero)+(getAnswer('AM10').value | nullToZero)")
 
             mm-awac-question(question-code="AM12")

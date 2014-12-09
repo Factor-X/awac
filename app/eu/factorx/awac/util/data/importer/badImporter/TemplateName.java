@@ -22,12 +22,12 @@ public enum TemplateName {
             "eu.factorx.awac.buisness.bad.municipality"),
 
     BAD_LITTLEEMITTER("public/template/bad.vm",
-            "app/eu/factorx/awac/service/knowledge/activity/contributor/littleEmitter/",
-            "eu.factorx.awac.service.knowledge.activity.contributor.littleEmitter",
+            "app/eu/factorx/awac/service/knowledge/activity/contributor/littleemitter/",
+            "eu.factorx.awac.service.knowledge.activity.contributor.littleemitter",
             //test
             "public/template/badTest.vm",
-            "test/eu/factorx/awac/buisness/bad/littleEmitter/",
-            "eu.factorx.awac.buisness.bad.littleEmitter"),
+            "test/eu/factorx/awac/buisness/bad/littleemitter/",
+            "eu.factorx.awac.buisness.bad.littleemitter"),
 
     BAD_HOUSEHOLD("public/template/bad.vm",
             "app/eu/factorx/awac/service/knowledge/activity/contributor/household/",

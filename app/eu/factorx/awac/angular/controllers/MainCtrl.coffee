@@ -439,7 +439,26 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     $rootScope.availablePeriods = null
                     $location.path("noScope")
         else if $rootScope.instanceName == 'event'
-            #TODO implement
+            console.log '$rootScope.mySites', $rootScope.mySites
+            console.log '$rootScope.scopeSelectedId', $rootScope.scopeSelectedId
+            if !scopeId?
+                scopeId = $rootScope.scopeSelectedId
+            if scopeId?
+                for site in $rootScope.mySites
+                    if site.id == scopeId
+                        $rootScope.availablePeriods = site.listPeriodAvailable
+
+                currentPeriodFound = false
+                if $rootScope.availablePeriods?
+                    for period in $rootScope.availablePeriods
+                        if period.key == $rootScope.periodSelectedKey
+                            currentPeriodFound = true
+                    if not currentPeriodFound
+                        if $rootScope.availablePeriods.length > 0
+                            $rootScope.periodSelectedKey = $rootScope.availablePeriods[0].key
+                else
+                    $rootScope.availablePeriods = null
+                    $location.path("noScope")
         else
             $rootScope.availablePeriods = $rootScope.periods
 

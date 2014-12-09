@@ -22,7 +22,7 @@ div
             mm-awac-question(question-code="AEV53")
             mm-awac-question(question-code="AEV54")
             mm-awac-question(question-code="AEV55")
-            mm-awac-question(question-code="AEV56")
+            mm-awac-question(question-code="AEV56", ng-aggregation="(getAnswer('AEV43').value | nullToZero)+(getAnswer('AEV47').value | nullToZero)+(getAnswer('AEV48').value | nullToZero)+(getAnswer('AEV50').value | nullToZero)+(getAnswer('AEV51').value | nullToZero)"+(getAnswer('AEV52').value | nullToZero)+(getAnswer('AEV53').value | nullToZero)+(getAnswer('AEV54').value | nullToZero)+(getAnswer('AEV55').value | nullToZero))
 
     .horizontal_separator
         mm-awac-section(title-code="AEV57")
