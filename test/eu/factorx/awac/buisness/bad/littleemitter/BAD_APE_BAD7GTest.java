@@ -122,7 +122,7 @@ public class BAD_APE_BAD7GTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(72000.0, false);
+                mapResult.put(32000.0, false);
         
         String valueGenerated = "";
 

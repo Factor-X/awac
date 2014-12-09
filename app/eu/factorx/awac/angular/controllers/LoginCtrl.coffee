@@ -61,8 +61,7 @@ angular
 
     #send the request to the server
     $scope.send = (options) ->
-
-        if $scope.connectionFieldValid()
+        if options.anonymous || $scope.connectionFieldValid()
 
             #active loading mode
             $scope.isLoading = true

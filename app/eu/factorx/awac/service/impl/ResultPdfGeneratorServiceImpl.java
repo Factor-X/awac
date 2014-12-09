@@ -86,9 +86,21 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
             "<body>\n";
 
         String r_1 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, null);
-        String r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
-        String r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
-        String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+        String r_2 = null;
+        try {
+            r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
+        } catch (Exception e) {
+        }
+        String r_3 = null;
+        try {
+            r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
+        } catch (Exception e) {
+        }
+        String r_4 = null;
+        try {
+            r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+        } catch (Exception e) {
+        }
 
 
         // 0. Header
@@ -118,14 +130,21 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
         // 2. Graphs
         String histogram = writeHistogram(r_1, allReportResults);
-        String donut1 = writeDonut(r_2, allReportResults);
-        String donut2 = writeDonut(r_3, allReportResults);
-        String donut3 = writeDonut(r_4, allReportResults);
-
         pdfGenerator.setMemoryResource("mem://svg/histogram", histogram);
-        pdfGenerator.setMemoryResource("mem://svg/donut1", donut1);
-        pdfGenerator.setMemoryResource("mem://svg/donut2", donut2);
-        pdfGenerator.setMemoryResource("mem://svg/donut3", donut3);
+
+        if (r_2 != null) {
+            String donut1 = writeDonut(r_2, allReportResults);
+            pdfGenerator.setMemoryResource("mem://svg/donut1", donut1);
+        }
+        if (r_3 != null) {
+            String donut2 = writeDonut(r_3, allReportResults);
+            pdfGenerator.setMemoryResource("mem://svg/donut2", donut2);
+        }
+        if (r_4 != null) {
+            String donut3 = writeDonut(r_4, allReportResults);
+            pdfGenerator.setMemoryResource("mem://svg/donut3", donut3);
+        }
+
 
         String kiviat = writeKiviat(r_1, allReportResults);
         pdfGenerator.setMemoryResource("mem://svg/kiviat", kiviat);
@@ -144,27 +163,42 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
         content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 
+        if (r_2 == null && r_3 == null && r_4 == null) {
+            String donut = writeDonut(r_1, allReportResults);
+            pdfGenerator.setMemoryResource("mem://svg/donut", donut);
+
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_1, lang, allReportResults, false);
+        }
+
         // scope 1
-        content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_2, lang, allReportResults) + " tCO2e</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_2, lang, allReportResults, false);
+        if (r_2 != null) {
+            content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_2, lang, allReportResults) + " tCO2e</h2>";
+
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_2, lang, allReportResults, false);
+        }
 
         // scope 2
-        content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_3, lang, allReportResults) + " tCO2e</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_3, lang, allReportResults, false);
-
+        if (r_3 != null) {
+            content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_3, lang, allReportResults) + " tCO2e</h2>";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_3, lang, allReportResults, false);
+        }
         // scope 3
-        content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_4, lang, allReportResults) + " tCO2e</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_4, lang, allReportResults, false);
-
+        if (r_4 != null) {
+            content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " : " + getTotal(r_4, lang, allReportResults) + " tCO2e</h2>";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_4, lang, allReportResults, false);
+        }
         content += "</div>";
 
         // web
@@ -208,9 +242,22 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
             "<body>\n";
 
         String r_1 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, null);
-        String r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
-        String r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
-        String r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+        String r_2 = null;
+        try {
+            r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
+        } catch (Exception ignored) {
+        }
+        String r_3 = null;
+        try {
+            r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
+        } catch (Exception ignored) {
+        }
+        String r_4 = null;
+        try {
+            r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
+        } catch (Exception ignored) {
+        }
+
 
         // 0. Header
         String organization = scopes.get(0).getOrganization().getName();
@@ -236,24 +283,28 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
         // 2. Graphs
         String histogram = writeHistogram(r_1, merged);
-        List<String> donut1 = writeDonut(r_2, merged);
-        List<String> donut2 = writeDonut(r_3, merged);
-        List<String> donut3 = writeDonut(r_4, merged);
-
-        String donut1L = donut1.get(0);
-        String donut1R = donut1.get(1);
-        String donut2L = donut2.get(0);
-        String donut2R = donut2.get(1);
-        String donut3L = donut3.get(0);
-        String donut3R = donut3.get(1);
-
         pdfGenerator.setMemoryResource("mem://svg/histogram", histogram);
-        pdfGenerator.setMemoryResource("mem://svg/donut1L", donut1L);
-        pdfGenerator.setMemoryResource("mem://svg/donut1R", donut1R);
-        pdfGenerator.setMemoryResource("mem://svg/donut2L", donut2L);
-        pdfGenerator.setMemoryResource("mem://svg/donut2R", donut2R);
-        pdfGenerator.setMemoryResource("mem://svg/donut3L", donut3L);
-        pdfGenerator.setMemoryResource("mem://svg/donut3R", donut3R);
+        if (r_2 != null) {
+            List<String> donut1 = writeDonut(r_2, merged);
+            String donut1L = donut1.get(0);
+            String donut1R = donut1.get(1);
+            pdfGenerator.setMemoryResource("mem://svg/donut1L", donut1L);
+            pdfGenerator.setMemoryResource("mem://svg/donut1R", donut1R);
+        }
+        if (r_3 != null) {
+            List<String> donut2 = writeDonut(r_3, merged);
+            String donut2L = donut2.get(0);
+            String donut2R = donut2.get(1);
+            pdfGenerator.setMemoryResource("mem://svg/donut2L", donut2L);
+            pdfGenerator.setMemoryResource("mem://svg/donut2R", donut2R);
+        }
+        if (r_4 != null) {
+            List<String> donut3 = writeDonut(r_4, merged);
+            String donut3L = donut3.get(0);
+            String donut3R = donut3.get(1);
+            pdfGenerator.setMemoryResource("mem://svg/donut3L", donut3L);
+            pdfGenerator.setMemoryResource("mem://svg/donut3R", donut3R);
+        }
 
         String kiviat = writeKiviat(r_1, merged);
         pdfGenerator.setMemoryResource("mem://svg/kiviat", kiviat);
@@ -267,29 +318,50 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
         // donuts
         content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 
+        if (r_2 == null && r_3 == null && r_4 == null) {
+            List<String> donuts = writeDonut(r_1, merged);
+            String donutL = donuts.get(0);
+            String donutR = donuts.get(1);
+            pdfGenerator.setMemoryResource("mem://svg/donutL", donutL);
+            pdfGenerator.setMemoryResource("mem://svg/donutR", donutR);
+
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donutL\" />";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donutR\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_1, lang, merged, false);
+        }
+
         // scope 1
-        content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1L\" />";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1R\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_2, lang, merged, false);
+        if (r_2 != null) {
+            content += "<h2>" + translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1L\" />";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1R\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_2, lang, merged, false);
+        }
 
         // scope 2
-        content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2L\" />";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2R\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_3, lang, merged, false);
+        if (r_3 != null) {
+            content += "<h2>" + translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2L\" />";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2R\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_3, lang, merged, false);
+        }
 
         // scope 3
-        content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3L\" />";
-        content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3R\" />";
-        content += "<br/>";
-        content += "<br/>";
-        content += addLegend(r_4, lang, merged, false);
+        if (r_4 != null) {
+            content += "<h2>" + translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h2>";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3L\" />";
+            content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3R\" />";
+            content += "<br/>";
+            content += "<br/>";
+            content += addLegend(r_4, lang, merged, false);
+        }
+
 
         // web
         content += "<h1>" + translate("KIVIAT_DIAGRAM", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";

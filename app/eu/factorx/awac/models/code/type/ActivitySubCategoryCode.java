@@ -33,6 +33,8 @@ public class ActivitySubCategoryCode extends Code {
     public static final ActivitySubCategoryCode ASC_19 = new ActivitySubCategoryCode("ASC_19");
     public static final ActivitySubCategoryCode ASC_20 = new ActivitySubCategoryCode("ASC_20");
     public static final ActivitySubCategoryCode ASC_21 = new ActivitySubCategoryCode("ASC_21");
+    public static final ActivitySubCategoryCode ASC_22 = new ActivitySubCategoryCode("ASC_22");
+    public static final ActivitySubCategoryCode ASC_23 = new ActivitySubCategoryCode("ASC_23");
 	private static final long serialVersionUID = 1L;
 	protected ActivitySubCategoryCode() {
 		super(CodeList.ActivitySubCategory);

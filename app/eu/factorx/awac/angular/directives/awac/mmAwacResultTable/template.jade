@@ -26,7 +26,7 @@ ng-virtual
                         span.wrapped
                             span(ng-bind-html="'SCOPE_3' | translate")
                             span  (tCO2e)
-                th.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                th.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     div
                         span.wrapped
                             span(ng-bind-html="'OUT_OF_SCOPE' | translate")
@@ -47,7 +47,7 @@ ng-virtual
                         span.wrapped
                             span(ng-bind-html="'SCOPE_3' | translate")
                             span  (tCO2e)
-                th.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                th.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     div
                         span.wrapped
                             span(ng-bind-html="'OUT_OF_SCOPE' | translate")
@@ -65,7 +65,7 @@ ng-virtual
                     span(ng-bind-html="rl.leftScope2Value | numberToI18NOrLess", ng-show="rl.leftScope2Value > 0")
                 td.align-right.scope3(style="color: {{ ngModel.leftColor }}")
                     span(ng-bind-html="rl.leftScope3Value | numberToI18NOrLess", ng-show="rl.leftScope3Value > 0")
-                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     span(ng-bind-html="rl.leftOutOfScopeValue | numberToI18NOrLess", ng-show="rl.leftOutOfScopeValue > 0")
 
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
@@ -74,7 +74,7 @@ ng-virtual
                     span(ng-bind-html="rl.rightScope2Value | numberToI18NOrLess", ng-show="rl.rightScope2Value > 0")
                 td.align-right.scope3(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="rl.rightScope3Value | numberToI18NOrLess", ng-show="rl.rightScope3Value > 0")
-                td.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                td.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     span(ng-bind-html="rl.rightOutOfScopeValue | numberToI18NOrLess", ng-show="rl.rightOutOfScopeValue > 0")
 
         tfoot
@@ -87,7 +87,7 @@ ng-virtual
                     span(ng-bind-html="getLeftTotalScope2() | numberToI18NOrLess")
                 td.align-right.scope3(style="color: {{ ngModel.leftColor }}")
                     span(ng-bind-html="getLeftTotalScope3() | numberToI18NOrLess")
-                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}")
+                td.align-right.out-of-scope(style="color: {{ ngModel.leftColor }}", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     span(ng-bind-html="getLeftTotalOutOfScope() | numberToI18NOrLess")
 
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
@@ -97,7 +97,7 @@ ng-virtual
                 td.align-right.scope3(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="getRightTotalScope3() | numberToI18NOrLess")
                 td.align-right.out-of-scope(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
-                    span(ng-bind-html="getRightTotalOutOfScope() | numberToI18NOrLess")
+                    span(ng-bind-html="getRightTotalOutOfScope() | numberToI18NOrLess", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
             tr
                 td
                 td.align-right.scope1(colspan="4", style="color: {{ ngModel.leftColor }}")

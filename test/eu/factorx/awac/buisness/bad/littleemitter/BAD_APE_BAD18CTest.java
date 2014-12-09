@@ -120,7 +120,7 @@ public class BAD_APE_BAD18CTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(0.04, false);
+                mapResult.put(40.0, false);
         
         String valueGenerated = "";
 
