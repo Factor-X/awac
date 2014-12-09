@@ -9,7 +9,7 @@ ng-virtual
                     div(ng-show="getLocker() != null", ng-bind-html="'LOCK_BY' | translateWithVars: [getLockerName()] ")
                 .validate_status(ng-click="valide()", ng-class="getValidateClass()")
                     div(ng-show="getValidator() != null", ng-bind-html="'VALIDATE_BY' | translateWithVars: [getValidatorName()] ")
-                .verified(ng-click="isDisabled || displayVerificationRejectedMessage()",ng-class="getVerificationClass(false,true)")
+                .verified( ng-click="isDisabled || displayVerificationRejectedMessage()", ng-class="getVerificationClass(false,true)", ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'municipality'")
                     div(ng-show="getVerifier() != null", ng-bind-html="'VERIFIED_BY' | translateWithVars: [getVerifierName()] ")
         .element_sidebar(ng-show="$root.instanceName  === 'verification'")
             .block_status
