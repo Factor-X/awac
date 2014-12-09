@@ -8,8 +8,7 @@ import eu.factorx.awac.dto.awac.post.CreateFactorDTO;
 import eu.factorx.awac.dto.awac.post.UpdateFactorsDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationDTO;
 import eu.factorx.awac.dto.myrmex.get.NotificationsDTO;
-import eu.factorx.awac.generated.AwacEnterpriseInitialData;
-import eu.factorx.awac.generated.AwacMunicipalityInitialData;
+import eu.factorx.awac.generated.*;
 import eu.factorx.awac.models.Notification;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.code.CodeList;
@@ -83,6 +82,13 @@ public class AdminController extends AbstractController {
     private FactorsExcelGeneratorService factorsExcelGeneratorService;
     @Autowired
     private WysiwygDocumentService       wysiwygDocumentService;
+    @Autowired
+    private AwacHouseholdInitialData     awacHouseholdInitialData;
+    @Autowired
+    private AwacLittleEmitterInitialData awacLittleEmitterInitialData;
+    @Autowired
+    private AwacEventInitialData         awacEventInitialData;
+
 
     @Transactional(readOnly = true)
     @Security.Authenticated(SecuredController.class)
@@ -143,6 +149,40 @@ public class AdminController extends AbstractController {
 
         return (ok());
     }
+
+    @Transactional(readOnly = false)
+    public Result createHouseholdSurveyData() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+
+        awacHouseholdInitialData.createOrUpdateSurvey();
+
+        return (ok());
+    }
+
+    @Transactional(readOnly = false)
+    public Result createLittleEmitterSurveyData() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+
+        awacLittleEmitterInitialData.createOrUpdateSurvey();
+
+        return (ok());
+    }
+
+    @Transactional(readOnly = false)
+    public Result createEventSurveyData() {
+        if (!Play.application().isDev()) {
+            return unauthorized();
+        }
+
+        awacEventInitialData.createOrUpdateSurvey();
+
+        return (ok());
+    }
+
 
     @Transactional(readOnly = true)
     public Result runBADImporter(String interfaceString) {

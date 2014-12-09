@@ -1,6 +1,7 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.data.question.Driver;
+import eu.factorx.awac.models.data.question.DriverValue;
 import eu.factorx.awac.service.DriverService;
 import org.springframework.stereotype.Component;
 import play.db.jpa.JPA;
@@ -18,6 +19,13 @@ public class DriverServiceImpl extends AbstractJPAPersistenceServiceImpl<Driver>
         } else {
             return null;
         }
+    }
 
+    @Override
+    public void remove(Driver entity) {
+        for (DriverValue driverValue : entity.getDriverValueList()) {
+            JPA.em().remove(driverValue);
+        }
+        super.remove(entity);
     }
 }

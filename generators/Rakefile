@@ -77,7 +77,7 @@ namespace :bads do
 
     namespace :import do
 
-        desc 'Import the BADs for calculator'
+        desc 'Import the BADs for enterprise'
         task :enterprise do |t, args|
             options             = {}
             options[:log_level] = 'DEBUG'
@@ -96,6 +96,48 @@ namespace :bads do
             options             = {}
             options[:log_level] = 'DEBUG'
             options[:calculator] = 'municipality'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './bads/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the BADs for household'
+        task :household do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'household'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './bads/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the BADs for little emitter'
+        task :little_emitter do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'little_emitter'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './bads/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the BADs for event'
+        task :event do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'event'
             OptionParser.new(args) do |opts|
                 opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                     options[:log_level] = v.upcase
@@ -155,6 +197,48 @@ namespace :surveys do
             options             = {}
             options[:log_level] = 'DEBUG'
             options[:calculator] = 'municipality'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './surveys/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the survey for household'
+        task :household do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'household'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './surveys/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the survey for little emitter'
+        task :little_emitter do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'little_emitter'
+            OptionParser.new(args) do |opts|
+                opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
+                    options[:log_level] = v.upcase
+                end
+            end.parse!
+            require_relative './surveys/import/main.rb'
+            main(options)
+        end
+
+        desc 'Import the survey for event'
+        task :event do |t, args|
+            options             = {}
+            options[:log_level] = 'DEBUG'
+            options[:calculator] = 'event'
             OptionParser.new(args) do |opts|
                 opts.on('-l', '--log-level {level}', 'Log level, ' + options[:log_level] + ' by default', String) do |v|
                     options[:log_level] = v.upcase

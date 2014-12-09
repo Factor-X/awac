@@ -2,12 +2,14 @@ package eu.factorx.awac.generated;
 
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.models.data.question.DriverValue;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import play.Logger;
 import eu.factorx.awac.models.Notification;
@@ -58,6 +60,9 @@ public class AwacHouseholdInitialData {
     @Autowired
     private PeriodService periodService;
 
+    @Autowired
+    private AwacCalculatorService awacCalculatorService;
+
     private Form form1,form2,form3,form4,form5;
     private QuestionSet am2,am3,am7,am13,am23,am24,am26,am48,am63,am72,am110,am111,am117,am118,am122,am126,am130,am500,am134,am140,am600,am143,am147,am150,am153,am156,am160,am168,am169,am171,am175;
     private Question am4,am5,am6,am8,am9,am10,am11,am12,am14,am15,am16,am17,am18,am19,am20,am21,am22,am25,am27,am28,am29,am30,am31,am32,am33,am34,am35,am36,am37,am38,am39,am40,am41,am42,am43,am44,am45,am46,am47,am49,am50,am51,am52,am53,am54,am55,am56,am57,am58,am59,am60,am61,am62,am64,am65,am66,am67,am68,am69,am70,am71,am73,am74,am75,am76,am77,am78,am79,am80,am81,am82,am83,am84,am85,am86,am87,am88,am89,am90,am91,am92,am93,am94,am95,am96,am97,am98,am99,am100,am101,am102,am103,am104,am105,am106,am107,am108,am109,am112,am113,am114,am115,am116,am119,am120,am121,am123,am124,am125,am127,am128,am129,am131,am132,am133,am135,am136,am137,am138,am139,am141,am142,am144,am145,am146,am148,am149,am151,am152,am154,am155,am157,am158,am159,am161,am166,am170,am172,am173,am174,am176,am177,am178,am179;
@@ -70,6 +75,8 @@ public class AwacHouseholdInitialData {
     private UnitCategory powerUnits;
     private UnitCategory moneyUnits;
     private UnitCategory timeUnits;
+
+    private AwacCalculator awacCalculator;
 
 
 	private void deleteQuestion(Question question, int indent) {
@@ -151,6 +158,7 @@ public class AwacHouseholdInitialData {
         moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
         timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
+        awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode("household"));
 
         // delete old questions
 		{
@@ -380,6 +388,7 @@ public class AwacHouseholdInitialData {
         form1 = formService.findByIdentifier("TAB_M1");
         if (form1 == null) {
             form1 = new Form("TAB_M1");
+            form1.setAwacCalculator(awacCalculator);
             JPA.em().persist(form1);
         }
     }
@@ -389,6 +398,7 @@ public class AwacHouseholdInitialData {
         form2 = formService.findByIdentifier("TAB_M2");
         if (form2 == null) {
             form2 = new Form("TAB_M2");
+            form2.setAwacCalculator(awacCalculator);
             JPA.em().persist(form2);
         }
     }
@@ -398,6 +408,7 @@ public class AwacHouseholdInitialData {
         form3 = formService.findByIdentifier("TAB_M3");
         if (form3 == null) {
             form3 = new Form("TAB_M3");
+            form3.setAwacCalculator(awacCalculator);
             JPA.em().persist(form3);
         }
     }
@@ -407,6 +418,7 @@ public class AwacHouseholdInitialData {
         form4 = formService.findByIdentifier("TAB_M4");
         if (form4 == null) {
             form4 = new Form("TAB_M4");
+            form4.setAwacCalculator(awacCalculator);
             JPA.em().persist(form4);
         }
     }
@@ -416,6 +428,7 @@ public class AwacHouseholdInitialData {
         form5 = formService.findByIdentifier("TAB_M5");
         if (form5 == null) {
             form5 = new Form("TAB_M5");
+            form5.setAwacCalculator(awacCalculator);
             JPA.em().persist(form5);
         }
     }

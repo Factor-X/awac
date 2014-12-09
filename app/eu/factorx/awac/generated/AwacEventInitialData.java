@@ -2,12 +2,14 @@ package eu.factorx.awac.generated;
 
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.models.data.question.DriverValue;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import play.Logger;
 import eu.factorx.awac.models.Notification;
@@ -58,6 +60,9 @@ public class AwacEventInitialData {
     @Autowired
     private PeriodService periodService;
 
+    @Autowired
+    private AwacCalculatorService awacCalculatorService;
+
     private Form form1,form2,form3,form4,form5,form6;
     private QuestionSet aev2,aev10,aev11,aev13,aev27,aev31,aev37,aev38,aev42,aev57,aev58,aev64,aev66,aev67,aev78,aev84,aev85,aev91,aev94,aev96,aev97,aev98,aev106,aev109,aev112,aev116,aev124,aev126,aev127,aev130,aev132,aev133,aev136;
     private Question aev3,aev4,aev5,aev6,aev7,aev8,aev9,aev12,aev14,aev15,aev16,aev17,aev18,aev19,aev20,aev21,aev22,aev23,aev24,aev25,aev26,aev28,aev29,aev30,aev32,aev33,aev34,aev35,aev36,aev39,aev40,aev41,aev43,aev44,aev45,aev46,aev47,aev48,aev49,aev50,aev51,aev52,aev53,aev54,aev55,aev56,aev59,aev60,aev61,aev62,aev63,aev65,aev68,aev74,aev76,aev77,aev79,aev80,aev81,aev82,aev83,aev86,aev87,aev88,aev89,aev90,aev92,aev93,aev95,aev99,aev100,aev101,aev102,aev103,aev104,aev105,aev107,aev110,aev111,aev113,aev114,aev115,aev117,aev122,aev125,aev128,aev129,aev131,aev134,aev135,aev137;
@@ -70,6 +75,8 @@ public class AwacEventInitialData {
     private UnitCategory powerUnits;
     private UnitCategory moneyUnits;
     private UnitCategory timeUnits;
+
+    private AwacCalculator awacCalculator;
 
 
 	private void deleteQuestion(Question question, int indent) {
@@ -151,6 +158,7 @@ public class AwacEventInitialData {
         moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
         timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
+        awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode("event"));
 
         // delete old questions
 		{
@@ -330,6 +338,7 @@ public class AwacEventInitialData {
         form1 = formService.findByIdentifier("TAB_EV1");
         if (form1 == null) {
             form1 = new Form("TAB_EV1");
+            form1.setAwacCalculator(awacCalculator);
             JPA.em().persist(form1);
         }
     }
@@ -339,6 +348,7 @@ public class AwacEventInitialData {
         form2 = formService.findByIdentifier("TAB_EV2");
         if (form2 == null) {
             form2 = new Form("TAB_EV2");
+            form2.setAwacCalculator(awacCalculator);
             JPA.em().persist(form2);
         }
     }
@@ -348,6 +358,7 @@ public class AwacEventInitialData {
         form3 = formService.findByIdentifier("TAB_EV3");
         if (form3 == null) {
             form3 = new Form("TAB_EV3");
+            form3.setAwacCalculator(awacCalculator);
             JPA.em().persist(form3);
         }
     }
@@ -357,6 +368,7 @@ public class AwacEventInitialData {
         form4 = formService.findByIdentifier("TAB_EV4");
         if (form4 == null) {
             form4 = new Form("TAB_EV4");
+            form4.setAwacCalculator(awacCalculator);
             JPA.em().persist(form4);
         }
     }
@@ -366,6 +378,7 @@ public class AwacEventInitialData {
         form5 = formService.findByIdentifier("TAB_EV5");
         if (form5 == null) {
             form5 = new Form("TAB_EV5");
+            form5.setAwacCalculator(awacCalculator);
             JPA.em().persist(form5);
         }
     }
@@ -375,6 +388,7 @@ public class AwacEventInitialData {
         form6 = formService.findByIdentifier("TAB_EV6");
         if (form6 == null) {
             form6 = new Form("TAB_EV6");
+            form6.setAwacCalculator(awacCalculator);
             JPA.em().persist(form6);
         }
     }
