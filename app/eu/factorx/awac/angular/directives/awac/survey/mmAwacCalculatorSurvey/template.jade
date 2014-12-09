@@ -14,7 +14,7 @@ div
 
                     td
                         select.language-chooser(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')
-                    td
+                    td(ng-hide="$root.instanceName == 'household'")
                         .survey-interface-management(ng-bind-html="'SURVEY_INTERFACE_MANAGEMENT' | translate")
                     td
                         .login-info
@@ -36,7 +36,7 @@ div
                         type='button',
                         ng-bind-html="'SURVEY_INTERFACE_ASSISTANCE' | translate",
                         ng-click="$root.showHelp()")
-                    td
+                    td(ng-hide="$root.instanceName == 'household'")
                         //  organization manager button => for all calculator
                         button.button.user_manage(
                         type='button',
